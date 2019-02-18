@@ -30,6 +30,7 @@
     "triple-equals": true,
     "object-literal-sort-keys": false,
     "no-submodule-imports": false,
+    "no-implicit-dependencies": [true, "dev"],
     "semicolon": [
       true,
       "always",

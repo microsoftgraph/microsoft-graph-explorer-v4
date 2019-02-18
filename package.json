@@ -3,12 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "24.0.6",
-    "@types/node": "11.9.4",
-    "@types/react": "16.8.3",
-    "@types/react-dom": "16.8.2",
+    "monaco-editor": "0.15.6",
+    "office-ui-fabric-react": "6.140.0",
     "react": "16.8.2",
     "react-dom": "16.8.2",
+    "react-redux": "6.0.0",
     "react-scripts": "2.1.5",
     "redux": "4.0.1",
     "redux-thunk": "2.3.0",
@@ -30,7 +29,13 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "redux-logger": "3.0.6",
+    "@types/jest": "24.0.6",
+    "@types/node": "11.9.4",
+    "@types/react": "16.8.3",
+    "@types/react-dom": "16.8.2",
+    "@types/react-redux": "^7.0.1",
+    "@types/redux-logger": "3.0.7",
+    "redux-logger": "^3.0.6",
     "tslint": "^5.12.1"
   }
 }
