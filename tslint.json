@@ -1,0 +1,93 @@
+{
+  "extends": [
+    "tslint:latest"
+  ],
+  "rules": {
+    "comment-format": [
+      true,
+      "check-uppercase"
+    ],
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "max-line-length": [
+      true,
+      120
+    ],
+    "indent": [
+      true,
+      "spaces",
+      2
+    ],
+    "no-var-keyword": true,
+    "prefer-const": true,
+    "ban-comma-operator": true,
+    "no-unused-expression": true,
+    "no-duplicate-variable": true,
+    "curly": true,
+    "class-name": true,
+    "triple-equals": true,
+    "object-literal-sort-keys": false,
+    "no-submodule-imports": false,
+    "semicolon": [
+      true,
+      "always",
+      "ignore-bound-class-methods"
+    ],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-module",
+      "check-separator",
+      "check-type",
+      "check-preblock",
+      "check-typecast"
+    ],
+    "typedef-whitespace": [
+      true,
+      {
+        "call-signature": "nospace",
+        "index-signature": "nospace",
+        "parameter": "nospace",
+        "property-declaration": "nospace",
+        "variable-declaration": "nospace"
+      },
+      {
+        "call-signature": "onespace",
+        "index-signature": "onespace",
+        "parameter": "onespace",
+        "property-declaration": "onespace",
+        "variable-declaration": "onespace"
+      }
+    ],
+    "ban-types": {
+      "options": [
+        [
+          "Object",
+          "Avoid using the `Object` type. Did you mean `object`?"
+        ],
+        [
+          "Boolean",
+          "Avoid using the `Boolean` type. Did you mean `boolean`?"
+        ],
+        [
+          "Number",
+          "Avoid using the `Number` type. Did you mean `number`?"
+        ],
+        [
+          "String",
+          "Avoid using the `String` type. Did you mean `string`?"
+        ]
+      ]
+    }
+  },
+  "linterOptions": {
+    "exclude": [
+      "src/app/loc_strings.ts",
+      "src/app/generate-queries/gen-queries.ts"
+    ]
+  }
+}
