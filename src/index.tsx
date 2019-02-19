@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import App from './app/views/App';
-import './index.css';
 import { store } from './store';
+import './styles/index.scss';
 
 const appState = store({});
 
