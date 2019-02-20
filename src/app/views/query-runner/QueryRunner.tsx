@@ -19,7 +19,7 @@ interface IQueryRunnerState {
 
 interface IQueryRunnerProps {
   actions?: {
-    querySample: Function;
+    runQuery: Function;
   };
 }
 
@@ -56,7 +56,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     const { actions  } = this.props;
 
     if (actions) {
-      actions.querySample(querySample);
+      actions.runQuery(querySample);
     }
   };
 

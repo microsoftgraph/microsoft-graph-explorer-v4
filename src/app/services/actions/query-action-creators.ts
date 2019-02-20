@@ -2,14 +2,19 @@ import { fetch } from 'cross-fetch';
 
 import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../constants';
 
-function queryResponse(payload: string) {
+interface IAction {
+  type: string;
+  payload: object;
+}
+
+function queryResponse(payload: string): IAction {
   return {
     type: QUERY_GRAPH_SUCCESS,
-    payload,
+    payload: JSON.parse(payload),
   };
 }
 
-export function querySample(url: string): Function {
+export function runQuery(url: string): Function {
   const headers = {Authorization: 'Bearer {token:https://graph.microsoft.com/}'};
 
   return (dispatch: Function) => {

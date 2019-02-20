@@ -6,7 +6,7 @@ interface IQueryInputControl {
   handleOnOptionsChange: Function;
   handleQuerySampleChange: Function;
   options: Array<{ key: string; text: string}>;
-  selectedVerb: string
+  selectedVerb: string,
 }
 
 export const QueryInputControl = ({
