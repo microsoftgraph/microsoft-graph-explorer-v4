@@ -2,5 +2,13 @@
 @import "variables";
 
 body {
-  background: green;
+  display: flex;
+  justify-content: center;
+
+  #root {
+    width: 856px;
+    display: flex;
+    justify-content: flex-start;
+  }
 }
+
