@@ -4,7 +4,10 @@ import {
   TextField,
 } from 'office-ui-fabric-react';
 import React, { Component, FormEvent } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
+import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './query-runner.scss';
 import { QueryInputControl } from './QueryInput';
 
@@ -14,7 +17,13 @@ interface IQueryRunnerState {
   querySample: string;
 }
 
-export class QueryRunner extends Component<{}, IQueryRunnerState> {
+interface IQueryRunnerProps {
+  actions?: {
+    querySample: Function;
+  };
+}
+
+export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -43,10 +52,12 @@ export class QueryRunner extends Component<{}, IQueryRunnerState> {
   };
 
   private handleOnClick = () => {
-    console.group('Parameters for making request');
-    console.log(this.state.selectedVerb);
-    console.log(this.state.querySample);
-    console.groupEnd();
+    const { querySample } = this.state;
+    const { actions  } = this.props;
+
+    if (actions) {
+      actions.querySample(querySample);
+    }
   };
 
   public render() {
@@ -68,3 +79,11 @@ export class QueryRunner extends Component<{}, IQueryRunnerState> {
     );
   }
 }
+
+function mapDispatchToProps(dispatch: Dispatch): object {
+  return {
+    actions: bindActionCreators(queryActionCreators, dispatch),
+  };
+}
+
+export default connect(null, mapDispatchToProps)(QueryRunner);

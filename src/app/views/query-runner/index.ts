@@ -1,1 +1,5 @@
-export { QueryRunner } from './QueryRunner';
+import QueryRunner from './QueryRunner';
+
+export {
+  QueryRunner,
+};

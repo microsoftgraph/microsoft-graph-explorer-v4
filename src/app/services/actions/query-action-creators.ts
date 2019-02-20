@@ -8,10 +8,13 @@ function queryResponse(payload: string) {
     payload,
   };
 }
+
 export function querySample(url: string): Function {
+  const headers = {Authorization: 'Bearer {token:https://graph.microsoft.com/}'};
+
   return (dispatch: Function) => {
-    return fetch(url)
+    return fetch(`https://proxy.apisandbox.msdn.microsoft.com/svc?url=${url}`, { headers })
       .then((response) => response.json(), (error) => console.log(error))
-      .then((json) => dispatch(queryResponse(json)));
+      .then((json) => { console.log(json); dispatch(queryResponse(json)); });
   };
 }
