@@ -1,15 +1,21 @@
 @import "../../../styles/variables";
 
-.query-controls {
+.query-input-container {
   display: flex;
-  justify-content: space-between;
   width: 100%;
 
-  .query-text-field {
-    width: 620px;
-  }
+  .query-input-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 
-  .query-verb-dropdown {
-    width: 90px;
+    .query-text-field {
+      width: 620px;
+    }
+
+    .query-verb-dropdown {
+      width: 90px;
+    }
   }
 }
+

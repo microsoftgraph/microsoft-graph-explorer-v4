@@ -31,6 +31,7 @@
     "object-literal-sort-keys": false,
     "no-submodule-imports": false,
     "no-implicit-dependencies": [true, "dev"],
+    "member-ordering": false,
     "semicolon": [
       true,
       "always",
