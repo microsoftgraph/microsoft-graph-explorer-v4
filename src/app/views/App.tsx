@@ -7,9 +7,7 @@ class App extends Component {
   public render() {
     return (
       <div className='app'>
-        <div className='query-runner'>
-          <QueryRunner/>
-        </div>
+        <QueryRunner/>
       </div>
     );
   }

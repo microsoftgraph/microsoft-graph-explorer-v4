@@ -3,15 +3,9 @@
 .app {
   display: flex;
   width: 100%;
-}
-
-.query-runner {
-  display: flex;
-  justify-content: flex-start;
-  border: 1px solid black;
   margin-top: $gutter;
   padding: $gutter;
-  width: 100%;
 }
+
 
 
