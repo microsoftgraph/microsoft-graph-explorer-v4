@@ -4,22 +4,29 @@ import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../constants';
 
 interface IAction {
   type: string;
-  payload: object;
+  response: string;
 }
 
-function queryResponse(payload: string): IAction {
+function queryResponse(response: string): IAction {
   return {
     type: QUERY_GRAPH_SUCCESS,
-    payload: JSON.parse(payload),
+    response,
+  };
+}
+
+function queryResponseError(response: string): IAction {
+  return {
+    type: QUERY_GRAPH_ERROR,
+    response,
   };
 }
 
 export function runQuery(url: string): Function {
-  const headers = {Authorization: 'Bearer {token:https://graph.microsoft.com/}'};
+  const headers = { Authorization: 'Bearer {token:https://graph.microsoft.com/}' };
 
   return (dispatch: Function) => {
     return fetch(`https://proxy.apisandbox.msdn.microsoft.com/svc?url=${url}`, { headers })
-      .then((response) => response.json(), (error) => console.log(error))
-      .then((json) => { console.log(json); dispatch(queryResponse(json)); });
+      .then((response) => response.json(), (error) => queryResponseError(error))
+      .then((json) => dispatch(queryResponse(json)));
   };
 }

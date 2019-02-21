@@ -1,5 +1,6 @@
 import {
-  Dropdown, IDropdownOption,
+  Dropdown,
+  IDropdownOption,
   PrimaryButton,
   TextField,
 } from 'office-ui-fabric-react';
@@ -14,7 +15,7 @@ import { QueryInputControl } from './QueryInput';
 interface IQueryRunnerState {
   options: Array<{ key: string; text: string; }>;
   selectedVerb: string;
-  querySample: string;
+  sampleURL: string;
 }
 
 interface IQueryRunnerProps {
@@ -35,7 +36,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
         { key: 'DELETE', text: 'DELETE' },
       ],
       selectedVerb: 'GET',
-      querySample: '',
+      sampleURL: 'https://graph.microsoft.com/v1.0/me/',
     };
   }
 
@@ -47,16 +48,16 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
   private handleQuerySampleChange = (event: FormEvent, newQuery?: string) => {
     if (newQuery) {
-      this.setState({ querySample: newQuery });
+      this.setState({ sampleURL: newQuery });
     }
   };
 
   private handleOnClick = () => {
-    const { querySample } = this.state;
-    const { actions  } = this.props;
+    const { sampleURL } = this.state;
+    const { actions } = this.props;
 
     if (actions) {
-      actions.runQuery(querySample);
+      actions.runQuery(sampleURL);
     }
   };
 
@@ -64,6 +65,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     const {
       options,
       selectedVerb,
+      sampleURL,
     } = this.state;
 
     return (
@@ -74,6 +76,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
           handleQuerySampleChange={this.handleQuerySampleChange}
           options={options}
           selectedVerb={selectedVerb}
+          sampleURL={sampleURL}
         />
       </div>
     );

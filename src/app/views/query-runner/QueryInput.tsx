@@ -6,7 +6,8 @@ interface IQueryInputControl {
   handleOnOptionsChange: Function;
   handleQuerySampleChange: Function;
   options: Array<{ key: string; text: string}>;
-  selectedVerb: string,
+  selectedVerb: string;
+  sampleURL: string;
 }
 
 export const QueryInputControl = ({
@@ -15,6 +16,7 @@ export const QueryInputControl = ({
   handleQuerySampleChange,
   options,
   selectedVerb,
+  sampleURL,
 }: IQueryInputControl) => {
 
   return (
@@ -29,6 +31,7 @@ export const QueryInputControl = ({
         placeholder='Query Sample'
         className='query-text-field'
         onChange={(event, value) => handleQuerySampleChange(event, value)}
+        defaultValue={sampleURL}
       />
       <PrimaryButton
         onClick={() => handleOnClick()}
