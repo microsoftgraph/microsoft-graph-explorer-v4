@@ -1,11 +1,7 @@
 import { fetch } from 'cross-fetch';
 
+import { IAction } from '../../../types/query-runner';
 import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../constants';
-
-interface IAction {
-  type: string;
-  response: string;
-}
 
 function queryResponse(response: string): IAction {
   return {

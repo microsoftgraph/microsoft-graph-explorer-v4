@@ -8,21 +8,10 @@ import React, { Component, FormEvent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './query-runner.scss';
 import { QueryInputControl } from './QueryInput';
-
-interface IQueryRunnerState {
-  options: Array<{ key: string; text: string; }>;
-  selectedVerb: string;
-  sampleURL: string;
-}
-
-interface IQueryRunnerProps {
-  actions?: {
-    runQuery: Function;
-  };
-}
 
 export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
   constructor(props: any) {
