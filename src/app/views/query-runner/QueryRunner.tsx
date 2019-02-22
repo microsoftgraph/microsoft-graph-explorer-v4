@@ -12,6 +12,7 @@ import { IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runne
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './query-runner.scss';
 import { QueryInputControl } from './QueryInput';
+import { Request } from './request/Request';
 
 export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
   constructor(props: any) {
@@ -21,7 +22,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
         { key: 'GET', text: 'GET' },
         { key: 'POST', text: 'POST' },
         { key: 'PUT', text: 'PUT' },
-        { key: 'PATCH', text: 'PATCH'},
+        { key: 'PATCH', text: 'PATCH' },
         { key: 'DELETE', text: 'DELETE' },
       ],
       selectedVerb: 'GET',
@@ -59,14 +60,15 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
     return (
       <div className='query-input-container'>
-        <QueryInputControl
-          handleOnClick={this.handleOnClick}
-          handleOnOptionsChange={this.handleOnOptionsChange}
-          handleQuerySampleChange={this.handleQuerySampleChange}
-          options={options}
-          selectedVerb={selectedVerb}
-          sampleURL={sampleURL}
-        />
+          <QueryInputControl
+            handleOnClick={this.handleOnClick}
+            handleOnOptionsChange={this.handleOnOptionsChange}
+            handleQuerySampleChange={this.handleQuerySampleChange}
+            options={options}
+            selectedVerb={selectedVerb}
+            sampleURL={sampleURL}
+          />
+          <Request />
       </div>
     );
   }
