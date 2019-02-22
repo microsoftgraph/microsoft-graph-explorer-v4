@@ -1,4 +1,9 @@
 @import "../../../../styles/variables";
 .request-editors {
     width: 100%;
+    margin-top:10px;
+    
+    .request-editor-control{
+        margin-top:10px;
+    }
 }
