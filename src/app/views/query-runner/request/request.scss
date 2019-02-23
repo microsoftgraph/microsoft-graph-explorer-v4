@@ -1,9 +1,28 @@
-@import "../../../../styles/variables";
-.request-editors {
-    width: 100%;
-    margin-top:10px;
-    
+@import"../../../../styles/variables";
+.request-editors{
+width:100%;
+margin-top:10px;
     .request-editor-control{
         margin-top:10px;
     }
+
+    .headers-editor{
+        width:100%;
+
+        th{
+            font-weight:bold;
+            text-align:left;
+        }
+
+        .header-input{
+            width:95%;
+        }
+
+        .remove-header-btn {
+            margin-top: 12px;
+            font-size: 25px;
+        }
+ 
+    }
+
 }
