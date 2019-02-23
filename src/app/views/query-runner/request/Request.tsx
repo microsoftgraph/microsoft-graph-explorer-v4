@@ -5,6 +5,15 @@ import { RequestBodyControl } from './RequestBody';
 import { RequestHeadersControl } from './RequestHeaders';
 
 export class Request extends Component<any, any> {
+
+    private handleOnClick = () => {
+        return;
+    };
+
+    private handleOnInputChange = (event: any, value?: any) => {
+        return;
+    };
+
     public render() {
         return (
             <div className='request-editors'>
@@ -13,7 +22,10 @@ export class Request extends Component<any, any> {
                         <RequestBodyControl disabled={true} />
                     </PivotItem>
                     <PivotItem headerText='Request Headers'>
-                        <RequestHeadersControl />
+                        <RequestHeadersControl
+                            handleOnClick={this.handleOnClick}
+                            handleOnInputChange={this.handleOnInputChange}
+                            />
                     </PivotItem>
                 </Pivot>
             </div>

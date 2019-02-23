@@ -1,7 +1,15 @@
-import { DefaultButton, TextField, IconButton } from 'office-ui-fabric-react';
+import { IconButton, TextField } from 'office-ui-fabric-react';
 import React from 'react';
 
-export const RequestHeadersControl = () => {
+interface IRequestHeadersControl {
+    handleOnClick: Function;
+    handleOnInputChange: Function;
+}
+
+export const RequestHeadersControl = ({
+    handleOnClick,
+    handleOnInputChange,
+}: IRequestHeadersControl) => {
     return (
         <div className='request-editor-control'>
             <table className='headers-editor'>
@@ -12,7 +20,10 @@ export const RequestHeadersControl = () => {
                 </tr>
                 <tr>
                     <td>
-                        <TextField className='header-input' />
+                        <TextField
+                            className='header-input'
+                            onChange={(event, value) => handleOnInputChange(event, value)}
+                        />
                     </td>
                     <td>
                         <TextField className='header-input' />
@@ -20,8 +31,9 @@ export const RequestHeadersControl = () => {
                     <td className='remove-header-btn'>
                         <IconButton
                             iconProps={{ iconName: 'Delete' }}
-                            title='Remove'
-                            ariaLabel='Remove'
+                            title='Remove request header'
+                            ariaLabel='Remove request header'
+                            onClick={() => handleOnClick()}
                         />
                     </td>
                 </tr>
