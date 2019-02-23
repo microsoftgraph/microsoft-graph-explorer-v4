@@ -3,6 +3,7 @@ import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react/lib/Pivo
 import React, { Component } from 'react';
 import './request.scss';
 import { RequestBodyControl } from './RequestBody';
+import { RequestHeadersControl } from './RequestHeaders';
 
 export class Request extends Component<any, any> {
     public render() {
@@ -13,7 +14,7 @@ export class Request extends Component<any, any> {
                         <RequestBodyControl />
                     </PivotItem>
                     <PivotItem headerText='Request Headers'>
-                        <Label>Request Headers</Label>
+                        <RequestHeadersControl />
                     </PivotItem>
                 </Pivot>
             </div>
