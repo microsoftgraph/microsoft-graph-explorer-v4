@@ -29,13 +29,13 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     };
   }
 
-  private handleOnOptionsChange = (event: FormEvent, option?: IDropdownOption) => {
+  private handleOnMethodChange = (option?: IDropdownOption) => {
     if (option !== undefined) {
       this.setState({ selectedVerb: option.text });
     }
   };
 
-  private handleQuerySampleChange = (event: FormEvent, newQuery?: string) => {
+  private handleOnUrlChange = (newQuery?: string) => {
     if (newQuery) {
       this.setState({ sampleURL: newQuery });
     }
@@ -61,8 +61,8 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       <div className='query-input-container'>
         <QueryInputControl
           handleOnClick={this.handleOnClick}
-          handleOnOptionsChange={this.handleOnOptionsChange}
-          handleQuerySampleChange={this.handleQuerySampleChange}
+          handleOnMethodChange={this.handleOnMethodChange}
+          handleOnUrlChange={this.handleOnUrlChange}
           options={options}
           selectedVerb={selectedVerb}
           sampleURL={sampleURL}
