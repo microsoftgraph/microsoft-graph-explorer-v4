@@ -31,16 +31,21 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/enzyme": "^3.9.0",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/jest": "24.0.6",
     "@types/node": "11.9.4",
     "@types/react": "16.8.3",
     "@types/react-dom": "16.8.2",
-    "@types/react-redux": "^7.0.1",
+    "@types/react-redux": "7.0.1",
     "@types/redux-logger": "3.0.7",
     "@types/redux-mock-store": "1.0.0",
-    "jest-fetch-mock": "^2.1.1",
-    "redux-logger": "^3.0.6",
+    "enzyme": "3.9.0",
+    "enzyme-adapter-react-16": "^1.9.1",
+    "jest-fetch-mock": "2.1.1",
+    "react-test-renderer": "16.8.3",
+    "redux-logger": "3.0.6",
     "redux-mock-store": "1.5.3",
-    "tslint": "^5.12.1"
+    "tslint": "5.12.1"
   }
 }
