@@ -14,7 +14,7 @@ steps:
       npm run lint
     displayName: 'Runs linting checks'
   - script: |
-      npm test
+      npm test -- --coverage
     displayName: 'Runs tests'
 
 
