@@ -21,5 +21,6 @@ steps:
     inputs:
       codeCoverageTool: Cobertura
       summaryFileLocation: 'coverage/clover.xml'
+      reportDirectory: 'coverage'
 
 
