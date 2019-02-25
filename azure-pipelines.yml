@@ -17,4 +17,9 @@ steps:
       npm test -- --coverage
     displayName: 'Runs tests'
 
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: 'coverage/clover.xml'
+
 
