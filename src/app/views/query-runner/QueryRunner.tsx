@@ -17,7 +17,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   constructor(props: any) {
     super(props);
     this.state = {
-      options: [
+      httpMethods: [
         { key: 'GET', text: 'GET' },
         { key: 'POST', text: 'POST' },
         { key: 'PUT', text: 'PUT' },
@@ -52,7 +52,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
   public render() {
     const {
-      options,
+      httpMethods,
       selectedVerb,
       sampleURL,
     } = this.state;
@@ -63,7 +63,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
           handleOnClick={this.handleOnClick}
           handleOnMethodChange={this.handleOnMethodChange}
           handleOnUrlChange={this.handleOnUrlChange}
-          options={options}
+          httpMethods={httpMethods}
           selectedVerb={selectedVerb}
           sampleURL={sampleURL}
         />

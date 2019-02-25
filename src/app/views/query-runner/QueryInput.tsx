@@ -6,7 +6,7 @@ export const QueryInputControl = ({
   handleOnClick,
   handleOnMethodChange,
   handleOnUrlChange,
-  options,
+  httpMethods,
   selectedVerb,
   sampleURL,
 }: IQueryInputControl) => {
@@ -16,7 +16,7 @@ export const QueryInputControl = ({
       <Dropdown
         className='query-verb-dropdown'
         defaultSelectedKey={selectedVerb}
-        options={options}
+        options={httpMethods}
         onChange={(event, method) => handleOnMethodChange(method)}
       />
       <TextField

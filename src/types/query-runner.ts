@@ -1,5 +1,5 @@
 export interface IQueryRunnerState {
-  options: Array<{ key: string; text: string; }>;
+  httpMethods: Array<{ key: string; text: string; }>;
   selectedVerb: string;
   sampleURL: string;
 }
@@ -14,7 +14,7 @@ export interface IQueryInputControl {
   handleOnClick: Function;
   handleOnMethodChange: Function;
   handleOnUrlChange: Function;
-  options: Array<{ key: string; text: string}>;
+  httpMethods: Array<{ key: string; text: string}>;
   selectedVerb: string;
   sampleURL: string;
 }
