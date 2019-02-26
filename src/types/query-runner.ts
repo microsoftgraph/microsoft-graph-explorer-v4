@@ -11,7 +11,7 @@ export interface IQueryRunnerProps {
 }
 
 export interface IQueryInputControl {
-  handleOnClick: Function;
+  handleOnRunQuery: Function;
   handleOnMethodChange: Function;
   handleOnUrlChange: Function;
   httpMethods: Array<{ key: string; text: string}>;

@@ -41,7 +41,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     }
   };
 
-  private handleOnClick = () => {
+  private handleOnRunQuery = () => {
     const { sampleURL } = this.state;
     const { actions } = this.props;
 
@@ -60,7 +60,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     return (
       <div className='query-input-container'>
         <QueryInputControl
-          handleOnClick={this.handleOnClick}
+          handleOnRunQuery={this.handleOnRunQuery}
           handleOnMethodChange={this.handleOnMethodChange}
           handleOnUrlChange={this.handleOnUrlChange}
           httpMethods={httpMethods}

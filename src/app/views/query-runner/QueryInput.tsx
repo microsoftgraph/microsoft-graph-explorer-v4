@@ -3,7 +3,7 @@ import React from 'react';
 import { IQueryInputControl } from '../../../types/query-runner';
 
 export const QueryInputControl = ({
-  handleOnClick,
+  handleOnRunQuery,
   handleOnMethodChange,
   handleOnUrlChange,
   httpMethods,
@@ -26,7 +26,7 @@ export const QueryInputControl = ({
         defaultValue={sampleURL}
       />
       <PrimaryButton
-        onClick={() => handleOnClick()}
+        onClick={() => handleOnRunQuery()}
       >
         Run Query
       </PrimaryButton>
