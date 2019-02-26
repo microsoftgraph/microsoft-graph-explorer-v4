@@ -48,12 +48,14 @@ export class Request extends Component<any, any> {
 
     private handleOnHeaderValueBlur = () => {
         const headers = this.state.headers;
-        headers.push(this.state.header);
-        const header = { name: '', value: '' };
-        this.setState({
-            headers,
-            header,
-        });
+        if (this.state.header.name !== '') {
+            headers.push(this.state.header);
+            const header = { name: '', value: '' };
+            this.setState({
+                headers,
+                header,
+            });
+        }
     }
 
     private handleOnHeaderNameBlur = () => {

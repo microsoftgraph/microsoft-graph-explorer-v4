@@ -40,7 +40,7 @@ export const RequestHeadersControl = ({
                             iconProps={{ iconName: 'Delete' }}
                             title='Remove request header'
                             ariaLabel='Remove request header'
-                            onClick={() => handleOnHeaderDelete(header)}
+                            onClick={() => handleOnHeaderDelete(index)}
                         />
                     </td>
                 </tr>
