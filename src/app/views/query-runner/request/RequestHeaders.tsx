@@ -5,6 +5,8 @@ interface IRequestHeadersControl {
     handleOnHeaderDelete: Function;
     handleOnHeaderNameChange: Function;
     handleOnHeaderValueChange: Function;
+    handleOnHeaderNameBlur: Function;
+    handleOnHeaderValueBlur: Function;
     headers: Array<{ name: string; value: string; }>;
 }
 
@@ -12,6 +14,8 @@ export const RequestHeadersControl = ({
     handleOnHeaderDelete,
     handleOnHeaderNameChange,
     handleOnHeaderValueChange,
+    handleOnHeaderNameBlur,
+    handleOnHeaderValueBlur,
     headers,
 }: IRequestHeadersControl) => {
     const headersList = (
@@ -21,14 +25,14 @@ export const RequestHeadersControl = ({
                     <td>
                         <TextField
                             className='header-input'
-                            onChange={(event, name) => handleOnHeaderNameChange(event, index, name)}
-                            value={header.name}
+                            onChange={(event, name) => handleOnHeaderNameChange(event, name)}
+                            onBlur={() => handleOnHeaderNameBlur()}
                         />
                     </td>
                     <td>
                         <TextField className='header-input'
-                            onChange={(event, value) => handleOnHeaderValueChange(event, index, value)}
-                            value={header.value}
+                            onChange={(event, value) => handleOnHeaderValueChange(event, value)}
+                            onBlur={() => handleOnHeaderValueBlur()}
                         />
                     </td>
                     <td className='remove-header-btn'>
@@ -36,7 +40,7 @@ export const RequestHeadersControl = ({
                             iconProps={{ iconName: 'Delete' }}
                             title='Remove request header'
                             ariaLabel='Remove request header'
-                            onClick={() => handleOnHeaderDelete(index)}
+                            onClick={() => handleOnHeaderDelete(header)}
                         />
                     </td>
                 </tr>
