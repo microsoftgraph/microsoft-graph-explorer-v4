@@ -9,49 +9,45 @@ export class Request extends Component<any, any> {
         headers: [
             { name: '', value: '' },
         ],
-        header: { name: '', value: '' },
+        headerName: '',
+        headerValue: '',
     };
 
     private handleOnHeaderNameChange = (event: any, name?: any) => {
         if (name) {
-            const headerName = this.state.header;
-            headerName.name = name;
             this.setState({
-                header: headerName,
+                headerName: name,
             });
         }
     };
 
     private handleOnHeaderValueChange = (event: any, value?: any) => {
         if (value) {
-            const headerValue = this.state.header;
-            headerValue.value = value;
             this.setState({
-                header: headerValue,
+                headerValue: value,
             });
         }
     };
 
-    private handleOnHeaderDelete = (item: any) => {
-        const headers = this.state.headers.filter((header: any) => {
-            if (header !== item) {
-                return header;
-            }
-        });
+    private handleOnHeaderDelete = (headerIndex: any) => {
+        const { headers } = this.state;
+        const headersToDelete = [...headers];
+        headersToDelete.splice(headerIndex, 1);
         this.setState({
-            headers,
+            headers: headersToDelete,
         });
+
     };
 
     private handleOnHeaderValueBlur = () => {
-        if (this.state.header.name !== '') {
-            let headerItems = this.state.headers.filter((header) => {
-                return header.name !== '';
-            });
-
-            headerItems = [...headerItems, this.state.header];
+        if (this.state.headerName !== '') {
+            const { headerName, headerValue, headers } = this.state;
+            const header = { name: headerName, value: headerValue };
+            const newHeaders = [header, ...headers];
             this.setState({
-                headers: headerItems,
+                headers: newHeaders,
+                headerName: '',
+                headerValue: '',
             });
         }
     }

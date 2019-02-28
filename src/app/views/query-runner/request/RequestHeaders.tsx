@@ -55,7 +55,7 @@ export const RequestHeadersControl = ({
                     </tr>
                 </thead>
                 <tbody>
-                    {headersList}
+                    { headersList }
                 </tbody>
             </table>
         </div>
