@@ -11,6 +11,7 @@ export class Request extends Component<any, any> {
         ],
         headerName: '',
         headerValue: '',
+        code: '',
     };
 
     private handleOnHeaderNameChange = (event: any, name?: any) => {
@@ -20,6 +21,12 @@ export class Request extends Component<any, any> {
             });
         }
     };
+
+    public editorChange(newValue: any, e: any) {
+        /* this.setState({
+            code: newValue,
+        }); */
+    }
 
     private handleOnHeaderValueChange = (event: any, value?: any) => {
         if (value) {
@@ -58,12 +65,21 @@ export class Request extends Component<any, any> {
     }
 
     public render() {
-        const { headers } = this.state;
+        const { headers, code } = this.state;
+        const options = {
+            selectOnLineNumbers: true,
+            language: 'javascript',
+            minimap: false,
+        };
         return (
             <div className='request-editors'>
                 <Pivot linkSize={PivotLinkSize.large}>
                     <PivotItem headerText='Request Body'>
-                        <RequestBodyControl disabled={true} />
+                        <RequestBodyControl
+                            editorChange={this.editorChange}
+                            code={code}
+                            options={options}
+                        />
                     </PivotItem>
                     <PivotItem headerText='Request Headers'>
                         <RequestHeadersControl
