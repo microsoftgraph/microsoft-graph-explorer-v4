@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import './app.scss';
+import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 
 class App extends Component {
@@ -8,6 +9,7 @@ class App extends Component {
     return (
       <div className='app'>
         <QueryRunner/>
+        <QueryResponse/>
       </div>
     );
   }
