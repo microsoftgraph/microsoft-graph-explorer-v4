@@ -5,15 +5,12 @@ import { RequestBodyControl } from './RequestBody';
 import { RequestHeadersControl } from './RequestHeaders';
 
 export class Request extends Component<any, any> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            headers: [
-                { name: '', value: '' },
-            ],
-            header: { name: '', value: '' },
-        };
-    }
+    public state = {
+        headers: [
+            { name: '', value: '' },
+        ],
+        header: { name: '', value: '' },
+    };
 
     private handleOnHeaderNameChange = (event: any, name?: any) => {
         if (name) {
@@ -36,39 +33,25 @@ export class Request extends Component<any, any> {
     };
 
     private handleOnHeaderDelete = (item: any) => {
-        const headers = this.state.headers;
-        headers.splice(item, 1);
-        if (headers.length < 1) {
-            headers.push({ name: '', value: '' });
-        }
+        const headers = this.state.headers.filter((header: any) => {
+            if (header !== item) {
+                return header;
+            }
+        });
         this.setState({
             headers,
         });
     };
 
     private handleOnHeaderValueBlur = () => {
-        const headers = this.state.headers;
         if (this.state.header.name !== '') {
-            headers.push(this.state.header);
-            const header = { name: '', value: '' };
-            this.setState({
-                headers,
-                header,
+            let headerItems = this.state.headers.filter((header) => {
+                return header.name !== '';
             });
-        }
-    }
 
-    private handleOnHeaderNameBlur = () => {
-        this.addEmptyHeader();
-    }
-
-    private addEmptyHeader() {
-        const lastHeader = this.getLastHeader();
-        if (lastHeader.name !== '') {
-            const headers = this.state.headers;
-            headers.push({ name: '', value: '' });
+            headerItems = [...headerItems, this.state.header];
             this.setState({
-                headers,
+                headers: headerItems,
             });
         }
     }
@@ -79,9 +62,7 @@ export class Request extends Component<any, any> {
     }
 
     public render() {
-        const {
-            headers,
-        } = this.state;
+        const { headers } = this.state;
         return (
             <div className='request-editors'>
                 <Pivot linkSize={PivotLinkSize.large}>
@@ -93,7 +74,6 @@ export class Request extends Component<any, any> {
                             handleOnHeaderDelete={this.handleOnHeaderDelete}
                             handleOnHeaderNameChange={this.handleOnHeaderNameChange}
                             handleOnHeaderValueChange={this.handleOnHeaderValueChange}
-                            handleOnHeaderNameBlur={this.handleOnHeaderNameBlur}
                             handleOnHeaderValueBlur={this.handleOnHeaderValueBlur}
                             headers={headers}
                         />

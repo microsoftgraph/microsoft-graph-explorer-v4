@@ -5,7 +5,6 @@ interface IRequestHeadersControl {
     handleOnHeaderDelete: Function;
     handleOnHeaderNameChange: Function;
     handleOnHeaderValueChange: Function;
-    handleOnHeaderNameBlur: Function;
     handleOnHeaderValueBlur: Function;
     headers: Array<{ name: string; value: string; }>;
 }
@@ -14,7 +13,6 @@ export const RequestHeadersControl = ({
     handleOnHeaderDelete,
     handleOnHeaderNameChange,
     handleOnHeaderValueChange,
-    handleOnHeaderNameBlur,
     handleOnHeaderValueBlur,
     headers,
 }: IRequestHeadersControl) => {
@@ -26,7 +24,6 @@ export const RequestHeadersControl = ({
                         <TextField
                             className='header-input'
                             onChange={(event, name) => handleOnHeaderNameChange(event, name)}
-                            onBlur={() => handleOnHeaderNameBlur()}
                         />
                     </td>
                     <td>
