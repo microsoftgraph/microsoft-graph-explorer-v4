@@ -18,8 +18,3 @@ export interface IQueryInputControl {
   selectedVerb: string;
   sampleURL: string;
 }
-
-export interface IAction {
-  type: string;
-  response: string;
-}

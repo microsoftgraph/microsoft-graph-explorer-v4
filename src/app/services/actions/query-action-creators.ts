@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/query-runner';
+import { IAction } from '../../../types/action';
 import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../constants';
 
 export function queryResponse(response: string): IAction {
