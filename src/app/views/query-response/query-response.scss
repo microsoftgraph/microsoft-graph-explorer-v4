@@ -1,0 +1,11 @@
+@import "../../../styles/variables";
+
+.query-response {
+  margin-top: $gutter;
+  height: 450px;
+  //border: 1px solid crimson;
+
+  .ms-Pivot.root-84 {
+    background-color: #eeeeee;
+  }
+}
