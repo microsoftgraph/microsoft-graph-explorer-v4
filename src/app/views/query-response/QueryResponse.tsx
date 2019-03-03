@@ -17,8 +17,9 @@ class QueryResponse extends Component<{ body?: object; }> {
             <MonacoEditor
               width={857}
               height={450}
-              value={body && JSON.stringify(body)}
+              value={body && JSON.stringify(body).split(',').join(',\n')}
               language='json'
+              options={{ lineNumbers: 'off' }}
             />
           </PivotItem>
           <PivotItem
