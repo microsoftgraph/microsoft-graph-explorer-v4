@@ -1,5 +1,6 @@
 import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import MonacoEditor from 'react-monaco-editor';
 
 import './query-response.scss';
 
@@ -11,7 +12,12 @@ class QueryResponse extends Component {
           <PivotItem
             headerText='Response Body'
           >
-            <h1>Response from Graph</h1>
+            <MonacoEditor
+              width={857}
+              height={450}
+              value={'{ "age": 7}'}
+              language='json'
+            />
           </PivotItem>
           <PivotItem
             headerText='Response Headers'

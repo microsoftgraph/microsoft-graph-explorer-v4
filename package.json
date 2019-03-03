@@ -8,6 +8,7 @@
     "office-ui-fabric-react": "6.140.0",
     "react": "16.8.2",
     "react-dom": "16.8.2",
+    "react-monaco-editor": "^0.24.1",
     "react-redux": "6.0.0",
     "react-scripts": "2.1.5",
     "redux": "4.0.1",
