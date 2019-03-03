@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { queryRunnerReducer } from './query-runner-reducers';
+import { graphResponse } from './query-runner-reducers';
 
 export default combineReducers({
-  graphResponse: queryRunnerReducer,
+  graphResponse,
 });
