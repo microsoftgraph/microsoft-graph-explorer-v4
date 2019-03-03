@@ -1,11 +1,13 @@
 import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import MonacoEditor from 'react-monaco-editor';
+import { connect } from 'react-redux';
 
 import './query-response.scss';
 
-class QueryResponse extends Component {
+class QueryResponse extends Component<{ body?: object; }> {
   public render() {
+    const { body } = this.props;
     return (
       <div className='query-response'>
         <Pivot className='pivot-response'>
@@ -15,7 +17,7 @@ class QueryResponse extends Component {
             <MonacoEditor
               width={857}
               height={450}
-              value={'{ "age": 7}'}
+              value={body && JSON.stringify(body)}
               language='json'
             />
           </PivotItem>
@@ -30,4 +32,10 @@ class QueryResponse extends Component {
   }
 }
 
-export default QueryResponse;
+function mapStateToProps(state: { graphResponse: object; }) {
+  return {
+    body: state.graphResponse,
+  };
+}
+
+export default connect(mapStateToProps)(QueryResponse);
