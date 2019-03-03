@@ -1,11 +1,23 @@
 @import "../../../styles/variables";
 
 .query-response {
+  display: flex;
   margin-top: $gutter;
-  height: 450px;
-  //border: 1px solid crimson;
+  width: 100%;
+  height: 375px;
+  border: 1px solid silver;
 
   .ms-Pivot.root-84 {
     background-color: #eeeeee;
+    width: 856px;
   }
+}
+
+.monaco-editor {
+  padding-top: $gutter;
+  margin-left: 1px;
+}
+
+.monaco-scrollable-element {
+  left: $gutter !important;
 }

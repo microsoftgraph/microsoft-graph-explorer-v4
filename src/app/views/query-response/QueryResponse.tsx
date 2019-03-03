@@ -14,13 +14,15 @@ class QueryResponse extends Component<{ body?: object; }> {
           <PivotItem
             headerText='Response Body'
           >
-            <MonacoEditor
-              width={857}
-              height={450}
-              value={body && JSON.stringify(body).split(',').join(',\n')}
-              language='json'
-              options={{ lineNumbers: 'off' }}
-            />
+            <div className='monaco-editor'>
+              <MonacoEditor
+                width='800'
+                height='300'
+                value={body && JSON.stringify(body).split(',').join(',\n')}
+                language='json'
+                options={{ lineNumbers: 'off' }}
+              />
+            </div>
           </PivotItem>
           <PivotItem
             headerText='Response Headers'
