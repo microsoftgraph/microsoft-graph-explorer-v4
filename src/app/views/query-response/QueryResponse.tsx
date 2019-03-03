@@ -16,7 +16,7 @@ class QueryResponse extends Component<{ body?: object; }> {
           >
             <Monaco
               body={body}
-              readOnly
+
             />
           </PivotItem>
           <PivotItem
