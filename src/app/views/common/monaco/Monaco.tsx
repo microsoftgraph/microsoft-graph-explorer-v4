@@ -11,12 +11,16 @@ function editorDidMount(editor: any, monaco: any) {
   const editorHasText = !!editor.getModel().getValue();
 
   if (editorHasText) {
-    editor.getAction('editor.action.formatDocument').run();
+    formatDocument(editor);
   }
 
   editor.onDidChangeModelContent(() => {
-    editor.getAction('editor.action.formatDocument').run();
+    formatDocument(editor);
   });
+}
+
+function formatDocument(editor: any) {
+  editor.getAction('editor.action.formatDocument').run();
 }
 
 export function Monaco(props: IMonaco) {

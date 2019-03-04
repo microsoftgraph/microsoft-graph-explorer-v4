@@ -5,9 +5,23 @@ import { connect } from 'react-redux';
 import { Monaco } from '../common';
 import './query-response.scss';
 
-class QueryResponse extends Component<{ body?: object; }> {
+interface IQueryResponseProps {
+  graphResponse?: object | undefined;
+}
+
+class QueryResponse extends Component<IQueryResponseProps> {
   public render() {
-    const { body } = this.props;
+    let body;
+    let headers;
+
+    const { graphResponse } = this.props;
+    if (graphResponse) {
+      // @ts-ignore
+      body = graphResponse.body;
+      // @ts-ignore
+      headers = graphResponse.headers;
+    }
+
     return (
       <div className='query-response'>
         <Pivot className='pivot-response'>
@@ -21,7 +35,9 @@ class QueryResponse extends Component<{ body?: object; }> {
           <PivotItem
             headerText='Response Headers'
           >
-            <h1>Response Headers</h1>
+            <Monaco
+              body={headers}
+            />
           </PivotItem>
         </Pivot>
       </div>
@@ -30,8 +46,9 @@ class QueryResponse extends Component<{ body?: object; }> {
 }
 
 function mapStateToProps(state: { graphResponse: object; }) {
+
   return {
-    body: state.graphResponse,
+    graphResponse: state.graphResponse,
   };
 }
 
