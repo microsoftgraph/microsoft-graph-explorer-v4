@@ -8,6 +8,12 @@ interface IMonaco {
 }
 
 function editorDidMount(editor: any, monaco: any) {
+  const editorHasText = !!editor.getModel().getValue();
+
+  if (editorHasText) {
+    editor.getAction('editor.action.formatDocument').run();
+  }
+
   editor.onDidChangeModelContent(() => {
     editor.getAction('editor.action.formatDocument').run();
   });
