@@ -22,10 +22,8 @@ export class Request extends Component<any, any> {
         }
     };
 
-    public editorChange(newValue: any, e: any) {
-        /* this.setState({
-            code: newValue,
-        }); */
+    public editorChange(value: any) {
+        return;
     }
 
     private handleOnHeaderValueChange = (event: any, value?: any) => {

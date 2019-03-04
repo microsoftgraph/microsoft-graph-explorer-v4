@@ -16,7 +16,7 @@ export const RequestBodyControl = ({ editorChange, code, options }: IRequestBody
                 height='300'
                 value={code}
                 options={options}
-                onChange={() => editorChange()}
+                onChange={(event, value) => editorChange(event, value)}
             />
         </div>
     );
