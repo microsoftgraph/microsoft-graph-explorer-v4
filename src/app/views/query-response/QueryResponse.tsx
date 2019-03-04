@@ -2,23 +2,22 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { IQueryResponseProps } from '../../../types/query-response';
 import { Monaco } from '../common';
 import './query-response.scss';
 
-interface IQueryResponseProps {
-  graphResponse?: object | undefined;
-}
+class QueryResponse extends Component<IQueryResponseProps, {}> {
+  constructor(props: any) {
+    super(props);
+  }
 
-class QueryResponse extends Component<IQueryResponseProps> {
   public render() {
     let body;
     let headers;
 
     const { graphResponse } = this.props;
     if (graphResponse) {
-      // @ts-ignore
       body = graphResponse.body;
-      // @ts-ignore
       headers = graphResponse.headers;
     }
 
@@ -45,8 +44,7 @@ class QueryResponse extends Component<IQueryResponseProps> {
   }
 }
 
-function mapStateToProps(state: { graphResponse: object; }) {
-
+function mapStateToProps(state: IQueryResponseProps) {
   return {
     graphResponse: state.graphResponse,
   };

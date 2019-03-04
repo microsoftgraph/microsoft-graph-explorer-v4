@@ -23,12 +23,17 @@ export function runQuery(url: string): Function {
 
     return fetch(`https://proxy.apisandbox.msdn.microsoft.com/svc?url=${url}`, { headers })
       .then((resp) => {
-        respHeaders = resp.headers;
-        return resp.json();
-      }, (error) => queryResponseError(error))
+        if (resp.ok) {
+          respHeaders = resp.headers;
+          return resp.json();
+        }
+
+        throw new Error('The request was not completed');
+      })
       .then((json) => dispatch(queryResponse({
         body: json,
         headers: respHeaders,
-      })));
+      })))
+      .catch((error) => dispatch(queryResponseError(error)));
   };
 }
