@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 
+import './app.scss';
+import { QueryRunner } from './query-runner';
+
 class App extends Component {
   public render() {
     return (
-      <div className='App'>
-        <h2>Graph Explorer</h2>
+      <div className='app'>
+        <QueryRunner/>
       </div>
     );
   }

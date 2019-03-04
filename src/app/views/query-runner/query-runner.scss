@@ -1,0 +1,21 @@
+@import "../../../styles/variables";
+
+.query-input-container {
+  display: flex;
+  width: 100%;
+
+  .query-input-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .query-text-field {
+      width: 620px;
+    }
+
+    .query-verb-dropdown {
+      width: 90px;
+    }
+  }
+}
+

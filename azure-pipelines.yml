@@ -14,7 +14,13 @@ steps:
       npm run lint
     displayName: 'Runs linting checks'
   - script: |
-      npm test
+      npm test -- --coverage
     displayName: 'Runs tests'
+
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: 'coverage/clover.xml'
+      reportDirectory: 'coverage'
 
 
