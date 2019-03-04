@@ -137,8 +137,8 @@
       "node"
     ],
     "watchPlugins": [
-      "C:\\Users\\jaobala\\Desktop\\workspace\\microsoft\\new-ge\\node_modules\\jest-watch-typeahead\\filename.js",
-      "C:\\Users\\jaobala\\Desktop\\workspace\\microsoft\\new-ge\\node_modules\\jest-watch-typeahead\\testname.js"
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
     ]
   },
   "babel": {
