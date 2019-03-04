@@ -19,12 +19,15 @@ export function runQuery(url: string): Function {
   const headers = { Authorization: 'Bearer {token:https://graph.microsoft.com/}' };
 
   return (dispatch: Function) => {
-    let respHeaders: object;
+    const respHeaders: any = {};
 
     return fetch(`https://proxy.apisandbox.msdn.microsoft.com/svc?url=${url}`, { headers })
       .then((resp) => {
         if (resp.ok) {
-          respHeaders = resp.headers;
+          resp.headers.forEach((val, key) => {
+            respHeaders[key] = val;
+          });
+
           return resp.json();
         }
 
