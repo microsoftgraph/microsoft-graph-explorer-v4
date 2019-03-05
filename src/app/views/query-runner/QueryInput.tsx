@@ -1,20 +1,12 @@
 import { Dropdown, PrimaryButton, TextField } from 'office-ui-fabric-react';
 import React from 'react';
-
-interface IQueryInputControl {
-  handleOnClick: Function;
-  handleOnOptionsChange: Function;
-  handleQuerySampleChange: Function;
-  options: Array<{ key: string; text: string}>;
-  selectedVerb: string;
-  sampleURL: string;
-}
+import { IQueryInputControl } from '../../../types/query-runner';
 
 export const QueryInputControl = ({
-  handleOnClick,
-  handleOnOptionsChange,
-  handleQuerySampleChange,
-  options,
+  handleOnRunQuery,
+  handleOnMethodChange,
+  handleOnUrlChange,
+  httpMethods,
   selectedVerb,
   sampleURL,
 }: IQueryInputControl) => {
@@ -24,17 +16,17 @@ export const QueryInputControl = ({
       <Dropdown
         className='query-verb-dropdown'
         defaultSelectedKey={selectedVerb}
-        options={options}
-        onChange={(event, option) => handleOnOptionsChange(event, option)}
+        options={httpMethods}
+        onChange={(event, method) => handleOnMethodChange(method)}
       />
       <TextField
         placeholder='Query Sample'
         className='query-text-field'
-        onChange={(event, value) => handleQuerySampleChange(event, value)}
+        onChange={(event, value) => handleOnUrlChange(value)}
         defaultValue={sampleURL}
       />
       <PrimaryButton
-        onClick={() => handleOnClick()}
+        onClick={() => handleOnRunQuery()}
       >
         Run Query
       </PrimaryButton>

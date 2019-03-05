@@ -1,10 +1,5 @@
-import {
-  Dropdown,
-  IDropdownOption,
-  PrimaryButton,
-  TextField,
-} from 'office-ui-fabric-react';
-import React, { Component, FormEvent } from 'react';
+import { IDropdownOption } from 'office-ui-fabric-react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -18,7 +13,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   constructor(props: any) {
     super(props);
     this.state = {
-      options: [
+      httpMethods: [
         { key: 'GET', text: 'GET' },
         { key: 'POST', text: 'POST' },
         { key: 'PUT', text: 'PUT' },
@@ -30,19 +25,19 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     };
   }
 
-  private handleOnOptionsChange = (event: FormEvent, option?: IDropdownOption) => {
+  private handleOnMethodChange = (option?: IDropdownOption) => {
     if (option !== undefined) {
       this.setState({ selectedVerb: option.text });
     }
   };
 
-  private handleQuerySampleChange = (event: FormEvent, newQuery?: string) => {
+  private handleOnUrlChange = (newQuery?: string) => {
     if (newQuery) {
       this.setState({ sampleURL: newQuery });
     }
   };
 
-  private handleOnClick = () => {
+  private handleOnRunQuery = () => {
     const { sampleURL } = this.state;
     const { actions } = this.props;
 
@@ -53,22 +48,22 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
   public render() {
     const {
-      options,
+      httpMethods,
       selectedVerb,
       sampleURL,
     } = this.state;
 
     return (
       <div className='query-input-container'>
-          <QueryInputControl
-            handleOnClick={this.handleOnClick}
-            handleOnOptionsChange={this.handleOnOptionsChange}
-            handleQuerySampleChange={this.handleQuerySampleChange}
-            options={options}
-            selectedVerb={selectedVerb}
-            sampleURL={sampleURL}
-          />
-          <Request />
+        <QueryInputControl
+          handleOnRunQuery={this.handleOnRunQuery}
+          handleOnMethodChange={this.handleOnMethodChange}
+          handleOnUrlChange={this.handleOnUrlChange}
+          httpMethods={httpMethods}
+          selectedVerb={selectedVerb}
+          sampleURL={sampleURL}
+        />
+        <Request />
       </div>
     );
   }

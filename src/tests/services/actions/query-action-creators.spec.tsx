@@ -8,27 +8,17 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('actions', () => {
-
-  it('should create an action with a graphResponse', () => {
-    const response = 'graphResponse';
-
-    const expectedAction = {
-      type: QUERY_GRAPH_SUCCESS,
-      response,
-    };
-
-    expect(queryResponse(response)).toEqual(expectedAction);
-  });
-
   it('creates QUERY_GRAPH_SUCCESS when runQuery is called', () => {
-
-    fetchMock.mockResponse(JSON.stringify({ graphResponse: 'graphResponse' }));
+    fetchMock.mockResponse(JSON.stringify({ displayName: 'Megan Bowen' }), {
+      headers: { 'content-type': 'application-json' },
+    });
 
     const expectedActions = [
       {
         type: QUERY_GRAPH_SUCCESS,
         response: {
-          graphResponse: 'graphResponse',
+          body: { displayName: 'Megan Bowen' },
+          headers: { 'content-type': 'application-json'},
         },
       },
     ];
