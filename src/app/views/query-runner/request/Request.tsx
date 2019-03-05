@@ -11,7 +11,6 @@ export class Request extends Component<any, any> {
         ],
         headerName: '',
         headerValue: '',
-        code: '',
     };
 
     private handleOnHeaderNameChange = (event: any, name?: any) => {
@@ -63,21 +62,12 @@ export class Request extends Component<any, any> {
     }
 
     public render() {
-        const { headers, code } = this.state;
-        const options = {
-            selectOnLineNumbers: true,
-            language: 'javascript',
-            minimap: false,
-        };
+        const { headers } = this.state;
         return (
             <div className='request-editors'>
                 <Pivot linkSize={PivotLinkSize.large}>
                     <PivotItem headerText='Request Body'>
-                        <RequestBodyControl
-                            editorChange={this.editorChange}
-                            code={code}
-                            options={options}
-                        />
+                        <RequestBodyControl />
                     </PivotItem>
                     <PivotItem headerText='Request Headers'>
                         <RequestHeadersControl
