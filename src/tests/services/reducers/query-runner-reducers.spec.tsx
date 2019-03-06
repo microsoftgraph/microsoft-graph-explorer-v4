@@ -1,5 +1,5 @@
 import { QUERY_GRAPH_SUCCESS } from '../../../app/services/constants';
-import { queryRunnerReducer } from '../../../app/services/reducers/query-runner-reducers';
+import { graphResponse } from '../../../app/services/reducers/query-runner-reducers';
 
 describe('Query Runner Reducer', () => {
   it('should return initial state', () => {
