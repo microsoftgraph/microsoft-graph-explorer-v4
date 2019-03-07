@@ -1,11 +1,11 @@
 import { QUERY_GRAPH_SUCCESS } from '../../../app/services/constants';
-import { queryRunnerReducer } from '../../../app/services/reducers/query-runner-reducers';
+import { graphResponse } from '../../../app/services/reducers/query-runner-reducers';
 
 describe('Query Runner Reducer', () => {
   it('should return initial state', () => {
     const initialState = {};
     const dummyAction = { type: 'Dummy', response: { displayName: 'Megan Bowen' } };
-    const newState = queryRunnerReducer(initialState, dummyAction);
+    const newState = graphResponse(initialState, dummyAction);
 
     expect(newState).toEqual(initialState);
   });
@@ -21,7 +21,7 @@ describe('Query Runner Reducer', () => {
       },
     };
     const queryAction = { type: QUERY_GRAPH_SUCCESS, response: mockResponse };
-    const newState = queryRunnerReducer(initialState, queryAction);
+    const newState = graphResponse(initialState, queryAction);
 
     expect(newState).toEqual(mockResponse);
   });
