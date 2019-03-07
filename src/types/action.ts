@@ -1,4 +1,4 @@
 export interface IAction {
   type: string;
-  response: string;
+  response: object;
 }
