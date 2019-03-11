@@ -1,13 +1,6 @@
 import { IconButton, TextField } from 'office-ui-fabric-react';
 import React from 'react';
-
-interface IRequestHeadersControl {
-    handleOnHeaderDelete: Function;
-    handleOnHeaderNameChange: Function;
-    handleOnHeaderValueChange: Function;
-    handleOnHeaderValueBlur: Function;
-    headers: Array<{ name: string; value: string; }>;
-}
+import { IRequestHeadersControl } from '../../../../types/request';
 
 export const RequestHeadersControl = ({
     handleOnHeaderDelete,

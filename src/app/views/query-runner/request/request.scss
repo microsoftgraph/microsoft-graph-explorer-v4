@@ -1,22 +1,24 @@
 @import"../../../../styles/variables";
-.request-editors{
+
+.request-editors {
 width:100%;
 margin-top:10px;
 min-height: 375px;
+border: 1px solid silver;
 
-    .request-editor-control{
+    .request-editor-control {
         margin-top:10px;
     }
 
-    .headers-editor{
+    .headers-editor {
         width:100%;
 
-        th{
+        th {
             font-weight:bold;
             text-align:left;
         }
 
-        .header-input{
+        .header-input {
             width:95%;
         }
 
