@@ -67,7 +67,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "lint": "tslint --project tsconfig.json -c tslint.json",
+    "lint": "tslint --project tsconfig.json -c tslint.json"
   },
   "eslintConfig": {
     "extends": "react-app"
