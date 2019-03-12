@@ -23,5 +23,10 @@
   "include": [
     "src",
     "src/tests"
-  ]
+  ],
+  "linterOptions":{
+    "exclude": [
+      "src/messages"
+    ]
+  }
 }

@@ -36,7 +36,7 @@ addLocaleData([
 
 ReactDOM.render(
   <Provider store={appState}>
-    <IntlProvider locale={locale} messages={(messages as any)[locale]}>
+    <IntlProvider locale={locale} messages={(messages as any)['fr-FR']}>
       <App />
     </IntlProvider>
   </Provider>,
