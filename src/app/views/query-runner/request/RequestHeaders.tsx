@@ -16,12 +16,12 @@ export const RequestHeadersControl = ({
                     <td>
                         <TextField
                             className='header-input'
-                            onChange={(event, name) => handleOnHeaderNameChange(event, name)}
+                            onChange={(event, name) => handleOnHeaderNameChange(name)}
                         />
                     </td>
                     <td>
                         <TextField className='header-input'
-                            onChange={(event, value) => handleOnHeaderValueChange(event, value)}
+                            onChange={(event, value) => handleOnHeaderValueChange(value)}
                             onBlur={() => handleOnHeaderValueBlur()}
                         />
                     </td>

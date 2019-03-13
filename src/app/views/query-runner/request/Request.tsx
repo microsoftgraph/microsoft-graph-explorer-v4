@@ -13,7 +13,7 @@ export class Request extends Component<any, any> {
         headerValue: '',
     };
 
-    private handleOnHeaderNameChange = (event: any, name?: any) => {
+    private handleOnHeaderNameChange = (name?: any) => {
         if (name) {
             this.setState({
                 headerName: name,
@@ -25,7 +25,7 @@ export class Request extends Component<any, any> {
         return;
     }
 
-    private handleOnHeaderValueChange = (event: any, value?: any) => {
+    private handleOnHeaderValueChange = (value?: any) => {
         if (value) {
             this.setState({
                 headerValue: value,
@@ -40,7 +40,13 @@ export class Request extends Component<any, any> {
         this.setState({
             headers: headersToDelete,
         });
-
+        const listOfHeaders = headers;
+        if (listOfHeaders.length === 0) {
+            listOfHeaders.push({ name: '', value: '' });
+        }
+        this.setState({
+            headers: listOfHeaders,
+        });
     };
 
     private handleOnHeaderValueBlur = () => {
