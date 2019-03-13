@@ -4,4 +4,7 @@ export interface IQueryResponseProps {
     body: object;
     headers: object;
   };
+  intl: {
+    message: object;
+  };
 }

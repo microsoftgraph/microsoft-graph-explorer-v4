@@ -1,5 +1,7 @@
 import { Dropdown, PrimaryButton, TextField } from 'office-ui-fabric-react';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
 import { IQueryInputControl } from '../../../types/query-runner';
 
 export const QueryInputControl = ({
@@ -28,7 +30,9 @@ export const QueryInputControl = ({
       <PrimaryButton
         onClick={() => handleOnRunQuery()}
       >
-        Run Query
+        <FormattedMessage
+          id='Run Query'
+        />
       </PrimaryButton>
     </div>
   );
