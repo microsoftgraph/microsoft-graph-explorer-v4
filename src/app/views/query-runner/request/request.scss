@@ -1,0 +1,38 @@
+@import"../../../../styles/variables";
+
+.request-editors {
+width:100%;
+margin-top: $gutter;
+min-height: 375px;
+border: 1px solid silver;
+
+    .ms-Pivot.root-84 {
+        width: 100%;
+        background-color: #eeeeee;
+    }
+
+    .request-editor-control {
+        margin-top:10px;
+    }
+
+    .headers-editor {
+        width:100%;
+        margin: 10px;
+
+        th {
+            font-weight:bold;
+            text-align:left;
+        }
+
+        .header-input {
+            width:95%;
+        }
+
+        .remove-header-btn {
+            margin-top: 12px;
+            font-size: 25px;
+        }
+ 
+    }
+
+}

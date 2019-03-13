@@ -1,10 +1,9 @@
 @import "../../../styles/variables";
 
 .query-input-container {
-  display: flex;
   width: 100%;
 
-  .query-input-controls {
+.query-input-controls { 
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -16,6 +15,6 @@
     .query-verb-dropdown {
       width: 90px;
     }
-  }
+  } 
 }
 

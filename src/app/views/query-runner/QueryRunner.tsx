@@ -1,10 +1,5 @@
-import {
-  Dropdown,
-  IDropdownOption,
-  PrimaryButton,
-  TextField,
-} from 'office-ui-fabric-react';
-import React, { Component, FormEvent } from 'react';
+import { IDropdownOption } from 'office-ui-fabric-react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -12,6 +7,7 @@ import { IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runne
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './query-runner.scss';
 import { QueryInputControl } from './QueryInput';
+import { Request } from './request/Request';
 
 export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
   constructor(props: any) {
@@ -21,7 +17,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
         { key: 'GET', text: 'GET' },
         { key: 'POST', text: 'POST' },
         { key: 'PUT', text: 'PUT' },
-        { key: 'PATCH', text: 'PATCH'},
+        { key: 'PATCH', text: 'PATCH' },
         { key: 'DELETE', text: 'DELETE' },
       ],
       selectedVerb: 'GET',
@@ -67,6 +63,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
           selectedVerb={selectedVerb}
           sampleURL={sampleURL}
         />
+        <Request />
       </div>
     );
   }
