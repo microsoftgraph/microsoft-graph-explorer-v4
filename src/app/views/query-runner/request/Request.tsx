@@ -71,7 +71,7 @@ export class Request extends Component<any, any> {
         const { headers } = this.state;
         return (
             <div className='request-editors'>
-                <Pivot linkSize={PivotLinkSize.large}>
+                <Pivot>
                     <PivotItem headerText='Request Body'>
                         <RequestBodyControl />
                     </PivotItem>
