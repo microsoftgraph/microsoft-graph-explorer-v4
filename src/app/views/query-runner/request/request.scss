@@ -6,12 +6,17 @@ margin-top:10px;
 min-height: 375px;
 border: 1px solid silver;
 
+    .ms-Pivot.root-84 {
+        width: 100%;
+    }
+
     .request-editor-control {
         margin-top:10px;
     }
 
     .headers-editor {
         width:100%;
+        margin: 10px;
 
         th {
             font-weight:bold;

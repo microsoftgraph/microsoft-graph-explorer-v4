@@ -5,7 +5,7 @@ export const RequestBodyControl = () => {
     return (
         <div className='request-editor-control'>
             <Monaco
-                body={{}}
+                body={undefined}
             />
         </div>
     );
