@@ -60,7 +60,7 @@ export class Request extends Component<any, any> {
                 headerValue: '',
             });
         }
-    }
+    };
 
     public getLastHeader() {
         const headersLength = this.state.headers.length;
