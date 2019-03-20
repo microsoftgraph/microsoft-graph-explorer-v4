@@ -8,6 +8,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IAuthenticationProps, IAuthenticationState } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
+import { ADMIN_AUTH_URL, AUTH_URL, DEFAULT_USER_SCOPES , TOKEN_URL, USER_INFO_URL } from '../../services/constants';
 import './authentication.scss';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
@@ -18,17 +19,14 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     },
   };
 
-  private readonly userInfoUrl = `https://graph.microsoft.com/v1.0/me`;
-
   public signIn = () => {
     const { actions, queryActions } = this.props;
     hello.init({
       msft: {
         oauth: {
           version: 2,
-          auth:
-            'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
-          grant: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+          auth: AUTH_URL,
+          grant: TOKEN_URL,
         },
         scope_delim: ' ',
         form: false,
@@ -36,8 +34,8 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
       msft_admin_consent: {
         oauth: {
           version: 2,
-          auth: 'https://login.microsoftonline.com/common/adminconsent',
-          grant: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+          auth: ADMIN_AUTH_URL,
+          grant: TOKEN_URL,
         },
         scope_delim: ' ',
         form: false,
@@ -54,9 +52,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     );
     hello('msft').login({
         response_type: 'token',
-        scope:
-          'openid profile User.ReadWrite User.ReadBasic.All Sites.ReadWrite.All Contacts.ReadWrite ' +
-          'People.Read Notes.ReadWrite.All Tasks.ReadWrite Mail.ReadWrite Files.ReadWrite.All Calendars.ReadWrite',
+        scope: DEFAULT_USER_SCOPES,
         display: 'popup',
       });
     hello.on('auth.login', async (auth) => {
@@ -68,7 +64,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
         if (accessToken) {
           try {
             let user = {};
-            const userInfo = (queryActions) ? await queryActions.runQuery(this.userInfoUrl) : null;
+            const userInfo = (queryActions) ? await queryActions.runQuery(USER_INFO_URL) : null;
             const jsonUserInfo = userInfo.response.body;
             user = {...user,
                     displayName: jsonUserInfo.displayName,
