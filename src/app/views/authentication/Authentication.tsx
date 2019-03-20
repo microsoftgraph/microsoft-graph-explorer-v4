@@ -7,6 +7,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { IAuthenticationProps, IAuthenticationState } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
+import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './authentication.scss';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
@@ -17,7 +18,10 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     };
   }
 
+  private readonly userInfoUrl = `https://graph.microsoft.com/v1.0/me`;
+
   public signIn = () => {
+    const { actions, queryActions } = this.props;
     hello.init({
       msft: {
         oauth: {
@@ -62,7 +66,21 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
           accessToken = authResponse.access_token;
         }
         if (accessToken) {
-          console.log(accessToken);
+          try {
+            let user = {};
+            const userInfo = (queryActions) ? await queryActions.runQuery(this.userInfoUrl) : null;
+            const jsonUserInfo = userInfo.response.body;
+            user = {...user,
+                    displayName: jsonUserInfo.displayName,
+                    emailAddress: jsonUserInfo.mail || jsonUserInfo.userPrincipalName,
+            };
+            if (actions) {
+              actions.authenticateUser(user);
+            }
+          } catch (e) {
+            // tslint:disable-next-line:no-console
+            console.log(e);
+          }
         }
       });
   };
@@ -86,6 +104,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators(authActionCreators, dispatch),
+    queryActions: bindActionCreators(queryActionCreators, dispatch),
   };
 }
 export default connect(
