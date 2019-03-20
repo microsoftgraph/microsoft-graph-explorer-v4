@@ -11,12 +11,12 @@ import * as queryActionCreators from '../../services/actions/query-action-creato
 import './authentication.scss';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      user: {},
-    };
-  }
+  public state = {
+    user: {
+      displayName: '',
+      emailAddress: '',
+    },
+  };
 
   private readonly userInfoUrl = `https://graph.microsoft.com/v1.0/me`;
 
@@ -76,6 +76,9 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
             };
             if (actions) {
               actions.authenticateUser(user);
+              this.setState({
+                user,
+              });
             }
           } catch (e) {
             // tslint:disable-next-line:no-console
@@ -86,15 +89,16 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   };
 
   public render() {
+    const { user } = this.state;
     return (
       <div className='authentication-container'>
         <PrimaryButton onClick={this.signIn} className='signIn-button'>
           Sign In
         </PrimaryButton>
         <div className='authentication-details'>
-          <span className='user-name'>Megan Bowen</span>
+          <span className='user-name'>{user.displayName}</span>
           <br />
-          <span className='user-email'>MeganB@M365x214355.onmicrosoft.com</span>
+          <span className='user-email'>{user.emailAddress}</span>
         </div>
       </div>
     );
@@ -107,7 +111,14 @@ function mapDispatchToProps(dispatch: Dispatch): object {
     queryActions: bindActionCreators(queryActionCreators, dispatch),
   };
 }
+
+function mapStateToProps(state: IAuthenticationState) {
+  return {
+    user: state.user,
+  };
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(Authentication);
