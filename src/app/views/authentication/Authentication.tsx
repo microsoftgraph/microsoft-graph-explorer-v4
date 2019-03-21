@@ -13,9 +13,13 @@ import './authentication.scss';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
   public state = {
-    user: {
-      displayName: '',
-      emailAddress: '',
+    authenticated: {
+      status: false,
+      user: {
+        displayName: '',
+        emailAddress: '',
+      },
+      token: '',
     },
   };
 
@@ -57,23 +61,27 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
       });
     hello.on('auth.login', async (auth) => {
         let accessToken;
+        const authenticated = {...this.state.authenticated};
         if (auth.network === 'msft') {
           const authResponse = hello('msft').getAuthResponse();
           accessToken = authResponse.access_token;
+          if (accessToken) {
+            authenticated.token = accessToken;
+          }
+          authenticated.status = true;
         }
         if (accessToken) {
           try {
-            let user = {};
             const userInfo = (queryActions) ? await queryActions.runQuery(USER_INFO_URL) : null;
             const jsonUserInfo = userInfo.response.body;
-            user = {...user,
-                    displayName: jsonUserInfo.displayName,
-                    emailAddress: jsonUserInfo.mail || jsonUserInfo.userPrincipalName,
+            authenticated.user = {...{},
+                                  displayName: jsonUserInfo.displayName,
+                                  emailAddress: jsonUserInfo.mail || jsonUserInfo.userPrincipalName,
             };
             if (actions) {
-              actions.authenticateUser(user);
+              actions.authenticateUser(authenticated);
               this.setState({
-                user,
+                authenticated,
               });
             }
           } catch (e) {
@@ -85,16 +93,17 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   };
 
   public render() {
-    const { user } = this.state;
+    const { authenticated } = this.state;
+    console.log(authenticated);
     return (
       <div className='authentication-container'>
         <PrimaryButton onClick={this.signIn} className='signIn-button'>
           Sign In
         </PrimaryButton>
         <div className='authentication-details'>
-          <span className='user-name'>{user.displayName}</span>
+          <span className='user-name'>{authenticated.user.displayName}</span>
           <br />
-          <span className='user-email'>{user.emailAddress}</span>
+          <span className='user-email'>{authenticated.user.emailAddress}</span>
         </div>
       </div>
     );
@@ -110,7 +119,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 function mapStateToProps(state: IAuthenticationState) {
   return {
-    user: state.user,
+    authenticated: state.authenticated,
   };
 }
 

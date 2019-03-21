@@ -8,5 +8,5 @@ export interface IAuthenticationProps {
   }
 
 export interface IAuthenticationState {
-    user: object;
+    authenticated: object;
   }
