@@ -94,7 +94,6 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
 
   public render() {
     const { authenticated } = this.state;
-    console.log(authenticated);
     return (
       <div className='authentication-container'>
         <PrimaryButton onClick={this.signIn} className='signIn-button'>
