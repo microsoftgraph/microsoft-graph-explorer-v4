@@ -14,14 +14,14 @@ export function queryResponseError(response: object): IAction {
   };
 }
 
-export function runQuery(url: string, identified: boolean = false): Function {
-  return (dispatch: Function, getState: Function) => {
+export function runQuery(url: string): Function {
+  return (dispatch: Function) => {
     const respHeaders: any = {};
-    const authentication = getState().authResponse;
     let authToken = '{token:https://graph.microsoft.com/}';
     let graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${url}`;
-    if (authentication && authentication.authenticated && identified) {
-      authToken = authentication.authenticated.token;
+    const authenticated = localStorage.getItem('authenticated');
+    if (authenticated) {
+      authToken = JSON.parse(authenticated).token;
       graphUrl = url;
     }
     const headers = { Authorization: `Bearer ${authToken}` };

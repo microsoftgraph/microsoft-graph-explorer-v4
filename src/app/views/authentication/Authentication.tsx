@@ -80,10 +80,13 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
             authenticated.token = accessToken;
           }
           authenticated.status = true;
+          if (actions) {
+            actions.authenticateUser(authenticated);
+          }
         }
         if (accessToken) {
           try {
-            const userInfo = (queryActions) ? await queryActions.runQuery(USER_INFO_URL, true) : null;
+            const userInfo = (queryActions) ? await queryActions.runQuery(USER_INFO_URL) : null;
             const jsonUserInfo = userInfo.response.body;
             authenticated.user = {...{},
                                   displayName: jsonUserInfo.displayName,
