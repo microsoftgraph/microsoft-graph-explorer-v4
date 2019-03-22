@@ -20,7 +20,7 @@ export function runQuery(url: string): Function {
     let authToken = '{token:https://graph.microsoft.com/}';
     let graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${url}`;
     const authenticated = localStorage.getItem('authenticated');
-    if (authenticated) {
+    if (authenticated && JSON.parse(authenticated).token) {
       authToken = JSON.parse(authenticated).token;
       graphUrl = url;
     }

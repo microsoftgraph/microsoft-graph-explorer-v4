@@ -25,7 +25,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
 
   public componentDidMount = () => {
     const authenticated = localStorage.getItem('authenticated');
-    if (authenticated && this.props.actions) {
+    if (authenticated && this.props.actions && JSON.parse(authenticated).status) {
       this.props.actions.authenticateUser(JSON.parse(authenticated));
       this.setState({
         authenticated: JSON.parse(authenticated),
@@ -40,6 +40,24 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
         scope: DEFAULT_USER_SCOPES,
         display: 'popup',
       });
+  };
+
+  public signOut = () => {
+    const { actions } = this.props;
+    if (actions) {
+      const authenticated = {
+        status: false,
+        user: {
+          displayName: null,
+          emailAddress: null,
+        },
+        token: null,
+      };
+      actions.authenticateUser(authenticated);
+      this.setState({
+        authenticated,
+      });
+    }
   };
 
   private initialiseAuthentication() {
@@ -108,11 +126,20 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
 
   public render() {
     const { authenticated } = this.state;
+    let button;
+    if (authenticated.status) {
+      button = <PrimaryButton onClick={this.signOut} className='signIn-button'>
+      Sign Out
+    </PrimaryButton>;
+    } else {
+      button = <PrimaryButton onClick={this.signIn} className='signIn-button'>
+      Sign In
+    </PrimaryButton>;
+    }
+
     return (
       <div className='authentication-container'>
-        <PrimaryButton onClick={this.signIn} className='signIn-button'>
-          Sign In
-        </PrimaryButton>
+        {button}
         <div className='authentication-details'>
           <span className='user-name'>{authenticated.user.displayName}</span>
           <br />
