@@ -23,7 +23,26 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     },
   };
 
+  public componentDidMount = () => {
+    const authenticated = localStorage.getItem('authenticated');
+    if (authenticated && this.props.actions) {
+      this.props.actions.authenticateUser(JSON.parse(authenticated));
+      this.setState({
+        authenticated: JSON.parse(authenticated),
+      });
+    }
+  }
+
   public signIn = () => {
+    this.initialiseAuthentication();
+    hello('msft').login({
+        response_type: 'token',
+        scope: DEFAULT_USER_SCOPES,
+        display: 'popup',
+      });
+  };
+
+  private initialiseAuthentication() {
     const { actions, queryActions } = this.props;
     hello.init({
       msft: {
@@ -45,19 +64,11 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
         form: false,
       },
     } as any);
-    hello.init(
-      {
-        msft: 'cb2d7367-7429-41c6-ab18-6ecb336139a6',
-        msft_admin_consent: 'cb2d7367-7429-41c6-ab18-6ecb336139a6',
-      },
-      {
+    hello.init({
+      msft: 'cb2d7367-7429-41c6-ab18-6ecb336139a6',
+      msft_admin_consent: 'cb2d7367-7429-41c6-ab18-6ecb336139a6',
+    }, {
         redirect_uri: window.location.pathname,
-      },
-    );
-    hello('msft').login({
-        response_type: 'token',
-        scope: DEFAULT_USER_SCOPES,
-        display: 'popup',
       });
     hello.on('auth.login', async (auth) => {
         let accessToken;
@@ -90,7 +101,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
           }
         }
       });
-  };
+  }
 
   public render() {
     const { authenticated } = this.state;
