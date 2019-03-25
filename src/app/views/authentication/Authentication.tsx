@@ -11,6 +11,7 @@ import * as queryActionCreators from '../../services/actions/query-action-creato
 import { ADMIN_AUTH_URL, AUTH_URL, DEFAULT_USER_SCOPES , TOKEN_URL, USER_INFO_URL } from '../../services/constants';
 import SubmitButton from '../common/submit-button/SubmitButton';
 import './authentication.scss';
+import { Profile } from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
   public state = {
@@ -146,11 +147,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     return (
       <div className='authentication-container'>
         <SubmitButton className='signIn-button' text={buttonText} handleOnClick={this.signIn} submitting={loading} />
-        <div className='authentication-details'>
-          <span className='user-name'>{authenticated.user.displayName}</span>
-          <br />
-          <span className='user-email'>{authenticated.user.emailAddress}</span>
-        </div>
+        <Profile user={authenticated.user}/>
       </div>
     );
   }
