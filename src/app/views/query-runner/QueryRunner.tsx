@@ -42,7 +42,9 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     const { actions } = this.props;
 
     if (actions) {
-      actions.runQuery(sampleURL);
+      actions.runQuery({
+        sampleURL,
+      });
     }
   };
 

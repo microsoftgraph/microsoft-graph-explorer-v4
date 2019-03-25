@@ -1,5 +1,4 @@
 import hello from 'hellojs';
-import { PrimaryButton } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
@@ -8,7 +7,8 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IAuthenticationProps, IAuthenticationState } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
-import { ADMIN_AUTH_URL, AUTH_URL, DEFAULT_USER_SCOPES , TOKEN_URL, USER_INFO_URL } from '../../services/constants';
+import { ADMIN_AUTH_URL, AUTH_URL, DEFAULT_USER_SCOPES , TOKEN_URL,
+  USER_INFO_URL, USER_PICTURE_URL } from '../../services/constants';
 import SubmitButton from '../common/submit-button/SubmitButton';
 import './authentication.scss';
 import { Profile } from './profile/Profile';
@@ -20,6 +20,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
       user: {
         displayName: '',
         emailAddress: '',
+        profileImageUrl: '',
       },
       token: '',
     },
@@ -102,7 +103,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
       });
     hello.on('auth.login', async (auth) => {
         let accessToken;
-        const authenticated = {...this.state.authenticated};
+        let authenticated = {...this.state.authenticated};
         if (auth.network === 'msft') {
           const authResponse = hello('msft').getAuthResponse();
           accessToken = authResponse.access_token;
@@ -116,18 +117,48 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
         }
         if (accessToken) {
           try {
-            const userInfo = (queryActions) ? await queryActions.runQuery(USER_INFO_URL) : null;
+            const query = {
+              sampleURL : USER_INFO_URL,
+            };
+            const userInfo = (queryActions) ? await queryActions.runQuery(query) : null;
             const jsonUserInfo = userInfo.response.body;
             authenticated.user = {...{},
                                   displayName: jsonUserInfo.displayName,
                                   emailAddress: jsonUserInfo.mail || jsonUserInfo.userPrincipalName,
+                                  profileImageUrl: '',
             };
             if (actions) {
               actions.authenticateUser(authenticated);
               this.setState({
                 authenticated,
-                loading: false,
               });
+            }
+            try {
+              const pictureQuery = {
+                sampleURL : USER_PICTURE_URL,
+              };
+              const userPicture = (queryActions) ? await queryActions.runQuery(pictureQuery) : null;
+              const blob = new Blob([userPicture.response.body.arrayBuffer()], { type: 'image/jpeg' });
+              const imageUrl = window.URL.createObjectURL(blob);
+              if (actions) {
+                authenticated = this.state.authenticated;
+                authenticated.user.profileImageUrl = imageUrl;
+                actions.authenticateUser(authenticated);
+                this.setState({
+                  authenticated,
+                  loading: false,
+                });
+              }
+            } catch (e) {
+              if (actions) {
+                authenticated = this.state.authenticated;
+                authenticated.user.profileImageUrl = '';
+                actions.authenticateUser(authenticated);
+                this.setState({
+                  authenticated,
+                  loading: false,
+                });
+              }
             }
           } catch (e) {
             // tslint:disable-next-line:no-console

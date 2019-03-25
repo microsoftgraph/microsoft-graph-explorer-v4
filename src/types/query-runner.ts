@@ -4,6 +4,11 @@ export interface IQueryRunnerState {
   sampleURL: string;
 }
 
+export interface IQuery {
+  selectedVerb?: string;
+  sampleURL: string;
+}
+
 export interface IQueryRunnerProps {
   actions?: {
     runQuery: Function;

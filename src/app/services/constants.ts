@@ -3,6 +3,7 @@ export const QUERY_GRAPH_ERROR = 'QUERY_GRAPH_ERROR';
 export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
 
 export const USER_INFO_URL = 'https://graph.microsoft.com/v1.0/me';
+export const USER_PICTURE_URL = 'https://graph.microsoft.com/v1.0/me/photo/$value';
 export const AUTH_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
 export const ADMIN_AUTH_URL = 'https://login.microsoftonline.com/common/adminconsent';
 export const TOKEN_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
