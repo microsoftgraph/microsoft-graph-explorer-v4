@@ -9,6 +9,7 @@ import { IAuthenticationProps, IAuthenticationState } from '../../../types/authe
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import { ADMIN_AUTH_URL, AUTH_URL, DEFAULT_USER_SCOPES , TOKEN_URL, USER_INFO_URL } from '../../services/constants';
+import SubmitButton from '../common/submit-button/SubmitButton';
 import './authentication.scss';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
@@ -21,6 +22,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
       },
       token: '',
     },
+    loading: false,
   };
 
   public componentDidMount = () => {
@@ -34,12 +36,20 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   }
 
   public signIn = () => {
-    this.initialiseAuthentication();
-    hello('msft').login({
-        response_type: 'token',
-        scope: DEFAULT_USER_SCOPES,
-        display: 'popup',
-      });
+    this.setState({
+      loading: true,
+    });
+    const authenticated = this.state.authenticated;
+    if (authenticated.status) {
+      this.signOut();
+    } else {
+      this.initialiseAuthentication();
+      hello('msft').login({
+          response_type: 'token',
+          scope: DEFAULT_USER_SCOPES,
+          display: 'popup',
+        });
+    }
   };
 
   public signOut = () => {
@@ -56,6 +66,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
       actions.authenticateUser(authenticated);
       this.setState({
         authenticated,
+        loading: false,
       });
     }
   };
@@ -114,6 +125,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
               actions.authenticateUser(authenticated);
               this.setState({
                 authenticated,
+                loading: false,
               });
             }
           } catch (e) {
@@ -125,21 +137,15 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   }
 
   public render() {
-    const { authenticated } = this.state;
-    let button;
+    const { authenticated, loading } = this.state;
+    let buttonText = 'Sign In';
     if (authenticated.status) {
-      button = <PrimaryButton onClick={this.signOut} className='signIn-button'>
-      Sign Out
-    </PrimaryButton>;
-    } else {
-      button = <PrimaryButton onClick={this.signIn} className='signIn-button'>
-      Sign In
-    </PrimaryButton>;
+      buttonText = 'Sign Out';
     }
 
     return (
       <div className='authentication-container'>
-        {button}
+        <SubmitButton className='signIn-button' text={buttonText} handleOnClick={this.signIn} submitting={loading} />
         <div className='authentication-details'>
           <span className='user-name'>{authenticated.user.displayName}</span>
           <br />
