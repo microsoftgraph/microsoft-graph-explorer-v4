@@ -10,7 +10,7 @@ export const QueryInputControl = ({
   handleOnUrlChange,
   httpMethods,
   selectedVerb,
-  sampleURL,
+  sampleUrl,
 }: IQueryInputControl) => {
 
   return (
@@ -25,7 +25,7 @@ export const QueryInputControl = ({
         placeholder='Query Sample'
         className='query-text-field'
         onChange={(event, value) => handleOnUrlChange(value)}
-        defaultValue={sampleURL}
+        defaultValue={sampleUrl}
       />
       <PrimaryButton
         onClick={() => handleOnRunQuery()}

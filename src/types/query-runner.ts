@@ -1,7 +1,9 @@
 export interface IQueryRunnerState {
   httpMethods: Array<{ key: string; text: string; }>;
   selectedVerb: string;
-  sampleURL: string;
+  sampleUrl: string;
+  sampleBody: object;
+  sampleHeaders: object;
 }
 
 export interface IQueryRunnerProps {
@@ -16,7 +18,7 @@ export interface IQueryInputControl {
   handleOnUrlChange: Function;
   httpMethods: Array<{ key: string; text: string}>;
   selectedVerb: string;
-  sampleURL: string;
+  sampleUrl: string;
 }
 
 export interface IAction {
