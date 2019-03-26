@@ -138,8 +138,9 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
                 sampleURL : USER_PICTURE_URL,
               };
               const userPicture = (queryActions) ? await queryActions.runQuery(pictureQuery) : null;
-              const blob = new Blob([userPicture.response.body.arrayBuffer()], { type: 'image/jpeg' });
-              const imageUrl = window.URL.createObjectURL(blob);
+              const buffer = await userPicture.response.body.arrayBuffer();
+              const blob = new Blob([buffer], { type: 'image/jpeg' });
+              const imageUrl = URL.createObjectURL(blob);
               if (actions) {
                 authenticated = this.state.authenticated;
                 authenticated.user.profileImageUrl = imageUrl;
@@ -170,14 +171,11 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
 
   public render() {
     const { authenticated, loading } = this.state;
-    let buttonText = 'Sign In';
-    if (authenticated.status) {
-      buttonText = 'Sign Out';
-    }
+    const buttonLabel = authenticated.status ? 'sign out' : 'sign in';
 
     return (
       <div className='authentication-container'>
-        <SubmitButton className='signIn-button' text={buttonText} handleOnClick={this.signIn} submitting={loading} />
+        <SubmitButton className='signIn-button' text={buttonLabel} handleOnClick={this.signIn} submitting={loading} />
         <Profile user={authenticated.user}/>
       </div>
     );
