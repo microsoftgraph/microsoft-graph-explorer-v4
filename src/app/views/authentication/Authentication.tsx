@@ -13,7 +13,7 @@ import { Profile } from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
   public state = {
-    authenticated: {
+    authenticatedUser: {
       status: false,
       user: {
         displayName: '',
@@ -26,64 +26,68 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   };
 
   public componentDidMount = () => {
-    const authenticated = localStorage.getItem('authenticated');
-    if (authenticated && this.props.actions && JSON.parse(authenticated).status) {
-      this.props.actions.authenticateUser(JSON.parse(authenticated));
+    const authenticatedUser = localStorage.getItem('authenticatedUser');
+    if (authenticatedUser && this.props.actions && JSON.parse(authenticatedUser).status) {
+      this.props.actions.authenticateUser(JSON.parse(authenticatedUser));
       this.setState({
-        authenticated: JSON.parse(authenticated),
+        authenticatedUser: JSON.parse(authenticatedUser),
       });
     }
   }
 
   public signIn = async () => {
     const { queryActions, actions } = this.props;
-    let authenticated = {...this.state.authenticated};
+    let authenticatedUser = {...this.state.authenticatedUser};
     this.setState({
       loading: true,
     });
-    if (authenticated.status) {
+    if (authenticatedUser.status) {
       this.signOut();
     } else {
       const accessToken = await getAccessToken();
       if (accessToken) {
-        authenticated.token = accessToken;
-        authenticated.status = true;
+        authenticatedUser.token = accessToken;
+        authenticatedUser.status = true;
         if (actions) {
-          actions.authenticateUser(authenticated);
+          actions.authenticateUser(authenticatedUser);
+          localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
         }
         try {
           const userInfo = await this.getUserInfo(queryActions);
-          authenticated.user = {...{},
-                                displayName: userInfo.displayName,
-                                emailAddress: userInfo.mail || userInfo.userPrincipalName,
-                                profileImageUrl: '',
+          authenticatedUser.user = {...{},
+                                    displayName: userInfo.displayName,
+                                    emailAddress: userInfo.mail || userInfo.userPrincipalName,
+                                    profileImageUrl: '',
           };
           if (actions) {
-            actions.authenticateUser(authenticated);
+            actions.authenticateUser(authenticatedUser);
             this.setState({
-              authenticated,
+              authenticatedUser,
             });
+            localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
           }
           try {
             const imageUrl = await this.getImageUrl(queryActions);
             if (actions) {
-              authenticated = this.state.authenticated;
-              authenticated.user.profileImageUrl = imageUrl;
-              actions.authenticateUser(authenticated);
+              authenticatedUser = this.state.authenticatedUser;
+              authenticatedUser.user.profileImageUrl = imageUrl;
+              actions.authenticateUser(authenticatedUser);
               this.setState({
-                authenticated,
+                authenticatedUser,
                 loading: false,
               });
+              localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
             }
           } catch (e) {
             if (actions) {
-              authenticated = this.state.authenticated;
-              authenticated.user.profileImageUrl = '';
-              actions.authenticateUser(authenticated);
+              authenticatedUser = this.state.authenticatedUser;
+              authenticatedUser.user.profileImageUrl = '';
+              actions.authenticateUser(authenticatedUser);
               this.setState({
-                authenticated,
+                authenticatedUser,
                 loading: false,
               });
+              localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
             }
           }
         } catch (e) {
@@ -97,7 +101,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   public signOut = () => {
     const { actions } = this.props;
     if (actions) {
-      const authenticated = {
+      const authenticatedUser = {
         status: false,
         user: {
           displayName: null,
@@ -105,10 +109,10 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
         },
         token: null,
       };
-      actions.authenticateUser(authenticated);
+      actions.authenticateUser(authenticatedUser);
       logOut();
       this.setState({
-        authenticated,
+        authenticatedUser,
         loading: false,
       });
     }
@@ -133,13 +137,13 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   }
 
   public render() {
-    const { authenticated, loading } = this.state;
-    const buttonLabel = authenticated.status ? 'sign out' : 'sign in';
+    const { authenticatedUser, loading } = this.state;
+    const buttonLabel = authenticatedUser.status ? 'sign out' : 'sign in';
 
     return (
       <div className='authentication-container'>
         <SubmitButton className='signIn-button' text={buttonLabel} handleOnClick={this.signIn} submitting={loading} />
-        <Profile user={authenticated.user}/>
+        <Profile user={authenticatedUser.user}/>
       </div>
     );
   }
@@ -154,7 +158,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 function mapStateToProps(state: IAuthenticationState) {
   return {
-    authenticated: state.authenticated,
+    authenticatedUser: state.authenticatedUser,
   };
 }
 

@@ -20,11 +20,11 @@ export function runQuery(query: IQuery): Function {
   let authToken = '{token:https://graph.microsoft.com/}';
   let graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleURL}`;
   const respHeaders: any = {};
-  const authenticated = localStorage.getItem('authenticated');
+  const authenticatedUser = localStorage.getItem('authenticatedUser');
 
   return (dispatch: Function) => {
-    if (authenticated && JSON.parse(authenticated).token) {
-      authToken = JSON.parse(authenticated).token;
+    if (authenticatedUser && JSON.parse(authenticatedUser).token) {
+      authToken = JSON.parse(authenticatedUser).token;
       graphUrl = query.sampleURL;
     }
     const headers = { Authorization: `Bearer ${authToken}` };
