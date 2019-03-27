@@ -1,16 +1,14 @@
-import hello from 'hellojs';
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { IAuthenticationProps, IAuthenticationState } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
-import { ADMIN_AUTH_URL, AUTH_URL, DEFAULT_USER_SCOPES , TOKEN_URL,
-  USER_INFO_URL, USER_PICTURE_URL } from '../../services/constants';
+import { USER_INFO_URL, USER_PICTURE_URL } from '../../services/constants';
 import SubmitButton from '../common/submit-button/SubmitButton';
 import './authentication.scss';
+import { getAccessToken, logOut } from './AuthService';
 import { Profile } from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
@@ -37,20 +35,62 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     }
   }
 
-  public signIn = () => {
+  public signIn = async () => {
+    const { queryActions, actions } = this.props;
+    let authenticated = {...this.state.authenticated};
     this.setState({
       loading: true,
     });
-    const authenticated = this.state.authenticated;
     if (authenticated.status) {
       this.signOut();
     } else {
-      this.initialiseAuthentication();
-      hello('msft').login({
-          response_type: 'token',
-          scope: DEFAULT_USER_SCOPES,
-          display: 'popup',
-        });
+      const accessToken = await getAccessToken();
+      if (accessToken) {
+        authenticated.token = accessToken;
+        authenticated.status = true;
+        if (actions) {
+          actions.authenticateUser(authenticated);
+        }
+        try {
+          const userInfo = await this.getUserInfo(queryActions);
+          authenticated.user = {...{},
+                                displayName: userInfo.displayName,
+                                emailAddress: userInfo.mail || userInfo.userPrincipalName,
+                                profileImageUrl: '',
+          };
+          if (actions) {
+            actions.authenticateUser(authenticated);
+            this.setState({
+              authenticated,
+            });
+          }
+          try {
+            const imageUrl = await this.getImageUrl(queryActions);
+            if (actions) {
+              authenticated = this.state.authenticated;
+              authenticated.user.profileImageUrl = imageUrl;
+              actions.authenticateUser(authenticated);
+              this.setState({
+                authenticated,
+                loading: false,
+              });
+            }
+          } catch (e) {
+            if (actions) {
+              authenticated = this.state.authenticated;
+              authenticated.user.profileImageUrl = '';
+              actions.authenticateUser(authenticated);
+              this.setState({
+                authenticated,
+                loading: false,
+              });
+            }
+          }
+        } catch (e) {
+          // tslint:disable-next-line:no-console
+          console.log(e);
+        }
+      }
     }
   };
 
@@ -66,6 +106,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
         token: null,
       };
       actions.authenticateUser(authenticated);
+      logOut();
       this.setState({
         authenticated,
         loading: false,
@@ -73,100 +114,22 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     }
   };
 
-  private initialiseAuthentication() {
-    const { actions, queryActions } = this.props;
-    hello.init({
-      msft: {
-        oauth: {
-          version: 2,
-          auth: AUTH_URL,
-          grant: TOKEN_URL,
-        },
-        scope_delim: ' ',
-        form: false,
-      },
-      msft_admin_consent: {
-        oauth: {
-          version: 2,
-          auth: ADMIN_AUTH_URL,
-          grant: TOKEN_URL,
-        },
-        scope_delim: ' ',
-        form: false,
-      },
-    } as any);
-    hello.init({
-      msft: 'cb2d7367-7429-41c6-ab18-6ecb336139a6',
-      msft_admin_consent: 'cb2d7367-7429-41c6-ab18-6ecb336139a6',
-    }, {
-        redirect_uri: window.location.pathname,
-      });
-    hello.on('auth.login', async (auth) => {
-        let accessToken;
-        let authenticated = {...this.state.authenticated};
-        if (auth.network === 'msft') {
-          const authResponse = hello('msft').getAuthResponse();
-          accessToken = authResponse.access_token;
-          if (accessToken) {
-            authenticated.token = accessToken;
-          }
-          authenticated.status = true;
-          if (actions) {
-            actions.authenticateUser(authenticated);
-          }
-        }
-        if (accessToken) {
-          try {
-            const query = {
-              sampleURL : USER_INFO_URL,
-            };
-            const userInfo = (queryActions) ? await queryActions.runQuery(query) : null;
-            const jsonUserInfo = userInfo.response.body;
-            authenticated.user = {...{},
-                                  displayName: jsonUserInfo.displayName,
-                                  emailAddress: jsonUserInfo.mail || jsonUserInfo.userPrincipalName,
-                                  profileImageUrl: '',
-            };
-            if (actions) {
-              actions.authenticateUser(authenticated);
-              this.setState({
-                authenticated,
-              });
-            }
-            try {
-              const pictureQuery = {
-                sampleURL : USER_PICTURE_URL,
-              };
-              const userPicture = (queryActions) ? await queryActions.runQuery(pictureQuery) : null;
-              const buffer = await userPicture.response.body.arrayBuffer();
-              const blob = new Blob([buffer], { type: 'image/jpeg' });
-              const imageUrl = URL.createObjectURL(blob);
-              if (actions) {
-                authenticated = this.state.authenticated;
-                authenticated.user.profileImageUrl = imageUrl;
-                actions.authenticateUser(authenticated);
-                this.setState({
-                  authenticated,
-                  loading: false,
-                });
-              }
-            } catch (e) {
-              if (actions) {
-                authenticated = this.state.authenticated;
-                authenticated.user.profileImageUrl = '';
-                actions.authenticateUser(authenticated);
-                this.setState({
-                  authenticated,
-                  loading: false,
-                });
-              }
-            }
-          } catch (e) {
-            // tslint:disable-next-line:no-console
-            console.log(e);
-          }
-        }
-      });
+  private async getUserInfo(queryActions: any) {
+    const userInfo = (queryActions) ? await queryActions.runQuery({
+      sampleURL: USER_INFO_URL,
+    }) : null;
+    const jsonUserInfo = userInfo.response.body;
+    return jsonUserInfo;
+  }
+
+  private async getImageUrl(queryActions: any) {
+    const userPicture = (queryActions) ? await queryActions.runQuery({
+      sampleURL: USER_PICTURE_URL,
+    }) : null;
+    const buffer = await userPicture.response.body.arrayBuffer();
+    const blob = new Blob([buffer], { type: 'image/jpeg' });
+    const imageUrl = URL.createObjectURL(blob);
+    return imageUrl;
   }
 
   public render() {
