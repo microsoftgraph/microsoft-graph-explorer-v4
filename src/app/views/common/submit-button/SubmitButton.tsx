@@ -12,7 +12,7 @@ const SubmitButtonControl = ({
     if (submitting) {
         return (
             <div className={className}>
-            <PrimaryButton
+            <PrimaryButton disabled={submitting}
               onClick={() => handleOnClick()}
             >
               <FormattedMessage

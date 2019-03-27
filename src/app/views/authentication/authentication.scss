@@ -13,7 +13,7 @@
     margin-bottom: $gutter;
     justify-content: space-between;
     position: relative;
-    height: 40px;
+    height: 48px;
 
 
     .user-imageArea {
@@ -33,7 +33,7 @@
       }
 
       .user-email {
-        font-size: 0.8em;
+        font-size: $fontSizeSmall;
       }
     }
   }
