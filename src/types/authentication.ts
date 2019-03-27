@@ -9,4 +9,5 @@ export interface IAuthenticationProps {
 
 export interface IAuthenticationState {
     authenticated: object;
+    loading: boolean;
   }

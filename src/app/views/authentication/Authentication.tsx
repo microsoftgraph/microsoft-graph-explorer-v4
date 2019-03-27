@@ -1,5 +1,4 @@
 import hello from 'hellojs';
-import { PrimaryButton } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
@@ -8,8 +7,11 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IAuthenticationProps, IAuthenticationState } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
-import { ADMIN_AUTH_URL, AUTH_URL, DEFAULT_USER_SCOPES , TOKEN_URL, USER_INFO_URL } from '../../services/constants';
+import { ADMIN_AUTH_URL, AUTH_URL, DEFAULT_USER_SCOPES , TOKEN_URL,
+  USER_INFO_URL, USER_PICTURE_URL } from '../../services/constants';
+import SubmitButton from '../common/submit-button/SubmitButton';
 import './authentication.scss';
+import { Profile } from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
   public state = {
@@ -18,9 +20,11 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
       user: {
         displayName: '',
         emailAddress: '',
+        profileImageUrl: '',
       },
       token: '',
     },
+    loading: false,
   };
 
   public componentDidMount = () => {
@@ -34,12 +38,20 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   }
 
   public signIn = () => {
-    this.initialiseAuthentication();
-    hello('msft').login({
-        response_type: 'token',
-        scope: DEFAULT_USER_SCOPES,
-        display: 'popup',
-      });
+    this.setState({
+      loading: true,
+    });
+    const authenticated = this.state.authenticated;
+    if (authenticated.status) {
+      this.signOut();
+    } else {
+      this.initialiseAuthentication();
+      hello('msft').login({
+          response_type: 'token',
+          scope: DEFAULT_USER_SCOPES,
+          display: 'popup',
+        });
+    }
   };
 
   public signOut = () => {
@@ -56,6 +68,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
       actions.authenticateUser(authenticated);
       this.setState({
         authenticated,
+        loading: false,
       });
     }
   };
@@ -90,7 +103,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
       });
     hello.on('auth.login', async (auth) => {
         let accessToken;
-        const authenticated = {...this.state.authenticated};
+        let authenticated = {...this.state.authenticated};
         if (auth.network === 'msft') {
           const authResponse = hello('msft').getAuthResponse();
           accessToken = authResponse.access_token;
@@ -104,17 +117,49 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
         }
         if (accessToken) {
           try {
-            const userInfo = (queryActions) ? await queryActions.runQuery(USER_INFO_URL) : null;
+            const query = {
+              sampleURL : USER_INFO_URL,
+            };
+            const userInfo = (queryActions) ? await queryActions.runQuery(query) : null;
             const jsonUserInfo = userInfo.response.body;
             authenticated.user = {...{},
                                   displayName: jsonUserInfo.displayName,
                                   emailAddress: jsonUserInfo.mail || jsonUserInfo.userPrincipalName,
+                                  profileImageUrl: '',
             };
             if (actions) {
               actions.authenticateUser(authenticated);
               this.setState({
                 authenticated,
               });
+            }
+            try {
+              const pictureQuery = {
+                sampleURL : USER_PICTURE_URL,
+              };
+              const userPicture = (queryActions) ? await queryActions.runQuery(pictureQuery) : null;
+              const buffer = await userPicture.response.body.arrayBuffer();
+              const blob = new Blob([buffer], { type: 'image/jpeg' });
+              const imageUrl = URL.createObjectURL(blob);
+              if (actions) {
+                authenticated = this.state.authenticated;
+                authenticated.user.profileImageUrl = imageUrl;
+                actions.authenticateUser(authenticated);
+                this.setState({
+                  authenticated,
+                  loading: false,
+                });
+              }
+            } catch (e) {
+              if (actions) {
+                authenticated = this.state.authenticated;
+                authenticated.user.profileImageUrl = '';
+                actions.authenticateUser(authenticated);
+                this.setState({
+                  authenticated,
+                  loading: false,
+                });
+              }
             }
           } catch (e) {
             // tslint:disable-next-line:no-console
@@ -125,26 +170,13 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   }
 
   public render() {
-    const { authenticated } = this.state;
-    let button;
-    if (authenticated.status) {
-      button = <PrimaryButton onClick={this.signOut} className='signIn-button'>
-      Sign Out
-    </PrimaryButton>;
-    } else {
-      button = <PrimaryButton onClick={this.signIn} className='signIn-button'>
-      Sign In
-    </PrimaryButton>;
-    }
+    const { authenticated, loading } = this.state;
+    const buttonLabel = authenticated.status ? 'sign out' : 'sign in';
 
     return (
       <div className='authentication-container'>
-        {button}
-        <div className='authentication-details'>
-          <span className='user-name'>{authenticated.user.displayName}</span>
-          <br />
-          <span className='user-email'>{authenticated.user.emailAddress}</span>
-        </div>
+        <SubmitButton className='signIn-button' text={buttonLabel} handleOnClick={this.signIn} submitting={loading} />
+        <Profile user={authenticated.user}/>
       </div>
     );
   }
