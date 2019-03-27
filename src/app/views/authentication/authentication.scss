@@ -1,4 +1,4 @@
-@import "../../../styles/_variables.scss";
+@import '../../../styles/_variables.scss';
 
 .authentication-container {
   margin-top: $gutter;
@@ -9,12 +9,32 @@
     margin-bottom: $gutter;
   }
   
-  .profile { 
+  .profile {
     margin-bottom: $gutter;
     justify-content: space-between;
-  }
+    position: relative;
+    height: 40px;
 
-  .user-email {
-    font-size: .8em;
+
+    .user-imageArea {
+      position: absolute;
+      overflow: hidden;
+      max-width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      z-index: 0;
+      width: 100%;
+      left: -14%;
+
+      .user-image {
+        position: absolute;
+        z-index: 10;
+        width: 100%;
+      }
+
+      .user-email {
+        font-size: 0.8em;
+      }
+    }
   }
 }
