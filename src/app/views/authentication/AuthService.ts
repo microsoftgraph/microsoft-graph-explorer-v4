@@ -16,7 +16,7 @@ export async function getAccessToken() {
 }
 
 export function logOut() {
-    localStorage.setItem('authenticated', JSON.stringify({
+    localStorage.setItem('authenticatedUser', JSON.stringify({
         status: false,
         token: null,
       }));

@@ -8,6 +8,6 @@ export interface IAuthenticationProps {
   }
 
 export interface IAuthenticationState {
-    authenticated: object;
+    authenticatedUser: object;
     loading: boolean;
   }
