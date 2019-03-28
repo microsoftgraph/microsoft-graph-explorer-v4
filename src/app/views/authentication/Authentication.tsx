@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import { IAuthenticationProps, IAuthenticationState } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
@@ -12,18 +11,21 @@ import { getAccessToken, logOut } from './AuthService';
 import { Profile } from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
-  public state = {
-    authenticatedUser: {
-      status: false,
-      user: {
-        displayName: '',
-        emailAddress: '',
-        profileImageUrl: '',
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      authenticatedUser: {
+        status: false,
+        user: {
+          displayName: '',
+          emailAddress: '',
+          profileImageUrl: '',
+        },
+        token: '',
       },
-      token: '',
-    },
-    loading: false,
-  };
+      loading: false,
+    };
+  }
 
   public componentDidMount = () => {
     const authenticatedUser = localStorage.getItem('authenticatedUser');
@@ -37,7 +39,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
 
   public signIn = async () => {
     const { queryActions, actions } = this.props;
-    let authenticatedUser = {...this.state.authenticatedUser};
+    let { authenticatedUser } = this.state;
     this.setState({
       loading: true,
     });
@@ -104,10 +106,11 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
       const authenticatedUser = {
         status: false,
         user: {
-          displayName: null,
-          emailAddress: null,
+          displayName: '',
+          emailAddress: '',
+          profileImageUrl: '',
         },
-        token: null,
+        token: '',
       };
       actions.authenticateUser(authenticatedUser);
       logOut();
