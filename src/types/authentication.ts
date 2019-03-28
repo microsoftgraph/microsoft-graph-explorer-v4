@@ -8,6 +8,14 @@ export interface IAuthenticationProps {
   }
 
 export interface IAuthenticationState {
-    authenticatedUser: object;
+    authenticatedUser: {
+      status: boolean,
+      user: {
+          displayName: string,
+          emailAddress: string,
+          profileImageUrl: string,
+        },
+      token: string,
+    };
     loading: boolean;
   }
