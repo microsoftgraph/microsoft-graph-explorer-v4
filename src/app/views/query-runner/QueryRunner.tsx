@@ -29,6 +29,11 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
   public componentDidMount = () => {
     const base64Token = window.location.href.split('#')[1];
+
+    if (!base64Token) {
+      return;
+    }
+
     const data = JSON.parse(atob(base64Token));
 
     const {
