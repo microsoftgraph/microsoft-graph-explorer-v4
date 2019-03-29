@@ -21,9 +21,30 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
         { key: 'DELETE', text: 'DELETE' },
       ],
       selectedVerb: 'GET',
-      sampleURL: 'https://graph.microsoft.com/v1.0/me/',
+      sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
+      sampleBody: {},
+      sampleHeaders: {},
     };
   }
+
+  public componentDidMount = () => {
+    const base64Token = window.location.href.split('#')[1];
+    const data = JSON.parse(atob(base64Token));
+
+    const {
+      sampleVerb,
+      sampleHeaders,
+      sampleUrl,
+      sampleBody,
+    } = data;
+
+    this.setState({
+      sampleUrl,
+      sampleBody,
+      sampleHeaders,
+      selectedVerb: sampleVerb,
+    });
+  };
 
   private handleOnMethodChange = (option?: IDropdownOption) => {
     if (option !== undefined) {
@@ -33,16 +54,16 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
   private handleOnUrlChange = (newQuery?: string) => {
     if (newQuery) {
-      this.setState({ sampleURL: newQuery });
+      this.setState({ sampleUrl: newQuery });
     }
   };
 
   private handleOnRunQuery = () => {
-    const { sampleURL } = this.state;
+    const { sampleUrl } = this.state;
     const { actions } = this.props;
 
     if (actions) {
-      actions.runQuery(sampleURL);
+      actions.runQuery(sampleUrl);
     }
   };
 
@@ -50,7 +71,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     const {
       httpMethods,
       selectedVerb,
-      sampleURL,
+      sampleUrl,
     } = this.state;
 
     return (
@@ -61,7 +82,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
           handleOnUrlChange={this.handleOnUrlChange}
           httpMethods={httpMethods}
           selectedVerb={selectedVerb}
-          sampleURL={sampleURL}
+          sampleUrl={sampleUrl}
         />
         <Request />
       </div>
