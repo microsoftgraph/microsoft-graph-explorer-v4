@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 
-import { QueryRunner } from '../../app/views/query-runner';
 import { QueryInputControl } from '../../app/views/query-runner/QueryInput';
+import { QueryRunner } from '../../app/views/query-runner/QueryRunner';
 
 describe('Query Runner Component', () => {
   it('renders without crashing', () => {
