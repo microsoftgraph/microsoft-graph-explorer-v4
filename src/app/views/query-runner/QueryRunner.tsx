@@ -28,7 +28,8 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   }
 
   public componentDidMount = () => {
-    const base64Token = window.location.href.split('#')[1];
+    const urlParams = new URLSearchParams(window.location.search);
+    const base64Token = urlParams.getAll('query')[0];
 
     if (!base64Token) {
       return;
