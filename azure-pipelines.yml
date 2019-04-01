@@ -17,10 +17,22 @@ steps:
       npm test -- --coverage
     displayName: 'Runs tests'
 
+  - script: |
+      npm run build
+    displayName: 'Build'
+
   - task: PublishCodeCoverageResults@1
     inputs:
       codeCoverageTool: Cobertura
       summaryFileLocation: 'coverage/clover.xml'
       reportDirectory: 'coverage'
 
+  - task: AzureRmWebAppDeployment@3
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+    inputs:
+      azureSubscription: 'graph-explorer'
+      WebAppName: 'graph-explorer'
+      Package: '$(System.DefaultWorkingDirectory)'
+      GenerateWebConfig: true
+      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node
 
