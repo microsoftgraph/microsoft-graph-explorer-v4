@@ -31,7 +31,7 @@ steps:
   - task: AzureRmWebAppDeployment@3
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     inputs:
-      azureSubscription: 'graph-explorer'
+      azureSubscription: 'arm-connection'
       WebAppName: 'graph-explorer'
       Package: '$(System.DefaultWorkingDirectory)'
       GenerateWebConfig: true
