@@ -10,7 +10,7 @@ import { getAccessToken, getImageUrl, getUserInfo, logOut } from './AuthService'
 import { Profile } from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
-  constructor(props: any) {
+  constructor(props: IAuthenticationProps) {
     super(props);
     this.state = {
       authenticatedUser: {
@@ -37,7 +37,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     }
   }
 
-  public signIn = async () => {
+  public signIn = async (): Promise<void> => {
     const { queryActions, actions } = this.props;
     let { authenticatedUser } = this.state;
     this.setState({
@@ -100,7 +100,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     }
   };
 
-  public signOut = () => {
+  public signOut = (): void => {
     const { actions } = this.props;
     if (actions) {
       const authenticatedUser = {

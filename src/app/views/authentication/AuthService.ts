@@ -6,7 +6,7 @@ const graphScopes = [DEFAULT_USER_SCOPES];
 const options = { redirectUri: window.location };
 const authProvider = new MSALAuthenticationProvider(clientId, graphScopes, options);
 
-export async function getAccessToken() {
+export async function getAccessToken(): Promise<string> {
     try {
       const accessToken = await authProvider.getAccessToken();
       return accessToken;
@@ -15,7 +15,7 @@ export async function getAccessToken() {
     }
 }
 
-export function logOut() {
+export function logOut(): void {
     localStorage.setItem('authenticatedUser', JSON.stringify({
         status: false,
         token: null,
