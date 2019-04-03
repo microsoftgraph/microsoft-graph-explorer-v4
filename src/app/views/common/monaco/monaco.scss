@@ -3,4 +3,13 @@
 .monaco-editor {
   margin-left: 1px;
   padding-top: $gutter;
+  width: inherit !important;
+
+  .react-monaco-editor-container {
+    width: inherit !important;
+  }
+
+  .overflow-guard {
+    width: inherit !important;
+  }
 }

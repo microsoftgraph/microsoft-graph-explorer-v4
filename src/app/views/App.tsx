@@ -7,9 +7,13 @@ import { QueryRunner } from './query-runner';
 class App extends Component {
   public render() {
     return (
-      <div className='app'>
-        <QueryRunner/>
-        <QueryResponse/>
+      <div className='app container'>
+        <div className='row'>
+          <div className='col-sm-12 col-lg-8 offset-lg-2'>
+            <QueryRunner/>
+            <QueryResponse/>
+          </div>
+        </div>
       </div>
     );
   }
