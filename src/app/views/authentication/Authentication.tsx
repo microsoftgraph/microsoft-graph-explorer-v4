@@ -4,10 +4,9 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IAuthenticationProps, IAuthenticationState } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
-import { USER_INFO_URL, USER_PICTURE_URL } from '../../services/constants';
 import SubmitButton from '../common/submit-button/SubmitButton';
 import './authentication.scss';
-import { getAccessToken, logOut } from './AuthService';
+import { getAccessToken, getImageUrl, getUserInfo, logOut } from './AuthService';
 import { Profile } from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
@@ -56,7 +55,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
           localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
         }
         try {
-          const userInfo = await this.getUserInfo(queryActions);
+          const userInfo = await getUserInfo(queryActions);
           authenticatedUser.user = {...{},
                                     displayName: userInfo.displayName,
                                     emailAddress: userInfo.mail || userInfo.userPrincipalName,
@@ -70,7 +69,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
             localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
           }
           try {
-            const imageUrl = await this.getImageUrl(queryActions);
+            const imageUrl = await getImageUrl(queryActions);
             if (actions) {
               authenticatedUser = this.state.authenticatedUser;
               authenticatedUser.user.profileImageUrl = imageUrl;
@@ -121,24 +120,6 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
       });
     }
   };
-
-  private async getUserInfo(queryActions: any) {
-    const userInfo = (queryActions) ? await queryActions.runQuery({
-      sampleURL: USER_INFO_URL,
-    }) : null;
-    const jsonUserInfo = userInfo.response.body;
-    return jsonUserInfo;
-  }
-
-  private async getImageUrl(queryActions: any) {
-    const userPicture = (queryActions) ? await queryActions.runQuery({
-      sampleURL: USER_PICTURE_URL,
-    }) : null;
-    const buffer = await userPicture.response.body.arrayBuffer();
-    const blob = new Blob([buffer], { type: 'image/jpeg' });
-    const imageUrl = URL.createObjectURL(blob);
-    return imageUrl;
-  }
 
   public render() {
     const { authenticatedUser, loading } = this.state;
