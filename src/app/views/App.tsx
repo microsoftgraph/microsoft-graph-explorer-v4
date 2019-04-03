@@ -9,7 +9,7 @@ class App extends Component {
     return (
       <div className='app container'>
         <div className='row'>
-          <div className='col-sm-12 col-lg-9 offset-lg-2'>
+          <div className='col-sm-12 col-lg-8 offset-lg-2'>
             <QueryRunner/>
             <QueryResponse/>
           </div>
