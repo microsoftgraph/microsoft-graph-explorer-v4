@@ -29,10 +29,11 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
 
   public componentDidMount = () => {
     const authenticatedUser = localStorage.getItem('authenticatedUser');
-    if (authenticatedUser && this.props.actions && JSON.parse(authenticatedUser).status) {
-      this.props.actions.authenticateUser(JSON.parse(authenticatedUser));
+    const authUser = (authenticatedUser) ? JSON.parse(authenticatedUser) : null;
+    if (authenticatedUser && this.props.actions && authUser.status) {
+      this.props.actions.authenticateUser(authUser);
       this.setState({
-        authenticatedUser: JSON.parse(authenticatedUser),
+        authenticatedUser: authUser,
       });
     }
   }
