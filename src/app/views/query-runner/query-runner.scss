@@ -1,20 +1,7 @@
 @import "../../../styles/variables";
 
-.query-input-container {
-  width: 100%;
-
-.query-input-controls { 
-    display: flex;
-    justify-content: space-between;
+.run-query-button {
+  button {
     width: 100%;
-
-    .query-text-field {
-      width: 620px;
-    }
-
-    .query-verb-dropdown {
-      width: 90px;
-    }
-  } 
+  }
 }
-
