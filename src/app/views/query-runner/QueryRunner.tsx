@@ -68,7 +68,9 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
           </div>
         </div>
         <div className='row'>
-          <Request />
+          <div className='col-sm-12 col-lg-12'>
+            <Request />
+          </div>
         </div>
       </div>
     );
