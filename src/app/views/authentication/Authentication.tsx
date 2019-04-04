@@ -6,7 +6,7 @@ import * as authActionCreators from '../../services/actions/auth-action-creators
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import SubmitButton from '../common/submit-button/SubmitButton';
 import './authentication.scss';
-import { getAccessToken, getImageUrl, getUserInfo, logOut } from './AuthUtility';
+import { getAccessToken, getImageUrl, getUserInfo } from './AuthUtility';
 import { Profile } from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
@@ -53,7 +53,6 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
         authenticatedUser.status = true;
         if (actions) {
           actions.authenticateUser(authenticatedUser);
-          localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
         }
         try {
           const userInfo = await getUserInfo(queryActions);
@@ -67,7 +66,6 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
             this.setState({
               authenticatedUser,
             });
-            localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
           }
           try {
             const imageUrl = await getImageUrl(queryActions);
@@ -79,7 +77,6 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
                 authenticatedUser,
                 loading: false,
               });
-              localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
             }
           } catch (e) {
             if (actions) {
@@ -90,7 +87,6 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
                 authenticatedUser,
                 loading: false,
               });
-              localStorage.setItem('authenticatedUser', JSON.stringify(authenticatedUser));
             }
           }
         } catch (e) {
@@ -114,7 +110,6 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
         token: '',
       };
       actions.authenticateUser(authenticatedUser);
-      logOut();
       this.setState({
         authenticatedUser,
         loading: false,
