@@ -15,13 +15,6 @@ export async function getAccessToken(): Promise<string> {
     }
 }
 
-export function logOut(): void {
-    localStorage.setItem('authenticatedUser', JSON.stringify({
-        status: false,
-        token: null,
-      }));
-}
-
 export async function getUserInfo(queryActions: any) {
   const userInfo = (queryActions) ? await queryActions.runQuery({
     sampleURL: USER_INFO_URL,
