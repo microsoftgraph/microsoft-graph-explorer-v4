@@ -6,7 +6,7 @@ import * as authActionCreators from '../../services/actions/auth-action-creators
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import SubmitButton from '../common/submit-button/SubmitButton';
 import './authentication.scss';
-import { getAccessToken, getImageUrl, getUserInfo, logOut } from './AuthService';
+import { getAccessToken, getImageUrl, getUserInfo, logOut } from './AuthUtility';
 import { Profile } from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
