@@ -26,18 +26,6 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     };
   }
 
-  public componentDidMount = () => {
-    const authenticatedUser = localStorage.getItem('authenticatedUser');
-    const authUser = (authenticatedUser) ? JSON.parse(authenticatedUser) : null;
-
-    if (authenticatedUser && this.props.actions && authUser.status) {
-      this.props.actions.authenticateUser(authUser);
-      this.setState({
-        authenticatedUser: authUser,
-      });
-    }
-  }
-
   public signIn = async (): Promise<void> => {
     const { queryActions, actions } = this.props;
     let { authenticatedUser } = this.state;
