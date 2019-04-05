@@ -23,10 +23,12 @@ export function runQuery(query: IQuery): Function {
 
   return (dispatch: Function, getState: Function) => {
     const state = getState().authResponse;
-    const authenticatedUser = state.authenticatedUser;
-    if (authenticatedUser && authenticatedUser.token) {
-      authToken = authenticatedUser.token;
-      graphUrl = query.sampleURL;
+    if (state) {
+      const authenticatedUser = state.authenticatedUser;
+      if (authenticatedUser && authenticatedUser.token) {
+        authToken = authenticatedUser.token;
+        graphUrl = query.sampleURL;
+      }
     }
 
     const headers = { Authorization: `Bearer ${authToken}` };
