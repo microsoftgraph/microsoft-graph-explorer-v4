@@ -20,14 +20,15 @@ export function runQuery(query: IQuery): Function {
   let authToken = '{token:https://graph.microsoft.com/}';
   let graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleURL}`;
   const respHeaders: any = {};
-  const authenticatedUser = localStorage.getItem('authenticatedUser');
-  const authUser = (authenticatedUser) ? JSON.parse(authenticatedUser) : null;
 
-  return (dispatch: Function) => {
-    if (authenticatedUser && authUser.token) {
-      authToken = authUser.token;
+  return (dispatch: Function, getState: Function) => {
+    const state = getState().authResponse;
+    const authenticatedUser = state.authenticatedUser;
+    if (authenticatedUser && authenticatedUser.token) {
+      authToken = authenticatedUser.token;
       graphUrl = query.sampleURL;
     }
+
     const headers = { Authorization: `Bearer ${authToken}` };
 
     return fetch(graphUrl, { headers })
@@ -46,16 +47,23 @@ export function runQuery(query: IQuery): Function {
         }
         throw new Error('The request was not completed');
       })
-      .then((json) => dispatch(queryResponse({
-        body: json,
-        headers: respHeaders,
-      })))
+      .then((json) =>
+        dispatch(
+          queryResponse({
+            body: json,
+            headers: respHeaders,
+          }),
+        ),
+      )
       .catch((error) => dispatch(queryResponseError(error)));
   };
 }
 
 export function isImageResponse(contentType: string) {
-  return contentType === 'application/octet-stream' || contentType.substr(0, 6) === 'image/';
+  return (
+    contentType === 'application/octet-stream' ||
+    contentType.substr(0, 6) === 'image/'
+  );
 }
 
 export function getContentType(headers: Headers) {
@@ -63,9 +71,9 @@ export function getContentType(headers: Headers) {
   if (full) {
     const delimiterPos = full.indexOf(';');
     if (delimiterPos !== -1) {
-        return full.substr(0, delimiterPos);
+      return full.substr(0, delimiterPos);
     } else {
-        return full;
+      return full;
     }
   }
 }
