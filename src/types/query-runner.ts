@@ -3,6 +3,9 @@ export interface IQueryRunnerState {
   selectedVerb: string;
   sampleURL: string;
   sampleBody?: string;
+  headers: Array<{ name: string; value: string; }>;
+  headerName: string;
+  headerValue: string;
 }
 
 export interface IQuery {

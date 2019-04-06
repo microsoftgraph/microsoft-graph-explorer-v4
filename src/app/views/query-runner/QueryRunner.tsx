@@ -23,6 +23,9 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       selectedVerb: 'GET',
       sampleURL: 'https://graph.microsoft.com/v1.0/me/',
       sampleBody: undefined,
+      headers: [{ name: '', value: '' }],
+      headerName: '',
+      headerValue: '',
     };
   }
 
@@ -43,6 +46,56 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       this.setState({ sampleBody: body });
     }
   };
+
+  private handleOnHeaderNameChange = (name?: any) => {
+    if (name) {
+      this.setState({
+        headerName: name,
+      });
+    }
+  };
+
+  private handleOnHeaderValueChange = (value?: any) => {
+    if (value) {
+      this.setState({
+        headerValue: value,
+      });
+    }
+  };
+
+  private handleOnHeaderDelete = (headerIndex: any) => {
+    const { headers } = this.state;
+    const headersToDelete = [...headers];
+    headersToDelete.splice(headerIndex, 1);
+    this.setState({
+      headers: headersToDelete,
+    });
+    const listOfHeaders = headers;
+    if (listOfHeaders.length === 0) {
+      listOfHeaders.push({ name: '', value: '' });
+    }
+    this.setState({
+      headers: listOfHeaders,
+    });
+  };
+
+  private handleOnHeaderValueBlur = () => {
+    if (this.state.headerName !== '') {
+      const { headerName, headerValue, headers } = this.state;
+      const header = { name: headerName, value: headerValue };
+      const newHeaders = [header, ...headers];
+      this.setState({
+        headers: newHeaders,
+        headerName: '',
+        headerValue: '',
+      });
+    }
+  };
+
+  public getLastHeader() {
+    const headersLength = this.state.headers.length;
+    return this.state.headers[headersLength - 1];
+    }
 
   private handleOnRunQuery = () => {
     const { sampleURL, selectedVerb, sampleBody } = this.state;
@@ -84,6 +137,10 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
           <div className='col-sm-12 col-lg-12'>
             <Request
               handleOnEditorChange={this.handleOnEditorChange}
+              handleOnHeaderDelete={this.handleOnHeaderDelete}
+              handleOnHeaderNameChange={this.handleOnHeaderNameChange}
+              handleOnHeaderValueChange={this.handleOnHeaderValueChange}
+              handleOnHeaderValueBlur={this.handleOnHeaderValueBlur}
             />
           </div>
         </div>
