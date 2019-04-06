@@ -31,9 +31,18 @@ export function runQuery(query: IQuery): Function {
       }
     }
 
-    const headers = { Authorization: `Bearer ${authToken}` };
+    const headers = {
+      'Authorization': `Bearer ${authToken}`,
+      'Content-Type': 'application/json',
+    };
 
-    return fetch(graphUrl, { headers })
+    const options = {
+      headers,
+      method: query.selectedVerb,
+      body: JSON.stringify(query.sampleBody),
+    };
+
+    return fetch(graphUrl, options)
       .then((resp) => {
         if (resp.ok) {
           resp.headers.forEach((val, key) => {

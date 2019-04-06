@@ -2,11 +2,13 @@ export interface IQueryRunnerState {
   httpMethods: Array<{ key: string; text: string; }>;
   selectedVerb: string;
   sampleURL: string;
+  sampleBody?: string;
 }
 
 export interface IQuery {
   selectedVerb?: string;
   sampleURL: string;
+  sampleBody?: string;
 }
 
 export interface IQueryRunnerProps {

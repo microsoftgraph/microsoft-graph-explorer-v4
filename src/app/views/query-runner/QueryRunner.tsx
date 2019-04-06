@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runner';
+import { IQuery, IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './query-runner.scss';
 import { QueryInputControl } from './QueryInput';
@@ -22,6 +22,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       ],
       selectedVerb: 'GET',
       sampleURL: 'https://graph.microsoft.com/v1.0/me/',
+      sampleBody: undefined,
     };
   }
 
@@ -37,14 +38,24 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     }
   };
 
+  private handleOnEditorChange = (body?: string) => {
+    if (body) {
+      this.setState({ sampleBody: body });
+    }
+  };
+
   private handleOnRunQuery = () => {
-    const { sampleURL } = this.state;
+    const { sampleURL, selectedVerb, sampleBody } = this.state;
     const { actions } = this.props;
 
+    const query: IQuery = {
+      sampleURL,
+      selectedVerb,
+      sampleBody,
+    };
+
     if (actions) {
-      actions.runQuery({
-        sampleURL,
-      });
+      actions.runQuery(query);
     }
   };
 
@@ -71,7 +82,9 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
         </div>
         <div className='row'>
           <div className='col-sm-12 col-lg-12'>
-            <Request />
+            <Request
+              handleOnEditorChange={this.handleOnEditorChange}
+            />
           </div>
         </div>
       </div>
