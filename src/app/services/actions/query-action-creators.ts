@@ -1,5 +1,6 @@
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
+import { IRequestOptions } from '../../../types/request';
 import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../constants';
 
 export function queryResponse(response: object): IAction {
@@ -36,11 +37,13 @@ export function runQuery(query: IQuery): Function {
       'Content-Type': 'application/json',
     };
 
-    const options = {
-      headers,
-      method: query.selectedVerb,
-      body: JSON.stringify(query.sampleBody),
-    };
+    let options: IRequestOptions = {};
+    options = { method: query.selectedVerb, headers};
+
+    if (query.sampleBody && query.selectedVerb !== 'GET') {
+      const body = JSON.stringify(query.sampleBody);
+      options.body = body;
+    }
 
     return fetch(graphUrl, options)
       .then((resp) => {
