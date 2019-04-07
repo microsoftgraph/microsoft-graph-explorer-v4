@@ -117,6 +117,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       httpMethods,
       selectedVerb,
       sampleURL,
+      headers,
     } = this.state;
 
     return (
@@ -141,6 +142,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
               handleOnHeaderNameChange={this.handleOnHeaderNameChange}
               handleOnHeaderValueChange={this.handleOnHeaderValueChange}
               handleOnHeaderValueBlur={this.handleOnHeaderValueBlur}
+              headers={headers}
             />
           </div>
         </div>

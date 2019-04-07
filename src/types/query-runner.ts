@@ -9,7 +9,7 @@ export interface IQueryRunnerState {
 }
 
 export interface IQuery {
-  selectedVerb?: string;
+  selectedVerb: string;
   sampleURL: string;
   sampleBody?: string;
 }

@@ -1,16 +1,9 @@
-import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react';
-import React, { Component } from 'react';
+import { Pivot, PivotItem } from 'office-ui-fabric-react';
+import React from 'react';
+import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
 import './request.scss';
 import { RequestHeadersControl } from './RequestHeaders';
-
-interface IRequestComponent {
-    handleOnEditorChange: Function;
-    handleOnHeaderNameChange: Function;
-    handleOnHeaderDelete: Function;
-    handleOnHeaderValueChange: Function;
-    handleOnHeaderValueBlur: Function;
-  }
 
 export const Request = ({
     handleOnEditorChange,
@@ -18,6 +11,7 @@ export const Request = ({
     handleOnHeaderDelete,
     handleOnHeaderValueChange,
     handleOnHeaderValueBlur,
+    headers,
   }: IRequestComponent) => {
 
     return (
@@ -26,7 +20,7 @@ export const Request = ({
           <PivotItem headerText='Request Body'>
             <Monaco
                     body={undefined}
-                    onChange={(value, event) => handleOnEditorChange(value)} />
+                    onChange={(value) => handleOnEditorChange(value)} />
                 />
           </PivotItem>
           <PivotItem headerText='Request Headers'>
@@ -35,7 +29,7 @@ export const Request = ({
               handleOnHeaderNameChange={(event: any, name: any) => handleOnHeaderNameChange(name)}
               handleOnHeaderValueChange={(event: any, value: any) => handleOnHeaderValueChange(value)}
               handleOnHeaderValueBlur={(event: any, header: any) => handleOnHeaderValueBlur(header)}
-              headers={[{ name: '', value: '' }]}
+              headers={headers}
             />
           </PivotItem>
         </Pivot>

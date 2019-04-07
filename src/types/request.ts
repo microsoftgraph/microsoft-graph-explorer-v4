@@ -5,3 +5,18 @@ export interface IRequestHeadersControl {
     handleOnHeaderValueBlur: Function;
     headers: Array<{ name: string; value: string; }>;
 }
+
+export interface IRequestComponent {
+    handleOnEditorChange: Function;
+    handleOnHeaderNameChange: Function;
+    handleOnHeaderDelete: Function;
+    handleOnHeaderValueChange: Function;
+    handleOnHeaderValueBlur: Function;
+    headers: Array<{ name: string; value: string; }>;
+}
+
+export interface IRequestOptions {
+    headers?: {};
+    method?: string;
+    body?: string|undefined;
+  }
