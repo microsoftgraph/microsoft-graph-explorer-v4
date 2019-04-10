@@ -106,7 +106,8 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   };
 
   public render() {
-    const { authenticatedUser, loading } = this.state;
+    const { loading } = this.state;
+    const { authenticatedUser } = this.props.authenticatedUser;
     const buttonLabel = authenticatedUser.status ? 'sign out' : 'sign in';
 
     return (
@@ -125,9 +126,9 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-function mapStateToProps(state: IAuthenticationState) {
+function mapStateToProps(state: any) {
   return {
-    authenticatedUser: state.authenticatedUser,
+    authenticatedUser: state.authResponse.authenticatedUser,
   };
 }
 
