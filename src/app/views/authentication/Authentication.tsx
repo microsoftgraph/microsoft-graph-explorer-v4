@@ -35,7 +35,16 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     if (authenticatedUser.status) {
       this.signOut();
     } else {
-      const accessToken = await getAccessToken();
+      let accessToken;
+
+      try {
+        accessToken = await getAccessToken();
+      } catch (e) {
+        this.setState({
+          loading: false
+        });
+      }
+      
       if (accessToken) {
         authenticatedUser.token = accessToken;
         authenticatedUser.status = true;
