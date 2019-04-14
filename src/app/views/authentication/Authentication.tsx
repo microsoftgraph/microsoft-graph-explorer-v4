@@ -41,10 +41,10 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
         accessToken = await getAccessToken();
       } catch (e) {
         this.setState({
-          loading: false
+          loading: false,
         });
       }
-      
+
       if (accessToken) {
         authenticatedUser.token = accessToken;
         authenticatedUser.status = true;
