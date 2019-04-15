@@ -14,26 +14,30 @@ export const QueryInputControl = ({
 }: IQueryInputControl) => {
 
   return (
-    <div  className='query-input-controls'>
-      <Dropdown
-        className='query-verb-dropdown'
-        defaultSelectedKey={selectedVerb}
-        options={httpMethods}
-        onChange={(event, method) => handleOnMethodChange(method)}
-      />
-      <TextField
-        placeholder='Query Sample'
-        className='query-text-field'
-        onChange={(event, value) => handleOnUrlChange(value)}
-        defaultValue={sampleUrl}
-      />
-      <PrimaryButton
-        onClick={() => handleOnRunQuery()}
-      >
-        <FormattedMessage
-          id='Run Query'
+    <div className='row'>
+      <div className='col-sm-2'>
+        <Dropdown
+          defaultSelectedKey={selectedVerb}
+          options={httpMethods}
+          onChange={(event, method) => handleOnMethodChange(method)}
         />
-      </PrimaryButton>
+      </div>
+      <div className='col-sm-8'>
+        <TextField
+          placeholder='Query Sample'
+          onChange={(event, value) => handleOnUrlChange(value)}
+          defaultValue={sampleURL}
+        />
+      </div>
+      <div className='col-sm-2 run-query-button'>
+        <PrimaryButton
+          onClick={() => handleOnRunQuery()}
+        >
+          <FormattedMessage
+            id='Run Query'
+          />
+        </PrimaryButton>
+      </div>
     </div>
   );
 };

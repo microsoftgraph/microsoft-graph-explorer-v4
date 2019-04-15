@@ -1,4 +1,5 @@
 import { IAction } from '../../../types/action';
+import { IQuery } from '../../../types/query-runner';
 import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../constants';
 
 export function queryResponse(response: object): IAction {
@@ -15,28 +16,66 @@ export function queryResponseError(response: object): IAction {
   };
 }
 
-export function runQuery(url: string): Function {
-  const headers = { Authorization: 'Bearer {token:https://graph.microsoft.com/}' };
+export function runQuery(query: IQuery): Function {
+  let authToken = '{token:https://graph.microsoft.com/}';
+  let graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleURL}`;
+  const respHeaders: any = {};
 
-  return (dispatch: Function) => {
-    const respHeaders: any = {};
+  return (dispatch: Function, getState: Function) => {
+    const state = getState().authResponse;
+    if (state) {
+      const authenticatedUser = state.authenticatedUser;
+      if (authenticatedUser && authenticatedUser.token) {
+        authToken = authenticatedUser.token;
+        graphUrl = query.sampleURL;
+      }
+    }
 
-    return fetch(`https://proxy.apisandbox.msdn.microsoft.com/svc?url=${url}`, { headers })
+    const headers = { Authorization: `Bearer ${authToken}` };
+
+    return fetch(graphUrl, { headers })
       .then((resp) => {
         if (resp.ok) {
           resp.headers.forEach((val, key) => {
             respHeaders[key] = val;
           });
 
-          return resp.json();
+          const contentType = getContentType(resp.headers);
+          if (contentType && isImageResponse(contentType)) {
+            return resp;
+          } else {
+            return resp.json();
+          }
         }
-
         throw new Error('The request was not completed');
       })
-      .then((json) => dispatch(queryResponse({
-        body: json,
-        headers: respHeaders,
-      })))
+      .then((json) =>
+        dispatch(
+          queryResponse({
+            body: json,
+            headers: respHeaders,
+          }),
+        ),
+      )
       .catch((error) => dispatch(queryResponseError(error)));
   };
+}
+
+export function isImageResponse(contentType: string) {
+  return (
+    contentType === 'application/octet-stream' ||
+    contentType.substr(0, 6) === 'image/'
+  );
+}
+
+export function getContentType(headers: Headers) {
+  const full = headers.get('content-type');
+  if (full) {
+    const delimiterPos = full.indexOf(';');
+    if (delimiterPos !== -1) {
+      return full.substr(0, delimiterPos);
+    } else {
+      return full;
+    }
+  }
 }

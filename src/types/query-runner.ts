@@ -6,6 +6,11 @@ export interface IQueryRunnerState {
   sampleHeaders: object;
 }
 
+export interface IQuery {
+  selectedVerb?: string;
+  sampleURL: string;
+}
+
 export interface IQueryRunnerProps {
   actions?: {
     runQuery: Function;

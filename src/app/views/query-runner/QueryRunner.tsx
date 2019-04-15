@@ -69,7 +69,9 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     const { actions } = this.props;
 
     if (actions) {
-      actions.runQuery(sampleUrl);
+      actions.runQuery({
+        sampleURL,
+      });
     }
   };
 
@@ -81,16 +83,24 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     } = this.state;
 
     return (
-      <div className='query-input-container'>
-        <QueryInputControl
-          handleOnRunQuery={this.handleOnRunQuery}
-          handleOnMethodChange={this.handleOnMethodChange}
-          handleOnUrlChange={this.handleOnUrlChange}
-          httpMethods={httpMethods}
-          selectedVerb={selectedVerb}
-          sampleUrl={sampleUrl}
-        />
-        <Request />
+      <div>
+        <div className='row'>
+          <div className='col-sm-12 col-lg-12'>
+            <QueryInputControl
+              handleOnRunQuery={this.handleOnRunQuery}
+              handleOnMethodChange={this.handleOnMethodChange}
+              handleOnUrlChange={this.handleOnUrlChange}
+              httpMethods={httpMethods}
+              selectedVerb={selectedVerb}
+              sampleURL={sampleURL}
+            />
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-sm-12 col-lg-12'>
+            <Request />
+          </div>
+        </div>
       </div>
     );
   }

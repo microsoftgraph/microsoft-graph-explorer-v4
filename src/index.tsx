@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -18,7 +19,11 @@ import { store } from './store';
 import './styles/index.scss';
 
 initializeIcons();
-const appState = store({});
+const authUser = localStorage.getItem('authenticatedUser');
+const authenticatedUser = (authUser) ? JSON.parse(authUser) : null;
+let authResponse = {};
+authResponse = {...authResponse, authenticatedUser };
+const appState = store({ authResponse });
 
 const supportedLocales = ['de-DE', 'en-US', 'es-ES', 'fr-FR', 'ja-JP', 'pt-BR', 'ru-RU', 'zh-CN'];
 

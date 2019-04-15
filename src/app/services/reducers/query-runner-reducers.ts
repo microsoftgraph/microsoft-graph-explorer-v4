@@ -1,7 +1,7 @@
 import { IAction } from '../../../types/action';
 import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../constants';
 
-export function graphResponse(state = {}, action: IAction) {
+export function graphResponse(state = {}, action: IAction): object {
   switch (action.type) {
     case QUERY_GRAPH_SUCCESS:
       return action.response;
