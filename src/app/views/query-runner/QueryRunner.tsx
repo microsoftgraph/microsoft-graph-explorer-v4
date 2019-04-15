@@ -70,7 +70,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
     if (actions) {
       actions.runQuery({
-        sampleURL,
+        sampleUrl,
       });
     }
   };
@@ -92,7 +92,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
               handleOnUrlChange={this.handleOnUrlChange}
               httpMethods={httpMethods}
               selectedVerb={selectedVerb}
-              sampleURL={sampleURL}
+              sampleUrl={sampleUrl}
             />
           </div>
         </div>

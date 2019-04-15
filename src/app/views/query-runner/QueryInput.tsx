@@ -26,7 +26,7 @@ export const QueryInputControl = ({
         <TextField
           placeholder='Query Sample'
           onChange={(event, value) => handleOnUrlChange(value)}
-          defaultValue={sampleURL}
+          defaultValue={sampleUrl}
         />
       </div>
       <div className='col-sm-2 run-query-button'>
