@@ -1,10 +1,12 @@
 import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+
+import { IRequestState } from '../../../../types/request';
 import './request.scss';
 import { RequestBodyControl } from './RequestBody';
 import { RequestHeadersControl } from './RequestHeaders';
 
-export class Request extends Component<any, any> {
+export class Request extends Component<{}, IRequestState> {
     public state = {
         headers: [
             { name: '', value: '' },
@@ -13,7 +15,7 @@ export class Request extends Component<any, any> {
         headerValue: '',
     };
 
-    private handleOnHeaderNameChange = (name?: any) => {
+    private handleOnHeaderNameChange = (name?: string) => {
         if (name) {
             this.setState({
                 headerName: name,
@@ -25,7 +27,7 @@ export class Request extends Component<any, any> {
         return;
     }
 
-    private handleOnHeaderValueChange = (value?: any) => {
+    private handleOnHeaderValueChange = (value?: string) => {
         if (value) {
             this.setState({
                 headerValue: value,
@@ -33,7 +35,7 @@ export class Request extends Component<any, any> {
         }
     };
 
-    private handleOnHeaderDelete = (headerIndex: any) => {
+    private handleOnHeaderDelete = (headerIndex: number) => {
         const { headers } = this.state;
         const headersToDelete = [...headers];
         headersToDelete.splice(headerIndex, 1);
