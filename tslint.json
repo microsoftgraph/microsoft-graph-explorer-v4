@@ -22,6 +22,7 @@
       "spaces",
       2
     ],
+    "jsx-no-lambda":false,
     "no-var-keyword": true,
     "prefer-const": true,
     "ban-comma-operator": true,
