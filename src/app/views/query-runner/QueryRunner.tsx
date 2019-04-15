@@ -10,7 +10,7 @@ import { QueryInputControl } from './QueryInput';
 import { Request } from './request/Request';
 
 export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
-  constructor(props: any) {
+  constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
       httpMethods: [

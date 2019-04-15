@@ -1,6 +1,6 @@
 import React from 'react';
-
-export const Profile = ({ user }: any) => {
+import { IProfileProps } from '../../../../types/profile';
+export const Profile = ({ user }: { user: IProfileProps}) => {
         return (
             <div className='profile'>
                 <div className='user-imageArea'>
