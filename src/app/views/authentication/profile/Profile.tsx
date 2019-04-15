@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { IProfileProps } from '../../../../types/profile';
 
 export const Profile = ({ user }: { user: IProfileProps}) => {

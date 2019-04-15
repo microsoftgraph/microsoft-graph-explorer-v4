@@ -1,5 +1,6 @@
 import { Pivot, PivotItem, PivotLinkSize } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+
 import { IRequestState } from '../../../../types/request';
 import './request.scss';
 import { RequestBodyControl } from './RequestBody';
