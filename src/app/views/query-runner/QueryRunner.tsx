@@ -66,6 +66,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   private handleOnHeaderDelete = (headerIndex: any) => {
     const { headers } = this.state;
     const headersToDelete = [...headers];
+
     headersToDelete.splice(headerIndex, 1);
     this.setState({
       headers: headersToDelete,
@@ -84,6 +85,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       const { headerName, headerValue, headers } = this.state;
       const header = { name: headerName, value: headerValue };
       const newHeaders = [header, ...headers];
+
       this.setState({
         headers: newHeaders,
         headerName: '',
@@ -93,9 +95,8 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   };
 
   public getLastHeader() {
-    const headersLength = this.state.headers.length;
-    return this.state.headers[headersLength - 1];
-    }
+    return this.state.headers.pop();
+  }
 
   private handleOnRunQuery = () => {
     const { sampleURL, selectedVerb, sampleBody } = this.state;
