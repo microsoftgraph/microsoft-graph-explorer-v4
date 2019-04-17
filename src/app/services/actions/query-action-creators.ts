@@ -40,9 +40,11 @@ export function runQuery(query: IQuery): Function {
     let options: IRequestOptions = {};
     options = { method: query.selectedVerb, headers};
 
-    if (query.sampleBody && query.selectedVerb !== 'GET') {
+    const hasBody = !!query.sampleBody; // !! forces it to be true or false
+    const isGET = query.selectedVerb;
+    if (hasBody && !isGET) {
       const body = JSON.stringify(query.sampleBody);
-      options.body = body;
+      options = {...options,  body};
     }
 
     return fetch(graphUrl, options)
