@@ -85,6 +85,18 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     }
   };
 
+  public componentDidMount = () => {
+    const authenticatedUser = localStorage.getItem('authenticatedUser');
+    const authUser = (authenticatedUser) ? JSON.parse(authenticatedUser) : null;
+
+    if (authenticatedUser && this.props.actions && authUser.status) {
+      this.props.actions.authenticateUser(authUser);
+      this.setState({
+        authenticatedUser: authUser,
+      });
+    }
+  }
+
   public signOut = (): void => {
     const { actions } = this.props;
     if (actions) {
@@ -106,10 +118,8 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   };
 
   public render() {
-    const { loading } = this.state;
-    const { authenticatedUser } = this.props.authenticatedUser;
-    const buttonLabel = authenticatedUser.status ? 'sign out' : 'sign in';
-
+    const { authenticatedUser, loading } = this.state;
+    const buttonLabel = (authenticatedUser && authenticatedUser.status) ? 'sign out' : 'sign in';
     return (
       <div className='authentication-container'>
         <SubmitButton className='signIn-button' text={buttonLabel} handleOnClick={this.signIn} submitting={loading} />
