@@ -1,25 +1,23 @@
-import { classNamesFunction, styled } from 'office-ui-fabric-react';
+import { classNamesFunction, ITheme, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 
-import './app.scss';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
+import { classNames } from './classnames';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 
-class App extends Component<{}> {
-  constructor(props: any) {
-    super(props);
-  }
+interface IAppProps {
+  theme?: ITheme;
+  styles?: object;
+}
 
+class App extends Component<IAppProps> {
   public render() {
-    // @ts-ignore
-    const { styles, theme } = this.props;
-    const getClassNames = classNamesFunction();
-    const classNames = getClassNames(styles, theme);
+    const classes = classNames(this.props);
 
     return (
-      <div className={`container ${(classNames as any).app}`}>
+      <div className={`container ${classes.app}`}>
         <div className='row'>
           <div className='col-sm-12 col-lg-8 offset-lg-2'>
             <Authentication/>
