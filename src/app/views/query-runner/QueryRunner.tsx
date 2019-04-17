@@ -10,7 +10,7 @@ import { QueryInputControl } from './QueryInput';
 import { Request } from './request/Request';
 
 export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
-  constructor(props: any) {
+  constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
       httpMethods: [
@@ -21,13 +21,38 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
         { key: 'DELETE', text: 'DELETE' },
       ],
       selectedVerb: 'GET',
-      sampleURL: 'https://graph.microsoft.com/v1.0/me/',
+      sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
       sampleBody: undefined,
       headers: [{ name: '', value: '' }],
       headerName: '',
       headerValue: '',
+      sampleHeaders: {},
     };
   }
+
+  public componentDidMount = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const base64Token = urlParams.getAll('query')[0];
+
+    if (!base64Token) {
+      return;
+    }
+
+    const data = JSON.parse(atob(base64Token));
+    const {
+      sampleVerb,
+      sampleHeaders,
+      sampleUrl,
+      sampleBody,
+    } = data;
+
+    this.setState({
+      sampleUrl,
+      sampleBody,
+      sampleHeaders,
+      selectedVerb: sampleVerb,
+    });
+  };
 
   private handleOnMethodChange = (option?: IDropdownOption) => {
     if (option !== undefined) {
@@ -37,7 +62,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
   private handleOnUrlChange = (newQuery?: string) => {
     if (newQuery) {
-      this.setState({ sampleURL: newQuery });
+      this.setState({ sampleUrl: newQuery });
     }
   };
 
@@ -47,7 +72,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     }
   };
 
-  private handleOnHeaderNameChange = (name?: any) => {
+  private handleOnHeaderNameChange = (name?: string) => {
     if (name) {
       this.setState({
         headerName: name,
@@ -55,7 +80,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     }
   };
 
-  private handleOnHeaderValueChange = (value?: any) => {
+  private handleOnHeaderValueChange = (value?: string) => {
     if (value) {
       this.setState({
         headerValue: value,
@@ -63,7 +88,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     }
   };
 
-  private handleOnHeaderDelete = (headerIndex: any) => {
+  private handleOnHeaderDelete = (headerIndex: number) => {
     const { headers } = this.state;
     const headersToDelete = [...headers];
 
@@ -71,7 +96,9 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     this.setState({
       headers: headersToDelete,
     });
+
     const listOfHeaders = headers;
+
     if (listOfHeaders.length === 0) {
       listOfHeaders.push({ name: '', value: '' });
     }
@@ -99,11 +126,11 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   }
 
   private handleOnRunQuery = () => {
-    const { sampleURL, selectedVerb, sampleBody } = this.state;
+    const { sampleUrl, selectedVerb, sampleBody } = this.state;
     const { actions } = this.props;
 
     const query: IQuery = {
-      sampleURL,
+      sampleUrl,
       selectedVerb,
       sampleBody,
     };
@@ -117,7 +144,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     const {
       httpMethods,
       selectedVerb,
-      sampleURL,
+      sampleUrl,
       headers,
     } = this.state;
 
@@ -131,7 +158,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
               handleOnUrlChange={this.handleOnUrlChange}
               httpMethods={httpMethods}
               selectedVerb={selectedVerb}
-              sampleURL={sampleURL}
+              sampleUrl={sampleUrl}
             />
           </div>
         </div>

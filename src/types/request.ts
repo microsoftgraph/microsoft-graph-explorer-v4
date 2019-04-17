@@ -20,3 +20,9 @@ export interface IRequestOptions {
     method?: string;
     body?: string|undefined;
   }
+
+export interface IRequestState {
+    headers: Array<{ name: string; value: string; }>;
+    headerName: string;
+    headerValue: string;
+}

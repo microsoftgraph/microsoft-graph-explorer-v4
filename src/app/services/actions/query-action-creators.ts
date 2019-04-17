@@ -19,7 +19,7 @@ export function queryResponseError(response: object): IAction {
 
 export function runQuery(query: IQuery): Function {
   let authToken = '{token:https://graph.microsoft.com/}';
-  let graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleURL}`;
+  let graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleUrl}`;
   const respHeaders: any = {};
 
   return (dispatch: Function, getState: Function) => {
@@ -28,7 +28,7 @@ export function runQuery(query: IQuery): Function {
       const authenticatedUser = state.authenticatedUser;
       if (authenticatedUser && authenticatedUser.token) {
         authToken = authenticatedUser.token;
-        graphUrl = query.sampleURL;
+        graphUrl = query.sampleUrl;
       }
     }
 
@@ -40,7 +40,7 @@ export function runQuery(query: IQuery): Function {
     let options: IRequestOptions = {};
     options = { method: query.selectedVerb, headers};
 
-    const hasBody = !!query.sampleBody; // !! forces it to be true or false
+    const hasBody = !!query.sampleBody;
     const isGET = query.selectedVerb;
     if (hasBody && !isGET) {
       const body = JSON.stringify(query.sampleBody);
