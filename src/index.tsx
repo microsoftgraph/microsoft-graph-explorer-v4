@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
+import { loadTheme, styled } from 'office-ui-fabric-react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -10,13 +11,13 @@ import fr from 'react-intl/locale-data/fr';
 import jp from 'react-intl/locale-data/ja';
 import ru from 'react-intl/locale-data/ru';
 import zh from 'react-intl/locale-data/zh';
-
 import { Provider } from 'react-redux';
-import App from './app/views/App';
 
+import App from './app/views/App';
 import messages from './messages';
 import { store } from './store';
 import './styles/index.scss';
+import { dark, light } from './themes';
 
 initializeIcons();
 
@@ -36,10 +37,16 @@ addLocaleData([
   ...zh,
 ]);
 
-ReactDOM.render(
-  <Provider store={appState}>
-    <IntlProvider locale={locale} messages={(messages as {[key: string]: object})[locale]}>
-      <App />
-    </IntlProvider>
-  </Provider>,
-  document.getElementById('root'));
+loadTheme(light);
+
+const Root = () => {
+  return (
+    <Provider store={appState}>
+      <IntlProvider locale={locale} messages={(messages as {[key: string]: object})[locale]}>
+        <App />
+      </IntlProvider>
+    </Provider>
+  );
+};
+
+ReactDOM.render(<Root />, document.getElementById('root'));
