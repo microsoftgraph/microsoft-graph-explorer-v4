@@ -17,7 +17,7 @@ class App extends Component<IAppProps> {
     const classes = classNames(this.props);
 
     return (
-      <div className={`container ${classes.app}`}>
+      <div className={`container-fluid ${classes.app}`}>
         <div className='row'>
           <div className='col-sm-12 col-lg-8 offset-lg-2'>
             <Authentication/>
