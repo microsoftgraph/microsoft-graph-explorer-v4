@@ -49,11 +49,11 @@
     "postcss-preset-env": "6.5.0",
     "postcss-safe-parser": "4.0.1",
     "react": "16.8.2",
-    "react-app-polyfill":"0.2.1",
-    "react-dev-utils":"7.0.3",
+    "react-app-polyfill": "0.2.1",
+    "react-dev-utils": "7.0.3",
     "react-dom": "16.8.2",
-    "react-intl":"2.8.0",
-    "react-monaco-editor":"0.24.1",
+    "react-intl": "2.8.0",
+    "react-monaco-editor": "0.24.1",
     "react-redux": "6.0.0",
     "redux": "4.0.1",
     "redux-thunk": "2.3.0",
@@ -100,6 +100,8 @@
     "react-test-renderer": "16.8.3",
     "redux-logger": "3.0.6",
     "redux-mock-store": "1.5.3",
-    "tslint": "5.12.1"
+    "tslint": "5.12.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^4.0.0"
   }
 }
