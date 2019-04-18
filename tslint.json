@@ -1,6 +1,8 @@
 {
   "extends": [
-    "tslint:latest"
+    "tslint:latest",
+    "tslint-react",
+    "tslint-config-prettier"
   ],
   "rules": {
     "comment-format": [
@@ -20,6 +22,7 @@
       "spaces",
       2
     ],
+    "jsx-no-lambda":false,
     "no-var-keyword": true,
     "prefer-const": true,
     "ban-comma-operator": true,

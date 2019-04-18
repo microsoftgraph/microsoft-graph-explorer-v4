@@ -5,7 +5,6 @@
   "dependencies": {
     "@babel/core": "7.2.2",
     "@microsoft/microsoft-graph-client": "^1.5.2",
-    "@svgr/webpack": "4.1.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",
@@ -71,7 +70,8 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "lint": "tslint --project tsconfig.json -c tslint.json"
+    "lint": "tslint --project tsconfig.json -c tslint.json",
+    "prettier": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -96,9 +96,12 @@
     "enzyme": "3.9.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "jest-fetch-mock": "2.1.1",
+    "prettier": "^1.17.0",
     "react-test-renderer": "16.8.3",
     "redux-logger": "3.0.6",
     "redux-mock-store": "1.5.3",
-    "tslint": "5.12.1"
+    "tslint": "5.12.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^4.0.0"
   }
 }

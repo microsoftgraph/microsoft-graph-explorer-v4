@@ -44,7 +44,6 @@ export const RequestHeadersControl = ({
                     <tr>
                         <th>Key</th>
                         <th>Value</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
