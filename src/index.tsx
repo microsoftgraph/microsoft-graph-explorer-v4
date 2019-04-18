@@ -40,7 +40,7 @@ addLocaleData([
   ...zh,
 ]);
 
-loadTheme(dark);
+loadTheme(light);
 
 const Root = () => {
   return (
