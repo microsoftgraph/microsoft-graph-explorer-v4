@@ -1,11 +1,12 @@
 import { getTheme } from '@uifabric/styling';
 import React from 'react';
-import MonacoEditor from 'react-monaco-editor';
+import MonacoEditor, { ChangeHandler } from 'react-monaco-editor';
 
 import './monaco.scss';
 
 interface IMonaco {
   body: object|undefined;
+  onChange?: ChangeHandler | undefined;
 }
 
 function editorDidMount(editor: any) {
@@ -25,9 +26,11 @@ function formatDocument(editor: any) {
 }
 
 export function Monaco(props: IMonaco) {
-  const { body } = props;
+
+  const { body, onChange } = props;
   const currentTheme = getTheme();
   const isDark = currentTheme.palette.black === '#ffffff' ? true : false;
+
 
   return (
     <div className='monaco-editor'>
@@ -38,6 +41,7 @@ export function Monaco(props: IMonaco) {
         language='json'
         options={{ lineNumbers: 'off', minimap: { enabled: false } }}
         editorDidMount={editorDidMount}
+        onChange={onChange}
         theme={isDark ? 'vs-dark' : 'vs'}
       />
     </div>

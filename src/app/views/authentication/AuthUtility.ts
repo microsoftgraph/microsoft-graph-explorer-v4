@@ -17,7 +17,7 @@ export async function getAccessToken(): Promise<string> {
 
 export async function getUserInfo(queryActions: any) {
   const userInfo = (queryActions) ? await queryActions.runQuery({
-    sampleURL: USER_INFO_URL,
+    sampleUrl: USER_INFO_URL,
   }) : null;
   const jsonUserInfo = userInfo.response.body;
   return jsonUserInfo;
@@ -25,7 +25,7 @@ export async function getUserInfo(queryActions: any) {
 
 export async function getImageUrl(queryActions: any) {
   const userPicture = (queryActions) ? await queryActions.runQuery({
-    sampleURL: USER_PICTURE_URL,
+    sampleUrl: USER_PICTURE_URL,
   }) : null;
   const buffer = await userPicture.response.body.arrayBuffer();
   const blob = new Blob([buffer], { type: 'image/jpeg' });
