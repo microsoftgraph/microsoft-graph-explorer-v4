@@ -2,6 +2,7 @@ import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../constants';
+import { GraphClient } from '../graph-client';
 
 export function queryResponse(response: object): IAction {
   return {
@@ -29,6 +30,10 @@ export function runQuery(query: IQuery): Function {
       if (authenticatedUser && authenticatedUser.token) {
         authToken = authenticatedUser.token;
         graphUrl = query.sampleUrl;
+
+        GraphClient.getInstance()
+          .api('/me')
+          .get();
       }
     }
 
