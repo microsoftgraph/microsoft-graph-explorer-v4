@@ -1,3 +1,4 @@
+import { ResponseType } from '@microsoft/microsoft-graph-client';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
@@ -21,28 +22,17 @@ export function queryResponseError(response: object): IAction {
 export function runQuery(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
     const authState = getState().authResponse;
-
     if (authState) {
       const isAuthenticated = authState.authenticatedUser;
 
       if (isAuthenticated) {
         const graphUrl = query.sampleUrl;
 
-        return GraphClient.getInstance()
-          .api('/me')
-          .get();
+        return authenticatedRequest(dispatch, query);
       }
 
       return anonymousRequest(dispatch, query);
     }
-    //
-    // const hasBody = !!query.sampleBody;
-    // const isGET = query.selectedVerb;
-    // if (hasBody && !isGET) {
-    //   const body = JSON.stringify(query.sampleBody);
-    //   options = {...options,  body};
-    // }
-    //
   };
 }
 
@@ -64,16 +54,7 @@ function anonymousRequest(dispatch: Function, query: IQuery) {
   return fetch(graphUrl, options)
     .then((resp) => {
       if (resp.ok) {
-        resp.headers.forEach((val, key) => {
-          respHeaders[key] = val;
-        });
-
-        const contentType = getContentType(resp.headers);
-        if (contentType && isImageResponse(contentType)) {
-          return resp;
-        } else {
-          return resp.json();
-        }
+        return parseResponse(resp, respHeaders);
       }
       throw new Error('The request was not completed');
     })
@@ -89,8 +70,39 @@ function anonymousRequest(dispatch: Function, query: IQuery) {
     .catch((error) => dispatch(queryResponseError(error)));
 }
 
-function authenticatedRequest() {
+function parseResponse(resp: any, respHeaders: any) {
+  resp.headers.forEach((val: any, key: any) => {
+    respHeaders[key] = val;
+  });
 
+  const contentType = getContentType(resp.headers);
+  if (contentType && isImageResponse(contentType)) {
+    return resp;
+  } else {
+    return resp.json();
+  }
+}
+
+function authenticatedRequest(dispatch: Function, query: IQuery) {
+  const respHeaders: any = {};
+
+  return GraphClient.getInstance()
+    .api(query.sampleUrl)
+    .responseType(ResponseType.RAW)
+    .get()
+    .then((resp) => {
+      if (resp.ok) {
+        return parseResponse(resp, respHeaders);
+      }
+      throw new Error('The request was not completed');
+    }).then((json: object) => {
+      dispatch(
+        queryResponse({
+          body: json,
+          headers: respHeaders
+        }),
+      );
+    });
 }
 
 export function isImageResponse(contentType: string) {
