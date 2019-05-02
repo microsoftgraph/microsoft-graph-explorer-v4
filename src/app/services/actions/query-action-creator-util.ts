@@ -55,7 +55,7 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
 }
 
 export function authenticatedRequest(dispatch: Function, query: IQuery) {
-  return requestBasedOnVerb(dispatch, query);
+  return makeRequest(query.selectedVerb)(dispatch, query);
 }
 
 export function isImageResponse(contentType: string) {
@@ -77,7 +77,7 @@ export function getContentType(headers: Headers) {
   }
 }
 
-function parseResponse(resp: any, respHeaders: any) {
+function parseResponse(resp: any, respHeaders: any): Promise<any> {
   resp.headers.forEach((val: any, key: any) => {
     respHeaders[key] = val;
   });
@@ -90,41 +90,45 @@ function parseResponse(resp: any, respHeaders: any) {
   }
 }
 
-function requestBasedOnVerb(dispatch: Function, query: IQuery) {
-  switch (query.selectedVerb) {
-    case 'GET':
-      return getRequest(query, dispatch);
-    case 'POST':
-      break;
-    case 'PUT':
-      break;
-    case 'PATCH':
-      break;
-    case 'DELETE':
-      break;
-    default:
-      return;
-  }
-}
+const makeRequest = (httpVerb: string): Function => {
+  return async (dispatch: Function, query: IQuery) => {
+    const respHeaders: any = {};
 
-function getRequest(query: IQuery, dispatch: Function) {
-  const respHeaders: any = {};
+    const client = GraphClient.getInstance()
+      .api(query.sampleUrl)
+      .responseType(ResponseType.RAW);
 
-  return GraphClient.getInstance()
-    .api(query.sampleUrl)
-    .responseType(ResponseType.RAW)
-    .get()
-    .then((resp) => {
-      if (resp.ok) {
-        return parseResponse(resp, respHeaders);
-      }
-      throw new Error('The request was not completed');
-    }).then((json: object) => {
-      dispatch(
+    let response;
+
+    switch (httpVerb) {
+      case 'GET':
+        response = await client.get();
+        break;
+      case 'POST':
+        response = await client.post(query.sampleBody);
+        break;
+      case 'PUT':
+        response = await client.put(query.sampleBody);
+        break;
+      case 'PATCH':
+        response = await client.patch(query.sampleBody);
+        break;
+      case 'DELETE':
+        response = await client.delete();
+        break;
+      default:
+        return;
+    }
+
+    if (response.ok) {
+      const json = await parseResponse(response, respHeaders);
+      return dispatch(
         queryResponse({
           body: json,
           headers: respHeaders
-        }),
+        })
       );
-    });
-}
+    }
+    dispatch(queryResponseError(response.body));
+  };
+};
