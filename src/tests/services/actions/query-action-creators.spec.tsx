@@ -1,7 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { queryResponse, runQuery } from '../../../app/services/actions/query-action-creators';
+import { runQuery } from '../../../app/services/actions/query-action-creators';
 import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../../../app/services/constants';
 
 const middlewares = [thunk];
@@ -24,9 +24,12 @@ describe('actions', () => {
     ];
 
     const store = mockStore({ graphResponse: '' });
+    const query = {
+      sampleUrl: 'https://graph.microsoft.com/v1.0/me/'
+    };
 
     // @ts-ignore
-    return store.dispatch(runQuery('https://graph.microsoft.com/v1.0/me/'))
+    return store.dispatch(runQuery(query))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

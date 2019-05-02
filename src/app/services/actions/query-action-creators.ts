@@ -8,12 +8,9 @@ export function runQuery(query: IQuery): Function {
       const isAuthenticated = authState.authenticatedUser;
 
       if (isAuthenticated) {
-        const graphUrl = query.sampleUrl;
-
         return authenticatedRequest(dispatch, query);
       }
-
-      return anonymousRequest(dispatch, query);
     }
+    return anonymousRequest(dispatch, query);
   };
 }
