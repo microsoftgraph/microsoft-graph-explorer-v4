@@ -11,6 +11,7 @@ export function runQuery(query: IQuery): Function {
         return authenticatedRequest(dispatch, query);
       }
     }
+
     return anonymousRequest(dispatch, query);
   };
 }

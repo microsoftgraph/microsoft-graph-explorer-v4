@@ -1,6 +1,7 @@
 import { Client } from '@microsoft/microsoft-graph-client';
 import { MSALAuthenticationProvider } from '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProvider';
 import { DEFAULT_USER_SCOPES } from '../constants';
+import { HelloAuthProvider } from './HelloAuthProvider';
 
 export class GraphClient {
   private static client: Client;
@@ -12,7 +13,7 @@ export class GraphClient {
       redirectUri: window.location,
       cacheLocation: 'localStorage'
     };
-    const authProvider = new MSALAuthenticationProvider(clientId, graphScopes, options);
+    const authProvider = new HelloAuthProvider();
 
     const clientOptions = {
       authProvider,

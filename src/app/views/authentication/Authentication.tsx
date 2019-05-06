@@ -1,9 +1,11 @@
+import hello from 'hellojs';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { IAuthenticationProps, IAuthenticationState } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
+import { HelloAuthProvider } from '../../services/graph-client/HelloAuthProvider';
 import SubmitButton from '../common/submit-button/SubmitButton';
 import './authentication.scss';
 import { getAccessToken, getImageUrl, getUserInfo } from './AuthUtility';
@@ -27,75 +29,18 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   }
 
   public signIn = async (): Promise<void> => {
-    const { queryActions, actions } = this.props;
-    let { authenticatedUser } = this.state;
-    this.setState({
-      loading: true,
-    });
-    if (authenticatedUser.status) {
-      this.signOut();
-    } else {
-      const accessToken = await getAccessToken();
-      if (accessToken) {
-        authenticatedUser.token = accessToken;
-        authenticatedUser.status = true;
-        if (actions) {
-          actions.authenticateUser(authenticatedUser);
-        }
-        try {
-          const userInfo = await getUserInfo(queryActions);
-          authenticatedUser.user = {...{},
-                                    displayName: userInfo.displayName,
-                                    emailAddress: userInfo.mail || userInfo.userPrincipalName,
-                                    profileImageUrl: '',
-          };
-          if (actions) {
-            actions.authenticateUser(authenticatedUser);
-            this.setState({
-              authenticatedUser,
-            });
-          }
-          try {
-            const imageUrl = await getImageUrl(queryActions);
-            if (actions) {
-              authenticatedUser = this.state.authenticatedUser;
-              authenticatedUser.user.profileImageUrl = imageUrl;
-              actions.authenticateUser(authenticatedUser);
-              this.setState({
-                authenticatedUser,
-                loading: false,
-              });
-            }
-          } catch (e) {
-            if (actions) {
-              authenticatedUser = this.state.authenticatedUser;
-              authenticatedUser.user.profileImageUrl = '';
-              actions.authenticateUser(authenticatedUser);
-              this.setState({
-                authenticatedUser,
-                loading: false,
-              });
-            }
-          }
-        } catch (e) {
-          // tslint:disable-next-line:no-console
-          console.log(e);
-        }
-      }
+    const { actions } = this.props;
+
+    if (actions) {
+      actions.authenticateUser();
     }
   };
 
   public componentDidMount = () => {
-    const authenticatedUser = localStorage.getItem('authenticatedUser');
-    const authUser = (authenticatedUser) ? JSON.parse(authenticatedUser) : null;
-
-    if (authenticatedUser && this.props.actions && authUser.status) {
-      this.props.actions.authenticateUser(authUser);
-      this.setState({
-        authenticatedUser: authUser,
-      });
-    }
-  }
+    new HelloAuthProvider()
+      .getAccessToken()
+      .then(token => console.log(token));
+  };
 
   public signOut = (): void => {
     const { actions } = this.props;
@@ -109,7 +54,6 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
         },
         token: '',
       };
-      actions.authenticateUser(authenticatedUser);
       this.setState({
         authenticatedUser,
         loading: false,
@@ -122,7 +66,7 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
     const buttonLabel = (authenticatedUser && authenticatedUser.status) ? 'sign out' : 'sign in';
     return (
       <div className='authentication-container'>
-        <SubmitButton className='signIn-button' text={buttonLabel} handleOnClick={this.signIn} submitting={loading} />
+        <SubmitButton className='signIn-button' text={buttonLabel} handleOnClick={this.signIn} submitting={false} />
         <Profile user={authenticatedUser.user}/>
       </div>
     );
