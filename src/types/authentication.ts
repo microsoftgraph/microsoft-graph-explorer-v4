@@ -5,7 +5,6 @@ export interface IAuthenticationProps {
     queryActions?: {
       runQuery: Function;
     };
-    authenticatedUser: IAuthenticationState;
   }
 
 export interface IAuthenticationState {

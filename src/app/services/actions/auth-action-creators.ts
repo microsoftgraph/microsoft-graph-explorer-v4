@@ -1,15 +1,10 @@
 import { IAction } from '../../../types/action';
-import { AUTHENTICATE_USER } from '../constants';
-import { HelloAuthProvider } from '../graph-client/HelloAuthProvider';
+import { GET_AUTH_TOKEN_SUCCESS } from '../constants';
 
-export function authenticateUserSuccess(response: object): IAction {
+export function getAuthTokenSuccess(response: string): IAction {
   return {
-    type: AUTHENTICATE_USER,
+    type: GET_AUTH_TOKEN_SUCCESS,
     response,
   };
 }
 
-export function authenticateUser(): void {
-  new HelloAuthProvider()
-    .login();
-}

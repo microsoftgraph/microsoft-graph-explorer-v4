@@ -1,10 +1,10 @@
 import { IAction } from '../../../types/action';
-import { AUTHENTICATE_USER } from '../constants';
+import { GET_AUTH_TOKEN_SUCCESS } from '../constants';
 
-export function authResponse(state = {}, action: IAction): object {
+export function authToken(state = {}, action: IAction): string | object {
     switch (action.type) {
-        case AUTHENTICATE_USER:
-        return {...state, authenticatedUser: action.response};
+        case GET_AUTH_TOKEN_SUCCESS:
+            return action.response;
         default:
             return state;
     }

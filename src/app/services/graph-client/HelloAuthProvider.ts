@@ -1,4 +1,4 @@
-import { AuthenticationProvider, AuthenticationProviderOptions, AuthProvider } from '@microsoft/microsoft-graph-client';
+import { AuthenticationProvider } from '@microsoft/microsoft-graph-client';
 import hello from 'hellojs';
 import { DEFAULT_USER_SCOPES } from '../constants';
 
@@ -59,10 +59,13 @@ export class HelloAuthProvider implements AuthenticationProvider {
   }
 
   public  getAccessToken(): Promise<any> {
-    const accessToken = this.hello('msft')
-      .getAuthResponse('msft')
-      .access_token;
-
-    return Promise.resolve(accessToken);
+    try {
+      const accessToken = this.hello('msft')
+        .getAuthResponse('msft')
+        .access_token;
+      return Promise.resolve(accessToken);
+    } catch (error) {
+      return Promise.resolve(null);
+    }
   }
 }

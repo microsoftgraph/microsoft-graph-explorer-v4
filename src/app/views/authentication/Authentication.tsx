@@ -1,14 +1,13 @@
-import hello from 'hellojs';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { IAuthenticationProps, IAuthenticationState } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import { HelloAuthProvider } from '../../services/graph-client/HelloAuthProvider';
 import SubmitButton from '../common/submit-button/SubmitButton';
 import './authentication.scss';
-import { getAccessToken, getImageUrl, getUserInfo } from './AuthUtility';
 import { Profile } from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps,  IAuthenticationState> {
@@ -29,17 +28,8 @@ export class Authentication extends Component<IAuthenticationProps,  IAuthentica
   }
 
   public signIn = async (): Promise<void> => {
-    const { actions } = this.props;
-
-    if (actions) {
-      actions.authenticateUser();
-    }
-  };
-
-  public componentDidMount = () => {
     new HelloAuthProvider()
-      .getAccessToken()
-      .then(token => console.log(token));
+      .login();
   };
 
   public signOut = (): void => {
@@ -80,13 +70,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-function mapStateToProps(state: any) {
-  return {
-    authenticatedUser: state.authResponse.authenticatedUser,
-  };
-}
-
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(Authentication);

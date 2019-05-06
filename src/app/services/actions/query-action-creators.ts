@@ -3,13 +3,10 @@ import { anonymousRequest, authenticatedRequest } from './query-action-creator-u
 
 export function runQuery(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
-    const authState = getState().authResponse;
-    if (authState) {
-      const isAuthenticated = authState.authenticatedUser;
+    const tokenPresent = getState().authToken;
 
-      if (isAuthenticated) {
-        return authenticatedRequest(dispatch, query);
-      }
+    if (tokenPresent) {
+      return authenticatedRequest(dispatch, query);
     }
 
     return anonymousRequest(dispatch, query);

@@ -1,11 +1,11 @@
 import { AUTHENTICATE_USER } from '../../../app/services/constants';
-import { authResponse } from '../../../app/services/reducers/auth-reducers';
+import { authToken } from '../../../app/services/reducers/auth-reducers';
 
 describe('Auth Reducer', () => {
   it('should return initial state', () => {
     const initialState = {};
     const dummyAction = { type: 'Dummy', response: { displayName: 'Megan Bowen' } };
-    const newState = authResponse(initialState, dummyAction);
+    const newState = authToken(initialState, dummyAction);
 
     expect(newState).toEqual(initialState);
   });
@@ -26,7 +26,7 @@ describe('Auth Reducer', () => {
       authenticatedUser,
     };
     const queryAction = { type: AUTHENTICATE_USER, response: authenticatedUser };
-    const newState = authResponse(initialState, queryAction);
+    const newState = authToken(initialState, queryAction);
 
     expect(newState).toEqual(mockUser);
   });

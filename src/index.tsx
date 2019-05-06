@@ -12,6 +12,8 @@ import jp from 'react-intl/locale-data/ja';
 import ru from 'react-intl/locale-data/ru';
 import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
+import { getAuthTokenSuccess } from './app/services/actions/auth-action-creators';
+import { HelloAuthProvider } from './app/services/graph-client/HelloAuthProvider';
 
 import App from './app/views/App';
 import messages from './messages';
@@ -22,6 +24,14 @@ import { dark, light } from './themes';
 initializeIcons();
 
 const appState = store({});
+
+new HelloAuthProvider().getAccessToken()
+  .then((token) => {
+    if (token) {
+      appState.dispatch(getAuthTokenSuccess(token));
+    }
+  });
+
 
 const supportedLocales = ['de-DE', 'en-US', 'es-ES', 'fr-FR', 'ja-JP', 'pt-BR', 'ru-RU', 'zh-CN'];
 
