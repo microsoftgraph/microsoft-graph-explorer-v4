@@ -48,7 +48,7 @@ export class HelloAuthProvider implements AuthenticationProvider {
     });
   }
 
-  public login() {
+  public signIn() {
     const loginProperties = {
       display: 'page',
       state: 'abcd',
@@ -57,6 +57,10 @@ export class HelloAuthProvider implements AuthenticationProvider {
 
     // @ts-ignore
     this.hello('msft').login(loginProperties);
+  }
+
+  public signOut() {
+    this.hello('msft').logout();
   }
 
   public  getAccessToken(): Promise<any> {

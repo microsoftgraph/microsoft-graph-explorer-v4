@@ -25,7 +25,6 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
   const graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleUrl}`;
   const respHeaders: any = {};
 
-
   const headers = {
     'Authorization': `Bearer ${authToken}`,
     'Content-Type': 'application/json',
