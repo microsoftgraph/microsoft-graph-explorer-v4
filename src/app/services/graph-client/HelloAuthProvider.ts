@@ -1,15 +1,16 @@
 import { AuthenticationProvider } from '@microsoft/microsoft-graph-client';
 import hello from 'hellojs';
-import { DEFAULT_USER_SCOPES } from '../constants';
+import { AUTH_URL, DEFAULT_USER_SCOPES } from '../constants';
 
 export class HelloAuthProvider implements AuthenticationProvider {
   private hello: any;
 
   constructor() {
     const options = {
-      authUrl: 'https://login.microsoftonline.com',
+      authUrl: AUTH_URL,
       clientId: 'cb2d7367-7429-41c6-ab18-6ecb336139a6',
     };
+
     this.hello = hello;
 
     this.hello.init({
