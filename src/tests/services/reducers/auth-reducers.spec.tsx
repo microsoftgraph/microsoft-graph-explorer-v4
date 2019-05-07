@@ -10,24 +10,12 @@ describe('Auth Reducer', () => {
     expect(newState).toEqual(initialState);
   });
 
-  it('should handle AUTHENTICATE_USER', () => {
+  it('should handle GET_AUTH_TOKEN_SUCCESS', () => {
     const initialState = {};
-    const authenticatedUser = {
-      status: true,
-      token: 'ex',
-      user:
-        {
-          displayName: 'Megan Bowen',
-          emailAddress: 'meganbowen@onmicrosoft.com',
-          profileImageUrl: 'blob:http:',
-        },
-    };
-    const mockUser = {
-      authenticatedUser,
-    };
-    const queryAction = { type: GET_AUTH_TOKEN_SUCCESS, response: authenticatedUser };
+
+    const queryAction = { type: GET_AUTH_TOKEN_SUCCESS, response: 'a token' };
     const newState = authToken(initialState, queryAction);
 
-    expect(newState).toEqual(mockUser);
+    expect(newState).toEqual('a token');
   });
 });
