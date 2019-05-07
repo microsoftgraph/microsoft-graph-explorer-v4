@@ -1,6 +1,6 @@
 import { AuthenticationProvider } from '@microsoft/microsoft-graph-client';
 import hello from 'hellojs';
-import { AUTH_URL, DEFAULT_USER_SCOPES } from '../constants';
+import { AUTH_URL, DEFAULT_USER_SCOPES } from '../graph-constants';
 
 export class HelloAuthProvider implements AuthenticationProvider {
   private hello: any;

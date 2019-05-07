@@ -3,8 +3,8 @@ import { ResponseType } from '@microsoft/microsoft-graph-client';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
-import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../constants';
 import { GraphClient } from '../graph-client';
+import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../redux-constants';
 
 export function queryResponseError(response: object): IAction {
   return {
@@ -30,9 +30,7 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
     'Content-Type': 'application/json',
   };
 
-
-  let options: IRequestOptions = {};
-  options = { method: query.selectedVerb, headers};
+  const options: IRequestOptions = { method: query.selectedVerb, headers};
 
   return fetch(graphUrl, options)
     .then((resp) => {

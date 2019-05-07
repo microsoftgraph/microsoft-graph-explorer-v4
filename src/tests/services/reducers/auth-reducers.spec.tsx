@@ -1,5 +1,5 @@
-import { AUTHENTICATE_USER } from '../../../app/services/constants';
 import { authToken } from '../../../app/services/reducers/auth-reducers';
+import { GET_AUTH_TOKEN_SUCCESS } from '../../../app/services/redux-constants';
 
 describe('Auth Reducer', () => {
   it('should return initial state', () => {
@@ -25,7 +25,7 @@ describe('Auth Reducer', () => {
     const mockUser = {
       authenticatedUser,
     };
-    const queryAction = { type: AUTHENTICATE_USER, response: authenticatedUser };
+    const queryAction = { type: GET_AUTH_TOKEN_SUCCESS, response: authenticatedUser };
     const newState = authToken(initialState, queryAction);
 
     expect(newState).toEqual(mockUser);

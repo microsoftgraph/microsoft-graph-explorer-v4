@@ -1,6 +1,6 @@
 import { IAction } from '../../../types/action';
-import { GET_AUTH_TOKEN_SUCCESS, LOGOUT_SUCCESS } from '../constants';
 import { HelloAuthProvider } from '../graph-client/HelloAuthProvider';
+import { GET_AUTH_TOKEN_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
 
 export function getAuthTokenSuccess(response: string): IAction {
   return {

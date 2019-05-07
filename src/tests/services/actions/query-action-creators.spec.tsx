@@ -2,7 +2,6 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import { runQuery } from '../../../app/services/actions/query-action-creators';
-import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../../../app/services/constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
