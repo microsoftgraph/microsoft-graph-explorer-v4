@@ -3,7 +3,7 @@ import { GET_AUTH_TOKEN_SUCCESS } from '../../../app/services/redux-constants';
 
 describe('Auth Reducer', () => {
   it('should return initial state', () => {
-    const initialState = {};
+    const initialState = '';
     const dummyAction = { type: 'Dummy', response: { displayName: 'Megan Bowen' } };
     const newState = authToken(initialState, dummyAction);
 
@@ -11,7 +11,7 @@ describe('Auth Reducer', () => {
   });
 
   it('should handle GET_AUTH_TOKEN_SUCCESS', () => {
-    const initialState = {};
+    const initialState = '';
 
     const queryAction = { type: GET_AUTH_TOKEN_SUCCESS, response: 'a token' };
     const newState = authToken(initialState, queryAction);
