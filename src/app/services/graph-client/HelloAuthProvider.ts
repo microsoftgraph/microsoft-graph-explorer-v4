@@ -1,9 +1,11 @@
 import { AuthenticationProvider } from '@microsoft/microsoft-graph-client';
+import jwtDecode from 'jwt-decode';
+
 import hello from 'hellojs';
 import { AUTH_URL, DEFAULT_USER_SCOPES } from '../graph-constants';
 
 export class HelloAuthProvider implements AuthenticationProvider {
-  private hello: any;
+  public hello: any;
 
   constructor() {
     const options = {
@@ -46,6 +48,8 @@ export class HelloAuthProvider implements AuthenticationProvider {
       redirect_uri: window.location.pathname,
       scope: DEFAULT_USER_SCOPES,
     });
+
+    setInterval(() => this.refreshAccessToken(), 1000 * 60 * 2);
   }
 
   public signIn() {
@@ -72,5 +76,27 @@ export class HelloAuthProvider implements AuthenticationProvider {
     } catch (error) {
       return Promise.resolve(null);
     }
+  }
+
+  public async refreshAccessToken() {
+      const token = await this.getAccessToken();
+
+      if (!token) {
+        return this.signOut();
+      }
+
+      const decodedToken = jwtDecode(token);
+      const loginProperties = {
+        display: 'none',
+        response_type: 'token',
+        response_mode: 'fragment',
+        nonce: 'graph_explorer',
+        prompt: 'none',
+        scope: DEFAULT_USER_SCOPES,
+        login_hint: (decodedToken as any).unique_name,
+        domain_hint: 'organizations',
+      };
+
+      this.hello('msft').login(loginProperties);
   }
 }

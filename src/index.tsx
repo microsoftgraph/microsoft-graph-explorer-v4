@@ -33,6 +33,7 @@ new HelloAuthProvider().getAccessToken()
   });
 
 
+
 const supportedLocales = ['de-DE', 'en-US', 'es-ES', 'fr-FR', 'ja-JP', 'pt-BR', 'ru-RU', 'zh-CN'];
 
 const locale = supportedLocales.indexOf(navigator.language) !== -1 ? navigator.language : 'en-US';
