@@ -8,6 +8,6 @@ export function authToken(state = {}, action: IAction): string | object {
         case LOGOUT_SUCCESS:
             return action.response;
         default:
-            return state;
+            return '';
     }
 }
