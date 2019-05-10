@@ -64,7 +64,11 @@ export class HelloAuthProvider implements AuthenticationProvider {
   }
 
   public signOut() {
-    this.hello('msft').logout();
+    const session = this.hello('msft').getAuthResponse('msft');
+
+    if (session) {
+      this.hello('msft').logout();
+    }
   }
 
   public  getAccessToken(): Promise<any> {

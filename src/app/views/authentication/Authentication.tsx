@@ -46,7 +46,7 @@ export class Authentication extends Component<IAuthenticationProps> {
 
 function mapStateToProps(state: any) {
   return {
-    tokenPresent: !!state.authToken
+    tokenPresent: !(typeof state.authToken === 'object')
   };
 }
 
