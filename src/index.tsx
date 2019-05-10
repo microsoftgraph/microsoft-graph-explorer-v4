@@ -23,7 +23,9 @@ import { dark, light } from './themes';
 
 initializeIcons();
 
-const appState = store({});
+const appState = store({
+  authToken: '',
+});
 
 new HelloAuthProvider().getAccessToken()
   .then((token) => {

@@ -9,7 +9,7 @@ export function getAuthTokenSuccess(response: string): IAction {
   };
 }
 
-export function signOutSuccess(response: object): IAction {
+export function signOutSuccess(response: string): IAction {
   return {
     type: LOGOUT_SUCCESS,
     response,
@@ -19,6 +19,6 @@ export function signOutSuccess(response: object): IAction {
 export function signOut() {
   new HelloAuthProvider()
     .signOut();
-  return (dispatch: Function) => dispatch(signOutSuccess({}));
+  return (dispatch: Function) => dispatch(signOutSuccess(''));
 }
 
