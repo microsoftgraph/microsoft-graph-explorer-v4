@@ -1,9 +1,24 @@
 import { IAction } from '../../../types/action';
-import { AUTHENTICATE_USER } from '../constants';
+import { HelloAuthProvider } from '../graph-client/HelloAuthProvider';
+import { GET_AUTH_TOKEN_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
 
-export function authenticateUser(response: object): IAction {
-    return {
-      type: AUTHENTICATE_USER,
-      response,
-    };
-  }
+export function getAuthTokenSuccess(response: string): IAction {
+  return {
+    type: GET_AUTH_TOKEN_SUCCESS,
+    response,
+  };
+}
+
+export function signOutSuccess(response: string): IAction {
+  return {
+    type: LOGOUT_SUCCESS,
+    response,
+  };
+}
+
+export function signOut() {
+  new HelloAuthProvider()
+    .signOut();
+  return (dispatch: Function) => dispatch(signOutSuccess(''));
+}
+
