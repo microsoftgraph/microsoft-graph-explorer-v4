@@ -49,7 +49,7 @@ export class HelloAuthProvider implements AuthenticationProvider {
       scope: DEFAULT_USER_SCOPES,
     });
 
-    setInterval(() => this.refreshAccessToken(), 1000 * 60 * 2);
+    setInterval(() => this.refreshAccessToken(), 1000);
   }
 
   public signIn() {
@@ -85,7 +85,10 @@ export class HelloAuthProvider implements AuthenticationProvider {
         return this.signOut();
       }
 
-      const decodedToken = jwtDecode(token);
+      const decodedToken: any = jwtDecode(token);
+      const currentTime = (new Date()).getTime() / 1000;
+      const hasExpired = currentTime > decodedToken.exp;
+
       const loginProperties = {
         display: 'none',
         response_type: 'token',
@@ -93,10 +96,12 @@ export class HelloAuthProvider implements AuthenticationProvider {
         nonce: 'graph_explorer',
         prompt: 'none',
         scope: DEFAULT_USER_SCOPES,
-        login_hint: (decodedToken as any).unique_name,
+        login_hint: decodedToken.unique_name,
         domain_hint: 'organizations',
       };
 
-      this.hello('msft').login(loginProperties);
+      if (hasExpired) {
+        this.hello('msft').login(loginProperties);
+      }
   }
 }
