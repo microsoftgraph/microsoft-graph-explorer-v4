@@ -4,7 +4,7 @@ import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
-import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../redux-constants';
+import { QUERY_GRAPH_ERROR, QUERY_GRAPH_RUNNING, QUERY_GRAPH_SUCCESS } from '../redux-constants';
 
 export function queryResponseError(response: object): IAction {
   return {
@@ -20,7 +20,15 @@ export function queryResponse(response: object): IAction {
   };
 }
 
+export function queryRunningStatus(response: object): IAction {
+  return {
+    type: QUERY_GRAPH_RUNNING,
+    response,
+  };
+}
+
 export function anonymousRequest(dispatch: Function, query: IQuery) {
+
   const authToken = '{token:https://graph.microsoft.com/}';
   const graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleUrl}`;
   const respHeaders: any = {};
@@ -30,28 +38,35 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
     'Content-Type': 'application/json',
   };
 
-  const options: IRequestOptions = { method: query.selectedVerb, headers};
+  const options: IRequestOptions = { method: query.selectedVerb, headers };
+
+  dispatch(queryRunningStatus({ isLoadingData: true }));
 
   return fetch(graphUrl, options)
     .then((resp) => {
+      dispatch(queryRunningStatus({ isLoadingData: false }));
       if (resp.ok) {
         return parseResponse(resp, respHeaders);
       }
       throw new Error('The request was not completed');
     })
     .then((json) =>
-
       dispatch(
         queryResponse({
           body: json,
           headers: respHeaders,
         }),
+        queryRunningStatus({ isLoadingData: false })
       ),
     )
-    .catch((error) => dispatch(queryResponseError(error)));
+    .catch((error) => dispatch(
+      queryResponseError(error),
+      queryRunningStatus({ isLoadingData: false }))
+    );
 }
 
 export function authenticatedRequest(dispatch: Function, query: IQuery) {
+  dispatch(queryRunningStatus({ isLoadingData: true }));
   return makeRequest(query.selectedVerb)(dispatch, query);
 }
 
@@ -123,9 +138,14 @@ const makeRequest = (httpVerb: string): Function => {
         queryResponse({
           body: json,
           headers: respHeaders
-        })
+        }),
+        queryRunningStatus({ isLoadingData: false }),
       );
     }
-    dispatch(queryResponseError(response.body));
+    return dispatch(
+      queryResponseError(response.body),
+      queryRunningStatus({ isLoadingData: false }),
+    );
+
   };
 };

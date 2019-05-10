@@ -148,6 +148,8 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       headers,
     } = this.state;
 
+    const { isLoadingData } = this.props;
+
     return (
       <div>
         <div className='row'>
@@ -159,6 +161,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
               httpMethods={httpMethods}
               selectedVerb={selectedVerb}
               sampleUrl={sampleUrl}
+              submitting={isLoadingData}
             />
           </div>
         </div>
@@ -185,4 +188,10 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-export default connect(null, mapDispatchToProps)(QueryRunner);
+function mapStateToProps(state: any) {
+  return {
+    isLoadingData: state.graphResponse.isLoadingData
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(QueryRunner);
