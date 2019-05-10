@@ -36,7 +36,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     const urlParams = new URLSearchParams(window.location.search);
     const base64Token = urlParams.getAll('query')[0];
 
-    if (base64Token) {
+    if (!base64Token) {
       return;
     }
 
