@@ -47,8 +47,6 @@ function tokenize(payload: string) {
   let word = '';
   const tokens = [];
 
-  getBody(payload);
-
   // tslint:disable-next-line
   for (let i = 0; i < payload.length; i++) {
     const char = payload[i];
