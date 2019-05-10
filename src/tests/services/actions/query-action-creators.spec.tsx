@@ -15,10 +15,18 @@ describe('actions', () => {
 
     const expectedActions = [
       {
+        type: 'QUERY_GRAPH_RUNNING',
+        response: { isLoadingData: true }
+      },
+      {
+        type: 'QUERY_GRAPH_RUNNING',
+        response: { isLoadingData: false }
+      },
+      {
         type: QUERY_GRAPH_SUCCESS,
         response: {
           body: { displayName: 'Megan Bowen' },
-          headers: { 'content-type': 'application-json'},
+          headers: { 'content-type': 'application-json' },
         },
       },
     ];
