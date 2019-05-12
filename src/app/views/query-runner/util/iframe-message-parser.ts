@@ -1,4 +1,15 @@
-function isVerb (word: string): boolean {
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+interface IParsedSnippet {
+  verb: string;
+  url: string;
+  headerKey?: string;
+  headerValue?: string;
+  body?: string;
+}
+
+function isVerb(word: string): boolean {
   return ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].indexOf(word) !== -1;
 }
 
@@ -17,7 +28,6 @@ function isHeaderValue(word: string): boolean {
 function getBody(payload: string) {
   const NEWLINE = /\n/;
   const OPEN_BRACE = /{/;
-  const CLOSING_BRACE = /}/;
   let current = 1;
   let word = '';
 
@@ -25,7 +35,6 @@ function getBody(payload: string) {
     const char = payload[current];
     const foundNewLine = NEWLINE.test(payload[current - 1]);
     const foundOpeningBrace = OPEN_BRACE.test(char);
-    const foundClosingBrace = CLOSING_BRACE.test(char);
 
     if (foundNewLine) {
       if (foundOpeningBrace) {
@@ -43,7 +52,7 @@ function getBody(payload: string) {
   return word.replace(/\n/g, '');
 }
 
-function tokenize(payload: string) {
+function tokenize(payload: string): object[] {
   let word = '';
   const tokens = [];
 
@@ -102,10 +111,10 @@ function tokenize(payload: string) {
   return tokens;
 }
 
-export function parse(payload: string): object {
+export function parse(payload: string): IParsedSnippet | {} {
   const tokens = tokenize(payload);
 
   return tokens.reduce((obj: object, item: object) => {
-    return {...obj, ...item};
+    return { ...obj, ...item };
   }, {});
 }
