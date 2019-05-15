@@ -1,5 +1,6 @@
-import { classNamesFunction, ITheme, styled } from 'office-ui-fabric-react';
+import { classNamesFunction, ITheme, MessageBar, MessageBarType, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
@@ -10,11 +11,13 @@ import { QueryRunner } from './query-runner';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
+  error: object|null;
 }
 
 class App extends Component<IAppProps> {
   public render() {
     const classes = classNames(this.props);
+    const { error }: any = this.props;
 
     return (
       <div className={`container-fluid ${classes.app}`}>
@@ -22,6 +25,15 @@ class App extends Component<IAppProps> {
           <div className='col-sm-12 col-lg-8 offset-lg-2'>
             <Authentication/>
             <QueryRunner/>
+            {error && 
+              <MessageBar
+                messageBarType={MessageBarType.error}
+                isMultiline={false}
+                onDismiss={() => console.log('test')}
+              >
+                {`${error.statusText} - ${error.status}`}
+              </MessageBar>
+            }
             <QueryResponse/>
           </div>
         </div>
@@ -30,4 +42,12 @@ class App extends Component<IAppProps> {
   }
 }
 
-export default styled(App, appStyles);
+const mapStateToProps = (state: any) => {
+  return {
+    error: state.queryRunnerError
+  };
+};
+
+const StyledApp =  styled(App, appStyles);
+
+export default connect(mapStateToProps)(StyledApp);
