@@ -5,13 +5,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
 import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../redux-constants';
-
-export function queryResponseError(response: object): IAction {
-  return {
-    type: QUERY_GRAPH_ERROR,
-    response,
-  };
-}
+import { queryResponseError } from './error-action-creator';
 
 export function queryResponse(response: object): IAction {
   return {

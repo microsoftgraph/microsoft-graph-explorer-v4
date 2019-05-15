@@ -1,7 +1,9 @@
 import { classNamesFunction, ITheme, MessageBar, MessageBarType, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
+import { clearQueryError } from '../services/actions/error-action-creator';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
@@ -11,30 +13,30 @@ import { QueryRunner } from './query-runner';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
-  error: object|null;
+  error: object | null;
 }
 
 class App extends Component<IAppProps> {
   public render() {
     const classes = classNames(this.props);
-    const { error }: any = this.props;
+    const { error, actions }: any = this.props;
 
     return (
       <div className={`container-fluid ${classes.app}`}>
         <div className='row'>
           <div className='col-sm-12 col-lg-8 offset-lg-2'>
-            <Authentication/>
-            <QueryRunner/>
-            {error && 
+            <Authentication />
+            <QueryRunner />
+            {error &&
               <MessageBar
                 messageBarType={MessageBarType.error}
                 isMultiline={false}
-                onDismiss={() => console.log('test')}
+                onDismiss={actions.clearQueryError}
               >
                 {`${error.statusText} - ${error.status}`}
               </MessageBar>
             }
-            <QueryResponse/>
+            <QueryResponse />
           </div>
         </div>
       </div>
@@ -48,6 +50,12 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-const StyledApp =  styled(App, appStyles);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    actions: bindActionCreators({ clearQueryError }, dispatch)
+  };
+};
 
-export default connect(mapStateToProps)(StyledApp);
+const StyledApp = styled(App, appStyles);
+
+export default connect(mapStateToProps, mapDispatchToProps)(StyledApp);
