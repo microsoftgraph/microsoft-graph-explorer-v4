@@ -34,7 +34,7 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
       return resp;
     })
     .then((json) => {
-      if (!json.ok) {
+      if (json.ok === false) {
         return dispatch(queryResponseError(json));
       }
 
