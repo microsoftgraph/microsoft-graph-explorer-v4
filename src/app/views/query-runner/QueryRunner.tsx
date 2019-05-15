@@ -190,7 +190,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 function mapStateToProps(state: any) {
   return {
-    isLoadingData: state.graphResponse.isLoadingData
+    isLoadingData: state.isLoadingData
   };
 }
 

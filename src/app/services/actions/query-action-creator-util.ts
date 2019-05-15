@@ -1,10 +1,10 @@
 import { ResponseType } from '@microsoft/microsoft-graph-client';
-
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
-import { QUERY_GRAPH_ERROR, QUERY_GRAPH_RUNNING, QUERY_GRAPH_SUCCESS } from '../redux-constants';
+import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../redux-constants';
+import { queryRunningStatus } from './query-loading-action-creators';
 
 export function queryResponseError(response: object): IAction {
   return {
@@ -16,13 +16,6 @@ export function queryResponseError(response: object): IAction {
 export function queryResponse(response: object): IAction {
   return {
     type: QUERY_GRAPH_SUCCESS,
-    response,
-  };
-}
-
-export function queryRunningStatus(response: object): IAction {
-  return {
-    type: QUERY_GRAPH_RUNNING,
     response,
   };
 }
@@ -40,11 +33,10 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
 
   const options: IRequestOptions = { method: query.selectedVerb, headers };
 
-  dispatch(queryRunningStatus({ isLoadingData: true }));
+  dispatch(queryRunningStatus(true));
 
   return fetch(graphUrl, options)
-    .then((resp) => {
-      dispatch(queryRunningStatus({ isLoadingData: false }));
+  .then((resp) => {
       if (resp.ok) {
         return parseResponse(resp, respHeaders);
       }
@@ -56,17 +48,14 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
           body: json,
           headers: respHeaders,
         }),
-        queryRunningStatus({ isLoadingData: false })
       ),
     )
     .catch((error) => dispatch(
-      queryResponseError(error),
-      queryRunningStatus({ isLoadingData: false }))
-    );
+      queryResponseError(error)
+    ));
 }
 
 export function authenticatedRequest(dispatch: Function, query: IQuery) {
-  dispatch(queryRunningStatus({ isLoadingData: true }));
   return makeRequest(query.selectedVerb)(dispatch, query);
 }
 
@@ -112,6 +101,8 @@ const makeRequest = (httpVerb: string): Function => {
 
     let response;
 
+    dispatch(queryRunningStatus(true));
+
     switch (httpVerb) {
       case 'GET':
         response = await client.get();
@@ -139,12 +130,10 @@ const makeRequest = (httpVerb: string): Function => {
           body: json,
           headers: respHeaders
         }),
-        queryRunningStatus({ isLoadingData: false }),
       );
     }
     return dispatch(
       queryResponseError(response.body),
-      queryRunningStatus({ isLoadingData: false }),
     );
 
   };

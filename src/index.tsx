@@ -25,7 +25,9 @@ initializeIcons();
 
 const appState = store({
   authToken: '',
+  isLoadingData: false
 });
+
 
 new HelloAuthProvider().getAccessToken()
   .then((token) => {

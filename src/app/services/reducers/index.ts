@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import { HelloAuthProvider } from '../graph-client/HelloAuthProvider';
-
 import { authToken } from './auth-reducers';
+import { isLoadingData } from './query-loading-reducers';
 import { graphResponse } from './query-runner-reducers';
 
 export default combineReducers({
-  graphResponse,
   authToken,
+  graphResponse,
+  isLoadingData,
 });
