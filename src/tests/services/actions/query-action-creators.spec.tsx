@@ -16,11 +16,7 @@ describe('actions', () => {
     const expectedActions = [
       {
         type: 'QUERY_GRAPH_RUNNING',
-        response: { isLoadingData: true }
-      },
-      {
-        type: 'QUERY_GRAPH_RUNNING',
-        response: { isLoadingData: false }
+        response:  true
       },
       {
         type: QUERY_GRAPH_SUCCESS,
