@@ -23,7 +23,9 @@ import { dark, light } from './themes';
 
 initializeIcons();
 
-const appState = store({});
+const appState = store({
+  authToken: '',
+});
 
 new HelloAuthProvider().getAccessToken()
   .then((token) => {
@@ -31,6 +33,7 @@ new HelloAuthProvider().getAccessToken()
       appState.dispatch(getAuthTokenSuccess(token));
     }
   });
+
 
 
 const supportedLocales = ['de-DE', 'en-US', 'es-ES', 'fr-FR', 'ja-JP', 'pt-BR', 'ru-RU', 'zh-CN'];

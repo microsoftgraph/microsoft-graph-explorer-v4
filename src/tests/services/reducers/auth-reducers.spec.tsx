@@ -11,7 +11,7 @@ describe('Auth Reducer', () => {
   });
 
   it('should handle GET_AUTH_TOKEN_SUCCESS', () => {
-    const initialState = {};
+    const initialState = '';
 
     const queryAction = { type: GET_AUTH_TOKEN_SUCCESS, response: 'a token' };
     const newState = authToken(initialState, queryAction);
