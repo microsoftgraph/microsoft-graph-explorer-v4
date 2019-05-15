@@ -8,8 +8,12 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('actions', () => {
+  beforeEach(() => {
+    fetchMock.resetMocks();
+  });
+
   it('creates QUERY_GRAPH_SUCCESS when runQuery is called', () => {
-    fetchMock.mockResponse(JSON.stringify({ displayName: 'Megan Bowen' }), {
+    fetchMock.mockResponseOnce(JSON.stringify({ displayName: 'Megan Bowen', ok: true }), {
       headers: { 'content-type': 'application-json' },
     });
 
@@ -17,7 +21,7 @@ describe('actions', () => {
       {
         type: QUERY_GRAPH_SUCCESS,
         response: {
-          body: { displayName: 'Megan Bowen' },
+          body: { displayName: 'Megan Bowen', ok: true},
           headers: { 'content-type': 'application-json'},
         },
       },
