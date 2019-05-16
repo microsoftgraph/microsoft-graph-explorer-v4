@@ -31,10 +31,12 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         }) : null;
 
         const userInfo = jsonUserInfo.response.body;
-        const buffer = await userPicture.response.body.arrayBuffer();
-        const blob = new Blob([buffer], { type: 'image/jpeg' });
-        const createObjectURL = URL.createObjectURL(blob);
-        const imageUrl = (createObjectURL) ? createObjectURL : '';
+        let imageUrl = '';
+        if (userPicture) {
+            const buffer = await userPicture.response.body.arrayBuffer();
+            const blob = new Blob([buffer], { type: 'image/jpeg' });
+            imageUrl = URL.createObjectURL(blob);
+        }
 
         const user = {
             ...{},
