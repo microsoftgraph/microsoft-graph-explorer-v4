@@ -5,13 +5,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
 import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../redux-constants';
-
-export function queryResponseError(response: object): IAction {
-  return {
-    type: QUERY_GRAPH_ERROR,
-    response,
-  };
-}
+import { queryResponseError } from './error-action-creator';
 
 export function queryResponse(response: object): IAction {
   return {
@@ -30,25 +24,27 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
     'Content-Type': 'application/json',
   };
 
-  const options: IRequestOptions = { method: query.selectedVerb, headers};
+  const options: IRequestOptions = { method: query.selectedVerb, headers };
 
   return fetch(graphUrl, options)
     .then((resp) => {
       if (resp.ok) {
         return parseResponse(resp, respHeaders);
       }
-      throw new Error('The request was not completed');
+      return resp;
     })
-    .then((json) =>
+    .then((json) => {
+      if (json.ok === false) {
+        return dispatch(queryResponseError(json));
+      }
 
-      dispatch(
+      return dispatch(
         queryResponse({
           body: json,
           headers: respHeaders,
         }),
-      ),
-    )
-    .catch((error) => dispatch(queryResponseError(error)));
+      );
+    });
 }
 
 export function authenticatedRequest(dispatch: Function, query: IQuery) {
@@ -126,6 +122,6 @@ const makeRequest = (httpVerb: string): Function => {
         })
       );
     }
-    dispatch(queryResponseError(response.body));
+    return dispatch(queryResponseError(response));
   };
 };

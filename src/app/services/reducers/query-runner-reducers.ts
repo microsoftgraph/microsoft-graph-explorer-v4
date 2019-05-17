@@ -1,12 +1,10 @@
 import { IAction } from '../../../types/action';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 
-export function graphResponse(state = {}, action: IAction): object {
+export function graphResponse(state = {}, action: IAction): any {
   switch (action.type) {
     case QUERY_GRAPH_SUCCESS:
-      if (typeof action.response !== 'string') {
-        return action.response;
-      }
+      return action.response;
     default:
       return state;
   }
