@@ -19,6 +19,10 @@ describe('actions', () => {
 
     const expectedActions = [
       {
+        type: 'QUERY_GRAPH_RUNNING',
+        response:  true
+      },
+      {
         type: QUERY_GRAPH_SUCCESS,
         response: {
           body: { displayName: 'Megan Bowen', ok: true},

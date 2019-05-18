@@ -1,5 +1,5 @@
 import { IAction } from '../../../types/action';
-import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
+import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../redux-constants';
 
 export function graphResponse(state = {}, action: IAction): any {
   switch (action.type) {

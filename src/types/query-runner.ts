@@ -16,6 +16,7 @@ export interface IQuery {
 }
 
 export interface IQueryRunnerProps {
+  isLoadingData: boolean;
   actions?: {
     runQuery: Function;
   };
@@ -28,4 +29,5 @@ export interface IQueryInputControl {
   httpMethods: Array<{ key: string; text: string}>;
   selectedVerb: string;
   sampleUrl: string;
+  submitting: boolean;
 }

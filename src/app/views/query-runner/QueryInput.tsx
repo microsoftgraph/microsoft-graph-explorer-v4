@@ -1,6 +1,6 @@
-import { Dropdown, PrimaryButton, TextField } from 'office-ui-fabric-react';
+import { Dropdown, TextField } from 'office-ui-fabric-react';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import SubmitButton from '../common/submit-button/SubmitButton';
 
 import { IQueryInputControl } from '../../../types/query-runner';
 
@@ -11,6 +11,7 @@ export const QueryInputControl = ({
   httpMethods,
   selectedVerb,
   sampleUrl,
+  submitting,
 }: IQueryInputControl) => {
 
   return (
@@ -30,13 +31,12 @@ export const QueryInputControl = ({
         />
       </div>
       <div className='col-sm-2 run-query-button'>
-        <PrimaryButton
-          onClick={() => handleOnRunQuery()}
-        >
-          <FormattedMessage
-            id='Run Query'
-          />
-        </PrimaryButton>
+        <SubmitButton
+          className='run-query-button'
+          text='Run Query'
+          handleOnClick={() => handleOnRunQuery()}
+          submitting={submitting}
+        />
       </div>
     </div>
   );

@@ -1,11 +1,11 @@
 import { ResponseType } from '@microsoft/microsoft-graph-client';
-
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
-import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../redux-constants';
+import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryResponseError } from './error-action-creator';
+import { queryRunningStatus } from './query-loading-action-creators';
 
 export function queryResponse(response: object): IAction {
   return {
@@ -15,6 +15,7 @@ export function queryResponse(response: object): IAction {
 }
 
 export function anonymousRequest(dispatch: Function, query: IQuery) {
+
   const authToken = '{token:https://graph.microsoft.com/}';
   const graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleUrl}`;
   const respHeaders: any = {};
@@ -26,8 +27,10 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
 
   const options: IRequestOptions = { method: query.selectedVerb, headers };
 
+  dispatch(queryRunningStatus(true));
+
   return fetch(graphUrl, options)
-    .then((resp) => {
+  .then((resp) => {
       if (resp.ok) {
         return parseResponse(resp, respHeaders);
       }
@@ -93,6 +96,8 @@ const makeRequest = (httpVerb: string): Function => {
 
     let response;
 
+    dispatch(queryRunningStatus(true));
+
     switch (httpVerb) {
       case 'GET':
         response = await client.get();
@@ -119,7 +124,7 @@ const makeRequest = (httpVerb: string): Function => {
         queryResponse({
           body: json,
           headers: respHeaders
-        })
+        }),
       );
     }
     return dispatch(queryResponseError(response));
