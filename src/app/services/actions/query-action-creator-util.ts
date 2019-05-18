@@ -3,15 +3,9 @@ import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
-import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../redux-constants';
+import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
+import { queryResponseError } from './error-action-creator';
 import { queryRunningStatus } from './query-loading-action-creators';
-
-export function queryResponseError(response: object): IAction {
-  return {
-    type: QUERY_GRAPH_ERROR,
-    response,
-  };
-}
 
 export function queryResponse(response: object): IAction {
   return {
@@ -40,19 +34,20 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
       if (resp.ok) {
         return parseResponse(resp, respHeaders);
       }
-      throw new Error('The request was not completed');
+      return resp;
     })
-    .then((json) =>
-      dispatch(
+    .then((json) => {
+      if (json.ok === false) {
+        return dispatch(queryResponseError(json));
+      }
+
+      return dispatch(
         queryResponse({
           body: json,
           headers: respHeaders,
         }),
-      ),
-    )
-    .catch((error) => dispatch(
-      queryResponseError(error)
-    ));
+      );
+    });
 }
 
 export function authenticatedRequest(dispatch: Function, query: IQuery) {
@@ -132,9 +127,6 @@ const makeRequest = (httpVerb: string): Function => {
         }),
       );
     }
-    return dispatch(
-      queryResponseError(response.body),
-    );
-
+    return dispatch(queryResponseError(response));
   };
 };

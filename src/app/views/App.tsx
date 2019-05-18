@@ -1,6 +1,9 @@
-import { classNamesFunction, ITheme, styled } from 'office-ui-fabric-react';
+import { classNamesFunction, ITheme, MessageBar, MessageBarType, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
+import { clearQueryError } from '../services/actions/error-action-creator';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
@@ -10,19 +13,30 @@ import { QueryRunner } from './query-runner';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
+  error: object | null;
 }
 
 class App extends Component<IAppProps> {
   public render() {
     const classes = classNames(this.props);
+    const { error, actions }: any = this.props;
 
     return (
       <div className={`container-fluid ${classes.app}`}>
         <div className='row'>
           <div className='col-sm-12 col-lg-8 offset-lg-2'>
-            <Authentication/>
-            <QueryRunner/>
-            <QueryResponse/>
+            <Authentication />
+            <QueryRunner />
+            {error &&
+              <MessageBar
+                messageBarType={MessageBarType.error}
+                isMultiline={false}
+                onDismiss={actions.clearQueryError}
+              >
+                {`${error.statusText} - ${error.status}`}
+              </MessageBar>
+            }
+            <QueryResponse />
           </div>
         </div>
       </div>
@@ -30,4 +44,18 @@ class App extends Component<IAppProps> {
   }
 }
 
-export default styled(App, appStyles);
+const mapStateToProps = (state: any) => {
+  return {
+    error: state.queryRunnerError
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    actions: bindActionCreators({ clearQueryError }, dispatch)
+  };
+};
+
+const StyledApp = styled(App, appStyles);
+
+export default connect(mapStateToProps, mapDispatchToProps)(StyledApp);

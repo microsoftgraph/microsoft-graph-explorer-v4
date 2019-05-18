@@ -7,7 +7,7 @@ import * as authActionCreators from '../../services/actions/auth-action-creators
 import { HelloAuthProvider } from '../../services/graph-client/HelloAuthProvider';
 import SubmitButton from '../common/submit-button/SubmitButton';
 import './authentication.scss';
-import { Profile } from './profile/Profile';
+import Profile  from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps> {
   constructor(props: IAuthenticationProps) {
@@ -39,6 +39,7 @@ export class Authentication extends Component<IAuthenticationProps> {
           handleOnClick={tokenPresent ? this.signOut : this.signIn}
           submitting={false}
         />
+        {tokenPresent && <Profile/>}
       </div>
     );
   }
