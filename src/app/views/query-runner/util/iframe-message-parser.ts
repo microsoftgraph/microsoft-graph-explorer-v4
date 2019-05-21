@@ -1,14 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-interface IParsedSnippet {
-  verb: string;
-  url: string;
-  headerKey?: string;
-  headerValue?: string;
-  body?: string;
-}
-
 function isVerb(word: string): boolean {
   return ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].indexOf(word) !== -1;
 }
@@ -19,15 +11,7 @@ function isUrl(word: string): boolean {
    * https://graph.microsoft.com/v1.0/users/{id | userPrincipalName}/calendars
    * !word.includes('{') ignores parameterized urls.
    */
-  return word.includes('https') && !word.includes('{');
-}
-
-function isHeaderKey(word: string): boolean {
-  return ['Content-type'].indexOf(word) !== -1;
-}
-
-function isHeaderValue(word: string): boolean {
-  return ['application/json'].indexOf(word) !== -1;
+  return word.includes('https');
 }
 
 /**
@@ -36,7 +20,7 @@ function isHeaderValue(word: string): boolean {
  * 
  * @param payload 
  */
-function getBody(payload: string): string {
+export function getBody(payload: string): string {
   const NEWLINE = /\n/;
   const OPEN_BRACE = /{/;
   let current = 1;
@@ -72,13 +56,58 @@ function getBody(payload: string): string {
   return word.replace(/\n/g, '');
 }
 
+export function getHeaders(payload: string) {
+  const SPACE = /\s/;
+  const NEWLINE = /\n/;
+
+  const headers: any = [];
+  let header: any = {};
+  let newlineCount = 0;
+  let positionOfSecondNewLine = 0;
+  let word = '';
+
+  for (let i = 0; i < payload.length; i++) {
+    if (NEWLINE.test(payload[i]) && newlineCount <= 2) {
+      newlineCount++;
+      positionOfSecondNewLine = i;
+    }
+
+    if (newlineCount === 2) {
+      while (true) {
+
+        for (let n = positionOfSecondNewLine + 1; n < payload.length; n++) {
+          const char = payload[n];
+          const nextChar = payload[n + 1];
+          const isDelimeter =  NEWLINE.test(char);
+
+
+          word += char;
+          if (isDelimeter) {
+            const spl = word.trim().split(':');
+
+            header[spl[0]] = spl[1];
+            headers.push(header);
+            header = {};
+            word = '';
+          }
+
+          if (NEWLINE.test(char) && SPACE.test(nextChar)) {
+            return headers;
+          }
+        }
+      }
+    }
+  }
+  return headers;
+}
+
 /**
  * tokenize breaks down the snippet payload into the following tokens: verb, url, headerKey, headerValue & body.
  * @param payload 
  */
-function tokenize(payload: string): object[] {
+export function getUrl(payload: string) {
   let word = '';
-  const tokens = [];
+  const result = [];
 
   // tslint:disable-next-line
   for (let i = 0; i < payload.length; i++) {
@@ -99,56 +128,29 @@ function tokenize(payload: string): object[] {
 
       word = word.trim();
       if (isVerb(word)) {
-        tokens.push({
+        result.push({
           verb: word
         });
       }
 
       if (isUrl(word)) {
-        tokens.push({
+        result.push({
           url: word
-        });
-      }
-
-      /**
-       * Header keys have a colon post-fixed ie Content-application: This removes the colon
-       * so that it becomes Content-application.
-       */
-      const headerKeyWithoutColon = word.replace(/:/g, '');
-
-      if (isHeaderKey(headerKeyWithoutColon)) {
-        tokens.push({
-          headerKey: headerKeyWithoutColon
-        });
-      }
-
-      if (isHeaderValue(word)) {
-        tokens.push({
-          headerValue: word
         });
       }
       word = '';
     }
-
   }
 
-  const body = getBody(payload);
-
-  if (body) {
-    tokens.push({
-      body
-    });
-  }
-
-
-  return tokens;
+  return result;
 }
 
-/**
- * This parser converts the list of tokens into a javascript object.
- */
-export function parse(payload: string): IParsedSnippet | {} {
-  const tokens = tokenize(payload);
+export function parse(payload: string) {
+  const url = getUrl(payload);
+  const headers = getHeaders(payload);
+  const body = getBody(payload);
+
+  const tokens = [...url, ...headers, { body }];
 
   return tokens.reduce((obj: object, item: object) => {
     return { ...obj, ...item };

@@ -1,4 +1,4 @@
-import { parse } from './iframe-message-parser';
+import { getBody, getHeaders, getUrl, parse } from './iframe-message-parser';
 
 describe('Iframe Message Parser', () => {
   it('parses url and verb correctly', () => {
@@ -6,39 +6,28 @@ describe('Iframe Message Parser', () => {
     POST https://graph.microsoft.com/v1.0/me/calendars
     `;
 
-    const parsedMessage = parse(message);
-    expect(parsedMessage).toEqual({
-      verb: 'POST',
-      url: 'https://graph.microsoft.com/v1.0/me/calendars',
-    });
+    const parsedMessage = getUrl(message);
+    expect(parsedMessage).toEqual([
+      { verb: 'POST' },
+      { url: 'https://graph.microsoft.com/v1.0/me/calendars' }
+    ]);
   });
 
-  it('ignores urls with parameters', () => {
-    const message = `
-    POST https://graph.microsoft.com/v1.0/me/calendars
-    POST https://graph.microsoft.com/v1.0/users/{id | userPrincipalName}/calendars
-    `;
-
-    const parsedMessage = parse(message);
-    expect(parsedMessage).toEqual({
-      verb: 'POST',
-      url: 'https://graph.microsoft.com/v1.0/me/calendars',
-    });
-  });
 
   it('parses headers correctly', () => {
     const message = `
-    POST https://graph.microsoft.com/v1.0/me/calendars
-    Content-type: application/json
-    `;
+POST https://graph.microsoft.com/v1.0/me/calendars
+Content-type: application/json
+Prefer: A-timezone
+     
 
-    const parsedMessage = parse(message);
-    expect(parsedMessage).toEqual({
-      verb: 'POST',
-      url: 'https://graph.microsoft.com/v1.0/me/calendars',
-      headerKey: 'Content-type',
-      headerValue: 'application/json',
-    });
+`;
+
+    const parsedMessage = getHeaders(message);
+    expect(parsedMessage).toEqual([
+      { 'Content-type': ' application/json' },
+      { 'Prefer': ' A-timezone'}
+    ]);
   });
 
   it('parses body correctly', () => {
@@ -46,27 +35,7 @@ describe('Iframe Message Parser', () => {
 { "name": "Volunteer" }
 `;
 
-    const parsedMessage = parse(message);
-    expect(parsedMessage).toEqual({
-      body: '{ "name": "Volunteer" }',
-    });
-  });
-
-  it('parses the whole message correctly', () => {
-    const message = `
-    POST https://graph.microsoft.com/v1.0/me/calendars
-    Content-type: application/json
-    
-{ "name": "Volunteer" }
-`;
-
-    const parsedMessage = parse(message);
-    expect(parsedMessage).toEqual({
-      verb: 'POST',
-      url: 'https://graph.microsoft.com/v1.0/me/calendars',
-      headerKey: 'Content-type',
-      headerValue: 'application/json',
-      body: '{ "name": "Volunteer" }'
-    });
+    const parsedMessage = getBody(message);
+    expect(parsedMessage).toEqual('{ "name": "Volunteer" }');
   });
 });
