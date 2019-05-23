@@ -1,4 +1,4 @@
-import { getBody, getHeaders, getUrl, parse } from './iframe-message-parser';
+import { extractBody, extractHeaders, extractUrl, parse } from './iframe-message-parser';
 
 describe('Iframe Message Parser', () => {
   it('parses url and verb correctly', () => {
@@ -6,7 +6,7 @@ describe('Iframe Message Parser', () => {
     POST https://graph.microsoft.com/v1.0/me/calendars
     `;
 
-    const parsedMessage = getUrl(message);
+    const parsedMessage = extractUrl(message);
     expect(parsedMessage).toEqual([
       { verb: 'POST' },
       { url: 'https://graph.microsoft.com/v1.0/me/calendars' }
@@ -23,10 +23,10 @@ Prefer: A-timezone
 
 `;
 
-    const parsedMessage = getHeaders(message);
+    const parsedMessage = extractHeaders(message);
     expect(parsedMessage).toEqual([
-      { 'Content-type': ' application/json' },
-      { 'Prefer': ' A-timezone'}
+      { 'Content-type': 'application/json' },
+      { 'Prefer': 'A-timezone'}
     ]);
   });
 
@@ -35,7 +35,26 @@ Prefer: A-timezone
 { "name": "Volunteer" }
 `;
 
-    const parsedMessage = getBody(message);
+    const parsedMessage = extractBody(message);
     expect(parsedMessage).toEqual('{ "name": "Volunteer" }');
+  });
+
+  it('parses th request snippet correctly', () => {
+    const message = `
+POST https://graph.microsoft.com/v1.0/me/calendars
+Content-type: application/json
+Prefer: A-timezone
+     
+{ "name": "Volunteer" }
+`;
+
+    const parsed = parse(message);
+    expect(parsed).toEqual({
+      verb: 'POST',
+      url: 'https://graph.microsoft.com/v1.0/me/calendars',
+      'Content-type': 'application/json',
+      'Prefer': 'A-timezone',
+      body: '{ "name": "Volunteer" }'
+    });
   });
 });

@@ -6,21 +6,22 @@ function isVerb(word: string): boolean {
 }
 
 function isUrl(word: string): boolean {
-  /**
-   * If a url includes {} that means it is parameterized for example
-   * https://graph.microsoft.com/v1.0/users/{id | userPrincipalName}/calendars
-   * !word.includes('{') ignores parameterized urls.
-   */
   return word.includes('https');
 }
 
 /**
- * Extracts the body from a snippet payload. The payload is preceded by a newline character
- * and between curly braces. The body is also the last part of the snippet payload.
+ * In the request snippet the body is represented like below.
+ * `
+ *
+ * { name: user}
+ * `
+ * Observe that it is preceded by a newline followed by curly braces. We use these properties to
+ * start extracting the body from the request snippet. When a newline is followed by a curly brace
+ * we know that we have encountered they body section of the request snippet.
  * 
  * @param payload 
  */
-export function getBody(payload: string): string {
+export function extractBody(payload: string): string {
   const NEWLINE = /\n/;
   const OPEN_BRACE = /{/;
   let current = 1;
@@ -56,7 +57,19 @@ export function getBody(payload: string): string {
   return word.replace(/\n/g, '');
 }
 
-export function getHeaders(payload: string) {
+/**
+ * Headers in a request snippet are represented like below.
+ * `
+ * POST https://graph.microsoft.com/v1/me
+ * Content-type: application/json
+ *
+ * `
+ * We observe that headers begin after the second newline of the request snippet and end when a newline
+ * is followed by a space. We use these properties to extract headers from the request snippet.
+ *
+ * @param payload
+ */
+export function extractHeaders(payload: string): object[] {
   const SPACE = /\s/;
   const NEWLINE = /\n/;
 
@@ -67,6 +80,8 @@ export function getHeaders(payload: string) {
   let word = '';
 
   for (let i = 0; i < payload.length; i++) {
+
+    // Gets the position of the second newline. We start reading headers from the second newline.
     if (NEWLINE.test(payload[i]) && newlineCount <= 2) {
       newlineCount++;
       positionOfSecondNewLine = i;
@@ -85,7 +100,7 @@ export function getHeaders(payload: string) {
           if (isDelimeter) {
             const spl = word.trim().split(':');
 
-            header[spl[0]] = spl[1];
+            header[spl[0]] = spl[1].trim();
             headers.push(header);
             header = {};
             word = '';
@@ -105,7 +120,7 @@ export function getHeaders(payload: string) {
  * tokenize breaks down the snippet payload into the following tokens: verb, url, headerKey, headerValue & body.
  * @param payload 
  */
-export function getUrl(payload: string) {
+export function extractUrl(payload: string) {
   let word = '';
   const result = [];
 
@@ -117,9 +132,8 @@ export function getUrl(payload: string) {
     const NEWLINE = /\n/;
 
     /**
-     * The tokens [verb, url, headerKey, headerValue, body] are separated by either a space or a newline.
-     * When we encounter a delimeter we check what type of token it is and push it into the list of
-     * tokens.
+     * The tokens [verb, url] are separated by either a space or a newline.
+     * When we encounter a delimeter we check what type of token it is and push it into result.
      */
     const isDelimeter = SPACE.test(char) || NEWLINE.test(char);
     word += char;
@@ -146,9 +160,9 @@ export function getUrl(payload: string) {
 }
 
 export function parse(payload: string) {
-  const url = getUrl(payload);
-  const headers = getHeaders(payload);
-  const body = getBody(payload);
+  const url = extractUrl(payload);
+  const headers = extractHeaders(payload);
+  const body = extractBody(payload);
 
   const tokens = [...url, ...headers, { body }];
 
