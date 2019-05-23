@@ -10,7 +10,7 @@ function isUrl(word: string): boolean {
 }
 
 /**
- * In the request snippet the body is represented like below.
+ * In the request snippet the body is represented in the format below.
  * `
  *
  * { name: user}
@@ -58,7 +58,7 @@ export function extractBody(payload: string): string {
 }
 
 /**
- * Headers in a request snippet are represented like below.
+ * Headers in a request snippet are represented in the format below.
  * `
  * POST https://graph.microsoft.com/v1/me
  * Content-type: application/json
