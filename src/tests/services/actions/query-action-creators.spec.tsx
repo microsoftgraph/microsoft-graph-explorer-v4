@@ -48,10 +48,12 @@ describe('actions', () => {
 
     const expectedActions = [
       {
-        type: QUERY_GRAPH_ERROR,
-        response: {
-          ok: false,
-        }
+        response: true,
+        type: 'QUERY_GRAPH_RUNNING'
+      },
+      {
+        response: { 'ok': false },
+        type: 'QUERY_GRAPH_ERROR'
       }
     ];
 
