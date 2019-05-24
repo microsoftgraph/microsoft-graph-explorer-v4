@@ -25,17 +25,23 @@ export class Profile extends Component<IProfileProps, IProfileState> {
             sampleUrl: USER_INFO_URL,
         }) : null;
 
-        const userPicture = (actions) ? await actions.runQuery({
-            selectedVerb: 'GET',
-            sampleUrl: USER_PICTURE_URL,
-        }) : null;
-
         const userInfo = jsonUserInfo.response.body;
+
         let imageUrl = '';
-        if (userPicture) {
-            const buffer = await userPicture.response.body.arrayBuffer();
-            const blob = new Blob([buffer], { type: 'image/jpeg' });
-            imageUrl = URL.createObjectURL(blob);
+
+        try {
+            const userPicture = (actions) ? await actions.runQuery({
+                selectedVerb: 'GET',
+                sampleUrl: USER_PICTURE_URL,
+            }) : null;
+
+            if (userPicture ) {
+                const buffer = await userPicture.response.body.arrayBuffer();
+                const blob = new Blob([buffer], { type: 'image/jpeg' });
+                imageUrl = URL.createObjectURL(blob);
+            }
+        } catch (error) {
+            imageUrl = '';
         }
 
         const user = {
