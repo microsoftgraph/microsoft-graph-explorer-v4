@@ -34,5 +34,6 @@ steps:
       azureSubscription: 'graph-explorer-arm'
       WebAppName: 'graph-explorer'
       Package: '$(System.DefaultWorkingDirectory)'
+      GenerateWebConfig: true
       WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
 
