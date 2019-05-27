@@ -20,9 +20,19 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
   const graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleUrl}`;
   const respHeaders: any = {};
 
+
+  const sampleHeaders: any = {};
+
+  query.sampleHeaders.forEach(header => {
+    if (header.name !== '' && header.value !== '') {
+      sampleHeaders[header.name] = header.value;
+    }
+  });
+
   const headers = {
     'Authorization': `Bearer ${authToken}`,
     'Content-Type': 'application/json',
+    ...sampleHeaders
   };
 
   const options: IRequestOptions = { method: query.selectedVerb, headers };

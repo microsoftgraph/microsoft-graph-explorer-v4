@@ -126,13 +126,14 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   }
 
   private handleOnRunQuery = () => {
-    const { sampleUrl, selectedVerb, sampleBody } = this.state;
+    const { sampleUrl, selectedVerb, sampleBody, headers } = this.state;
     const { actions } = this.props;
 
     const query: IQuery = {
       sampleUrl,
       selectedVerb,
       sampleBody,
+      sampleHeaders: headers
     };
 
     if (actions) {

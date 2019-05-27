@@ -13,6 +13,7 @@ export interface IQuery {
   selectedVerb: string;
   sampleUrl: string;
   sampleBody?: string;
+  sampleHeaders: Array<{ name: string; value: string; }>;
 }
 
 export interface IQueryRunnerProps {
