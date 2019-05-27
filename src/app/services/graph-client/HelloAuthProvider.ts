@@ -13,6 +13,11 @@ export class HelloAuthProvider implements AuthenticationProvider {
       clientId: process.env.REACT_APP_CLIENT_ID,
     };
 
+    // tslint:disable
+    console.log(process.env);
+    console.log(process.env.REACT_APP_CLIENT_ID);
+    // tslint:enable
+
     this.hello = hello;
 
     this.hello.init({
