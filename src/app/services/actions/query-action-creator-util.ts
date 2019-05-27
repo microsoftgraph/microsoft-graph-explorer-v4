@@ -19,15 +19,15 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
   const authToken = '{token:https://graph.microsoft.com/}';
   const graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleUrl}`;
   const respHeaders: any = {};
-
-
   const sampleHeaders: any = {};
 
-  query.sampleHeaders.forEach(header => {
-    if (header.name !== '' && header.value !== '') {
-      sampleHeaders[header.name] = header.value;
-    }
-  });
+  if (query.sampleHeaders) {
+    query.sampleHeaders.forEach(header => {
+      if (header.name !== '' && header.value !== '') {
+        sampleHeaders[header.name] = header.value;
+      }
+    });
+  }
 
   const headers = {
     'Authorization': `Bearer ${authToken}`,
@@ -99,9 +99,19 @@ function parseResponse(resp: any, respHeaders: any): Promise<any> {
 const makeRequest = (httpVerb: string): Function => {
   return async (dispatch: Function, query: IQuery) => {
     const respHeaders: any = {};
+    const sampleHeaders: any = {};
+
+    if (query.sampleHeaders) {
+      query.sampleHeaders.forEach(header => {
+        if (header.name !== '' && header.value !== '') {
+          sampleHeaders[header.name] = header.value;
+        }
+      });
+    }
 
     const client = GraphClient.getInstance()
       .api(query.sampleUrl)
+      .headers(sampleHeaders)
       .responseType(ResponseType.RAW);
 
     let response;
