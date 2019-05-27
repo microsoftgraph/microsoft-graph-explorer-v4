@@ -1,4 +1,4 @@
-import { FocusZone, getTheme } from 'office-ui-fabric-react'
+import { FocusZone, getTheme } from 'office-ui-fabric-react';
 import React from 'react';
 import MonacoEditor, { ChangeHandler } from 'react-monaco-editor';
 

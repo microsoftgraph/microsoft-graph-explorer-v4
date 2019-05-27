@@ -1,4 +1,4 @@
-import { classNamesFunction, ITheme, MessageBar, FocusTrapZone, MessageBarType, styled } from 'office-ui-fabric-react';
+import { classNamesFunction, FocusTrapZone, ITheme, MessageBar, MessageBarType, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
