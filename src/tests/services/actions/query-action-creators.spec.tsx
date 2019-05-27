@@ -52,12 +52,12 @@ describe('actions', () => {
         type: 'QUERY_GRAPH_RUNNING'
       },
       {
-        response:
-          {
-            ok: false
-          },
-          type: 'QUERY_GRAPH_ERROR'
-        }
+      response:
+        {
+          ok: false
+        },
+        type: 'QUERY_GRAPH_ERROR'
+      }
     ];
 
     const store = mockStore({ graphResponse: '' });

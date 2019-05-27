@@ -10,7 +10,7 @@ export class HelloAuthProvider implements AuthenticationProvider {
   constructor() {
     const options = {
       authUrl: AUTH_URL,
-      clientId: '5963e35f-c7c3-49b9-9b64-85a17aaa92f7',
+      clientId: process.env.REACT_APP_CLIENT_ID,
     };
 
     this.hello = hello;

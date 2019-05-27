@@ -1,4 +1,11 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Configure the app
+
+1. Acquire the client ID after registering the application
+
+1. Find the file **.env.tmp** and save it as **.env**
+
+1. Replace *ENTER_YOUR_APP_ID* with the application ID of your registered application.
+
 
 ## Available Scripts
 
