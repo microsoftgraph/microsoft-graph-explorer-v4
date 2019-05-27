@@ -52,7 +52,10 @@ describe('actions', () => {
         type: 'QUERY_GRAPH_RUNNING'
       },
       {
-        response: { 'ok': false },
+      response:
+        {
+          ok: false
+        },
         type: 'QUERY_GRAPH_ERROR'
       }
     ];
