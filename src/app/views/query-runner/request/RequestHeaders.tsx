@@ -1,55 +1,87 @@
-import { IconButton, TextField } from 'office-ui-fabric-react';
-import React from 'react';
-import { IRequestHeadersControl } from '../../../../types/request';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import * as headersActionCreators from '../../../services/actions/request-headers-action-creators';
+import HeadersList from './HeadersList';
 
-export const RequestHeadersControl = ({
-    handleOnHeaderDelete,
-    handleOnHeaderNameChange,
-    handleOnHeaderValueChange,
-    handleOnHeaderValueBlur,
-    headers,
-}: IRequestHeadersControl) => {
-    const headersList = (
-        headers.map((header, index) => {
-            return (
-                <tr key={index}>
-                    <td>
-                        <TextField
-                            className='header-input'
-                            onChange={(event, name) => handleOnHeaderNameChange(event, name)}
-                        />
-                    </td>
-                    <td>
-                        <TextField className='header-input'
-                            onChange={(event, value) => handleOnHeaderValueChange(event, value)}
-                            onBlur={() => handleOnHeaderValueBlur()}
-                        />
-                    </td>
-                    <td className='remove-header-btn'>
-                        <IconButton
-                            iconProps={{ iconName: 'Delete' }}
-                            title='Remove request header'
-                            ariaLabel='Remove request header'
-                            onClick={() => handleOnHeaderDelete(index)}
-                        />
-                    </td>
-                </tr>
-            );
-        })
-    );
-    return (
-        <div className='request-editor-control'>
-            <table className='headers-editor'>
-                <thead>
-                    <tr>
-                        <th>Key</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { headersList }
-                </tbody>
-            </table>
-        </div>
-    );
-};
+class RequestHeaders extends Component<any, any> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            headerName: '',
+            headerValue: '',
+        };
+    }
+
+    private handleOnHeaderNameChange = (name?: string) => {
+        if (name) {
+            this.setState({
+                headerName: name,
+            });
+        }
+    };
+
+    private handleOnHeaderValueChange = (value?: string) => {
+        if (value) {
+            this.setState({
+                headerValue: value,
+            });
+        }
+    };
+
+    private handleOnHeaderDelete = (header: any) => {
+        const { actions } = this.props;
+        if (actions) {
+            actions.removeRequestHeader(header);
+        }
+    };
+
+
+    private handleOnHeaderValueBlur = () => {
+        if (this.state.headerName !== '') {
+            const { headerName, headerValue } = this.state;
+            const { actions, headers } = this.props;
+            const header = { name: headerName, value: headerValue };
+            const newHeaders = [header, ...headers];
+
+            this.setState({
+                headerName: '',
+                headerValue: '',
+            });
+
+            if (actions) {
+                actions.addRequestHeader(newHeaders);
+            }
+        }
+    };
+
+    public render() {
+        const { headers } = this.props;
+        return (
+            <div className='request-editor-control'>
+                <HeadersList
+                    handleOnHeaderDelete={(event: any, header: any) => this.handleOnHeaderDelete(header)}
+                    handleOnHeaderNameChange={(event: any, name: any) => this.handleOnHeaderNameChange(name)}
+                    handleOnHeaderValueChange={(event: any, value: any) => this.handleOnHeaderValueChange(value)}
+                    handleOnHeaderValueBlur={(event: any) => this.handleOnHeaderValueBlur()}
+                    headers={headers}
+                />
+            </div>
+        );
+    }
+}
+
+function mapDispatchToProps(dispatch: Dispatch): object {
+    return {
+        actions: bindActionCreators(headersActionCreators, dispatch),
+    };
+}
+
+function mapStateToProps(state: any) {
+    return {
+        headers: state.headersAdded
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RequestHeaders);
+

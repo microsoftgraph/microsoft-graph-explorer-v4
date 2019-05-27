@@ -27,6 +27,7 @@ const appState = store({
   authToken: '',
   isLoadingData: false,
   queryRunnerError: null,
+  headersAdded: [{ name: '', value: '' }],
 });
 
 
