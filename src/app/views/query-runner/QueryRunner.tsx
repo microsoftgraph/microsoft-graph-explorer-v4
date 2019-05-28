@@ -8,6 +8,7 @@ import * as queryActionCreators from '../../services/actions/query-action-creato
 import './query-runner.scss';
 import { QueryInputControl } from './QueryInput';
 import { Request } from './request/Request';
+import { parse } from './util/iframe-message-parser';
 
 export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
   constructor(props: IQueryRunnerProps) {
@@ -31,6 +32,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   }
 
   public componentDidMount = () => {
+    window.addEventListener('message', this.receiveMessage, false);
     const urlParams = new URLSearchParams(window.location.search);
     const base64Token = urlParams.getAll('query')[0];
 
@@ -51,6 +53,34 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       sampleBody,
       sampleHeaders,
       selectedVerb: sampleVerb,
+    });
+  };
+
+  public componentWillUnmount(): void {
+    window.removeEventListener('message', this.receiveMessage);
+  }
+
+  private receiveMessage = (event: MessageEvent): void => {
+    const {
+      verb,
+      headerKey,
+      headerValue,
+      url,
+      body
+    }: any = parse(event.data);
+
+    if (event.origin !== 'http://docs.microsoft.com' || event.source === null) {
+      return;
+    }
+
+    const headers: any = {};
+    headers[headerKey] = headerValue;
+
+    this.setState({
+      sampleUrl: url,
+      sampleBody: body,
+      sampleHeaders: headers,
+      selectedVerb: verb,
     });
   };
 
