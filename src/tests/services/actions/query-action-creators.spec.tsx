@@ -20,13 +20,13 @@ describe('actions', () => {
     const expectedActions = [
       {
         type: 'QUERY_GRAPH_RUNNING',
-        response:  true
+        response: true
       },
       {
         type: QUERY_GRAPH_SUCCESS,
         response: {
-          body: { displayName: 'Megan Bowen', ok: true},
-          headers: { 'content-type': 'application-json'},
+          body: { displayName: 'Megan Bowen', ok: true },
+          headers: { 'content-type': 'application-json' },
         },
       },
     ];
@@ -53,11 +53,11 @@ describe('actions', () => {
       },
       {
         response:
-          {
-            ok: false
-          },
-          type: 'QUERY_GRAPH_ERROR'
-        }
+        {
+          ok: false
+        },
+        type: 'QUERY_GRAPH_ERROR'
+      }
     ];
 
     const store = mockStore({ graphResponse: '' });
