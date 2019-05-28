@@ -13,11 +13,6 @@ export class HelloAuthProvider implements AuthenticationProvider {
       clientId: '5963e35f-c7c3-49b9-9b64-85a17aaa92f7',
     };
 
-    // tslint:disable
-    console.log(process.env);
-    console.log(process.env.REACT_APP_CLIENT_ID);
-    // tslint:enable
-
     this.hello = hello;
 
     this.hello.init({
@@ -50,9 +45,9 @@ export class HelloAuthProvider implements AuthenticationProvider {
       msft: options.clientId,
       msft_admin_consent: options.clientId,
     }, {
-      redirect_uri: window.location.pathname,
-      scope: DEFAULT_USER_SCOPES,
-    });
+        redirect_uri: window.location.pathname,
+        scope: DEFAULT_USER_SCOPES,
+      });
 
     setInterval(() => this.refreshAccessToken(), 1000);
   }
@@ -76,7 +71,7 @@ export class HelloAuthProvider implements AuthenticationProvider {
     }
   }
 
-  public  getAccessToken(): Promise<any> {
+  public getAccessToken(): Promise<any> {
     try {
       const accessToken = this.hello('msft')
         .getAuthResponse('msft')
@@ -88,29 +83,29 @@ export class HelloAuthProvider implements AuthenticationProvider {
   }
 
   public async refreshAccessToken() {
-      const token = await this.getAccessToken();
+    const token = await this.getAccessToken();
 
-      if (!token) {
-        return this.signOut();
-      }
+    if (!token) {
+      return this.signOut();
+    }
 
-      const decodedToken: any = jwtDecode(token);
-      const currentTime = (new Date()).getTime() / 1000;
-      const hasExpired = currentTime > decodedToken.exp;
+    const decodedToken: any = jwtDecode(token);
+    const currentTime = (new Date()).getTime() / 1000;
+    const hasExpired = currentTime > decodedToken.exp;
 
-      const loginProperties = {
-        display: 'none',
-        response_type: 'token',
-        response_mode: 'fragment',
-        nonce: 'graph_explorer',
-        prompt: 'none',
-        scope: DEFAULT_USER_SCOPES,
-        login_hint: decodedToken.unique_name,
-        domain_hint: 'organizations',
-      };
+    const loginProperties = {
+      display: 'none',
+      response_type: 'token',
+      response_mode: 'fragment',
+      nonce: 'graph_explorer',
+      prompt: 'none',
+      scope: DEFAULT_USER_SCOPES,
+      login_hint: decodedToken.unique_name,
+      domain_hint: 'organizations',
+    };
 
-      if (hasExpired) {
-        this.hello('msft').login(loginProperties);
-      }
+    if (hasExpired) {
+      this.hello('msft').login(loginProperties);
+    }
   }
 }
