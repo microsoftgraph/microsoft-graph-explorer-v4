@@ -25,6 +25,7 @@ export const QueryInputControl = ({
       </div>
       <div className='col-sm-8'>
         <TextField
+          ariaLabel='Query Sample Input'
           placeholder='Query Sample'
           onChange={(event, value) => handleOnUrlChange(value)}
           defaultValue={sampleUrl}
