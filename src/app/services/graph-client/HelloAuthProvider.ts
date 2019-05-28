@@ -93,7 +93,7 @@ export class HelloAuthProvider implements AuthenticationProvider {
     const currentTime = (new Date()).getTime() / 1000;
     const hasExpired = currentTime > decodedToken.exp;
 
-    const loginProperties = {
+    const silentLoginProperties = {
       display: 'none',
       response_type: 'token',
       response_mode: 'fragment',
@@ -105,7 +105,7 @@ export class HelloAuthProvider implements AuthenticationProvider {
     };
 
     if (hasExpired) {
-      this.hello('msft').login(loginProperties);
+      this.hello('msft').login(silentLoginProperties);
     }
   }
 }
