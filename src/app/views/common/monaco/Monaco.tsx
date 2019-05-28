@@ -1,4 +1,4 @@
-import { getTheme } from '@uifabric/styling';
+import { FocusZone, getTheme } from 'office-ui-fabric-react';
 import React from 'react';
 import MonacoEditor, { ChangeHandler } from 'react-monaco-editor';
 
@@ -33,17 +33,19 @@ export function Monaco(props: IMonaco) {
 
 
   return (
-    <div className='monaco-editor'>
-      <MonacoEditor
-        width='800'
-        height='300'
-        value={JSON.stringify(body)}
-        language='json'
-        options={{ lineNumbers: 'off', minimap: { enabled: false } }}
-        editorDidMount={editorDidMount}
-        onChange={onChange}
-        theme={isDark ? 'vs-dark' : 'vs'}
-      />
-    </div>
+    <FocusZone disabled={true}>
+      <div className='monaco-editor'>
+        <MonacoEditor
+          width='800'
+          height='300'
+          value={JSON.stringify(body)}
+          language='json'
+          options={{ lineNumbers: 'off', minimap: { enabled: false } }}
+          editorDidMount={editorDidMount}
+          onChange={onChange}
+          theme={isDark ? 'vs-dark' : 'vs'}
+        />
+      </div>
+    </FocusZone>
   );
 }
