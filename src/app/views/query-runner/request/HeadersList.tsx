@@ -1,56 +1,48 @@
-import { IconButton, TextField } from 'office-ui-fabric-react';
-import React from 'react';
+import { DetailsList, IColumn, IconButton, SelectionMode } from 'office-ui-fabric-react';
+import * as React from 'react';
 import { IHeadersListControl } from '../../../../types/request';
 
 const HeadersList = ({
     handleOnHeaderDelete,
-    handleOnHeaderNameChange,
-    handleOnHeaderValueChange,
-    handleOnHeaderValueBlur,
     headers,
 }: IHeadersListControl) => {
-    const headersList = (
-        headers.map((header, index) => {
-            return (
-                <tr key={index}>
-                    <td>
-                        <TextField
-                            className='header-input'
-                            onChange={(event, name) => handleOnHeaderNameChange(event, name)}
-                        />
-                    </td>
-                    <td>
-                        <TextField className='header-input'
-                            onChange={(event, value) => handleOnHeaderValueChange(event, value)}
-                            onBlur={() => handleOnHeaderValueBlur()}
-                        />
-                    </td>
-                    <td className='remove-header-btn'>
-                        <IconButton
-                            iconProps={{ iconName: 'Delete' }}
-                            title='Remove request header'
-                            ariaLabel='Remove request header'
-                            onClick={(event) => handleOnHeaderDelete(event, header)}
-                        />
-                    </td>
-                </tr>
-            );
-        })
-    );
+
+    const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+        if (column) {
+            const fieldContent = item[column.fieldName as keyof any] as string;
+
+
+            switch (column.key) {
+                case 'button':
+                    return <IconButton
+                        iconProps={{ iconName: 'Delete' }}
+                        title='Remove request header'
+                        ariaLabel='Remove request header'
+                        onClick={(event) => handleOnHeaderDelete(event, item)}
+                    />;
+
+                default:
+                    return <span>{fieldContent}</span>;
+            }
+        }
+        return <span>No content</span>;
+    };
+
+    const columns = [
+        { key: 'column1', name: 'Key', fieldName: 'name', minWidth: 100, maxWidth: 200, isResizable: true },
+        { key: 'column2', name: 'Value', fieldName: 'value', minWidth: 100, maxWidth: 200, isResizable: true },
+        { key: 'button', name: '', fieldName: 'button', minWidth: 100, maxWidth: 200, isResizable: true }
+    ];
+
     return (
-        <div className='request-editor-control'>
-            <table className='headers-editor'>
-                <thead>
-                    <tr>
-                        <th>Key</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { headersList }
-                </tbody>
-            </table>
-        </div>
+        <DetailsList
+            className='detail-list'
+            items={headers}
+            setKey='set'
+            columns={columns}
+            onRenderItemColumn={renderItemColumn}
+            selectionMode={SelectionMode.none}
+        />
     );
 };
 

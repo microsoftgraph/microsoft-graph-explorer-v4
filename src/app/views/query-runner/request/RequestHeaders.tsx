@@ -1,4 +1,6 @@
+import { PrimaryButton, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import * as headersActionCreators from '../../../services/actions/request-headers-action-creators';
@@ -37,7 +39,7 @@ class RequestHeaders extends Component<any, any> {
     };
 
 
-    private handleOnHeaderValueBlur = () => {
+    private handleOnHeaderAdd = () => {
         if (this.state.headerName !== '') {
             const { headerName, headerValue } = this.state;
             const { actions, headers } = this.props;
@@ -59,11 +61,35 @@ class RequestHeaders extends Component<any, any> {
         const { headers } = this.props;
         return (
             <div className='request-editor-control'>
+                <div className='row headers-editor'>
+                    <div className='col-md-4 col-12'>
+                        <label htmlFor=''>
+                            <FormattedMessage id='Key' />
+                        </label>
+                        <TextField
+                            className='header-input'
+                            onChange={(event, name) => this.handleOnHeaderNameChange(name)}
+                        />
+                    </div>
+                    <div className='col-md-4 col-12'>
+                        <label htmlFor=''>
+                            <FormattedMessage id='Value' />
+                        </label>
+                        <TextField className='header-input'
+                            onChange={(event, value) => this.handleOnHeaderValueChange(value)}
+                        />
+                    </div>
+                    <div className='col-md-4 col-12'>
+                        <br/>
+                        <PrimaryButton onClick={() => this.handleOnHeaderAdd()}>
+                            <FormattedMessage id='Add' />
+                        </PrimaryButton>
+                    </div>
+                </div>
+                <br />
+                <hr />
                 <HeadersList
                     handleOnHeaderDelete={(event: any, header: any) => this.handleOnHeaderDelete(header)}
-                    handleOnHeaderNameChange={(event: any, name: any) => this.handleOnHeaderNameChange(name)}
-                    handleOnHeaderValueChange={(event: any, value: any) => this.handleOnHeaderValueChange(value)}
-                    handleOnHeaderValueBlur={(event: any) => this.handleOnHeaderValueBlur()}
                     headers={headers}
                 />
             </div>

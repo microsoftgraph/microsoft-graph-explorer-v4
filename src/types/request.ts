@@ -1,8 +1,5 @@
 export interface IHeadersListControl {
     handleOnHeaderDelete: Function;
-    handleOnHeaderNameChange: Function;
-    handleOnHeaderValueChange: Function;
-    handleOnHeaderValueBlur: Function;
     headers: Array<{ name: string; value: string; }>;
 }
 

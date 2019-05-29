@@ -1,11 +1,11 @@
 @import"../../../../styles/variables";
 
 .request-editors {
-width:100%;
-margin-top: $gutter;
+    width:100%;
+    margin-top: $gutter;
     margin-bottom: $gutter;
-min-height: 375px;
-border: 1px solid silver;
+    min-height: 375px;
+    border: 1px solid silver;
 
     .ms-Pivot.root-84 {
         width: 100%;
@@ -18,11 +18,10 @@ border: 1px solid silver;
 
     .headers-editor {
         width:100%;
-        margin: 10px;
+        margin: $gutter;
 
-        th {
-            font-weight:bold;
-            text-align:left;
+        .detail-list{
+            margin-left: $gutter;
         }
 
         .header-input {
@@ -33,7 +32,7 @@ border: 1px solid silver;
             margin-top: 12px;
             font-size: 25px;
         }
- 
+
     }
 
 }
