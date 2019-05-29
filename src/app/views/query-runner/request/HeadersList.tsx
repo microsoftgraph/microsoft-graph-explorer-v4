@@ -9,28 +9,29 @@ const HeadersList = ({
 
     const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
         if (column) {
-            const fieldContent = item[column.fieldName as keyof any] as string;
 
+            const fieldContent = item[column.fieldName as keyof any] as string;
 
             switch (column.key) {
                 case 'button':
-                    return <IconButton
-                        iconProps={{ iconName: 'Delete' }}
-                        title='Remove request header'
-                        ariaLabel='Remove request header'
-                        onClick={(event) => handleOnHeaderDelete(event, item)}
-                    />;
+                    if (item.value !== '') {
+                        return <IconButton
+                            iconProps={{ iconName: 'Delete' }}
+                            title='Remove request header'
+                            ariaLabel='Remove request header'
+                            onClick={(event) => handleOnHeaderDelete(event, item)}
+                        />;
+                    }
 
                 default:
                     return <span>{fieldContent}</span>;
             }
         }
-        return <span>No content</span>;
     };
 
     const columns = [
-        { key: 'column1', name: 'Key', fieldName: 'name', minWidth: 100, maxWidth: 200, isResizable: true },
-        { key: 'column2', name: 'Value', fieldName: 'value', minWidth: 100, maxWidth: 200, isResizable: true },
+        { key: 'key', name: 'Key', fieldName: 'name', minWidth: 100, maxWidth: 200, isResizable: true },
+        { key: 'value', name: 'Value', fieldName: 'value', minWidth: 100, maxWidth: 200, isResizable: true },
         { key: 'button', name: '', fieldName: 'button', minWidth: 100, maxWidth: 200, isResizable: true }
     ];
 

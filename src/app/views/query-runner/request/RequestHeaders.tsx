@@ -68,14 +68,16 @@ class RequestHeaders extends Component<any, any> {
                         </label>
                         <TextField
                             className='header-input'
+                            value= {this.state.headerName}
                             onChange={(event, name) => this.handleOnHeaderNameChange(name)}
-                        />
+                            />
                     </div>
                     <div className='col-md-4 col-12'>
                         <label htmlFor=''>
                             <FormattedMessage id='Value' />
                         </label>
                         <TextField className='header-input'
+                            value= {this.state.headerValue}
                             onChange={(event, value) => this.handleOnHeaderValueChange(value)}
                         />
                     </div>
