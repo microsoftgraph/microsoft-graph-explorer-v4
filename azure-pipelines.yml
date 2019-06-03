@@ -22,9 +22,9 @@ steps:
     displayName: 'Runs tests'
 
   - script: |
+      npm run build
     env:
       REACT_APP_FOO: $(REACT_APP_FOO)
-      npm run build
     displayName: 'Build'
 
   - task: PublishCodeCoverageResults@1
