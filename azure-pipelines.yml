@@ -1,9 +1,6 @@
 pool:
   vmImage: 'vs2017-win2016'
 
-env:
-  REACT_APP_FOO: $(REACT_APP_FOO)
-
 steps:
   - task: NodeTool@0
     inputs:
