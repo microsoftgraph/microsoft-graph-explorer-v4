@@ -7,8 +7,7 @@ import RequestHeaders from './RequestHeaders';
 
 const Request = ({
     handleOnEditorChange,
-    headers,
-}: any) => {
+}: IRequestComponent) => {
 
     return (
       <div className='request-editors'>
@@ -20,9 +19,7 @@ const Request = ({
                 />
           </PivotItem>
           <PivotItem headerText='Request Headers'>
-            <RequestHeaders
-              headers={headers}
-            />
+            <RequestHeaders />
           </PivotItem>
         </Pivot>
       </div>

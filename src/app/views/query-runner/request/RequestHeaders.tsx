@@ -1,12 +1,13 @@
 import { PrimaryButton, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { IRequestHeadersProps } from '../../../../types/request';
 import * as headersActionCreators from '../../../services/actions/request-headers-action-creators';
 import HeadersList from './HeadersList';
 
-class RequestHeaders extends Component<any, any> {
+class RequestHeaders extends Component<IRequestHeadersProps, any> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -42,8 +43,12 @@ class RequestHeaders extends Component<any, any> {
     private handleOnHeaderAdd = () => {
         if (this.state.headerName !== '') {
             const { headerName, headerValue } = this.state;
-            const { actions, headers } = this.props;
+            const { actions } = this.props;
+            let { headers } = this.props;
             const header = { name: headerName, value: headerValue };
+            if (!headers) {
+                headers = [{ name: '', value: '' }];
+            }
             const newHeaders = [header, ...headers];
 
             this.setState({
@@ -58,25 +63,23 @@ class RequestHeaders extends Component<any, any> {
     };
 
     public render() {
-        const { headers } = this.props;
+        // @ts-ignore
+        const { headers, intl: { messages }  } = this.props;
+
         return (
             <div className='request-editor-control'>
                 <div className='row headers-editor'>
                     <div className='col-md-4 col-lg-4'>
-                        <label htmlFor=''>
-                            <FormattedMessage id='Key' />
-                        </label>
                         <TextField
                             className='header-input'
+                            placeholder={messages.Key}
                             value= {this.state.headerName}
                             onChange={(event, name) => this.handleOnHeaderNameChange(name)}
                             />
                     </div>
                     <div className='col-md-4 col-lg-4'>
-                        <label htmlFor=''>
-                            <FormattedMessage id='Value' />
-                        </label>
                         <TextField className='header-input'
+                            placeholder={messages.Value}
                             value= {this.state.headerValue}
                             onChange={(event, value) => this.handleOnHeaderValueChange(value)}
                         />
@@ -111,5 +114,7 @@ function mapStateToProps(state: any) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RequestHeaders);
+// @ts-ignore
+const WithIntl = injectIntl(RequestHeaders);
+export default connect(mapStateToProps, mapDispatchToProps)(WithIntl);
 

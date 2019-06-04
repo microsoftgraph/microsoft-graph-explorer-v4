@@ -33,9 +33,9 @@ const HeadersList = ({
         { key: 'button', name: '', fieldName: 'button', minWidth: 100, maxWidth: 200, isResizable: true }
     ];
 
-    const headerItems = headers.filter((header) => {
+    const headerItems = (headers) ? headers.filter((header) => {
         return header.value !== '';
-    });
+    }) : [];
 
     return (
         <div className='headers-list'>
