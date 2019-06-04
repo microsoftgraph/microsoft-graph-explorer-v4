@@ -7,6 +7,7 @@
     min-height: 375px;
     border: 1px solid silver;
 
+
     .ms-Pivot.root-84 {
         width: 100%;
         background-color: #eeeeee;
@@ -14,25 +15,42 @@
 
     .request-editor-control {
         margin-top:10px;
+        width: 100%;
+        text-align: center;
+        position: relative;
+
+        .headers-editor {
+            display: inline-flex;
+            width: 100%;
+
+            .header-input {
+                width:95%;
+            }
+
+            .remove-header-btn {
+                margin-top: 12px;
+                font-size: 25px;
+            }
+        }
     }
 
-    .headers-editor {
-        width:100%;
-        margin: $gutter;
+    .headers-list {
+        overflow-y: scroll;
+        max-height: 230px;
+        min-height: 230px;
+        overflow-x: hidden;
 
-        .detail-list{
+        .detail-list {
+            width:100%;
             margin-left: $gutter;
-        }
 
-        .header-input {
-            width:95%;
+            .field-content {
+                line-height: 32px;
+                padding: $gutter;
+            }
         }
-
-        .remove-header-btn {
-            margin-top: 12px;
-            font-size: 25px;
-        }
-
     }
+
+
 
 }

@@ -62,7 +62,7 @@ class RequestHeaders extends Component<any, any> {
         return (
             <div className='request-editor-control'>
                 <div className='row headers-editor'>
-                    <div className='col-md-4 col-12'>
+                    <div className='col-md-4 col-lg-4'>
                         <label htmlFor=''>
                             <FormattedMessage id='Key' />
                         </label>
@@ -72,7 +72,7 @@ class RequestHeaders extends Component<any, any> {
                             onChange={(event, name) => this.handleOnHeaderNameChange(name)}
                             />
                     </div>
-                    <div className='col-md-4 col-12'>
+                    <div className='col-md-4 col-lg-4'>
                         <label htmlFor=''>
                             <FormattedMessage id='Value' />
                         </label>
@@ -81,7 +81,7 @@ class RequestHeaders extends Component<any, any> {
                             onChange={(event, value) => this.handleOnHeaderValueChange(value)}
                         />
                     </div>
-                    <div className='col-md-4 col-12'>
+                    <div className='col-md-4 col-lg-4'>
                         <br/>
                         <PrimaryButton onClick={() => this.handleOnHeaderAdd()}>
                             <FormattedMessage id='Add' />
