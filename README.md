@@ -1,75 +1,38 @@
-## Configure the app
+# Microsoft Graph Explorer V2
+[![Build Status](https://dev.azure.com/japhethobalak/japhethobalak/_apis/build/status/microsoftgraph.microsoft-graph-explorer-v2?branchName=dev)](https://dev.azure.com/japhethobalak/japhethobalak/_build/latest?definitionId=4&branchName=dev)
 
-1. Acquire the client ID after registering the application
+The [Microsoft Graph Explorer V2](https://developer.microsoft.com/graph/graph-explorer) lets developers quickly navigate and test API endpoints.
 
-1. Find the file **.env.tmp** and save it as **.env**
+The Graph Explorer is written in [TypeScript](https://www.typescriptlang.org/) and powered by:
+* [React](https://reactjs.org/)
+* [Office Fabric](https://dev.office.com/fabric)
 
-1. Replace *ENTER_YOUR_APP_ID* with the application ID of your registered application.
 
+## Running the explorer locally
 
-## Available Scripts
+* `npm install` to install project dependencies. `npm` is installed by default with [Node.js](https://nodejs.org/).
+* `npm start` starts the TypeScript compiler in watch mode and the local server. It should open your browser automatically with the Graph Explorer at [http://localhost:3000/](http://localhost:3000).
 
-In the project directory, you can run:
+#### Enabling authentication with your own credentials
+* You'll need to register an app on [apps.dev.microsoft.com](https://apps.dev.microsoft.com) to configure the login page for your local Graph Explorer.  Under `Platforms` click `Add Platform` and select Web.  `Allow Implicit Flow` should be checked and set `http://localhost:3000` as the redirect URL.  You don't need a client secret since the explorer is a single page application. Select the delegated permissions that you'll want to use in your local Graph Explorer.
+* Rename `secrets.sample.js` to `secrets.js` in the project root and insert your client ID.
 
-### `npm start`
+## Other commands
+* `npm test` to run tests from the command line for scenarios like parsing metadata and functional explorer tests.
+* `npm run lint` linting your files
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Contributing
+Please see the [contributing guidelines](CONTRIBUTING.md).
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-### `npm test`
+## Known issues
+* You cannot remove permissions by using the Graph Explorer UI. You will need to [remove the application consent](http://shawntabrizi.com/aad/revoking-consent-azure-active-directory-applications/) and then re-consent to remove permissions. I know, this is far from a good experience.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Additional resources
+* [Microsoft Graph website](https://graph.microsoft.io)
+* [Office Dev Center](http://dev.office.com/)
+* [Graph Explorer releases](https://github.com/microsoftgraph/microsoft-graph-explorer/releases)
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Copyright
+Copyright (c) 2017 Microsoft. All rights reserved.

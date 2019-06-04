@@ -20,6 +20,8 @@ steps:
 
   - script: |
       npm run build
+    env:
+      REACT_APP_CLIENT_ID: $(REACT_APP_CLIENT_ID)
     displayName: 'Build'
 
   - task: PublishCodeCoverageResults@1

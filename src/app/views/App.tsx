@@ -1,4 +1,4 @@
-import { classNamesFunction, ITheme, MessageBar, MessageBarType, styled } from 'office-ui-fabric-react';
+import { classNamesFunction, FocusTrapZone, ITheme, MessageBar, MessageBarType, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -22,24 +22,26 @@ class App extends Component<IAppProps> {
     const { error, actions }: any = this.props;
 
     return (
-      <div className={`container-fluid ${classes.app}`}>
-        <div className='row'>
-          <div className='col-sm-12 col-lg-8 offset-lg-2'>
-            <Authentication />
-            <QueryRunner />
-            {error &&
-              <MessageBar
-                messageBarType={MessageBarType.error}
-                isMultiline={false}
-                onDismiss={actions.clearQueryError}
-              >
-                {`${error.statusText} - ${error.status}`}
-              </MessageBar>
-            }
-            <QueryResponse />
+      <FocusTrapZone>
+        <div className={`container-fluid ${classes.app}`}>
+          <div className='row'>
+            <div className='col-sm-12 col-lg-8 offset-lg-2'>
+              <Authentication />
+              <QueryRunner />
+              {error &&
+                <MessageBar
+                  messageBarType={MessageBarType.error}
+                  isMultiline={false}
+                  onDismiss={actions.clearQueryError}
+                >
+                  {`${error.statusText} - ${error.status}`}
+                </MessageBar>
+              }
+              <QueryResponse />
+            </div>
           </div>
         </div>
-      </div>
+      </FocusTrapZone>
     );
   }
 }
