@@ -14,17 +14,15 @@ const HeadersList = ({
 
             switch (column.key) {
                 case 'button':
-                    if (item.value !== '') {
-                        return <IconButton
-                            iconProps={{ iconName: 'Delete' }}
-                            title='Remove request header'
-                            ariaLabel='Remove request header'
-                            onClick={(event) => handleOnHeaderDelete(event, item)}
-                        />;
-                    }
+                    return <IconButton
+                        iconProps={{ iconName: 'Delete' }}
+                        title='Remove request header'
+                        ariaLabel='Remove request header'
+                        onClick={(event) => handleOnHeaderDelete(event, item)}
+                    />;
 
                 default:
-                    return <span>{fieldContent}</span>;
+                    return <span className='field-content'>{fieldContent}</span>;
             }
         }
     };
@@ -35,15 +33,21 @@ const HeadersList = ({
         { key: 'button', name: '', fieldName: 'button', minWidth: 100, maxWidth: 200, isResizable: true }
     ];
 
+    const headerItems = headers.filter((header) => {
+        return header.value !== '';
+    });
+
     return (
-        <DetailsList
-            className='detail-list'
-            items={headers}
-            setKey='set'
-            columns={columns}
-            onRenderItemColumn={renderItemColumn}
-            selectionMode={SelectionMode.none}
-        />
+        <div className='headers-list'>
+            <DetailsList
+                className='detail-list'
+                items={headerItems}
+                setKey='set'
+                columns={columns}
+                onRenderItemColumn={renderItemColumn}
+                selectionMode={SelectionMode.none}
+            />
+        </div>
     );
 };
 
