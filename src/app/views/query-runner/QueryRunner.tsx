@@ -6,7 +6,7 @@ import { IQuery, IQueryRunnerProps, IQueryRunnerState } from '../../../types/que
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './query-runner.scss';
 import { QueryInputControl } from './QueryInput';
-import { Request } from './request/Request';
+import Request from './request/Request';
 import { parse } from './util/iframe-message-parser';
 
 export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
