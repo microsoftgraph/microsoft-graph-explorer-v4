@@ -9,6 +9,7 @@ import { Authentication } from './authentication';
 import { classNames } from './classnames';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
+import { Sidebar } from './sidebar/Sidebar';
 
 interface IAppProps {
   theme?: ITheme;
@@ -25,7 +26,10 @@ class App extends Component<IAppProps> {
       <FocusTrapZone>
         <div className={`container-fluid ${classes.app}`}>
           <div className='row'>
-            <div className='col-sm-12 col-lg-8 offset-lg-2'>
+            <div className='col-sm-3 col-md-3'>
+              <Sidebar />
+            </div>
+            <div className='col-sm-8 col-md-8'>
               <Authentication />
               <QueryRunner />
               {error &&
