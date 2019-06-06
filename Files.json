@@ -1,0 +1,42 @@
+{
+    "type": "AdaptiveCard",
+    "body": [
+        {
+            "type": "TextBlock",
+            "size": "Medium",
+            "weight": "Bolder",
+            "text": "Recent files"
+        },
+        {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "{name}",
+                    "weight": "Bolder"
+                },
+                {
+                    "type": "FactSet",
+                    "facts": [
+                        {
+                            "title": "Created",
+                            "value": "{{DATE({createdDateTime}, SHORT)}} by {createdBy.user.displayName}"
+                        },
+                        {
+                            "title": "Modified",
+                            "value": "{{DATE({lastModifiedDateTime}, SHORT)}} by {lastModifiedBy.user.displayName}"
+                        }
+                    ]
+                }
+            ],
+            "$data": "{value}",
+            "style": "emphasis",
+            "selectAction": {
+                "type": "Action.OpenUrl",
+                "url": "{webUrl}"
+            }
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.0"
+}

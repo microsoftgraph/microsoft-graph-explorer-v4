@@ -1,0 +1,49 @@
+{
+    "type": "AdaptiveCard",
+    "body": [
+        {
+            "type": "TextBlock",
+            "size": "Medium",
+            "weight": "Bolder",
+            "text": "{displayName}"
+        },
+        {
+            "type": "FactSet",
+            "facts": [
+                {
+                    "title": "Given name",
+                    "value": "{givenName}"
+                },
+                {
+                    "title": "Surname",
+                    "value": "{surname}"
+                },
+                {
+                    "title": "Job title",
+                    "value": "{jobTitle}"
+                },
+                {
+                    "title": "Office location",
+                    "value": "{officeLocation}"
+                },
+                {
+                    "title": "Email",
+                    "value": "{mail}"
+                }
+            ]
+        },
+        {
+            "type": "TextBlock",
+            "text": "Business phones",
+            "weight": "Bolder"
+        },
+        {
+            "type": "TextBlock",
+            "text": "{$data}",
+            "$data": "{businessPhones}",
+            "spacing": "None"
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.0"
+}
