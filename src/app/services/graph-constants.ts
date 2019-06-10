@@ -1,4 +1,5 @@
 export const USER_INFO_URL = 'https://graph.microsoft.com/v1.0/me';
+export const GRAPH_URL = 'https://graph.microsoft.com';
 export const USER_PICTURE_URL = 'https://graph.microsoft.com/v1.0/me/photo/$value';
 export const AUTH_URL = 'https://login.microsoftonline.com';
 export const ADMIN_AUTH_URL = 'https://signIn.microsoftonline.com/common/adminconsent';
