@@ -34,15 +34,26 @@ export class Sidebar extends Component<any, any> {
             return occurs;
         };
 
+        let previousCount = 0;
+        let isCollapsed = false;
         for (const item of samples) {
             if (!map.has(item.category)) {
                 map.set(item.category, true);
+                const count = getNumberOfOccurrences(item.category);
+
+                if (categories.length > 0) {
+                    isCollapsed = true;
+                }
+
                 categories.push({
                     name: item.category,
                     key: item.category,
-                    startIndex: 0,
-                    count: 0
+                    startIndex: previousCount,
+                    isCollapsed,
+                    count
                 });
+
+                previousCount += count;
             }
         }
 
@@ -68,10 +79,4 @@ function mapDispatchToProps(dispatch: Dispatch): object {
     };
 }
 
-function mapStateToProps(state: any) {
-    return {
-        isLoadingData: state.isLoadingData
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
+export default connect(null, mapDispatchToProps)(Sidebar);
