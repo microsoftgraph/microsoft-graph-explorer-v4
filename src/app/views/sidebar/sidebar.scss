@@ -2,6 +2,9 @@
 
 .query-list {
   cursor: pointer;
+  .ms-GroupHeader-title, i {
+      font-size: $fontSizeRegular;
+  }
   .query-row {
     text-align: center;
     position: relative;
@@ -14,6 +17,7 @@
     .badge {
       display: inline-block;
       font-weight: bold;
+      float: left;
       font-size: $fontSizeExtraSmall;
     }
     .doc-link {

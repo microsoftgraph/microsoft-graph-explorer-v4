@@ -63,7 +63,6 @@ export class Sidebar extends Component<any, any> {
                 );
             }
           };
-
         const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
             if (column) {
 
@@ -130,7 +129,7 @@ export class Sidebar extends Component<any, any> {
                     groups={categories}
                     selection={selection}
                     groupProps={{
-                        showEmptyGroups: true
+                        showEmptyGroups: true,
                     }}
                     onRenderItemColumn={renderItemColumn}
                     onRenderRow={renderRow}
