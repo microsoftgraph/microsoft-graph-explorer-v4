@@ -5,6 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { IQuery } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
+import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../services/graph-constants';
 import { SampleQueries } from './sample-queries';
 import './sidebar.scss';
@@ -18,6 +19,60 @@ export class Sidebar extends Component<any, any> {
         };
     }
 
+    public renderRow = (props: any): any => {
+        const { tokenPresent } = this.props;
+        let selectionDisabled = false;
+        if (props) {
+            if (!tokenPresent && props.item.method !== 'GET') {
+                selectionDisabled = true;
+            }
+            return (
+                <div className={'row-disabled-' + selectionDisabled} data-selection-disabled={selectionDisabled}>
+                    <DetailsRow {...props} className='query-row' />
+                </div>
+            );
+        }
+      };
+
+    public onDocumentationLinkClicked = (event: any, item: any) => {
+        console.log(item.docLink);
+    };
+
+    public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+        if (column) {
+            const queryContent = item[column.fieldName as keyof any] as string;
+            switch (column.key) {
+
+                case 'button':
+                    return <IconButton
+                        className='pull-right doc-link'
+                        iconProps={{ iconName: 'NavigateExternalInline' }}
+                        title={item.docLink}
+                        ariaLabel={item.docLink}
+                        onClick={(event) => this.onDocumentationLinkClicked(event, item)}
+                    />;
+
+                case 'method':
+                    return <span className={'badge badge-' + item.method}>{item.method}</span>;
+
+                default:
+                    return <span className='query-content'>{queryContent}</span>;
+            }
+        }
+    };
+
+    public getNumberOfOccurrences = (category: any) => {
+        const { samples } = this.state;
+        let occurs = 0;
+        samples.forEach((element: { category: any; }) => {
+            if (element.category === category) {
+                occurs++;
+            }
+        });
+        return occurs;
+    };
+
+
     public render() {
         const { samples } = this.state;
         const categories: any[] = [];
@@ -28,10 +83,6 @@ export class Sidebar extends Component<any, any> {
             { key: 'category', name: 'Sample Queries', fieldName: 'humanName', minWidth: 100, maxWidth: 200 },
             { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20 },
         ];
-
-        const onDocumentationLinkClicked = (event: any, item: any) => {
-            console.log(item.docLink);
-        };
 
         const selection = new Selection({
             onSelectionChanged: () => {
@@ -44,65 +95,22 @@ export class Sidebar extends Component<any, any> {
                   };
 
                 if (actions) {
-                actions.runQuery(query);
+                  actions.queryInputActions.setSampleQuery(query);
+                  if (query.selectedVerb === 'GET') {
+                    actions.queryActions.runQuery(query);
+                  }
                 }
             }
         });
 
-        const renderRow = (props: any): any => {
-            const { tokenPresent } = this.props;
-            let selectionDisabled = false;
-            if (props) {
-                if (!tokenPresent && props.item.method !== 'GET') {
-                    selectionDisabled = true;
-                }
-                return (
-                    <div className={'row-disabled-' + selectionDisabled} data-selection-disabled={selectionDisabled}>
-                        <DetailsRow {...props} className='query-row' />
-                    </div>
-                );
-            }
-          };
-        const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
-            if (column) {
 
-                const queryContent = item[column.fieldName as keyof any] as string;
-                switch (column.key) {
-                    case 'button':
-                        return <IconButton
-                            className='pull-right doc-link'
-                            iconProps={{ iconName: 'NavigateExternalInline' }}
-                            title={item.docLink}
-                            ariaLabel={item.docLink}
-                            onClick={(event) => onDocumentationLinkClicked(event, item)}
-                        />;
-
-                    case 'method':
-                        return <span className={'badge badge-' + item.method}>{item.method}</span>;
-
-
-                    default:
-                        return <span className='query-content'>{queryContent}</span>;
-                }
-            }
-        };
-
-        const getNumberOfOccurrences = (category: any) => {
-            let occurs = 0;
-            samples.forEach((element: { category: any; }) => {
-                if (element.category === category) {
-                    occurs++;
-                }
-            });
-            return occurs;
-        };
 
         let previousCount = 0;
         let isCollapsed = false;
         for (const item of samples) {
             if (!map.has(item.category)) {
                 map.set(item.category, true);
-                const count = getNumberOfOccurrences(item.category);
+                const count = this.getNumberOfOccurrences(item.category);
 
                 if (categories.length > 0) {
                     isCollapsed = true;
@@ -131,8 +139,8 @@ export class Sidebar extends Component<any, any> {
                     groupProps={{
                         showEmptyGroups: true,
                     }}
-                    onRenderItemColumn={renderItemColumn}
-                    onRenderRow={renderRow}
+                    onRenderItemColumn={this.renderItemColumn}
+                    onRenderRow={this.renderRow}
                 />
             </div>
         );
@@ -146,7 +154,10 @@ function mapStateToProps(state: any) {
 
   function mapDispatchToProps(dispatch: Dispatch): object {
     return {
-        actions: bindActionCreators(queryActionCreators, dispatch),
+        actions: {
+            queryActions: bindActionCreators(queryActionCreators, dispatch),
+            queryInputActions: bindActionCreators(queryInputActionCreators, dispatch)
+          }
     };
 }
 

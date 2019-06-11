@@ -27,6 +27,10 @@ const appState = store({
   authToken: '',
   isLoadingData: false,
   queryRunnerError: null,
+  sampleQuery: {
+    sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
+    selectedVerb: 'GET',
+  }
 });
 
 

@@ -6,7 +6,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IQuery, IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './query-runner.scss';
-import { QueryInputControl } from './QueryInput';
+import QueryInput from './QueryInput';
 import { Request } from './request/Request';
 import { parse } from './util/iframe-message-parser';
 
@@ -184,7 +184,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       <div>
         <div className='row'>
           <div className='col-sm-12 col-lg-12'>
-            <QueryInputControl
+            <QueryInput
               handleOnRunQuery={this.handleOnRunQuery}
               handleOnMethodChange={this.handleOnMethodChange}
               handleOnUrlChange={this.handleOnUrlChange}
