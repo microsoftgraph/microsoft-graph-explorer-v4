@@ -22,13 +22,13 @@
         .headers-editor {
             display: inline-flex;
             width: 100%;
+            line-height: 5px;
 
             .header-input {
                 width:95%;
             }
 
             .remove-header-btn {
-                margin-top: 12px;
                 font-size: 25px;
             }
         }
