@@ -1,4 +1,4 @@
-import { DetailsList, IColumn, IconButton, Selection, SelectionMode } from 'office-ui-fabric-react';
+import { DetailsList, DetailsRow, IColumn, IconButton, Selection, SelectionMode } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -7,6 +7,7 @@ import { IQuery } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import { GRAPH_URL } from '../../services/graph-constants';
 import { SampleQueries } from './sample-queries';
+import './sidebar.scss';
 
 export class Sidebar extends Component<any, any> {
 
@@ -23,8 +24,9 @@ export class Sidebar extends Component<any, any> {
         const map = new Map();
 
         const columns = [
+            { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
             { key: 'category', name: 'Sample Queries', fieldName: 'humanName', minWidth: 100, maxWidth: 200 },
-            { key: 'button', name: '', fieldName: 'button', minWidth: 100, maxWidth: 200 }
+            { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20 },
         ];
 
         const onDocumentationLinkClicked = (event: any, item: any) => {
@@ -47,21 +49,41 @@ export class Sidebar extends Component<any, any> {
             }
         });
 
+        const renderRow = (props: any): any => {
+            const { tokenPresent } = this.props;
+            let selectionDisabled = false;
+            if (props) {
+                if (!tokenPresent && props.item.method !== 'GET') {
+                    selectionDisabled = true;
+                }
+                return (
+                    <div className={'row-disabled-' + selectionDisabled} data-selection-disabled={selectionDisabled}>
+                        <DetailsRow {...props} className='query-row' />
+                    </div>
+                );
+            }
+          };
+
         const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
             if (column) {
 
-                const fieldContent = item[column.fieldName as keyof any] as string;
+                const queryContent = item[column.fieldName as keyof any] as string;
                 switch (column.key) {
                     case 'button':
                         return <IconButton
+                            className='pull-right doc-link'
                             iconProps={{ iconName: 'NavigateExternalInline' }}
                             title={item.docLink}
                             ariaLabel={item.docLink}
                             onClick={(event) => onDocumentationLinkClicked(event, item)}
                         />;
 
+                    case 'method':
+                        return <span className={'badge badge-' + item.method}>{item.method}</span>;
+
+
                     default:
-                        return <span>{fieldContent}</span>;
+                        return <span className='query-content'>{queryContent}</span>;
                 }
             }
         };
@@ -111,16 +133,22 @@ export class Sidebar extends Component<any, any> {
                         showEmptyGroups: true
                     }}
                     onRenderItemColumn={renderItemColumn}
+                    onRenderRow={renderRow}
                 />
             </div>
         );
     }
 }
+function mapStateToProps(state: any) {
+    return {
+      tokenPresent: !!state.authToken
+    };
+  }
 
-function mapDispatchToProps(dispatch: Dispatch): object {
+  function mapDispatchToProps(dispatch: Dispatch): object {
     return {
         actions: bindActionCreators(queryActionCreators, dispatch),
     };
 }
 
-export default connect(null, mapDispatchToProps)(Sidebar);
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
