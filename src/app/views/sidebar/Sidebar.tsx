@@ -91,19 +91,17 @@ export class Sidebar extends Component<any, any> {
                 const query: IQuery = {
                     sampleUrl: GRAPH_URL + item.requestUrl,
                     selectedVerb: item.method,
-                    sampleBody: item.body,
+                    sampleBody: item.postBody,
                   };
 
                 if (actions) {
-                  actions.queryInputActions.setSampleQuery(query);
+                  actions.queryInputActions.setSampleQuerySuccess(query);
                   if (query.selectedVerb === 'GET') {
                     actions.queryActions.runQuery(query);
                   }
                 }
             }
         });
-
-
 
         let previousCount = 0;
         let isCollapsed = false;
@@ -152,7 +150,7 @@ function mapStateToProps(state: any) {
     };
   }
 
-  function mapDispatchToProps(dispatch: Dispatch): object {
+function mapDispatchToProps(dispatch: Dispatch): object {
     return {
         actions: {
             queryActions: bindActionCreators(queryActionCreators, dispatch),
