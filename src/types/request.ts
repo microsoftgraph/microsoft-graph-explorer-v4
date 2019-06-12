@@ -16,7 +16,7 @@ export interface IRequestHeadersProps {
 
 export interface IRequestComponent {
     handleOnEditorChange: Function;
-    headers?: Array<{ name: string; value: string; }>;
+    sampleBody?: object | undefined;
 }
 
 export interface IRequestOptions {

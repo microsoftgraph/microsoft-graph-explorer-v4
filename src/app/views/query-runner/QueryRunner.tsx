@@ -93,9 +93,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   };
 
   private handleOnEditorChange = (body?: string) => {
-    if (body) {
-      this.setState({ sampleBody: body });
-    }
+    this.setState({ sampleBody: body });
   };
 
 

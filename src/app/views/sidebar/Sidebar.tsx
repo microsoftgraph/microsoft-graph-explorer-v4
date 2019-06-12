@@ -95,10 +95,13 @@ export class Sidebar extends Component<any, any> {
                   };
 
                 if (actions) {
-                  actions.queryInputActions.setSampleQuerySuccess(query);
-                  if (query.selectedVerb === 'GET') {
-                    actions.queryActions.runQuery(query);
-                  }
+                    if (query.selectedVerb === 'GET') {
+                        query.sampleBody = JSON.parse('{}');
+                        actions.queryActions.runQuery(query);
+                    } else {
+                        query.sampleBody = (query.sampleBody) ? JSON.parse(query.sampleBody) : undefined;
+                    }
+                    actions.queryInputActions.setSampleQuerySuccess(query);
                 }
             }
         });
