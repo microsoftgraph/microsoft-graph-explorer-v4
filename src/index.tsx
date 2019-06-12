@@ -30,7 +30,8 @@ const appState = store({
   sampleQuery: {
     sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
     selectedVerb: 'GET',
-  }
+  },
+  headersAdded: [{ name: '', value: '' }],
 });
 
 

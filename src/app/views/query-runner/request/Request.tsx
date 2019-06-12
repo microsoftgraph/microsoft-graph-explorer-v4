@@ -3,16 +3,11 @@ import React from 'react';
 import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
 import './request.scss';
-import { RequestHeadersControl } from './RequestHeaders';
+import RequestHeaders from './RequestHeaders';
 
-export const Request = ({
+const Request = ({
     handleOnEditorChange,
-    handleOnHeaderNameChange,
-    handleOnHeaderDelete,
-    handleOnHeaderValueChange,
-    handleOnHeaderValueBlur,
-    headers,
-  }: IRequestComponent) => {
+}: IRequestComponent) => {
 
     return (
       <div className='request-editors'>
@@ -24,15 +19,11 @@ export const Request = ({
                 />
           </PivotItem>
           <PivotItem headerText='Request Headers'>
-            <RequestHeadersControl
-              handleOnHeaderDelete={(event: any, header: any) => handleOnHeaderDelete(header)}
-              handleOnHeaderNameChange={(event: any, name: any) => handleOnHeaderNameChange(name)}
-              handleOnHeaderValueChange={(event: any, value: any) => handleOnHeaderValueChange(value)}
-              handleOnHeaderValueBlur={(event: any, header: any) => handleOnHeaderValueBlur(header)}
-              headers={headers}
-            />
+            <RequestHeaders />
           </PivotItem>
         </Pivot>
       </div>
     );
   };
+
+export default Request;

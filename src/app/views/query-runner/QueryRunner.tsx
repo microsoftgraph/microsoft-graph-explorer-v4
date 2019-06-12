@@ -2,12 +2,11 @@ import { IDropdownOption } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import { IQuery, IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
-import { Request } from './request/Request';
+import Request from './request/Request';
 import { parse } from './util/iframe-message-parser';
 
 export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
@@ -24,9 +23,6 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       selectedVerb: 'GET',
       sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
       sampleBody: undefined,
-      headers: [{ name: '', value: '' }],
-      headerName: '',
-      headerValue: '',
       sampleHeaders: {},
     };
   }
@@ -102,67 +98,16 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     }
   };
 
-  private handleOnHeaderNameChange = (name?: string) => {
-    if (name) {
-      this.setState({
-        headerName: name,
-      });
-    }
-  };
-
-  private handleOnHeaderValueChange = (value?: string) => {
-    if (value) {
-      this.setState({
-        headerValue: value,
-      });
-    }
-  };
-
-  private handleOnHeaderDelete = (headerIndex: number) => {
-    const { headers } = this.state;
-    const headersToDelete = [...headers];
-
-    headersToDelete.splice(headerIndex, 1);
-    this.setState({
-      headers: headersToDelete,
-    });
-
-    const listOfHeaders = headers;
-
-    if (listOfHeaders.length === 0) {
-      listOfHeaders.push({ name: '', value: '' });
-    }
-    this.setState({
-      headers: listOfHeaders,
-    });
-  };
-
-  private handleOnHeaderValueBlur = () => {
-    if (this.state.headerName !== '') {
-      const { headerName, headerValue, headers } = this.state;
-      const header = { name: headerName, value: headerValue };
-      const newHeaders = [header, ...headers];
-
-      this.setState({
-        headers: newHeaders,
-        headerName: '',
-        headerValue: '',
-      });
-    }
-  };
-
-  public getLastHeader() {
-    return this.state.headers.pop();
-  }
 
   private handleOnRunQuery = () => {
     const { sampleUrl, selectedVerb, sampleBody } = this.state;
-    const { actions } = this.props;
+    const { actions, headers } = this.props;
 
     const query: IQuery = {
       sampleUrl,
       selectedVerb,
       sampleBody,
+      sampleHeaders: headers
     };
 
     if (actions) {
@@ -175,7 +120,6 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       httpMethods,
       selectedVerb,
       sampleUrl,
-      headers,
     } = this.state;
 
     const { isLoadingData } = this.props;
@@ -199,11 +143,6 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
           <div className='col-sm-12 col-lg-12'>
             <Request
               handleOnEditorChange={this.handleOnEditorChange}
-              handleOnHeaderDelete={this.handleOnHeaderDelete}
-              handleOnHeaderNameChange={this.handleOnHeaderNameChange}
-              handleOnHeaderValueChange={this.handleOnHeaderValueChange}
-              handleOnHeaderValueBlur={this.handleOnHeaderValueBlur}
-              headers={headers}
             />
           </div>
         </div>
@@ -220,7 +159,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 function mapStateToProps(state: any) {
   return {
-    isLoadingData: state.isLoadingData
+    isLoadingData: state.isLoadingData,
+    headers: state.headersAdded
   };
 }
 
