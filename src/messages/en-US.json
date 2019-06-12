@@ -225,5 +225,6 @@
   "Action": "Action",
   "Canary": "Canary",
   "disable canary": "disable canary",
-  "using canary": "You are using the canary version of Graph Explorer. Sign in to make requests"
+  "using canary": "You are using the canary version of Graph Explorer. Sign in to make requests",
+  "Add": "Add"
 }

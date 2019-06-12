@@ -1,25 +1,29 @@
-export interface IRequestHeadersControl {
+export interface IHeadersListControl {
     handleOnHeaderDelete: Function;
-    handleOnHeaderNameChange: Function;
-    handleOnHeaderValueChange: Function;
-    handleOnHeaderValueBlur: Function;
-    headers: Array<{ name: string; value: string; }>;
+    headers?: Array<{ name: string; value: string; }>;
+}
+
+export interface IRequestHeadersProps {
+    headers?: Array<{ name: string; value: string; }>;
+    actions?: {
+        addRequestHeader: Function;
+        removeRequestHeader: Function;
+    };
+    intl: {
+        message: object;
+      };
 }
 
 export interface IRequestComponent {
     handleOnEditorChange: Function;
-    handleOnHeaderNameChange: Function;
-    handleOnHeaderDelete: Function;
-    handleOnHeaderValueChange: Function;
-    handleOnHeaderValueBlur: Function;
-    headers: Array<{ name: string; value: string; }>;
+    headers?: Array<{ name: string; value: string; }>;
 }
 
 export interface IRequestOptions {
     headers?: {};
     method?: string;
-    body?: string|undefined;
-  }
+    body?: string | undefined;
+}
 
 export interface IRequestState {
     headers: Array<{ name: string; value: string; }>;

@@ -3,9 +3,6 @@ export interface IQueryRunnerState {
   selectedVerb: string;
   sampleUrl: string;
   sampleBody?: string;
-  headers: Array<{ name: string; value: string; }>;
-  headerName: string;
-  headerValue: string;
   sampleHeaders: object;
 }
 
@@ -13,10 +10,12 @@ export interface IQuery {
   selectedVerb: string;
   sampleUrl: string;
   sampleBody?: string;
+  sampleHeaders: Array<{ name: string; value: string; }>;
 }
 
 export interface IQueryRunnerProps {
   isLoadingData: boolean;
+  headers: Array<{ name: string; value: string; }>;
   actions?: {
     runQuery: Function;
   };
