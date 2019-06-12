@@ -2,15 +2,17 @@ import { IDropdownOption } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { IQuery, IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runner';
+
+import { IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
+import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
 import Request from './request/Request';
 import { parse } from './util/iframe-message-parser';
 
-export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
-  constructor(props: IQueryRunnerProps) {
+export class QueryRunner extends Component<any, IQueryRunnerState> {
+  constructor(props: any) {
     super(props);
     this.state = {
       httpMethods: [
@@ -81,14 +83,20 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   };
 
   private handleOnMethodChange = (option?: IDropdownOption) => {
+    const query = {...this.props.sampleQuery};
+    const { actions } = this.props;
     if (option !== undefined) {
-      this.setState({ selectedVerb: option.text });
+      query.selectedVerb = option.text;
+      actions.queryInputActions.setSampleQuerySuccess(query);
     }
   };
 
   private handleOnUrlChange = (newQuery?: string) => {
-    if (newQuery) {
-      this.setState({ sampleUrl: newQuery });
+    const query = {...this.props.sampleQuery};
+    const { actions } = this.props;
+    if (newQuery !== undefined) {
+      query.sampleUrl = newQuery;
+      actions.queryInputActions.setSampleQuerySuccess(query);
     }
   };
 
@@ -98,29 +106,28 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
 
   private handleOnRunQuery = () => {
-    const { sampleUrl, selectedVerb, sampleBody } = this.state;
-    const { actions, headers } = this.props;
+    const { sampleBody } = this.state;
+    const { actions, headers, sampleQuery } = this.props;
 
-    const query: IQuery = {
-      sampleUrl,
-      selectedVerb,
-      sampleBody,
-      sampleHeaders: headers
-    };
+    if (headers) {
+      sampleQuery.sampleHeaders = headers;
+    }
+
+    if (sampleBody) {
+      sampleQuery.sampleBody = JSON.parse(sampleBody);
+    }
 
     if (actions) {
-      actions.runQuery(query);
+      actions.queryActions.runQuery(sampleQuery);
     }
   };
 
   public render() {
     const {
       httpMethods,
-      selectedVerb,
-      sampleUrl,
     } = this.state;
 
-    const { isLoadingData } = this.props;
+    const { isLoadingData, sampleQuery } = this.props;
 
     return (
       <div>
@@ -131,8 +138,8 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
               handleOnMethodChange={this.handleOnMethodChange}
               handleOnUrlChange={this.handleOnUrlChange}
               httpMethods={httpMethods}
-              selectedVerb={selectedVerb}
-              sampleUrl={sampleUrl}
+              selectedVerb={sampleQuery.selectedVerb}
+              sampleUrl={sampleQuery.sampleUrl}
               submitting={isLoadingData}
             />
           </div>
@@ -151,14 +158,18 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators(queryActionCreators, dispatch),
+    actions: {
+      queryActions: bindActionCreators(queryActionCreators, dispatch),
+      queryInputActions: bindActionCreators(queryInputActionCreators, dispatch)
+    }
   };
 }
 
 function mapStateToProps(state: any) {
   return {
     isLoadingData: state.isLoadingData,
-    headers: state.headersAdded
+    headers: state.headersAdded,
+    sampleQuery: state.sampleQuery,
   };
 }
 

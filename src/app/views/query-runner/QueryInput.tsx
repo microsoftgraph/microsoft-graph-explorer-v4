@@ -23,9 +23,8 @@ export class QueryInput extends Component<any, any> {
     return (
       <div className='row'>
         <div className='col-sm-2'>
-
           <Dropdown
-            defaultSelectedKey={selectedVerb}
+            selectedKey={selectedVerb}
             options={httpMethods}
             onChange={(event, method) => handleOnMethodChange(method)}
           />

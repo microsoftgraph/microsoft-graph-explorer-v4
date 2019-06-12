@@ -19,6 +19,7 @@ export interface IQueryRunnerProps {
   actions?: {
     runQuery: Function;
   };
+  sampleQuery: IQuery;
 }
 
 export interface IQueryInputControl {
