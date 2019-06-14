@@ -11,8 +11,8 @@ import QueryInput from './QueryInput';
 import Request from './request/Request';
 import { parse } from './util/iframe-message-parser';
 
-export class QueryRunner extends Component<any, IQueryRunnerState> {
-  constructor(props: any) {
+export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
+  constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
       httpMethods: [
@@ -22,14 +22,11 @@ export class QueryRunner extends Component<any, IQueryRunnerState> {
         { key: 'PATCH', text: 'PATCH' },
         { key: 'DELETE', text: 'DELETE' },
       ],
-      selectedVerb: 'GET',
-      sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
-      sampleBody: undefined,
-      sampleHeaders: {},
     };
   }
 
   public componentDidMount = () => {
+    const { actions } = this.props;
     window.addEventListener('message', this.receiveMessage, false);
     const urlParams = new URLSearchParams(window.location.search);
     const base64Token = urlParams.getAll('query')[0];
@@ -46,12 +43,17 @@ export class QueryRunner extends Component<any, IQueryRunnerState> {
       sampleBody,
     } = data;
 
-    this.setState({
+    const query = {
       sampleUrl,
       sampleBody,
       sampleHeaders,
       selectedVerb: sampleVerb,
-    });
+    };
+
+    if (actions) {
+      actions.setSampleQuery(query);
+    }
+
   };
 
   public componentWillUnmount(): void {
@@ -59,6 +61,7 @@ export class QueryRunner extends Component<any, IQueryRunnerState> {
   }
 
   private receiveMessage = (event: MessageEvent): void => {
+    const { actions } = this.props;
     const {
       verb,
       headerKey,
@@ -74,12 +77,16 @@ export class QueryRunner extends Component<any, IQueryRunnerState> {
     const headers: any = {};
     headers[headerKey] = headerValue;
 
-    this.setState({
+    const query = {
       sampleUrl: url,
       sampleBody: body,
       sampleHeaders: headers,
       selectedVerb: verb,
-    });
+    };
+
+    if (actions) {
+      actions.setSampleQuery(query);
+    }
   };
 
   private handleOnMethodChange = (option?: IDropdownOption) => {
@@ -87,7 +94,9 @@ export class QueryRunner extends Component<any, IQueryRunnerState> {
     const { actions } = this.props;
     if (option !== undefined) {
       query.selectedVerb = option.text;
-      actions.queryInputActions.setSampleQuerySuccess(query);
+      if (actions) {
+        actions.setSampleQuery(query);
+      }
     }
   };
 
@@ -96,7 +105,9 @@ export class QueryRunner extends Component<any, IQueryRunnerState> {
     const { actions } = this.props;
     if (newQuery !== undefined) {
       query.sampleUrl = newQuery;
-      actions.queryInputActions.setSampleQuerySuccess(query);
+      if (actions) {
+        actions.setSampleQuery(query);
+      }
     }
   };
 
@@ -118,7 +129,7 @@ export class QueryRunner extends Component<any, IQueryRunnerState> {
     }
 
     if (actions) {
-      actions.queryActions.runQuery(sampleQuery);
+      actions.runQuery(sampleQuery);
     }
   };
 
@@ -158,10 +169,7 @@ export class QueryRunner extends Component<any, IQueryRunnerState> {
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: {
-      queryActions: bindActionCreators(queryActionCreators, dispatch),
-      queryInputActions: bindActionCreators(queryInputActionCreators, dispatch)
-    }
+    actions:  bindActionCreators({ ...queryActionCreators, ...queryInputActionCreators }, dispatch),
   };
 }
 

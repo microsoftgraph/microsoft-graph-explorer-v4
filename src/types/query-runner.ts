@@ -1,9 +1,6 @@
 export interface IQueryRunnerState {
   httpMethods: Array<{ key: string; text: string; }>;
-  selectedVerb: string;
-  sampleUrl: string;
   sampleBody?: string;
-  sampleHeaders: object;
 }
 
 export interface IQuery {
@@ -18,6 +15,7 @@ export interface IQueryRunnerProps {
   headers: Array<{ name: string; value: string; }>;
   actions?: {
     runQuery: Function;
+    setSampleQuery: Function;
   };
   sampleQuery: IQuery;
 }

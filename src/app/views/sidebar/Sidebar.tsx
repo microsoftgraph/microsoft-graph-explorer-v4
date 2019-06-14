@@ -101,7 +101,7 @@ export class Sidebar extends Component<any, any> {
                     } else {
                         query.sampleBody = (query.sampleBody) ? JSON.parse(query.sampleBody) : undefined;
                     }
-                    actions.queryInputActions.setSampleQuerySuccess(query);
+                    actions.queryInputActions.setSampleQuery(query);
                 }
             }
         });
