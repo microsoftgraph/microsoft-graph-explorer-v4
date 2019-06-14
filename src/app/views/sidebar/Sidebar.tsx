@@ -8,7 +8,7 @@ export const Sidebar = () => {
     return (
         <div className='query-list'>
             <Pivot>
-                <PivotItem headerText='Sample Queries'>
+                <PivotItem headerText='Sample Categories'>
                     <SampleQueries />
                 </PivotItem>
             </Pivot>

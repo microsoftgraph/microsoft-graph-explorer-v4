@@ -1,7 +1,9 @@
 import {
-    DetailsList, DetailsRow, IColumn, IconButton, SearchBox, Selection, SelectionMode
+    DetailsList, DetailsRow, IColumn, IconButton,
+    SearchBox, Selection, SelectionMode
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -80,7 +82,7 @@ export class SampleQueries extends Component<any, any> {
                     return <span className={'badge badge-' + item.method}>{item.method}</span>;
 
                 default:
-                    return <span className='query-content'>{queryContent}</span>;
+                    return <span className='query-content'><FormattedMessage id={queryContent} /></span>;
             }
         }
     };
