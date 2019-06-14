@@ -1,6 +1,7 @@
+import { ISampleQuery } from "../../../../types/query-runner";
 
 
-export const SampleQueries: any[] = [
+export const queries: ISampleQuery[]  = [
     {
       "category": "Getting Started",
       "method": "GET",

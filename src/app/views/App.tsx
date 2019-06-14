@@ -9,7 +9,7 @@ import { Authentication } from './authentication';
 import { classNames } from './classnames';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
-import Sidebar from './sidebar/Sidebar';
+import { Sidebar } from './sidebar/Sidebar';
 
 interface IAppProps {
   theme?: ITheme;

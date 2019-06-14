@@ -29,3 +29,15 @@ export interface IQueryInputControl {
   sampleUrl: string;
   submitting: boolean;
 }
+
+export interface ISampleQuery {
+  docLink?: string;
+  skipTest?: boolean;
+  category: string;
+  requestUrl: string;
+  method: string;
+  humanName: string;
+  tip?: string;
+  postBody?: string;
+  headers?: Array<{ name: string; value: string; }>;
+}
