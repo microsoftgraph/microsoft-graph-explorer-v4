@@ -35,7 +35,7 @@ export class Sidebar extends Component<any, any> {
       };
 
     public onDocumentationLinkClicked = (event: any, item: any) => {
-        console.log(item.docLink);
+        window.open(item.docLink, '_blank');
     };
 
     public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
