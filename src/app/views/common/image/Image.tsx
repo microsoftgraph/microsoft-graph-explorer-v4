@@ -1,17 +1,6 @@
 import React, { Component } from 'react';
+import { IImageComponentProps, IImageComponentState } from '../../../../types/image';
 
-interface IImageComponentProps {
-  body: any;
-  styles: any;
-}
-
-interface IImageComponentState {
-  imageUrl: string;
-}
-
-/**
- * TODO: Support custom styles
- */
 export class Image extends Component<IImageComponentProps, IImageComponentState> {
   constructor(props: any) {
     super(props);
@@ -34,10 +23,10 @@ export class Image extends Component<IImageComponentProps, IImageComponentState>
 
   public render() {
     const { imageUrl } = this.state;
-    const { styles } = this.props;
+    const { styles, alt } = this.props;
 
     return (
-      <img style={styles} src={imageUrl} />
+      <img style={styles} src={imageUrl} alt={alt} />
     );
   }
 }

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { IQueryResponseProps } from '../../../types/query-response';
 import { Monaco } from '../common';
-import { Image } from '../common/image/Image';
+import { Image } from '../common';
 import './query-response.scss';
 
 class QueryResponse extends Component<IQueryResponseProps, {}> {
@@ -44,6 +44,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
               <Image
                 styles={{ padding: '10px' }}
                 body={body}
+                alt='profile image'
               />
               :
               <Monaco
