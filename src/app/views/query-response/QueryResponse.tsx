@@ -4,8 +4,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { IQueryResponseProps } from '../../../types/query-response';
-import { Monaco } from '../common';
-import { Image } from '../common';
+import { Image, Monaco } from '../common';
 import './query-response.scss';
 
 class QueryResponse extends Component<IQueryResponseProps, {}> {
