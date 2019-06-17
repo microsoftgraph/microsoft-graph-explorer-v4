@@ -37,7 +37,10 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
             headerText={messages['Response Preview']}
           >
             {isImageResponse ?
-              <Image body={body} />
+              <Image
+                styles={{ padding: '10px' }}
+                body={body}
+              />
               :
               <Monaco
                 body={body}

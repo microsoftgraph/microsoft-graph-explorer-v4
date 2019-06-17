@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 interface IImageComponentProps {
   body: any;
+  styles: any;
 }
 
 interface IImageComponentState {
@@ -33,9 +34,10 @@ export class Image extends Component<IImageComponentProps, IImageComponentState>
 
   public render() {
     const { imageUrl } = this.state;
+    const { styles } = this.props;
 
     return (
-      <img src={imageUrl} />
+      <img style={styles} src={imageUrl} />
     );
   }
 }
