@@ -1,52 +1,76 @@
 @import '../../../styles/variables';
 
-.query-list {
-  cursor: pointer;
-  .ms-GroupHeader-title, i {
-      font-size: $fontSizeRegular;
-  }
-  .query-row {
-    text-align: center;
-    position: relative;
-    line-height: $gutter;
-    font-size: $fontSizeSmall;
+.sidebar {
 
-    .query-content {
-      float: left;
+  .search-box {
+    margin-top: $gutter;
+  }
+
+  .query-list {
+    cursor: pointer;
+    max-height: 850px;
+    min-height: 850px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .ms-GroupHeader-title,
+    i {
+      font-size: $fontSizeRegular;
     }
-    .badge {
-      display: inline-block;
-      font-weight: bold;
-      float: left;
-      font-size: $fontSizeExtraSmall;
-    }
-    .doc-link {
-      display: inline-block;
-      margin-top: -12%;
-    }
-    .pull-right {
-      float: right;
-    }
-    .pull-left {
-      float: left;
-    }
-    .badge-GET {
-      color: green;
-    }
-    .badge-POST {
-      color: orange;
-    }
-    .badge-PUT {
-      color: orangered;
-    }
-    .badge-PATCH {
-      color: blue;
-    }
-    .badge-DELETE {
-      color: red;
-    }
-    .row-disabled-true {
+
+    .row-disabled {
       cursor: not-allowed;
+    }
+
+    .query-row {
+      text-align: center;
+      position: relative;
+      line-height: $gutter;
+      font-size: $fontSizeSmall;
+
+      .query-content {
+        float: left;
+      }
+
+      .badge {
+        display: inline-block;
+        font-weight: bold;
+        float: left;
+        font-size: $fontSizeExtraSmall;
+      }
+
+      .doc-link {
+        display: inline-block;
+        margin-top: -12%;
+      }
+
+      .pull-right {
+        float: right;
+      }
+
+      .pull-left {
+        float: left;
+      }
+
+      .badge-GET {
+        color: green;
+      }
+
+      .badge-POST {
+        color: orange;
+      }
+
+      .badge-PUT {
+        color: orangered;
+      }
+
+      .badge-PATCH {
+        color: blue;
+      }
+
+      .badge-DELETE {
+        color: red;
+      }
     }
   }
 }

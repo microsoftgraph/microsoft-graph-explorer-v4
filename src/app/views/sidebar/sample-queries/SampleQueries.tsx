@@ -53,9 +53,9 @@ export class SampleQueries extends Component<any, any> {
                 selectionDisabled = true;
             }
             return (
-                <div className={'row-disabled-' + selectionDisabled} data-selection-disabled={selectionDisabled}>
-                    <DetailsRow {...props} className='query-row' />
-                </div>
+                <DetailsRow {...props}
+                    className={'query-row ' + (selectionDisabled ? 'row-disabled' : '')}
+                    data-selection-disabled={selectionDisabled} />
             );
         }
     };
@@ -161,11 +161,11 @@ export class SampleQueries extends Component<any, any> {
 
         return (
             <div>
-                <SearchBox placeholder='Search'
+                <SearchBox className='search-box' placeholder='Search'
                     onChange={(value) => this.searchValueChanged(value)}
                 />
                 <hr />
-                <DetailsList
+                <DetailsList  className='query-list'
                     items={groupedList.samples}
                     selectionMode={SelectionMode.none}
                     columns={columns} groups={groupedList.categories}

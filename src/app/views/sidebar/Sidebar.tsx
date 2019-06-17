@@ -6,13 +6,12 @@ import './sidebar.scss';
 
 export const Sidebar = () => {
     return (
-        <div className='query-list'>
+        <div className='sidebar'>
             <Pivot>
                 <PivotItem headerText='Sample Categories'>
                     <SampleQueries />
                 </PivotItem>
             </Pivot>
         </div>
-
     );
 };
