@@ -14,7 +14,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
   }
 
   public render() {
-    let body;
+    let body: any;
     let headers;
     let isImageResponse;
     // @ts-ignore
@@ -25,7 +25,9 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
       body = graphResponse.body;
       headers = graphResponse.headers;
 
-      isImageResponse = body && (body as any).body;
+      if (body) {
+        isImageResponse = body && body.body;
+      }
     }
 
     return (
