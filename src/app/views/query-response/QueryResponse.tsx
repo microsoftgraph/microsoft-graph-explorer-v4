@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { IQueryResponseProps } from '../../../types/query-response';
-import { Monaco } from '../common';
+import { Image, Monaco } from '../common';
 import './query-response.scss';
 
 class QueryResponse extends Component<IQueryResponseProps, {}> {
@@ -13,8 +13,9 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
   }
 
   public render() {
-    let body;
+    let body: any;
     let headers;
+    let isImageResponse;
     // @ts-ignore
     const { intl: { messages } } = this.props;
 
@@ -22,6 +23,14 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
     if (graphResponse) {
       body = graphResponse.body;
       headers = graphResponse.headers;
+
+      if (body) {
+        /**
+         * body.body is a getter propety for the Body mixin. It is used to access the ReadableStream property.
+         * https://developer.mozilla.org/en-US/docs/Web/API/Body/body
+         */
+        isImageResponse = body && body.body;
+      }
     }
 
     return (
@@ -30,9 +39,18 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
           <PivotItem
             headerText={messages['Response Preview']}
           >
-            <Monaco
-              body={body}
-            />
+            {isImageResponse ?
+              <Image
+                styles={{ padding: '10px' }}
+                body={body}
+                alt='profile image'
+              />
+              :
+              <Monaco
+                body={body}
+              />
+            }
+
           </PivotItem>
           <PivotItem
             headerText={messages['Response Headers']}
