@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { IQueryResponseProps } from '../../../types/query-response';
 import { Monaco } from '../common';
+import { Image } from '../common/image/Image';
 import './query-response.scss';
 
 class QueryResponse extends Component<IQueryResponseProps, {}> {
@@ -15,6 +16,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
   public render() {
     let body;
     let headers;
+    let isImageResponse;
     // @ts-ignore
     const { intl: { messages } } = this.props;
 
@@ -22,6 +24,8 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
     if (graphResponse) {
       body = graphResponse.body;
       headers = graphResponse.headers;
+
+      isImageResponse = body && (body as any).body;
     }
 
     return (
@@ -30,9 +34,14 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
           <PivotItem
             headerText={messages['Response Preview']}
           >
-            <Monaco
-              body={body}
-            />
+            {isImageResponse ?
+              <Image body={body} />
+              :
+              <Monaco
+                body={body}
+              />
+            }
+
           </PivotItem>
           <PivotItem
             headerText={messages['Response Headers']}
