@@ -26,6 +26,10 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
       headers = graphResponse.headers;
 
       if (body) {
+        /**
+         * body.body is a getter propety for the Body mixin. It is used to access the ReadableStream property.
+         * https://developer.mozilla.org/en-US/docs/Web/API/Body/body
+         */
         isImageResponse = body && body.body;
       }
     }
