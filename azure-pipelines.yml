@@ -34,7 +34,14 @@ steps:
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     inputs:
       azureSubscription: 'graph-explorer-arm'
-      WebAppName: 'graph-explorer'
+      WebAppName: 'graphTryIt-staging'
+      Package: '$(System.DefaultWorkingDirectory)'
+      GenerateWebConfig: true
+      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    inputs:
+      azureSubscription: 'graph-explorer-arm'
+      WebAppName: 'graphTryIt'
       Package: '$(System.DefaultWorkingDirectory)'
       GenerateWebConfig: true
       WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
