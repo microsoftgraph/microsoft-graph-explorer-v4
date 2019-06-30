@@ -38,6 +38,9 @@ steps:
       Package: '$(System.DefaultWorkingDirectory)'
       GenerateWebConfig: true
       WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
+    displayName: 'Staging deployment'
+
+  - task: AzureRmWebAppDeployment@3
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       azureSubscription: 'graph-explorer-arm'
@@ -45,4 +48,5 @@ steps:
       Package: '$(System.DefaultWorkingDirectory)'
       GenerateWebConfig: true
       WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
+    displayName: 'Production deployment'
 
