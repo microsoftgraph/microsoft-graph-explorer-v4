@@ -33,7 +33,7 @@ steps:
   - task: AzureRmWebAppDeployment@3
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     inputs:
-      azureSubscription: 'graph-explorer-arm'
+      azureSubscription: 'Graph-Explorer-ARM'
       WebAppName: 'graphTryIt-staging'
       Package: '$(System.DefaultWorkingDirectory)'
       GenerateWebConfig: true
@@ -43,7 +43,7 @@ steps:
   - task: AzureRmWebAppDeployment@3
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
-      azureSubscription: 'graph-explorer-arm'
+      azureSubscription: 'Graph-Explorer-ARM'
       WebAppName: 'graphTryIt'
       Package: '$(System.DefaultWorkingDirectory)'
       GenerateWebConfig: true
