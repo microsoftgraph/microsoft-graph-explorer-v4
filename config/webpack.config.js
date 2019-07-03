@@ -476,6 +476,9 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1
+      }),
       new MonacoWebpackPlugin(),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
