@@ -57,6 +57,10 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   }
 
   private receiveMessage = (event: MessageEvent): void => {
+    // tslint:disable
+    console.log(event.data);
+    console.log(window.location.pathname);
+    // tslint:enable
     const {
       verb,
       headerKey,
