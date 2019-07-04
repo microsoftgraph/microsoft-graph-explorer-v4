@@ -26,9 +26,9 @@ const renderItemColumn = (item: any, index: number | undefined, column: IColumn 
 };
 
 const columns = [
-  { key: 'key', name: 'Key', fieldName: 'name', minWidth: 100, maxWidth: 200 },
-  { key: 'value', name: 'Value', fieldName: 'value', minWidth: 100, maxWidth: 200 },
-  { key: 'button', name: '', fieldName: 'button', minWidth: 100, maxWidth: 200 }
+  { key: 'key', name: 'Key', fieldName: 'name', minWidth: 300, maxWidth: 400 },
+  { key: 'value', name: 'Value', fieldName: 'value', minWidth: 300, maxWidth: 400 },
+  { key: 'button', name: '', fieldName: 'button', minWidth: 200, maxWidth: 300 }
 ];
 
 const headerItems = (headers) ? headers.filter((header) => {
