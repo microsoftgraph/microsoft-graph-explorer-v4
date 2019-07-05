@@ -53,7 +53,11 @@ addLocaleData([
   ...zh,
 ]);
 
-loadGETheme('dark');
+const theme = new URLSearchParams(location.search).get('theme');
+
+if (theme) {
+  loadGETheme(theme);
+}
 
 const Root = () => {
   return (
