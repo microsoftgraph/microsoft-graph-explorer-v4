@@ -1,13 +1,34 @@
-import { IDropdownOption } from 'office-ui-fabric-react';
+import { IDropdownOption, loadTheme } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
+import { loadGETheme } from '../../../themes';
 import { IQuery, IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './query-runner.scss';
 import { QueryInputControl } from './QueryInput';
 import Request from './request/Request';
 import { parse } from './util/iframe-message-parser';
+
+interface IInitMessage {
+  /** Message type. */
+  type: 'init';
+  /** The user's locale on Docs. */
+  locale: string;
+  /** The current Docs theme. */
+  theme: 'light' | 'dark' | 'high-contrast';
+  /** The text within the Docs code block. */
+  code: string;
+  /** Data extracted from the permissions table. Will be null if Docs cannot locate the permissions table. */
+  permission: string[];
+}
+
+interface IThemeChangedMessage {
+  type: 'theme-changed';
+  theme: 'light' | 'dark' | 'high-contrast';
+}
+
 
 export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
   constructor(props: IQueryRunnerProps) {
@@ -37,8 +58,6 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
     // Notify host document that GE is ready to receive messages
     const hostOrigin = new URLSearchParams(location.search).get('host-origin');
-    // tslint:disable-next-line
-    console.log(hostOrigin);
     const originIsWhitelisted = hostOrigin && whiteListedDomains.indexOf(hostOrigin);
     if (hostOrigin && originIsWhitelisted) {
       window.parent.postMessage({ type: 'ready'}, hostOrigin);
@@ -46,6 +65,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
+
     const urlParams = new URLSearchParams(window.location.search);
     const base64Token = urlParams.getAll('query')[0];
 
@@ -74,9 +94,24 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   }
 
   private receiveMessage = (event: MessageEvent): void => {
+    const msgEvent: IThemeChangedMessage | IInitMessage = event.data;
+
+    switch (msgEvent.type) {
+      case 'init':
+        this.handleInitMsg(msgEvent);
+        break;
+      case 'theme-changed':
+        this.handleThemeChangeMsg(msgEvent);
+        break;
+      default:
+        return;
+    }
+  };
+
+  private handleInitMsg = (msg: IInitMessage) => {
     // tslint:disable
-    console.log(event.data);
-    console.log(window.location.pathname);
+    console.log(msg);
+    console.log(window.location.href);
     // tslint:enable
     const {
       verb,
@@ -84,11 +119,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       headerValue,
       url,
       body
-    }: any = parse(event.data);
-
-    // if (event.origin !== 'http://docs.microsoft.com' || event.source === null) {
-    //   return;
-    // }
+    }: any = parse(msg.code);
 
     const headers: any = {};
     headers[headerKey] = headerValue;
@@ -99,6 +130,10 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       sampleHeaders: headers,
       selectedVerb: verb,
     });
+  };
+
+  private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
+    loadGETheme(msg.theme);
   };
 
   private handleOnMethodChange = (option?: IDropdownOption) => {

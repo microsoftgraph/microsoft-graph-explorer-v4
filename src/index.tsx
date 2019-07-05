@@ -1,5 +1,4 @@
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
-import { loadTheme, styled } from 'office-ui-fabric-react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -19,7 +18,7 @@ import App from './app/views/App';
 import messages from './messages';
 import { store } from './store';
 import './styles/index.scss';
-import { dark, light } from './themes';
+import { loadGETheme } from './themes';
 
 initializeIcons();
 
@@ -54,7 +53,7 @@ addLocaleData([
   ...zh,
 ]);
 
-loadTheme(light);
+loadGETheme('dark');
 
 const Root = () => {
   return (
