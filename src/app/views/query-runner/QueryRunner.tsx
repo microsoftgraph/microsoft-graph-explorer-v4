@@ -109,10 +109,6 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   };
 
   private handleInitMsg = (msg: IInitMessage) => {
-    // tslint:disable
-    console.log(msg);
-    console.log(window.location.href);
-    // tslint:enable
     const {
       verb,
       headerKey,
