@@ -28,6 +28,23 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   }
 
   public componentDidMount = () => {
+    const whiteListedDomains = [
+      'https://docs.microsoft.com',
+      'https://review.docs.microsoft.com',
+      'https://ppe.docs.microsoft.com',
+      'https://docs.azure.cn'
+    ];
+
+    // Notify host document that GE is ready to receive messages
+    const hostOrigin = new URLSearchParams(location.search).get('host-origin');
+    // tslint:disable-next-line
+    console.log(hostOrigin);
+    const originIsWhitelisted = hostOrigin && whiteListedDomains.indexOf(hostOrigin);
+    if (hostOrigin && originIsWhitelisted) {
+      window.parent.postMessage({ type: 'ready'}, hostOrigin);
+    }
+
+    // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
     const urlParams = new URLSearchParams(window.location.search);
     const base64Token = urlParams.getAll('query')[0];
@@ -69,9 +86,9 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       body
     }: any = parse(event.data);
 
-    if (event.origin !== 'http://docs.microsoft.com' || event.source === null) {
-      return;
-    }
+    // if (event.origin !== 'http://docs.microsoft.com' || event.source === null) {
+    //   return;
+    // }
 
     const headers: any = {};
     headers[headerKey] = headerValue;
