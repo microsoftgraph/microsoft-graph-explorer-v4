@@ -99,6 +99,11 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       body
     }: any = parse(msg.code);
 
+    // tslint:disable
+    console.log(msg);
+    console.log(parse(msg.code));
+    // tslint:enable
+
     const headers: any = {};
     headers[headerKey] = headerValue;
 
