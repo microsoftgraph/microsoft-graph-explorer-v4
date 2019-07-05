@@ -1,8 +1,11 @@
-import { IDropdownOption } from 'office-ui-fabric-react';
+import { IDropdownOption, loadTheme } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { IQuery, IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runner';
+
+import { loadGETheme } from '../../../themes';
+import { IInitMessage, IQuery, IQueryRunnerProps,
+  IQueryRunnerState, IThemeChangedMessage } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './query-runner.scss';
 import { QueryInputControl } from './QueryInput';
@@ -37,8 +40,6 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
     // Notify host document that GE is ready to receive messages
     const hostOrigin = new URLSearchParams(location.search).get('host-origin');
-    // tslint:disable-next-line
-    console.log(hostOrigin);
     const originIsWhitelisted = hostOrigin && whiteListedDomains.indexOf(hostOrigin);
     if (hostOrigin && originIsWhitelisted) {
       window.parent.postMessage({ type: 'ready'}, hostOrigin);
@@ -46,6 +47,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
+
     const urlParams = new URLSearchParams(window.location.search);
     const base64Token = urlParams.getAll('query')[0];
 
@@ -74,21 +76,28 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   }
 
   private receiveMessage = (event: MessageEvent): void => {
-    // tslint:disable
-    console.log(event.data);
-    console.log(window.location.pathname);
-    // tslint:enable
+    const msgEvent: IThemeChangedMessage | IInitMessage = event.data;
+
+    switch (msgEvent.type) {
+      case 'init':
+        this.handleInitMsg(msgEvent);
+        break;
+      case 'theme-changed':
+        this.handleThemeChangeMsg(msgEvent);
+        break;
+      default:
+        return;
+    }
+  };
+
+  private handleInitMsg = (msg: IInitMessage) => {
     const {
       verb,
       headerKey,
       headerValue,
       url,
       body
-    }: any = parse(event.data);
-
-    // if (event.origin !== 'http://docs.microsoft.com' || event.source === null) {
-    //   return;
-    // }
+    }: any = parse(msg.code);
 
     const headers: any = {};
     headers[headerKey] = headerValue;
@@ -99,6 +108,10 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       sampleHeaders: headers,
       selectedVerb: verb,
     });
+  };
+
+  private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
+    loadGETheme(msg.theme);
   };
 
   private handleOnMethodChange = (option?: IDropdownOption) => {

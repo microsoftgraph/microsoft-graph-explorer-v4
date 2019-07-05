@@ -9,8 +9,8 @@ import zhCN from './zh-CN';
 
 export default {
   'en-US': enUS,
-  'de-De': deDe,
-  'es-Es': esES,
+  'de-DE': deDe,
+  'es-ES': esES,
   'fr-FR': frFR,
   'ja-JP': jaJP,
   'pt-BR': ptBR,
