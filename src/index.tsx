@@ -6,6 +6,7 @@ import { addLocaleData, IntlProvider } from 'react-intl';
 import br from 'react-intl/locale-data/br';
 import de from 'react-intl/locale-data/de';
 import en from 'react-intl/locale-data/en';
+import es from 'react-intl/locale-data/es';
 import fr from 'react-intl/locale-data/fr';
 import jp from 'react-intl/locale-data/ja';
 import ru from 'react-intl/locale-data/ru';
@@ -38,10 +39,18 @@ new HelloAuthProvider().getAccessToken()
   });
 
 
-
-const supportedLocales = ['de-DE', 'en-US', 'es-ES', 'fr-FR', 'ja-JP', 'pt-BR', 'ru-RU', 'zh-CN'];
-
-const locale = supportedLocales.indexOf(navigator.language) !== -1 ? navigator.language : 'en-US';
+const localeMap: any = {
+  'de-de': 'de-DE',
+  'en-us': 'en-US',
+  'es-es': 'es-ES',
+  'fr-fr': 'fr-FR',
+  'ja-jp': 'ja-JP',
+  'pt-br': 'pt-BR',
+  'ru-ru': 'ru-RU',
+  'zh-cn': 'zh-CN'
+};
+const hostDocumentLocale = new URLSearchParams(location.search).get('locale');
+const geLocale = hostDocumentLocale && localeMap[hostDocumentLocale];
 
 addLocaleData([
   ...br,
@@ -51,18 +60,20 @@ addLocaleData([
   ...jp,
   ...ru,
   ...zh,
+  ...es,
 ]);
 
-const theme = new URLSearchParams(location.search).get('theme');
 
+const theme = new URLSearchParams(location.search).get('theme');
 if (theme) {
   loadGETheme(theme);
 }
 
+
 const Root = () => {
   return (
     <Provider store={appState}>
-      <IntlProvider locale={locale} messages={(messages as {[key: string]: object})[locale]}>
+      <IntlProvider locale={geLocale} messages={(messages as {[key: string]: object})[geLocale]}>
         <App />
       </IntlProvider>
     </Provider>
