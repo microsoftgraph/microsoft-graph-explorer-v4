@@ -4,31 +4,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { loadGETheme } from '../../../themes';
-import { IQuery, IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runner';
+import { IInitMessage, IQuery, IQueryRunnerProps,
+  IQueryRunnerState, IThemeChangedMessage } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './query-runner.scss';
 import { QueryInputControl } from './QueryInput';
 import Request from './request/Request';
 import { parse } from './util/iframe-message-parser';
-
-interface IInitMessage {
-  /** Message type. */
-  type: 'init';
-  /** The user's locale on Docs. */
-  locale: string;
-  /** The current Docs theme. */
-  theme: 'light' | 'dark' | 'high-contrast';
-  /** The text within the Docs code block. */
-  code: string;
-  /** Data extracted from the permissions table. Will be null if Docs cannot locate the permissions table. */
-  permission: string[];
-}
-
-interface IThemeChangedMessage {
-  type: 'theme-changed';
-  theme: 'light' | 'dark' | 'high-contrast';
-}
-
 
 export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
   constructor(props: IQueryRunnerProps) {
