@@ -43,11 +43,12 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     const originIsWhitelisted = hostOrigin && whiteListedDomains.indexOf(hostOrigin) !== -1;
     // tslint:disable-next-line
     console.log(originIsWhitelisted);
-    // @ts-ignore
-    window.parent.postMessage({ type: 'ready'}, hostOrigin);
-    // if (hostOrigin && originIsWhitelisted) {
-    //   window.parent.postMessage({ type: 'ready'}, hostOrigin);
-    // }
+
+    if (hostOrigin && originIsWhitelisted) {
+      // tslint:disable-next-line
+      console.log('Notifying host');
+      window.parent.postMessage({ type: 'ready'}, hostOrigin);
+    }
 
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
