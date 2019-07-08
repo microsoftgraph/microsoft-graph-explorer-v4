@@ -1,3 +1,5 @@
+import { headersAdded } from '../../../services/reducers/request-headers-reducers';
+
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
@@ -18,8 +20,8 @@ function isUrl(word: string): boolean {
  * Observe that it is preceded by a newline followed by curly braces. We use these properties to
  * start extracting the body from the request snippet. When a newline is followed by a curly brace
  * we know that we have encountered they body section of the request snippet.
- * 
- * @param payload 
+ *
+ * @param payload
  */
 function extractBody(payload: string): string {
   const NEWLINE = /\n/;
@@ -34,7 +36,7 @@ function extractBody(payload: string): string {
 
     /**
      * If the previous character is a new line and the current character is an opening brace
-     * then the body part of the snippet payload has been encountered. We read the body and 
+     * then the body part of the snippet payload has been encountered. We read the body and
      * return it.
      */
     if (previousCharIsNewLine) {
@@ -42,7 +44,7 @@ function extractBody(payload: string): string {
         let start = current;
 
         /**
-         * Since we know the body is the last part of the snippet payload, we start reading it from the first 
+         * Since we know the body is the last part of the snippet payload, we start reading it from the first
          * open curly brace to the end of the payload.
          */
         while (start < payload.length) {
@@ -88,27 +90,24 @@ function extractHeaders(payload: string): object[] {
     }
 
     if (newlineCount === 2) {
-      while (true) {
-
-        for (let n = positionOfSecondNewLine + 1; n < payload.length; n++) {
-          const char = payload[n];
-          const nextChar = payload[n + 1];
-          const isDelimeter =  NEWLINE.test(char);
+      for (let n = positionOfSecondNewLine + 1; n < payload.length; n++) {
+        const char = payload[n];
+        const nextChar = payload[n + 1];
+        const isDelimeter = NEWLINE.test(char);
 
 
-          word += char;
-          if (isDelimeter) {
-            const spl = word.trim().split(':');
+        word += char;
+        if (isDelimeter) {
+          const spl = word.trim().split(':');
 
-            header[spl[0]] = spl[1].trim();
-            headers.push(header);
-            header = {};
-            word = '';
-          }
+          header[spl[0]] = spl[1].trim();
+          headers.push(header);
+          header = {};
+          word = '';
+        }
 
-          if (NEWLINE.test(char) && SPACE.test(nextChar)) {
-            return headers;
-          }
+        if (NEWLINE.test(char) && SPACE.test(nextChar)) {
+          return headers;
         }
       }
     }
@@ -118,7 +117,7 @@ function extractHeaders(payload: string): object[] {
 
 /**
  * tokenize breaks down the snippet payload into the following tokens: verb, url, headerKey, headerValue & body.
- * @param payload 
+ * @param payload
  */
 function extractUrl(payload: string) {
   let word = '';
@@ -160,15 +159,22 @@ function extractUrl(payload: string) {
 }
 
 export function parse(httpRequestMessage: string) {
+  /**
+   * The parser expects the http request message to start and end with a new line character, however,
+   * the request message it receives does not have them. Hence, we prefix and suffix the httpRequestMessage
+   * with new line characters.
+   */
   const payload = '\n' + httpRequestMessage + '\n';
 
   const url = extractUrl(payload);
-  // const headers = [];
+  const headers = extractHeaders(payload);
   const body = extractBody(payload);
 
   const tokens = [...url, { body }];
 
-  return tokens.reduce((obj: object, item: object) => {
+  const result = tokens.reduce((obj: object, item: object) => {
     return { ...obj, ...item };
   }, {});
+
+  return { ...result, headers };
 }
