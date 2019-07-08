@@ -21,7 +21,7 @@ function isUrl(word: string): boolean {
  * 
  * @param payload 
  */
-export function extractBody(payload: string): string {
+function extractBody(payload: string): string {
   const NEWLINE = /\n/;
   const OPEN_BRACE = /{/;
   let current = 1;
@@ -69,7 +69,7 @@ export function extractBody(payload: string): string {
  *
  * @param payload
  */
-export function extractHeaders(payload: string): object[] {
+function extractHeaders(payload: string): object[] {
   const SPACE = /\s/;
   const NEWLINE = /\n/;
 
@@ -120,7 +120,7 @@ export function extractHeaders(payload: string): object[] {
  * tokenize breaks down the snippet payload into the following tokens: verb, url, headerKey, headerValue & body.
  * @param payload 
  */
-export function extractUrl(payload: string) {
+function extractUrl(payload: string) {
   let word = '';
   const result = [];
 
@@ -159,7 +159,9 @@ export function extractUrl(payload: string) {
   return result;
 }
 
-export function parse(payload: string) {
+export function parse(httpRequestMessage: string) {
+  const payload = '\n' + httpRequestMessage + '\n';
+
   const url = extractUrl(payload);
   const headers = extractHeaders(payload);
   const body = extractBody(payload);
