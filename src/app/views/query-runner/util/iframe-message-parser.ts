@@ -163,10 +163,10 @@ export function parse(httpRequestMessage: string) {
   const payload = '\n' + httpRequestMessage + '\n';
 
   const url = extractUrl(payload);
-  const headers = extractHeaders(payload);
+  // const headers = [];
   const body = extractBody(payload);
 
-  const tokens = [...url, ...headers, { body }];
+  const tokens = [...url, { body }];
 
   return tokens.reduce((obj: object, item: object) => {
     return { ...obj, ...item };
