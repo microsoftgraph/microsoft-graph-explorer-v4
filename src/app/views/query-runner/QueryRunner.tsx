@@ -96,28 +96,28 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   };
 
   private handleInitMsg = (msg: IInitMessage) => {
-    const {
-      verb,
-      headerKey,
-      headerValue,
-      url,
-      body
-    }: any = parse(msg.code);
+    // const {
+    //   verb,
+    //   headerKey,
+    //   headerValue,
+    //   url,
+    //   body
+    // }: any = parse(msg.code);
 
     // tslint:disable
     console.log(msg);
     console.log(parse(msg.code));
     // tslint:enable
 
-    const headers: any = {};
-    headers[headerKey] = headerValue;
+    // const headers: any = {};
+    // headers[headerKey] = headerValue;
 
-    this.setState({
-      sampleUrl: url,
-      sampleBody: body,
-      sampleHeaders: headers,
-      selectedVerb: verb,
-    });
+    // this.setState({
+    //   sampleUrl: url,
+    //   sampleBody: body,
+    //   sampleHeaders: headers,
+    //   selectedVerb: verb,
+    // });
   };
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
