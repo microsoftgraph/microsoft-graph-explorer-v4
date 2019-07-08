@@ -14,9 +14,8 @@ const Request = ({
         <Pivot>
           <PivotItem headerText='Request Body'>
             <Monaco
-                    body={undefined}
-                    onChange={(value) => handleOnEditorChange(value)} />
-                />
+              body={undefined}
+              onChange={(value) => handleOnEditorChange(value)} />
           </PivotItem>
           <PivotItem headerText='Request Headers'>
             <RequestHeaders />

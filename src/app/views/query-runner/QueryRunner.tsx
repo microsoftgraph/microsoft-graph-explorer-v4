@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { loadGETheme } from '../../../themes';
-import { IInitMessage, IQuery, IQueryRunnerProps,
-  IQueryRunnerState, IThemeChangedMessage } from '../../../types/query-runner';
+import {
+  IInitMessage, IQuery, IQueryRunnerProps,
+  IQueryRunnerState, IThemeChangedMessage
+} from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import './query-runner.scss';
 import { QueryInputControl } from './QueryInput';
@@ -47,7 +49,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     if (hostOrigin && originIsWhitelisted) {
       // tslint:disable-next-line
       console.log('Notifying host');
-      window.parent.postMessage({ type: 'ready'}, hostOrigin);
+      window.parent.postMessage({ type: 'ready' }, hostOrigin);
     }
 
     // Listens for messages from host document
