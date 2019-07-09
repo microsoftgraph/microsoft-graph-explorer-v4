@@ -9,6 +9,7 @@ const Request = ({
   sampleBody,
   handleOnEditorChange,
 }: IRequestComponent) => {
+  // tslint:disable-next-line
   console.log(sampleBody);
 
   return (
