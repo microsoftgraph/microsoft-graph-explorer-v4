@@ -6,23 +6,24 @@ import './request.scss';
 import RequestHeaders from './RequestHeaders';
 
 const Request = ({
-    handleOnEditorChange,
+  sampleBody,
+  handleOnEditorChange,
 }: IRequestComponent) => {
 
-    return (
-      <div className='request-editors'>
-        <Pivot>
-          <PivotItem headerText='Request Body'>
-            <Monaco
-              body={undefined}
-              onChange={(value) => handleOnEditorChange(value)} />
-          </PivotItem>
-          <PivotItem headerText='Request Headers'>
-            <RequestHeaders />
-          </PivotItem>
-        </Pivot>
-      </div>
-    );
-  };
+  return (
+    <div className='request-editors'>
+      <Pivot>
+        <PivotItem headerText='Request Body'>
+          <Monaco
+            body={sampleBody && JSON.parse(sampleBody)}
+            onChange={(value) => handleOnEditorChange(value)} />
+        </PivotItem>
+        <PivotItem headerText='Request Headers'>
+          <RequestHeaders />
+        </PivotItem>
+      </Pivot>
+    </div>
+  );
+};
 
 export default Request;

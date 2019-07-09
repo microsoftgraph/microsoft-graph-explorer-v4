@@ -11,10 +11,11 @@ export interface IRequestHeadersProps {
     };
     intl: {
         message: object;
-      };
+    };
 }
 
 export interface IRequestComponent {
+    sampleBody?: string;
     handleOnEditorChange: Function;
     headers?: Array<{ name: string; value: string; }>;
 }
