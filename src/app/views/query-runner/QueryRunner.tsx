@@ -117,7 +117,6 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       selectedVerb: verb,
     });
 
-    this.handleOnMethodChange(verb);
   };
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
@@ -168,8 +167,6 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     } = this.state;
 
     const { isLoadingData } = this.props;
-    // tslint:disable-next-line
-    console.log(selectedVerb);
 
     return (
       <div>

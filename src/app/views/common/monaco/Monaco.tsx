@@ -35,8 +35,7 @@ export function Monaco(props: IMonaco) {
   if (typeof body !== 'string') {
     body = JSON.stringify(body);
   }
-  // tslint:disable-next-line
-  console.log(body);
+
   return (
     <FocusZone disabled={true}>
       <div className='monaco-editor'>
