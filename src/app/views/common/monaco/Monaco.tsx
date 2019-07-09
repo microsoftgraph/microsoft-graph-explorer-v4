@@ -5,7 +5,7 @@ import MonacoEditor, { ChangeHandler } from 'react-monaco-editor';
 import './monaco.scss';
 
 interface IMonaco {
-  body: object|undefined;
+  body: null | string | undefined;
   onChange?: ChangeHandler | undefined;
 }
 
@@ -31,6 +31,7 @@ export function Monaco(props: IMonaco) {
   const currentTheme = getTheme();
   const isDark = currentTheme.palette.black === '#ffffff' ? true : false;
 
+  const isString = typeof body === 'string';
 
   return (
     <FocusZone disabled={true}>
@@ -38,7 +39,7 @@ export function Monaco(props: IMonaco) {
         <MonacoEditor
           width='800'
           height='300'
-          value={JSON.stringify(body)}
+          value={isString ? body : JSON.stringify(body)}
           language='json'
           options={{ lineNumbers: 'off', minimap: { enabled: false } }}
           editorDidMount={editorDidMount}

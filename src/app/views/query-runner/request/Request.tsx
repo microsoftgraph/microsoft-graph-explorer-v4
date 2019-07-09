@@ -10,12 +10,13 @@ const Request = ({
   handleOnEditorChange,
 }: IRequestComponent) => {
   console.log(sampleBody);
+
   return (
     <div className='request-editors'>
       <Pivot>
         <PivotItem headerText='Request Body'>
           <Monaco
-            body={sampleBody && JSON.parse(sampleBody)}
+            body={sampleBody}
             onChange={(value) => handleOnEditorChange(value)} />
         </PivotItem>
         <PivotItem headerText='Request Headers'>

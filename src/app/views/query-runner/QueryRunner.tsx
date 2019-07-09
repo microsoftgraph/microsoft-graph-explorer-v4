@@ -116,6 +116,8 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       sampleHeaders: headers,
       selectedVerb: verb,
     });
+
+    this.handleOnMethodChange(verb);
   };
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
@@ -166,6 +168,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     } = this.state;
 
     const { isLoadingData } = this.props;
+    console.log(selectedVerb);
 
     return (
       <div>
