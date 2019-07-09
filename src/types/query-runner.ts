@@ -18,6 +18,7 @@ export interface IQueryRunnerProps {
   headers: Array<{ name: string; value: string; }>;
   actions?: {
     runQuery: Function;
+    addRequestHeader: Function;
   };
 }
 

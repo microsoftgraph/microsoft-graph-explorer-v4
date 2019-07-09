@@ -9,6 +9,7 @@ import {
   IQueryRunnerState, IThemeChangedMessage
 } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
+import { addRequestHeader } from '../../services/actions/request-headers-action-creators';
 import './query-runner.scss';
 import { QueryInputControl } from './QueryInput';
 import Request from './request/Request';
@@ -105,18 +106,24 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       body
     }: any = parse(msg.code);
 
-    // tslint:disable
-    console.log(msg);
-    console.log(parse(msg.code));
-    // tslint:enable
-
     this.setState({
       sampleUrl: url,
       sampleBody: body,
-      sampleHeaders: headers,
       selectedVerb: verb,
     });
 
+    const { actions } = this.props;
+
+    if (actions) {
+      headers.forEach((header: any) => {
+        const requestHeader = {
+          name: Object.keys(header)[0],
+          value: Object.values(header)[0]
+        };
+
+        actions.addRequestHeader(requestHeader);
+      });
+    }
   };
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
@@ -188,7 +195,6 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
           <div className='col-sm-12 col-lg-12'>
             <Request
               sampleBody={sampleBody}
-              headers={sampleHeaders}
               handleOnEditorChange={this.handleOnEditorChange}
             />
           </div>
@@ -200,7 +206,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators(queryActionCreators, dispatch),
+    actions: bindActionCreators({ ...queryActionCreators, addRequestHeader }, dispatch),
   };
 }
 

@@ -8,10 +8,7 @@ import RequestHeaders from './RequestHeaders';
 const Request = ({
   sampleBody,
   handleOnEditorChange,
-  headers,
 }: IRequestComponent) => {
-  // tslint:disable-next-line
-  console.log(sampleBody);
 
   return (
     <div className='request-editors'>
@@ -22,9 +19,7 @@ const Request = ({
             onChange={(value) => handleOnEditorChange(value)} />
         </PivotItem>
         <PivotItem headerText='Request Headers'>
-          // @ts-ignore
           <RequestHeaders
-            headers={headers}
           />
         </PivotItem>
       </Pivot>

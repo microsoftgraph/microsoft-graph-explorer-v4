@@ -52,11 +52,8 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
         }];
       }
 
-      // tslint:disable-next-line
-      console.log(headers);
       const newHeaders = [header, ...headers];
-      // tslint:disable-next-line
-      console.log(newHeaders);
+
       this.setState({
         headerName: '',
         headerValue: '',
@@ -71,6 +68,9 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
   public render() {
     // @ts-ignore
     const { headers, intl: { messages } } = this.props;
+
+    // tslint:disable-next-line
+    console.log(headers);
 
     return (
       <div className='request-editor-control'>
