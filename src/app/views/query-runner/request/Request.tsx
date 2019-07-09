@@ -9,7 +9,7 @@ const Request = ({
   sampleBody,
   handleOnEditorChange,
 }: IRequestComponent) => {
-
+  console.log(sampleBody);
   return (
     <div className='request-editors'>
       <Pivot>
