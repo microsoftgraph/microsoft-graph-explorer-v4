@@ -115,14 +115,13 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     const { actions } = this.props;
 
     if (actions) {
-      headers.forEach((header: any) => {
-        const requestHeader = {
+      const requestHeadears = headers.map((header: any) => {
+        return {
           name: Object.keys(header)[0],
           value: Object.values(header)[0]
         };
-
-        actions.addRequestHeader(requestHeader);
       });
+      actions.addRequestHeader(requestHeadears);
     }
   };
 
