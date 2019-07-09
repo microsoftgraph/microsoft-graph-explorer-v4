@@ -28,7 +28,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       selectedVerb: 'GET',
       sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
       sampleBody: undefined,
-      sampleHeaders: {},
+      sampleHeaders: [],
     };
   }
 
@@ -164,6 +164,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       selectedVerb,
       sampleUrl,
       sampleBody,
+      sampleHeaders,
     } = this.state;
 
     const { isLoadingData } = this.props;
@@ -187,6 +188,7 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
           <div className='col-sm-12 col-lg-12'>
             <Request
               sampleBody={sampleBody}
+              headers={sampleHeaders}
               handleOnEditorChange={this.handleOnEditorChange}
             />
           </div>

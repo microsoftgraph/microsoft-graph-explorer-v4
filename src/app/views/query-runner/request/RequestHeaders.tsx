@@ -9,7 +9,7 @@ import * as headersActionCreators from '../../../services/actions/request-header
 import HeadersList from './HeadersList';
 
 class RequestHeaders extends Component<IRequestHeadersProps, any> {
-    constructor(props: any) {
+  constructor(props: any) {
     super(props);
     this.state = {
       headerName: '',
@@ -52,7 +52,11 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
         }];
       }
 
+      // tslint:disable-next-line
+      console.log(headers);
       const newHeaders = [header, ...headers];
+      // tslint:disable-next-line
+      console.log(newHeaders);
       this.setState({
         headerName: '',
         headerValue: '',
@@ -73,10 +77,10 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
         <div className='row headers-editor'>
           <div className='col-md-4 col-lg-4'>
             <TextField className='header-input'
-                placeholder={messages.Key}
-                value={this.state.headerName}
-                onChange={(event, name) => this.handleOnHeaderNameChange(name)}
-              />
+              placeholder={messages.Key}
+              value={this.state.headerName}
+              onChange={(event, name) => this.handleOnHeaderNameChange(name)}
+            />
           </div>
           <div className='col-md-4 col-lg-4'>
             <TextField
@@ -97,7 +101,7 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
         <hr />
         <HeadersList handleOnHeaderDelete={(event: any, header: any) => this.handleOnHeaderDelete(header)}
           headers={headers}
-          />
+        />
       </div>
     );
   }

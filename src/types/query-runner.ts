@@ -3,7 +3,7 @@ export interface IQueryRunnerState {
   selectedVerb: string;
   sampleUrl: string;
   sampleBody?: string;
-  sampleHeaders: object;
+  sampleHeaders: Array<{ name: string; value: string; }>;
 }
 
 export interface IQuery {
@@ -25,7 +25,7 @@ export interface IQueryInputControl {
   handleOnRunQuery: Function;
   handleOnMethodChange: Function;
   handleOnUrlChange: Function;
-  httpMethods: Array<{ key: string; text: string}>;
+  httpMethods: Array<{ key: string; text: string }>;
   selectedVerb: string;
   sampleUrl: string;
   submitting: boolean;

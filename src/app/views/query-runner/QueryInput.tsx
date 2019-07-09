@@ -13,8 +13,7 @@ export const QueryInputControl = ({
   sampleUrl,
   submitting,
 }: IQueryInputControl) => {
-  // tslint:disable-next-line
-  console.log(selectedVerb);
+
   return (
     <div className='row'>
       <div className='col-sm-2'>
