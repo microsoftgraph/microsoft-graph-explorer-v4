@@ -5,7 +5,7 @@ import MonacoEditor, { ChangeHandler } from 'react-monaco-editor';
 import './monaco.scss';
 
 interface IMonaco {
-  body: null | string | undefined;
+  body: object | string | undefined;
   onChange?: ChangeHandler | undefined;
 }
 
@@ -27,19 +27,23 @@ function formatDocument(editor: any) {
 
 export function Monaco(props: IMonaco) {
 
-  const { body, onChange } = props;
+  let { body } = props;
+  const { onChange } = props;
   const currentTheme = getTheme();
   const isDark = currentTheme.palette.black === '#ffffff' ? true : false;
 
-  const isString = typeof body === 'string';
-
+  if (typeof body !== 'string') {
+    body = JSON.stringify(body);
+  }
+  // tslint:disable-next-line
+  console.log(body);
   return (
     <FocusZone disabled={true}>
       <div className='monaco-editor'>
         <MonacoEditor
           width='800'
           height='300'
-          value={isString ? body : JSON.stringify(body)}
+          value={body}
           language='json'
           options={{ lineNumbers: 'off', minimap: { enabled: false } }}
           editorDidMount={editorDidMount}
