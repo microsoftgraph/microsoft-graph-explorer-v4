@@ -9,5 +9,8 @@ export const appStyles = (theme: ITheme) => {
       width: '100%',
       height: '100vh',
     },
+    tryItMessage: {
+      marginBottom: theme.spacing.s1
+    }
   };
 };
