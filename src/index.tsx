@@ -50,7 +50,7 @@ const localeMap: any = {
   'zh-cn': 'zh-CN'
 };
 const hostDocumentLocale = new URLSearchParams(location.search).get('locale');
-const geLocale = hostDocumentLocale && localeMap[hostDocumentLocale];
+const geLocale = hostDocumentLocale && localeMap[hostDocumentLocale] || 'en-US';
 
 addLocaleData([
   ...br,
