@@ -12,14 +12,15 @@ import jp from 'react-intl/locale-data/ja';
 import ru from 'react-intl/locale-data/ru';
 import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
-import { getAuthTokenSuccess } from './app/services/actions/auth-action-creators';
-import { HelloAuthProvider } from './app/services/graph-client/HelloAuthProvider';
 
+import { getAuthTokenSuccess, setGraphExplorerMode } from './app/services/actions/auth-action-creators';
+import { HelloAuthProvider } from './app/services/graph-client/HelloAuthProvider';
 import App from './app/views/App';
 import messages from './messages';
 import { store } from './store';
 import './styles/index.scss';
 import { loadGETheme } from './themes';
+import { Mode } from './types/action';
 
 initializeIcons();
 
@@ -69,11 +70,14 @@ if (theme) {
   loadGETheme(theme);
 }
 
+if (hostDocumentLocale) {
+  appState.dispatch(setGraphExplorerMode(Mode.TryIt));
+}
 
 const Root = () => {
   return (
     <Provider store={appState}>
-      <IntlProvider locale={geLocale} messages={(messages as {[key: string]: object})[geLocale]}>
+      <IntlProvider locale={geLocale} messages={(messages as { [key: string]: object })[geLocale]}>
         <App />
       </IntlProvider>
     </Provider>

@@ -1,6 +1,6 @@
-import { IAction } from '../../../types/action';
+import { IAction, Mode } from '../../../types/action';
 import { HelloAuthProvider } from '../graph-client/HelloAuthProvider';
-import { GET_AUTH_TOKEN_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
+import { GET_AUTH_TOKEN_SUCCESS, LOGOUT_SUCCESS, SET_GRAPH_EXPLORER_MODE_SUCCESS } from '../redux-constants';
 
 export function getAuthTokenSuccess(response: string): IAction {
   return {
@@ -22,3 +22,9 @@ export function signOut() {
   return (dispatch: Function) => dispatch(signOutSuccess(''));
 }
 
+export function setGraphExplorerMode(mode: Mode) {
+  return {
+    type: SET_GRAPH_EXPLORER_MODE_SUCCESS,
+    response: mode,
+  };
+}
