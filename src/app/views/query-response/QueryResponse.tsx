@@ -19,8 +19,8 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
     // @ts-ignore
     const { intl: { messages } } = this.props;
 
-    const { graphResponse } = this.props;
-    if (graphResponse) {
+    const { graphResponse, isLoginResponse } = this.props;
+    if (graphResponse && !isLoginResponse) {
       body = graphResponse.body;
       headers = graphResponse.headers;
 
@@ -68,6 +68,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 function mapStateToProps(state: IQueryResponseProps) {
   return {
     graphResponse: state.graphResponse,
+    isLoginResponse: state.isLoginResponse
   };
 }
 // @ts-ignore
