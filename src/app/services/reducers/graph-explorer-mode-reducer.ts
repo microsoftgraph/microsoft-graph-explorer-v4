@@ -1,15 +1,11 @@
 import { IAction, Mode } from '../../../types/action';
 import { SET_GRAPH_EXPLORER_MODE_SUCCESS } from '../redux-constants';
 
-export function graphExplorerMode(state = {}, action: IAction): Mode {
+export function graphExplorerMode(state = '', action: IAction): any {
   switch (action.type) {
     case SET_GRAPH_EXPLORER_MODE_SUCCESS:
-      if (action.response === Mode.TryIt) {
-        return Mode.TryIt;
-      } else {
-        return Mode.Complete;
-      }
+      return action.response;
     default:
-      return Mode.Complete;
+      return state;
   }
 }
