@@ -108,6 +108,16 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       selectedVerb: verb,
     });
 
+    /**
+     * We are delaying this by 1 second here so that we give Monaco's formatter time to initialize.
+     * If we don't put this delay, the body won't be formatted.
+     */
+    setTimeout(() => {
+      this.setState({
+        sampleBody: body
+      });
+    }, 1000);
+
     const { actions } = this.props;
 
     if (actions) {
