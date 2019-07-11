@@ -104,7 +104,6 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
     this.setState({
       sampleUrl: url,
-      sampleBody: body,
       selectedVerb: verb,
     });
 
