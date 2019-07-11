@@ -44,12 +44,8 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     // Notify host document that GE is ready to receive messages
     const hostOrigin = new URLSearchParams(location.search).get('host-origin');
     const originIsWhitelisted = hostOrigin && whiteListedDomains.indexOf(hostOrigin) !== -1;
-    // tslint:disable-next-line
-    console.log(originIsWhitelisted);
 
     if (hostOrigin && originIsWhitelisted) {
-      // tslint:disable-next-line
-      console.log('Notifying host');
       window.parent.postMessage({ type: 'ready' }, hostOrigin);
     }
 
