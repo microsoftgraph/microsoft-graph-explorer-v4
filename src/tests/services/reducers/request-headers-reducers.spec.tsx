@@ -1,4 +1,3 @@
-import { removeRequestHeader } from '../../../app/services/actions/request-headers-action-creators';
 import { headersAdded } from '../../../app/services/reducers/request-headers-reducers';
 import { HEADER_ADD_SUCCESS, HEADER_REMOVE_SUCCESS } from '../../../app/services/redux-constants';
 

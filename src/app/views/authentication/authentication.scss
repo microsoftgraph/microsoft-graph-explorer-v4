@@ -1,14 +1,13 @@
 @import '../../../styles/_variables.scss';
 
 .authentication-container {
-  margin-top: $gutter;
   justify-content: space-between;
   display: flex;
 
   .signIn-button {
     margin-bottom: $gutter;
   }
-  
+
   .profile {
     margin-bottom: $gutter;
     justify-content: space-between;

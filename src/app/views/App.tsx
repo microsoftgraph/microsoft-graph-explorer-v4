@@ -1,8 +1,9 @@
-import { classNamesFunction, FocusTrapZone, ITheme, MessageBar, MessageBarType, styled } from 'office-ui-fabric-react';
+import { FocusTrapZone, ITheme, MessageBar, MessageBarType, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { Mode } from '../../types/action';
 import { clearQueryError } from '../services/actions/error-action-creator';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
@@ -14,19 +15,20 @@ interface IAppProps {
   theme?: ITheme;
   styles?: object;
   error: object | null;
+  graphExplorerMode: Mode;
 }
 
 class App extends Component<IAppProps> {
   public render() {
     const classes = classNames(this.props);
-    const { error, actions }: any = this.props;
+    const { graphExplorerMode, error, actions }: any = this.props;
 
     return (
       <FocusTrapZone>
         <div className={`container-fluid ${classes.app}`}>
           <div className='row'>
             <div className='col-sm-12 col-lg-8 offset-lg-2'>
-              <Authentication />
+              {graphExplorerMode === Mode.Complete && <Authentication />}
               <QueryRunner />
               {error &&
                 <MessageBar
@@ -48,7 +50,8 @@ class App extends Component<IAppProps> {
 
 const mapStateToProps = (state: any) => {
   return {
-    error: state.queryRunnerError
+    error: state.queryRunnerError,
+    graphExplorerMode: state.graphExplorerMode
   };
 };
 
