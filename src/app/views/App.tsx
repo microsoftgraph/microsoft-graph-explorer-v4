@@ -29,20 +29,6 @@ class App extends Component<IAppProps> {
           <div className='row'>
             <div className='col-sm-12 col-lg-8 offset-lg-2'>
               {graphExplorerMode === Mode.Complete && <Authentication />}
-              {graphExplorerMode === Mode.TryIt &&
-                <MessageBar
-                  messageBarType={MessageBarType.warning}
-                  isMultiline={true}
-                  className={classes.tryItMessage}
-                >
-                  <p>This part of Graph Explorer is still under construction and
-                     doesn't support POST, PUT, PATCH and DELETE requests</p>
-                  <p>
-                    Use the complete <a href='https://developer.microsoft.com/en-us/graph/graph-explorer'
-                      target='_blank'>Graph Explorer</a>
-                  </p>
-                </MessageBar>
-              }
               <QueryRunner />
               {error &&
                 <MessageBar
