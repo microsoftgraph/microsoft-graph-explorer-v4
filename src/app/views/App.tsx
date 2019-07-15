@@ -37,7 +37,7 @@ class App extends Component<IAppProps> {
                 >
                   <p>
                     To experience more functionalities, please access the main Graph Explorer site
-                    <a href='https://developer.microsoft.com/en-us/graph/graph-explorer'>here</a>
+                    <a href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>here</a>
                   </p>
                 </MessageBar>
               </div>
