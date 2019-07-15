@@ -195,14 +195,16 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
             />
           </div>
         </div>
-        <div className='row'>
-          <div className='col-sm-12 col-lg-12'>
-            <Request
-              sampleBody={sampleBody}
-              handleOnEditorChange={this.handleOnEditorChange}
-            />
+        {selectedVerb !== 'GET' &&
+          <div className='row'>
+            <div className='col-sm-12 col-lg-12'>
+              <Request
+                sampleBody={sampleBody}
+                handleOnEditorChange={this.handleOnEditorChange}
+              />
+            </div>
           </div>
-        </div>
+        }
       </div>
     );
   }
