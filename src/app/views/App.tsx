@@ -29,6 +29,19 @@ class App extends Component<IAppProps> {
           <div className='row'>
             <div className='col-sm-12 col-lg-8 offset-lg-2'>
               {graphExplorerMode === Mode.Complete && <Authentication />}
+              {graphExplorerMode === Mode.TryIt &&
+              <div style={{ marginBottom: 8 }}>
+                <MessageBar
+                  messageBarType={MessageBarType.warning}
+                  isMultiline={false}
+                >
+                  <p>
+                    To experience more functionalities, please access the main Graph Explorer site
+                    <a href='https://developer.microsoft.com/en-us/graph/graph-explorer'>here</a>
+                  </p>
+                </MessageBar>
+              </div>
+              }
               <QueryRunner />
               {error &&
                 <MessageBar
