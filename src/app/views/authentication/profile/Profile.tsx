@@ -72,25 +72,10 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
     public render() {
         const { user } = this.state;
-        const displayImage = (user.profileImageUrl !== '');
-        let imageArea;
-        if (displayImage) {
-            imageArea =
-            <img className='user-image' src={user.profileImageUrl} />
-            ;
-        } else {
-            const initials = this.getInitials(user.displayName);
-            imageArea =
-                <span className='initials'>
-                    {initials}
-                </span>
-            ;
-        }
-
         return (
             <div className='profile'>
                 <div className='user-imageArea'>
-                    {imageArea}
+                    <img className='user-image' src={user.profileImageUrl} />
                 </div>
                 <div className='user-details'>
                     <span className='user-name'>{user.displayName}</span>

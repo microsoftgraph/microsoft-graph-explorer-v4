@@ -16,7 +16,7 @@
 
     .user-details {
       margin-top: $radius;
-      margin-left: $gutter;
+      margin-left: 20px;
       .user-email {
         font-size: $fontSizeSmall;
       }
@@ -35,7 +35,6 @@
       z-index: 0;
       width: 100%;
       left: -14%;
-      background-color: blueviolet;
       vertical-align: middle;
       text-align: center;
 
