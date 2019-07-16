@@ -120,40 +120,20 @@ function extractHeaders(payload: string): object[] {
  * @param payload
  */
 function extractUrl(payload: string) {
-  let word = '';
-  const result = [];
+  const result: object[] = [];
+  const sampleUrl = payload.split('\n')[1];
+  const domain = 'https://graph.microsoft.com/v1.0';
 
-  // tslint:disable-next-line
-  for (let i = 0; i < payload.length; i++) {
-    const char = payload[i];
+  const urlParts = sampleUrl.split(' ');
+  const verb = urlParts[0];
+  let url = urlParts[1];
 
-    const SPACE = /\s/;
-    const NEWLINE = /\n/;
-
-    /**
-     * The tokens [verb, url] are separated by either a space or a newline.
-     * When we encounter a delimeter we check what type of token it is and push it into result.
-     */
-    const isDelimeter = SPACE.test(char) || NEWLINE.test(char);
-    word += char;
-
-    if (isDelimeter) {
-
-      word = word.trim();
-      if (isVerb(word)) {
-        result.push({
-          verb: word
-        });
-      }
-
-      if (isUrl(word)) {
-        result.push({
-          url: word
-        });
-      }
-      word = '';
-    }
+  const hasDomain = url.includes(domain);
+  if (!hasDomain) {
+    url = domain + url;
   }
+
+  result.push({ verb, url });
 
   return result;
 }
