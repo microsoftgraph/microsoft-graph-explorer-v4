@@ -3,14 +3,6 @@ import { headersAdded } from '../../../services/reducers/request-headers-reducer
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-function isVerb(word: string): boolean {
-  return ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].indexOf(word) !== -1;
-}
-
-function isUrl(word: string): boolean {
-  return word.includes('https');
-}
-
 /**
  * In the request snippet the body is represented in the format below.
  * `
@@ -152,7 +144,7 @@ export function parse(httpRequestMessage: string) {
    * the request message it receives does not have them. Hence, we prefix and suffix the httpRequestMessage
    * with new line characters.
    */
-  const payload = '\n' + httpRequestMessage + '\n';
+  const payload = `\n ${httpRequestMessage}\n `;
 
   const url = extractUrl(payload);
   const headers = extractHeaders(payload);
