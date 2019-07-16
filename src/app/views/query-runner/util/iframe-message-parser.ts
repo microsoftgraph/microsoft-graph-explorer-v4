@@ -116,18 +116,26 @@ function extractHeaders(payload: string): object[] {
 }
 
 /**
- * tokenize breaks down the snippet payload into the following tokens: verb, url, headerKey, headerValue & body.
+ * Extracts the url from a payload
+ *
  * @param payload
+ * Has the form \n payload \n
  */
-function extractUrl(payload: string) {
+function extractUrl(payload: string): object[] {
   const result: object[] = [];
+
+  // The payload has the form \n sampleUrl \n. After splitting it on new lines the sampleUrl will be at index 1
+  // of the resulting array
   const sampleUrl = payload.split('\n')[1];
   const domain = 'https://graph.microsoft.com/v1.0';
 
+  // The sampleUrl has the format VERB URL, after splitting it on the space character the VERB will be at index 0
+  // and the URL at index 1
   const urlParts = sampleUrl.split(' ');
   const verb = urlParts[0];
   let url = urlParts[1];
 
+  // Some urls do not have a domain only the path. For such urls we append the domain.
   const hasDomain = url.includes(domain);
   if (!hasDomain) {
     url = domain + url;
