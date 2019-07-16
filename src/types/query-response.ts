@@ -7,4 +7,5 @@ export interface IQueryResponseProps {
   intl: {
     message: object;
   };
+  verb: string;
 }

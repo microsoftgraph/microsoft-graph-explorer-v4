@@ -107,6 +107,9 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       selectedVerb: verb,
     });
 
+    // Sets selected verb in App Component
+    this.props.onSelectVerb(verb);
+
     /**
      * We are delaying this by 1 second here so that we give Monaco's formatter time to initialize.
      * If we don't put this delay, the body won't be formatted.
@@ -137,6 +140,9 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   private handleOnMethodChange = (option?: IDropdownOption) => {
     if (option !== undefined) {
       this.setState({ selectedVerb: option.text });
+
+      // Sets selected verb in App Component
+      this.props.onSelectVerb(option.text);
     }
   };
 
@@ -175,7 +181,6 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       selectedVerb,
       sampleUrl,
       sampleBody,
-      sampleHeaders,
     } = this.state;
 
     const { isLoadingData } = this.props;
@@ -195,14 +200,16 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
             />
           </div>
         </div>
-        <div className='row'>
-          <div className='col-sm-12 col-lg-12'>
-            <Request
-              sampleBody={sampleBody}
-              handleOnEditorChange={this.handleOnEditorChange}
-            />
+        {selectedVerb !== 'GET' &&
+          <div className='row'>
+            <div className='col-sm-12 col-lg-12'>
+              <Request
+                sampleBody={sampleBody}
+                handleOnEditorChange={this.handleOnEditorChange}
+              />
+            </div>
           </div>
-        </div>
+        }
       </div>
     );
   }

@@ -10,8 +10,6 @@ const Request = ({
   handleOnEditorChange,
 }: IRequestComponent) => {
 
-  // tslint:disable-next-line
-  console.log(sampleBody);
   return (
     <div className='request-editors'>
       <Pivot>

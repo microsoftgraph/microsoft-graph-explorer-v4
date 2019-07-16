@@ -16,6 +16,7 @@ export interface IQuery {
 export interface IQueryRunnerProps {
   isLoadingData: boolean;
   headers: Array<{ name: string; value: string; }>;
+  onSelectVerb: Function;
   actions?: {
     runQuery: Function;
     addRequestHeader: Function;

@@ -18,7 +18,24 @@ interface IAppProps {
   graphExplorerMode: Mode;
 }
 
-class App extends Component<IAppProps> {
+interface IAppState {
+  selectedVerb: string;
+}
+
+class App extends Component<IAppProps, IAppState> {
+  constructor(props: IAppProps) {
+    super(props);
+    this.state = {
+      selectedVerb: 'GET'
+    };
+  }
+
+  public handleSelectVerb = (verb: string) => {
+    this.setState({
+      selectedVerb: verb
+    });
+  }
+
   public render() {
     const classes = classNames(this.props);
     const { graphExplorerMode, error, actions }: any = this.props;
@@ -30,19 +47,21 @@ class App extends Component<IAppProps> {
             <div className='col-sm-12 col-lg-8 offset-lg-2'>
               {graphExplorerMode === Mode.Complete && <Authentication />}
               {graphExplorerMode === Mode.TryIt &&
-              <div style={{ marginBottom: 8 }}>
-                <MessageBar
-                  messageBarType={MessageBarType.warning}
-                  isMultiline={false}
-                >
-                  <p>
-                    To experience more functionalities, please access the main Graph Explorer site
+                <div style={{ marginBottom: 8 }}>
+                  <MessageBar
+                    messageBarType={MessageBarType.warning}
+                    isMultiline={false}
+                  >
+                    <p>
+                      To experience more functionalities, please access the main Graph Explorer site
                     <a href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>here</a>
-                  </p>
-                </MessageBar>
-              </div>
+                    </p>
+                  </MessageBar>
+                </div>
               }
-              <QueryRunner />
+              <QueryRunner
+                onSelectVerb={this.handleSelectVerb}
+              />
               {error &&
                 <MessageBar
                   messageBarType={MessageBarType.error}
@@ -52,7 +71,12 @@ class App extends Component<IAppProps> {
                   {`${error.statusText} - ${error.status}`}
                 </MessageBar>
               }
-              <QueryResponse />
+              {
+                // @ts-ignore
+                <QueryResponse
+                  verb={this.state.selectedVerb}
+                />
+              }
             </div>
           </div>
         </div>
