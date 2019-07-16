@@ -16,7 +16,7 @@ Prefer: A-timezone
         { 'Content-type': 'application/json' },
         { 'Prefer': 'A-timezone' }
       ],
-      body: '{ "name": "Volunteer" }'
+      body: '{ "name": "Volunteer" } '
     });
   });
 
@@ -35,7 +35,7 @@ Prefer: A-timezone
         { 'Content-type': 'application/json' },
         { 'Prefer': 'A-timezone' }
       ],
-      body: '{ "name": "Volunteer" }'
+      body: '{ "name": "Volunteer" } '
     });
   });
 });

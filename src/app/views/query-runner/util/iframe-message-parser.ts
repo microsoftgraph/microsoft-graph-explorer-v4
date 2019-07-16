@@ -144,7 +144,7 @@ export function parse(httpRequestMessage: string) {
    * the request message it receives does not have them. Hence, we prefix and suffix the httpRequestMessage
    * with new line characters.
    */
-  const payload = `\n ${httpRequestMessage}\n `;
+  const payload = `\n${httpRequestMessage}\n `;
 
   const url = extractUrl(payload);
   const headers = extractHeaders(payload);
