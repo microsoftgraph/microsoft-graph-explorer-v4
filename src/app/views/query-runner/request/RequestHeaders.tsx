@@ -92,6 +92,7 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
           </div>
           <div className='col-md-4 col-lg-4'>
             <PrimaryButton
+              className='header-input-button'
               onClick={() => this.handleOnHeaderAdd()}>
               <FormattedMessage id='Add' />
             </PrimaryButton>
