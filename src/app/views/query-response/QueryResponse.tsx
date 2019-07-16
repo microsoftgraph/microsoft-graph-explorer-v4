@@ -16,8 +16,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
     let body: any;
     let headers;
     let isImageResponse;
-    // @ts-ignore
-    const { intl: { messages } } = this.props;
+    const { intl: { messages }, verb }: any = this.props;
 
     const { graphResponse } = this.props;
     if (graphResponse) {
@@ -48,6 +47,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
               :
               <Monaco
                 body={body}
+                verb={verb}
               />
             }
           </PivotItem>
@@ -69,6 +69,7 @@ function mapStateToProps(state: IQueryResponseProps) {
     graphResponse: state.graphResponse,
   };
 }
+
 // @ts-ignore
 const WithIntl = injectIntl(QueryResponse);
 export default connect(mapStateToProps)(WithIntl);

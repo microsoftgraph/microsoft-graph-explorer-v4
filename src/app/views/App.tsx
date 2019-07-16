@@ -40,8 +40,6 @@ class App extends Component<IAppProps, IAppState> {
     const classes = classNames(this.props);
     const { graphExplorerMode, error, actions }: any = this.props;
 
-    console.log(this.state.selectedVerb);
-
     return (
       <FocusTrapZone>
         <div className={`container-fluid ${classes.app}`}>
@@ -73,7 +71,12 @@ class App extends Component<IAppProps, IAppState> {
                   {`${error.statusText} - ${error.status}`}
                 </MessageBar>
               }
-              <QueryResponse />
+              {
+                // @ts-ignore
+                <QueryResponse
+                  verb={this.state.selectedVerb}
+                />
+              }
             </div>
           </div>
         </div>
