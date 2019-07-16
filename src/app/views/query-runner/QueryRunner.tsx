@@ -175,7 +175,6 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
       selectedVerb,
       sampleUrl,
       sampleBody,
-      sampleHeaders,
     } = this.state;
 
     const { isLoadingData } = this.props;

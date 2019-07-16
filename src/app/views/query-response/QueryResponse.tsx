@@ -50,7 +50,6 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
                 body={body}
               />
             }
-
           </PivotItem>
           <PivotItem
             headerText={messages['Response Headers']}
