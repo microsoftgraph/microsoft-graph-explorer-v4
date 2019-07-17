@@ -57,6 +57,19 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
     };
 
+    public getInitials = (name: string) => {
+        let initials = '';
+        if (name) {
+            const names = name.split(' ');
+            initials = names[0].substring(0, 1).toUpperCase();
+
+            if (names.length > 1) {
+                initials += names[names.length - 1].substring(0, 1).toUpperCase();
+            }
+        }
+        return initials;
+    };
+
     public render() {
         const { user } = this.state;
         return (
@@ -64,9 +77,11 @@ export class Profile extends Component<IProfileProps, IProfileState> {
                 <div className='user-imageArea'>
                     <img className='user-image' src={user.profileImageUrl} />
                 </div>
-                <span className='user-name'>{user.displayName}</span>
-                <br />
-                <span className='user-email'>{user.emailAddress}</span>
+                <div className='user-details'>
+                    <span className='user-name'>{user.displayName}</span>
+                    <br />
+                    <span className='user-email'>{user.emailAddress}</span>
+                </div>
             </div>
         );
     }

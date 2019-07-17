@@ -14,6 +14,17 @@
     position: relative;
     height: 48px;
 
+    .user-details {
+      margin-top: $radius;
+      margin-left: 20px;
+      .user-email {
+        font-size: $fontSizeSmall;
+      }
+      .user-name {
+        font-size: $fontSizeRegular;
+        font-weight: bold;
+      }
+    }
 
     .user-imageArea {
       position: absolute;
@@ -24,16 +35,23 @@
       z-index: 0;
       width: 100%;
       left: -14%;
+      vertical-align: middle;
+      text-align: center;
 
       .user-image {
-        position: absolute;
+        position: relative;
         z-index: 10;
         width: 100%;
       }
 
-      .user-email {
-        font-size: $fontSizeSmall;
+      .initials {
+        color: #fff;
+        position: relative;
+        line-height: 48px;
+        font-size: $fontSizeLarge;
+        font-weight: bold;
       }
+
     }
   }
 }
