@@ -74,28 +74,30 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
 
     return (
       <div className='request-editor-control'>
-        <div className='row headers-editor'>
-          <div className='col-md-4 col-lg-4'>
-            <TextField className='header-input'
-              placeholder={messages.Key}
-              value={this.state.headerName}
-              onChange={(event, name) => this.handleOnHeaderNameChange(name)}
-            />
-          </div>
-          <div className='col-md-4 col-lg-4'>
-            <TextField
-              className='header-input'
-              placeholder={messages.Value}
-              value={this.state.headerValue}
-              onChange={(event, value) => this.handleOnHeaderValueChange(value)}
-            />
-          </div>
-          <div className='col-md-4 col-lg-4'>
-            <PrimaryButton
-              className='header-input-button'
-              onClick={() => this.handleOnHeaderAdd()}>
-              <FormattedMessage id='Add' />
-            </PrimaryButton>
+        <div className='row'>
+          <div className='headers-editor'>
+            <div>
+              <TextField className='header-input'
+                placeholder={messages.Key}
+                value={this.state.headerName}
+                onChange={(event, name) => this.handleOnHeaderNameChange(name)}
+              />
+            </div>
+            <div>
+              <TextField
+                className='header-input'
+                placeholder={messages.Value}
+                value={this.state.headerValue}
+                onChange={(event, value) => this.handleOnHeaderValueChange(value)}
+              />
+            </div>
+            <div>
+              <PrimaryButton
+                className='header-input-button'
+                onClick={() => this.handleOnHeaderAdd()}>
+                <FormattedMessage id='Add' />
+              </PrimaryButton>
+            </div>
           </div>
         </div>
         <br />

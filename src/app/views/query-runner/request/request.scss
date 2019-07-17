@@ -19,17 +19,19 @@
         text-align: center;
         position: relative;
 
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+
         .headers-editor {
-            display: inline-flex;
-            width: 100%;
-            line-height: 5px;
+            display: flex;
+            width: '100%';
+            align-items: center;
+            justify-content: space-around;
 
             .header-input {
-                width:95%;
-            }
-
-            .header-input-button {
-                float: left;
+                width:450px;
             }
 
             .remove-header-btn {
@@ -54,7 +56,4 @@
             }
         }
     }
-
-
-
 }
