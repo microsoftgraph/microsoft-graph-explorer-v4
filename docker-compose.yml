@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+
+  microsoft-graph:
+    container_name: microsoft-graph
+    image: microsoft-graph
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/microsoft-graph-explorer'
+      - '/microsoft-graph-explorer/node_modules'
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=dev
