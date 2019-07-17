@@ -45,7 +45,7 @@ class App extends Component<IAppProps, IAppState> {
         <div className={`container-fluid ${classes.app}`}>
           <div className='row'>
             <div className='col-sm-12 col-lg-8 offset-lg-2'>
-              {graphExplorerMode === Mode.Complete && <Authentication />}
+            {graphExplorerMode === Mode.Complete && <Authentication />}
               {graphExplorerMode === Mode.TryIt &&
                 <div style={{ marginBottom: 8 }}>
                   <MessageBar
@@ -59,9 +59,11 @@ class App extends Component<IAppProps, IAppState> {
                   </MessageBar>
                 </div>
               }
-              <QueryRunner
-                onSelectVerb={this.handleSelectVerb}
-              />
+              <div style={{ marginBottom: 8 }}>
+                <QueryRunner
+                  onSelectVerb={this.handleSelectVerb}
+                  />
+              </div>
               {error &&
                 <MessageBar
                   messageBarType={MessageBarType.error}
