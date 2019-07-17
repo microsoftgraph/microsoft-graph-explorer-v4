@@ -19,19 +19,11 @@
         text-align: center;
         position: relative;
 
-        .row {
-            display: flex;
-            justify-content: center;
-        }
-
         .headers-editor {
-            display: flex;
-            width: '100%';
-            align-items: center;
-            justify-content: space-around;
+            padding: $gutter;
 
-            .header-input {
-                width:450px;
+            .header-input-button {
+                width: 100%;
             }
 
             .remove-header-btn {
