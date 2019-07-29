@@ -28,6 +28,7 @@ export const QueryInputControl = ({
       <div className='col-sm-8'>
         <TextField
           ariaLabel='Query Sample Input'
+          role='Query Sample Input'
           placeholder='Query Sample'
           onChange={(event, value) => handleOnUrlChange(value)}
           defaultValue={sampleUrl}
@@ -37,6 +38,8 @@ export const QueryInputControl = ({
         <SubmitButton
           className='run-query-button'
           text='Run Query'
+          role='Run query button'
+          ariaLabel='Run query button'
           handleOnClick={() => handleOnRunQuery()}
           submitting={submitting}
         />

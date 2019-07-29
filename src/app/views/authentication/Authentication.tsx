@@ -35,6 +35,8 @@ export class Authentication extends Component<IAuthenticationProps> {
       <div className='authentication-container'>
         <SubmitButton
           className='signIn-button'
+          ariaLabel='Sign-in button'
+          role='Sign-in button'
           text={buttonLabel}
           handleOnClick={tokenPresent ? this.signOut : this.signIn}
           submitting={false}
