@@ -18,6 +18,7 @@ export const QueryInputControl = ({
     <div className='row'>
       <div className='col-sm-2'>
         <Dropdown
+          ariaLabel='Query sample option'
           defaultSelectedKey={selectedVerb}
           selectedKey={selectedVerb}
           options={httpMethods}

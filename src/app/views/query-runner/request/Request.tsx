@@ -13,14 +13,13 @@ const Request = ({
   return (
     <div className='request-editors'>
       <Pivot>
-        <PivotItem headerText='Request Body'>
-          <Monaco
+        <PivotItem headerText='Request Body' ariaLabel='Request Body'>
+        <Monaco
             body={sampleBody}
             onChange={(value) => handleOnEditorChange(value)} />
         </PivotItem>
-        <PivotItem headerText='Request Headers'>
-          <RequestHeaders
-          />
+        <PivotItem headerText='Request Headers' ariaLabel='Request Headers'>
+          <RequestHeaders />
         </PivotItem>
       </Pivot>
     </div>
