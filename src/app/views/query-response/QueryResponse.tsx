@@ -37,6 +37,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
         <Pivot className='pivot-response'>
           <PivotItem
             ariaLabel='Response Preview'
+            role='Response Preview'
             headerText={messages['Response Preview']}
           >
             {isImageResponse ? (
@@ -51,6 +52,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
           </PivotItem>
           <PivotItem
             ariaLabel='Response Headers'
+            role='Response Headers'
             headerText={messages['Response Headers']}
           >
             <Monaco body={headers} />
