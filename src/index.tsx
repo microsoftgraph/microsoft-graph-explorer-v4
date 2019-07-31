@@ -29,6 +29,12 @@ const appState = store({
   isLoadingData: false,
   queryRunnerError: null,
   headersAdded: [{ name: '', value: '' }],
+  sampleQuery: {
+    sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
+    selectedVerb: 'GET',
+    sampleBody: undefined,
+    sampleHeaders: {},
+  },
 });
 
 
