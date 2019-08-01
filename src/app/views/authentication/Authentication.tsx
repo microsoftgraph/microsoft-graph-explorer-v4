@@ -7,7 +7,7 @@ import * as authActionCreators from '../../services/actions/auth-action-creators
 import { HelloAuthProvider } from '../../services/graph-client/HelloAuthProvider';
 import SubmitButton from '../common/submit-button/SubmitButton';
 import './authentication.scss';
-import Profile  from './profile/Profile';
+import Profile from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps> {
   constructor(props: IAuthenticationProps) {
@@ -15,8 +15,7 @@ export class Authentication extends Component<IAuthenticationProps> {
   }
 
   public signIn = async (): Promise<void> => {
-    new HelloAuthProvider()
-      .signIn();
+    new HelloAuthProvider().signIn();
   };
 
   public signOut = (): void => {
@@ -36,12 +35,12 @@ export class Authentication extends Component<IAuthenticationProps> {
         <SubmitButton
           className='signIn-button'
           ariaLabel='Sign-in button'
-          role='Sign-in button'
+          role='button'
           text={buttonLabel}
           handleOnClick={tokenPresent ? this.signOut : this.signIn}
           submitting={false}
         />
-        {tokenPresent && <Profile/>}
+        {tokenPresent && <Profile />}
       </div>
     );
   }
@@ -55,11 +54,11 @@ function mapStateToProps(state: any) {
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators(authActionCreators, dispatch),
+    actions: bindActionCreators(authActionCreators, dispatch)
   };
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Authentication);
