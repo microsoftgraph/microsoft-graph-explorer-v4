@@ -16,7 +16,10 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
     let body: any;
     let headers;
     let isImageResponse;
-    const { intl: { messages }, verb }: any = this.props;
+    const {
+      intl: { messages },
+      verb
+    }: any = this.props;
 
     const { graphResponse } = this.props;
     if (graphResponse) {
@@ -36,27 +39,24 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
       <div className='query-response'>
         <Pivot className='pivot-response'>
           <PivotItem
+            ariaLabel='Response Preview'
             headerText={messages['Response Preview']}
           >
-            {isImageResponse ?
+            {isImageResponse ? (
               <Image
                 styles={{ padding: '10px' }}
                 body={body}
                 alt='profile image'
               />
-              :
-              <Monaco
-                body={body}
-                verb={verb}
-              />
-            }
+            ) : (
+              <Monaco body={body} verb={verb} />
+            )}
           </PivotItem>
           <PivotItem
+            ariaLabel='Response Headers'
             headerText={messages['Response Headers']}
           >
-            <Monaco
-              body={headers}
-            />
+            <Monaco body={headers} />
           </PivotItem>
         </Pivot>
       </div>
@@ -66,7 +66,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 
 function mapStateToProps(state: IQueryResponseProps) {
   return {
-    graphResponse: state.graphResponse,
+    graphResponse: state.graphResponse
   };
 }
 

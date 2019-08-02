@@ -11,13 +11,14 @@ export const QueryInputControl = ({
   httpMethods,
   selectedVerb,
   sampleUrl,
-  submitting,
+  submitting
 }: IQueryInputControl) => {
-
   return (
     <div className='row'>
       <div className='col-sm-2'>
         <Dropdown
+          ariaLabel='Query sample option'
+          role='listbox'
           defaultSelectedKey={selectedVerb}
           selectedKey={selectedVerb}
           options={httpMethods}
@@ -27,6 +28,7 @@ export const QueryInputControl = ({
       <div className='col-sm-8'>
         <TextField
           ariaLabel='Query Sample Input'
+          role='textbox'
           placeholder='Query Sample'
           onChange={(event, value) => handleOnUrlChange(value)}
           defaultValue={sampleUrl}
@@ -36,6 +38,8 @@ export const QueryInputControl = ({
         <SubmitButton
           className='run-query-button'
           text='Run Query'
+          role='button'
+          ariaLabel='Run query button'
           handleOnClick={() => handleOnRunQuery()}
           submitting={submitting}
         />
