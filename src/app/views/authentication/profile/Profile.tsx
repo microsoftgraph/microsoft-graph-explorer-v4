@@ -25,9 +25,9 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
     const jsonUserInfo = actions
       ? await actions.runQuery({
-          selectedVerb: 'GET',
-          sampleUrl: USER_INFO_URL
-        })
+        selectedVerb: 'GET',
+        sampleUrl: USER_INFO_URL
+      }, true)
       : null;
 
     const userInfo = jsonUserInfo.response.body;
@@ -37,9 +37,9 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     try {
       const userPicture = actions
         ? await actions.runQuery({
-            selectedVerb: 'GET',
-            sampleUrl: USER_PICTURE_URL
-          })
+          selectedVerb: 'GET',
+          sampleUrl: USER_PICTURE_URL
+        }, true)
         : null;
 
       if (userPicture) {

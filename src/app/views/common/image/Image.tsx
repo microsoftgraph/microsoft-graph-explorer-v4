@@ -13,11 +13,14 @@ export class Image extends Component<IImageComponentProps, IImageComponentState>
     const { body } = this.props;
 
     if (body) {
-      const buffer = await body.clone().arrayBuffer();
-      const blob = new Blob([buffer], { type: 'image/jpeg' });
-      const imageUrl = URL.createObjectURL(blob);
-
-      this.setState({ imageUrl });
+      try {
+        const buffer = await body.clone().arrayBuffer();
+        const blob = new Blob([buffer], { type: 'image/jpeg' });
+        const imageUrl = URL.createObjectURL(blob);
+        this.setState({ imageUrl });
+      } catch (error) {
+        return null;
+      }
     }
   }
 

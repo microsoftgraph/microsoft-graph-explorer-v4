@@ -27,6 +27,7 @@ initializeIcons();
 const appState = store({
   authToken: '',
   isLoadingData: false,
+  isProfileRequest: false,
   queryRunnerError: null,
   headersAdded: [{ name: '', value: '' }],
 });

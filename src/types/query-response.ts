@@ -4,6 +4,7 @@ export interface IQueryResponseProps {
     body: object;
     headers: object;
   };
+  isProfileRequest?: boolean;
   intl: {
     message: object;
   };
