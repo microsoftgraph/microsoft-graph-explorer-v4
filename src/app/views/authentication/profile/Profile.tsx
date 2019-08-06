@@ -80,13 +80,13 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const { user } = this.state;
     return (
       <div className='profile'>
-        <div className='user-imageArea'>
+        {user.profileImageUrl !== '' && <div className='user-imageArea'>
           <img
             className='user-image'
             alt={user.displayName}
             src={user.profileImageUrl}
           />
-        </div>
+        </div>}
         <div className='user-details'>
           <span className='user-name'>{user.displayName}</span>
           <br />
