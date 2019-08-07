@@ -8,9 +8,9 @@ export function runQuery(query: IQuery): Function {
     const respHeaders: any = {};
 
     if (tokenPresent) {
-      return authenticatedRequest(dispatch, query).then(async (response: any) => {
+      return authenticatedRequest(dispatch, query).then(async (response: Response) => {
 
-        if (response.ok) {
+        if (response && response.ok) {
           const result = await parseResponse(response, respHeaders);
           return dispatch(
             queryResponse({

@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import { runQuery } from '../../../app/services/actions/query-action-creators';
-import { QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../../../app/services/redux-constants';
+import { QUERY_GRAPH_ERROR, QUERY_GRAPH_RUNNING, QUERY_GRAPH_SUCCESS } from '../../../app/services/redux-constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -20,13 +20,13 @@ describe('actions', () => {
     const expectedActions = [
       {
         type: 'QUERY_GRAPH_RUNNING',
-        response:  true
+        response: true
       },
       {
         type: QUERY_GRAPH_SUCCESS,
         response: {
-          body: { displayName: 'Megan Bowen', ok: true},
-          headers: { 'content-type': 'application-json'},
+          body: { displayName: 'Megan Bowen', ok: true },
+          headers: { 'content-type': 'application-json' },
         },
       },
     ];
@@ -49,15 +49,15 @@ describe('actions', () => {
     const expectedActions = [
       {
         response: true,
-        type: 'QUERY_GRAPH_RUNNING'
+        type: QUERY_GRAPH_RUNNING
       },
       {
         response:
-          {
-            ok: false
-          },
-          type: 'QUERY_GRAPH_ERROR'
-        }
+        {
+          ok: false
+        },
+        type: QUERY_GRAPH_ERROR
+      }
     ];
 
     const store = mockStore({ graphResponse: '' });

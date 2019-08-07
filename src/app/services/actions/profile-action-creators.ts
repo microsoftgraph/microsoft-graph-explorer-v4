@@ -20,9 +20,9 @@ export function getProfileInfo(query: IQuery): Function {
   return (dispatch: Function) => {
     const respHeaders: any = {};
 
-    return authenticatedRequest(dispatch, query).then(async (response: any) => {
+    return authenticatedRequest(dispatch, query).then(async (response: Response) => {
 
-      if (response.ok) {
+      if (response && response.ok) {
         const json = await parseResponse(response, respHeaders);
         return dispatch(
           profileRequestSuccess({
