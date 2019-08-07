@@ -5,7 +5,6 @@ import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryResponseError } from './error-action-creator';
-import { profileRequestSuccess } from './profile-action-creators';
 import { queryRunningStatus } from './query-loading-action-creators';
 
 export function queryResponse(response: object): IAction {
@@ -61,8 +60,8 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
     });
 }
 
-export function authenticatedRequest(dispatch: Function, query: IQuery, profileRequest: boolean) {
-  return makeRequest(query.selectedVerb, profileRequest)(dispatch, query);
+export function authenticatedRequest(dispatch: Function, query: IQuery) {
+  return makeRequest(query.selectedVerb)(dispatch, query);
 }
 
 export function isImageResponse(contentType: string) {
@@ -84,7 +83,7 @@ export function getContentType(headers: Headers) {
   }
 }
 
-function parseResponse(resp: any, respHeaders: any): Promise<any> {
+export function parseResponse(resp: any, respHeaders: any): Promise<any> {
   resp.headers.forEach((val: any, key: any) => {
     respHeaders[key] = val;
   });
@@ -97,9 +96,8 @@ function parseResponse(resp: any, respHeaders: any): Promise<any> {
   }
 }
 
-const makeRequest = (httpVerb: string, profileRequest: boolean): Function => {
+const makeRequest = (httpVerb: string): Function => {
   return async (dispatch: Function, query: IQuery) => {
-    const respHeaders: any = {};
     const sampleHeaders: any = {};
 
     if (query.sampleHeaders) {
@@ -139,17 +137,6 @@ const makeRequest = (httpVerb: string, profileRequest: boolean): Function => {
         return;
     }
 
-    dispatch(profileRequestSuccess(profileRequest));
-
-    if (response.ok) {
-      const json = await parseResponse(response, respHeaders);
-      return dispatch(
-        queryResponse({
-          body: json,
-          headers: respHeaders
-        }),
-      );
-    }
-    return dispatch(queryResponseError(response));
+    return Promise.resolve(response);
   };
 };

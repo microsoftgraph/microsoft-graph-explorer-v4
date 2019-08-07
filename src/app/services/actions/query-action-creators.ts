@@ -1,12 +1,26 @@
 import { IQuery } from '../../../types/query-runner';
-import { anonymousRequest, authenticatedRequest } from './query-action-creator-util';
+import { queryResponseError } from './error-action-creator';
+import { anonymousRequest, authenticatedRequest, parseResponse, queryResponse } from './query-action-creator-util';
 
-export function runQuery(query: IQuery, profileRequest: boolean): Function {
+export function runQuery(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = getState().authToken;
+    const respHeaders: any = {};
 
     if (tokenPresent) {
-      return authenticatedRequest(dispatch, query, profileRequest);
+      return authenticatedRequest(dispatch, query).then(async (response: any) => {
+
+        if (response.ok) {
+          const result = await parseResponse(response, respHeaders);
+          return dispatch(
+            queryResponse({
+              body: result,
+              headers: respHeaders
+            }),
+          );
+        }
+        return dispatch(queryResponseError(response));
+      });
     }
 
     return anonymousRequest(dispatch, query);
