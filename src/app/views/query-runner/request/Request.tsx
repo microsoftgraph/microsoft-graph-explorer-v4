@@ -12,7 +12,7 @@ export class Request extends Component<IRequestComponent, any> {
     super(props);
   }
 
-  public render () {
+  public render() {
 
     const {
       handleOnEditorChange,

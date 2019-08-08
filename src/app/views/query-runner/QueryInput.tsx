@@ -25,6 +25,8 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       <div className='row'>
         <div className='col-sm-2'>
           <Dropdown
+            ariaLabel='Query sample option'
+            role='listbox'
             selectedKey={selectedVerb}
             options={httpMethods}
             onChange={(event, method) => handleOnMethodChange(method)}
@@ -33,6 +35,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
         <div className='col-sm-8'>
           <TextField
             ariaLabel='Query Sample Input'
+            role='textbox'
             placeholder='Query Sample'
             onChange={(event, value) => handleOnUrlChange(value)}
             defaultValue={sampleUrl}
@@ -42,6 +45,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
           <SubmitButton
             className='run-query-button'
             text='Run Query'
+            role='button'
             handleOnClick={() => handleOnRunQuery()}
             submitting={submitting}
           />

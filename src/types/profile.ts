@@ -1,7 +1,7 @@
 export interface IProfileProps {
     actions?: {
-        runQuery: Function;
-      };
+        getProfileInfo: Function;
+    };
 }
 
 export interface IProfileState {

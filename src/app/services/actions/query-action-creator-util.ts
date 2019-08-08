@@ -40,7 +40,7 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
   dispatch(queryRunningStatus(true));
 
   return fetch(graphUrl, options)
-  .then((resp) => {
+    .then((resp) => {
       if (resp.ok) {
         return parseResponse(resp, respHeaders);
       }
@@ -83,7 +83,7 @@ export function getContentType(headers: Headers) {
   }
 }
 
-function parseResponse(resp: any, respHeaders: any): Promise<any> {
+export function parseResponse(resp: any, respHeaders: any): Promise<any> {
   resp.headers.forEach((val: any, key: any) => {
     respHeaders[key] = val;
   });
@@ -98,7 +98,6 @@ function parseResponse(resp: any, respHeaders: any): Promise<any> {
 
 const makeRequest = (httpVerb: string): Function => {
   return async (dispatch: Function, query: IQuery) => {
-    const respHeaders: any = {};
     const sampleHeaders: any = {};
 
     if (query.sampleHeaders) {
@@ -138,15 +137,6 @@ const makeRequest = (httpVerb: string): Function => {
         return;
     }
 
-    if (response.ok) {
-      const json = await parseResponse(response, respHeaders);
-      return dispatch(
-        queryResponse({
-          body: json,
-          headers: respHeaders
-        }),
-      );
-    }
-    return dispatch(queryResponseError(response));
+    return Promise.resolve(response);
   };
 };
