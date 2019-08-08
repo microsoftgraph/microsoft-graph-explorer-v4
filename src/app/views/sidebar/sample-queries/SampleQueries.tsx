@@ -168,7 +168,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
                 <div className={classes.groupHeaderRow}>
                     <IconButton
                         className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
-                        iconProps={{ iconName: props.group!.isCollapsed ? 'ChevronDownSmall' : 'ChevronRightSmall' }}
+                        iconProps={{ iconName: props.group!.isCollapsed ? 'ChevronRightSmall' : 'ChevronDownSmall' }}
                         title={props.group!.isCollapsed ?
                             `Expand ${props.group!.name}` : `Collapse ${props.group!.name}`}
                         ariaLabel='expand collapse group'
