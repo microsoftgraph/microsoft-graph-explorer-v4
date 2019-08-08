@@ -2,9 +2,10 @@ import { Dropdown, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { IQueryInputProps } from '../../../types/query-runner';
 import SubmitButton from '../common/submit-button/SubmitButton';
 
-export class QueryInput extends Component<any, any> {
+export class QueryInput extends Component<IQueryInputProps, any> {
   constructor(props: any) {
     super(props);
   }

@@ -22,7 +22,7 @@ export interface IQueryRunnerProps {
   };
 }
 
-export interface IQueryInputControl {
+export interface IQueryInputProps {
   handleOnRunQuery: Function;
   handleOnMethodChange: Function;
   handleOnUrlChange: Function;

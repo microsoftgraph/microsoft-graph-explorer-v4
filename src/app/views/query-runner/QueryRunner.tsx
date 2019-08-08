@@ -6,7 +6,6 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { loadGETheme } from '../../../themes';
 import {
   IInitMessage,
-  IQuery,
   IQueryRunnerProps,
   IQueryRunnerState,
   IThemeChangedMessage
@@ -22,7 +21,7 @@ import { parse } from './util/iframe-message-parser';
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
-> {
+  > {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
@@ -198,8 +197,6 @@ export class QueryRunner extends Component<
               handleOnMethodChange={this.handleOnMethodChange}
               handleOnUrlChange={this.handleOnUrlChange}
               httpMethods={httpMethods}
-              selectedVerb={sampleQuery.selectedVerb}
-              sampleUrl={sampleQuery.sampleUrl}
               submitting={isLoadingData}
             />
           </div>
