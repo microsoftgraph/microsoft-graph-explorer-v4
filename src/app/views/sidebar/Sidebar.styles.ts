@@ -78,8 +78,7 @@ export const sidebarStyles = (theme: ITheme) => {
       fontSize: FontSizes.small,
     },
     docLink: {
-      marginTop: '-12%',
-      position: 'absolute' as 'absolute',
+      marginTop: '-8%',
     },
 
   };
