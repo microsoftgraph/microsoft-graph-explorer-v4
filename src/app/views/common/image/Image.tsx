@@ -16,7 +16,6 @@ export class Image extends Component<IImageComponentProps, IImageComponentState>
       const buffer = await body.clone().arrayBuffer();
       const blob = new Blob([buffer], { type: 'image/jpeg' });
       const imageUrl = URL.createObjectURL(blob);
-
       this.setState({ imageUrl });
     }
   }

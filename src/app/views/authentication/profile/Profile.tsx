@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
-import * as queryActionCreators from '../../../services/actions/query-action-creators';
+import * as profileActionCreators from '../../../services/actions/profile-action-creators';
 import {
   USER_INFO_URL,
   USER_PICTURE_URL
@@ -24,10 +24,10 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const { actions } = this.props;
 
     const jsonUserInfo = actions
-      ? await actions.runQuery({
-          selectedVerb: 'GET',
-          sampleUrl: USER_INFO_URL
-        })
+      ? await actions.getProfileInfo({
+        selectedVerb: 'GET',
+        sampleUrl: USER_INFO_URL
+      })
       : null;
 
     const userInfo = jsonUserInfo.response.body;
@@ -36,10 +36,10 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
     try {
       const userPicture = actions
-        ? await actions.runQuery({
-            selectedVerb: 'GET',
-            sampleUrl: USER_PICTURE_URL
-          })
+        ? await actions.getProfileInfo({
+          selectedVerb: 'GET',
+          sampleUrl: USER_PICTURE_URL
+        })
         : null;
 
       if (userPicture) {
@@ -80,13 +80,13 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const { user } = this.state;
     return (
       <div className='profile'>
-        <div className='user-imageArea'>
+        {user.profileImageUrl !== '' && <div className='user-imageArea'>
           <img
             className='user-image'
             alt={user.displayName}
             src={user.profileImageUrl}
           />
-        </div>
+        </div>}
         <div className='user-details'>
           <span className='user-name'>{user.displayName}</span>
           <br />
@@ -99,7 +99,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators(queryActionCreators, dispatch)
+    actions: bindActionCreators(profileActionCreators, dispatch)
   };
 }
 

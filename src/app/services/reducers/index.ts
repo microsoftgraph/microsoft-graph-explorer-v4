@@ -12,5 +12,5 @@ export default combineReducers({
   isLoadingData,
   queryRunnerError,
   headersAdded,
-  graphExplorerMode,
+  graphExplorerMode
 });
