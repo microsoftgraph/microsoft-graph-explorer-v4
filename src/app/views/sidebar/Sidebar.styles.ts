@@ -17,33 +17,70 @@ export const sidebarStyles = (theme: ITheme) => {
       overflowX: 'hidden' as 'hidden',
       fontSize: FontSizes.medium,
     },
-    rowDisabled: {
-      cursor: 'not-allowed',
+    pullLeft: {
+      float: 'left'
     },
+
+    /* Group Headers */
+
+    groupHeader: {
+      fontSize: FontSizes.medium,
+      position: 'relative' as 'relative',
+    },
+    groupHeaderRow: {
+      lineHeight: '50px',
+      fontSize: FontSizes.medium,
+      textAlign: 'left',
+      paddingTop: '0px',
+      paddingRight: '4px',
+      paddingBottom: '0px',
+      paddingLeft: '4px',
+    },
+    groupHeaderRowIcon: {
+      marginTop: '2%',
+      fontSize: FontSizes.small,
+      fontWeight: FontWeights.light
+    },
+    groupTitle: {
+      fontSize: FontSizes.medium,
+      fontWeight: FontWeights.semibold,
+      cursor: 'pointer',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      outline: '0px',
+    },
+    headerCount: {
+      paddingTop: '0px',
+      paddingRight: '4px',
+      paddingBottom: '0px',
+      paddingLeft: '4px',
+    },
+
+    /* Row */
+
     queryRow: {
       textAlign: 'center',
-      position: 'relative' as 'relative',
-      lineHeight: '10px',
+      verticalAlign: 'middle',
+      position: 'absolute' as 'absolute',
+      lineHeight: '100%',
+      width: '80%',
       fontSize: FontSizes.medium,
     },
     queryContent: {
       float: 'left',
     },
+    rowDisabled: {
+      cursor: 'not-allowed',
+    },
     badge: {
-      display: 'inline-block' as 'inline-block',
       float: 'left',
       fontWeight: FontWeights.bold,
       fontSize: FontSizes.small,
     },
     docLink: {
-      display: 'inline-block' as 'inline-block',
-      marginTop: '-12%'
+      marginTop: '-12%',
+      position: 'absolute' as 'absolute',
     },
-    pullRight: {
-      float: 'right'
-    },
-    pullLeft: {
-      float: 'left'
-    }
+
   };
 };
