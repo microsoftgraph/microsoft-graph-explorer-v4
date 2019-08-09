@@ -16,6 +16,7 @@ export const sidebarStyles = (theme: ITheme) => {
       overflowY: 'auto' as 'auto',
       overflowX: 'hidden' as 'hidden',
       fontSize: FontSizes.medium,
+      background: 'inherit' as 'inherit'
     },
     pullLeft: {
       float: 'left'
@@ -59,6 +60,7 @@ export const sidebarStyles = (theme: ITheme) => {
     /* Row */
 
     queryRow: {
+      background: 'inherit' as 'inherit',
       textAlign: 'center',
       verticalAlign: 'middle',
       position: 'absolute' as 'absolute',
@@ -81,5 +83,10 @@ export const sidebarStyles = (theme: ITheme) => {
       marginTop: '-8%',
     },
 
+
+    /* Column */
+    columnHeader: {
+      background: 'green'
+    }
   };
 };

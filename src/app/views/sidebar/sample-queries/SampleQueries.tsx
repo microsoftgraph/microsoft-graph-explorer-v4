@@ -133,7 +133,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           >{item.method}</span>;
 
         default:
-          return <span className={classes.queryContent}><FormattedMessage id={queryContent} /></span>;
+          return <span title={queryContent} className={classes.queryContent}>
+            <FormattedMessage id={queryContent} />
+          </span>;
       }
     }
   };
@@ -192,7 +194,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const columns = [
       { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
       { key: 'category', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: 200 },
-      { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20 },
+      { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20, },
     ];
 
     const selection = new Selection({

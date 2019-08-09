@@ -11,6 +11,9 @@ export const appStyles = (theme: ITheme) => {
     },
     tryItMessage: {
       marginBottom: theme.spacing.s1
+    },
+    sidebar: {
+      background: theme.palette.neutralLighter
     }
   };
 };
