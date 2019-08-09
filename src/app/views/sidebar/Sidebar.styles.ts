@@ -83,10 +83,5 @@ export const sidebarStyles = (theme: ITheme) => {
       marginTop: '-8%',
     },
 
-
-    /* Column */
-    columnHeader: {
-      background: 'green'
-    }
   };
 };
