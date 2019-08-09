@@ -13,7 +13,7 @@ export const appStyles = (theme: ITheme) => {
       marginBottom: theme.spacing.s1
     },
     sidebar: {
-      background: theme.palette.neutralLighter
+      borderRight: 'solid 1px ' + theme.palette.neutralLighter
     }
   };
 };
