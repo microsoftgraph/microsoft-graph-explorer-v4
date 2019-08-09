@@ -1,6 +1,6 @@
 import {
-    DetailsList, DetailsRow, getTheme, IColumn, IconButton,
-    ITheme, SearchBox, Selection, SelectionMode, styled
+  DetailsList, DetailsRow, getTheme, IColumn, IconButton,
+  ITheme, SearchBox, Selection, SelectionMode, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -16,244 +16,244 @@ import { sidebarStyles } from '../Sidebar.styles';
 import { queries } from './queries';
 
 interface ISampleQueriesProps {
-    theme?: ITheme;
-    styles?: object;
-    tokenPresent: boolean;
-    actions?: {
-        runQuery: Function;
-        setSampleQuery: Function;
-    };
+  theme?: ITheme;
+  styles?: object;
+  tokenPresent: boolean;
+  actions?: {
+    runQuery: Function;
+    setSampleQuery: Function;
+  };
 }
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
-    constructor(props: ISampleQueriesProps) {
-        super(props);
-        this.state = {
-            samples: queries,
-            groupedList: {
-                samples: queries,
-                categories: [],
-            }
-        };
+  constructor(props: ISampleQueriesProps) {
+    super(props);
+    this.state = {
+      samples: queries,
+      groupedList: {
+        samples: queries,
+        categories: [],
+      }
+    };
+  }
+
+  public componentDidMount = () => {
+    const { samples } = this.state;
+    const groupedList = this.generateSamples(samples);
+    this.setState({ groupedList });
+  }
+
+  public searchValueChanged = (value: any): void => {
+    const { samples } = this.state;
+    const keyword = value.toLowerCase();
+
+    const filteredSamples = samples.filter((sample: any) => {
+      const name = sample.humanName.toLowerCase();
+      return name.toLowerCase().includes(keyword);
+    });
+
+    const groupedList = this.generateSamples(filteredSamples);
+    this.setState({ groupedList });
+  }
+
+
+  public onDocumentationLinkClicked = (event: any, item: any) => {
+    window.open(item.docLink, '_blank');
+  };
+
+  public getMethodStyle = (method: string) => {
+    const currentTheme = getTheme();
+
+    method = method.toString().toUpperCase();
+    switch (method) {
+      case 'GET':
+        return currentTheme.palette.green;
+
+      case 'POST':
+        return currentTheme.palette.orangeLighter;
+
+      case 'PUT':
+        return currentTheme.palette.yellowDark;
+
+      case 'PATCH':
+        return currentTheme.palette.blue;
+
+      case 'DELETE':
+        return currentTheme.palette.red;
+
+      default:
+        return currentTheme.palette.green;
     }
+  };
 
-    public componentDidMount = () => {
-        const { samples } = this.state;
-        const groupedList = this.generateSamples(samples);
-        this.setState({ groupedList });
-    }
+  public generateSamples(samples: any) {
+    const map = new Map();
+    const categories: any[] = [];
+    let isCollapsed = false;
 
-    public searchValueChanged = (value: any): void => {
-        const { samples } = this.state;
-        const keyword = value.toLowerCase();
-
-        const filteredSamples = samples.filter((sample: any) => {
-            const name = sample.humanName.toLowerCase();
-            return name.toLowerCase().includes(keyword);
+    let previousCount = 0;
+    let count = 0;
+    for (const item of samples) {
+      if (!map.has(item.category)) {
+        map.set(item.category, true);
+        count = samples.filter((sample: ISampleQuery) => sample.category === item.category).length;
+        if (categories.length > 0) {
+          isCollapsed = true;
+        }
+        categories.push({
+          name: item.category,
+          key: item.category,
+          startIndex: previousCount,
+          isCollapsed,
+          count,
         });
-
-        const groupedList = this.generateSamples(filteredSamples);
-        this.setState({ groupedList });
+        previousCount += count;
+      }
     }
-
-
-    public onDocumentationLinkClicked = (event: any, item: any) => {
-        window.open(item.docLink, '_blank');
+    return {
+      samples,
+      categories,
     };
+  }
 
-    public getMethodStyle = (method: string) => {
-        const currentTheme = getTheme();
+  public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+    const classes = classNames(this.props);
+    if (column) {
+      const queryContent = item[column.fieldName as keyof any] as string;
+      switch (column.key) {
 
-        method = method.toString().toUpperCase();
-        switch (method) {
-            case 'GET':
-                return currentTheme.palette.green;
+        case 'button':
+          return <IconButton
+            className={classes.docLink}
+            iconProps={{ iconName: 'NavigateExternalInline' }}
+            title={item.docLink}
+            ariaLabel={item.docLink}
+            onClick={(event) => this.onDocumentationLinkClicked(event, item)}
+          />;
 
-            case 'POST':
-                return currentTheme.palette.orangeLighter;
+        case 'method':
+          return <span className={classes.badge}
+            style={{ color: this.getMethodStyle(item.method) }}
+          >{item.method}</span>;
 
-            case 'PUT':
-                return currentTheme.palette.yellowDark;
+        default:
+          return <span className={classes.queryContent}><FormattedMessage id={queryContent} /></span>;
+      }
+    }
+  };
 
-            case 'PATCH':
-                return currentTheme.palette.blue;
+  public renderRow = (props: any): any => {
+    const { tokenPresent } = this.props;
+    const classes = classNames(this.props);
+    let selectionDisabled = false;
+    if (props) {
+      if (!tokenPresent && props.item.method !== 'GET') {
+        selectionDisabled = true;
+      }
+      return (
+        <div className={classes.groupHeader}>
+          <DetailsRow {...props}
+            className={classes.queryRow + ' ' + (selectionDisabled ? classes.rowDisabled : '')}
+            data-selection-disabled={selectionDisabled} />
+        </div>
+      );
+    }
+  };
 
-            case 'DELETE':
-                return currentTheme.palette.red;
+  public renderGroupHeader = (props: any): any => {
+    const classes = classNames(this.props);
+    return (
+      <div aria-label={props.group!.name} onClick={this.onToggleCollapse(props)}>
+        <div className={classes.groupHeaderRow}>
+          <IconButton
+            className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
+            iconProps={{ iconName: props.group!.isCollapsed ? 'ChevronRightSmall' : 'ChevronDownSmall' }}
+            title={props.group!.isCollapsed ?
+              `Expand ${props.group!.name}` : `Collapse ${props.group!.name}`}
+            ariaLabel='expand collapse group'
+            onClick={() => this.onToggleCollapse(props)}
+          />
+          <div className={classes.groupTitle}>
+            <span>{props.group!.name}</span>
+            <span className={classes.headerCount}>({props.group!.count})</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
-            default:
-                return currentTheme.palette.green;
-        }
+  private onToggleCollapse(props: any): () => void {
+    return () => {
+      props!.onToggleCollapse!(props!.group!);
     };
+  }
 
-    public generateSamples(samples: any) {
-        const map = new Map();
-        const categories: any[] = [];
-        let isCollapsed = false;
+  public render() {
+    const { groupedList } = this.state;
+    const classes = classNames(this.props);
+    const columns = [
+      { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
+      { key: 'category', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: 200 },
+      { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20 },
+    ];
 
-        let previousCount = 0;
-        let count = 0;
-        for (const item of samples) {
-            if (!map.has(item.category)) {
-                map.set(item.category, true);
-                count = samples.filter((sample: ISampleQuery) => sample.category === item.category).length;
-                if (categories.length > 0) {
-                    isCollapsed = true;
-                }
-                categories.push({
-                    name: item.category,
-                    key: item.category,
-                    startIndex: previousCount,
-                    isCollapsed,
-                    count,
-                });
-                previousCount += count;
-            }
-        }
-        return {
-            samples,
-            categories,
+    const selection = new Selection({
+      onSelectionChanged: () => {
+        const { actions } = this.props;
+        const item = selection.getSelection()[0] as any;
+        if (!item) { return; }
+        const query: IQuery = {
+          sampleUrl: GRAPH_URL + item.requestUrl,
+          selectedVerb: item.method,
+          sampleBody: item.postBody,
         };
-    }
 
-    public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
-        const classes = classNames(this.props);
-        if (column) {
-            const queryContent = item[column.fieldName as keyof any] as string;
-            switch (column.key) {
-
-                case 'button':
-                    return <IconButton
-                        className={classes.docLink}
-                        iconProps={{ iconName: 'NavigateExternalInline' }}
-                        title={item.docLink}
-                        ariaLabel={item.docLink}
-                        onClick={(event) => this.onDocumentationLinkClicked(event, item)}
-                    />;
-
-                case 'method':
-                    return <span className={classes.badge}
-                        style={{ color: this.getMethodStyle(item.method) }}
-                    >{item.method}</span>;
-
-                default:
-                    return <span className={classes.queryContent}><FormattedMessage id={queryContent} /></span>;
-            }
+        if (actions) {
+          if (query.selectedVerb === 'GET') {
+            query.sampleBody = JSON.parse('{}');
+            actions.runQuery(query);
+          } else {
+            query.sampleBody = (query.sampleBody) ? JSON.parse(query.sampleBody) : undefined;
+          }
+          actions.setSampleQuery(query);
         }
-    };
+      }
+    });
 
-    public renderRow = (props: any): any => {
-        const { tokenPresent } = this.props;
-        const classes = classNames(this.props);
-        let selectionDisabled = false;
-        if (props) {
-            if (!tokenPresent && props.item.method !== 'GET') {
-                selectionDisabled = true;
-            }
-            return (
-                <div className={classes.groupHeader}>
-                    <DetailsRow {...props}
-                        className={classes.queryRow + ' ' + (selectionDisabled ? classes.rowDisabled : '')}
-                        data-selection-disabled={selectionDisabled} />
-                </div>
-            );
-        }
-    };
-
-    public renderGroupHeader = (props: any): any => {
-        const classes = classNames(this.props);
-        return (
-            <div aria-label={props.group!.name} onClick={this.onToggleCollapse(props)}>
-                <div className={classes.groupHeaderRow}>
-                    <IconButton
-                        className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
-                        iconProps={{ iconName: props.group!.isCollapsed ? 'ChevronRightSmall' : 'ChevronDownSmall' }}
-                        title={props.group!.isCollapsed ?
-                            `Expand ${props.group!.name}` : `Collapse ${props.group!.name}`}
-                        ariaLabel='expand collapse group'
-                        onClick={() => this.onToggleCollapse(props)}
-                    />
-                    <div className={classes.groupTitle}>
-                        <span>{props.group!.name}</span>
-                        <span className={classes.headerCount}>({props.group!.count})</span>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
-    private onToggleCollapse(props: any): () => void {
-        return () => {
-            props!.onToggleCollapse!(props!.group!);
-        };
-    }
-
-    public render() {
-        const { groupedList } = this.state;
-        const classes = classNames(this.props);
-        const columns = [
-            { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
-            { key: 'category', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: 200 },
-            { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20 },
-        ];
-
-        const selection = new Selection({
-            onSelectionChanged: () => {
-                const { actions } = this.props;
-                const item = selection.getSelection()[0] as any;
-                if (!item) { return; }
-                const query: IQuery = {
-                    sampleUrl: GRAPH_URL + item.requestUrl,
-                    selectedVerb: item.method,
-                    sampleBody: item.postBody,
-                };
-
-                if (actions) {
-                    if (query.selectedVerb === 'GET') {
-                        query.sampleBody = JSON.parse('{}');
-                        actions.runQuery(query);
-                    } else {
-                        query.sampleBody = (query.sampleBody) ? JSON.parse(query.sampleBody) : undefined;
-                    }
-                    actions.setSampleQuery(query);
-                }
-            }
-        });
-
-        return (
-            <div>
-                <SearchBox className={classes.searchBox} placeholder='Search'
-                    onChange={(value) => this.searchValueChanged(value)}
-                />
-                <hr />
-                <DetailsList className={classes.queryList}
-                    onRenderItemColumn={this.renderItemColumn}
-                    items={groupedList.samples}
-                    selectionMode={SelectionMode.none}
-                    columns={columns} groups={groupedList.categories}
-                    selection={selection}
-                    groupProps={{
-                        showEmptyGroups: true,
-                        onRenderHeader: this.renderGroupHeader,
-                    }}
-                    onRenderRow={this.renderRow}
-                />
-            </div>
-        );
-    }
+    return (
+      <div>
+        <SearchBox className={classes.searchBox} placeholder='Search'
+          onChange={(value) => this.searchValueChanged(value)}
+        />
+        <hr />
+        <DetailsList className={classes.queryList}
+          onRenderItemColumn={this.renderItemColumn}
+          items={groupedList.samples}
+          selectionMode={SelectionMode.none}
+          columns={columns} groups={groupedList.categories}
+          selection={selection}
+          groupProps={{
+            showEmptyGroups: true,
+            onRenderHeader: this.renderGroupHeader,
+          }}
+          onRenderRow={this.renderRow}
+        />
+      </div>
+    );
+  }
 
 }
 function mapStateToProps(state: any) {
-    return {
-        tokenPresent: !!state.authToken
-    };
+  return {
+    tokenPresent: !!state.authToken
+  };
 }
 
 function mapDispatchToProps(dispatch: Dispatch): object {
-    return {
-        actions: bindActionCreators({ ...queryActionCreators, ...queryInputActionCreators }, dispatch),
-    };
+  return {
+    actions: bindActionCreators({ ...queryActionCreators, ...queryInputActionCreators }, dispatch),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(styled(SampleQueries, sidebarStyles));
