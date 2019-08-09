@@ -1,13 +1,13 @@
 import {
   DetailsList, DetailsRow, getTheme, IColumn, IconButton,
-  ITheme, SearchBox, Selection, SelectionMode, styled
+  SearchBox, Selection, SelectionMode, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { IQuery, ISampleQuery } from '../../../../types/query-runner';
+import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
@@ -15,15 +15,6 @@ import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { queries } from './queries';
 
-interface ISampleQueriesProps {
-  theme?: ITheme;
-  styles?: object;
-  tokenPresent: boolean;
-  actions?: {
-    runQuery: Function;
-    setSampleQuery: Function;
-  };
-}
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
@@ -41,6 +32,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   public componentDidMount = () => {
     const { samples } = this.state;
     const groupedList = this.generateSamples(samples);
+
     this.setState({ groupedList });
   }
 
@@ -90,20 +82,21 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   public generateSamples(samples: any) {
     const map = new Map();
     const categories: any[] = [];
-    let isCollapsed = false;
 
+    let isCollapsed = false;
     let previousCount = 0;
     let count = 0;
-    for (const item of samples) {
-      if (!map.has(item.category)) {
-        map.set(item.category, true);
-        count = samples.filter((sample: ISampleQuery) => sample.category === item.category).length;
+
+    for (const query of samples) {
+      if (!map.has(query.category)) {
+        map.set(query.category, true);
+        count = samples.filter((sample: ISampleQuery) => sample.category === query.category).length;
         if (categories.length > 0) {
           isCollapsed = true;
         }
         categories.push({
-          name: item.category,
-          key: item.category,
+          name: query.category,
+          key: query.category,
           startIndex: previousCount,
           isCollapsed,
           count,
@@ -119,8 +112,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const classes = classNames(this.props);
+
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
+
       switch (column.key) {
 
         case 'button':
@@ -147,6 +142,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const { tokenPresent } = this.props;
     const classes = classNames(this.props);
     let selectionDisabled = false;
+
     if (props) {
       if (!tokenPresent && props.item.method !== 'GET') {
         selectionDisabled = true;
@@ -163,6 +159,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   public renderGroupHeader = (props: any): any => {
     const classes = classNames(this.props);
+
     return (
       <div aria-label={props.group!.name} onClick={this.onToggleCollapse(props)}>
         <div className={classes.groupHeaderRow}>
@@ -201,22 +198,23 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const selection = new Selection({
       onSelectionChanged: () => {
         const { actions } = this.props;
-        const item = selection.getSelection()[0] as any;
-        if (!item) { return; }
-        const query: IQuery = {
-          sampleUrl: GRAPH_URL + item.requestUrl,
-          selectedVerb: item.method,
-          sampleBody: item.postBody,
+        const selectedQuery = selection.getSelection()[0] as any;
+        if (!selectedQuery) { return; }
+
+        const sampleQuery: IQuery = {
+          sampleUrl: GRAPH_URL + selectedQuery.requestUrl,
+          selectedVerb: selectedQuery.method,
+          sampleBody: selectedQuery.postBody,
         };
 
         if (actions) {
-          if (query.selectedVerb === 'GET') {
-            query.sampleBody = JSON.parse('{}');
-            actions.runQuery(query);
+          if (sampleQuery.selectedVerb === 'GET') {
+            sampleQuery.sampleBody = JSON.parse('{}');
+            actions.runQuery(sampleQuery);
           } else {
-            query.sampleBody = (query.sampleBody) ? JSON.parse(query.sampleBody) : undefined;
+            sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
           }
-          actions.setSampleQuery(query);
+          actions.setSampleQuery(sampleQuery);
         }
       }
     });

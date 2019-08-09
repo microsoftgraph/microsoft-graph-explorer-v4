@@ -1,3 +1,5 @@
+import { ITheme } from '@uifabric/styling';
+
 export interface IQueryRunnerState {
   httpMethods: Array<{ key: string; text: string; }>;
   sampleBody?: string;
@@ -61,4 +63,14 @@ export interface ISampleQuery {
   tip?: string;
   postBody?: string;
   headers?: Array<{ name: string; value: string; }>;
+}
+
+export interface ISampleQueriesProps {
+  theme?: ITheme;
+  styles?: object;
+  tokenPresent: boolean;
+  actions?: {
+    runQuery: Function;
+    setSampleQuery: Function;
+  };
 }
