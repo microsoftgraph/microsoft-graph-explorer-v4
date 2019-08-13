@@ -48,7 +48,7 @@ class App extends Component<IAppProps, IAppState> {
     const { graphExplorerMode, error, actions }: any = this.props;
     const layout =
       graphExplorerMode === Mode.TryIt
-        ? 'col-sm-12 col-lg-8'
+        ? 'col-sm-12 col-lg-8 offset-lg-2'
         : 'col-sm-12 col-lg-9';
     return (
       <FocusTrapZone>
