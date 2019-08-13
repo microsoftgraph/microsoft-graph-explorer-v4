@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { IQueryResponseProps } from '../../../types/query-response';
 import { Image, Monaco } from '../common';
 import './query-response.scss';
+import { Snippets } from './snippets';
 
 class QueryResponse extends Component<IQueryResponseProps, {}> {
   constructor(props: any) {
@@ -57,6 +58,11 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
             <Monaco
               body={headers}
             />
+          </PivotItem>
+          <PivotItem
+            headerText={messages.Snippets}
+            >
+            <Snippets/>
           </PivotItem>
         </Pivot>
       </div>
