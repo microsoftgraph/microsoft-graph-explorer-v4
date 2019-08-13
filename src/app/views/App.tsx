@@ -65,12 +65,12 @@ class App extends Component<IAppProps, IAppState> {
                 <div style={{ marginBottom: 8 }}>
                   <MessageBar
                     messageBarType={MessageBarType.warning}
-                    isMultiline={false}
+                    isMultiline={true}
                   >
                     <p>
                       To try operations other than GET or to access your own data, sign in to
-                      <a href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
-                        Graph Explorer
+                      <a tabIndex={0} href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
+                        Graph Explorer.
                       </a>
                     </p>
                   </MessageBar>
