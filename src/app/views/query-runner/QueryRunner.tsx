@@ -5,17 +5,23 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { loadGETheme } from '../../../themes';
 import {
-  IInitMessage, IQuery, IQueryRunnerProps,
-  IQueryRunnerState, IThemeChangedMessage
+  IInitMessage,
+  IQueryRunnerProps,
+  IQueryRunnerState,
+  IThemeChangedMessage
 } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
+import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import { addRequestHeader } from '../../services/actions/request-headers-action-creators';
 import './query-runner.scss';
-import { QueryInputControl } from './QueryInput';
+import QueryInput from './QueryInput';
 import Request from './request/Request';
 import { parse } from './util/iframe-message-parser';
 
-export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState> {
+export class QueryRunner extends Component<
+  IQueryRunnerProps,
+  IQueryRunnerState
+  > {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
@@ -24,16 +30,13 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
         { key: 'POST', text: 'POST' },
         { key: 'PUT', text: 'PUT' },
         { key: 'PATCH', text: 'PATCH' },
-        { key: 'DELETE', text: 'DELETE' },
-      ],
-      selectedVerb: 'GET',
-      sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
-      sampleBody: undefined,
-      sampleHeaders: [],
+        { key: 'DELETE', text: 'DELETE' }
+      ]
     };
   }
 
   public componentDidMount = () => {
+    const { actions } = this.props;
     const whiteListedDomains = [
       'https://docs.microsoft.com',
       'https://review.docs.microsoft.com',
@@ -43,7 +46,8 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
     // Notify host document that GE is ready to receive messages
     const hostOrigin = new URLSearchParams(location.search).get('host-origin');
-    const originIsWhitelisted = hostOrigin && whiteListedDomains.indexOf(hostOrigin) !== -1;
+    const originIsWhitelisted =
+      hostOrigin && whiteListedDomains.indexOf(hostOrigin) !== -1;
 
     if (hostOrigin && originIsWhitelisted) {
       window.parent.postMessage({ type: 'ready' }, hostOrigin);
@@ -60,19 +64,18 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
     }
 
     const data = JSON.parse(atob(base64Token));
-    const {
-      sampleVerb,
-      sampleHeaders,
-      sampleUrl,
-      sampleBody,
-    } = data;
+    const { sampleVerb, sampleHeaders, sampleUrl, sampleBody } = data;
 
-    this.setState({
+    const query = {
       sampleUrl,
       sampleBody,
       sampleHeaders,
-      selectedVerb: sampleVerb,
-    });
+      selectedVerb: sampleVerb
+    };
+
+    if (actions) {
+      actions.setSampleQuery(query);
+    }
   };
 
   public componentWillUnmount(): void {
@@ -95,17 +98,15 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   };
 
   private handleInitMsg = (msg: IInitMessage) => {
-    const {
-      verb,
-      headers,
-      url,
-      body
-    }: any = parse(msg.code);
+    const { actions } = this.props;
+    const { verb, headers, url, body }: any = parse(msg.code);
 
-    this.setState({
-      sampleUrl: url,
-      selectedVerb: verb,
-    });
+    if (actions) {
+      actions.setSampleQuery({
+        sampleUrl: url,
+        selectedVerb: verb
+      });
+    }
 
     // Sets selected verb in App Component
     this.props.onSelectVerb(verb);
@@ -115,12 +116,12 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
      * If we don't put this delay, the body won't be formatted.
      */
     setTimeout(() => {
-      this.setState({
-        sampleBody: body
-      });
+      if (actions) {
+        actions.setSampleQuery({
+          sampleBody: body
+        });
+      }
     }, 1000);
-
-    const { actions } = this.props;
 
     if (actions) {
       const requestHeadears = headers.map((header: any) => {
@@ -138,8 +139,13 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   };
 
   private handleOnMethodChange = (option?: IDropdownOption) => {
+    const query = { ...this.props.sampleQuery };
+    const { actions } = this.props;
     if (option !== undefined) {
-      this.setState({ selectedVerb: option.text });
+      query.selectedVerb = option.text;
+      if (actions) {
+        actions.setSampleQuery(query);
+      }
 
       // Sets selected verb in App Component
       this.props.onSelectVerb(option.text);
@@ -147,69 +153,61 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
   };
 
   private handleOnUrlChange = (newQuery?: string) => {
+    const query = { ...this.props.sampleQuery };
+    const { actions } = this.props;
     if (newQuery) {
-      this.setState({ sampleUrl: newQuery });
+      query.sampleUrl = newQuery;
+      if (actions) {
+        actions.setSampleQuery(query);
+      }
     }
   };
 
   private handleOnEditorChange = (body?: string) => {
-    if (body) {
-      this.setState({ sampleBody: body });
-    }
+    this.setState({ sampleBody: body });
   };
 
-
   private handleOnRunQuery = () => {
-    const { sampleUrl, selectedVerb, sampleBody } = this.state;
-    const { actions, headers } = this.props;
+    const { sampleBody } = this.state;
+    const { actions, headers, sampleQuery } = this.props;
 
-    const query: IQuery = {
-      sampleUrl,
-      selectedVerb,
-      sampleBody,
-      sampleHeaders: headers
-    };
+    if (headers) {
+      sampleQuery.sampleHeaders = headers;
+    }
+
+    if (sampleBody) {
+      sampleQuery.sampleBody = JSON.parse(sampleBody);
+    }
 
     if (actions) {
-      actions.runQuery(query);
+      actions.runQuery(sampleQuery);
     }
   };
 
   public render() {
-    const {
-      httpMethods,
-      selectedVerb,
-      sampleUrl,
-      sampleBody,
-    } = this.state;
-
-    const { isLoadingData } = this.props;
+    const { httpMethods } = this.state;
+    const { isLoadingData, sampleQuery } = this.props;
 
     return (
       <div>
         <div className='row'>
           <div className='col-sm-12 col-lg-12'>
-            <QueryInputControl
+            <QueryInput
               handleOnRunQuery={this.handleOnRunQuery}
               handleOnMethodChange={this.handleOnMethodChange}
               handleOnUrlChange={this.handleOnUrlChange}
               httpMethods={httpMethods}
-              selectedVerb={selectedVerb}
-              sampleUrl={sampleUrl}
               submitting={isLoadingData}
             />
           </div>
         </div>
-        {selectedVerb !== 'GET' &&
+        {sampleQuery.selectedVerb !== 'GET' && (
           <div className='row'>
             <div className='col-sm-12 col-lg-12'>
-              <Request
-                sampleBody={sampleBody}
-                handleOnEditorChange={this.handleOnEditorChange}
-              />
+              <Request handleOnEditorChange={this.handleOnEditorChange} />
             </div>
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -217,15 +215,22 @@ export class QueryRunner extends Component<IQueryRunnerProps, IQueryRunnerState>
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators({ ...queryActionCreators, addRequestHeader }, dispatch),
+    actions: bindActionCreators(
+      { ...queryActionCreators, ...queryInputActionCreators, addRequestHeader },
+      dispatch
+    )
   };
 }
 
 function mapStateToProps(state: any) {
   return {
     isLoadingData: state.isLoadingData,
-    headers: state.headersAdded
+    headers: state.headersAdded,
+    sampleQuery: state.sampleQuery
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(QueryRunner);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(QueryRunner);

@@ -87,7 +87,8 @@
   },
   "linterOptions": {
     "exclude": [
-      "src/messages/*"
+      "src/messages/*",
+      "src/app/views/sidebar/sample-queries/queries.ts"
     ]
   }
 }

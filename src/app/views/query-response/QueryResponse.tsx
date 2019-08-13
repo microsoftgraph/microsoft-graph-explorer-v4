@@ -21,8 +21,8 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
       verb
     }: any = this.props;
 
-    const { graphResponse, isProfileRequest } = this.props;
-    if (graphResponse && !isProfileRequest) {
+    const { graphResponse } = this.props;
+    if (graphResponse) {
       body = graphResponse.body;
       headers = graphResponse.headers;
 
@@ -42,7 +42,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
             ariaLabel='Response Preview'
             headerText={messages['Response Preview']}
           >
-            {isImageResponse && !isProfileRequest ? (
+            {isImageResponse ? (
               <Image
                 styles={{ padding: '10px' }}
                 body={body}
@@ -67,7 +67,6 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 function mapStateToProps(state: IQueryResponseProps) {
   return {
     graphResponse: state.graphResponse,
-    isProfileRequest: state.isProfileRequest
   };
 }
 

@@ -1,26 +1,46 @@
 import { Pivot, PivotItem } from 'office-ui-fabric-react';
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
 import './request.scss';
 import RequestHeaders from './RequestHeaders';
 
-const Request = ({ sampleBody, handleOnEditorChange }: IRequestComponent) => {
-  return (
-    <div className='request-editors'>
-      <Pivot>
-        <PivotItem headerText='Request Body' ariaLabel='Request Body'>
-          <Monaco
-            body={sampleBody}
-            onChange={value => handleOnEditorChange(value)}
-          />
-        </PivotItem>
-        <PivotItem headerText='Request Headers' ariaLabel='Request Headers'>
-          <RequestHeaders />
-        </PivotItem>
-      </Pivot>
-    </div>
-  );
-};
+export class Request extends Component<IRequestComponent, any> {
+  constructor(props: IRequestComponent) {
+    super(props);
+  }
 
-export default Request;
+  public render() {
+
+    const {
+      handleOnEditorChange,
+      sampleBody
+    } = this.props;
+
+    return (
+      <div className='request-editors'>
+        <Pivot>
+          <PivotItem headerText='Request Body'>
+            <Monaco
+              body={sampleBody}
+              onChange={(value) => handleOnEditorChange(value)} />
+            />
+          </PivotItem>
+          <PivotItem headerText='Request Headers'>
+            <RequestHeaders />
+          </PivotItem>
+        </Pivot>
+      </div>
+    );
+  }
+}
+
+function mapStateToProps(state: any) {
+  return {
+    sampleBody: state.sampleQuery.sampleBody
+  };
+}
+
+export default connect(mapStateToProps, null)(Request);
