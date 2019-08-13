@@ -53,8 +53,8 @@ class App extends Component<IAppProps, IAppState> {
                     isMultiline={false}
                   >
                     <p>
-                      To experience more functionalities, please access the main Graph Explorer site
-                    <a href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>here</a>
+                      To try operations other than GET or to access your own data, sign in to
+                    <a href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>Graph Explorer</a>
                     </p>
                   </MessageBar>
                 </div>
