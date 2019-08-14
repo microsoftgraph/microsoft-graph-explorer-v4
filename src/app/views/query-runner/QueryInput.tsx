@@ -23,7 +23,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
 
     return (
       <div className='row'>
-        <div className='col-sm-2'>
+        <div className='col-sm-3'>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
@@ -32,7 +32,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </div>
-        <div className='col-sm-8'>
+        <div className='col-sm-7'>
           <TextField
             ariaLabel='Query Sample Input'
             role='textbox'

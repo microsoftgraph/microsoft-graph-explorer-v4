@@ -118,6 +118,8 @@ export class QueryRunner extends Component<
     setTimeout(() => {
       if (actions) {
         actions.setSampleQuery({
+          sampleUrl: url,
+          selectedVerb: verb,
           sampleBody: body
         });
       }
