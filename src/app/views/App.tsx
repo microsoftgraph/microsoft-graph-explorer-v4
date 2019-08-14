@@ -70,7 +70,7 @@ class App extends Component<IAppProps, IAppState> {
                     <p>
                       To try operations other than GET or to access your own data, sign in to
                       <a href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
-                        Graph Explorer
+                        Graph Explorer.
                       </a>
                     </p>
                   </MessageBar>
