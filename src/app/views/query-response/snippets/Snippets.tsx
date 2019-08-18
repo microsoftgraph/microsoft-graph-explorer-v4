@@ -1,6 +1,8 @@
 import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { useEffect } from 'react';
 
+import { getSnippet } from '../../../services/actions/snippet-action-creator';
+
 
 interface ISnippetProps {
   language: string;
@@ -8,7 +10,7 @@ interface ISnippetProps {
 
 export function Snippets() {
   const supportedLanguages = ['C#', 'Java', 'Javascript', 'Objective-C'];
-  
+
   return (
     <Pivot>
       {renderSnippets(supportedLanguages)}
@@ -29,8 +31,9 @@ function renderSnippets(supportedLanguages: string[]) {
 
 function Snippet(props: ISnippetProps) {
   const { language } = props;
+
   useEffect(() => {
-    // TODO: Fetch the snippet for specified language
+    getSnippet(language);
   });
 
   // TODO: Render the snippet in Monaco
