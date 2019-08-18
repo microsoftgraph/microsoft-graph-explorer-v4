@@ -1,29 +1,30 @@
+import { ITheme } from '@uifabric/styling';
+
 export interface IQueryRunnerState {
   httpMethods: Array<{ key: string; text: string; }>;
-  selectedVerb: string;
-  sampleUrl: string;
   sampleBody?: string;
-  sampleHeaders: Array<{ name: string; value: string; }>;
 }
 
 export interface IQuery {
   selectedVerb: string;
   sampleUrl: string;
   sampleBody?: string;
-  sampleHeaders: Array<{ name: string; value: string; }>;
+  sampleHeaders?: Array<{ name: string; value: string; }>;
 }
 
 export interface IQueryRunnerProps {
   isLoadingData: boolean;
   headers: Array<{ name: string; value: string; }>;
   onSelectVerb: Function;
+  sampleQuery: IQuery;
   actions?: {
     runQuery: Function;
     addRequestHeader: Function;
+    setSampleQuery: Function;
   };
 }
 
-export interface IQueryInputControl {
+export interface IQueryInputProps {
   handleOnRunQuery: Function;
   handleOnMethodChange: Function;
   handleOnUrlChange: Function;
@@ -50,4 +51,26 @@ export interface IInitMessage {
 export interface IThemeChangedMessage {
   type: 'theme-changed';
   theme: 'light' | 'dark' | 'high-contrast';
+}
+
+export interface ISampleQuery {
+  docLink?: string;
+  skipTest?: boolean;
+  category: string;
+  requestUrl: string;
+  method: string;
+  humanName: string;
+  tip?: string;
+  postBody?: string;
+  headers?: Array<{ name: string; value: string; }>;
+}
+
+export interface ISampleQueriesProps {
+  theme?: ITheme;
+  styles?: object;
+  tokenPresent: boolean;
+  actions?: {
+    runQuery: Function;
+    setSampleQuery: Function;
+  };
 }
