@@ -8,6 +8,7 @@ interface IMonaco {
   body: object | string | undefined;
   onChange?: ChangeHandler | undefined;
   verb?: string;
+  language?: string;
 }
 
 function editorDidMount(editor: any) {
@@ -29,7 +30,7 @@ function formatDocument(editor: any) {
 export function Monaco(props: IMonaco) {
 
   let { body } = props;
-  const { onChange, verb } = props;
+  const { onChange, verb, language } = props;
   const currentTheme = getTheme();
   const isDark = currentTheme.palette.black === '#ffffff' ? true : false;
 
@@ -46,7 +47,7 @@ export function Monaco(props: IMonaco) {
           width='800 !important'
           height={verbIsGet ? '80vh' : '350px'}
           value={body}
-          language='json'
+          language={language}
           options={{ lineNumbers: 'off', minimap: { enabled: false } }}
           editorDidMount={editorDidMount}
           onChange={onChange}

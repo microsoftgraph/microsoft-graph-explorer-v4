@@ -17,8 +17,15 @@ export function getSnippet(language: string, sampleQuery: IQuery, dispatch: Func
         sample.sampleUrl = pathname;
     }
 
-    // tslint:disable-next-line: max-line-length
-    const url = `https:graphexplorerapi.azurewebsites.net/api/graphexplorersnippets?lang=${language.toLocaleLowerCase()}`;
+    let url = '';
+
+    if (language === 'C#') {
+        url = 'https:graphexplorerapi.azurewebsites.net/api/graphexplorersnippets';
+    } else {
+        // tslint:disable-next-line: max-line-length
+        url = `https:graphexplorerapi.azurewebsites.net/api/graphexplorersnippets?lang=${language.toLocaleLowerCase()}`;
+    }
+
     // tslint:disable-next-line: max-line-length
     const body = `${sample.selectedVerb} ${sample.sampleUrl} HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n`;
     const obj: any = {};

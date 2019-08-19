@@ -10,7 +10,7 @@ interface ISnippetProps {
 }
 
 export function Snippets() {
-  const supportedLanguages = ['Java', 'csharp', 'Javascript', 'Objective-C'];
+  const supportedLanguages = ['C#', 'Javascript', 'Java', 'Objective-C'];
 
   return (
     <Pivot>
@@ -45,6 +45,9 @@ function Snippet(props: ISnippetProps) {
   }, [sampleQuery.sampleUrl]);
 
   return (
-    <Monaco body={snippet} />
+    <Monaco
+      body={snippet}
+      language={language.toLocaleLowerCase()}
+    />
   );
 }
