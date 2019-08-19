@@ -1,4 +1,4 @@
-import { Pivot, PivotItem } from 'office-ui-fabric-react';
+import { Pivot } from 'office-ui-fabric-react';
 import React from 'react';
 import { renderSnippets } from './snippets-helper';
 
