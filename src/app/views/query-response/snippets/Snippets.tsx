@@ -4,13 +4,12 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { getSnippet } from '../../../services/actions/snippet-action-creator';
 
-
 interface ISnippetProps {
   language: string;
 }
 
 export function Snippets() {
-  const supportedLanguages = ['C#', 'Java', 'Javascript', 'Objective-C'];
+  const supportedLanguages = ['java', 'csharp', 'Javascript', 'Objective-C'];
 
   return (
     <Pivot>
@@ -35,8 +34,12 @@ function Snippet(props: ISnippetProps) {
   const sampleQuery = useSelector((state: any) => state.sampleQuery, shallowEqual);
   const dispatch = useDispatch();
 
-  // tslint:disable-next-line
-  console.log(sampleQuery);
+  let pathname = '';
+
+  if (sampleQuery.sampleUrl) {
+    pathname = new URL(sampleQuery.sampleUrl).pathname;
+  }
+  sampleQuery.sampleUrl = pathname;
 
   useEffect(() => {
     // tslint:disable-next-line
