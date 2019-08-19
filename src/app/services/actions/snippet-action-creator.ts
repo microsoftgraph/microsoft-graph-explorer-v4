@@ -27,7 +27,7 @@ export function getSnippet(language: string, sampleQuery: IQuery, dispatch: Func
     }
 
     // tslint:disable-next-line: max-line-length
-    const body = `${sample.selectedVerb} ${sample.sampleUrl} HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n`;
+    const body = `${sample.selectedVerb} ${sample.sampleUrl} HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(sample.sampleBody)}`;
     const obj: any = {};
     return fetch(url, {
         method: 'POST',

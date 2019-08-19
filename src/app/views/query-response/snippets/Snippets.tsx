@@ -42,7 +42,7 @@ function Snippet(props: ISnippetProps) {
     getSnippet(language, sampleQuery, dispatch)
       // tslint:disable-next-line
       .catch((error: any) => console.log(error));
-  }, [snippet]);
+  });
 
   return (
     <Monaco
