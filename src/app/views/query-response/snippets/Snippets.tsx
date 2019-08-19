@@ -9,7 +9,7 @@ interface ISnippetProps {
 }
 
 export function Snippets() {
-  const supportedLanguages = ['java', 'csharp', 'Javascript', 'Objective-C'];
+  const supportedLanguages = ['Java', 'csharp', 'Javascript', 'Objective-C'];
 
   return (
     <Pivot>
@@ -33,13 +33,6 @@ function Snippet(props: ISnippetProps) {
   const { language } = props;
   const sampleQuery = useSelector((state: any) => state.sampleQuery, shallowEqual);
   const dispatch = useDispatch();
-
-  let pathname = '';
-
-  if (sampleQuery.sampleUrl) {
-    pathname = new URL(sampleQuery.sampleUrl).pathname;
-  }
-  sampleQuery.sampleUrl = pathname;
 
   useEffect(() => {
     // tslint:disable-next-line

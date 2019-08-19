@@ -10,9 +10,17 @@ export function getSnippetSuccess(response: string): IAction {
 }
 
 export function getSnippet(language: string, sampleQuery: IQuery, dispatch: Function) {
-    const url = `https:graphexplorerapi.azurewebsites.net/api/graphexplorersnippets?lang=${language}`;
+    const sample = { ...sampleQuery };
+
+    if (sample.sampleUrl) {
+        const pathname = new URL(sample.sampleUrl).pathname;
+        sample.sampleUrl = pathname;
+    }
+
     // tslint:disable-next-line: max-line-length
-    const body = `${sampleQuery.selectedVerb} ${sampleQuery.sampleUrl} HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n`;
+    const url = `https:graphexplorerapi.azurewebsites.net/api/graphexplorersnippets?lang=${language.toLocaleLowerCase()}`;
+    // tslint:disable-next-line: max-line-length
+    const body = `${sample.selectedVerb} ${sample.sampleUrl} HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n`;
     const obj: any = {};
     return fetch(url, {
         method: 'POST',
