@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { getSnippet } from '../../../services/actions/snippet-action-creator';
+import { Monaco } from '../../common';
 
 interface ISnippetProps {
   language: string;
@@ -32,6 +33,7 @@ function renderSnippets(supportedLanguages: string[]) {
 function Snippet(props: ISnippetProps) {
   const { language } = props;
   const sampleQuery = useSelector((state: any) => state.sampleQuery, shallowEqual);
+  const snippet = useSelector((state: any) => (state.snippets)[language]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -42,6 +44,7 @@ function Snippet(props: ISnippetProps) {
       .catch((error: any) => console.log(error));
   }, [sampleQuery.sampleUrl]);
 
-  // TODO: Render the snippet in Monaco
-  return (<div>{`Showing snippets for ${language}`}</div>);
+  return (
+    <Monaco body={snippet} />
+  );
 }
