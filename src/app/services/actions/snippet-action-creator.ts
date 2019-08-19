@@ -13,7 +13,7 @@ export function getSnippet(language: string, sampleQuery: IQuery, dispatch: Func
     const url = `https:graphexplorerapi.azurewebsites.net/api/graphexplorersnippets?lang=${language}`;
     // tslint:disable-next-line: max-line-length
     const body = `${sampleQuery.selectedVerb} ${sampleQuery.sampleUrl} HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n`;
-
+    const obj: any = {};
     return fetch(url, {
         method: 'POST',
         headers: {
@@ -22,5 +22,8 @@ export function getSnippet(language: string, sampleQuery: IQuery, dispatch: Func
         body
     }).then(resp => resp.text())
         // tslint:disable-next-line
-        .then((result) => console.log(result));
+        .then((result) => {
+            obj[language] = result;
+            dispatch(getSnippetSuccess(obj));
+        });
 }
