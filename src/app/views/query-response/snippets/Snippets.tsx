@@ -10,7 +10,7 @@ interface ISnippetProps {
 }
 
 export function Snippets() {
-  const supportedLanguages = ['C#', 'Javascript', 'Java', 'Objective-C'];
+  const supportedLanguages = ['CSharp', 'Javascript', 'Java', 'Objective-C'];
 
   return (
     <Pivot>
