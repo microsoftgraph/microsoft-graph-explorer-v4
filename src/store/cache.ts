@@ -6,8 +6,9 @@ export function writeData  (data: object) {
   localforage.setItem(key, data);
 }
 
-export function readData  () {
-  return localforage.getItem(key);
+export async function readData  () {
+  const data = await localforage.getItem(key);
+  return data;
 }
 
 export function removeData  () { localforage.removeItem(key); }
