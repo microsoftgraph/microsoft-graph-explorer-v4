@@ -21,6 +21,7 @@ import { store } from './store';
 import './styles/index.scss';
 import { loadGETheme } from './themes';
 import { Mode } from './types/action';
+import { IInitMessage, IThemeChangedMessage } from './types/query-runner';
 
 initializeIcons();
 
@@ -91,3 +92,19 @@ const Root = () => {
 };
 
 ReactDOM.render(<Root />, document.getElementById('root'));
+
+window.addEventListener('message', receiveMessage, false);
+
+function receiveMessage(event: MessageEvent) {
+  const msgEvent: IThemeChangedMessage | IInitMessage = event.data;
+
+  switch (msgEvent.type) {
+    case 'theme-changed':
+      console.log('Received theme');
+      loadGETheme(msgEvent.theme);
+      ReactDOM.render(<Root />, document.getElementById('root'));
+      break;
+    default:
+      return;
+  }
+}
