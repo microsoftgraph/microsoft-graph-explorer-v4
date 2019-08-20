@@ -6,6 +6,7 @@ import { GraphClient } from '../graph-client';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryResponseError } from './error-action-creator';
 import { queryRunningStatus } from './query-loading-action-creators';
+import { addHistoryItem } from './request-history-action-creators';
 
 export function queryResponse(response: object): IAction {
   return {
@@ -18,7 +19,6 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
 
   const authToken = '{token:https://graph.microsoft.com/}';
   const graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleUrl}`;
-  const respHeaders: any = {};
   const sampleHeaders: any = {};
 
   if (query.sampleHeaders) {
@@ -40,23 +40,8 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
   dispatch(queryRunningStatus(true));
 
   return fetch(graphUrl, options)
-    .then((resp) => {
-      if (resp.ok) {
-        return parseResponse(resp, respHeaders);
-      }
-      return resp;
-    })
-    .then((json) => {
-      if (json.ok === false) {
-        return dispatch(queryResponseError(json));
-      }
-
-      return dispatch(
-        queryResponse({
-          body: json,
-          headers: respHeaders,
-        }),
-      );
+    .then((response) => {
+      return Promise.resolve(response);
     });
 }
 
