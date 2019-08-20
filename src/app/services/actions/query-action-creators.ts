@@ -1,3 +1,4 @@
+import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { queryResponseError } from './error-action-creator';
 import { anonymousRequest, authenticatedRequest,
@@ -21,10 +22,11 @@ export function runQuery(query: IQuery): Function {
     });
   };
 
-  async function processRequestResult(response: Response,  respHeaders: any, dispatch: Function, runTime: string) {
+  async function processRequestResult(response: Response,  respHeaders: any, dispatch: Function, runTime: any) {
 
-    const status = { code: response.status, text: response.statusText };
+    const status = response.status;
     let result = await parseResponse(response, respHeaders);
+    const duration = respHeaders.duration;
 
     if (response && response.ok) {
       dispatch(queryResponse({
@@ -41,6 +43,17 @@ export function runQuery(query: IQuery): Function {
       result = await result.clone().arrayBuffer();
     }
 
-    return dispatch(addHistoryItem({ query, response: result, runTime, status }));
+    const historyItem: IHistoryItem = {
+      url: query.sampleUrl,
+      method: query.selectedVerb,
+      headers: query.sampleHeaders,
+      body: query.sampleBody,
+      runTime,
+      status,
+      response: result,
+      duration,
+    };
+
+    return dispatch(addHistoryItem(historyItem));
   }
 }

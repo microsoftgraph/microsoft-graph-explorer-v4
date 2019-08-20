@@ -1,6 +1,7 @@
 import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React from 'react';
 
+import History from './history/History';
 import SampleQueries from './sample-queries/SampleQueries';
 
 export const Sidebar = () => {
@@ -9,6 +10,9 @@ export const Sidebar = () => {
       <Pivot>
         <PivotItem headerText='Sample Queries'>
           <SampleQueries />
+        </PivotItem>
+        <PivotItem headerText='History'>
+          <History />
         </PivotItem>
       </Pivot>
     </div>
