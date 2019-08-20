@@ -100,6 +100,7 @@ function receiveMessage(event: MessageEvent) {
 
   switch (msgEvent.type) {
     case 'theme-changed':
+      // tslint:disable-next-line
       console.log('Received theme');
       loadGETheme(msgEvent.theme);
       ReactDOM.render(<Root />, document.getElementById('root'));
