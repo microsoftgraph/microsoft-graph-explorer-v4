@@ -4,9 +4,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
-import { queryResponseError } from './error-action-creator';
 import { queryRunningStatus } from './query-loading-action-creators';
-import { addHistoryItem } from './request-history-action-creators';
 
 export function queryResponse(response: object): IAction {
   return {

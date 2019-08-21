@@ -28,16 +28,6 @@ export function runQuery(query: IQuery): Function {
     let result = await parseResponse(response, respHeaders);
     const duration = respHeaders.duration;
 
-    if (response && response.ok) {
-      dispatch(queryResponse({
-        body: result,
-        headers: respHeaders
-      }));
-    }
-    else {
-      dispatch(queryResponseError(response));
-    }
-
     const contentType = respHeaders['content-type'];
     if (contentType && isImageResponse(contentType)) {
       result = await result.clone().arrayBuffer();
@@ -54,6 +44,17 @@ export function runQuery(query: IQuery): Function {
       duration,
     };
 
-    return dispatch(addHistoryItem(historyItem));
+    dispatch(addHistoryItem(historyItem));
+
+    if (response && response.ok) {
+      return dispatch(queryResponse({
+        body: result,
+        headers: respHeaders
+      }));
+    }
+    else {
+      return dispatch(queryResponseError(response));
+    }
+
   }
 }
