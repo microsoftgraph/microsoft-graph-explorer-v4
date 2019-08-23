@@ -1,5 +1,6 @@
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
+import { createHarPayload, generateHar } from '../../views/sidebar/history/harUtil';
 import { queryResponseError } from './error-action-creator';
 import { anonymousRequest, authenticatedRequest,
   isImageResponse, parseResponse, queryResponse } from './query-action-creator-util';
@@ -25,6 +26,7 @@ export function runQuery(query: IQuery): Function {
   async function processRequestResult(response: Response,  respHeaders: any, dispatch: Function, runTime: any) {
 
     const status = response.status;
+    const statusText = response.statusText;
     let result = await parseResponse(response, respHeaders);
     const duration = respHeaders.duration;
 
@@ -36,13 +38,19 @@ export function runQuery(query: IQuery): Function {
     const historyItem: IHistoryItem = {
       url: query.sampleUrl,
       method: query.selectedVerb,
-      headers: query.sampleHeaders,
       body: query.sampleBody,
+      headers: query.sampleHeaders,
+      responseHeaders: respHeaders,
       runTime,
       status,
-      response: result,
+      statusText,
+      result,
       duration,
+      har: ''
     };
+    const harPayload = createHarPayload(historyItem);
+    const har = JSON.stringify(generateHar(harPayload));
+    historyItem.har = har;
 
     dispatch(addHistoryItem(historyItem));
 

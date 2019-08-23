@@ -155,6 +155,7 @@ export class History extends Component<IHistoryProps, any> {
                 {
                   key: 'export',
                   text: 'Export',
+                  onClick: () => this.onExportQuery(item)
                 },
                 {
                   key: 'remove',
@@ -208,6 +209,7 @@ export class History extends Component<IHistoryProps, any> {
       sampleUrl: GRAPH_URL + query.url.replace(GRAPH_URL, ''),
       selectedVerb: query.method,
       sampleBody: query.body,
+      sampleHeaders: query.headers
     };
 
     if (actions) {
@@ -218,6 +220,26 @@ export class History extends Component<IHistoryProps, any> {
         sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
       }
       actions.setSampleQuery(sampleQuery);
+    }
+  }
+
+  private onExportQuery = (query: IHistoryItem) => {
+    const blob = new Blob([query.har], { type: 'text/json' });
+
+    const url = query.url.substr(8).split('/');
+    url.pop(); // Removes leading slash
+
+    const filename = `${url.join('_')}.har`;
+
+    if (window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveBlob(blob, filename);
+    } else {
+      const elem = window.document.createElement('a');
+      elem.href = window.URL.createObjectURL(blob);
+      elem.download = filename;
+      document.body.appendChild(elem);
+      elem.click();
+      document.body.removeChild(elem);
     }
   }
 
