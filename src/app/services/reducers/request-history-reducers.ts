@@ -8,7 +8,7 @@ export function requestHistory(state: any[] = [], action: IAction): any {
       let history = [...state, action.response];
       history = history.reduce((current, compare) => {
         return current.findIndex((historyItem: IHistoryItem) => {
-          return historyItem.runTime === compare.runTime;
+          return historyItem.createdAt=== compare.createdAt;
         }) < 0 ? [...current, compare] : current;
       }, []);
 

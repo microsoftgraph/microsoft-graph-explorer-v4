@@ -13,7 +13,7 @@ describe('Request History Reducer', () => {
 
   it('should handle ADD_HISTORY_ITEM_SUCCESS', () => {
     const initialState: any = [];
-    const dummy = { query: 'query', runTime: new Date().toISOString() };
+    const dummy = { query: 'query', createdAt: new Date().toISOString() };
     const queryAction = {
       type: ADD_HISTORY_ITEM_SUCCESS,
       response: dummy

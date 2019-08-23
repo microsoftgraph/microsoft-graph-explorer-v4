@@ -55,9 +55,9 @@ export class History extends Component<IHistoryProps, any> {
     const yesterday = this.formatDate(yesterdaysDate);
 
     requestHistory.forEach((element: any) => {
-      if (element.runTime.includes(today)) {
+      if (element.createdAt.includes(today)) {
         date = 'Today';
-      } else if (element.runTime.includes(yesterday)) {
+      } else if (element.createdAt.includes(yesterday)) {
         date = 'Yesterday';
       }
       element.category = date;

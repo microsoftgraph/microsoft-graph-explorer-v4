@@ -9,20 +9,20 @@ export function runQuery(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = getState().authToken;
     const respHeaders: any = {};
-    const runTime = new Date().toISOString();
+    const createdAt = new Date().toISOString();
 
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query).then(async (response: Response) => {
-        await processRequestResult(response, respHeaders, dispatch, runTime);
+        await processResponse (response, respHeaders, dispatch, createdAt);
       });
     }
 
     return anonymousRequest(dispatch, query).then(async (response: Response) => {
-      await processRequestResult(response, respHeaders, dispatch, runTime);
+      await processResponse (response, respHeaders, dispatch, createdAt);
     });
   };
 
-  async function processRequestResult(response: Response,  respHeaders: any, dispatch: Function, runTime: any) {
+  async function processResponse (response: Response,  respHeaders: any, dispatch: Function, createdAt: any) {
 
     const status = response.status;
     let result = await parseResponse(response, respHeaders);
@@ -38,7 +38,7 @@ export function runQuery(query: IQuery): Function {
       method: query.selectedVerb,
       headers: query.sampleHeaders,
       body: query.sampleBody,
-      runTime,
+      createdAt,
       status,
       response: result,
       duration,

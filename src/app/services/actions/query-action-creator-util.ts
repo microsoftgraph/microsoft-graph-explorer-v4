@@ -37,10 +37,7 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
 
   dispatch(queryRunningStatus(true));
 
-  return fetch(graphUrl, options)
-    .then((response) => {
-      return Promise.resolve(response);
-    });
+  return fetch(graphUrl, options).then(response => Promise.resolve(response));
 }
 
 export function authenticatedRequest(dispatch: Function, query: IQuery) {
