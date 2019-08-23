@@ -1,8 +1,14 @@
-import { DetailsList, DetailsRow, IColumn,
-  IconButton, SearchBox, SelectionMode, styled } from 'office-ui-fabric-react';
+import {
+  ContextualMenuItemType, DetailsList, DetailsRow,
+  IColumn, IconButton, SearchBox, SelectionMode, styled
+} from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import { IHistoryItem, IHistoryProps } from '../../../../types/history';
+import { IQuery } from '../../../../types/query-runner';
+import * as queryActionCreators from '../../../services/actions/query-action-creators';
+import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -47,7 +53,7 @@ export class History extends Component<IHistoryProps, any> {
     return `${year}-${month}-${day}`;
   }
 
-  public getItems (requestHistory: any) {
+  public getItems(requestHistory: any) {
     const items: any[] = [];
     let date = 'Older';
     const today = this.formatDate(new Date());
@@ -104,7 +110,7 @@ export class History extends Component<IHistoryProps, any> {
 
     return (
       <div className={classes.groupHeader}>
-        <DetailsRow {...props} className={classes.queryRow}/>
+        <DetailsRow {...props} className={classes.queryRow} />
       </div>
     );
   };
@@ -124,6 +130,39 @@ export class History extends Component<IHistoryProps, any> {
           return <span title={item.status} className={classes.docLink}>
             {item.status}
           </span>;
+
+        case 'button':
+          return <IconButton
+            className={classes.docLink}
+            title={item.status}
+            ariaLabel={item.status}
+            menuProps={{
+              shouldFocusOnMount: true,
+              items: [
+                {
+                  key: 'viewRequest',
+                  text: 'View',
+                },
+                {
+                  key: 'divider_1',
+                  itemType: ContextualMenuItemType.Divider
+                },
+                {
+                  key: 'runQuery',
+                  text: 'Run',
+                  onClick: () => this.onRunQuery(item)
+                },
+                {
+                  key: 'export',
+                  text: 'Export',
+                },
+                {
+                  key: 'remove',
+                  text: 'Remove',
+                },
+              ]
+            }}
+          />;
 
         default:
           return <span title={queryContent} className={classes.queryContent}>
@@ -162,13 +201,33 @@ export class History extends Component<IHistoryProps, any> {
     };
   }
 
+  private onRunQuery = (query: IHistoryItem) => {
+    const { actions } = this.props;
+
+    const sampleQuery: IQuery = {
+      sampleUrl: GRAPH_URL + query.url.replace(GRAPH_URL, ''),
+      selectedVerb: query.method,
+      sampleBody: query.body,
+    };
+
+    if (actions) {
+      if (sampleQuery.selectedVerb === 'GET') {
+        sampleQuery.sampleBody = JSON.parse('{}');
+        actions.runQuery(sampleQuery);
+      } else {
+        sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
+      }
+      actions.setSampleQuery(sampleQuery);
+    }
+  }
+
   public render() {
     const { groupedList } = this.state;
     const classes = classNames(this.props);
     const columns = [
       { key: 'method', name: 'method', fieldName: 'method', minWidth: 20, maxWidth: 50 },
       { key: 'url', name: 'Url', fieldName: 'url', minWidth: 100, maxWidth: 200 },
-      { key: 'status', name: 'Status', fieldName: 'status', minWidth: 20, maxWidth: 20, },
+      { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20, },
     ];
 
     return (
@@ -201,4 +260,11 @@ function mapStateToProps(state: any) {
   };
 }
 
-export default connect(mapStateToProps, null)(styled(History, sidebarStyles));
+function mapDispatchToProps(dispatch: Dispatch): object {
+  return {
+    actions: bindActionCreators({ ...queryActionCreators, ...queryInputActionCreators }, dispatch),
+  };
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(styled(History, sidebarStyles));
