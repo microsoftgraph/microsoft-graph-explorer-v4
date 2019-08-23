@@ -75,7 +75,7 @@ export class History extends Component<IHistoryProps, any> {
       element.category = date;
       items.push(element);
     });
-    return items.sort(dynamicSort('-runTime'));
+    return items.sort(dynamicSort('-createdAt'));
   }
 
   public generateGroupedList(history: any) {
@@ -223,8 +223,6 @@ export class History extends Component<IHistoryProps, any> {
       if (sampleQuery.selectedVerb === 'GET') {
         sampleQuery.sampleBody = JSON.parse('{}');
         actions.runQuery(sampleQuery);
-      } else {
-        sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
       }
       actions.setSampleQuery(sampleQuery);
     }

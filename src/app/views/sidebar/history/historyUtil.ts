@@ -5,7 +5,7 @@ export function createHarPayload(query: IHistoryItem) {
   const queryResult = JSON.stringify(query.result);
 
   let harPayload = {
-    startedDateTime: query.runTime.toString(),
+    startedDateTime: query.createdAt.toString(),
     time: query.duration,
     method: query.method,
     url: query.url,
