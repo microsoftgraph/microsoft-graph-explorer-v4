@@ -26,10 +26,9 @@ export function runQuery(query: IQuery): Function {
 
     const status = response.status;
     let result = await parseResponse(response, respHeaders);
-    const duration = respHeaders.duration;
+    const { duration, contentType } = respHeaders;
 
-    const contentType = respHeaders['content-type'];
-    if (contentType && isImageResponse(contentType)) {
+    if (isImageResponse(contentType)) {
       result = await result.clone().arrayBuffer();
     }
 

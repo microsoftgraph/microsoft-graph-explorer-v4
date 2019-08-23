@@ -21,15 +21,15 @@ export class History extends Component<IHistoryProps, any> {
 
 
   public componentDidMount = () => {
-    const groupedList = this.generateGroupedList(this.props.requestHistory);
+    const groupedList = this.generateGroupedList(this.props.history);
     this.setState({ groupedList });
   }
 
   public searchValueChanged = (value: any): void => {
-    const { requestHistory } = this.props;
+    const { history } = this.props;
     const keyword = value.toLowerCase();
 
-    const filteredSamples = requestHistory.filter((sample: any) => {
+    const filteredSamples = history.filter((sample: any) => {
       const name = sample.url.toLowerCase();
       return name.toLowerCase().includes(keyword);
     });
@@ -47,14 +47,14 @@ export class History extends Component<IHistoryProps, any> {
     return `${year}-${month}-${day}`;
   }
 
-  public getItems (requestHistory: any) {
+  public getItems (history: any) {
     const items: any[] = [];
     let date = 'Older';
     const today = this.formatDate(new Date());
     const yesterdaysDate = new Date(); yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
     const yesterday = this.formatDate(yesterdaysDate);
 
-    requestHistory.forEach((element: any) => {
+    history.forEach((element: any) => {
       if (element.createdAt.includes(today)) {
         date = 'Today';
       } else if (element.createdAt.includes(yesterday)) {
@@ -66,10 +66,10 @@ export class History extends Component<IHistoryProps, any> {
     return items;
   }
 
-  public generateGroupedList(requestHistory: any) {
+  public generateGroupedList(history: any) {
     const map = new Map();
     const categories: any[] = [];
-    const items = this.getItems(requestHistory);
+    const items = this.getItems(history);
 
     let isCollapsed = false;
     let previousCount = 0;
@@ -197,7 +197,7 @@ export class History extends Component<IHistoryProps, any> {
 
 function mapStateToProps(state: any) {
   return {
-    requestHistory: state.requestHistory
+    history: state.history
   };
 }
 

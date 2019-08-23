@@ -17,7 +17,7 @@ describe('Request History Action Creators', () => {
       },
     ];
 
-    const store = mockStore({ requestHistory: []});
+    const store = mockStore({ history: []});
 
     // @ts-ignore
     store.dispatch(addHistoryItem(historyItem));

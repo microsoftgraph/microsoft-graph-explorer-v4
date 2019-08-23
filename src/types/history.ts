@@ -15,7 +15,7 @@ export interface IHistoryItem {
 export interface IHistoryProps {
   theme?: ITheme;
   styles?: object;
-  requestHistory: Array<{
+  history: Array<{
     url: string;
     method: string;
     headers?: Array<{ name: string; value: string; }>;
