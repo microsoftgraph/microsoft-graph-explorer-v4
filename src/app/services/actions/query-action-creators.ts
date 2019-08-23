@@ -1,6 +1,6 @@
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
-import { createHarPayload, generateHar } from '../../views/sidebar/history/harUtil';
+import { createHarPayload, generateHar } from '../../views/sidebar/history/historyUtil';
 import { queryResponseError } from './error-action-creator';
 import { anonymousRequest, authenticatedRequest,
   isImageResponse, parseResponse, queryResponse } from './query-action-creator-util';

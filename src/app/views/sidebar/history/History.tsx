@@ -5,6 +5,7 @@ import {
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { IHistoryItem, IHistoryProps } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
@@ -12,6 +13,7 @@ import * as queryInputActionCreators from '../../../services/actions/query-input
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
+import { dynamicSort } from './historyUtil';
 
 export class History extends Component<IHistoryProps, any> {
 
@@ -69,14 +71,13 @@ export class History extends Component<IHistoryProps, any> {
       element.category = date;
       items.push(element);
     });
-    return items;
+    return items.sort(dynamicSort('-runTime'));
   }
 
   public generateGroupedList(requestHistory: any) {
     const map = new Map();
     const categories: any[] = [];
     const items = this.getItems(requestHistory);
-
     let isCollapsed = false;
     let previousCount = 0;
     let count = 0;
