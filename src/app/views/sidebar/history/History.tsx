@@ -39,8 +39,7 @@ export class History extends Component<IHistoryProps, any> {
       return name.toLowerCase().includes(keyword);
     });
 
-    const groupedList = this.generateGroupedList(filteredSamples);
-    this.setState({ groupedList });
+    this.generateGroupedList(filteredSamples);
   }
 
   public formatDate = (date: any) => {
