@@ -220,11 +220,9 @@ export class History extends Component<IHistoryProps, any> {
     };
 
     if (actions) {
-      if (sampleQuery.selectedVerb === 'GET') {
-        sampleQuery.sampleBody = JSON.parse('{}');
-        actions.runQuery(sampleQuery);
-      }
+      sampleQuery.sampleBody = JSON.parse('{}');
       actions.setSampleQuery(sampleQuery);
+      actions.runQuery(sampleQuery);
     }
   }
 
