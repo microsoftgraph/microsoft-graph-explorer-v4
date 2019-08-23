@@ -150,6 +150,7 @@ export class History extends Component<IHistoryProps, any> {
                 {
                   key: 'viewRequest',
                   text: 'View',
+                  onClick: () => this.onViewQuery(item)
                 },
                 {
                   key: 'divider_1',
@@ -254,6 +255,25 @@ export class History extends Component<IHistoryProps, any> {
     const { actions } = this.props;
     if (actions) {
       actions.removeHistoryItem(query);
+    }
+  }
+
+  private onViewQuery = (query: IHistoryItem) => {
+    const { actions } = this.props;
+
+    const sampleQuery: IQuery = {
+      sampleUrl: GRAPH_URL + query.url.replace(GRAPH_URL, ''),
+      selectedVerb: query.method,
+      sampleBody: query.body,
+      sampleHeaders: query.headers
+    };
+
+    if (actions) {
+      actions.setSampleQuery(sampleQuery);
+      actions.viewHistoryItem({
+        body: query.result,
+        headers: query.responseHeaders
+      });
     }
   }
 
