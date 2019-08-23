@@ -9,7 +9,7 @@ const mockStore = configureMockStore(middlewares);
 
 describe('Request History Action Creators', () => {
   it('Adds an history item to the store', () => {
-    const historyItem = { query: 'test', runTime: new Date().toISOString() };
+    const historyItem = { query: 'test', createdAt: new Date().toISOString() };
     const expectedActions = [
       {
         type: ADD_HISTORY_ITEM_SUCCESS,
@@ -17,7 +17,7 @@ describe('Request History Action Creators', () => {
       },
     ];
 
-    const store = mockStore({ requestHistory: []});
+    const store = mockStore({ history: []});
 
     // @ts-ignore
     store.dispatch(addHistoryItem(historyItem));

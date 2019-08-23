@@ -1,3 +1,4 @@
+import { writeData } from '../../../store/cache';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { createHarPayload, generateHar } from '../../views/sidebar/history/historyUtil';
@@ -10,49 +11,24 @@ export function runQuery(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = getState().authToken;
     const respHeaders: any = {};
-    const runTime = new Date().toISOString();
+    const createdAt = new Date().toISOString();
 
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query).then(async (response: Response) => {
-        await processRequestResult(response, respHeaders, dispatch, runTime);
+        await processResponse (response, respHeaders, dispatch, createdAt);
       });
     }
 
     return anonymousRequest(dispatch, query).then(async (response: Response) => {
-      await processRequestResult(response, respHeaders, dispatch, runTime);
+      await processResponse (response, respHeaders, dispatch, createdAt);
     });
   };
 
-  async function processRequestResult(response: Response,  respHeaders: any, dispatch: Function, runTime: any) {
+  async function processResponse (response: Response,  respHeaders: any, dispatch: Function, createdAt: any) {
 
-    const status = response.status;
-    const statusText = response.statusText;
-    let result = await parseResponse(response, respHeaders);
-    const duration = respHeaders.duration;
+    const result = await parseResponse(response, respHeaders);
 
-    const contentType = respHeaders['content-type'];
-    if (contentType && isImageResponse(contentType)) {
-      result = await result.clone().arrayBuffer();
-    }
-
-    const historyItem: IHistoryItem = {
-      url: query.sampleUrl,
-      method: query.selectedVerb,
-      body: query.sampleBody,
-      headers: query.sampleHeaders,
-      responseHeaders: respHeaders,
-      runTime,
-      status,
-      statusText,
-      result,
-      duration,
-      har: ''
-    };
-    const harPayload = createHarPayload(historyItem);
-    const har = JSON.stringify(generateHar(harPayload));
-    historyItem.har = har;
-
-    dispatch(addHistoryItem(historyItem));
+    createHistory(response, respHeaders, query, createdAt, dispatch, result);
 
     if (response && response.ok) {
       return dispatch(queryResponse({
@@ -66,3 +42,38 @@ export function runQuery(query: IQuery): Function {
 
   }
 }
+
+async function createHistory(response: Response, respHeaders: any, query: IQuery,
+  createdAt: any, dispatch: Function, result: any) {
+  const status = response.status;
+  const statusText = response.statusText;
+  const { duration, contentType } = respHeaders;
+
+  if (isImageResponse(contentType)) {
+    result = await result.clone().arrayBuffer();
+  }
+
+  const historyItem: IHistoryItem = {
+    url: query.sampleUrl,
+    method: query.selectedVerb,
+    headers: query.sampleHeaders,
+    body: query.sampleBody,
+    responseHeaders: respHeaders,
+    createdAt,
+    status,
+    statusText,
+    result,
+    duration,
+    har: ''
+  };
+
+  const harPayload = createHarPayload(historyItem);
+  const har = JSON.stringify(generateHar(harPayload));
+  historyItem.har = har;
+
+  writeData(historyItem);
+
+  dispatch(addHistoryItem(historyItem));
+  return result;
+}
+

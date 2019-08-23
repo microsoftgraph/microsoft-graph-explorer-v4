@@ -6,15 +6,15 @@ import { isLoadingData } from './query-loading-reducers';
 import { queryRunnerError } from './query-runner-error';
 import { graphResponse } from './query-runner-reducers';
 import { headersAdded } from './request-headers-reducers';
-import { requestHistory } from './request-history-reducers';
+import { history } from './request-history-reducers';
 
 export default combineReducers({
   authToken,
   graphExplorerMode,
   graphResponse,
   headersAdded,
+  history,
   isLoadingData,
   queryRunnerError,
-  requestHistory,
   sampleQuery
 });

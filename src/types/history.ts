@@ -6,7 +6,7 @@ export interface IHistoryItem {
   headers: Array<{ name: string; value: string; }>;
   category?: string;
   body?: string;
-  runTime: string;
+  createdAt: string;
   status: number;
   statusText: string;
   response?: Response;
@@ -23,13 +23,13 @@ export interface IHistoryProps {
   };
   theme?: ITheme;
   styles?: object;
-  requestHistory: Array<{
+  history: Array<{
     url: string;
     method: string;
     headers?: Array<{ name: string; value: string; }>;
     category?: string;
     body?: string;
-    runTime: string;
+    createdAt: string;
     status: number;
     response: object;
     duration: number;

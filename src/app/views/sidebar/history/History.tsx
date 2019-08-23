@@ -29,21 +29,25 @@ export class History extends Component<IHistoryProps, any> {
 
 
   public componentDidMount = () => {
-    const groupedList = this.generateGroupedList(this.props.requestHistory);
-    this.setState({ groupedList });
+    this.generateGroupedList(this.props.history);
+  }
+
+  public componentDidUpdate = (prevProps: IHistoryProps) => {
+    if (prevProps.history !== this.props.history) {
+      this.generateGroupedList(this.props.history);
+    }
   }
 
   public searchValueChanged = (value: any): void => {
-    const { requestHistory } = this.props;
+    const { history } = this.props;
     const keyword = value.toLowerCase();
 
-    const filteredSamples = requestHistory.filter((sample: any) => {
+    const filteredSamples = history.filter((sample: any) => {
       const name = sample.url.toLowerCase();
       return name.toLowerCase().includes(keyword);
     });
 
-    const groupedList = this.generateGroupedList(filteredSamples);
-    this.setState({ groupedList });
+    this.generateGroupedList(filteredSamples);
   }
 
   public formatDate = (date: any) => {
@@ -55,17 +59,17 @@ export class History extends Component<IHistoryProps, any> {
     return `${year}-${month}-${day}`;
   }
 
-  public getItems(requestHistory: any) {
+  public getItems (history: any) {
     const items: any[] = [];
     let date = 'Older';
     const today = this.formatDate(new Date());
     const yesterdaysDate = new Date(); yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
     const yesterday = this.formatDate(yesterdaysDate);
 
-    requestHistory.forEach((element: any) => {
-      if (element.runTime.includes(today)) {
+    history.forEach((element: any) => {
+      if (element.createdAt.includes(today)) {
         date = 'Today';
-      } else if (element.runTime.includes(yesterday)) {
+      } else if (element.createdAt.includes(yesterday)) {
         date = 'Yesterday';
       }
       element.category = date;
@@ -74,10 +78,11 @@ export class History extends Component<IHistoryProps, any> {
     return items.sort(dynamicSort('-runTime'));
   }
 
-  public generateGroupedList(requestHistory: any) {
+  public generateGroupedList(history: any) {
     const map = new Map();
     const categories: any[] = [];
-    const items = this.getItems(requestHistory);
+    const items = this.getItems(history);
+
     let isCollapsed = false;
     let previousCount = 0;
     let count = 0;
@@ -100,10 +105,11 @@ export class History extends Component<IHistoryProps, any> {
       }
     }
 
-    return {
-      items,
-      categories,
-    };
+    this.setState({
+      groupedList: {
+        items,
+        categories,
+      }});
   }
 
   public renderRow = (props: any): any => {
@@ -279,7 +285,7 @@ export class History extends Component<IHistoryProps, any> {
 
 function mapStateToProps(state: any) {
   return {
-    requestHistory: state.requestHistory
+    history: state.history
   };
 }
 
