@@ -153,10 +153,6 @@ export class History extends Component<IHistoryProps, any> {
                   onClick: () => this.onViewQuery(item)
                 },
                 {
-                  key: 'divider_1',
-                  itemType: ContextualMenuItemType.Divider
-                },
-                {
                   key: 'runQuery',
                   text: 'Run',
                   onClick: () => this.onRunQuery(item)
@@ -281,8 +277,8 @@ export class History extends Component<IHistoryProps, any> {
     const { groupedList } = this.state;
     const classes = classNames(this.props);
     const columns = [
-      { key: 'method', name: 'method', fieldName: 'method', minWidth: 20, maxWidth: 50 },
-      { key: 'url', name: 'Url', fieldName: 'url', minWidth: 100, maxWidth: 200 },
+      { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
+      { key: 'url', name: '', fieldName: 'url', minWidth: 100, maxWidth: 200 },
       { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20, },
     ];
 
