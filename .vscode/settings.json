@@ -2,11 +2,22 @@
 {
     "search.exclude": {
         "**/node_modules": true,
-        "**/all.min.js":true
+        "**/all.min.js": true,
+        "**/build": true
     },
     "files.exclude": {
         "**/node_modules": true,
         "**/.github": true,
+        "build/": true
     },
-    "files.trimTrailingWhitespace": true
+    "files.trimTrailingWhitespace": true,
+    "editor.formatOnPaste": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "editor.tabSize": 2,
+    "files.insertFinalNewline": true,
+    "tslint.autoFixOnSave": true,
+    "explorer.confirmDelete": false,
+    "git.enableSmartCommit": true,
+    "eslint.autoFixOnSave": true,
+    "team.showWelcomeMessage": false
 }

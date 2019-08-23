@@ -21,8 +21,13 @@ export class History extends Component<IHistoryProps, any> {
 
 
   public componentDidMount = () => {
-    const groupedList = this.generateGroupedList(this.props.history);
-    this.setState({ groupedList });
+    this.generateGroupedList(this.props.history);
+  }
+
+  public componentDidUpdate = (prevProps: IHistoryProps) => {
+    if (prevProps.history !== this.props.history) {
+      this.generateGroupedList(this.props.history);
+    }
   }
 
   public searchValueChanged = (value: any): void => {
@@ -93,10 +98,11 @@ export class History extends Component<IHistoryProps, any> {
       }
     }
 
-    return {
-      items,
-      categories,
-    };
+    this.setState({
+      groupedList: {
+        items,
+        categories,
+      }});
   }
 
   public renderRow = (props: any): any => {
