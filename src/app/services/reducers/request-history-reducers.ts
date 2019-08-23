@@ -1,4 +1,3 @@
-import { writeData } from '../../../store/cache';
 import { IAction } from '../../../types/action';
 import { IHistoryItem } from '../../../types/history';
 import { ADD_HISTORY_ITEM_SUCCESS } from '../redux-constants';
@@ -13,7 +12,6 @@ export function history(state: any[] = [], action: IAction): any {
         }) < 0 ? [...current, compare] : current;
       }, []);
 
-      writeData(history);
       return historyItems;
     default:
       return state;

@@ -1,3 +1,4 @@
+import { writeData } from '../../../store/cache';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { queryResponseError } from './error-action-creator';
@@ -24,26 +25,9 @@ export function runQuery(query: IQuery): Function {
 
   async function processResponse (response: Response,  respHeaders: any, dispatch: Function, createdAt: any) {
 
-    const status = response.status;
-    let result = await parseResponse(response, respHeaders);
-    const { duration, contentType } = respHeaders;
+    const result = await parseResponse(response, respHeaders);
 
-    if (isImageResponse(contentType)) {
-      result = await result.clone().arrayBuffer();
-    }
-
-    const historyItem: IHistoryItem = {
-      url: query.sampleUrl,
-      method: query.selectedVerb,
-      headers: query.sampleHeaders,
-      body: query.sampleBody,
-      createdAt,
-      status,
-      response: result,
-      duration,
-    };
-
-    dispatch(addHistoryItem(historyItem));
+    createHistory(response, respHeaders, query, createdAt, dispatch, result);
 
     if (response && response.ok) {
       return dispatch(queryResponse({
@@ -57,3 +41,30 @@ export function runQuery(query: IQuery): Function {
 
   }
 }
+
+async function createHistory(response: Response, respHeaders: any, query: IQuery,
+  createdAt: any, dispatch: Function, result: any) {
+  const status = response.status;
+  const { duration, contentType } = respHeaders;
+
+  if (isImageResponse(contentType)) {
+    result = await result.clone().arrayBuffer();
+  }
+
+  const historyItem: IHistoryItem = {
+    url: query.sampleUrl,
+    method: query.selectedVerb,
+    headers: query.sampleHeaders,
+    body: query.sampleBody,
+    createdAt,
+    status,
+    response: result,
+    duration,
+  };
+
+  writeData(historyItem);
+
+  dispatch(addHistoryItem(historyItem));
+  return result;
+}
+

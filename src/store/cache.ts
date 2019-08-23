@@ -1,13 +1,16 @@
 import localforage from 'localforage';
+import { IHistoryItem } from '../types/history';
 
 const key = 'history';
 
-export function writeData  (data: object) {
-  localforage.setItem(key, data);
+export async function writeData  (data: IHistoryItem) {
+  const historyItems: IHistoryItem[] = await readData();
+  const items = [...historyItems, data];
+  localforage.setItem(key, items);
 }
 
-export async function readData  () {
-  const data = await localforage.getItem(key);
+export async function readData(): Promise<IHistoryItem[]> {
+  const data: IHistoryItem[] = await localforage.getItem(key);
   return data || [];
 }
 
