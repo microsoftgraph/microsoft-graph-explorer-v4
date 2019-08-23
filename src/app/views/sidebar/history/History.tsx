@@ -10,6 +10,7 @@ import { IHistoryItem, IHistoryProps } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
+import * as requestHistoryActionCreators from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -167,6 +168,7 @@ export class History extends Component<IHistoryProps, any> {
                 {
                   key: 'remove',
                   text: 'Remove',
+                  onClick: () => this.onDeleteQuery(item)
                 },
               ]
             }}
@@ -248,6 +250,13 @@ export class History extends Component<IHistoryProps, any> {
     }
   }
 
+  private onDeleteQuery = (query: IHistoryItem) => {
+    const { actions } = this.props;
+    if (actions) {
+      actions.removeHistoryItem(query);
+    }
+  }
+
   public render() {
     const { groupedList } = this.state;
     const classes = classNames(this.props);
@@ -289,7 +298,11 @@ function mapStateToProps(state: any) {
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators({ ...queryActionCreators, ...queryInputActionCreators }, dispatch),
+    actions: bindActionCreators({
+      ...queryActionCreators,
+      ...queryInputActionCreators,
+      ...requestHistoryActionCreators },
+      dispatch),
   };
 }
 

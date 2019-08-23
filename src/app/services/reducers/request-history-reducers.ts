@@ -1,6 +1,6 @@
 import { IAction } from '../../../types/action';
 import { IHistoryItem } from '../../../types/history';
-import { ADD_HISTORY_ITEM_SUCCESS } from '../redux-constants';
+import { ADD_HISTORY_ITEM_SUCCESS, REMOVE_HISTORY_ITEM_SUCCESS } from '../redux-constants';
 
 export function history(state: any[] = [], action: IAction): any {
   switch (action.type) {
@@ -13,6 +13,10 @@ export function history(state: any[] = [], action: IAction): any {
       }, []);
 
       return historyItems;
+
+    case REMOVE_HISTORY_ITEM_SUCCESS:
+      return state.filter(historyItem => historyItem !== action.response);
+
     default:
       return state;
   }

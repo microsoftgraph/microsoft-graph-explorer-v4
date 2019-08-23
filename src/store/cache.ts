@@ -14,6 +14,10 @@ export async function readData(): Promise<IHistoryItem[]> {
   return data || [];
 }
 
-export function removeData  () { localforage.removeItem(key); }
+export async function removeData(data: IHistoryItem) {
+  const historyItems: IHistoryItem[] = await readData();
+  const items = historyItems.filter(history => history !== data);
+  localforage.setItem(key, items);
+}
 
 export function clear  () { localforage.clear(); }
