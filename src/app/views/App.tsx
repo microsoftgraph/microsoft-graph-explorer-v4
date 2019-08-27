@@ -43,6 +43,8 @@ class App extends Component<IAppProps, IAppState> {
   public componentDidMount = () => {
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
+    // tslint:disable-next-line:no-console
+    console.log('adding listener');
   }
 
   public componentWillUnmount(): void {
@@ -50,7 +52,11 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
+    // tslint:disable-next-line:no-console
+    console.log('received theme', msg.theme);
     loadGETheme(msg.theme);
+    // tslint:disable-next-line:no-console
+    console.log('loaded theme');
   };
 
   private receiveMessage = (event: MessageEvent): void => {
