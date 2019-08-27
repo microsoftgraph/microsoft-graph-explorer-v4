@@ -9,7 +9,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { loadGETheme } from '../../themes';
+import { dark } from '../../themes/dark';
 import { Mode } from '../../types/action';
+import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
 import { clearQueryError } from '../services/actions/error-action-creator';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
@@ -37,6 +40,31 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
+  public componentDidMount = () => {
+    // Listens for messages from host document
+    window.addEventListener('message', this.receiveMessage, false);
+  }
+
+  public componentWillUnmount(): void {
+    window.removeEventListener('message', this.receiveMessage);
+  }
+
+  private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
+    loadGETheme(msg.theme);
+  };
+
+  private receiveMessage = (event: MessageEvent): void => {
+    const msgEvent: IThemeChangedMessage | IInitMessage = event.data;
+
+    switch (msgEvent.type) {
+      case 'theme-changed':
+        this.handleThemeChangeMsg(msgEvent);
+        break;
+      default:
+        return;
+    }
+  };
+
   public handleSelectVerb = (verb: string) => {
     this.setState({
       selectedVerb: verb
@@ -45,7 +73,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, actions }: any = this.props;
+    const { graphExplorerMode, error, actions, sampleQuery }: any = this.props;
     const layout =
       graphExplorerMode === Mode.TryIt
         ? 'col-sm-12 col-lg-8 offset-lg-2'
@@ -88,6 +116,7 @@ class App extends Component<IAppProps, IAppState> {
                   {`${error.statusText} - ${error.status}`}
                 </MessageBar>
               )}
+              {sampleQuery && (<div/>)}
               {
                 // @ts-ignore
                 <QueryResponse verb={this.state.selectedVerb} />
@@ -103,6 +132,7 @@ class App extends Component<IAppProps, IAppState> {
 const mapStateToProps = (state: any) => {
   return {
     error: state.queryRunnerError,
+    receivedSampleQuery: state.sampleQuery,
     graphExplorerMode: state.graphExplorerMode
   };
 };
