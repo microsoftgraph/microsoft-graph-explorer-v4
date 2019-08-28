@@ -1,11 +1,20 @@
-import { DetailsList, DetailsRow, IColumn,
-  IconButton, SearchBox, SelectionMode, styled } from 'office-ui-fabric-react';
+import {
+  ContextualMenuItemType, DetailsList, DetailsRow,
+  IColumn, IconButton, SearchBox, SelectionMode, styled
+} from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+
 import { IHistoryItem, IHistoryProps } from '../../../../types/history';
+import { IQuery } from '../../../../types/query-runner';
+import * as queryActionCreators from '../../../services/actions/query-action-creators';
+import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
+import * as requestHistoryActionCreators from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
+import { dynamicSort } from './historyUtil';
 
 export class History extends Component<IHistoryProps, any> {
 
@@ -67,7 +76,7 @@ export class History extends Component<IHistoryProps, any> {
       element.category = date;
       items.push(element);
     });
-    return items;
+    return items.sort(dynamicSort('-createdAt'));
   }
 
   public generateGroupedList(history: any) {
@@ -109,7 +118,7 @@ export class History extends Component<IHistoryProps, any> {
 
     return (
       <div className={classes.groupHeader}>
-        <DetailsRow {...props} className={classes.queryRow}/>
+        <DetailsRow {...props} className={classes.queryRow} />
       </div>
     );
   };
@@ -129,6 +138,38 @@ export class History extends Component<IHistoryProps, any> {
           return <span title={item.status} className={classes.docLink}>
             {item.status}
           </span>;
+
+        case 'button':
+          return <IconButton
+            className={classes.docLink}
+            title={item.status}
+            ariaLabel={item.status}
+            menuProps={{
+              shouldFocusOnMount: true,
+              items: [
+                {
+                  key: 'viewRequest',
+                  text: 'View',
+                  onClick: () => this.onViewQuery(item)
+                },
+                {
+                  key: 'runQuery',
+                  text: 'Run',
+                  onClick: () => this.onRunQuery(item)
+                },
+                {
+                  key: 'export',
+                  text: 'Export',
+                  onClick: () => this.onExportQuery(item)
+                },
+                {
+                  key: 'remove',
+                  text: 'Remove',
+                  onClick: () => this.onDeleteQuery(item)
+                },
+              ]
+            }}
+          />;
 
         default:
           return <span title={queryContent} className={classes.queryContent}>
@@ -167,13 +208,78 @@ export class History extends Component<IHistoryProps, any> {
     };
   }
 
+  private onRunQuery = (query: IHistoryItem) => {
+    const { actions } = this.props;
+
+    const sampleQuery: IQuery = {
+      sampleUrl: GRAPH_URL + query.url.replace(GRAPH_URL, ''),
+      selectedVerb: query.method,
+      sampleBody: query.body,
+      sampleHeaders: query.headers
+    };
+
+    if (actions) {
+      if (sampleQuery.selectedVerb === 'GET') {
+        sampleQuery.sampleBody = JSON.parse('{}');
+      }
+      actions.runQuery(sampleQuery);
+      actions.setSampleQuery(sampleQuery);
+    }
+  }
+
+  private onExportQuery = (query: IHistoryItem) => {
+    const blob = new Blob([query.har], { type: 'text/json' });
+
+    const url = query.url.substr(8).split('/');
+    url.pop(); // Removes leading slash
+
+    const filename = `${url.join('_')}.har`;
+
+    if (window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveBlob(blob, filename);
+    } else {
+      const elem = window.document.createElement('a');
+      elem.href = window.URL.createObjectURL(blob);
+      elem.download = filename;
+      document.body.appendChild(elem);
+      elem.click();
+      document.body.removeChild(elem);
+    }
+  }
+
+  private onDeleteQuery = (query: IHistoryItem) => {
+    const { actions } = this.props;
+    if (actions) {
+      actions.removeHistoryItem(query);
+    }
+  }
+
+  private onViewQuery = (query: IHistoryItem) => {
+    const { actions } = this.props;
+
+    const sampleQuery: IQuery = {
+      sampleUrl: GRAPH_URL + query.url.replace(GRAPH_URL, ''),
+      selectedVerb: query.method,
+      sampleBody: query.body,
+      sampleHeaders: query.headers
+    };
+
+    if (actions) {
+      actions.setSampleQuery(sampleQuery);
+      actions.viewHistoryItem({
+        body: query.result,
+        headers: query.responseHeaders
+      });
+    }
+  }
+
   public render() {
     const { groupedList } = this.state;
     const classes = classNames(this.props);
     const columns = [
-      { key: 'method', name: 'method', fieldName: 'method', minWidth: 20, maxWidth: 50 },
-      { key: 'url', name: 'Url', fieldName: 'url', minWidth: 100, maxWidth: 200 },
-      { key: 'status', name: 'Status', fieldName: 'status', minWidth: 20, maxWidth: 20, },
+      { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
+      { key: 'url', name: '', fieldName: 'url', minWidth: 100, maxWidth: 200 },
+      { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20, },
     ];
 
     return (
@@ -206,4 +312,15 @@ function mapStateToProps(state: any) {
   };
 }
 
-export default connect(mapStateToProps, null)(styled(History, sidebarStyles));
+function mapDispatchToProps(dispatch: Dispatch): object {
+  return {
+    actions: bindActionCreators({
+      ...queryActionCreators,
+      ...queryInputActionCreators,
+      ...requestHistoryActionCreators },
+      dispatch),
+  };
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(styled(History, sidebarStyles));

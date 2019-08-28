@@ -207,6 +207,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           sampleUrl: GRAPH_URL + selectedQuery.requestUrl,
           selectedVerb: selectedQuery.method,
           sampleBody: selectedQuery.postBody,
+          sampleHeaders: selectedQuery.headers || []
         };
 
         if (actions) {
