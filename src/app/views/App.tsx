@@ -14,6 +14,9 @@ import { dark } from '../../themes/dark';
 import { Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
 import { clearQueryError } from '../services/actions/error-action-creator';
+import { runQuery } from '../services/actions/query-action-creators';
+import { setSampleQuery } from '../services/actions/query-input-action-creators';
+import { addRequestHeader } from '../services/actions/request-headers-action-creators';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
@@ -26,6 +29,12 @@ interface IAppProps {
   styles?: object;
   error: object | null;
   graphExplorerMode: Mode;
+  actions: {
+    addRequestHeader: Function;
+    clearQueryError: Function;
+    setSampleQuery: Function;
+    runQuery: Function;
+  };
 }
 
 interface IAppState {
@@ -41,6 +50,12 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public componentDidMount = () => {
+    // TODO: delete these calls and and make them where relevant.
+    this.props.actions!.clearQueryError();
+    this.props.actions!.runQuery();
+    this.props.actions!.addRequestHeader();
+    this.props.actions!.setSampleQuery();
+
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
     // tslint:disable-next-line:no-console
@@ -145,7 +160,7 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions: bindActionCreators({ clearQueryError }, dispatch)
+    actions: bindActionCreators({ clearQueryError, runQuery, setSampleQuery, addRequestHeader }, dispatch)
   };
 };
 
