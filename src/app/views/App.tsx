@@ -90,7 +90,7 @@ class App extends Component<IAppProps, IAppState> {
     if (actions) {
       actions.setSampleQuery(query);
     }
-  };
+  }
 
   public componentWillUnmount(): void {
     window.removeEventListener('message', this.receiveMessage);
