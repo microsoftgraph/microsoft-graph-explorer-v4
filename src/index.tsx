@@ -76,6 +76,12 @@ if (theme) {
   loadGETheme(theme);
 }
 
+const localTheme = localStorage.getItem('theme');
+
+if (localTheme) {
+  loadGETheme(localTheme);
+  localStorage.removeItem('theme');
+}
 if (hostDocumentLocale) {
   appState.dispatch(setGraphExplorerMode(Mode.TryIt));
 }

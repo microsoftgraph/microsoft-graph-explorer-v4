@@ -97,11 +97,15 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
-    // tslint:disable-next-line:no-console
+    // tslint:disable
     console.log('received theme', msg.theme);
     loadGETheme(msg.theme);
-    // tslint:disable-next-line:no-console
+
     console.log('loaded theme');
+    console.log('Reloading...');
+    localStorage.setItem('theme', msg.theme);
+    window.location.reload();
+    // tslint:enable
   };
 
   private receiveMessage = (event: MessageEvent): void => {
