@@ -182,6 +182,12 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     );
   };
 
+  private renderDetailsHeader() {
+    return (
+      <div/>
+    );
+  }
+
   private onToggleCollapse(props: any): () => void {
     return () => {
       props!.onToggleCollapse!(props!.group!);
@@ -239,6 +245,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             onRenderHeader: this.renderGroupHeader,
           }}
           onRenderRow={this.renderRow}
+          onRenderDetailsHeader={this.renderDetailsHeader}
         />
       </div>
     );

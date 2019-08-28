@@ -208,6 +208,12 @@ export class History extends Component<IHistoryProps, any> {
     };
   }
 
+  private renderDetailsHeader() {
+    return (
+      <div/>
+    );
+  }
+
   private onRunQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
 
@@ -300,6 +306,7 @@ export class History extends Component<IHistoryProps, any> {
             onRenderHeader: this.renderGroupHeader,
           }}
           onRenderRow={this.renderRow}
+          onRenderDetailsHeader={this.renderDetailsHeader}
         />}
       </div>
     );
