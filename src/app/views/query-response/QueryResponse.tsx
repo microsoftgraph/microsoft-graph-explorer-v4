@@ -4,12 +4,20 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { IQueryResponseProps } from '../../../types/query-response';
+import { clearResponse } from '../../services/actions/error-action-creator';
 import { Image, Monaco } from '../common';
 import './query-response.scss';
 
 class QueryResponse extends Component<IQueryResponseProps, {}> {
   constructor(props: any) {
     super(props);
+  }
+
+  public componentWillUnmount() {
+    // tslint:disable-next-line
+    console.log('Clearing response')
+    // @ts-ignore
+    this.props.dispatch(clearResponse());
   }
 
   public render() {
@@ -37,6 +45,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 
     return (
       <div className='query-response'>
+        {body &&
         <Pivot className='pivot-response'>
           <PivotItem
             ariaLabel='Response Preview'
@@ -59,6 +68,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
             <Monaco body={headers} />
           </PivotItem>
         </Pivot>
+        }
       </div>
     );
   }

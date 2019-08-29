@@ -14,7 +14,9 @@ function editorDidMount(editor: any) {
   const editorHasText = !!editor.getModel().getValue();
 
   if (editorHasText) {
-    formatDocument(editor);
+    setTimeout(() => {
+      formatDocument(editor);
+    }, 100);
   }
 
   editor.onDidChangeModelContent(() => {

@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { renderApp } from '../..';
 import { loadGETheme } from '../../themes';
 import { Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
@@ -102,9 +103,9 @@ class App extends Component<IAppProps, IAppState> {
     loadGETheme(msg.theme);
 
     console.log('loaded theme');
-    console.log('Reloading...');
-    localStorage.setItem('theme', msg.theme);
-    window.location.reload();
+    console.log('Rerendering...');
+
+    renderApp(Math.random().toString())
     // tslint:enable
   };
 
@@ -142,6 +143,10 @@ class App extends Component<IAppProps, IAppState> {
      * If we don't put this delay, the body won't be formatted.
      */
     setTimeout(() => {
+      // tslint:disable
+      console.log('Sample body');
+      console.log(body);
+      // tslint:enable
       if (actions) {
         actions.setSampleQuery({
           sampleUrl: url,
@@ -173,7 +178,7 @@ class App extends Component<IAppProps, IAppState> {
     const { graphExplorerMode, error, actions, sampleQuery }: any = this.props;
     const layout =
       graphExplorerMode === Mode.TryIt
-        ? 'col-sm-12 col-lg-8 offset-lg-2'
+        ? 'col-sm-12'
         : 'col-sm-12 col-lg-9';
     return (
       <FocusTrapZone>

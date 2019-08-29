@@ -76,12 +76,6 @@ if (theme) {
   loadGETheme(theme);
 }
 
-const localTheme = localStorage.getItem('theme');
-
-if (localTheme) {
-  loadGETheme(localTheme);
-  localStorage.removeItem('theme');
-}
 if (hostDocumentLocale) {
   appState.dispatch(setGraphExplorerMode(Mode.TryIt));
 }
@@ -97,3 +91,7 @@ const Root = () => {
 };
 
 ReactDOM.render(<Root />, document.getElementById('root'));
+
+export function renderApp(key: string) {
+  ReactDOM.render(<Root key={key}/>, document.getElementById('root'));
+}
