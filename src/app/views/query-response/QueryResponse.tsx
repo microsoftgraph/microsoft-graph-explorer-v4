@@ -43,8 +43,6 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
       }
     }
 
-    const theme = getTheme();
-    console.log(theme);
     return (
       <div className='query-response'>
         {body ?
@@ -71,9 +69,16 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
           </PivotItem>
         </Pivot>
         :
-          <div className='default-text' style={{ fontFamily: theme.fonts.mega.fontFamily}}>
-            <p >Run Query to see Response</p>
-          </div>
+          <Pivot className='pivot-response'>
+            <PivotItem
+              ariaLabel='Response Preview'
+              headerText={messages['Response Preview']}
+            />
+            <PivotItem
+              ariaLabel='Response Headers'
+              headerText={messages['Response Headers']}
+            />
+          </Pivot>
         }
       </div>
     );
