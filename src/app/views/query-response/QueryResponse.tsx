@@ -1,4 +1,4 @@
-import { Pivot, PivotItem } from 'office-ui-fabric-react';
+import { getTheme, Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -43,9 +43,11 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
       }
     }
 
+    const theme = getTheme();
+    console.log(theme);
     return (
       <div className='query-response'>
-        {body &&
+        {body ?
         <Pivot className='pivot-response'>
           <PivotItem
             ariaLabel='Response Preview'
@@ -68,6 +70,10 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
             <Monaco body={headers} />
           </PivotItem>
         </Pivot>
+        :
+          <div className='default-text' style={{ fontFamily: theme.fonts.mega.fontFamily}}>
+            <p >Run Query to see Response</p>
+          </div>
         }
       </div>
     );
@@ -76,10 +82,11 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 
 function mapStateToProps(state: IQueryResponseProps) {
   return {
-    graphResponse: state.graphResponse,
+    graphResponse:  state.graphResponse,
   };
 }
 
 // @ts-ignore
 const WithIntl = injectIntl(QueryResponse);
 export default connect(mapStateToProps)(WithIntl);
+
