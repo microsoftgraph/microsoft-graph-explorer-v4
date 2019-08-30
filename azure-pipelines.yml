@@ -37,9 +37,9 @@ steps:
 
   - task: PublishBuildArtifacts@1
     inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: 'build'
-    publishLocation: 'Container'
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: 'build'
+      publishLocation: 'Container'
     #targetPath: # Required when publishLocation == FilePath
 
 #  - task: AzureRmWebAppDeployment@3
