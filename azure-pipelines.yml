@@ -32,7 +32,7 @@ steps:
 
   - task: DeleteFiles@1
     inputs:
-      sourceFolder: 'node_modules'
+      sourceFolder: '$(Agent.BuildDirectory)/node_modules'
     displayName: 'Deleting node_modules'
 
   - task: AzureRmWebAppDeployment@3
