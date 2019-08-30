@@ -1,6 +1,6 @@
 import {
-  ContextualMenuItemType, DetailsList, DetailsRow,
-  IColumn, IconButton, SearchBox, SelectionMode, styled
+  ContextualMenuItemType, DetailsList, DetailsRow, getId, getTheme,
+  IColumn, IconButton, SearchBox, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -116,7 +116,6 @@ export class History extends Component<IHistoryProps, any> {
 
   public renderRow = (props: any): any => {
     const classes = classNames(this.props);
-
     return (
       <div className={classes.groupHeader}>
         <DetailsRow {...props} className={classes.queryRow} />
@@ -126,25 +125,26 @@ export class History extends Component<IHistoryProps, any> {
 
   public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const classes = classNames(this.props);
+    const hostId: string = getId('tooltipHost');
+    const currentTheme = getTheme();
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
+      let color = currentTheme.palette.green;
+      if (item.status > 300) {
+        color = currentTheme.palette.red;
+      }
 
       switch (column.key) {
 
-        case 'method':
-          return <span className={classes.badge}>{item.method}</span>;
-
         case 'status':
-          return <span title={item.status} className={classes.docLink}>
-            {item.status}
-          </span>;
+          return <span style={{ color }} className={classes.badge}>{item.status}</span>;
 
         case 'button':
           return <IconButton
             className={classes.docLink}
-            title={item.status}
-            ariaLabel={item.status}
+            title='Actions'
+            ariaLabel='Actions'
             menuProps={{
               shouldFocusOnMount: true,
               items: [
@@ -182,9 +182,18 @@ export class History extends Component<IHistoryProps, any> {
           />;
 
         default:
-          return <span title={queryContent} className={classes.queryContent}>
-            {queryContent.replace(GRAPH_URL, '')}
-          </span>;
+          return <>
+            <TooltipHost
+              content={`${item.method} - ${queryContent}`}
+              id={hostId}
+              calloutProps={{ gapSpace: 0 }}
+              styles={{ root: { display: 'inline-block' } }}
+            >
+              <span aria-labelledby={hostId} className={classes.queryContent}>
+                {queryContent.replace(GRAPH_URL, '')}
+              </span>
+            </TooltipHost>
+          </>;
       }
     }
   };
@@ -243,25 +252,6 @@ export class History extends Component<IHistoryProps, any> {
     }
   }
 
-  private onExportQuery = (query: IHistoryItem) => {
-    const blob = new Blob([query.har], { type: 'text/json' });
-
-    const url = query.url.substr(8).split('/');
-    url.pop(); // Removes leading slash
-
-    const filename = `${url.join('_')}.har`;
-
-    if (window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveBlob(blob, filename);
-    } else {
-      const elem = window.document.createElement('a');
-      elem.href = window.URL.createObjectURL(blob);
-      elem.download = filename;
-      document.body.appendChild(elem);
-      elem.click();
-      document.body.removeChild(elem);
-    }
-  }
 
   private onDeleteQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
@@ -293,7 +283,7 @@ export class History extends Component<IHistoryProps, any> {
     const { groupedList } = this.state;
     const classes = classNames(this.props);
     const columns = [
-      { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
+      { key: 'status', name: '', fieldName: 'status', minWidth: 20, maxWidth: 50 },
       { key: 'url', name: '', fieldName: 'url', minWidth: 100, maxWidth: 200 },
       { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20, },
     ];
@@ -342,3 +332,4 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(styled(History, sidebarStyles));
+

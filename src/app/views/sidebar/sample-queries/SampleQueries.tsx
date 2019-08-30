@@ -1,6 +1,6 @@
 import {
-  DetailsList, DetailsRow, getTheme, IColumn, IconButton,
-  SearchBox, Selection, SelectionMode, styled
+  DetailsList, DetailsRow, getId, getTheme, IColumn,
+  IconButton, SearchBox, Selection, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -112,6 +112,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const classes = classNames(this.props);
+    const hostId: string = getId('tooltipHost');
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
@@ -133,9 +134,19 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           >{item.method}</span>;
 
         default:
-          return <span title={queryContent} className={classes.queryContent}>
-            <FormattedMessage id={queryContent} />
-          </span>;
+          return <>
+            <TooltipHost
+              content={queryContent}
+              id={hostId}
+              calloutProps={{ gapSpace: 0 }}
+              styles={{ root: { display: 'inline-block' } }}
+            >
+              <span aria-labelledby={hostId} className={classes.queryContent}>
+                <FormattedMessage id={queryContent} />
+              </span>
+            </TooltipHost>
+          </>
+            ;
       }
     }
   };
@@ -184,7 +195,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   private renderDetailsHeader() {
     return (
-      <div/>
+      <div />
     );
   }
 
