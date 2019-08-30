@@ -138,10 +138,6 @@ class App extends Component<IAppProps, IAppState> {
      * If we don't put this delay, the body won't be formatted.
      */
     setTimeout(() => {
-      // tslint:disable
-      console.log('Sample body');
-      console.log(body);
-      // tslint:enable
       if (actions) {
         actions.setSampleQuery({
           sampleUrl: url,
@@ -152,13 +148,13 @@ class App extends Component<IAppProps, IAppState> {
     }, 1000);
 
     if (actions) {
-      const requestHeadears = headers.map((header: any) => {
+      const requestHeaders = headers.map((header: any) => {
         return {
           name: Object.keys(header)[0],
           value: Object.values(header)[0]
         };
       });
-      actions.addRequestHeader(requestHeadears);
+      actions.addRequestHeader(requestHeaders);
     }
   };
 
