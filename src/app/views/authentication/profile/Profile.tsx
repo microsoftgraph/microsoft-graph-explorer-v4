@@ -1,12 +1,16 @@
+import { styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
 import {
   USER_INFO_URL,
   USER_PICTURE_URL
 } from '../../../services/graph-constants';
+import { classNames } from '../../classnames';
+import { authenticationStyles } from '../Authentication.styles';
 
 export class Profile extends Component<IProfileProps, IProfileState> {
   constructor(props: IProfileProps) {
@@ -78,19 +82,21 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
   public render() {
     const { user } = this.state;
+    const classes = classNames(this.props);
+
     return (
-      <div className='profile'>
-        {user.profileImageUrl !== '' && <div className='user-imageArea'>
+      <div className={classes.profile}>
+        {user.profileImageUrl !== '' && <div className={classes.userImageArea}>
           <img
-            className='user-image'
+            className={classes.userImage}
             alt={user.displayName}
             src={user.profileImageUrl}
           />
         </div>}
-        <div className='user-details'>
-          <span className='user-name'>{user.displayName}</span>
+        <div className={classes.userDetails}>
+          <span className={classes.userName}>{user.displayName}</span>
           <br />
-          <span className='user-email'>{user.emailAddress}</span>
+          <span className={classes.userEmail}>{user.emailAddress}</span>
         </div>
       </div>
     );
@@ -106,4 +112,4 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 export default connect(
   null,
   mapDispatchToProps
-)(Profile);
+)(styled(Profile, authenticationStyles));

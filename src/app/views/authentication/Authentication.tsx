@@ -1,3 +1,4 @@
+import { styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -5,8 +6,9 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IAuthenticationProps } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import { HelloAuthProvider } from '../../services/graph-client/HelloAuthProvider';
+import { classNames } from '../classnames';
 import SubmitButton from '../common/submit-button/SubmitButton';
-import './authentication.scss';
+import { authenticationStyles } from './Authentication.styles';
 import Profile from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps> {
@@ -28,12 +30,13 @@ export class Authentication extends Component<IAuthenticationProps> {
 
   public render() {
     const { tokenPresent } = this.props;
+    const classes = classNames(this.props);
 
     const buttonLabel = tokenPresent ? 'sign out' : 'sign in';
     return (
-      <div className='authentication-container'>
+      <div className={classes.authenticationContainer}>
         <SubmitButton
-          className='signIn-button'
+          className={classes.signInButton}
           ariaLabel='Sign-in button'
           role='button'
           text={buttonLabel}
@@ -61,4 +64,4 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Authentication);
+)(styled(Authentication, authenticationStyles));
