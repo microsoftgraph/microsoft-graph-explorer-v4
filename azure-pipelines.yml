@@ -30,35 +30,28 @@ steps:
       summaryFileLocation: 'coverage/clover.xml'
       reportDirectory: 'coverage'
 
-  - task: CopyFiles@2
-    inputs:
-      sourceFolder: 'build'
-      targetFolder: $(Build.ArtifactStagingDirectory)
+  - task: DeleteFiles@1
+    inputs: 'node_modules'
+      sourceFolder: # Optional
+    displayName: 'Deleting node_modules'
 
-  - task: PublishBuildArtifacts@1
+  - task: AzureRmWebAppDeployment@3
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      artifactName: 'build'
-      publishLocation: 'Container'
-    #targetPath: # Required when publishLocation == FilePath
+      azureSubscription: 'Graph-Explorer-ARM'
+      WebAppName: 'graphTryIt-staging'
+      Package: '$(System.DefaultWorkingDirectory)'
+      GenerateWebConfig: true
+      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
+    displayName: 'Staging deployment'
 
-#  - task: AzureRmWebAppDeployment@3
-#    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-#    inputs:
-#      azureSubscription: 'Graph-Explorer-ARM'
-#      WebAppName: 'graphTryIt-staging'
-#      Package: '$(System.DefaultWorkingDirectory)'
-#      GenerateWebConfig: true
-#      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
-#    displayName: 'Staging deployment'
-#
-#  - task: AzureRmWebAppDeployment@3
-#    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-#    inputs:
-#      azureSubscription: 'Graph-Explorer-ARM'
-#      WebAppName: 'graphTryIt'
-#      Package: '$(System.DefaultWorkingDirectory)'
-#      GenerateWebConfig: true
-#      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
-#    displayName: 'Production deployment'
+  - task: AzureRmWebAppDeployment@3
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    inputs:
+      azureSubscription: 'Graph-Explorer-ARM'
+      WebAppName: 'graphTryIt'
+      Package: '$(System.DefaultWorkingDirectory)'
+      GenerateWebConfig: true
+      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
+    displayName: 'Production deployment'
 
