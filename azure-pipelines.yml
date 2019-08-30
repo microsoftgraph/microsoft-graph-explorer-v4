@@ -30,23 +30,35 @@ steps:
       summaryFileLocation: 'coverage/clover.xml'
       reportDirectory: 'coverage'
 
-  - task: AzureRmWebAppDeployment@3
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  - task: CopyFiles@2
     inputs:
-      azureSubscription: 'Graph-Explorer-ARM'
-      WebAppName: 'graphTryIt-staging'
-      Package: '$(System.DefaultWorkingDirectory)'
-      GenerateWebConfig: true
-      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
-    displayName: 'Staging deployment'
+      sourceFolder: 'build'
+      targetFolder: $(Build.ArtifactStagingDirectory)
 
-  - task: AzureRmWebAppDeployment@3
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  - task: PublishBuildArtifacts@1
     inputs:
-      azureSubscription: 'Graph-Explorer-ARM'
-      WebAppName: 'graphTryIt'
-      Package: '$(System.DefaultWorkingDirectory)'
-      GenerateWebConfig: true
-      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
-    displayName: 'Production deployment'
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'build'
+    publishLocation: 'Container'
+    #targetPath: # Required when publishLocation == FilePath
+
+#  - task: AzureRmWebAppDeployment@3
+#    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+#    inputs:
+#      azureSubscription: 'Graph-Explorer-ARM'
+#      WebAppName: 'graphTryIt-staging'
+#      Package: '$(System.DefaultWorkingDirectory)'
+#      GenerateWebConfig: true
+#      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
+#    displayName: 'Staging deployment'
+#
+#  - task: AzureRmWebAppDeployment@3
+#    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+#    inputs:
+#      azureSubscription: 'Graph-Explorer-ARM'
+#      WebAppName: 'graphTryIt'
+#      Package: '$(System.DefaultWorkingDirectory)'
+#      GenerateWebConfig: true
+#      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
+#    displayName: 'Production deployment'
 
