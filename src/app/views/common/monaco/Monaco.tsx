@@ -33,7 +33,7 @@ export function Monaco(props: IMonaco) {
   let { body } = props;
   const { onChange, verb } = props;
   const currentTheme = getTheme();
-  const isDark = currentTheme.palette.black === '#ffffff' ? true : false;
+  const isLight = currentTheme.semanticColors.bodyBackground === '#ffffff' ? true : false;
 
   if (typeof body !== 'string') {
     body = JSON.stringify(body);
@@ -52,7 +52,7 @@ export function Monaco(props: IMonaco) {
           options={{ lineNumbers: 'off', minimap: { enabled: false } }}
           editorDidMount={editorDidMount}
           onChange={onChange}
-          theme={isDark ? 'vs-dark' : 'vs'}
+          theme={isLight ? 'vs' : 'vs-dark'}
         />
       </div>
     </FocusZone>
