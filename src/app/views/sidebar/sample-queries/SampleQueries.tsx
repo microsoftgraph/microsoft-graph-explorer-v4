@@ -1,6 +1,6 @@
 import {
-  DetailsList, DetailsRow, getId, getTheme, IColumn,
-  IconButton, SearchBox, Selection, SelectionMode, styled, TooltipHost
+  DetailsList, DetailsListLayoutMode, DetailsRow, getId, getTheme,
+  IColumn, IconButton, SearchBox, Selection, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -210,8 +210,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const classes = classNames(this.props);
     const columns = [
       { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
-      { key: 'category', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: 200 },
-      { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20, },
+      { key: 'category', name: '', fieldName: 'humanName', minWidth: 105, maxWidth: 205 },
+      { key: 'button', name: '', fieldName: 'button', minWidth: 15, maxWidth: 15, },
     ];
 
     const selection = new Selection({
@@ -246,6 +246,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         />
         <hr />
         <DetailsList className={classes.queryList}
+          layoutMode={DetailsListLayoutMode.justified}
           onRenderItemColumn={this.renderItemColumn}
           items={groupedList.samples}
           selectionMode={SelectionMode.none}

@@ -61,26 +61,29 @@ export const sidebarStyles = (theme: ITheme) => {
 
     queryRow: {
       background: 'inherit' as 'inherit',
-      textAlign: 'center',
-      verticalAlign: 'middle',
-      position: 'absolute' as 'absolute',
-      lineHeight: '100%',
+      display: 'table' as 'table',
+      textAlign: 'left',
+      height: '35px',
       width: '80%',
       fontSize: FontSizes.medium,
     },
     queryContent: {
+      display: 'table-cell' as 'table-cell',
       float: 'left',
+      textAlign: 'left',
     },
     rowDisabled: {
       cursor: 'not-allowed',
     },
     badge: {
-      float: 'left',
       fontWeight: FontWeights.bold,
       fontSize: FontSizes.small,
     },
     docLink: {
-      marginTop: '-8%',
+      display: 'table-cell' as 'table-cell',
+      float: 'right',
+      verticalAlign: 'center',
+      marginTop: '-8.5%',
     },
 
   };
