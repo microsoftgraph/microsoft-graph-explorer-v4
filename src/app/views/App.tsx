@@ -98,15 +98,10 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
-    // tslint:disable
-    console.log('received theme', msg.theme);
     loadGETheme(msg.theme);
+    // Rerenders the application so that all components can be updated with the new theme.
+    renderApp(Math.random().toString());
 
-    console.log('loaded theme');
-    console.log('Rerendering...');
-
-    renderApp(Math.random().toString())
-    // tslint:enable
   };
 
   private receiveMessage = (event: MessageEvent): void => {

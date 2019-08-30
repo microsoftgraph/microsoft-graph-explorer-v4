@@ -3,12 +3,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { loadGETheme } from '../../../themes';
 import {
-  IInitMessage,
   IQueryRunnerProps,
   IQueryRunnerState,
-  IThemeChangedMessage
 } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
@@ -16,7 +13,6 @@ import { addRequestHeader } from '../../services/actions/request-headers-action-
 import './query-runner.scss';
 import QueryInput from './QueryInput';
 import Request from './request/Request';
-import { parse } from './util/iframe-message-parser';
 
 export class QueryRunner extends Component<
   IQueryRunnerProps,
@@ -127,7 +123,4 @@ function mapStateToProps(state: any) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QueryRunner);
+export default connect(mapStateToProps, mapDispatchToProps)(QueryRunner);

@@ -14,9 +14,6 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
   }
 
   public componentWillUnmount() {
-    // tslint:disable-next-line
-    console.log('Clearing response')
-    // @ts-ignore
     this.props.dispatch(clearResponse());
   }
 
