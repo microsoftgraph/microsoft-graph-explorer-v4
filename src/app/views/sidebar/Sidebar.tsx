@@ -8,10 +8,10 @@ export const Sidebar = () => {
   return (
     <div>
       <Pivot>
-        <PivotItem headerText='Sample Queries'>
+        <PivotItem headerText='Sample Queries' itemIcon='Rocket'>
           <SampleQueries />
         </PivotItem>
-        <PivotItem headerText='History'>
+        <PivotItem headerText='History' itemIcon='History'>
           <History />
         </PivotItem>
       </Pivot>

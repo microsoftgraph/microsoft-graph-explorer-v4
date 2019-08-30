@@ -60,7 +60,7 @@ export class History extends Component<IHistoryProps, any> {
     return `${year}-${month}-${day}`;
   }
 
-  public getItems (history: any) {
+  public getItems(history: any) {
     const items: any[] = [];
     let date = 'Older';
     const today = this.formatDate(new Date());
@@ -110,7 +110,8 @@ export class History extends Component<IHistoryProps, any> {
       groupedList: {
         items,
         categories,
-      }});
+      }
+    });
   }
 
   public renderRow = (props: any): any => {
@@ -148,23 +149,32 @@ export class History extends Component<IHistoryProps, any> {
               shouldFocusOnMount: true,
               items: [
                 {
-                  key: 'viewRequest',
+                  key: 'actions',
+                  itemType: ContextualMenuItemType.Header,
+                  text: 'Actions',
+                },
+                {
+                  key: 'view',
                   text: 'View',
+                  iconProps: {
+                    iconName: 'View'
+                  },
                   onClick: () => this.onViewQuery(item)
                 },
                 {
                   key: 'runQuery',
                   text: 'Run',
+                  iconProps: {
+                    iconName: 'Refresh'
+                  },
                   onClick: () => this.onRunQuery(item)
-                },
-                {
-                  key: 'export',
-                  text: 'Export',
-                  onClick: () => this.onExportQuery(item)
                 },
                 {
                   key: 'remove',
                   text: 'Remove',
+                  iconProps: {
+                    iconName: 'Delete'
+                  },
                   onClick: () => this.onDeleteQuery(item)
                 },
               ]
@@ -210,7 +220,7 @@ export class History extends Component<IHistoryProps, any> {
 
   private renderDetailsHeader() {
     return (
-      <div/>
+      <div />
     );
   }
 
@@ -324,7 +334,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
     actions: bindActionCreators({
       ...queryActionCreators,
       ...queryInputActionCreators,
-      ...requestHistoryActionCreators },
+      ...requestHistoryActionCreators
+    },
       dispatch),
   };
 }
