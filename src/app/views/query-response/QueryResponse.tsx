@@ -1,9 +1,10 @@
-import { Pivot, PivotItem } from 'office-ui-fabric-react';
+import { getTheme, Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { IQueryResponseProps } from '../../../types/query-response';
+import { clearResponse } from '../../services/actions/error-action-creator';
 import { Image, Monaco } from '../common';
 import './query-response.scss';
 
@@ -12,12 +13,18 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
     super(props);
   }
 
+  public componentWillUnmount() {
+    this.props.dispatch(clearResponse());
+  }
+
   public render() {
     let body: any;
     let headers;
     let isImageResponse;
-    // @ts-ignore
-    const { intl: { messages } } = this.props;
+    const {
+      intl: { messages },
+      verb
+    }: any = this.props;
 
     const { graphResponse } = this.props;
     if (graphResponse) {
@@ -35,31 +42,41 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 
     return (
       <div className='query-response'>
+        {body ?
         <Pivot className='pivot-response'>
           <PivotItem
+            ariaLabel='Response Preview'
             headerText={messages['Response Preview']}
           >
-            {isImageResponse ?
+            {isImageResponse ? (
               <Image
                 styles={{ padding: '10px' }}
                 body={body}
                 alt='profile image'
               />
-              :
-              <Monaco
-                body={body}
-              />
-            }
-
+            ) : (
+                <Monaco body={body} verb={verb} />
+              )}
           </PivotItem>
           <PivotItem
+            ariaLabel='Response Headers'
             headerText={messages['Response Headers']}
           >
-            <Monaco
-              body={headers}
-            />
+            <Monaco body={headers} />
           </PivotItem>
         </Pivot>
+        :
+          <Pivot className='pivot-response'>
+            <PivotItem
+              ariaLabel='Response Preview'
+              headerText={messages['Response Preview']}
+            />
+            <PivotItem
+              ariaLabel='Response Headers'
+              headerText={messages['Response Headers']}
+            />
+          </Pivot>
+        }
       </div>
     );
   }
@@ -67,9 +84,11 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 
 function mapStateToProps(state: IQueryResponseProps) {
   return {
-    graphResponse: state.graphResponse,
+    graphResponse:  state.graphResponse,
   };
 }
+
 // @ts-ignore
 const WithIntl = injectIntl(QueryResponse);
 export default connect(mapStateToProps)(WithIntl);
+

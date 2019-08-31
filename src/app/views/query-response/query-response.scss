@@ -3,12 +3,23 @@
 .query-response {
   width:100%;
   margin-top: $gutter;
-  min-height: 375px;
+  min-height: 500px;
   border: 1px solid silver;
+  overflow: hidden;
+
 
   .ms-Pivot.root-84 {
     width: 100%;
     background-color: #eeeeee;
+  }
+
+  .default-text {
+    display: flex;
+    width: 100%;
+    min-height: 500px;
+    font-size: 50px;
+    justify-content: center;
+    align-items: center;
   }
 }
 

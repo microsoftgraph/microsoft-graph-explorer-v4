@@ -29,6 +29,12 @@ const appState = store({
   isLoadingData: false,
   queryRunnerError: null,
   headersAdded: [{ name: '', value: '' }],
+  sampleQuery: {
+    sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
+    selectedVerb: 'GET',
+    sampleBody: undefined,
+    sampleHeaders: {},
+  },
 });
 
 
@@ -85,3 +91,7 @@ const Root = () => {
 };
 
 ReactDOM.render(<Root />, document.getElementById('root'));
+
+export function renderApp(key: string) {
+  ReactDOM.render(<Root key={key}/>, document.getElementById('root'));
+}

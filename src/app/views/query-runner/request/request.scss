@@ -4,8 +4,9 @@
     width:100%;
     margin-top: $gutter;
     margin-bottom: $gutter;
-    min-height: 375px;
+    min-height: 370px;
     border: 1px solid silver;
+    overflow: hidden;
 
 
     .ms-Pivot.root-84 {
@@ -20,12 +21,10 @@
         position: relative;
 
         .headers-editor {
-            display: inline-flex;
-            width: 100%;
-            line-height: 5px;
+            padding: $gutter;
 
-            .header-input {
-                width:95%;
+            .header-input-button {
+                width: 100%;
             }
 
             .remove-header-btn {
@@ -50,7 +49,4 @@
             }
         }
     }
-
-
-
 }

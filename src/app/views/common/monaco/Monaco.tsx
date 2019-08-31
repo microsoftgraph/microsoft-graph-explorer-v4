@@ -7,13 +7,16 @@ import './monaco.scss';
 interface IMonaco {
   body: object | string | undefined;
   onChange?: ChangeHandler | undefined;
+  verb?: string;
 }
 
 function editorDidMount(editor: any) {
   const editorHasText = !!editor.getModel().getValue();
 
   if (editorHasText) {
-    formatDocument(editor);
+    setTimeout(() => {
+      formatDocument(editor);
+    }, 500);
   }
 
   editor.onDidChangeModelContent(() => {
@@ -28,26 +31,28 @@ function formatDocument(editor: any) {
 export function Monaco(props: IMonaco) {
 
   let { body } = props;
-  const { onChange } = props;
+  const { onChange, verb } = props;
   const currentTheme = getTheme();
-  const isDark = currentTheme.palette.black === '#ffffff' ? true : false;
+  const isLight = currentTheme.semanticColors.bodyBackground === '#ffffff' ? true : false;
 
   if (typeof body !== 'string') {
     body = JSON.stringify(body);
   }
 
+  const verbIsGet = verb === 'GET';
+
   return (
     <FocusZone disabled={true}>
       <div className='monaco-editor'>
         <MonacoEditor
-          width='800'
-          height='300'
+          width='800 !important'
+          height={verbIsGet ? '80vh' : '350px'}
           value={body}
           language='json'
           options={{ lineNumbers: 'off', minimap: { enabled: false } }}
           editorDidMount={editorDidMount}
           onChange={onChange}
-          theme={isDark ? 'vs-dark' : 'vs'}
+          theme={isLight ? 'vs' : 'vs-dark'}
         />
       </div>
     </FocusZone>

@@ -69,20 +69,17 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
     // @ts-ignore
     const { headers, intl: { messages } } = this.props;
 
-    // tslint:disable-next-line
-    console.log(headers);
-
     return (
       <div className='request-editor-control'>
         <div className='row headers-editor'>
-          <div className='col-md-4 col-lg-4'>
+          <div className='col-sm-5'>
             <TextField className='header-input'
               placeholder={messages.Key}
               value={this.state.headerName}
               onChange={(event, name) => this.handleOnHeaderNameChange(name)}
             />
           </div>
-          <div className='col-md-4 col-lg-4'>
+          <div className='col-sm-5'>
             <TextField
               className='header-input'
               placeholder={messages.Value}
@@ -90,8 +87,9 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
               onChange={(event, value) => this.handleOnHeaderValueChange(value)}
             />
           </div>
-          <div className='col-md-4 col-lg-4'>
+          <div className='col-sm-2'>
             <PrimaryButton
+              className='header-input-button'
               onClick={() => this.handleOnHeaderAdd()}>
               <FormattedMessage id='Add' />
             </PrimaryButton>

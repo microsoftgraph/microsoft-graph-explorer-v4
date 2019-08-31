@@ -1,4 +1,5 @@
 import { ITheme } from '@uifabric/styling';
+import { inherits } from 'util';
 
 export const appStyles = (theme: ITheme) => {
   return {
@@ -11,6 +12,12 @@ export const appStyles = (theme: ITheme) => {
     },
     tryItMessage: {
       marginBottom: theme.spacing.s1
+    },
+    sidebar: {
+      borderRight: 'solid 1px ' + theme.palette.neutralLighter
+    },
+    toGraphExplorer: {
+      color: 'inherit'
     }
   };
 };

@@ -3,4 +3,6 @@ export interface ISubmitButtonControl {
     submitting: boolean;
     text: string;
     className: string;
+    ariaLabel?: string;
+    role?: string;
 }
