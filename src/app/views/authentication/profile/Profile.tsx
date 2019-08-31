@@ -1,14 +1,11 @@
-import { styled } from 'office-ui-fabric-react';
+import { IPersonaSharedProps, Persona, PersonaSize, Stack, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
-import {
-  USER_INFO_URL,
-  USER_PICTURE_URL
-} from '../../../services/graph-constants';
+import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 
@@ -68,36 +65,37 @@ export class Profile extends Component<IProfileProps, IProfileState> {
   };
 
   public getInitials = (name: string) => {
+    const n = name.indexOf('(');
+    name = name.substring(0, n !== -1 ? n : name.length);
+    const parts = name.split(' ');
     let initials = '';
-    if (name) {
-      const names = name.split(' ');
-      initials = names[0].substring(0, 1).toUpperCase();
-
-      if (names.length > 1) {
-        initials += names[names.length - 1].substring(0, 1).toUpperCase();
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < parts.length; i++) {
+      if (parts[i].length > 0 && parts[i] !== '') {
+        initials += parts[i][0];
       }
     }
+    initials = initials.substring(0, 2);
     return initials;
   };
 
   public render() {
     const { user } = this.state;
+
+    const persona: IPersonaSharedProps = {
+      imageUrl: user.profileImageUrl,
+      imageInitials: this.getInitials(user.displayName),
+      text: user.displayName,
+      secondaryText: user.emailAddress,
+    };
+
     const classes = classNames(this.props);
 
     return (
       <div className={classes.profile}>
-        {user.profileImageUrl !== '' && <div className={classes.userImageArea}>
-          <img
-            className={classes.userImage}
-            alt={user.displayName}
-            src={user.profileImageUrl}
-          />
-        </div>}
-        <div className={classes.userDetails}>
-          <span className={classes.userName}>{user.displayName}</span>
-          <br />
-          <span className={classes.userEmail}>{user.emailAddress}</span>
-        </div>
+        <Stack>
+          <Persona {...persona} size={PersonaSize.size40} />
+        </Stack>
       </div>
     );
   }

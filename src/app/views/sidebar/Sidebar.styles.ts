@@ -62,8 +62,7 @@ export const sidebarStyles = (theme: ITheme) => {
     queryRow: {
       background: 'inherit' as 'inherit',
       display: 'table' as 'table',
-      textAlign: 'left',
-      height: '35px',
+      lineHeight: '100%',
       width: '80%',
       fontSize: FontSizes.medium,
     },
