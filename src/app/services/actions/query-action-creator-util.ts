@@ -13,7 +13,7 @@ export function queryResponse(response: object): IAction {
   };
 }
 
-export function anonymousRequest(dispatch: Function, query: IQuery) {
+export async function anonymousRequest(dispatch: Function, query: IQuery) {
 
   const authToken = '{token:https://graph.microsoft.com/}';
   const graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleUrl}`;
@@ -37,7 +37,7 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
 
   dispatch(queryRunningStatus(true));
 
-  return fetch(graphUrl, options).then(response => Promise.resolve(response));
+  return fetch(graphUrl, options);
 }
 
 export function authenticatedRequest(dispatch: Function, query: IQuery) {
@@ -65,16 +65,18 @@ export function getContentType(headers: Headers) {
 }
 
 export function parseResponse(resp: any, respHeaders: any): Promise<any> {
-  resp.headers.forEach((val: any, key: any) => {
-    respHeaders[key] = val;
-  });
-
-  const contentType = getContentType(resp.headers);
-  if (contentType && isImageResponse(contentType)) {
-    return resp;
-  } else {
-    return resp.json();
+  if (resp && resp.headers) {
+    resp.headers.forEach((val: any, key: any) => {
+      respHeaders[key] = val;
+    });
+    const contentType = getContentType(resp.headers);
+    if (contentType && isImageResponse(contentType)) {
+      return resp;
+    } else {
+      return resp.json();
+    }
   }
+  return resp;
 }
 
 const makeRequest = (httpVerb: string): Function => {

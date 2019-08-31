@@ -3,8 +3,10 @@ import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { createHarPayload, generateHar } from '../../views/sidebar/history/historyUtil';
 import { queryResponseError } from './error-action-creator';
-import { anonymousRequest, authenticatedRequest,
-  isImageResponse, parseResponse, queryResponse } from './query-action-creator-util';
+import {
+  anonymousRequest, authenticatedRequest, isImageResponse,
+  parseResponse, queryResponse
+} from './query-action-creator-util';
 import { addHistoryItem } from './request-history-action-creators';
 
 export function runQuery(query: IQuery): Function {
@@ -15,19 +17,18 @@ export function runQuery(query: IQuery): Function {
 
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query).then(async (response: Response) => {
-        await processResponse (response, respHeaders, dispatch, createdAt);
+        await processResponse(response, respHeaders, dispatch, createdAt);
       });
     }
 
     return anonymousRequest(dispatch, query).then(async (response: Response) => {
-      await processResponse (response, respHeaders, dispatch, createdAt);
+      await processResponse(response, respHeaders, dispatch, createdAt);
     });
   };
 
-  async function processResponse (response: Response,  respHeaders: any, dispatch: Function, createdAt: any) {
+  async function processResponse(response: Response, respHeaders: any, dispatch: Function, createdAt: any) {
 
     const result = await parseResponse(response, respHeaders);
-
     createHistory(response, respHeaders, query, createdAt, dispatch, result);
 
     if (response && response.ok) {
