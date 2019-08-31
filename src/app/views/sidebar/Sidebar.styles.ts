@@ -61,7 +61,6 @@ export const sidebarStyles = (theme: ITheme) => {
 
     queryRow: {
       background: 'inherit' as 'inherit',
-      display: 'table' as 'table',
       lineHeight: '100%',
       width: '80%',
       fontSize: FontSizes.medium,
@@ -82,7 +81,7 @@ export const sidebarStyles = (theme: ITheme) => {
       display: 'table-cell' as 'table-cell',
       float: 'right',
       verticalAlign: 'center',
-      marginTop: '-8.5%',
+      marginTop: '-7.5%',
     },
 
   };

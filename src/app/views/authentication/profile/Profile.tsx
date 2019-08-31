@@ -69,10 +69,9 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     name = name.substring(0, n !== -1 ? n : name.length);
     const parts = name.split(' ');
     let initials = '';
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < parts.length; i++) {
-      if (parts[i].length > 0 && parts[i] !== '') {
-        initials += parts[i][0];
+    for (const part of parts) {
+      if (part.length > 0 && part !== '') {
+        initials += part[0];
       }
     }
     initials = initials.substring(0, 2);
