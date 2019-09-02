@@ -1,6 +1,6 @@
 import {
   DetailsList, DetailsRow, getTheme, IColumn, IconButton,
-  SearchBox, Selection, SelectionMode, styled
+  SearchBox, Selection, SelectionMode, Spinner, SpinnerSize, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -31,6 +31,12 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     this.props.actions!.fetchSamples();
   }
 
+  public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
+    if (prevProps.samples.queries !== this.props.samples.queries) {
+      this.generateSamples(this.props.samples.queries);
+    }
+  }
+
   public searchValueChanged = (value: any): void => {
     const { queries } = this.props.samples;
     const keyword = value.toLowerCase();
@@ -40,8 +46,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       return name.toLowerCase().includes(keyword);
     });
 
-    const groupedList = this.generateSamples(filteredSamples);
-    this.setState({ groupedList });
+    this.generateSamples(filteredSamples);
   }
 
 
@@ -99,10 +104,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         previousCount += count;
       }
     }
-    return {
-      samples,
-      categories,
-    };
+
+    this.setState({
+      groupedList: {
+        samples,
+        categories,
+      }
+    });
   }
 
   public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
@@ -184,8 +192,16 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   }
 
   public render() {
-    const { queries, error, pending } = this.props.samples;
-    if (pending) { return (<div>Loading</div>); }
+    const { error, pending } = this.props.samples;
+    if (pending) {
+      return (<div>
+        <Spinner size={SpinnerSize.large} label='loading samples ...' ariaLive='assertive' labelPosition='top' />
+      </div>);
+    }
+    if (error) { return (<div>{error.message}</div>); }
+
+    const { groupedList } = this.state;
+
     const classes = classNames(this.props);
     const columns = [
       { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
@@ -193,7 +209,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20, },
     ];
 
-    const groupedList = this.generateSamples(queries);
 
     const selection = new Selection({
       onSelectionChanged: () => {
@@ -254,7 +269,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
     actions: bindActionCreators({
       ...queryActionCreators,
       ...queryInputActionCreators,
-      ...samplesActionCreators }, dispatch),
+      ...samplesActionCreators
+    }, dispatch),
   };
 }
 

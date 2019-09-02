@@ -73,7 +73,9 @@ export interface ISampleQueriesProps {
   samples: {
     pending: boolean;
     queries: ISampleQuery[];
-    error: object;
+    error: {
+      message: string;
+    };
   };
   actions?: {
     runQuery: Function;
