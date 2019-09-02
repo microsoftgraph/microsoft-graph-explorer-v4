@@ -70,7 +70,11 @@ export interface ISampleQueriesProps {
   theme?: ITheme;
   styles?: object;
   tokenPresent: boolean;
-  sampleQueries: ISampleQuery[];
+  samples: {
+    pending: boolean;
+    queries: ISampleQuery[];
+    error: object;
+  };
   actions?: {
     runQuery: Function;
     setSampleQuery: Function;

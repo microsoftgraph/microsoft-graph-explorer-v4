@@ -14,38 +14,28 @@ import * as samplesActionCreators from '../../../services/actions/samples-action
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import { queries } from './queries';
-
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   constructor(props: ISampleQueriesProps) {
     super(props);
     this.state = {
-      samples: queries,
       groupedList: {
-        samples: queries,
+        samples: [],
         categories: [],
       }
     };
   }
 
-  public componentDidMount = async () => {
-    const { samples } = this.state;
-    const { actions, sampleQueries } = this.props;
-    if (actions) {
-      const sampleResult = await actions.fetchSamples();
-      const groupedList = this.generateSamples(sampleResult.response.sampleQueries);
-      this.setState({ groupedList });
-    }
-
+  public componentDidMount = () => {
+    this.props.actions!.fetchSamples();
   }
 
   public searchValueChanged = (value: any): void => {
-    const { samples } = this.state;
+    const { queries } = this.props.samples;
     const keyword = value.toLowerCase();
 
-    const filteredSamples = samples.filter((sample: any) => {
+    const filteredSamples = queries.filter((sample: any) => {
       const name = sample.humanName.toLowerCase();
       return name.toLowerCase().includes(keyword);
     });
@@ -194,13 +184,16 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   }
 
   public render() {
-    const { groupedList } = this.state;
+    const { queries, error, pending } = this.props.samples;
+    if (pending) { return (<div>Loading</div>); }
     const classes = classNames(this.props);
     const columns = [
       { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
       { key: 'category', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: 200 },
       { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20, },
     ];
+
+    const groupedList = this.generateSamples(queries);
 
     const selection = new Selection({
       onSelectionChanged: () => {
@@ -252,7 +245,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 function mapStateToProps(state: any) {
   return {
     tokenPresent: !!state.authToken,
-    sampleQueries: state.sampleQueries
+    samples: state.samples
   };
 }
 

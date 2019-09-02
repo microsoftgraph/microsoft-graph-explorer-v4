@@ -1,6 +1,6 @@
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
-import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_SUCCESS } from '../redux-constants';
+import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_PENDING, SAMPLES_FETCH_SUCCESS } from '../redux-constants';
 
 export function fetchSamplesSuccess(response: object): IAction {
   return {
@@ -16,6 +16,12 @@ export function fetchSamplesError(response: object): IAction {
   };
 }
 
+export function fetchSamplesPending() {
+  return {
+    type: SAMPLES_FETCH_PENDING
+  };
+}
+
 export function fetchSamples(): Function {
   return async (dispatch: Function) => {
     const samplesUrl = 'https://graphexplorerapi.azurewebsites.net/api/GraphExplorerSamples';
@@ -26,17 +32,19 @@ export function fetchSamples(): Function {
 
     const options: IRequestOptions = { headers };
 
+    dispatch(fetchSamplesPending());
+
     return fetch(samplesUrl, options)
-      .then(async (response) => {
-
-        if (response.ok === false) {
-          return dispatch(fetchSamplesError(response));
+      .then(res => res.json())
+      .then(res => {
+        if (res.error) {
+          throw (res.error);
         }
-
-        const queries = await response.json();
-        return dispatch(fetchSamplesSuccess({
-          sampleQueries: queries.sampleQueries,
-        }));
+        dispatch(fetchSamplesSuccess(res.sampleQueries));
+        return res.products;
+      })
+      .catch(error => {
+        dispatch(fetchSamplesError(error));
       });
 
   };

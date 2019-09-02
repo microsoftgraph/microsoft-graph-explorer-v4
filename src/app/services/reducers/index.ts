@@ -6,6 +6,7 @@ import { isLoadingData } from './query-loading-reducers';
 import { queryRunnerError } from './query-runner-error';
 import { graphResponse } from './query-runner-reducers';
 import { headersAdded } from './request-headers-reducers';
+import { samples } from './samples-reducers';
 
 export default combineReducers({
   authToken,
@@ -14,5 +15,6 @@ export default combineReducers({
   queryRunnerError,
   headersAdded,
   graphExplorerMode,
-  sampleQuery
+  sampleQuery,
+  samples
 });
