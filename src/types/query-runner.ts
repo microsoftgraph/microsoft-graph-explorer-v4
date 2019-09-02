@@ -55,6 +55,7 @@ export interface IThemeChangedMessage {
 
 export interface ISampleQuery {
   docLink?: string;
+  id?: string;
   skipTest?: boolean;
   category: string;
   requestUrl: string;
@@ -69,8 +70,10 @@ export interface ISampleQueriesProps {
   theme?: ITheme;
   styles?: object;
   tokenPresent: boolean;
+  sampleQueries: ISampleQuery[];
   actions?: {
     runQuery: Function;
     setSampleQuery: Function;
+    fetchSamples: Function;
   };
 }

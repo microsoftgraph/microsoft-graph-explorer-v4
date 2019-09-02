@@ -18,7 +18,7 @@ export function fetchSamplesError(response: object): IAction {
 
 export function fetchSamples(): Function {
   return async (dispatch: Function) => {
-    const samplesUrl = 'https://graphexplorerapi.azurewebsites.net/api/GraphExplorerSampless';
+    const samplesUrl = 'https://graphexplorerapi.azurewebsites.net/api/GraphExplorerSamples';
 
     const headers = {
       'Content-Type': 'application/json',

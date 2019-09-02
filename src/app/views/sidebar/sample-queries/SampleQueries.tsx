@@ -10,6 +10,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
+import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -29,11 +30,15 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     };
   }
 
-  public componentDidMount = () => {
+  public componentDidMount = async () => {
     const { samples } = this.state;
-    const groupedList = this.generateSamples(samples);
+    const { actions, sampleQueries } = this.props;
+    if (actions) {
+      const sampleResult = await actions.fetchSamples();
+      const groupedList = this.generateSamples(sampleResult.response.sampleQueries);
+      this.setState({ groupedList });
+    }
 
-    this.setState({ groupedList });
   }
 
   public searchValueChanged = (value: any): void => {
@@ -246,13 +251,17 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 }
 function mapStateToProps(state: any) {
   return {
-    tokenPresent: !!state.authToken
+    tokenPresent: !!state.authToken,
+    sampleQueries: state.sampleQueries
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators({ ...queryActionCreators, ...queryInputActionCreators }, dispatch),
+    actions: bindActionCreators({
+      ...queryActionCreators,
+      ...queryInputActionCreators,
+      ...samplesActionCreators }, dispatch),
   };
 }
 
