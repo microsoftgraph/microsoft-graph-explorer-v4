@@ -1,12 +1,13 @@
 import {
   DetailsList, DetailsRow, getTheme, IColumn, IconButton,
-  SearchBox, Selection, SelectionMode, Spinner, SpinnerSize, styled
+  MessageBar, MessageBarType, SearchBox, Selection, SelectionMode, Spinner, SpinnerSize, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { log } from 'console';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
@@ -193,22 +194,29 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   public render() {
     const { error, pending } = this.props.samples;
+
     if (pending) {
       return (<div>
         <Spinner size={SpinnerSize.large} label='loading samples ...' ariaLive='assertive' labelPosition='top' />
       </div>);
     }
-    if (error) { return (<div>{error.message}</div>); }
+
+    if (error) {
+      return (
+        <MessageBar messageBarType={MessageBarType.error}
+          isMultiline={true}
+          dismissButtonAriaLabel='Close'>
+          Fetching the samples failed
+        </MessageBar>);
+    }
 
     const { groupedList } = this.state;
-
     const classes = classNames(this.props);
     const columns = [
       { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
       { key: 'category', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: 200 },
       { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20, },
     ];
-
 
     const selection = new Selection({
       onSelectionChanged: () => {
