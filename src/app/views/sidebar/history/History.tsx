@@ -84,7 +84,7 @@ export class History extends Component<IHistoryProps, any> {
     const categories: any[] = [];
     const items = this.getItems(history);
 
-    let isCollapsed = false;
+    const isCollapsed = false;
     let previousCount = 0;
     let count = 0;
 
@@ -92,9 +92,6 @@ export class History extends Component<IHistoryProps, any> {
       if (!map.has(historyItem.category)) {
         map.set(historyItem.category, true);
         count = items.filter((sample: IHistoryItem) => sample.category === historyItem.category).length;
-        if (categories.length > 0) {
-          isCollapsed = true;
-        }
         categories.push({
           name: historyItem.category,
           key: historyItem.category,

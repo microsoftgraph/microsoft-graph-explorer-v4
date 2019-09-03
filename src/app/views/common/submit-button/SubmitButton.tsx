@@ -18,10 +18,11 @@ const SubmitButtonControl = ({
           onClick={() => handleOnClick()}
           ariaLabel={ariaLabel}
           role={role}
-        >
+          style={{textTransform: 'capitalize'}}
+          >
           <FormattedMessage
             id={text}
-          />
+            />
           &nbsp;
             <Spinner size={SpinnerSize.small} />
         </PrimaryButton>
@@ -31,6 +32,7 @@ const SubmitButtonControl = ({
     return (
       <div className={className}>
         <PrimaryButton
+          style={{textTransform: 'capitalize'}}
           onClick={() => handleOnClick()}
           ariaLabel={ariaLabel}
           role={role}
