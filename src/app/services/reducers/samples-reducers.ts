@@ -1,4 +1,5 @@
 import { IAction } from '../../../types/action';
+import { queries } from '../../views/sidebar/sample-queries/queries';
 import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_PENDING, SAMPLES_FETCH_SUCCESS } from '../redux-constants';
 
 const initialState = {
@@ -24,6 +25,7 @@ export function samples(state = initialState, action: IAction): any {
       return {
         ...state,
         pending: false,
+        queries,
         error: action.response
       };
     default:

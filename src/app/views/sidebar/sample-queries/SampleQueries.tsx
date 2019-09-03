@@ -200,15 +200,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       </div>);
     }
 
-    if (error) {
-      return (
-        <MessageBar messageBarType={MessageBarType.error}
-          isMultiline={true}
-          dismissButtonAriaLabel='Close'>
-          Fetching the samples failed
-        </MessageBar>);
-    }
-
     const { groupedList } = this.state;
     const classes = classNames(this.props);
     const columns = [
@@ -247,6 +238,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           onChange={(value) => this.searchValueChanged(value)}
         />
         <hr />
+        {error && <MessageBar messageBarType={MessageBarType.warning}
+          isMultiline={true}
+          dismissButtonAriaLabel='Close'>
+          You are viewing a limited set of samples because the request to update failed
+        </MessageBar>}
         <DetailsList className={classes.queryList}
           onRenderItemColumn={this.renderItemColumn}
           items={groupedList.samples}

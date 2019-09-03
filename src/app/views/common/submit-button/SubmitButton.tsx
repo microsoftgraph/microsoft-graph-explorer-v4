@@ -11,37 +11,22 @@ const SubmitButtonControl = ({
   ariaLabel,
   role
 }: ISubmitButtonControl) => {
-  if (submitting) {
-    return (
-      <div className={className}>
-        <PrimaryButton disabled={submitting}
-          onClick={() => handleOnClick()}
-          ariaLabel={ariaLabel}
-          role={role}
-        >
-          <FormattedMessage
-            id={text}
-          />
-          &nbsp;
+  return (
+    <div className={className}>
+      <PrimaryButton disabled={submitting}
+        onClick={() => handleOnClick()}
+        ariaLabel={ariaLabel}
+        role={role}
+      >
+        <FormattedMessage
+          id={text}
+        />
+        {submitting && <>&nbsp;
             <Spinner size={SpinnerSize.small} />
-        </PrimaryButton>
-      </div>
-    );
-  } else {
-    return (
-      <div className={className}>
-        <PrimaryButton
-          onClick={() => handleOnClick()}
-          ariaLabel={ariaLabel}
-          role={role}
-        >
-          <FormattedMessage
-            id={text}
-          />
-        </PrimaryButton>
-      </div>
-    );
-  }
+        </>}
+      </PrimaryButton>
+    </div>
+  );
 };
 
 export default SubmitButtonControl;

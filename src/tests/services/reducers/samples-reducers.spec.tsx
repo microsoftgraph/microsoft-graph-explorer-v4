@@ -1,7 +1,6 @@
-import { clearQueryError } from '../../../app/services/actions/error-action-creator';
-import { queryRunnerError } from '../../../app/services/reducers/query-runner-error';
 import { samples } from '../../../app/services/reducers/samples-reducers';
-import { CLEAR_QUERY_ERROR, SAMPLES_FETCH_ERROR, SAMPLES_FETCH_SUCCESS } from '../../../app/services/redux-constants';
+import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_SUCCESS } from '../../../app/services/redux-constants';
+import { queries } from '../../../app/views/sidebar/sample-queries/queries';
 import { ISampleQuery } from '../../../types/query-runner';
 
 describe('Samples Reducer', () => {
@@ -58,6 +57,7 @@ describe('Samples Reducer', () => {
 
     const newState = { ...initialState };
     newState.error = mockResponse;
+    newState.queries = queries;
 
     const queryAction = { type: SAMPLES_FETCH_ERROR, response: mockResponse };
     const state = samples(initialState, queryAction);
