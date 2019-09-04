@@ -78,7 +78,7 @@ describe('Samples Reducer', () => {
     const newState = { ...initialState };
     newState.pending = isQueryRunning;
 
-    const queryAction = { type: SAMPLES_FETCH_PENDING, response: isQueryRunning };
+    const queryAction: any = { type: SAMPLES_FETCH_PENDING};
     const state = samples(initialState, queryAction);
 
     expect(state).toEqual(newState);
