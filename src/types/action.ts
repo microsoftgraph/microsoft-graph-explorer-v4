@@ -1,6 +1,6 @@
 export interface IAction {
   type: string;
-  response: object | string;
+  response: object | string | boolean;
 }
 
 export enum Mode {

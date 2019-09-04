@@ -1,5 +1,6 @@
 import { samples } from '../../../app/services/reducers/samples-reducers';
-import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_SUCCESS } from '../../../app/services/redux-constants';
+import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_PENDING,
+  SAMPLES_FETCH_SUCCESS } from '../../../app/services/redux-constants';
 import { queries } from '../../../app/views/sidebar/sample-queries/queries';
 import { ISampleQuery } from '../../../types/query-runner';
 
@@ -60,6 +61,24 @@ describe('Samples Reducer', () => {
     newState.queries = queries;
 
     const queryAction = { type: SAMPLES_FETCH_ERROR, response: mockResponse };
+    const state = samples(initialState, queryAction);
+
+    expect(state).toEqual(newState);
+  });
+
+  it('should handle SAMPLES_FETCH_PENDING', () => {
+    const initialState: any = {
+      pending: false,
+      queries: [],
+      error: null
+    };
+
+    const isQueryRunning = true;
+
+    const newState = { ...initialState };
+    newState.pending = isQueryRunning;
+
+    const queryAction = { type: SAMPLES_FETCH_PENDING, response: isQueryRunning };
     const state = samples(initialState, queryAction);
 
     expect(state).toEqual(newState);

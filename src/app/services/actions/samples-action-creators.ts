@@ -16,9 +16,10 @@ export function fetchSamplesError(response: object): IAction {
   };
 }
 
-export function fetchSamplesPending() {
+export function fetchSamplesPending(response: boolean): IAction {
   return {
-    type: SAMPLES_FETCH_PENDING
+    type: SAMPLES_FETCH_PENDING,
+    response
   };
 }
 
@@ -32,7 +33,7 @@ export function fetchSamples(): Function {
 
     const options: IRequestOptions = { headers };
 
-    dispatch(fetchSamplesPending());
+    dispatch(fetchSamplesPending(true));
 
     return fetch(samplesUrl, options)
       .then(res => res.json())
