@@ -30,9 +30,7 @@ function formatDocument(editor: any) {
 export function Monaco(props: IMonaco) {
 
   let { body } = props;
-  console.log(body);
   const { onChange, verb } = props;
-  const currentTheme = getTheme();
 
   if (body && typeof body !== 'string') {
     body = JSON.stringify(body);
