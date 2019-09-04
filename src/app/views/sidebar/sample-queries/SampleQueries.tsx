@@ -193,15 +193,18 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   public render() {
     const { error, pending } = this.props.samples;
+    const classes = classNames(this.props);
 
     if (pending) {
-      return (<div>
-        <Spinner size={SpinnerSize.large} label='loading samples ...' ariaLive='assertive' labelPosition='top' />
-      </div>);
+      return (
+        <Spinner
+          className={classes.spinner}
+          size={SpinnerSize.large}
+          label='loading samples ...' ariaLive='assertive' labelPosition='top' />
+      );
     }
 
     const { groupedList } = this.state;
-    const classes = classNames(this.props);
     const columns = [
       { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
       { key: 'category', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: 200 },
