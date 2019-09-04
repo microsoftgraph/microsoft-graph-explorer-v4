@@ -14,7 +14,8 @@ const SubmitButtonControl = ({
   if (submitting) {
     return (
       <div className={className}>
-        <PrimaryButton disabled={submitting}
+        <PrimaryButton
+          disabled={submitting}
           onClick={() => handleOnClick()}
           ariaLabel={ariaLabel}
           role={role}
