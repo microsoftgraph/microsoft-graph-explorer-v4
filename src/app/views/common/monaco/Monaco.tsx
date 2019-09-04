@@ -15,9 +15,7 @@ function editorDidMount(editor: any) {
   const editorHasText = !!editor.getModel().getValue();
 
   if (editorHasText) {
-    setTimeout(() => {
-      formatDocument(editor);
-    }, 500);
+    formatDocument(editor);
   }
 
   editor.onDidChangeModelContent(() => {
@@ -32,10 +30,11 @@ function formatDocument(editor: any) {
 export function Monaco(props: IMonaco) {
 
   let { body } = props;
+  console.log(body);
   const { onChange, verb } = props;
   const currentTheme = getTheme();
 
-  if (typeof body !== 'string') {
+  if (body && typeof body !== 'string') {
     body = JSON.stringify(body);
   }
 
@@ -49,7 +48,7 @@ export function Monaco(props: IMonaco) {
             width='800 !important'
             height={verbIsGet ? '80vh' : '350px'}
             // @ts-ignore
-            value={body}
+            value={body  ? body : ''}
             language='json'
             options={{ lineNumbers: 'off', minimap: { enabled: false } }}
             editorDidMount={editorDidMount}
