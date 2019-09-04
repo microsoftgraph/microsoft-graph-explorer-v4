@@ -241,7 +241,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         {error && <MessageBar messageBarType={MessageBarType.warning}
           isMultiline={true}
           dismissButtonAriaLabel='Close'>
-          You are viewing a limited set of samples because the request to update failed
+          You are viewing a cached set of samples because of a network connection failure.
         </MessageBar>}
         <DetailsList className={classes.queryList}
           onRenderItemColumn={this.renderItemColumn}
