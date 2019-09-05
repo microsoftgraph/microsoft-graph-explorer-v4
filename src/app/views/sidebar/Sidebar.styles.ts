@@ -4,19 +4,27 @@ import {
 } from '@uifabric/styling';
 
 export const sidebarStyles = (theme: ITheme) => {
+  const pageHeight = '850px';
   return {
     searchBox: {
       marginTop: theme.spacing.s1,
     },
+    spinner: {
+      display: 'flex',
+      width: '100%',
+      minHeight: pageHeight,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
     queryList: {
       marginBottom: theme.spacing.s1,
       cursor: 'pointer',
-      maxHeight: '850px',
-      minHeight: '850px',
-      overflowY: 'auto' as 'auto',
-      overflowX: 'hidden' as 'hidden',
+      maxHeight: pageHeight,
+      minHeight: pageHeight,
+      overflowY: 'auto',
+      overflowX: 'hidden',
       fontSize: FontSizes.medium,
-      background: 'inherit' as 'inherit'
+      background: 'inherit'
     },
     pullLeft: {
       float: 'left'
@@ -26,7 +34,7 @@ export const sidebarStyles = (theme: ITheme) => {
 
     groupHeader: {
       fontSize: FontSizes.medium,
-      position: 'relative' as 'relative',
+      position: 'relative',
     },
     groupHeaderRow: {
       lineHeight: '50px',
@@ -60,27 +68,28 @@ export const sidebarStyles = (theme: ITheme) => {
     /* Row */
 
     queryRow: {
-      background: 'inherit' as 'inherit',
-      textAlign: 'center',
-      verticalAlign: 'middle',
-      position: 'absolute' as 'absolute',
+      background: 'inherit',
       lineHeight: '100%',
       width: '80%',
       fontSize: FontSizes.medium,
     },
     queryContent: {
+      display: 'table-cell',
       float: 'left',
+      textAlign: 'left',
     },
     rowDisabled: {
       cursor: 'not-allowed',
     },
     badge: {
-      float: 'left',
       fontWeight: FontWeights.bold,
       fontSize: FontSizes.small,
     },
     docLink: {
-      marginTop: '-8%',
+      display: 'table-cell',
+      float: 'right',
+      verticalAlign: 'center',
+      marginTop: '-7.5%',
     },
 
   };

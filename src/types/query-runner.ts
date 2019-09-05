@@ -9,7 +9,7 @@ export interface IQuery {
   selectedVerb: string;
   sampleUrl: string;
   sampleBody?: string;
-  sampleHeaders?: Array<{ name: string; value: string; }>;
+  sampleHeaders: Array<{ name: string; value: string; }>;
 }
 
 export interface IQueryRunnerProps {
@@ -25,6 +25,8 @@ export interface IQueryRunnerProps {
 }
 
 export interface IQueryInputProps {
+  theme?: ITheme;
+  styles?: object;
   handleOnRunQuery: Function;
   handleOnMethodChange: Function;
   handleOnUrlChange: Function;
@@ -55,6 +57,7 @@ export interface IThemeChangedMessage {
 
 export interface ISampleQuery {
   docLink?: string;
+  id?: string;
   skipTest?: boolean;
   category: string;
   requestUrl: string;
@@ -69,8 +72,16 @@ export interface ISampleQueriesProps {
   theme?: ITheme;
   styles?: object;
   tokenPresent: boolean;
+  samples: {
+    pending: boolean;
+    queries: ISampleQuery[];
+    error: {
+      message: string;
+    };
+  };
   actions?: {
     runQuery: Function;
     setSampleQuery: Function;
+    fetchSamples: Function;
   };
 }

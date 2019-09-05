@@ -9,4 +9,5 @@ export interface IQueryResponseProps {
     message: object;
   };
   verb: string;
+  theme: string;
 }

@@ -1,4 +1,4 @@
-import { getTheme, Pivot, PivotItem } from 'office-ui-fabric-react';
+import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -42,7 +42,6 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 
     return (
       <div className='query-response'>
-        {body ?
         <Pivot className='pivot-response'>
           <PivotItem
             ariaLabel='Response Preview'
@@ -65,18 +64,6 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
             <Monaco body={headers} />
           </PivotItem>
         </Pivot>
-        :
-          <Pivot className='pivot-response'>
-            <PivotItem
-              ariaLabel='Response Preview'
-              headerText={messages['Response Preview']}
-            />
-            <PivotItem
-              ariaLabel='Response Headers'
-              headerText={messages['Response Headers']}
-            />
-          </Pivot>
-        }
       </div>
     );
   }
@@ -85,6 +72,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 function mapStateToProps(state: IQueryResponseProps) {
   return {
     graphResponse:  state.graphResponse,
+    appTheme: state.theme,
   };
 }
 
