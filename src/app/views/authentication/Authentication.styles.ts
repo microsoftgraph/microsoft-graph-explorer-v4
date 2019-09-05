@@ -3,16 +3,16 @@ import { ITheme } from '@uifabric/styling';
 export const authenticationStyles = (theme: ITheme) => {
   return {
     authenticationContainer: {
-      justifyContent: 'space-between' as 'space-between',
-      display: 'flex' as 'flex'
+      justifyContent: 'space-between',
+      display: 'flex'
     },
     signInButton: {
       marginBottom: theme.spacing.s1,
     },
     profile: {
       marginBottom: theme.spacing.s1,
-      justifyContent: 'space-between' as 'space-between',
-      position: 'relative' as 'relative',
+      justifyContent: 'space-between',
+      position: 'relative',
       height: 48
     },
   };

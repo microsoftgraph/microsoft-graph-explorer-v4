@@ -106,7 +106,9 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
+// @ts-ignore
+const styledProfile = styled(Profile, authenticationStyles);
 export default connect(
   null,
   mapDispatchToProps
-)(styled(Profile, authenticationStyles));
+)(styledProfile);
