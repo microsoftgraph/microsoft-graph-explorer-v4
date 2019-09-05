@@ -14,6 +14,7 @@ import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
 
 import { getAuthTokenSuccess, setGraphExplorerMode } from './app/services/actions/auth-action-creators';
+import { changeTheme } from './app/services/actions/theme-action-creator';
 import { HelloAuthProvider } from './app/services/graph-client/HelloAuthProvider';
 import App from './app/views/App';
 import messages from './messages';
@@ -26,6 +27,7 @@ initializeIcons();
 
 const appState = store({
   authToken: '',
+  theme: 'light',
   isLoadingData: false,
   queryRunnerError: null,
   headersAdded: [{ name: '', value: '' }],
@@ -72,8 +74,10 @@ addLocaleData([
 
 
 const theme = new URLSearchParams(location.search).get('theme');
+
 if (theme) {
   loadGETheme(theme);
+  appState.dispatch(changeTheme(theme));
 }
 
 if (hostDocumentLocale) {
@@ -91,7 +95,3 @@ const Root = () => {
 };
 
 ReactDOM.render(<Root />, document.getElementById('root'));
-
-export function renderApp(key: string) {
-  ReactDOM.render(<Root key={key}/>, document.getElementById('root'));
-}

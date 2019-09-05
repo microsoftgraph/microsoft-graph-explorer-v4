@@ -1,4 +1,4 @@
-import { IDropdownOption, loadTheme } from 'office-ui-fabric-react';
+import { IDropdownOption, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -119,7 +119,7 @@ function mapStateToProps(state: any) {
   return {
     isLoadingData: state.isLoadingData,
     headers: state.headersAdded,
-    sampleQuery: state.sampleQuery
+    sampleQuery: state.sampleQuery,
   };
 }
 

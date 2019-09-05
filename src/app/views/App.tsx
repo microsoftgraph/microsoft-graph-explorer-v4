@@ -9,14 +9,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { renderApp } from '../..';
 import { loadGETheme } from '../../themes';
+import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
 import { clearQueryError } from '../services/actions/error-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { addRequestHeader } from '../services/actions/request-headers-action-creators';
+import { changeTheme } from '../services/actions/theme-action-creator';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
@@ -99,10 +100,10 @@ class App extends Component<IAppProps, IAppState> {
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
     loadGETheme(msg.theme);
-    // Rerenders the application so that all components can be updated with the new theme.
-    renderApp(Math.random().toString());
 
-  };
+    // @ts-ignore
+    this.props.actions!.changeTheme(msg.theme);
+    };
 
   private receiveMessage = (event: MessageEvent): void => {
     const msgEvent: IThemeChangedMessage | IInitMessage = event.data;
@@ -172,6 +173,8 @@ class App extends Component<IAppProps, IAppState> {
         ? 'col-sm-12'
         : 'col-sm-12 col-lg-9';
     return (
+      // @ts-ignore
+      <ThemeContext.Provider value={this.props.appTheme}>
       <FocusTrapZone>
         <div className={`container-fluid ${classes.app}`}>
           <div className='row'>
@@ -220,6 +223,7 @@ class App extends Component<IAppProps, IAppState> {
           </div>
         </div>
       </FocusTrapZone>
+      </ThemeContext.Provider>
     );
   }
 }
@@ -228,13 +232,22 @@ const mapStateToProps = (state: any) => {
   return {
     error: state.queryRunnerError,
     receivedSampleQuery: state.sampleQuery,
-    graphExplorerMode: state.graphExplorerMode
+    graphExplorerMode: state.graphExplorerMode,
+    appTheme: state.theme,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions: bindActionCreators({ clearQueryError, runQuery, setSampleQuery, addRequestHeader }, dispatch)
+    actions: bindActionCreators({
+      clearQueryError,
+      runQuery,
+      setSampleQuery,
+      addRequestHeader,
+      changeTheme: (newTheme: string) => {
+       return (disp: Function) => disp(changeTheme(newTheme));
+      }
+    }, dispatch)
   };
 };
 

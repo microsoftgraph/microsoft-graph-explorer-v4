@@ -25,6 +25,8 @@ export interface IQueryRunnerProps {
 }
 
 export interface IQueryInputProps {
+  theme?: ITheme;
+  styles?: object;
   handleOnRunQuery: Function;
   handleOnMethodChange: Function;
   handleOnUrlChange: Function;
