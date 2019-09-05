@@ -23,6 +23,12 @@ import './styles/index.scss';
 import { loadGETheme } from './themes';
 import { Mode } from './types/action';
 
+const spinner = document.getElementById('spinner');
+
+if (spinner !== null) {
+  (spinner as any).parentElement.removeChild(spinner);
+}
+
 initializeIcons();
 
 const appState = store({
