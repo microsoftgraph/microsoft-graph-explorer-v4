@@ -14,15 +14,17 @@ import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
 
 import { getAuthTokenSuccess, setGraphExplorerMode } from './app/services/actions/auth-action-creators';
+import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeTheme } from './app/services/actions/theme-action-creator';
 import { HelloAuthProvider } from './app/services/graph-client/HelloAuthProvider';
 import App from './app/views/App';
 import messages from './messages';
 import { store } from './store';
+import { readData } from './store/cache';
 import './styles/index.scss';
 import { loadGETheme } from './themes';
 import { Mode } from './types/action';
-
+import { IHistoryItem } from './types/history';
 initializeIcons();
 
 const appState = store({
@@ -83,6 +85,14 @@ if (theme) {
 if (hostDocumentLocale) {
   appState.dispatch(setGraphExplorerMode(Mode.TryIt));
 }
+
+readData().then((data: any) => {
+  if (data.length > 0) {
+    data.forEach((element: IHistoryItem) => {
+      appState.dispatch(addHistoryItem(element));
+    });
+  }
+});
 
 const Root = () => {
   return (

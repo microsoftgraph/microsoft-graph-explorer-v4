@@ -4,7 +4,6 @@ import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
-import { queryResponseError } from './error-action-creator';
 import { queryRunningStatus } from './query-loading-action-creators';
 
 export function queryResponse(response: object): IAction {
@@ -14,11 +13,10 @@ export function queryResponse(response: object): IAction {
   };
 }
 
-export function anonymousRequest(dispatch: Function, query: IQuery) {
+export async function anonymousRequest(dispatch: Function, query: IQuery) {
 
   const authToken = '{token:https://graph.microsoft.com/}';
   const graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleUrl}`;
-  const respHeaders: any = {};
   const sampleHeaders: any = {};
 
   if (query.sampleHeaders) {
@@ -39,25 +37,7 @@ export function anonymousRequest(dispatch: Function, query: IQuery) {
 
   dispatch(queryRunningStatus(true));
 
-  return fetch(graphUrl, options)
-    .then((resp) => {
-      if (resp.ok) {
-        return parseResponse(resp, respHeaders);
-      }
-      return resp;
-    })
-    .then((json) => {
-      if (json.ok === false) {
-        return dispatch(queryResponseError(json));
-      }
-
-      return dispatch(
-        queryResponse({
-          body: json,
-          headers: respHeaders,
-        }),
-      );
-    });
+  return fetch(graphUrl, options);
 }
 
 export function authenticatedRequest(dispatch: Function, query: IQuery) {
@@ -65,6 +45,7 @@ export function authenticatedRequest(dispatch: Function, query: IQuery) {
 }
 
 export function isImageResponse(contentType: string) {
+  if (!contentType) { return false; }
   return (
     contentType === 'application/octet-stream' ||
     contentType.substr(0, 6) === 'image/'
@@ -84,16 +65,18 @@ export function getContentType(headers: Headers) {
 }
 
 export function parseResponse(resp: any, respHeaders: any): Promise<any> {
-  resp.headers.forEach((val: any, key: any) => {
-    respHeaders[key] = val;
-  });
-
-  const contentType = getContentType(resp.headers);
-  if (contentType && isImageResponse(contentType)) {
-    return resp;
-  } else {
-    return resp.json();
+  if (resp && resp.headers) {
+    resp.headers.forEach((val: any, key: any) => {
+      respHeaders[key] = val;
+    });
+    const contentType = getContentType(resp.headers);
+    if (contentType && isImageResponse(contentType)) {
+      return resp;
+    } else {
+      return resp.json();
+    }
   }
+  return resp;
 }
 
 const makeRequest = (httpVerb: string): Function => {
