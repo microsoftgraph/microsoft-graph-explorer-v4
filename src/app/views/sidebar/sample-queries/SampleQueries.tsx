@@ -1,6 +1,7 @@
 import {
-  DetailsList, DetailsRow, getTheme, IColumn, IconButton,
-  MessageBar, MessageBarType, SearchBox, Selection, SelectionMode, Spinner, SpinnerSize, styled
+  DetailsList, DetailsListLayoutMode, DetailsRow, getId, getTheme,
+  IColumn, IconButton, MessageBar, MessageBarType, SearchBox,
+  Selection, SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -115,6 +116,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const classes = classNames(this.props);
+    const hostId: string = getId('tooltipHost');
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
@@ -136,9 +138,19 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           >{item.method}</span>;
 
         default:
-          return <span title={queryContent} className={classes.queryContent}>
-            <FormattedMessage id={queryContent} />
-          </span>;
+          return <>
+            <TooltipHost
+              content={queryContent}
+              id={hostId}
+              calloutProps={{ gapSpace: 0 }}
+              styles={{ root: { display: 'inline-block' } }}
+            >
+              <span aria-labelledby={hostId} className={classes.queryContent}>
+                <FormattedMessage id={queryContent} />
+              </span>
+            </TooltipHost>
+          </>
+            ;
       }
     }
   };
@@ -185,6 +197,12 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     );
   };
 
+  private renderDetailsHeader() {
+    return (
+      <div />
+    );
+  }
+
   private onToggleCollapse(props: any): () => void {
     return () => {
       props!.onToggleCollapse!(props!.group!);
@@ -207,8 +225,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const { groupedList } = this.state;
     const columns = [
       { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
-      { key: 'category', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: 200 },
-      { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20, },
+      { key: 'category', name: '', fieldName: 'humanName', minWidth: 105, maxWidth: 205 },
+      { key: 'button', name: '', fieldName: 'button', minWidth: 15, maxWidth: 15, },
     ];
 
     const selection = new Selection({
@@ -221,6 +239,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           sampleUrl: GRAPH_URL + selectedQuery.requestUrl,
           selectedVerb: selectedQuery.method,
           sampleBody: selectedQuery.postBody,
+          sampleHeaders: selectedQuery.headers || []
         };
 
         if (actions) {
@@ -247,6 +266,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           You are viewing a cached set of samples because of a network connection failure.
         </MessageBar>}
         <DetailsList className={classes.queryList}
+          layoutMode={DetailsListLayoutMode.justified}
           onRenderItemColumn={this.renderItemColumn}
           items={groupedList.samples}
           selectionMode={SelectionMode.none}
@@ -257,6 +277,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             onRenderHeader: this.renderGroupHeader,
           }}
           onRenderRow={this.renderRow}
+          onRenderDetailsHeader={this.renderDetailsHeader}
         />
       </div>
     );
@@ -280,4 +301,6 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(styled(SampleQueries, sidebarStyles));
+// @ts-ignore
+const styledSampleQueries = styled(SampleQueries, sidebarStyles);
+export default connect(mapStateToProps, mapDispatchToProps)(styledSampleQueries);

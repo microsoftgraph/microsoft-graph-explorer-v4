@@ -1,4 +1,8 @@
+import { ITheme } from 'office-ui-fabric-react';
+
 export interface IProfileProps {
+    theme?: ITheme;
+    styles?: object;
     actions?: {
         getProfileInfo: Function;
     };
