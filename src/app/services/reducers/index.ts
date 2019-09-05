@@ -19,9 +19,6 @@ export default combineReducers({
   isLoadingData,
   queryRunnerError,
   sampleQuery,
-  headersAdded,
-  graphExplorerMode,
-  sampleQuery,
   samples,
   theme
 });
