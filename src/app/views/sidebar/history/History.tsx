@@ -327,6 +327,6 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(styled(History, sidebarStyles));
-
+// @ts-ignore
+const styledHistory = styled(History, sidebarStyles);
+export default connect(mapStateToProps, mapDispatchToProps)(styledHistory);

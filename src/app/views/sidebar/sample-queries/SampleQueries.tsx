@@ -1,6 +1,6 @@
 import {
   DetailsList, DetailsListLayoutMode, DetailsRow, getId, getTheme,
-  IColumn, IconButton, MessageBar, MessageBarType, SearchBox, 
+  IColumn, IconButton, MessageBar, MessageBarType, SearchBox,
   Selection, SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
@@ -301,4 +301,6 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(styled(SampleQueries, sidebarStyles));
+// @ts-ignore
+const styledSampleQueries = styled(SampleQueries, sidebarStyles);
+export default connect(mapStateToProps, mapDispatchToProps)(styledSampleQueries);

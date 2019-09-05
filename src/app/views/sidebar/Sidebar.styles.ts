@@ -10,21 +10,21 @@ export const sidebarStyles = (theme: ITheme) => {
       marginTop: theme.spacing.s1,
     },
     spinner: {
-      display: 'flex' as 'flex',
+      display: 'flex',
       width: '100%',
       minHeight: pageHeight,
-      justifyContent: 'center' as 'center',
-      alignItems: 'center' as 'center'
+      justifyContent: 'center',
+      alignItems: 'center'
     },
     queryList: {
       marginBottom: theme.spacing.s1,
       cursor: 'pointer',
       maxHeight: pageHeight,
       minHeight: pageHeight,
-      overflowY: 'auto' as 'auto',
-      overflowX: 'hidden' as 'hidden',
+      overflowY: 'auto',
+      overflowX: 'hidden',
       fontSize: FontSizes.medium,
-      background: 'inherit' as 'inherit'
+      background: 'inherit'
     },
     pullLeft: {
       float: 'left'
@@ -34,7 +34,7 @@ export const sidebarStyles = (theme: ITheme) => {
 
     groupHeader: {
       fontSize: FontSizes.medium,
-      position: 'relative' as 'relative',
+      position: 'relative',
     },
     groupHeaderRow: {
       lineHeight: '50px',
@@ -68,13 +68,13 @@ export const sidebarStyles = (theme: ITheme) => {
     /* Row */
 
     queryRow: {
-      background: 'inherit' as 'inherit',
+      background: 'inherit',
       lineHeight: '100%',
       width: '80%',
       fontSize: FontSizes.medium,
     },
     queryContent: {
-      display: 'table-cell' as 'table-cell',
+      display: 'table-cell',
       float: 'left',
       textAlign: 'left',
     },
@@ -86,7 +86,7 @@ export const sidebarStyles = (theme: ITheme) => {
       fontSize: FontSizes.small,
     },
     docLink: {
-      display: 'table-cell' as 'table-cell',
+      display: 'table-cell',
       float: 'right',
       verticalAlign: 'center',
       marginTop: '-7.5%',
