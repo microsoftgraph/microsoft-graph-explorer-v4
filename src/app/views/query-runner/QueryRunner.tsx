@@ -1,14 +1,11 @@
-import { IDropdownOption, loadTheme } from 'office-ui-fabric-react';
+import { IDropdownOption, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { loadGETheme } from '../../../themes';
 import {
-  IInitMessage,
   IQueryRunnerProps,
   IQueryRunnerState,
-  IThemeChangedMessage
 } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
@@ -16,7 +13,6 @@ import { addRequestHeader } from '../../services/actions/request-headers-action-
 import './query-runner.scss';
 import QueryInput from './QueryInput';
 import Request from './request/Request';
-import { parse } from './util/iframe-message-parser';
 
 export class QueryRunner extends Component<
   IQueryRunnerProps,
@@ -34,111 +30,6 @@ export class QueryRunner extends Component<
       ]
     };
   }
-
-  public componentDidMount = () => {
-    const { actions } = this.props;
-    const whiteListedDomains = [
-      'https://docs.microsoft.com',
-      'https://review.docs.microsoft.com',
-      'https://ppe.docs.microsoft.com',
-      'https://docs.azure.cn'
-    ];
-
-    // Notify host document that GE is ready to receive messages
-    const hostOrigin = new URLSearchParams(location.search).get('host-origin');
-    const originIsWhitelisted =
-      hostOrigin && whiteListedDomains.indexOf(hostOrigin) !== -1;
-
-    if (hostOrigin && originIsWhitelisted) {
-      window.parent.postMessage({ type: 'ready' }, hostOrigin);
-    }
-
-    // Listens for messages from host document
-    window.addEventListener('message', this.receiveMessage, false);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const base64Token = urlParams.getAll('query')[0];
-
-    if (!base64Token) {
-      return;
-    }
-
-    const data = JSON.parse(atob(base64Token));
-    const { sampleVerb, sampleHeaders, sampleUrl, sampleBody } = data;
-
-    const query = {
-      sampleUrl,
-      sampleBody,
-      sampleHeaders,
-      selectedVerb: sampleVerb
-    };
-
-    if (actions) {
-      actions.setSampleQuery(query);
-    }
-  };
-
-  public componentWillUnmount(): void {
-    window.removeEventListener('message', this.receiveMessage);
-  }
-
-  private receiveMessage = (event: MessageEvent): void => {
-    const msgEvent: IThemeChangedMessage | IInitMessage = event.data;
-
-    switch (msgEvent.type) {
-      case 'init':
-        this.handleInitMsg(msgEvent);
-        break;
-      case 'theme-changed':
-        this.handleThemeChangeMsg(msgEvent);
-        break;
-      default:
-        return;
-    }
-  };
-
-  private handleInitMsg = (msg: IInitMessage) => {
-    const { actions } = this.props;
-    const { verb, headers, url, body }: any = parse(msg.code);
-
-    if (actions) {
-      actions.setSampleQuery({
-        sampleUrl: url,
-        selectedVerb: verb
-      });
-    }
-
-    // Sets selected verb in App Component
-    this.props.onSelectVerb(verb);
-
-    /**
-     * We are delaying this by 1 second here so that we give Monaco's formatter time to initialize.
-     * If we don't put this delay, the body won't be formatted.
-     */
-    setTimeout(() => {
-      if (actions) {
-        actions.setSampleQuery({
-          sampleUrl: url,
-          selectedVerb: verb,
-          sampleBody: body
-        });
-      }
-    }, 1000);
-
-    if (actions) {
-      const requestHeadears = headers.map((header: any) => {
-        return {
-          name: Object.keys(header)[0],
-          value: Object.values(header)[0]
-        };
-      });
-      actions.addRequestHeader(requestHeadears);
-    }
-  };
-
-  private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
-    loadGETheme(msg.theme);
-  };
 
   private handleOnMethodChange = (option?: IDropdownOption) => {
     const query = { ...this.props.sampleQuery };
@@ -228,11 +119,8 @@ function mapStateToProps(state: any) {
   return {
     isLoadingData: state.isLoadingData,
     headers: state.headersAdded,
-    sampleQuery: state.sampleQuery
+    sampleQuery: state.sampleQuery,
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QueryRunner);
+export default connect(mapStateToProps, mapDispatchToProps)(QueryRunner);

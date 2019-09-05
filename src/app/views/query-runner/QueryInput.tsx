@@ -1,4 +1,4 @@
-import { Dropdown, TextField } from 'office-ui-fabric-react';
+import { Dropdown, styled, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -58,10 +58,10 @@ export class QueryInput extends Component<IQueryInputProps, any> {
 function mapStateToProps(state: any) {
   return {
     sampleUrl: state.sampleQuery.sampleUrl,
-    selectedVerb: state.sampleQuery.selectedVerb
+    selectedVerb: state.sampleQuery.selectedVerb,
+    appTheme: state.theme
   };
 }
-
 export default connect(
   mapStateToProps,
   null

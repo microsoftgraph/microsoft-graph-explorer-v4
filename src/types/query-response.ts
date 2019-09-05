@@ -1,5 +1,6 @@
 
 export interface IQueryResponseProps {
+  dispatch: Function;
   graphResponse?: {
     body: object;
     headers: object;
@@ -8,4 +9,5 @@ export interface IQueryResponseProps {
     message: object;
   };
   verb: string;
+  theme: string;
 }

@@ -9,13 +9,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { loadGETheme } from '../../themes';
+import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
+import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
 import { clearQueryError } from '../services/actions/error-action-creator';
+import { runQuery } from '../services/actions/query-action-creators';
+import { setSampleQuery } from '../services/actions/query-input-action-creators';
+import { addRequestHeader } from '../services/actions/request-headers-action-creators';
+import { changeTheme } from '../services/actions/theme-action-creator';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
+import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
 
 interface IAppProps {
@@ -23,6 +31,12 @@ interface IAppProps {
   styles?: object;
   error: object | null;
   graphExplorerMode: Mode;
+  actions: {
+    addRequestHeader: Function;
+    clearQueryError: Function;
+    setSampleQuery: Function;
+    runQuery: Function;
+  };
 }
 
 interface IAppState {
@@ -37,6 +51,114 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
+  public componentDidMount = () => {
+    const { actions } = this.props;
+    const whiteListedDomains = [
+      'https://docs.microsoft.com',
+      'https://review.docs.microsoft.com',
+      'https://ppe.docs.microsoft.com',
+      'https://docs.azure.cn'
+    ];
+
+    // Notify host document that GE is ready to receive messages
+    const hostOrigin = new URLSearchParams(location.search).get('host-origin');
+    const originIsWhitelisted =
+      hostOrigin && whiteListedDomains.indexOf(hostOrigin) !== -1;
+
+    if (hostOrigin && originIsWhitelisted) {
+      window.parent.postMessage({ type: 'ready' }, hostOrigin);
+    }
+
+    // Listens for messages from host document
+    window.addEventListener('message', this.receiveMessage, false);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const base64Token = urlParams.getAll('query')[0];
+
+    if (!base64Token) {
+      return;
+    }
+
+    const data = JSON.parse(atob(base64Token));
+    const { sampleVerb, sampleHeaders, sampleUrl, sampleBody } = data;
+
+    const query = {
+      sampleUrl,
+      sampleBody,
+      sampleHeaders,
+      selectedVerb: sampleVerb
+    };
+
+    if (actions) {
+      actions.setSampleQuery(query);
+    }
+  };
+
+  public componentWillUnmount(): void {
+    window.removeEventListener('message', this.receiveMessage);
+  }
+
+  private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
+    loadGETheme(msg.theme);
+
+    // @ts-ignore
+    this.props.actions!.changeTheme(msg.theme);
+    };
+
+  private receiveMessage = (event: MessageEvent): void => {
+    const msgEvent: IThemeChangedMessage | IInitMessage = event.data;
+
+    switch (msgEvent.type) {
+      case 'init':
+        this.handleInitMsg(msgEvent);
+        break;
+      case 'theme-changed':
+        this.handleThemeChangeMsg(msgEvent);
+        break;
+      default:
+        return;
+    }
+  };
+
+  private handleInitMsg = (msg: IInitMessage) => {
+    const { actions } = this.props;
+    const { verb, headers, url, body }: any = parse(msg.code);
+
+    if (actions) {
+      actions.setSampleQuery({
+        sampleUrl: url,
+        selectedVerb: verb
+      });
+    }
+
+    // Sets selected verb in App Component
+    this.handleSelectVerb(verb);
+
+    /**
+     * We are delaying this by 1 second here so that we give Monaco's formatter time to initialize.
+     * If we don't put this delay, the body won't be formatted.
+     */
+    setTimeout(() => {
+      if (actions) {
+        actions.setSampleQuery({
+          sampleUrl: url,
+          selectedVerb: verb,
+          sampleBody: body
+        });
+      }
+    }, 1000);
+
+    if (actions) {
+      const requestHeaders = headers.map((header: any) => {
+        return {
+          name: Object.keys(header)[0],
+          value: Object.values(header)[0]
+        };
+      });
+      actions.addRequestHeader(requestHeaders);
+    }
+  };
+
   public handleSelectVerb = (verb: string) => {
     this.setState({
       selectedVerb: verb
@@ -45,12 +167,14 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, actions }: any = this.props;
+    const { graphExplorerMode, error, actions, sampleQuery }: any = this.props;
     const layout =
       graphExplorerMode === Mode.TryIt
-        ? 'col-sm-12 col-lg-8 offset-lg-2'
+        ? 'col-sm-12'
         : 'col-sm-12 col-lg-9';
     return (
+      // @ts-ignore
+      <ThemeContext.Provider value={this.props.appTheme}>
       <FocusTrapZone>
         <div className={`container-fluid ${classes.app}`}>
           <div className='row'>
@@ -69,7 +193,9 @@ class App extends Component<IAppProps, IAppState> {
                   >
                     <p>
                       To try operations other than GET or to access your own data, sign in to
-                      <a tabIndex={0} href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
+                      <a className={classes.toGraphExplorer}
+                        tabIndex={0}
+                        href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
                         Graph Explorer.
                       </a>
                     </p>
@@ -88,6 +214,7 @@ class App extends Component<IAppProps, IAppState> {
                   {`${error.statusText} - ${error.status}`}
                 </MessageBar>
               )}
+              {sampleQuery && (<div/>)}
               {
                 // @ts-ignore
                 <QueryResponse verb={this.state.selectedVerb} />
@@ -96,6 +223,7 @@ class App extends Component<IAppProps, IAppState> {
           </div>
         </div>
       </FocusTrapZone>
+      </ThemeContext.Provider>
     );
   }
 }
@@ -103,13 +231,23 @@ class App extends Component<IAppProps, IAppState> {
 const mapStateToProps = (state: any) => {
   return {
     error: state.queryRunnerError,
-    graphExplorerMode: state.graphExplorerMode
+    receivedSampleQuery: state.sampleQuery,
+    graphExplorerMode: state.graphExplorerMode,
+    appTheme: state.theme,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions: bindActionCreators({ clearQueryError }, dispatch)
+    actions: bindActionCreators({
+      clearQueryError,
+      runQuery,
+      setSampleQuery,
+      addRequestHeader,
+      changeTheme: (newTheme: string) => {
+       return (disp: Function) => disp(changeTheme(newTheme));
+      }
+    }, dispatch)
   };
 };
 

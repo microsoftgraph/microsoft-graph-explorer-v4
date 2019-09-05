@@ -4,12 +4,17 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { IQueryResponseProps } from '../../../types/query-response';
+import { clearResponse } from '../../services/actions/error-action-creator';
 import { Image, Monaco } from '../common';
 import './query-response.scss';
 
 class QueryResponse extends Component<IQueryResponseProps, {}> {
   constructor(props: any) {
     super(props);
+  }
+
+  public componentWillUnmount() {
+    this.props.dispatch(clearResponse());
   }
 
   public render() {
@@ -66,10 +71,12 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 
 function mapStateToProps(state: IQueryResponseProps) {
   return {
-    graphResponse: state.graphResponse,
+    graphResponse:  state.graphResponse,
+    appTheme: state.theme,
   };
 }
 
 // @ts-ignore
 const WithIntl = injectIntl(QueryResponse);
 export default connect(mapStateToProps)(WithIntl);
+

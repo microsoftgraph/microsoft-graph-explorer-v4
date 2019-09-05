@@ -15,6 +15,7 @@ import { Provider } from 'react-redux';
 
 import { getAuthTokenSuccess, setGraphExplorerMode } from './app/services/actions/auth-action-creators';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
+import { changeTheme } from './app/services/actions/theme-action-creator';
 import { HelloAuthProvider } from './app/services/graph-client/HelloAuthProvider';
 import App from './app/views/App';
 import messages from './messages';
@@ -28,6 +29,7 @@ initializeIcons();
 
 const appState = store({
   authToken: '',
+  theme: 'light',
   isLoadingData: false,
   queryRunnerError: null,
   headersAdded: [{ name: '', value: '' }],
@@ -74,8 +76,10 @@ addLocaleData([
 
 
 const theme = new URLSearchParams(location.search).get('theme');
+
 if (theme) {
   loadGETheme(theme);
+  appState.dispatch(changeTheme(theme));
 }
 
 if (hostDocumentLocale) {
