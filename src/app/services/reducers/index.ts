@@ -6,6 +6,7 @@ import { isLoadingData } from './query-loading-reducers';
 import { queryRunnerError } from './query-runner-error';
 import { graphResponse } from './query-runner-reducers';
 import { headersAdded } from './request-headers-reducers';
+import { samples } from './samples-reducers';
 import { theme } from './theme-reducer';
 
 export default combineReducers({
@@ -16,5 +17,6 @@ export default combineReducers({
   headersAdded,
   graphExplorerMode,
   sampleQuery,
+  samples,
   theme
 });

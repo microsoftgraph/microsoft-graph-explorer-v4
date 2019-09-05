@@ -1,6 +1,6 @@
 import {
   DetailsList, DetailsRow, getTheme, IColumn, IconButton,
-  SearchBox, Selection, SelectionMode, styled
+  MessageBar, MessageBarType, SearchBox, Selection, SelectionMode, Spinner, SpinnerSize, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -10,43 +10,43 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
+import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import { queries } from './queries';
-
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   constructor(props: ISampleQueriesProps) {
     super(props);
     this.state = {
-      samples: queries,
       groupedList: {
-        samples: queries,
+        samples: [],
         categories: [],
       }
     };
   }
 
   public componentDidMount = () => {
-    const { samples } = this.state;
-    const groupedList = this.generateSamples(samples);
+    this.props.actions!.fetchSamples();
+  }
 
-    this.setState({ groupedList });
+  public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
+    if (prevProps.samples.queries !== this.props.samples.queries) {
+      this.generateSamples(this.props.samples.queries);
+    }
   }
 
   public searchValueChanged = (value: any): void => {
-    const { samples } = this.state;
+    const { queries } = this.props.samples;
     const keyword = value.toLowerCase();
 
-    const filteredSamples = samples.filter((sample: any) => {
+    const filteredSamples = queries.filter((sample: any) => {
       const name = sample.humanName.toLowerCase();
       return name.toLowerCase().includes(keyword);
     });
 
-    const groupedList = this.generateSamples(filteredSamples);
-    this.setState({ groupedList });
+    this.generateSamples(filteredSamples);
   }
 
 
@@ -104,10 +104,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         previousCount += count;
       }
     }
-    return {
-      samples,
-      categories,
-    };
+
+    this.setState({
+      groupedList: {
+        samples,
+        categories,
+      }
+    });
   }
 
   public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
@@ -189,8 +192,19 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   }
 
   public render() {
-    const { groupedList } = this.state;
+    const { error, pending } = this.props.samples;
     const classes = classNames(this.props);
+
+    if (pending) {
+      return (
+        <Spinner
+          className={classes.spinner}
+          size={SpinnerSize.large}
+          label='loading samples ...' ariaLive='assertive' labelPosition='top' />
+      );
+    }
+
+    const { groupedList } = this.state;
     const columns = [
       { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
       { key: 'category', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: 200 },
@@ -227,6 +241,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           onChange={(value) => this.searchValueChanged(value)}
         />
         <hr />
+        {error && <MessageBar messageBarType={MessageBarType.warning}
+          isMultiline={true}
+          dismissButtonAriaLabel='Close'>
+          You are viewing a cached set of samples because of a network connection failure.
+        </MessageBar>}
         <DetailsList className={classes.queryList}
           onRenderItemColumn={this.renderItemColumn}
           items={groupedList.samples}
@@ -246,13 +265,18 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 }
 function mapStateToProps(state: any) {
   return {
-    tokenPresent: !!state.authToken
+    tokenPresent: !!state.authToken,
+    samples: state.samples
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators({ ...queryActionCreators, ...queryInputActionCreators }, dispatch),
+    actions: bindActionCreators({
+      ...queryActionCreators,
+      ...queryInputActionCreators,
+      ...samplesActionCreators
+    }, dispatch),
   };
 }
 
