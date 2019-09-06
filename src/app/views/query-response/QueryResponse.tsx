@@ -1,9 +1,10 @@
-import { Pivot, PivotItem } from 'office-ui-fabric-react';
+import { getTheme, Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { IQueryResponseProps } from '../../../types/query-response';
+import { clearResponse } from '../../services/actions/error-action-creator';
 import { Image, Monaco } from '../common';
 import './query-response.scss';
 import { Snippets } from './snippets';
@@ -11,6 +12,13 @@ import { Snippets } from './snippets';
 class QueryResponse extends Component<IQueryResponseProps, {}> {
   constructor(props: any) {
     super(props);
+  }
+
+  public componentWillUnmount() {
+    // tslint:disable-next-line
+    console.log('Clearing response')
+    // @ts-ignore
+    this.props.dispatch(clearResponse());
   }
 
   public render() {
@@ -38,6 +46,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 
     return (
       <div className='query-response'>
+        {body ?
         <Pivot className='pivot-response'>
           <PivotItem
             ariaLabel='Response Preview'
@@ -65,6 +74,18 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
             <Snippets/>
           </PivotItem>
         </Pivot>
+        :
+          <Pivot className='pivot-response'>
+            <PivotItem
+              ariaLabel='Response Preview'
+              headerText={messages['Response Preview']}
+            />
+            <PivotItem
+              ariaLabel='Response Headers'
+              headerText={messages['Response Headers']}
+            />
+          </Pivot>
+        }
       </div>
     );
   }
@@ -72,10 +93,11 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 
 function mapStateToProps(state: IQueryResponseProps) {
   return {
-    graphResponse: state.graphResponse,
+    graphResponse:  state.graphResponse,
   };
 }
 
 // @ts-ignore
 const WithIntl = injectIntl(QueryResponse);
 export default connect(mapStateToProps)(WithIntl);
+

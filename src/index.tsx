@@ -91,3 +91,7 @@ const Root = () => {
 };
 
 ReactDOM.render(<Root />, document.getElementById('root'));
+
+export function renderApp(key: string) {
+  ReactDOM.render(<Root key={key}/>, document.getElementById('root'));
+}
