@@ -9,14 +9,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { renderApp } from '../..';
 import { loadGETheme } from '../../themes';
+import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
 import { clearQueryError } from '../services/actions/error-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { addRequestHeader } from '../services/actions/request-headers-action-creators';
+import { changeTheme } from '../services/actions/theme-action-creator';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
@@ -91,23 +92,18 @@ class App extends Component<IAppProps, IAppState> {
     if (actions) {
       actions.setSampleQuery(query);
     }
-  }
+  };
 
   public componentWillUnmount(): void {
     window.removeEventListener('message', this.receiveMessage);
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
-    // tslint:disable
-    console.log('received theme', msg.theme);
     loadGETheme(msg.theme);
 
-    console.log('loaded theme');
-    console.log('Rerendering...');
-
-    renderApp(Math.random().toString())
-    // tslint:enable
-  };
+    // @ts-ignore
+    this.props.actions!.changeTheme(msg.theme);
+    };
 
   private receiveMessage = (event: MessageEvent): void => {
     const msgEvent: IThemeChangedMessage | IInitMessage = event.data;
@@ -143,10 +139,6 @@ class App extends Component<IAppProps, IAppState> {
      * If we don't put this delay, the body won't be formatted.
      */
     setTimeout(() => {
-      // tslint:disable
-      console.log('Sample body');
-      console.log(body);
-      // tslint:enable
       if (actions) {
         actions.setSampleQuery({
           sampleUrl: url,
@@ -157,13 +149,13 @@ class App extends Component<IAppProps, IAppState> {
     }, 1000);
 
     if (actions) {
-      const requestHeadears = headers.map((header: any) => {
+      const requestHeaders = headers.map((header: any) => {
         return {
           name: Object.keys(header)[0],
           value: Object.values(header)[0]
         };
       });
-      actions.addRequestHeader(requestHeadears);
+      actions.addRequestHeader(requestHeaders);
     }
   };
 
@@ -181,6 +173,8 @@ class App extends Component<IAppProps, IAppState> {
         ? 'col-sm-12'
         : 'col-sm-12 col-lg-9';
     return (
+      // @ts-ignore
+      <ThemeContext.Provider value={this.props.appTheme}>
       <FocusTrapZone>
         <div className={`container-fluid ${classes.app}`}>
           <div className='row'>
@@ -229,6 +223,7 @@ class App extends Component<IAppProps, IAppState> {
           </div>
         </div>
       </FocusTrapZone>
+      </ThemeContext.Provider>
     );
   }
 }
@@ -237,13 +232,22 @@ const mapStateToProps = (state: any) => {
   return {
     error: state.queryRunnerError,
     receivedSampleQuery: state.sampleQuery,
-    graphExplorerMode: state.graphExplorerMode
+    graphExplorerMode: state.graphExplorerMode,
+    appTheme: state.theme,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions: bindActionCreators({ clearQueryError, runQuery, setSampleQuery, addRequestHeader }, dispatch)
+    actions: bindActionCreators({
+      clearQueryError,
+      runQuery,
+      setSampleQuery,
+      addRequestHeader,
+      changeTheme: (newTheme: string) => {
+       return (disp: Function) => disp(changeTheme(newTheme));
+      }
+    }, dispatch)
   };
 };
 

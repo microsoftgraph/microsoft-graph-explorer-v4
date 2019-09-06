@@ -2,6 +2,7 @@ import { FocusZone, getTheme } from 'office-ui-fabric-react';
 import React from 'react';
 import MonacoEditor, { ChangeHandler } from 'react-monaco-editor';
 
+import { ThemeContext } from '../../../../themes/theme-context';
 import './monaco.scss';
 
 interface IMonaco {
@@ -15,9 +16,7 @@ function editorDidMount(editor: any) {
   const editorHasText = !!editor.getModel().getValue();
 
   if (editorHasText) {
-    setTimeout(() => {
-      formatDocument(editor);
-    }, 500);
+    formatDocument(editor);
   }
 
   editor.onDidChangeModelContent(() => {
@@ -33,10 +32,8 @@ export function Monaco(props: IMonaco) {
 
   let { body } = props;
   const { onChange, verb, language } = props;
-  const currentTheme = getTheme();
-  const isDark = currentTheme.palette.black === '#ffffff' ? true : false;
 
-  if (typeof body !== 'string') {
+  if (body && typeof body !== 'string') {
     body = JSON.stringify(body);
   }
 
@@ -45,16 +42,19 @@ export function Monaco(props: IMonaco) {
   return (
     <FocusZone disabled={true}>
       <div className='monaco-editor'>
-        <MonacoEditor
-          width='800 !important'
-          height={verbIsGet ? '80vh' : '350px'}
-          value={body}
-          language={language ? language : 'json'}
-          options={{ lineNumbers: 'off', minimap: { enabled: false } }}
-          editorDidMount={editorDidMount}
-          onChange={onChange}
-          theme={isDark ? 'vs-dark' : 'vs'}
-        />
+        <ThemeContext.Consumer >
+          {(theme) => (<MonacoEditor
+            width='800 !important'
+            height={verbIsGet ? '80vh' : '350px'}
+            // @ts-ignore
+            value={body  ? body : ''}
+            language='json'
+            options={{ lineNumbers: 'off', minimap: { enabled: false } }}
+            editorDidMount={editorDidMount}
+            onChange={onChange}
+            theme={theme === 'light' ? 'vs' : 'vs-dark'}
+          />)}
+        </ThemeContext.Consumer>
       </div>
     </FocusZone>
   );

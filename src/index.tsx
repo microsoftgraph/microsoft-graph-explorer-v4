@@ -14,18 +14,29 @@ import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
 
 import { getAuthTokenSuccess, setGraphExplorerMode } from './app/services/actions/auth-action-creators';
+import { addHistoryItem } from './app/services/actions/request-history-action-creators';
+import { changeTheme } from './app/services/actions/theme-action-creator';
 import { HelloAuthProvider } from './app/services/graph-client/HelloAuthProvider';
 import App from './app/views/App';
 import messages from './messages';
 import { store } from './store';
+import { readData } from './store/cache';
 import './styles/index.scss';
 import { loadGETheme } from './themes';
 import { Mode } from './types/action';
+import { IHistoryItem } from './types/history';
+
+const spinner = document.getElementById('spinner');
+
+if (spinner !== null) {
+  (spinner as any).parentElement.removeChild(spinner);
+}
 
 initializeIcons();
 
 const appState = store({
   authToken: '',
+  theme: 'light',
   isLoadingData: false,
   queryRunnerError: null,
   headersAdded: [{ name: '', value: '' }],
@@ -72,13 +83,23 @@ addLocaleData([
 
 
 const theme = new URLSearchParams(location.search).get('theme');
+
 if (theme) {
   loadGETheme(theme);
+  appState.dispatch(changeTheme(theme));
 }
 
 if (hostDocumentLocale) {
   appState.dispatch(setGraphExplorerMode(Mode.TryIt));
 }
+
+readData().then((data: any) => {
+  if (data.length > 0) {
+    data.forEach((element: IHistoryItem) => {
+      appState.dispatch(addHistoryItem(element));
+    });
+  }
+});
 
 const Root = () => {
   return (
@@ -91,7 +112,3 @@ const Root = () => {
 };
 
 ReactDOM.render(<Root />, document.getElementById('root'));
-
-export function renderApp(key: string) {
-  ReactDOM.render(<Root key={key}/>, document.getElementById('root'));
-}

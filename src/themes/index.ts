@@ -1,11 +1,13 @@
 import { IPartialTheme, loadTheme } from '@uifabric/styling';
 
 import { dark } from './dark';
+import { highContrast } from './high-contrast';
 import { light } from './light';
 
 const themes: any = {
   dark,
   light,
+  'high-contrast': highContrast,
 };
 
 export function loadGETheme(theme: string): void {
