@@ -66,6 +66,8 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
     if (mode === Mode.Complete) {
       pivotItems.push(
         <PivotItem
+          key='code-snippets'
+          ariaLabel='Code Snippets'
           headerText={messages.Snippets}
         >
           <Snippets/>
