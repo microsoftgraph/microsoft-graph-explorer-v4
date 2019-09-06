@@ -17,13 +17,10 @@ export function getSnippet(language: string, sampleQuery: IQuery, dispatch: Func
     sample.sampleUrl = pathname;
   }
 
-  let url = '';
+  let url = 'https:graphexplorerapi.azurewebsites.net/api/graphexplorersnippets';
 
-  if (language === 'csharp') {
-    url = 'https:graphexplorerapi.azurewebsites.net/api/graphexplorersnippets';
-  } else {
-    // tslint:disable-next-line: max-line-length
-    url = `https:graphexplorerapi.azurewebsites.net/api/graphexplorersnippets?lang=${language.toLocaleLowerCase()}`;
+  if (language !== 'csharp') {
+    url += `?lang=${language.toLocaleLowerCase()}`;
   }
 
   // tslint:disable-next-line: max-line-length
