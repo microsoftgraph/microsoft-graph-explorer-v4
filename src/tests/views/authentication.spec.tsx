@@ -4,7 +4,7 @@ import React from 'react';
 import { Authentication } from '../../app/views/authentication';
 
 describe('Authentication Component', () => {
-  it.skip('renders without crashing', () => {
-    shallow(<Authentication />);
+  it('renders without crashing', () => {
+    return shallow(<Authentication />);
   });
 });
