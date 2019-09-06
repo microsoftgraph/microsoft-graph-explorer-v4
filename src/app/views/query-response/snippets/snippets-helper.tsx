@@ -1,5 +1,5 @@
 import { PivotItem } from 'office-ui-fabric-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { getSnippet } from '../../../services/actions/snippet-action-creator';
@@ -33,17 +33,21 @@ function Snippet(props: ISnippetProps) {
 
   const sampleQuery = useSelector((state: any) => state.sampleQuery, shallowEqual);
   const snippet = useSelector((state: any) => (state.snippets)[language]);
+  const [ loadingState, setLoadingState ] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (snippet === undefined) {
-      getSnippet(language, sampleQuery, dispatch);
+      setLoadingState(true);
+
+      getSnippet(language, sampleQuery, dispatch)
+        .then(() => setLoadingState(false));
     }
   });
 
   return (
     <Monaco
-      body={snippet}
+      body={loadingState ? 'Fetching code snippet...' : snippet}
       language={language}
     />
   );
