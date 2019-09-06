@@ -48,7 +48,7 @@ export function Monaco(props: IMonaco) {
             height={verbIsGet ? '80vh' : '350px'}
             // @ts-ignore
             value={body  ? body : ''}
-            language='json'
+            language={language ? language : 'json'}
             options={{ lineNumbers: 'off', minimap: { enabled: false } }}
             editorDidMount={editorDidMount}
             onChange={onChange}

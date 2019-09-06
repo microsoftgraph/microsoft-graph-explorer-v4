@@ -25,8 +25,8 @@ function Snippet(props: ISnippetProps) {
   /**
    * Converting language lowercase so that we won't have to call toLowerCase() in multiple places.
    *
-   * Ie the monaco component expects a lowercase string for the language prop and the graphexplorerapi
-   * expects a lowercase string for the param value.
+   * Ie the monaco component expects a lowercase string for the language prop and the graphexplorerapi expects
+   * a lowercase string for the param value.
    */
   language = language.toLowerCase();
 
@@ -36,7 +36,9 @@ function Snippet(props: ISnippetProps) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getSnippet(language, sampleQuery, dispatch);
+    if (snippet === undefined) {
+      getSnippet(language, sampleQuery, dispatch);
+    }
   });
 
   return (

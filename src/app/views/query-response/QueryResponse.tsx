@@ -4,7 +4,6 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { IQueryResponseProps } from '../../../types/query-response';
-import { clearResponse } from '../../services/actions/error-action-creator';
 import { Image, Monaco } from '../common';
 import './query-response.scss';
 import { Snippets } from './snippets';
@@ -12,10 +11,6 @@ import { Snippets } from './snippets';
 class QueryResponse extends Component<IQueryResponseProps, {}> {
   constructor(props: any) {
     super(props);
-  }
-
-  public componentWillUnmount() {
-    this.props.dispatch(clearResponse());
   }
 
   public render() {
