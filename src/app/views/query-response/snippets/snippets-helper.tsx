@@ -37,13 +37,11 @@ function Snippet(props: ISnippetProps) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (snippet === undefined) {
       setLoadingState(true);
 
       getSnippet(language, sampleQuery, dispatch)
         .then(() => setLoadingState(false));
-    }
-  });
+  }, [sampleQuery.sampleUrl]);
 
   return (
     <Monaco

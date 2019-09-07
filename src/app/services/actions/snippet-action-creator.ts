@@ -20,7 +20,7 @@ export function getSnippet(language: string, sampleQuery: IQuery, dispatch: Func
   let url = 'https:graphexplorerapi.azurewebsites.net/api/graphexplorersnippets';
 
   if (language !== 'csharp') {
-    url += `?lang=${language.toLocaleLowerCase()}`;
+    url += `?lang=${language}`;
   }
 
   // tslint:disable-next-line: max-line-length
