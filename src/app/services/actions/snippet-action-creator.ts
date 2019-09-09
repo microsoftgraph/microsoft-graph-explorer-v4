@@ -13,8 +13,8 @@ export function getSnippet(language: string, sampleQuery: IQuery, dispatch: Func
   const sample = { ...sampleQuery };
 
   if (sample.sampleUrl) {
-    const pathname = new URL(sample.sampleUrl).pathname;
-    sample.sampleUrl = pathname;
+    const urlObject: URL = new URL(sample.sampleUrl);
+    sample.sampleUrl = urlObject.pathname + urlObject.search;
   }
 
   let url = 'https:graphexplorerapi.azurewebsites.net/api/graphexplorersnippets';
