@@ -3,6 +3,7 @@
 .monaco-editor {
   margin-left: 1px;
   padding-top: $gutter;
+  padding-bottom: $gutter;
   width: inherit !important;
 
   .react-monaco-editor-container {
