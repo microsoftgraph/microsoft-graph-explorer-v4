@@ -179,7 +179,7 @@ class App extends Component<IAppProps, IAppState> {
         <div className={`container-fluid ${classes.app}`}>
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
-              <div className={`col-sm-3 col-lg-3 col-md-3 ${classes.sidebar}`}>
+              <div className={`col-sm-12 col-lg-3 col-md-3 ${classes.sidebar}`}>
                 <Sidebar />
               </div>
             )}
