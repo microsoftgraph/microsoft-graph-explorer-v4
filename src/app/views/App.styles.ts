@@ -18,6 +18,9 @@ export const appStyles = (theme: ITheme) => {
     },
     toGraphExplorer: {
       color: 'inherit'
-    }
+    },
+    sidebarToggle: {
+      marginBottom: theme.spacing.s1,
+    },
   };
 };
