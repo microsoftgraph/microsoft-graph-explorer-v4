@@ -8,6 +8,7 @@ import { graphResponse } from './query-runner-reducers';
 import { headersAdded } from './request-headers-reducers';
 import { history } from './request-history-reducers';
 import { samples } from './samples-reducers';
+import { snippets } from './snippet-reducer';
 import { theme } from './theme-reducer';
 
 export default combineReducers({
@@ -19,6 +20,7 @@ export default combineReducers({
   isLoadingData,
   queryRunnerError,
   sampleQuery,
+  snippets,
   samples,
   theme
 });

@@ -62,8 +62,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 }
 
 // @ts-ignore
-const styledAuthentication = styled(Authentication, authenticationStyles);
+const StyledAuthentication = styled(Authentication, authenticationStyles);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(styledAuthentication);
+)(StyledAuthentication);
