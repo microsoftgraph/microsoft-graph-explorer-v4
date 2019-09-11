@@ -108,6 +108,12 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       alignTargetEdge: true,
       items: [
         {
+          key: 'office-dev-program',
+          text: 'Office Dev Program',
+          href: 'https://developer.microsoft.com/en-us/office/dev-program',
+          target: '_blank'
+        },
+        {
           key: 'sign-out',
           text: 'Sign Out',
           onClick: () => this.handleSignOut()
