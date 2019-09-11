@@ -45,6 +45,9 @@ interface IAppState {
 }
 
 class App extends Component<IAppProps, IAppState> {
+
+  private mediaQueryList = window.matchMedia('(max-width: 767px)');
+
   constructor(props: IAppProps) {
     super(props);
     this.state = {
@@ -55,9 +58,8 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public componentDidMount = () => {
-    const mediaQueryList = window.matchMedia('(max-width: 767px)');
-    this.displayToggleButton(mediaQueryList);
-    mediaQueryList.addListener(this.displayToggleButton);
+    this.displayToggleButton(this.mediaQueryList);
+    this.mediaQueryList.addListener(this.displayToggleButton);
 
     const { actions } = this.props;
     const whiteListedDomains = [
@@ -103,6 +105,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public componentWillUnmount(): void {
     window.removeEventListener('message', this.receiveMessage);
+    this.mediaQueryList.removeListener(this.displayToggleButton);
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
