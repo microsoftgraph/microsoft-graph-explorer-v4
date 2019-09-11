@@ -1,7 +1,8 @@
-import { Dropdown, styled, TextField } from 'office-ui-fabric-react';
+import { Dropdown, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { Mode } from '../../../types/action';
 import { IQueryInputProps } from '../../../types/query-runner';
 import SubmitButton from '../common/submit-button/SubmitButton';
 
@@ -18,7 +19,8 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       httpMethods,
       selectedVerb,
       sampleUrl,
-      submitting
+      submitting,
+      mode,
     } = this.props;
 
     return (
@@ -29,6 +31,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             role='listbox'
             selectedKey={selectedVerb}
             options={httpMethods}
+            disabled={mode === Mode.TryIt}
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </div>
@@ -59,7 +62,8 @@ function mapStateToProps(state: any) {
   return {
     sampleUrl: state.sampleQuery.sampleUrl,
     selectedVerb: state.sampleQuery.selectedVerb,
-    appTheme: state.theme
+    appTheme: state.theme,
+    mode: state.graphExplorerMode,
   };
 }
 export default connect(

@@ -1,5 +1,7 @@
+import { Mode } from './action';
 
 export interface IQueryResponseProps {
+  mode: Mode;
   dispatch: Function;
   graphResponse?: {
     body: object;

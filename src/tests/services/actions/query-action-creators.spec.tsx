@@ -7,7 +7,7 @@ import { QUERY_GRAPH_ERROR, QUERY_GRAPH_RUNNING, QUERY_GRAPH_SUCCESS } from '../
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('actions', () => {
+describe('query actions', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
