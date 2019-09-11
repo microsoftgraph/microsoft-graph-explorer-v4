@@ -175,7 +175,7 @@ class App extends Component<IAppProps, IAppState> {
     });
   };
 
-  public toggleSidebar(): void {
+  public toggleSidebar = (): void => {
     const showSidebar = !this.state.showSidebar;
     this.setState({ showSidebar });
   }
@@ -195,7 +195,7 @@ class App extends Component<IAppProps, IAppState> {
     const { showSidebar, showToggle } = this.state;
     const layout =
       graphExplorerMode === Mode.TryIt
-        ? 'col-sm-12 col-xs-12'
+        ? 'col-xs-12'
         : 'col-xs-12 col-sm-12 col-lg-9 col-md-8';
     return (
       // @ts-ignore
@@ -210,7 +210,7 @@ class App extends Component<IAppProps, IAppState> {
                     className={classes.sidebarToggle}
                     title='Remove sidebar'
                     ariaLabel='Remove sidebar'
-                    onClick={() => this.toggleSidebar()}
+                    onClick={this.toggleSidebar}
                   />}
                   {showSidebar && <Sidebar />}
                 </div>
