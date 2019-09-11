@@ -1,4 +1,4 @@
-import { styled } from 'office-ui-fabric-react';
+import { ActionButton, Stack, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -7,7 +7,6 @@ import { IAuthenticationProps } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import { HelloAuthProvider } from '../../services/graph-client/HelloAuthProvider';
 import { classNames } from '../classnames';
-import SubmitButton from '../common/submit-button/SubmitButton';
 import { authenticationStyles } from './Authentication.styles';
 import Profile from './profile/Profile';
 
@@ -20,30 +19,28 @@ export class Authentication extends Component<IAuthenticationProps> {
     new HelloAuthProvider().signIn();
   };
 
-  public signOut = (): void => {
-    const { actions } = this.props;
-
-    if (actions) {
-      actions.signOut();
-    }
-  };
-
   public render() {
     const { tokenPresent } = this.props;
     const classes = classNames(this.props);
 
-    const buttonLabel = tokenPresent ? 'sign out' : 'sign in';
     return (
       <div className={classes.authenticationContainer}>
-        <SubmitButton
-          className={classes.signInButton}
-          ariaLabel='Sign-in button'
-          role='button'
-          text={buttonLabel}
-          handleOnClick={tokenPresent ? this.signOut : this.signIn}
-          submitting={false}
-        />
-        {tokenPresent && <Profile />}
+        <Stack>
+          <Stack.Item align='end'>
+            {!tokenPresent && <ActionButton
+              ariaLabel='Sign-in button'
+              className={classes.signInButton}
+              role='button'
+              iconProps={{ iconName: 'Contact' }}
+              onClick={this.signIn}>
+              sign in
+          </ActionButton>}
+          </Stack.Item>
+          {tokenPresent &&
+            <Stack.Item align='end'>
+              <Profile/>
+            </Stack.Item>}
+        </Stack>
       </div>
     );
   }
