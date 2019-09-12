@@ -6,6 +6,7 @@ import { Mode } from '../../../types/action';
 
 import { IQueryResponseProps } from '../../../types/query-response';
 import { Image, Monaco } from '../common';
+import AdaptiveCard  from './adaptive-cards/AdaptiveCard';
 import './query-response.scss';
 import { Snippets } from './snippets';
 
@@ -64,6 +65,16 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
     ];
 
     if (mode === Mode.Complete) {
+      pivotItems.push(
+        <PivotItem
+          key = 'adaptive-cards'
+          ariaLabel='Adaptive Cards'
+          headerText={messages['Adaptive Cards']}
+        >
+          <AdaptiveCard
+            body= {body}/>
+        </PivotItem>
+      );
       pivotItems.push(
         <PivotItem
           key='code-snippets'
