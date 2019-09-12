@@ -10,6 +10,7 @@ import { history } from './request-history-reducers';
 import { samples } from './samples-reducers';
 import { snippets } from './snippet-reducer';
 import { theme } from './theme-reducer';
+import { sidebarProperties } from './toggle-sidebar-reducer';
 
 export default combineReducers({
   authToken,
@@ -20,7 +21,8 @@ export default combineReducers({
   isLoadingData,
   queryRunnerError,
   sampleQuery,
-  snippets,
   samples,
-  theme
+  sidebarProperties,
+  snippets,
+  theme,
 });

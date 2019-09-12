@@ -8,15 +8,18 @@ import {
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
+import { ISidebarProps } from '../../types/sidebar';
 import { clearQueryError } from '../services/actions/error-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { addRequestHeader } from '../services/actions/request-headers-action-creators';
 import { changeTheme } from '../services/actions/theme-action-creator';
+import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
@@ -30,17 +33,18 @@ interface IAppProps {
   styles?: object;
   error: object | null;
   graphExplorerMode: Mode;
+  sidebarProperties: ISidebarProps;
   actions: {
     addRequestHeader: Function;
     clearQueryError: Function;
     setSampleQuery: Function;
     runQuery: Function;
+    toggleSidebar: Function;
   };
 }
 
 interface IAppState {
   selectedVerb: string;
-  showSidebar: boolean;
   showToggle: boolean;
 }
 
@@ -52,7 +56,6 @@ class App extends Component<IAppProps, IAppState> {
     super(props);
     this.state = {
       selectedVerb: 'GET',
-      showSidebar: true,
       showToggle: false,
     };
   }
@@ -176,8 +179,10 @@ class App extends Component<IAppProps, IAppState> {
   };
 
   public toggleSidebar = (): void => {
-    const showSidebar = !this.state.showSidebar;
-    this.setState({ showSidebar });
+    const { sidebarProperties } = this.props;
+    const properties = { ...sidebarProperties};
+    properties.showSidebar = !properties.showSidebar;
+    this.props.actions!.toggleSidebar(properties);
   }
 
   public displayToggleButton = (mediaQueryList: any) => {
@@ -186,13 +191,19 @@ class App extends Component<IAppProps, IAppState> {
     if (showToggle) {
       showSidebar = false;
     }
-    this.setState({ showToggle, showSidebar  });
+
+    const properties = {
+      showToggle,
+      showSidebar
+    };
+
+    this.props.actions!.toggleSidebar(properties);
   }
 
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, actions, sampleQuery }: any = this.props;
-    const { showSidebar, showToggle } = this.state;
+    const { graphExplorerMode, error, actions, sampleQuery, sidebarProperties }: any = this.props;
+    const { showToggle, showSidebar } = sidebarProperties;
     const layout =
       graphExplorerMode === Mode.TryIt
         ? 'col-xs-12'
@@ -266,6 +277,7 @@ const mapStateToProps = (state: any) => {
     receivedSampleQuery: state.sampleQuery,
     graphExplorerMode: state.graphExplorerMode,
     appTheme: state.theme,
+    sidebarProperties: state.sidebarProperties,
   };
 };
 
@@ -276,6 +288,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       runQuery,
       setSampleQuery,
       addRequestHeader,
+      toggleSidebar,
       changeTheme: (newTheme: string) => {
         return (disp: Function) => disp(changeTheme(newTheme));
       }
