@@ -14,8 +14,11 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 
   public componentWillMount() {
-    const { body , sampleQuery } = this.props;
+    const { body , sampleQuery, hostConfig } = this.props;
     this.props.actions!.getAdaptiveCard(body, sampleQuery);
+    if (hostConfig) {
+      this.adaptiveCard.hostConfig = new AdaptiveCardsAPI.HostConfig(hostConfig);
+    }
   }
 
   public componentDidUpdate(nextProps: IAdaptiveCardProps) {

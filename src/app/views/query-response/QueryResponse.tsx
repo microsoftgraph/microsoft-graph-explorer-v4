@@ -2,11 +2,13 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { ThemeContext } from '../../../themes/theme-context';
 import { Mode } from '../../../types/action';
 
 import { IQueryResponseProps } from '../../../types/query-response';
 import { Image, Monaco } from '../common';
 import AdaptiveCard  from './adaptive-cards/AdaptiveCard';
+import { darkThemeHostConfig } from './adaptive-cards/AdaptiveHostConfig';
 import './query-response.scss';
 import { Snippets } from './snippets';
 
@@ -71,8 +73,14 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
           ariaLabel='Adaptive Cards'
           headerText={messages['Adaptive Cards']}
         >
-          <AdaptiveCard
-            body= {body}/>
+          <ThemeContext.Consumer >
+            {(theme) => (
+              <AdaptiveCard
+                body= {body}
+                hostConfig={theme === 'light' ? {} : darkThemeHostConfig}
+              />
+            )}
+          </ThemeContext.Consumer>
         </PivotItem>
       );
       pivotItems.push(

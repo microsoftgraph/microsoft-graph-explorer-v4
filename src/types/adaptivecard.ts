@@ -6,6 +6,7 @@ export interface IAdaptiveCardProps {
       pending: boolean;
       data?: any;
     };
+    hostConfig?: any;
     sampleQuery?: IQuery;
     actions?: {
       getAdaptiveCard: Function;
