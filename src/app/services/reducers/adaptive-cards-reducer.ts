@@ -1,29 +1,29 @@
 import { IAction } from '../../../types/action';
-import { ADAPTIVE_FETCH_ERROR, ADAPTIVE_FETCH_PENDING, ADAPTIVE_FETCH_SUCCESS } from '../redux-constants';
+import { FETCH_ADAPTIVE_CARD_ERROR, FETCH_ADAPTIVE_CARD_PENDING, FETCH_ADAPTIVE_CARD_SUCCESS } from '../redux-constants';
 
 const initialState = {
-    pending: false,
-    data: ''
+  pending: false,
+  data: ''
 };
 
 export function adaptiveCard(state = initialState, action: IAction): any {
-    switch (action.type) {
-        case ADAPTIVE_FETCH_SUCCESS:
-            return {
-                pending: false,
-                data: action.response
-            };
-        case ADAPTIVE_FETCH_PENDING:
-            return {
-                pending: true,
-                data: null
-            };
-        case ADAPTIVE_FETCH_ERROR:
-            return {
-                pending: false,
-                data: null
-        };
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case FETCH_ADAPTIVE_CARD_SUCCESS:
+      return {
+        pending: false,
+        data: action.response
+      };
+    case FETCH_ADAPTIVE_CARD_PENDING:
+      return {
+        pending: true,
+        data: null
+      };
+    case FETCH_ADAPTIVE_CARD_ERROR:
+      return {
+        pending: false,
+        data: null
+      };
+    default:
+      return state;
+  }
 }

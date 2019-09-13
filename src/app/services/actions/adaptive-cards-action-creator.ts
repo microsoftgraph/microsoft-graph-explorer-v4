@@ -1,24 +1,28 @@
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
-import { ADAPTIVE_FETCH_ERROR , ADAPTIVE_FETCH_PENDING, ADAPTIVE_FETCH_SUCCESS } from '../redux-constants';
+import {
+  FETCH_ADAPTIVE_CARD_ERROR ,
+  FETCH_ADAPTIVE_CARD_PENDING,
+  FETCH_ADAPTIVE_CARD_SUCCESS
+} from '../redux-constants';
 
-export function getAdaptiveCardSuccess(result: string): IAction {
+export function getAdaptiveCardSuccess(result: string = ''): IAction {
   return {
-    type: ADAPTIVE_FETCH_SUCCESS,
+    type: FETCH_ADAPTIVE_CARD_SUCCESS,
     response: result,
   };
 }
 
 export function getAdaptiveCardError(error: string): IAction {
   return {
-    type: ADAPTIVE_FETCH_ERROR,
+    type: FETCH_ADAPTIVE_CARD_ERROR,
     response: error
   };
 }
 
 export function getAdaptiveCardPending(): IAction {
   return {
-    type: ADAPTIVE_FETCH_PENDING,
+    type: FETCH_ADAPTIVE_CARD_PENDING,
     response: ''
   };
 }
@@ -28,11 +32,11 @@ export function getAdaptiveCard(payload: string, sampleQuery: IQuery): Function 
 
     if (!payload) {
       // no payload so return empty result
-      return dispatch(getAdaptiveCardSuccess(''));
+      return dispatch(getAdaptiveCardSuccess());
     }
 
     const template = lookupTemplate(sampleQuery);
-    if (template === '' ) {
+    if (!template) {
       // we dont support this card yet
       return dispatch(getAdaptiveCardError('No template available'));
     }
@@ -62,20 +66,17 @@ export function getAdaptiveCard(payload: string, sampleQuery: IQuery): Function 
   };
 }
 
-function lookupTemplate(sampleQuery: IQuery) {
+function lookupTemplate(sampleQuery: IQuery) : string {
   if (sampleQuery) {
     const urlObject: URL = new URL(sampleQuery.sampleUrl);
     // remove the prefix i.e. beta or v1.0 and any possible extra whack character at the end'/'
     const query = urlObject.pathname.substr(6).replace(/\/$/, '') + urlObject.search;
-    const template = templateTable[query];
-    if (template) {
-      return template;
-    }
+    return templateMap[query];
   }
   return '';
 }
 
-const templateTable: any = {
+const templateMap: any = {
   'me': 'Profile.json',
   'me/manager': 'Profile.json',
   'me/drive/root/children': 'Files.json'

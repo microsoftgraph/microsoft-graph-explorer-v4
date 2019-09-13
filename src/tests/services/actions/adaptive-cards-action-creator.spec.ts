@@ -4,9 +4,9 @@ import {
   getAdaptiveCardSuccess
 } from '../../../app/services/actions/adaptive-cards-action-creator';
 import {
-  ADAPTIVE_FETCH_ERROR,
-  ADAPTIVE_FETCH_PENDING,
-  ADAPTIVE_FETCH_SUCCESS
+  FETCH_ADAPTIVE_CARD_ERROR,
+  FETCH_ADAPTIVE_CARD_PENDING,
+  FETCH_ADAPTIVE_CARD_SUCCESS
 } from '../../../app/services/redux-constants';
 
 
@@ -20,7 +20,7 @@ describe('Graph Explorer Adaptive Cards Action Creators\'', () => {
 
     const result = 'sample response';
     const expectedAction = {
-      type: ADAPTIVE_FETCH_SUCCESS,
+      type: FETCH_ADAPTIVE_CARD_SUCCESS,
       response: result
     };
 
@@ -32,7 +32,7 @@ describe('Graph Explorer Adaptive Cards Action Creators\'', () => {
   it('creates ADAPTIVE_FETCH_PENDING when getAdaptiveCardPending is called', () => {
 
     const expectedAction = {
-      type: ADAPTIVE_FETCH_PENDING,
+      type: FETCH_ADAPTIVE_CARD_PENDING,
       response: ''
     };
 
@@ -45,7 +45,7 @@ describe('Graph Explorer Adaptive Cards Action Creators\'', () => {
 
     const error = 'sample error';
     const expectedAction = {
-      type: ADAPTIVE_FETCH_ERROR,
+      type: FETCH_ADAPTIVE_CARD_ERROR,
       response: error
     };
 

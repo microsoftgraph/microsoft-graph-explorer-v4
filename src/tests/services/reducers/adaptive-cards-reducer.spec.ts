@@ -1,8 +1,8 @@
 import { adaptiveCard } from '../../../app/services/reducers/adaptive-cards-reducer';
 import {
-  ADAPTIVE_FETCH_ERROR,
-  ADAPTIVE_FETCH_PENDING,
-  ADAPTIVE_FETCH_SUCCESS
+  FETCH_ADAPTIVE_CARD_ERROR,
+  FETCH_ADAPTIVE_CARD_PENDING,
+  FETCH_ADAPTIVE_CARD_SUCCESS
 } from '../../../app/services/redux-constants';
 
 describe('Graph Explorer Adaptive Cards Reducer', () => {
@@ -20,13 +20,13 @@ describe('Graph Explorer Adaptive Cards Reducer', () => {
 
   });
 
-  it('should handle ADAPTIVE_FETCH_ERROR', () => {
+  it('should handle FETCH_ADAPTIVE_CARD_ERROR', () => {
     const initialState = {
       pending: false,
       data: ''
     };
 
-    const errorAction = { type: 'ADAPTIVE_FETCH_ERROR' , response: {} };
+    const errorAction = { type: 'FETCH_ADAPTIVE_CARD_ERROR' , response: {} };
     const newState = adaptiveCard(initialState, errorAction);
 
     const expectedState = {
@@ -39,13 +39,13 @@ describe('Graph Explorer Adaptive Cards Reducer', () => {
 
   });
 
-  it('should handle ADAPTIVE_FETCH_PENDING', () => {
+  it('should handle FETCH_ADAPTIVE_CARD_PENDING', () => {
     const initialState = {
       pending: false,
       data: ''
     };
 
-    const errorAction = { type: 'ADAPTIVE_FETCH_PENDING' , response: {} };
+    const errorAction = { type: 'FETCH_ADAPTIVE_CARD_PENDING' , response: {} };
     const newState = adaptiveCard(initialState, errorAction);
 
     const expectedState = {
@@ -58,13 +58,13 @@ describe('Graph Explorer Adaptive Cards Reducer', () => {
 
   });
 
-  it('should handle ADAPTIVE_FETCH_SUCCESS', () => {
+  it('should handle FETCH_ADAPTIVE_CARD_SUCCESS', () => {
     const initialState = {
       pending: false,
       data: ''
     };
 
-    const errorAction = { type: 'ADAPTIVE_FETCH_SUCCESS' , response: 'Sample adaptive card data' };
+    const errorAction = { type: 'FETCH_ADAPTIVE_CARD_SUCCESS' , response: 'Sample adaptive card data' };
     const newState = adaptiveCard(initialState, errorAction);
 
     const expectedState = {
