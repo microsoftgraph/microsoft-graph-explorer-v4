@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken } from './auth-reducers';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
 import { sampleQuery } from './query-input-reducers';
@@ -22,5 +23,6 @@ export default combineReducers({
   sampleQuery,
   snippets,
   samples,
-  theme
+  theme,
+  adaptiveCard
 });
