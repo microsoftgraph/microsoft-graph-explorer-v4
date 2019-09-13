@@ -34,12 +34,10 @@ export class Authentication extends Component<IAuthenticationProps> {
               iconProps={{ iconName: 'Contact' }}
               onClick={this.signIn}>
               sign in
-          </ActionButton>}
+              </ActionButton>}
+            {tokenPresent &&
+              <Profile />}
           </Stack.Item>
-          {tokenPresent &&
-            <Stack.Item align='end'>
-              <Profile/>
-            </Stack.Item>}
         </Stack>
       </div>
     );

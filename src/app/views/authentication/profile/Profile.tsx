@@ -1,6 +1,7 @@
-import { ActionButton, ContextualMenuItemType,
-  IPersonaSharedProps, Persona,
-  PersonaSize, styled } from 'office-ui-fabric-react';
+import {
+  ActionButton, IPersonaSharedProps, Persona,
+  PersonaSize, styled
+} from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -111,12 +112,18 @@ export class Profile extends Component<IProfileProps, IProfileState> {
           key: 'office-dev-program',
           text: 'Office Dev Program',
           href: 'https://developer.microsoft.com/en-us/office/dev-program',
-          target: '_blank'
+          target: '_blank',
+          iconProps: {
+            iconName: 'CommandPrompt',
+          },
         },
         {
           key: 'sign-out',
           text: 'Sign Out',
-          onClick: () => this.handleSignOut()
+          onClick: () => this.handleSignOut(),
+          iconProps: {
+            iconName: 'SignOut',
+          },
         },
       ]
     };
@@ -124,7 +131,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     return (
       <div className={classes.profile}>
         <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-          <Persona {...persona} size={PersonaSize.size40}/>
+          <Persona {...persona} size={PersonaSize.size40} />
         </ActionButton>
       </div>
     );
