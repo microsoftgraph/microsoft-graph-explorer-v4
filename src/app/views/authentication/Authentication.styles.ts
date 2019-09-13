@@ -4,16 +4,13 @@ export const authenticationStyles = (theme: ITheme) => {
   return {
     authenticationContainer: {
       justifyContent: 'space-between',
-      display: 'flex'
     },
     signInButton: {
-      marginBottom: theme.spacing.s1,
+      textTransform: 'capitalize',
     },
     profile: {
       marginBottom: theme.spacing.s1,
-      justifyContent: 'space-between',
-      position: 'relative',
-      height: 48
+      width: '100%',
     },
   };
 };

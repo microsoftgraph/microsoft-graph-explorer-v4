@@ -1,9 +1,13 @@
-import { IPersonaSharedProps, Persona, PersonaSize, Stack, styled } from 'office-ui-fabric-react';
+import {
+  ActionButton, IPersonaSharedProps, Persona,
+  PersonaSize, styled
+} from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { IProfileProps, IProfileState } from '../../../../types/profile';
+import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
 import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
@@ -65,18 +69,28 @@ export class Profile extends Component<IProfileProps, IProfileState> {
   };
 
   public getInitials = (name: string) => {
-    const n = name.indexOf('(');
-    name = name.substring(0, n !== -1 ? n : name.length);
-    const parts = name.split(' ');
-    let initials = '';
-    for (const part of parts) {
-      if (part.length > 0 && part !== '') {
-        initials += part[0];
+    if (name && name !== '') {
+      const n = name.indexOf('(');
+      name = name.substring(0, n !== -1 ? n : name.length);
+      const parts = name.split(' ');
+      let initials = '';
+      for (const part of parts) {
+        if (part.length > 0 && part !== '') {
+          initials += part[0];
+        }
       }
+      initials = initials.substring(0, 2);
+      return initials;
     }
-    initials = initials.substring(0, 2);
-    return initials;
   };
+
+  public handleSignOut = () => {
+    const { actions } = this.props;
+
+    if (actions) {
+      actions.signOut();
+    }
+  }
 
   public render() {
     const { user } = this.state;
@@ -90,11 +104,35 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
     const classes = classNames(this.props);
 
+    const menuProperties = {
+      shouldFocusOnMount: true,
+      alignTargetEdge: true,
+      items: [
+        {
+          key: 'office-dev-program',
+          text: 'Office Dev Program',
+          href: 'https://developer.microsoft.com/en-us/office/dev-program',
+          target: '_blank',
+          iconProps: {
+            iconName: 'CommandPrompt',
+          },
+        },
+        {
+          key: 'sign-out',
+          text: 'Sign Out',
+          onClick: () => this.handleSignOut(),
+          iconProps: {
+            iconName: 'SignOut',
+          },
+        },
+      ]
+    };
+
     return (
       <div className={classes.profile}>
-        <Stack>
+        <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
           <Persona {...persona} size={PersonaSize.size40} />
-        </Stack>
+        </ActionButton>
       </div>
     );
   }
@@ -102,7 +140,10 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators(profileActionCreators, dispatch)
+    actions: bindActionCreators({
+      ...profileActionCreators,
+      ...authActionCreators
+    }, dispatch)
   };
 }
 

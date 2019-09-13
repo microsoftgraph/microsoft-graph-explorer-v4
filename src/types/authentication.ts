@@ -5,7 +5,6 @@ export interface IAuthenticationProps {
   styles?: object;
   actions?: {
     authenticateUser: Function;
-    signOut: Function;
   };
   tokenPresent: boolean;
 }
