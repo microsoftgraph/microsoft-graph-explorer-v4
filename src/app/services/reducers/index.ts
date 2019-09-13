@@ -11,8 +11,10 @@ import { history } from './request-history-reducers';
 import { samples } from './samples-reducers';
 import { snippets } from './snippet-reducer';
 import { theme } from './theme-reducer';
+import { sidebarProperties } from './toggle-sidebar-reducer';
 
-export default combineReducers({
+export default combineReducers({ 
+  adaptiveCard,
   authToken,
   graphExplorerMode,
   graphResponse,
@@ -21,8 +23,8 @@ export default combineReducers({
   isLoadingData,
   queryRunnerError,
   sampleQuery,
-  snippets,
   samples,
+  sidebarProperties,
+  snippets,
   theme,
-  adaptiveCard
 });

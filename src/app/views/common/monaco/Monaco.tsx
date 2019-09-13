@@ -49,7 +49,16 @@ export function Monaco(props: IMonaco) {
             // @ts-ignore
             value={body  ? body : ''}
             language={language ? language : 'json'}
-            options={{ lineNumbers: 'off', minimap: { enabled: false } }}
+            options={{
+              lineNumbers: 'off',
+              automaticLayout: true,
+              minimap: { enabled: false },
+              scrollbar: {
+                horizontalHasArrows: true,
+                horizontal: 'visible',
+                horizontalScrollbarSize: 17,
+              },
+            }}
             editorDidMount={editorDidMount}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
