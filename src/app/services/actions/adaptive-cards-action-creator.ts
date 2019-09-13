@@ -26,7 +26,7 @@ export function getAdaptiveCardPending(): IAction {
 export function getAdaptiveCard(payload: string, sampleQuery: IQuery): Function {
   return async (dispatch: Function) => {
 
-    if (payload === undefined) {
+    if (!payload) {
       // no payload so return empty result
       return dispatch(getAdaptiveCardSuccess(''));
     }
@@ -66,7 +66,7 @@ function lookupTemplate(sampleQuery: IQuery) {
   if (sampleQuery) {
     const urlObject: URL = new URL(sampleQuery.sampleUrl);
     // remove the prefix i.e. beta or v1.0 and any possible extra whack character at the end'/'
-    const query = urlObject.pathname.substr(6).replace(/\/$/, '');
+    const query = urlObject.pathname.substr(6).replace(/\/$/, '') + urlObject.search;
     const template = templateTable[query];
     if (template) {
       return template;

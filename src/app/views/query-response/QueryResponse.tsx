@@ -8,7 +8,7 @@ import { Mode } from '../../../types/action';
 import { IQueryResponseProps } from '../../../types/query-response';
 import { Image, Monaco } from '../common';
 import AdaptiveCard  from './adaptive-cards/AdaptiveCard';
-import { darkThemeHostConfig } from './adaptive-cards/AdaptiveHostConfig';
+import { darkThemeHostConfig, lightThemeHostConfig } from './adaptive-cards/AdaptiveHostConfig';
 import './query-response.scss';
 import { Snippets } from './snippets';
 
@@ -77,7 +77,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
             {(theme) => (
               <AdaptiveCard
                 body= {body}
-                hostConfig={theme === 'light' ? {} : darkThemeHostConfig}
+                hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
               />
             )}
           </ThemeContext.Consumer>
