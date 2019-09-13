@@ -10,8 +10,7 @@ export const authenticationStyles = (theme: ITheme) => {
     },
     profile: {
       marginBottom: theme.spacing.s1,
-      justifyContent: 'space-between',
-      position: 'relative',
+      width: '100%',
     },
   };
 };
