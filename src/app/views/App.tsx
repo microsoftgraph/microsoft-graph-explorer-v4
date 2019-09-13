@@ -4,7 +4,8 @@ import {
   ITheme,
   MessageBar,
   MessageBarType,
-  styled } from 'office-ui-fabric-react';
+  styled
+} from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -180,7 +181,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public toggleSidebar = (): void => {
     const { sidebarProperties } = this.props;
-    const properties = { ...sidebarProperties};
+    const properties = { ...sidebarProperties };
     properties.showSidebar = !properties.showSidebar;
     this.props.actions!.toggleSidebar(properties);
   }
@@ -202,7 +203,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, actions, sampleQuery, sidebarProperties }: any = this.props;
+    const { graphExplorerMode, error, actions, sidebarProperties }: any = this.props;
     const { showToggle, showSidebar } = sidebarProperties;
 
     let displayContent = true;
@@ -267,7 +268,6 @@ class App extends Component<IAppProps, IAppState> {
                       {`${error.statusText} - ${error.status}`}
                     </MessageBar>
                   )}
-                  {sampleQuery && (<div />)}
                   {
                     // @ts-ignore
                     <QueryResponse verb={this.state.selectedVerb} />
