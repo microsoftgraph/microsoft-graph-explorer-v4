@@ -1,5 +1,9 @@
 import { IAction } from '../../../types/action';
-import { FETCH_ADAPTIVE_CARD_ERROR, FETCH_ADAPTIVE_CARD_PENDING, FETCH_ADAPTIVE_CARD_SUCCESS } from '../redux-constants';
+import {
+  FETCH_ADAPTIVE_CARD_ERROR,
+  FETCH_ADAPTIVE_CARD_PENDING,
+  FETCH_ADAPTIVE_CARD_SUCCESS
+} from '../redux-constants';
 
 const initialState = {
   pending: false,

@@ -66,7 +66,7 @@ export function getAdaptiveCard(payload: string, sampleQuery: IQuery): Function 
   };
 }
 
-function lookupTemplate(sampleQuery: IQuery) : string {
+function lookupTemplate(sampleQuery: IQuery): string {
   if (sampleQuery) {
     const urlObject: URL = new URL(sampleQuery.sampleUrl);
     // remove the prefix i.e. beta or v1.0 and any possible extra whack character at the end'/'
