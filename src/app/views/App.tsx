@@ -204,6 +204,14 @@ class App extends Component<IAppProps, IAppState> {
     const classes = classNames(this.props);
     const { graphExplorerMode, error, actions, sampleQuery, sidebarProperties }: any = this.props;
     const { showToggle, showSidebar } = sidebarProperties;
+
+    let displayContent = true;
+    if (graphExplorerMode === Mode.Complete) {
+      if (showToggle && showSidebar) {
+        displayContent = false;
+      }
+    }
+
     const layout =
       graphExplorerMode === Mode.TryIt
         ? 'col-xs-12'
@@ -227,7 +235,7 @@ class App extends Component<IAppProps, IAppState> {
                 </div>
               )}
               <div className={layout}>
-                {graphExplorerMode === Mode.Complete && <Authentication />}
+                {graphExplorerMode === Mode.Complete && displayContent && <Authentication />}
                 {graphExplorerMode === Mode.TryIt && (
                   <div style={{ marginBottom: 8 }}>
                     <MessageBar
@@ -245,23 +253,26 @@ class App extends Component<IAppProps, IAppState> {
                     </MessageBar>
                   </div>
                 )}
-                <div style={{ marginBottom: 8 }}>
-                  <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                </div>
-                {error && (
-                  <MessageBar
-                    messageBarType={MessageBarType.error}
-                    isMultiline={false}
-                    onDismiss={actions.clearQueryError}
-                  >
-                    {`${error.statusText} - ${error.status}`}
-                  </MessageBar>
-                )}
-                {sampleQuery && (<div />)}
-                {
-                  // @ts-ignore
-                  <QueryResponse verb={this.state.selectedVerb} />
-                }
+
+                {displayContent && <>
+                  <div style={{ marginBottom: 8 }}>
+                    <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                  </div>
+                  {error && (
+                    <MessageBar
+                      messageBarType={MessageBarType.error}
+                      isMultiline={false}
+                      onDismiss={actions.clearQueryError}
+                    >
+                      {`${error.statusText} - ${error.status}`}
+                    </MessageBar>
+                  )}
+                  {sampleQuery && (<div />)}
+                  {
+                    // @ts-ignore
+                    <QueryResponse verb={this.state.selectedVerb} />
+                  }
+                </>}
               </div>
             </div>
           </div>
