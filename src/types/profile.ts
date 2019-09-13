@@ -5,6 +5,7 @@ export interface IProfileProps {
     styles?: object;
     actions?: {
         getProfileInfo: Function;
+        signOut: Function;
     };
 }
 
