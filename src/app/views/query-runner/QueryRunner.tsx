@@ -27,7 +27,8 @@ export class QueryRunner extends Component<
         { key: 'PUT', text: 'PUT' },
         { key: 'PATCH', text: 'PATCH' },
         { key: 'DELETE', text: 'DELETE' }
-      ]
+      ],
+      url: ''
     };
   }
 
@@ -45,16 +46,22 @@ export class QueryRunner extends Component<
     }
   };
 
-  private handleOnUrlChange = (newQuery?: string) => {
+  private handleOnUrlChange = (newQuery = '') => {
+    this.setState({ url: newQuery });
+  };
+
+  private handleOnBlur = () => {
+    const { url } = this.state;
     const query = { ...this.props.sampleQuery };
     const { actions } = this.props;
-    if (newQuery) {
-      query.sampleUrl = newQuery;
+
+    if (url) {
+      query.sampleUrl = url;
       if (actions) {
         actions.setSampleQuery(query);
       }
     }
-  };
+  }
 
   private handleOnEditorChange = (body?: string) => {
     this.setState({ sampleBody: body });
@@ -78,7 +85,7 @@ export class QueryRunner extends Component<
   };
 
   public render() {
-    const { httpMethods } = this.state;
+    const { httpMethods, url } = this.state;
     const { isLoadingData, sampleQuery } = this.props;
 
     return (
@@ -89,6 +96,7 @@ export class QueryRunner extends Component<
               handleOnRunQuery={this.handleOnRunQuery}
               handleOnMethodChange={this.handleOnMethodChange}
               handleOnUrlChange={this.handleOnUrlChange}
+              handleOnBlur={this.handleOnBlur}
               httpMethods={httpMethods}
               submitting={isLoadingData}
             />
