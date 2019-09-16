@@ -16,6 +16,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       handleOnRunQuery,
       handleOnMethodChange,
       handleOnUrlChange,
+      handleOnBlur,
       httpMethods,
       selectedVerb,
       sampleUrl,
@@ -42,6 +43,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             placeholder='Query Sample'
             onChange={(event, value) => handleOnUrlChange(value)}
             defaultValue={sampleUrl}
+            onBlur={() => handleOnBlur()}
           />
         </div>
         <div className='col-sm-2 run-query-button'>
