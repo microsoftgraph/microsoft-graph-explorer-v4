@@ -81,11 +81,11 @@ export class QueryRunner extends Component<
 
     if (actions) {
       actions.runQuery(sampleQuery);
-    }
+    } 
   };
 
   public render() {
-    const { httpMethods, url } = this.state;
+    const { httpMethods } = this.state;
     const { isLoadingData, sampleQuery } = this.props;
 
     return (
