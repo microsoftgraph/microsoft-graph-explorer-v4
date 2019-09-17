@@ -35,15 +35,53 @@ steps:
       sourceFolder: '$(System.DefaultWorkingDirectory)/node_modules'
     displayName: 'Deleting node_modules'
 
-  - task: AzureRmWebAppDeployment@3
+  - task: FtpUpload@2
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     inputs:
-      azureSubscription: 'Graph-Explorer-ARM'
-      WebAppName: 'graphTryIt-staging'
-      Package: '$(System.DefaultWorkingDirectory)'
-      GenerateWebConfig: true
-      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
-    displayName: 'Staging deployment'
+      credentialsOption: 'inputs'
+      serverUrl: $(FTP_SERVER_URL)
+      username: $(FTP_USERNAME)
+      password: $(FTP_PASSWORD)
+      rootDirectory: '$(Build.SourcesDirectory)/build'
+      filePatterns: '**'
+      remoteDirectory: '/site/wwwroot/build'
+    displayName: 'Copying into build folder'
+
+  - task: FtpUpload@2
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+    inputs:
+      credentialsOption: 'inputs'
+      serverUrl: $(FTP_SERVER_URL)
+      username: $(FTP_USERNAME)
+      password: $(FTP_PASSWORD)
+      rootDirectory: '$(Build.SourcesDirectory)/build/static'
+      filePatterns: '**'
+      remoteDirectory: '/site/wwwroot/build/static'
+    displayName: 'Copying into static folder'
+
+  - task: FtpUpload@2
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+    inputs:
+      credentialsOption: 'inputs'
+      serverUrl: $(FTP_SERVER_URL)
+      username: $(FTP_USERNAME)
+      password: $(FTP_PASSWORD)
+      rootDirectory: '$(Build.SourcesDirectory)/build/static/js'
+      filePatterns: '**'
+      remoteDirectory: '/site/wwwroot/build/static/js'
+    displayName: 'Copying into static js folder'
+
+  - task: FtpUpload@2
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+    inputs:
+      credentialsOption: 'inputs'
+      serverUrl: $(FTP_SERVER_URL)
+      username: $(FTP_USERNAME)
+      password: $(FTP_PASSWORD)
+      rootDirectory: '$(Build.SourcesDirectory)/build/static/css'
+      filePatterns: '**'
+      remoteDirectory: '/site/wwwroot/build/static/css'
+    displayName: 'Copying into static css folder'
 
   - task: AzureRmWebAppDeployment@3
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))

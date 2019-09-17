@@ -2,19 +2,19 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { ThemeContext } from '../../../themes/theme-context';
+import { Mode } from '../../../types/action';
 
 import { IQueryResponseProps } from '../../../types/query-response';
-import { clearResponse } from '../../services/actions/error-action-creator';
 import { Image, Monaco } from '../common';
+import AdaptiveCard  from './adaptive-cards/AdaptiveCard';
+import { darkThemeHostConfig, lightThemeHostConfig } from './adaptive-cards/AdaptiveHostConfig';
 import './query-response.scss';
+import { Snippets } from './snippets';
 
 class QueryResponse extends Component<IQueryResponseProps, {}> {
   constructor(props: any) {
     super(props);
-  }
-
-  public componentWillUnmount() {
-    this.props.dispatch(clearResponse());
   }
 
   public render() {
@@ -26,7 +26,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
       verb
     }: any = this.props;
 
-    const { graphResponse } = this.props;
+    const { graphResponse, mode } = this.props;
     if (graphResponse) {
       body = graphResponse.body;
       headers = graphResponse.headers;
@@ -40,39 +40,75 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
       }
     }
 
+
+    const pivotItems = [
+      <PivotItem
+        key='response-preview'
+        ariaLabel='Response Preview'
+        headerText={messages['Response Preview']}
+      >
+        {isImageResponse ? (
+          <Image
+            styles={{ padding: '10px' }}
+            body={body}
+            alt='profile image'
+          />
+        ) : (
+          <Monaco body={body} verb={verb} />
+        )}
+      </PivotItem>,
+      <PivotItem
+        key='response-headers'
+        ariaLabel='Response Headers'
+        headerText={messages['Response Headers']}
+      >
+        <Monaco body={headers} />
+      </PivotItem>
+    ];
+
+    if (mode === Mode.Complete) {
+      pivotItems.push(
+        <PivotItem
+          key = 'adaptive-cards'
+          ariaLabel='Adaptive Cards'
+          headerText={messages['Adaptive Cards']}
+        >
+          <ThemeContext.Consumer >
+            {(theme) => (
+              <AdaptiveCard
+                body= {body}
+                hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
+              />
+            )}
+          </ThemeContext.Consumer>
+        </PivotItem>
+      );
+      pivotItems.push(
+        <PivotItem
+          key='code-snippets'
+          ariaLabel='Code Snippets'
+          headerText={messages.Snippets}
+        >
+          <Snippets/>
+        </PivotItem>
+      );
+    }
+
     return (
       <div className='query-response'>
         <Pivot className='pivot-response'>
-          <PivotItem
-            ariaLabel='Response Preview'
-            headerText={messages['Response Preview']}
-          >
-            {isImageResponse ? (
-              <Image
-                styles={{ padding: '10px' }}
-                body={body}
-                alt='profile image'
-              />
-            ) : (
-                <Monaco body={body} verb={verb} />
-              )}
-          </PivotItem>
-          <PivotItem
-            ariaLabel='Response Headers'
-            headerText={messages['Response Headers']}
-          >
-            <Monaco body={headers} />
-          </PivotItem>
+          {pivotItems}
         </Pivot>
       </div>
     );
   }
 }
 
-function mapStateToProps(state: IQueryResponseProps) {
+function mapStateToProps(state: any) {
   return {
     graphResponse:  state.graphResponse,
     appTheme: state.theme,
+    mode : state.graphExplorerMode,
   };
 }
 

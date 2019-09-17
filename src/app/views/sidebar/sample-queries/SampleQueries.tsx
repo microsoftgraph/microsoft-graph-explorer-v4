@@ -29,7 +29,12 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   }
 
   public componentDidMount = () => {
-    this.props.actions!.fetchSamples();
+    const { queries } = this.props.samples;
+    if (queries && queries.length > 0) {
+      this.generateSamples(queries);
+    } else {
+      this.props.actions!.fetchSamples();
+    }
   }
 
   public componentDidUpdate = (prevProps: ISampleQueriesProps) => {

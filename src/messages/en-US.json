@@ -226,5 +226,7 @@
   "Canary": "Canary",
   "disable canary": "disable canary",
   "using canary": "You are using the canary version of Graph Explorer. Sign in to make requests",
-  "Add": "Add"
+  "Add": "Add",
+  "Snippets": "Snippets",
+  "Adaptive Cards" : "Adaptive Cards"
 }

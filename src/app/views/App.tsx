@@ -1,5 +1,6 @@
 import {
   FocusTrapZone,
+  IconButton,
   ITheme,
   MessageBar,
   MessageBarType,
@@ -13,11 +14,13 @@ import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
+import { ISidebarProps } from '../../types/sidebar';
 import { clearQueryError } from '../services/actions/error-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { addRequestHeader } from '../services/actions/request-headers-action-creators';
 import { changeTheme } from '../services/actions/theme-action-creator';
+import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
@@ -31,27 +34,40 @@ interface IAppProps {
   styles?: object;
   error: object | null;
   graphExplorerMode: Mode;
+  sidebarProperties: ISidebarProps;
   actions: {
     addRequestHeader: Function;
     clearQueryError: Function;
     setSampleQuery: Function;
     runQuery: Function;
+    toggleSidebar: Function;
   };
 }
 
 interface IAppState {
   selectedVerb: string;
+  showToggle: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
+
+  private mediaQueryList = window.matchMedia('(max-width: 767px)');
+
   constructor(props: IAppProps) {
     super(props);
     this.state = {
-      selectedVerb: 'GET'
+      selectedVerb: 'GET',
+      showToggle: false,
     };
   }
 
   public componentDidMount = () => {
+    // tslint:disable-next-line
+    console.log('Uploaded through FTP');
+
+    this.displayToggleButton(this.mediaQueryList);
+    this.mediaQueryList.addListener(this.displayToggleButton);
+
     const { actions } = this.props;
     const whiteListedDomains = [
       'https://docs.microsoft.com',
@@ -96,6 +112,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public componentWillUnmount(): void {
     window.removeEventListener('message', this.receiveMessage);
+    this.mediaQueryList.removeListener(this.displayToggleButton);
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
@@ -103,7 +120,7 @@ class App extends Component<IAppProps, IAppState> {
 
     // @ts-ignore
     this.props.actions!.changeTheme(msg.theme);
-    };
+  };
 
   private receiveMessage = (event: MessageEvent): void => {
     const msgEvent: IThemeChangedMessage | IInitMessage = event.data;
@@ -165,64 +182,104 @@ class App extends Component<IAppProps, IAppState> {
     });
   };
 
+  public toggleSidebar = (): void => {
+    const { sidebarProperties } = this.props;
+    const properties = { ...sidebarProperties };
+    properties.showSidebar = !properties.showSidebar;
+    this.props.actions!.toggleSidebar(properties);
+  }
+
+  public displayToggleButton = (mediaQueryList: any) => {
+    const showToggle = mediaQueryList.matches;
+    let showSidebar = true;
+    if (showToggle) {
+      showSidebar = false;
+    }
+
+    const properties = {
+      showToggle,
+      showSidebar
+    };
+
+    this.props.actions!.toggleSidebar(properties);
+  }
+
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, actions, sampleQuery }: any = this.props;
+    const { graphExplorerMode, error, actions, sidebarProperties }: any = this.props;
+    const { showToggle, showSidebar } = sidebarProperties;
+
+    let displayContent = true;
+    if (graphExplorerMode === Mode.Complete) {
+      if (showToggle && showSidebar) {
+        displayContent = false;
+      }
+    }
+
     const layout =
       graphExplorerMode === Mode.TryIt
-        ? 'col-sm-12'
-        : 'col-sm-12 col-lg-9';
+        ? 'col-xs-12 col-sm-12'
+        : 'col-xs-12 col-sm-12 col-lg-9 col-md-8';
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-      <FocusTrapZone>
-        <div className={`container-fluid ${classes.app}`}>
-          <div className='row'>
-            {graphExplorerMode === Mode.Complete && (
-              <div className={`col-sm-3 col-lg-3 col-md-3 ${classes.sidebar}`}>
-                <Sidebar />
-              </div>
-            )}
-            <div className={layout}>
-              {graphExplorerMode === Mode.Complete && <Authentication />}
-              {graphExplorerMode === Mode.TryIt && (
-                <div style={{ marginBottom: 8 }}>
-                  <MessageBar
-                    messageBarType={MessageBarType.warning}
-                    isMultiline={true}
-                  >
-                    <p>
-                      To try operations other than GET or to access your own data, sign in to
-                      <a className={classes.toGraphExplorer}
-                        tabIndex={0}
-                        href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
-                        Graph Explorer.
-                      </a>
-                    </p>
-                  </MessageBar>
+        <FocusTrapZone>
+          <div className={`container-fluid ${classes.app}`}>
+            <div className='row'>
+              {graphExplorerMode === Mode.Complete && (
+                <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
+                  {showToggle && <IconButton
+                    iconProps={{ iconName: 'GlobalNavButton' }}
+                    className={classes.sidebarToggle}
+                    title='Remove sidebar'
+                    ariaLabel='Remove sidebar'
+                    onClick={this.toggleSidebar}
+                  />}
+                  {showSidebar && <Sidebar />}
                 </div>
               )}
-              <div style={{ marginBottom: 8 }}>
-                <QueryRunner onSelectVerb={this.handleSelectVerb} />
+              <div className={layout}>
+                {graphExplorerMode === Mode.Complete && displayContent && <Authentication />}
+                {graphExplorerMode === Mode.TryIt && (
+                  <div style={{ marginBottom: 8 }}>
+                    <MessageBar
+                      messageBarType={MessageBarType.warning}
+                      isMultiline={true}
+                    >
+                      <p>
+                        To try operations other than GET or to access your own data, sign in to
+                      <a className={classes.toGraphExplorer}
+                          tabIndex={0}
+                          href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
+                          Graph Explorer.
+                      </a>
+                      </p>
+                    </MessageBar>
+                  </div>
+                )}
+
+                {displayContent && <>
+                  <div style={{ marginBottom: 8 }}>
+                    <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                  </div>
+                  {error && (
+                    <MessageBar
+                      messageBarType={MessageBarType.error}
+                      isMultiline={false}
+                      onDismiss={actions.clearQueryError}
+                    >
+                      {`${error.statusText} - ${error.status}`}
+                    </MessageBar>
+                  )}
+                  {
+                    // @ts-ignore
+                    <QueryResponse verb={this.state.selectedVerb} />
+                  }
+                </>}
               </div>
-              {error && (
-                <MessageBar
-                  messageBarType={MessageBarType.error}
-                  isMultiline={false}
-                  onDismiss={actions.clearQueryError}
-                >
-                  {`${error.statusText} - ${error.status}`}
-                </MessageBar>
-              )}
-              {sampleQuery && (<div/>)}
-              {
-                // @ts-ignore
-                <QueryResponse verb={this.state.selectedVerb} />
-              }
             </div>
           </div>
-        </div>
-      </FocusTrapZone>
+        </FocusTrapZone>
       </ThemeContext.Provider>
     );
   }
@@ -234,6 +291,7 @@ const mapStateToProps = (state: any) => {
     receivedSampleQuery: state.sampleQuery,
     graphExplorerMode: state.graphExplorerMode,
     appTheme: state.theme,
+    sidebarProperties: state.sidebarProperties,
   };
 };
 
@@ -244,8 +302,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       runQuery,
       setSampleQuery,
       addRequestHeader,
+      toggleSidebar,
       changeTheme: (newTheme: string) => {
-       return (disp: Function) => disp(changeTheme(newTheme));
+        return (disp: Function) => disp(changeTheme(newTheme));
       }
     }, dispatch)
   };

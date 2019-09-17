@@ -4,7 +4,7 @@ import { Mode } from '../../../types/action';
 
 describe('Graph Explorer Mode Reducer', () => {
   it('should change graph explorer Mode', () => {
-    const initialState = {};
+    const initialState = undefined;
     const dummyAction = { type: SET_GRAPH_EXPLORER_MODE_SUCCESS, response: Mode.TryIt };
     const newState = graphExplorerMode(initialState, dummyAction);
 

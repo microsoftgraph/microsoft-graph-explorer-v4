@@ -1,8 +1,10 @@
 import { ITheme } from '@uifabric/styling';
+import { Mode } from './action';
 
 export interface IQueryRunnerState {
   httpMethods: Array<{ key: string; text: string; }>;
   sampleBody?: string;
+  url: string;
 }
 
 export interface IQuery {
@@ -27,9 +29,11 @@ export interface IQueryRunnerProps {
 export interface IQueryInputProps {
   theme?: ITheme;
   styles?: object;
+  mode?: Mode;
   handleOnRunQuery: Function;
   handleOnMethodChange: Function;
   handleOnUrlChange: Function;
+  handleOnBlur: Function;
   httpMethods: Array<{ key: string; text: string }>;
   selectedVerb: string;
   sampleUrl: string;
