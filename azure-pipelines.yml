@@ -44,7 +44,7 @@ steps:
       password: $(FTP_PASSWORD)
       rootDirectory: '$(Build.SourcesDirectory)/build'
       filePatterns: '**'
-      remoteDirectory: '/upload/$(Build.BuildId)/'
+      remoteDirectory: '/site/wwwroot/build'
       #clean: false
       #cleanContents: false # Required when clean == False
       #preservePaths: false
