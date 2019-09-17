@@ -39,7 +39,7 @@ steps:
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     inputs:
       credentialsOption: 'inputs'
-      serverUrl: $(FTP_SERVER_URL)
+      serverUrl: $(FTP_ENDPOINT)
       username: $(FTP_USERNAME)
       password: $(FTP_PASSWORD)
       rootDirectory: '$(Build.SourcesDirectory)/build'
