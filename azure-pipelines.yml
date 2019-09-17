@@ -35,15 +35,20 @@ steps:
       sourceFolder: '$(System.DefaultWorkingDirectory)/node_modules'
     displayName: 'Deleting node_modules'
 
-  - task: AzureRmWebAppDeployment@3
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  - task: FtpUpload@2
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
-      azureSubscription: 'Graph-Explorer-ARM'
-      WebAppName: 'graphTryIt-staging'
-      Package: '$(System.DefaultWorkingDirectory)'
-      GenerateWebConfig: true
-      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
-    displayName: 'Staging deployment'
+      credentialsOption: 'inputs'
+      serverUrl: $(FTP_SERVER_URL)
+      username: $(FTP_USERNAME)
+      password: $(FTP_PASSWORD)
+      rootDirectory: '$(Build.SourcesDirectory)/build'
+      filePatterns: '**'
+      remoteDirectory: '/upload/$(Build.BuildId)/'
+      #clean: false
+      #cleanContents: false # Required when clean == False
+      #preservePaths: false
+      #trustSSL: false
 
   - task: AzureRmWebAppDeployment@3
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
