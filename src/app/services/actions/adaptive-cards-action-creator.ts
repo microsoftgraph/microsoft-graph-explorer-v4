@@ -1,3 +1,4 @@
+import * as AdaptiveCardsTemplateAPI from 'adaptivecards-templating';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import {
@@ -35,29 +36,27 @@ export function getAdaptiveCard(payload: string, sampleQuery: IQuery): Function 
       return dispatch(getAdaptiveCardSuccess());
     }
 
-    const template = lookupTemplate(sampleQuery);
-    if (!template) {
+    const templateFileName = lookupTemplate(sampleQuery);
+    if (!templateFileName) {
       // we dont support this card yet
       return dispatch(getAdaptiveCardError('No template available'));
     }
 
-    const url = `https://templates.adaptivecards.io/graph.microsoft.com/${template}`;
-    const body = JSON.stringify(payload);
     dispatch(getAdaptiveCardPending());
 
-    return fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body
-    }).then(resp => resp.json())
-      .then((result) => {
-        if (result.error) {
-          throw (result.error);
+    return fetch(`https://templates.adaptivecards.io/graph.microsoft.com/${templateFileName}`)
+      .then(resp => resp.json())
+      .then((fetchResult) => {
+        if (fetchResult.error) {
+          throw (fetchResult.error);
         }
+        // create a card from the template
+        const template = new AdaptiveCardsTemplateAPI.Template(fetchResult);
+        const context = new AdaptiveCardsTemplateAPI.EvaluationContext();
+        context.$root = payload;
+        const card = template.expand(context);
         // give back the result of the card
-        return dispatch(getAdaptiveCardSuccess(result));
+        return dispatch(getAdaptiveCardSuccess(card));
       })
       .catch(error => {
         // something wrong happened

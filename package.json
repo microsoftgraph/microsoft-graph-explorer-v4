@@ -9,6 +9,7 @@
     "@types/hellojs": "1.16.2",
     "@uifabric/styling": "6.46.0",
     "adaptivecards": "1.1.0",
+    "adaptivecards-templating": "0.1.0-alpha.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",
