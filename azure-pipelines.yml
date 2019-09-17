@@ -45,10 +45,6 @@ steps:
       rootDirectory: '$(Build.SourcesDirectory)/build'
       filePatterns: '**'
       remoteDirectory: '/site/wwwroot/build'
-      #clean: false
-      #cleanContents: false # Required when clean == False
-      #preservePaths: false
-      #trustSSL: false
 
   - task: AzureRmWebAppDeployment@3
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))

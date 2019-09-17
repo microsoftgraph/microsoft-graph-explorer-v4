@@ -62,6 +62,9 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public componentDidMount = () => {
+    // tslint:disable-next-line
+    console.log('Uploaded through FTP');
+
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
 
