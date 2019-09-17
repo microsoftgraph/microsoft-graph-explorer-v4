@@ -17,7 +17,7 @@ export function getSnippet(language: string, sampleQuery: IQuery, dispatch: Func
     sample.sampleUrl = urlObject.pathname + urlObject.search;
   }
 
-  let url = 'https:graphexplorerapi.azurewebsites.net/api/graphexplorersnippets';
+  let url = 'https://graphexplorerapi.azurewebsites.net/api/graphexplorersnippets';
 
   if (language !== 'csharp') {
     url += `?lang=${language}`;
