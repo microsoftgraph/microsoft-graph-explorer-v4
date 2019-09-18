@@ -70,7 +70,7 @@ steps:
       storage: 'graphstagingblobstorage'
       containerName: 'staging/vendor/bower_components/explorer-v2/build'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-    displayName: 'Deploying to -tst'
+    displayName: 'Deploy to -tst'
 
   - task: AzureRmWebAppDeployment@3
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
