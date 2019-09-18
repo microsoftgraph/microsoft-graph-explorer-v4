@@ -65,7 +65,7 @@ steps:
     inputs:
       sourcePath: 'build-tst'
       azureConnectionType: 'ConnectedServiceNameARM'
-      azureSubscription: 'Graph-Explorer-ARM'
+      azureSubscription: 'arm-connection
       destination: 'azureBlob'
       storage: 'graphstagingblobstorage'
       containerName: 'staging/vendor/bower_components/explorer-v2/build'
