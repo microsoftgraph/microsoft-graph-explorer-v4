@@ -20,15 +20,15 @@ steps:
     displayName: 'Runs tests'
 
   - script: |
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
       npm run build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     env:
       REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
     displayName: 'Building production assets'
 
   - script: |
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
       npm run build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     env:
       REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
     displayName: 'Build staging assets'
