@@ -26,10 +26,16 @@ import { loadGETheme } from './themes';
 import { Mode } from './types/action';
 import { IHistoryItem } from './types/history';
 
+// removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
-
 if (spinner !== null) {
   (spinner as any).parentElement.removeChild(spinner);
+}
+
+// removes the loading spinner from the portal team html after GE loads
+const apiExplorer = document.getElementsByTagName('api-explorer')[0];
+if (apiExplorer && apiExplorer !== null) {
+  (apiExplorer as any).parentElement.removeChild(apiExplorer);
 }
 
 initializeIcons();
