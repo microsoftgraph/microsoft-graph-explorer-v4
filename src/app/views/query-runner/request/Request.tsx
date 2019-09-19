@@ -26,7 +26,6 @@ export class Request extends Component<IRequestComponent, any> {
             <Monaco
               body={sampleBody}
               onChange={(value) => handleOnEditorChange(value)} />
-            />
           </PivotItem>
           <PivotItem headerText='Request Headers'>
             <RequestHeaders />
