@@ -64,19 +64,22 @@ export function getContentType(headers: Headers) {
   }
 }
 
-export function parseResponse(resp: any, respHeaders: any): Promise<any> {
-  if (resp && resp.headers) {
-    resp.headers.forEach((val: any, key: any) => {
+export function parseResponse(response: any, respHeaders: any): Promise<any> {
+  if (response && response.headers) {
+    response.headers.forEach((val: any, key: any) => {
       respHeaders[key] = val;
     });
-    const contentType = getContentType(resp.headers);
+
+    const contentType = getContentType(response.headers);
     if (contentType && isImageResponse(contentType)) {
-      return resp;
+      return response;
     } else {
-      return resp.json();
+      if (response.ok) {
+        return response.json();
+      }
     }
   }
-  return resp;
+  return response;
 }
 
 const makeRequest = (httpVerb: string): Function => {
