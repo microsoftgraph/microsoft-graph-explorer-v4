@@ -34,7 +34,7 @@ if (spinner !== null) {
 
 // removes the loading spinner from the portal team html after GE loads
 const apiExplorer = document.getElementsByTagName('api-explorer')[0];
-if (apiExplorer && apiExplorer !== null) {
+if (apiExplorer) {
   (apiExplorer as any).parentElement.removeChild(apiExplorer);
 }
 
