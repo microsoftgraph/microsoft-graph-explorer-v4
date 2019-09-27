@@ -13,10 +13,11 @@ import ru from 'react-intl/locale-data/ru';
 import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
 
-import { getAuthTokenSuccess, setGraphExplorerMode } from './app/services/actions/auth-action-creators';
+import { getAuthTokenSuccess } from './app/services/actions/auth-action-creators';
+import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeTheme } from './app/services/actions/theme-action-creator';
-import { HelloAuthProvider } from './app/services/graph-client/HelloAuthProvider';
+import { MsalAuthProvider } from './app/services/graph-client/MsalAuthProvider';
 import App from './app/views/App';
 import messages from './messages';
 import { store } from './store';
@@ -55,8 +56,8 @@ const appState = store({
 });
 
 
-new HelloAuthProvider().getAccessToken()
-  .then((token) => {
+new MsalAuthProvider().getTokenSilent()
+  .then((token: any) => {
     if (token) {
       appState.dispatch(getAuthTokenSuccess(token));
     }

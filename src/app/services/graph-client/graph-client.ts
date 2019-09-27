@@ -1,11 +1,11 @@
 import { Client } from '@microsoft/microsoft-graph-client';
-import { HelloAuthProvider } from './HelloAuthProvider';
+import { MsalAuthProvider } from './MsalAuthProvider';
 
 export class GraphClient {
   private static client: Client;
 
   private static createClient(): Client {
-    const authProvider = new HelloAuthProvider();
+    const authProvider = new MsalAuthProvider();
 
     const clientOptions = {
       authProvider,
