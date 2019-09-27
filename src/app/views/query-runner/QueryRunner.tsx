@@ -17,7 +17,7 @@ import Request from './request/Request';
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
-  > {
+> {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
@@ -28,6 +28,8 @@ export class QueryRunner extends Component<
         { key: 'PATCH', text: 'PATCH' },
         { key: 'DELETE', text: 'DELETE' }
       ],
+      urlVersions: [{ key: 'V1.0', text: 'V1.0' }, { key: 'V2.0', text: 'V2.0' }],
+      selectedVersion: '',
       url: ''
     };
   }
@@ -81,11 +83,19 @@ export class QueryRunner extends Component<
 
     if (actions) {
       actions.runQuery(sampleQuery);
-    } 
+    }
+  };
+
+  private handleOnVersionChange = (option?: IDropdownOption) => {
+    if (option !== undefined) {
+      this.setState({
+        selectedVersion: option.text
+      });
+    }
   };
 
   public render() {
-    const { httpMethods } = this.state;
+    const { httpMethods, urlVersions, selectedVersion } = this.state;
     const { isLoadingData, sampleQuery } = this.props;
 
     return (
@@ -95,10 +105,13 @@ export class QueryRunner extends Component<
             <QueryInput
               handleOnRunQuery={this.handleOnRunQuery}
               handleOnMethodChange={this.handleOnMethodChange}
+              handleOnVersionChange={this.handleOnVersionChange}
               handleOnUrlChange={this.handleOnUrlChange}
               handleOnBlur={this.handleOnBlur}
               httpMethods={httpMethods}
               submitting={isLoadingData}
+              urlVersions={urlVersions}
+              selectedVersion={selectedVersion}
             />
           </div>
         </div>
@@ -131,4 +144,7 @@ function mapStateToProps(state: any) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(QueryRunner);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(QueryRunner);
