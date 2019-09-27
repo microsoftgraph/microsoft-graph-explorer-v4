@@ -45,7 +45,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
-            selectedKey={selectedVersion || 'V1.0'}
+            selectedKey={selectedVersion || 'v1.0'}
             options={urlVersions}
             onChange={(event, method) => handleOnVersionChange(method)}
           />
