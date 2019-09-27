@@ -28,7 +28,10 @@ export class QueryRunner extends Component<
         { key: 'PATCH', text: 'PATCH' },
         { key: 'DELETE', text: 'DELETE' }
       ],
-      urlVersions: [{ key: 'V1.0', text: 'V1.0' }, { key: 'V2.0', text: 'V2.0' }],
+      urlVersions: [
+        { key: 'v1.0', text: 'v1.0' },
+        { key: 'v2.0', text: 'v2.0' }
+      ],
       selectedVersion: '',
       url: ''
     };
@@ -87,10 +90,20 @@ export class QueryRunner extends Component<
   };
 
   private handleOnVersionChange = (option?: IDropdownOption) => {
+    const { sampleQuery } = this.props;
     if (option !== undefined) {
       this.setState({
         selectedVersion: option.text
       });
+      if (this.props.actions !== undefined) {
+        this.props.actions.setSampleQuery({
+          ...sampleQuery,
+          sampleUrl: sampleQuery.sampleUrl.replace(
+            /v[0-9]+\.[0-9]+/g,
+            option.text
+          )
+        });
+      }
     }
   };
 
@@ -140,7 +153,7 @@ function mapStateToProps(state: any) {
   return {
     isLoadingData: state.isLoadingData,
     headers: state.headersAdded,
-    sampleQuery: state.sampleQuery,
+    sampleQuery: state.sampleQuery
   };
 }
 
