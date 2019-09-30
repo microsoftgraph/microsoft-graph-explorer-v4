@@ -21,6 +21,7 @@ export class MsalAuthProvider implements AuthenticationProvider {
   }
 
   /**
+   * @public
    * Checks to see if the token exists in the cache
    * @param {string[]} scopes optional scopes passed to get the token silently
    */
@@ -35,6 +36,7 @@ export class MsalAuthProvider implements AuthenticationProvider {
   }
 
   /**
+   * @public
    * Generates a new access token from passed in scopes
    * @param {string[]} scopes passed to generate token
    */
@@ -79,14 +81,13 @@ export class MsalAuthProvider implements AuthenticationProvider {
   }
 
 /**
+ * @public
  * Gets the token from the cache
  * Called by the graph client before making requests.
- * Overides the authprovider's getAccessToken function to get the token
- * silently to prevent repeated forced logins
  */
   public async getAccessToken(): Promise<any> {
     try {
-      const token = await this.getTokenSilent();
+      const token = await this.authProvider.getAccessToken();
       return token;
     } catch (error) {
       return Promise.resolve(null);
@@ -103,6 +104,10 @@ export class MsalAuthProvider implements AuthenticationProvider {
       errorCode === 'token_renewal_error';
   }
 
+/**
+ * @private
+ * Determines whether to load the POPUP/REDIRECT options
+ */
   private getLoginType() {
     const userAgent = window.navigator.userAgent;
     const msie = userAgent.indexOf('MSIE ');
