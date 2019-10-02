@@ -281,7 +281,8 @@ class App extends Component<IAppProps, IAppState> {
                     <br/>
                     <a href='https://go.microsoft.com/fwlink/?LinkId=521839' target='_blank'>
                     <FormattedMessage id='Microsoft Privacy Statement'/></a>
-                    </MessageBar>}
+                    </MessageBar>
+                  }
                   {
                     // @ts-ignore
                     <QueryResponse verb={this.state.selectedVerb} />
