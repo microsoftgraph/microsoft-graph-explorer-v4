@@ -228,5 +228,8 @@
   "using canary": "You are using the canary version of Graph Explorer. Sign in to make requests",
   "Add": "Add",
   "Snippets": "Snippets",
-  "Adaptive Cards" : "Adaptive Cards"
+  "Adaptive Cards" : "Adaptive Cards",
+  "use the Microsoft Graph API" : "When you use the Microsoft Graph API, you agree to the Microsoft API Terms of Use",
+  "Terms of use" : "View the Microsoft API Terms of Use",
+  "Microsoft Privacy Statement" : "View the Microsoft Privacy Statement"
 }
