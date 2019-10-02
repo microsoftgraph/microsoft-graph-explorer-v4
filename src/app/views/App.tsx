@@ -24,6 +24,7 @@ import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
+import { Banner } from './opt-in-out-banner/Banner';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
@@ -201,6 +202,10 @@ class App extends Component<IAppProps, IAppState> {
     this.props.actions!.toggleSidebar(properties);
   }
 
+  public optOut = () => {
+    (window as any).location.reload();
+  }
+
   public render() {
     const classes = classNames(this.props);
     const { graphExplorerMode, error, actions, sidebarProperties }: any = this.props;
@@ -222,6 +227,7 @@ class App extends Component<IAppProps, IAppState> {
       <ThemeContext.Provider value={this.props.appTheme}>
         <FocusTrapZone>
           <div className={`container-fluid ${classes.app}`}>
+            <Banner optOut={this.optOut}/>
             <div className='row'>
               {graphExplorerMode === Mode.Complete && (
                 <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
