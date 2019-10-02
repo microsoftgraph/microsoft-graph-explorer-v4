@@ -1,5 +1,5 @@
 import { IAction } from '../../../types/action';
-import { MsalAuthProvider } from '../graph-client/MsalAuthProvider';
+import { logOut } from '../graph-client/MsalService';
 import { GET_AUTH_TOKEN_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
 
 export function getAuthTokenSuccess(response: string): IAction {
@@ -17,8 +17,7 @@ export function signOutSuccess(response: string): IAction {
 }
 
 export function signOut() {
-  new MsalAuthProvider()
-    .signOut();
+  logOut();
   return (dispatch: Function) => dispatch(signOutSuccess(''));
 }
 

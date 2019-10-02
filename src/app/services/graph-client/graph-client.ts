@@ -1,11 +1,11 @@
 import { Client } from '@microsoft/microsoft-graph-client';
-import { MsalAuthProvider } from './MsalAuthProvider';
+import 'isomorphic-fetch';
+import { authProvider } from './MsalAgent';
 
 export class GraphClient {
   private static client: Client;
 
   private static createClient(): Client {
-    const authProvider = new MsalAuthProvider();
 
     const clientOptions = {
       authProvider,
@@ -21,3 +21,4 @@ export class GraphClient {
     return GraphClient.client;
   }
 }
+
