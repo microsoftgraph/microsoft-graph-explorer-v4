@@ -10,6 +10,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { FormattedMessage } from 'react-intl';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
@@ -268,6 +269,19 @@ class App extends Component<IAppProps, IAppState> {
                       {`${error.statusText} - ${error.status}`}
                     </MessageBar>
                   )}
+                  {
+                    <MessageBar
+                    messageBarType={MessageBarType.info}
+                    isMultiline={true}
+                    >
+                    <FormattedMessage id='use the Microsoft Graph API'/>
+                    <br/><br/>
+                    <a href='https://aka.ms/msgraphtou' target='_blank'>
+                    <FormattedMessage id='Terms of use'/></a>
+                    <br/>
+                    <a href='https://go.microsoft.com/fwlink/?LinkId=521839' target='_blank'>
+                    <FormattedMessage id='Microsoft Privacy Statement'/></a>
+                    </MessageBar>}
                   {
                     // @ts-ignore
                     <QueryResponse verb={this.state.selectedVerb} />
