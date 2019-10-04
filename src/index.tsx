@@ -45,6 +45,7 @@ const appState = store({
   theme: 'light',
   isLoadingData: false,
   queryRunnerError: null,
+  termsOfUse: true,
   headersAdded: [{ name: '', value: '' }],
   sampleQuery: {
     sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
