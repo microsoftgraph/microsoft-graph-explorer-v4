@@ -68,15 +68,3 @@ function requiresInteraction(error: any): boolean {
     errorCode === 'login_required' ||
     errorCode === 'token_renewal_error';
 }
-
-/**
- * Determines whether to load the POPUP/REDIRECT interaction
- * @returns a string
- */
-function getLoginType(): string {
-  /**
-   * Always pops up
-   * Graph Explorer should perform incremental permissions without losing state
-   */
-  return 'POPUP';
-}
