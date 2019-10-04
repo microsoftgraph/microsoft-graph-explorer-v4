@@ -1,11 +1,10 @@
 import { writeData } from '../../../store/cache';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
-import { createHarPayload, generateHar } from '../../views/sidebar/history/historyUtil';
 import { queryResponseError } from './error-action-creator';
 import {
-  anonymousRequest, authenticatedRequest, isImageResponse,
-  parseResponse, queryResponse
+  anonymousRequest, authenticatedRequest,
+  isImageResponse, parseResponse, queryResponse
 } from './query-action-creator-util';
 import { addHistoryItem } from './request-history-action-creators';
 
@@ -48,7 +47,8 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
   createdAt: any, dispatch: Function, result: any) {
   const status = response.status;
   const statusText = response.statusText;
-  const { duration, contentType } = respHeaders;
+  const duration = (new Date()).getTime() - new Date(createdAt).getTime();
+  const contentType = respHeaders['content-type'];
 
   if (isImageResponse(contentType)) {
     result = await result.clone().arrayBuffer();
@@ -67,10 +67,6 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
     duration,
     har: ''
   };
-
-  const harPayload = createHarPayload(historyItem);
-  const har = JSON.stringify(generateHar(harPayload));
-  historyItem.har = har;
 
   writeData(historyItem);
 

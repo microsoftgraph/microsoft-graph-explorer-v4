@@ -4,7 +4,7 @@ export interface IAuthenticationProps {
   theme?: ITheme;
   styles?: object;
   actions?: {
-    authenticateUser: Function;
+    signIn: Function;
   };
   tokenPresent: boolean;
 }
