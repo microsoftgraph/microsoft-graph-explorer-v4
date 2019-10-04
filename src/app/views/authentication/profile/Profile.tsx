@@ -99,7 +99,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
     const persona: IPersonaSharedProps = {
       imageUrl: user.profileImageUrl,
-      imageInitials: (user.displayName) ? this.getInitials(user.displayName) : '',
+      imageInitials: this.getInitials(user.displayName),
       text: user.displayName,
       secondaryText: user.emailAddress,
     };

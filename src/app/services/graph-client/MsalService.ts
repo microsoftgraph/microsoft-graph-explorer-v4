@@ -2,7 +2,6 @@ import { AuthenticationParameters } from 'msal/lib-commonjs/AuthenticationParame
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { msalApplication } from './MsalAgent';
 
-const loginType = getLoginType();
 const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
 
 export async function logIn(): Promise<any> {
@@ -10,16 +9,12 @@ export async function logIn(): Promise<any> {
     scopes: defaultUserScopes,
   };
 
-  if (loginType === 'POPUP') {
-    try {
-      await msalApplication.loginPopup(loginRequest);
-      const response = await msalApplication.acquireTokenPopup(loginRequest);
-      return response.accessToken;
-    } catch (error) {
-      return null;
-    }
-  } else if (loginType === 'REDIRECT') {
-    await msalApplication.acquireTokenRedirect(loginRequest);
+  try {
+    await msalApplication.loginPopup(loginRequest);
+    const response = await msalApplication.acquireTokenPopup(loginRequest);
+    return response.accessToken;
+  } catch (error) {
+    return null;
   }
 }
 
@@ -45,17 +40,14 @@ export async function acquireNewAccessToken(scopes: string[] = []): Promise<any>
 
   try {
     const response = await msalApplication.acquireTokenSilent(loginRequest);
-    return response;
+    return response.accessToken;
   } catch (error) {
     if (requiresInteraction(error)) {
-      if (loginType === 'POPUP') {
-        try {
-          return msalApplication.acquireTokenPopup(loginRequest);
-        } catch (error) {
-          return null;
-        }
-      } else if (loginType === 'REDIRECT') {
-        msalApplication.acquireTokenRedirect(loginRequest);
+      try {
+        const response = await msalApplication.acquireTokenPopup(loginRequest);
+        return response.accessToken;
+      } catch (error) {
+        return null;
       }
     }
   }
