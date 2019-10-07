@@ -12,13 +12,10 @@ describe('Terms of Use Action Creators', () => {
       const expectedAction = [
         {
           type: CLEAR_TERMS_OF_USE,
-          response: {
-            termsOfUse: false
-          }
         },
       ];
 
-      const store = mockStore({ termsOfUseInfo: {} });
+      const store = mockStore({ termsOfUse: {} });
 
     // @ts-ignore
     store.dispatch(clearTermsOfUse({
