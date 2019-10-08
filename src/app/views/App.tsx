@@ -283,12 +283,13 @@ class App extends Component<IAppProps, IAppState> {
                       <br /><br />
                       <div>
                         <a className={classes.links}
-                        href={`https://docs.microsoft.com/${language}/legal/microsoft-apis/terms-of-use?context=graph/context`}
+                        href={'https://docs.microsoft.com/' + language +
+                        '/legal/microsoft-apis/terms-of-use?context=graph/context'}
                           target='_blank'>
                           <FormattedMessage id='Terms of use' /></a>
                         <br />
                         <a  className={classes.links}
-                        href={`https://privacy.microsoft.com/${language}/privacystatement`}
+                        href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
                           target='_blank'>
                           <FormattedMessage id='Microsoft Privacy Statement' /></a>
                       </div>
