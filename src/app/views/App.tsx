@@ -203,7 +203,11 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public optOut = () => {
-    (window as any).location.reload();
+    const path = location.href;
+    const urlObject: URL = new URL(path);
+    const { protocol, hostname, pathname, port } = urlObject;
+    const url = `${protocol}//${hostname}${(port) ? ':' + port : ''}${pathname}`;
+    window.location.href = url.includes('localhost') ? 'http://localhost:3001' : `${url.replace('preview', '')}`;
   }
 
   public render() {
