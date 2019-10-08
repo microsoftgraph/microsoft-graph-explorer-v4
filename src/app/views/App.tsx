@@ -209,6 +209,7 @@ class App extends Component<IAppProps, IAppState> {
     const classes = classNames(this.props);
     const { graphExplorerMode, error, termsOfUse, actions, sidebarProperties }: any = this.props;
     const { showToggle, showSidebar } = sidebarProperties;
+    const language = navigator.language  || 'en-US';
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
@@ -281,11 +282,13 @@ class App extends Component<IAppProps, IAppState> {
                       <FormattedMessage id='Use the Microsoft Graph API' />
                       <br /><br />
                       <div>
-                        <a className={classes.links} href='https://aka.ms/msgraphtou'
+                        <a className={classes.links}
+                        href={`https://docs.microsoft.com/${language}/legal/microsoft-apis/terms-of-use?context=graph/context`}
                           target='_blank'>
                           <FormattedMessage id='Terms of use' /></a>
                         <br />
-                        <a  className={classes.links} href='https://go.microsoft.com/fwlink/?LinkId=521839'
+                        <a  className={classes.links}
+                        href={`https://privacy.microsoft.com/${language}/privacystatement`}
                           target='_blank'>
                           <FormattedMessage id='Microsoft Privacy Statement' /></a>
                       </div>
