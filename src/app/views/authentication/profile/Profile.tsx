@@ -36,52 +36,54 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       : null;
 
     const userInfo = jsonUserInfo.response.body;
+    if (userInfo) {
+      let imageUrl = '';
 
-    let imageUrl = '';
+      try {
+        const userPicture = actions
+          ? await actions.getProfileInfo({
+            selectedVerb: 'GET',
+            sampleUrl: USER_PICTURE_URL
+          })
+          : null;
 
-    try {
-      const userPicture = actions
-        ? await actions.getProfileInfo({
-          selectedVerb: 'GET',
-          sampleUrl: USER_PICTURE_URL
-        })
-        : null;
-
-      if (userPicture) {
-        const buffer = await userPicture.response.body.arrayBuffer();
-        const blob = new Blob([buffer], { type: 'image/jpeg' });
-        imageUrl = URL.createObjectURL(blob);
+        if (userPicture) {
+          const buffer = await userPicture.response.body.arrayBuffer();
+          const blob = new Blob([buffer], { type: 'image/jpeg' });
+          imageUrl = URL.createObjectURL(blob);
+        }
+      } catch (error) {
+        imageUrl = '';
       }
-    } catch (error) {
-      imageUrl = '';
+
+      const user = {
+        ...{},
+        displayName: userInfo.displayName,
+        emailAddress: userInfo.mail || userInfo.userPrincipalName,
+        profileImageUrl: imageUrl
+      };
+
+      this.setState({
+        user
+      });
     }
 
-    const user = {
-      ...{},
-      displayName: userInfo.displayName,
-      emailAddress: userInfo.mail || userInfo.userPrincipalName,
-      profileImageUrl: imageUrl
-    };
-
-    this.setState({
-      user
-    });
   };
 
   public getInitials = (name: string) => {
+    let initials = '';
     if (name && name !== '') {
       const n = name.indexOf('(');
       name = name.substring(0, n !== -1 ? n : name.length);
       const parts = name.split(' ');
-      let initials = '';
       for (const part of parts) {
         if (part.length > 0 && part !== '') {
           initials += part[0];
         }
       }
       initials = initials.substring(0, 2);
-      return initials;
     }
+    return initials;
   };
 
   public handleSignOut = () => {
