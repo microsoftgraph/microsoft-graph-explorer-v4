@@ -16,6 +16,7 @@ import { Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
 import { ISidebarProps } from '../../types/sidebar';
 import { clearQueryError } from '../services/actions/error-action-creator';
+import { fetchScopes } from '../services/actions/permissions-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { addRequestHeader } from '../services/actions/request-headers-action-creators';
