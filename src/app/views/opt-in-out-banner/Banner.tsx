@@ -1,26 +1,46 @@
-import { MessageBar, MessageBarType, Toggle } from 'office-ui-fabric-react';
-import React from 'react';
+import { MessageBar, Toggle } from 'office-ui-fabric-react';
+import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 
 interface IBanner {
   optOut: Function;
+  intl: {
+    message: object;
+  };
 }
 
-export const Banner = ({ optOut }: IBanner) => {
-  return (
-    <div className='row'>
-      <MessageBar styles={{
-        icon: {
-          fontSize: '30px',
-          float: 'right',
-        }
-      }}>
-        <Toggle
-          label='You are using Graph Explorer in preview. Switch the toggle to go back to Graph Explorer classic'
-          inlineLabel={true}
-          defaultChecked={true}
-          onText=' '
-          onChange={() => optOut()} />
-      </MessageBar>
-    </div>
-  );
-};
+class Banner extends Component<IBanner, {}> {
+  constructor(props: any) {
+    super(props);
+  }
+
+  public render() {
+    const {
+      intl: { messages },
+      optOut
+    }: any = this.props;
+
+    return (
+      <div className='row'>
+        <MessageBar styles={{
+          icon: {
+            fontSize: '30px',
+            float: 'right',
+          }
+        }}>
+          <Toggle
+            label={messages['using Graph Explorer in preview']}
+            inlineLabel={true}
+            defaultChecked={true}
+            onText=' '
+            onChange={optOut} />
+        </MessageBar>
+      </div>
+    );
+  }
+
+}
+
+// @ts-ignore
+const intlBanner = injectIntl(Banner);
+export default intlBanner;
