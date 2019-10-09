@@ -1,12 +1,16 @@
 import { writeData } from '../../../store/cache';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
+import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { queryResponseError } from './error-action-creator';
+import { fetchScopes } from './permissions-action-creator';
 import {
   anonymousRequest, authenticatedRequest,
   isImageResponse, parseResponse, queryResponse
 } from './query-action-creator-util';
 import { addHistoryItem } from './request-history-action-creators';
+
+let scopes: string[] = DEFAULT_USER_SCOPES.split(' ');
 
 export function runQuery(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
@@ -15,17 +19,18 @@ export function runQuery(query: IQuery): Function {
     const createdAt = new Date().toISOString();
 
     if (tokenPresent) {
-      return authenticatedRequest(dispatch, query).then(async (response: Response) => {
-        await processResponse(response, respHeaders, dispatch, createdAt);
+      return authenticatedRequest(dispatch, query, scopes).then(async (response: Response) => {
+        await processResponse(response, respHeaders, dispatch, getState, createdAt);
       });
     }
 
     return anonymousRequest(dispatch, query).then(async (response: Response) => {
-      await processResponse(response, respHeaders, dispatch, createdAt);
+      await processResponse(response, respHeaders, dispatch, getState, createdAt);
     });
   };
 
-  async function processResponse(response: Response, respHeaders: any, dispatch: Function, createdAt: any) {
+  async function processResponse(response: Response, respHeaders: any, dispatch: Function,
+    getState: Function, createdAt: any) {
 
     const result = await parseResponse(response, respHeaders);
     createHistory(response, respHeaders, query, createdAt, dispatch, result);
@@ -35,6 +40,15 @@ export function runQuery(query: IQuery): Function {
         body: result,
         headers: respHeaders
       }));
+    }
+    else if (response.status === 403)
+    {
+      dispatch(fetchScopes(query.sampleUrl, query.selectedVerb));
+      scopes = getState().scopes.scopes;
+
+      if (scopes.length > 1) {
+        runQuery(query);
+      }
     }
     else {
       return dispatch(queryResponseError(response));
