@@ -23,9 +23,10 @@ export function fetchScopesSuccess(response: object): IAction {
     };
   }
 
-  export function fetchScopes(): Function {
+  export function fetchScopes(requestUrl: string, method: string): Function {
     return async (dispatch: Function) => {
-      const permissionsUrl = 'https://graphexplorerapi.azurewebsites.net/api/GraphExplorerPermissions';
+      const permissionsUrl = 'https://graphexplorerapi.azurewebsites.net/api/GraphExplorerPermissions?requesturl=' +
+       requestUrl + '&method=' + method;
 
       const headers = {
         'Content-Type': 'application/json',

@@ -3,7 +3,7 @@ import { SCOPES_FETCH_ERROR, SCOPES_FETCH_PENDING, SCOPES_FETCH_SUCCESS } from '
 
 const initialState = {
   pending: false,
-  scopes: [],
+  data: [],
   error: null
 };
 
@@ -18,7 +18,7 @@ export function scopes(state = initialState, action: IAction): any {
       return {
         ...state,
         pending: false,
-        scopes: action.response
+        data: action.response
       };
     case SCOPES_FETCH_ERROR:
       return {
