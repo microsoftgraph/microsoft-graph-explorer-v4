@@ -10,6 +10,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { FormattedMessage } from 'react-intl';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
@@ -20,6 +21,7 @@ import { fetchScopes } from '../services/actions/permissions-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { addRequestHeader } from '../services/actions/request-headers-action-creators';
+import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeTheme } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { appStyles } from './App.styles';
@@ -34,11 +36,13 @@ interface IAppProps {
   theme?: ITheme;
   styles?: object;
   error: object | null;
+  termsOfUse: boolean;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
   actions: {
     addRequestHeader: Function;
     clearQueryError: Function;
+    clearTermsOfUse: Function;
     setSampleQuery: Function;
     runQuery: Function;
     toggleSidebar: Function;
@@ -204,8 +208,9 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, actions, sidebarProperties }: any = this.props;
+    const { graphExplorerMode, error, termsOfUse, actions, sidebarProperties }: any = this.props;
     const { showToggle, showSidebar } = sidebarProperties;
+    const language = navigator.language  || 'en-US';
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
@@ -246,7 +251,7 @@ class App extends Component<IAppProps, IAppState> {
                     >
                       <p>
                         To try operations other than GET or to access your own data, sign in to
-                      <a className={classes.toGraphExplorer}
+                      <a className={classes.links}
                           tabIndex={0}
                           href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
                           Graph Explorer.
@@ -269,6 +274,28 @@ class App extends Component<IAppProps, IAppState> {
                       {`${error.statusText} - ${error.status}`}
                     </MessageBar>
                   )}
+                  {graphExplorerMode === Mode.Complete && termsOfUse && (
+                    <MessageBar
+                      messageBarType={MessageBarType.info}
+                      isMultiline={true}
+                      onDismiss={actions.clearTermsOfUse}
+                    >
+                      <FormattedMessage id='Use the Microsoft Graph API' />
+                      <br /><br />
+                      <div>
+                        <a className={classes.links}
+                        href={'https://docs.microsoft.com/' + language +
+                        '/legal/microsoft-apis/terms-of-use?context=graph/context'}
+                          target='_blank'>
+                          <FormattedMessage id='Terms of use' /></a>
+                        <br />
+                        <a  className={classes.links}
+                        href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
+                          target='_blank'>
+                          <FormattedMessage id='Microsoft Privacy Statement' /></a>
+                      </div>
+                    </MessageBar>
+                  )}
                   {
                     // @ts-ignore
                     <QueryResponse verb={this.state.selectedVerb} />
@@ -286,6 +313,7 @@ class App extends Component<IAppProps, IAppState> {
 const mapStateToProps = (state: any) => {
   return {
     error: state.queryRunnerError,
+    termsOfUse: state.termsOfUse,
     receivedSampleQuery: state.sampleQuery,
     graphExplorerMode: state.graphExplorerMode,
     appTheme: state.theme,
@@ -297,6 +325,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     actions: bindActionCreators({
       clearQueryError,
+      clearTermsOfUse,
       runQuery,
       setSampleQuery,
       addRequestHeader,

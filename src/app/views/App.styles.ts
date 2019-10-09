@@ -16,7 +16,7 @@ export const appStyles = (theme: ITheme) => {
     sidebar: {
       borderRight: 'solid 1px ' + theme.palette.neutralLighter
     },
-    toGraphExplorer: {
+    links: {
       color: 'inherit'
     },
     sidebarToggle: {
