@@ -24,7 +24,6 @@ export function scopes(state = initialState, action: IAction): any {
       return {
         ...state,
         pending: false,
-        scopes,
         error: action.response
       };
     default:

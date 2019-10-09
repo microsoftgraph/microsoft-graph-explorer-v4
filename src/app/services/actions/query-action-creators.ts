@@ -10,7 +10,7 @@ import {
 } from './query-action-creator-util';
 import { addHistoryItem } from './request-history-action-creators';
 
-let scopes: string[] = DEFAULT_USER_SCOPES.split(' ');
+const scopes: string[] = DEFAULT_USER_SCOPES.split(' ');
 
 export function runQuery(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
@@ -20,17 +20,17 @@ export function runQuery(query: IQuery): Function {
 
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query, scopes).then(async (response: Response) => {
-        await processResponse(response, respHeaders, dispatch, getState, createdAt);
+        await processResponse(response, respHeaders, dispatch, createdAt);
       });
     }
 
     return anonymousRequest(dispatch, query).then(async (response: Response) => {
-      await processResponse(response, respHeaders, dispatch, getState, createdAt);
+      await processResponse(response, respHeaders, dispatch, createdAt);
     });
   };
 
   async function processResponse(response: Response, respHeaders: any, dispatch: Function,
-    getState: Function, createdAt: any) {
+    createdAt: any) {
 
     const result = await parseResponse(response, respHeaders);
     createHistory(response, respHeaders, query, createdAt, dispatch, result);
@@ -41,14 +41,8 @@ export function runQuery(query: IQuery): Function {
         headers: respHeaders
       }));
     }
-    else if (response.status === 403)
-    {
-      dispatch(fetchScopes(query.sampleUrl, query.selectedVerb));
-      scopes = getState().scopes.scopes;
-
-      if (scopes.length > 1) {
-        runQuery(query);
-      }
+    else if (response.status === 403) {
+      dispatch(fetchScopes());
     }
     else {
       return dispatch(queryResponseError(response));
@@ -64,7 +58,8 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
   const duration = (new Date()).getTime() - new Date(createdAt).getTime();
   const contentType = respHeaders['content-type'];
 
-  if (isImageResponse(contentType)) {
+  const isImageResult = isImageResponse(contentType);
+  if (isImageResult) {
     result = await result.clone().arrayBuffer();
   }
 
@@ -77,8 +72,8 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
     createdAt,
     status,
     statusText,
-    result,
     duration,
+    result: isImageResult ? result : null,
     har: ''
   };
 
