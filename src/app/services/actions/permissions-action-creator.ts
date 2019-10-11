@@ -77,25 +77,33 @@ export function getConsent(): Function {
     const query = getState().sampleQuery;
     const scopes = getState().scopes.data;
 
-    return authenticatedRequest(dispatch, query, scopes).then(async (response: Response) => {
+    for (let num = 0; num < scopes.length; num++) {
 
-      if (response && response.ok) {
-        const json = await parseResponse(response, respHeaders);
-        return dispatch(
-          queryResponse({
-            body: json,
-            headers: respHeaders
-          }),
-        );
-      }
-      return dispatch(queryResponseError({ response }));
-    }).catch((error: any) => {
-      const response = {
-        statusText: error.code,
-        status: error.message ? error.message : 'Consent was not granted',
-      };
-      return dispatch(getConsentError(response));
-    });
+      const scope: string[] = [scopes[num]];
+
+      return authenticatedRequest(dispatch, query, scope).then(async (response: Response) => {
+
+        if (response && response.ok) {
+          const json = await parseResponse(response, respHeaders);
+          return dispatch(
+            queryResponse({
+              body: json,
+              headers: respHeaders
+            }),
+          );
+        }
+        if (response.status === 403 && num === scopes.length - 1) {
+          // Only exit with error 403 when we have exhausted all scopes
+          return dispatch(queryResponseError({ response }));
+        }
+      }).catch((error: any) => {
+        const response = {
+          statusText: error.code,
+          status: error.message ? error.message : 'Consent was not granted',
+        };
+        return dispatch(getConsentError(response));
+      });
+    }
 
   };
 }
