@@ -24,8 +24,7 @@ class Banner extends Component<IBanner, {}> {
       <div className='row'>
         <MessageBar styles={{
           icon: {
-            fontSize: '30px',
-            float: 'right',
+            display: 'none',
           }
         }}>
           <Toggle

@@ -7,6 +7,7 @@
     "@microsoft/microsoft-graph-client": "1.5.2",
     "@svgr/webpack": "4.1.0",
     "@types/hellojs": "1.16.2",
+    "@uifabric/react-cards": "0.108.2",
     "@uifabric/styling": "6.46.0",
     "adaptivecards": "1.1.0",
     "adaptivecards-templating": "0.1.0-alpha.1",

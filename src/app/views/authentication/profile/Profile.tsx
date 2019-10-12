@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { Card } from '@uifabric/react-cards';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
@@ -94,6 +95,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
   public render() {
     const { user } = this.state;
+    const { minimized } = this.props;
 
     const persona: IPersonaSharedProps = {
       imageUrl: user.profileImageUrl,
@@ -128,11 +130,31 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       ]
     };
 
+    const tokens: any = {
+      boxShadow: 'none',
+      childrenGap: 0,
+      padding: 10,
+      minWidth: 0
+    };
+
+
     return (
       <div className={classes.profile}>
-        <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-          <Persona {...persona} size={PersonaSize.size40} />
-        </ActionButton>
+        {minimized &&
+          <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+            <Persona {...persona} size={PersonaSize.size40} hidePersonaDetails={minimized} />
+          </ActionButton>
+        }
+
+        {!minimized &&
+          <Card compact={true} tokens={tokens}>
+            <Card.Item fill={true}>
+              <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+                <Persona {...persona} coinSize={60} size={PersonaSize.size40} />
+              </ActionButton>
+            </Card.Item>
+          </Card>
+        }
       </div>
     );
   }
@@ -147,9 +169,16 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
+function mapStateToProps(state: any) {
+  return {
+    minimized: !!state.sidebarProperties.showToggle
+  };
+}
+
+
 // @ts-ignore
 const styledProfile = styled(Profile, authenticationStyles);
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(styledProfile);

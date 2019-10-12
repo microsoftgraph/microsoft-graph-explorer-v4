@@ -1,9 +1,13 @@
 import {
   FocusTrapZone,
+  FontSizes,
   IconButton,
+  IStackTokens,
   ITheme,
+  Label,
   MessageBar,
   MessageBarType,
+  Stack,
   styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
@@ -207,7 +211,7 @@ class App extends Component<IAppProps, IAppState> {
     const urlObject: URL = new URL(path);
     const { protocol, hostname, pathname, port } = urlObject;
     const url = `${protocol}//${hostname}${(port) ? ':' + port : ''}${pathname}`;
-    window.location.href = url.includes('localhost') ? 'http://localhost:3001' : `${url.replace('preview', '')}`;
+    window.location.href = url.includes('localhost') ? 'http://localhost:3000' : `${url.replace('preview', '')}`;
   }
 
   public render() {
@@ -222,6 +226,11 @@ class App extends Component<IAppProps, IAppState> {
       }
     }
 
+    const horizontalGapStackTokens: IStackTokens = {
+      childrenGap: 10,
+      padding: 10
+    };
+
     const layout =
       graphExplorerMode === Mode.TryIt
         ? 'col-xs-12 col-sm-12'
@@ -231,25 +240,43 @@ class App extends Component<IAppProps, IAppState> {
       <ThemeContext.Provider value={this.props.appTheme}>
         <FocusTrapZone>
           <div className={`container-fluid ${classes.app}`}>
-            {
-              // @ts-ignore
-              <Banner optOut={this.optOut}/>
-            }
             <div className='row'>
               {graphExplorerMode === Mode.Complete && (
                 <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
-                  {showToggle && <IconButton
-                    iconProps={{ iconName: 'GlobalNavButton' }}
-                    className={classes.sidebarToggle}
-                    title='Remove sidebar'
-                    ariaLabel='Remove sidebar'
-                    onClick={this.toggleSidebar}
-                  />}
-                  {showSidebar && <Sidebar />}
+
+                  <Stack horizontal={true} disableShrink={true} tokens={horizontalGapStackTokens}>
+                      {showToggle &&
+                        <IconButton
+                          iconProps={{ iconName: 'GlobalNavButton' }}
+                          className={classes.sidebarToggle}
+                          title='Remove sidebar'
+                          ariaLabel='Remove sidebar'
+                          onClick={this.toggleSidebar}
+                        />
+                      }
+                      <Label style={{
+                        fontSize: FontSizes.xLarge,
+                        fontWeight: 600,
+                        marginBottom: '10px'
+                      }}>
+                        Graph Explorer
+                      </Label>
+                      { showToggle &&
+                      <Authentication />}
+                    </Stack>
+
+                  {!showToggle && <Authentication /> }
+
+                  {showSidebar && <>
+                    {
+                      // @ts-ignore
+                      <Banner optOut={this.optOut} />
+                    }
+                  <Sidebar />
+                  </>}
                 </div>
               )}
               <div className={layout}>
-                {graphExplorerMode === Mode.Complete && displayContent && <Authentication />}
                 {graphExplorerMode === Mode.TryIt && (
                   <div style={{ marginBottom: 8 }}>
                     <MessageBar

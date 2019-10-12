@@ -35,9 +35,9 @@ export class Authentication extends Component<IAuthenticationProps> {
               onClick={this.signIn}>
               sign in
               </ActionButton>}
+          </Stack.Item>
             {tokenPresent &&
               <Profile />}
-          </Stack.Item>
         </Stack>
       </div>
     );
