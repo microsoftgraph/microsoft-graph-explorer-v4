@@ -226,7 +226,7 @@ class App extends Component<IAppProps, IAppState> {
       }
     }
 
-    const horizontalGapStackTokens: IStackTokens = {
+    const stackTokens: IStackTokens = {
       childrenGap: 10,
       padding: 10
     };
@@ -244,7 +244,7 @@ class App extends Component<IAppProps, IAppState> {
               {graphExplorerMode === Mode.Complete && (
                 <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
 
-                  <Stack horizontal={true} disableShrink={true} tokens={horizontalGapStackTokens}>
+                  <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
                       {showToggle &&
                         <IconButton
                           iconProps={{ iconName: 'GlobalNavButton' }}
@@ -262,7 +262,14 @@ class App extends Component<IAppProps, IAppState> {
                         Graph Explorer
                       </Label>
                       { showToggle &&
-                      <Authentication />}
+                        <span style={{
+                          position: 'absolute',
+                          marginLeft: '75%',
+                        }}>
+
+                        <Authentication />
+                        </span>
+                      }
                     </Stack>
 
                   {!showToggle && <Authentication /> }
