@@ -29,7 +29,7 @@ export class Authentication extends Component<IAuthenticationProps> {
     return (
       <div className={classes.authenticationContainer}>
         <Stack>
-          <Stack.Item align='end'>
+          <Stack.Item align='start'>
             {!tokenPresent && <ActionButton
               ariaLabel='Sign-in button'
               className={classes.signInButton}
@@ -39,8 +39,8 @@ export class Authentication extends Component<IAuthenticationProps> {
               sign in
               </ActionButton>}
           </Stack.Item>
-            {tokenPresent &&
-              <Profile />}
+          {tokenPresent &&
+            <Profile />}
         </Stack>
       </div>
     );
