@@ -16,27 +16,41 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       handleOnRunQuery,
       handleOnMethodChange,
       handleOnUrlChange,
+      handleOnVersionChange,
       handleOnBlur,
       httpMethods,
       selectedVerb,
+      selectedVersion,
+      urlVersions,
       sampleUrl,
       submitting,
-      mode,
+      mode
     } = this.props;
 
     return (
       <div className='row'>
-        <div className='col-sm-3'>
+        <div className='col-sm-1' style={{ paddingRight: 0 }}>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
             selectedKey={selectedVerb}
             options={httpMethods}
             disabled={mode === Mode.TryIt}
+            styles={{ title: { paddingRight: 0 } }}
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </div>
-        <div className='col-sm-7'>
+
+        <div className='col-sm-1'>
+          <Dropdown
+            ariaLabel='Query sample option'
+            role='listbox'
+            selectedKey={selectedVersion || 'v1.0'}
+            options={urlVersions}
+            onChange={(event, method) => handleOnVersionChange(method)}
+          />
+        </div>
+        <div className='col-sm-8' style={{ paddingRight: 0, paddingLeft: 0 }}>
           <TextField
             ariaLabel='Query Sample Input'
             role='textbox'
@@ -65,7 +79,7 @@ function mapStateToProps(state: any) {
     sampleUrl: state.sampleQuery.sampleUrl,
     selectedVerb: state.sampleQuery.selectedVerb,
     appTheme: state.theme,
-    mode: state.graphExplorerMode,
+    mode: state.graphExplorerMode
   };
 }
 export default connect(

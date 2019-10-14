@@ -18,7 +18,7 @@ import Request from './request/Request';
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
-  > {
+> {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
@@ -29,6 +29,11 @@ export class QueryRunner extends Component<
         { key: 'PATCH', text: 'PATCH' },
         { key: 'DELETE', text: 'DELETE' }
       ],
+      urlVersions: [
+        { key: 'v1.0', text: 'v1.0' },
+        { key: 'v2.0', text: 'v2.0' }
+      ],
+      selectedVersion: '',
       url: ''
     };
   }
@@ -85,11 +90,27 @@ export class QueryRunner extends Component<
     }
   };
 
-  public render() {
-    const { httpMethods } = this.state;
-    const { graphExplorerMode, isLoadingData } = this.props;
+  private handleOnVersionChange = (option?: IDropdownOption) => {
+    const { sampleQuery } = this.props;
+    if (option !== undefined) {
+      this.setState({
+        selectedVersion: option.text
+      });
+      if (this.props.actions !== undefined) {
+        this.props.actions.setSampleQuery({
+          ...sampleQuery,
+          sampleUrl: sampleQuery.sampleUrl.replace(
+            /v[0-9]+\.[0-9]+/g,
+            option.text
+          )
+        });
+      }
+    }
+  };
 
-    const displayRequestComponent = (graphExplorerMode === Mode.Complete);
+  public render() {
+    const { httpMethods, urlVersions, selectedVersion } = this.state;
+    const { graphExplorerMode, isLoadingData, sampleQuery } = this.props;
 
     return (
       <div>
@@ -98,20 +119,21 @@ export class QueryRunner extends Component<
             <QueryInput
               handleOnRunQuery={this.handleOnRunQuery}
               handleOnMethodChange={this.handleOnMethodChange}
+              handleOnVersionChange={this.handleOnVersionChange}
               handleOnUrlChange={this.handleOnUrlChange}
               handleOnBlur={this.handleOnBlur}
               httpMethods={httpMethods}
               submitting={isLoadingData}
+              urlVersions={urlVersions}
+              selectedVersion={selectedVersion}
             />
           </div>
         </div>
-        {displayRequestComponent && (
-          <div className='row'>
-            <div className='col-sm-12 col-lg-12'>
-              <Request handleOnEditorChange={this.handleOnEditorChange} />
-            </div>
+        <div className='row'>
+          <div className='col-sm-12 col-lg-12'>
+            <Request handleOnEditorChange={this.handleOnEditorChange} />
           </div>
-        )}
+        </div>
       </div>
     );
   }
@@ -135,4 +157,7 @@ function mapStateToProps(state: any) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(QueryRunner);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(QueryRunner);
