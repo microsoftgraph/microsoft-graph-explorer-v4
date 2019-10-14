@@ -9,19 +9,32 @@ import SubmitButton from '../common/submit-button/SubmitButton';
 export class QueryInput extends Component<IQueryInputProps, any> {
   constructor(props: any) {
     super(props);
+    this.state = {
+      httpMethods: [
+        { key: 'GET', text: 'GET' },
+        { key: 'POST', text: 'POST' },
+        { key: 'PUT', text: 'PUT' },
+        { key: 'PATCH', text: 'PATCH' },
+        { key: 'DELETE', text: 'DELETE' }
+      ],
+      urlVersions: [
+        { key: 'v1.0', text: 'v1.0' },
+        { key: 'beta', text: 'beta' }
+      ],
+    };
   }
 
   public render() {
+    const { httpMethods, urlVersions } = this.state;
+
     const {
       handleOnRunQuery,
       handleOnMethodChange,
       handleOnUrlChange,
       handleOnVersionChange,
       handleOnBlur,
-      httpMethods,
       selectedVerb,
       selectedVersion,
-      urlVersions,
       sampleUrl,
       submitting,
       mode
@@ -76,11 +89,11 @@ export class QueryInput extends Component<IQueryInputProps, any> {
 
 function mapStateToProps(state: any) {
   return {
+    mode: state.graphExplorerMode,
     sampleUrl: state.sampleQuery.sampleUrl,
     selectedVerb: state.sampleQuery.selectedVerb,
-    appTheme: state.theme,
-    mode: state.graphExplorerMode,
     selectedVersion: state.selectedVersion,
+    submitting: state.isLoadingData,
   };
 }
 export default connect(

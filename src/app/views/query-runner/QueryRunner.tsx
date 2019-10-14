@@ -22,18 +22,8 @@ export class QueryRunner extends Component<
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
-      httpMethods: [
-        { key: 'GET', text: 'GET' },
-        { key: 'POST', text: 'POST' },
-        { key: 'PUT', text: 'PUT' },
-        { key: 'PATCH', text: 'PATCH' },
-        { key: 'DELETE', text: 'DELETE' }
-      ],
-      urlVersions: [
-        { key: 'v1.0', text: 'v1.0' },
-        { key: 'beta', text: 'beta' }
-      ],
-      url: ''
+      url: '',
+      sampleBody: '',
     };
   }
 
@@ -105,8 +95,6 @@ export class QueryRunner extends Component<
   };
 
   public render() {
-    const { httpMethods, urlVersions } = this.state;
-    const { isLoadingData } = this.props;
 
     return (
       <div>
@@ -118,9 +106,6 @@ export class QueryRunner extends Component<
               handleOnVersionChange={this.handleOnVersionChange}
               handleOnUrlChange={this.handleOnUrlChange}
               handleOnBlur={this.handleOnBlur}
-              httpMethods={httpMethods}
-              submitting={isLoadingData}
-              urlVersions={urlVersions}
             />
           </div>
         </div>
@@ -145,10 +130,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 function mapStateToProps(state: any) {
   return {
-    isLoadingData: state.isLoadingData,
     headers: state.headersAdded,
     sampleQuery: state.sampleQuery,
-    graphExplorerMode: state.graphExplorerMode,
   };
 }
 

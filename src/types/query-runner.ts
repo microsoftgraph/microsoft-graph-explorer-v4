@@ -2,8 +2,6 @@ import { ITheme } from '@uifabric/styling';
 import { Mode } from './action';
 
 export interface IQueryRunnerState {
-  httpMethods: Array<{ key: string; text: string }>;
-  urlVersions: Array<{ key: string; text: string }>;
   sampleBody?: string;
   url: string;
 }
@@ -16,11 +14,9 @@ export interface IQuery {
 }
 
 export interface IQueryRunnerProps {
-  isLoadingData: boolean;
   headers: Array<{ name: string; value: string }>;
   onSelectVerb: Function;
   sampleQuery: IQuery;
-  graphExplorerMode: Mode;
   actions?: {
     runQuery: Function;
     addRequestHeader: Function;
@@ -38,10 +34,8 @@ export interface IQueryInputProps {
   handleOnUrlChange: Function;
   handleOnVersionChange: Function;
   handleOnBlur: Function;
-  httpMethods: Array<{ key: string; text: string }>;
   selectedVerb: string;
   selectedVersion: string;
-  urlVersions: Array<{ key: string; text: string }>;
   sampleUrl: string;
   submitting: boolean;
 }
