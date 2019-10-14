@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { Mode } from '../../../types/action';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
@@ -95,6 +96,8 @@ export class QueryRunner extends Component<
   };
 
   public render() {
+    const { graphExplorerMode } = this.props;
+    const displayRequestComponent = (graphExplorerMode === Mode.Complete);
 
     return (
       <div>
@@ -109,11 +112,13 @@ export class QueryRunner extends Component<
             />
           </div>
         </div>
-        <div className='row'>
-          <div className='col-sm-12 col-lg-12'>
-            <Request handleOnEditorChange={this.handleOnEditorChange} />
+        {displayRequestComponent && (
+          <div className='row'>
+            <div className='col-sm-12 col-lg-12'>
+              <Request handleOnEditorChange={this.handleOnEditorChange} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }
@@ -130,6 +135,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 function mapStateToProps(state: any) {
   return {
+    graphExplorerMode: state.graphExplorerMode,
     headers: state.headersAdded,
     sampleQuery: state.sampleQuery,
   };

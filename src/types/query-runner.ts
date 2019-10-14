@@ -17,6 +17,7 @@ export interface IQueryRunnerProps {
   headers: Array<{ name: string; value: string }>;
   onSelectVerb: Function;
   sampleQuery: IQuery;
+  graphExplorerMode: Mode;
   actions?: {
     runQuery: Function;
     addRequestHeader: Function;
