@@ -1,8 +1,8 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { setSampleQuery } from '../../../app/services/actions/query-input-action-creators';
-import { SET_SAMPLE_QUERY_SUCCESS } from '../../../app/services/redux-constants';
+import { selectQueryVersion, setSampleQuery } from '../../../app/services/actions/query-input-action-creators';
+import { SELECT_VERSION_SUCCESS, SET_SAMPLE_QUERY_SUCCESS } from '../../../app/services/redux-constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -30,6 +30,21 @@ describe('actions', () => {
       selectedVerb: 'GET',
       sampleUrl: 'https://graph.microsoft.com/v1.0/me/'
     }));
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('creates SELECT_VERSION_SUCCESS when selectQueryVersion is called', () => {
+    const expectedActions = [
+      {
+        type: SELECT_VERSION_SUCCESS,
+        response: 'beta'
+      },
+    ];
+
+    const store = mockStore({ selectedVersion: 'v1.0' });
+
+    // @ts-ignore
+    store.dispatch(selectQueryVersion('beta'));
     expect(store.getActions()).toEqual(expectedActions);
   });
 

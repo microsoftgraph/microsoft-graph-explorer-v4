@@ -1,5 +1,5 @@
-import { sampleQuery } from '../../../app/services/reducers/query-input-reducers';
-import { SET_SAMPLE_QUERY_SUCCESS } from '../../../app/services/redux-constants';
+import { sampleQuery, selectedVersion } from '../../../app/services/reducers/query-input-reducers';
+import { SELECT_VERSION_SUCCESS, SET_SAMPLE_QUERY_SUCCESS } from '../../../app/services/redux-constants';
 
 describe('Query INput Reducer', () => {
   it('should return initial state', () => {
@@ -30,5 +30,19 @@ describe('Query INput Reducer', () => {
     const newState = sampleQuery(initialState, action);
 
     expect(newState).toEqual(query);
+  });
+
+  it('should handle SELECT_VERSION_SUCCESS', () => {
+    const initialState = {};
+
+    const version = 'beta';
+
+    const action = {
+      type: SELECT_VERSION_SUCCESS, response: 'beta'
+    };
+
+    const newState = selectedVersion(initialState, action);
+
+    expect(newState).toEqual(version);
   });
 });
