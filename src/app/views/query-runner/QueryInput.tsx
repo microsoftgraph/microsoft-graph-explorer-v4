@@ -79,7 +79,8 @@ function mapStateToProps(state: any) {
     sampleUrl: state.sampleQuery.sampleUrl,
     selectedVerb: state.sampleQuery.selectedVerb,
     appTheme: state.theme,
-    mode: state.graphExplorerMode
+    mode: state.graphExplorerMode,
+    selectedVersion: state.selectedVersion,
   };
 }
 export default connect(

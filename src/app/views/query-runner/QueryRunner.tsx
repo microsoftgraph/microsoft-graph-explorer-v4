@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { Mode } from '../../../types/action';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
@@ -11,6 +10,7 @@ import {
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import { addRequestHeader } from '../../services/actions/request-headers-action-creators';
+import { GRAPH_URL } from '../../services/graph-constants';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
 import Request from './request/Request';
@@ -31,9 +31,8 @@ export class QueryRunner extends Component<
       ],
       urlVersions: [
         { key: 'v1.0', text: 'v1.0' },
-        { key: 'v2.0', text: 'v2.0' }
+        { key: 'beta', text: 'beta' }
       ],
-      selectedVersion: '',
       url: ''
     };
   }
@@ -92,25 +91,22 @@ export class QueryRunner extends Component<
 
   private handleOnVersionChange = (option?: IDropdownOption) => {
     const { sampleQuery } = this.props;
-    if (option !== undefined) {
-      this.setState({
-        selectedVersion: option.text
+    if (option) {
+      const urlObject: URL = new URL(sampleQuery.sampleUrl);
+      const requestUrl = urlObject.pathname.substr(5).replace(/\/$/, '');
+      const sampleUrl = `${GRAPH_URL}/${option.text + requestUrl + decodeURI(urlObject.search)}`;
+
+      this.props.actions!.selectQueryVersion(option.text);
+      this.props.actions!.setSampleQuery({
+        ...sampleQuery,
+        sampleUrl
       });
-      if (this.props.actions !== undefined) {
-        this.props.actions.setSampleQuery({
-          ...sampleQuery,
-          sampleUrl: sampleQuery.sampleUrl.replace(
-            /v[0-9]+\.[0-9]+/g,
-            option.text
-          )
-        });
-      }
     }
   };
 
   public render() {
-    const { httpMethods, urlVersions, selectedVersion } = this.state;
-    const { graphExplorerMode, isLoadingData, sampleQuery } = this.props;
+    const { httpMethods, urlVersions } = this.state;
+    const { isLoadingData } = this.props;
 
     return (
       <div>
@@ -125,7 +121,6 @@ export class QueryRunner extends Component<
               httpMethods={httpMethods}
               submitting={isLoadingData}
               urlVersions={urlVersions}
-              selectedVersion={selectedVersion}
             />
           </div>
         </div>

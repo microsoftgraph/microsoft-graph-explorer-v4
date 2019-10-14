@@ -5,7 +5,6 @@ export interface IQueryRunnerState {
   httpMethods: Array<{ key: string; text: string }>;
   urlVersions: Array<{ key: string; text: string }>;
   sampleBody?: string;
-  selectedVersion: string;
   url: string;
 }
 
@@ -26,6 +25,7 @@ export interface IQueryRunnerProps {
     runQuery: Function;
     addRequestHeader: Function;
     setSampleQuery: Function;
+    selectQueryVersion: Function;
   };
 }
 

@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken } from './auth-reducers';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
-import { sampleQuery } from './query-input-reducers';
+import { sampleQuery, selectedVersion } from './query-input-reducers';
 import { isLoadingData } from './query-loading-reducers';
 import { queryRunnerError } from './query-runner-error';
 import { graphResponse } from './query-runner-reducers';
@@ -23,10 +23,11 @@ export default combineReducers({
   history,
   isLoadingData,
   queryRunnerError,
-  termsOfUse,
   sampleQuery,
   samples,
+  selectedVersion,
   sidebarProperties,
   snippets,
+  termsOfUse,
   theme,
 });
