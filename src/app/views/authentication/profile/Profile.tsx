@@ -134,7 +134,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
     const tokens: any = {
       boxShadow: 'none',
-      childrenGap: 0,
+      childrenGap: 15,
       padding: 10,
       minWidth: 0
     };
@@ -144,17 +144,24 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       <div className={classes.profile}>
         {minimized &&
           <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-            <Persona {...persona} size={PersonaSize.size40} hidePersonaDetails={minimized} />
+            <Persona {...persona} size={PersonaSize.size40} hidePersonaDetails={true} />
           </ActionButton>
         }
 
         {!minimized &&
           <Card compact={true} tokens={tokens}>
             <Card.Item fill={true}>
-              <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-                <Persona {...persona} coinSize={60} size={PersonaSize.size40} />
-              </ActionButton>
+            <Persona {...persona} coinSize={80} size={PersonaSize.size40} hidePersonaDetails={true} />
             </Card.Item>
+          <Card.Section>
+            <span className={classes.personaText}>
+              {persona.text}
+            </span>
+            <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
+            <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+              More actions
+            </ActionButton>
+          </Card.Section>
           </Card>
         }
       </div>
