@@ -28,7 +28,7 @@ class Banner extends Component<IBanner, {}> {
           }
         }}>
           <Toggle
-            label={messages['using Graph Explorer in preview']}
+            label={messages['back to classic']}
             inlineLabel={true}
             defaultChecked={true}
             onText=' '
