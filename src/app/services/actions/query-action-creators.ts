@@ -41,7 +41,7 @@ export function runQuery(query: IQuery): Function {
         headers: respHeaders
       }));
     }
-    else if (response.status === 403) {
+    else if (response && response.status === 403) {
       dispatch(fetchScopes());
     }
     else {
