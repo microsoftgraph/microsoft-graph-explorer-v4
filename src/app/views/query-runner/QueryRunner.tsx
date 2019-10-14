@@ -1,8 +1,9 @@
-import { IDropdownOption, styled } from 'office-ui-fabric-react';
+import { IDropdownOption } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { Mode } from '../../../types/action';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
@@ -109,7 +110,7 @@ export class QueryRunner extends Component<
 
   public render() {
     const { httpMethods, urlVersions, selectedVersion } = this.state;
-    const { isLoadingData, sampleQuery } = this.props;
+    const { graphExplorerMode, isLoadingData, sampleQuery } = this.props;
 
     return (
       <div>
@@ -128,13 +129,11 @@ export class QueryRunner extends Component<
             />
           </div>
         </div>
-        {sampleQuery.selectedVerb !== 'GET' && (
-          <div className='row'>
-            <div className='col-sm-12 col-lg-12'>
-              <Request handleOnEditorChange={this.handleOnEditorChange} />
-            </div>
+        <div className='row'>
+          <div className='col-sm-12 col-lg-12'>
+            <Request handleOnEditorChange={this.handleOnEditorChange} />
           </div>
-        )}
+        </div>
       </div>
     );
   }
@@ -153,7 +152,8 @@ function mapStateToProps(state: any) {
   return {
     isLoadingData: state.isLoadingData,
     headers: state.headersAdded,
-    sampleQuery: state.sampleQuery
+    sampleQuery: state.sampleQuery,
+    graphExplorerMode: state.graphExplorerMode,
   };
 }
 

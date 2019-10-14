@@ -10,10 +10,11 @@ import { headersAdded } from './request-headers-reducers';
 import { history } from './request-history-reducers';
 import { samples } from './samples-reducers';
 import { snippets } from './snippet-reducer';
+import { termsOfUse } from './terms-of-use-reducer';
 import { theme } from './theme-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
 
-export default combineReducers({ 
+export default combineReducers({
   adaptiveCard,
   authToken,
   graphExplorerMode,
@@ -22,6 +23,7 @@ export default combineReducers({
   history,
   isLoadingData,
   queryRunnerError,
+  termsOfUse,
   sampleQuery,
   samples,
   sidebarProperties,
