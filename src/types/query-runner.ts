@@ -86,5 +86,6 @@ export interface ISampleQueriesProps {
     runQuery: Function;
     setSampleQuery: Function;
     fetchSamples: Function;
+    selectQueryVersion: Function;
   };
 }

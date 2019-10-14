@@ -233,8 +233,10 @@ export class History extends Component<IHistoryProps, any> {
   private onRunQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
 
+    const requestUrl = query.url.replace(GRAPH_URL, '');
+    const queryVersion = requestUrl.substring(1, 5);
     const sampleQuery: IQuery = {
-      sampleUrl: GRAPH_URL + query.url.replace(GRAPH_URL, ''),
+      sampleUrl: GRAPH_URL + requestUrl,
       selectedVerb: query.method,
       sampleBody: query.body,
       sampleHeaders: query.headers
@@ -244,8 +246,9 @@ export class History extends Component<IHistoryProps, any> {
       if (sampleQuery.selectedVerb === 'GET') {
         sampleQuery.sampleBody = JSON.parse('{}');
       }
-      actions.runQuery(sampleQuery);
+      actions.selectQueryVersion(queryVersion);
       actions.setSampleQuery(sampleQuery);
+      actions.runQuery(sampleQuery);
     }
   }
 
@@ -260,14 +263,17 @@ export class History extends Component<IHistoryProps, any> {
   private onViewQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
 
+    const requestUrl = query.url.replace(GRAPH_URL, '');
+    const queryVersion = requestUrl.substring(1, 5);
     const sampleQuery: IQuery = {
-      sampleUrl: GRAPH_URL + query.url.replace(GRAPH_URL, ''),
+      sampleUrl: GRAPH_URL + requestUrl,
       selectedVerb: query.method,
       sampleBody: query.body,
       sampleHeaders: query.headers
     };
 
     if (actions) {
+      actions.selectQueryVersion(queryVersion);
       actions.setSampleQuery(sampleQuery);
       actions.viewHistoryItem({
         body: query.result,

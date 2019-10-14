@@ -240,6 +240,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         const selectedQuery = selection.getSelection()[0] as any;
         if (!selectedQuery) { return; }
 
+        const queryVersion = selectedQuery.requestUrl.substring(1, 5);
         const sampleQuery: IQuery = {
           sampleUrl: GRAPH_URL + selectedQuery.requestUrl,
           selectedVerb: selectedQuery.method,
@@ -248,6 +249,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         };
 
         if (actions) {
+          actions.selectQueryVersion(queryVersion);
           if (sampleQuery.selectedVerb === 'GET') {
             sampleQuery.sampleBody = JSON.parse('{}');
             actions.runQuery(sampleQuery);
