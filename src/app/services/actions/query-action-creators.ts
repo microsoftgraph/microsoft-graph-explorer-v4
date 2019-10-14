@@ -1,7 +1,6 @@
 import { writeData } from '../../../store/cache';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
-import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { queryResponseError } from './error-action-creator';
 import { fetchScopes } from './permissions-action-creator';
 import {
@@ -10,8 +9,6 @@ import {
 } from './query-action-creator-util';
 import { addHistoryItem } from './request-history-action-creators';
 
-const scopes: string[] = DEFAULT_USER_SCOPES.split(' ');
-
 export function runQuery(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = getState().authToken;
@@ -19,7 +16,7 @@ export function runQuery(query: IQuery): Function {
     const createdAt = new Date().toISOString();
 
     if (tokenPresent) {
-      return authenticatedRequest(dispatch, query, scopes).then(async (response: Response) => {
+      return authenticatedRequest(dispatch, query).then(async (response: Response) => {
         await processResponse(response, respHeaders, dispatch, createdAt);
       });
     }
