@@ -44,6 +44,11 @@ export class QueryRunner extends Component<
 
   private handleOnUrlChange = (newQuery = '') => {
     this.setState({ url: newQuery });
+
+    const { queryVersion } = parseSampleUrl(newQuery);
+    if (queryVersion === 'v1.0' || queryVersion === 'beta') {
+      this.props.actions!.setQueryVersion(queryVersion);
+    }
   };
 
   private handleOnBlur = () => {
