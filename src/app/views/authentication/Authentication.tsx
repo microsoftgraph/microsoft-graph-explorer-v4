@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { FormattedMessage } from 'react-intl';
 import { IAuthenticationProps } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import { logIn } from '../../services/graph-client/MsalService';
@@ -36,7 +37,7 @@ export class Authentication extends Component<IAuthenticationProps> {
               role='button'
               iconProps={{ iconName: 'Contact' }}
               onClick={this.signIn}>
-              sign in
+                <FormattedMessage id='sign in' />
               </ActionButton>}
             {tokenPresent &&
               <Profile />}

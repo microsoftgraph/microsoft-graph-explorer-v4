@@ -3,6 +3,7 @@ import {
   PersonaSize, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -96,6 +97,9 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
   public render() {
     const { user } = this.state;
+    const {
+      intl: { messages },
+    }: any = this.props;
 
     const persona: IPersonaSharedProps = {
       imageUrl: user.profileImageUrl,
@@ -112,7 +116,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       items: [
         {
           key: 'office-dev-program',
-          text: 'Office Dev Program',
+          text: messages['Office Dev Program'],
           href: 'https://developer.microsoft.com/en-us/office/dev-program',
           target: '_blank',
           iconProps: {
@@ -121,7 +125,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         },
         {
           key: 'sign-out',
-          text: 'Sign Out',
+          text: messages['sign out'],
           onClick: () => this.handleSignOut(),
           iconProps: {
             iconName: 'SignOut',
@@ -151,7 +155,9 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 // @ts-ignore
 const styledProfile = styled(Profile, authenticationStyles);
+// @ts-ignore
+const IntlProfile = injectIntl(styledProfile);
 export default connect(
   null,
   mapDispatchToProps
-)(styledProfile);
+)(IntlProfile);
