@@ -28,17 +28,17 @@ export class QueryRunner extends Component<
     };
   }
 
-  private handleOnMethodChange = (option?: IDropdownOption) => {
+  private handleOnMethodChange = (method?: IDropdownOption) => {
     const query = { ...this.props.sampleQuery };
     const { actions } = this.props;
-    if (option !== undefined) {
-      query.selectedVerb = option.text;
+    if (method !== undefined) {
+      query.selectedVerb = method.text;
       if (actions) {
         actions.setSampleQuery(query);
       }
 
       // Sets selected verb in App Component
-      this.props.onSelectVerb(option.text);
+      this.props.onSelectVerb(method.text);
     }
   };
 
@@ -80,14 +80,14 @@ export class QueryRunner extends Component<
     }
   };
 
-  private handleOnVersionChange = (option?: IDropdownOption) => {
+  private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
     const { sampleQuery } = this.props;
-    if (option) {
+    if (urlVersion) {
       const urlObject: URL = new URL(sampleQuery.sampleUrl);
       const requestUrl = urlObject.pathname.substr(5).replace(/\/$/, '');
-      const sampleUrl = `${GRAPH_URL}/${option.text + requestUrl + decodeURI(urlObject.search)}`;
+      const sampleUrl = `${GRAPH_URL}/${urlVersion.text + requestUrl + decodeURI(urlObject.search)}`;
 
-      this.props.actions!.setQueryVersion(option.text);
+      this.props.actions!.setQueryVersion(urlVersion.text);
       this.props.actions!.setSampleQuery({
         ...sampleQuery,
         sampleUrl
