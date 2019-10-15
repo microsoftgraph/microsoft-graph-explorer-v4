@@ -87,7 +87,7 @@ export class QueryRunner extends Component<
       const requestUrl = urlObject.pathname.substr(5).replace(/\/$/, '');
       const sampleUrl = `${GRAPH_URL}/${option.text + requestUrl + decodeURI(urlObject.search)}`;
 
-      this.props.actions!.selectQueryVersion(option.text);
+      this.props.actions!.setQueryVersion(option.text);
       this.props.actions!.setSampleQuery({
         ...sampleQuery,
         sampleUrl

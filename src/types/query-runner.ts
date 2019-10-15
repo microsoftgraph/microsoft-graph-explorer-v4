@@ -22,7 +22,7 @@ export interface IQueryRunnerProps {
     runQuery: Function;
     addRequestHeader: Function;
     setSampleQuery: Function;
-    selectQueryVersion: Function;
+    setQueryVersion: Function;
   };
 }
 
@@ -87,6 +87,6 @@ export interface ISampleQueriesProps {
     runQuery: Function;
     setSampleQuery: Function;
     fetchSamples: Function;
-    selectQueryVersion: Function;
+    setQueryVersion: Function;
   };
 }

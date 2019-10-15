@@ -9,7 +9,7 @@ export function setSampleQuery(response: IQuery): IAction {
   };
 }
 
-export function selectQueryVersion(response: IQuery): IAction {
+export function setQueryVersion(response: IQuery): IAction {
   return {
     type: SELECT_VERSION_SUCCESS,
     response,

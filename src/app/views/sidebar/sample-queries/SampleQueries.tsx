@@ -249,7 +249,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         };
 
         if (actions) {
-          actions.selectQueryVersion(queryVersion);
+          actions.setQueryVersion(queryVersion);
           if (sampleQuery.selectedVerb === 'GET') {
             sampleQuery.sampleBody = JSON.parse('{}');
             actions.runQuery(sampleQuery);

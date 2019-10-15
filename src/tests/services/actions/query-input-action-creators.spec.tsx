@@ -1,7 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { selectQueryVersion, setSampleQuery } from '../../../app/services/actions/query-input-action-creators';
+import { setQueryVersion, setSampleQuery } from '../../../app/services/actions/query-input-action-creators';
 import { SELECT_VERSION_SUCCESS, SET_SAMPLE_QUERY_SUCCESS } from '../../../app/services/redux-constants';
 
 const middlewares = [thunk];
@@ -33,7 +33,7 @@ describe('actions', () => {
     expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('creates SELECT_VERSION_SUCCESS when selectQueryVersion is called', () => {
+  it('creates SELECT_VERSION_SUCCESS when setQueryVersion is called', () => {
     const expectedActions = [
       {
         type: SELECT_VERSION_SUCCESS,
@@ -44,7 +44,7 @@ describe('actions', () => {
     const store = mockStore({ selectedVersion: 'v1.0' });
 
     // @ts-ignore
-    store.dispatch(selectQueryVersion('beta'));
+    store.dispatch(setQueryVersion('beta'));
     expect(store.getActions()).toEqual(expectedActions);
   });
 

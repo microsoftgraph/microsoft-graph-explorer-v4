@@ -246,7 +246,7 @@ export class History extends Component<IHistoryProps, any> {
       if (sampleQuery.selectedVerb === 'GET') {
         sampleQuery.sampleBody = JSON.parse('{}');
       }
-      actions.selectQueryVersion(queryVersion);
+      actions.setQueryVersion(queryVersion);
       actions.setSampleQuery(sampleQuery);
       actions.runQuery(sampleQuery);
     }
@@ -273,7 +273,7 @@ export class History extends Component<IHistoryProps, any> {
     };
 
     if (actions) {
-      actions.selectQueryVersion(queryVersion);
+      actions.setQueryVersion(queryVersion);
       actions.setSampleQuery(sampleQuery);
       actions.viewHistoryItem({
         body: query.result,
