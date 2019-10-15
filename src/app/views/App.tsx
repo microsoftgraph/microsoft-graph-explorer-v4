@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
@@ -207,7 +207,10 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, termsOfUse, actions, sidebarProperties }: any = this.props;
+    const { graphExplorerMode, error, termsOfUse, actions, sidebarProperties, intl: { messages } }: any = this.props;
+    const sampleHeaderText = messages['Sample Queries'];
+    // tslint:disable-next-line:no-string-literal
+    const historyHeaderText = messages['History'];
     const { showToggle, showSidebar } = sidebarProperties;
     const language = navigator.language  || 'en-US';
 
@@ -237,7 +240,9 @@ class App extends Component<IAppProps, IAppState> {
                     ariaLabel='Remove sidebar'
                     onClick={this.toggleSidebar}
                   />}
-                  {showSidebar && <Sidebar />}
+                  {showSidebar && <Sidebar
+                    sampleHeaderText={sampleHeaderText}
+                    historyHeaderText={historyHeaderText} />}
                 </div>
               )}
               <div className={layout}>
@@ -337,8 +342,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 };
 
 const StyledApp = styled(App, appStyles);
+const IntlApp = injectIntl(StyledApp);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(StyledApp);
+)(IntlApp);
