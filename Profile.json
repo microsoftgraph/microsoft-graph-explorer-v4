@@ -1,7 +1,7 @@
 {
     "type": "AdaptiveCard",
-    "$sampleData": 
-    {
+    "$odata.type": "#microsoft.graph.user",
+    "$sampleData": {
         "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users/$entity",
         "businessPhones": [
             "+1 412 555 0109"

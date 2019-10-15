@@ -1,0 +1,1526 @@
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#groups",
+    "value": [
+        {
+            "id": "02bd9fd6-8f93-4758-87c3-1fb73740a315",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T18:56:16Z",
+            "creationOptions": [
+                "ExchangeProvisioningFlags:481"
+            ],
+            "description": "Welcome to the HR Taskforce team.",
+            "displayName": "HR Taskforce",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "HRTaskforce@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "HRTaskforce",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_896cf652-b200-4b74-8111-c013f64406cf@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:HRTaskforce@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T18:56:16Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [
+                "Team"
+            ],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-45981654-1196986259-3072312199-363020343",
+            "visibility": "Private",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "06f62f70-9827-4e6e-93ef-8e0f2d9b7b23",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:38:15Z",
+            "creationOptions": [],
+            "description": "Video Production",
+            "displayName": "Video Production",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "VideoProduction@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "VideoProduction",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_16219fd2-fafd-4fea-8084-8b5eaa8c5ad2@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:VideoProduction@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:38:15Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-116797296-1315870759-261025683-595303213",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "0a53828f-36c9-44c3-be3d-99a7fce977ac",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-02T02:54:25Z",
+            "creationOptions": [
+                "YammerProvisioning"
+            ],
+            "description": "Marketing Campaigns",
+            "displayName": "Marketing Campaigns",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "marketingcampaigns@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "marketingcampaigns",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:marketingcampaigns@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-02T02:54:25Z",
+            "resourceBehaviorOptions": [
+                "YammerProvisioning"
+            ],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-173245071-1153644233-2811837886-2893539836",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "1381c058-2ee8-41ce-a005-aae7d91fe086",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-15T01:03:59Z",
+            "creationOptions": [
+                "ProvisionGroupHomepage"
+            ],
+            "description": "Where we share innovative ideas.",
+            "displayName": "Ideas",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "Ideas@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Ideas",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_877ab59c-6bed-4a01-9a7f-ced52a812f57@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:Ideas@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-15T01:03:59Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-327270488-1104031464-3886679456-2262835161",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "13be6971-79db-4f33-9d41-b25589ca25af",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T18:56:22Z",
+            "creationOptions": [
+                "ExchangeProvisioningFlags:481"
+            ],
+            "description": "Welcome to the BizDev team.",
+            "displayName": "Business Development",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "BusinessDevelopment@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "BusinessDevelopment",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_2e92576b-c282-48ae-a7f2-be31d202333b@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:BusinessDevelopment@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T18:56:22Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [
+                "Team"
+            ],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-331245937-1328773595-1437745565-2938489481",
+            "visibility": "Private",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "14d0da09-90ed-4ec6-a7b1-8e234e542fff",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:36:54Z",
+            "creationOptions": [],
+            "description": "Quality Assurance group forum to discus bugs, fixes, and obstacles to releasing the best products in the marketplace.",
+            "displayName": "Quality Assurance",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "qualityassurance@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "qualityassurance",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_7ec3c7a4-a39c-43c9-b4eb-c9d7bd79d0f0@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:qualityassurance@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:36:54Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-349231625-1321636077-596554151-4281291854",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "1c602d17-dd54-416b-b172-f3d070df0d64",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-14T16:09:27Z",
+            "creationOptions": [],
+            "description": "New Managers training course for March 2017",
+            "displayName": "New Managers March 2017",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "newMan201703@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "newMan201703",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:newMan201703@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-14T16:09:27Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-476065047-1097588052-3505615537-1678630768",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "1e770bc2-3c5f-487f-871f-16fbdf1c8ed8",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:36:31Z",
+            "creationOptions": [],
+            "description": "Activewear events Channel ... everything you need to know all in one place. Announcements, Events, Information, and News.",
+            "displayName": "Activewear",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "Activewear@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Activewear",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:Activewear@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:36:31Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-511118274-1216298079-4212531079-3633192159",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "26496b80-7c41-4e72-bcda-12aec3c7ad8b",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:37:35Z",
+            "creationOptions": [],
+            "description": "An environment for collaboration for current and future social campaigns.",
+            "displayName": "Social Campaigns",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "socialcampaigns@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "socialcampaigns",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_a0eb828f-bb26-439f-a581-4ed007edd6f2@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:socialcampaigns@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:37:35Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-642345856-1316125761-2920471228-2343421891",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "278cd687-5121-43cd-b397-ec45f432c4f8",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:37:23Z",
+            "creationOptions": [],
+            "description": "Central area for discussion and collaboration for the Software Development Team.",
+            "displayName": "Software Development",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "softwaredevelopment@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "softwaredevelopment",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:softwaredevelopment@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:37:23Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-663541383-1137529121-1173133235-4173607668",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "33b43a5b-87d6-41ec-91f8-a2610048105f",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-03T02:56:11Z",
+            "creationOptions": [],
+            "description": "A group to synthesize, analyze, and synchronize our marketing efforts.",
+            "displayName": "Marketing",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "Marketing@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Marketing",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_687d763f-13d6-4185-8ac7-67eb8d4eee77@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:Marketing@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-03T02:56:11Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-867449435-1106020310-1638070417-1594902528",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "56e1d078-2ec9-40aa-8f24-042d393c79cd",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:37:05Z",
+            "creationOptions": [],
+            "description": "IT Department",
+            "displayName": "IT Department",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "itdepartment@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "itdepartment",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_f43313fa-4693-4856-848a-94eb7a78814b@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:itdepartment@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:37:05Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-1457639544-1084894921-755246223-3447274553",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "5b22aa31-973b-4457-8d41-53c0f06117b9",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-04T15:35:22Z",
+            "creationOptions": [],
+            "description": null,
+            "displayName": "Northwind Traders",
+            "groupTypes": [],
+            "isAssignableToRole": null,
+            "mail": "Northwind@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Northwind",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:Northwind@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-04T15:35:22Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-1528998449-1146591035-3226681741-3105317360",
+            "visibility": null,
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "5c9f8694-89f3-4a5a-84ff-10c18315fbff",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:36:36Z",
+            "creationOptions": [],
+            "description": "A collaboration area for the Product Launch team.",
+            "displayName": "Product Launch",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "productlaunch@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "productlaunch",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_098e04ee-a54a-4cc3-8e45-beafbbe32deb@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:productlaunch@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:36:36Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-1553958548-1247447539-3239116676-4294645123",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "733b514d-790b-4542-9efd-1558644d8b1e",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2018-03-26T21:58:55Z",
+            "creationOptions": [
+                "ExchangeProvisioningFlags:461",
+                "classAssignments"
+            ],
+            "description": "Negotiation For Beginners training",
+            "displayName": "Negotiation For Beginners",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "NegotiationForBeginners@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "NegotiationForBeginners",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_e0557f9f-2f2d-4af2-ba87-dc3a38e25c33@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:NegotiationForBeginners@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2018-03-26T21:58:55Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-1933267277-1161984267-1477836190-512445796",
+            "visibility": "HiddenMembership",
+            "extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType": "Section",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "7e4ec76c-8276-43ef-ba10-9aaa197cb212",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2018-03-26T21:59:18Z",
+            "creationOptions": [
+                "ExchangeProvisioningFlags:461",
+                "classAssignments"
+            ],
+            "description": "Leadership 101 training",
+            "displayName": "Leadership 101",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "Leadership101@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Leadership101",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:Leadership101@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2018-03-26T21:59:18Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-2119092076-1139769974-2862223546-313687065",
+            "visibility": "HiddenMembership",
+            "extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType": "Section",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "7fb15d45-c47d-4364-b6e6-96e649d635f5",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:38:04Z",
+            "creationOptions": [],
+            "description": "Discussion area for Operations and Facilities employees.",
+            "displayName": "Operations and Facilities",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "operationsandfacilities@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "operationsandfacilities",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_cedaf914-06e2-4eac-b1b1-55f829909ea0@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:operationsandfacilities@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:38:04Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-2142330181-1130677373-3868649142-4113946185",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "801f2093-de7e-4883-a786-8a5f30874ff4",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2018-03-26T21:59:41Z",
+            "creationOptions": [
+                "ExchangeProvisioningFlags:461",
+                "classAssignments"
+            ],
+            "description": "Growing Future Leaders training",
+            "displayName": "Growing Future Leaders",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "GrowingFutureLeaders@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "GrowingFutureLeaders",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:GrowingFutureLeaders@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2018-03-26T21:59:41Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-2149523603-1216601726-1602913959-4098852656",
+            "visibility": "HiddenMembership",
+            "extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType": "Section",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "8090c93e-ba7c-433e-9f39-08c7ba07c0b3",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T18:56:29Z",
+            "creationOptions": [
+                "ExchangeProvisioningFlags:481"
+            ],
+            "description": "Welcome to the team that we've assembled to launch our product.",
+            "displayName": "X1050 Launch Team",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "X1050LaunchTeam@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "X1050LaunchTeam",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_676f0eb9-321e-469c-9fbc-6549df9f9aa0@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:X1050LaunchTeam@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T18:56:29Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [
+                "Team"
+            ],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-2156972350-1128184444-3339205023-3015706554",
+            "visibility": "Private",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "80b12dc5-31d5-4094-98bb-c5eb3ab7fb77",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-04T15:35:22Z",
+            "creationOptions": [],
+            "description": null,
+            "displayName": "Legal Team",
+            "groupTypes": [],
+            "isAssignableToRole": null,
+            "mail": "Legal2@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Legal",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:Legal2@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-04T15:35:22Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-2159095237-1083453909-3955604376-2012985146",
+            "visibility": null,
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "832f20ff-f7a5-4e44-be9d-02a33fe18938",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:37:11Z",
+            "creationOptions": [],
+            "description": "Telemedicine Workflow",
+            "displayName": "Telemedicine Workflow",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "telemedicineworkflow@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "telemedicineworkflow",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_179cc0a0-428c-4d9d-8b9e-be34dfc06646@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:telemedicineworkflow@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:37:11Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-2200903935-1313142693-2734857662-948560191",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "8540ce78-1d6e-4e1f-957a-15507a636988",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:36:59Z",
+            "creationOptions": [],
+            "description": "Product Launch Event",
+            "displayName": "Product Launch Event",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "productlaunchevent@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "productlaunchevent",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:productlaunchevent@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:36:59Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-2235616888-1310661998-1343584917-2288608122",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "8da06639-1730-4ad1-830a-29a5fe506104",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:38:09Z",
+            "creationOptions": [],
+            "description": "It Support Group - Feel free to ask questions and for help with your IT needs. We're here to serve you!",
+            "displayName": "IT Support",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "itsupport@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "itsupport",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:itsupport@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:38:09Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-2376099385-1255216944-2770930307-73486590",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "914dd61c-09ae-4ce5-8452-6d43606d38b0",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-13T22:09:35Z",
+            "creationOptions": [],
+            "description": "Product Launch follow-up",
+            "displayName": "Product Launch follow-up",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "ProductLaunchfollow-up@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "ProductLaunchfollow-up",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:ProductLaunchfollow-up@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-13T22:09:35Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-2437797404-1290078638-1131238020-2956488032",
+            "visibility": "Private",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "94cb7dd0-cb3b-49e0-ad15-4efeb3c7d3e9",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-03T02:56:29Z",
+            "creationOptions": [],
+            "description": "Finance departments central collaboration forum.",
+            "displayName": "Finance",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "Finance@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Finance",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_c8e21461-8622-439e-b10c-495754b52d6c@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:Finance@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-03T02:56:29Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-2496363984-1239468859-4266530221-3922970547",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "9a6a616e-5637-4306-b1fe-bceeaa750873",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:36:48Z",
+            "creationOptions": [],
+            "description": "A collaborative forum for the Engineering department.",
+            "displayName": "Engineering",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "engineering@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "engineering",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_7c86deae-0eb2-4214-a328-fb47c16e78d9@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:engineering@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:36:48Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-2590663022-1124488759-4005363377-1929934250",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "9d036600-daf4-477a-bdd3-00e9db13214f",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-04T15:35:22Z",
+            "creationOptions": [],
+            "description": null,
+            "displayName": "Tailspin Toys",
+            "groupTypes": [],
+            "isAssignableToRole": null,
+            "mail": "Tailspin@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Tailspin",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:Tailspin@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-04T15:35:22Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-2634245632-1199233780-3909145533-1327567835",
+            "visibility": null,
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "a258a179-27d0-4af1-bb17-9a9d9669f7ef",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-02T02:54:31Z",
+            "creationOptions": [
+                "YammerProvisioning"
+            ],
+            "description": "A group that collaborates about onboarding and other HR-related topics.",
+            "displayName": "Human Resources",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "humanresources@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "humanresources",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_7dae49c8-308b-4974-8085-e3044e93a67f@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:humanresources@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-02T02:54:31Z",
+            "resourceBehaviorOptions": [
+                "YammerProvisioning"
+            ],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-2723717497-1257318352-2644121531-4025969046",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "a8873b19-1b42-4931-b923-234d7a00c5d8",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-03T02:56:24Z",
+            "creationOptions": [],
+            "description": "Electronic events Channel ... everything you need to know all in one place. Announcements, Events, Information, and News.",
+            "displayName": "Electronic Events",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "ElectronicEvents@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "ElectronicEvents",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_81f25130-103a-4077-918a-f3336f7b2c5d@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:ElectronicEvents@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-03T02:56:24Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-2827434777-1227955010-1294148537-3636789370",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "ae908c30-a360-4264-9bb8-ca0c5a19d05c",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-03T02:56:47Z",
+            "creationOptions": [],
+            "description": "Legal departments central collaboration forum.",
+            "displayName": "Legal",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "Legal@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Legal",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_cfda6dca-8209-4d4f-adad-99743aff19cf@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:Legal@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-03T02:56:47Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-2928708656-1113891680-214612123-1557141850",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "bb765cc0-235c-425b-aed2-64826dab6fd8",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:36:42Z",
+            "creationOptions": [],
+            "description": "A group to synthesize, analyze, and synchronize our online marketing efforts.",
+            "displayName": "Online Marketing",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "onlinemarketing@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "onlinemarketing",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_3dbd9e00-c625-47af-94fd-afe2706fb73b@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:onlinemarketing@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:36:42Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-3145096384-1113269084-2187645614-3631197037",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "be29b3cb-f58e-4c83-9f58-ed082c317c2d",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2018-03-26T21:58:14Z",
+            "creationOptions": [
+                "ExchangeProvisioningFlags:461",
+                "classAssignments"
+            ],
+            "description": "Advanced Presentation Skills training",
+            "displayName": "Advanced Presentation Skills",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "AdvancedPresentationSkills@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "AdvancedPresentationSkills",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:AdvancedPresentationSkills@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2018-03-26T21:58:14Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-3190404043-1283716494-149772447-763113772",
+            "visibility": "HiddenMembership",
+            "extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType": "Section",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "c333f4a9-7acf-452c-81b2-2748fa5baece",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:37:46Z",
+            "creationOptions": [],
+            "description": "Global Trainings Resources forum used to respond to employee trainging questions, and present new policies, procedures, and protocols.",
+            "displayName": "Employee Training",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "employeetraining@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "employeetraining",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:employeetraining@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:37:46Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-3274962089-1160542927-1210561153-3467533306",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "cc92cd0d-3d9e-4bc5-9453-109610353952",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-03T02:56:17Z",
+            "creationOptions": [],
+            "description": "IT",
+            "displayName": "IT",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "IT@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "IT",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:IT@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-03T02:56:17Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-3432172813-1271217566-2517652372-1379480848",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "d00ad3ee-9f6b-48df-a0a8-1342083ebed4",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-04T15:35:23Z",
+            "creationOptions": [],
+            "description": null,
+            "displayName": "All Employees",
+            "groupTypes": [],
+            "isAssignableToRole": null,
+            "mail": "Employees@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Employees",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:Employees@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-04T15:35:23Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-3490370542-1222614891-1108584608-3569237512",
+            "visibility": null,
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "d174fcb7-6569-4f8a-84c2-907d34826d4e",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:37:18Z",
+            "creationOptions": [],
+            "description": "Central group for the Research and Development team to collaborate across projects.",
+            "displayName": "Research and Development",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "researchanddevelopment@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "researchanddevelopment",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:researchanddevelopment@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:37:18Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-3514105015-1334469993-2106638980-1315799604",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "d17a5f86-57f4-48f8-87a0-79761dc8e706",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:36:25Z",
+            "creationOptions": [],
+            "description": "Fashion events Channel ... everything you need to know all in one place. Announcements, Events, Information, and News.",
+            "displayName": "Fashion Events",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "FashionEvents@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "FashionEvents",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_c1e5444e-12d8-43d3-96b1-f2f66559ef58@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:FashionEvents@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:36:25Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-3514457990-1224234996-1987682439-115853341",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "d514c104-6351-4d20-a029-f4fa8a6badde",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-04T15:35:23Z",
+            "creationOptions": [],
+            "description": null,
+            "displayName": "Sales Team",
+            "groupTypes": [],
+            "isAssignableToRole": null,
+            "mail": "Sales2@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Sales",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:Sales2@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-04T15:35:23Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-3574907140-1293968209-4210305440-3735907210",
+            "visibility": null,
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "d8e62a27-848b-437d-8cf1-a21f0e410ed7",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-04T15:35:23Z",
+            "creationOptions": [],
+            "description": null,
+            "displayName": "Executives",
+            "groupTypes": [],
+            "isAssignableToRole": null,
+            "mail": "Executives@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Executives",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:Executives@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-04T15:35:23Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-3638962727-1132299403-530772364-3608035598",
+            "visibility": null,
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "e0a409e4-64c9-42d3-a291-326eca93a9fe",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:37:30Z",
+            "creationOptions": [],
+            "description": "A forum for the Project Management team to collaborate and discuss tasks, challenges, and victories across past, present, and future projects.",
+            "displayName": "Project Management",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "projectmanagement@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "projectmanagement",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:projectmanagement@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:37:30Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-3768846820-1121150153-1848807842-4272526282",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "e4ae9ed6-a509-48ae-b0a8-ae590bd6153b",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-03T02:56:52Z",
+            "creationOptions": [],
+            "description": "HR Channel ... everything you need to know all in one place.",
+            "displayName": "HR",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "HR@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "HR",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_1925e96a-9148-41b6-8f40-bda2a081d441@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:HR@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-03T02:56:52Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-3836649174-1219405065-1504618672-991286795",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "e88d3b5c-a594-4ee8-a593-82dc016a6f75",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-03T02:56:41Z",
+            "creationOptions": [],
+            "description": "A general forum for the Retail Team.",
+            "displayName": "Retail",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "Retail@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Retail",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_1afbd117-4852-49b0-be9a-b51e6d4136e0@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:Retail@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-03T02:56:41Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-3901569884-1323869588-3699544997-1970235905",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "e8a654a1-f61f-408a-8241-a8ca0ce050c7",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-04T15:35:22Z",
+            "creationOptions": [],
+            "description": null,
+            "displayName": "Finance Team",
+            "groupTypes": [],
+            "isAssignableToRole": null,
+            "mail": "Finance2@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Finance",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:Finance2@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-04T15:35:22Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-3903214753-1082848799-3400024450-3343966220",
+            "visibility": null,
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "ef18b112-d6dc-4b56-8cee-85f82dbe8a7d",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2018-03-24T00:01:55Z",
+            "creationOptions": [
+                "ExchangeProvisioningFlags:461",
+                "classAssignments"
+            ],
+            "description": "Presentation Skills 101 training",
+            "displayName": "Presentation Skills 101",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "PresentationSkills101@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "PresentationSkills101",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:PresentationSkills101@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2018-03-24T00:01:55Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-4011372818-1263982300-4169526924-2106244653",
+            "visibility": "HiddenMembership",
+            "extension_fe2174665583431c953114ff7268b7b3_Education_ObjectType": "Section",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "f2861ed7-abca-4556-bf0c-39ddc717ad81",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:37:41Z",
+            "creationOptions": [],
+            "description": "A general forum for the Marketing Team.",
+            "displayName": "Marketing Team",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "marketingteam@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "marketingteam",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_bc953c23-3624-4a53-9d2c-b3456404c405@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:marketingteam@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:37:41Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-4068875991-1163307978-3711503551-2175604679",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "f795caea-121d-49c7-8ae6-a95623add8aa",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:37:58Z",
+            "creationOptions": [],
+            "description": "Official collaboration area for Senior Leadership.",
+            "displayName": "Senior Leadership Team",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "seniorleadershipteam@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "seniorleadershipteam",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_9f96bd57-0eac-432f-958f-9bd76659458b@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:seniorleadershipteam@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:37:58Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-4153789162-1237783069-1453975178-2866326819",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "f9cd2c32-9c65-4e6e-8881-03b90b871a67",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-04T15:35:22Z",
+            "creationOptions": [],
+            "description": null,
+            "displayName": "Project Falcon",
+            "groupTypes": [],
+            "isAssignableToRole": null,
+            "mail": "ProjectFalcon@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "ProjectFalcon",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:ProjectFalcon@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-04T15:35:22Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": false,
+            "securityIdentifier": "S-1-12-1-4190972978-1315871845-3104014728-1729791755",
+            "visibility": null,
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "fba674a5-8b3d-4017-be19-21074b7a3e37",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-07-31T17:37:52Z",
+            "creationOptions": [],
+            "description": "Finance and Accounting departments central collaboration forum.",
+            "displayName": "Finance and Accounting",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "financeandaccounting@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "financeandaccounting",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SMTP:financeandaccounting@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-07-31T17:37:52Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-4221990053-1075284797-119609790-926841419",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        },
+        {
+            "id": "fec200ce-a7a9-42cd-9717-3a3179a99b72",
+            "deletedDateTime": null,
+            "classification": null,
+            "createdDateTime": "2017-09-03T02:56:35Z",
+            "creationOptions": [],
+            "description": "A general forum for the Sales Team.",
+            "displayName": "Sales",
+            "groupTypes": [
+                "Unified"
+            ],
+            "isAssignableToRole": null,
+            "mail": "Sales@M365x214355.onmicrosoft.com",
+            "mailEnabled": true,
+            "mailNickname": "Sales",
+            "onPremisesLastSyncDateTime": null,
+            "onPremisesSecurityIdentifier": null,
+            "onPremisesSyncEnabled": null,
+            "preferredDataLocation": null,
+            "proxyAddresses": [
+                "SPO:SPO_aaccff45-cf55-4824-a64a-e7c94a51e5c6@SPO_dcd219dd-bc68-4b9b-bf0b-4a33a796be35",
+                "SMTP:Sales@M365x214355.onmicrosoft.com"
+            ],
+            "renewedDateTime": "2017-09-03T02:56:35Z",
+            "resourceBehaviorOptions": [],
+            "resourceProvisioningOptions": [],
+            "securityEnabled": true,
+            "securityIdentifier": "S-1-12-1-4274127054-1120774057-825890711-1922804089",
+            "visibility": "Public",
+            "onPremisesProvisioningErrors": []
+        }
+    ]
+}

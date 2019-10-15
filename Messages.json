@@ -1,0 +1,64 @@
+{
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "$odata.type": "#microsoft.graph.message",
+    "body": [
+        {
+            "type": "Container",
+            "$data": "{value}",
+            "items": [
+                {
+                    "type": "ColumnSet",
+                    "columns": [
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "TextBlock",
+                                    "text": "{from.emailAddress.name}",
+                                    "size": "Medium",
+                                    "weight": "{if(isRead, 'normal', 'bolder')}"
+                                },
+                                {
+                                    "type": "TextBlock",
+                                    "text": "{subject}",
+                                    "spacing": "None",
+                                    "size": "Small",
+                                    "weight": "{if(isRead, 'normal', 'bolder')}"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Column",
+                            "width": "auto",
+                            "items": [
+                                {
+                                    "type": "TextBlock",
+                                    "text": "{if(hasAttachments, '📎', '')} {if(importance == 'normal', '', '❗')} {if(flag.flagStatus == 'flagged', '🚩', '')}",
+                                    "horizontalAlignment": "Right"
+                                },
+                                {
+                                    "type": "TextBlock",
+                                    "text": "{{DATE({sentDateTime}, COMPACT)}} {{TIME({sentDateTime})}}",
+                                    "spacing": "None",
+                                    "size": "Small"
+                                }
+                            ],
+                            "verticalContentAlignment": "Center"
+                        }
+                    ]
+                },
+                {
+                    "type": "TextBlock",
+                    "text": "{bodyPreview}",
+                    "isVisible": false,
+                    "size": "Small",
+                    "isSubtle": true
+                }
+            ],
+            "separator": true
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+}

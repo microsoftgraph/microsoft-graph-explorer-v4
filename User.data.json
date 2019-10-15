@@ -1,0 +1,14 @@
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users/$entity",
+    "businessPhones": [],
+    "displayName": "Conf Room Adams",
+    "givenName": null,
+    "jobTitle": null,
+    "mail": "Adams@M365x214355.onmicrosoft.com",
+    "mobilePhone": null,
+    "officeLocation": null,
+    "preferredLanguage": null,
+    "surname": null,
+    "userPrincipalName": "Adams@M365x214355.onmicrosoft.com",
+    "id": "6e7b768e-07e2-4810-8459-485f84f8f204"
+}

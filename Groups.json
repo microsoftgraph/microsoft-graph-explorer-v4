@@ -1,0 +1,56 @@
+{
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "$odata.type": "#microsoft.graph.group",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "$data": "{value}",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "{displayName}",
+                            "size": "Medium",
+                            "weight": "Bolder"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "{description}",
+                            "spacing": "Small",
+                            "wrap": true,
+                            "maxLines": 2
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "{visibility} Group ({if(visibility == 'Public', 'General', 'Confidential')})",
+                            "spacing": "Small",
+                            "size": "Small"
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [
+                        {
+                            "type": "ActionSet",
+                            "actions": [
+                                {
+                                    "type": "Action.OpenUrl",
+                                    "title": "📩",
+                                    "url": "mailto:{mail}"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "separator": true
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+}

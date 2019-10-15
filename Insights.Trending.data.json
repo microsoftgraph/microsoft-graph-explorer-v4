@@ -1,0 +1,189 @@
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('48d31887-5fad-4d73-a9f5-3c356e68a038')/insights/trending",
+    "value": [
+        {
+            "id": "AQm7WFq6H8FBgSVp2iZDcKBI3WhyDnIVQaNSNdsYiRi-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJu1hauh_BQYEladomQ3CgAQ",
+            "weight": 743614.6241886764,
+            "resourceVisualization": {
+                "title": "Engineering Excellence",
+                "type": "spsite",
+                "mediaType": "application/octet-stream",
+                "previewImageUrl": "https://m365x214355.sharepoint.com/_api/v2.0/drives/b!CbtYWrofwUGBJWnaJkNwoEjdaHIOchVBo1I12xiJGL4AAAAAAAAAAAAAAAAAAAAA/items/01ZKFJJWIAAAAAAAAAAAAAAAAAAAAAAAAA/thumbnails/0/small/thumbnailContent",
+                "previewText": "\t\r\n\t  Engineering Excellence\r\n\t\r\n   \r\n  \r\n\r\n\r\n\r\n\r\n\r\n\t\tHome\r\n\t \r\n\r\n\r\n\r\n\r\n\r\n\r\n Documents\r\n\r\nType \r\n  \r\nName \r\n  \r\n\r\nThere are no items to show in this view of the \"Documents\" document library. \r\n\r\nFollow\r\njavascript: SP.SOD.executeFunc('followingc",
+                "containerWebUrl": "https://m365x214355.sharepoint.com",
+                "containerDisplayName": "Engineering Excellence",
+                "containerType": "Site"
+            },
+            "resourceReference": {
+                "webUrl": "https://m365x214355.sharepoint.com/ee",
+                "id": "sites/m365x214355.sharepoint.com,5a58bb09-1fba-41c1-8125-69da264370a0,7268dd48-720e-4115-a352-35db188918be",
+                "type": "microsoft.graph.siteItem"
+            }
+        },
+        {
+            "id": "AU5E5cHYEtNDlrHy9mVZ71jwvYGxgJaISYH3okruSv1qAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACGX3rR9Ff4SIegeXYdyOcGAg",
+            "weight": 568407.3144158383,
+            "resourceVisualization": {
+                "title": "Fashion Events",
+                "type": "spsite",
+                "mediaType": "application/octet-stream",
+                "previewImageUrl": "https://m365x214355.sharepoint.com/_api/v2.0/drives/b!TkTlwdgS00OWsfL2ZVnvWPC9gbGAlohJgfeiSu5K_WoAAAAAAAAAAAAAAAAAAAAA/items/01LOL2YFQAAAAAAAAAAAAAAAAAAAAAAAAA/thumbnails/0/small/thumbnailContent",
+                "previewText": "Fashion events Channel ... everything you need to know all in one place. Announcements, Events, Information, and News.",
+                "containerDisplayName": "Fashion Events",
+                "containerType": "Site"
+            },
+            "resourceReference": {
+                "webUrl": "https://m365x214355.sharepoint.com/sites/FashionEvents",
+                "id": "sites/m365x214355.sharepoint.com,c1e5444e-12d8-43d3-96b1-f2f66559ef58,b181bdf0-9680-4988-81f7-a24aee4afd6a",
+                "type": "microsoft.graph.siteItem"
+            }
+        },
+        {
+            "id": "AQm7WFq6H8FBgSVp2iZDcKBI3WhyDnIVQaNSNdsYiRi-FWj4zWlTdkSl85RS_Ja_MCMtBYOrH7NFvcN4xq7tS4IJu1hauh_BQYEladomQ3CgAQ",
+            "weight": 292.3233569276693,
+            "resourceVisualization": {
+                "title": "How To Use This Library",
+                "type": "Web",
+                "mediaType": "text/html",
+                "previewImageUrl": "https://m365x214355.sharepoint.com/_api/v2.0/drives/b!CbtYWrofwUGBJWnaJkNwoEjdaHIOchVBo1I12xiJGL4VaPjNaVN2RKXzlFL8lr8w/items/01ZKFJJWJDFUCYHKY7WNC33Q3YY2XO2S4C/thumbnails/0/small/thumbnailContent",
+                "previewText": "How To Use This Library \r\n  \r\n\r\n\r\n\r\n\r\n\r\n\t\tHow To Use This Library\r\n\t \r\n\r\n\r\nHow to use this wiki library\r\nYou can use this wiki library to share knowledge, brainstorm ideas, collaborate with your team on a design, create an instruction guide, build",
+                "containerWebUrl": "https://m365x214355.sharepoint.com/ee/SitePages/Forms/ByAuthor.aspx",
+                "containerDisplayName": "Engineering Excellence"
+            },
+            "resourceReference": {}
+        },
+        {
+            "id": "AfCw6a52_31Jp5XlxlToCf_wvYGxgJaISYH3okruSv1qzTu3YwleXUuKVg7xokbqXsNW9AHlWDNAqS2AQ2YuFjd4zkCFbh0fTpV6FVB6Y2mIAg",
+            "weight": 0.3019269456534026,
+            "resourceVisualization": {
+                "title": "Picture1",
+                "type": "Image",
+                "mediaType": "application/octet-stream",
+                "previewImageUrl": "https://m365x214355.sharepoint.com/_api/v2.0/drives/b!8LDprnb_fUmnleXGVOgJ__C9gbGAlohJgfeiSu5K_WrNO7djCV5dS4pWDvGiRupe/items/015SAUG4ODK32ADZKYGNAKSLMAINTC4FRX/thumbnails/0/small/thumbnailContent",
+                "previewText": "",
+                "containerWebUrl": "https://m365x214355.sharepoint.com/sites/productlaunchevent/Shared Documents/Forms/AllItems.aspx",
+                "containerDisplayName": "Product Launch Event",
+                "containerType": "Site"
+            },
+            "resourceReference": {
+                "webUrl": "https://m365x214355.sharepoint.com/sites/productlaunchevent/Shared Documents/Forms/DispForm.aspx?ID=3",
+                "id": "drives/b!8LDprnb_fUmnleXGVOgJ__C9gbGAlohJgfeiSu5K_WrNO7djCV5dS4pWDvGiRupe/items/015SAUG4ODK32ADZKYGNAKSLMAINTC4FRX",
+                "type": "microsoft.graph.driveItem"
+            }
+        },
+        {
+            "id": "AfCw6a52_31Jp5XlxlToCf_wvYGxgJaISYH3okruSv1qzTu3YwleXUuKVg7xokbqXvkIeNHHel9GsKzWV7ntYDt4zkCFbh0fTpV6FVB6Y2mIAg",
+            "weight": 0.3019243079484224,
+            "resourceVisualization": {
+                "title": "tablet",
+                "type": "Image",
+                "mediaType": "application/octet-stream",
+                "previewImageUrl": "https://m365x214355.sharepoint.com/_api/v2.0/drives/b!8LDprnb_fUmnleXGVOgJ__C9gbGAlohJgfeiSu5K_WrNO7djCV5dS4pWDvGiRupe/items/015SAUG4PZBB4NDR32L5DLBLGWK6462YB3/thumbnails/0/small/thumbnailContent",
+                "previewText": "",
+                "containerWebUrl": "https://m365x214355.sharepoint.com/sites/productlaunchevent/Shared Documents/Forms/AllItems.aspx",
+                "containerDisplayName": "Product Launch Event",
+                "containerType": "Site"
+            },
+            "resourceReference": {
+                "webUrl": "https://m365x214355.sharepoint.com/sites/productlaunchevent/Shared Documents/Forms/DispForm.aspx?ID=2",
+                "id": "drives/b!8LDprnb_fUmnleXGVOgJ__C9gbGAlohJgfeiSu5K_WrNO7djCV5dS4pWDvGiRupe/items/015SAUG4PZBB4NDR32L5DLBLGWK6462YB3",
+                "type": "microsoft.graph.driveItem"
+            }
+        },
+        {
+            "id": "AfCw6a52_31Jp5XlxlToCf_wvYGxgJaISYH3okruSv1qzTu3YwleXUuKVg7xokbqXvd1ebfw4RVNpJIdGzVF2OB4zkCFbh0fTpV6FVB6Y2mIAg",
+            "weight": 0.30192008771631407,
+            "resourceVisualization": {
+                "title": "PK388",
+                "type": "Image",
+                "mediaType": "application/octet-stream",
+                "previewImageUrl": "https://m365x214355.sharepoint.com/_api/v2.0/drives/b!8LDprnb_fUmnleXGVOgJ__C9gbGAlohJgfeiSu5K_WrNO7djCV5dS4pWDvGiRupe/items/015SAUG4PXOV43P4HBCVG2JEQ5DM2ULWHA/thumbnails/0/small/thumbnailContent",
+                "previewText": "",
+                "containerWebUrl": "https://m365x214355.sharepoint.com/sites/productlaunchevent/Shared Documents/Forms/AllItems.aspx",
+                "containerDisplayName": "Product Launch Event",
+                "containerType": "Site"
+            },
+            "resourceReference": {
+                "webUrl": "https://m365x214355.sharepoint.com/sites/productlaunchevent/Shared Documents/Forms/DispForm.aspx?ID=1",
+                "id": "drives/b!8LDprnb_fUmnleXGVOgJ__C9gbGAlohJgfeiSu5K_WrNO7djCV5dS4pWDvGiRupe/items/015SAUG4PXOV43P4HBCVG2JEQ5DM2ULWHA",
+                "type": "microsoft.graph.driveItem"
+            }
+        },
+        {
+            "id": "AdyW4uHsmlhAvQUrVLUpBo2d-OSs6oEGQLcSbjWeWoqLHchw7d_-G0qh8fROOcW7eMU40IXkIr5HlySIq2YahL4NzZLMnj3FS5RTEJYQNTlSAg",
+            "weight": 0.3019037354311822,
+            "resourceVisualization": {
+                "title": "Computer Systems Information",
+                "type": "PowerPoint",
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                "previewImageUrl": "https://m365x214355.sharepoint.com/_api/v2.0/drives/b!3Jbi4eyaWEC9BStUtSkGjZ345KzqgQZAtxJuNZ5aiosdyHDt3_4bSqHx9E45xbt4/items/01JHPWRI6FHDIILZBCXZDZOJEIVNTBVBF6/thumbnails/0/small/thumbnailContent",
+                "previewText": "Computer systems information\r\nUser Guide to R&D systems\r\n11 August 2015\r\nToby Nixon, Project Lead\r\nEmotional Connection\r\nEmotional connection is key \r\nThe right connection inspires brand loyalty\r\nIt’s time to break new ground\r\n\r\nChloe - can you add in a s",
+                "containerWebUrl": "https://m365x214355.sharepoint.com/sites/IT/Shared Documents/Forms/AllItems.aspx",
+                "containerDisplayName": "IT",
+                "containerType": "Site"
+            },
+            "resourceReference": {
+                "webUrl": "https://m365x214355.sharepoint.com/sites/IT/_layouts/15/Doc.aspx?sourcedoc=%7B85D038C5-22E4-47BE-9724-88AB661A84BE%7D&file=Computer%20Systems%20Information.pptx&action=edit&mobileredirect=true&DefaultItemOpen=1",
+                "id": "drives/b!3Jbi4eyaWEC9BStUtSkGjZ345KzqgQZAtxJuNZ5aiosdyHDt3_4bSqHx9E45xbt4/items/01JHPWRI6FHDIILZBCXZDZOJEIVNTBVBF6",
+                "type": "microsoft.graph.driveItem"
+            }
+        },
+        {
+            "id": "AdyW4uHsmlhAvQUrVLUpBo2d-OSs6oEGQLcSbjWeWoqLHchw7d_-G0qh8fROOcW7eCid_dl96JJCkDug1JcONroNzZLMnj3FS5RTEJYQNTlSAg",
+            "weight": 0.3018974059898916,
+            "resourceVisualization": {
+                "title": "Workplace Innovation",
+                "type": "Excel",
+                "mediaType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "previewImageUrl": "https://m365x214355.sharepoint.com/_api/v2.0/drives/b!3Jbi4eyaWEC9BStUtSkGjZ345KzqgQZAtxJuNZ5aiosdyHDt3_4bSqHx9E45xbt4/items/01JHPWRIZITX65S7PISJBJAO5A2SLQ4NV2/thumbnails/0/small/thumbnailContent",
+                "previewText": "Workplace Innovation  RETURN TO MENU Date Production Total  Shipping Total 01/31/2009 134563 28816 02/28/2009 121948 22570 03/31/2009 122388 26079 04/30/2009 118258 24597 05/31/2009 134869 23228 06/30/2009 127412 22313 07/31/2009 122359 21398 08/31/2009 1",
+                "containerWebUrl": "https://m365x214355.sharepoint.com/sites/IT/Shared Documents/Forms/AllItems.aspx",
+                "containerDisplayName": "IT",
+                "containerType": "Site"
+            },
+            "resourceReference": {
+                "webUrl": "https://m365x214355.sharepoint.com/sites/IT/_layouts/15/Doc.aspx?sourcedoc=%7BD9FD9D28-E87D-4292-903B-A0D4970E36BA%7D&file=Workplace%20Innovation.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1",
+                "id": "drives/b!3Jbi4eyaWEC9BStUtSkGjZ345KzqgQZAtxJuNZ5aiosdyHDt3_4bSqHx9E45xbt4/items/01JHPWRIZITX65S7PISJBJAO5A2SLQ4NV2",
+                "type": "microsoft.graph.driveItem"
+            }
+        },
+        {
+            "id": "AdyW4uHsmlhAvQUrVLUpBo2d-OSs6oEGQLcSbjWeWoqLHchw7d_-G0qh8fROOcW7eO3boqT2MypAtL13utVdB4gNzZLMnj3FS5RTEJYQNTlSAg",
+            "weight": 0.301848889088915,
+            "resourceVisualization": {
+                "title": "device",
+                "type": "Image",
+                "mediaType": "application/octet-stream",
+                "previewImageUrl": "https://m365x214355.sharepoint.com/_api/v2.0/drives/b!3Jbi4eyaWEC9BStUtSkGjZ345KzqgQZAtxJuNZ5aiosdyHDt3_4bSqHx9E45xbt4/items/01JHPWRI7N3ORKJ5RTFJALJPLXXLKV2B4I/thumbnails/0/small/thumbnailContent",
+                "previewText": "",
+                "containerWebUrl": "https://m365x214355.sharepoint.com/sites/IT/Shared Documents/Forms/AllItems.aspx",
+                "containerDisplayName": "IT",
+                "containerType": "Site"
+            },
+            "resourceReference": {
+                "webUrl": "https://m365x214355.sharepoint.com/sites/IT/Shared Documents/Forms/DispForm.aspx?ID=1",
+                "id": "drives/b!3Jbi4eyaWEC9BStUtSkGjZ345KzqgQZAtxJuNZ5aiosdyHDt3_4bSqHx9E45xbt4/items/01JHPWRI7N3ORKJ5RTFJALJPLXXLKV2B4I",
+                "type": "microsoft.graph.driveItem"
+            }
+        },
+        {
+            "id": "AdKfIRb9-upPgISLXqqMWtLwvYGxgJaISYH3okruSv1qzTu3YwleXUuKVg7xokbqXtUe-Qz90jtHkTRv7DlVc99wL_YGJ5huTpPvjg8tm3sjAg",
+            "weight": 0.30183992571630835,
+            "resourceVisualization": {
+                "title": "Customer Feedback for ZT1000",
+                "type": "PowerPoint",
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                "previewImageUrl": "https://m365x214355.sharepoint.com/_api/v2.0/drives/b!0p8hFv366k-AhIteqoxa0vC9gbGAlohJgfeiSu5K_WrNO7djCV5dS4pWDvGiRupe/items/01NJTMOPOVD34QZ7OSHNDZCNDP5Q4VK467/thumbnails/0/small/thumbnailContent",
+                "previewText": "HR TRAINING PART I\r\nNorthwind\r\nVoiceover\r\nOrganize teamwork with Microsoft Planner\r\nTake the chaos out of teamwork and get more done! Planner makes it easy for your team to create new plans, organize and assign tasks, share files, chat about what you’re w",
+                "containerWebUrl": "https://m365x214355.sharepoint.com/sites/VideoProduction/Shared Documents/Forms/AllItems.aspx",
+                "containerDisplayName": "Video Production",
+                "containerType": "Site"
+            },
+            "resourceReference": {
+                "webUrl": "https://m365x214355.sharepoint.com/sites/VideoProduction/_layouts/15/Doc.aspx?sourcedoc=%7B0CF91ED5-D2FD-473B-9134-6FEC395573DF%7D&file=Northind%20HR%20Training%20Part%20I%20Storyboard.pptx&action=edit&mobileredirect=true&DefaultItemOpen=1",
+                "id": "drives/b!0p8hFv366k-AhIteqoxa0vC9gbGAlohJgfeiSu5K_WrNO7djCV5dS4pWDvGiRupe/items/01NJTMOPOVD34QZ7OSHNDZCNDP5Q4VK467",
+                "type": "microsoft.graph.driveItem"
+            }
+        }
+    ]
+}
