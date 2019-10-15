@@ -42,7 +42,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
 
     return (
       <div className='row'>
-        <div className='col-sm-1' style={{ paddingRight: 0 }}>
+        <div className='col-sm-3 col-md-2'>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
@@ -54,7 +54,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
           />
         </div>
 
-        <div className='col-sm-1'>
+        <div className='col-sm-2 col-md-2'>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
@@ -63,7 +63,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, method) => handleOnVersionChange(method)}
           />
         </div>
-        <div className='col-sm-8' style={{ paddingRight: 0, paddingLeft: 0 }}>
+        <div className='col-sm-5 col-md-6'>
           <TextField
             ariaLabel='Query Sample Input'
             role='textbox'
@@ -73,7 +73,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onBlur={() => handleOnBlur()}
           />
         </div>
-        <div className='col-sm-2 run-query-button'>
+        <div className='col-sm-1 col-md-2 run-query-button'>
           <SubmitButton
             className='run-query-button'
             text='Run Query'
