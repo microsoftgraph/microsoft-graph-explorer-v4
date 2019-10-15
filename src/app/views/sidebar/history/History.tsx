@@ -238,14 +238,14 @@ export class History extends Component<IHistoryProps, any> {
       sampleUrl,
       selectedVerb: query.method,
       sampleBody: query.body,
-      sampleHeaders: query.headers
+      sampleHeaders: query.headers,
+      selectedVersion: queryVersion,
     };
 
     if (actions) {
       if (sampleQuery.selectedVerb === 'GET') {
         sampleQuery.sampleBody = JSON.parse('{}');
       }
-      actions.setQueryVersion(queryVersion);
       actions.setSampleQuery(sampleQuery);
       actions.runQuery(sampleQuery);
     }
@@ -266,11 +266,11 @@ export class History extends Component<IHistoryProps, any> {
       sampleUrl,
       selectedVerb: query.method,
       sampleBody: query.body,
-      sampleHeaders: query.headers
+      sampleHeaders: query.headers,
+      selectedVersion: queryVersion,
     };
 
     if (actions) {
-      actions.setQueryVersion(queryVersion);
       actions.setSampleQuery(sampleQuery);
       actions.viewHistoryItem({
         body: query.result,

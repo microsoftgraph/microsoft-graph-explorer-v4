@@ -8,6 +8,7 @@ export interface IQueryRunnerState {
 
 export interface IQuery {
   selectedVerb: string;
+  selectedVersion: string;
   sampleUrl: string;
   sampleBody?: string;
   sampleHeaders: Array<{ name: string; value: string }>;
@@ -22,7 +23,6 @@ export interface IQueryRunnerProps {
     runQuery: Function;
     addRequestHeader: Function;
     setSampleQuery: Function;
-    setQueryVersion: Function;
   };
 }
 
@@ -87,6 +87,5 @@ export interface ISampleQueriesProps {
     runQuery: Function;
     setSampleQuery: Function;
     fetchSamples: Function;
-    setQueryVersion: Function;
   };
 }

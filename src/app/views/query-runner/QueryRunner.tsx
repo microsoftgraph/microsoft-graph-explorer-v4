@@ -47,7 +47,9 @@ export class QueryRunner extends Component<
 
     const { queryVersion } = parseSampleUrl(newQuery);
     if (queryVersion === 'v1.0' || queryVersion === 'beta') {
-      this.props.actions!.setQueryVersion(queryVersion);
+      const query = { ...this.props.sampleQuery };
+      query.selectedVersion = queryVersion;
+      this.props.actions!.setSampleQuery(query);
     }
   };
 
@@ -89,10 +91,10 @@ export class QueryRunner extends Component<
     const { sampleQuery } = this.props;
     if (urlVersion) {
       const { sampleUrl, queryVersion } = parseSampleUrl(sampleQuery.sampleUrl, urlVersion.text);
-      this.props.actions!.setQueryVersion(queryVersion);
       this.props.actions!.setSampleQuery({
         ...sampleQuery,
-        sampleUrl
+        sampleUrl,
+        selectedVersion: queryVersion
       });
     }
   };

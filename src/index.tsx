@@ -54,8 +54,8 @@ const appState = store({
     selectedVerb: 'GET',
     sampleBody: undefined,
     sampleHeaders: {},
+    selectedVersion: 'v1.0',
   },
-  selectedVersion: 'v1.0',
 });
 
 msalApplication.acquireTokenSilent({ scopes: DEFAULT_USER_SCOPES.split(' ') }).then((token: any) => {

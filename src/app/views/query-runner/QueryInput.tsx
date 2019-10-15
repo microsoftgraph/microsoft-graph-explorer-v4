@@ -92,7 +92,7 @@ function mapStateToProps(state: any) {
     mode: state.graphExplorerMode,
     sampleUrl: state.sampleQuery.sampleUrl,
     selectedVerb: state.sampleQuery.selectedVerb,
-    selectedVersion: state.selectedVersion,
+    selectedVersion: state.sampleQuery.selectedVersion,
     submitting: state.isLoadingData,
   };
 }
