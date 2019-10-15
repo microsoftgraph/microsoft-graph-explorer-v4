@@ -248,5 +248,11 @@
   "Office Dev Program" : "Office Dev Program",
   "Fetching Adaptive Card" : "Fetching Adaptive Card",
   "The Adaptive Card for this response is not available" : "The Adaptive Card for this response is not available",
-  "loading samples" : "loading samples"
+  "loading samples" : "loading samples",
+  "older" : "Older",
+  "today" : "Today",
+  "yesterday" : "Yesterday",
+  "actions" : "Actions",
+  "view" : "View",
+  "remove" : "Remove"
 }
