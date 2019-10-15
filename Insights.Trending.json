@@ -1,7 +1,7 @@
 {
     "type": "AdaptiveCard",
     "version": "1.0",
-    "$odata.type": "#microsoft.graph.trending",
+    "@odata.type": "#microsoft.graph.trending",
     "body": [
         {
             "type": "Container",

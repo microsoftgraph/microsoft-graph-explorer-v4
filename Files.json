@@ -1,6 +1,6 @@
 {
     "type": "AdaptiveCard",
-    "$odata.type": "#microsoft.graph.driveItem",
+    "@odata.type": "#microsoft.graph.driveItem",
     "body": [
         {
             "type": "TextBlock",

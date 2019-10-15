@@ -1,7 +1,7 @@
 {
     "type": "AdaptiveCard",
     "version": "1.0",
-    "$odata.type": "#microsoft.graph.group",
+    "@odata.type": "#microsoft.graph.group",
     "body": [
         {
             "type": "ColumnSet",
