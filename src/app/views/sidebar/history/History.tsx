@@ -12,6 +12,7 @@ import * as queryActionCreators from '../../../services/actions/query-action-cre
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as requestHistoryActionCreators from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
+import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { dynamicSort } from './historyUtil';
@@ -232,11 +233,9 @@ export class History extends Component<IHistoryProps, any> {
 
   private onRunQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
-
-    const requestUrl = query.url.replace(GRAPH_URL, '');
-    const queryVersion = requestUrl.substring(1, 5);
+    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
     const sampleQuery: IQuery = {
-      sampleUrl: GRAPH_URL + requestUrl,
+      sampleUrl,
       selectedVerb: query.method,
       sampleBody: query.body,
       sampleHeaders: query.headers
@@ -262,11 +261,9 @@ export class History extends Component<IHistoryProps, any> {
 
   private onViewQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
-
-    const requestUrl = query.url.replace(GRAPH_URL, '');
-    const queryVersion = requestUrl.substring(1, 5);
+    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
     const sampleQuery: IQuery = {
-      sampleUrl: GRAPH_URL + requestUrl,
+      sampleUrl,
       selectedVerb: query.method,
       sampleBody: query.body,
       sampleHeaders: query.headers

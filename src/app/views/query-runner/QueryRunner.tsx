@@ -11,7 +11,7 @@ import {
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import { addRequestHeader } from '../../services/actions/request-headers-action-creators';
-import { GRAPH_URL } from '../../services/graph-constants';
+import { parseSampleUrl } from '../../utils/sample-url-generation';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
 import Request from './request/Request';
@@ -83,11 +83,8 @@ export class QueryRunner extends Component<
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
     const { sampleQuery } = this.props;
     if (urlVersion) {
-      const urlObject: URL = new URL(sampleQuery.sampleUrl);
-      const requestUrl = urlObject.pathname.substr(5).replace(/\/$/, '');
-      const sampleUrl = `${GRAPH_URL}/${urlVersion.text + requestUrl + decodeURI(urlObject.search)}`;
-
-      this.props.actions!.setQueryVersion(urlVersion.text);
+      const { sampleUrl, queryVersion } = parseSampleUrl(sampleQuery.sampleUrl, urlVersion.text);
+      this.props.actions!.setQueryVersion(queryVersion);
       this.props.actions!.setSampleQuery({
         ...sampleQuery,
         sampleUrl
