@@ -1,5 +1,6 @@
 import { Dropdown, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { Mode } from '../../../types/action';
@@ -24,6 +25,10 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       mode,
     } = this.props;
 
+    const {
+      intl: { messages },
+    }: any = this.props;
+
     return (
       <div className='row'>
         <div className='col-sm-3'>
@@ -40,7 +45,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
           <TextField
             ariaLabel='Query Sample Input'
             role='textbox'
-            placeholder='Query Sample'
+            placeholder={messages['Query Sample']}
             onChange={(event, value) => handleOnUrlChange(value)}
             defaultValue={sampleUrl}
             onBlur={() => handleOnBlur()}
@@ -49,7 +54,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
         <div className='col-sm-2 run-query-button'>
           <SubmitButton
             className='run-query-button'
-            text='Run Query'
+            text={messages['Run Query']}
             role='button'
             handleOnClick={() => handleOnRunQuery()}
             submitting={submitting}
@@ -68,7 +73,10 @@ function mapStateToProps(state: any) {
     mode: state.graphExplorerMode,
   };
 }
+
+// @ts-ignore
+const IntlQueryInput = injectIntl(QueryInput);
 export default connect(
   mapStateToProps,
   null
-)(QueryInput);
+)(IntlQueryInput);

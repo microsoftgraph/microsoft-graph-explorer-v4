@@ -6,7 +6,7 @@ export interface IAdaptiveCardProps {
       pending: boolean;
       data?: any;
     };
-    intl?: {
+    intl: {
       message: object;
     };
     hostConfig?: any;

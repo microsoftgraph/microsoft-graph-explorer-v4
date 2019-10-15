@@ -39,6 +39,9 @@ export interface IQueryInputProps {
   selectedVerb: string;
   sampleUrl: string;
   submitting: boolean;
+  intl: {
+    message: object;
+  };
 }
 
 

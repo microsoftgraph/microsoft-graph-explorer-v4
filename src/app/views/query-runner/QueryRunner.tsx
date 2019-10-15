@@ -95,14 +95,17 @@ export class QueryRunner extends Component<
       <div>
         <div className='row'>
           <div className='col-sm-12 col-lg-12'>
-            <QueryInput
-              handleOnRunQuery={this.handleOnRunQuery}
-              handleOnMethodChange={this.handleOnMethodChange}
-              handleOnUrlChange={this.handleOnUrlChange}
-              handleOnBlur={this.handleOnBlur}
-              httpMethods={httpMethods}
-              submitting={isLoadingData}
-            />
+            {
+              // @ts-ignore
+              <QueryInput
+                handleOnRunQuery={this.handleOnRunQuery}
+                handleOnMethodChange={this.handleOnMethodChange}
+                handleOnUrlChange={this.handleOnUrlChange}
+                handleOnBlur={this.handleOnBlur}
+                httpMethods={httpMethods}
+                submitting={isLoadingData}
+              />
+            }
           </div>
         </div>
         {displayRequestComponent && (
