@@ -92,4 +92,7 @@ export interface ISampleQueriesProps {
     setSampleQuery: Function;
     fetchSamples: Function;
   };
+  intl: {
+    message: object;
+  };
 }

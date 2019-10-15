@@ -247,5 +247,6 @@
   "Adaptive Cards" : "Adaptive Cards",
   "Office Dev Program" : "Office Dev Program",
   "Fetching Adaptive Card" : "Fetching Adaptive Card",
-  "The Adaptive Card for this response is not available" : "The Adaptive Card for this response is not available"
+  "The Adaptive Card for this response is not available" : "The Adaptive Card for this response is not available",
+  "loading samples" : "loading samples"
 }
