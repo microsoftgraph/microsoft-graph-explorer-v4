@@ -111,7 +111,10 @@ export class QueryRunner extends Component<
         {displayRequestComponent && (
           <div className='row'>
             <div className='col-sm-12 col-lg-12'>
-              <Request handleOnEditorChange={this.handleOnEditorChange} />
+              {
+                // @ts-ignore
+                <Request handleOnEditorChange={this.handleOnEditorChange} />
+              }
             </div>
           </div>
         )}
