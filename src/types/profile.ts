@@ -1,6 +1,9 @@
 import { ITheme } from 'office-ui-fabric-react';
 
 export interface IProfileProps {
+    intl: {
+      message: object;
+    };
     theme?: ITheme;
     styles?: object;
     mobileScreen: boolean;
