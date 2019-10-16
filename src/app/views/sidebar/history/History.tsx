@@ -142,14 +142,12 @@ export class History extends Component<IHistoryProps, any> {
     const {
       intl: { messages },
     }: any = this.props;
-    // tslint:disable-next-line:no-string-literal
+    // tslint:disable
     const actionsText = messages['actions'];
-    // tslint:disable-next-line:no-string-literal
     const runQueryText = messages['Run Query'];
-    // tslint:disable-next-line:no-string-literal
     const viewText = messages['view'];
-    // tslint:disable-next-line:no-string-literal
     const removeText = messages['remove'];
+    // tslint:enable
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
