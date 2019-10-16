@@ -54,6 +54,7 @@ const appState = store({
     selectedVerb: 'GET',
     sampleBody: undefined,
     sampleHeaders: {},
+    selectedVersion: 'v1.0',
   },
 });
 

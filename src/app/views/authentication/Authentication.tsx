@@ -24,24 +24,24 @@ export class Authentication extends Component<IAuthenticationProps> {
   };
 
   public render() {
-    const { tokenPresent } = this.props;
+    const { tokenPresent, mobileScreen } = this.props;
     const classes = classNames(this.props);
 
     return (
       <div className={classes.authenticationContainer}>
         <Stack>
-          <Stack.Item align='end'>
+          <Stack.Item align='start'>
             {!tokenPresent && <ActionButton
               ariaLabel='Sign-in button'
               className={classes.signInButton}
               role='button'
               iconProps={{ iconName: 'Contact' }}
               onClick={this.signIn}>
-                <FormattedMessage id='sign in' />
+                {!mobileScreen && <FormattedMessage id='sign in' />}
               </ActionButton>}
-            {tokenPresent &&
-              <Profile />}
           </Stack.Item>
+          {tokenPresent &&
+            <Profile />}
         </Stack>
       </div>
     );
@@ -51,6 +51,7 @@ export class Authentication extends Component<IAuthenticationProps> {
 function mapStateToProps(state: any) {
   return {
     tokenPresent: !!state.authToken,
+    mobileScreen: !!state.sidebarProperties.showToggle,
   };
 }
 

@@ -6,6 +6,7 @@ export interface IProfileProps {
     };
     theme?: ITheme;
     styles?: object;
+    mobileScreen: boolean;
     actions?: {
         getProfileInfo: Function;
         signOut: Function;

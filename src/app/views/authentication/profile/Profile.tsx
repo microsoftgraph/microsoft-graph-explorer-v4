@@ -7,6 +7,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { Card } from '@uifabric/react-cards';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
@@ -99,6 +100,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const { user } = this.state;
     const {
       intl: { messages },
+      mobileScreen,
     }: any = this.props;
 
     const persona: IPersonaSharedProps = {
@@ -134,11 +136,38 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       ]
     };
 
+    const profileCardTokens: any = {
+      boxShadow: 'none',
+      childrenGap: 15,
+      padding: 10,
+      minWidth: 0
+    };
+
+
     return (
       <div className={classes.profile}>
-        <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-          <Persona {...persona} size={PersonaSize.size40} />
-        </ActionButton>
+        {mobileScreen &&
+          <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+            <Persona {...persona} size={PersonaSize.size40} hidePersonaDetails={true} />
+          </ActionButton>
+        }
+
+        {!mobileScreen &&
+          <Card compact={true} tokens={profileCardTokens}>
+            <Card.Item fill={true}>
+            <Persona {...persona} coinSize={80} size={PersonaSize.size40} hidePersonaDetails={true} />
+            </Card.Item>
+          <Card.Section>
+            <span className={classes.personaText}>
+              {persona.text}
+            </span>
+            <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
+            <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+              More actions
+            </ActionButton>
+          </Card.Section>
+          </Card>
+        }
       </div>
     );
   }
@@ -153,11 +182,18 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
+function mapStateToProps(state: any) {
+  return {
+    mobileScreen: !!state.sidebarProperties.showToggle
+  };
+}
+
+
 // @ts-ignore
 const styledProfile = styled(Profile, authenticationStyles);
 // @ts-ignore
 const IntlProfile = injectIntl(styledProfile);
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(IntlProfile);

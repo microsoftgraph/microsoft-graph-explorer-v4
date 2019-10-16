@@ -1,6 +1,7 @@
 import * as AdaptiveCardsTemplateAPI from 'adaptivecards-templating';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
+import { parseSampleUrl } from '../../utils/sample-url-generation';
 import {
   FETCH_ADAPTIVE_CARD_ERROR ,
   FETCH_ADAPTIVE_CARD_PENDING,
@@ -67,9 +68,8 @@ export function getAdaptiveCard(payload: string, sampleQuery: IQuery): Function 
 
 function lookupTemplate(sampleQuery: IQuery): string {
   if (sampleQuery) {
-    const urlObject: URL = new URL(sampleQuery.sampleUrl);
-    // remove the prefix i.e. beta or v1.0 and any possible extra whack character at the end'/'
-    const query = urlObject.pathname.substr(6).replace(/\/$/, '') + urlObject.search;
+    const { requestUrl, search } = parseSampleUrl(sampleQuery.sampleUrl);
+    const query = requestUrl + search;
     return templateMap[query];
   }
   return '';
