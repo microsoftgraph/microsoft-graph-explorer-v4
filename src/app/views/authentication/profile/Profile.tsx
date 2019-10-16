@@ -3,7 +3,7 @@ import {
   PersonaSize, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -163,7 +163,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
             </span>
             <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
             <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-              More actions
+              <FormattedMessage id='More actions' />
             </ActionButton>
           </Card.Section>
           </Card>
@@ -191,7 +191,6 @@ function mapStateToProps(state: any) {
 
 // @ts-ignore
 const styledProfile = styled(Profile, authenticationStyles);
-// @ts-ignore
 const IntlProfile = injectIntl(styledProfile);
 export default connect(
   mapStateToProps,

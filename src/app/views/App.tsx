@@ -283,11 +283,8 @@ class App extends Component<IAppProps, IAppState> {
                   {!showToggle && <Authentication /> }
 
                   {showSidebar && <>
-                    {
-                      // @ts-ignore
-                      <Banner optOut={this.optOut} />
-                    }
-                  <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
+                    <Banner optOut={this.optOut} />
+                    <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                   </>}
                 </div>
               )}
