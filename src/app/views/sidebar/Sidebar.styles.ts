@@ -4,7 +4,7 @@ import {
 } from '@uifabric/styling';
 
 export const sidebarStyles = (theme: ITheme) => {
-  const pageHeight = '850px';
+  const pageHeight = '660px';
   return {
     searchBox: {
       marginTop: theme.spacing.s1,

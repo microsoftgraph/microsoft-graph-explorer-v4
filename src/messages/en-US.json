@@ -229,6 +229,7 @@
   "Add": "Add",
   "Snippets": "Snippets",
   "Adaptive Cards" : "Adaptive Cards",
+  "back to classic": "Switch the toggle to go back to Graph Explorer classic.",
   "Use the Microsoft Graph API" : "When you use the Microsoft Graph API, you agree to the Microsoft API Terms of Use",
   "Terms of use" : "View the Microsoft API Terms of Use",
   "Microsoft Privacy Statement" : "View the Microsoft Privacy Statement"

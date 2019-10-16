@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { Card } from '@uifabric/react-cards';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
@@ -96,6 +97,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
   public render() {
     const { user } = this.state;
+    const { mobileScreen } = this.props;
 
     const persona: IPersonaSharedProps = {
       imageUrl: user.profileImageUrl,
@@ -130,11 +132,38 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       ]
     };
 
+    const profileCardTokens: any = {
+      boxShadow: 'none',
+      childrenGap: 15,
+      padding: 10,
+      minWidth: 0
+    };
+
+
     return (
       <div className={classes.profile}>
-        <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-          <Persona {...persona} size={PersonaSize.size40} />
-        </ActionButton>
+        {mobileScreen &&
+          <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+            <Persona {...persona} size={PersonaSize.size40} hidePersonaDetails={true} />
+          </ActionButton>
+        }
+
+        {!mobileScreen &&
+          <Card compact={true} tokens={profileCardTokens}>
+            <Card.Item fill={true}>
+            <Persona {...persona} coinSize={80} size={PersonaSize.size40} hidePersonaDetails={true} />
+            </Card.Item>
+          <Card.Section>
+            <span className={classes.personaText}>
+              {persona.text}
+            </span>
+            <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
+            <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+              More actions
+            </ActionButton>
+          </Card.Section>
+          </Card>
+        }
       </div>
     );
   }
@@ -149,9 +178,16 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
+function mapStateToProps(state: any) {
+  return {
+    mobileScreen: !!state.sidebarProperties.showToggle
+  };
+}
+
+
 // @ts-ignore
 const styledProfile = styled(Profile, authenticationStyles);
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(styledProfile);
