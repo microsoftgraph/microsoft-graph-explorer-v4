@@ -97,7 +97,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
   public render() {
     const { user } = this.state;
-    const { minimized } = this.props;
+    const { mobileScreen } = this.props;
 
     const persona: IPersonaSharedProps = {
       imageUrl: user.profileImageUrl,
@@ -132,7 +132,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       ]
     };
 
-    const tokens: any = {
+    const profileCardtokens: any = {
       boxShadow: 'none',
       childrenGap: 15,
       padding: 10,
@@ -142,14 +142,14 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
     return (
       <div className={classes.profile}>
-        {minimized &&
+        {mobileScreen &&
           <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
             <Persona {...persona} size={PersonaSize.size40} hidePersonaDetails={true} />
           </ActionButton>
         }
 
-        {!minimized &&
-          <Card compact={true} tokens={tokens}>
+        {!mobileScreen &&
+          <Card compact={true} tokens={profileCardtokens}>
             <Card.Item fill={true}>
             <Persona {...persona} coinSize={80} size={PersonaSize.size40} hidePersonaDetails={true} />
             </Card.Item>
@@ -180,7 +180,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 function mapStateToProps(state: any) {
   return {
-    minimized: !!state.sidebarProperties.showToggle
+    mobileScreen: !!state.sidebarProperties.showToggle
   };
 }
 

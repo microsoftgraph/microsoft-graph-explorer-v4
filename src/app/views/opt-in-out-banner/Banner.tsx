@@ -1,13 +1,7 @@
 import { MessageBar, Toggle } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
-
-interface IBanner {
-  optOut: Function;
-  intl: {
-    message: object;
-  };
-}
+import { IBanner } from '../../../types/sidebar';
 
 class Banner extends Component<IBanner, {}> {
   constructor(props: any) {
