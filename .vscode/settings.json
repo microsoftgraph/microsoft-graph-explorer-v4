@@ -1,0 +1,11 @@
+{
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/all.min.js": true
+    },
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/.github": true,
+    },
+    "files.trimTrailingWhitespace": true
+}

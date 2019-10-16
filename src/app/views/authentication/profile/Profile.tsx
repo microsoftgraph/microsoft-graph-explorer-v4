@@ -132,7 +132,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       ]
     };
 
-    const profileCardtokens: any = {
+    const profileCardTokens: any = {
       boxShadow: 'none',
       childrenGap: 15,
       padding: 10,
@@ -149,7 +149,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         }
 
         {!mobileScreen &&
-          <Card compact={true} tokens={profileCardtokens}>
+          <Card compact={true} tokens={profileCardTokens}>
             <Card.Item fill={true}>
             <Persona {...persona} coinSize={80} size={PersonaSize.size40} hidePersonaDetails={true} />
             </Card.Item>
