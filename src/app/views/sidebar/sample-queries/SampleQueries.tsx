@@ -240,11 +240,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         const selectedQuery = selection.getSelection()[0] as any;
         if (!selectedQuery) { return; }
 
+        const queryVersion = selectedQuery.requestUrl.substring(1, 5);
         const sampleQuery: IQuery = {
           sampleUrl: GRAPH_URL + selectedQuery.requestUrl,
           selectedVerb: selectedQuery.method,
           sampleBody: selectedQuery.postBody,
-          sampleHeaders: selectedQuery.headers || []
+          sampleHeaders: selectedQuery.headers || [],
+          selectedVersion: queryVersion,
         };
 
         if (actions) {

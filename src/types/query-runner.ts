@@ -2,21 +2,20 @@ import { ITheme } from '@uifabric/styling';
 import { Mode } from './action';
 
 export interface IQueryRunnerState {
-  httpMethods: Array<{ key: string; text: string; }>;
   sampleBody?: string;
   url: string;
 }
 
 export interface IQuery {
   selectedVerb: string;
+  selectedVersion: string;
   sampleUrl: string;
   sampleBody?: string;
-  sampleHeaders: Array<{ name: string; value: string; }>;
+  sampleHeaders: Array<{ name: string; value: string }>;
 }
 
 export interface IQueryRunnerProps {
-  isLoadingData: boolean;
-  headers: Array<{ name: string; value: string; }>;
+  headers: Array<{ name: string; value: string }>;
   onSelectVerb: Function;
   sampleQuery: IQuery;
   graphExplorerMode: Mode;
@@ -34,13 +33,13 @@ export interface IQueryInputProps {
   handleOnRunQuery: Function;
   handleOnMethodChange: Function;
   handleOnUrlChange: Function;
+  handleOnVersionChange: Function;
   handleOnBlur: Function;
-  httpMethods: Array<{ key: string; text: string }>;
   selectedVerb: string;
+  selectedVersion: string;
   sampleUrl: string;
   submitting: boolean;
 }
-
 
 export interface IInitMessage {
   /** Message type. */
@@ -70,7 +69,7 @@ export interface ISampleQuery {
   humanName: string;
   tip?: string;
   postBody?: string;
-  headers?: Array<{ name: string; value: string; }>;
+  headers?: Array<{ name: string; value: string }>;
 }
 
 export interface ISampleQueriesProps {
