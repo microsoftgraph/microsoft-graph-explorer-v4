@@ -84,8 +84,8 @@ export function getConsent(): Function {
             }),
           );
         }
-        if (response.status === 403 && num === scopes.length - 1) {
-          // Only exit with error 403 when we have exhausted all scopes
+        if (num === scopes.length - 1) {
+          // All scopes have been consented to with no success
           return dispatch(getConsentError(response));
         }
       }
