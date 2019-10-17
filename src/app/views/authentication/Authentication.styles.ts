@@ -9,7 +9,6 @@ export const authenticationStyles = (theme: ITheme) => {
       textTransform: 'capitalize',
     },
     profile: {
-      marginBottom: theme.spacing.s1,
       width: '100%',
     },
     personaText: {
