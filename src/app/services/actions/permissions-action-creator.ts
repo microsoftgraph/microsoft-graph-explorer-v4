@@ -27,8 +27,7 @@ export function getConsentError(response: object): IAction {
 
 export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
-    const query = getState().sampleQuery;
-    const { sampleUrl, selectedVerb } = query;
+    const { sampleQuery: { sampleUrl, selectedVerb } } = getState();
     const urlObject: URL = new URL(sampleUrl);
     // remove the prefix i.e. beta or v1.0 and any possible extra '/' character at the end
     const requestUrl = urlObject.pathname.substr(5).replace(/\/$/, '');
@@ -65,8 +64,8 @@ export function fetchScopes(): Function {
 export function getConsent(): Function {
   return async(dispatch: Function, getState: Function) => {
     const respHeaders: any = {};
-    const query = getState().sampleQuery;
-    const scopes = getState().scopes.data;
+    const {sampleQuery: query} = getState();
+    const {scopes: {data: scopes} } = getState();
 
     for (let num = 0; num < scopes.length; num++) {
 
