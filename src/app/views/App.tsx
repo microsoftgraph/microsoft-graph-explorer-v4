@@ -383,7 +383,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-const StyledApp = styled(App, appStyles);
+const StyledApp = styled(App, appStyles as any);
 const IntlApp = injectIntl(StyledApp);
 
 export default connect(
