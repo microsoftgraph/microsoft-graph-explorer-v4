@@ -39,6 +39,9 @@ export interface IQueryInputProps {
   selectedVersion: string;
   sampleUrl: string;
   submitting: boolean;
+  intl: {
+    message: object;
+  };
 }
 
 export interface IInitMessage {
@@ -87,5 +90,8 @@ export interface ISampleQueriesProps {
     runQuery: Function;
     setSampleQuery: Function;
     fetchSamples: Function;
+  };
+  intl: {
+    message: object;
   };
 }

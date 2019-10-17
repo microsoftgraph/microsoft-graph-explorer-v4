@@ -1,5 +1,6 @@
 import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { IRequestComponent } from '../../../../types/request';
@@ -19,15 +20,19 @@ export class Request extends Component<IRequestComponent, any> {
       sampleBody
     } = this.props;
 
+    const {
+      intl: { messages },
+    }: any = this.props;
+
     return (
       <div className='request-editors'>
         <Pivot>
-          <PivotItem headerText='Request Body'>
+          <PivotItem headerText={messages['request body']}>
             <Monaco
               body={sampleBody}
               onChange={(value) => handleOnEditorChange(value)} />
           </PivotItem>
-          <PivotItem headerText='Request Headers'>
+          <PivotItem headerText={messages['request header']}>
             <RequestHeaders />
           </PivotItem>
         </Pivot>
@@ -42,4 +47,6 @@ function mapStateToProps(state: any) {
   };
 }
 
-export default connect(mapStateToProps, null)(Request);
+// @ts-ignore
+const IntlRequest = injectIntl(Request);
+export default connect(mapStateToProps, null)(IntlRequest);

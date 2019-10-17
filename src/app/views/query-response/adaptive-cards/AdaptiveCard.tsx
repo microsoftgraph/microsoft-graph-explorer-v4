@@ -1,7 +1,9 @@
 import * as AdaptiveCardsAPI from 'adaptivecards';
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { Monaco } from '../../common';
@@ -46,10 +48,13 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
 
   public render() {
     const { data , pending } = this.props.card;
+    const {
+      intl: { messages },
+    }: any = this.props;
 
     if (pending) {
       return (<Monaco
-        body={'Fetching Adaptive Card ...'}
+        body={`${messages['Fetching Adaptive Card']} ...`}
       />);
     }
 
@@ -71,7 +76,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
       }
     } else {
         return (<Monaco
-          body={data === null ? 'The Adaptive Card for this response is not available' : ''}
+          body={data === null ? `${messages['The Adaptive Card for this response is not available']}` : ''}
         />);
     }
   }
@@ -92,4 +97,6 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdaptiveCard);
+// @ts-ignore
+const IntlAdaptiveCard = injectIntl(AdaptiveCard);
+export default connect(mapStateToProps, mapDispatchToProps)(IntlAdaptiveCard);
