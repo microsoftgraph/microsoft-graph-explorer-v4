@@ -1,6 +1,6 @@
 import { IAction } from '../../../types/action';
-import { CLEAR_QUERY_ERROR, GET_CONSENT_ERROR,
-  QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS, FETCH_SCOPES_ERROR } from '../redux-constants';
+import { CLEAR_QUERY_ERROR, FETCH_SCOPES_ERROR,
+  GET_CONSENT_ERROR, QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../redux-constants';
 
 export function queryRunnerError(state = {}, action: IAction): any {
   switch (action.type) {
