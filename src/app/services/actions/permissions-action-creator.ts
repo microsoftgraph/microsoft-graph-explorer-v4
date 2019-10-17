@@ -1,19 +1,19 @@
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
 
-import { GET_CONSENT_ERROR, SCOPES_FETCH_ERROR, SCOPES_FETCH_SUCCESS } from '../redux-constants';
+import { FETCH_SCOPES_ERROR, FETCH_SCOPES_SUCCESS, GET_CONSENT_ERROR } from '../redux-constants';
 import { authenticatedRequest, parseResponse, queryResponse } from './query-action-creator-util';
 
 export function fetchScopesSuccess(response: object): IAction {
   return {
-    type: SCOPES_FETCH_SUCCESS,
+    type: FETCH_SCOPES_SUCCESS,
     response,
   };
 }
 
 export function fetchScopesError(response: object): IAction {
   return {
-    type: SCOPES_FETCH_ERROR,
+    type: FETCH_SCOPES_ERROR,
     response,
   };
 }
