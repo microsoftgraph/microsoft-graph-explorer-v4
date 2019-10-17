@@ -5,9 +5,6 @@ export const authenticationStyles = (theme: ITheme) => {
     authenticationContainer: {
       justifyContent: 'space-between',
     },
-    signInButton: {
-      textTransform: 'capitalize',
-    },
     profile: {
       width: '100%',
     },

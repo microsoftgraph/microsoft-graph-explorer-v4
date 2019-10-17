@@ -41,7 +41,6 @@ export class Authentication extends Component<IAuthenticationProps> {
         {!tokenPresent &&
           <DefaultButton
             ariaLabel='Sign-in button'
-            className={classes.signInButton}
             role='button'
             iconProps={{ iconName: 'Contact' }}
             onClick={this.signIn}
