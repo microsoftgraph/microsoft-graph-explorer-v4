@@ -18,6 +18,9 @@ export interface IRequestComponent {
     sampleBody?: string;
     handleOnEditorChange: Function;
     headers?: Array<{ name: string; value: string; }>;
+    intl: {
+        message: object;
+    };
 }
 
 export interface IRequestOptions {

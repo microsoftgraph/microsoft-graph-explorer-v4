@@ -3,6 +3,7 @@ import {
   PersonaSize, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -97,7 +98,10 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
   public render() {
     const { user } = this.state;
-    const { mobileScreen } = this.props;
+    const {
+      intl: { messages },
+      mobileScreen,
+    }: any = this.props;
 
     const persona: IPersonaSharedProps = {
       imageUrl: user.profileImageUrl,
@@ -114,7 +118,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       items: [
         {
           key: 'office-dev-program',
-          text: 'Office Dev Program',
+          text: messages['Office Dev Program'],
           href: 'https://developer.microsoft.com/en-us/office/dev-program',
           target: '_blank',
           iconProps: {
@@ -123,7 +127,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         },
         {
           key: 'sign-out',
-          text: 'Sign Out',
+          text: messages['sign out'],
           onClick: () => this.handleSignOut(),
           iconProps: {
             iconName: 'SignOut',
@@ -159,7 +163,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
             </span>
             <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
             <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-              More actions
+              <FormattedMessage id='More actions' />
             </ActionButton>
           </Card.Section>
           </Card>
@@ -187,7 +191,8 @@ function mapStateToProps(state: any) {
 
 // @ts-ignore
 const styledProfile = styled(Profile, authenticationStyles);
+const IntlProfile = injectIntl(styledProfile);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(styledProfile);
+)(IntlProfile);
