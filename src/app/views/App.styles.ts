@@ -8,7 +8,8 @@ export const appStyles = (theme: ITheme) => {
       color: theme.semanticColors.bodyText,
       paddingTop: theme.spacing.s1,
       width: '100%',
-      height: '100vh',
+      height: '1024px',
+      overflow: 'scroll'
     },
     tryItMessage: {
       marginBottom: theme.spacing.s1
