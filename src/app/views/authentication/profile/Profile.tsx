@@ -3,9 +3,11 @@ import {
   PersonaSize, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { Card } from '@uifabric/react-cards';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
@@ -96,6 +98,10 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
   public render() {
     const { user } = this.state;
+    const {
+      intl: { messages },
+      mobileScreen,
+    }: any = this.props;
 
     const persona: IPersonaSharedProps = {
       imageUrl: user.profileImageUrl,
@@ -112,7 +118,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       items: [
         {
           key: 'office-dev-program',
-          text: 'Office Dev Program',
+          text: messages['Office Dev Program'],
           href: 'https://developer.microsoft.com/en-us/office/dev-program',
           target: '_blank',
           iconProps: {
@@ -121,7 +127,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         },
         {
           key: 'sign-out',
-          text: 'Sign Out',
+          text: messages['sign out'],
           onClick: () => this.handleSignOut(),
           iconProps: {
             iconName: 'SignOut',
@@ -130,11 +136,38 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       ]
     };
 
+    const profileCardTokens: any = {
+      boxShadow: 'none',
+      childrenGap: 15,
+      padding: 10,
+      minWidth: 0
+    };
+
+
     return (
       <div className={classes.profile}>
-        <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-          <Persona {...persona} size={PersonaSize.size40} />
-        </ActionButton>
+        {mobileScreen &&
+          <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+            <Persona {...persona} size={PersonaSize.size40} hidePersonaDetails={true} />
+          </ActionButton>
+        }
+
+        {!mobileScreen &&
+          <Card compact={true} tokens={profileCardTokens}>
+            <Card.Item fill={true}>
+            <Persona {...persona} coinSize={80} size={PersonaSize.size40} hidePersonaDetails={true} />
+            </Card.Item>
+          <Card.Section>
+            <span className={classes.personaText}>
+              {persona.text}
+            </span>
+            <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
+            <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+              <FormattedMessage id='More actions' />
+            </ActionButton>
+          </Card.Section>
+          </Card>
+        }
       </div>
     );
   }
@@ -149,9 +182,17 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
+function mapStateToProps(state: any) {
+  return {
+    mobileScreen: !!state.sidebarProperties.showToggle
+  };
+}
+
+
 // @ts-ignore
 const styledProfile = styled(Profile, authenticationStyles);
+const IntlProfile = injectIntl(styledProfile);
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
-)(styledProfile);
+)(IntlProfile);

@@ -4,7 +4,7 @@ import {
   Selection, SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -216,6 +216,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   public render() {
     const { error, pending } = this.props.samples;
+    const {
+      intl: { messages },
+    }: any = this.props;
+
     const classes = classNames(this.props);
 
     if (pending) {
@@ -223,7 +227,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         <Spinner
           className={classes.spinner}
           size={SpinnerSize.large}
-          label='loading samples ...' ariaLive='assertive' labelPosition='top' />
+          label={`${messages['loading samples']} ...`}
+          ariaLive='assertive'
+          labelPosition='top' />
       );
     }
 
@@ -240,11 +246,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         const selectedQuery = selection.getSelection()[0] as any;
         if (!selectedQuery) { return; }
 
+        const queryVersion = selectedQuery.requestUrl.substring(1, 5);
         const sampleQuery: IQuery = {
           sampleUrl: GRAPH_URL + selectedQuery.requestUrl,
           selectedVerb: selectedQuery.method,
           sampleBody: selectedQuery.postBody,
-          sampleHeaders: selectedQuery.headers || []
+          sampleHeaders: selectedQuery.headers || [],
+          selectedVersion: queryVersion,
         };
 
         if (actions) {
@@ -308,4 +316,6 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 // @ts-ignore
 const styledSampleQueries = styled(SampleQueries, sidebarStyles);
-export default connect(mapStateToProps, mapDispatchToProps)(styledSampleQueries);
+// @ts-ignore
+const IntlSampleQueries = injectIntl(styledSampleQueries);
+export default connect(mapStateToProps, mapDispatchToProps)(IntlSampleQueries);

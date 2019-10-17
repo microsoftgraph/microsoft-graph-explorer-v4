@@ -3,6 +3,7 @@ import {
   IColumn, IconButton, SearchBox, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -12,6 +13,7 @@ import * as queryActionCreators from '../../../services/actions/query-action-cre
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as requestHistoryActionCreators from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
+import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { dynamicSort } from './historyUtil';
@@ -61,17 +63,29 @@ export class History extends Component<IHistoryProps, any> {
   }
 
   public getItems(history: any) {
+    const {
+      intl: { messages },
+    }: any = this.props;
+
     const items: any[] = [];
-    let date = 'Older';
+
+    // tslint:disable-next-line:no-string-literal
+    const olderText = messages['older'];
+    // tslint:disable-next-line:no-string-literal
+    const todayText = messages['today'];
+    // tslint:disable-next-line:no-string-literal
+    const yesterdayText = messages['yesterday'];
+
+    let date = olderText;
     const today = this.formatDate(new Date());
     const yesterdaysDate = new Date(); yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
     const yesterday = this.formatDate(yesterdaysDate);
 
     history.forEach((element: any) => {
       if (element.createdAt.includes(today)) {
-        date = 'Today';
+        date = todayText;
       } else if (element.createdAt.includes(yesterday)) {
-        date = 'Yesterday';
+        date = yesterdayText;
       }
       element.category = date;
       items.push(element);
@@ -125,6 +139,16 @@ export class History extends Component<IHistoryProps, any> {
     const hostId: string = getId('tooltipHost');
     const currentTheme = getTheme();
 
+    const {
+      intl: { messages },
+    }: any = this.props;
+    // tslint:disable
+    const actionsText = messages['actions'];
+    const runQueryText = messages['Run Query'];
+    const viewText = messages['view'];
+    const removeText = messages['remove'];
+    // tslint:enable
+
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
       let color = currentTheme.palette.green;
@@ -148,11 +172,11 @@ export class History extends Component<IHistoryProps, any> {
                 {
                   key: 'actions',
                   itemType: ContextualMenuItemType.Header,
-                  text: 'Actions',
+                  text: actionsText,
                 },
                 {
                   key: 'view',
-                  text: 'View',
+                  text: viewText,
                   iconProps: {
                     iconName: 'View'
                   },
@@ -160,7 +184,7 @@ export class History extends Component<IHistoryProps, any> {
                 },
                 {
                   key: 'runQuery',
-                  text: 'Run',
+                  text: runQueryText,
                   iconProps: {
                     iconName: 'Refresh'
                   },
@@ -168,7 +192,7 @@ export class History extends Component<IHistoryProps, any> {
                 },
                 {
                   key: 'remove',
-                  text: 'Remove',
+                  text: removeText,
                   iconProps: {
                     iconName: 'Delete'
                   },
@@ -232,20 +256,21 @@ export class History extends Component<IHistoryProps, any> {
 
   private onRunQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
-
+    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
     const sampleQuery: IQuery = {
-      sampleUrl: GRAPH_URL + query.url.replace(GRAPH_URL, ''),
+      sampleUrl,
       selectedVerb: query.method,
       sampleBody: query.body,
-      sampleHeaders: query.headers
+      sampleHeaders: query.headers,
+      selectedVersion: queryVersion,
     };
 
     if (actions) {
       if (sampleQuery.selectedVerb === 'GET') {
         sampleQuery.sampleBody = JSON.parse('{}');
       }
-      actions.runQuery(sampleQuery);
       actions.setSampleQuery(sampleQuery);
+      actions.runQuery(sampleQuery);
     }
   }
 
@@ -259,12 +284,13 @@ export class History extends Component<IHistoryProps, any> {
 
   private onViewQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
-
+    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
     const sampleQuery: IQuery = {
-      sampleUrl: GRAPH_URL + query.url.replace(GRAPH_URL, ''),
+      sampleUrl,
       selectedVerb: query.method,
       sampleBody: query.body,
-      sampleHeaders: query.headers
+      sampleHeaders: query.headers,
+      selectedVersion: queryVersion,
     };
 
     if (actions) {
@@ -327,6 +353,9 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
+
 // @ts-ignore
 const styledHistory = styled(History, sidebarStyles);
-export default connect(mapStateToProps, mapDispatchToProps)(styledHistory);
+// @ts-ignore
+const IntlHistory = injectIntl(styledHistory);
+export default connect(mapStateToProps, mapDispatchToProps)(IntlHistory);

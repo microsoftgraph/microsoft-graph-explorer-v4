@@ -7,4 +7,5 @@ export interface IAuthenticationProps {
     signIn: Function;
   };
   tokenPresent: boolean;
+  mobileScreen: boolean;
 }

@@ -24,11 +24,11 @@ export default combineReducers({
   history,
   isLoadingData,
   queryRunnerError,
-  termsOfUse,
   sampleQuery,
   samples,
   scopes,
   sidebarProperties,
   snippets,
+  termsOfUse,
   theme,
 });

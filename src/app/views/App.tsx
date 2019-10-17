@@ -1,16 +1,20 @@
 import {
   FocusTrapZone,
+  FontSizes,
   IconButton,
+  IStackTokens,
   ITheme,
+  Label,
   MessageBar,
   MessageBarType,
+  Stack,
   styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
@@ -27,6 +31,7 @@ import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
+import { Banner } from './opt-in-out-banner';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
@@ -206,9 +211,20 @@ class App extends Component<IAppProps, IAppState> {
     this.props.actions!.toggleSidebar(properties);
   }
 
+  public optOut = () => {
+    const path = location.href;
+    const urlObject: URL = new URL(path);
+    const { protocol, hostname, pathname, port } = urlObject;
+    const url = `${protocol}//${hostname}${(port) ? ':' + port : ''}${pathname}`;
+    window.location.href = url.includes('localhost') ? 'http://localhost:3000' : `${url.replace('preview', '')}`;
+  }
+
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, termsOfUse, actions, sidebarProperties }: any = this.props;
+    const { graphExplorerMode, error, termsOfUse, actions, sidebarProperties, intl: { messages } }: any = this.props;
+    const sampleHeaderText = messages['Sample Queries'];
+    // tslint:disable-next-line:no-string-literal
+    const historyHeaderText = messages['History'];
     const { showToggle, showSidebar } = sidebarProperties;
     const language = navigator.language  || 'en-US';
 
@@ -218,6 +234,11 @@ class App extends Component<IAppProps, IAppState> {
         displayContent = false;
       }
     }
+
+    const stackTokens: IStackTokens = {
+      childrenGap: 10,
+      padding: 10
+    };
 
     const layout =
       graphExplorerMode === Mode.TryIt
@@ -231,18 +252,44 @@ class App extends Component<IAppProps, IAppState> {
             <div className='row'>
               {graphExplorerMode === Mode.Complete && (
                 <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
-                  {showToggle && <IconButton
-                    iconProps={{ iconName: 'GlobalNavButton' }}
-                    className={classes.sidebarToggle}
-                    title='Remove sidebar'
-                    ariaLabel='Remove sidebar'
-                    onClick={this.toggleSidebar}
-                  />}
-                  {showSidebar && <Sidebar />}
+
+                  <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
+                      {showToggle &&
+                        <IconButton
+                          iconProps={{ iconName: 'GlobalNavButton' }}
+                          className={classes.sidebarToggle}
+                          title='Remove sidebar'
+                          ariaLabel='Remove sidebar'
+                          onClick={this.toggleSidebar}
+                        />
+                      }
+                      <Label style={{
+                        fontSize: FontSizes.xLarge,
+                        fontWeight: 600,
+                        marginBottom: '10px'
+                      }}>
+                        Graph Explorer
+                      </Label>
+                      { showToggle &&
+                        <span style={{
+                          position: 'absolute',
+                          marginLeft: '75%',
+                        }}>
+
+                        <Authentication />
+                        </span>
+                      }
+                    </Stack>
+
+                  {!showToggle && <Authentication /> }
+
+                  {showSidebar && <>
+                    <Banner optOut={this.optOut} />
+                    <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
+                  </>}
                 </div>
               )}
               <div className={layout}>
-                {graphExplorerMode === Mode.Complete && displayContent && <Authentication />}
                 {graphExplorerMode === Mode.TryIt && (
                   <div style={{ marginBottom: 8 }}>
                     <MessageBar
@@ -280,7 +327,7 @@ class App extends Component<IAppProps, IAppState> {
                       isMultiline={true}
                       onDismiss={actions.clearTermsOfUse}
                     >
-                      <FormattedMessage id='Use the Microsoft Graph API' />
+                      <FormattedMessage id='use the Microsoft Graph API' />
                       <br /><br />
                       <div>
                         <a className={classes.links}
@@ -338,8 +385,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 };
 
 const StyledApp = styled(App, appStyles);
+const IntlApp = injectIntl(StyledApp);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(StyledApp);
+)(IntlApp);

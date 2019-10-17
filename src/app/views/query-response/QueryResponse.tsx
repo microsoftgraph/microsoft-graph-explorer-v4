@@ -84,6 +84,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
         >
           <ThemeContext.Consumer >
             {(theme) => (
+              // @ts-ignore
               <AdaptiveCard
                 body= {body}
                 hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
