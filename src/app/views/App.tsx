@@ -215,7 +215,7 @@ class App extends Component<IAppProps, IAppState> {
     const urlObject: URL = new URL(path);
     const { protocol, hostname, pathname, port } = urlObject;
     const url = `${protocol}//${hostname}${(port) ? ':' + port : ''}${pathname}`;
-    window.location.href = url.includes('localhost') ? 'http://localhost:3000' : `${url.replace('preview', '')}`;
+    window.location.href = url.includes('localhost') ? 'http://localhost:3000' : `${url.replace('/preview', '')}`;
   }
 
   public render() {
@@ -383,7 +383,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-const StyledApp = styled(App, appStyles);
+const StyledApp = styled(App, appStyles as any);
 const IntlApp = injectIntl(StyledApp);
 
 export default connect(
