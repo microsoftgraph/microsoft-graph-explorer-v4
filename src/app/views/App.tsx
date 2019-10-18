@@ -215,7 +215,7 @@ class App extends Component<IAppProps, IAppState> {
     const urlObject: URL = new URL(path);
     const { protocol, hostname, pathname, port } = urlObject;
     const url = `${protocol}//${hostname}${(port) ? ':' + port : ''}${pathname}`;
-    window.location.href = url.includes('localhost') ? 'http://localhost:3000' : `${url.replace('preview', '')}`;
+    window.location.href = url.includes('localhost') ? 'http://localhost:3000' : `${url.replace('/preview', '')}`;
   }
 
   public render() {
