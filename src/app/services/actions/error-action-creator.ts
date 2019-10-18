@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux';
 import { IAction } from '../../../types/action';
-import { CLEAR_QUERY_ERROR, CLEAR_RESPONSE, QUERY_GRAPH_ERROR } from '../redux-constants';
+import { CLEAR_QUERY_ERROR, CLEAR_RESPONSE, QUERY_GRAPH_STATUS } from '../redux-constants';
 
-export function queryResponseError(response: object): IAction {
+export function queryResponseStatus(response: object): IAction {
   return {
-    type: QUERY_GRAPH_ERROR,
+    type: QUERY_GRAPH_STATUS,
     response,
   };
 }

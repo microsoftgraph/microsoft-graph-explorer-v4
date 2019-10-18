@@ -1,7 +1,6 @@
-import { clearQueryError } from '../../../app/services/actions/error-action-creator';
 import { queryRunnerError } from '../../../app/services/reducers/query-runner-error';
 import { graphResponse } from '../../../app/services/reducers/query-runner-reducers';
-import { CLEAR_QUERY_ERROR, QUERY_GRAPH_ERROR, QUERY_GRAPH_SUCCESS } from '../../../app/services/redux-constants';
+import { CLEAR_QUERY_ERROR, QUERY_GRAPH_STATUS, QUERY_GRAPH_SUCCESS } from '../../../app/services/redux-constants';
 
 describe('Query Runner Reducer', () => {
   it('should return initial state', () => {
@@ -28,12 +27,12 @@ describe('Query Runner Reducer', () => {
     expect(newState).toEqual(mockResponse);
   });
 
-  it('should handle QUERY_GRAPH_ERROR', () => {
+  it('should handle QUERY_GRAPH_STATUS', () => {
     const initialState = {};
     const mockResponse = {
       status: 400
     };
-    const queryAction = { type: QUERY_GRAPH_ERROR, response: mockResponse };
+    const queryAction = { type: QUERY_GRAPH_STATUS, response: mockResponse };
     const newState = queryRunnerError(initialState, queryAction);
 
     expect(newState).toEqual(mockResponse);

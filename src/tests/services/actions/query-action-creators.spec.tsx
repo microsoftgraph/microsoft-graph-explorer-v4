@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import { runQuery } from '../../../app/services/actions/query-action-creators';
-import { QUERY_GRAPH_ERROR, QUERY_GRAPH_RUNNING, QUERY_GRAPH_SUCCESS } from '../../../app/services/redux-constants';
+import { QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS, QUERY_GRAPH_SUCCESS } from '../../../app/services/redux-constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -71,7 +71,7 @@ describe('query actions', () => {
       });
   });
 
-  it('dispatches QUERY_GRAPH_ERROR for failed requests', () => {
+  it('dispatches QUERY_GRAPH_STATUS for failed requests', () => {
     const createdAt = new Date().toISOString();
     const sampleUrl = 'https://graph.microsoft.com/v1.0/m/';
     setTimeout(() => { // delays request time by 1 second so that the createdAt dates match
@@ -110,7 +110,7 @@ describe('query actions', () => {
           body: { ok: false },
           headers: {}
         },
-        type: QUERY_GRAPH_ERROR
+        type: QUERY_GRAPH_STATUS
       }
     ];
 

@@ -28,7 +28,7 @@ import { Sidebar } from './sidebar/Sidebar';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
-  error: object | null;
+  queryState: object | null;
   termsOfUse: boolean;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
@@ -209,7 +209,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, termsOfUse, actions, sidebarProperties, intl: { messages } }: any = this.props;
+    const { graphExplorerMode, queryState, termsOfUse, actions, sidebarProperties, intl: { messages } }: any = this.props;
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
@@ -310,13 +310,13 @@ class App extends Component<IAppProps, IAppState> {
                   <div style={{ marginBottom: 8 }}>
                     <QueryRunner onSelectVerb={this.handleSelectVerb} />
                   </div>
-                  {error && (
+                  {queryState && (
                     <MessageBar
-                      messageBarType={MessageBarType.error}
+                      messageBarType={queryState.ok ? MessageBarType.success : MessageBarType.error}
                       isMultiline={false}
                       onDismiss={actions.clearQueryError}
                     >
-                      {`${error.statusText} - ${error.status}`}
+                      {`${queryState.statusText} - ${queryState.status}`}
                     </MessageBar>
                   )}
                   {graphExplorerMode === Mode.Complete && termsOfUse && (
@@ -357,7 +357,7 @@ class App extends Component<IAppProps, IAppState> {
 
 const mapStateToProps = (state: any) => {
   return {
-    error: state.queryRunnerError,
+    queryState: state.queryRunnerError,
     termsOfUse: state.termsOfUse,
     receivedSampleQuery: state.sampleQuery,
     graphExplorerMode: state.graphExplorerMode,

@@ -1,7 +1,7 @@
 import { writeData } from '../../../store/cache';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
-import { queryResponseError } from './error-action-creator';
+import { queryResponseStatus } from './error-action-creator';
 import { fetchScopes } from './permissions-action-creator';
 import {
   anonymousRequest, authenticatedRequest,
@@ -33,6 +33,9 @@ export function runQuery(query: IQuery): Function {
     createHistory(response, respHeaders, query, createdAt, dispatch, result);
 
     if (response && response.ok) {
+
+      dispatch(queryResponseStatus(response));
+
       return dispatch(queryResponse({
         body: result,
         headers: respHeaders
@@ -42,7 +45,7 @@ export function runQuery(query: IQuery): Function {
       dispatch(fetchScopes());
     }
     else {
-      return dispatch(queryResponseError(response));
+      return dispatch(queryResponseStatus(response));
     }
 
   }
