@@ -1,12 +1,12 @@
 import { writeData } from '../../../store/cache';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
-import { queryResponseStatus } from './error-action-creator';
 import { fetchScopes } from './permissions-action-creator';
 import {
   anonymousRequest, authenticatedRequest,
   isImageResponse, parseResponse, queryResponse
 } from './query-action-creator-util';
+import { queryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
 
 export function runQuery(query: IQuery): Function {
