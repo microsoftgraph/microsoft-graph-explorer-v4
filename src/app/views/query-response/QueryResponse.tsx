@@ -2,10 +2,12 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+
 import { ThemeContext } from '../../../themes/theme-context';
 import { Mode } from '../../../types/action';
-
 import { IQueryResponseProps } from '../../../types/query-response';
+import { getConsent } from '../../services/actions/permissions-action-creator';
 import { Image, Monaco } from '../common';
 import AdaptiveCard  from './adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from './adaptive-cards/AdaptiveHostConfig';
@@ -15,6 +17,13 @@ import { Snippets } from './snippets';
 class QueryResponse extends Component<IQueryResponseProps, {}> {
   constructor(props: any) {
     super(props);
+  }
+
+  public componentDidUpdate(nextProps: any) {
+    const { scopes } = this.props;
+    if (nextProps.scopes !== scopes) {
+      this.props.actions!.getConsent();
+    }
   }
 
   public render() {
@@ -110,10 +119,19 @@ function mapStateToProps(state: any) {
     graphResponse:  state.graphResponse,
     appTheme: state.theme,
     mode : state.graphExplorerMode,
+    scopes: state.scopes.data,
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch): object {
+  return {
+    actions: bindActionCreators({
+      getConsent
+    }, dispatch),
   };
 }
 
 // @ts-ignore
 const WithIntl = injectIntl(QueryResponse);
-export default connect(mapStateToProps)(WithIntl);
+export default connect(mapStateToProps, mapDispatchToProps)(WithIntl);
 
