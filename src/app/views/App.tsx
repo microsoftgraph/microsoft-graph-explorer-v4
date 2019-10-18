@@ -317,7 +317,7 @@ class App extends Component<IAppProps, IAppState> {
                       isMultiline={false}
                       onDismiss={actions.clearQueryStatus}
                     >
-                      {`${queryState.statusText} - ${queryState.status}`}
+                      {`${queryState.statusText} - ${queryState.status} - ${queryState.duration}ms`}
                     </MessageBar>
                   )}
                   {graphExplorerMode === Mode.Complete && termsOfUse && (

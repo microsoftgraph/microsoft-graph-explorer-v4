@@ -33,8 +33,6 @@ describe('query actions', () => {
           body: undefined,
           createdAt,
           duration: undefined,
-          // tslint:disable-next-line:max-line-length
-          har: '{"log":{"version":"2.0","creator":{"name":"Graph Explorer","version":"2.0"},"entries":[{"startedDateTime":"' + createdAt + '","request":{"url":"' + sampleUrl + '","httpVersion":"HTTP/1.1","cookies":[],"queryString":[{"name":"","value":""}],"headersSize":-1,"bodySize":-1},"response":{"status":200,"statusText":"OK","httpVersion":"HTTP/1.1","cookies":[],"headers":{"content-type":"application-json"},"content":{"text":"{\\"displayName\\":\\"Megan Bowen\\",\\"ok\\":true}","size":39,"mimeType":"application/json"},"redirectURL":"","headersSize":-1,"bodySize":-1},"cache":{},"timings":{"send":0,"wait":0,"receive":0},"connection":""}]}}',
           headers: undefined,
           method: undefined,
           responseHeaders:
