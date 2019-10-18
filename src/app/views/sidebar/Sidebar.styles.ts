@@ -97,6 +97,7 @@ export const sidebarStyles = (theme: ITheme) => {
       float: 'right',
       verticalAlign: 'center',
       marginTop: '-7.5%',
+      marginRight: theme.spacing.s1,
     },
 
   };
