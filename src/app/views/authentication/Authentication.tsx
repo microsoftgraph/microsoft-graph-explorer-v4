@@ -1,4 +1,4 @@
-import { ActionButton, Stack, styled } from 'office-ui-fabric-react';
+import { DefaultButton, FontSizes, Icon, Label, Stack, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -27,22 +27,50 @@ export class Authentication extends Component<IAuthenticationProps> {
     const { tokenPresent, mobileScreen } = this.props;
     const classes = classNames(this.props);
 
+    const authLabel = {
+      fontSize: FontSizes.large,
+      fontWeight: 400,
+    };
+
+    const authIcon = {
+      margin: '0 5px'
+    };
+
+    const authenticationStack = <Stack>
+      <Stack.Item align='start'>
+        {!tokenPresent &&
+          <DefaultButton
+            ariaLabel='Sign-in button'
+            role='button'
+            iconProps={{ iconName: 'Contact' }}
+            onClick={this.signIn}
+          >
+        {!mobileScreen && <FormattedMessage id='sign in' />}
+        </DefaultButton>}
+        {tokenPresent && <Profile />}
+      </Stack.Item>
+    </Stack>;
+
+
     return (
       <div className={classes.authenticationContainer}>
-        <Stack>
-          <Stack.Item align='start'>
-            {!tokenPresent && <ActionButton
-              ariaLabel='Sign-in button'
-              className={classes.signInButton}
-              role='button'
-              iconProps={{ iconName: 'Contact' }}
-              onClick={this.signIn}>
-                {!mobileScreen && <FormattedMessage id='sign in' />}
-              </ActionButton>}
-          </Stack.Item>
-          {tokenPresent &&
-            <Profile />}
-        </Stack>
+        {!mobileScreen && <Stack>
+          {!tokenPresent &&
+          <>
+            <Label style={authLabel}>
+              <Icon iconName='Permissions' style={authIcon} />
+              <FormattedMessage id='Authentication'/>
+            </Label>
+            <br />
+            <Label>
+              <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />
+            </Label>
+          </>
+          }
+          <span><br />{authenticationStack}<br /> </span>
+        </Stack>}
+
+        {mobileScreen && authenticationStack}
       </div>
     );
   }
