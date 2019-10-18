@@ -2,7 +2,7 @@ import { IAction } from '../../../types/action';
 import { CLEAR_QUERY_ERROR, FETCH_SCOPES_ERROR,
   GET_CONSENT_ERROR, QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS, QUERY_GRAPH_SUCCESS } from '../redux-constants';
 
-export function queryRunnerError(state = {}, action: IAction): any {
+export function queryRunnerStatus(state = {}, action: IAction): any {
   switch (action.type) {
     case QUERY_GRAPH_STATUS:
       return action.response;
