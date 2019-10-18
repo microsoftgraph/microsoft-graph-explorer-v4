@@ -14,6 +14,9 @@ export const appStyles = (theme: ITheme) => {
     sidebar: {
       background: theme.palette.neutralLighter,
     },
+    separator: {
+      borderBottom: '1px solid ' + theme.palette.neutralLight,
+    },
     links: {
       color: 'inherit'
     },

@@ -1,20 +1,9 @@
-import {
-  FocusTrapZone,
-  FontSizes,
-  IconButton,
-  IStackTokens,
-  ITheme,
-  Label,
-  MessageBar,
-  MessageBarType,
-  Stack,
-  styled
-} from 'office-ui-fabric-react';
+import { FocusTrapZone, FontSizes, IconButton, IStackTokens, ITheme, Label,
+  MessageBar, MessageBarType, Stack, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import { FormattedMessage, injectIntl } from 'react-intl';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
@@ -253,37 +242,47 @@ class App extends Component<IAppProps, IAppState> {
                 <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
 
                   <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
-                      {showToggle &&
-                        <IconButton
-                          iconProps={{ iconName: 'GlobalNavButton' }}
-                          className={classes.sidebarToggle}
-                          title='Remove sidebar'
-                          ariaLabel='Remove sidebar'
-                          onClick={this.toggleSidebar}
-                        />
-                      }
+                    {showToggle && <>
+                      <IconButton
+                        iconProps={{ iconName: 'GlobalNavButton' }}
+                        className={classes.sidebarToggle}
+                        title='Remove sidebar'
+                        ariaLabel='Remove sidebar'
+                        onClick={this.toggleSidebar}
+                      />
                       <Label style={{
                         fontSize: FontSizes.xLarge,
                         fontWeight: 600,
-                        marginBottom: '10px'
                       }}>
                         Graph Explorer
                       </Label>
-                      { showToggle &&
-                        <span style={{
-                          position: 'absolute',
-                          marginLeft: '75%',
-                        }}>
+                      <span style={{
+                        position: 'absolute',
+                        marginLeft: '70%',
+                      }}>
 
-                        <Authentication />
-                        </span>
-                      }
+                      <Authentication />
+                      </span>
+                      </>
+                    }
+
+                    {!showToggle && <Label style={{
+                      fontSize: FontSizes.xxLarge,
+                      fontWeight: 600,
+                      marginBottom: '10px',
+                      marginTop: '2%',
+                    }}>
+                      Graph Explorer
+                      </Label>}
                     </Stack>
 
-                  {!showToggle && <Authentication /> }
+                  <hr className={classes.separator} />
+
+                  {!showToggle && <><Authentication /> <hr className={classes.separator} /></> }
 
                   {showSidebar && <>
                     <Banner optOut={this.optOut} />
+                    <hr className={classes.separator} />
                     <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                   </>}
                 </div>

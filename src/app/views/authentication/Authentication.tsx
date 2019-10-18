@@ -1,4 +1,4 @@
-import { DefaultButton, FontSizes, Icon, Label, Stack, styled } from 'office-ui-fabric-react';
+import { FontSizes, Icon, Label, PrimaryButton, Stack, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -39,14 +39,14 @@ export class Authentication extends Component<IAuthenticationProps> {
     const authenticationStack = <Stack>
       <Stack.Item align='start'>
         {!tokenPresent &&
-          <DefaultButton
+          <PrimaryButton
             ariaLabel='Sign-in button'
             role='button'
             iconProps={{ iconName: 'Contact' }}
             onClick={this.signIn}
           >
         {!mobileScreen && <FormattedMessage id='sign in' />}
-        </DefaultButton>}
+        </PrimaryButton>}
         {tokenPresent && <Profile />}
       </Stack.Item>
     </Stack>;
