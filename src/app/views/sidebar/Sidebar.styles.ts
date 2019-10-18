@@ -72,6 +72,13 @@ export const sidebarStyles = (theme: ITheme) => {
       lineHeight: '100%',
       width: '80%',
       fontSize: FontSizes.medium,
+      borderBottom: '1px solid ' + theme.palette.neutralLight,
+      color: theme.palette.black,
+      selectors: {
+        ':hover': {
+          background: theme.palette.neutralLight,
+        },
+      },
     },
     queryContent: {
       display: 'table-cell',
@@ -90,6 +97,7 @@ export const sidebarStyles = (theme: ITheme) => {
       float: 'right',
       verticalAlign: 'center',
       marginTop: '-7.5%',
+      marginRight: theme.spacing.s1,
     },
 
   };
