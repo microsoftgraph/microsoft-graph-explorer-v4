@@ -8,8 +8,6 @@ export function graphResponse(state = {}, action: IAction): any {
       return action.response;
     case VIEW_HISTORY_ITEM_SUCCESS:
       return action.response;
-    // case QUERY_GRAPH_STATUS:
-    //   return { body: {}, headers: {} };
     case SET_SAMPLE_QUERY_SUCCESS:
       return { body: undefined, headers: undefined };
     case CLEAR_RESPONSE:
