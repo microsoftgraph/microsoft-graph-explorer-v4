@@ -53,7 +53,7 @@
   "User photo": "фотография вошедшего пользователя",
   "Response Headers": "Заголовки откликов",
   "Response headers viewer": "Заголовки откликов, возвращаемые Microsoft Graph",
-  "Response body": "Тело отклика, возвращаемое Microsoft Graph",
+  "Response body": "Текст отклика, возвращаемый Microsoft Graph",
   "Response Preview": "Просмотр отклика",
   "Sample Queries": "Примеры запросов",
   "show more samples": "Показать другие примеры",
