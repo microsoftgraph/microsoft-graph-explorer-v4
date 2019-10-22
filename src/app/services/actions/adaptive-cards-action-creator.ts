@@ -37,6 +37,11 @@ export function getAdaptiveCard(payload: string, sampleQuery: IQuery): Function 
       return dispatch(getAdaptiveCardSuccess());
     }
 
+    if (Object.keys(payload).length === 0) {
+      // check if the payload is something else that we cannot use
+      return dispatch(getAdaptiveCardError('Invalid payload for card'));
+    }
+
     const templateFileName = lookupTemplate(sampleQuery);
     if (!templateFileName) {
       // we dont support this card yet
@@ -74,7 +79,7 @@ function lookupTemplate(sampleQuery: IQuery): string {
     for (const templateMapKey in templateMap) {
       if (templateMap.hasOwnProperty(templateMapKey)) {
         // check if the template matches a specific pattern while ignoring case
-        const isMatch = new RegExp(templateMapKey + '$', 'i').test(query);
+        const isMatch = new RegExp(templateMapKey + '$', 'i').test('/' + query);
         if (isMatch) {
           return templateMap[templateMapKey];
         }
@@ -85,16 +90,16 @@ function lookupTemplate(sampleQuery: IQuery): string {
 }
 
 const templateMap: any = {
-  'groups' : 'Groups.json',
-  'me': 'Profile.json',
-  'me/directReports' : 'Users.json',
-  'me/drive/root/children': 'Files.json',
-  'me/drive/recent' : 'Files.json',
-  'me/manager': 'Profile.json',
-  'me/memberOf' : 'Groups.json',
-  'me/messages' : 'Messages.json',
-  'sites/([^/]+)' : 'Site.json',
-  'sites/([^/]+)/sites' : 'Sites.json',
-  'users' : 'Users.json',
-  'users/([^/]+)' : 'Profile.json'
+  '/groups' : 'Groups.json',
+  '/me': 'Profile.json',
+  '/me/directReports' : 'Users.json',
+  '/me/drive/root/children': 'Files.json',
+  '/me/drive/recent' : 'Files.json',
+  '/me/manager': 'Profile.json',
+  '/me/memberOf' : 'Groups.json',
+  '/me/messages' : 'Messages.json',
+  '/sites/([^/?]+)' : 'Site.json',
+  '/sites/([^/?]+)/sites' : 'Sites.json',
+  '/users' : 'Users.json',
+  '/users/([^/?]+)' : 'Profile.json'
 };
