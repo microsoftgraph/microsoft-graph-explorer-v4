@@ -139,7 +139,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
         case 'method':
           return <span className={classes.badge}
-            style={{ color: this.getMethodStyle(item.method) }}
+            style={{ background: this.getMethodStyle(item.method) }}
           >{item.method}</span>;
 
         default:
