@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
+import { Permission } from './permissions';
 import './request.scss';
 import RequestHeaders from './RequestHeaders';
 
@@ -34,6 +35,9 @@ export class Request extends Component<IRequestComponent, any> {
           </PivotItem>
           <PivotItem headerText={messages['request header']}>
             <RequestHeaders />
+          </PivotItem>
+          <PivotItem headerText={messages.Permission}>
+            <Permission />
           </PivotItem>
         </Pivot>
       </div>

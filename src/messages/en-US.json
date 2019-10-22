@@ -256,5 +256,6 @@
   "view" : "View",
   "remove" : "Remove",
   "back to classic": "Switch the toggle to go back to Graph Explorer classic.",
-  "More actions" : "More actions"
+  "More actions" : "More actions",
+  "Permission": "Permission"
 }
