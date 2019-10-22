@@ -11,7 +11,7 @@ export function Permission() {
     setLoading(true);
 
     fetchScopes(sample)
-      .then(res => { setLoading(false); setPermissions(res); console.log(res); });
+      .then(res => { setLoading(false); setPermissions(res); });
   }, [sample.sampleUrl]);
 
 
