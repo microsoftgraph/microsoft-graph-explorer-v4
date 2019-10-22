@@ -9,9 +9,9 @@ import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
 import { ISidebarProps } from '../../types/sidebar';
-import { clearQueryError } from '../services/actions/error-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
+import { clearQueryStatus } from '../services/actions/query-status-action-creator';
 import { addRequestHeader } from '../services/actions/request-headers-action-creators';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeTheme } from '../services/actions/theme-action-creator';
@@ -28,13 +28,13 @@ import { Sidebar } from './sidebar/Sidebar';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
-  error: object | null;
+  queryState: object | null;
   termsOfUse: boolean;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
   actions: {
     addRequestHeader: Function;
-    clearQueryError: Function;
+    clearQueryStatus: Function;
     clearTermsOfUse: Function;
     setSampleQuery: Function;
     runQuery: Function;
@@ -209,7 +209,8 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, termsOfUse, actions, sidebarProperties, intl: { messages } }: any = this.props;
+    const { graphExplorerMode, queryState, termsOfUse,
+      actions, sidebarProperties, intl: { messages } }: any = this.props;
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
@@ -310,13 +311,13 @@ class App extends Component<IAppProps, IAppState> {
                   <div style={{ marginBottom: 8 }}>
                     <QueryRunner onSelectVerb={this.handleSelectVerb} />
                   </div>
-                  {error && (
+                  {queryState && (
                     <MessageBar
-                      messageBarType={MessageBarType.error}
+                      messageBarType={queryState.ok ? MessageBarType.success : MessageBarType.error}
                       isMultiline={false}
-                      onDismiss={actions.clearQueryError}
+                      onDismiss={actions.clearQueryStatus}
                     >
-                      {`${error.statusText} - ${error.status}`}
+                      {`${queryState.statusText} - ${queryState.status} - ${queryState.duration}ms`}
                     </MessageBar>
                   )}
                   {graphExplorerMode === Mode.Complete && termsOfUse && (
@@ -357,7 +358,7 @@ class App extends Component<IAppProps, IAppState> {
 
 const mapStateToProps = (state: any) => {
   return {
-    error: state.queryRunnerError,
+    queryState: state.queryRunnerStatus,
     termsOfUse: state.termsOfUse,
     receivedSampleQuery: state.sampleQuery,
     graphExplorerMode: state.graphExplorerMode,
@@ -369,7 +370,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     actions: bindActionCreators({
-      clearQueryError,
+      clearQueryStatus,
       clearTermsOfUse,
       runQuery,
       setSampleQuery,

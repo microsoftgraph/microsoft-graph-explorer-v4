@@ -5,8 +5,8 @@ import { graphExplorerMode } from './graph-explorer-mode-reducer';
 import { scopes } from './permissions-reducer';
 import { sampleQuery } from './query-input-reducers';
 import { isLoadingData } from './query-loading-reducers';
-import { queryRunnerError } from './query-runner-error';
 import { graphResponse } from './query-runner-reducers';
+import { queryRunnerStatus } from './query-runner-status-reducers';
 import { headersAdded } from './request-headers-reducers';
 import { history } from './request-history-reducers';
 import { samples } from './samples-reducers';
@@ -23,7 +23,7 @@ export default combineReducers({
   headersAdded,
   history,
   isLoadingData,
-  queryRunnerError,
+  queryRunnerStatus,
   sampleQuery,
   samples,
   scopes,
