@@ -6,10 +6,10 @@ export function getMethodStyle (method: string) {
   method = method.toString().toUpperCase();
   switch (method) {
     case 'GET':
-      return currentTheme.palette.green;
+      return currentTheme.palette.blue;
 
     case 'POST':
-      return currentTheme.palette.blue;
+      return currentTheme.palette.green;
 
     case 'PUT':
       return currentTheme.palette.magentaDark;
