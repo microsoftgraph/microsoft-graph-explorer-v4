@@ -34,7 +34,7 @@ export async function anonymousRequest(dispatch: Function, query: IQuery) {
   const headers = {
     'Authorization': `Bearer ${authToken}`,
     'Content-Type': 'application/json',
-    'SdkVersion': 'GraphExplorer/v04',
+    'SdkVersion': 'GraphExplorer/4.0',
     ...sampleHeaders
   };
 
@@ -91,7 +91,7 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
 const makeRequest = (httpVerb: string, scopes: string[]): Function => {
   return async (dispatch: Function, query: IQuery) => {
     const sampleHeaders: any = {};
-    sampleHeaders['GE-Version'] = 'GraphExplorer/v04';
+    sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
 
     if (query.sampleHeaders) {
       query.sampleHeaders.forEach(header => {
