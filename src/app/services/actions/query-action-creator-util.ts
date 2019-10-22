@@ -34,7 +34,7 @@ export async function anonymousRequest(dispatch: Function, query: IQuery) {
   const headers = {
     'Authorization': `Bearer ${authToken}`,
     'Content-Type': 'application/json',
-    'GE-Version': 'GraphExplorer/v04',
+    'SdkVersion': 'GraphExplorer/v04',
     ...sampleHeaders
   };
 
