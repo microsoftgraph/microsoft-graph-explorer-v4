@@ -1,5 +1,4 @@
 import { ITheme } from '@uifabric/styling';
-import { inherits } from 'util';
 
 export const appStyles = (theme: ITheme) => {
   return {
@@ -13,7 +12,10 @@ export const appStyles = (theme: ITheme) => {
       marginBottom: theme.spacing.s1
     },
     sidebar: {
-      borderRight: 'solid 1px ' + theme.palette.neutralLighter
+      background: theme.palette.neutralLighter,
+    },
+    separator: {
+      borderBottom: '1px solid ' + theme.palette.neutralLight,
     },
     links: {
       color: 'inherit'

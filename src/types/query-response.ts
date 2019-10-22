@@ -12,4 +12,8 @@ export interface IQueryResponseProps {
   };
   verb: string;
   theme: string;
+  scopes: string[];
+  actions: {
+    getConsent: Function;
+  };
 }

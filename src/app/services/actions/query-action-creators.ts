@@ -2,6 +2,7 @@ import { writeData } from '../../../store/cache';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { queryResponseError } from './error-action-creator';
+import { fetchScopes } from './permissions-action-creator';
 import {
   anonymousRequest, authenticatedRequest,
   isImageResponse, parseResponse, queryResponse
@@ -25,7 +26,8 @@ export function runQuery(query: IQuery): Function {
     });
   };
 
-  async function processResponse(response: Response, respHeaders: any, dispatch: Function, createdAt: any) {
+  async function processResponse(response: Response, respHeaders: any, dispatch: Function,
+    createdAt: any) {
 
     const result = await parseResponse(response, respHeaders);
     createHistory(response, respHeaders, query, createdAt, dispatch, result);
@@ -35,6 +37,9 @@ export function runQuery(query: IQuery): Function {
         body: result,
         headers: respHeaders
       }));
+    }
+    else if (response && response.status === 403) {
+      dispatch(fetchScopes());
     }
     else {
       return dispatch(queryResponseError(response));
@@ -50,7 +55,8 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
   const duration = (new Date()).getTime() - new Date(createdAt).getTime();
   const contentType = respHeaders['content-type'];
 
-  if (isImageResponse(contentType)) {
+  const isImageResult = isImageResponse(contentType);
+  if (isImageResult) {
     result = await result.clone().arrayBuffer();
   }
 
@@ -63,8 +69,8 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
     createdAt,
     status,
     statusText,
-    result,
     duration,
+    result: isImageResult ? result : null,
     har: ''
   };
 
