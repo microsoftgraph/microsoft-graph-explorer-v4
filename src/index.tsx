@@ -46,7 +46,7 @@ const appState = store({
   authToken: '',
   theme: 'light',
   isLoadingData: false,
-  queryRunnerError: null,
+  queryRunnerStatus: null,
   termsOfUse: true,
   headersAdded: [{ name: '', value: '' }],
   sampleQuery: {
@@ -109,6 +109,31 @@ readData().then((data: any) => {
     });
   }
 });
+
+/**
+ * Set's up Monaco Editor's Workers.
+ */
+enum Workers {
+  Json = 'json',
+  Editor = 'editor'
+}
+
+(window as any).MonacoEnvironment = {
+  getWorkerUrl (moduleId: any, label: string) {
+    if (label === 'json') {
+      return getWorkerFor(Workers.Json);
+    }
+    return getWorkerFor(Workers.Editor);
+  }
+};
+
+function getWorkerFor(worker: string): string {
+  const WORKER_PATH = 'https://personalize.blob.core.windows.net/test';
+
+  return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+	    importScripts('${WORKER_PATH}/${worker}.worker.js');`
+  )}`;
+}
 
 const Root = () => {
   return (

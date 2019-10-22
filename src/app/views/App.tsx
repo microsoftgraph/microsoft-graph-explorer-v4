@@ -1,28 +1,17 @@
-import {
-  FocusTrapZone,
-  FontSizes,
-  IconButton,
-  IStackTokens,
-  ITheme,
-  Label,
-  MessageBar,
-  MessageBarType,
-  Stack,
-  styled
-} from 'office-ui-fabric-react';
+import { FocusTrapZone, FontSizes, IconButton, IStackTokens, ITheme, Label,
+  MessageBar, MessageBarType, Stack, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import { FormattedMessage, injectIntl } from 'react-intl';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
 import { ISidebarProps } from '../../types/sidebar';
-import { clearQueryError } from '../services/actions/error-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
+import { clearQueryStatus } from '../services/actions/query-status-action-creator';
 import { addRequestHeader } from '../services/actions/request-headers-action-creators';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeTheme } from '../services/actions/theme-action-creator';
@@ -39,13 +28,13 @@ import { Sidebar } from './sidebar/Sidebar';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
-  error: object | null;
+  queryState: object | null;
   termsOfUse: boolean;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
   actions: {
     addRequestHeader: Function;
-    clearQueryError: Function;
+    clearQueryStatus: Function;
     clearTermsOfUse: Function;
     setSampleQuery: Function;
     runQuery: Function;
@@ -215,12 +204,13 @@ class App extends Component<IAppProps, IAppState> {
     const urlObject: URL = new URL(path);
     const { protocol, hostname, pathname, port } = urlObject;
     const url = `${protocol}//${hostname}${(port) ? ':' + port : ''}${pathname}`;
-    window.location.href = url.includes('localhost') ? 'http://localhost:3000' : `${url.replace('preview', '')}`;
+    window.location.href = url.includes('localhost') ? 'http://localhost:3000' : `${url.replace('/preview', '')}`;
   }
 
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, termsOfUse, actions, sidebarProperties, intl: { messages } }: any = this.props;
+    const { graphExplorerMode, queryState, termsOfUse,
+      actions, sidebarProperties, intl: { messages } }: any = this.props;
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
@@ -253,37 +243,47 @@ class App extends Component<IAppProps, IAppState> {
                 <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
 
                   <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
-                      {showToggle &&
-                        <IconButton
-                          iconProps={{ iconName: 'GlobalNavButton' }}
-                          className={classes.sidebarToggle}
-                          title='Remove sidebar'
-                          ariaLabel='Remove sidebar'
-                          onClick={this.toggleSidebar}
-                        />
-                      }
+                    {showToggle && <>
+                      <IconButton
+                        iconProps={{ iconName: 'GlobalNavButton' }}
+                        className={classes.sidebarToggle}
+                        title='Remove sidebar'
+                        ariaLabel='Remove sidebar'
+                        onClick={this.toggleSidebar}
+                      />
                       <Label style={{
                         fontSize: FontSizes.xLarge,
                         fontWeight: 600,
-                        marginBottom: '10px'
                       }}>
                         Graph Explorer
                       </Label>
-                      { showToggle &&
-                        <span style={{
-                          position: 'absolute',
-                          marginLeft: '75%',
-                        }}>
+                      <span style={{
+                        position: 'absolute',
+                        marginLeft: '70%',
+                      }}>
 
-                        <Authentication />
-                        </span>
-                      }
+                      <Authentication />
+                      </span>
+                      </>
+                    }
+
+                    {!showToggle && <Label style={{
+                      fontSize: FontSizes.xxLarge,
+                      fontWeight: 600,
+                      marginBottom: '10px',
+                      marginTop: '2%',
+                    }}>
+                      Graph Explorer
+                      </Label>}
                     </Stack>
 
-                  {!showToggle && <Authentication /> }
+                  <hr className={classes.separator} />
+
+                  {!showToggle && <><Authentication /> <hr className={classes.separator} /></> }
 
                   {showSidebar && <>
                     <Banner optOut={this.optOut} />
+                    <hr className={classes.separator} />
                     <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                   </>}
                 </div>
@@ -311,13 +311,13 @@ class App extends Component<IAppProps, IAppState> {
                   <div style={{ marginBottom: 8 }}>
                     <QueryRunner onSelectVerb={this.handleSelectVerb} />
                   </div>
-                  {error && (
+                  {queryState && (
                     <MessageBar
-                      messageBarType={MessageBarType.error}
+                      messageBarType={queryState.ok ? MessageBarType.success : MessageBarType.error}
                       isMultiline={false}
-                      onDismiss={actions.clearQueryError}
+                      onDismiss={actions.clearQueryStatus}
                     >
-                      {`${error.statusText} - ${error.status}`}
+                      {`${queryState.statusText} - ${queryState.status} - ${queryState.duration}ms`}
                     </MessageBar>
                   )}
                   {graphExplorerMode === Mode.Complete && termsOfUse && (
@@ -358,7 +358,7 @@ class App extends Component<IAppProps, IAppState> {
 
 const mapStateToProps = (state: any) => {
   return {
-    error: state.queryRunnerError,
+    queryState: state.queryRunnerStatus,
     termsOfUse: state.termsOfUse,
     receivedSampleQuery: state.sampleQuery,
     graphExplorerMode: state.graphExplorerMode,
@@ -370,7 +370,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     actions: bindActionCreators({
-      clearQueryError,
+      clearQueryStatus,
       clearTermsOfUse,
       runQuery,
       setSampleQuery,
@@ -383,7 +383,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-const StyledApp = styled(App, appStyles);
+const StyledApp = styled(App, appStyles as any);
 const IntlApp = injectIntl(StyledApp);
 
 export default connect(
