@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import { runQuery } from '../../../app/services/actions/query-action-creators';
-import { QUERY_GRAPH_ERROR, QUERY_GRAPH_RUNNING, QUERY_GRAPH_SUCCESS } from '../../../app/services/redux-constants';
+import { QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS, QUERY_GRAPH_SUCCESS } from '../../../app/services/redux-constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -33,8 +33,6 @@ describe('query actions', () => {
           body: undefined,
           createdAt,
           duration: undefined,
-          // tslint:disable-next-line:max-line-length
-          har: '{"log":{"version":"2.0","creator":{"name":"Graph Explorer","version":"2.0"},"entries":[{"startedDateTime":"' + createdAt + '","request":{"url":"' + sampleUrl + '","httpVersion":"HTTP/1.1","cookies":[],"queryString":[{"name":"","value":""}],"headersSize":-1,"bodySize":-1},"response":{"status":200,"statusText":"OK","httpVersion":"HTTP/1.1","cookies":[],"headers":{"content-type":"application-json"},"content":{"text":"{\\"displayName\\":\\"Megan Bowen\\",\\"ok\\":true}","size":39,"mimeType":"application/json"},"redirectURL":"","headersSize":-1,"bodySize":-1},"cache":{},"timings":{"send":0,"wait":0,"receive":0},"connection":""}]}}',
           headers: undefined,
           method: undefined,
           responseHeaders:
@@ -71,7 +69,7 @@ describe('query actions', () => {
       });
   });
 
-  it('dispatches QUERY_GRAPH_ERROR for failed requests', () => {
+  it('dispatches QUERY_GRAPH_STATUS for failed requests', () => {
     const createdAt = new Date().toISOString();
     const sampleUrl = 'https://graph.microsoft.com/v1.0/m/';
     setTimeout(() => { // delays request time by 1 second so that the createdAt dates match
@@ -110,7 +108,7 @@ describe('query actions', () => {
           body: { ok: false },
           headers: {}
         },
-        type: QUERY_GRAPH_ERROR
+        type: QUERY_GRAPH_STATUS
       }
     ];
 

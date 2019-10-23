@@ -1,7 +1,12 @@
 import { IAction } from '../../../types/action';
 import {
-  FETCH_SCOPES_ERROR, GET_CONSENT_ERROR,
-  PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS, QUERY_GRAPH_ERROR, QUERY_GRAPH_RUNNING, QUERY_GRAPH_SUCCESS
+  FETCH_SCOPES_ERROR,
+  GET_CONSENT_ERROR,
+  PROFILE_REQUEST_ERROR,
+  PROFILE_REQUEST_SUCCESS,
+  QUERY_GRAPH_RUNNING,
+  QUERY_GRAPH_STATUS,
+  QUERY_GRAPH_SUCCESS
 } from '../redux-constants';
 
 export function isLoadingData(state = {}, action: IAction): any {
@@ -14,7 +19,7 @@ export function isLoadingData(state = {}, action: IAction): any {
       }
     case QUERY_GRAPH_SUCCESS:
       return false;
-    case QUERY_GRAPH_ERROR:
+    case QUERY_GRAPH_STATUS:
       return false;
     case FETCH_SCOPES_ERROR:
       return false;
