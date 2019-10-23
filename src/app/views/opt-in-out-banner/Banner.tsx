@@ -15,14 +15,13 @@ class Banner extends Component<IBanner, {}> {
     }: any = this.props;
 
     return (
-      <div className='row' style={{ marginLeft: 1}}>
         <Toggle
           label={messages['back to classic']}
           inlineLabel={true}
           defaultChecked={true}
           onText=' '
           onChange={optOut} />
-      </div>
+
     );
   }
 
