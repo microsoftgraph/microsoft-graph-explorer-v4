@@ -1,9 +1,9 @@
 import { getTheme } from 'office-ui-fabric-react';
 
-export function getMethodStyle (method: string) {
+export function getStyleFor (method: string) {
   const currentTheme = getTheme();
+  method = method.toUpperCase();
 
-  method = method.toString().toUpperCase();
   switch (method) {
     case 'GET':
       return currentTheme.palette.blue;
@@ -21,6 +21,6 @@ export function getMethodStyle (method: string) {
       return currentTheme.palette.redDark;
 
     default:
-      return currentTheme.palette.green;
+      return currentTheme.palette.orangeLight;
   }
 }

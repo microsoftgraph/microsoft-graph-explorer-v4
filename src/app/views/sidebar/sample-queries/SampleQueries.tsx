@@ -13,7 +13,7 @@ import * as queryActionCreators from '../../../services/actions/query-action-cre
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
-import { getMethodStyle } from '../../../utils/badge-color';
+import { getStyleFor } from '../../../utils/badge-color';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 
@@ -117,7 +117,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
         case 'method':
           return <span className={classes.badge}
-            style={{ background: getMethodStyle(item.method) }}
+            style={{ background: getStyleFor(item.method) }}
           >{item.method}</span>;
 
         default:
