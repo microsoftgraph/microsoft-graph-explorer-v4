@@ -343,7 +343,7 @@ class App extends Component<IAppProps, IAppState> {
                         '/legal/microsoft-apis/terms-of-use?context=graph/context'}
                           target='_blank'>
                           <FormattedMessage id='Terms of use' /></a>
-                        <br />
+                        &nbsp;,
                         <a  className={classes.links}
                         href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
                           target='_blank'>
