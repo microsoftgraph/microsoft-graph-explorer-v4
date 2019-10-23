@@ -267,23 +267,32 @@ class App extends Component<IAppProps, IAppState> {
                       </>
                     }
 
-                    {!showToggle && <Label style={{
-                      fontSize: FontSizes.xxLarge,
-                      fontWeight: 600,
-                      marginBottom: '10px',
-                      marginTop: '2%',
-                    }}>
-                      Graph Explorer
-                      </Label>}
-                    </Stack>
+                    {!showToggle && <>
+                        <Label style={{
+                          fontSize: FontSizes.xxLarge,
+                          fontWeight: 600,
+                          marginBottom: '10px',
+                          marginTop: '2%',
+                        }}>
+                          Graph Explorer
+                        </Label>
+                      <span style={{
+                        marginTop: '4%',
+                        position: 'absolute',
+                        marginLeft: '73%',
+                      }}>
+
+                      <Banner optOut={this.optOut} />
+                      </span>
+                    </>
+                    }
+                  </Stack>
 
                   <hr className={classes.separator} />
 
                   {!showToggle && <><Authentication /> <hr className={classes.separator} /></> }
 
                   {showSidebar && <>
-                    <Banner optOut={this.optOut} />
-                    <hr className={classes.separator} />
                     <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                   </>}
                 </div>
@@ -334,7 +343,7 @@ class App extends Component<IAppProps, IAppState> {
                         '/legal/microsoft-apis/terms-of-use?context=graph/context'}
                           target='_blank'>
                           <FormattedMessage id='Terms of use' /></a>
-                        <br />
+                        &nbsp;,
                         <a  className={classes.links}
                         href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
                           target='_blank'>
@@ -358,7 +367,7 @@ class App extends Component<IAppProps, IAppState> {
 
 const mapStateToProps = (state: any) => {
   return {
-    queryState: state.queryRunnerStatus,
+    queryState:  state.queryRunnerStatus,
     termsOfUse: state.termsOfUse,
     receivedSampleQuery: state.sampleQuery,
     graphExplorerMode: state.graphExplorerMode,
@@ -369,7 +378,7 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions: bindActionCreators({
+    actions:  bindActionCreators({
       clearQueryStatus,
       clearTermsOfUse,
       runQuery,
@@ -390,3 +399,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(IntlApp);
+
