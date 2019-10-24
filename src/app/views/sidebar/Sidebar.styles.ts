@@ -91,6 +91,17 @@ export const sidebarStyles = (theme: ITheme) => {
     badge: {
       fontWeight: FontWeights.bold,
       fontSize: FontSizes.small,
+      display: 'inline-block',
+      textAlign: 'center',
+      marginRight: '15px',
+      lineHeight: 'normal',
+      whiteSpace: 'nowrap',
+      paddingLeft: 5,
+      paddingRight: 5,
+      paddingTop: 3,
+      paddingBottom: 3,
+      color: '#fff',
+      minWidth: '55px'
     },
     docLink: {
       display: 'table-cell',
