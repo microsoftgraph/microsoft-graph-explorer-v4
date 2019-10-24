@@ -8,7 +8,7 @@
     "@svgr/webpack": "4.1.0",
     "@uifabric/react-cards": "0.108.2",
     "@uifabric/styling": "6.46.0",
-    "adaptivecards": "1.1.0",
+    "adaptivecards": "1.2.3",
     "adaptivecards-templating": "0.1.0-alpha.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
