@@ -34,6 +34,7 @@ export async function anonymousRequest(dispatch: Function, query: IQuery) {
   const headers = {
     'Authorization': `Bearer ${authToken}`,
     'Content-Type': 'application/json',
+    'SdkVersion': 'GraphExplorer/4.0',
     ...sampleHeaders
   };
 
@@ -90,6 +91,7 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
 const makeRequest = (httpVerb: string, scopes: string[]): Function => {
   return async (dispatch: Function, query: IQuery) => {
     const sampleHeaders: any = {};
+    sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
 
     if (query.sampleHeaders) {
       query.sampleHeaders.forEach(header => {
@@ -101,7 +103,6 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
 
     const msalAuthOptions = new MSALAuthenticationProviderOptions(scopes);
     const middlewareOptions = new AuthenticationHandlerOptions(authProvider, msalAuthOptions);
-
     const client = GraphClient.getInstance()
       .api(query.sampleUrl)
       .middlewareOptions([middlewareOptions])
