@@ -73,7 +73,7 @@ export function getConsent(): Function {
     for (let num = 0; num < scopes.length; num++) {
 
       const scope: string[] = [];
-      scope.push(scopes[num]);
+      scope.push(scopes[num].value);
 
       try {
         const response = await authenticatedRequest(dispatch, query, scope);
