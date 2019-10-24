@@ -260,6 +260,38 @@ export const queries: ISampleQuery[]  = [
       "docLink": "https://developer.microsoft.com/en-us/graph/docs/concepts/delta_query_messages",
       "skipTest": false
   },
+    {
+        "category": "Outlook Mail",
+        "method": "GET",
+        "humanName": "my outlook categories",
+        "requestUrl": "/beta/me/outlook/masterCategories",
+        "docLink": "https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/outlookuser_list_mastercategories",
+        "skipTest": false
+    },
+    {
+        "category": "Outlook Mail",
+        "method": "GET",
+        "humanName": "get email headers",
+        "requestUrl": "/beta/me/messages?$select=internetMessageHeaders&$top=1",
+        "docLink": "https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/resources/message",
+        "skipTest": false
+    },
+    {
+        "category": "Outlook Mail",
+        "method": "GET",
+        "humanName": "list conference rooms",
+        "requestUrl": "/beta/me/findRooms",
+        "docLink": "https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/user_findrooms",
+        "skipTest": false
+    },
+    {
+        "category": "Outlook Mail",
+        "method": "GET",
+        "humanName": "my inbox rules",
+        "requestUrl": "/beta/me/mailFolders/inbox/messagerules",
+        "docLink": "https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/resources/messagerule",
+        "skipTest": false
+    },
   {
       "category": "Outlook Mail (beta)",
       "method": "GET",
@@ -1093,38 +1125,6 @@ export const queries: ISampleQuery[]  = [
       "docLink": "https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/channel_post_chatthreads",
       "postBody": "{\r\n\"rootMessage\": {\r\n       \"body\": {\r\n         \"contentType\": 2,\r\n         \"content\": \"Hello world\"\r\n       }\r\n   }\r\n }",
       "tip": "This query requires a team id and a channel id from that team. To find the team id  & channel id, you can run: 1) GET https://graph.microsoft.com/beta/me/joinedTeams 2) GET https://graph.microsoft.com/beta/teams/{team-id}/channels",
-      "skipTest": false
-  },
-  {
-      "category": "Outlook Mail",
-      "method": "GET",
-      "humanName": "my inbox rules",
-      "requestUrl": "/beta/me/mailFolders/inbox/messagerules",
-      "docLink": "https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/resources/messagerule",
-      "skipTest": false
-  },
-  {
-      "category": "Outlook Mail",
-      "method": "GET",
-      "humanName": "my outlook categories",
-      "requestUrl": "/beta/me/outlook/masterCategories",
-      "docLink": "https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/outlookuser_list_mastercategories",
-      "skipTest": false
-  },
-  {
-      "category": "Outlook Mail",
-      "method": "GET",
-      "humanName": "get email headers",
-      "requestUrl": "/beta/me/messages?$select=internetMessageHeaders&$top=1",
-      "docLink": "https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/resources/message",
-      "skipTest": false
-  },
-  {
-      "category": "Outlook Mail",
-      "method": "GET",
-      "humanName": "list conference rooms",
-      "requestUrl": "/beta/me/findRooms",
-      "docLink": "https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/user_findrooms",
       "skipTest": false
   },
   {
