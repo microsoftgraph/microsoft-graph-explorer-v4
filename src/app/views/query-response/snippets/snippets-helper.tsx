@@ -47,6 +47,7 @@ function Snippet(props: ISnippetProps) {
     <Monaco
       body={loadingState ? 'Fetching code snippet...' : snippet}
       language={language}
+      readOnly={true}
     />
   );
 }
