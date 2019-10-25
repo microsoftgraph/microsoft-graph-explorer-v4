@@ -241,8 +241,8 @@ class App extends Component<IAppProps, IAppState> {
               {graphExplorerMode === Mode.Complete && (
                 <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
 
-                  <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
-                    {showToggle && <>
+                  {showToggle && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
+                    <>
                       <IconButton
                         iconProps={{ iconName: 'GlobalNavButton' }}
                         className={classes.sidebarToggle}
@@ -264,28 +264,31 @@ class App extends Component<IAppProps, IAppState> {
                       <Authentication />
                       </span>
                       </>
-                    }
+                </Stack>
+                }
 
-                    {!showToggle && <>
-                        <Label style={{
-                          fontSize: FontSizes.xxLarge,
-                          fontWeight: 600,
-                          marginBottom: '10px',
-                          marginTop: '2%',
-                        }}>
-                          Graph Explorer
-                        </Label>
-                      <span style={{
-                        marginTop: '4%',
-                        position: 'absolute',
-                        marginLeft: '73%',
-                      }}>
-
+                {!showToggle &&
+                  <div style={{
+                    position: 'relative',
+                    width: '100%',
+                  }}>
+                    <Label style={{
+                      fontSize: FontSizes.xxLarge,
+                      fontWeight: 600,
+                      marginBottom: '10px',
+                      marginTop: '2%',
+                    }}>
+                      Graph Explorer
+                    </Label>
+                    <span style={{
+                      position: 'absolute',
+                      top: 0,
+                      right: 0,
+                      marginTop: '2%',
+                    }} >
                       <Banner optOut={this.optOut} />
-                      </span>
-                    </>
-                    }
-                  </Stack>
+                    </span>
+                  </div>}
 
                   <hr className={classes.separator} />
 
@@ -365,7 +368,7 @@ class App extends Component<IAppProps, IAppState> {
 
 const mapStateToProps = (state: any) => {
   return {
-    queryState:  state.queryRunnerStatus,
+    queryState:   state.queryRunnerStatus,
     termsOfUse: state.termsOfUse,
     receivedSampleQuery: state.sampleQuery,
     graphExplorerMode: state.graphExplorerMode,
@@ -376,7 +379,7 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions:  bindActionCreators({
+    actions:   bindActionCreators({
       clearQueryStatus,
       clearTermsOfUse,
       runQuery,
@@ -397,4 +400,5 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(IntlApp);
+
 
