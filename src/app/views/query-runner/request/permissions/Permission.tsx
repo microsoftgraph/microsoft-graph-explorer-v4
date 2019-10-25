@@ -1,7 +1,15 @@
+import { DetailsList } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Monaco } from '../../../common';
 import { fetchScopes } from './util';
+
+export interface IPermission {
+value: string;
+consentDisplayName: string;
+consentDescription: string;
+isAdmin: boolean;
+}
 
 export function Permission() {
   const sample = useSelector((state: any) => state.sampleQuery, shallowEqual);
@@ -43,9 +51,14 @@ export function Permission() {
       <div>
         <h2 style={{ fontSize: 20, fontWeight: 'bold' }}>Permissions</h2>
         <ul>
-          {permissions.map((permission: string) => {
-            return <li key={permission}>{permission}</li>;
-          })}
+          {permissions.map((permission: IPermission) => {
+              return <li key={permission.value}>
+              Name: {permission.value},
+              Display Name: {permission.consentDisplayName},
+              Description: {permission.consentDescription},
+              AdminConsent: {permission.isAdmin}
+              </li>;
+            })}
         </ul>
         </div>
       }
