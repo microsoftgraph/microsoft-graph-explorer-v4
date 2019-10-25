@@ -268,10 +268,7 @@ class App extends Component<IAppProps, IAppState> {
                 }
 
                 {!showToggle &&
-                  <div style={{
-                    position: 'relative',
-                    width: '100%',
-                  }}>
+
                     <Label style={{
                       fontSize: FontSizes.xxLarge,
                       fontWeight: 600,
@@ -280,21 +277,16 @@ class App extends Component<IAppProps, IAppState> {
                     }}>
                       Graph Explorer
                     </Label>
-                    <span style={{
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
-                      marginTop: '2%',
-                    }} >
-                      <Banner optOut={this.optOut} />
-                    </span>
-                  </div>}
 
-                  <hr className={classes.separator} />
+                  }
+
 
                   {!showToggle && <><Authentication /> <hr className={classes.separator} /></> }
 
                   {showSidebar && <>
+                    <hr className={classes.separator} />
+                    <Banner optOut={this.optOut} />
+                    <hr className={classes.separator} />
                     <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                   </>}
                 </div>
