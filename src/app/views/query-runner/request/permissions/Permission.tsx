@@ -8,6 +8,8 @@ export function Permission() {
   const [permissions, setPermissions ] = useState([]);
   const [ loading, setLoading ] = useState(false);
   const [sampleError, setError, ] = useState(false);
+  const authToken = useSelector((state: any) => state.authToken);
+
   let errorMessage;
 
   useEffect(() => {
@@ -28,15 +30,24 @@ export function Permission() {
 
 
   return (
-    <div>
+    <div style={{ padding: 10, height: 'inherit', overflowY: 'scroll' } }>
       {sampleError && <Monaco body = {errorMessage} />}
       {loading && <Monaco body = {'Fetching permissions...'}/>}
+      {authToken &&
+        <div style={{ marginBottom: 10 }}>
+          <h2 style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 5 }}>Access Token</h2>
+          <p style={{ wordWrap: 'break-word', fontFamily: 'monospace' }}>{authToken}</p>
+        </div>
+      }
       {permissions &&
+      <div>
+        <h2 style={{ fontSize: 20, fontWeight: 'bold' }}>Permissions</h2>
         <ul>
           {permissions.map((permission: string) => {
             return <li key={permission}>{permission}</li>;
           })}
         </ul>
+        </div>
       }
     </div>
   );
