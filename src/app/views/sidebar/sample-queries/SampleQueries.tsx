@@ -1,5 +1,5 @@
 import {
-  DetailsList, DetailsListLayoutMode, DetailsRow, getId, getTheme,
+  DetailsList, DetailsListLayoutMode, DetailsRow, getId,
   IColumn, IconButton, MessageBar, MessageBarType, SearchBox,
   Selection, SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from 'office-ui-fabric-react';
@@ -13,6 +13,7 @@ import * as queryActionCreators from '../../../services/actions/query-action-cre
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
+import { getStyleFor } from '../../../utils/badge-color';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 
@@ -60,30 +61,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     window.open(item.docLink, '_blank');
   };
 
-  public getMethodStyle = (method: string) => {
-    const currentTheme = getTheme();
 
-    method = method.toString().toUpperCase();
-    switch (method) {
-      case 'GET':
-        return currentTheme.palette.green;
-
-      case 'POST':
-        return currentTheme.palette.orangeLighter;
-
-      case 'PUT':
-        return currentTheme.palette.yellowDark;
-
-      case 'PATCH':
-        return currentTheme.palette.blue;
-
-      case 'DELETE':
-        return currentTheme.palette.red;
-
-      default:
-        return currentTheme.palette.green;
-    }
-  };
 
   public generateSamples(samples: any) {
     const map = new Map();
@@ -139,7 +117,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
         case 'method':
           return <span className={classes.badge}
-            style={{ color: this.getMethodStyle(item.method) }}
+            style={{ background: getStyleFor(item.method) }}
           >{item.method}</span>;
 
         default:

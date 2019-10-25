@@ -241,8 +241,8 @@ class App extends Component<IAppProps, IAppState> {
               {graphExplorerMode === Mode.Complete && (
                 <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
 
-                  <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
-                    {showToggle && <>
+                  {showToggle && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
+                    <>
                       <IconButton
                         iconProps={{ iconName: 'GlobalNavButton' }}
                         className={classes.sidebarToggle}
@@ -264,34 +264,29 @@ class App extends Component<IAppProps, IAppState> {
                       <Authentication />
                       </span>
                       </>
-                    }
+                </Stack>
+                }
 
-                    {!showToggle && <>
-                        <Label style={{
-                          fontSize: FontSizes.xxLarge,
-                          fontWeight: 600,
-                          marginBottom: '10px',
-                          marginTop: '2%',
-                        }}>
-                          Graph Explorer
-                        </Label>
-                      <span style={{
-                        marginTop: '4%',
-                        position: 'absolute',
-                        marginLeft: '73%',
-                      }}>
+                {!showToggle &&
 
-                      <Banner optOut={this.optOut} />
-                      </span>
-                    </>
-                    }
-                  </Stack>
+                    <Label style={{
+                      fontSize: FontSizes.xxLarge,
+                      fontWeight: 600,
+                      marginBottom: '10px',
+                      marginTop: '2%',
+                    }}>
+                      Graph Explorer
+                    </Label>
+
+                  }
+
 
                   <hr className={classes.separator} />
-
                   {!showToggle && <><Authentication /> <hr className={classes.separator} /></> }
 
                   {showSidebar && <>
+                    <Banner optOut={this.optOut} />
+                    <hr className={classes.separator} />
                     <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                   </>}
                 </div>
@@ -365,7 +360,7 @@ class App extends Component<IAppProps, IAppState> {
 
 const mapStateToProps = (state: any) => {
   return {
-    queryState:  state.queryRunnerStatus,
+    queryState:   state.queryRunnerStatus,
     termsOfUse: state.termsOfUse,
     receivedSampleQuery: state.sampleQuery,
     graphExplorerMode: state.graphExplorerMode,
@@ -376,7 +371,7 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions:  bindActionCreators({
+    actions:   bindActionCreators({
       clearQueryStatus,
       clearTermsOfUse,
       runQuery,
@@ -397,4 +392,5 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(IntlApp);
+
 
