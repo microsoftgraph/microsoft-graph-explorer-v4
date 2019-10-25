@@ -281,10 +281,10 @@ class App extends Component<IAppProps, IAppState> {
                   }
 
 
+                  <hr className={classes.separator} />
                   {!showToggle && <><Authentication /> <hr className={classes.separator} /></> }
 
                   {showSidebar && <>
-                    <hr className={classes.separator} />
                     <Banner optOut={this.optOut} />
                     <hr className={classes.separator} />
                     <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
