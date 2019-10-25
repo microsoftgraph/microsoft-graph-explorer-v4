@@ -17,8 +17,8 @@ isAdmin: boolean;
 export function Permission() {
   const sample = useSelector((state: any) => state.sampleQuery, shallowEqual);
   const [permissions, setPermissions ] = useState([]);
-  const [ loading, setLoading ] = useState(false);
-  const [sampleError, setError, ] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [sampleError, setError] = useState(false);
   const authToken = useSelector((state: any) => state.authToken);
 
   const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
@@ -31,7 +31,9 @@ export function Permission() {
 
         case 'isAdmin':
           if (item.isAdmin) {
-            return 'Admin';
+            return 'True';
+          } else {
+            return  'False';
           }
 
         case 'consentDescription':
@@ -56,10 +58,11 @@ export function Permission() {
   };
 
   const columns = [
-    { key: 'value', name: 'Name', fieldName: 'value', minWidth: 100, maxWidth: 200},
+    { key: 'value', name: 'Name', fieldName: 'value', minWidth: 150, maxWidth: 200},
     { key: 'consentDisplayName', name: 'Function', fieldName: 'consentDisplayName', minWidth: 200, maxWidth: 300},
-    { key: 'consentDescription', name: 'Description', fieldName: 'consentDescription', minWidth: 500, maxWidth: 600},
-    { key: 'isAdmin', name: '', fieldName: 'isAdmin', minWidth: 200, maxWidth: 400}
+    { key: 'consentDescription', name: 'Description', fieldName: 'consentDescription', isResizable: true,
+      minWidth: 500, maxWidth: 600},
+    { key: 'isAdmin', name: 'Admin Consent', fieldName: 'isAdmin', minWidth: 100, maxWidth: 200}
   ];
 
   let errorMessage;
