@@ -236,7 +236,6 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        <FocusTrapZone>
           <div className={`container-fluid ${classes.app}`}>
             <div className='row'>
               {graphExplorerMode === Mode.Complete && (
@@ -359,7 +358,6 @@ class App extends Component<IAppProps, IAppState> {
               </div>
             </div>
           </div>
-        </FocusTrapZone>
       </ThemeContext.Provider>
     );
   }
