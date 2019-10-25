@@ -256,5 +256,6 @@
   "view" : "View",
   "remove" : "Remove",
   "back to classic": "Preview",
-  "More actions" : "More actions"
+  "More actions" : "More actions",
+  "Permissions": "Permissions"
 }
