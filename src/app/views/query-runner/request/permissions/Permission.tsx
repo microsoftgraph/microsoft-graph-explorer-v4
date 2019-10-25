@@ -87,7 +87,8 @@ export function Permission() {
       {authToken &&
         <div style={{ marginBottom: 10 }}>
         <Label style={{ fontWeight: 'bold', marginBottom: 5 }}><FormattedMessage id='Access Token' /></Label>
-          <p style={{ wordWrap: 'break-word', fontFamily: 'monospace', fontSize: FontSizes.xSmall }}>{authToken}</p>
+          <p style={{ wordWrap: 'break-word', fontFamily: 'monospace', fontSize: FontSizes.xSmall,
+              height: 50, overflowY: 'scroll' }}>{authToken}</p>
         </div>
       }
       {permissions &&
