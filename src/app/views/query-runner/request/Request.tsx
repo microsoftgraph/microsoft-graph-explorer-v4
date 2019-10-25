@@ -38,7 +38,7 @@ export class Request extends Component<IRequestComponent, any> {
           <PivotItem headerText={messages['request header']}>
             <RequestHeaders />
           </PivotItem>
-          {mode === Mode.Complete && <PivotItem headerText={messages.Permission}>
+          {mode === Mode.Complete && <PivotItem headerText={messages.Permissions}>
             <Permission />
           </PivotItem>}
         </Pivot>
