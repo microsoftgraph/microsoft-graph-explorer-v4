@@ -74,7 +74,6 @@ export function Permission() {
 
     fetchScopes(sample)
       .then(res => { setLoading(false); setPermissions(res); })
-      // .then(res => { if (res.error) {throw(res.error); }})
       .catch((error) => {
         setError(true);
         setLoading(false);
