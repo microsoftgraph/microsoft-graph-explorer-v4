@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
+import { Mode } from '../../../../types/action';
 import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
 import { Permission } from './permissions';
@@ -18,7 +19,8 @@ export class Request extends Component<IRequestComponent, any> {
 
     const {
       handleOnEditorChange,
-      sampleBody
+      sampleBody,
+      mode
     } = this.props;
 
     const {
@@ -36,9 +38,9 @@ export class Request extends Component<IRequestComponent, any> {
           <PivotItem headerText={messages['request header']}>
             <RequestHeaders />
           </PivotItem>
-          <PivotItem headerText={messages.Permission}>
+          {mode === Mode.Complete && <PivotItem headerText={messages.Permission}>
             <Permission />
-          </PivotItem>
+          </PivotItem>}
         </Pivot>
       </div>
     );
@@ -47,6 +49,7 @@ export class Request extends Component<IRequestComponent, any> {
 
 function mapStateToProps(state: any) {
   return {
+    mode: state.graphExplorerMode,
     sampleBody: state.sampleQuery.sampleBody
   };
 }
