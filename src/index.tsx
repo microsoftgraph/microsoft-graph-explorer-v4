@@ -46,7 +46,7 @@ const appState = store({
   authToken: '',
   theme: 'light',
   isLoadingData: false,
-  queryRunnerError: null,
+  queryRunnerStatus: null,
   termsOfUse: true,
   headersAdded: [{ name: '', value: '' }],
   sampleQuery: {

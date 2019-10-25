@@ -9,9 +9,9 @@ import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
 import { ISidebarProps } from '../../types/sidebar';
-import { clearQueryError } from '../services/actions/error-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
+import { clearQueryStatus } from '../services/actions/query-status-action-creator';
 import { addRequestHeader } from '../services/actions/request-headers-action-creators';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeTheme } from '../services/actions/theme-action-creator';
@@ -28,13 +28,13 @@ import { Sidebar } from './sidebar/Sidebar';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
-  error: object | null;
+  queryState: object | null;
   termsOfUse: boolean;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
   actions: {
     addRequestHeader: Function;
-    clearQueryError: Function;
+    clearQueryStatus: Function;
     clearTermsOfUse: Function;
     setSampleQuery: Function;
     runQuery: Function;
@@ -209,7 +209,8 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, termsOfUse, actions, sidebarProperties, intl: { messages } }: any = this.props;
+    const { graphExplorerMode, queryState, termsOfUse,
+      actions, sidebarProperties, intl: { messages } }: any = this.props;
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
@@ -235,7 +236,6 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        <FocusTrapZone>
           <div className={`container-fluid ${classes.app}`}>
             <div className='row'>
               {graphExplorerMode === Mode.Complete && (
@@ -266,23 +266,32 @@ class App extends Component<IAppProps, IAppState> {
                       </>
                     }
 
-                    {!showToggle && <Label style={{
-                      fontSize: FontSizes.xxLarge,
-                      fontWeight: 600,
-                      marginBottom: '10px',
-                      marginTop: '2%',
-                    }}>
-                      Graph Explorer
-                      </Label>}
-                    </Stack>
+                    {!showToggle && <>
+                        <Label style={{
+                          fontSize: FontSizes.xxLarge,
+                          fontWeight: 600,
+                          marginBottom: '10px',
+                          marginTop: '2%',
+                        }}>
+                          Graph Explorer
+                        </Label>
+                      <span style={{
+                        marginTop: '4%',
+                        position: 'absolute',
+                        marginLeft: '73%',
+                      }}>
+
+                      <Banner optOut={this.optOut} />
+                      </span>
+                    </>
+                    }
+                  </Stack>
 
                   <hr className={classes.separator} />
 
                   {!showToggle && <><Authentication /> <hr className={classes.separator} /></> }
 
                   {showSidebar && <>
-                    <Banner optOut={this.optOut} />
-                    <hr className={classes.separator} />
                     <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                   </>}
                 </div>
@@ -310,13 +319,13 @@ class App extends Component<IAppProps, IAppState> {
                   <div style={{ marginBottom: 8 }}>
                     <QueryRunner onSelectVerb={this.handleSelectVerb} />
                   </div>
-                  {error && (
+                  {queryState && (
                     <MessageBar
-                      messageBarType={MessageBarType.error}
+                      messageBarType={queryState.ok ? MessageBarType.success : MessageBarType.error}
                       isMultiline={false}
-                      onDismiss={actions.clearQueryError}
+                      onDismiss={actions.clearQueryStatus}
                     >
-                      {`${error.statusText} - ${error.status}`}
+                      {`${queryState.statusText} - ${queryState.status} - ${queryState.duration}ms`}
                     </MessageBar>
                   )}
                   {graphExplorerMode === Mode.Complete && termsOfUse && (
@@ -333,7 +342,7 @@ class App extends Component<IAppProps, IAppState> {
                         '/legal/microsoft-apis/terms-of-use?context=graph/context'}
                           target='_blank'>
                           <FormattedMessage id='Terms of use' /></a>
-                        <br />
+                        &nbsp;,
                         <a  className={classes.links}
                         href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
                           target='_blank'>
@@ -349,7 +358,6 @@ class App extends Component<IAppProps, IAppState> {
               </div>
             </div>
           </div>
-        </FocusTrapZone>
       </ThemeContext.Provider>
     );
   }
@@ -357,7 +365,7 @@ class App extends Component<IAppProps, IAppState> {
 
 const mapStateToProps = (state: any) => {
   return {
-    error: state.queryRunnerError,
+    queryState:  state.queryRunnerStatus,
     termsOfUse: state.termsOfUse,
     receivedSampleQuery: state.sampleQuery,
     graphExplorerMode: state.graphExplorerMode,
@@ -368,8 +376,8 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions: bindActionCreators({
-      clearQueryError,
+    actions:  bindActionCreators({
+      clearQueryStatus,
       clearTermsOfUse,
       runQuery,
       setSampleQuery,
@@ -389,3 +397,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(IntlApp);
+
