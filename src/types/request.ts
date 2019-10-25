@@ -1,3 +1,5 @@
+import { Mode } from './action';
+
 export interface IHeadersListControl {
     handleOnHeaderDelete: Function;
     headers?: Array<{ name: string; value: string; }>;
@@ -16,6 +18,7 @@ export interface IRequestHeadersProps {
 
 export interface IRequestComponent {
     sampleBody?: string;
+    mode: Mode;
     handleOnEditorChange: Function;
     headers?: Array<{ name: string; value: string; }>;
     intl: {
