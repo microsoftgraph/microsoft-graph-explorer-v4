@@ -257,5 +257,6 @@
   "remove" : "Remove",
   "back to classic": "Preview",
   "More actions" : "More actions",
-  "Permissions": "Permissions"
+  "Permissions": "Permissions",
+  "Sign In to see your access token.": "Sign In to see your access token."
 }
