@@ -298,7 +298,13 @@ class App extends Component<IAppProps, IAppState> {
                     <MessageBar
                       messageBarType={MessageBarType.warning}
                     >
-                      <p>Authentication is not supported in Edge. Use EdgeDev.</p>
+                      <p>Sign in not supported on this browser, please use
+                        <a className={classes.links}
+                          tabIndex={0}
+                          href='https://www.microsoftedgeinsider.com/en-us/welcome?channel=dev' target='_blank'>
+                          EdgeDev.
+                        </a>
+                      </p>
                     </MessageBar>
                   </div>
                 : !showToggle && <><Authentication />
