@@ -29,7 +29,7 @@ export function Auth() {
         <textarea style={{
           wordWrap: 'break-word', fontFamily: 'monospace', fontSize: FontSizes.xSmall, width: '100%',
           height: 50, overflowY: 'scroll', border: 'none', resize: 'none'
-        }} id='access-token'>{accessToken}</textarea>
+        }} id='access-token' value={accessToken} readOnly={true}/>
       </div>
       :
       <p style={{ font: 'inherit', fontWeight: 'bold' }}><FormattedMessage id='Sign In to see your access token.'/></p>
