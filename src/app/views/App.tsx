@@ -301,7 +301,7 @@ class App extends Component<IAppProps, IAppState> {
                       <p>Sign in not supported on this browser, please use
                         <a className={classes.links}
                           tabIndex={0}
-                          href='https://www.microsoftedgeinsider.com/en-us/welcome?channel=dev' target='_blank'>
+                          href='https://www.microsoftedgeinsider.com/en-us/download' target='_blank'>
                           EdgeDev.
                         </a>
                       </p>
