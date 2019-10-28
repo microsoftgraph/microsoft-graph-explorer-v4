@@ -208,6 +208,7 @@ class App extends Component<IAppProps, IAppState> {
     const isEdge = msedge > 0;
     return isEdge;
   }
+
   public optOut = () => {
     const path = location.href;
     const urlObject: URL = new URL(path);
