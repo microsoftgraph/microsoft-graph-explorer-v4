@@ -199,6 +199,15 @@ class App extends Component<IAppProps, IAppState> {
     this.props.actions!.toggleSidebar(properties);
   }
 
+  public userIsOnEdge() {
+    const ua = window.navigator.userAgent;
+    const msie = ua.indexOf('MSIE ');
+    const msie11 = ua.indexOf('Trident/');
+    const msedge = ua.indexOf('Edge/');
+    const isIE = msie > 0 || msie11 > 0;
+    const isEdge = msedge > 0;
+    return isEdge;
+  }
   public optOut = () => {
     const path = location.href;
     const urlObject: URL = new URL(path);
@@ -216,6 +225,7 @@ class App extends Component<IAppProps, IAppState> {
     const historyHeaderText = messages['History'];
     const { showToggle, showSidebar } = sidebarProperties;
     const language = navigator.language  || 'en-US';
+    const onEdge = this.userIsOnEdge();
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
@@ -261,7 +271,7 @@ class App extends Component<IAppProps, IAppState> {
                         marginLeft: '70%',
                       }}>
 
-                      <Authentication />
+                        <Authentication />
                       </span>
                       </>
                 </Stack>
@@ -282,7 +292,16 @@ class App extends Component<IAppProps, IAppState> {
 
 
                   <hr className={classes.separator} />
-                  {!showToggle && <><Authentication /> <hr className={classes.separator} /></> }
+                {onEdge ?
+                  <div style={{ marginBottom: 8 }}>
+                    <MessageBar
+                      messageBarType={MessageBarType.warning}
+                    >
+                      <p>Authentication is not supported in Edge. Use EdgeDev.</p>
+                    </MessageBar>
+                  </div>
+                : !showToggle && <><Authentication />
+                   <hr className={classes.separator} /></> }
 
                   {showSidebar && <>
                     <Banner optOut={this.optOut} />
