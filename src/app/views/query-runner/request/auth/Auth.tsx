@@ -5,14 +5,14 @@ import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
 function handleCopy() {
-  const doc: any = document.getElementById('access-token');
-  doc.focus();
-  doc.select();
+  const tokenTextArea: any = document.getElementById('access-token');
+  tokenTextArea.focus();
+  tokenTextArea.select();
 
   document.execCommand('copy');
   document.execCommand('unselect');
 
-  doc.blur();
+  tokenTextArea.blur();
 }
 
 export function Auth() {
