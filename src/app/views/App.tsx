@@ -199,14 +199,14 @@ class App extends Component<IAppProps, IAppState> {
     this.props.actions!.toggleSidebar(properties);
   }
 
-  public userIsOnEdge() {
+  public userIsOnEdgeOrIE() {
     const ua = window.navigator.userAgent;
     const msie = ua.indexOf('MSIE ');
     const msie11 = ua.indexOf('Trident/');
     const msedge = ua.indexOf('Edge/');
     const isIE = msie > 0 || msie11 > 0;
     const isEdge = msedge > 0;
-    return isEdge;
+    return isEdge || isIE;
   }
 
   public optOut = () => {
@@ -226,7 +226,7 @@ class App extends Component<IAppProps, IAppState> {
     const historyHeaderText = messages['History'];
     const { showToggle, showSidebar } = sidebarProperties;
     const language = navigator.language  || 'en-US';
-    const onEdge = this.userIsOnEdge();
+    const onEdgeOrIE = this.userIsOnEdgeOrIE();
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
@@ -293,7 +293,7 @@ class App extends Component<IAppProps, IAppState> {
 
 
                   <hr className={classes.separator} />
-                {onEdge ?
+                {onEdgeOrIE ?
                   <div style={{ marginBottom: 8 }}>
                     <MessageBar
                       messageBarType={MessageBarType.warning}
