@@ -19,7 +19,6 @@ export function Permission() {
   const [permissions, setPermissions ] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sampleError, setError] = useState(false);
-  const authToken = useSelector((state: any) => state.authToken);
 
   const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
@@ -86,13 +85,6 @@ export function Permission() {
     <div style={{ padding: 10, maxHeight: '350px', minHeight: '300px', overflowY: 'scroll' } }>
       {sampleError && <Monaco body = {errorMessage} />}
       {loading && <Monaco body = {'Fetching permissions...'}/>}
-      {authToken &&
-        <div style={{ marginBottom: 10 }}>
-        <Label style={{ fontWeight: 'bold', marginBottom: 5 }}><FormattedMessage id='Access Token' /></Label>
-          <p style={{ wordWrap: 'break-word', fontFamily: 'monospace', fontSize: FontSizes.xSmall,
-              height: 50, overflowY: 'scroll' }}>{authToken}</p>
-        </div>
-      }
       {permissions &&
       <div>
         <Label style={{ fontWeight: 'bold', marginBottom: 5 }}>
