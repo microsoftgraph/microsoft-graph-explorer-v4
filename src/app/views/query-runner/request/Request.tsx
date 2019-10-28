@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Mode } from '../../../../types/action';
 import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
+import { Auth } from './auth';
 import { Permission } from './permissions';
 import './request.scss';
 import RequestHeaders from './RequestHeaders';
@@ -38,9 +39,15 @@ export class Request extends Component<IRequestComponent, any> {
           <PivotItem headerText={messages['request header']}>
             <RequestHeaders />
           </PivotItem>
-          {mode === Mode.Complete && <PivotItem headerText={messages.Permissions}>
+          {
+          mode === Mode.Complete &&
+          <PivotItem headerText={messages.Permissions}>
             <Permission />
-          </PivotItem>}
+          </PivotItem>
+          }
+          <PivotItem headerText='Auth'>
+            <Auth />
+          </PivotItem>
         </Pivot>
       </div>
     );
