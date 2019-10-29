@@ -58,6 +58,10 @@ export function runQuery(query: IQuery): Function {
       dispatch(fetchScopes());
     }
     else {
+      dispatch(queryResponse({
+        body: result,
+        headers: respHeaders
+      }));
       return dispatch(queryResponseStatus(status));
     }
 
