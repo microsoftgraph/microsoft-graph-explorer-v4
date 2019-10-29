@@ -82,20 +82,21 @@ export function Permission() {
   }, [sample.sampleUrl]);
 
   return (
-    <div style={{ padding: 10, maxHeight: '350px', minHeight: '300px', overflowY: 'scroll' } }>
+    <div style={{ padding: 10, maxHeight: '350px', minHeight: '300px', overflowY: 'auto' }}>
       {sampleError && <Monaco body = {errorMessage} />}
       {loading && <Monaco body = {'Fetching permissions...'}/>}
-      {permissions &&
-      <div>
-        <Label style={{ fontWeight: 'bold', marginBottom: 5 }}>
-          <FormattedMessage id='Permission' />&nbsp;({permissions.length})</Label>
-        <DetailsList
-          items={permissions}
-          columns={columns}
-          onRenderItemColumn={renderItemColumn}
-          selectionMode={SelectionMode.none}
-          layoutMode={DetailsListLayoutMode.justified}
-        />
+      {permissions && !loading &&
+        <div style={{marginBottom: 120}}>
+          <Label style={{ fontWeight: 'bold', marginBottom: 5 }}>
+            <FormattedMessage id='Permission' />&nbsp;({permissions.length})
+          </Label>
+          <DetailsList
+            items={permissions}
+            columns={columns}
+            onRenderItemColumn={renderItemColumn}
+            selectionMode={SelectionMode.none}
+            layoutMode={DetailsListLayoutMode.justified}
+          />
         </div>
       }
     </div>
