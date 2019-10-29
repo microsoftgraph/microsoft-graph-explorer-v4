@@ -11,7 +11,8 @@ export function authToken(state = {}, action: IAction): string|object {
             return state;
     }
 }
-export function consentedScopes(state = [], action: IAction): string|object {
+
+export function consentedScopes(state = [], action: IAction): any {
     switch (action.type) {
         case GET_CONSENTED_SCOPES_SUCCESS:
             return action.response;

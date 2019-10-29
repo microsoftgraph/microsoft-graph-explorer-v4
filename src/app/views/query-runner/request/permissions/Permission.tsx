@@ -12,10 +12,13 @@ value: string;
 consentDisplayName: string;
 consentDescription: string;
 isAdmin: boolean;
+consented: boolean;
 }
 
 export function Permission() {
   const sample = useSelector((state: any) => state.sampleQuery, shallowEqual);
+  const accessToken = useSelector((state: any) => state.authToken);
+  const consentedScopes: string[] = useSelector((state: any) => state.consentedScopes);
   const [permissions, setPermissions ] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sampleError, setError] = useState(false);
@@ -81,6 +84,16 @@ export function Permission() {
       });
   }, [sample.sampleUrl]);
 
+  if (accessToken) {
+    permissions.forEach((permission: IPermission) => {
+      permission.consented = false;
+      if (consentedScopes.indexOf(permission.value) !== -1) {
+        permission.consented = true;
+      }
+    });
+  }
+
+
   return (
     <div style={{ padding: 10, maxHeight: '350px', minHeight: '300px', overflowY: 'auto' }}>
       {sampleError && <Monaco body = {errorMessage} />}
@@ -88,7 +101,7 @@ export function Permission() {
       {permissions && !loading &&
         <div style={{marginBottom: 120}}>
           <Label style={{ fontWeight: 'bold', marginBottom: 5 }}>
-            <FormattedMessage id='Permission' />&nbsp;({permissions.length})
+            <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
           </Label>
           <DetailsList
             items={permissions}

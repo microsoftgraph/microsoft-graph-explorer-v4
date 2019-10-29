@@ -13,7 +13,7 @@ import ru from 'react-intl/locale-data/ru';
 import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
 
-import { getAuthTokenSuccess } from './app/services/actions/auth-action-creators';
+import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeTheme } from './app/services/actions/theme-action-creator';
@@ -44,11 +44,10 @@ initializeIcons();
 
 const appState = store({
   authToken: '',
-  theme: 'light',
+  consentedScopes: [],
+  headersAdded: [{ name: '', value: '' }],
   isLoadingData: false,
   queryRunnerStatus: null,
-  termsOfUse: true,
-  headersAdded: [{ name: '', value: '' }],
   sampleQuery: {
     sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
     selectedVerb: 'GET',
@@ -56,11 +55,15 @@ const appState = store({
     sampleHeaders: {},
     selectedVersion: 'v1.0',
   },
+  termsOfUse: true,
+  theme: 'light',
+
 });
 
-msalApplication.acquireTokenSilent({ scopes: DEFAULT_USER_SCOPES.split(' ') }).then((token: any) => {
-  if (token && token.accessToken) {
-    appState.dispatch(getAuthTokenSuccess(token.accessToken));
+msalApplication.acquireTokenSilent({ scopes: DEFAULT_USER_SCOPES.split(' ') }).then((authResponse: any) => {
+  if (authResponse && authResponse.accessToken) {
+    appState.dispatch(getAuthTokenSuccess(authResponse.accessToken));
+    appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
   }
 }).catch(() => {
   // ignore the error as it means that a User login is required

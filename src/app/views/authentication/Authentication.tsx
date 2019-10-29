@@ -18,7 +18,6 @@ export class Authentication extends Component<IAuthenticationProps> {
 
   public signIn = async (): Promise<void> => {
     const authResponse = await logIn();
-    debugger;
     if (authResponse) {
       this.props.actions!.signIn(authResponse.accessToken);
       this.props.actions!.storeScopes(authResponse.scopes);
