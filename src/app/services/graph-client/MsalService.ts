@@ -4,7 +4,6 @@ import { msalApplication } from './MsalAgent';
 
 const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
 export async function logIn(): Promise<any> {
-
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
   };
@@ -28,28 +27,14 @@ export function logOut() {
  *  @returns {Promise.<any>}
  */
 export async function acquireNewAccessToken(scopes: string[] = []): Promise<any> {
-  const hasScopes = (scopes.length > 0);
-  let listOfScopes = defaultUserScopes;
-  if (hasScopes) {
-    listOfScopes = scopes;
-  }
-
   const loginRequest: AuthenticationParameters = {
-    scopes: listOfScopes,
+    scopes,
   };
-
   try {
-    const authResponse = await msalApplication.acquireTokenSilent(loginRequest);
+    const authResponse = await msalApplication.acquireTokenPopup(loginRequest);
     return authResponse;
   } catch (error) {
-    if (requiresInteraction(error)) {
-      try {
-        const authResponse = await msalApplication.acquireTokenPopup(loginRequest);
-        return authResponse.accessToken;
-      } catch (error) {
-        return null;
-      }
-    }
+    return null;
   }
 }
 
