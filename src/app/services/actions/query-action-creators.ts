@@ -1,7 +1,6 @@
 import { writeData } from '../../../store/cache';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
-import { fetchScopes } from './permissions-action-creator';
 import {
   anonymousRequest, authenticatedRequest,
   isImageResponse, parseResponse, queryResponse
