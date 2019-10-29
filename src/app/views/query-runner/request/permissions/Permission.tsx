@@ -130,7 +130,6 @@ export function Permission({}) {
 
   return (
     <div style={{ padding: 10, maxHeight: '350px', minHeight: '300px', overflowY: 'auto', overflowX: 'auto', }}>
-      {sampleError && <Monaco body = {errorMessage} />}
       {loading && <Monaco body = {'Fetching permissions...'}/>}
       {permissions && !loading &&
         <div style={{marginBottom: 120}}>
