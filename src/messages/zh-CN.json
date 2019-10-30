@@ -13,7 +13,7 @@
   "secure score control profiles (beta)": "安全功能分数控制配置文件 (beta)",
   "update alert": "更新警报",
   "To try the explorer, please ": "若要试用资源管理器，请 ",
-  "sign in": "登录",
+  "sign in": "使用你的 Microsoft 工作或学校帐户",
   " with your work or school account from Microsoft.": " 登录 Graph 浏览器。",
   "Submit": "提交",
   "Using demo tenant": "当前使用的是示例帐户。",
@@ -255,6 +255,8 @@
   "actions" : "操作",
   "view" : "视图",
   "remove" : "删除",
-  "back to classic": "操作切换按钮，切换回 Graph 浏览器经典模式。",
-  "More actions" : "更多操作"
+  "back to classic": "预览",
+  "More actions" : "更多操作",
+  "Permissions": "权限",
+  "Sign In to see your access token.": "登录以查看你的访问令牌。"
 }

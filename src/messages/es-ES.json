@@ -13,7 +13,7 @@
   "secure score control profiles (beta)": "perfiles de control de puntuación segura (beta)",
   "update alert": "actualizar alerta",
   "To try the explorer, please ": "Para probar el explorador, por favor ",
-  "sign in": "Iniciar sesión",
+  "sign in": "Inicie sesión en el Explorador de Graph",
   " with your work or school account from Microsoft.": " con su cuenta profesional o educativa de Microsoft.",
   "Submit": "Enviar",
   "Using demo tenant": "Actualmente está utilizando una cuenta de muestra.",
@@ -255,6 +255,8 @@
   "actions" : "Acciones",
   "view" : "Ver",
   "remove" : "Eliminar ",
-  "back to classic": "Cambiar el botón de alternancia para volver a Graph Explorer clásico.",
-  "More actions" : "Más acciones"
+  "back to classic": "Vista previa",
+  "More actions" : "Más acciones",
+  "Permissions": "Permisos",
+  "Sign In to see your access token.": "Inicie sesión para ver el token de acceso."
 }

@@ -13,7 +13,7 @@
   "secure score control profiles (beta)": "プロファイルを制御するセキュリティ スコア (ベータ版)",
   "update alert": "警告の更新",
   "To try the explorer, please ": "エクスプローラーを試すには、 ",
-  "sign in": "サインイン",
+  "sign in": "Microsoft の職場または学校のアカウントで",
   " with your work or school account from Microsoft.": " Graph Explorer にサインインしてください。",
   "Submit": "送信",
   "Using demo tenant": "現在、サンプル アカウントを使用しています。",
@@ -255,6 +255,8 @@
   "actions" : "操作",
   "view" : "表示",
   "remove" : "削除",
-  "back to classic": "トグルを切り替えて、Graph エクスプローラー クラシックに戻ります。",
-  "More actions" : "その他の操作"
+  "back to classic": "プレビュー",
+  "More actions" : "その他の操作",
+  "Permissions": "アクセス許可",
+  "Sign In to see your access token.": "サインインすると、アクセス トークンが表示されます。"
 }

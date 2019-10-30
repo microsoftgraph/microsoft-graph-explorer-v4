@@ -12,8 +12,8 @@
   "secure scores (beta)": "оценки безопасности (бета)",
   "secure score control profiles (beta)": "профили составляющих оценки безопасности (бета)",
   "update alert": "оповещение об обновлении",
-  "To try the explorer, please ": "Чтобы попробовать песочницу, ",
-  "sign in": "Войти",
+  "To try the explorer, please ": "Чтобы попробовать песочницу Graph, ",
+  "sign in": "выполните вход",
   " with your work or school account from Microsoft.": " с помощью рабочей или учебной учетной записи от корпорации Майкрософт.",
   "Submit": "Отправить",
   "Using demo tenant": "Вы используете тестовую учетную запись.",
@@ -255,6 +255,8 @@
   "actions" : "Действия",
   "view" : "Просмотреть",
   "remove" : "Удалить",
-  "back to classic": "Установить переключатель на возврат к классической версии песочницы Graph",
-  "More actions" : "Дополнительные действия"
+  "back to classic": "Предварительная версия",
+  "More actions" : "Дополнительные действия",
+  "Permissions": "Разрешения",
+  "Sign In to see your access token.": "Войдите в систему, чтобы просмотреть свой маркер доступа."
 }

@@ -13,8 +13,8 @@
   "secure score control profiles (beta)": "profils de contrôle des scores sécurisés (bêta)",
   "update alert": "mettre à jour l’alerte",
   "To try the explorer, please ": "Pour essayer l’afficheur, veuillez ",
-  "sign in": "Se connecter",
-  " with your work or school account from Microsoft.": " avec votre compte scolaire ou professionnel de Microsoft.",
+  "sign in": "vous connecter à l’Afficheur Graph",
+  " with your work or school account from Microsoft.": " avec votre compte Microsoft scolaire ou professionnel.",
   "Submit": "Submit",
   "Using demo tenant": "Vous utilisez actuellement un compte factice.",
   "To access your own data:": "Pour accéder à vos données :",
@@ -255,6 +255,8 @@
   "actions" : "Actions",
   "view" : "Afficher",
   "remove" : "Supprimer",
-  "back to classic": "Actionnez le bouton bascule pour retourner l’Afficheur Graph classique.",
-  "More actions" : "Autres actions"
+  "back to classic": "Aperçu",
+  "More actions" : "Autres actions",
+  "Permissions": "Autorisations",
+  "Sign In to see your access token.": "Connectez-vous pour voir votre jeton d’accès."
 }

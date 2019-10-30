@@ -12,8 +12,8 @@
   "secure scores (beta)": "Sicherheitsbewertungen (Beta)",
   "secure score control profiles (beta)": "Profile für Steuerung der Sicherheitsbewertung (Beta)",
   "update alert": "Warnung aktualisieren",
-  "To try the explorer, please ": "Um den Explorer auszuprobieren, ",
-  "sign in": "Anmelden",
+  "To try the explorer, please ": "Um den Explorer auszuprobieren, bitte ",
+  "sign in": "Beim Graph Explorer anmelden",
   " with your work or school account from Microsoft.": " mit Ihrem Geschäfts-, Schul- oder Unikonto von Microsoft.",
   "Submit": "Senden",
   "Using demo tenant": "Sie verwenden derzeit ein Beispielkonto.",
@@ -255,6 +255,8 @@
   "actions" : "Aktionen",
   "view" : "Anzeigen",
   "remove" : "Entfernen",
-  "back to classic": "Wechseln Sie mit der Umschaltfläche zurück zu Graph Explorer Classic.",
-  "More actions" : "Weitere Aktionen"
+  "back to classic": "Vorschau",
+  "More actions" : "Weitere Aktionen",
+  "Permissions": "Berechtigungen",
+  "Sign In to see your access token.": "Melden Sie sich an, um sich Ihr Zugriffstoken anzeigen zu lassen."
 }
