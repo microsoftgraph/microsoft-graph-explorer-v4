@@ -5,6 +5,7 @@ export interface IAuthenticationProps {
   styles?: object;
   actions?: {
     signIn: Function;
+    storeScopes: Function;
   };
   tokenPresent: boolean;
   mobileScreen: boolean;

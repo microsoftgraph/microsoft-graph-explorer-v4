@@ -1,7 +1,6 @@
 import { writeData } from '../../../store/cache';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
-import { fetchScopes } from './permissions-action-creator';
 import {
   anonymousRequest, authenticatedRequest,
   isImageResponse, parseResponse, queryResponse
@@ -53,9 +52,6 @@ export function runQuery(query: IQuery): Function {
         body: result,
         headers: respHeaders
       }));
-    }
-    else if (response && response.status === 403) {
-      dispatch(fetchScopes());
     }
     else {
       dispatch(queryResponse({
