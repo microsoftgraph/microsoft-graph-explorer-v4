@@ -2,12 +2,10 @@ import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
 
 import { ThemeContext } from '../../../themes/theme-context';
 import { Mode } from '../../../types/action';
 import { IQueryResponseProps } from '../../../types/query-response';
-import { getConsent } from '../../services/actions/permissions-action-creator';
 import { Image, Monaco } from '../common';
 import AdaptiveCard  from './adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from './adaptive-cards/AdaptiveHostConfig';
@@ -17,13 +15,6 @@ import { Snippets } from './snippets';
 class QueryResponse extends Component<IQueryResponseProps, {}> {
   constructor(props: any) {
     super(props);
-  }
-
-  public componentDidUpdate(nextProps: any) {
-    const { scopes } = this.props;
-    if (nextProps.scopes !== scopes) {
-      this.props.actions!.getConsent();
-    }
   }
 
   public render() {
@@ -48,7 +39,6 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
         isImageResponse = body && body.body;
       }
     }
-
 
     const pivotItems = [
       <PivotItem
@@ -123,15 +113,7 @@ function mapStateToProps(state: any) {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch): object {
-  return {
-    actions: bindActionCreators({
-      getConsent
-    }, dispatch),
-  };
-}
-
 // @ts-ignore
 const WithIntl = injectIntl(QueryResponse);
-export default connect(mapStateToProps, mapDispatchToProps)(WithIntl);
+export default connect(mapStateToProps)(WithIntl);
 

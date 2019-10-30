@@ -18,13 +18,6 @@ export function fetchScopesError(response: object): IAction {
   };
 }
 
-export function getConsentError(response: object): IAction {
-  return {
-    type: GET_CONSENT_ERROR,
-    response,
-  };
-}
-
 export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
     const { sampleQuery: { sampleUrl, selectedVerb } } = getState();
@@ -60,44 +53,5 @@ export function fetchScopes(): Function {
         };
         return dispatch(fetchScopesError(response));
       });
-
-  };
-}
-
-export function getConsent(): Function {
-  return async(dispatch: Function, getState: Function) => {
-    const respHeaders: any = {};
-    const {sampleQuery: query} = getState();
-    const {scopes: {data: scopes} } = getState();
-
-    for (let num = 0; num < scopes.length; num++) {
-
-      const scope: string[] = [];
-      scope.push(scopes[num].value);
-
-      try {
-        const response = await authenticatedRequest(dispatch, query, scope);
-        if (response && response.ok) {
-          const json = await parseResponse(response, respHeaders);
-          return dispatch(
-            queryResponse({
-              body: json,
-              headers: respHeaders
-            }),
-          );
-        }
-        if (num === scopes.length - 1) {
-          // All scopes have been consented to with no success
-          return dispatch(getConsentError(response));
-        }
-      }
-      catch (error) {
-        const errorResponse = {
-          statusText: error.code,
-          status: error.message ? error.message : 'Consent was not granted',
-        };
-        return dispatch(getConsentError(errorResponse));
-    }
-  }
   };
 }
