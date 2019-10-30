@@ -104,7 +104,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       selectionDisabled = true;
     }
 
-    return selectionDisabled ? 'Sign In to try this sample' : queryContent;
+    return selectionDisabled ? <FormattedMessage id={'Sign In to try this sample'} /> : queryContent;
 
   }
 
