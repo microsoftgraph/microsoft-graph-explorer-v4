@@ -27,7 +27,7 @@ export function Auth() {
         <div style={{ width: 120, display: 'flex', flexDirection: 'row',
          justifyContent: 'space-between', alignItems: 'center', paddingBottom: 10 }}>
           <Label style={{ fontWeight: 'bold', marginBottom: 5 }}><FormattedMessage id='Access Token' /></Label>
-          <IconButton onClick={handleCopy} iconProps={copyIcon} title='Emoji' ariaLabel='Copy' />
+          <IconButton onClick={handleCopy} iconProps={copyIcon} title='Copy' ariaLabel='Copy' />
         </div>
         <textarea style={{
           wordWrap: 'break-word', fontFamily: 'monospace', fontSize: FontSizes.xSmall, width: '100%',
