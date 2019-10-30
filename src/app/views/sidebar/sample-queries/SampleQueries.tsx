@@ -121,9 +121,17 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           >{item.method}</span>;
 
         default:
+          let selectionDisabled = false;
+
+          if (!this.props.tokenPresent && item.method !== 'GET') {
+            selectionDisabled = true;
+          }
+
+          const content = selectionDisabled ? 'Sign In to try this sample' : queryContent;
+
           return <>
             <TooltipHost
-              content={queryContent}
+              tooltipProps={{onRenderContent: () => <div style={{ paddingBottom: 3 }}>{content}</div>}}
               id={hostId}
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}
@@ -149,9 +157,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       }
       return (
         <div className={classes.groupHeader}>
-          <DetailsRow {...props}
+          <DetailsRow
+            {...props}
             className={classes.queryRow + ' ' + (selectionDisabled ? classes.rowDisabled : '')}
-            data-selection-disabled={selectionDisabled} />
+            data-selection-disabled={selectionDisabled}
+            />
         </div>
       );
     }
