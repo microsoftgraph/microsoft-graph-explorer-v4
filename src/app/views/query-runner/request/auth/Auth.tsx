@@ -1,5 +1,5 @@
 import { FontSizes } from '@uifabric/styling';
-import { Label, PrimaryButton } from 'office-ui-fabric-react';
+import { IconButton, IIconProps, Label, PrimaryButton } from 'office-ui-fabric-react';
 import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -17,14 +17,17 @@ function handleCopy() {
 
 export function Auth() {
   const accessToken = useSelector((state: any) => state.authToken);
+  const copyIcon: IIconProps = {
+    iconName: 'copy'
+  };
 
   return (<div style={{ padding: 10 }}>
     {accessToken ?
       <div style={{ marginBottom: 10 }}>
-        <div style={{ width: 200, display: 'flex', flexDirection: 'row',
+        <div style={{ width: 120, display: 'flex', flexDirection: 'row',
          justifyContent: 'space-between', alignItems: 'center', paddingBottom: 10 }}>
           <Label style={{ fontWeight: 'bold', marginBottom: 5 }}><FormattedMessage id='Access Token' /></Label>
-          <PrimaryButton onClick={handleCopy}>Copy</PrimaryButton>
+          <IconButton onClick={handleCopy} iconProps={copyIcon} title='Emoji' ariaLabel='Copy' />
         </div>
         <textarea style={{
           wordWrap: 'break-word', fontFamily: 'monospace', fontSize: FontSizes.xSmall, width: '100%',
