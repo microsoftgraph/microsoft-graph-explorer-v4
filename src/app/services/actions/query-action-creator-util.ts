@@ -80,9 +80,7 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
     if (contentType && isImageResponse(contentType)) {
       return response;
     } else {
-      if (response.ok) {
-        return response.json();
-      }
+      return response.json();
     }
   }
   return response;
