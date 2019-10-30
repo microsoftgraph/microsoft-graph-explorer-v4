@@ -32,7 +32,14 @@ export function Auth() {
         }} id='access-token' value={accessToken} readOnly={true}/>
       </div>
       :
-      <p style={{ font: 'inherit', fontWeight: 'bold' }}><FormattedMessage id='Sign In to see your access token.'/></p>
+        <Label
+          style={{
+            fontSize: FontSizes.large,
+            fontWeight: 600,
+          }}
+        >
+          <FormattedMessage id='Sign In to see your access token.' />
+        </Label>
     }
     </div>);
 }
