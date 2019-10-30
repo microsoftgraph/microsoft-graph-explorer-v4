@@ -28,7 +28,7 @@ export function Auth() {
         </div>
         <textarea style={{
           wordWrap: 'break-word', fontFamily: 'monospace', fontSize: FontSizes.xSmall, width: '100%',
-          height: 50, overflowY: 'scroll', border: 'none', resize: 'none'
+          height: 63, overflowY: 'scroll', border: 'none', resize: 'none'
         }} id='access-token' value={accessToken} readOnly={true}/>
       </div>
       :
