@@ -255,6 +255,8 @@
   "actions" : "Ações",
   "view" : "Exibir",
   "remove" : "Remover",
-  "back to classic": "Utilize o botão de alternância para voltar ao Explorador do Graph clássico.",
-  "More actions" : "Mais ações"
+  "back to classic": "Visualização",
+  "More actions" : "Mais ações",
+  "Permissions": "Permissões",
+  "Sign In to see your access token.": "Entre para ver seu token de acesso."
 }

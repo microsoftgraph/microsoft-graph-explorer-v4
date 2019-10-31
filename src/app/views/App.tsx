@@ -321,7 +321,11 @@ class App extends Component<IAppProps, IAppState> {
                       isMultiline={false}
                       onDismiss={actions.clearQueryStatus}
                     >
-                      {`${queryState.statusText} - ${queryState.status} - ${queryState.duration}ms`}
+                      {`${queryState.statusText} - ${queryState.status} `}
+                      {queryState.duration && <>
+                      {`- ${queryState.duration}`}<FormattedMessage id='milliseconds' />
+                      </>}
+
                     </MessageBar>
                   )}
                   {graphExplorerMode === Mode.Complete && termsOfUse && (
@@ -361,7 +365,7 @@ class App extends Component<IAppProps, IAppState> {
 
 const mapStateToProps = (state: any) => {
   return {
-    queryState:   state.queryRunnerStatus,
+    queryState: state.queryRunnerStatus,
     termsOfUse: state.termsOfUse,
     receivedSampleQuery: state.sampleQuery,
     graphExplorerMode: state.graphExplorerMode,

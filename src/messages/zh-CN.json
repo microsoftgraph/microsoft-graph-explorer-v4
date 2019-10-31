@@ -255,6 +255,8 @@
   "actions" : "操作",
   "view" : "视图",
   "remove" : "删除",
-  "back to classic": "操作切换按钮，切换回 Graph 浏览器经典模式。",
-  "More actions" : "更多操作"
+  "back to classic": "预览",
+  "More actions" : "更多操作",
+  "Permissions": "权限",
+  "Sign In to see your access token.": "登录以查看你的访问令牌。"
 }

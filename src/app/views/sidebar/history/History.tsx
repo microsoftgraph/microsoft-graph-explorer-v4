@@ -11,6 +11,7 @@ import { IHistoryItem, IHistoryProps } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
+import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as requestHistoryActionCreators from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
@@ -292,12 +293,18 @@ export class History extends Component<IHistoryProps, any> {
       sampleHeaders: query.headers,
       selectedVersion: queryVersion,
     };
-
+    const { duration, status, statusText } = query;
     if (actions) {
       actions.setSampleQuery(sampleQuery);
       actions.viewHistoryItem({
         body: query.result,
         headers: query.responseHeaders
+      });
+      actions.setQueryResponseStatus({
+        duration,
+        ok: status < 300,
+        status,
+        statusText
       });
     }
   }
@@ -347,7 +354,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
     actions: bindActionCreators({
       ...queryActionCreators,
       ...queryInputActionCreators,
-      ...requestHistoryActionCreators
+      ...requestHistoryActionCreators,
+      ...queryStatusActionCreators,
     },
       dispatch),
   };
