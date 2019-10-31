@@ -74,8 +74,8 @@ export class Authentication extends Component<IAuthenticationProps> {
             iconProps={{ iconName: 'Contact' }}
             onClick={this.signIn}
           >
-        {!mobileScreen && <FormattedMessage id='sign in' />}
-        </PrimaryButton>}
+            {!mobileScreen && <FormattedMessage id='sign in' />}
+          </PrimaryButton>}
         {tokenPresent && <Profile />}
       </Stack.Item>
     </Stack>;
@@ -85,20 +85,19 @@ export class Authentication extends Component<IAuthenticationProps> {
       <div className={classes.authenticationContainer}>
         {!mobileScreen && <Stack>
           {!tokenPresent &&
-          <>
-            <Label style={authLabel}>
-              <Icon iconName='Permissions' style={authIcon} />
-              <FormattedMessage id='Authentication'/>
-            </Label>
-            <br />
-            <Label>
-              <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />
-            </Label>
-          </>
+            <>
+              <Label style={authLabel}>
+                <Icon iconName='Permissions' style={authIcon} />
+                <FormattedMessage id='Authentication' />
+              </Label>
+              <br />
+              <Label>
+                <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />
+              </Label>
+            </>
           }
           <span><br />{authenticationStack}<br /> </span>
         </Stack>}
-
         {mobileScreen && authenticationStack}
       </div>
     );
