@@ -83,6 +83,25 @@
   </div>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
+
+  <script>
+    window.MonacoEnvironment = {
+      getWorkerUrl(moduleId, label) {
+        if (label === 'json') {
+          return getWorkerFor('json');
+        }
+        return getWorkerFor('editor');
+      }
+    };
+
+    function getWorkerFor(worker) {
+      const WORKER_PATH = 'https://personalize.blob.core.windows.net/test';
+
+      return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+    importScripts('${WORKER_PATH}/${worker}.worker.js');`
+      )}`;
+    }
+  </script>
 </body>
 
 </html>
