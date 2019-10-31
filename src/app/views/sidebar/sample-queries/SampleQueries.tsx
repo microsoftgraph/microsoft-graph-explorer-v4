@@ -97,12 +97,25 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     });
   }
 
+  public getToolTipContent (item: any, queryContent: any) {
+    let selectionDisabled = false;
+
+    if (!this.props.tokenPresent && item.method !== 'GET') {
+      selectionDisabled = true;
+    }
+
+    return selectionDisabled ? <FormattedMessage id={'Sign In to try this sample'} /> : queryContent;
+
+  }
+
   public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const classes = classNames(this.props);
     const hostId: string = getId('tooltipHost');
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
+
+      const toolTipContent = this.getToolTipContent(item, queryContent);
 
       switch (column.key) {
 
@@ -116,14 +129,21 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           />;
 
         case 'method':
-          return <span className={classes.badge}
-            style={{ background: getStyleFor(item.method) }}
-          >{item.method}</span>;
+        return <TooltipHost
+            tooltipProps={{ onRenderContent: () => <div style={{ paddingBottom: 3 }}>{toolTipContent}</div> }}
+            id={hostId}
+            calloutProps={{ gapSpace: 0 }}
+            styles={{ root: { display: 'inline-block' } }}
+          >
+            <span className={classes.badge}
+              style={{ background: getStyleFor(item.method) }}
+            >{item.method}</span>;
+          </TooltipHost>;
 
         default:
           return <>
             <TooltipHost
-              content={queryContent}
+              tooltipProps={{ onRenderContent: () => <div style={{ paddingBottom: 3 }}>{toolTipContent}</div>}}
               id={hostId}
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}
@@ -149,9 +169,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       }
       return (
         <div className={classes.groupHeader}>
-          <DetailsRow {...props}
+          <DetailsRow
+            {...props}
             className={classes.queryRow + ' ' + (selectionDisabled ? classes.rowDisabled : '')}
-            data-selection-disabled={selectionDisabled} />
+            data-selection-disabled={selectionDisabled}
+            />
         </div>
       );
     }

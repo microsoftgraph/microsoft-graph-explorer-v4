@@ -1,12 +1,11 @@
 import { writeData } from '../../../store/cache';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
-import { fetchScopes } from './permissions-action-creator';
 import {
   anonymousRequest, authenticatedRequest,
   isImageResponse, parseResponse, queryResponse
 } from './query-action-creator-util';
-import { queryResponseStatus } from './query-status-action-creator';
+import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
 
 export function runQuery(query: IQuery): Function {
@@ -47,18 +46,19 @@ export function runQuery(query: IQuery): Function {
 
       status.ok = true;
 
-      dispatch(queryResponseStatus(status));
+      dispatch(setQueryResponseStatus(status));
 
       return dispatch(queryResponse({
         body: result,
         headers: respHeaders
       }));
     }
-    else if (response && response.status === 403) {
-      dispatch(fetchScopes());
-    }
     else {
-      return dispatch(queryResponseStatus(status));
+      dispatch(queryResponse({
+        body: result,
+        headers: respHeaders
+      }));
+      return dispatch(setQueryResponseStatus(status));
     }
 
   }
@@ -73,8 +73,11 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
 
   const isImageResult = isImageResponse(contentType);
   if (isImageResult) {
-    result = await result.clone().arrayBuffer();
+    result = {
+      message: 'Run the query to view the image'
+    };
   }
+
 
   const historyItem: IHistoryItem = {
     url: query.sampleUrl,
@@ -86,7 +89,7 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
     status,
     statusText,
     duration,
-    result: isImageResult ? result : null,
+    result,
     har: ''
   };
 
