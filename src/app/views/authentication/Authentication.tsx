@@ -6,7 +6,9 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { IAuthenticationProps } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
-import { logIn } from '../../services/graph-client/MsalService';
+import { msalApplication } from '../../services/graph-client/msal-agent';
+import { acquireNewAccessToken, logIn } from '../../services/graph-client/msal-service';
+import { DEFAULT_USER_SCOPES } from '../../services/graph-constants';
 import { classNames } from '../classnames';
 import { authenticationStyles } from './Authentication.styles';
 import Profile from './profile/Profile';
@@ -14,15 +16,37 @@ import Profile from './profile/Profile';
 export class Authentication extends Component<IAuthenticationProps> {
   constructor(props: IAuthenticationProps) {
     super(props);
+    msalApplication.handleRedirectCallback(this.acquireTokenCallBack, this.acquireTokenErrorCallback);
   }
 
-  public signIn = async (): Promise<void> => {
-    const authResponse = await logIn();
-    if (authResponse) {
-      this.props.actions!.signIn(authResponse.accessToken);
-      this.props.actions!.storeScopes(authResponse.scopes);
+  public componentDidMount() {
+    const account = msalApplication.getAccount();
+
+    if (account) {
+      acquireNewAccessToken(msalApplication, DEFAULT_USER_SCOPES.split(' '))
+        .then(this.acquireTokenCallBack)
+        .then(this.acquireTokenErrorCallback);
     }
-  };
+  }
+
+  public signIn() {
+    acquireNewAccessToken(msalApplication)
+      .then(this.acquireTokenCallBack).catch(this.acquireTokenErrorCallback);
+  }
+
+  public async acquireTokenCallBack(response: any) {
+    if (response && response.tokenType === 'access_token') {
+      this.props.actions!.signIn(response.accessToken);
+      this.props.actions!.storeScopes(response.scopes);
+    } else if (response && response.tokenType === 'id_token') {
+      await acquireNewAccessToken(msalApplication)
+        .then(this.acquireTokenCallBack).catch(this.acquireTokenErrorCallback);
+    }
+  }
+
+  public acquireTokenErrorCallback(error: any) {
+    console.log(error);
+  }
 
   public render() {
     const { tokenPresent, mobileScreen } = this.props;

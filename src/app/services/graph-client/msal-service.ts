@@ -1,6 +1,6 @@
-import { AuthenticationParameters } from 'msal';
+import { AuthenticationParameters, AuthResponse, UserAgentApplication } from 'msal';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
-import { msalApplication } from './MsalAgent';
+import { msalApplication } from './msal-agent';
 
 const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
 const loginType = getLoginType();
@@ -11,17 +11,7 @@ export async function logIn(): Promise<any> {
     scopes: defaultUserScopes,
   };
 
-  if (loginType === 'POPUP') {
-    try {
-      await msalApplication.loginPopup(loginRequest);
-      const authResponse = await msalApplication.acquireTokenPopup(loginRequest);
-      return authResponse;
-    } catch (error) {
-      return null;
-    }
-  } else if (loginType === 'REDIRECT') {
-    await msalApplication.loginRedirect(loginRequest);
-  }
+  return msalApplication.loginRedirect(loginRequest);
 }
 
 function authCallback(error: any, response: any) {
@@ -32,25 +22,40 @@ export function logOut() {
   msalApplication.logout();
 }
 
+export async function getTokenSilent(userAgentApp: UserAgentApplication,
+   scopes: string[]): Promise<AuthResponse> {
+  return userAgentApp.acquireTokenSilent({ scopes });
+}
+
 /**
  * Generates a new access token from passed in scopes
  * @param {string[]} scopes passed to generate token
  *  @returns {Promise.<any>}
  */
-export async function acquireNewAccessToken(scopes: string[] = []): Promise<any> {
+export async function acquireNewAccessToken(userAgentApp: UserAgentApplication, scopes: string[] = []): Promise<any> {
   const loginRequest: AuthenticationParameters = {
     scopes,
   };
-  if (loginType === 'POPUP') {
-    try {
-      const authResponse = await msalApplication.acquireTokenPopup(loginRequest);
-      return authResponse;
-    } catch (error) {
-      return null;
-    }
-  } else if (loginType === 'REDIRECT') {
-    await msalApplication.acquireTokenRedirect(loginRequest);
-  }
+
+  // getTokenSilent(userAgentApp, scopes)).catch ((error) => {
+  //   if (requiresInteraction(error.errorCode)) {
+  //     if (loginType === 'POPUP') {
+  //       try {
+  //         return userAgentApp.acquireTokenPopup({ scopes: generateUserScopes(listOfScopes) });
+  //       } catch (error) {
+  //         throw error;
+  //       }
+  //     } else if (loginType === 'REDIRECT') {
+  //       userAgentApp.acquireTokenRedirect({ scopes: generateUserScopes(listOfScopes) });
+  //     }
+  //   }
+  // }; )
+  getTokenSilent(userAgentApp, scopes)
+    .catch((error: any) => {
+      if (requiresInteraction(error.errorCode)) {
+        userAgentApp.acquireTokenRedirect({ scopes });
+      }
+    });
 }
 
 /**

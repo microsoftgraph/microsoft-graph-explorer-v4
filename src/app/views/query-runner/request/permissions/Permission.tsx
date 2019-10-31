@@ -5,7 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../../../services/actions/auth-action-creators';
-import { acquireNewAccessToken } from '../../../../services/graph-client/MsalService';
+import { msalApplication } from '../../../../services/graph-client/msal-agent';
+import { acquireNewAccessToken } from '../../../../services/graph-client/msal-service';
 import { Monaco } from '../../../common';
 import { fetchScopes } from './util';
 
@@ -69,7 +70,7 @@ export function Permission({}) {
 
   const handleConsent = async (permission: IPermission) => {
     const scope = [permission.value];
-    const authResponse = await acquireNewAccessToken(scope);
+    const authResponse = await acquireNewAccessToken(msalApplication, scope);
 
     if (authResponse && authResponse.accessToken) {
       dispatch(getAuthTokenSuccess(authResponse.accessToken));
