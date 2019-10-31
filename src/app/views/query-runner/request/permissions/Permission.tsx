@@ -127,7 +127,6 @@ export function Permission({}) {
     }
   };
 
-
   return (
     <div style={{ padding: 10, maxHeight: '350px', minHeight: '300px', overflowY: 'auto', overflowX: 'auto', }}>
       {loading && <Monaco body = {'Fetching permissions...'}/>}
