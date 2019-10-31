@@ -16,6 +16,9 @@ import Profile from './profile/Profile';
 export class Authentication extends Component<IAuthenticationProps> {
   constructor(props: IAuthenticationProps) {
     super(props);
+    this.acquireTokenCallBack = this.acquireTokenCallBack.bind(this);
+    this.acquireTokenErrorCallback = this.acquireTokenErrorCallback.bind(this);
+
     msalApplication.handleRedirectCallback(this.acquireTokenCallBack, this.acquireTokenErrorCallback);
   }
 
@@ -29,9 +32,10 @@ export class Authentication extends Component<IAuthenticationProps> {
     }
   }
 
-  public signIn() {
-    acquireNewAccessToken(msalApplication)
-      .then(this.acquireTokenCallBack).catch(this.acquireTokenErrorCallback);
+  public async signIn() {
+    await logIn()
+      .then(this.acquireTokenCallBack)
+      .catch(this.acquireTokenErrorCallback);
   }
 
   public async acquireTokenCallBack(response: any) {
