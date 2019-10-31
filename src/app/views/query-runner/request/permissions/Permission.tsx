@@ -25,7 +25,6 @@ export function Permission({}) {
   const consentedScopes: string[] = useSelector((state: any) => state.consentedScopes);
   const [permissions, setPermissions ] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [sampleError, setError] = useState(false);
   const columns = [
     { key: 'value', name: 'Name', fieldName: 'value', minWidth: 100, maxWidth: 150 },
     { key: 'consentDisplayName', name: 'Function', fieldName: 'consentDisplayName', isResizable: true,
@@ -43,22 +42,17 @@ export function Permission({}) {
       );
     }
 
-  let errorMessage;
-
   useEffect(() => {
     setLoading(true);
     setPermissions([]);
-    setError(false);
 
     fetchScopes(sample)
       .then(res => { setLoading(false); setPermissions(res); })
       .catch((error) => {
-        setError(true);
         setLoading(false);
         setPermissions([]);
-        errorMessage = error;
       });
-  }, [sample.sampleUrl]);
+  }, [sample.sampleUrl, sample.selectedVerb]);
 
   if (accessToken) {
     permissions.forEach((permission: IPermission) => {
@@ -127,7 +121,6 @@ export function Permission({}) {
       }
     }
   };
-
 
   return (
     <div style={{ padding: 10, maxHeight: '350px', minHeight: '300px', overflowY: 'auto', overflowX: 'auto', }}>
