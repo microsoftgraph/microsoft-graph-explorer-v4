@@ -49,6 +49,7 @@ export class Authentication extends Component<IAuthenticationProps> {
   }
 
   public acquireTokenErrorCallback(error: any) {
+    // tslint:disable-next-line:no-console
     console.log(error);
   }
 
