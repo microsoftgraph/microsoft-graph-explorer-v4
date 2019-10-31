@@ -14,8 +14,8 @@ The Graph Explorer is written in [TypeScript](https://www.typescriptlang.org/) a
 * `npm start` starts the TypeScript compiler in watch mode and the local server. It should open your browser automatically with the Graph Explorer at [http://localhost:3000/](http://localhost:3000).
 
 #### Enabling authentication with your own credentials
-* You'll need to register an app on [apps.dev.microsoft.com](https://apps.dev.microsoft.com) to configure the login page for your local Graph Explorer.  Under `Platforms` click `Add Platform` and select Web.  `Allow Implicit Flow` should be checked and set `http://localhost:3000` as the redirect URL.  You don't need a client secret since the explorer is a single page application. Select the delegated permissions that you'll want to use in your local Graph Explorer.
-* Rename `secrets.sample.js` to `secrets.js` in the project root and insert your client ID.
+* You'll need to register an app on [https://portal.azure.com/](https://portal.azure.com/#blade/Microsoft_AAD_RegisteredApps/ApplicationsListBlade) to configure the login page for your local Graph Explorer.  Under `Azure services` which is located [here](https://portal.azure.com/#home) click `App registrations` and set the name of the application, make sure **Redirect URI** dropdown is set to Web and set `http://localhost:3000` as the redirect URL.
+* Copy the **Application (client) ID** and create a `.env` file in the project root and insert your client ID to this REACT_APP_CLIENT_ID in the `.env` file.
 
 ## Other commands
 * `npm test` to run tests from the command line for scenarios like parsing metadata and functional explorer tests.
