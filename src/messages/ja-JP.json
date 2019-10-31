@@ -255,6 +255,8 @@
   "actions" : "操作",
   "view" : "表示",
   "remove" : "削除",
-  "back to classic": "トグルを切り替えて、Graph エクスプローラー クラシックに戻ります。",
-  "More actions" : "その他の操作"
+  "back to classic": "プレビュー",
+  "More actions" : "その他の操作",
+  "Permissions": "アクセス許可",
+  "Sign In to see your access token.": "サインインすると、アクセス トークンが表示されます。"
 }
