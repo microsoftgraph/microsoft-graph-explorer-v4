@@ -42,22 +42,17 @@ export function Permission({}) {
       );
     }
 
-  let errorMessage;
-
   useEffect(() => {
     setLoading(true);
     setPermissions([]);
-    setError(false);
 
     fetchScopes(sample)
       .then(res => { setLoading(false); setPermissions(res); })
       .catch((error) => {
-        setError(true);
         setLoading(false);
         setPermissions([]);
-        errorMessage = error;
       });
-  }, [sample.sampleUrl]);
+  }, [sample.sampleUrl, sample.selectedVerb]);
 
   if (accessToken) {
     permissions.forEach((permission: IPermission) => {
