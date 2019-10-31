@@ -1,4 +1,4 @@
-import { FontSizes, Icon, Label, PrimaryButton, Stack, styled } from 'office-ui-fabric-react';
+import { FontSizes, Icon, Label, PrimaryButton, Stack, styled, Spinner } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
