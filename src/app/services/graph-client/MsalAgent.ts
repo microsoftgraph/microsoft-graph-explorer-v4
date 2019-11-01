@@ -12,8 +12,7 @@ const configuration: Configuration = {
     clientId: process.env.REACT_APP_CLIENT_ID || '',
   },
   cache: {
-    cacheLocation: 'localStorage',
-    storeAuthStateInCookie: false,
+    storeAuthStateInCookie: true,
   },
 };
 
