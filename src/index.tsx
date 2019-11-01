@@ -17,7 +17,7 @@ import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/a
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeTheme } from './app/services/actions/theme-action-creator';
-import { msalApplication } from './app/services/graph-client/msal-agent';
+import { msalApplication } from './app/services/graph-client/MsalAgent';
 import { DEFAULT_USER_SCOPES } from './app/services/graph-constants';
 import App from './app/views/App';
 import messages from './messages';
