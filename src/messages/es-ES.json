@@ -258,5 +258,6 @@
   "back to classic": "Vista previa",
   "More actions" : "Más acciones",
   "Permissions": "Permisos",
-  "Sign In to see your access token.": "Inicie sesión para ver el token de acceso."
+  "Sign In to see your access token.": "Inicie sesión para ver el token de acceso.",
+  "Sign In to try this sample": "Inicie sesión para probar el ejemplo"
 }

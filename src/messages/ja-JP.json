@@ -258,5 +258,6 @@
   "back to classic": "プレビュー",
   "More actions" : "その他の操作",
   "Permissions": "アクセス許可",
-  "Sign In to see your access token.": "サインインすると、アクセス トークンが表示されます。"
+  "Sign In to see your access token.": "サインインすると、アクセス トークンが表示されます。",
+  "Sign In to try this sample": "サインインしてこのサンプルを試す"
 }
