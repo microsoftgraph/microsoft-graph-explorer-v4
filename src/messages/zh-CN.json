@@ -258,5 +258,6 @@
   "back to classic": "预览",
   "More actions" : "更多操作",
   "Permissions": "权限",
-  "Sign In to see your access token.": "登录以查看你的访问令牌。"
+  "Sign In to see your access token.": "登录以查看你的访问令牌。",
+  "Sign In to try this sample": "登录以尝试此示例"
 }

@@ -258,5 +258,6 @@
   "back to classic": "Vorschau",
   "More actions" : "Weitere Aktionen",
   "Permissions": "Berechtigungen",
-  "Sign In to see your access token.": "Melden Sie sich an, um sich Ihr Zugriffstoken anzeigen zu lassen."
+  "Sign In to see your access token.": "Melden Sie sich an, um sich Ihr Zugriffstoken anzeigen zu lassen.",
+  "Sign In to try this sample": "Melden Sie sich an, um dieses Beispiel zu testen"
 }
