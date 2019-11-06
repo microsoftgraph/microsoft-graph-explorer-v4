@@ -6,9 +6,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { IAuthenticationProps } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
-import { msalApplication } from '../../services/graph-client/msal-agent';
-import { acquireNewAccessToken, logIn } from '../../services/graph-client/msal-service';
-import { DEFAULT_USER_SCOPES } from '../../services/graph-constants';
+import { logIn } from '../../services/graph-client/MsalService';
 import { classNames } from '../classnames';
 import { authenticationStyles } from './Authentication.styles';
 import Profile from './profile/Profile';
@@ -16,42 +14,21 @@ import Profile from './profile/Profile';
 export class Authentication extends Component<IAuthenticationProps> {
   constructor(props: IAuthenticationProps) {
     super(props);
-    this.acquireTokenCallBack = this.acquireTokenCallBack.bind(this);
-    this.acquireTokenErrorCallback = this.acquireTokenErrorCallback.bind(this);
-
-    msalApplication.handleRedirectCallback(this.acquireTokenCallBack, this.acquireTokenErrorCallback);
   }
 
-  public componentDidMount() {
-    const account = msalApplication.getAccount();
+  public signIn = async (): Promise<void> => {
+    const { mscc } = (window as any);
 
-    if (account) {
-      acquireNewAccessToken(msalApplication, DEFAULT_USER_SCOPES.split(' '))
-        .then(this.acquireTokenCallBack)
-        .then(this.acquireTokenErrorCallback);
+    if (mscc) {
+      mscc.setConsent();
     }
-  }
 
-  public async signIn() {
-    await logIn()
-      .then(this.acquireTokenCallBack)
-      .catch(this.acquireTokenErrorCallback);
-  }
-
-  public async acquireTokenCallBack(response: any) {
-    if (response && response.tokenType === 'access_token') {
-      this.props.actions!.signIn(response.accessToken);
-      this.props.actions!.storeScopes(response.scopes);
-    } else if (response && response.tokenType === 'id_token') {
-      await acquireNewAccessToken(msalApplication)
-        .then(this.acquireTokenCallBack).catch(this.acquireTokenErrorCallback);
+    const authResponse = await logIn();
+    if (authResponse) {
+      this.props.actions!.signIn(authResponse.accessToken);
+      this.props.actions!.storeScopes(authResponse.scopes);
     }
-  }
-
-  public acquireTokenErrorCallback(error: any) {
-    // tslint:disable-next-line:no-console
-    console.log(error);
-  }
+  };
 
   public render() {
     const { tokenPresent, mobileScreen } = this.props;
@@ -99,6 +76,7 @@ export class Authentication extends Component<IAuthenticationProps> {
           }
           <span><br />{authenticationStack}<br /> </span>
         </Stack>}
+
         {mobileScreen && authenticationStack}
       </div>
     );
