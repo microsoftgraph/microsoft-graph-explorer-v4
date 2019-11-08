@@ -24,13 +24,10 @@ export function Auth(props: any) {
     iconName: 'copy'
   };
 
-  return (<div style={{ padding: 10 }}>
+  return (<div className={classes.auth}>
     {accessToken ?
-      <div style={{ marginBottom: 10 }}>
-        <div style={{
-          width: 120, display: 'flex', flexDirection: 'row',
-          justifyContent: 'space-between', alignItems: 'center', paddingBottom: 10
-        }}>
+      <div>
+        <div className={classes.accessTokenContainer}>
           <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
           <IconButton onClick={handleCopy} iconProps={copyIcon} title='Copy' ariaLabel='Copy' />
         </div>
