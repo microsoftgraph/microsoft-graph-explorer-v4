@@ -1,7 +1,6 @@
 import {
   DetailsList,
   DetailsListLayoutMode,
-  FontSizes,
   getId,
   IColumn,
   Label,
@@ -64,7 +63,7 @@ function Permission(props: any) {
 
     fetchScopes(sample)
       .then(res => { setLoading(false); setPermissions(res); })
-      .catch((error) => {
+      .catch(() => {
         setLoading(false);
         setPermissions([]);
       });
