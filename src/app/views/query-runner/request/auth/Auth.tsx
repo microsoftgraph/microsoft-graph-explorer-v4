@@ -1,6 +1,5 @@
-import { FontSizes } from '@uifabric/styling';
 import { IconButton, IIconProps, Label, PrimaryButton, styled } from 'office-ui-fabric-react';
-import React, { useRef } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { classNames } from '../../../classnames';
