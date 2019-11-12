@@ -1,4 +1,4 @@
-import { FontSizes, Icon, Label, PrimaryButton, Stack, styled } from 'office-ui-fabric-react';
+import { FontSizes, Icon, Label, PrimaryButton, Spinner, SpinnerSize, Stack, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -11,12 +11,15 @@ import { classNames } from '../classnames';
 import { authenticationStyles } from './Authentication.styles';
 import Profile from './profile/Profile';
 
-export class Authentication extends Component<IAuthenticationProps> {
+export class Authentication extends Component<IAuthenticationProps, { loginInProgress: boolean }> {
   constructor(props: IAuthenticationProps) {
     super(props);
+    this.state = { loginInProgress: false };
   }
 
   public signIn = async (): Promise<void> => {
+    this.setState({ loginInProgress: true });
+
     const { mscc } = (window as any);
 
     if (mscc) {
@@ -25,14 +28,19 @@ export class Authentication extends Component<IAuthenticationProps> {
 
     const authResponse = await logIn();
     if (authResponse) {
+      this.setState({ loginInProgress: false });
+
       this.props.actions!.signIn(authResponse.accessToken);
       this.props.actions!.storeScopes(authResponse.scopes);
     }
+
+    this.setState({ loginInProgress: false });
   };
 
   public render() {
     const { tokenPresent, mobileScreen } = this.props;
     const classes = classNames(this.props);
+    const { loginInProgress } = this.state;
 
     const authLabel = {
       fontSize: FontSizes.large,
@@ -61,21 +69,26 @@ export class Authentication extends Component<IAuthenticationProps> {
 
     return (
       <div className={classes.authenticationContainer}>
-        {!mobileScreen && <Stack>
-          {!tokenPresent &&
-            <>
-              <Label style={authLabel}>
-                <Icon iconName='Permissions' style={authIcon} />
-                <FormattedMessage id='Authentication' />
-              </Label>
-              <br />
-              <Label>
-                <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />
-              </Label>
-            </>
-          }
-          <span><br />{authenticationStack}<br /> </span>
-        </Stack>}
+        {loginInProgress ? <div className={classes.spinnerContainer}>
+          <Spinner className={classes.spinner} size={SpinnerSize.medium} />
+          <Label>Signing you in...</Label>
+        </div>
+          :
+          !mobileScreen && <Stack>
+            {!tokenPresent &&
+              <>
+                <Label style={authLabel}>
+                  <Icon iconName='Permissions' style={authIcon} />
+                  <FormattedMessage id='Authentication' />
+                </Label>
+                <br />
+                <Label>
+                  <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />
+                </Label>
+              </>
+            }
+            <span><br />{authenticationStack}<br /> </span>
+          </Stack>}
 
         {mobileScreen && authenticationStack}
       </div>
