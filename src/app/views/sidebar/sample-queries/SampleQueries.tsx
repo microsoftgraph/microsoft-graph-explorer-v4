@@ -243,7 +243,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     const selection = new Selection({
       onSelectionChanged: () => {
-        const { actions } = this.props;
+        const { actions, profile } = this.props;
         const selectedQuery = selection.getSelection()[0] as any;
         if (!selectedQuery) { return; }
 
@@ -256,7 +256,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           selectedVersion: queryVersion,
         };
 
-        substituteTokens(sampleQuery);
+        substituteTokens(sampleQuery, profile);
 
         if (actions) {
           if (sampleQuery.selectedVerb === 'GET') {
@@ -303,6 +303,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 function mapStateToProps(state: any) {
   return {
     tokenPresent: !!state.authToken,
+    profile: state.profile,
     samples: state.samples
   };
 }

@@ -79,6 +79,7 @@ export interface ISampleQueriesProps {
   theme?: ITheme;
   styles?: object;
   tokenPresent: boolean;
+  profile: object;
   samples: {
     pending: boolean;
     queries: ISampleQuery[];
