@@ -76,23 +76,22 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
           </Label>
         </div>
           :
-          !mobileScreen && <Stack>
-            {!tokenPresent &&
-              <>
-                <Label style={authLabel}>
-                  <Icon iconName='Permissions' style={authIcon} />
-                  <FormattedMessage id='Authentication' />
-                </Label>
-                <br />
-                <Label>
-                  <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />
-                </Label>
-              </>
-            }
-            <span><br />{authenticationStack}<br /> </span>
-          </Stack>}
-
-        {mobileScreen && authenticationStack}
+          mobileScreen ? authenticationStack :
+            <Stack>
+              {!tokenPresent &&
+                <>
+                  <Label style={authLabel}>
+                    <Icon iconName='Permissions' style={authIcon} />
+                    <FormattedMessage id='Authentication' />
+                  </Label>
+                  <br />
+                  <Label>
+                    <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />
+                  </Label>
+                </>
+              }
+              <span><br />{authenticationStack}<br /> </span>
+            </Stack>}
       </div>
     );
   }
