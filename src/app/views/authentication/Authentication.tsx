@@ -71,7 +71,9 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
       <div className={classes.authenticationContainer}>
         {loginInProgress ? <div className={classes.spinnerContainer}>
           <Spinner className={classes.spinner} size={SpinnerSize.medium} />
-          <Label>Signing you in...</Label>
+          <Label>
+            <FormattedMessage id='Signing you in...' />
+          </Label>
         </div>
           :
           !mobileScreen && <Stack>
