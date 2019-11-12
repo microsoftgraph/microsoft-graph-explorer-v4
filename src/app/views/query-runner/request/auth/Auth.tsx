@@ -1,8 +1,9 @@
-import { FontSizes } from '@uifabric/styling';
-import { IconButton, IIconProps, Label, PrimaryButton } from 'office-ui-fabric-react';
-import React, { useRef } from 'react';
+import { IconButton, IIconProps, Label, PrimaryButton, styled } from 'office-ui-fabric-react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { classNames } from '../../../classnames';
+import { authStyles } from './Auth.styles';
 
 function handleCopy() {
   const tokenTextArea: any = document.getElementById('access-token');
@@ -15,34 +16,29 @@ function handleCopy() {
   tokenTextArea.blur();
 }
 
-export function Auth() {
+export function Auth(props: any) {
   const accessToken = useSelector((state: any) => state.authToken);
+
+  const classes = classNames(props);
   const copyIcon: IIconProps = {
     iconName: 'copy'
   };
 
-  return (<div style={{ padding: 10 }}>
+  return (<div className={classes.auth}>
     {accessToken ?
-      <div style={{ marginBottom: 10 }}>
-        <div style={{ width: 120, display: 'flex', flexDirection: 'row',
-         justifyContent: 'space-between', alignItems: 'center', paddingBottom: 10 }}>
-          <Label style={{ fontWeight: 'bold', marginBottom: 5 }}><FormattedMessage id='Access Token' /></Label>
+      <div>
+        <div className={classes.accessTokenContainer}>
+          <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
           <IconButton onClick={handleCopy} iconProps={copyIcon} title='Copy' ariaLabel='Copy' />
         </div>
-        <textarea style={{
-          wordWrap: 'break-word', fontFamily: 'monospace', fontSize: FontSizes.xSmall, width: '100%',
-          height: 63, overflowY: 'scroll', border: 'none', resize: 'none'
-        }} id='access-token' value={accessToken} readOnly={true}/>
+        <textarea className={classes.accessToken} id='access-token' value={accessToken} readOnly={true} />
       </div>
       :
-        <Label
-          style={{
-            fontSize: FontSizes.large,
-            fontWeight: 600,
-          }}
-        >
-          <FormattedMessage id='Sign In to see your access token.' />
-        </Label>
+      <Label className={classes.emptyStateLabel}>
+        <FormattedMessage id='Sign In to see your access token.' />
+      </Label>
     }
-    </div>);
+  </div>);
 }
+
+export default styled(Auth, authStyles as any);

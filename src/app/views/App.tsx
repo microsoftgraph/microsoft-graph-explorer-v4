@@ -1,5 +1,7 @@
-import { FocusTrapZone, FontSizes, IconButton, IStackTokens, ITheme, Label,
-  MessageBar, MessageBarType, Stack, styled } from 'office-ui-fabric-react';
+import {
+  FontSizes, IconButton, IStackTokens, ITheme, Label,
+  MessageBar, MessageBarType, Stack, styled
+} from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -215,7 +217,7 @@ class App extends Component<IAppProps, IAppState> {
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
     const { showToggle, showSidebar } = sidebarProperties;
-    const language = navigator.language  || 'en-US';
+    const language = navigator.language || 'en-US';
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
@@ -236,128 +238,128 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-          <div className={`container-fluid ${classes.app}`}>
-            <div className='row'>
-              {graphExplorerMode === Mode.Complete && (
-                <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
+        <div className={`container-fluid ${classes.app}`}>
+          <div className='row'>
+            {graphExplorerMode === Mode.Complete && (
+              <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
 
-                  {showToggle && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
-                    <>
-                      <IconButton
-                        iconProps={{ iconName: 'GlobalNavButton' }}
-                        className={classes.sidebarToggle}
-                        title='Remove sidebar'
-                        ariaLabel='Remove sidebar'
-                        onClick={this.toggleSidebar}
-                      />
-                      <Label style={{
-                        fontSize: FontSizes.xLarge,
-                        fontWeight: 600,
-                      }}>
-                        Graph Explorer
+                {showToggle && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
+                  <>
+                    <IconButton
+                      iconProps={{ iconName: 'GlobalNavButton' }}
+                      className={classes.sidebarToggle}
+                      title='Remove sidebar'
+                      ariaLabel='Remove sidebar'
+                      onClick={this.toggleSidebar}
+                    />
+                    <Label style={{
+                      fontSize: FontSizes.xLarge,
+                      fontWeight: 600,
+                    }}>
+                      Graph Explorer
                       </Label>
-                      <span style={{
-                        position: 'absolute',
-                        marginLeft: '70%',
-                      }}>
+                    <span style={{
+                      position: 'absolute',
+                      marginLeft: '70%',
+                    }}>
 
-                        <Authentication />
-                      </span>
-                      </>
+                      <Authentication />
+                    </span>
+                  </>
                 </Stack>
                 }
 
                 {!showToggle &&
 
-                    <Label style={{
-                      fontSize: FontSizes.xxLarge,
-                      fontWeight: 600,
-                      marginBottom: '10px',
-                      marginTop: '2%',
-                    }}>
-                      Graph Explorer
+                  <Label style={{
+                    fontSize: FontSizes.xxLarge,
+                    fontWeight: 600,
+                    marginBottom: '10px',
+                    marginTop: '2%',
+                  }}>
+                    Graph Explorer
                     </Label>
 
-                  }
+                }
 
 
-                  <hr className={classes.separator} />
+                <hr className={classes.separator} />
                 {!showToggle && <><Authentication />
-                   <hr className={classes.separator} /></> }
+                  <hr className={classes.separator} /></>}
 
-                  {showSidebar && <>
-                    <Banner optOut={this.optOut} />
-                    <hr className={classes.separator} />
-                    <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
-                  </>}
-                </div>
-              )}
-              <div className={layout}>
-                {graphExplorerMode === Mode.TryIt && (
-                  <div style={{ marginBottom: 8 }}>
-                    <MessageBar
-                      messageBarType={MessageBarType.warning}
-                      isMultiline={true}
-                    >
-                      <p>
-                        To try operations other than GET or to access your own data, sign in to
-                      <a className={classes.links}
-                          tabIndex={0}
-                          href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
-                          Graph Explorer.
-                      </a>
-                      </p>
-                    </MessageBar>
-                  </div>
-                )}
-
-                {displayContent && <>
-                  <div style={{ marginBottom: 8 }}>
-                    <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                  </div>
-                  {queryState && (
-                    <MessageBar
-                      messageBarType={queryState.ok ? MessageBarType.success : MessageBarType.error}
-                      isMultiline={false}
-                      onDismiss={actions.clearQueryStatus}
-                    >
-                      {`${queryState.statusText} - ${queryState.status} `}
-                      {queryState.duration && <>
-                      {`- ${queryState.duration}`}<FormattedMessage id='milliseconds' />
-                      </>}
-
-                    </MessageBar>
-                  )}
-                  {graphExplorerMode === Mode.Complete && termsOfUse && (
-                    <MessageBar
-                      messageBarType={MessageBarType.info}
-                      isMultiline={true}
-                      onDismiss={actions.clearTermsOfUse}
-                    >
-                      <FormattedMessage id='use the Microsoft Graph API' />
-                      <br /><br />
-                      <div>
-                        <a className={classes.links}
-                        href={'https://docs.microsoft.com/' + language +
-                        '/legal/microsoft-apis/terms-of-use?context=graph/context'}
-                          target='_blank'>
-                          <FormattedMessage id='Terms of use' /></a>
-                        &nbsp;,
-                        <a  className={classes.links}
-                        href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
-                          target='_blank'>
-                          <FormattedMessage id='Microsoft Privacy Statement' /></a>
-                      </div>
-                    </MessageBar>
-                  )}
-                  {
-                    // @ts-ignore
-                    <QueryResponse verb={this.state.selectedVerb} />
-                  }
+                {showSidebar && <>
+                  <Banner optOut={this.optOut} />
+                  <hr className={classes.separator} />
+                  <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                 </>}
               </div>
+            )}
+            <div className={layout}>
+              {graphExplorerMode === Mode.TryIt && (
+                <div style={{ marginBottom: 8 }}>
+                  <MessageBar
+                    messageBarType={MessageBarType.warning}
+                    isMultiline={true}
+                  >
+                    <p>
+                      To try operations other than GET or to access your own data, sign in to
+                      <a className={classes.links}
+                        tabIndex={0}
+                        href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
+                        Graph Explorer.
+                      </a>
+                    </p>
+                  </MessageBar>
+                </div>
+              )}
+
+              {displayContent && <>
+                <div style={{ marginBottom: 8 }}>
+                  <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                </div>
+                {queryState && (
+                  <MessageBar
+                    messageBarType={queryState.ok ? MessageBarType.success : MessageBarType.error}
+                    isMultiline={false}
+                    onDismiss={actions.clearQueryStatus}
+                  >
+                    {`${queryState.statusText} - ${queryState.status} `}
+                    {queryState.duration && <>
+                      {`- ${queryState.duration}`}<FormattedMessage id='milliseconds' />
+                    </>}
+
+                  </MessageBar>
+                )}
+                {graphExplorerMode === Mode.Complete && termsOfUse && (
+                  <MessageBar
+                    messageBarType={MessageBarType.info}
+                    isMultiline={true}
+                    onDismiss={actions.clearTermsOfUse}
+                  >
+                    <FormattedMessage id='use the Microsoft Graph API' />
+                    <br /><br />
+                    <div>
+                      <a className={classes.links}
+                        href={'https://docs.microsoft.com/' + language +
+                          '/legal/microsoft-apis/terms-of-use?context=graph/context'}
+                        target='_blank'>
+                        <FormattedMessage id='Terms of use' /></a>
+                      &nbsp;,
+                        <a className={classes.links}
+                        href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
+                        target='_blank'>
+                        <FormattedMessage id='Microsoft Privacy Statement' /></a>
+                    </div>
+                  </MessageBar>
+                )}
+                {
+                  // @ts-ignore
+                  <QueryResponse verb={this.state.selectedVerb} />
+                }
+              </>}
             </div>
           </div>
+        </div>
       </ThemeContext.Provider>
     );
   }
@@ -376,7 +378,7 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions:   bindActionCreators({
+    actions: bindActionCreators({
       clearQueryStatus,
       clearTermsOfUse,
       runQuery,

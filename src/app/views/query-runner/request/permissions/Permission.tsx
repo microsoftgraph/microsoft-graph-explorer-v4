@@ -1,12 +1,23 @@
-import { DetailsList, DetailsListLayoutMode, FontSizes, getId, IColumn,
-  Label, PrimaryButton, SelectionMode, TooltipHost } from 'office-ui-fabric-react';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  getId,
+  IColumn,
+  Label,
+  PrimaryButton,
+  SelectionMode,
+  styled,
+  TooltipHost
+} from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../../../services/actions/auth-action-creators';
 import { acquireNewAccessToken } from '../../../../services/graph-client/MsalService';
+import { classNames } from '../../../classnames';
 import { Monaco } from '../../../common';
+import { permissionStyles } from './Permission.styles';
 import { fetchScopes } from './util';
 
 export interface IPermission {
@@ -17,17 +28,20 @@ export interface IPermission {
   consented: boolean;
 }
 
-export function Permission({}) {
+function Permission(props: any) {
   const sample = useSelector((state: any) => state.sampleQuery, shallowEqual);
   const accessToken = useSelector((state: any) => state.authToken);
   const dispatch = useDispatch();
   const consentedScopes: string[] = useSelector((state: any) => state.consentedScopes);
-  const [permissions, setPermissions ] = useState([]);
+  const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const columns = [
     { key: 'value', name: 'Name', fieldName: 'value', minWidth: 100, maxWidth: 150 },
-    { key: 'consentDisplayName', name: 'Function', fieldName: 'consentDisplayName', isResizable: true,
-      minWidth: 150, maxWidth: 200 },
+    {
+      key: 'consentDisplayName', name: 'Function', fieldName: 'consentDisplayName', isResizable: true,
+      minWidth: 150, maxWidth: 200
+    },
     {
       key: 'consentDescription', name: 'Description', fieldName: 'consentDescription', isResizable: true,
       minWidth: 200, maxWidth: 300
@@ -35,11 +49,13 @@ export function Permission({}) {
     { key: 'isAdmin', name: 'Admin Consent', fieldName: 'isAdmin', minWidth: 100, maxWidth: 200 }
   ];
 
-    if (accessToken) {
-      columns.push(
-        { key: 'consented', name: 'Status' , fieldName: 'consented', minWidth: 100, maxWidth: 200 }
-      );
-    }
+  if (accessToken) {
+    columns.push(
+      { key: 'consented', name: 'Status', fieldName: 'consented', minWidth: 100, maxWidth: 200 }
+    );
+  }
+
+  const classes = classNames(props);
 
   useEffect(() => {
     setLoading(true);
@@ -47,7 +63,7 @@ export function Permission({}) {
 
     fetchScopes(sample)
       .then(res => { setLoading(false); setPermissions(res); })
-      .catch((error) => {
+      .catch(() => {
         setLoading(false);
         setPermissions([]);
       });
@@ -89,10 +105,7 @@ export function Permission({}) {
         case 'consented':
           const consented = !!item.consented;
           if (consented) {
-            return <Label style={{
-              fontSize: FontSizes.small,
-              fontStyle: 'italic'
-            }}
+            return <Label className={classes.consented}
             ><FormattedMessage id='Consented' /></Label>;
           } else {
             return <PrimaryButton onClick={() => handleConsent(item)}>
@@ -106,7 +119,7 @@ export function Permission({}) {
               content={item.consentDescription}
               id={hostId}
               calloutProps={{ gapSpace: 0 }}
-              styles={{ root: { display: 'inline-block' } }}
+              className={classes.tooltipHost}
             >
               <span aria-labelledby={hostId}>
                 {item.consentDescription}
@@ -122,11 +135,11 @@ export function Permission({}) {
   };
 
   return (
-    <div style={{ padding: 10, maxHeight: '350px', minHeight: '300px', overflowY: 'auto', overflowX: 'auto', }}>
-      {loading && <Monaco body = {'Fetching permissions...'}/>}
+    <div className={classes.container}>
+      {loading && <Monaco body={'Fetching permissions...'} />}
       {permissions && !loading &&
-        <div style={{marginBottom: 120}}>
-          <Label style={{ fontWeight: 'bold', marginBottom: 5 }}>
+        <div className={classes.permissions}>
+          <Label className={classes.permissionLength}>
             <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
           </Label>
           <DetailsList
@@ -141,3 +154,5 @@ export function Permission({}) {
     </div>
   );
 }
+
+export default styled(Permission, permissionStyles as any);
