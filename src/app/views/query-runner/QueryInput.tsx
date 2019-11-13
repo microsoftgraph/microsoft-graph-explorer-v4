@@ -1,4 +1,4 @@
-import { Dropdown, styled, TextField } from 'office-ui-fabric-react';
+import { Dropdown, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
