@@ -14,9 +14,9 @@ import * as queryInputActionCreators from '../../../services/actions/query-input
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
+import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import { substituteTokens } from './tokens';
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
