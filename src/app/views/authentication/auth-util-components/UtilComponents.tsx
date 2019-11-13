@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Profile from '../profile/Profile';
 
-export function showSignInPartial(tokenPresent: boolean, mobileScreen: boolean, signIn: Function) {
+export function showSignInButtonOrProfile(tokenPresent: boolean, mobileScreen: boolean, signIn: Function) {
   return (
     <Stack>
       <Stack.Item align='start'>

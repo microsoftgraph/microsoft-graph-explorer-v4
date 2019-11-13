@@ -8,7 +8,7 @@ import { IAuthenticationProps } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import { logIn } from '../../services/graph-client/MsalService';
 import { classNames } from '../classnames';
-import { showSignInPartial } from './auth-util-components';
+import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
 import Profile from './profile/Profile';
 
@@ -50,10 +50,9 @@ export class Authentication extends Component<IAuthenticationProps> {
               </Label>
             </>
           }
-          <span><br />{showSignInPartial(tokenPresent, mobileScreen, this.signIn)}<br /> </span>
+          <span><br />{showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn)}<br /> </span>
         </Stack>}
-
-        {mobileScreen && showSignInPartial(tokenPresent, mobileScreen, this.signIn)}
+        {mobileScreen && showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn)}
       </div>
     );
   }

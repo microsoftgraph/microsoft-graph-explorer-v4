@@ -1,1 +1,1 @@
-export { showSignInPartial } from './UtilComponents';
+export { showSignInButtonOrProfile } from './UtilComponents';
