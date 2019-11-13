@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { Mode } from '../../../types/action';
 import { IQueryInputProps } from '../../../types/query-runner';
+import { getStyleFor } from '../../utils/badge-color';
 import SubmitButton from '../common/submit-button/SubmitButton';
 
 export class QueryInput extends Component<IQueryInputProps, any> {
@@ -54,7 +55,16 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             selectedKey={selectedVerb}
             options={httpMethods}
             disabled={mode === Mode.TryIt}
-            styles={{ title: { paddingRight: 0 } }}
+            styles={{
+              title: {
+                paddingRight: 0,
+                background: getStyleFor(selectedVerb),
+                color: '#ffffff !important',
+              },
+              caretDown: {
+                color: '#ffffff !important',
+              },
+            }}
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </div>
