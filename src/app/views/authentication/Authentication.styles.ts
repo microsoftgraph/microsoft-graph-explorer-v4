@@ -16,6 +16,13 @@ export const authenticationStyles = (theme: ITheme) => {
     personaSecondaryText: {
       fontSize: FontSizes.medium
     },
+    authenticationLabel: {
+      fontSize: FontSizes.large,
+      fontWeight: 400,
+    },
+    keyIcon: {
+      margin: '0 5px',
+    },
     spinner: {
       flexDirection: 'row',
       alignItems: 'flex-start',
