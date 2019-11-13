@@ -1,4 +1,4 @@
-import { Dropdown, TextField } from 'office-ui-fabric-react';
+import { Dropdown, styled, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -7,6 +7,7 @@ import { Mode } from '../../../types/action';
 import { IQueryInputProps } from '../../../types/query-runner';
 import { getStyleFor } from '../../utils/badge-color';
 import SubmitButton from '../common/submit-button/SubmitButton';
+import { queryRunnerStyles } from './QueryRunner.styles';
 
 export class QueryInput extends Component<IQueryInputProps, any> {
   constructor(props: any) {
@@ -46,6 +47,12 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       intl: { messages },
     }: any = this.props;
 
+    const verbSelector: any = queryRunnerStyles().verbSelector;
+    verbSelector.title = {
+      ...verbSelector.title,
+      background: getStyleFor(selectedVerb),
+    };
+
     return (
       <div className='row'>
         <div className='col-sm-3 col-md-2'>
@@ -55,16 +62,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             selectedKey={selectedVerb}
             options={httpMethods}
             disabled={mode === Mode.TryIt}
-            styles={{
-              title: {
-                paddingRight: 0,
-                background: getStyleFor(selectedVerb),
-                color: '#ffffff !important',
-              },
-              caretDown: {
-                color: '#ffffff !important',
-              },
-            }}
+            styles={verbSelector}
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </div>
