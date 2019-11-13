@@ -3,6 +3,7 @@ import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken, consentedScopes } from './auth-reducers';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
 import { scopes } from './permissions-reducer';
+import { profile } from './profile-reducer';
 import { sampleQuery } from './query-input-reducers';
 import { isLoadingData } from './query-loading-reducers';
 import { graphResponse } from './query-runner-reducers';
@@ -24,6 +25,7 @@ export default combineReducers({
   headersAdded,
   history,
   isLoadingData,
+  profile,
   queryRunnerStatus,
   sampleQuery,
   samples,

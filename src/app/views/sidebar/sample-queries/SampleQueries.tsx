@@ -14,6 +14,7 @@ import * as queryInputActionCreators from '../../../services/actions/query-input
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
+import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 
@@ -97,7 +98,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     });
   }
 
-  public getToolTipContent (item: any, queryContent: any) {
+  public getToolTipContent(item: any, queryContent: any) {
     let selectionDisabled = false;
 
     if (!this.props.tokenPresent && item.method !== 'GET') {
@@ -129,7 +130,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           />;
 
         case 'method':
-        return <TooltipHost
+          return <TooltipHost
             tooltipProps={{ onRenderContent: () => <div style={{ paddingBottom: 3 }}>{toolTipContent}</div> }}
             id={hostId}
             calloutProps={{ gapSpace: 0 }}
@@ -143,7 +144,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         default:
           return <>
             <TooltipHost
-              tooltipProps={{ onRenderContent: () => <div style={{ paddingBottom: 3 }}>{toolTipContent}</div>}}
+              tooltipProps={{ onRenderContent: () => <div style={{ paddingBottom: 3 }}>{toolTipContent}</div> }}
               id={hostId}
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}
@@ -173,7 +174,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             {...props}
             className={classes.queryRow + ' ' + (selectionDisabled ? classes.rowDisabled : '')}
             data-selection-disabled={selectionDisabled}
-            />
+          />
         </div>
       );
     }
@@ -242,7 +243,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     const selection = new Selection({
       onSelectionChanged: () => {
-        const { actions } = this.props;
+        const { actions, profile } = this.props;
         const selectedQuery = selection.getSelection()[0] as any;
         if (!selectedQuery) { return; }
 
@@ -254,6 +255,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           sampleHeaders: selectedQuery.headers || [],
           selectedVersion: queryVersion,
         };
+
+        substituteTokens(sampleQuery, profile);
 
         if (actions) {
           if (sampleQuery.selectedVerb === 'GET') {
@@ -300,6 +303,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 function mapStateToProps(state: any) {
   return {
     tokenPresent: !!state.authToken,
+    profile: state.profile,
     samples: state.samples
   };
 }

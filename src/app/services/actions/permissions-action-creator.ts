@@ -1,8 +1,6 @@
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
-
-import { FETCH_SCOPES_ERROR, FETCH_SCOPES_SUCCESS, GET_CONSENT_ERROR } from '../redux-constants';
-import { authenticatedRequest, parseResponse, queryResponse } from './query-action-creator-util';
+import { FETCH_SCOPES_ERROR, FETCH_SCOPES_SUCCESS } from '../redux-constants';
 
 export function fetchScopesSuccess(response: object): IAction {
   return {
