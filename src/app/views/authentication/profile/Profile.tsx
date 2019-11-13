@@ -37,7 +37,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       })
       : null;
 
-    const userInfo = jsonUserInfo.response.body;
+    const userInfo = jsonUserInfo.response;
     if (userInfo) {
       let imageUrl = '';
 
@@ -50,7 +50,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
           : null;
 
         if (userPicture) {
-          const buffer = await userPicture.response.body.arrayBuffer();
+          const buffer = await userPicture.response.arrayBuffer();
           const blob = new Blob([buffer], { type: 'image/jpeg' });
           imageUrl = URL.createObjectURL(blob);
         }
@@ -153,17 +153,17 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         {!mobileScreen &&
           <Card compact={true} tokens={profileCardTokens}>
             <Card.Item fill={true}>
-            <Persona {...persona} coinSize={60} size={PersonaSize.size40} hidePersonaDetails={true} />
+              <Persona {...persona} coinSize={60} size={PersonaSize.size40} hidePersonaDetails={true} />
             </Card.Item>
-          <Card.Section>
-            <span className={classes.personaText}>
-              {persona.text}
-            </span>
-            <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
-            <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-              <FormattedMessage id='More actions' />
-            </ActionButton>
-          </Card.Section>
+            <Card.Section>
+              <span className={classes.personaText}>
+                {persona.text}
+              </span>
+              <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
+              <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+                <FormattedMessage id='More actions' />
+              </ActionButton>
+            </Card.Section>
           </Card>
         }
       </div>

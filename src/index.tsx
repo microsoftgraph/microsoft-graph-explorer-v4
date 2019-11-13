@@ -47,6 +47,7 @@ const appState = store({
   consentedScopes: [],
   headersAdded: [{ name: '', value: '' }],
   isLoadingData: false,
+  profile: null,
   queryRunnerStatus: null,
   sampleQuery: {
     sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
