@@ -8,6 +8,7 @@ import { IAuthenticationProps } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import { logIn } from '../../services/graph-client/MsalService';
 import { classNames } from '../classnames';
+import { showSignInPartial } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
 import Profile from './profile/Profile';
 
@@ -34,38 +35,13 @@ export class Authentication extends Component<IAuthenticationProps> {
     const { tokenPresent, mobileScreen } = this.props;
     const classes = classNames(this.props);
 
-    const authLabel = {
-      fontSize: FontSizes.large,
-      fontWeight: 400,
-    };
-
-    const authIcon = {
-      margin: '0 5px'
-    };
-
-    const authenticationStack = <Stack>
-      <Stack.Item align='start'>
-        {!tokenPresent &&
-          <PrimaryButton
-            ariaLabel='Sign-in button'
-            role='button'
-            iconProps={{ iconName: 'Contact' }}
-            onClick={this.signIn}
-          >
-            {!mobileScreen && <FormattedMessage id='sign in' />}
-          </PrimaryButton>}
-        {tokenPresent && <Profile />}
-      </Stack.Item>
-    </Stack>;
-
-
     return (
       <div className={classes.authenticationContainer}>
         {!mobileScreen && <Stack>
           {!tokenPresent &&
             <>
-              <Label style={authLabel}>
-                <Icon iconName='Permissions' style={authIcon} />
+              <Label className={classes.authenticationLabel}>
+                <Icon iconName='Permissions' className={classes.keyIcon} />
                 <FormattedMessage id='Authentication' />
               </Label>
               <br />
@@ -74,10 +50,10 @@ export class Authentication extends Component<IAuthenticationProps> {
               </Label>
             </>
           }
-          <span><br />{authenticationStack}<br /> </span>
+          <span><br />{showSignInPartial(tokenPresent, mobileScreen, this.signIn)}<br /> </span>
         </Stack>}
 
-        {mobileScreen && authenticationStack}
+        {mobileScreen && showSignInPartial(tokenPresent, mobileScreen, this.signIn)}
       </div>
     );
   }
