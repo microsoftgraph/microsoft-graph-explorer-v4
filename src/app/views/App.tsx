@@ -84,14 +84,16 @@ class App extends Component<IAppProps, IAppState> {
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
     this.handleSharedQueries();
-    this.handleSharedV3Queries();
   };
 
-  public handleSharedV3Queries() {
+  public handleSharedQueries() {
     const { actions } = this.props;
     const queryStringParams = this.getQueryStringParams();
     const query = this.generateQueryObjectFrom(queryStringParams);
-    actions!.setSampleQuery(query);
+
+    if (query) {
+      actions!.setSampleQuery(query);
+    }
   }
 
   private getQueryStringParams() {
@@ -101,42 +103,23 @@ class App extends Component<IAppProps, IAppState> {
     const method = urlParams.get('method');
     const version = urlParams.get('version');
     const graphUrl = urlParams.get('GraphUrl');
+    const requestBody = urlParams.get('requestBody');
 
-    return { request, method, version, graphUrl };
+    return { request, method, version, graphUrl, requestBody };
   }
 
   private generateQueryObjectFrom(queryParams: any) {
-    const { request, method, version, graphUrl } = this.getQueryStringParams();
+    const { request, method, version, graphUrl, requestBody } = queryParams;
+    if (!request) {
+      return null;
+    }
+
     return {
       sampleUrl: `${graphUrl}/${version}/${request}`,
       selectedVerb: method,
-      selectedVersion: version
+      selectedVersion: version,
+      sampleBody: requestBody
     };
-  }
-
-  public handleSharedQueries() {
-    const { actions } = this.props;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const base64Token = urlParams.getAll('query')[0];
-
-    if (!base64Token) {
-      return;
-    }
-
-    const data = JSON.parse(atob(base64Token));
-    const { sampleVerb, sampleHeaders, sampleUrl, sampleBody } = data;
-
-    const query = {
-      sampleUrl,
-      sampleBody,
-      sampleHeaders,
-      selectedVerb: sampleVerb
-    };
-
-    if (actions) {
-      actions.setSampleQuery(query);
-    }
   }
 
   public componentWillUnmount(): void {
