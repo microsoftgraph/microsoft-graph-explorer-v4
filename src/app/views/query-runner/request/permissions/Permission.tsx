@@ -3,6 +3,7 @@ import {
   DetailsListLayoutMode,
   getId,
   IColumn,
+  Icon,
   Label,
   PrimaryButton,
   SelectionMode,
@@ -56,7 +57,6 @@ function Permission(props: any) {
   }
 
   const classes = classNames(props);
-
   useEffect(() => {
     setLoading(true);
     setPermissions([]);
@@ -97,9 +97,9 @@ function Permission(props: any) {
 
         case 'isAdmin':
           if (item.isAdmin) {
-            return 'True';
+            return <Icon iconName='checkmark' className={classes.checkIcon} />;
           } else {
-            return 'False';
+            return '';
           }
 
         case 'consented':

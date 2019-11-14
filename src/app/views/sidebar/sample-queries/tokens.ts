@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Guid } from 'guid-typescript';
 import { IToken } from '../../../../types/sidebar';
 
