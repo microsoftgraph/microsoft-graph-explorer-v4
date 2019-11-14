@@ -1,4 +1,4 @@
-import { Pivot, PivotItem } from 'office-ui-fabric-react';
+import { IconButton, Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -7,7 +7,7 @@ import { ThemeContext } from '../../../themes/theme-context';
 import { Mode } from '../../../types/action';
 import { IQueryResponseProps } from '../../../types/query-response';
 import { Image, Monaco } from '../common';
-import AdaptiveCard  from './adaptive-cards/AdaptiveCard';
+import AdaptiveCard from './adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from './adaptive-cards/AdaptiveHostConfig';
 import './query-response.scss';
 import { Snippets } from './snippets';
@@ -53,8 +53,8 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
             alt='profile image'
           />
         ) : (
-          <Monaco body={body} verb={verb} />
-        )}
+            <Monaco body={body} verb={verb} />
+          )}
       </PivotItem>,
       <PivotItem
         key='response-headers'
@@ -68,7 +68,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
     if (mode === Mode.Complete) {
       pivotItems.push(
         <PivotItem
-          key = 'adaptive-cards'
+          key='adaptive-cards'
           ariaLabel='Adaptive Cards'
           headerText={messages['Adaptive Cards']}
         >
@@ -76,7 +76,7 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
             {(theme) => (
               // @ts-ignore
               <AdaptiveCard
-                body= {body}
+                body={body}
                 hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
               />
             )}
@@ -89,13 +89,16 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
           ariaLabel='Code Snippets'
           headerText={messages.Snippets}
         >
-          <Snippets/>
+          <Snippets />
         </PivotItem>
       );
     }
 
     return (
-      <div className='query-response'>
+      <div className='query-response' style={{ display: 'block' }}>
+        <IconButton className='share-query-btn' iconProps={{
+          iconName: 'Share'
+        }} />
         <Pivot className='pivot-response'>
           {pivotItems}
         </Pivot>
@@ -106,9 +109,9 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
 
 function mapStateToProps(state: any) {
   return {
-    graphResponse:  state.graphResponse,
+    graphResponse: state.graphResponse,
     appTheme: state.theme,
-    mode : state.graphExplorerMode,
+    mode: state.graphExplorerMode,
     scopes: state.scopes.data,
   };
 }
