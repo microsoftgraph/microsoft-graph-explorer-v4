@@ -65,7 +65,6 @@ class App extends Component<IAppProps, IAppState> {
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
 
-    const { actions } = this.props;
     const whiteListedDomains = [
       'https://docs.microsoft.com',
       'https://review.docs.microsoft.com',
@@ -84,6 +83,39 @@ class App extends Component<IAppProps, IAppState> {
 
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
+    this.handleSharedQueries();
+    this.handleSharedV3Queries();
+  };
+
+  public handleSharedV3Queries() {
+    const { actions } = this.props;
+    const queryStringParams = this.getQueryStringParams();
+    const query = this.generateQueryObjectFrom(queryStringParams);
+    actions!.setSampleQuery(query);
+  }
+
+  private getQueryStringParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const request = urlParams.get('request');
+    const method = urlParams.get('method');
+    const version = urlParams.get('version');
+    const graphUrl = urlParams.get('GraphUrl');
+
+    return { request, method, version, graphUrl };
+  }
+
+  private generateQueryObjectFrom(queryParams: any) {
+    const { request, method, version, graphUrl } = this.getQueryStringParams();
+    return {
+      sampleUrl: `${graphUrl}/${version}/${request}`,
+      selectedVerb: method,
+      selectedVersion: version
+    };
+  }
+
+  public handleSharedQueries() {
+    const { actions } = this.props;
 
     const urlParams = new URLSearchParams(window.location.search);
     const base64Token = urlParams.getAll('query')[0];
@@ -105,7 +137,7 @@ class App extends Component<IAppProps, IAppState> {
     if (actions) {
       actions.setSampleQuery(query);
     }
-  };
+  }
 
   public componentWillUnmount(): void {
     window.removeEventListener('message', this.receiveMessage);
