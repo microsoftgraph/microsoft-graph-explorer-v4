@@ -1,4 +1,4 @@
-import { IconButton, IIconProps, Label, PrimaryButton, styled } from 'office-ui-fabric-react';
+import { IconButton, IIconProps, Label, styled } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';

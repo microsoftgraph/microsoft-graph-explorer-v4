@@ -25,6 +25,10 @@ export const permissionStyles = (theme: ITheme) => {
     },
     permissions: {
       marginBottom: 120
+    },
+    checkIcon: {
+      fontSize: theme.fonts.large,
+      color: theme.palette.accent
     }
   };
 };
