@@ -10,6 +10,7 @@ import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
+import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
@@ -96,7 +97,7 @@ class App extends Component<IAppProps, IAppState> {
     }
   }
 
-  private getQueryStringParams() {
+  private getQueryStringParams(): ISharedQueryParams {
     const urlParams = new URLSearchParams(window.location.search);
 
     const request = urlParams.get('request');
