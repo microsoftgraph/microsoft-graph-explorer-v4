@@ -126,8 +126,8 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
-  private hashDecode(requestBody: string) {
-    return atob(requestBody);
+  private hashDecode(requestBody: string): string {
+    return requestBody ? atob(requestBody) : '';
   }
 
   public componentWillUnmount(): void {
