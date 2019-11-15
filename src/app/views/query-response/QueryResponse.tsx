@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-
 import { ThemeContext } from '../../../themes/theme-context';
 import { Mode } from '../../../types/action';
 import { IQueryResponseProps } from '../../../types/query-response';
@@ -55,14 +54,18 @@ class QueryResponse extends Component<IQueryResponseProps, { showShareQueryDialo
      * V3 expects the request query param to not have the version number.
      */
     const graphUrlRequest = new URL(sampleQuery.sampleUrl).pathname.substr(6);
-    const uriEncodedRequestBody = encodeURI(JSON.stringify(sampleQuery.sampleBody));
+    const requestBody = this.hashEncode(JSON.stringify(sampleQuery.sampleBody));
 
     return origin + pathname
       + '?request=' + graphUrlRequest
       + '&method=' + sampleQuery.selectedVerb
       + '&version=' + sampleQuery.selectedVersion
       + '&GraphUrl=' + graphUrl
-      + '&requestBody' + uriEncodedRequestBody;
+      + '&requestBody=' + requestBody;
+  }
+
+  private hashEncode(requestBody: string): string {
+    return btoa(requestBody);
   }
 
   public render() {
