@@ -1,7 +1,9 @@
-import { IconButton, Pivot, PivotItem } from 'office-ui-fabric-react';
+import { DefaultButton, IconButton, Pivot, PivotItem, PrimaryButton, } from 'office-ui-fabric-react';
+import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+
 
 import { ThemeContext } from '../../../themes/theme-context';
 import { Mode } from '../../../types/action';
@@ -12,13 +14,23 @@ import { darkThemeHostConfig, lightThemeHostConfig } from './adaptive-cards/Adap
 import './query-response.scss';
 import { Snippets } from './snippets';
 
-class QueryResponse extends Component<IQueryResponseProps, {}> {
+class QueryResponse extends Component<IQueryResponseProps, { showShareQueryDialog: boolean, query: string }> {
   constructor(props: any) {
     super(props);
+    this.state = {
+      showShareQueryDialog: true,
+      query: '',
+    };
   }
 
   public handleShareQuery = () => {
     const query = this.generateShareQueryParams();
+    this.setState({ query });
+    this.toggleShareQueryDialogState();
+  }
+
+  public toggleShareQueryDialogState = () => {
+    this.setState({ showShareQueryDialog: !this.state.showShareQueryDialog });
   }
 
   private generateShareQueryParams = (): string => {
@@ -50,7 +62,9 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
       verb
     }: any = this.props;
 
+    const { showShareQueryDialog, query } = this.state;
     const { graphResponse, mode } = this.props;
+
     if (graphResponse) {
       body = graphResponse.body;
       headers = graphResponse.headers;
@@ -119,13 +133,33 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
     }
 
     return (
-      <div className='query-response'>
-        <IconButton onClick={this.handleShareQuery} className='share-query-btn' iconProps={{
-          iconName: 'Share'
-        }} />
-        <Pivot className='pivot-response'>
-          {pivotItems}
-        </Pivot>
+      <div>
+        <div className='query-response'>
+          <IconButton onClick={this.handleShareQuery} className='share-query-btn' iconProps={{
+            iconName: 'Share'
+          }} />
+          <Pivot className='pivot-response'>
+            {pivotItems}
+          </Pivot>
+        </div>
+        <Dialog
+          hidden={showShareQueryDialog}
+          onDismiss={this.toggleShareQueryDialogState}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: 'Share Query',
+            isMultiline: true,
+            subText: messages['Share Query Message']
+          }}
+        >
+          <p className='share-query-params'>
+            {query}
+          </p>
+          <DialogFooter>
+            <PrimaryButton text='Copy' />
+            <DefaultButton text='Close' onClick={this.toggleShareQueryDialogState} />
+          </DialogFooter>
+        </Dialog>
       </div>
     );
   }
