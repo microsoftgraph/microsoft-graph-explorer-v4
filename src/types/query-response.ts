@@ -1,4 +1,5 @@
 import { Mode } from './action';
+import { IQuery } from './query-runner';
 
 export interface IQueryResponseProps {
   mode: Mode;
@@ -13,6 +14,7 @@ export interface IQueryResponseProps {
   verb: string;
   theme: string;
   scopes: string[];
+  sampleQuery: IQuery;
   actions: {
     getConsent: Function;
   };

@@ -17,6 +17,30 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
     super(props);
   }
 
+  public handleShareQuery = () => {
+    const query = this.generateShareQueryParams();
+  }
+
+  private generateShareQueryParams = (): string => {
+    const { sampleQuery } = this.props;
+    const origin = window.location.origin;
+    const pathname = window.location.pathname;
+    const graphUrl = new URL(sampleQuery.sampleUrl).origin;
+    /**
+     * To ensure backward compatibility the version is removed from the pathname.
+     * V3 expects the request query param to not have the version number.
+     */
+    const graphUrlRequest = new URL(sampleQuery.sampleUrl).pathname.substr(6);
+    const uriEncodedRequestBody = encodeURI(JSON.stringify(sampleQuery.sampleBody));
+
+    return origin + pathname
+      + '?request=' + graphUrlRequest
+      + '&method=' + sampleQuery.selectedVerb
+      + '&version=' + sampleQuery.selectedVersion
+      + '&GraphUrl=' + graphUrl
+      + '&requestBody' + uriEncodedRequestBody;
+  }
+
   public render() {
     let body: any;
     let headers;
@@ -95,8 +119,8 @@ class QueryResponse extends Component<IQueryResponseProps, {}> {
     }
 
     return (
-      <div className='query-response' style={{ display: 'block' }}>
-        <IconButton className='share-query-btn' iconProps={{
+      <div className='query-response'>
+        <IconButton onClick={this.handleShareQuery} className='share-query-btn' iconProps={{
           iconName: 'Share'
         }} />
         <Pivot className='pivot-response'>
@@ -113,6 +137,7 @@ function mapStateToProps(state: any) {
     appTheme: state.theme,
     mode: state.graphExplorerMode,
     scopes: state.scopes.data,
+    sampleQuery: state.sampleQuery
   };
 }
 
