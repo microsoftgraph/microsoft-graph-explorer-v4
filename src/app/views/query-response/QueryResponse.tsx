@@ -46,8 +46,7 @@ class QueryResponse extends Component<IQueryResponseProps, { showShareQueryDialo
 
   private generateShareQueryParams = (): string => {
     const { sampleQuery: { sampleBody, sampleUrl, selectedVerb, selectedVersion } } = this.props;
-    const origin = window.location.origin;
-    const pathname = window.location.pathname;
+    const { origin, pathname } = window.location;
     const url = new URL(sampleUrl);
     const graphUrl = url.origin;
     /**
