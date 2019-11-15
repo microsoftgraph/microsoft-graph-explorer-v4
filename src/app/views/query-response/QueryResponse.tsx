@@ -45,21 +45,22 @@ class QueryResponse extends Component<IQueryResponseProps, { showShareQueryDialo
   }
 
   private generateShareQueryParams = (): string => {
-    const { sampleQuery } = this.props;
+    const { sampleQuery: { sampleBody, sampleUrl, selectedVerb, selectedVersion } } = this.props;
     const origin = window.location.origin;
     const pathname = window.location.pathname;
-    const graphUrl = new URL(sampleQuery.sampleUrl).origin;
+    const url = new URL(sampleUrl);
+    const graphUrl = url.origin;
     /**
      * To ensure backward compatibility the version is removed from the pathname.
      * V3 expects the request query param to not have the version number.
      */
-    const graphUrlRequest = new URL(sampleQuery.sampleUrl).pathname.substr(6);
-    const requestBody = this.hashEncode(JSON.stringify(sampleQuery.sampleBody));
+    const graphUrlRequest = url.pathname.substr(6) + url.search;
+    const requestBody = this.hashEncode(JSON.stringify(sampleBody));
 
     return origin + pathname
       + '?request=' + graphUrlRequest
-      + '&method=' + sampleQuery.selectedVerb
-      + '&version=' + sampleQuery.selectedVersion
+      + '&method=' + selectedVerb
+      + '&version=' + selectedVersion
       + '&GraphUrl=' + graphUrl
       + '&requestBody=' + requestBody;
   }
