@@ -93,7 +93,10 @@ class App extends Component<IAppProps, IAppState> {
     const query = this.generateQueryObjectFrom(queryStringParams);
 
     if (query) {
-      actions!.setSampleQuery(query);
+      // This timeout waits for monaco to initialize it's formatter.
+      setTimeout(() => {
+        actions!.setSampleQuery(query);
+      }, 700);
     }
   }
 
@@ -119,8 +122,12 @@ class App extends Component<IAppProps, IAppState> {
       sampleUrl: `${graphUrl}/${version}/${request}`,
       selectedVerb: method,
       selectedVersion: version,
-      sampleBody: requestBody
+      sampleBody: this.hashDecode(requestBody)
     };
+  }
+
+  private hashDecode(requestBody: string) {
+    return atob(requestBody);
   }
 
   public componentWillUnmount(): void {
