@@ -1,4 +1,4 @@
-import { DefaultButton, IconButton, Pivot, PivotItem, PrimaryButton, } from 'office-ui-fabric-react';
+import { DefaultButton, FontSizes, IconButton, Pivot, PivotItem, PrimaryButton, } from 'office-ui-fabric-react';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -21,6 +21,18 @@ class QueryResponse extends Component<IQueryResponseProps, { showShareQueryDialo
       showShareQueryDialog: true,
       query: '',
     };
+  }
+
+  public handleCopy = () => {
+    const shareQueryParams: any = document.getElementById('share-query-text');
+    shareQueryParams.focus();
+    shareQueryParams.select();
+
+    document.execCommand('copy');
+    document.execCommand('unselect');
+
+    shareQueryParams.blur();
+    this.toggleShareQueryDialogState();
   }
 
   public handleShareQuery = () => {
@@ -152,11 +164,18 @@ class QueryResponse extends Component<IQueryResponseProps, { showShareQueryDialo
             subText: messages['Share Query Message']
           }}
         >
-          <p className='share-query-params'>
-            {query}
-          </p>
+          <textarea style={{
+            wordWrap: 'break-word',
+            fontFamily: 'monospace',
+            fontSize: FontSizes.xSmall,
+            width: '100%',
+            height: 63,
+            overflowY: 'scroll',
+            border: 'none',
+            resize: 'none'
+          }} className='share-query-params' id='share-query-text' defaultValue={query} />
           <DialogFooter>
-            <PrimaryButton text='Copy' />
+            <PrimaryButton text='Copy' onClick={this.handleCopy} />
             <DefaultButton text='Close' onClick={this.toggleShareQueryDialogState} />
           </DialogFooter>
         </Dialog>
