@@ -5,7 +5,7 @@ import { getTokens } from '../views/sidebar/sample-queries/tokens';
 /*
  * Given a token, go through each of the possible replacement scenarios and find which value to
  * replace the token with.
- * Order: Authenticated user values, demo tenant replacament values, default replacement values.
+ * Order: Authenticated user values, demo tenant replacement values, default replacement values.
  */
 export function getTokenSubstituteValue(token: IToken, isAuthenticated: boolean) {
   const priorityOrder = []; // Desc
