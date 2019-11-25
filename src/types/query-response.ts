@@ -19,3 +19,8 @@ export interface IQueryResponseProps {
     getConsent: Function;
   };
 }
+
+export interface IQueryResponseState {
+  showShareQueryDialog: boolean;
+  query: string;
+}

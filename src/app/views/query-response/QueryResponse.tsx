@@ -6,14 +6,14 @@ import { connect } from 'react-redux';
 
 import { ThemeContext } from '../../../themes/theme-context';
 import { Mode } from '../../../types/action';
-import { IQueryResponseProps } from '../../../types/query-response';
+import { IQueryResponseProps, IQueryResponseState } from '../../../types/query-response';
 import { Image, Monaco } from '../common';
 import AdaptiveCard from './adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from './adaptive-cards/AdaptiveHostConfig';
 import './query-response.scss';
 import { Snippets } from './snippets';
 
-class QueryResponse extends Component<IQueryResponseProps, { showShareQueryDialog: boolean, query: string }> {
+class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> {
   constructor(props: any) {
     super(props);
     this.state = {
