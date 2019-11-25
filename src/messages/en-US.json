@@ -261,5 +261,7 @@
   "Sign In to see your access token.": "Sign In to see your access token.",
   "Sign In to try this sample": "Sign In to try this sample",
   "Signing you in...": "Signing you in...",
-  "Share Query Message": "Share this link to let people try your current query in the Graph Explorer"
+  "Share Query Message": "Share this link to let people try your current query in the Graph Explorer",
+  "Copy": "Copy",
+  "Close": "Close"
 }

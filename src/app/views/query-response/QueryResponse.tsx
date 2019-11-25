@@ -178,8 +178,8 @@ class QueryResponse extends Component<IQueryResponseProps, { showShareQueryDialo
             resize: 'none'
           }} className='share-query-params' id='share-query-text' defaultValue={query} />
           <DialogFooter>
-            <PrimaryButton text='Copy' onClick={this.handleCopy} />
-            <DefaultButton text='Close' onClick={this.toggleShareQueryDialogState} />
+            <PrimaryButton text={messages.Copy} onClick={this.handleCopy} />
+            <DefaultButton text={messages.Close} onClick={this.toggleShareQueryDialogState} />
           </DialogFooter>
         </Dialog>
       </div>
