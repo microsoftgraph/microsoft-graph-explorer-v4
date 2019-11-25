@@ -11,6 +11,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
+import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
@@ -243,7 +244,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     const selection = new Selection({
       onSelectionChanged: () => {
-        const { actions, profile } = this.props;
+        const { actions, tokenPresent, profile } = this.props;
         const selectedQuery = selection.getSelection()[0] as any;
         if (!selectedQuery) { return; }
 
@@ -261,9 +262,16 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         if (actions) {
           if (sampleQuery.selectedVerb === 'GET') {
             sampleQuery.sampleBody = JSON.parse('{}');
-            actions.runQuery(sampleQuery);
+            if (selectedQuery.tip && tokenPresent) {
+              displayTipMessage(actions, selectedQuery);
+            } else {
+              actions.runQuery(sampleQuery);
+            }
           } else {
             sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
+            if (selectedQuery.tip) {
+              displayTipMessage(actions, selectedQuery);
+            }
           }
           actions.setSampleQuery(sampleQuery);
         }
@@ -300,6 +308,16 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   }
 
 }
+function displayTipMessage(actions: any, selectedQuery: any) {
+  if (selectedQuery.tip) {
+    actions.setQueryResponseStatus({
+      messageType: MessageBarType.warning,
+      statusText: 'Tip',
+      status: selectedQuery.tip
+    });
+  }
+}
+
 function mapStateToProps(state: any) {
   return {
     tokenPresent: !!state.authToken,
@@ -313,7 +331,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
     actions: bindActionCreators({
       ...queryActionCreators,
       ...queryInputActionCreators,
-      ...samplesActionCreators
+      ...samplesActionCreators,
+      ...queryStatusActionCreators,
     }, dispatch),
   };
 }
