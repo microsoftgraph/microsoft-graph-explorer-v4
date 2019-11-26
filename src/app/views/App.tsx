@@ -1,5 +1,5 @@
 import {
-  FontSizes, getFocusableByIndexPath, IconButton, IStackTokens, ITheme,
+  IconButton, IStackTokens, ITheme,
   Label, MessageBar, MessageBarType, Stack, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
