@@ -274,12 +274,15 @@ class App extends Component<IAppProps, IAppState> {
                       ariaLabel='Remove sidebar'
                       onClick={this.toggleSidebar}
                     />
-                    <Label style={{
-                      fontSize: FontSizes.xLarge,
-                      fontWeight: 600,
-                    }}>
-                      Graph Explorer
+                    <div style={{ padding: 10 }}>
+                      <Label style={{
+                        fontSize: FontSizes.xLarge,
+                        fontWeight: 600,
+                      }}>
+                        Graph Explorer
                       </Label>
+                      <Banner optOut={this.optOut} />
+                    </div>
                     <span style={{
                       position: 'absolute',
                       marginLeft: '70%',
