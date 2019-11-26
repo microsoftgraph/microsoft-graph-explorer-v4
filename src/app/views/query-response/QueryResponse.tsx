@@ -4,14 +4,9 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { ThemeContext } from '../../../themes/theme-context';
-import { Mode } from '../../../types/action';
 import { IQueryResponseProps, IQueryResponseState } from '../../../types/query-response';
-import { Image, Monaco } from '../common';
-import AdaptiveCard from './adaptive-cards/AdaptiveCard';
-import { darkThemeHostConfig, lightThemeHostConfig } from './adaptive-cards/AdaptiveHostConfig';
+import { getPivotItems } from './pivot-items/pivot-items';
 import './query-response.scss';
-import { Snippets } from './snippets';
 
 class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> {
   constructor(props: any) {
@@ -93,59 +88,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
       }
     }
 
-    const pivotItems = [
-      <PivotItem
-        key='response-preview'
-        ariaLabel='Response Preview'
-        headerText={messages['Response Preview']}
-      >
-        {isImageResponse ? (
-          <Image
-            styles={{ padding: '10px' }}
-            body={body}
-            alt='profile image'
-          />
-        ) : (
-            <Monaco body={body} verb={verb} />
-          )}
-      </PivotItem>,
-      <PivotItem
-        key='response-headers'
-        ariaLabel='Response Headers'
-        headerText={messages['Response Headers']}
-      >
-        <Monaco body={headers} />
-      </PivotItem>
-    ];
-
-    if (mode === Mode.Complete) {
-      pivotItems.push(
-        <PivotItem
-          key='adaptive-cards'
-          ariaLabel='Adaptive Cards'
-          headerText={messages['Adaptive Cards']}
-        >
-          <ThemeContext.Consumer >
-            {(theme) => (
-              // @ts-ignore
-              <AdaptiveCard
-                body={body}
-                hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
-              />
-            )}
-          </ThemeContext.Consumer>
-        </PivotItem>
-      );
-      pivotItems.push(
-        <PivotItem
-          key='code-snippets'
-          ariaLabel='Code Snippets'
-          headerText={messages.Snippets}
-        >
-          <Snippets />
-        </PivotItem>
-      );
-    }
+    const pivotItems = getPivotItems(messages, body, verb, mode, headers, isImageResponse);
 
     return (
       <div>
