@@ -129,7 +129,7 @@ class App extends Component<IAppProps, IAppState> {
   private hashDecode(requestBody: string): string {
     const decodedBody = atob(requestBody);
 
-    if (!decodedBody) {
+    if (decodedBody === 'undefined') {
       return '';
     }
 
