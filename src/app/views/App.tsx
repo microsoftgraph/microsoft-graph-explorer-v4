@@ -1,6 +1,6 @@
 import {
-  FontSizes, IconButton, IStackTokens, ITheme, Label,
-  MessageBar, MessageBarType, Stack, styled
+  FontSizes, getFocusableByIndexPath, IconButton, IStackTokens, ITheme,
+  Label, MessageBar, MessageBarType, Stack, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -265,7 +265,6 @@ class App extends Component<IAppProps, IAppState> {
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
-
                 {showToggle && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
                   <>
                     <IconButton
@@ -293,16 +292,20 @@ class App extends Component<IAppProps, IAppState> {
                 }
 
                 {!showToggle &&
-
-                  <Label style={{
-                    fontSize: FontSizes.xxLarge,
-                    fontWeight: 600,
-                    marginBottom: '10px',
-                    marginTop: '2%',
+                  <div style={{
+                    height: 50,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
                   }}>
-                    Graph Explorer
+                    <Label style={{
+                      fontSize: FontSizes.xxLarge,
+                      fontWeight: 600,
+                    }}>
+                      Graph Explorer
                     </Label>
-
+                    <Banner optOut={this.optOut} />
+                  </div>
                 }
 
 
@@ -311,8 +314,6 @@ class App extends Component<IAppProps, IAppState> {
                   <hr className={classes.separator} /></>}
 
                 {showSidebar && <>
-                  <Banner optOut={this.optOut} />
-                  <hr className={classes.separator} />
                   <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                 </>}
               </div>
