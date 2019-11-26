@@ -275,10 +275,7 @@ class App extends Component<IAppProps, IAppState> {
                       onClick={this.toggleSidebar}
                     />
                     <div style={{ padding: 10 }}>
-                      <Label style={{
-                        fontSize: FontSizes.xLarge,
-                        fontWeight: 600,
-                      }}>
+                      <Label className={classes.graphExplorerLabel}>
                         Graph Explorer
                       </Label>
                       <Banner optOut={this.optOut} />
@@ -295,16 +292,8 @@ class App extends Component<IAppProps, IAppState> {
                 }
 
                 {!showToggle &&
-                  <div style={{
-                    height: 50,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}>
-                    <Label style={{
-                      fontSize: FontSizes.xLarge,
-                      fontWeight: 600,
-                    }}>
+                  <div className={classes.graphExplorerLabelContainer}>
+                    <Label className={classes.graphExplorerLabel}>
                       Graph Explorer
                     </Label>
                     <Banner optOut={this.optOut} />
