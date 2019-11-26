@@ -7,6 +7,7 @@
   height: 610px;
   border: 1px solid silver;
   overflow: hidden;
+  display: block;
 
 
   .ms-Pivot.root-84 {
@@ -21,5 +22,20 @@
     justify-content: center;
     align-items: center;
   }
+
+  .share-query-btn {
+    float: right;
+    margin-top: 10px;
+    padding: 0px;
+    z-index: 1;
+  }
+}
+
+.share-query-params {
+  font-family: 'monospace';
+  font-size: 12px;
+  width: '100%';
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
