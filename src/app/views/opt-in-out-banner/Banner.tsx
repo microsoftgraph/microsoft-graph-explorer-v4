@@ -1,4 +1,4 @@
-import { MessageBar, Toggle } from 'office-ui-fabric-react';
+import { Toggle } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { IBanner } from '../../../types/sidebar';
@@ -15,13 +15,13 @@ class Banner extends Component<IBanner, {}> {
     }: any = this.props;
 
     return (
-        <Toggle
-          label={messages['back to classic']}
-          inlineLabel={true}
-          defaultChecked={true}
-          onText=' '
-          onChange={optOut} />
-
+      <Toggle
+        label={messages['back to classic']}
+        styles={{ label: { marginBottom: -20 }, pill: { marginBottom: -20 } }}
+        inlineLabel={true}
+        defaultChecked={true}
+        onText=' '
+        onChange={optOut} />
     );
   }
 
