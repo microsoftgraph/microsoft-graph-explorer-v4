@@ -299,7 +299,7 @@ class App extends Component<IAppProps, IAppState> {
                     justifyContent: 'space-between'
                   }}>
                     <Label style={{
-                      fontSize: FontSizes.xxLarge,
+                      fontSize: FontSizes.xLarge,
                       fontWeight: 600,
                     }}>
                       Graph Explorer
