@@ -11,7 +11,7 @@ import { Snippets } from '../snippets';
 
 export const getPivotItems = (messages: any,
   body: any,
-  verb: any,
+  verb: string,
   mode: Mode,
   headers: any,
   isImageResponse: boolean) => {
