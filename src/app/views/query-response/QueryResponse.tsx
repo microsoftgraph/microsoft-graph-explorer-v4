@@ -8,6 +8,7 @@ import { ThemeContext } from '../../../themes/theme-context';
 import { Mode } from '../../../types/action';
 import { IQueryResponseProps, IQueryResponseState } from '../../../types/query-response';
 import { Image, Monaco } from '../common';
+import { copy } from '../common/copy';
 import AdaptiveCard from './adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from './adaptive-cards/AdaptiveHostConfig';
 import './query-response.scss';
@@ -23,15 +24,8 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
   }
 
   public handleCopy = () => {
-    const shareQueryParams: any = document.getElementById('share-query-text');
-    shareQueryParams.focus();
-    shareQueryParams.select();
-
-    document.execCommand('copy');
-    document.execCommand('unselect');
-
-    shareQueryParams.blur();
-    this.toggleShareQueryDialogState();
+    copy('share-query-text')
+      .then(() => this.toggleShareQueryDialogState());
   }
 
   public handleShareQuery = () => {
