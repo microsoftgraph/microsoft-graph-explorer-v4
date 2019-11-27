@@ -1,4 +1,4 @@
-import { PivotItem } from 'office-ui-fabric-react';
+import { IconButton, PivotItem } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
@@ -20,6 +20,16 @@ export function renderSnippets(supportedLanguages: string[]) {
   ));
 }
 
+function copy(snippet: string) {
+  const element = document.createElement('textarea');
+  element.value = snippet;
+  document.body.appendChild(element);
+  element.select();
+
+  document.execCommand('copy');
+  document.body.removeChild(element);
+}
+
 function Snippet(props: ISnippetProps) {
   let { language } = props;
   /**
@@ -34,7 +44,13 @@ function Snippet(props: ISnippetProps) {
   const sampleQuery = useSelector((state: any) => state.sampleQuery, shallowEqual);
   const snippet = useSelector((state: any) => (state.snippets)[language]);
   const [ loadingState, setLoadingState ] = useState(false);
+  const [ copyText, setCopyText ] = useState('Copy');
+
   const dispatch = useDispatch();
+
+  const copyIcon = {
+    iconName: 'copy',
+  };
 
   useEffect(() => {
       setLoadingState(true);
@@ -43,11 +59,15 @@ function Snippet(props: ISnippetProps) {
         .then(() => setLoadingState(false));
   }, [sampleQuery.sampleUrl]);
 
+  // TODO: move styles to a separate file
   return (
-    <Monaco
-      body={loadingState ? 'Fetching code snippet...' : snippet}
-      language={language}
-      readOnly={true}
-    />
+    <div style={{ display: 'block' }}>
+      <IconButton iconProps={copyIcon} onClick={() => copy(snippet)}/>
+      <Monaco
+        body={loadingState ? 'Fetching code snippet...' : snippet}
+        language={language}
+        readOnly={true}
+      />
+    </div>
   );
 }
