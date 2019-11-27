@@ -5,6 +5,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { IQueryResponseProps, IQueryResponseState } from '../../../types/query-response';
+import { copy } from '../common/copy';
 import { getPivotItems } from './pivot-items/pivot-items';
 import './query-response.scss';
 
@@ -18,15 +19,8 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
   }
 
   public handleCopy = () => {
-    const shareQueryParams: any = document.getElementById('share-query-text');
-    shareQueryParams.focus();
-    shareQueryParams.select();
-
-    document.execCommand('copy');
-    document.execCommand('unselect');
-
-    shareQueryParams.blur();
-    this.toggleShareQueryDialogState();
+    copy('share-query-text')
+      .then(() => this.toggleShareQueryDialogState());
   }
 
   public handleShareQuery = () => {

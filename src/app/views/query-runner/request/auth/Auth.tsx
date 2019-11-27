@@ -3,17 +3,11 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { classNames } from '../../../classnames';
+import { copy } from '../../../common/copy';
 import { authStyles } from './Auth.styles';
 
-function handleCopy() {
-  const tokenTextArea: any = document.getElementById('access-token');
-  tokenTextArea.focus();
-  tokenTextArea.select();
-
-  document.execCommand('copy');
-  document.execCommand('unselect');
-
-  tokenTextArea.blur();
+async function handleCopy() {
+  await copy('access-token');
 }
 
 export function Auth(props: any) {
