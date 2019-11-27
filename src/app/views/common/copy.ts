@@ -1,12 +1,4 @@
-export const copy = (id: string, text?: string): Promise<any> => {
-  if (text) {
-    return genericCopy(text);
-  }
-  
-  return copyTextArea(id);
-};
-
-function genericCopy(text: string) {
+export function genericCopy(text: string) {
   const element = document.createElement('textarea');
   element.value = text;
   document.body.appendChild(element);
@@ -18,7 +10,7 @@ function genericCopy(text: string) {
   return Promise.resolve('copied');
 }
 
-function copyTextArea(id: string) {
+export function copy(id: string) {
   const textArea: any = document.getElementById(id);
   textArea.focus();
   textArea.select();

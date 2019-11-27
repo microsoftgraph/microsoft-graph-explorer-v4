@@ -4,6 +4,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { getSnippet } from '../../../services/actions/snippet-action-creator';
 import { Monaco } from '../../common';
+import { genericCopy } from '../../common/copy';
 
 interface ISnippetProps {
   language: string;
@@ -18,16 +19,6 @@ export function renderSnippets(supportedLanguages: string[]) {
       <Snippet language={language} />
     </PivotItem>
   ));
-}
-
-function copy(snippet: string) {
-  const element = document.createElement('textarea');
-  element.value = snippet;
-  document.body.appendChild(element);
-  element.select();
-
-  document.execCommand('copy');
-  document.body.removeChild(element);
 }
 
 function Snippet(props: ISnippetProps) {
@@ -58,10 +49,9 @@ function Snippet(props: ISnippetProps) {
         .then(() => setLoadingState(false));
   }, [sampleQuery.sampleUrl]);
 
-  // TODO: move styles to a separate file
   return (
     <div style={{ display: 'block' }}>
-      <IconButton iconProps={copyIcon} onClick={() => copy(snippet)}/>
+      <IconButton iconProps={copyIcon} onClick={async () => genericCopy(snippet)}/>
       <Monaco
         body={loadingState ? 'Fetching code snippet...' : snippet}
         language={language}
