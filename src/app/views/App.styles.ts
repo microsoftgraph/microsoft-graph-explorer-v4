@@ -1,4 +1,4 @@
-import { ITheme } from '@uifabric/styling';
+import { FontSizes, ITheme } from '@uifabric/styling';
 
 export const appStyles = (theme: ITheme) => {
   return {
@@ -23,5 +23,15 @@ export const appStyles = (theme: ITheme) => {
     sidebarToggle: {
       marginBottom: theme.spacing.s1,
     },
+    graphExplorerLabel: {
+      fontSize: FontSizes.xLarge,
+      fontWeight: 600,
+    },
+    graphExplorerLabelContainer: {
+      height: 50,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    }
   };
 };

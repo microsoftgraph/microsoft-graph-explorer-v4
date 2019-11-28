@@ -1,6 +1,6 @@
 import {
-  FontSizes, IconButton, IStackTokens, ITheme, Label,
-  MessageBar, MessageBarType, Stack, styled
+  IconButton, IStackTokens, ITheme,
+  Label, MessageBar, MessageBarType, Stack, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -127,7 +127,13 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private hashDecode(requestBody: string): string {
-    return requestBody ? atob(requestBody) : '';
+    const decodedBody = atob(requestBody);
+
+    if (decodedBody === 'undefined') {
+      return '';
+    }
+
+    return decodedBody;
   }
 
   public componentWillUnmount(): void {
@@ -265,7 +271,6 @@ class App extends Component<IAppProps, IAppState> {
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
-
                 {showToggle && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
                   <>
                     <IconButton
@@ -275,12 +280,12 @@ class App extends Component<IAppProps, IAppState> {
                       ariaLabel='Remove sidebar'
                       onClick={this.toggleSidebar}
                     />
-                    <Label style={{
-                      fontSize: FontSizes.xLarge,
-                      fontWeight: 600,
-                    }}>
-                      Graph Explorer
+                    <div style={{ padding: 10 }}>
+                      <Label className={classes.graphExplorerLabel}>
+                        Graph Explorer
                       </Label>
+                      <Banner optOut={this.optOut} />
+                    </div>
                     <span style={{
                       position: 'absolute',
                       marginLeft: '70%',
@@ -293,16 +298,12 @@ class App extends Component<IAppProps, IAppState> {
                 }
 
                 {!showToggle &&
-
-                  <Label style={{
-                    fontSize: FontSizes.xxLarge,
-                    fontWeight: 600,
-                    marginBottom: '10px',
-                    marginTop: '2%',
-                  }}>
-                    Graph Explorer
+                  <div className={classes.graphExplorerLabelContainer}>
+                    <Label className={classes.graphExplorerLabel}>
+                      Graph Explorer
                     </Label>
-
+                    <Banner optOut={this.optOut} />
+                  </div>
                 }
 
 
@@ -311,8 +312,6 @@ class App extends Component<IAppProps, IAppState> {
                   <hr className={classes.separator} /></>}
 
                 {showSidebar && <>
-                  <Banner optOut={this.optOut} />
-                  <hr className={classes.separator} />
                   <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                 </>}
               </div>
