@@ -1,6 +1,6 @@
 import {
-  FontSizes, IconButton, IStackTokens, ITheme, Label,
-  MessageBar, MessageBarType, Stack, styled
+  IconButton, IStackTokens, ITheme,
+  Label, MessageBar, MessageBarType, Stack, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -10,6 +10,7 @@ import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
+import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
@@ -65,7 +66,6 @@ class App extends Component<IAppProps, IAppState> {
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
 
-    const { actions } = this.props;
     const whiteListedDomains = [
       'https://docs.microsoft.com',
       'https://review.docs.microsoft.com',
@@ -84,28 +84,57 @@ class App extends Component<IAppProps, IAppState> {
 
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const base64Token = urlParams.getAll('query')[0];
-
-    if (!base64Token) {
-      return;
-    }
-
-    const data = JSON.parse(atob(base64Token));
-    const { sampleVerb, sampleHeaders, sampleUrl, sampleBody } = data;
-
-    const query = {
-      sampleUrl,
-      sampleBody,
-      sampleHeaders,
-      selectedVerb: sampleVerb
-    };
-
-    if (actions) {
-      actions.setSampleQuery(query);
-    }
+    this.handleSharedQueries();
   };
+
+  public handleSharedQueries() {
+    const { actions } = this.props;
+    const queryStringParams = this.getQueryStringParams();
+    const query = this.generateQueryObjectFrom(queryStringParams);
+
+    if (query) {
+      // This timeout waits for monaco to initialize it's formatter.
+      setTimeout(() => {
+        actions!.setSampleQuery(query);
+      }, 700);
+    }
+  }
+
+  private getQueryStringParams(): ISharedQueryParams {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const request = urlParams.get('request');
+    const method = urlParams.get('method');
+    const version = urlParams.get('version');
+    const graphUrl = urlParams.get('GraphUrl');
+    const requestBody = urlParams.get('requestBody');
+
+    return { request, method, version, graphUrl, requestBody };
+  }
+
+  private generateQueryObjectFrom(queryParams: any) {
+    const { request, method, version, graphUrl, requestBody } = queryParams;
+    if (!request) {
+      return null;
+    }
+
+    return {
+      sampleUrl: `${graphUrl}/${version}/${request}`,
+      selectedVerb: method,
+      selectedVersion: version,
+      sampleBody: this.hashDecode(requestBody)
+    };
+  }
+
+  private hashDecode(requestBody: string): string {
+    const decodedBody = atob(requestBody);
+
+    if (decodedBody === 'undefined') {
+      return '';
+    }
+
+    return decodedBody;
+  }
 
   public componentWillUnmount(): void {
     window.removeEventListener('message', this.receiveMessage);
@@ -242,7 +271,6 @@ class App extends Component<IAppProps, IAppState> {
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
-
                 {showToggle && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
                   <>
                     <IconButton
@@ -252,12 +280,12 @@ class App extends Component<IAppProps, IAppState> {
                       ariaLabel='Remove sidebar'
                       onClick={this.toggleSidebar}
                     />
-                    <Label style={{
-                      fontSize: FontSizes.xLarge,
-                      fontWeight: 600,
-                    }}>
-                      Graph Explorer
+                    <div style={{ padding: 10 }}>
+                      <Label className={classes.graphExplorerLabel}>
+                        Graph Explorer
                       </Label>
+                      <Banner optOut={this.optOut} />
+                    </div>
                     <span style={{
                       position: 'absolute',
                       marginLeft: '70%',
@@ -270,16 +298,12 @@ class App extends Component<IAppProps, IAppState> {
                 }
 
                 {!showToggle &&
-
-                  <Label style={{
-                    fontSize: FontSizes.xxLarge,
-                    fontWeight: 600,
-                    marginBottom: '10px',
-                    marginTop: '2%',
-                  }}>
-                    Graph Explorer
+                  <div className={classes.graphExplorerLabelContainer}>
+                    <Label className={classes.graphExplorerLabel}>
+                      Graph Explorer
                     </Label>
-
+                    <Banner optOut={this.optOut} />
+                  </div>
                 }
 
 
@@ -288,8 +312,6 @@ class App extends Component<IAppProps, IAppState> {
                   <hr className={classes.separator} /></>}
 
                 {showSidebar && <>
-                  <Banner optOut={this.optOut} />
-                  <hr className={classes.separator} />
                   <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                 </>}
               </div>
