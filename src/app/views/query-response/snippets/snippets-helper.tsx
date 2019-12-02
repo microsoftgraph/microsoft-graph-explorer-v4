@@ -51,7 +51,7 @@ function Snippet(props: ISnippetProps) {
 
   return (
     <div style={{ display: 'block' }}>
-      <IconButton iconProps={copyIcon} onClick={async () => genericCopy(snippet)}/>
+      <IconButton style={{ float: 'right', zIndex: 1}} iconProps={copyIcon} onClick={async () => genericCopy(snippet)}/>
       <Monaco
         body={loadingState ? 'Fetching code snippet...' : snippet}
         language={language}
