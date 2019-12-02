@@ -1,6 +1,6 @@
 import {
   ContextualMenuItemType, DetailsList, DetailsRow, getId, getTheme,
-  IColumn, IconButton, SearchBox, SelectionMode, styled, TooltipHost
+  IColumn, IconButton, MessageBarType, SearchBox, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -302,6 +302,7 @@ export class History extends Component<IHistoryProps, any> {
       });
       actions.setQueryResponseStatus({
         duration,
+        messageType: (status < 300) ? MessageBarType.success : MessageBarType.error,
         ok: status < 300,
         status,
         statusText

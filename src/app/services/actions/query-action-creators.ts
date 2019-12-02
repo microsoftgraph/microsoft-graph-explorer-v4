@@ -1,3 +1,4 @@
+import { MessageBarType } from 'office-ui-fabric-react';
 import { writeData } from '../../../store/cache';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
@@ -33,6 +34,7 @@ export function runQuery(query: IQuery): Function {
     createHistory(response, respHeaders, query, createdAt, dispatch, result, duration);
 
     const status: any = {
+      messageType: MessageBarType.error,
       ok : false,
       duration,
     };
@@ -45,6 +47,7 @@ export function runQuery(query: IQuery): Function {
     if (response && response.ok) {
 
       status.ok = true;
+      status.messageType = MessageBarType.success;
 
       dispatch(setQueryResponseStatus(status));
 

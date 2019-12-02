@@ -341,7 +341,7 @@ class App extends Component<IAppProps, IAppState> {
                 </div>
                 {queryState && (
                   <MessageBar
-                    messageBarType={queryState.ok ? MessageBarType.success : MessageBarType.error}
+                    messageBarType={queryState.messageType}
                     isMultiline={false}
                     onDismiss={actions.clearQueryStatus}
                   >
