@@ -102,8 +102,10 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
             {pivotItems}
           </Pivot>
         </div>
-        // @ts-ignore
-        <Modal
+
+        {
+          // @ts-ignore
+          <Modal
           isOpen={showModal}
           onDismiss={this.toggleModal}
           dragOptions={false}
@@ -112,7 +114,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
           <Pivot className='pivot-response'>
             {pivotItems}
           </Pivot>
-        </Modal>
+        </Modal>}
         <Dialog
           hidden={showShareQueryDialog}
           onDismiss={this.toggleShareQueryDialogState}
