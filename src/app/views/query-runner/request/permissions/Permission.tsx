@@ -15,7 +15,7 @@ import { FormattedMessage } from 'react-intl';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../../../services/actions/auth-action-creators';
-import { acquireNewAccessToken } from '../../../../services/graph-client/MsalService';
+import { acquireNewAccessToken } from '../../../../services/graph-client/msal-service';
 import { classNames } from '../../../classnames';
 import { Monaco } from '../../../common';
 import { permissionStyles } from './Permission.styles';
