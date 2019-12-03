@@ -6,9 +6,10 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
-import { Mode } from '../../types/action';
+import { LoginType, Mode } from '../../types/action';
 import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
@@ -19,6 +20,7 @@ import { addRequestHeader } from '../services/actions/request-headers-action-cre
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeTheme } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
+import { getLoginType } from '../services/graph-client/msal-service';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
@@ -240,6 +242,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
+    const loginType = getLoginType();
     const { graphExplorerMode, queryState, termsOfUse,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
     const sampleHeaderText = messages['Sample Queries'];
@@ -319,7 +322,8 @@ class App extends Component<IAppProps, IAppState> {
             <div className={layout}>
               {graphExplorerMode === Mode.TryIt && (
                 <div style={{ marginBottom: 8 }}>
-                  <MessageBar
+                  {loginType === LoginType.Popup && <Authentication />}
+                  {loginType === LoginType.Redirect && <MessageBar
                     messageBarType={MessageBarType.warning}
                     isMultiline={true}
                   >
@@ -331,7 +335,7 @@ class App extends Component<IAppProps, IAppState> {
                         Graph Explorer.
                       </a>
                     </p>
-                  </MessageBar>
+                  </MessageBar>}
                 </div>
               )}
 

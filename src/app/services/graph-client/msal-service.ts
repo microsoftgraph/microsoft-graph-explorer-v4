@@ -1,6 +1,7 @@
 import { AuthenticationParameters } from 'msal';
+import { LoginType } from '../../../types/action';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
-import { msalApplication } from './MsalAgent';
+import { msalApplication } from './msal-agent';
 
 const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
 const loginType = getLoginType();
@@ -11,7 +12,7 @@ export async function logIn(): Promise<any> {
     scopes: defaultUserScopes,
   };
 
-  if (loginType === 'POPUP') {
+  if (loginType === LoginType.Popup) {
     try {
       await msalApplication.loginPopup(loginRequest);
       const authResponse = await msalApplication.acquireTokenPopup(loginRequest);
@@ -19,7 +20,7 @@ export async function logIn(): Promise<any> {
     } catch (error) {
       return null;
     }
-  } else if (loginType === 'REDIRECT') {
+  } else if (loginType === LoginType.Redirect) {
     await msalApplication.loginRedirect(loginRequest);
   }
 }
@@ -29,7 +30,10 @@ function authCallback(error: any, response: any) {
 }
 
 export function logOut() {
-  msalApplication.logout();
+  // Locking this to only logout through redirect since redirects aren't supported yet in the iframe
+  if (loginType === LoginType.Redirect) {
+    msalApplication.logout();
+  }
 }
 
 /**
@@ -41,14 +45,14 @@ export async function acquireNewAccessToken(scopes: string[] = []): Promise<any>
   const loginRequest: AuthenticationParameters = {
     scopes,
   };
-  if (loginType === 'POPUP') {
+  if (loginType === LoginType.Popup) {
     try {
       const authResponse = await msalApplication.acquireTokenPopup(loginRequest);
       return authResponse;
     } catch (error) {
       return null;
     }
-  } else if (loginType === 'REDIRECT') {
+  } else if (loginType === LoginType.Redirect) {
     await msalApplication.acquireTokenRedirect(loginRequest);
   }
 }
@@ -80,5 +84,5 @@ export function getLoginType() {
   const msedge = userAgent.indexOf('Edge/');
   const isIE = msie > 0 || msie11 > 0;
   const isEdge = msedge > 0;
-  return isIE || isEdge ? 'REDIRECT' : 'POPUP';
+  return isIE || isEdge ? LoginType.Redirect : LoginType.Popup;
 }
