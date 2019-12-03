@@ -263,13 +263,14 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           if (sampleQuery.selectedVerb === 'GET') {
             sampleQuery.sampleBody = JSON.parse('{}');
             if (tokenPresent) {
-              displayTipMessage(actions, selectedQuery);
+              if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
+              else { actions.runQuery(sampleQuery); }
             } else {
               actions.runQuery(sampleQuery);
             }
           } else {
             sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
-            displayTipMessage(actions, selectedQuery);
+            if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
           }
           actions.setSampleQuery(sampleQuery);
         }
@@ -307,13 +308,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
 }
 function displayTipMessage(actions: any, selectedQuery: ISampleQuery) {
-  if (selectedQuery.tip) {
-    actions.setQueryResponseStatus({
-      messageType: MessageBarType.warning,
-      statusText: 'Tip',
-      status: selectedQuery.tip
-    });
-  }
+  actions.setQueryResponseStatus({
+    messageType: MessageBarType.warning,
+    statusText: 'Tip',
+    status: selectedQuery.tip
+  });
 }
 
 function mapStateToProps(state: any) {
