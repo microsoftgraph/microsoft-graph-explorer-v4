@@ -13,7 +13,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-
+import { telemetry } from '../../../../../telemetry';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../../../services/actions/auth-action-creators';
 import { acquireNewAccessToken } from '../../../../services/graph-client/MsalService';
 import { classNames } from '../../../classnames';
@@ -155,4 +155,5 @@ function Permission(props: any) {
   );
 }
 
-export default styled(Permission, permissionStyles as any);
+const TrackedPermission = telemetry.trackComponent(Permission);
+export default styled(TrackedPermission, permissionStyles as any);

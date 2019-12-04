@@ -2,6 +2,7 @@ import { IconButton, IIconProps, Label, styled } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { telemetry } from '../../../../../telemetry';
 import { classNames } from '../../../classnames';
 import { copy } from '../../../common/copy';
 import { authStyles } from './Auth.styles';
@@ -35,4 +36,5 @@ export function Auth(props: any) {
   </div>);
 }
 
-export default styled(Auth, authStyles as any);
+const TrackedAuth = telemetry.trackComponent(Auth);
+export default styled(TrackedAuth, authStyles as any);
