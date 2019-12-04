@@ -1,4 +1,3 @@
-import { ReactPlugin } from '@microsoft/applicationinsights-react-js';
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 
 class Telemetry {
@@ -14,6 +13,7 @@ class Telemetry {
 
   public startCollectingData() {
     this.appInsights.loadAppInsights();
+    this.appInsights.trackPageView();
   }
 
   public collect(eventName: string, payload: any) {
@@ -26,7 +26,7 @@ class Telemetry {
   }
 
   // A valid event name ends with the word EVENT
-  private valid(eventName: string) {
+  private valid(eventName: string): boolean {
     const listOfWords = eventName.split('_');
     const lastIndex = listOfWords.length - 1;
     const lastWord = listOfWords[lastIndex];
@@ -34,4 +34,4 @@ class Telemetry {
   }
 }
 
-export default new Telemetry();
+export const telemetry = new Telemetry();
