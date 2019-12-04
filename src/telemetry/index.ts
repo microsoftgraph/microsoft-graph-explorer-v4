@@ -1,3 +1,7 @@
-export { ITelemetry } from './ITelemetry';
-export { telemetry } from './telemetry';
+import { telemetry } from './telemetry';
+
+export {
+  telemetry
+};
+
 
