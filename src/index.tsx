@@ -24,6 +24,7 @@ import { readHistoryData } from './app/views/sidebar/history/history-utils';
 import messages from './messages';
 import { store } from './store';
 import './styles/index.scss';
+import { ITelemetry, telemetry } from './telemetry';
 import { loadGETheme } from './themes';
 import { readTheme } from './themes/theme-utils';
 import { Mode } from './types/enums';
@@ -152,6 +153,9 @@ function getWorkerFor(worker: string): string {
 	    importScripts('${WORKER_PATH}/${worker}.worker.js');`
   )}`;
 }
+
+const telemetryProvider: ITelemetry = telemetry;
+telemetryProvider.startCollectingData();
 
 const Root = () => {
   return (
