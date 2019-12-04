@@ -163,43 +163,46 @@ export class History extends Component<IHistoryProps, any> {
           return <span style={{ color }} className={classes.badge}>{item.status}</span>;
 
         case 'button':
+          const buttonActions = [
+            {
+              key: 'actions',
+              itemType: ContextualMenuItemType.Header,
+              text: actionsText,
+            },
+            {
+              key: 'view',
+              text: viewText,
+              iconProps: {
+                iconName: 'View'
+              },
+              onClick: () => this.onViewQuery(item)
+            },
+            {
+              key: 'runQuery',
+              text: runQueryText,
+              iconProps: {
+                iconName: 'Refresh'
+              },
+              onClick: () => this.onRunQuery(item)
+            },
+            {
+              key: 'remove',
+              text: removeText,
+              iconProps: {
+                iconName: 'Delete'
+              },
+              onClick: () => this.onDeleteQuery(item)
+            },
+          ];
+
           return <IconButton
             className={classes.docLink}
             title='Actions'
             ariaLabel='Actions'
+            menuIconProps={{ iconName: 'More' }}
             menuProps={{
               shouldFocusOnMount: true,
-              items: [
-                {
-                  key: 'actions',
-                  itemType: ContextualMenuItemType.Header,
-                  text: actionsText,
-                },
-                {
-                  key: 'view',
-                  text: viewText,
-                  iconProps: {
-                    iconName: 'View'
-                  },
-                  onClick: () => this.onViewQuery(item)
-                },
-                {
-                  key: 'runQuery',
-                  text: runQueryText,
-                  iconProps: {
-                    iconName: 'Refresh'
-                  },
-                  onClick: () => this.onRunQuery(item)
-                },
-                {
-                  key: 'remove',
-                  text: removeText,
-                  iconProps: {
-                    iconName: 'Delete'
-                  },
-                  onClick: () => this.onDeleteQuery(item)
-                },
-              ]
+              items: buttonActions
             }}
           />;
 
