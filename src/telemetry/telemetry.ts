@@ -1,13 +1,19 @@
-import { ApplicationInsights } from '@microsoft/applicationinsights-web';
+import { ReactPlugin, withAITracking } from '@microsoft/applicationinsights-react-js';
+import { ApplicationAnalytics, ApplicationInsights } from '@microsoft/applicationinsights-web';
+import { ComponentType } from 'react';
+import ITelemetry from './ITelemetry';
 
-class Telemetry {
+class Telemetry implements ITelemetry {
   private appInsights: ApplicationInsights;
+  private config: any;
 
   constructor() {
+    this.config = {
+      instrumentationKey: 'a800ae98-f89e-4f96-b491-cf1b8a989bff',
+    };
+
     this.appInsights = new ApplicationInsights({
-      config: {
-        instrumentationKey: 'a800ae98-f89e-4f96-b491-cf1b8a989bff',
-      }
+      config: this.config
     });
   }
 
@@ -22,6 +28,15 @@ class Telemetry {
     }
 
     this.appInsights.trackEvent({ name: eventName }, payload);
+  }
+
+  public trackComponent(ComponentToTrack: ComponentType): ComponentType {
+    const reactPlugin = new ReactPlugin();
+    const appInsightsAnalytics = new ApplicationAnalytics();
+    appInsightsAnalytics.initialize(this.config, this.appInsights.core, []);
+    reactPlugin.initialize(this.config, this.appInsights.core , [appInsightsAnalytics]);
+
+    return withAITracking(reactPlugin, ComponentToTrack);
   }
 
   // A valid event name ends with the word EVENT
