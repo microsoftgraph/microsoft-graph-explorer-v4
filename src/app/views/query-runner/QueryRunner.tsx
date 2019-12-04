@@ -2,6 +2,10 @@ import { IDropdownOption } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { telemetry } from '../../../telemetry';
+import { RUN_QUERY_EVENT } from '../../../telemetry/event-types';
+import ITelemetry from '../../../telemetry/ITelemetry';
+
 
 import { Mode } from '../../../types/action';
 import {
@@ -20,12 +24,15 @@ export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
 > {
+  private telemetryProvider: ITelemetry;
+
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
       url: '',
       sampleBody: '',
     };
+    this.telemetryProvider = telemetry;
   }
 
   private handleOnMethodChange = (method?: IDropdownOption) => {
@@ -64,7 +71,7 @@ export class QueryRunner extends Component<
         actions.setSampleQuery(query);
       }
     }
-  }
+  };
 
   private handleOnEditorChange = (body?: string) => {
     this.setState({ sampleBody: body });
@@ -83,6 +90,7 @@ export class QueryRunner extends Component<
     }
 
     if (actions) {
+      this.telemetryProvider.collect(RUN_QUERY_EVENT, sampleQuery);
       actions.runQuery(sampleQuery);
     }
   };

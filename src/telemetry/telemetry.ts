@@ -21,8 +21,7 @@ class Telemetry {
       throw new Error('Invalid telemetry event name');
     }
 
-    // @ts-ignore
-    this.appInsights.trackEvent(eventName, payload);
+    this.appInsights.trackEvent({ name: eventName }, payload);
   }
 
   // A valid event name ends with the word EVENT
