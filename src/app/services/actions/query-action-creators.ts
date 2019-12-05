@@ -1,10 +1,11 @@
 import { MessageBarType } from 'office-ui-fabric-react';
 import { writeData } from '../../../store/cache';
+import { ContentType } from '../../../types/action';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import {
   anonymousRequest, authenticatedRequest,
-  isImageResponse, parseResponse, queryResponse
+  parseResponse, queryResponse
 } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
@@ -35,7 +36,7 @@ export function runQuery(query: IQuery): Function {
 
     const status: any = {
       messageType: MessageBarType.error,
-      ok : false,
+      ok: false,
       duration,
     };
 
@@ -71,14 +72,14 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
   createdAt: any, dispatch: Function, result: any, duration: number) {
   const status = response.status;
   const statusText = response.statusText;
-
+  const responseHeaders = { ...respHeaders };
   const contentType = respHeaders['content-type'];
 
-  const isImageResult = isImageResponse(contentType);
-  if (isImageResult) {
+  if (contentType === ContentType.Image) {
     result = {
       message: 'Run the query to view the image'
     };
+    responseHeaders['content-type'] = ContentType.Json;
   }
 
 
@@ -87,7 +88,7 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
     method: query.selectedVerb,
     headers: query.sampleHeaders,
     body: query.sampleBody,
-    responseHeaders: respHeaders,
+    responseHeaders,
     createdAt,
     status,
     statusText,
