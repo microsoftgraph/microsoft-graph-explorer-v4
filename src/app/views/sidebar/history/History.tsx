@@ -273,8 +273,10 @@ export class History extends Component<IHistoryProps, any> {
       if (sampleQuery.selectedVerb === 'GET') {
         sampleQuery.sampleBody = JSON.parse('{}');
       }
-      actions.setSampleQuery(sampleQuery);
-      actions.runQuery(sampleQuery);
+      setTimeout(() => {
+        actions.setSampleQuery(sampleQuery);
+        actions.runQuery(sampleQuery);
+      }, 1000);
     }
   }
 

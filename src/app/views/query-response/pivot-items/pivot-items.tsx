@@ -2,7 +2,7 @@ import React from 'react';
 
 import { PivotItem } from 'office-ui-fabric-react';
 import { ThemeContext } from '../../../../themes/theme-context';
-import { Mode } from '../../../../types/action';
+import { ContentType, Mode } from '../../../../types/action';
 import { Image, Monaco } from '../../common';
 import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
@@ -15,6 +15,12 @@ export const getPivotItems = (messages: any,
   mode: Mode,
   headers: any,
   isImageResponse: boolean) => {
+
+  let language = 'json';
+  if (headers && headers['content-type'].includes(ContentType.XML)) {
+    language = 'xml';
+  }
+
   const pivotItems = [
     <PivotItem
       key='response-preview'
@@ -28,7 +34,7 @@ export const getPivotItems = (messages: any,
           alt='profile image'
         />
       ) : (
-          <Monaco body={body} verb={verb} />
+          <Monaco body={body} verb={verb} language={language} />
         )}
     </PivotItem>,
     <PivotItem
