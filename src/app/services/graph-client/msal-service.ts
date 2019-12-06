@@ -15,7 +15,7 @@ export async function logIn(): Promise<any> {
   if (loginType === LoginType.Popup) {
     try {
       await msalApplication.loginPopup(loginRequest);
-      const authResponse = await msalApplication.acquireTokenPopup(loginRequest);
+      const authResponse = await msalApplication.acquireTokenSilent(loginRequest);
       return authResponse;
     } catch (error) {
       return null;
