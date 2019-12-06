@@ -18,7 +18,7 @@ export const appStyles = (theme: ITheme) => {
       borderBottom: '1px solid ' + theme.palette.neutralLight,
     },
     links: {
-      color: 'inherit'
+      color: theme.palette.blue
     },
     sidebarToggle: {
       marginBottom: theme.spacing.s1,
