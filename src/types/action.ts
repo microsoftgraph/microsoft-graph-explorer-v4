@@ -12,3 +12,9 @@ export enum LoginType {
   Redirect = 'REDIRECT',
   Popup = 'POPUP',
 }
+
+export enum ContentType {
+  XML = 'application/xml',
+  Json = 'application/json',
+  Image = 'image/jpeg'
+}

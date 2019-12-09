@@ -1,7 +1,7 @@
 import { AuthenticationHandlerOptions, ResponseType } from '@microsoft/microsoft-graph-client';
 import { MSALAuthenticationProviderOptions } from
   '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
-import { IAction } from '../../../types/action';
+import { ContentType, IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
@@ -77,10 +77,15 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
     });
 
     const contentType = getContentType(response.headers);
-    if (contentType && isImageResponse(contentType)) {
-      return response;
-    } else {
-      return response.json();
+    switch (contentType) {
+      case ContentType.Json:
+        return response.json();
+
+      case ContentType.XML:
+        return response.text();
+
+      default:
+        return response;
     }
   }
   return response;
