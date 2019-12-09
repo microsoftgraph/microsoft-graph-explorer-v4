@@ -9,7 +9,7 @@ export function formatXml(xml: any) {
 
   xml = xml.replace(reg, '$1\r\n$2$3');
 
-  return xml.split('\r\n').map((node: any, index: number) => {
+  return xml.split('\r\n').map((node: any) => {
     let indent = 0;
     if (node.match(/.+<\/\w[^>]*>$/)) {
       indent = 0;

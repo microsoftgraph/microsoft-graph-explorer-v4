@@ -77,17 +77,15 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
     });
 
     const contentType = getContentType(response.headers);
-    if (contentType) {
-      switch (contentType) {
-        case ContentType.Json:
-          return response.json();
+    switch (contentType) {
+      case ContentType.Json:
+        return response.json();
 
-        case ContentType.XML:
-          return response.text();
+      case ContentType.XML:
+        return response.text();
 
-        default:
-          return response;
-      }
+      default:
+        return response;
     }
   }
   return response;
