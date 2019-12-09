@@ -4,7 +4,7 @@ import { PivotItem } from 'office-ui-fabric-react';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { ContentType, Mode } from '../../../../types/action';
 import { Image, Monaco } from '../../common';
-import { formatXml } from '../../common/monaco/util';
+import { formatXml } from '../../common/monaco/util/format-xml';
 import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { Snippets } from '../snippets';
