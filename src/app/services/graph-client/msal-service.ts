@@ -18,10 +18,23 @@ export async function logIn(): Promise<any> {
       const authResponse = await msalApplication.acquireTokenSilent(loginRequest);
       return authResponse;
     } catch (error) {
-      return null;
+      if (requiresInteraction(error)) {
+        return acquireTokenWIthInteraction(loginRequest);
+       } else {
+         return null;
+       }
     }
   } else if (loginType === LoginType.Redirect) {
     await msalApplication.loginRedirect(loginRequest);
+  }
+}
+
+async function acquireTokenWIthInteraction(loginRequest: AuthenticationParameters) {
+  try {
+    const authResponse = await msalApplication.acquireTokenPopup(loginRequest);
+    return authResponse;
+  } catch (error) {
+    return null;
   }
 }
 
