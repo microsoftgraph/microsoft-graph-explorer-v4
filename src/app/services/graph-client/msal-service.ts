@@ -21,7 +21,7 @@ export async function logIn(): Promise<any> {
       if (requiresInteraction(error)) {
         return acquireTokenWIthInteraction(loginRequest);
        } else {
-         return null;
+        throw error;
        }
     }
   } else if (loginType === LoginType.Redirect) {
@@ -34,7 +34,7 @@ async function acquireTokenWIthInteraction(loginRequest: AuthenticationParameter
     const authResponse = await msalApplication.acquireTokenPopup(loginRequest);
     return authResponse;
   } catch (error) {
-    return null;
+    throw error;
   }
 }
 
@@ -63,7 +63,7 @@ export async function acquireNewAccessToken(scopes: string[] = []): Promise<any>
       const authResponse = await msalApplication.acquireTokenPopup(loginRequest);
       return authResponse;
     } catch (error) {
-      return null;
+      throw error;
     }
   } else if (loginType === LoginType.Redirect) {
     await msalApplication.acquireTokenRedirect(loginRequest);
