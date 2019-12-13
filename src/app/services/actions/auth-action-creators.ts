@@ -1,5 +1,5 @@
 import { IAction } from '../../../types/action';
-import { logOut } from '../graph-client/MsalService';
+import { logOut } from '../graph-client/msal-service';
 import { GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
 
 export function getAuthTokenSuccess(response: string): IAction {

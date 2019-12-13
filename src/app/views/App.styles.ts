@@ -1,4 +1,4 @@
-import { ITheme } from '@uifabric/styling';
+import { FontSizes, ITheme } from '@uifabric/styling';
 
 export const appStyles = (theme: ITheme) => {
   return {
@@ -18,10 +18,20 @@ export const appStyles = (theme: ITheme) => {
       borderBottom: '1px solid ' + theme.palette.neutralLight,
     },
     links: {
-      color: 'inherit'
+      color: theme.palette.blue
     },
     sidebarToggle: {
       marginBottom: theme.spacing.s1,
     },
+    graphExplorerLabel: {
+      fontSize: FontSizes.xLarge,
+      fontWeight: 600,
+    },
+    graphExplorerLabelContainer: {
+      height: 50,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    }
   };
 };

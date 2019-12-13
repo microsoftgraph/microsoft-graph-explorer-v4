@@ -1,6 +1,6 @@
 import {
-  FontSizes, IconButton, IStackTokens, ITheme, Label,
-  MessageBar, MessageBarType, Stack, styled
+  IconButton, IStackTokens, ITheme,
+  Label, MessageBar, MessageBarType, Stack, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -8,8 +8,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
-import { Mode } from '../../types/action';
-import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
+import { LoginType, Mode } from '../../types/action';
+import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import { runQuery } from '../services/actions/query-action-creators';
@@ -19,6 +19,9 @@ import { addRequestHeader } from '../services/actions/request-headers-action-cre
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeTheme } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
+import { getLoginType } from '../services/graph-client/msal-service';
+import { parseSampleUrl } from '../utils/sample-url-generation';
+import { substituteTokens } from '../utils/token-helpers';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
@@ -28,9 +31,11 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
 
+
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
+  profile: object;
   queryState: object | null;
   termsOfUse: boolean;
   graphExplorerMode: Mode;
@@ -127,7 +132,13 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private hashDecode(requestBody: string): string {
-    return requestBody ? atob(requestBody) : '';
+    const decodedBody = atob(requestBody);
+
+    if (decodedBody === 'undefined') {
+      return '';
+    }
+
+    return decodedBody;
   }
 
   public componentWillUnmount(): void {
@@ -158,7 +169,7 @@ class App extends Component<IAppProps, IAppState> {
   };
 
   private handleInitMsg = (msg: IInitMessage) => {
-    const { actions } = this.props;
+    const { actions, profile } = this.props;
     const { verb, headers, url, body }: any = parse(msg.code);
 
     if (actions) {
@@ -177,11 +188,19 @@ class App extends Component<IAppProps, IAppState> {
      */
     setTimeout(() => {
       if (actions) {
-        actions.setSampleQuery({
+        const { queryVersion } = parseSampleUrl(url);
+
+        const query: IQuery = {
           sampleUrl: url,
           selectedVerb: verb,
-          sampleBody: body
-        });
+          sampleBody: body,
+          selectedVersion: queryVersion,
+          sampleHeaders: headers
+        };
+
+        substituteTokens(query, profile);
+
+        actions.setSampleQuery(query);
       }
     }, 1000);
 
@@ -234,6 +253,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
+    const loginType = getLoginType();
     const { graphExplorerMode, queryState, termsOfUse,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
     const sampleHeaderText = messages['Sample Queries'];
@@ -265,7 +285,6 @@ class App extends Component<IAppProps, IAppState> {
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
-
                 {showToggle && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
                   <>
                     <IconButton
@@ -275,12 +294,12 @@ class App extends Component<IAppProps, IAppState> {
                       ariaLabel='Remove sidebar'
                       onClick={this.toggleSidebar}
                     />
-                    <Label style={{
-                      fontSize: FontSizes.xLarge,
-                      fontWeight: 600,
-                    }}>
-                      Graph Explorer
+                    <div style={{ padding: 10 }}>
+                      <Label className={classes.graphExplorerLabel}>
+                        Graph Explorer
                       </Label>
+                      <Banner optOut={this.optOut} />
+                    </div>
                     <span style={{
                       position: 'absolute',
                       marginLeft: '70%',
@@ -293,16 +312,12 @@ class App extends Component<IAppProps, IAppState> {
                 }
 
                 {!showToggle &&
-
-                  <Label style={{
-                    fontSize: FontSizes.xxLarge,
-                    fontWeight: 600,
-                    marginBottom: '10px',
-                    marginTop: '2%',
-                  }}>
-                    Graph Explorer
+                  <div className={classes.graphExplorerLabelContainer}>
+                    <Label className={classes.graphExplorerLabel}>
+                      Graph Explorer
                     </Label>
-
+                    <Banner optOut={this.optOut} />
+                  </div>
                 }
 
 
@@ -311,8 +326,6 @@ class App extends Component<IAppProps, IAppState> {
                   <hr className={classes.separator} /></>}
 
                 {showSidebar && <>
-                  <Banner optOut={this.optOut} />
-                  <hr className={classes.separator} />
                   <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                 </>}
               </div>
@@ -320,7 +333,8 @@ class App extends Component<IAppProps, IAppState> {
             <div className={layout}>
               {graphExplorerMode === Mode.TryIt && (
                 <div style={{ marginBottom: 8 }}>
-                  <MessageBar
+                  {loginType === LoginType.Popup && <Authentication />}
+                  {loginType === LoginType.Redirect && <MessageBar
                     messageBarType={MessageBarType.warning}
                     isMultiline={true}
                   >
@@ -332,7 +346,7 @@ class App extends Component<IAppProps, IAppState> {
                         Graph Explorer.
                       </a>
                     </p>
-                  </MessageBar>
+                  </MessageBar>}
                 </div>
               )}
 
@@ -342,7 +356,7 @@ class App extends Component<IAppProps, IAppState> {
                 </div>
                 {queryState && (
                   <MessageBar
-                    messageBarType={queryState.ok ? MessageBarType.success : MessageBarType.error}
+                    messageBarType={queryState.messageType}
                     isMultiline={false}
                     onDismiss={actions.clearQueryStatus}
                   >
@@ -390,12 +404,13 @@ class App extends Component<IAppProps, IAppState> {
 
 const mapStateToProps = (state: any) => {
   return {
-    queryState: state.queryRunnerStatus,
-    termsOfUse: state.termsOfUse,
-    receivedSampleQuery: state.sampleQuery,
-    graphExplorerMode: state.graphExplorerMode,
     appTheme: state.theme,
+    graphExplorerMode: state.graphExplorerMode,
+    profile: state.profile,
+    queryState: state.queryRunnerStatus,
+    receivedSampleQuery: state.sampleQuery,
     sidebarProperties: state.sidebarProperties,
+    termsOfUse: state.termsOfUse,
   };
 };
 

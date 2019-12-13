@@ -5,6 +5,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { IQueryResponseProps, IQueryResponseState } from '../../../types/query-response';
+import { copy } from '../common/copy';
 import { getPivotItems } from './pivot-items/pivot-items';
 import './query-response.scss';
 
@@ -18,15 +19,8 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
   }
 
   public handleCopy = () => {
-    const shareQueryParams: any = document.getElementById('share-query-text');
-    shareQueryParams.focus();
-    shareQueryParams.select();
-
-    document.execCommand('copy');
-    document.execCommand('unselect');
-
-    shareQueryParams.blur();
-    this.toggleShareQueryDialogState();
+    copy('share-query-text')
+      .then(() => this.toggleShareQueryDialogState());
   }
 
   public handleShareQuery = () => {
@@ -66,7 +60,6 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
   public render() {
     let body: any;
     let headers;
-    let isImageResponse;
     const {
       intl: { messages },
       verb
@@ -78,17 +71,9 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     if (graphResponse) {
       body = graphResponse.body;
       headers = graphResponse.headers;
-
-      if (body) {
-        /**
-         * body.body is a getter propety for the Body mixin. It is used to access the ReadableStream property.
-         * https://developer.mozilla.org/en-US/docs/Web/API/Body/body
-         */
-        isImageResponse = body && body.body;
-      }
     }
 
-    const pivotItems = getPivotItems(messages, body, verb, mode, headers, isImageResponse);
+    const pivotItems = getPivotItems(messages, body, verb, mode, headers);
 
     return (
       <div>
