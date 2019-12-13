@@ -1,6 +1,6 @@
 import {
   ContextualMenuItemType, DetailsList, DetailsRow, getId, getTheme,
-  IColumn, IconButton, SearchBox, SelectionMode, styled, TooltipHost
+  IColumn, IconButton, MessageBarType, SearchBox, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -163,43 +163,46 @@ export class History extends Component<IHistoryProps, any> {
           return <span style={{ color }} className={classes.badge}>{item.status}</span>;
 
         case 'button':
+          const buttonActions = [
+            {
+              key: 'actions',
+              itemType: ContextualMenuItemType.Header,
+              text: actionsText,
+            },
+            {
+              key: 'view',
+              text: viewText,
+              iconProps: {
+                iconName: 'View'
+              },
+              onClick: () => this.onViewQuery(item)
+            },
+            {
+              key: 'runQuery',
+              text: runQueryText,
+              iconProps: {
+                iconName: 'Refresh'
+              },
+              onClick: () => this.onRunQuery(item)
+            },
+            {
+              key: 'remove',
+              text: removeText,
+              iconProps: {
+                iconName: 'Delete'
+              },
+              onClick: () => this.onDeleteQuery(item)
+            },
+          ];
+
           return <IconButton
             className={classes.docLink}
             title='Actions'
             ariaLabel='Actions'
+            menuIconProps={{ iconName: 'More' }}
             menuProps={{
               shouldFocusOnMount: true,
-              items: [
-                {
-                  key: 'actions',
-                  itemType: ContextualMenuItemType.Header,
-                  text: actionsText,
-                },
-                {
-                  key: 'view',
-                  text: viewText,
-                  iconProps: {
-                    iconName: 'View'
-                  },
-                  onClick: () => this.onViewQuery(item)
-                },
-                {
-                  key: 'runQuery',
-                  text: runQueryText,
-                  iconProps: {
-                    iconName: 'Refresh'
-                  },
-                  onClick: () => this.onRunQuery(item)
-                },
-                {
-                  key: 'remove',
-                  text: removeText,
-                  iconProps: {
-                    iconName: 'Delete'
-                  },
-                  onClick: () => this.onDeleteQuery(item)
-                },
-              ]
+              items: buttonActions
             }}
           />;
 
@@ -302,6 +305,7 @@ export class History extends Component<IHistoryProps, any> {
       });
       actions.setQueryResponseStatus({
         duration,
+        messageType: (status < 300) ? MessageBarType.success : MessageBarType.error,
         ok: status < 300,
         status,
         statusText

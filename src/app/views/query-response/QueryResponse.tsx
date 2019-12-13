@@ -65,7 +65,6 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
   public render() {
     let body: any;
     let headers;
-    let isImageResponse;
     const {
       intl: { messages },
       verb
@@ -77,17 +76,9 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     if (graphResponse) {
       body = graphResponse.body;
       headers = graphResponse.headers;
-
-      if (body) {
-        /**
-         * body.body is a getter propety for the Body mixin. It is used to access the ReadableStream property.
-         * https://developer.mozilla.org/en-US/docs/Web/API/Body/body
-         */
-        isImageResponse = body && body.body;
-      }
     }
 
-    const pivotItems = getPivotItems(messages, body, verb, mode, headers, isImageResponse);
+    const pivotItems = getPivotItems(messages, body, verb, mode, headers);
 
     return (
       <div>

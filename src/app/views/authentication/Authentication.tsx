@@ -1,4 +1,4 @@
-import { FontSizes, Icon, Label, PrimaryButton, Spinner, SpinnerSize, Stack, styled } from 'office-ui-fabric-react';
+import { Icon, Label, Spinner, SpinnerSize, Stack, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -6,11 +6,10 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { IAuthenticationProps } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
-import { logIn } from '../../services/graph-client/MsalService';
+import { logIn } from '../../services/graph-client/msal-service';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
-import Profile from './profile/Profile';
 
 export class Authentication extends Component<IAuthenticationProps, { loginInProgress: boolean }> {
   constructor(props: IAuthenticationProps) {
