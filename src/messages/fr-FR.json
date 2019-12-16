@@ -260,5 +260,7 @@
   "Permissions": "Autorisations",
   "Sign In to see your access token.": "Connectez-vous pour voir votre jeton d’accès.",
   "Sign In to try this sample": "Connectez-vous pour essayer cet exemple",
-  "Signing you in...": "Connexion en cours..."
+  "Signing you in...": "Connexion en cours...",
+  "Share Query Message": "Partagez ce lien pour permettre aux utilisateurs d’essayer votre requête actuelle dans l’Afficheur Graph.",
+  "Copy": "Copy"
 }
