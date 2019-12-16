@@ -9,7 +9,7 @@ import { DEFAULT_USER_SCOPES } from '../graph-constants';
 
 const configuration: Configuration = {
   auth: {
-    clientId: process.env.REACT_APP_CLIENT_ID || '',
+    clientId: (window as any).ClientID || process.env.REACT_APP_CLIENT_ID,
   },
   cache: {
     storeAuthStateInCookie: true,

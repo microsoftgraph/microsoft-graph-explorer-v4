@@ -3979,22 +3979,35 @@
 .query-response {
   width: 100%;
   margin-top: 10px;
-  margin-bottom: 10px;
-  min-height: 500px;
+  min-height: 470px;
+  height: 610px;
   border: 1px solid silver;
-  overflow: hidden; }
+  overflow: hidden;
+  display: block; }
   .query-response .ms-Pivot.root-84 {
     width: 100%; }
   .query-response .default-text {
     display: -webkit-flex;
     display: flex;
     width: 100%;
-    min-height: 500px;
+    min-height: 370px;
     font-size: 50px;
     -webkit-justify-content: center;
             justify-content: center;
     -webkit-align-items: center;
             align-items: center; }
+  .query-response .share-query-btn {
+    float: right;
+    margin-top: 10px;
+    padding: 0px;
+    z-index: 1; }
+
+.share-query-params {
+  font-family: 'monospace';
+  font-size: 12px;
+  width: '100%';
+  overflow-x: auto;
+  overflow-y: hidden; }
 
 .run-query-button button {
   width: 100%;
@@ -4004,7 +4017,7 @@
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
-  min-height: 370px;
+  height: 270px;
   border: 1px solid silver;
   overflow: hidden; }
   .request-editors .ms-Pivot.root-84 {
