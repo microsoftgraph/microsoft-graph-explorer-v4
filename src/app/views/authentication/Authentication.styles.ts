@@ -14,7 +14,11 @@ export const authenticationStyles = (theme: ITheme) => {
       fontWeight: 600
     },
     personaSecondaryText: {
-      fontSize: FontSizes.medium
+      fontSize: FontSizes.small,
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      textTransform: 'lowercase'
     },
     authenticationLabel: {
       fontSize: FontSizes.large,

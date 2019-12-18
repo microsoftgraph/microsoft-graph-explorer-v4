@@ -10,6 +10,7 @@ import { logIn } from '../../services/graph-client/msal-service';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
+import { MoreActions } from './more-actions';
 
 export class Authentication extends Component<IAuthenticationProps, { loginInProgress: boolean }> {
   constructor(props: IAuthenticationProps) {
@@ -55,10 +56,19 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
             <Stack>
               {!tokenPresent &&
                 <>
-                  <Label className={classes.authenticationLabel}>
-                    <Icon iconName='Permissions' className={classes.keyIcon} />
-                    <FormattedMessage id='Authentication' />
-                  </Label>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}>
+
+                    <Label className={classes.authenticationLabel}>
+                      <Icon iconName='Permissions' className={classes.keyIcon} />
+                      <FormattedMessage id='Authentication' />
+                    </Label>
+                    <MoreActions />
+                  </div>
+
                   <br />
                   <Label>
                     <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />

@@ -1,19 +1,20 @@
+import { Card } from '@uifabric/react-cards';
 import {
   ActionButton, IPersonaSharedProps, Persona,
-  PersonaSize, styled
+  PersonaSize, Stack, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { Card } from '@uifabric/react-cards';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
 import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
+import { MoreActions } from '../more-actions';
 
 export class Profile extends Component<IProfileProps, IProfileState> {
   constructor(props: IProfileProps) {
@@ -151,20 +152,22 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         }
 
         {!mobileScreen &&
-          <Card compact={true} tokens={profileCardTokens}>
-            <Card.Item fill={true}>
-              <Persona {...persona} coinSize={60} size={PersonaSize.size40} hidePersonaDetails={true} />
-            </Card.Item>
-            <Card.Section>
-              <span className={classes.personaText}>
-                {persona.text}
-              </span>
-              <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
-              <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-                <FormattedMessage id='More actions' />
-              </ActionButton>
-            </Card.Section>
-          </Card>
+          <Stack horizontal={true} wrap={true} >
+            <Stack.Item align='start'>
+              <Card compact={true} tokens={profileCardTokens}>
+                <Persona {...persona} coinSize={50} size={PersonaSize.size40} hidePersonaDetails={true} />
+                <Card.Section>
+                  <span className={classes.personaText}>
+                    {persona.text}
+                  </span>
+                  <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
+                </Card.Section>
+              </Card>
+            </Stack.Item>
+            <Stack.Item align='end'>
+              <MoreActions />
+            </Stack.Item>
+          </Stack>
         }
       </div>
     );
