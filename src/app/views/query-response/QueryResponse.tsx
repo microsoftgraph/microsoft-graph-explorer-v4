@@ -35,7 +35,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
   };
 
   public toggleModal = () => {
-    this.setState({ showModal: !this.state.showModal});
+    this.setState({ showModal: !this.state.showModal });
   }
 
   private generateShareQueryParams = (): string => {
@@ -97,15 +97,16 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
         {
           // @ts-ignore
           <Modal
-          isOpen={showModal}
-          onDismiss={this.toggleModal}
-          dragOptions={false}
-          styles={{ main: { width: 1500, height: 900 }, }}
-        >
-          <Pivot className='pivot-response'>
-            {pivotItems}
-          </Pivot>
-        </Modal>}
+            isOpen={showModal}
+            onDismiss={this.toggleModal}
+            dragOptions={false}
+            styles={{ main: { width: 1500, height: 900 }, }}
+          >
+            <Pivot className='pivot-response'>
+              {pivotItems}
+            </Pivot>
+          </Modal>
+        }
         <Dialog
           hidden={showShareQueryDialog}
           onDismiss={this.toggleShareQueryDialogState}
