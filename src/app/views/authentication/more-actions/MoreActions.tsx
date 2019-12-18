@@ -1,30 +1,45 @@
-import { IconButton } from 'office-ui-fabric-react';
+import {
+  ChoiceGroup, DefaultButton, Dialog, DialogFooter,
+  DialogType, IconButton
+} from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
+import * as themeAtionCreators from '../../../services/actions/theme-action-creator';
 
 export interface IMoreActionsProps {
   actions?: {
     signOut: Function;
+    changeTheme: Function;
   };
   intl?: {
     message: object;
   };
   authenticated: boolean;
+  appTheme: string;
 }
 
 class MoreActions extends Component<IMoreActionsProps, any> {
   constructor(props: IMoreActionsProps) {
     super(props);
+    this.state = {
+      hideThemeChooserDialog: true,
+    };
+  }
+
+  public toggleThemeChooserDialogState = () => {
+    this.setState({ hideThemeChooserDialog: !this.state.hideThemeChooserDialog });
   }
 
   public handleSignOut = () => {
-    const { actions } = this.props;
-    if (actions) {
-      actions.signOut();
-    }
+    this.props.actions!.signOut();
+  }
+
+  public handleChangeTheme = (event: any, option: any) => {
+    const newTheme = option.key;
+    this.props.actions!.changeTheme(newTheme);
   }
 
   public render() {
@@ -32,7 +47,10 @@ class MoreActions extends Component<IMoreActionsProps, any> {
     const {
       intl: { messages },
       authenticated,
+      appTheme
     }: any = this.props;
+
+    const { hideThemeChooserDialog } = this.state;
 
     const items: any = [
       {
@@ -43,6 +61,14 @@ class MoreActions extends Component<IMoreActionsProps, any> {
         iconProps: {
           iconName: 'CommandPrompt',
         },
+      },
+      {
+        key: 'change-theme',
+        text: messages['Change theme'],
+        iconProps: {
+          iconName: 'Color',
+        },
+        onClick: () => this.toggleThemeChooserDialogState(),
       }
     ];
 
@@ -64,29 +90,73 @@ class MoreActions extends Component<IMoreActionsProps, any> {
     };
 
     return (
-      <IconButton
-        ariaLabel='More actions'
-        role='button'
-        styles={{
-          label: { marginBottom: -20 },
-          icon: { marginBottom: -20 }
-        }}
-        menuIconProps={{ iconName: 'Settings' }}
-        title='More actions'
-        menuProps={menuProperties} />
+      <>
+        <IconButton
+          ariaLabel='More actions'
+          role='button'
+          styles={{
+            label: { marginBottom: -20 },
+            icon: { marginBottom: -20 }
+          }}
+          menuIconProps={{ iconName: 'Settings' }}
+          title='More actions'
+          menuProps={menuProperties} />
+
+        <Dialog
+          hidden={hideThemeChooserDialog}
+          onDismiss={this.toggleThemeChooserDialogState}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: messages['Change theme'],
+            isMultiline: false,
+          }}
+        >
+
+          <ChoiceGroup
+            label='Pick one theme'
+            defaultSelectedKey={appTheme}
+            options={[
+              {
+                key: 'light',
+                iconProps: { iconName: 'Light' },
+                text: 'Light'
+              },
+              {
+                key: 'dark',
+                iconProps: { iconName: 'CircleFill' },
+                text: 'Dark'
+              },
+              {
+                key: 'high-contrast',
+                iconProps: { iconName: 'Contrast' },
+                text: 'High Contrast',
+              }
+            ]}
+            onChange={(event, option) => this.handleChangeTheme(event, option)}
+          />
+
+          <DialogFooter>
+            <DefaultButton text={messages.Close} onClick={this.toggleThemeChooserDialogState} />
+          </DialogFooter>
+        </Dialog>
+      </>
     );
   }
 }
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators(authActionCreators, dispatch)
+    actions: bindActionCreators({
+      ...themeAtionCreators,
+      ...authActionCreators
+    }, dispatch)
   };
 }
 
 function mapStateToProps(state: any) {
   return {
     authenticated: !!state.authToken,
+    appTheme: state.theme,
   };
 }
 
