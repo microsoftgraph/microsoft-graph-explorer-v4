@@ -1,6 +1,6 @@
 import { Card } from '@uifabric/react-cards';
 import {
-  ActionButton, IPersonaSharedProps, Persona,
+  ActionButton, Icon, IPersonaSharedProps, Label, Persona,
   PersonaSize, Stack, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
@@ -152,8 +152,12 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         }
 
         {!mobileScreen &&
-          <Stack horizontal={true} wrap={true} >
-            <Stack.Item align='start'>
+          <>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
               <Card compact={true} tokens={profileCardTokens}>
                 <Persona {...persona} coinSize={50} size={PersonaSize.size40} hidePersonaDetails={true} />
                 <Card.Section>
@@ -163,12 +167,9 @@ export class Profile extends Component<IProfileProps, IProfileState> {
                   <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
                 </Card.Section>
               </Card>
-            </Stack.Item>
-            <Stack.Item align='end'>
               <Settings />
-            </Stack.Item>
-          </Stack>
-        }
+            </div>
+          </>}
       </div>
     );
   }
