@@ -1,5 +1,5 @@
 import { MessageBarType } from 'office-ui-fabric-react';
-import { writeData } from '../../../store/cache';
+import { writeHistoryData } from '../../../store/history-cache';
 import { ContentType } from '../../../types/action';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
@@ -97,7 +97,7 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
     har: ''
   };
 
-  writeData(historyItem);
+  writeHistoryData(historyItem);
 
   dispatch(addHistoryItem(historyItem));
   return result;

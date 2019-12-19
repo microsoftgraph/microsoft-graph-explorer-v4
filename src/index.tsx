@@ -22,7 +22,7 @@ import { DEFAULT_USER_SCOPES } from './app/services/graph-constants';
 import App from './app/views/App';
 import messages from './messages';
 import { store } from './store';
-import { readData } from './store/cache';
+import { readHistoryData } from './store/history-cache';
 import './styles/index.scss';
 import { loadGETheme } from './themes';
 import { Mode } from './types/action';
@@ -106,7 +106,7 @@ if (hostDocumentLocale) {
   appState.dispatch(setGraphExplorerMode(Mode.TryIt));
 }
 
-readData().then((data: any) => {
+readHistoryData().then((data: any) => {
   if (data.length > 0) {
     data.forEach((element: IHistoryItem) => {
       appState.dispatch(addHistoryItem(element));
