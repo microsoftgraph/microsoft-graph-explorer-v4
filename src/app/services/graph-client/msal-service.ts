@@ -43,10 +43,7 @@ function authCallback(error: any, response: any) {
 }
 
 export function logOut() {
-  // Locking this to only logout through redirect since redirects aren't supported yet in the iframe
-  if (loginType === LoginType.Redirect) {
-    msalApplication.logout();
-  }
+  msalApplication.logout();
 }
 
 /**
