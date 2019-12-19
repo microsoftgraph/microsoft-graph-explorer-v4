@@ -8,9 +8,9 @@ import { IAuthenticationProps } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import { logIn } from '../../services/graph-client/msal-service';
 import { classNames } from '../classnames';
+import { Settings } from '../settings';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
-import { MoreActions } from './more-actions';
 
 export class Authentication extends Component<IAuthenticationProps, { loginInProgress: boolean }> {
   constructor(props: IAuthenticationProps) {
@@ -66,7 +66,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
                       <Icon iconName='Permissions' className={classes.keyIcon} />
                       <FormattedMessage id='Authentication' />
                     </Label>
-                    <MoreActions />
+                    <Settings />
                   </div>
 
                   <br />
