@@ -100,7 +100,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
             isOpen={showModal}
             onDismiss={this.toggleModal}
             dragOptions={false}
-            styles={{ main: { width: 1500, height: 900 }, }}
+            styles={{ main: { width: '80%', height: '90%' }, }}
           >
             <Pivot className='pivot-response'>
               {pivotItems}
