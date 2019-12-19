@@ -13,8 +13,8 @@ import * as authActionCreators from '../../../services/actions/auth-action-creat
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
 import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
+import { Settings } from '../../settings';
 import { authenticationStyles } from '../Authentication.styles';
-import { MoreActions } from '../more-actions';
 
 export class Profile extends Component<IProfileProps, IProfileState> {
   constructor(props: IProfileProps) {
@@ -165,7 +165,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
               </Card>
             </Stack.Item>
             <Stack.Item align='end'>
-              <MoreActions />
+              <Settings />
             </Stack.Item>
           </Stack>
         }

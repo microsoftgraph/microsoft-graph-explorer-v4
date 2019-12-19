@@ -1,15 +1,14 @@
 import {
-  ChoiceGroup, DefaultButton, Dialog, DialogFooter,
-  DialogType, IconButton
+  ChoiceGroup, Dialog, DialogType, IconButton
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import * as authActionCreators from '../../../services/actions/auth-action-creators';
-import * as themeAtionCreators from '../../../services/actions/theme-action-creator';
+import * as authActionCreators from '../../services/actions/auth-action-creators';
+import * as themeAtionCreators from '../../services/actions/theme-action-creator';
 
-export interface IMoreActionsProps {
+export interface ISettingsProps {
   actions?: {
     signOut: Function;
     changeTheme: Function;
@@ -21,8 +20,8 @@ export interface IMoreActionsProps {
   appTheme: string;
 }
 
-class MoreActions extends Component<IMoreActionsProps, any> {
-  constructor(props: IMoreActionsProps) {
+class Settings extends Component<ISettingsProps, any> {
+  constructor(props: ISettingsProps) {
     super(props);
     this.state = {
       hideThemeChooserDialog: true,
@@ -40,6 +39,7 @@ class MoreActions extends Component<IMoreActionsProps, any> {
   public handleChangeTheme = (event: any, option: any) => {
     const newTheme = option.key;
     this.props.actions!.changeTheme(newTheme);
+    window.location.reload();
   }
 
   public render() {
@@ -134,10 +134,6 @@ class MoreActions extends Component<IMoreActionsProps, any> {
             ]}
             onChange={(event, option) => this.handleChangeTheme(event, option)}
           />
-
-          <DialogFooter>
-            <DefaultButton text={messages.Close} onClick={this.toggleThemeChooserDialogState} />
-          </DialogFooter>
         </Dialog>
       </>
     );
@@ -161,8 +157,8 @@ function mapStateToProps(state: any) {
 }
 
 // @ts-ignore
-const IntlMoreActions = injectIntl(MoreActions);
+const IntlSettings = injectIntl(Settings);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(IntlMoreActions);
+)(IntlSettings);
