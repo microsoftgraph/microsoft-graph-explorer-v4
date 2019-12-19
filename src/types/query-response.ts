@@ -22,5 +22,6 @@ export interface IQueryResponseProps {
 
 export interface IQueryResponseState {
   showShareQueryDialog: boolean;
+  showModal: boolean;
   query: string;
 }
