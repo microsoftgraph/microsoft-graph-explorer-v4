@@ -108,17 +108,17 @@ class Settings extends Component<ISettingsProps, any> {
               {
                 key: 'light',
                 iconProps: { iconName: 'Light' },
-                text: 'Light'
+                text: messages.Light
               },
               {
                 key: 'dark',
                 iconProps: { iconName: 'CircleFill' },
-                text: 'Dark'
+                text: messages.Dark
               },
               {
                 key: 'high-contrast',
                 iconProps: { iconName: 'Contrast' },
-                text: 'High Contrast',
+                text: messages['High Contrast'],
               }
             ]}
             onChange={(event, option) => this.handleChangeTheme(event, option)}
