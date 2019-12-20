@@ -5,6 +5,8 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { loadGETheme } from '../../../themes';
+import { IThemeChangedMessage } from '../../../types/query-runner';
 import { ISettingsProps } from '../../../types/settings';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as themeAtionCreators from '../../services/actions/theme-action-creator';
@@ -26,9 +28,9 @@ class Settings extends Component<ISettingsProps, any> {
   }
 
   public handleChangeTheme = (event: any, option: any) => {
-    const newTheme = option.key;
+    const newTheme: IThemeChangedMessage['theme'] = option.key;
     this.props.actions!.changeTheme(newTheme);
-    window.location.reload();
+    loadGETheme(newTheme);
   }
 
   public render() {

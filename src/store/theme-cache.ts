@@ -1,7 +1,9 @@
+import { IThemeChangedMessage } from '../types/query-runner';
+
 const key = 'CURRENT_THEME';
 const defaultTheme = 'light';
 
-export function saveTheme(theme: string) {
+export function saveTheme(theme: IThemeChangedMessage['theme']) {
   localStorage.setItem(key, theme);
 }
 

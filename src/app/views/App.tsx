@@ -17,7 +17,7 @@ import { setSampleQuery } from '../services/actions/query-input-action-creators'
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
 import { addRequestHeader } from '../services/actions/request-headers-action-creators';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
-import { changeTheme } from '../services/actions/theme-action-creator';
+import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { getLoginType } from '../services/graph-client/msal-service';
 import { parseSampleUrl } from '../utils/sample-url-generation';
@@ -423,7 +423,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       addRequestHeader,
       toggleSidebar,
       changeTheme: (newTheme: string) => {
-        return (disp: Function) => disp(changeTheme(newTheme));
+        return (disp: Function) => disp(changeThemeSuccess(newTheme));
       }
     }, dispatch)
   };

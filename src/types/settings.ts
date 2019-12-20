@@ -1,3 +1,5 @@
+import { IThemeChangedMessage } from './query-runner';
+
 export interface ISettingsProps {
   actions?: {
     signOut: Function;
@@ -7,5 +9,5 @@ export interface ISettingsProps {
     message: object;
   };
   authenticated: boolean;
-  appTheme: string;
+  appTheme: IThemeChangedMessage['theme'];
 }
