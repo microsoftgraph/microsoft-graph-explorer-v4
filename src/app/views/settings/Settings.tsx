@@ -5,20 +5,9 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { ISettingsProps } from '../../../types/settings';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as themeAtionCreators from '../../services/actions/theme-action-creator';
-
-export interface ISettingsProps {
-  actions?: {
-    signOut: Function;
-    changeTheme: Function;
-  };
-  intl?: {
-    message: object;
-  };
-  authenticated: boolean;
-  appTheme: string;
-}
 
 class Settings extends Component<ISettingsProps, any> {
   constructor(props: ISettingsProps) {
