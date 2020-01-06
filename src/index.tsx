@@ -132,7 +132,8 @@ enum Workers {
 };
 
 function getWorkerFor(worker: string): string {
-  const WORKER_PATH = 'https://personalize.blob.core.windows.net/test';
+  // tslint:disable-next-line:max-line-length
+  const WORKER_PATH = 'https://graphstagingblobstorage.blob.core.windows.net/staging/vendor/bower_components/explorer-v2/build';
 
   return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
 	    importScripts('${WORKER_PATH}/${worker}.worker.js');`
