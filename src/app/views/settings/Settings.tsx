@@ -7,41 +7,25 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { loadGETheme } from '../../../themes';
 import { IThemeChangedMessage } from '../../../types/query-runner';
-import { ISettingsProps } from '../../../types/settings';
+import { ISettingsProps, ISettingsState } from '../../../types/settings';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as themeAtionCreators from '../../services/actions/theme-action-creator';
 
-class Settings extends Component<ISettingsProps, any> {
+
+class Settings extends Component<ISettingsProps, ISettingsState> {
   constructor(props: ISettingsProps) {
     super(props);
     this.state = {
       hideThemeChooserDialog: true,
+      items: []
     };
   }
 
-  public toggleThemeChooserDialogState = () => {
-    this.setState({ hideThemeChooserDialog: !this.state.hideThemeChooserDialog });
-  }
-
-  public handleSignOut = () => {
-    this.props.actions!.signOut();
-  }
-
-  public handleChangeTheme = (selectedTheme: any) => {
-    const newTheme: IThemeChangedMessage['theme'] = selectedTheme.key;
-    this.props.actions!.changeTheme(newTheme);
-    loadGETheme(newTheme);
-  }
-
-  public render() {
-
+  public componentDidMount = () => {
     const {
-      intl: { messages },
       authenticated,
-      appTheme
+      intl: { messages }
     }: any = this.props;
-
-    const { hideThemeChooserDialog } = this.state;
 
     const items: any = [
       {
@@ -73,6 +57,32 @@ class Settings extends Component<ISettingsProps, any> {
         onClick: () => this.handleSignOut(),
       });
     }
+
+    this.setState({ items });
+  }
+
+  public toggleThemeChooserDialogState = () => {
+    this.setState({ hideThemeChooserDialog: !this.state.hideThemeChooserDialog });
+  }
+
+  public handleSignOut = () => {
+    this.props.actions!.signOut();
+  }
+
+  public handleChangeTheme = (selectedTheme: any) => {
+    const newTheme: IThemeChangedMessage['theme'] = selectedTheme.key;
+    this.props.actions!.changeTheme(newTheme);
+    loadGETheme(newTheme);
+  }
+
+  public render() {
+
+    const {
+      intl: { messages },
+      appTheme
+    }: any = this.props;
+
+    const { hideThemeChooserDialog, items } = this.state;
 
     const menuProperties = {
       shouldFocusOnMount: true,

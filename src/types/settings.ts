@@ -11,3 +11,8 @@ export interface ISettingsProps {
   authenticated: boolean;
   appTheme: IThemeChangedMessage['theme'];
 }
+
+export interface ISettingsState {
+  hideThemeChooserDialog: boolean;
+  items: [];
+}
