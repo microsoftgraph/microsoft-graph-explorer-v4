@@ -17,7 +17,7 @@ class Telemetry implements ITelemetry {
     });
   }
 
-  public startCollectingData() {
+  public initialize() {
     this.appInsights.loadAppInsights();
     this.appInsights.trackPageView();
   }
@@ -34,7 +34,7 @@ class Telemetry implements ITelemetry {
     const reactPlugin = new ReactPlugin();
     const appInsightsAnalytics = new ApplicationAnalytics();
     appInsightsAnalytics.initialize(this.config, this.appInsights.core, []);
-    reactPlugin.initialize(this.config, this.appInsights.core , [appInsightsAnalytics]);
+    reactPlugin.initialize(this.config, this.appInsights.core, [appInsightsAnalytics]);
 
     return withAITracking(reactPlugin, ComponentToTrack);
   }
