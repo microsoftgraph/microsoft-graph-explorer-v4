@@ -27,8 +27,8 @@ class Settings extends Component<ISettingsProps, any> {
     this.props.actions!.signOut();
   }
 
-  public handleChangeTheme = (event: any, option: any) => {
-    const newTheme: IThemeChangedMessage['theme'] = option.key;
+  public handleChangeTheme = (selectedTheme: any) => {
+    const newTheme: IThemeChangedMessage['theme'] = selectedTheme.key;
     this.props.actions!.changeTheme(newTheme);
     loadGETheme(newTheme);
   }
@@ -123,7 +123,7 @@ class Settings extends Component<ISettingsProps, any> {
                 text: messages['High Contrast'],
               }
             ]}
-            onChange={(event, option) => this.handleChangeTheme(event, option)}
+            onChange={(event, selectedTheme) => this.handleChangeTheme(selectedTheme)}
           />
         </Dialog>
       </>
