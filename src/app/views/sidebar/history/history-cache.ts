@@ -1,5 +1,5 @@
 import localforage from 'localforage';
-import { IHistoryItem } from '../types/history';
+import { IHistoryItem } from '../../../../types/history';
 
 const key = 'history';
 

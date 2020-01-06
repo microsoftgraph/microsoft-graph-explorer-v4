@@ -1,5 +1,6 @@
 import { Dispatch } from 'redux';
-import { saveTheme } from '../../../store/theme-cache';
+
+import { saveTheme } from '../../../themes/theme-cache';
 import { IAction } from '../../../types/action';
 import { IThemeChangedMessage } from '../../../types/query-runner';
 import { CHANGE_THEME_SUCCESS } from '../redux-constants';

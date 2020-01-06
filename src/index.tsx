@@ -20,12 +20,12 @@ import { changeThemeSuccess } from './app/services/actions/theme-action-creator'
 import { msalApplication } from './app/services/graph-client/msal-agent';
 import { DEFAULT_USER_SCOPES } from './app/services/graph-constants';
 import App from './app/views/App';
+import { readHistoryData } from './app/views/sidebar/history/history-cache';
 import messages from './messages';
 import { store } from './store';
-import { readHistoryData } from './store/history-cache';
-import { readTheme } from './store/theme-cache';
 import './styles/index.scss';
 import { loadGETheme } from './themes';
+import { readTheme } from './themes/theme-cache';
 import { Mode } from './types/action';
 import { IHistoryItem } from './types/history';
 
