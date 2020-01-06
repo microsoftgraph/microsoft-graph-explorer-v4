@@ -156,7 +156,7 @@ function getWorkerFor(worker: string): string {
 }
 
 const telemetryProvider: ITelemetry = telemetry;
-telemetryProvider.startCollectingData();
+telemetryProvider.initialize();
 
 const Root = () => {
   return (
