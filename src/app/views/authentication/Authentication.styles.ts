@@ -6,6 +6,11 @@ export const authenticationStyles = (theme: ITheme) => {
     authenticationContainer: {
       justifyContent: 'space-between',
     },
+    authenticationLayout: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    },
     profile: {
       width: '100%',
     },

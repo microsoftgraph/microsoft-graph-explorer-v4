@@ -56,11 +56,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
             <Stack>
               {!tokenPresent &&
                 <>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}>
+                  <div className={classes.authenticationLayout}>
 
                     <Label className={classes.authenticationLabel}>
                       <Icon iconName='Permissions' className={classes.keyIcon} />
