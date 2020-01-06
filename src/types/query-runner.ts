@@ -1,5 +1,5 @@
 import { ITheme } from '@uifabric/styling';
-import { Mode } from './action';
+import { Mode } from './enums';
 
 export interface IQueryRunnerState {
   sampleBody?: string;

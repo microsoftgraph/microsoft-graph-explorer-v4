@@ -26,7 +26,7 @@ import { store } from './store';
 import './styles/index.scss';
 import { loadGETheme } from './themes';
 import { readTheme } from './themes/theme-cache';
-import { Mode } from './types/action';
+import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
 
 // removes the loading spinner from GE html after the app is loaded

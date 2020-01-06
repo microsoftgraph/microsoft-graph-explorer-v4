@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
-import { LoginType, Mode } from '../../types/action';
+import { Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';

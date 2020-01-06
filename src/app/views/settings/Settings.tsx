@@ -6,7 +6,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { loadGETheme } from '../../../themes';
-import { IThemeChangedMessage } from '../../../types/query-runner';
+import { AppTheme } from '../../../types/enums';
 import { ISettingsProps, ISettingsState } from '../../../types/settings';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as themeAtionCreators from '../../services/actions/theme-action-creator';
@@ -70,7 +70,7 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
   }
 
   public handleChangeTheme = (selectedTheme: any) => {
-    const newTheme: IThemeChangedMessage['theme'] = selectedTheme.key;
+    const newTheme: AppTheme = selectedTheme.key;
     this.props.actions!.changeTheme(newTheme);
     loadGETheme(newTheme);
   }

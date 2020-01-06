@@ -1,7 +1,8 @@
 import { AuthenticationHandlerOptions, ResponseType } from '@microsoft/microsoft-graph-client';
 import { MSALAuthenticationProviderOptions } from
   '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
-import { ContentType, IAction } from '../../../types/action';
+import { IAction } from '../../../types/action';
+import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';

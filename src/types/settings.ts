@@ -1,4 +1,4 @@
-import { IThemeChangedMessage } from './query-runner';
+import { AppTheme } from './enums';
 
 export interface ISettingsProps {
   actions?: {
@@ -9,7 +9,7 @@ export interface ISettingsProps {
     message: object;
   };
   authenticated: boolean;
-  appTheme: IThemeChangedMessage['theme'];
+  appTheme: AppTheme;
 }
 
 export interface ISettingsState {

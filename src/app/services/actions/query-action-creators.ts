@@ -1,5 +1,5 @@
 import { MessageBarType } from 'office-ui-fabric-react';
-import { ContentType } from '../../../types/action';
+import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { writeHistoryData } from '../../views/sidebar/history/history-cache';

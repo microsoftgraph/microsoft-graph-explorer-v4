@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { Mode } from '../../../types/action';
+import { Mode } from '../../../types/enums';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
@@ -19,7 +19,7 @@ import Request from './request/Request';
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
-> {
+  > {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {

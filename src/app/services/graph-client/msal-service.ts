@@ -1,5 +1,5 @@
 import { AuthenticationParameters } from 'msal';
-import { LoginType } from '../../../types/action';
+import { LoginType } from '../../../types/enums';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { msalApplication } from './msal-agent';
 
@@ -20,9 +20,9 @@ export async function logIn(): Promise<any> {
     } catch (error) {
       if (requiresInteraction(error)) {
         return acquireTokenWIthInteraction(loginRequest);
-       } else {
+      } else {
         throw error;
-       }
+      }
     }
   } else if (loginType === LoginType.Redirect) {
     await msalApplication.loginRedirect(loginRequest);
