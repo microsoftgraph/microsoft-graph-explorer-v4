@@ -349,7 +349,8 @@ export class History extends Component<IHistoryProps, any> {
 
 function mapStateToProps(state: any) {
   return {
-    history: state.history
+    history: state.history,
+    appTheme: state.theme,
   };
 }
 
