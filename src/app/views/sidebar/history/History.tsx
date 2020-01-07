@@ -17,7 +17,7 @@ import { GRAPH_URL } from '../../../services/graph-constants';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import { dynamicSort } from './historyUtil';
+import { dynamicSort } from './history-utils';
 
 export class History extends Component<IHistoryProps, any> {
 
