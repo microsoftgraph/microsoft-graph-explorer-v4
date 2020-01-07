@@ -107,6 +107,7 @@ function mapStateToProps(state: any) {
     selectedVerb: state.sampleQuery.selectedVerb,
     selectedVersion: state.sampleQuery.selectedVersion,
     submitting: state.isLoadingData,
+    theme: state.theme,
   };
 }
 
