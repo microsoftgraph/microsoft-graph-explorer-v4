@@ -186,7 +186,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 function mapStateToProps(state: any) {
   return {
-    mobileScreen: !!state.sidebarProperties.showToggle
+    mobileScreen: !!state.sidebarProperties.showToggle,
+    appTheme: state.theme,
   };
 }
 

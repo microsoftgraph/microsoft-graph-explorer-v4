@@ -82,6 +82,7 @@ function mapStateToProps(state: any) {
   return {
     tokenPresent: !!state.authToken,
     mobileScreen: !!state.sidebarProperties.showToggle,
+    appTheme: state.theme,
   };
 }
 
