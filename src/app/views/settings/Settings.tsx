@@ -1,10 +1,14 @@
 import {
-  ChoiceGroup, Dialog, DialogType, IconButton
+  ChoiceGroup,
+  Dialog,
+  DialogType,
+  IconButton
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
 import { ISettingsProps, ISettingsState } from '../../../types/settings';
@@ -91,7 +95,7 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
     };
 
     return (
-      <>
+      <div>
         <IconButton
           ariaLabel='More actions'
           role='button'
@@ -102,41 +106,42 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
           menuIconProps={{ iconName: 'Settings' }}
           title='More actions'
           menuProps={menuProperties} />
+        <div>
+          <Dialog
+            hidden={hideThemeChooserDialog}
+            onDismiss={this.toggleThemeChooserDialogState}
+            dialogContentProps={{
+              type: DialogType.normal,
+              title: messages['Change theme'],
+              isMultiline: false,
+            }}
+          >
 
-        <Dialog
-          hidden={hideThemeChooserDialog}
-          onDismiss={this.toggleThemeChooserDialogState}
-          dialogContentProps={{
-            type: DialogType.normal,
-            title: messages['Change theme'],
-            isMultiline: false,
-          }}
-        >
-
-          <ChoiceGroup
-            label='Pick one theme'
-            defaultSelectedKey={appTheme}
-            options={[
-              {
-                key: 'light',
-                iconProps: { iconName: 'Light' },
-                text: messages.Light
-              },
-              {
-                key: 'dark',
-                iconProps: { iconName: 'CircleFill' },
-                text: messages.Dark
-              },
-              {
-                key: 'high-contrast',
-                iconProps: { iconName: 'Contrast' },
-                text: messages['High Contrast'],
-              }
-            ]}
-            onChange={(event, selectedTheme) => this.handleChangeTheme(selectedTheme)}
-          />
-        </Dialog>
-      </>
+            <ChoiceGroup
+              label='Pick one theme'
+              defaultSelectedKey={appTheme}
+              options={[
+                {
+                  key: 'light',
+                  iconProps: { iconName: 'Light' },
+                  text: messages.Light
+                },
+                {
+                  key: 'dark',
+                  iconProps: { iconName: 'CircleFill' },
+                  text: messages.Dark
+                },
+                {
+                  key: 'high-contrast',
+                  iconProps: { iconName: 'Contrast' },
+                  text: messages['High Contrast'],
+                }
+              ]}
+              onChange={(event, selectedTheme) => this.handleChangeTheme(selectedTheme)}
+            />
+          </Dialog>
+        </div>
+      </div>
     );
   }
 }
