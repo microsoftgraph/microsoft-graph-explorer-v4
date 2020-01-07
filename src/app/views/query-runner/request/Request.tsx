@@ -57,7 +57,8 @@ export class Request extends Component<IRequestComponent, any> {
 function mapStateToProps(state: any) {
   return {
     mode: state.graphExplorerMode,
-    sampleBody: state.sampleQuery.sampleBody
+    sampleBody: state.sampleQuery.sampleBody,
+    theme: state.theme,
   };
 }
 
