@@ -122,17 +122,17 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
               defaultSelectedKey={appTheme}
               options={[
                 {
-                  key: 'light',
+                  key: AppTheme.Light,
                   iconProps: { iconName: 'Light' },
                   text: messages.Light
                 },
                 {
-                  key: 'dark',
+                  key: AppTheme.Dark,
                   iconProps: { iconName: 'CircleFill' },
                   text: messages.Dark
                 },
                 {
-                  key: 'high-contrast',
+                  key: AppTheme.HighContrast,
                   iconProps: { iconName: 'Contrast' },
                   text: messages['High Contrast'],
                 }
