@@ -2,7 +2,7 @@ import React from 'react';
 
 import { PivotItem } from 'office-ui-fabric-react';
 import { ThemeContext } from '../../../../themes/theme-context';
-import { ContentType, Mode } from '../../../../types/action';
+import { ContentType, Mode } from '../../../../types/enums';
 import { Image, Monaco } from '../../common';
 import { formatXml } from '../../common/monaco/util/format-xml';
 import AdaptiveCard from '../adaptive-cards/AdaptiveCard';

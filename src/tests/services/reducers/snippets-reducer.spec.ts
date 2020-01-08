@@ -1,6 +1,5 @@
 import { snippets } from '../../../app/services/reducers/snippet-reducer';
 import { GET_SNIPPET_SUCCESS } from '../../../app/services/redux-constants';
-import { Mode } from '../../../types/action';
 
 describe('Graph Explorer Snippet Reducer', () => {
   it('should change graph explorer Mode', () => {

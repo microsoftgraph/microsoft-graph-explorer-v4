@@ -1,12 +1,9 @@
 import { MessageBarType } from 'office-ui-fabric-react';
-import { writeData } from '../../../store/cache';
-import { ContentType } from '../../../types/action';
+import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
-import {
-  anonymousRequest, authenticatedRequest,
-  parseResponse, queryResponse
-} from './query-action-creator-util';
+import { writeHistoryData } from '../../views/sidebar/history/history-utils';
+import { anonymousRequest, authenticatedRequest, parseResponse, queryResponse } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
 
@@ -97,7 +94,7 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
     har: ''
   };
 
-  writeData(historyItem);
+  writeHistoryData(historyItem);
 
   dispatch(addHistoryItem(historyItem));
   return result;

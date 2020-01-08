@@ -1,5 +1,5 @@
 import { AuthenticationParameters } from 'msal';
-import { LoginType } from '../../../types/action';
+import { LoginType } from '../../../types/enums';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { msalApplication } from './msal-agent';
 
@@ -20,9 +20,9 @@ export async function logIn(): Promise<any> {
     } catch (error) {
       if (requiresInteraction(error)) {
         return acquireTokenWIthInteraction(loginRequest);
-       } else {
+      } else {
         throw error;
-       }
+      }
     }
   } else if (loginType === LoginType.Redirect) {
     await msalApplication.loginRedirect(loginRequest);
@@ -43,10 +43,7 @@ function authCallback(error: any, response: any) {
 }
 
 export function logOut() {
-  // Locking this to only logout through redirect since redirects aren't supported yet in the iframe
-  if (loginType === LoginType.Redirect) {
-    msalApplication.logout();
-  }
+  msalApplication.logout();
 }
 
 /**

@@ -262,5 +262,9 @@
   "Sign In to try this sample": "Sign In to try this sample",
   "Signing you in...": "Signing you in...",
   "Share Query Message": "Share this link to let people try your current query in the Graph Explorer",
-  "Copy": "Copy"
+  "Copy": "Copy",
+  "Change theme": "Change theme",
+  "Dark": "Dark",
+  "Light": "Light",
+  "High Contrast": "High Contrast"
 }

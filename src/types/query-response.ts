@@ -1,4 +1,4 @@
-import { Mode } from './action';
+import { Mode } from './enums';
 import { IQuery } from './query-runner';
 
 export interface IQueryResponseProps {

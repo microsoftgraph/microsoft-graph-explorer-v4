@@ -319,7 +319,8 @@ function mapStateToProps(state: any) {
   return {
     tokenPresent: !!state.authToken,
     profile: state.profile,
-    samples: state.samples
+    samples: state.samples,
+    appTheme: state.theme,
   };
 }
 

@@ -8,6 +8,7 @@ import { IAuthenticationProps } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import { logIn } from '../../services/graph-client/msal-service';
 import { classNames } from '../classnames';
+import { Settings } from '../settings';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
 
@@ -55,10 +56,15 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
             <Stack>
               {!tokenPresent &&
                 <>
-                  <Label className={classes.authenticationLabel}>
-                    <Icon iconName='Permissions' className={classes.keyIcon} />
-                    <FormattedMessage id='Authentication' />
-                  </Label>
+                  <div className={classes.authenticationLayout}>
+
+                    <Label className={classes.authenticationLabel}>
+                      <Icon iconName='Permissions' className={classes.keyIcon} />
+                      <FormattedMessage id='Authentication' />
+                    </Label>
+                    <Settings />
+                  </div>
+
                   <br />
                   <Label>
                     <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />
@@ -76,6 +82,7 @@ function mapStateToProps(state: any) {
   return {
     tokenPresent: !!state.authToken,
     mobileScreen: !!state.sidebarProperties.showToggle,
+    appTheme: state.theme,
   };
 }
 
