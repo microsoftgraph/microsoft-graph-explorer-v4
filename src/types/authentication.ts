@@ -9,4 +9,5 @@ export interface IAuthenticationProps {
   };
   tokenPresent: boolean;
   mobileScreen: boolean;
+  minimised: boolean;
 }

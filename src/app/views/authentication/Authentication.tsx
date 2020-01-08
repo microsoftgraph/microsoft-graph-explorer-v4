@@ -79,10 +79,13 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
 }
 
 function mapStateToProps(state: any) {
+  const mobileScreen = !!state.sidebarProperties.mobileScreen;
+  const showSidebar = !!state.sidebarProperties.showSidebar;
   return {
     tokenPresent: !!state.authToken,
-    mobileScreen: !!state.sidebarProperties.showToggle,
+    mobileScreen,
     appTheme: state.theme,
+    minimised: !mobileScreen && !showSidebar
   };
 }
 

@@ -52,7 +52,7 @@ interface IAppProps {
 
 interface IAppState {
   selectedVerb: string;
-  showToggle: boolean;
+  mobileScreen: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -63,7 +63,7 @@ class App extends Component<IAppProps, IAppState> {
     super(props);
     this.state = {
       selectedVerb: 'GET',
-      showToggle: false,
+      mobileScreen: false,
     };
   }
 
@@ -229,14 +229,14 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public displayToggleButton = (mediaQueryList: any) => {
-    const showToggle = mediaQueryList.matches;
+    const mobileScreen = mediaQueryList.matches;
     let showSidebar = true;
-    if (showToggle) {
+    if (mobileScreen) {
       showSidebar = false;
     }
 
     const properties = {
-      showToggle,
+      mobileScreen,
       showSidebar
     };
 
@@ -259,12 +259,12 @@ class App extends Component<IAppProps, IAppState> {
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
-    const { showToggle, showSidebar } = sidebarProperties;
+    const { mobileScreen, showSidebar } = sidebarProperties;
     const language = navigator.language || 'en-US';
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
-      if (showToggle && showSidebar) {
+      if (mobileScreen && showSidebar) {
         displayContent = false;
       }
     }
@@ -285,7 +285,7 @@ class App extends Component<IAppProps, IAppState> {
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
-                {showToggle && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
+                {mobileScreen && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
                   <>
                     <IconButton
                       iconProps={{ iconName: 'GlobalNavButton' }}
@@ -311,8 +311,15 @@ class App extends Component<IAppProps, IAppState> {
                 </Stack>
                 }
 
-                {!showToggle &&
+                {!mobileScreen &&
                   <div className={classes.graphExplorerLabelContainer}>
+                    <IconButton
+                      iconProps={{ iconName: 'GlobalNavButton' }}
+                      className={classes.sidebarToggle}
+                      title='Minimise sidebar'
+                      ariaLabel='Minimise sidebar'
+                      onClick={this.toggleSidebar}
+                    />
                     <Label className={classes.graphExplorerLabel}>
                       Graph Explorer
                     </Label>
@@ -322,7 +329,7 @@ class App extends Component<IAppProps, IAppState> {
 
 
                 <hr className={classes.separator} />
-                {!showToggle && <><Authentication />
+                {!mobileScreen && <><Authentication />
                   <hr className={classes.separator} /></>}
 
                 {showSidebar && <>
