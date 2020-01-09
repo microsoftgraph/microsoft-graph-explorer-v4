@@ -21,24 +21,10 @@ steps:
 
   - script: |
       npm run build
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    env:
-      REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
-    displayName: 'Building production assets'
-
-  - script: |
-      npm run build
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     env:
       REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
     displayName: 'Build staging assets'
-
-  - script: |
-      npm run build:tst
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-    env:
-      REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
-    displayName: 'Build -tst assets'
 
   - task: PublishCodeCoverageResults@1
     inputs:
@@ -63,7 +49,7 @@ steps:
 
   - task: AzureFileCopy@2
     inputs:
-      sourcePath: 'build-tst'
+      sourcePath: 'build'
       azureConnectionType: 'ConnectedServiceNameARM'
       azureSubscription: 'arm-connection'
       destination: 'azureBlob'
