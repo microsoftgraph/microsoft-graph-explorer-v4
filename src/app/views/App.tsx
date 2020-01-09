@@ -253,8 +253,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const loginType = getLoginType();
-    const { graphExplorerMode, queryState, termsOfUse,
+    const { graphExplorerMode, queryState, minimised, termsOfUse,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
@@ -274,17 +273,25 @@ class App extends Component<IAppProps, IAppState> {
       padding: 10
     };
 
-    const layout =
+    let sidebarWidth = `col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`;
+
+    let layout =
       graphExplorerMode === Mode.TryIt
         ? 'col-xs-12 col-sm-12'
         : 'col-xs-12 col-sm-12 col-lg-9 col-md-8';
+
+    if (minimised) {
+      sidebarWidth = `col-lg-1 col-md-1 ${classes.sidebarMini}`;
+      layout = `col-xs-12 col-sm-12 col-lg-11 col-md-11 ${classes.layoutExtra}`;
+    }
+
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`container-fluid ${classes.app}`}>
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
-              <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
+              <div className={sidebarWidth}>
                 {mobileScreen && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
                   <>
                     <IconButton
@@ -320,10 +327,16 @@ class App extends Component<IAppProps, IAppState> {
                       ariaLabel='Minimise sidebar'
                       onClick={this.toggleSidebar}
                     />
-                    <Label className={classes.graphExplorerLabel}>
-                      Graph Explorer
-                    </Label>
-                    <Banner optOut={this.optOut} />
+
+                    {!minimised &&
+                      <>
+                        <Label className={classes.graphExplorerLabel}>
+                          Graph Explorer
+                      </Label>
+                        <Banner optOut={this.optOut} />
+                      </>
+                    }
+
                   </div>
                 }
 
@@ -409,6 +422,9 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = (state: any) => {
+  const mobileScreen = !!state.sidebarProperties.mobileScreen;
+  const showSidebar = !!state.sidebarProperties.showSidebar;
+
   return {
     appTheme: state.theme,
     graphExplorerMode: state.graphExplorerMode,
@@ -417,6 +433,7 @@ const mapStateToProps = (state: any) => {
     receivedSampleQuery: state.sampleQuery,
     sidebarProperties: state.sidebarProperties,
     termsOfUse: state.termsOfUse,
+    minimised: !mobileScreen && !showSidebar
   };
 };
 
