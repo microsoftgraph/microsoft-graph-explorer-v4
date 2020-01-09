@@ -55,6 +55,7 @@ steps:
       destination: 'azureBlob'
       storage: 'graphstagingblobstorage'
       containerName: 'staging/vendor/bower_components/explorer-v2/build'
+      cleanTargetBeforeCopy: true
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     displayName: 'Deploy to -tst'
 
