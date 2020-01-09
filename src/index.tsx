@@ -16,18 +16,19 @@ import { Provider } from 'react-redux';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
-import { changeTheme } from './app/services/actions/theme-action-creator';
-import { msalApplication } from './app/services/graph-client/MsalAgent';
+import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
+import { msalApplication } from './app/services/graph-client/msal-agent';
 import { DEFAULT_USER_SCOPES } from './app/services/graph-constants';
 import App from './app/views/App';
+import { readHistoryData } from './app/views/sidebar/history/history-utils';
 import messages from './messages';
 import { store } from './store';
-import { readData } from './store/cache';
 import './styles/index.scss';
 import { telemetry } from './telemetry';
 import ITelemetry from './telemetry/ITelemetry';
 import { loadGETheme } from './themes';
-import { Mode } from './types/action';
+import { readTheme } from './themes/theme-utils';
+import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
 
 // removes the loading spinner from GE html after the app is loaded
@@ -44,6 +45,9 @@ if (apiExplorer) {
 
 initializeIcons();
 
+const currentTheme = readTheme();
+loadGETheme(currentTheme);
+
 const appState = store({
   authToken: '',
   consentedScopes: [],
@@ -59,7 +63,7 @@ const appState = store({
     selectedVersion: 'v1.0',
   },
   termsOfUse: true,
-  theme: 'light',
+  theme: currentTheme,
 
 });
 
@@ -101,14 +105,14 @@ const theme = new URLSearchParams(location.search).get('theme');
 
 if (theme) {
   loadGETheme(theme);
-  appState.dispatch(changeTheme(theme));
+  appState.dispatch(changeThemeSuccess(theme));
 }
 
 if (hostDocumentLocale) {
   appState.dispatch(setGraphExplorerMode(Mode.TryIt));
 }
 
-readData().then((data: any) => {
+readHistoryData().then((data: any) => {
   if (data.length > 0) {
     data.forEach((element: IHistoryItem) => {
       appState.dispatch(addHistoryItem(element));
@@ -134,7 +138,8 @@ enum Workers {
 };
 
 function getWorkerFor(worker: string): string {
-  const WORKER_PATH = 'https://personalize.blob.core.windows.net/test';
+  // tslint:disable-next-line:max-line-length
+  const WORKER_PATH = 'https://graphstagingblobstorage.blob.core.windows.net/staging/vendor/bower_components/explorer-v2/build';
 
   return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
 	    importScripts('${WORKER_PATH}/${worker}.worker.js');`

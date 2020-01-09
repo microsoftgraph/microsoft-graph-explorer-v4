@@ -7,7 +7,7 @@ import { RUN_QUERY_EVENT } from '../../../telemetry/event-types';
 import ITelemetry from '../../../telemetry/ITelemetry';
 
 
-import { Mode } from '../../../types/action';
+import { Mode } from '../../../types/enums';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,

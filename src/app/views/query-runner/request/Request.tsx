@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Mode } from '../../../../types/action';
+import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
@@ -40,10 +40,10 @@ export class Request extends Component<IRequestComponent, any> {
             <RequestHeaders />
           </PivotItem>
           {
-          mode === Mode.Complete &&
-          <PivotItem headerText={messages.Permissions}>
-            <Permission />
-          </PivotItem>
+            mode === Mode.Complete &&
+            <PivotItem headerText={messages.Permissions}>
+              <Permission />
+            </PivotItem>
           }
           <PivotItem headerText='Auth'>
             <Auth />
@@ -57,7 +57,8 @@ export class Request extends Component<IRequestComponent, any> {
 function mapStateToProps(state: any) {
   return {
     mode: state.graphExplorerMode,
-    sampleBody: state.sampleQuery.sampleBody
+    sampleBody: state.sampleQuery.sampleBody,
+    theme: state.theme,
   };
 }
 

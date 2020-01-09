@@ -1,4 +1,4 @@
-import { DefaultButton, FontSizes, IconButton, Pivot, PivotItem, PrimaryButton, } from 'office-ui-fabric-react';
+import { DefaultButton, FontSizes, IconButton, Modal, Pivot, PivotItem, PrimaryButton } from 'office-ui-fabric-react';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -14,6 +14,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     super(props);
     this.state = {
       showShareQueryDialog: true,
+      showModal: false,
       query: '',
     };
   }
@@ -31,6 +32,10 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
 
   public toggleShareQueryDialogState = () => {
     this.setState({ showShareQueryDialog: !this.state.showShareQueryDialog });
+  };
+
+  public toggleModal = () => {
+    this.setState({ showModal: !this.state.showModal });
   }
 
   private generateShareQueryParams = (): string => {
@@ -60,29 +65,20 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
   public render() {
     let body: any;
     let headers;
-    let isImageResponse;
     const {
       intl: { messages },
       verb
     }: any = this.props;
 
-    const { showShareQueryDialog, query } = this.state;
+    const { showShareQueryDialog, query, showModal } = this.state;
     const { graphResponse, mode } = this.props;
 
     if (graphResponse) {
       body = graphResponse.body;
       headers = graphResponse.headers;
-
-      if (body) {
-        /**
-         * body.body is a getter propety for the Body mixin. It is used to access the ReadableStream property.
-         * https://developer.mozilla.org/en-US/docs/Web/API/Body/body
-         */
-        isImageResponse = body && body.body;
-      }
     }
 
-    const pivotItems = getPivotItems(messages, body, verb, mode, headers, isImageResponse);
+    const pivotItems = getPivotItems(messages, body, verb, mode, headers);
 
     return (
       <div>
@@ -90,10 +86,27 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
           <IconButton onClick={this.handleShareQuery} className='share-query-btn' iconProps={{
             iconName: 'Share'
           }} />
+          <IconButton onClick={this.toggleModal} className='share-query-btn' iconProps={{
+            iconName: 'MiniExpandMirrored'
+          }} />
           <Pivot className='pivot-response'>
             {pivotItems}
           </Pivot>
         </div>
+
+        {
+          // @ts-ignore
+          <Modal
+            isOpen={showModal}
+            onDismiss={this.toggleModal}
+            dragOptions={false}
+            styles={{ main: { width: '80%', height: '90%' }, }}
+          >
+            <Pivot className='pivot-response'>
+              {pivotItems}
+            </Pivot>
+          </Modal>
+        }
         <Dialog
           hidden={showShareQueryDialog}
           onDismiss={this.toggleShareQueryDialogState}

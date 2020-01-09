@@ -1,4 +1,4 @@
-import { Mode } from './action';
+import { Mode } from './enums';
 
 export interface IHeadersListControl {
     handleOnHeaderDelete: Function;

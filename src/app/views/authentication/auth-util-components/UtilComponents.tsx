@@ -16,8 +16,8 @@ export function showSignInButtonOrProfile(tokenPresent: boolean, mobileScreen: b
           >
             {!mobileScreen && <FormattedMessage id='sign in' />}
           </PrimaryButton>}
-        {tokenPresent && <Profile />}
       </Stack.Item>
+      {tokenPresent && <Profile />}
     </Stack>
   );
 }

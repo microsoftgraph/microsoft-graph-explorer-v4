@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Mode } from '../../../types/action';
+import { Mode } from '../../../types/enums';
 import { IQueryInputProps } from '../../../types/query-runner';
 import { getStyleFor } from '../../utils/badge-color';
 import SubmitButton from '../common/submit-button/SubmitButton';
@@ -107,6 +107,7 @@ function mapStateToProps(state: any) {
     selectedVerb: state.sampleQuery.selectedVerb,
     selectedVersion: state.sampleQuery.selectedVersion,
     submitting: state.isLoadingData,
+    theme: state.theme,
   };
 }
 

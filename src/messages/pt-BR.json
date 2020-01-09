@@ -260,5 +260,7 @@
   "Permissions": "Permissões",
   "Sign In to see your access token.": "Entre para ver seu token de acesso.",
   "Sign In to try this sample": "Entre para experimentar este exemplo",
-  "Signing you in...": "Entrando..."
+  "Signing you in...": "Entrando...",
+  "Share Query Message": "Compartilhe este link para que as pessoas possam experimentar a consulta atual no Explorador do Graph",
+  "Copy": "Copiar"
 }

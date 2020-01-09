@@ -260,5 +260,7 @@
   "Permissions": "アクセス許可",
   "Sign In to see your access token.": "サインインすると、アクセス トークンが表示されます。",
   "Sign In to try this sample": "サインインしてこのサンプルを試す",
-  "Signing you in...": "サインイン中..."
+  "Signing you in...": "サインイン中...",
+  "Share Query Message": "このリンクを共有して、他のユーザーが Graph エクスプローラーで現在のクエリを試せるようにする",
+  "Copy": "コピー"
 }

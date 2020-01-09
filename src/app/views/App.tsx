@@ -8,8 +8,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
-import { Mode } from '../../types/action';
-import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
+import { Mode } from '../../types/enums';
+import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import { runQuery } from '../services/actions/query-action-creators';
@@ -17,8 +17,11 @@ import { setSampleQuery } from '../services/actions/query-input-action-creators'
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
 import { addRequestHeader } from '../services/actions/request-headers-action-creators';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
-import { changeTheme } from '../services/actions/theme-action-creator';
+import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
+import { getLoginType } from '../services/graph-client/msal-service';
+import { parseSampleUrl } from '../utils/sample-url-generation';
+import { substituteTokens } from '../utils/token-helpers';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
@@ -28,9 +31,11 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
 
+
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
+  profile: object;
   queryState: object | null;
   termsOfUse: boolean;
   graphExplorerMode: Mode;
@@ -164,7 +169,7 @@ class App extends Component<IAppProps, IAppState> {
   };
 
   private handleInitMsg = (msg: IInitMessage) => {
-    const { actions } = this.props;
+    const { actions, profile } = this.props;
     const { verb, headers, url, body }: any = parse(msg.code);
 
     if (actions) {
@@ -183,11 +188,19 @@ class App extends Component<IAppProps, IAppState> {
      */
     setTimeout(() => {
       if (actions) {
-        actions.setSampleQuery({
+        const { queryVersion } = parseSampleUrl(url);
+
+        const query: IQuery = {
           sampleUrl: url,
           selectedVerb: verb,
-          sampleBody: body
-        });
+          sampleBody: body,
+          selectedVersion: queryVersion,
+          sampleHeaders: headers
+        };
+
+        substituteTokens(query, profile);
+
+        actions.setSampleQuery(query);
       }
     }, 1000);
 
@@ -240,6 +253,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
+    const loginType = getLoginType();
     const { graphExplorerMode, queryState, termsOfUse,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
     const sampleHeaderText = messages['Sample Queries'];
@@ -389,12 +403,13 @@ class App extends Component<IAppProps, IAppState> {
 
 const mapStateToProps = (state: any) => {
   return {
-    queryState: state.queryRunnerStatus,
-    termsOfUse: state.termsOfUse,
-    receivedSampleQuery: state.sampleQuery,
-    graphExplorerMode: state.graphExplorerMode,
     appTheme: state.theme,
+    graphExplorerMode: state.graphExplorerMode,
+    profile: state.profile,
+    queryState: state.queryRunnerStatus,
+    receivedSampleQuery: state.sampleQuery,
     sidebarProperties: state.sidebarProperties,
+    termsOfUse: state.termsOfUse,
   };
 };
 
@@ -408,7 +423,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       addRequestHeader,
       toggleSidebar,
       changeTheme: (newTheme: string) => {
-        return (disp: Function) => disp(changeTheme(newTheme));
+        return (disp: Function) => disp(changeThemeSuccess(newTheme));
       }
     }, dispatch)
   };
