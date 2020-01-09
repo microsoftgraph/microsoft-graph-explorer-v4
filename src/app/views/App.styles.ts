@@ -16,12 +16,12 @@ export const appStyles = (theme: ITheme) => {
     },
     sidebarMini: {
       background: theme.palette.neutralLighter,
-      maxWidth: '3%',
-      minWidth: '2%',
+      maxWidth: '65px',
+      minWidth: '55px',
     },
     layoutExtra: {
-      minWidth: '97%',
-      maxWidth: '98%',
+      minWidth: '95%',
+      maxWidth: '96%',
     },
     separator: {
       borderBottom: '1px solid ' + theme.palette.neutralLight,
