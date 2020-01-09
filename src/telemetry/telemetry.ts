@@ -9,7 +9,7 @@ class Telemetry implements ITelemetry {
 
   constructor() {
     this.config = {
-      instrumentationKey: 'a800ae98-f89e-4f96-b491-cf1b8a989bff',
+      instrumentationKey: process.env.REACT_APP_INSTRUMENTATION_KEY,
     };
 
     this.appInsights = new ApplicationInsights({
