@@ -319,7 +319,7 @@ class App extends Component<IAppProps, IAppState> {
                 }
 
                 {!mobileScreen &&
-                  <div className={classes.graphExplorerLabelContainer}>
+                  <div style={{ display: 'flex' }}>
                     <IconButton
                       iconProps={{ iconName: 'GlobalNavButton' }}
                       className={classes.sidebarToggle}
@@ -327,18 +327,20 @@ class App extends Component<IAppProps, IAppState> {
                       ariaLabel='Minimise sidebar'
                       onClick={this.toggleSidebar}
                     />
+                    <div className={classes.graphExplorerLabelContainer}>
 
-                    {!minimised &&
-                      <>
-                        <Label className={classes.graphExplorerLabel}>
-                          Graph Explorer
+                      {!minimised &&
+                        <>
+                          <Label className={classes.graphExplorerLabel}>
+                            Graph Explorer
                       </Label>
-                        <span className={classes.previewButton} >
-                          <Banner optOut={this.optOut} />
-                        </span>
-                      </>
-                    }
+                          <span className={classes.previewButton} >
+                            <Banner optOut={this.optOut} />
+                          </span>
+                        </>
+                      }
 
+                    </div>
                   </div>
                 }
 

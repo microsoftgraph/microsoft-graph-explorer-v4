@@ -44,6 +44,7 @@ export const appStyles = (theme: ITheme) => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
+      width: 500
     }
   };
 };
