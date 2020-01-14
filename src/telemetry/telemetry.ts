@@ -30,6 +30,11 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackEvent({ name: eventName }, payload);
   }
 
+  public trackException(error: Error) {
+    const exception = { error };
+    this.appInsights.trackException(exception);
+  }
+
   public trackComponent(ComponentToTrack: ComponentType): ComponentType {
     const reactPlugin = new ReactPlugin();
     const appInsightsAnalytics = new ApplicationAnalytics();
