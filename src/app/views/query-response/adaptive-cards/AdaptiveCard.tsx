@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { Pivot, PivotItem, IconButton } from 'office-ui-fabric-react';
+import { IconButton, Pivot, PivotItem } from 'office-ui-fabric-react';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
