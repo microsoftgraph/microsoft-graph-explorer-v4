@@ -4,8 +4,10 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
+import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { Monaco } from '../../common';
 
 class AdaptiveCard extends Component<IAdaptiveCardProps> {
@@ -16,7 +18,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 
   public componentDidMount() {
-    const { body , sampleQuery, hostConfig } = this.props;
+    const { body, sampleQuery, hostConfig } = this.props;
     this.props.actions!.getAdaptiveCard(body, sampleQuery);
     if (hostConfig) {
       this.adaptiveCard.hostConfig = new AdaptiveCardsAPI.HostConfig(hostConfig);
@@ -24,7 +26,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 
   public componentDidUpdate(nextProps: IAdaptiveCardProps) {
-    const { body , sampleQuery } = this.props;
+    const { body, sampleQuery } = this.props;
     if (JSON.stringify(nextProps.body) !== JSON.stringify(body)) {
       // we need to update the card as our body has changed
       this.props.actions!.getAdaptiveCard(body, sampleQuery);
@@ -47,9 +49,10 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 
   public render() {
-    const { data , pending } = this.props.card;
+    const { data, pending } = this.props.card;
     const {
       intl: { messages },
+      sampleQuery
     }: any = this.props;
 
     if (pending) {
@@ -59,25 +62,46 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     }
 
     if (data) {
+      const { requestUrl } = parseSampleUrl(sampleQuery.sampleUrl);
+      const toolKitCode = `<mgt-card query="${requestUrl}"></mgt-card>`;
+
       try {
         this.adaptiveCard.parse(data);
         const renderedCard = this.adaptiveCard.render();
-        return <div style={{minHeight: '500px', maxHeight: '800px', overflowY : 'auto' }} ref={(n) => {
-          if (n && n.firstChild === null) {
-            n.appendChild(renderedCard);
-          } else {
-            if (n && n.firstChild !== null) {
-              n.replaceChild(renderedCard, n.firstChild);
-            }
-          }
-        }}/>;
+        return <Pivot className='pivot-response'>
+          <PivotItem
+            key='card'
+            ariaLabel='Card'
+            headerText={messages.Card}
+          >
+            <div style={{ minHeight: '500px', maxHeight: '800px', overflowY: 'auto' }} ref={(n) => {
+              if (n && n.firstChild === null) {
+                n.appendChild(renderedCard);
+              } else {
+                if (n && n.firstChild !== null) {
+                  n.replaceChild(renderedCard, n.firstChild);
+                }
+              }
+            }} />
+          </PivotItem>
+          <PivotItem
+            key='code'
+            ariaLabel='Code'
+            headerText={messages.Code}
+          >
+            <Monaco
+              language='xml'
+              body={toolKitCode}
+            />
+          </PivotItem>
+        </Pivot>;
       } catch (err) {
         return <div style={{ color: 'red' }}>{err.message}</div>;
       }
     } else {
-        return (<Monaco
-          body={data === null ? `${messages['The Adaptive Card for this response is not available']}` : ''}
-        />);
+      return (<Monaco
+        body={data === null ? `${messages['The Adaptive Card for this response is not available']}` : ''}
+      />);
     }
   }
 }
