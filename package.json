@@ -1,6 +1,6 @@
 {
   "name": "graph-explorer-v2",
-  "version": "0.1.0",
+  "version": "4.0.3",
   "private": true,
   "dependencies": {
     "@babel/core": "7.2.2",
@@ -78,8 +78,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "build:tst": "node scripts/build-tst.js",
+    "build": "node scripts/build.js && node versioned-build.js",
     "test": "node scripts/test.js",
     "lint": "tslint --project tsconfig.json -c tslint.json"
   },
