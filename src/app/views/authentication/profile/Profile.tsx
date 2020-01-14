@@ -102,6 +102,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const {
       intl: { messages },
       mobileScreen,
+      minimised,
     }: any = this.props;
 
     const persona: IPersonaSharedProps = {
@@ -143,6 +144,28 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     };
 
 
+    const profileDisplay = minimised ? <>
+      <Settings />
+      <br />
+      <Persona {...persona} coinSize={30} hidePersonaDetails={true} />
+    </> : <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    }}>
+        <Card compact={true} tokens={profileCardTokens}>
+          <Persona {...persona} coinSize={50} size={PersonaSize.size48} hidePersonaDetails={true} />
+          {!minimised && <Card.Section>
+            <span className={classes.personaText}>
+              {persona.text}
+            </span>
+            <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
+          </Card.Section>}
+        </Card>
+        <Settings />
+      </div>;
+
+
     return (
       <div className={classes.profile}>
         {mobileScreen &&
@@ -151,25 +174,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
           </ActionButton>
         }
 
-        {!mobileScreen &&
-          <>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-              <Card compact={true} tokens={profileCardTokens}>
-                <Persona {...persona} coinSize={50} size={PersonaSize.size40} hidePersonaDetails={true} />
-                <Card.Section>
-                  <span className={classes.personaText}>
-                    {persona.text}
-                  </span>
-                  <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
-                </Card.Section>
-              </Card>
-              <Settings />
-            </div>
-          </>}
+        {!mobileScreen && profileDisplay}
       </div>
     );
   }
@@ -185,9 +190,13 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 }
 
 function mapStateToProps(state: any) {
+  const mobileScreen = !!state.sidebarProperties.mobileScreen;
+  const showSidebar = !!state.sidebarProperties.showSidebar;
+
   return {
-    mobileScreen: !!state.sidebarProperties.showToggle,
+    mobileScreen: !!state.sidebarProperties.mobileScreen,
     appTheme: state.theme,
+    minimised: !mobileScreen && !showSidebar,
   };
 }
 
