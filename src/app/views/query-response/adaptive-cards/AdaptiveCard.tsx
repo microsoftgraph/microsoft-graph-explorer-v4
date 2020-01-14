@@ -4,11 +4,12 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { Pivot, PivotItem } from 'office-ui-fabric-react';
+import { Pivot, PivotItem, IconButton } from 'office-ui-fabric-react';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { Monaco } from '../../common';
+import { genericCopy } from '../../common/copy';
 
 class AdaptiveCard extends Component<IAdaptiveCardProps> {
   private adaptiveCard: AdaptiveCardsAPI.AdaptiveCard;
@@ -89,6 +90,11 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             ariaLabel='Code'
             headerText={messages.Code}
           >
+            <IconButton style={{ float: 'right', zIndex: 1 }}
+              iconProps={{
+                iconName: 'copy',
+              }}
+              onClick={async () => genericCopy(toolKitCode)} />
             <Monaco
               language='xml'
               body={toolKitCode}
