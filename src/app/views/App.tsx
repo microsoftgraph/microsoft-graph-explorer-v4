@@ -333,7 +333,9 @@ class App extends Component<IAppProps, IAppState> {
                         <Label className={classes.graphExplorerLabel}>
                           Graph Explorer
                       </Label>
-                        <Banner optOut={this.optOut} />
+                        <span className={classes.previewButton} >
+                          <Banner optOut={this.optOut} />
+                        </span>
                       </>
                     }
 

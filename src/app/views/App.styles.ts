@@ -31,16 +31,19 @@ export const appStyles = (theme: ITheme) => {
     },
     sidebarToggle: {
       marginBottom: theme.spacing.s1,
+      marginTop: theme.spacing.s1,
+    },
+    previewButton: {
+      marginTop: theme.spacing.s1,
     },
     graphExplorerLabel: {
       fontSize: FontSizes.xLarge,
       fontWeight: 600,
     },
     graphExplorerLabelContainer: {
-      height: 50,
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
     }
   };
 };
