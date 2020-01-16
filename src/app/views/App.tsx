@@ -288,7 +288,7 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        <div className={`container-fluid ${classes.app}`}>
+        <main className={`container-fluid ${classes.app}`}>
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={sidebarWidth}>
@@ -419,7 +419,7 @@ class App extends Component<IAppProps, IAppState> {
               </>}
             </div>
           </div>
-        </div>
+        </main>
       </ThemeContext.Provider>
     );
   }
