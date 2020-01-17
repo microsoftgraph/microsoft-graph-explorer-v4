@@ -39,7 +39,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
   };
 
   public render() {
-    const { tokenPresent, mobileScreen } = this.props;
+    const { minimised, tokenPresent, mobileScreen } = this.props;
     const classes = classNames(this.props);
     const { loginInProgress } = this.state;
 
@@ -47,31 +47,33 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
       <div className={classes.authenticationContainer}>
         {loginInProgress ? <div className={classes.spinnerContainer}>
           <Spinner className={classes.spinner} size={SpinnerSize.medium} />
-          <Label>
+          {!minimised && <Label>
             <FormattedMessage id='Signing you in...' />
           </Label>
+          }
         </div>
           :
-          mobileScreen ? showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn) :
+          mobileScreen ? showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn, minimised) :
             <Stack>
               {!tokenPresent &&
                 <>
                   <div className={classes.authenticationLayout}>
 
-                    <Label className={classes.authenticationLabel}>
+                    {!minimised && <Label className={classes.authenticationLabel}>
                       <Icon iconName='Permissions' className={classes.keyIcon} />
                       <FormattedMessage id='Authentication' />
                     </Label>
+                    }
                     <Settings />
                   </div>
 
                   <br />
-                  <Label>
+                  {!minimised && <Label>
                     <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />
-                  </Label>
+                  </Label>}
                 </>
               }
-              <span><br />{showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn)}<br /> </span>
+              <span><br />{showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn, minimised)}<br /> </span>
             </Stack>}
       </div>
     );
@@ -79,10 +81,13 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
 }
 
 function mapStateToProps(state: any) {
+  const mobileScreen = !!state.sidebarProperties.mobileScreen;
+  const showSidebar = !!state.sidebarProperties.showSidebar;
   return {
     tokenPresent: !!state.authToken,
-    mobileScreen: !!state.sidebarProperties.showToggle,
+    mobileScreen,
     appTheme: state.theme,
+    minimised: !mobileScreen && !showSidebar
   };
 }
 

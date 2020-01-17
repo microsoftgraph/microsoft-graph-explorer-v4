@@ -442,7 +442,7 @@ export const queries: ISampleQuery[] = [
         "method": "POST",
         "humanName": "create a folder",
         "requestUrl": "/v1.0/me/drive/root/children",
-        "docLink": "https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/item_post_children",
+        "docLink": "https://docs.microsoft.com/en-us/graph/api/driveitem-post-children?view=graph-rest-1.0&tabs=http",
         "headers": [
             {
                 "name": "Content-type",
@@ -1077,7 +1077,7 @@ export const queries: ISampleQuery[] = [
         "method": "GET",
         "humanName": "items in a team drive",
         "requestUrl": "/v1.0/groups/{group-id-for-teams}/drive/root/children",
-        "docLink": "https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/item_list_children",
+        "docLink": "https://docs.microsoft.com/en-gb/graph/api/driveitem-list-children?view=graph-rest-1.0&tabs=http",
         "tip": "This query requires a group id of the Team.  To find the group id of Teams you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/joinedTeams",
         "skipTest": false
     },
@@ -1405,7 +1405,7 @@ export const queries: ISampleQuery[] = [
         "method": "POST",
         "humanName": "create a raw notification",
         "requestUrl": "/beta/me/notifications",
-        "docLink": "https://aka.ms/graphNotificationsDocs",
+        "docLink": "https://docs.microsoft.com/en-gb/graph/api/user-post-notifications?view=graph-rest-beta",
         "headers": [
             {
                 "name": "Content-Type",
@@ -1421,7 +1421,7 @@ export const queries: ISampleQuery[] = [
         "method": "POST",
         "humanName": "create a visual notification",
         "requestUrl": "/beta/me/notifications",
-        "docLink": "https://aka.ms/graphNotificationsDocs",
+        "docLink": "https://docs.microsoft.com/en-gb/graph/api/user-post-notifications?view=graph-rest-beta",
         "headers": [
             {
                 "name": "Content-Type",

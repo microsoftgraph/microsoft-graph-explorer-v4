@@ -4,7 +4,7 @@ import { QUERY_GRAPH_RUNNING, SET_SAMPLE_QUERY_SUCCESS,
 
 const initialState = {
   showSidebar: false,
-  showToggle: false,
+  mobileScreen: false,
 };
 
 export function sidebarProperties(state = initialState, action: IAction): any {
@@ -12,21 +12,21 @@ export function sidebarProperties(state = initialState, action: IAction): any {
     case TOGGLE_SIDEBAR_SUCCESS:
       return action.response;
     case QUERY_GRAPH_RUNNING:
-      if (state.showToggle) {
+      if (state.mobileScreen) {
         return {
           ...state,
           showSidebar: false,
         };
       }
     case SET_SAMPLE_QUERY_SUCCESS:
-      if (state.showToggle) {
+      if (state.mobileScreen) {
         return {
           ...state,
           showSidebar: false,
         };
       }
     case VIEW_HISTORY_ITEM_SUCCESS:
-      if (state.showToggle) {
+      if (state.mobileScreen) {
         return {
           ...state,
           showSidebar: false,

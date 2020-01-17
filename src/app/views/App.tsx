@@ -52,7 +52,7 @@ interface IAppProps {
 
 interface IAppState {
   selectedVerb: string;
-  showToggle: boolean;
+  mobileScreen: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -63,7 +63,7 @@ class App extends Component<IAppProps, IAppState> {
     super(props);
     this.state = {
       selectedVerb: 'GET',
-      showToggle: false,
+      mobileScreen: false,
     };
   }
 
@@ -229,14 +229,14 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public displayToggleButton = (mediaQueryList: any) => {
-    const showToggle = mediaQueryList.matches;
+    const mobileScreen = mediaQueryList.matches;
     let showSidebar = true;
-    if (showToggle) {
+    if (mobileScreen) {
       showSidebar = false;
     }
 
     const properties = {
-      showToggle,
+      mobileScreen,
       showSidebar
     };
 
@@ -253,18 +253,17 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const loginType = getLoginType();
-    const { graphExplorerMode, queryState, termsOfUse,
+    const { graphExplorerMode, queryState, minimised, termsOfUse,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
-    const { showToggle, showSidebar } = sidebarProperties;
+    const { mobileScreen, showSidebar } = sidebarProperties;
     const language = navigator.language || 'en-US';
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
-      if (showToggle && showSidebar) {
+      if (mobileScreen && showSidebar) {
         displayContent = false;
       }
     }
@@ -274,18 +273,26 @@ class App extends Component<IAppProps, IAppState> {
       padding: 10
     };
 
-    const layout =
+    let sidebarWidth = `col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`;
+
+    let layout =
       graphExplorerMode === Mode.TryIt
         ? 'col-xs-12 col-sm-12'
         : 'col-xs-12 col-sm-12 col-lg-9 col-md-8';
+
+    if (minimised) {
+      sidebarWidth = `col-lg-1 col-md-1 ${classes.sidebarMini}`;
+      layout = `col-xs-12 col-sm-12 col-lg-11 col-md-11 ${classes.layoutExtra}`;
+    }
+
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        <div className={`container-fluid ${classes.app}`}>
+        <main className={`container-fluid ${classes.app}`}>
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
-              <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
-                {showToggle && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
+              <div className={sidebarWidth}>
+                {mobileScreen && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
                   <>
                     <IconButton
                       iconProps={{ iconName: 'GlobalNavButton' }}
@@ -311,18 +318,35 @@ class App extends Component<IAppProps, IAppState> {
                 </Stack>
                 }
 
-                {!showToggle &&
-                  <div className={classes.graphExplorerLabelContainer}>
-                    <Label className={classes.graphExplorerLabel}>
-                      Graph Explorer
-                    </Label>
-                    <Banner optOut={this.optOut} />
+                {!mobileScreen &&
+                  <div style={{ display: 'flex' }}>
+                    <IconButton
+                      iconProps={{ iconName: 'GlobalNavButton' }}
+                      className={classes.sidebarToggle}
+                      title='Minimise sidebar'
+                      ariaLabel='Minimise sidebar'
+                      onClick={this.toggleSidebar}
+                    />
+                    <div className={classes.graphExplorerLabelContainer}>
+
+                      {!minimised &&
+                        <>
+                          <Label className={classes.graphExplorerLabel}>
+                            Graph Explorer
+                      </Label>
+                          <span className={classes.previewButton} >
+                            <Banner optOut={this.optOut} />
+                          </span>
+                        </>
+                      }
+
+                    </div>
                   </div>
                 }
 
 
                 <hr className={classes.separator} />
-                {!showToggle && <><Authentication />
+                {!mobileScreen && <><Authentication />
                   <hr className={classes.separator} /></>}
 
                 {showSidebar && <>
@@ -395,13 +419,16 @@ class App extends Component<IAppProps, IAppState> {
               </>}
             </div>
           </div>
-        </div>
+        </main>
       </ThemeContext.Provider>
     );
   }
 }
 
 const mapStateToProps = (state: any) => {
+  const mobileScreen = !!state.sidebarProperties.mobileScreen;
+  const showSidebar = !!state.sidebarProperties.showSidebar;
+
   return {
     appTheme: state.theme,
     graphExplorerMode: state.graphExplorerMode,
@@ -410,6 +437,7 @@ const mapStateToProps = (state: any) => {
     receivedSampleQuery: state.sampleQuery,
     sidebarProperties: state.sidebarProperties,
     termsOfUse: state.termsOfUse,
+    minimised: !mobileScreen && !showSidebar
   };
 };
 

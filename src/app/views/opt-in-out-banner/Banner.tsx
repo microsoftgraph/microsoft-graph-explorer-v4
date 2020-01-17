@@ -17,7 +17,7 @@ class Banner extends Component<IBanner, {}> {
     return (
       <Toggle
         label={messages['back to classic']}
-        styles={{ label: { marginBottom: -20 }, pill: { marginBottom: -20 } }}
+        ariaLabel={messages['back to classic']}
         inlineLabel={true}
         defaultChecked={true}
         onText=' '
