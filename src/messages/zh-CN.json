@@ -262,5 +262,9 @@
   "Sign In to try this sample": "登录以尝试此示例",
   "Signing you in...": "登录到...",
   "Share Query Message": "共享此链接可让其他人在图形浏览器中尝试执行当前查询",
-  "Copy": "复制"
+  "Copy": "复制",
+  "Change theme": "更改主题",
+  "Dark": "深色",
+  "Light": "轻负载",
+  "High Contrast": "高对比度"
 }

@@ -262,5 +262,9 @@
   "Sign In to try this sample": "Connectez-vous pour essayer cet exemple",
   "Signing you in...": "Connexion en cours...",
   "Share Query Message": "Partagez ce lien pour permettre aux utilisateurs d’essayer votre requête actuelle dans l’Afficheur Graph.",
-  "Copy": "Copy"
+  "Copy": "Copier",
+  "Change theme": "Modifier le thème",
+  "Dark": "Foncé",
+  "Light": "Clair",
+  "High Contrast": "Contraste élevé"
 }
