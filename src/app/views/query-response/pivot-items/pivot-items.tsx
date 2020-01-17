@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { PivotItem } from 'office-ui-fabric-react';
+import { IconButton, PivotItem } from 'office-ui-fabric-react';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { ContentType, Mode } from '../../../../types/enums';
 import { Image, Monaco } from '../../common';
+import { genericCopy } from '../../common/copy';
 import { formatXml } from '../../common/monaco/util/format-xml';
 import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
@@ -30,7 +31,10 @@ export const getPivotItems = (messages: any,
       ariaLabel='Response Headers'
       headerText={messages['Response Headers']}
     >
-      <Monaco body={headers} />
+      {headers && <div><IconButton style={{ float: 'right', zIndex: 1 }} iconProps={{
+        iconName: 'copy',
+      }} onClick={async () => genericCopy(JSON.stringify(headers))} />
+        <Monaco body={headers} /></div>}
     </PivotItem>
   ];
 
