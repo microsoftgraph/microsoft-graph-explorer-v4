@@ -262,5 +262,9 @@
   "Sign In to try this sample": "Inicie sesión para probar el ejemplo",
   "Signing you in...": "Iniciando sesión...",
   "Share Query Message": "Comparta este vínculo para permitir que la gente intente la consulta actual en el Probador de Graph.",
-  "Copy": "Copiar"
+  "Copy": "Copiar",
+  "Change theme": "Cambiar el tema",
+  "Dark": "Oscuro",
+  "Light": "Claro",
+  "High Contrast": "Contraste alto"
 }
