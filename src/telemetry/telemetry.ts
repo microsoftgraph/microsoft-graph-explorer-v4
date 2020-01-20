@@ -10,6 +10,11 @@ class Telemetry implements ITelemetry {
   constructor() {
     this.config = {
       instrumentationKey: process.env.REACT_APP_INSTRUMENTATION_KEY,
+      disableExceptionTracking: true,
+      disableTelemetry: true,
+      disableFetchTracking: true,
+      isCookieUseDisabled: true,
+      isStorageUseDisabled: true
     };
 
     this.appInsights = new ApplicationInsights({
@@ -19,6 +24,7 @@ class Telemetry implements ITelemetry {
 
   public initialize() {
     this.appInsights.loadAppInsights();
+
     this.appInsights.trackPageView();
   }
 
