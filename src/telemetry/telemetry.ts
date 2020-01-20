@@ -14,8 +14,6 @@ class Telemetry implements ITelemetry {
       instrumentationKey: process.env.REACT_APP_INSTRUMENTATION_KEY,
       disableExceptionTracking: true,
       disableTelemetry: areWeInDev ? false : true,
-      isCookieUseDisabled: true,
-      isStorageUseDisabled: true
     };
 
     this.appInsights = new ApplicationInsights({
