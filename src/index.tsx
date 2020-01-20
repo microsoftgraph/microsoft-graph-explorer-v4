@@ -84,7 +84,17 @@ const localeMap: any = {
   'ru-ru': 'ru-RU',
   'zh-cn': 'zh-CN'
 };
-const hostDocumentLocale = new URLSearchParams(location.search).get('locale');
+
+function getTryItLocale() {
+  return new URLSearchParams(location.search).get('locale');
+}
+
+function getPortalLocale(): string {
+  return location.pathname.split('/')[1].toLocaleLowerCase();
+}
+
+const hostDocumentLocale = getTryItLocale() || getPortalLocale();
+
 const geLocale = hostDocumentLocale && localeMap[hostDocumentLocale] || 'en-US';
 
 addLocaleData([
@@ -98,7 +108,6 @@ addLocaleData([
   ...es,
 ]);
 
-
 const theme = new URLSearchParams(location.search).get('theme');
 
 if (theme) {
@@ -106,7 +115,7 @@ if (theme) {
   appState.dispatch(changeThemeSuccess(theme));
 }
 
-if (hostDocumentLocale) {
+if (theme) {
   appState.dispatch(setGraphExplorerMode(Mode.TryIt));
 }
 
