@@ -262,5 +262,9 @@
   "Sign In to try this sample": "サインインしてこのサンプルを試す",
   "Signing you in...": "サインイン中...",
   "Share Query Message": "このリンクを共有して、他のユーザーが Graph エクスプローラーで現在のクエリを試せるようにする",
-  "Copy": "コピー"
+  "Copy": "コピー",
+  "Change theme": "テーマを変更",
+  "Dark": "ダーク",
+  "Light": "ライト",
+  "High Contrast": "ハイ コントラスト"
 }
