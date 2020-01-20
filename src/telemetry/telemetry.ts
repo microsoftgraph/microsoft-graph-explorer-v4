@@ -8,10 +8,12 @@ class Telemetry implements ITelemetry {
   private config: any;
 
   constructor() {
+    const areWeInDev = process.env.NODE_ENV === 'development';
+
     this.config = {
       instrumentationKey: process.env.REACT_APP_INSTRUMENTATION_KEY,
       disableExceptionTracking: true,
-      disableTelemetry: true,
+      disableTelemetry: areWeInDev ? false : true,
       disableFetchTracking: true,
       isCookieUseDisabled: true,
       isStorageUseDisabled: true
