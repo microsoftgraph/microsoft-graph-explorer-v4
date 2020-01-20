@@ -36,7 +36,7 @@ class Telemetry implements ITelemetry {
   }
 
   public trackException(error: Error) {
-    const exception = { error };
+    const exception: any = { error: error.stack };
     this.appInsights.trackException(exception);
   }
 
