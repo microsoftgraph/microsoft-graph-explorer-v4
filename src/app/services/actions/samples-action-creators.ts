@@ -24,8 +24,9 @@ export function fetchSamplesPending(): any {
 }
 
 export function fetchSamples(): Function {
-  return async (dispatch: Function) => {
-    const samplesUrl = `${GE_API_URL}/api/GraphExplorerSamples`;
+  return async (dispatch: Function,  getState: Function) => {
+    const geApi = getState().geApi;
+    const samplesUrl = `${geApi}/api/GraphExplorerSamples`;
 
     const headers = {
       'Content-Type': 'application/json',
