@@ -143,18 +143,18 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           </TooltipHost>;
 
         default:
-          return <>
+          return <span aria-label={queryContent}>
             <TooltipHost
               tooltipProps={{ onRenderContent: () => <div style={{ paddingBottom: 3 }}>{toolTipContent}</div> }}
               id={hostId}
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}
             >
-              <span aria-labelledby={hostId} className={classes.queryContent}>
+              <span aria-label={queryContent} className={classes.queryContent}>
                 <FormattedMessage id={queryContent} />
               </span>
             </TooltipHost>
-          </>
+          </span>
             ;
       }
     }

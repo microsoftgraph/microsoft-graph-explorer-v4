@@ -1,6 +1,6 @@
 export interface ISidebarProps {
   showSidebar: boolean;
-  showToggle: boolean;
+  mobileScreen: boolean;
 }
 
 export interface IBanner {

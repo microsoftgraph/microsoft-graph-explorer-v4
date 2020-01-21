@@ -262,5 +262,9 @@
   "Sign In to try this sample": "Melden Sie sich an, um dieses Beispiel zu testen",
   "Signing you in...": "Anmelden...",
   "Share Query Message": "Teilen Sie diesen Link, damit Benutzer Ihre aktuelle Abfrage im Graph-Tester testen können.",
-  "Copy": "Copy"
+  "Copy": "Kopieren",
+  "Change theme": "Design ändern",
+  "Dark": "Dunkel",
+  "Light": "Hell",
+  "High Contrast": "Hoher KontrastHoher Kontrast"
 }
