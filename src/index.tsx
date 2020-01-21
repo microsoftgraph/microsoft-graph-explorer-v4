@@ -15,6 +15,7 @@ import { Provider } from 'react-redux';
 
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
+import { setGeApiUrl } from './app/services/actions/geApi-action-creators';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
 import { msalApplication } from './app/services/graph-client/msal-agent';
@@ -117,6 +118,12 @@ if (theme) {
 
 if (theme) {
   appState.dispatch(setGraphExplorerMode(Mode.TryIt));
+}
+
+const geApiUrl = new URLSearchParams(location.search).get('ge-api');
+
+if (geApiUrl) {
+  appState.dispatch(setGeApiUrl(geApiUrl));
 }
 
 readHistoryData().then((data: any) => {
