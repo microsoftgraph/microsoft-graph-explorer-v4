@@ -5,3 +5,4 @@ export const AUTH_URL = 'https://login.microsoftonline.com';
 export const ADMIN_AUTH_URL = 'https://signIn.microsoftonline.com/common/adminconsent';
 export const TOKEN_URL = 'https://signIn.microsoftonline.com/common/oauth2/v2.0/token';
 export const DEFAULT_USER_SCOPES = 'openid profile User.Read';
+export const GE_API_URL = 'https://graphexplorerapi.azurewebsites.net';
