@@ -1,6 +1,5 @@
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
-import { GE_API_URL } from '../graph-constants';
 import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_PENDING, SAMPLES_FETCH_SUCCESS } from '../redux-constants';
 
 export function fetchSamplesSuccess(response: object): IAction {
@@ -24,9 +23,9 @@ export function fetchSamplesPending(): any {
 }
 
 export function fetchSamples(): Function {
-  return async (dispatch: Function,  getState: Function) => {
-    const geApi = getState().geApi;
-    const samplesUrl = `${geApi}/api/GraphExplorerSamples`;
+  return async (dispatch: Function, getState: Function) => {
+    const devxApi = getState().devxApi;
+    const samplesUrl = `${devxApi}/api/GraphExplorerSamples`;
 
     const headers = {
       'Content-Type': 'application/json',

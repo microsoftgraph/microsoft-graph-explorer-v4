@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken, consentedScopes } from './auth-reducers';
-import { geApi } from './geApi-reducers';
+import { devxApi } from './devxApi-reducers';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
 import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
@@ -23,7 +23,7 @@ export default combineReducers({
   consentedScopes,
   graphExplorerMode,
   graphResponse,
-  geApi,
+  devxApi,
   headersAdded,
   history,
   isLoadingData,
