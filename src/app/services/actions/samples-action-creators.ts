@@ -23,8 +23,9 @@ export function fetchSamplesPending(): any {
 }
 
 export function fetchSamples(): Function {
-  return async (dispatch: Function) => {
-    const samplesUrl = 'https://graphexplorerapi.azurewebsites.net/api/GraphExplorerSamples';
+  return async (dispatch: Function, getState: Function) => {
+    const devxApi = getState().devxApi;
+    const samplesUrl = `${devxApi}/api/GraphExplorerSamples`;
 
     const headers = {
       'Content-Type': 'application/json',

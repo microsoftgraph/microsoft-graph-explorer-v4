@@ -14,6 +14,7 @@ import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
 
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
+import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
@@ -117,6 +118,12 @@ if (theme) {
 
 if (theme) {
   appState.dispatch(setGraphExplorerMode(Mode.TryIt));
+}
+
+const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
+
+if (devxApiUrl) {
+  appState.dispatch(setDevxApiUrl(devxApiUrl));
 }
 
 readHistoryData().then((data: any) => {
