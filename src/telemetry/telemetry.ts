@@ -27,7 +27,7 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackPageView();
   }
 
-  public collect(eventName: string, payload: any) {
+  public trackEvent(eventName: string, payload: any) {
     if (!this.valid(eventName)) {
       throw new Error('Invalid telemetry event name');
     }
@@ -40,7 +40,7 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackException(exception);
   }
 
-  public trackComponent(ComponentToTrack: ComponentType): ComponentType {
+  public trackReactComponent(ComponentToTrack: ComponentType): ComponentType {
     const reactPlugin = new ReactPlugin();
     const appInsightsAnalytics = new ApplicationAnalytics();
     appInsightsAnalytics.initialize(this.config, this.appInsights.core, []);
