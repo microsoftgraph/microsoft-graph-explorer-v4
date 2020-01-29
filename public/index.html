@@ -64,11 +64,6 @@
     }
   </style>
   <title>Graph Explorer</title>
-
-  <script>
-    var sdkInstance = "onedsSDK"; window[sdkInstance] = "oneDSWeb"; var aiName = window[sdkInstance], aisdk = window[aiName] || function (n, e) { var a = { config: n, extensions: [] }, t = document, i = window, o = "script"; function r(n) { a[n] = function () { var e = arguments; a.queue.push(function () { window[aiName][n](e) }) } } setTimeout(function () { var e = t.createElement(o); e.src = n.url || "https://az416426.vo.msecnd.net/scripts/c/ms.analytics-web-2.min.js", t.getElementsByTagName(o)[0].parentNode.appendChild(e) }), a.queue = []; for (var s = ["", "PageView", "PageAction", "ContentUpdate", "PageUnload", "Exception", "PageViewPerformance"]; s.length;)r("track" + s.pop()); if (!n.webAnalyticsConfiguration || !n.webAnalyticsConfiguration.autoCapture || n.webAnalyticsConfiguration.autoCapture.jsError) { r("_" + (s = "onerror")); var u = i[s]; i[s] = function (e, n, a, t, i) { var o = u && u(e, n, a, t, i); return !0 !== o && window[aiName] && window[aiName]["_" + s]({ message: e, url: n, lineNumber: a, columnNumber: t, error: i }), o } } return a }(
-      { instrumentationKey: "2b2853a9e46e464d9f1e1aa0941b6acc-89172db9-a182-4f7f-8043-9f11d6ca62d7-7274", webAnalyticsConfiguration: {} }); window[aiName] = aisdk;
-  </script>
 </head>
 
 <body>
