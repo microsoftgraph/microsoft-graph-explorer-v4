@@ -1,5 +1,5 @@
 import { ReactPlugin, withAITracking } from '@microsoft/applicationinsights-react-js';
-import { ApplicationAnalytics, ApplicationInsights } from '@microsoft/applicationinsights-web';
+import { ApplicationAnalytics, ApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
 import ITelemetry from './ITelemetry';
 
@@ -35,9 +35,8 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackEvent({ name: eventName }, payload);
   }
 
-  public trackException(error: Error) {
-    const exception: any = { error: error.stack };
-    this.appInsights.trackException(exception);
+  public trackException(error: Error, severityLevel: SeverityLevel) {
+    this.appInsights.trackException({ error, severityLevel });
   }
 
   public trackReactComponent(ComponentToTrack: ComponentType): ComponentType {
