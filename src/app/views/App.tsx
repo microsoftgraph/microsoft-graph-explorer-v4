@@ -457,7 +457,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-const StyledApp = styled(App, appStyles as any);
+const StyledApp: any = styled(App, appStyles as any);
 const IntlApp = injectIntl(StyledApp);
 
 export default connect(

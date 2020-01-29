@@ -49,7 +49,7 @@ initializeIcons();
 const currentTheme = readTheme();
 loadGETheme(currentTheme);
 
-const appState = store({
+const appState: any = store({
   authToken: '',
   consentedScopes: [],
   headersAdded: [{ name: '', value: '' }],
