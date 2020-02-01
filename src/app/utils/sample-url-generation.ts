@@ -12,7 +12,7 @@ export function parseSampleUrl(url: string, version?: string) {
     queryVersion = (version) ? version : urlObject.pathname.substring(1, 5);
 
     const searchParameters = urlObject.search;
-    if (searchParameters && searchParameters !== '') {
+    if (searchParameters !== '') {
       try {
         search = decodeURI(searchParameters);
       } catch (error) {
