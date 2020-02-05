@@ -1,5 +1,5 @@
 import { ReactPlugin, withAITracking } from '@microsoft/applicationinsights-react-js';
-import { ApplicationAnalytics, ApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
+import { ApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
 import ITelemetry from './ITelemetry';
 
