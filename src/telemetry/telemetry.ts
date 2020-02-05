@@ -9,13 +9,11 @@ class Telemetry implements ITelemetry {
   private reactPlugin: any;
 
   constructor() {
-    const areWeInDev = process.env.NODE_ENV === 'development';
-
     this.reactPlugin  = new ReactPlugin();
     this.config = {
       instrumentationKey: process.env.REACT_APP_INSTRUMENTATION_KEY,
       disableExceptionTracking: true,
-      disableTelemetry: areWeInDev ? false : true,
+      disableTelemetry: this.areWeInDev() ? false : true,
       extensions: [this.reactPlugin]
     };
 
@@ -52,6 +50,10 @@ class Telemetry implements ITelemetry {
     const lastIndex = listOfWords.length - 1;
     const lastWord = listOfWords[lastIndex];
     return lastWord === 'EVENT';
+  }
+
+  private areWeInDev(): boolean {
+    return process.env.NODE_ENV === 'development';
   }
 }
 
