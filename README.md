@@ -1,7 +1,7 @@
-# Microsoft Graph Explorer V2
+# Microsoft Graph Explorer V4
 [![Build Status](https://dev.azure.com/japhethobalak/japhethobalak/_apis/build/status/microsoftgraph.microsoft-graph-explorer-v2?branchName=dev)](https://dev.azure.com/japhethobalak/japhethobalak/_build/latest?definitionId=4&branchName=dev)
 
-The [Microsoft Graph Explorer V2](https://developer.microsoft.com/graph/graph-explorer) lets developers quickly navigate and test API endpoints.
+The [Microsoft Graph Explorer V4](https://developer.microsoft.com/graph/graph-explorer) lets developers quickly navigate and test API endpoints.
 
 The Graph Explorer is written in [TypeScript](https://www.typescriptlang.org/) and powered by:
 * [React](https://reactjs.org/)
