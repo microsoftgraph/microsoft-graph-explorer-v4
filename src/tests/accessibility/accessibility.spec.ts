@@ -1,6 +1,6 @@
 import * as Axe from 'axe-core';
 import { convertAxeToSarif } from 'axe-sarif-converter';
-import { AxeBuilder } from 'axe-webdriverjs';
+import AxeBuilder from 'axe-webdriverjs';
 import chromeDriver from 'chromedriver';
 import webdriver, { By, ThenableWebDriver, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
@@ -25,10 +25,11 @@ describe('Graph Explorer', () => {
 
   beforeEach(async() => {
     await driver.get('https://developer.microsoft.com/en-us/graph/graph-explorer/preview');
-    await driver.wait(until.elementLocated(By.css('h1')));
+    await driver.wait(until.elementLocated(By.css('p')));
   }, TEST_TIMEOUT_MS);
 
   it('checks for accessibility violations', async() => {
+    // @ts-ignore
     const accessibilityScanResults = await AxeBuilder(driver)
       .analyze();
     expect(accessibilityScanResults.violations).toStrictEqual([]);
