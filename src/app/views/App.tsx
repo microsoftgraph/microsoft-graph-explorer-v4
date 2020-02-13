@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
-import { Mode } from '../../types/enums';
+import { LoginType, Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
@@ -260,6 +260,7 @@ class App extends Component<IAppProps, IAppState> {
     const historyHeaderText = messages['History'];
     const { mobileScreen, showSidebar } = sidebarProperties;
     const language = navigator.language || 'en-US';
+    const loginType = getLoginType();
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
@@ -357,7 +358,8 @@ class App extends Component<IAppProps, IAppState> {
             <div className={layout}>
               {graphExplorerMode === Mode.TryIt && (
                 <div style={{ marginBottom: 8 }}>
-                  <MessageBar
+                  {loginType === LoginType.Popup && <Authentication />}
+                  {loginType === LoginType.Redirect && <MessageBar
                     messageBarType={MessageBarType.warning}
                     isMultiline={true}
                   >
@@ -369,7 +371,7 @@ class App extends Component<IAppProps, IAppState> {
                         Graph Explorer.
                       </a>
                     </p>
-                  </MessageBar>
+                  </MessageBar>}
                 </div>
               )}
 
