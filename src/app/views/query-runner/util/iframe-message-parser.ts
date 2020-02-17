@@ -85,11 +85,10 @@ function extractHeaders(payload: string): object[] {
       for (let n = positionOfSecondNewLine + 1; n < payload.length; n++) {
         const char = payload[n];
         const nextChar = payload[n + 1];
-        const isDelimeter = NEWLINE.test(char);
-
+        const isDelimiter = NEWLINE.test(char);
 
         word += char;
-        if (isDelimeter) {
+        if (isDelimiter) {
           const spl = word.trim().split(':');
 
           header[spl[0]] = spl[1].trim();
