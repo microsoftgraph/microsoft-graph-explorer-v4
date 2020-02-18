@@ -349,7 +349,12 @@ class App extends Component<IAppProps, IAppState> {
 
                 <hr className={classes.separator} />
                 {!mobileScreen && <>
-                  <div style={{ display: minimised ? 'block' : 'flex' }}>
+                  <div style={
+                    {
+                      display: minimised ? 'block' : 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}>
                     <div className={minimised ? '' : 'col-md-10'}>
                       <Authentication />
                     </div>
