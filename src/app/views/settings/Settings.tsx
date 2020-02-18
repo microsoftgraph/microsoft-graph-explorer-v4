@@ -13,7 +13,7 @@ import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
 import { ISettingsProps, ISettingsState } from '../../../types/settings';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
-import * as themeAtionCreators from '../../services/actions/theme-action-creator';
+import * as themeActionCreators from '../../services/actions/theme-action-creator';
 
 
 class Settings extends Component<ISettingsProps, ISettingsState> {
@@ -150,7 +150,7 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators({
-      ...themeAtionCreators,
+      ...themeActionCreators,
       ...authActionCreators
     }, dispatch)
   };
