@@ -135,7 +135,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const personaStyleToken: any = {
       secondaryText:
       {
-        paddingBottom: 20,
+        paddingBottom: 10,
         textTransform: 'lowercase'
       },
     };
@@ -150,7 +150,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
         {!mobileScreen && <Persona
           {...persona}
-          coinSize={minimised ? 30 : 48}
+          size={minimised ? PersonaSize.size32 : PersonaSize.size72}
           styles={personaStyleToken}
           hidePersonaDetails={minimised}
         />}
