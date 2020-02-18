@@ -135,6 +135,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const personaStyleToken: any = {
       secondaryText:
       {
+        paddingBottom: 20,
         textTransform: 'lowercase'
       },
     };
