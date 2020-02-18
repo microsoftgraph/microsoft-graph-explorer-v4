@@ -33,7 +33,6 @@ import { Sidebar } from './sidebar/Sidebar';
 
 
 interface IAppProps {
-  theme?: ITheme;
   styles?: object;
   profile: object;
   queryState: object | null;
@@ -460,6 +459,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 };
 
 const StyledApp = styled(App, appStyles as any);
+// @ts-ignore
 const IntlApp = injectIntl(StyledApp);
 
 export default connect(
