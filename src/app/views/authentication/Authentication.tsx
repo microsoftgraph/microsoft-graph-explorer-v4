@@ -1,4 +1,4 @@
-import { Icon, Label, Spinner, SpinnerSize, Stack, styled } from 'office-ui-fabric-react';
+import { Icon, Label, Spinner, SpinnerSize, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -8,7 +8,6 @@ import { IAuthenticationProps } from '../../../types/authentication';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import { logIn } from '../../services/graph-client/msal-service';
 import { classNames } from '../classnames';
-import { Settings } from '../settings';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
 
@@ -44,40 +43,40 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
     const { loginInProgress } = this.state;
 
     return (
-      <div className={classes.authenticationContainer}>
-        {loginInProgress ? <div className={classes.spinnerContainer}>
-          <Spinner className={classes.spinner} size={SpinnerSize.medium} />
-          {!minimised && <Label>
-            <FormattedMessage id='Signing you in...' />
-          </Label>
-          }
-        </div>
+      <>
+        {loginInProgress ? showLoginInProgressSpinner(classes, minimised)
           :
           mobileScreen ? showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn, minimised) :
-            <Stack>
-              {!tokenPresent &&
-                <>
-                  <div className={classes.authenticationLayout}>
-
-                    {!minimised && <Label className={classes.authenticationLabel}>
-                      <Icon iconName='Permissions' className={classes.keyIcon} />
-                      <FormattedMessage id='Authentication' />
-                    </Label>
-                    }
-                    <Settings />
-                  </div>
-
-                  <br />
-                  {!minimised && <Label>
-                    <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />
-                  </Label>}
-                </>
-              }
+            <>
+              {!tokenPresent && showUnAuthenticatedText(classes)}
               <span><br />{showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn, minimised)}<br /> </span>
-            </Stack>}
-      </div>
+            </>}
+      </>
     );
   }
+}
+
+function showUnAuthenticatedText(classes: any): React.ReactNode {
+  return <>
+    <Label className={classes.authenticationLabel}>
+      <Icon iconName='Permissions' className={classes.keyIcon} />
+      <FormattedMessage id='Authentication' />
+    </Label>
+
+    <br />
+    <Label>
+      <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />
+    </Label>
+  </>;
+}
+
+function showLoginInProgressSpinner(classes: any, minimised: boolean): React.ReactNode {
+  return <div className={classes.spinnerContainer}>
+    <Spinner className={classes.spinner} size={SpinnerSize.medium} />
+    {!minimised && <Label>
+      <FormattedMessage id='Signing you in...' />
+    </Label>}
+  </div>;
 }
 
 function mapStateToProps(state: any) {

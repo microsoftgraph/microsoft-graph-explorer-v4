@@ -29,6 +29,7 @@ import { Banner } from './opt-in-out-banner';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
+import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
 
 
@@ -346,7 +347,20 @@ class App extends Component<IAppProps, IAppState> {
 
 
                 <hr className={classes.separator} />
-                {!mobileScreen && <><Authentication />
+                {!mobileScreen && <>
+                  <div style={
+                    {
+                      display: minimised ? 'block' : 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}>
+                    <div className={minimised ? '' : 'col-md-10'}>
+                      <Authentication />
+                    </div>
+                    <div className={minimised ? '' : 'col-md-2'}>
+                      <Settings />
+                    </div>
+                  </div>
                   <hr className={classes.separator} /></>}
 
                 {showSidebar && <>

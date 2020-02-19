@@ -13,7 +13,7 @@ import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
 import { ISettingsProps, ISettingsState } from '../../../types/settings';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
-import * as themeAtionCreators from '../../services/actions/theme-action-creator';
+import * as themeActionCreators from '../../services/actions/theme-action-creator';
 
 
 class Settings extends Component<ISettingsProps, ISettingsState> {
@@ -27,7 +27,6 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
 
   public componentDidMount = () => {
     const {
-      authenticated,
       intl: { messages }
     }: any = this.props;
 
@@ -51,17 +50,6 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
       }
     ];
 
-    if (authenticated) {
-      items.push({
-        key: 'sign-out',
-        text: messages['sign out'],
-        iconProps: {
-          iconName: 'SignOut',
-        },
-        onClick: () => this.handleSignOut(),
-      });
-    }
-
     this.setState({ items });
   }
 
@@ -83,15 +71,28 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
 
     const {
       intl: { messages },
-      appTheme
+      appTheme,
+      authenticated,
     }: any = this.props;
 
     const { hideThemeChooserDialog, items } = this.state;
+    const menuOptions: any = [...items];
+
+    if (authenticated) {
+      menuOptions.push({
+        key: 'sign-out',
+        text: messages['sign out'],
+        iconProps: {
+          iconName: 'SignOut',
+        },
+        onClick: () => this.handleSignOut(),
+      });
+    }
 
     const menuProperties = {
       shouldFocusOnMount: true,
       alignTargetEdge: true,
-      items
+      items: menuOptions
     };
 
     return (
@@ -149,7 +150,7 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators({
-      ...themeAtionCreators,
+      ...themeActionCreators,
       ...authActionCreators
     }, dispatch)
   };

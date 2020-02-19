@@ -1,19 +1,20 @@
 import { ReactPlugin, withAITracking } from '@microsoft/applicationinsights-react-js';
-import { ApplicationAnalytics, ApplicationInsights } from '@microsoft/applicationinsights-web';
+import { ApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
 import ITelemetry from './ITelemetry';
 
 class Telemetry implements ITelemetry {
   private appInsights: ApplicationInsights;
   private config: any;
+  private reactPlugin: any;
 
   constructor() {
-    const areWeInDev = process.env.NODE_ENV === 'development';
-
+    this.reactPlugin  = new ReactPlugin();
     this.config = {
       instrumentationKey: process.env.REACT_APP_INSTRUMENTATION_KEY,
       disableExceptionTracking: true,
-      disableTelemetry: areWeInDev ? false : true,
+      disableTelemetry: this.areWeInDev() ? false : true,
+      extensions: [this.reactPlugin]
     };
 
     this.appInsights = new ApplicationInsights({
@@ -35,18 +36,12 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackEvent({ name: eventName }, payload);
   }
 
-  public trackException(error: Error) {
-    const exception: any = { error: error.stack };
-    this.appInsights.trackException(exception);
+  public trackException(error: Error, severityLevel: SeverityLevel) {
+    this.appInsights.trackException({ error, severityLevel });
   }
 
   public trackReactComponent(ComponentToTrack: ComponentType): ComponentType {
-    const reactPlugin = new ReactPlugin();
-    const appInsightsAnalytics = new ApplicationAnalytics();
-    appInsightsAnalytics.initialize(this.config, this.appInsights.core, []);
-    reactPlugin.initialize(this.config, this.appInsights.core, [appInsightsAnalytics]);
-
-    return withAITracking(reactPlugin, ComponentToTrack);
+    return withAITracking(this.reactPlugin, ComponentToTrack);
   }
 
   // A valid event name ends with the word EVENT
@@ -55,6 +50,10 @@ class Telemetry implements ITelemetry {
     const lastIndex = listOfWords.length - 1;
     const lastWord = listOfWords[lastIndex];
     return lastWord === 'EVENT';
+  }
+
+  private areWeInDev(): boolean {
+    return process.env.NODE_ENV === 'development';
   }
 }
 
