@@ -47,25 +47,25 @@ steps:
       WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
     displayName: 'Deploy to staging'
 
-  # - task: AzureFileCopy@2
-  #   inputs:
-  #     sourcePath: 'build'
-  #     azureConnectionType: 'ConnectedServiceNameARM'
-  #     azureSubscription: 'arm-connection'
-  #     destination: 'azureBlob'
-  #     storage: 'graphstagingblobstorage'
-  #     containerName: 'staging/vendor/bower_components/explorer-v2/build'
-  #     cleanTargetBeforeCopy: true
-  #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-  #   displayName: 'Deploy to -tst'
+  - task: AzureFileCopy@2
+    inputs:
+      sourcePath: 'build'
+      azureConnectionType: 'ConnectedServiceNameARM'
+      azureSubscription: 'arm-connection'
+      destination: 'azureBlob'
+      storage: 'graphstagingblobstorage'
+      containerName: 'staging/vendor/bower_components/explorer-v2/build'
+      cleanTargetBeforeCopy: true
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+    displayName: 'Deploy to -tst'
 
-  # - task: AzureRmWebAppDeployment@3
-  #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  #   inputs:
-  #     azureSubscription: 'Graph-Explorer-ARM'
-  #     WebAppName: 'graphTryIt'
-  #     Package: '$(System.DefaultWorkingDirectory)'
-  #     GenerateWebConfig: true
-  #     WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
-  #   displayName: 'Deploy to production'
+  - task: AzureRmWebAppDeployment@3
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    inputs:
+      azureSubscription: 'Graph-Explorer-ARM'
+      WebAppName: 'graphTryIt'
+      Package: '$(System.DefaultWorkingDirectory)'
+      GenerateWebConfig: true
+      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
+    displayName: 'Deploy to production'
 
