@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { RUN_QUERY_EVENT } from '../../../telemetry/event-types';
 import { Mode } from '../../../types/enums';
 import {
   IQueryRunnerProps,
@@ -20,6 +21,7 @@ export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
   > {
+
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
@@ -64,7 +66,7 @@ export class QueryRunner extends Component<
         actions.setSampleQuery(query);
       }
     }
-  }
+  };
 
   private handleOnEditorChange = (body?: string) => {
     this.setState({ sampleBody: body });
