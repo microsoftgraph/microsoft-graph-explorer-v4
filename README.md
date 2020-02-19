@@ -15,7 +15,7 @@ The Graph Explorer is written in [TypeScript](https://www.typescriptlang.org/) a
 
 #### Enabling authentication with your own credentials
 * You'll need to register an app on [apps.dev.microsoft.com](https://apps.dev.microsoft.com) to configure the login page for your local Graph Explorer.  Under `Platforms` click `Add Platform` and select Web.  `Allow Implicit Flow` should be checked and set `http://localhost:3000` as the redirect URL.  You don't need a client secret since the explorer is a single page application. Select the delegated permissions that you'll want to use in your local Graph Explorer.
-* Rename `secrets.sample.js` to `secrets.js` in the project root and insert your client ID.
+* Add an environment file to the root of the project `.env` and insert the client ID in a variable called `REACT_APP_CLIENT_ID`. The varaible should end up looking like this: `REACT_APP_CLIENT_ID=guid-client-id-value`.
 
 ## Other commands
 * `npm test` to run tests from the command line for scenarios like parsing metadata and functional explorer tests.
