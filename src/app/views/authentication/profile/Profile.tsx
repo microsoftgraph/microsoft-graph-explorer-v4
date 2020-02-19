@@ -1,19 +1,13 @@
-import { Card } from '@uifabric/react-cards';
-import {
-  ActionButton, Icon, IPersonaSharedProps, Label, Persona,
-  PersonaSize, Stack, styled
-} from 'office-ui-fabric-react';
+import { ActionButton, IPersonaSharedProps, Persona, PersonaSize, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
 import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
-import { Settings } from '../../settings';
 import { authenticationStyles } from '../Authentication.styles';
 
 export class Profile extends Component<IProfileProps, IProfileState> {
@@ -138,33 +132,13 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       ]
     };
 
-    const profileCardTokens: any = {
-      boxShadow: 'none',
-      childrenGap: 10,
+    const personaStyleToken: any = {
+      secondaryText:
+      {
+        paddingBottom: 10,
+        textTransform: 'lowercase'
+      },
     };
-
-
-    const profileDisplay = minimised ? <>
-      <Settings />
-      <br />
-      <Persona {...persona} coinSize={30} hidePersonaDetails={true} />
-    </> : <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    }}>
-        <Card compact={true} tokens={profileCardTokens}>
-          <Persona {...persona} coinSize={50} size={PersonaSize.size48} hidePersonaDetails={true} />
-          {!minimised && <Card.Section>
-            <span className={classes.personaText}>
-              {persona.text}
-            </span>
-            <span className={classes.personaSecondaryText}>{persona.secondaryText}</span>
-          </Card.Section>}
-        </Card>
-        <Settings />
-      </div>;
-
 
     return (
       <div className={classes.profile}>
@@ -174,7 +148,12 @@ export class Profile extends Component<IProfileProps, IProfileState> {
           </ActionButton>
         }
 
-        {!mobileScreen && profileDisplay}
+        {!mobileScreen && <Persona
+          {...persona}
+          size={minimised ? PersonaSize.size32 : PersonaSize.size72}
+          styles={personaStyleToken}
+          hidePersonaDetails={minimised}
+        />}
       </div>
     );
   }

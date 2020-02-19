@@ -1,30 +1,7 @@
 import { FontSizes, ITheme } from '@uifabric/styling';
-import { ThemeContext } from '../../../themes/theme-context';
 
 export const authenticationStyles = (theme: ITheme) => {
   return {
-    authenticationContainer: {
-      justifyContent: 'space-between',
-    },
-    authenticationLayout: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between'
-    },
-    profile: {
-      width: '100%',
-    },
-    personaText: {
-      fontSize: FontSizes.mediumPlus,
-      fontWeight: 600
-    },
-    personaSecondaryText: {
-      fontSize: FontSizes.small,
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      textTransform: 'lowercase'
-    },
     authenticationLabel: {
       fontSize: FontSizes.large,
       fontWeight: 400,

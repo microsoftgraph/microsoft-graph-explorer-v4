@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
-import { Mode } from '../../types/enums';
+import { LoginType, Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
@@ -29,6 +29,7 @@ import { Banner } from './opt-in-out-banner';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
+import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
 
 
@@ -260,6 +261,7 @@ class App extends Component<IAppProps, IAppState> {
     const historyHeaderText = messages['History'];
     const { mobileScreen, showSidebar } = sidebarProperties;
     const language = navigator.language || 'en-US';
+    const loginType = getLoginType();
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
@@ -346,7 +348,20 @@ class App extends Component<IAppProps, IAppState> {
 
 
                 <hr className={classes.separator} />
-                {!mobileScreen && <><Authentication />
+                {!mobileScreen && <>
+                  <div style={
+                    {
+                      display: minimised ? 'block' : 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}>
+                    <div className={minimised ? '' : 'col-md-10'}>
+                      <Authentication />
+                    </div>
+                    <div className={minimised ? '' : 'col-md-2'}>
+                      <Settings />
+                    </div>
+                  </div>
                   <hr className={classes.separator} /></>}
 
                 {showSidebar && <>
@@ -357,7 +372,8 @@ class App extends Component<IAppProps, IAppState> {
             <div className={layout}>
               {graphExplorerMode === Mode.TryIt && (
                 <div style={{ marginBottom: 8 }}>
-                  <MessageBar
+                  {loginType === LoginType.Popup && <Authentication />}
+                  {loginType === LoginType.Redirect && <MessageBar
                     messageBarType={MessageBarType.warning}
                     isMultiline={true}
                   >
@@ -369,7 +385,7 @@ class App extends Component<IAppProps, IAppState> {
                         Graph Explorer.
                       </a>
                     </p>
-                  </MessageBar>
+                  </MessageBar>}
                 </div>
               )}
 

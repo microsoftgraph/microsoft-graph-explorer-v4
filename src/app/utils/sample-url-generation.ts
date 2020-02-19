@@ -10,10 +10,17 @@ export function parseSampleUrl(url: string, version?: string) {
     const urlObject: URL = new URL(url);
     requestUrl = urlObject.pathname.substr(6).replace(/\/$/, '');
     queryVersion = (version) ? version : urlObject.pathname.substring(1, 5);
-    search = decodeURI(urlObject.search);
+
+    const searchParameters = urlObject.search;
+    if (searchParameters) {
+      try {
+        search = decodeURI(searchParameters);
+      } catch (error) {
+        search = searchParameters;
+      }
+    }
+
     sampleUrl = `${GRAPH_URL}/${queryVersion}/${requestUrl + search}`;
   }
-
   return { queryVersion, requestUrl, sampleUrl, search };
-
 }
