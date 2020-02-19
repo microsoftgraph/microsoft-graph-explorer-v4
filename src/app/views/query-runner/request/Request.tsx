@@ -45,7 +45,7 @@ export class Request extends Component<IRequestComponent, any> {
               <Permission />
             </PivotItem>
           }
-          <PivotItem headerText='Auth'>
+          <PivotItem headerText={messages.Auth}>
             <Auth />
           </PivotItem>
         </Pivot>
