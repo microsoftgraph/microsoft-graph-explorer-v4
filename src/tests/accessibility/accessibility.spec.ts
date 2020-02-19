@@ -5,7 +5,7 @@ import chromeDriver from 'chromedriver';
 import webdriver, { By, ThenableWebDriver, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 
-const TEST_TIMEOUT_MS = 30000;
+const TEST_TIMEOUT_MS = 300000;
 
 describe('Graph Explorer', () => {
   let driver: ThenableWebDriver;
