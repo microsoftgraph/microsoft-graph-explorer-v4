@@ -1,4 +1,5 @@
 import { IAction } from '../../../types/action';
+import { Mode } from '../../../types/enums';
 import { logOut } from '../graph-client/msal-service';
 import { GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
 
@@ -23,8 +24,13 @@ export function signOutSuccess(response: string): IAction {
 }
 
 export function signOut() {
-  logOut();
-  return (dispatch: Function) => dispatch(signOutSuccess(''));
+  return (dispatch: Function, getState: Function) => {
+    const { graphExplorerMode } = getState();
+    if (graphExplorerMode === Mode.Complete) {
+      logOut();
+    }
+    dispatch(signOutSuccess(''));
+  };
 }
 
 export function signIn(token: string) {
