@@ -11,7 +11,8 @@ export enum LoginType {
 export enum ContentType {
   XML = 'application/xml',
   Json = 'application/json',
-  Image = 'image/jpeg'
+  Image = 'image/jpeg',
+  TextPlain = 'text/plain'
 }
 
 export enum AppTheme {
