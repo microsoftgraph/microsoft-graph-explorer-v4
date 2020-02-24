@@ -252,6 +252,16 @@ export class History extends Component<IHistoryProps, any> {
     };
   }
 
+  private deleteCategoryHistory = (category: string) => {
+    const { groupedList } = this.state;
+    const queries = groupedList.items;
+    const itemsToDelete = queries.filter((query: IHistoryItem) => query.category === category);
+    itemsToDelete.forEach((item: IHistoryItem) => {
+      this.onDeleteQuery(item);
+    });
+    console.log('delete history from ' + category);
+  }
+
   private renderDetailsHeader() {
     return (
       <div />
