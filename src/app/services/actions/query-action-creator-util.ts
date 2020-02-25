@@ -86,6 +86,9 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
       case ContentType.XML:
         return response.text();
 
+      case ContentType.TextPlain:
+        return response.text();
+
       default:
         return response;
     }

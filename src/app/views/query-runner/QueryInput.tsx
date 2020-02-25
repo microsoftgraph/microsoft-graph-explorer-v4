@@ -27,6 +27,12 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     };
   }
 
+  public handleKeyDown = (event: any) => {
+    if (event.keyCode === 13) {
+      this.props.handleOnRunQuery();
+    }
+  }
+
   public render() {
     const { httpMethods, urlVersions } = this.state;
 
@@ -84,6 +90,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, value) => handleOnUrlChange(value)}
             defaultValue={sampleUrl}
             onBlur={() => handleOnBlur()}
+            onKeyDown={this.handleKeyDown}
           />
         </div>
         <div className='col-sm-1 col-md-2 run-query-button'>
