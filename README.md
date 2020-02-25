@@ -20,6 +20,7 @@ The Graph Explorer is written in [TypeScript](https://www.typescriptlang.org/) a
 * Create `.env` file in the root of the project and add the following keys.
     - REACT_APP_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     - REACT_APP_INSTRUMENTATION_KEY=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
 Where `REACT_APP_CLIENT_ID` is the `Application (client) ID` from the Azure portal and `REACT_APP_INSTRUMENTATION_KEY` is the `Object ID` from the portal.
 
 ## Other commands
