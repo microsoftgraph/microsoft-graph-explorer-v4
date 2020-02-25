@@ -15,7 +15,7 @@ class Telemetry implements ITelemetry {
     this.config = {
       instrumentationKey: process.env.REACT_APP_INSTRUMENTATION_KEY,
       disableExceptionTracking: true,
-      disableTelemetry: mscc.hasConsent() ? false : true,
+      disableTelemetry: mscc && mscc.hasConsent() ? false : true,
       extensions: [this.reactPlugin]
     };
 
