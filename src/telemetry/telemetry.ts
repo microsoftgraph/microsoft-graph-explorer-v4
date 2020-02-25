@@ -9,11 +9,13 @@ class Telemetry implements ITelemetry {
   private reactPlugin: any;
 
   constructor() {
+    const { mscc } = (window as any);
+
     this.reactPlugin  = new ReactPlugin();
     this.config = {
       instrumentationKey: process.env.REACT_APP_INSTRUMENTATION_KEY,
       disableExceptionTracking: true,
-      disableTelemetry: this.areWeInDev() ? false : true,
+      disableTelemetry: mscc.hasConsent() ? false : true,
       extensions: [this.reactPlugin]
     };
 
@@ -29,10 +31,6 @@ class Telemetry implements ITelemetry {
   }
 
   public trackEvent(eventName: string, payload: any) {
-    if (!this.valid(eventName)) {
-      throw new Error('Invalid telemetry event name');
-    }
-
     this.appInsights.trackEvent({ name: eventName }, payload);
   }
 
@@ -42,18 +40,6 @@ class Telemetry implements ITelemetry {
 
   public trackReactComponent(ComponentToTrack: ComponentType): ComponentType {
     return withAITracking(this.reactPlugin, ComponentToTrack);
-  }
-
-  // A valid event name ends with the word EVENT
-  private valid(eventName: string): boolean {
-    const listOfWords = eventName.split('_');
-    const lastIndex = listOfWords.length - 1;
-    const lastWord = listOfWords[lastIndex];
-    return lastWord === 'EVENT';
-  }
-
-  private areWeInDev(): boolean {
-    return process.env.NODE_ENV === 'development';
   }
 }
 
