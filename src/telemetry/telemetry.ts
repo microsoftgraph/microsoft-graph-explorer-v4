@@ -26,7 +26,7 @@ class Telemetry implements ITelemetry {
 
   public initialize() {
     this.appInsights.loadAppInsights();
-
+    this.appInsights.addTelemetryInitializer(this.filterFunction);
     this.appInsights.trackPageView();
   }
 
@@ -40,6 +40,10 @@ class Telemetry implements ITelemetry {
 
   public trackReactComponent(ComponentToTrack: ComponentType): ComponentType {
     return withAITracking(this.reactPlugin, ComponentToTrack);
+  }
+
+  private filterFunction(envelope: any) {
+    envelope.baseData.name = 'Graph Explorer v4';
   }
 }
 
