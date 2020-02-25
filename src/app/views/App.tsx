@@ -251,6 +251,21 @@ class App extends Component<IAppProps, IAppState> {
     window.location.href = url.includes('localhost') ? 'http://localhost:3000' : `${url.replace('/preview', '')}`;
   }
 
+  public displayAuthenticationSection = (minimised: boolean) => {
+    return <div style={{
+      display: minimised ? 'block' : 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
+      <div className={minimised ? '' : 'col-md-10'}>
+        <Authentication />
+      </div>
+      <div className={minimised ? '' : 'col-md-2'}>
+        <Settings />
+      </div>
+    </div>;
+  }
+
   public render() {
     const classes = classNames(this.props);
     const { graphExplorerMode, queryState, minimised, termsOfUse,
@@ -348,19 +363,7 @@ class App extends Component<IAppProps, IAppState> {
 
                 <hr className={classes.separator} />
                 {!mobileScreen && <>
-                  <div style={
-                    {
-                      display: minimised ? 'block' : 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                    }}>
-                    <div className={minimised ? '' : 'col-md-10'}>
-                      <Authentication />
-                    </div>
-                    <div className={minimised ? '' : 'col-md-2'}>
-                      <Settings />
-                    </div>
-                  </div>
+                  {this.displayAuthenticationSection(minimised)}
                   <hr className={classes.separator} /></>}
 
                 {showSidebar && <>
@@ -371,7 +374,7 @@ class App extends Component<IAppProps, IAppState> {
             <div className={layout}>
               {graphExplorerMode === Mode.TryIt && (
                 <div style={{ marginBottom: 8 }}>
-                  {loginType === LoginType.Popup && <Authentication />}
+                  {loginType === LoginType.Popup && this.displayAuthenticationSection(false)}
                   {loginType === LoginType.Redirect && <MessageBar
                     messageBarType={MessageBarType.warning}
                     isMultiline={true}
@@ -480,5 +483,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(IntlApp);
-
-
