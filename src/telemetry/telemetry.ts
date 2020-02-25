@@ -43,6 +43,7 @@ class Telemetry implements ITelemetry {
   }
 
   private filterFunction(envelope: any) {
+    // Identifies the source of telemetry events
     envelope.baseData.name = 'Graph Explorer v4';
   }
 }
