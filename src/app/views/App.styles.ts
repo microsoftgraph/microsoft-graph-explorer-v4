@@ -27,7 +27,7 @@ export const appStyles = (theme: ITheme) => {
       borderBottom: '1px solid ' + theme.palette.neutralLight,
     },
     links: {
-      color: theme.palette.blueMid
+      color: `${theme.palette.blueMid} !important`,
     },
     sidebarToggle: {
       marginBottom: theme.spacing.s1,
