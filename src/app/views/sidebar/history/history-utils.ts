@@ -1,27 +1,28 @@
 import localforage from 'localforage';
 import { IHistoryItem } from '../../../../types/history';
-
-const key = 'history';
+const historyStorage = localforage.createInstance({
+  storeName: 'history',
+  name: 'GE_V4'
+});
 
 export async function writeHistoryData(data: IHistoryItem) {
-  const historyItems: IHistoryItem[] = await readHistoryData();
-  const items = [...historyItems, data];
-  localforage.setItem(key, items);
+  historyStorage.setItem(data.createdAt, data);
 }
 
 export async function readHistoryData(): Promise<IHistoryItem[]> {
-  const data: IHistoryItem[] = await localforage.getItem(key);
-  return data || [];
+  let historyData: IHistoryItem[] = [];
+  const keys = await historyStorage.keys();
+  for (const element of keys) {
+    const historyItem: IHistoryItem = await historyStorage.getItem(element);
+    historyData = [...historyData, historyItem];
+  }
+  return historyData;
 }
 
 export const removeHistoryData = async (data: IHistoryItem) => {
-  const historyItems: IHistoryItem[] = await readHistoryData();
-  const items = historyItems.filter((history: IHistoryItem) => history.createdAt !== data.createdAt);
-  await localforage.setItem(key, items);
-  return items.length;
+  await historyStorage.removeItem(data.createdAt);
+  return true;
 };
-
-export function clear() { localforage.clear(); }
 
 export function dynamicSort(property: string) {
   const column = property;
