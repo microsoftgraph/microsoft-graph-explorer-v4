@@ -14,11 +14,12 @@ export async function readHistoryData(): Promise<IHistoryItem[]> {
   return data || [];
 }
 
-export async function removeHistoryData(data: IHistoryItem) {
+export const removeHistoryData = async (data: IHistoryItem) => {
   const historyItems: IHistoryItem[] = await readHistoryData();
-  const items = historyItems.filter(history => history !== data);
-  localforage.setItem(key, items);
-}
+  const items = historyItems.filter((history: IHistoryItem) => history.createdAt !== data.createdAt);
+  await localforage.setItem(key, items);
+  return items.length;
+};
 
 export function clear() { localforage.clear(); }
 

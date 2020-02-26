@@ -304,12 +304,11 @@ export class History extends Component<IHistoryProps, any> {
   }
 
 
-  private deleteQuery = (query: IHistoryItem) => {
+  private deleteQuery = async (query: IHistoryItem) => {
     const { actions } = this.props;
     if (actions) {
       delete query.category;
       actions.removeHistoryItem(query);
-      removeHistoryData(query);
     }
   }
 
