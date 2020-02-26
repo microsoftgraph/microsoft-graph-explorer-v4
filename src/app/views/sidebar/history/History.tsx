@@ -225,6 +225,14 @@ export class History extends Component<IHistoryProps, any> {
 
   public renderGroupHeader = (props: any): any => {
     const classes = classNames(this.props);
+    const {
+      intl: { messages },
+    }: any = this.props;
+
+    // tslint:disable
+    const expandText = messages['Expand'];
+    const collapseText = messages['Collapse'];
+    // tslint:enable
 
     return (
       <div aria-label={props.group!.name} style={
@@ -239,7 +247,7 @@ export class History extends Component<IHistoryProps, any> {
               className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
               iconProps={{ iconName: props.group!.isCollapsed ? 'ChevronRightSmall' : 'ChevronDownSmall' }}
               title={props.group!.isCollapsed ?
-                `Expand ${props.group!.name}` : `Collapse ${props.group!.name}`}
+                `${expandText} ${props.group!.name}` : `${collapseText} ${props.group!.name}`}
               ariaLabel='expand collapse group'
               onClick={() => this.onToggleCollapse(props)}
             />
@@ -253,7 +261,7 @@ export class History extends Component<IHistoryProps, any> {
           <IconButton
             className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
             iconProps={{ iconName: 'Delete' }}
-            title={`Delete requests in ${props.group!.name}`}
+            title={`${messages['Delete requests']} : ${props.group!.name}`}
             ariaLabel='delete group'
             onClick={() => this.deleteCategoryHistory(props.group!.name)}
           />

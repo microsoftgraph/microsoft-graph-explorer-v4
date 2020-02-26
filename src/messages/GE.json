@@ -267,5 +267,8 @@
   "Dark": "Dark",
   "Light": "Light",
   "High Contrast": "High Contrast",
-  "Auth": "Auth"
+  "Auth": "Auth",
+  "Collapse": "Collapse",
+  "Expand": "Expand",
+  "Delete requests": "Delete requests"
 }
