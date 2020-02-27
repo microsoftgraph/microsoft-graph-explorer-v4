@@ -214,7 +214,7 @@ export class History extends Component<IHistoryProps, any> {
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}
             >
-              <span aria-labelledby={hostId} className={classes.queryContent}>
+              <span aria-describedby={hostId} className={classes.queryContent}>
                 {queryContent.replace(GRAPH_URL, '')}
               </span>
             </TooltipHost>
@@ -360,7 +360,7 @@ export class History extends Component<IHistoryProps, any> {
           onChange={(value) => this.searchValueChanged(value)}
         />
         <hr />
-        {groupedList.items && <DetailsList
+        {groupedList.items.length > 0 && <DetailsList
           className={classes.queryList}
           onRenderItemColumn={this.renderItemColumn}
           items={groupedList.items}
