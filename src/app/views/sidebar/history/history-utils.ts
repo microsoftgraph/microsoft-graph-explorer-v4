@@ -5,8 +5,8 @@ const historyStorage = localforage.createInstance({
   name: 'GE_V4'
 });
 
-export async function writeHistoryData(data: IHistoryItem) {
-  historyStorage.setItem(data.createdAt, data);
+export async function writeHistoryData(historyItem: IHistoryItem) {
+  historyStorage.setItem(historyItem.createdAt, historyItem);
 }
 
 export async function readHistoryData(): Promise<IHistoryItem[]> {
@@ -19,8 +19,8 @@ export async function readHistoryData(): Promise<IHistoryItem[]> {
   return historyData;
 }
 
-export const removeHistoryData = async (data: IHistoryItem) => {
-  await historyStorage.removeItem(data.createdAt);
+export const removeHistoryData = async (historyItem: IHistoryItem) => {
+  await historyStorage.removeItem(historyItem.createdAt);
   return true;
 };
 
