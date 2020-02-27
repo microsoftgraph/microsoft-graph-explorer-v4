@@ -14,13 +14,15 @@ export function addHistoryItem(response: IHistoryItem): any {
   };
 }
 
-export function removeHistoryItem(response: IHistoryItem): Function {
+export function removeHistoryItem(query: IHistoryItem): Function {
+
+  delete query.category;
   return async (dispatch: Function) => {
-    return removeHistoryData(response)
+    return removeHistoryData(query)
       .then(res => {
         dispatch({
           type: REMOVE_HISTORY_ITEM_SUCCESS,
-          response,
+          response: query,
         });
       });
   };
