@@ -263,7 +263,7 @@ export class History extends Component<IHistoryProps, any> {
             iconProps={{ iconName: 'Delete' }}
             title={`${messages['Delete requests']} : ${props.group!.name}`}
             ariaLabel='delete group'
-            onClick={() => this.deleteCategoryHistory(props.group!.name)}
+            onClick={() => this.deleteHistoryCategory(props.group!.name)}
           />
         </div>
       </div>
@@ -276,10 +276,9 @@ export class History extends Component<IHistoryProps, any> {
     };
   }
 
-  private deleteCategoryHistory = (category: string) => {
-    const { groupedList } = this.state;
-    const queries = groupedList.items;
-    const itemsToDelete = queries.filter((query: IHistoryItem) => query.category === category);
+  private deleteHistoryCategory = (category: string) => {
+    const { groupedList: { items } } = this.state;
+    const itemsToDelete = items.filter((query: IHistoryItem) => query.category === category);
     itemsToDelete.forEach((item: IHistoryItem) => {
       this.deleteQuery(item);
     });
