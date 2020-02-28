@@ -17,7 +17,7 @@ import { GRAPH_URL } from '../../../services/graph-constants';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import { dynamicSort } from './history-utils';
+import { dynamicSort, removeHistoryData } from './history-utils';
 
 export class History extends Component<IHistoryProps, any> {
 
@@ -191,7 +191,7 @@ export class History extends Component<IHistoryProps, any> {
               iconProps: {
                 iconName: 'Delete'
               },
-              onClick: () => this.onDeleteQuery(item)
+              onClick: () => this.deleteQuery(item)
             },
           ];
 
@@ -214,7 +214,7 @@ export class History extends Component<IHistoryProps, any> {
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}
             >
-              <span aria-labelledby={hostId} className={classes.queryContent}>
+              <span aria-describedby={hostId} className={classes.queryContent}>
                 {queryContent.replace(GRAPH_URL, '')}
               </span>
             </TooltipHost>
@@ -225,22 +225,46 @@ export class History extends Component<IHistoryProps, any> {
 
   public renderGroupHeader = (props: any): any => {
     const classes = classNames(this.props);
+    const {
+      intl: { messages },
+    }: any = this.props;
+
+    // tslint:disable
+    const expandText = messages['Expand'];
+    const collapseText = messages['Collapse'];
+    // tslint:enable
 
     return (
-      <div aria-label={props.group!.name} onClick={this.onToggleCollapse(props)}>
-        <div className={classes.groupHeaderRow}>
-          <IconButton
-            className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
-            iconProps={{ iconName: props.group!.isCollapsed ? 'ChevronRightSmall' : 'ChevronDownSmall' }}
-            title={props.group!.isCollapsed ?
-              `Expand ${props.group!.name}` : `Collapse ${props.group!.name}`}
-            ariaLabel='expand collapse group'
-            onClick={() => this.onToggleCollapse(props)}
-          />
-          <div className={classes.groupTitle}>
-            <span>{props.group!.name}</span>
-            <span className={classes.headerCount}>({props.group!.count})</span>
+      <div aria-label={props.group!.name} style={
+        {
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+        <div className={'col-md-10'}>
+          <div className={classes.groupHeaderRow} onClick={this.onToggleCollapse(props)}>
+            <IconButton
+              className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
+              iconProps={{ iconName: props.group!.isCollapsed ? 'ChevronRightSmall' : 'ChevronDownSmall' }}
+              title={props.group!.isCollapsed ?
+                `${expandText} ${props.group!.name}` : `${collapseText} ${props.group!.name}`}
+              ariaLabel='expand collapse group'
+              onClick={() => this.onToggleCollapse(props)}
+            />
+            <div className={classes.groupTitle}>
+              <span>{props.group!.name}</span>
+              <span className={classes.headerCount}>({props.group!.count})</span>
+            </div>
           </div>
+        </div>
+        <div className={'col-md-2'}>
+          <IconButton
+            className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
+            iconProps={{ iconName: 'Delete' }}
+            title={`${messages['Delete requests']} : ${props.group!.name}`}
+            ariaLabel='delete group'
+            onClick={() => this.deleteHistoryCategory(props.group!.name)}
+          />
         </div>
       </div>
     );
@@ -250,6 +274,14 @@ export class History extends Component<IHistoryProps, any> {
     return () => {
       props!.onToggleCollapse!(props!.group!);
     };
+  }
+
+  private deleteHistoryCategory = (category: string) => {
+    const { groupedList: { items } } = this.state;
+    const itemsToDelete = items.filter((query: IHistoryItem) => query.category === category);
+    itemsToDelete.forEach((item: IHistoryItem) => {
+      this.deleteQuery(item);
+    });
   }
 
   private renderDetailsHeader() {
@@ -279,7 +311,7 @@ export class History extends Component<IHistoryProps, any> {
   }
 
 
-  private onDeleteQuery = (query: IHistoryItem) => {
+  private deleteQuery = async (query: IHistoryItem) => {
     const { actions } = this.props;
     if (actions) {
       actions.removeHistoryItem(query);
@@ -328,7 +360,7 @@ export class History extends Component<IHistoryProps, any> {
           onChange={(value) => this.searchValueChanged(value)}
         />
         <hr />
-        {groupedList.items && <DetailsList
+        {groupedList.items.length > 0 && <DetailsList
           className={classes.queryList}
           onRenderItemColumn={this.renderItemColumn}
           items={groupedList.items}

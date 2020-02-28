@@ -29,6 +29,9 @@ export const sidebarStyles = (theme: ITheme) => {
     pullLeft: {
       float: 'left'
     },
+    pullRight: {
+      float: 'right'
+    },
 
     /* Group Headers */
 
