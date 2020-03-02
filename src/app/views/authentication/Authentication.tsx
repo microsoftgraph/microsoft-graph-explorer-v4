@@ -5,6 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { FormattedMessage } from 'react-intl';
 import { IAuthenticationProps } from '../../../types/authentication';
+import { Mode } from '../../../types/enums';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import { logIn } from '../../services/graph-client/msal-service';
 import { classNames } from '../classnames';
@@ -38,7 +39,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
   };
 
   public render() {
-    const { minimised, tokenPresent, mobileScreen } = this.props;
+    const { minimised, tokenPresent, mobileScreen, graphExplorerMode } = this.props;
     const classes = classNames(this.props);
     const { loginInProgress } = this.state;
 
@@ -48,7 +49,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
           :
           mobileScreen ? showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn, minimised) :
             <>
-              {!tokenPresent && showUnAuthenticatedText(classes)}
+              {!tokenPresent && graphExplorerMode === Mode.Complete && showUnAuthenticatedText(classes)}
               <span><br />{showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn, minimised)}<br /> </span>
             </>}
       </>
@@ -86,7 +87,8 @@ function mapStateToProps(state: any) {
     tokenPresent: !!state.authToken,
     mobileScreen,
     appTheme: state.theme,
-    minimised: !mobileScreen && !showSidebar
+    minimised: !mobileScreen && !showSidebar,
+    graphExplorerMode: state.graphExplorerMode
   };
 }
 
