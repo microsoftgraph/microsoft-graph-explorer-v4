@@ -44,15 +44,10 @@ export class QueryRunner extends Component<
     }
   };
 
-  private handleOnUrlChange = (newQuery = '') => {
-    this.setState({ url: newQuery });
+  private handleOnUrlChange = (newUrl = '') => {
+    this.setState({ url: newUrl });
 
-    const { queryVersion } = parseSampleUrl(newQuery);
-    if (queryVersion === 'v1.0' || queryVersion === 'beta') {
-      const query = { ...this.props.sampleQuery };
-      query.selectedVersion = queryVersion;
-      this.props.actions!.setSampleQuery(query);
-    }
+    this.changeUrlVersion(newUrl);
   };
 
   private handleOnBlur = () => {
@@ -100,6 +95,20 @@ export class QueryRunner extends Component<
       });
     }
   };
+
+  private changeUrlVersion(newUrl: string) {
+    const query = { ...this.props.sampleQuery };
+    const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);
+    const { queryVersion: oldQueryVersion } = parseSampleUrl(query.sampleUrl);
+
+    if (newQueryVersion !== oldQueryVersion) {
+      if (newQueryVersion === 'v1.0' || newQueryVersion === 'beta') {
+        const sampleQuery = { ...this.props.sampleQuery };
+        sampleQuery.selectedVersion = newQueryVersion;
+        this.props.actions!.setSampleQuery(sampleQuery);
+      }
+    }
+  }
 
   public render() {
     const { graphExplorerMode } = this.props;
