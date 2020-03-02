@@ -150,7 +150,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       styles: personaStyleToken,
       hidePersonaDetails: minimised,
       size: graphExplorerMode === Mode.TryIt ? PersonaSize.size40 : defaultSize
-    }
+    };
 
     return (
       <div className={classes.profile}>
