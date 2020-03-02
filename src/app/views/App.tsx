@@ -409,7 +409,7 @@ class App extends Component<IAppProps, IAppState> {
 
                   </MessageBar>
                 )}
-                {graphExplorerMode === Mode.Complete && termsOfUse && (
+                {termsOfUse && (
                   <MessageBar
                     messageBarType={MessageBarType.info}
                     isMultiline={true}
