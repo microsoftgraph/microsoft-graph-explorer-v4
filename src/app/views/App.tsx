@@ -375,7 +375,7 @@ class App extends Component<IAppProps, IAppState> {
             <div className={layout}>
               {graphExplorerMode === Mode.TryIt && (
                 <div style={{ marginBottom: 8 }}>
-                  {loginType === LoginType.Popup && this.displayAuthenticationSection(false)}
+                  {loginType === LoginType.Popup && <Authentication />}
                   {loginType === LoginType.Redirect && <MessageBar
                     messageBarType={MessageBarType.warning}
                     isMultiline={true}
