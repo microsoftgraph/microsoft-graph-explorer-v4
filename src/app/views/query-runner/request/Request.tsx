@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
@@ -39,12 +38,9 @@ export class Request extends Component<IRequestComponent, any> {
           <PivotItem headerText={messages['request header']}>
             <RequestHeaders />
           </PivotItem>
-          {
-            mode === Mode.Complete &&
-            <PivotItem headerText={messages.Permissions}>
-              <Permission />
-            </PivotItem>
-          }
+          <PivotItem headerText={messages.Permissions}>
+            <Permission />
+          </PivotItem>
           <PivotItem headerText={messages.Auth}>
             <Auth />
           </PivotItem>
