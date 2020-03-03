@@ -1,7 +1,7 @@
 import { IAction } from '../../../types/action';
 import {
   CLEAR_RESPONSE, QUERY_GRAPH_RUNNING,
-  QUERY_GRAPH_SUCCESS, SET_SAMPLE_QUERY_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS
+  QUERY_GRAPH_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS
 } from '../redux-constants';
 
 export function graphResponse(state = {}, action: IAction): any {
