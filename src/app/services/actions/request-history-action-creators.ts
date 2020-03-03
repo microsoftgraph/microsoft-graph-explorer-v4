@@ -1,9 +1,10 @@
 
 import { IHistoryItem } from '../../../types/history';
-import { removeHistoryData } from '../../views/sidebar/history/history-utils';
+import { bulkRemoveHistoryData, removeHistoryData } from '../../views/sidebar/history/history-utils';
 import {
   ADD_HISTORY_ITEM_SUCCESS,
   REMOVE_HISTORY_ITEM_SUCCESS,
+  REMOVE_HISTORY_ITEMS_BULK_SUCCESS,
   VIEW_HISTORY_ITEM_SUCCESS
 } from '../redux-constants';
 
@@ -23,6 +24,24 @@ export function removeHistoryItem(historyItem: IHistoryItem): Function {
         dispatch({
           type: REMOVE_HISTORY_ITEM_SUCCESS,
           response: historyItem,
+        });
+      });
+  };
+}
+
+export function bulkRemoveHistoryItems(historyItems: IHistoryItem[]): Function {
+
+  const listOfKeys: any = [];
+  historyItems.forEach(historyItem => {
+    listOfKeys.push(historyItem.createdAt);
+  });
+
+  return async (dispatch: Function) => {
+    return bulkRemoveHistoryData(listOfKeys)
+      .then(() => {
+        dispatch({
+          type: REMOVE_HISTORY_ITEMS_BULK_SUCCESS,
+          response: listOfKeys,
         });
       });
   };
