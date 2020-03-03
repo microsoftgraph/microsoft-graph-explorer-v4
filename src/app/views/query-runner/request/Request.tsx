@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
+import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
@@ -15,38 +16,60 @@ export class Request extends Component<IRequestComponent, any> {
     super(props);
   }
 
-  public render() {
+  private getPivotItems = () => {
 
     const {
       handleOnEditorChange,
       sampleBody,
-      mode
-    } = this.props;
-
-    const {
+      mode,
       intl: { messages },
     }: any = this.props;
+
+    const pivotItems = [
+      <PivotItem
+        key='request-body'
+        headerText={messages['request body']}>
+        <Monaco
+          body={sampleBody}
+          onChange={(value) => handleOnEditorChange(value)} />
+      </PivotItem>,
+      <PivotItem
+        key='request-header'
+        headerText={messages['request header']}>
+        <RequestHeaders />
+      </PivotItem>,
+      <PivotItem
+        key='permissions'
+        headerText={messages.Permissions}>
+        <Permission />
+      </PivotItem>
+    ];
+
+    if (mode === Mode.Complete) {
+      pivotItems.push(
+        <PivotItem
+          key='auth'
+          headerText={messages.Auth}>
+          <Auth />
+        </PivotItem>
+      );
+    }
+
+    return pivotItems;
+  };
+
+  public render() {
+
+    const requestPivotItems = this.getPivotItems();
 
     return (
       <div className='request-editors'>
         <Pivot>
-          <PivotItem headerText={messages['request body']}>
-            <Monaco
-              body={sampleBody}
-              onChange={(value) => handleOnEditorChange(value)} />
-          </PivotItem>
-          <PivotItem headerText={messages['request header']}>
-            <RequestHeaders />
-          </PivotItem>
-          <PivotItem headerText={messages.Permissions}>
-            <Permission />
-          </PivotItem>
-          <PivotItem headerText={messages.Auth}>
-            <Auth />
-          </PivotItem>
+          {requestPivotItems}
         </Pivot>
       </div>
     );
+
   }
 }
 
