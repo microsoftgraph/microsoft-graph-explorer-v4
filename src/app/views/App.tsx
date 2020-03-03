@@ -375,17 +375,34 @@ class App extends Component<IAppProps, IAppState> {
             <div className={layout}>
               {graphExplorerMode === Mode.TryIt && (
                 <div style={{ marginBottom: 8 }}>
-                  {loginType === LoginType.Popup && <Authentication />}
+                  {loginType === LoginType.Popup && <>
+                    <MessageBar
+                      messageBarType={MessageBarType.warning}
+                      isMultiline={true}
+                    >
+                      <p>
+                        <FormattedMessage id='To try the full features' />,
+                        <a className={classes.links}
+                          tabIndex={0}
+                          href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
+                          <FormattedMessage id='sign in' />.
+                      </a>
+                      </p>
+                    </MessageBar>
+
+                    <Authentication />
+                  </>}
                   {loginType === LoginType.Redirect && <MessageBar
                     messageBarType={MessageBarType.warning}
                     isMultiline={true}
                   >
                     <p>
-                      To try operations other than GET or to access your own data, sign in to
+                      <FormattedMessage id='To try operations other than GET' />,
+
                       <a className={classes.links}
                         tabIndex={0}
                         href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
-                        Graph Explorer.
+                        <FormattedMessage id='sign in' />.
                       </a>
                     </p>
                   </MessageBar>}

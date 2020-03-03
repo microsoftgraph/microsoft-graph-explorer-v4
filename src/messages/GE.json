@@ -270,5 +270,7 @@
   "Auth": "Auth",
   "Collapse": "Collapse",
   "Expand": "Expand",
-  "Delete requests": "Delete requests"
+  "Delete requests": "Delete requests",
+  "To try operations other than GET": "To try operations other than GET or to access your own data",
+  "To try the full features": "To try the full features"
 }
