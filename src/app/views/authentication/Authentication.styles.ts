@@ -13,7 +13,8 @@ export const authenticationStyles = (theme: ITheme) => {
       flexDirection: 'row',
       alignItems: 'flex-start',
       justifyContent: 'start',
-      marginRight: theme.spacing.s1
+      marginRight: theme.spacing.s1,
+      padding: theme.spacing.s1,
     },
     spinnerContainer: {
       display: 'flex',
