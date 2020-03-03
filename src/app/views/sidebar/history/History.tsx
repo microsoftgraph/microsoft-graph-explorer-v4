@@ -17,7 +17,7 @@ import { GRAPH_URL } from '../../../services/graph-constants';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import { dynamicSort, removeHistoryData } from './history-utils';
+import { dynamicSort } from './history-utils';
 
 export class History extends Component<IHistoryProps, any> {
 
@@ -278,10 +278,13 @@ export class History extends Component<IHistoryProps, any> {
 
   private deleteHistoryCategory = (category: string) => {
     const { groupedList: { items } } = this.state;
+    const { actions } = this.props;
     const itemsToDelete = items.filter((query: IHistoryItem) => query.category === category);
-    itemsToDelete.forEach((item: IHistoryItem) => {
-      this.deleteQuery(item);
-    });
+
+    if (actions) {
+      actions.bulkRemoveHistoryItems(itemsToDelete);
+    }
+
   }
 
   private renderDetailsHeader() {
