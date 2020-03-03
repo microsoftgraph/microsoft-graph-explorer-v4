@@ -20,6 +20,10 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     };
   }
 
+  public shouldComponentUpdate(nextProps: IQueryResponseProps) {
+    return nextProps.graphResponse !== this.props.graphResponse;
+  }
+
   public handleCopy = () => {
     copy('share-query-text')
       .then(() => this.toggleShareQueryDialogState());
