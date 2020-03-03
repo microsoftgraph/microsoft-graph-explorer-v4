@@ -385,7 +385,7 @@ class App extends Component<IAppProps, IAppState> {
                         <a className={classes.links}
                           tabIndex={0}
                           href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
-                          <FormattedMessage id='sign in' />.
+                          <FormattedMessage id='full Graph Explorer' />.
                       </a>
                       </p>
                     </MessageBar>
