@@ -24,6 +24,16 @@ export const removeHistoryData = async (historyItem: IHistoryItem) => {
   return true;
 };
 
+export const bulkRemoveHistoryData = async (listOfKeys: string[]) => {
+  historyStorage.iterate((value, key, iterationNumber) => {
+    if (listOfKeys.includes(key)) {
+      historyStorage.removeItem(key);
+    }
+  }).then(() => {
+    return true;
+  });
+};
+
 export function dynamicSort(property: string) {
   const column = property;
   let sortOrder = 1;
