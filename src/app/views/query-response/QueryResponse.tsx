@@ -84,13 +84,13 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     return (
       <div>
         <div className='query-response'>
-          {mode === Mode.Complete &&
+          {mode === Mode.Complete && <>
             <IconButton onClick={this.handleShareQuery} className='share-query-btn' iconProps={{
               iconName: 'Share'
-            }} />}
-          <IconButton onClick={this.toggleModal} className='share-query-btn' iconProps={{
-            iconName: 'MiniExpandMirrored'
-          }} />
+            }} />
+            <IconButton onClick={this.toggleModal} className='share-query-btn' iconProps={{
+              iconName: 'MiniExpandMirrored'
+            }} /></>}
           <Pivot className='pivot-response'>
             {pivotItems}
           </Pivot>
