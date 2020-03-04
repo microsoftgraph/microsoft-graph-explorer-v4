@@ -1,4 +1,4 @@
-import { DefaultButton, FontSizes, IconButton, Modal, Pivot, PivotItem, PrimaryButton } from 'office-ui-fabric-react';
+import { DefaultButton, FontSizes, IconButton, Modal, Pivot, PrimaryButton } from 'office-ui-fabric-react';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import { IQueryResponseProps, IQueryResponseState } from '../../../types/query-response';
 import { copy } from '../common/copy';
+import { createShareLink } from '../common/share';
 import { getPivotItems } from './pivot-items/pivot-items';
 import './query-response.scss';
 
@@ -19,8 +20,8 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     };
   }
 
-  public shouldComponentUpdate(nextProps: IQueryResponseProps) {
-    return nextProps.graphResponse !== this.props.graphResponse;
+  public shouldComponentUpdate(nextProps: IQueryResponseProps, nextState: IQueryResponseState) {
+    return nextProps.graphResponse !== this.props.graphResponse || nextState !== this.state;
   }
 
   public handleCopy = () => {
@@ -29,7 +30,8 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
   }
 
   public handleShareQuery = () => {
-    const query = this.generateShareQueryParams();
+    const { sampleQuery } = this.props;
+    const query = createShareLink(sampleQuery);
     this.setState({ query });
     this.toggleShareQueryDialogState();
   }
@@ -40,30 +42,6 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
 
   public toggleModal = () => {
     this.setState({ showModal: !this.state.showModal });
-  }
-
-  private generateShareQueryParams = (): string => {
-    const { sampleQuery: { sampleBody, sampleUrl, selectedVerb, selectedVersion } } = this.props;
-    const { origin, pathname } = window.location;
-    const url = new URL(sampleUrl);
-    const graphUrl = url.origin;
-    /**
-     * To ensure backward compatibility the version is removed from the pathname.
-     * V3 expects the request query param to not have the version number.
-     */
-    const graphUrlRequest = url.pathname.substr(6) + url.search;
-    const requestBody = this.hashEncode(JSON.stringify(sampleBody));
-
-    return origin + pathname
-      + '?request=' + graphUrlRequest
-      + '&method=' + selectedVerb
-      + '&version=' + selectedVersion
-      + '&GraphUrl=' + graphUrl
-      + '&requestBody=' + requestBody;
-  }
-
-  private hashEncode(requestBody: string): string {
-    return btoa(requestBody);
   }
 
   public render() {
