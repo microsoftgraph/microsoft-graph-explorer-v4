@@ -18,7 +18,6 @@ export interface IQueryRunnerProps {
   headers: Array<{ name: string; value: string }>;
   onSelectVerb: Function;
   sampleQuery: IQuery;
-  graphExplorerMode: Mode;
   actions?: {
     runQuery: Function;
     addRequestHeader: Function;
@@ -29,7 +28,6 @@ export interface IQueryRunnerProps {
 export interface IQueryInputProps {
   theme?: ITheme;
   styles?: object;
-  mode?: Mode;
   handleOnRunQuery: Function;
   handleOnMethodChange: Function;
   handleOnUrlChange: Function;

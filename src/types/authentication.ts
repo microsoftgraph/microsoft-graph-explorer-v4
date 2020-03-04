@@ -1,4 +1,5 @@
 import { ITheme } from 'office-ui-fabric-react';
+import { Mode } from './enums';
 
 export interface IAuthenticationProps {
   theme?: ITheme;
@@ -10,4 +11,5 @@ export interface IAuthenticationProps {
   tokenPresent: boolean;
   mobileScreen: boolean;
   minimised: boolean;
+  graphExplorerMode: Mode;
 }
