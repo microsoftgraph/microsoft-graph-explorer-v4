@@ -4,7 +4,7 @@ import { bulkRemoveHistoryData, removeHistoryData } from '../../views/sidebar/hi
 import {
   ADD_HISTORY_ITEM_SUCCESS,
   REMOVE_HISTORY_ITEM_SUCCESS,
-  REMOVE_HISTORY_ITEMS_BULK_SUCCESS,
+  REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
   VIEW_HISTORY_ITEM_SUCCESS
 } from '../redux-constants';
 
@@ -40,7 +40,7 @@ export function bulkRemoveHistoryItems(historyItems: IHistoryItem[]): Function {
     return bulkRemoveHistoryData(listOfKeys)
       .then(() => {
         dispatch({
-          type: REMOVE_HISTORY_ITEMS_BULK_SUCCESS,
+          type: REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
           response: listOfKeys,
         });
       });

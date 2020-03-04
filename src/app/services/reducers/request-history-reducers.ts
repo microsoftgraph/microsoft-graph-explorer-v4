@@ -2,8 +2,8 @@ import { IAction } from '../../../types/action';
 import { IHistoryItem } from '../../../types/history';
 import {
   ADD_HISTORY_ITEM_SUCCESS,
-  REMOVE_HISTORY_ITEM_SUCCESS,
-  REMOVE_HISTORY_ITEMS_BULK_SUCCESS
+  REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
+  REMOVE_HISTORY_ITEM_SUCCESS
 } from '../redux-constants';
 
 export function history(state: any[] = [], action: IAction): any {
@@ -21,7 +21,7 @@ export function history(state: any[] = [], action: IAction): any {
     case REMOVE_HISTORY_ITEM_SUCCESS:
       return state.filter(historyItem => historyItem !== action.response);
 
-    case REMOVE_HISTORY_ITEMS_BULK_SUCCESS:
+    case REMOVE_ALL_HISTORY_ITEMS_SUCCESS:
       const historyItemsToDelete: any = action.response;
       return state.filter((historyItem: IHistoryItem) => !historyItemsToDelete.includes(historyItem.createdAt));
 
