@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
+import { Mode } from '../../../types/enums';
 import { IQueryResponseProps, IQueryResponseState } from '../../../types/query-response';
 import { copy } from '../common/copy';
 import { getPivotItems } from './pivot-items/pivot-items';
@@ -17,6 +18,10 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
       showModal: false,
       query: '',
     };
+  }
+
+  public shouldComponentUpdate(nextProps: IQueryResponseProps) {
+    return nextProps.graphResponse !== this.props.graphResponse;
   }
 
   public handleCopy = () => {
@@ -83,12 +88,13 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     return (
       <div>
         <div className='query-response'>
-          <IconButton onClick={this.handleShareQuery} className='share-query-btn' iconProps={{
-            iconName: 'Share'
-          }} />
-          <IconButton onClick={this.toggleModal} className='share-query-btn' iconProps={{
-            iconName: 'MiniExpandMirrored'
-          }} />
+          {mode === Mode.Complete && <>
+            <IconButton onClick={this.handleShareQuery} className='share-query-btn' iconProps={{
+              iconName: 'Share'
+            }} />
+            <IconButton onClick={this.toggleModal} className='share-query-btn' iconProps={{
+              iconName: 'MiniExpandMirrored'
+            }} /></>}
           <Pivot className='pivot-response'>
             {pivotItems}
           </Pivot>
