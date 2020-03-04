@@ -32,8 +32,8 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
 
   public handleShareQuery = () => {
     const { sampleQuery } = this.props;
-    const query = createShareLink(sampleQuery);
-    this.setState({ query });
+    const shareableLink = createShareLink(sampleQuery);
+    this.setState({ query: shareableLink });
     this.toggleShareQueryDialogState();
   }
 
