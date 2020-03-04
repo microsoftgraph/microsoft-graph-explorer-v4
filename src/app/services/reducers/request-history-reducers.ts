@@ -22,16 +22,8 @@ export function history(state: any[] = [], action: IAction): any {
       return state.filter(historyItem => historyItem !== action.response);
 
     case REMOVE_HISTORY_ITEMS_BULK_SUCCESS:
-      const historyItemsToDelete = Object.values(action.response);
-      const newState: any = [];
-
-      state.forEach((historyItem: IHistoryItem) => {
-        if (!historyItemsToDelete.includes(historyItem.createdAt)) {
-          newState.push(historyItem);
-        }
-      });
-
-      return newState;
+      const historyItemsToDelete: any = action.response;
+      return state.filter((historyItem: IHistoryItem) => !historyItemsToDelete.includes(historyItem.createdAt));
 
     default:
       return state;
