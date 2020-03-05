@@ -3,8 +3,8 @@ import { IHistoryItem } from '../../../types/history';
 import { bulkRemoveHistoryData, removeHistoryData } from '../../views/sidebar/history/history-utils';
 import {
   ADD_HISTORY_ITEM_SUCCESS,
-  REMOVE_HISTORY_ITEM_SUCCESS,
   REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
+  REMOVE_HISTORY_ITEM_SUCCESS,
   VIEW_HISTORY_ITEM_SUCCESS
 } from '../redux-constants';
 
