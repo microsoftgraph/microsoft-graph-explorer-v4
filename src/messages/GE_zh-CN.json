@@ -270,5 +270,8 @@
   "Auth": "Auth",
   "Collapse": "Collapse",
   "Expand": "Expand",
-  "Delete requests": "删除请求"
+  "Delete requests": "删除请求",
+  "To try operations other than GET": "尝试 GET 以外的操作或访问自己的数据",
+  "To try the full features": "获取更多 Microsoft Graph 资源管理器功能",
+  "full Graph Explorer": "转到完整体验 Graph 资源管理器"
 }
