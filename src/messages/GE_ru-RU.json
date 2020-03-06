@@ -270,5 +270,8 @@
   "Auth": "Проверка подлинности",
   "Collapse": "Collapse",
   "Expand": "Развернуть",
-  "Delete requests": "Запросы на удаление"
+  "Delete requests": "Запросы на удаление",
+  "To try operations other than GET": "Чтобы попробовать операции, отличные от GET или получить доступ к вашим собственным данным",
+  "To try the full features": "Чтобы получить больше возможностей Microsoft Graph Explorer",
+  "full Graph Explorer": "Переход к полнофункциональному проводнику Microsoft Graph"
 }
