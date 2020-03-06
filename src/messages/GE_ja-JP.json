@@ -270,5 +270,8 @@
   "Auth": "認証",
   "Collapse": "折りたたむ",
   "Expand": "展開",
-  "Delete requests": "要求を削除する"
+  "Delete requests": "要求を削除する",
+  "To try operations other than GET": "取得以外の操作を試みるか、独自のデータにアクセスするには",
+  "To try the full features": "Microsoft Graph Explorer のその他の機能を取得するには",
+  "full Graph Explorer": "Graph エクスプローラーを完全に体験する"
 }
