@@ -270,5 +270,8 @@
   "Auth": "Authentification",
   "Collapse": "Réduire",
   "Expand": "Expand",
-  "Delete requests": "Supprimer les requêtes"
+  "Delete requests": "Supprimer les requêtes",
+  "To try operations other than GET": "Pour essayer d’autres opérations que OBTENIR ou pour accéder à vos données",
+  "To try the full features": "Pour obtenir d’autres fonctionnalités de l’Explorateur Microsoft Graph",
+  "full Graph Explorer": "accédez à l'expérience complète Explorateur de graphiques "
 }
