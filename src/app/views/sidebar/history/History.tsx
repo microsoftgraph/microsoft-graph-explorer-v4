@@ -403,7 +403,7 @@ export class History extends Component<IHistoryProps, any> {
             type: DialogType.normal,
             title: `${messages['Delete requests']} : ${category}`,
             closeButtonAriaLabel: 'Close',
-            subText: 'Are you sure you want to delete these requests?'
+            subText: `${messages['Are you sure you want to delete these requests?']}`
           }}
           modalProps={{
             titleAriaId: getId(),
@@ -413,8 +413,8 @@ export class History extends Component<IHistoryProps, any> {
           }}
         >
           <DialogFooter>
-            <PrimaryButton onClick={this.deleteHistoryCategory} text='Delete' />
-            <DefaultButton onClick={this.closeDialog} text='Cancel' />
+            <PrimaryButton onClick={this.deleteHistoryCategory} text={messages.Delete} />
+            <DefaultButton onClick={this.closeDialog} text={messages.Cancel} />
           </DialogFooter>
         </Dialog>
       </>

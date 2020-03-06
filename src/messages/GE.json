@@ -273,5 +273,8 @@
   "Delete requests": "Delete requests",
   "To try operations other than GET": "To try operations other than GET or to access your own data",
   "To try the full features": "To get more Microsoft Graph Explorer features",
-  "full Graph Explorer": "go to the full experience Graph Explorer"
+  "full Graph Explorer": "go to the full experience Graph Explorer",
+  "Are you sure you want to delete these requests?": "Are you sure you want to delete these requests?",
+  "Delete": "Delete",
+  "Cancel": "Cancel"
 }
