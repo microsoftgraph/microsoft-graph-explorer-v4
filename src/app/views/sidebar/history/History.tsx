@@ -1,6 +1,7 @@
 import {
-  ContextualMenuItemType, DetailsList, DetailsRow, getId, getTheme,
-  IColumn, IconButton, MessageBarType, SearchBox, SelectionMode, styled, TooltipHost
+  ContextualMenuItemType, DefaultButton, DetailsList, DetailsRow, Dialog,
+  DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
+  MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -17,7 +18,7 @@ import { GRAPH_URL } from '../../../services/graph-constants';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import { dynamicSort, removeHistoryData } from './history-utils';
+import { dynamicSort } from './history-utils';
 
 export class History extends Component<IHistoryProps, any> {
 
@@ -27,7 +28,9 @@ export class History extends Component<IHistoryProps, any> {
       groupedList: {
         items: [],
         categories: [],
-      }
+      },
+      hideDialog: true,
+      category: ''
     };
   }
 
@@ -263,7 +266,7 @@ export class History extends Component<IHistoryProps, any> {
             iconProps={{ iconName: 'Delete' }}
             title={`${messages['Delete requests']} : ${props.group!.name}`}
             ariaLabel='delete group'
-            onClick={() => this.deleteHistoryCategory(props.group!.name)}
+            onClick={() => this.showDialog(props.group!.name)}
           />
         </div>
       </div>
@@ -276,12 +279,26 @@ export class History extends Component<IHistoryProps, any> {
     };
   }
 
-  private deleteHistoryCategory = (category: string) => {
-    const { groupedList: { items } } = this.state;
+  private showDialog = (category: string): void => {
+    this.setState({ hideDialog: false, category });
+  };
+
+  private closeDialog = (): void => {
+    this.setState({ hideDialog: true, category: '' });
+  };
+
+  private deleteHistoryCategory = (): any => {
+
+    const { category, groupedList: { items } } = this.state;
+    const { actions } = this.props;
     const itemsToDelete = items.filter((query: IHistoryItem) => query.category === category);
-    itemsToDelete.forEach((item: IHistoryItem) => {
-      this.deleteQuery(item);
-    });
+
+    if (actions) {
+      actions.bulkRemoveHistoryItems(itemsToDelete);
+    }
+
+    this.closeDialog();
+
   }
 
   private renderDetailsHeader() {
@@ -346,7 +363,10 @@ export class History extends Component<IHistoryProps, any> {
   }
 
   public render() {
-    const { groupedList } = this.state;
+    const { groupedList, hideDialog, category } = this.state;
+    const {
+      intl: { messages },
+    }: any = this.props;
     const classes = classNames(this.props);
     const columns = [
       { key: 'status', name: '', fieldName: 'status', minWidth: 20, maxWidth: 50 },
@@ -355,26 +375,49 @@ export class History extends Component<IHistoryProps, any> {
     ];
 
     return (
-      <div>
-        <SearchBox placeholder='Search' className={classes.searchBox}
-          onChange={(value) => this.searchValueChanged(value)}
-        />
-        <hr />
-        {groupedList.items.length > 0 && <DetailsList
-          className={classes.queryList}
-          onRenderItemColumn={this.renderItemColumn}
-          items={groupedList.items}
-          columns={columns}
-          selectionMode={SelectionMode.none}
-          groups={groupedList.categories}
-          groupProps={{
-            showEmptyGroups: true,
-            onRenderHeader: this.renderGroupHeader,
+      <>
+        <div>
+          <SearchBox placeholder='Search' className={classes.searchBox}
+            onChange={(value) => this.searchValueChanged(value)}
+          />
+          <hr />
+          {groupedList.items.length > 0 && <DetailsList
+            className={classes.queryList}
+            onRenderItemColumn={this.renderItemColumn}
+            items={groupedList.items}
+            columns={columns}
+            selectionMode={SelectionMode.none}
+            groups={groupedList.categories}
+            groupProps={{
+              showEmptyGroups: true,
+              onRenderHeader: this.renderGroupHeader,
+            }}
+            onRenderRow={this.renderRow}
+            onRenderDetailsHeader={this.renderDetailsHeader}
+          />}
+        </div>
+        <Dialog
+          hidden={hideDialog}
+          onDismiss={this.closeDialog}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: `${messages['Delete requests']} : ${category}`,
+            closeButtonAriaLabel: 'Close',
+            subText: 'Are you sure you want to delete these requests?'
           }}
-          onRenderRow={this.renderRow}
-          onRenderDetailsHeader={this.renderDetailsHeader}
-        />}
-      </div>
+          modalProps={{
+            titleAriaId: getId(),
+            subtitleAriaId: getId(),
+            isBlocking: false,
+            styles: { main: { maxWidth: 450 } },
+          }}
+        >
+          <DialogFooter>
+            <PrimaryButton onClick={this.deleteHistoryCategory} text='Delete' />
+            <DefaultButton onClick={this.closeDialog} text='Cancel' />
+          </DialogFooter>
+        </Dialog>
+      </>
     );
   }
 }
