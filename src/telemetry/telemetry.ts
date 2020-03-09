@@ -48,8 +48,7 @@ class Telemetry implements ITelemetry {
   }
 
   private getInstrumentationKey() {
-    const instrumentationKey = process.env.REACT_APP_INSTRUMENTATION_KEY;
-    return instrumentationKey || '';
+    return process.env.REACT_APP_INSTRUMENTATION_KEY || '';
   }
 }
 
