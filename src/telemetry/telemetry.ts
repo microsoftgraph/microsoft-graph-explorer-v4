@@ -9,9 +9,8 @@ class Telemetry implements ITelemetry {
   private reactPlugin: any;
 
   constructor() {
-    const { mscc } = (window as any);
-
     this.reactPlugin  = new ReactPlugin();
+
     this.config = {
       instrumentationKey: this.getInstrumentationKey(),
       disableExceptionTracking: true,
