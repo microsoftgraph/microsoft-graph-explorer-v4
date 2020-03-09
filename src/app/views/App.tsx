@@ -3,7 +3,7 @@ import {
   Label, MessageBar, MessageBarType, Stack, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { loadGETheme } from '../../themes';
@@ -37,6 +37,7 @@ import { Sidebar } from './sidebar/Sidebar';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
+  intl: InjectedIntl;
   profile: object;
   queryState: object | null;
   termsOfUse: boolean;
@@ -497,7 +498,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-const StyledApp: any = styled(App, appStyles as any);
+const StyledApp = styled(App, appStyles as any);
 const IntlApp = injectIntl(StyledApp);
 
 export default connect(
