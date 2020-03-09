@@ -25,6 +25,7 @@ import { substituteTokens } from '../utils/token-helpers';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
+import { createShareLink } from './common/share';
 import { Banner } from './opt-in-out-banner';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
@@ -42,6 +43,7 @@ interface IAppProps {
   termsOfUse: boolean;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
+  sampleQuery: IQuery;
   actions: {
     addRequestHeader: Function;
     clearQueryStatus: Function;
@@ -270,8 +272,9 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, queryState, minimised, termsOfUse,
+    const { graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
+    const query = createShareLink(sampleQuery);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
@@ -376,17 +379,34 @@ class App extends Component<IAppProps, IAppState> {
             <div className={layout}>
               {graphExplorerMode === Mode.TryIt && (
                 <div style={{ marginBottom: 8 }}>
-                  {loginType === LoginType.Popup && this.displayAuthenticationSection(false)}
+                  {loginType === LoginType.Popup && <>
+                    <MessageBar
+                      messageBarType={MessageBarType.warning}
+                      isMultiline={true}
+                    >
+                      <p>
+                        <FormattedMessage id='To try the full features' />,
+                        <a className={classes.links}
+                          tabIndex={0}
+                          href={query} target='_blank'>
+                          <FormattedMessage id='full Graph Explorer' />.
+                      </a>
+                      </p>
+                    </MessageBar>
+
+                    <Authentication />
+                  </>}
                   {loginType === LoginType.Redirect && <MessageBar
                     messageBarType={MessageBarType.warning}
                     isMultiline={true}
                   >
                     <p>
-                      To try operations other than GET or to access your own data, sign in to
+                      <FormattedMessage id='To try operations other than GET' />,
+
                       <a className={classes.links}
                         tabIndex={0}
-                        href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
-                        Graph Explorer.
+                        href={query} target='_blank'>
+                        <FormattedMessage id='sign in' />.
                       </a>
                     </p>
                   </MessageBar>}
@@ -410,7 +430,7 @@ class App extends Component<IAppProps, IAppState> {
 
                   </MessageBar>
                 )}
-                {graphExplorerMode === Mode.Complete && termsOfUse && (
+                {termsOfUse && (
                   <MessageBar
                     messageBarType={MessageBarType.info}
                     isMultiline={true}
@@ -457,7 +477,8 @@ const mapStateToProps = (state: any) => {
     receivedSampleQuery: state.sampleQuery,
     sidebarProperties: state.sidebarProperties,
     termsOfUse: state.termsOfUse,
-    minimised: !mobileScreen && !showSidebar
+    minimised: !mobileScreen && !showSidebar,
+    sampleQuery: state.sampleQuery,
   };
 };
 

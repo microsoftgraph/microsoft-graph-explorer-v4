@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Mode } from '../../../types/enums';
 import { IQueryInputProps } from '../../../types/query-runner';
 import { getStyleFor } from '../../utils/badge-color';
 import SubmitButton from '../common/submit-button/SubmitButton';
@@ -46,7 +45,6 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       selectedVersion,
       sampleUrl,
       submitting,
-      mode
     } = this.props;
 
     const {
@@ -67,7 +65,6 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             role='listbox'
             selectedKey={selectedVerb}
             options={httpMethods}
-            disabled={mode === Mode.TryIt}
             styles={verbSelector}
             onChange={(event, method) => handleOnMethodChange(method)}
           />
@@ -109,7 +106,6 @@ export class QueryInput extends Component<IQueryInputProps, any> {
 
 function mapStateToProps(state: any) {
   return {
-    mode: state.graphExplorerMode,
     sampleUrl: state.sampleQuery.sampleUrl,
     selectedVerb: state.sampleQuery.selectedVerb,
     selectedVersion: state.sampleQuery.selectedVersion,
