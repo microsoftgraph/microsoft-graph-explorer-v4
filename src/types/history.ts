@@ -23,6 +23,7 @@ export interface IHistoryProps {
     removeHistoryItem: Function;
     viewHistoryItem: Function;
     setQueryResponseStatus: Function;
+    bulkRemoveHistoryItems: Function;
   };
   theme?: ITheme;
   styles?: object;

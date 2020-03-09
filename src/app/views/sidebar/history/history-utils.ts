@@ -1,26 +1,38 @@
 import localforage from 'localforage';
 import { IHistoryItem } from '../../../../types/history';
+const historyStorage = localforage.createInstance({
+  storeName: 'history',
+  name: 'GE_V4'
+});
 
-const key = 'history';
-
-export async function writeHistoryData(data: IHistoryItem) {
-  const historyItems: IHistoryItem[] = await readHistoryData();
-  const items = [...historyItems, data];
-  localforage.setItem(key, items);
+export async function writeHistoryData(historyItem: IHistoryItem) {
+  historyStorage.setItem(historyItem.createdAt, historyItem);
 }
 
 export async function readHistoryData(): Promise<IHistoryItem[]> {
-  const data: IHistoryItem[] = await localforage.getItem(key);
-  return data || [];
+  let historyData: IHistoryItem[] = [];
+  const keys = await historyStorage.keys();
+  for (const element of keys) {
+    const historyItem: IHistoryItem = await historyStorage.getItem(element);
+    historyData = [...historyData, historyItem];
+  }
+  return historyData;
 }
 
-export async function removeHistoryData(data: IHistoryItem) {
-  const historyItems: IHistoryItem[] = await readHistoryData();
-  const items = historyItems.filter(history => history !== data);
-  localforage.setItem(key, items);
-}
+export const removeHistoryData = async (historyItem: IHistoryItem) => {
+  await historyStorage.removeItem(historyItem.createdAt);
+  return true;
+};
 
-export function clear() { localforage.clear(); }
+export const bulkRemoveHistoryData = async (listOfKeys: string[]) => {
+  historyStorage.iterate((value, key, iterationNumber) => {
+    if (listOfKeys.includes(key)) {
+      historyStorage.removeItem(key);
+    }
+  }).then(() => {
+    return true;
+  });
+};
 
 export function dynamicSort(property: string) {
   const column = property;

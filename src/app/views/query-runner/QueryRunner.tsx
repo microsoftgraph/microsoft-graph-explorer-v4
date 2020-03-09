@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { RUN_QUERY_EVENT } from '../../../telemetry/event-types';
-import { Mode } from '../../../types/enums';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
@@ -44,15 +42,10 @@ export class QueryRunner extends Component<
     }
   };
 
-  private handleOnUrlChange = (newQuery = '') => {
-    this.setState({ url: newQuery });
+  private handleOnUrlChange = (newUrl = '') => {
+    this.setState({ url: newUrl });
 
-    const { queryVersion } = parseSampleUrl(newQuery);
-    if (queryVersion === 'v1.0' || queryVersion === 'beta') {
-      const query = { ...this.props.sampleQuery };
-      query.selectedVersion = queryVersion;
-      this.props.actions!.setSampleQuery(query);
-    }
+    this.changeUrlVersion(newUrl);
   };
 
   private handleOnBlur = () => {
@@ -101,10 +94,21 @@ export class QueryRunner extends Component<
     }
   };
 
-  public render() {
-    const { graphExplorerMode } = this.props;
-    const displayRequestComponent = (graphExplorerMode === Mode.Complete);
+  private changeUrlVersion(newUrl: string) {
+    const query = { ...this.props.sampleQuery };
+    const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);
+    const { queryVersion: oldQueryVersion } = parseSampleUrl(query.sampleUrl);
 
+    if (newQueryVersion !== oldQueryVersion) {
+      if (newQueryVersion === 'v1.0' || newQueryVersion === 'beta') {
+        const sampleQuery = { ...this.props.sampleQuery };
+        sampleQuery.selectedVersion = newQueryVersion;
+        this.props.actions!.setSampleQuery(sampleQuery);
+      }
+    }
+  }
+
+  public render() {
     return (
       <div>
         <div className='row'>
@@ -121,16 +125,14 @@ export class QueryRunner extends Component<
             }
           </div>
         </div>
-        {displayRequestComponent && (
-          <div className='row'>
-            <div className='col-sm-12 col-lg-12'>
-              {
-                // @ts-ignore
-                <Request handleOnEditorChange={this.handleOnEditorChange} />
-              }
-            </div>
+        <div className='row'>
+          <div className='col-sm-12 col-lg-12'>
+            {
+              // @ts-ignore
+              <Request handleOnEditorChange={this.handleOnEditorChange} />
+            }
           </div>
-        )}
+        </div>
       </div>
     );
   }
@@ -147,7 +149,6 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 function mapStateToProps(state: any) {
   return {
-    graphExplorerMode: state.graphExplorerMode,
     headers: state.headersAdded,
     sampleQuery: state.sampleQuery,
   };

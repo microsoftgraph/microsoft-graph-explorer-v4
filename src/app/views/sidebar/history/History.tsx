@@ -1,6 +1,7 @@
 import {
-  ContextualMenuItemType, DetailsList, DetailsRow, getId, getTheme,
-  IColumn, IconButton, MessageBarType, SearchBox, SelectionMode, styled, TooltipHost
+  ContextualMenuItemType, DefaultButton, DetailsList, DetailsRow, Dialog,
+  DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
+  MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -27,7 +28,9 @@ export class History extends Component<IHistoryProps, any> {
       groupedList: {
         items: [],
         categories: [],
-      }
+      },
+      hideDialog: true,
+      category: ''
     };
   }
 
@@ -191,7 +194,7 @@ export class History extends Component<IHistoryProps, any> {
               iconProps: {
                 iconName: 'Delete'
               },
-              onClick: () => this.onDeleteQuery(item)
+              onClick: () => this.deleteQuery(item)
             },
           ];
 
@@ -214,7 +217,7 @@ export class History extends Component<IHistoryProps, any> {
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}
             >
-              <span aria-labelledby={hostId} className={classes.queryContent}>
+              <span aria-describedby={hostId} className={classes.queryContent}>
                 {queryContent.replace(GRAPH_URL, '')}
               </span>
             </TooltipHost>
@@ -225,22 +228,46 @@ export class History extends Component<IHistoryProps, any> {
 
   public renderGroupHeader = (props: any): any => {
     const classes = classNames(this.props);
+    const {
+      intl: { messages },
+    }: any = this.props;
+
+    // tslint:disable
+    const expandText = messages['Expand'];
+    const collapseText = messages['Collapse'];
+    // tslint:enable
 
     return (
-      <div aria-label={props.group!.name} onClick={this.onToggleCollapse(props)}>
-        <div className={classes.groupHeaderRow}>
-          <IconButton
-            className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
-            iconProps={{ iconName: props.group!.isCollapsed ? 'ChevronRightSmall' : 'ChevronDownSmall' }}
-            title={props.group!.isCollapsed ?
-              `Expand ${props.group!.name}` : `Collapse ${props.group!.name}`}
-            ariaLabel='expand collapse group'
-            onClick={() => this.onToggleCollapse(props)}
-          />
-          <div className={classes.groupTitle}>
-            <span>{props.group!.name}</span>
-            <span className={classes.headerCount}>({props.group!.count})</span>
+      <div aria-label={props.group!.name} style={
+        {
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+        <div className={'col-md-10'}>
+          <div className={classes.groupHeaderRow} onClick={this.onToggleCollapse(props)}>
+            <IconButton
+              className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
+              iconProps={{ iconName: props.group!.isCollapsed ? 'ChevronRightSmall' : 'ChevronDownSmall' }}
+              title={props.group!.isCollapsed ?
+                `${expandText} ${props.group!.name}` : `${collapseText} ${props.group!.name}`}
+              ariaLabel='expand collapse group'
+              onClick={() => this.onToggleCollapse(props)}
+            />
+            <div className={classes.groupTitle}>
+              <span>{props.group!.name}</span>
+              <span className={classes.headerCount}>({props.group!.count})</span>
+            </div>
           </div>
+        </div>
+        <div className={'col-md-2'}>
+          <IconButton
+            className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
+            iconProps={{ iconName: 'Delete' }}
+            title={`${messages['Delete requests']} : ${props.group!.name}`}
+            ariaLabel='delete group'
+            onClick={() => this.showDialog(props.group!.name)}
+          />
         </div>
       </div>
     );
@@ -250,6 +277,28 @@ export class History extends Component<IHistoryProps, any> {
     return () => {
       props!.onToggleCollapse!(props!.group!);
     };
+  }
+
+  private showDialog = (category: string): void => {
+    this.setState({ hideDialog: false, category });
+  };
+
+  private closeDialog = (): void => {
+    this.setState({ hideDialog: true, category: '' });
+  };
+
+  private deleteHistoryCategory = (): any => {
+
+    const { category, groupedList: { items } } = this.state;
+    const { actions } = this.props;
+    const itemsToDelete = items.filter((query: IHistoryItem) => query.category === category);
+
+    if (actions) {
+      actions.bulkRemoveHistoryItems(itemsToDelete);
+    }
+
+    this.closeDialog();
+
   }
 
   private renderDetailsHeader() {
@@ -279,7 +328,7 @@ export class History extends Component<IHistoryProps, any> {
   }
 
 
-  private onDeleteQuery = (query: IHistoryItem) => {
+  private deleteQuery = async (query: IHistoryItem) => {
     const { actions } = this.props;
     if (actions) {
       actions.removeHistoryItem(query);
@@ -314,7 +363,10 @@ export class History extends Component<IHistoryProps, any> {
   }
 
   public render() {
-    const { groupedList } = this.state;
+    const { groupedList, hideDialog, category } = this.state;
+    const {
+      intl: { messages },
+    }: any = this.props;
     const classes = classNames(this.props);
     const columns = [
       { key: 'status', name: '', fieldName: 'status', minWidth: 20, maxWidth: 50 },
@@ -323,26 +375,49 @@ export class History extends Component<IHistoryProps, any> {
     ];
 
     return (
-      <div>
-        <SearchBox placeholder='Search' className={classes.searchBox}
-          onChange={(value) => this.searchValueChanged(value)}
-        />
-        <hr />
-        {groupedList.items && <DetailsList
-          className={classes.queryList}
-          onRenderItemColumn={this.renderItemColumn}
-          items={groupedList.items}
-          columns={columns}
-          selectionMode={SelectionMode.none}
-          groups={groupedList.categories}
-          groupProps={{
-            showEmptyGroups: true,
-            onRenderHeader: this.renderGroupHeader,
+      <>
+        <div>
+          <SearchBox placeholder='Search' className={classes.searchBox}
+            onChange={(value) => this.searchValueChanged(value)}
+          />
+          <hr />
+          {groupedList.items.length > 0 && <DetailsList
+            className={classes.queryList}
+            onRenderItemColumn={this.renderItemColumn}
+            items={groupedList.items}
+            columns={columns}
+            selectionMode={SelectionMode.none}
+            groups={groupedList.categories}
+            groupProps={{
+              showEmptyGroups: true,
+              onRenderHeader: this.renderGroupHeader,
+            }}
+            onRenderRow={this.renderRow}
+            onRenderDetailsHeader={this.renderDetailsHeader}
+          />}
+        </div>
+        <Dialog
+          hidden={hideDialog}
+          onDismiss={this.closeDialog}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: `${messages['Delete requests']} : ${category}`,
+            closeButtonAriaLabel: 'Close',
+            subText: `${messages['Are you sure you want to delete these requests?']}`
           }}
-          onRenderRow={this.renderRow}
-          onRenderDetailsHeader={this.renderDetailsHeader}
-        />}
-      </div>
+          modalProps={{
+            titleAriaId: getId(),
+            subtitleAriaId: getId(),
+            isBlocking: false,
+            styles: { main: { maxWidth: 450 } },
+          }}
+        >
+          <DialogFooter>
+            <PrimaryButton onClick={this.deleteHistoryCategory} text={messages.Delete} />
+            <DefaultButton onClick={this.closeDialog} text={messages.Cancel} />
+          </DialogFooter>
+        </Dialog>
+      </>
     );
   }
 }
