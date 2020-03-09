@@ -13,9 +13,9 @@ class Telemetry implements ITelemetry {
 
     this.reactPlugin  = new ReactPlugin();
     this.config = {
-      instrumentationKey: process.env.REACT_APP_INSTRUMENTATION_KEY,
+      instrumentationKey: this.getInstrumentationKey(),
       disableExceptionTracking: true,
-      disableTelemetry: mscc && mscc.hasConsent() ? false : true,
+      disableTelemetry: this.getInstrumentationKey() ? false : true,
       extensions: [this.reactPlugin]
     };
 
@@ -45,6 +45,11 @@ class Telemetry implements ITelemetry {
   private filterFunction(envelope: any) {
     // Identifies the source of telemetry events
     envelope.baseData.name = 'Graph Explorer v4';
+  }
+
+  private getInstrumentationKey() {
+    const instrumentationKey = process.env.REACT_APP_INSTRUMENTATION_KEY;
+    return instrumentationKey || '';
   }
 }
 
