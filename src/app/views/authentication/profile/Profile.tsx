@@ -136,6 +136,9 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     };
 
     const personaStyleToken: any = {
+      primaryText: {
+        paddingBottom: 5,
+      },
       secondaryText:
       {
         paddingBottom: 10,
