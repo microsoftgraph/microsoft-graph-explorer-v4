@@ -272,9 +272,10 @@
   "Expand": "Expand",
   "Delete requests": "Delete requests",
   "To try operations other than GET": "To try operations other than GET or to access your own data",
-  "To try the full features": "To get more Microsoft Graph Explorer features",
+  "To try the full features": "For access to more features that you can use to work with queries",
   "full Graph Explorer": "go to the full experience Graph Explorer",
   "Are you sure you want to delete these requests?": "Are you sure you want to delete these requests?",
   "Delete": "Delete",
-  "Cancel": "Cancel"
+  "Cancel": "Cancel",
+  "running the query": "When you sign in, running the query will affect the data in your tenant."
 }

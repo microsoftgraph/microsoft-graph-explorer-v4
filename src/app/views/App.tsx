@@ -380,7 +380,7 @@ class App extends Component<IAppProps, IAppState> {
                 <div style={{ marginBottom: 8 }}>
                   {loginType === LoginType.Popup && <>
                     <MessageBar
-                      messageBarType={MessageBarType.warning}
+                      messageBarType={MessageBarType.info}
                       isMultiline={true}
                     >
                       <p>
@@ -390,6 +390,9 @@ class App extends Component<IAppProps, IAppState> {
                           href={query} target='_blank'>
                           <FormattedMessage id='full Graph Explorer' />.
                       </a>
+                      </p>
+                      <p>
+                        <FormattedMessage id='running the query' />.
                       </p>
                     </MessageBar>
 
