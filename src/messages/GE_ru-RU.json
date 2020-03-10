@@ -272,6 +272,9 @@
   "Expand": "Развернуть",
   "Delete requests": "Запросы на удаление",
   "To try operations other than GET": "Чтобы попробовать операции, отличные от GET или получить доступ к вашим собственным данным",
-  "To try the full features": "Чтобы получить больше возможностей Microsoft Graph Explorer",
-  "full Graph Explorer": "Переход к полнофункциональному проводнику Microsoft Graph"
+  "To try the full features": "Чтобы получить больше возможностей песочницы Microsoft Graph,",
+  "full Graph Explorer": "перейдите к полнофункциональной песочнице Graph",
+  "Are you sure you want to delete these requests?": "Удалить эти почтовые ящики запросы?",
+  "Delete": "Удалить",
+  "Cancel": "Отменить"
 }

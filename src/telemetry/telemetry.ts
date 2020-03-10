@@ -10,10 +10,11 @@ class Telemetry implements ITelemetry {
 
   constructor() {
     this.reactPlugin  = new ReactPlugin();
+
     this.config = {
-      instrumentationKey: process.env.REACT_APP_INSTRUMENTATION_KEY,
+      instrumentationKey: this.getInstrumentationKey(),
       disableExceptionTracking: true,
-      disableTelemetry: this.areWeInDev() ? false : true,
+      disableTelemetry: this.getInstrumentationKey() ? false : true,
       extensions: [this.reactPlugin]
     };
 
@@ -24,15 +25,11 @@ class Telemetry implements ITelemetry {
 
   public initialize() {
     this.appInsights.loadAppInsights();
-
+    this.appInsights.addTelemetryInitializer(this.filterFunction);
     this.appInsights.trackPageView();
   }
 
   public trackEvent(eventName: string, payload: any) {
-    if (!this.valid(eventName)) {
-      throw new Error('Invalid telemetry event name');
-    }
-
     this.appInsights.trackEvent({ name: eventName }, payload);
   }
 
@@ -44,16 +41,23 @@ class Telemetry implements ITelemetry {
     return withAITracking(this.reactPlugin, ComponentToTrack);
   }
 
-  // A valid event name ends with the word EVENT
-  private valid(eventName: string): boolean {
-    const listOfWords = eventName.split('_');
-    const lastIndex = listOfWords.length - 1;
-    const lastWord = listOfWords[lastIndex];
-    return lastWord === 'EVENT';
+  private filterFunction(envelope: any) {
+    // Identifies the source of telemetry events
+    envelope.baseData.name = 'Graph Explorer v4';
+
+    // Removes access token from uri
+    const uri = envelope.baseData.uri;
+    if (uri) {
+      const startOfFragment = uri.indexOf('#');
+      const sanitisedUri = uri.substring(0, startOfFragment);
+      envelope.baseData.uri = sanitisedUri;
+    }
+
+    return true;
   }
 
-  private areWeInDev(): boolean {
-    return process.env.NODE_ENV === 'development';
+  private getInstrumentationKey() {
+    return process.env.REACT_APP_INSTRUMENTATION_KEY || '';
   }
 }
 
