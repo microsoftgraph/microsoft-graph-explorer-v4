@@ -12,6 +12,7 @@ import { LoginType, Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
+import { signIn } from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
@@ -44,6 +45,7 @@ interface IAppProps {
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
+  authToken: string;
   actions: {
     addRequestHeader: Function;
     clearQueryStatus: Function;
@@ -51,6 +53,7 @@ interface IAppProps {
     setSampleQuery: Function;
     runQuery: Function;
     toggleSidebar: Function;
+    signIn: Function;
   };
 }
 
@@ -99,9 +102,15 @@ class App extends Component<IAppProps, IAppState> {
   public handleSharedQueries() {
     const { actions } = this.props;
     const queryStringParams = this.getQueryStringParams();
-    const query = this.generateQueryObjectFrom(queryStringParams);
+    const queryObject = this.generateQueryObjectFrom(queryStringParams);
 
-    if (query) {
+    if (queryObject) {
+      const query = queryObject.query;
+      const accessToken = queryObject.accessToken;
+
+      if (accessToken) {
+        actions!.signIn(accessToken);
+      }
       // This timeout waits for monaco to initialize it's formatter.
       setTimeout(() => {
         actions!.setSampleQuery(query);
@@ -117,21 +126,28 @@ class App extends Component<IAppProps, IAppState> {
     const version = urlParams.get('version');
     const graphUrl = urlParams.get('GraphUrl');
     const requestBody = urlParams.get('requestBody');
+    const accessToken = urlParams.get('accessToken');
 
-    return { request, method, version, graphUrl, requestBody };
+    return { request, method, version, graphUrl, requestBody, accessToken };
   }
 
   private generateQueryObjectFrom(queryParams: any) {
-    const { request, method, version, graphUrl, requestBody } = queryParams;
+    const { request, method, version, graphUrl, requestBody, accessToken } = queryParams;
+
     if (!request) {
       return null;
     }
 
-    return {
+    const query = {
       sampleUrl: `${graphUrl}/${version}/${request}`,
       selectedVerb: method,
       selectedVersion: version,
-      sampleBody: this.hashDecode(requestBody)
+      sampleBody: this.hashDecode(requestBody),
+    };
+
+    return {
+      query,
+      accessToken
     };
   }
 
@@ -272,9 +288,9 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
+    const { authToken, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
-    const query = createShareLink(sampleQuery);
+    const query = createShareLink(sampleQuery, authToken);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
@@ -479,6 +495,7 @@ const mapStateToProps = (state: any) => {
     termsOfUse: state.termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery: state.sampleQuery,
+    authToken: state.authToken
   };
 };
 
@@ -491,6 +508,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       setSampleQuery,
       addRequestHeader,
       toggleSidebar,
+      signIn,
       changeTheme: (newTheme: string) => {
         return (disp: Function) => disp(changeThemeSuccess(newTheme));
       }

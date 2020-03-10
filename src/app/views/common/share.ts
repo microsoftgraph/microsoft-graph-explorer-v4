@@ -1,6 +1,6 @@
 import { IQuery } from '../../../types/query-runner';
 
-export const createShareLink = (sampleQuery: IQuery): string => {
+export const createShareLink = (sampleQuery: IQuery, accessToken?: string): string => {
   const { sampleUrl, sampleBody, selectedVerb, selectedVersion } = sampleQuery;
   const url = new URL(sampleUrl);
   const graphUrl = url.origin;
@@ -11,12 +11,18 @@ export const createShareLink = (sampleQuery: IQuery): string => {
    */
   const graphUrlRequest = url.pathname.substr(6) + url.search;
   const requestBody = hashEncode(JSON.stringify(sampleBody));
-  return appUrl
+
+  let shareLink = appUrl
     + '?request=' + graphUrlRequest
     + '&method=' + selectedVerb
     + '&version=' + selectedVersion
     + '&GraphUrl=' + graphUrl
     + '&requestBody=' + requestBody;
+
+  if (accessToken) {
+    shareLink = shareLink + '&accessToken=' + accessToken;
+  }
+  return shareLink;
 };
 
 const hashEncode = (requestBody: string): string => {
