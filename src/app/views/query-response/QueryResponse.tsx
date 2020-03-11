@@ -119,6 +119,18 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
             dragOptions={false}
             styles={{ main: { width: '80%', height: '90%' }, }}
           >
+
+            <IconButton
+              styles={{
+                root: {
+                  float: 'right',
+                  zIndex: 1
+                },
+              }}
+              iconProps={{ iconName: 'Cancel' }}
+              ariaLabel='Close popup modal'
+              onClick={this.toggleModal}
+            />
             <Pivot className='pivot-response'>
               {pivotItems}
             </Pivot>
