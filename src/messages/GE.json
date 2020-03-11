@@ -270,7 +270,7 @@
   "Auth": "Auth",
   "Collapse": "Collapse",
   "Expand": "Expand",
-  "Delete requests": "Delete requests",
+  "Delete requests": "Delete all requests in the group",
   "To try operations other than GET": "To try operations other than GET or to access your own data",
   "To try the full features": "For access to more features that you can use to work with queries",
   "full Graph Explorer": "go to the full experience Graph Explorer",
