@@ -273,5 +273,8 @@
   "Delete requests": "Löschen von Anforderungen",
   "To try operations other than GET": "So versuchen Sie andere Vorgänge als ABRUFEN Ihrer eigenen Dateien oder Zugreifen auf Ihre eigenen Daten",
   "To try the full features": "So erhalten Sie weitere Microsoft Graph Explorer-Features",
-  "full Graph Explorer": "Wechseln zur vollständigen Benutzeroberfläche des Graph-Explorers"
+  "full Graph Explorer": "Zur vollständigen Benutzeroberfläche des Graph-Explorers wechseln",
+  "Are you sure you want to delete these requests?": "Möchten Sie diese Anforderungen wirklich löschen?",
+  "Delete": "Löschen",
+  "Cancel": "Abbrechen"
 }
