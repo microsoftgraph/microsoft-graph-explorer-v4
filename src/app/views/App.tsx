@@ -45,7 +45,6 @@ interface IAppProps {
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
-  authToken: string;
   actions: {
     addRequestHeader: Function;
     clearQueryStatus: Function;
@@ -288,9 +287,10 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { authToken, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
+    const { profile, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
-    const query = createShareLink(sampleQuery, authToken);
+    const emailAddress = profile ? profile.userPrincipalName : null;
+    const query = createShareLink(sampleQuery, emailAddress);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
@@ -495,7 +495,6 @@ const mapStateToProps = (state: any) => {
     termsOfUse: state.termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery: state.sampleQuery,
-    authToken: state.authToken
   };
 };
 

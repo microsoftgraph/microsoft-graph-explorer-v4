@@ -1,11 +1,17 @@
 import { IQuery } from '../../../types/query-runner';
 
-export const createShareLink = (sampleQuery: IQuery, accessToken?: string): string => {
+/**
+ * Creates a shareable link
+ * @param sampleQuery  The query you want to share ´text´.
+ * @param emailAddress Optional. Informs the browser that someone is logged in.
+ */
+export const createShareLink = (sampleQuery: IQuery, emailAddress?: string): string => {
   const { sampleUrl, sampleBody, selectedVerb, selectedVersion } = sampleQuery;
   const url = new URL(sampleUrl);
   const graphUrl = url.origin;
   const language = navigator.language || 'en-US';
-  const appUrl = 'https://developer.microsoft.com/' + language + '/graph/graph-explorer/preview';
+  const appUrl = 'http://localhost:3000';
+  // 'https://developer.microsoft.com/' + language + '/graph/graph-explorer/preview';
   /**
    * To ensure backward compatibility the version is removed from the pathname.
    * V3 expects the request query param to not have the version number.
@@ -20,8 +26,8 @@ export const createShareLink = (sampleQuery: IQuery, accessToken?: string): stri
     + '&GraphUrl=' + graphUrl
     + '&requestBody=' + requestBody;
 
-  if (accessToken) {
-    shareLink = shareLink + '&accessToken=' + accessToken;
+  if (emailAddress) {
+    shareLink = shareLink + '&emailAddress=' + emailAddress;
   }
   return shareLink;
 };
