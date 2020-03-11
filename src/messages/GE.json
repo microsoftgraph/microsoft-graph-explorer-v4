@@ -277,5 +277,6 @@
   "Are you sure you want to delete these requests?": "Are you sure you want to delete these requests?",
   "Delete": "Delete",
   "Cancel": "Cancel",
-  "running the query": "When you sign in, running the query will affect the data in your tenant."
+  "running the query": "When you sign in, running the query will affect the data in your tenant.",
+  "Expand response": "Expand response"
 }
