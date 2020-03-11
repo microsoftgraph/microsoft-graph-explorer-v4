@@ -1,10 +1,10 @@
 import {
   ContextualMenuItemType, DefaultButton, DetailsList, DetailsRow, Dialog,
   DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
-  MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
+  Label, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -373,6 +373,14 @@ export class History extends Component<IHistoryProps, any> {
       { key: 'url', name: '', fieldName: 'url', minWidth: 100, maxWidth: 200 },
       { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20, },
     ];
+
+    if (groupedList.items.length === 0) {
+      return (
+        <Label className={classes.spinner}>
+          <FormattedMessage id='We did not find any history items' />
+        </Label>
+      );
+    }
 
     return (
       <>
