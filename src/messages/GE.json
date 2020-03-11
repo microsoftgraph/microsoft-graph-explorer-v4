@@ -243,7 +243,7 @@
   "Terms of use": "View Microsoft APIs Terms of Use",
   "Microsoft Privacy Statement": "View Microsoft Privacy Statement",
   "Add": "Add",
-  "Snippets": "Snippets",
+  "Snippets": "Code snippets",
   "Adaptive Cards": "Adaptive Cards",
   "Office Dev Program": "Office Dev Program",
   "Fetching Adaptive Card": "Fetching Adaptive Card",
@@ -277,5 +277,6 @@
   "Are you sure you want to delete these requests?": "Are you sure you want to delete these requests?",
   "Delete": "Delete",
   "Cancel": "Cancel",
-  "running the query": "When you sign in, running the query will affect the data in your tenant."
+  "running the query": "When you sign in, running the query will affect the data in your tenant.",
+  "Access Token": "Access Token"
 }
