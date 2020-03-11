@@ -42,6 +42,10 @@ function authCallback(error: any, response: any) {
   return;
 }
 
+export function getAccount() {
+  return msalApplication.getAccount();
+}
+
 export function logOut() {
   msalApplication.logout();
 }

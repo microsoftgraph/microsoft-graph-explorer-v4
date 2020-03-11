@@ -4,5 +4,5 @@ export interface ISharedQueryParams {
   version: string | null;
   requestBody?: string | null;
   graphUrl: string | null;
-  accessToken?: string | null;
+  emailAddress?: string | null;
 }

@@ -276,5 +276,9 @@
   "full Graph Explorer": "go to the full experience Graph Explorer",
   "Are you sure you want to delete these requests?": "Are you sure you want to delete these requests?",
   "Delete": "Delete",
-  "Cancel": "Cancel"
+  "Cancel": "Cancel",
+  "You are logged in with a different account": "You are logged in with a different account",
+  "Would you like to change or continue?": "Would you like to change or continue?",
+  "Change": "Change",
+  "Continue": "Continue"
 }
