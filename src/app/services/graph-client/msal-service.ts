@@ -15,23 +15,18 @@ export function getSessionId() {
   }
 }
 
-export async function logIn(sessionId=''): Promise<any> {
+export async function logIn(sessionId = ''): Promise<any> {
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
   };
 
   if (sessionId !== '') {
     loginRequest.sid = sessionId;
-    console.log('Acquiring token silently')
-    console.log(loginRequest)
 
     try {
       const authResponse = await msalApplication.acquireTokenSilent(loginRequest);
-      console.log('===================')
-      console.log(authResponse)
-      console.log('=========================')
-      return authResponse
-    } catch(error) {
+      return authResponse;
+    } catch (error) {
       if (requiresInteraction(error)) {
         return acquireTokenWIthInteraction(loginRequest);
       }

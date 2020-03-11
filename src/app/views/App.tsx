@@ -83,7 +83,6 @@ class App extends Component<IAppProps, IAppState> {
     if (sessionId) {
       const authResp = await logIn(sessionId);
       if (authResp) {
-        console.log(authResp);
           // @ts-ignore
           this.props.actions!.signIn(authResp.accessToken);
           // @ts-ignore
@@ -91,7 +90,6 @@ class App extends Component<IAppProps, IAppState> {
       }
     }
 
-    console.log(sessionId);
     const whiteListedDomains = [
       'https://docs.microsoft.com',
       'https://review.docs.microsoft.com',
