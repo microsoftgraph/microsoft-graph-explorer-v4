@@ -12,6 +12,7 @@ import { LoginType, Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
+import * as authActionCreators from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
@@ -19,7 +20,7 @@ import { addRequestHeader } from '../services/actions/request-headers-action-cre
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { getLoginType } from '../services/graph-client/msal-service';
+import { getLoginType, getSessionId, logIn } from '../services/graph-client/msal-service';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { appStyles } from './App.styles';
@@ -32,6 +33,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
+
 
 
 interface IAppProps {
@@ -71,10 +73,25 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
-  public componentDidMount = () => {
+  public componentDidMount = async () => {
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('sid');
+
+    if (sessionId) {
+      const authResp = await logIn(sessionId);
+      if (authResp) {
+        console.log(authResp);
+          // @ts-ignore
+          this.props.actions!.signIn(authResp.accessToken);
+          // @ts-ignore
+          this.props.actions!.storeScopes(authResp.scopes);
+      }
+    }
+
+    console.log(sessionId);
     const whiteListedDomains = [
       'https://docs.microsoft.com',
       'https://review.docs.microsoft.com',
@@ -117,6 +134,7 @@ class App extends Component<IAppProps, IAppState> {
     const version = urlParams.get('version');
     const graphUrl = urlParams.get('GraphUrl');
     const requestBody = urlParams.get('requestBody');
+    const sid = urlParams.get('sid');
 
     return { request, method, version, graphUrl, requestBody };
   }
@@ -131,7 +149,7 @@ class App extends Component<IAppProps, IAppState> {
       sampleUrl: `${graphUrl}/${version}/${request}`,
       selectedVerb: method,
       selectedVersion: version,
-      sampleBody: this.hashDecode(requestBody)
+      sampleBody: this.hashDecode(requestBody),
     };
   }
 
@@ -494,6 +512,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       setSampleQuery,
       addRequestHeader,
       toggleSidebar,
+      ...authActionCreators,
       changeTheme: (newTheme: string) => {
         return (disp: Function) => disp(changeThemeSuccess(newTheme));
       }

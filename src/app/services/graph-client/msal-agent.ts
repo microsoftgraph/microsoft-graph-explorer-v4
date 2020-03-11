@@ -22,6 +22,7 @@ const configuration: Configuration = {
     clientId
   },
   cache: {
+    cacheLocation: 'localStorage',
     storeAuthStateInCookie: true,
   },
 };

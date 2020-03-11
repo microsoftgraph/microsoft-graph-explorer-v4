@@ -7,10 +7,36 @@ const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
 const loginType = getLoginType();
 msalApplication.handleRedirectCallback(authCallback);
 
-export async function logIn(): Promise<any> {
+export function getSessionId() {
+  const account = msalApplication.getAccount();
+
+  if (account) {
+    return account.idTokenClaims.sid;
+  }
+}
+
+export async function logIn(sessionId=''): Promise<any> {
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
   };
+
+  if (sessionId !== '') {
+    loginRequest.sid = sessionId;
+    console.log('Acquiring token silently')
+    console.log(loginRequest)
+
+    try {
+      const authResponse = await msalApplication.acquireTokenSilent(loginRequest);
+      console.log('===================')
+      console.log(authResponse)
+      console.log('=========================')
+      return authResponse
+    } catch(error) {
+      if (requiresInteraction(error)) {
+        return acquireTokenWIthInteraction(loginRequest);
+      }
+    }
+  }
 
   if (loginType === LoginType.Popup) {
     try {

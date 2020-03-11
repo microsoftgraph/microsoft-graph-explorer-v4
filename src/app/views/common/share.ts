@@ -1,4 +1,5 @@
 import { IQuery } from '../../../types/query-runner';
+import { getSessionId } from '../../services/graph-client/msal-service';
 
 export const createShareLink = (sampleQuery: IQuery): string => {
   const { sampleUrl, sampleBody, selectedVerb, selectedVersion } = sampleQuery;
@@ -16,7 +17,8 @@ export const createShareLink = (sampleQuery: IQuery): string => {
     + '&method=' + selectedVerb
     + '&version=' + selectedVersion
     + '&GraphUrl=' + graphUrl
-    + '&requestBody=' + requestBody;
+    + '&requestBody=' + requestBody
+    + '&sid=' + getSessionId();
 };
 
 const hashEncode = (requestBody: string): string => {
