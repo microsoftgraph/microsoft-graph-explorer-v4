@@ -272,9 +272,10 @@
   "Expand": "Expand",
   "Delete requests": "删除请求",
   "To try operations other than GET": "尝试 GET 以外的操作或访问自己的数据",
-  "To try the full features": "获取更多 Microsoft Graph 资源管理器功能",
+  "To try the full features": "用于访问可用于处理查询的更多功能",
   "full Graph Explorer": "转到完整体验 Graph 资源管理器",
   "Are you sure you want to delete these requests?": "是否确实要删除这些请求？",
   "Delete": "删除",
-  "Cancel": "取消"
+  "Cancel": "取消",
+  "running the query": "登录时，运行查询将影响租户中的数据。"
 }

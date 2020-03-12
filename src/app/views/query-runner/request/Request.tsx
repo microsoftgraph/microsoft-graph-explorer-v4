@@ -40,7 +40,7 @@ export class Request extends Component<IRequestComponent, any> {
       </PivotItem>,
       <PivotItem
         key='permissions'
-        headerText={messages.Permissions}>
+        headerText={messages['modify permissions']}>
         <Permission />
       </PivotItem>
     ];
@@ -49,7 +49,7 @@ export class Request extends Component<IRequestComponent, any> {
       pivotItems.push(
         <PivotItem
           key='auth'
-          headerText={messages.Auth}>
+          headerText={messages['Access Token']}>
           <Auth />
         </PivotItem>
       );
