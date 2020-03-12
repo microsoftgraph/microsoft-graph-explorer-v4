@@ -5,7 +5,8 @@ export const createShareLink = (sampleQuery: IQuery): string => {
   const { sampleUrl, sampleBody, selectedVerb, selectedVersion } = sampleQuery;
   const url = new URL(sampleUrl);
   const graphUrl = url.origin;
-  const appUrl = 'https://developer.microsoft.com/graph/graph-explorer/preview';
+  const language = navigator.language || 'en-US';
+  const appUrl = 'https://developer.microsoft.com/' + language + '/graph/graph-explorer/preview';
   /**
    * To ensure backward compatibility the version is removed from the pathname.
    * V3 expects the request query param to not have the version number.
