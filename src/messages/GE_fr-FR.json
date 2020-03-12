@@ -273,5 +273,8 @@
   "Delete requests": "Supprimer les requêtes",
   "To try operations other than GET": "Pour essayer d’autres opérations que OBTENIR ou pour accéder à vos données",
   "To try the full features": "Pour obtenir d’autres fonctionnalités de l’Explorateur Microsoft Graph",
-  "full Graph Explorer": "accédez à l'expérience complète Explorateur de graphiques "
+  "full Graph Explorer": "accédez à l'expérience complète Explorateur de graphiques ",
+  "Are you sure you want to delete these requests?": "Êtes-vous sûr de vouloir supprimer ces demandes ?",
+  "Delete": "Supprimer",
+  "Cancel": "Annuler"
 }

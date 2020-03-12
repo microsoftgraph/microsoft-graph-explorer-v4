@@ -1,6 +1,7 @@
 import {
-  IconButton, IStackTokens, ITheme,
-  Label, MessageBar, MessageBarType, Stack, styled
+  DefaultButton, Dialog, DialogFooter,
+  DialogType, getId, IconButton, IStackTokens, ITheme, Label, MessageBar,
+  MessageBarType, PrimaryButton, Stack, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, InjectedIntl, injectIntl } from 'react-intl';
@@ -12,6 +13,7 @@ import { LoginType, Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
+import * as authActionCreators from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
@@ -19,7 +21,7 @@ import { addRequestHeader } from '../services/actions/request-headers-action-cre
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { getLoginType } from '../services/graph-client/msal-service';
+import { getLoginType, getSessionId, logIn } from '../services/graph-client/msal-service';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { appStyles } from './App.styles';
@@ -34,6 +36,7 @@ import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
 
 
+
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -44,6 +47,7 @@ interface IAppProps {
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
+  authenticated: boolean;
   actions: {
     addRequestHeader: Function;
     clearQueryStatus: Function;
@@ -51,12 +55,15 @@ interface IAppProps {
     setSampleQuery: Function;
     runQuery: Function;
     toggleSidebar: Function;
+    signIn: Function;
+    storeScopes: Function;
   };
 }
 
 interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
+  hideDialog: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -68,12 +75,26 @@ class App extends Component<IAppProps, IAppState> {
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false,
+      hideDialog: true,
     };
   }
 
-  public componentDidMount = () => {
+  public componentDidMount = async () => {
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('sid');
+
+    if (sessionId) {
+      const authResp = await logIn(sessionId);
+      if (authResp) {
+        // @ts-ignore
+        this.props.actions!.signIn(authResp.accessToken);
+        // @ts-ignore
+        this.props.actions!.storeScopes(authResp.scopes);
+      }
+    }
 
     const whiteListedDomains = [
       'https://docs.microsoft.com',
@@ -123,6 +144,7 @@ class App extends Component<IAppProps, IAppState> {
 
   private generateQueryObjectFrom(queryParams: any) {
     const { request, method, version, graphUrl, requestBody } = queryParams;
+
     if (!request) {
       return null;
     }
@@ -131,7 +153,7 @@ class App extends Component<IAppProps, IAppState> {
       sampleUrl: `${graphUrl}/${version}/${request}`,
       selectedVerb: method,
       selectedVersion: version,
-      sampleBody: this.hashDecode(requestBody)
+      sampleBody: this.hashDecode(requestBody),
     };
   }
 
@@ -225,6 +247,25 @@ class App extends Component<IAppProps, IAppState> {
     });
   };
 
+  public promptNewLogin = async () => {
+    this.closeDialog();
+    localStorage.clear();
+    const { mscc } = (window as any);
+
+    if (mscc) {
+      mscc.setConsent();
+    }
+
+    setTimeout(async () => {
+      const authResponse = await logIn();
+      if (authResponse) {
+        this.props.actions!.signIn(authResponse.accessToken);
+        this.props.actions!.storeScopes(authResponse.scopes);
+      }
+    }, 700);
+
+  }
+
   public toggleSidebar = (): void => {
     const { sidebarProperties } = this.props;
     const properties = { ...sidebarProperties };
@@ -270,11 +311,19 @@ class App extends Component<IAppProps, IAppState> {
     </div>;
   }
 
+  private showDialog = (): void => {
+    this.setState({ hideDialog: false });
+  };
+
+  private closeDialog = (): void => {
+    this.setState({ hideDialog: true });
+  };
+
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
+    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
-    const query = createShareLink(sampleQuery);
+    const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
@@ -482,6 +531,7 @@ const mapStateToProps = (state: any) => {
     termsOfUse: state.termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery: state.sampleQuery,
+    authenticated: !!state.authToken
   };
 };
 
@@ -494,6 +544,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       setSampleQuery,
       addRequestHeader,
       toggleSidebar,
+      ...authActionCreators,
       changeTheme: (newTheme: string) => {
         return (disp: Function) => disp(changeThemeSuccess(newTheme));
       }
