@@ -150,7 +150,7 @@ export class History extends Component<IHistoryProps, any> {
     const actionsText = messages['actions'];
     const runQueryText = messages['Run Query'];
     const viewText = messages['view'];
-    const removeText = messages['remove'];
+    const removeText = messages['Delete'];
     // tslint:enable
 
     if (column) {
