@@ -52,7 +52,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     const filteredSamples = queries.filter((sample: any) => {
       const name = sample.humanName.toLowerCase();
-      return name.toLowerCase().includes(keyword);
+      const category = sample.category.toLowerCase();
+      return name.includes(keyword) || category.includes(keyword);
     });
 
     this.generateSamples(filteredSamples);
