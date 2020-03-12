@@ -1,4 +1,8 @@
-import { DefaultButton, FontSizes, IconButton, Modal, Pivot, PrimaryButton } from 'office-ui-fabric-react';
+import {
+  DefaultButton, FontSizes,
+  getId, IconButton, Modal, Pivot,
+  PrimaryButton, TooltipHost
+} from 'office-ui-fabric-react';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -67,12 +71,41 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
       <div>
         <div className='query-response'>
           {mode === Mode.Complete && <>
-            <IconButton onClick={this.handleShareQuery} className='share-query-btn' iconProps={{
-              iconName: 'Share'
-            }} />
-            <IconButton onClick={this.toggleModal} className='share-query-btn' iconProps={{
-              iconName: 'MiniExpandMirrored'
-            }} /></>}
+            <div style={{
+              float: 'right',
+              padding: '0px',
+              zIndex: 1,
+            }}>
+
+              <TooltipHost
+                content={`${messages['Share Query Message']}`}
+                id={getId()}
+                calloutProps={{ gapSpace: 0 }}
+                styles={{ root: { display: 'inline-block' } }}
+              >
+                <IconButton onClick={this.handleShareQuery} className='share-query-btn' iconProps={{
+                  iconName: 'Share'
+                }} />
+              </TooltipHost>
+            </div>
+
+            <div style={{
+              float: 'right',
+              padding: '0px',
+              zIndex: 1,
+            }}>
+              <TooltipHost
+                content={`${messages['Expand response']}`}
+                id={getId()}
+                calloutProps={{ gapSpace: 0 }}
+                styles={{ root: { display: 'inline-block' } }}
+              >
+                <IconButton onClick={this.toggleModal} className='share-query-btn' iconProps={{
+                  iconName: 'MiniExpandMirrored'
+                }} />
+              </TooltipHost>
+            </div>
+          </>}
           <Pivot className='pivot-response'>
             {pivotItems}
           </Pivot>
@@ -86,6 +119,18 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
             dragOptions={false}
             styles={{ main: { width: '80%', height: '90%' }, }}
           >
+
+            <IconButton
+              styles={{
+                root: {
+                  float: 'right',
+                  zIndex: 1
+                },
+              }}
+              iconProps={{ iconName: 'Cancel' }}
+              ariaLabel='Close popup modal'
+              onClick={this.toggleModal}
+            />
             <Pivot className='pivot-response'>
               {pivotItems}
             </Pivot>
@@ -116,7 +161,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
             <DefaultButton text={messages.Close} onClick={this.toggleShareQueryDialogState} />
           </DialogFooter>
         </Dialog>
-      </div>
+      </div >
     );
   }
 }
