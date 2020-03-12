@@ -27,10 +27,9 @@ export async function logIn(sessionId = ''): Promise<any> {
       const authResponse = await msalApplication.acquireTokenSilent(loginRequest);
       return authResponse;
     } catch (error) {
-      console.log(error)
-        delete loginRequest.sid
-        const authResp = await logIn();
-        return authResp;
+      delete loginRequest.sid;
+      const authResp = await logIn();
+      return authResp;
     }
   }
 

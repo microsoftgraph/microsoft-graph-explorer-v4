@@ -83,10 +83,10 @@ class App extends Component<IAppProps, IAppState> {
     if (sessionId) {
       const authResp = await logIn(sessionId);
       if (authResp) {
-          // @ts-ignore
-          this.props.actions!.signIn(authResp.accessToken);
-          // @ts-ignore
-          this.props.actions!.storeScopes(authResp.scopes);
+        // @ts-ignore
+        this.props.actions!.signIn(authResp.accessToken);
+        // @ts-ignore
+        this.props.actions!.storeScopes(authResp.scopes);
       }
     }
 
@@ -132,7 +132,6 @@ class App extends Component<IAppProps, IAppState> {
     const version = urlParams.get('version');
     const graphUrl = urlParams.get('GraphUrl');
     const requestBody = urlParams.get('requestBody');
-    const sid = urlParams.get('sid');
 
     return { request, method, version, graphUrl, requestBody };
   }
