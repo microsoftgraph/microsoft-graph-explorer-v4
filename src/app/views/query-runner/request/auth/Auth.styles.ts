@@ -18,8 +18,7 @@ export const authStyles = (theme: ITheme) => {
       fontFamily: 'monospace',
       fontSize: FontSizes.xSmall,
       width: '100%',
-      height: 63,
-      overflowY: 'scroll',
+      height: 150,
       border: 'none',
       resize: 'none'
     },
