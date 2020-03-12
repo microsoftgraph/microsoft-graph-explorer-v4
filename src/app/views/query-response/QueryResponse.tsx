@@ -26,7 +26,9 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
   }
 
   public shouldComponentUpdate(nextProps: IQueryResponseProps, nextState: IQueryResponseState) {
-    return nextProps.graphResponse !== this.props.graphResponse || nextState !== this.state;
+    return nextProps.graphResponse !== this.props.graphResponse
+      || nextState !== this.state
+      || nextProps.theme !== this.props.theme;
   }
 
   public handleCopy = () => {
@@ -169,7 +171,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
 function mapStateToProps(state: any) {
   return {
     graphResponse: state.graphResponse,
-    appTheme: state.theme,
+    theme: state.theme,
     mode: state.graphExplorerMode,
     scopes: state.scopes.data,
     sampleQuery: state.sampleQuery
