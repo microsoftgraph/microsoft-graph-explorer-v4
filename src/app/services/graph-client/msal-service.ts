@@ -7,10 +7,31 @@ const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
 const loginType = getLoginType();
 msalApplication.handleRedirectCallback(authCallback);
 
-export async function logIn(): Promise<any> {
+export function getSessionId() {
+  const account = msalApplication.getAccount();
+
+  if (account) {
+    return account.idTokenClaims.sid;
+  }
+}
+
+export async function logIn(sessionId = ''): Promise<any> {
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
   };
+
+  if (sessionId !== '') {
+    loginRequest.sid = sessionId;
+
+    try {
+      const authResponse = await msalApplication.acquireTokenSilent(loginRequest);
+      return authResponse;
+    } catch (error) {
+      delete loginRequest.sid;
+      const authResp = await logIn();
+      return authResp;
+    }
+  }
 
   if (loginType === LoginType.Popup) {
     try {

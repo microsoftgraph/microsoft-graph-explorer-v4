@@ -13,7 +13,7 @@ import { LoginType, Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
-import { signIn, storeScopes } from '../services/actions/auth-action-creators';
+import * as authActionCreators from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
@@ -21,7 +21,7 @@ import { addRequestHeader } from '../services/actions/request-headers-action-cre
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { getAccount, getLoginType, logIn, logOut } from '../services/graph-client/msal-service';
+import { getLoginType, getSessionId, logIn } from '../services/graph-client/msal-service';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { appStyles } from './App.styles';
@@ -36,6 +36,7 @@ import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
 
 
+
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -46,6 +47,7 @@ interface IAppProps {
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
+  authenticated: boolean;
   actions: {
     addRequestHeader: Function;
     clearQueryStatus: Function;
@@ -77,9 +79,22 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
-  public componentDidMount = () => {
+  public componentDidMount = async () => {
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('sid');
+
+    if (sessionId) {
+      const authResp = await logIn(sessionId);
+      if (authResp) {
+        // @ts-ignore
+        this.props.actions!.signIn(authResp.accessToken);
+        // @ts-ignore
+        this.props.actions!.storeScopes(authResp.scopes);
+      }
+    }
 
     const whiteListedDomains = [
       'https://docs.microsoft.com',
@@ -105,26 +120,13 @@ class App extends Component<IAppProps, IAppState> {
   public handleSharedQueries() {
     const { actions } = this.props;
     const queryStringParams = this.getQueryStringParams();
-    const queryObject = this.generateQueryObjectFrom(queryStringParams);
+    const query = this.generateQueryObjectFrom(queryStringParams);
 
-    if (queryObject) {
-      const query = queryObject.query;
-      const emailAddress = queryObject.emailAddress;
-
+    if (query) {
       // This timeout waits for monaco to initialize it's formatter.
       setTimeout(() => {
         actions!.setSampleQuery(query);
       }, 700);
-
-      // user logged in on try-it
-      if (emailAddress) {
-        const currentLoggedInAccount = getAccount();
-        if (currentLoggedInAccount && currentLoggedInAccount.userName !== emailAddress) {
-          this.showDialog();
-        } else if (!currentLoggedInAccount) {
-          this.promptNewLogin();
-        }
-      }
     }
   }
 
@@ -136,28 +138,22 @@ class App extends Component<IAppProps, IAppState> {
     const version = urlParams.get('version');
     const graphUrl = urlParams.get('GraphUrl');
     const requestBody = urlParams.get('requestBody');
-    const emailAddress = urlParams.get('emailAddress');
 
-    return { request, method, version, graphUrl, requestBody, emailAddress };
+    return { request, method, version, graphUrl, requestBody };
   }
 
   private generateQueryObjectFrom(queryParams: any) {
-    const { request, method, version, graphUrl, requestBody, emailAddress } = queryParams;
+    const { request, method, version, graphUrl, requestBody } = queryParams;
 
     if (!request) {
       return null;
     }
 
-    const query = {
+    return {
       sampleUrl: `${graphUrl}/${version}/${request}`,
       selectedVerb: method,
       selectedVersion: version,
       sampleBody: this.hashDecode(requestBody),
-    };
-
-    return {
-      query,
-      emailAddress
     };
   }
 
@@ -325,11 +321,9 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { profile, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
+    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
-    const { hideDialog } = this.state;
-    const emailAddress = profile ? profile.userPrincipalName : null;
-    const query = createShareLink(sampleQuery, emailAddress);
+    const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
@@ -436,7 +430,7 @@ class App extends Component<IAppProps, IAppState> {
                 <div style={{ marginBottom: 8 }}>
                   {loginType === LoginType.Popup && <>
                     <MessageBar
-                      messageBarType={MessageBarType.warning}
+                      messageBarType={MessageBarType.info}
                       isMultiline={true}
                     >
                       <p>
@@ -446,6 +440,9 @@ class App extends Component<IAppProps, IAppState> {
                           href={query} target='_blank'>
                           <FormattedMessage id='full Graph Explorer' />.
                       </a>
+                      </p>
+                      <p>
+                        <FormattedMessage id='running the query' />.
                       </p>
                     </MessageBar>
 
@@ -514,27 +511,6 @@ class App extends Component<IAppProps, IAppState> {
               </>}
             </div>
           </div>
-          <Dialog
-            hidden={hideDialog}
-            onDismiss={this.closeDialog}
-            dialogContentProps={{
-              type: DialogType.normal,
-              title: `${messages['You are logged in with a different account']}`,
-              closeButtonAriaLabel: 'Close',
-              subText: `${messages['Would you like to change or continue?']}`
-            }}
-            modalProps={{
-              titleAriaId: getId(),
-              subtitleAriaId: getId(),
-              isBlocking: false,
-              styles: { main: { maxWidth: 450 } },
-            }}
-          >
-            <DialogFooter>
-              <PrimaryButton onClick={this.promptNewLogin} text={messages.Change} />
-              <DefaultButton onClick={this.closeDialog} text={messages.Continue} />
-            </DialogFooter>
-          </Dialog>
         </main>
       </ThemeContext.Provider>
     );
@@ -555,6 +531,7 @@ const mapStateToProps = (state: any) => {
     termsOfUse: state.termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery: state.sampleQuery,
+    authenticated: !!state.authToken
   };
 };
 
@@ -567,8 +544,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       setSampleQuery,
       addRequestHeader,
       toggleSidebar,
-      signIn,
-      storeScopes,
+      ...authActionCreators,
       changeTheme: (newTheme: string) => {
         return (disp: Function) => disp(changeThemeSuccess(newTheme));
       }

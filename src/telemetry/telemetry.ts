@@ -44,6 +44,16 @@ class Telemetry implements ITelemetry {
   private filterFunction(envelope: any) {
     // Identifies the source of telemetry events
     envelope.baseData.name = 'Graph Explorer v4';
+
+    // Removes access token from uri
+    const uri = envelope.baseData.uri;
+    if (uri) {
+      const startOfFragment = uri.indexOf('#');
+      const sanitisedUri = uri.substring(0, startOfFragment);
+      envelope.baseData.uri = sanitisedUri;
+    }
+
+    return true;
   }
 
   private getInstrumentationKey() {

@@ -271,7 +271,11 @@
   "Collapse": "Collapse",
   "Expand": "Развернуть",
   "Delete requests": "Запросы на удаление",
-  "To try operations other than GET": "Чтобы попробовать операции, отличные от GET или получить доступ к вашим собственным данным",
-  "To try the full features": "Чтобы получить больше возможностей Microsoft Graph Explorer",
-  "full Graph Explorer": "Переход к полнофункциональному проводнику Microsoft Graph"
+  "To try operations other than GET": "Чтобы попробовать операции, отличные от GET, или получить доступ к вашим собственным данным,",
+  "To try the full features": "Для доступа к дополнительным функциям, которые можно использовать для работы с запросами,",
+  "full Graph Explorer": "перейдите на полнофункциональную версию песочницы Graph",
+  "Are you sure you want to delete these requests?": "Удалить эти запросы?",
+  "Delete": "Удалить",
+  "Cancel": "Отмена",
+  "running the query": "При входе в систему выполнение этого запроса повлияет на данные в клиенте."
 }
