@@ -27,9 +27,7 @@ export async function logIn(sessionId = ''): Promise<any> {
       const authResponse = await msalApplication.acquireTokenSilent(loginRequest);
       return authResponse;
     } catch (error) {
-      if (requiresInteraction(error)) {
         return acquireTokenWIthInteraction(loginRequest);
-      }
     }
   }
 
