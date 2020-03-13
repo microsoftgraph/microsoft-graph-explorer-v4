@@ -272,9 +272,10 @@
   "Expand": "Expand",
   "Delete requests": "Supprimer les requêtes",
   "To try operations other than GET": "Pour essayer d’autres opérations que OBTENIR ou pour accéder à vos données",
-  "To try the full features": "Pour obtenir d’autres fonctionnalités de l’Explorateur Microsoft Graph",
-  "full Graph Explorer": "accédez à l'expérience complète Explorateur de graphiques ",
+  "To try the full features": "Pour accéder à davantage de fonctionnalités que vous pouvez utiliser pour effectuer des requêtes",
+  "full Graph Explorer": "accédez à l'expérience complète de l'Afficheur Graph",
   "Are you sure you want to delete these requests?": "Êtes-vous sûr de vouloir supprimer ces demandes ?",
   "Delete": "Supprimer",
-  "Cancel": "Annuler"
+  "Cancel": "Annuler",
+  "running the query": "Lorsque vous vous connectez, l’exécution de la requête affecte les données chez votre client."
 }
