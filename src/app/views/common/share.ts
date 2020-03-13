@@ -1,5 +1,6 @@
 import { IQuery } from '../../../types/query-runner';
 import { getSessionId } from '../../services/graph-client/msal-service';
+import { parseSampleUrl } from '../../utils/sample-url-generation';
 
 /**
  * Creates a shareable link
@@ -7,7 +8,11 @@ import { getSessionId } from '../../services/graph-client/msal-service';
  * @param authenticated Optional. Informs the browser that someone is logged in.
  */
 export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): string => {
-  const { sampleUrl, sampleBody, selectedVerb, selectedVersion } = sampleQuery;
+  const { sampleBody, selectedVerb } = sampleQuery;
+  const { queryVersion, requestUrl, sampleUrl, search } = parseSampleUrl(sampleQuery.sampleUrl);
+  if (!sampleUrl) {
+    return '';
+  }
   const url = new URL(sampleUrl);
   const graphUrl = url.origin;
   const language = navigator.language || 'en-US';
@@ -16,13 +21,13 @@ export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): s
    * To ensure backward compatibility the version is removed from the pathname.
    * V3 expects the request query param to not have the version number.
    */
-  const graphUrlRequest = url.pathname.substr(6) + url.search;
+  const graphUrlRequest = requestUrl + search;
   const requestBody = hashEncode(JSON.stringify(sampleBody));
 
   let shareLink = `${appUrl}
     ?request=${graphUrlRequest}
     &method=${selectedVerb}
-    &version=${selectedVersion}
+    &version=${queryVersion}
     &GraphUrl=${graphUrl}
     &requestBody=${requestBody}`;
 
