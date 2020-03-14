@@ -8,7 +8,7 @@ export function fetchScopes(sample: IQuery): Promise<any> {
     Promise.reject('url is invalid');
   }
 
-  const permissionsUrl = 'https://graphexplorerapi.azurewebsites.net/api/GraphExplorerPermissions?requesturl=' +
+  const permissionsUrl = 'https://graphexplorerapi.azurewebsites.net/api/GraphExplorerPermissions?requesturl=/' +
     requestUrl + '&method=' + sample.selectedVerb;
 
   const headers = {
