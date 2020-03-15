@@ -272,9 +272,10 @@
   "Expand": "Expand",
   "Delete requests": "Eliminar solicitudes",
   "To try operations other than GET": "Para probar otras operaciones distintas a GET o para obtener acceso a sus propios datos",
-  "To try the full features": "Para obtener más características de Microsoft Graph Explorer",
+  "To try the full features": "Para obtener acceso a más características que se pueden usar para trabajar con consultas",
   "full Graph Explorer": "vaya a la experiencia completa de Graph Explorer",
   "Are you sure you want to delete these requests?": "¿Está seguro de que quiere eliminar estas solicitudes?",
   "Delete": "Eliminar",
-  "Cancel": "Cancelar"
+  "Cancel": "Cancelar",
+  "running the query": "Cuando inicie sesión, la ejecución de la consulta afectará a los datos de su espacio empresarial."
 }
