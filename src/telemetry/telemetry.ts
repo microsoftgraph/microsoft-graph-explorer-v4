@@ -57,7 +57,7 @@ class Telemetry implements ITelemetry {
   }
 
   private getInstrumentationKey() {
-    return (window as any)['InstrumentationKey'] || '';
+    return (window as any).InstrumentationKey || '';
   }
 }
 
