@@ -7,20 +7,38 @@ export function parseSampleUrl(url: string, version?: string) {
   let search = '';
 
   if (url !== '') {
-    const urlObject: URL = new URL(url);
-    requestUrl = urlObject.pathname.substr(6).replace(/\/$/, '');
-    queryVersion = (version) ? version : urlObject.pathname.substring(1, 5);
+    try {
+      const urlObject: URL = new URL(url);
+      requestUrl = urlObject.pathname.substr(6).replace(/\/$/, '');
+      queryVersion = (version) ? version : urlObject.pathname.substring(1, 5);
+      search = generateSearchParameters(urlObject, search);
+      sampleUrl = `${GRAPH_URL}/${queryVersion}/${requestUrl + search}`;
+    } catch (error) {
+      if (error.message === `Failed to construct 'URL': Invalid URL`) {
+        return {
+          queryVersion, requestUrl, sampleUrl, search
+        };
+      }
+    }
+  }
 
-    const searchParameters = urlObject.search;
-    if (searchParameters) {
-      try {
-        search = decodeURI(searchParameters);
-      } catch (error) {
+  return {
+    queryVersion, requestUrl, sampleUrl, search
+  };
+}
+
+function generateSearchParameters(urlObject: URL, search: string) {
+  const searchParameters = urlObject.search;
+  if (searchParameters) {
+    try {
+      search = decodeURI(searchParameters);
+    }
+    catch (error) {
+      if (error.message === 'URI malformed') {
         search = searchParameters;
       }
     }
-
-    sampleUrl = `${GRAPH_URL}/${queryVersion}/${requestUrl + search}`;
   }
-  return { queryVersion, requestUrl, sampleUrl, search };
+  return search;
 }
+
