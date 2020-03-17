@@ -14,9 +14,11 @@ export function parseSampleUrl(url: string, version?: string) {
       search = generateSearchParameters(urlObject, search);
       sampleUrl = `${GRAPH_URL}/${queryVersion}/${requestUrl + search}`;
     } catch (error) {
-      return {
-        queryVersion, requestUrl, sampleUrl, search
-      };
+      if (error.message === `Failed to construct 'URL': Invalid URL`) {
+        return {
+          queryVersion, requestUrl, sampleUrl, search
+        };
+      }
     }
   }
 
@@ -32,7 +34,9 @@ function generateSearchParameters(urlObject: URL, search: string) {
       search = decodeURI(searchParameters);
     }
     catch (error) {
-      search = searchParameters;
+      if (error.message === 'URI malformed') {
+        search = searchParameters;
+      }
     }
   }
   return search;

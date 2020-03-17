@@ -13,7 +13,6 @@ describe('Sample Url Generation', () => {
     };
 
     const parsedUrl = parseSampleUrl(url);
-
     expect(parsedUrl).toEqual(expectedUrl);
   });
 
@@ -62,7 +61,6 @@ describe('Sample Url Generation', () => {
     expect(parsedUrl).toEqual(expectedUrl);
   });
 
-
   it('returns empty properties when url is invalid', () => {
     const url = 'I am an invalid url';
 
@@ -76,6 +74,5 @@ describe('Sample Url Generation', () => {
     const parsedUrl = parseSampleUrl(url);
     expect(parsedUrl).toEqual(expectedUrl);
   });
-
 
 });

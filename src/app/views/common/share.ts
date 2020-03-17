@@ -10,9 +10,11 @@ import { parseSampleUrl } from '../../utils/sample-url-generation';
 export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): string => {
   const { sampleBody, selectedVerb } = sampleQuery;
   const { queryVersion, requestUrl, sampleUrl, search } = parseSampleUrl(sampleQuery.sampleUrl);
+
   if (!sampleUrl) {
     return '';
   }
+
   const url = new URL(sampleUrl);
   const graphUrl = url.origin;
   const language = navigator.language || 'en-US';
