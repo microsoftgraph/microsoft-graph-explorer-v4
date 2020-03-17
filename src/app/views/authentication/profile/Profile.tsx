@@ -146,7 +146,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       },
     };
 
-    const defaultSize = minimised ? PersonaSize.size32 : PersonaSize.size72;
+    const defaultSize = minimised ? PersonaSize.size32 : PersonaSize.size48;
 
     const profileProperties = {
       persona,
@@ -163,20 +163,26 @@ export class Profile extends Component<IProfileProps, IProfileState> {
           </ActionButton>
         }
 
-        {!mobileScreen && graphExplorerMode === Mode.TryIt ?
-          <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-            {this.showProfileComponent(profileProperties)}
-          </ActionButton> : this.showProfileComponent(profileProperties)}
+        {!mobileScreen && this.showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
       </div>
     );
   }
 
-  private showProfileComponent(profileProperties: any): React.ReactNode {
-    return <Persona
+  private showProfileComponent(profileProperties: any, graphExplorerMode: Mode, menuProperties: any): React.ReactNode {
+
+    const persona = <Persona
       {...profileProperties.persona}
       size={profileProperties.size}
       styles={profileProperties.styles}
       hidePersonaDetails={profileProperties.hidePersonaDetails} />;
+
+      if (graphExplorerMode === Mode.TryIt) {
+        return <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+            {persona}
+          </ActionButton>;
+      }
+
+      return persona;
   }
 }
 
