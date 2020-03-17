@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
+import { Mode } from '../../../types/enums';
 import { IQueryInputProps } from '../../../types/query-runner';
 import { getStyleFor } from '../../utils/badge-color';
 import SubmitButton from '../common/submit-button/SubmitButton';
@@ -45,6 +46,8 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       selectedVersion,
       sampleUrl,
       submitting,
+      mode,
+      authenticated
     } = this.props;
 
     const {
@@ -57,6 +60,8 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       background: getStyleFor(selectedVerb),
     };
 
+    const httpMethodsToDisplay = (mode === Mode.TryIt && !authenticated ) ? [httpMethods[0]] : httpMethods;
+
     return (
       <div className='row'>
         <div className='col-sm-3 col-md-2'>
@@ -64,7 +69,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             ariaLabel='Query sample option'
             role='listbox'
             selectedKey={selectedVerb}
-            options={httpMethods}
+            options={httpMethodsToDisplay}
             styles={verbSelector}
             onChange={(event, method) => handleOnMethodChange(method)}
           />
@@ -111,6 +116,8 @@ function mapStateToProps(state: any) {
     selectedVersion: state.sampleQuery.selectedVersion,
     submitting: state.isLoadingData,
     theme: state.theme,
+    mode: state.graphExplorerMode,
+    authenticated: !!state.authToken
   };
 }
 
