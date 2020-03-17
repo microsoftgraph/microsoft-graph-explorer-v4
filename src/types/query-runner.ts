@@ -37,6 +37,8 @@ export interface IQueryInputProps {
   selectedVersion: string;
   sampleUrl: string;
   submitting: boolean;
+  authenticated: boolean;
+  mode: Mode;
   intl: {
     message: object;
   };

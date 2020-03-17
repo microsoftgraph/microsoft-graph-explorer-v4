@@ -26,12 +26,9 @@ export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): s
   const graphUrlRequest = requestUrl + search;
   const requestBody = hashEncode(JSON.stringify(sampleBody));
 
-  let shareLink = `${appUrl}
-    ?request=${graphUrlRequest}
-    &method=${selectedVerb}
-    &version=${queryVersion}
-    &GraphUrl=${graphUrl}
-    &requestBody=${requestBody}`;
+  let shareLink =
+  // tslint:disable-next-line:max-line-length
+  `${appUrl}?request=${graphUrlRequest}&method=${selectedVerb}&version=${queryVersion}&GraphUrl=${graphUrl}&requestBody=${requestBody}`;
 
   if (authenticated) {
     const sessionId = getSessionId();
