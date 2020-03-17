@@ -380,6 +380,7 @@ class App extends Component<IAppProps, IAppState> {
                     <span style={{
                       position: 'absolute',
                       marginLeft: '70%',
+                      marginTop: '2.5%'
                     }}>
 
                       <Authentication />
