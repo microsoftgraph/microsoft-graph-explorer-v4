@@ -1,0 +1,5 @@
+{
+    "/me/planner/tasks" : "https://mgt.dev/iframe.html?id=components-mgt-tasks--tasks",
+    "/me": "https://mgt.dev/iframe.html?id=components-mgt-person-card--person-card-hover",
+    "/me/people" : "https://mgt.dev/iframe.html?id=components-mgt-people--people"
+}
