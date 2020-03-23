@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { IconButton, PivotItem } from 'office-ui-fabric-react';
+import React from 'react';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { ContentType, Mode } from '../../../../types/enums';
 import { Image, Monaco } from '../../common';
@@ -8,6 +7,7 @@ import { genericCopy } from '../../common/copy';
 import { formatXml } from '../../common/monaco/util/format-xml';
 import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
+import GraphToolkit from '../graph-toolkit/GraphToolkit';
 import { Snippets } from '../snippets';
 
 export const getPivotItems = (messages: any,
@@ -41,6 +41,20 @@ export const getPivotItems = (messages: any,
   if (mode === Mode.Complete) {
     pivotItems.push(
       <PivotItem
+        key='graph-toolkit'
+        ariaLabel='Graph Toolkit'
+        headerText={messages['Graph toolkit']}
+      >
+        <GraphToolkit />
+      </PivotItem>,
+      <PivotItem
+        key='code-snippets'
+        ariaLabel='Code Snippets'
+        headerText={messages.Snippets}
+      >
+        <Snippets />
+      </PivotItem>,
+      <PivotItem
         key='adaptive-cards'
         ariaLabel='Adaptive Cards'
         headerText={messages['Adaptive Cards']}
@@ -57,13 +71,7 @@ export const getPivotItems = (messages: any,
       </PivotItem>
     );
     pivotItems.push(
-      <PivotItem
-        key='code-snippets'
-        ariaLabel='Code Snippets'
-        headerText={messages.Snippets}
-      >
-        <Snippets />
-      </PivotItem>
+
     );
   }
 

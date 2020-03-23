@@ -280,5 +280,6 @@
   "running the query": "When you sign in, running the query will affect the data in your tenant.",
   "We did not find any history items": "We did not find any history items",
   "Expand response": "Expand response",
-  "Access Token": "Access token"
+  "Access Token": "Access token",
+  "Graph toolkit": "Graph toolkit"
 }
