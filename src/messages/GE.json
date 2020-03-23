@@ -281,5 +281,6 @@
   "We did not find any history items": "We did not find any history items",
   "Expand response": "Expand response",
   "Access Token": "Access token",
-  "Graph toolkit": "Graph toolkit"
+  "Graph toolkit": "Graph toolkit",
+  "We did not find a Graph toolkit for this query": "We did not find a Graph toolkit for this query"
 }
