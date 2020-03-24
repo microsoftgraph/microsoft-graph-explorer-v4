@@ -2,16 +2,10 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Label } from 'office-ui-fabric-react';
+import { Label, MessageBar, MessageBarType } from 'office-ui-fabric-react';
 import { IQuery } from '../../../../types/query-runner';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import templates from './toolkit';
-
-// const templateMap: any = {
-//   '/me/planner/tasks' : 'https://mgt.dev/iframe.html?id=components-mgt-tasks--tasks',
-//   '/me': 'https://mgt.dev/iframe.html?id=components-mgt-person-card--person-card-hover',
-//   '/me/people' : 'https://mgt.dev/iframe.html?id=components-mgt-people--people',
-// };
 
 class GraphToolkit extends Component<any> {
   constructor(props: any) {
@@ -24,19 +18,33 @@ class GraphToolkit extends Component<any> {
       const query = '/' + requestUrl + search;
       const url: string = (templates as any)[query];
       if (url) {
-        return url;
+        let { search: componentUrl } = parseSampleUrl(url);
+        componentUrl = componentUrl.replace('?id=', '');
+        return {
+          exampleUrl: `https://mgt.dev/?path=/story/${componentUrl}`,
+          toolkitUrl: url
+        };
       }
     }
-    return null;
+    return { toolkitUrl: null, exampleUrl: null };
   }
 
   public render() {
     const { sampleQuery } = this.props;
-    const toolkitUrl = this.lookupToolkitUrl(sampleQuery);
+    const { toolkitUrl, exampleUrl } = this.lookupToolkitUrl(sampleQuery);
 
     if (toolkitUrl) {
       return (
-        <iframe width='100%' height='470px' src={toolkitUrl} />
+        <>
+          <MessageBar messageBarType={MessageBarType.info}>
+            <a
+              tabIndex={0}
+              href={exampleUrl} target='_blank'>
+              <FormattedMessage id='Open this example in mgt.dev' />.
+            </a>
+          </MessageBar>
+          <iframe width='100%' height='470px' src={toolkitUrl} />
+        </>
       );
     }
 
@@ -48,7 +56,11 @@ class GraphToolkit extends Component<any> {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <FormattedMessage id='We did not find a Graph toolkit for this query' />
+        <FormattedMessage id='We did not find a Graph toolkit for this query' />. <a
+            tabIndex={0}
+            href='https://aka.ms/mgt' target='_blank'>
+            <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />.
+          </a>
       </Label>
     );
   }
