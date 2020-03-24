@@ -387,6 +387,7 @@ export class History extends Component<IHistoryProps, any> {
         <div>
           <SearchBox placeholder='Search' className={classes.searchBox}
             onChange={(value) => this.searchValueChanged(value)}
+            styles={{ field: { paddingLeft: 10 } }}
           />
           <hr />
           {groupedList.items.length > 0 && <DetailsList
