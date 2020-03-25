@@ -48,8 +48,6 @@ const HeadersList = ({
   const headerItems = (headers) ? headers.filter((header) => {
     return header.value !== '';
   }) : [];
-  headerItems.push({ name: 'Ron', value: 'Stoppable' });
-  headerItems.push({ name: 'Kim', value: 'Possible' });
 
   const headersList: any = headerStyles().headersList;
 
