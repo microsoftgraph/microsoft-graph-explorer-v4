@@ -4,8 +4,8 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { IRequestHeadersProps } from '../../../../types/request';
-import * as headersActionCreators from '../../../services/actions/request-headers-action-creators';
+import { IRequestHeadersProps } from '../../../../../types/request';
+import * as headersActionCreators from '../../../../services/actions/request-headers-action-creators';
 import HeadersList from './HeadersList';
 
 class RequestHeaders extends Component<IRequestHeadersProps, any> {
