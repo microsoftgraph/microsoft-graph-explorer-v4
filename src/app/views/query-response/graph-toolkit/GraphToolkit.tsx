@@ -3,9 +3,9 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { Label, MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import templates from '../../../../graph-toolkit-examples';
 import { IQuery } from '../../../../types/query-runner';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
-import templates from './toolkit';
 
 class GraphToolkit extends Component<any> {
   constructor(props: any) {
@@ -16,15 +16,21 @@ class GraphToolkit extends Component<any> {
     if (sampleQuery) {
       const { requestUrl, search } = parseSampleUrl(sampleQuery.sampleUrl);
       const query = '/' + requestUrl + search;
-      const url: string = (templates as any)[query];
-      if (url) {
-        let { search: componentUrl } = parseSampleUrl(url);
-        componentUrl = componentUrl.replace('?id=', '');
-        return {
-          exampleUrl: `https://mgt.dev/?path=/story/${componentUrl}`,
-          toolkitUrl: url
-        };
+      for (const templateMapKey in templates) {
+        if (templates.hasOwnProperty(templateMapKey)) {
+          const isMatch = new RegExp(templateMapKey + '$', 'i').test(query);
+          if (isMatch) {
+            const url: string = (templates as any)[templateMapKey];
+            let { search: componentUrl } = parseSampleUrl(url);
+            componentUrl = componentUrl.replace('?id=', '');
+            return {
+              exampleUrl: `https://mgt.dev/?path=/story/${componentUrl}`,
+              toolkitUrl: url
+            };
+          }
+        }
       }
+
     }
     return { toolkitUrl: null, exampleUrl: null };
   }
@@ -57,9 +63,9 @@ class GraphToolkit extends Component<any> {
         alignItems: 'center'
       }}>
         <FormattedMessage id='We did not find a Graph toolkit for this query' />. <a
-            tabIndex={0}
-            href='https://aka.ms/mgt' target='_blank'>
-            <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />.
+          tabIndex={0}
+          href='https://aka.ms/mgt' target='_blank'>
+          <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />.
           </a>
       </Label>
     );
