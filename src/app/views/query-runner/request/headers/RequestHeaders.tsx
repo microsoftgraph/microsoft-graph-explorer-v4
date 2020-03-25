@@ -6,6 +6,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { IRequestHeadersProps } from '../../../../../types/request';
 import * as headersActionCreators from '../../../../services/actions/request-headers-action-creators';
+import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
 
 class RequestHeaders extends Component<IRequestHeadersProps, any> {
@@ -68,10 +69,11 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
   public render() {
     // @ts-ignore
     const { headers, intl: { messages } } = this.props;
+    const container: any = headerStyles().container;
 
     return (
-      <div className='request-editor-control'>
-        <div className='row headers-editor'>
+      <div style={container}>
+        <div className='row'>
           <div className='col-sm-5'>
             <TextField className='header-input'
               placeholder={messages.Key}
@@ -87,9 +89,9 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
               onChange={(event, value) => this.handleOnHeaderValueChange(value)}
             />
           </div>
-          <div className='col-sm-2'>
+          <div className='col-sm-2 col-md-2'>
             <PrimaryButton
-              className='header-input-button'
+              style={{ width: '100%' }}
               onClick={() => this.handleOnHeaderAdd()}>
               <FormattedMessage id='Add' />
             </PrimaryButton>

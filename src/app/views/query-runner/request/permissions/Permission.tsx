@@ -16,7 +16,6 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../../../services/actions/auth-action-creators';
 import { acquireNewAccessToken } from '../../../../services/graph-client/msal-service';
 import { classNames } from '../../../classnames';
-import { Monaco } from '../../../common';
 import { permissionStyles } from './Permission.styles';
 import { fetchScopes } from './util';
 
@@ -135,7 +134,9 @@ function Permission(props: any) {
 
   return (
     <div className={classes.container}>
-      {loading && <Monaco body={'Fetching permissions...'} />}
+      {loading && <Label>
+        <FormattedMessage id={'Fetching permissions...'} />
+      </Label>}
       {permissions && !loading &&
         <div className={classes.permissions}>
           <Label className={classes.permissionLength}>

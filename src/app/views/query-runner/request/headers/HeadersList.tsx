@@ -1,6 +1,7 @@
-import { DetailsList, IColumn, IconButton, SelectionMode } from 'office-ui-fabric-react';
+import { DetailsList, DetailsRow, IColumn, IconButton, SelectionMode } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { IHeadersListControl } from '../../../../../types/request';
+import { headerStyles } from './Headers.styles';
 
 const HeadersList = ({
   handleOnHeaderDelete,
@@ -8,6 +9,7 @@ const HeadersList = ({
 }: IHeadersListControl) => {
 
   const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+    const itemContent: any = headerStyles().itemContent;
     if (column) {
       const fieldContent = item[column.fieldName as keyof any] as string;
       switch (column.key) {
@@ -20,8 +22,20 @@ const HeadersList = ({
           />;
 
         default:
-          return <span className='field-content'>{fieldContent}</span>;
+          return <div style={itemContent}>{fieldContent}</div>;
       }
+    }
+  };
+
+  const renderRow = (props: any): any => {
+    const { detailsRow, rowContainer }: any = headerStyles();
+
+    if (props) {
+      return (
+        <div style={rowContainer}>
+          <DetailsRow {...props} style={detailsRow} />
+        </div>
+      );
     }
   };
 
@@ -34,15 +48,18 @@ const HeadersList = ({
   const headerItems = (headers) ? headers.filter((header) => {
     return header.value !== '';
   }) : [];
+  headerItems.push({ name: 'Ron', value: 'Stoppable' });
+  headerItems.push({ name: 'Kim', value: 'Possible' });
+
+  const headersList: any = headerStyles().headersList;
 
   return (
-    <div className='headers-list'>
+    <div style={headersList}>
       <DetailsList
-        className='detail-list'
         items={headerItems}
-        setKey='set'
         columns={columns}
         onRenderItemColumn={renderItemColumn}
+        onRenderRow={renderRow}
         selectionMode={SelectionMode.none}
       />
     </div>
