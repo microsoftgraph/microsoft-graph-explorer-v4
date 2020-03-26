@@ -287,5 +287,6 @@
   "Description": "Description",
   "Status": "Status",
   "Admin consent required": "Admin consent required",
-  "Consent": "Consent"
+  "Consent": "Consent",
+  "permissions required to run the query": "The following permissions are required to run the query. To consent to the permissions, click Consent."
 }

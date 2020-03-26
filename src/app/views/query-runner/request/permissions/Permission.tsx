@@ -168,6 +168,9 @@ function Permission(props: any) {
           <Label className={classes.permissionLength}>
             <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
           </Label>
+          <Label className={classes.permissionText}>
+            <FormattedMessage id='permissions required to run the query' />
+          </Label>
           <DetailsList
             items={permissions}
             columns={columns}
