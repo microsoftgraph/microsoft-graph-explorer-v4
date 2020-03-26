@@ -48,7 +48,7 @@ export function generateHar(payload: IHarPayload): IHarFormat {
       version: '2.0',
       creator: {
         name: 'Graph Explorer',
-        version: '2.0',
+        version: '4.0',
       },
       entries: [
         {
@@ -87,6 +87,21 @@ export function generateHar(payload: IHarPayload): IHarFormat {
       ],
     },
   };
+}
+
+export function exportQuery(content: IHarFormat, requestUrl: string) {
+  const blob = new Blob([JSON.stringify(content)], { type: 'text/json' });
+
+  const url = requestUrl.substr(8).split('/');
+  url.pop();
+
+  const filename = `${url.join('_')}.har`;
+  const elem = window.document.createElement('a');
+  elem.href = window.URL.createObjectURL(blob);
+  elem.download = filename;
+  document.body.appendChild(elem);
+  elem.click();
+  document.body.removeChild(elem);
 }
 
 

@@ -18,6 +18,7 @@ import { GRAPH_URL } from '../../../services/graph-constants';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
+import { createHarPayload, exportQuery, generateHar } from './har-utils';
 import { dynamicSort } from './history-utils';
 
 export class History extends Component<IHistoryProps, any> {
@@ -151,6 +152,7 @@ export class History extends Component<IHistoryProps, any> {
     const runQueryText = messages['Run Query'];
     const viewText = messages['view'];
     const removeText = messages['Delete'];
+    const exportQueryText = messages['Export'];
     // tslint:enable
 
     if (column) {
@@ -187,6 +189,14 @@ export class History extends Component<IHistoryProps, any> {
                 iconName: 'Refresh'
               },
               onClick: () => this.onRunQuery(item)
+            },
+            {
+              key: 'exportQuery',
+              text: exportQueryText,
+              iconProps: {
+                iconName: 'Download'
+              },
+              onClick: () => this.onExportQuery(item)
             },
             {
               key: 'remove',
@@ -327,6 +337,11 @@ export class History extends Component<IHistoryProps, any> {
     }
   }
 
+  private onExportQuery = (query: IHistoryItem) => {
+    const harPayload = createHarPayload(query);
+    const generatedHarData = generateHar(harPayload);
+    exportQuery(generatedHarData, query.url);
+  }
 
   private deleteQuery = async (query: IHistoryItem) => {
     const { actions } = this.props;
