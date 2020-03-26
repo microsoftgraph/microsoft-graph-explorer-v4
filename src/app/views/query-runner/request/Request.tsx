@@ -22,6 +22,7 @@ export class Request extends Component<IRequestComponent, any> {
       handleOnEditorChange,
       sampleBody,
       mode,
+      mobileScreen,
       intl: { messages },
     }: any = this.props;
 
@@ -29,7 +30,7 @@ export class Request extends Component<IRequestComponent, any> {
       <PivotItem
         key='request-body'
         itemIcon='Send'
-        headerText={messages['request body']}>
+        headerText={(mobileScreen) ? '' : messages['request body']}>
         <Monaco
           body={sampleBody}
           onChange={(value) => handleOnEditorChange(value)} />
@@ -37,13 +38,13 @@ export class Request extends Component<IRequestComponent, any> {
       <PivotItem
         key='request-header'
         itemIcon='FileComment'
-        headerText={messages['request header']}>
+        headerText={(mobileScreen) ? '' : messages['request header']}>
         <RequestHeaders />
       </PivotItem>,
       <PivotItem
         key='permissions'
         itemIcon='AzureKeyVault'
-        headerText={messages['modify permissions']}>
+        headerText={(mobileScreen) ? '' : messages['modify permissions']}>
         <Permission />
       </PivotItem>
     ];
@@ -53,7 +54,7 @@ export class Request extends Component<IRequestComponent, any> {
         <PivotItem
           key='auth'
           itemIcon='AuthenticatorApp'
-          headerText={messages['Access Token']}>
+          headerText={(mobileScreen) ? '' : messages['Access Token']}>
           <Auth />
         </PivotItem>
       );
@@ -82,6 +83,7 @@ function mapStateToProps(state: any) {
     mode: state.graphExplorerMode,
     sampleBody: state.sampleQuery.sampleBody,
     theme: state.theme,
+    mobileScreen: !!state.sidebarProperties.mobileScreen
   };
 }
 
