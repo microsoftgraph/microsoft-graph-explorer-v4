@@ -8,6 +8,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { IHarPayload } from '../../../../types/har';
 import { IHistoryItem, IHistoryProps } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
@@ -254,7 +255,7 @@ export class History extends Component<IHistoryProps, any> {
           justifyContent: 'center',
           alignItems: 'center'
         }}>
-        <div className={'col-md-10'}>
+        <div className={'col-md-8'}>
           <div className={classes.groupHeaderRow} onClick={this.onToggleCollapse(props)}>
             <IconButton
               className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
@@ -270,13 +271,20 @@ export class History extends Component<IHistoryProps, any> {
             </div>
           </div>
         </div>
-        <div className={'col-md-2'}>
+        <div className={'col-md-4'} style={{display: 'inline-block'}}>
           <IconButton
             className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
             iconProps={{ iconName: 'Delete' }}
             title={`${messages['Delete requests']} : ${props.group!.name}`}
             ariaLabel='delete group'
             onClick={() => this.showDialog(props.group!.name)}
+          />
+          <IconButton
+            className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
+            iconProps={{ iconName: 'Download' }}
+            title={`${messages.Export} : ${props.group!.name}`}
+            ariaLabel='export group'
+            onClick={() => this.exportHistoryByCategory(props.group!.name)}
           />
         </div>
       </div>
@@ -311,6 +319,23 @@ export class History extends Component<IHistoryProps, any> {
 
   }
 
+  private exportHistoryByCategory = (category: string) => {
+    const { groupedList: { items } } = this.state;
+    const itemsToExport = items.filter((query: IHistoryItem) => query.category === category);
+    const entries: IHarPayload[] = [];
+
+    itemsToExport.forEach((query: IHistoryItem) => {
+      const harPayload = createHarPayload(query);
+      entries.push(harPayload);
+    });
+
+    const generatedHarData = generateHar(entries);
+    const { origin } = new URL(itemsToExport[0].url);
+    const exportTitle =  `${origin}/${itemsToExport[0].createdAt.substr(0, 10)}/`;
+
+    exportQuery(generatedHarData, exportTitle);
+  }
+
   private renderDetailsHeader() {
     return (
       <div />
@@ -339,8 +364,8 @@ export class History extends Component<IHistoryProps, any> {
 
   private onExportQuery = (query: IHistoryItem) => {
     const harPayload = createHarPayload(query);
-    const generatedHarData = generateHar(harPayload);
-    exportQuery(generatedHarData, query.url);
+    const generatedHarData = generateHar([harPayload]);
+    exportQuery(generatedHarData, `${query.url}/`);
   }
 
   private deleteQuery = async (query: IHistoryItem) => {

@@ -42,51 +42,58 @@ export function createHarPayload(query: IHistoryItem) {
   return harPayload;
 }
 
-export function generateHar(payload: IHarPayload): IHarFormat {
+export function generateHar(payloads: IHarPayload[]): IHarFormat {
+  const entries = createEntries(payloads);
   return {
     log: {
-      version: '2.0',
+      version: '4.0',
       creator: {
         name: 'Graph Explorer',
         version: '4.0',
       },
-      entries: [
-        {
-          startedDateTime: payload.startedDateTime,
-          time: payload.time,
-          request: {
-            method: payload.method,
-            url: payload.url,
-            httpVersion: payload.httpVersion,
-            cookies: payload.cookies,
-            headers: payload.request.headers,
-            queryString: payload.queryString,
-            postData: payload.postData,
-            headersSize: -1,
-            bodySize: -1,
-          },
-          response: {
-            status: payload.status,
-            statusText: payload.statusText,
-            httpVersion: payload.httpVersion,
-            cookies: payload.cookies,
-            headers: payload.response.headers,
-            content: payload.content,
-            redirectURL: '',
-            headersSize: -1,
-            bodySize: -1,
-          },
-          cache: {},
-          timings: {
-            send: payload.sendTime,
-            wait: payload.waitTime,
-            receive: payload.receiveTime,
-          },
-          connection: '',
-        },
-      ],
+      entries,
     },
   };
+}
+
+function createEntries(payloads: IHarPayload[]) {
+  const entries: any = [];
+  payloads.forEach(payload => {
+    entries.push({
+      startedDateTime: payload.startedDateTime,
+      time: payload.time,
+      request: {
+        method: payload.method,
+        url: payload.url,
+        httpVersion: payload.httpVersion,
+        cookies: payload.cookies,
+        headers: payload.request.headers,
+        queryString: payload.queryString,
+        postData: payload.postData,
+        headersSize: -1,
+        bodySize: -1,
+      },
+      response: {
+        status: payload.status,
+        statusText: payload.statusText,
+        httpVersion: payload.httpVersion,
+        cookies: payload.cookies,
+        headers: payload.response.headers,
+        content: payload.content,
+        redirectURL: '',
+        headersSize: -1,
+        bodySize: -1,
+      },
+      cache: {},
+      timings: {
+        send: payload.sendTime,
+        wait: payload.waitTime,
+        receive: payload.receiveTime,
+      },
+      connection: '',
+    });
+  });
+  return entries;
 }
 
 export function exportQuery(content: IHarFormat, requestUrl: string) {
