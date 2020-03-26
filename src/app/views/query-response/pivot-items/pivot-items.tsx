@@ -22,6 +22,7 @@ export const getPivotItems = (messages: any,
     <PivotItem
       key='response-preview'
       ariaLabel='Response Preview'
+      itemIcon='Reply'
       headerText={messages['Response Preview']}
     >
       {resultComponent}
@@ -30,6 +31,7 @@ export const getPivotItems = (messages: any,
       key='response-headers'
       ariaLabel='Response Headers'
       headerText={messages['Response Headers']}
+      itemIcon='FileComment'
     >
       {headers && <div><IconButton style={{ float: 'right', zIndex: 1 }} iconProps={{
         iconName: 'copy',
@@ -44,6 +46,7 @@ export const getPivotItems = (messages: any,
         key='adaptive-cards'
         ariaLabel='Adaptive Cards'
         headerText={messages['Adaptive Cards']}
+        itemIcon='ContactCard'
       >
         <ThemeContext.Consumer >
           {(theme) => (
@@ -61,6 +64,7 @@ export const getPivotItems = (messages: any,
         key='code-snippets'
         ariaLabel='Code Snippets'
         headerText={messages.Snippets}
+        itemIcon='PasteAsCode'
       >
         <Snippets />
       </PivotItem>

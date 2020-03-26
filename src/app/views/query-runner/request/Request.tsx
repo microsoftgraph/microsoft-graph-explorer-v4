@@ -28,6 +28,7 @@ export class Request extends Component<IRequestComponent, any> {
     const pivotItems = [
       <PivotItem
         key='request-body'
+        itemIcon='Send'
         headerText={messages['request body']}>
         <Monaco
           body={sampleBody}
@@ -35,11 +36,13 @@ export class Request extends Component<IRequestComponent, any> {
       </PivotItem>,
       <PivotItem
         key='request-header'
+        itemIcon='FileComment'
         headerText={messages['request header']}>
         <RequestHeaders />
       </PivotItem>,
       <PivotItem
         key='permissions'
+        itemIcon='AzureKeyVault'
         headerText={messages['modify permissions']}>
         <Permission />
       </PivotItem>
@@ -49,6 +52,7 @@ export class Request extends Component<IRequestComponent, any> {
       pivotItems.push(
         <PivotItem
           key='auth'
+          itemIcon='AuthenticatorApp'
           headerText={messages['Access Token']}>
           <Auth />
         </PivotItem>
