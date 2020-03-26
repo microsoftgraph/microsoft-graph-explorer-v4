@@ -481,6 +481,8 @@ class App extends Component<IAppProps, IAppState> {
                       {`- ${queryState.duration}`}<FormattedMessage id='milliseconds' />
                     </>}
 
+                    {queryState.status === 403 && <>. <FormattedMessage id='consent to scopes' /> </>}
+
                   </MessageBar>
                 )}
                 {termsOfUse && (
