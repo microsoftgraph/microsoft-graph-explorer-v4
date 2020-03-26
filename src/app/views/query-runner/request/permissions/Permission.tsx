@@ -11,7 +11,7 @@ import {
   TooltipHost
 } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../../../services/actions/auth-action-creators';
 import { acquireNewAccessToken } from '../../../../services/graph-client/msal-service';
@@ -35,23 +35,46 @@ function Permission(props: any) {
   const consentedScopes: string[] = useSelector((state: any) => state.consentedScopes);
   const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const {
+    intl: { messages },
+  }: any = props;
 
-  const columns = [
-    { key: 'value', name: 'Name', fieldName: 'value', minWidth: 100, maxWidth: 150 },
-    {
-      key: 'consentDisplayName', name: 'Function', fieldName: 'consentDisplayName', isResizable: true,
-      minWidth: 150, maxWidth: 200
-    },
-    {
-      key: 'consentDescription', name: 'Description', fieldName: 'consentDescription', isResizable: true,
-      minWidth: 200, maxWidth: 300
-    },
-    { key: 'isAdmin', name: 'Admin Consent', fieldName: 'isAdmin', minWidth: 100, maxWidth: 200 }
-  ];
+  const columns = [{
+    key: 'value',
+    name: messages.Permission,
+    fieldName: 'value',
+    minWidth: 100,
+    maxWidth: 150,
+    isResizable: true
+  },
+  {
+    key: 'consentDisplayName',
+    name: messages['Display string'],
+    fieldName: 'consentDisplayName',
+    isResizable: true,
+    minWidth: 150,
+    maxWidth: 200
+  },
+  {
+    key: 'consentDescription',
+    name: messages.Description,
+    fieldName: 'consentDescription',
+    isResizable: true,
+    minWidth: 200,
+    maxWidth: 300
+  },
+  {
+    key: 'isAdmin',
+    name: messages['Admin consent required'],
+    fieldName: 'isAdmin',
+    minWidth: 100,
+    maxWidth: 200
+  }
+];
 
   if (accessToken) {
     columns.push(
-      { key: 'consented', name: 'Status', fieldName: 'consented', minWidth: 100, maxWidth: 200 }
+      { key: 'consented', name: messages.Status, fieldName: 'consented', minWidth: 100, maxWidth: 200 }
     );
   }
 
@@ -96,9 +119,13 @@ function Permission(props: any) {
 
         case 'isAdmin':
           if (item.isAdmin) {
-            return <Icon iconName='checkmark' className={classes.checkIcon} />;
+            return <div style={{ textAlign: 'center'}}>
+              <Icon iconName='checkmark' className={classes.checkIcon} />
+            </div>;
           } else {
-            return '';
+            return <div style={{ textAlign: 'center'}}>
+            <Icon iconName='StatusCircleErrorX' className={classes.checkIcon} />
+          </div>;
           }
 
         case 'consented':
@@ -154,4 +181,5 @@ function Permission(props: any) {
   );
 }
 
-export default styled(Permission, permissionStyles as any);
+const IntlPermission = injectIntl(Permission);
+export default styled(IntlPermission, permissionStyles as any);

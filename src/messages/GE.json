@@ -281,5 +281,11 @@
   "We did not find any history items": "We did not find any history items",
   "Expand response": "Expand response",
   "Access Token": "Access token",
-  "consent to scopes": "Go to the Modify permissions tab and consent to scopes"
+  "consent to scopes": "Go to the Modify permissions tab and consent to scopes",
+  "Permission": "Permission",
+  "Display string": "Display string",
+  "Description": "Description",
+  "Status": "Status",
+  "Admin consent required": "Admin consent required",
+  "Consent": "Consent"
 }
