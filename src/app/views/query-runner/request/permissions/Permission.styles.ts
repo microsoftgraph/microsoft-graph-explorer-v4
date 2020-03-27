@@ -17,6 +17,10 @@ export const permissionStyles = (theme: ITheme) => {
       fontWeight: 'bold',
       marginBottom: 5
     },
+    permissionText: {
+      fontSize: FontSizes.small,
+      marginBottom: 5
+    },
     toolTipHost: {
       root: {
         display:
