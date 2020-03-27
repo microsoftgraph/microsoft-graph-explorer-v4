@@ -73,7 +73,6 @@ export const sidebarStyles = (theme: ITheme) => {
     queryRow: {
       background: 'inherit',
       lineHeight: '100%',
-      width: '80%',
       fontSize: FontSizes.medium,
       borderBottom: '1px solid ' + theme.palette.neutralLight,
       color: theme.palette.black,
@@ -82,9 +81,9 @@ export const sidebarStyles = (theme: ITheme) => {
           background: theme.palette.neutralLight,
         },
       },
+      marginLeft: '-5%',
     },
     queryContent: {
-      display: 'table-cell',
       float: 'left',
       textAlign: 'left',
     },
@@ -107,7 +106,6 @@ export const sidebarStyles = (theme: ITheme) => {
       minWidth: '55px'
     },
     docLink: {
-      display: 'table-cell',
       float: 'right',
       verticalAlign: 'center',
       marginTop: '-7.5%',
