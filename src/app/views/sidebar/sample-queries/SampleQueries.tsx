@@ -102,50 +102,55 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const classes = classNames(this.props);
+    const {
+      tokenPresent,
+      intl: { messages },
+    }: any = this.props;
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
 
       switch (column.key) {
         case 'authRequiredIcon':
-          if (item.method !== 'GET') {
+          if (item.method !== 'GET' && !tokenPresent) {
+            const signInText = messages['Sign In to try this sample'];
             return <TooltipHost
+              tooltipProps={{
+                onRenderContent: () => <div style={{ paddingBottom: 3 }}>
+                  <FormattedMessage id={'Sign In to try this sample'} /></div>
+              }}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+              styles={{ root: { display: 'inline-block' } }}
+            >
+              <IconButton
+                className={classes.docLink}
+                iconProps={{ iconName: 'Lock' }}
+                title={signInText}
+                ariaLabel={signInText}
+              />
+            </TooltipHost>;
+          }
+          return null;
+
+        case 'button':
+          return <TooltipHost
             tooltipProps={{
               onRenderContent: () => <div style={{ paddingBottom: 3 }}>
-                <FormattedMessage id={'Sign In to try this sample'} /></div>
+                {item.docLink}</div>
             }}
             id={getId()}
             calloutProps={{ gapSpace: 0 }}
             styles={{ root: { display: 'inline-block' } }}
           >
             <IconButton
-              className={classes.docLink}
-              iconProps={{ iconName: 'Lock' }}
-              title='Sign In to try this sample'
-              ariaLabel='Sign In to try this sample'
+              style={{ marginTop: '-7.5%' }}
+              iconProps={{ iconName: 'NavigateExternalInline' }}
+              title={item.docLink}
+              ariaLabel={item.docLink}
+              onClick={(event) => this.onDocumentationLinkClicked(event, item)}
             />
           </TooltipHost>;
-          }
-          return null;
-
-        case 'button':
-          return <TooltipHost
-          tooltipProps={{
-            onRenderContent: () => <div style={{ paddingBottom: 3 }}>
-              {item.docLink}</div>
-          }}
-          id={getId()}
-          calloutProps={{ gapSpace: 0 }}
-          styles={{ root: { display: 'inline-block' } }}
-        >
-          <IconButton
-            style={{marginTop: '-7.5%'}}
-            iconProps={{ iconName: 'NavigateExternalInline' }}
-            title={item.docLink}
-            ariaLabel={item.docLink}
-            onClick={(event) => this.onDocumentationLinkClicked(event, item)}
-          />
-        </TooltipHost>;
 
         case 'method':
           return <TooltipHost
