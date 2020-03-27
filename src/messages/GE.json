@@ -281,12 +281,13 @@
   "We did not find any history items": "We did not find any history items",
   "Expand response": "Expand response",
   "Access Token": "Access token",
-  "consent to scopes": "Go to the Modify permissions tab and consent to scopes",
+  "consent to scopes": " You need to consent to the permissions on the ",
   "Permission": "Permission",
   "Display string": "Display string",
   "Description": "Description",
   "Status": "Status",
   "Admin consent required": "Admin consent required",
   "Consent": "Consent",
-  "permissions required to run the query": "The following permissions are required to run the query. To consent to the permissions, click Consent."
+  "permissions required to run the query": "The following permissions are required to run the query. To consent to the permissions, click Consent.",
+  "tab": " tab"
 }
