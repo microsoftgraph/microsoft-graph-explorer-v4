@@ -22,25 +22,29 @@ export class Request extends Component<IRequestComponent, any> {
       handleOnEditorChange,
       sampleBody,
       mode,
+      mobileScreen,
       intl: { messages },
     }: any = this.props;
 
     const pivotItems = [
       <PivotItem
         key='request-body'
-        headerText={messages['request body']}>
+        itemIcon='Send'
+        headerText={(mobileScreen) ? '' : messages['request body']}>
         <Monaco
           body={sampleBody}
           onChange={(value) => handleOnEditorChange(value)} />
       </PivotItem>,
       <PivotItem
         key='request-header'
-        headerText={messages['request header']}>
+        itemIcon='FileComment'
+        headerText={(mobileScreen) ? '' : messages['request header']}>
         <RequestHeaders />
       </PivotItem>,
       <PivotItem
         key='permissions'
-        headerText={messages['modify permissions']}>
+        itemIcon='AzureKeyVault'
+        headerText={(mobileScreen) ? '' : messages['modify permissions']}>
         <Permission />
       </PivotItem>
     ];
@@ -49,7 +53,8 @@ export class Request extends Component<IRequestComponent, any> {
       pivotItems.push(
         <PivotItem
           key='auth'
-          headerText={messages['Access Token']}>
+          itemIcon='AuthenticatorApp'
+          headerText={(mobileScreen) ? '' : messages['Access Token']}>
           <Auth />
         </PivotItem>
       );
@@ -78,6 +83,7 @@ function mapStateToProps(state: any) {
     mode: state.graphExplorerMode,
     sampleBody: state.sampleQuery.sampleBody,
     theme: state.theme,
+    mobileScreen: !!state.sidebarProperties.mobileScreen
   };
 }
 
