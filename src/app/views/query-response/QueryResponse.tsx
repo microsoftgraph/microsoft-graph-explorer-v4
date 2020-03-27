@@ -27,6 +27,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
 
   public shouldComponentUpdate(nextProps: IQueryResponseProps, nextState: IQueryResponseState) {
     return nextProps.graphResponse !== this.props.graphResponse
+      || nextProps.mobileScreen !== this.props.mobileScreen
       || nextState !== this.state
       || nextProps.theme !== this.props.theme;
   }
@@ -60,14 +61,18 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     }: any = this.props;
 
     const { showShareQueryDialog, query, showModal } = this.state;
-    const { graphResponse, mode } = this.props;
+    const { graphResponse, mode, mobileScreen } = this.props;
 
     if (graphResponse) {
       body = graphResponse.body;
       headers = graphResponse.headers;
     }
 
-    const pivotItems = getPivotItems(messages, body, verb, mode, headers);
+    const pivotProperties = {
+      messages, body, verb, mode, headers, mobileScreen
+    };
+
+    const pivotItems = getPivotItems(pivotProperties);
 
     return (
       <div>
@@ -174,7 +179,8 @@ function mapStateToProps(state: any) {
     theme: state.theme,
     mode: state.graphExplorerMode,
     scopes: state.scopes.data,
-    sampleQuery: state.sampleQuery
+    sampleQuery: state.sampleQuery,
+    mobileScreen: !!state.sidebarProperties.mobileScreen
   };
 }
 
