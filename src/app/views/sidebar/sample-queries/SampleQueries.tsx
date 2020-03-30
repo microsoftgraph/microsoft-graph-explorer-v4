@@ -100,41 +100,65 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     });
   }
 
-  public getToolTipContent(item: any, queryContent: any) {
-    let selectionDisabled = false;
-
-    if (!this.props.tokenPresent && item.method !== 'GET') {
-      selectionDisabled = true;
-    }
-
-    return selectionDisabled ? <FormattedMessage id={'Sign In to try this sample'} /> : queryContent;
-
-  }
-
   public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const classes = classNames(this.props);
-    const hostId: string = getId('tooltipHost');
+    const {
+      tokenPresent,
+      intl: { messages },
+    }: any = this.props;
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
 
-      const toolTipContent = this.getToolTipContent(item, queryContent);
-
       switch (column.key) {
+        case 'authRequiredIcon':
+          if (item.method !== 'GET' && !tokenPresent) {
+            const signInText = messages['Sign In to try this sample'];
+            return <TooltipHost
+              tooltipProps={{
+                onRenderContent: () => <div style={{ paddingBottom: 3 }}>
+                  <FormattedMessage id={'Sign In to try this sample'} /></div>
+              }}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+              styles={{ root: { display: 'inline-block' } }}
+            >
+              <IconButton
+                className={classes.docLink}
+                iconProps={{ iconName: 'Lock' }}
+                title={signInText}
+                ariaLabel={signInText}
+              />
+            </TooltipHost>;
+          }
+          return null;
 
         case 'button':
-          return <IconButton
-            className={classes.docLink}
-            iconProps={{ iconName: 'NavigateExternalInline' }}
-            title={item.docLink}
-            ariaLabel={item.docLink}
-            onClick={(event) => this.onDocumentationLinkClicked(event, item)}
-          />;
+          return <TooltipHost
+            tooltipProps={{
+              onRenderContent: () => <div style={{ paddingBottom: 3 }}>
+                {item.docLink}</div>
+            }}
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+            styles={{ root: { display: 'inline-block' } }}
+          >
+            <IconButton
+              style={{ marginTop: '-7.5%' }}
+              iconProps={{ iconName: 'NavigateExternalInline' }}
+              title={item.docLink}
+              ariaLabel={item.docLink}
+              onClick={(event) => this.onDocumentationLinkClicked(event, item)}
+            />
+          </TooltipHost>;
 
         case 'method':
           return <TooltipHost
-            tooltipProps={{ onRenderContent: () => <div style={{ paddingBottom: 3 }}>{toolTipContent}</div> }}
-            id={hostId}
+            tooltipProps={{
+              onRenderContent: () => <div style={{ paddingBottom: 3 }}>
+                {queryContent}</div>
+            }}
+            id={getId()}
             calloutProps={{ gapSpace: 0 }}
             styles={{ root: { display: 'inline-block' } }}
           >
@@ -146,8 +170,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         default:
           return <span aria-label={queryContent}>
             <TooltipHost
-              tooltipProps={{ onRenderContent: () => <div style={{ paddingBottom: 3 }}>{toolTipContent}</div> }}
-              id={hostId}
+              tooltipProps={{
+                onRenderContent: () => <div style={{ paddingBottom: 3 }}>
+                  {item.method} <FormattedMessage id={queryContent} /></div>
+              }}
+              id={getId()}
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}
             >
@@ -238,6 +265,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     const { groupedList } = this.state;
     const columns = [
+      { key: 'authRequiredIcon', name: '', fieldName: 'authRequiredIcon', minWidth: 14, maxWidth: 15 },
       { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
       { key: 'category', name: '', fieldName: 'humanName', minWidth: 105, maxWidth: 205 },
       { key: 'button', name: '', fieldName: 'button', minWidth: 15, maxWidth: 15, },
@@ -280,8 +308,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     return (
       <div>
-        <SearchBox className={classes.searchBox} placeholder='Search'
+        <SearchBox className={classes.searchBox} placeholder='Search sample queries'
           onChange={(value) => this.searchValueChanged(value)}
+          styles={{ field: { paddingLeft: 10 } }}
         />
         <hr />
         {error && <MessageBar messageBarType={MessageBarType.warning}

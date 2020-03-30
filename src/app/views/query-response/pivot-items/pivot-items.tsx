@@ -10,26 +10,25 @@ import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { Snippets } from '../snippets';
 
-export const getPivotItems = (messages: any,
-  body: any,
-  verb: string,
-  mode: Mode,
-  headers: any) => {
+export const getPivotItems = (properties: any) => {
 
+  const { headers, body, verb, messages, mobileScreen, mode } = properties;
   const resultComponent = displayResultComponent(headers, body, verb);
 
   const pivotItems = [
     <PivotItem
       key='response-preview'
       ariaLabel='Response Preview'
-      headerText={messages['Response Preview']}
+      itemIcon='Reply'
+      headerText={(mobileScreen) ? '' : messages['Response Preview']}
     >
       {resultComponent}
     </PivotItem>,
     <PivotItem
       key='response-headers'
       ariaLabel='Response Headers'
-      headerText={messages['Response Headers']}
+      headerText={(mobileScreen) ? '' : messages['Response Headers']}
+      itemIcon='FileComment'
     >
       {headers && <div><IconButton style={{ float: 'right', zIndex: 1 }} iconProps={{
         iconName: 'copy',
@@ -43,7 +42,8 @@ export const getPivotItems = (messages: any,
       <PivotItem
         key='adaptive-cards'
         ariaLabel='Adaptive Cards'
-        headerText={messages['Adaptive Cards']}
+        headerText={(mobileScreen) ? '' : messages['Adaptive Cards']}
+        itemIcon='ContactCard'
       >
         <ThemeContext.Consumer >
           {(theme) => (
@@ -60,7 +60,8 @@ export const getPivotItems = (messages: any,
       <PivotItem
         key='code-snippets'
         ariaLabel='Code Snippets'
-        headerText={messages.Snippets}
+        headerText={(mobileScreen) ? '' : messages.Snippets}
+        itemIcon='PasteAsCode'
       >
         <Snippets />
       </PivotItem>

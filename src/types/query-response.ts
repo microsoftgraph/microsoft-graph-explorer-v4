@@ -18,6 +18,7 @@ export interface IQueryResponseProps {
   actions: {
     getConsent: Function;
   };
+  mobileScreen: boolean;
 }
 
 export interface IQueryResponseState {
