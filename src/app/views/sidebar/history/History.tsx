@@ -331,7 +331,7 @@ export class History extends Component<IHistoryProps, any> {
 
     const generatedHarData = generateHar(entries);
     const { origin } = new URL(itemsToExport[0].url);
-    const exportTitle =  `${origin}/${itemsToExport[0].createdAt.substr(0, 10)}/`;
+    const exportTitle =  `${origin}/${category.toLowerCase()}/${itemsToExport[0].createdAt.substr(0, 10)}/`;
 
     exportQuery(generatedHarData, exportTitle);
   }
