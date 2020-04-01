@@ -13,7 +13,6 @@ export interface IHistoryItem {
   responseHeaders: Array<{ name: string; value: string; }>;
   duration: number;
   result: object;
-  har: string;
 }
 
 export interface IHistoryProps {

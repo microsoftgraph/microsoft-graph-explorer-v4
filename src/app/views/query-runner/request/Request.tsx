@@ -7,9 +7,9 @@ import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
+import RequestHeaders from './headers/RequestHeaders';
 import { Permission } from './permissions';
 import './request.scss';
-import RequestHeaders from './RequestHeaders';
 
 export class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {

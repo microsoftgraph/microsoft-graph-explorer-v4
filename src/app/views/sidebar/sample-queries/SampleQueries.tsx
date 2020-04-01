@@ -308,8 +308,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     return (
       <div>
-        <SearchBox className={classes.searchBox} placeholder='Search'
+        <SearchBox className={classes.searchBox} placeholder='Search sample queries'
           onChange={(value) => this.searchValueChanged(value)}
+          styles={{ field: { paddingLeft: 10 } }}
         />
         <hr />
         {error && <MessageBar messageBarType={MessageBarType.warning}
