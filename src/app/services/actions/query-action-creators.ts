@@ -12,6 +12,7 @@ export function runQuery(query: IQuery): Function {
     const tokenPresent = getState().authToken;
     const respHeaders: any = {};
     const createdAt = new Date().toISOString();
+    debugger;
 
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query).then(async (response: Response) => {

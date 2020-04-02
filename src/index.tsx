@@ -52,7 +52,6 @@ loadGETheme(currentTheme);
 const appState: any = store({
   authToken: '',
   consentedScopes: [],
-  headersAdded: [{ name: '', value: '' }],
   isLoadingData: false,
   profile: null,
   queryRunnerStatus: null,

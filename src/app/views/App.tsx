@@ -17,7 +17,6 @@ import * as authActionCreators from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
-import { addRequestHeader } from '../services/actions/request-headers-action-creators';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
@@ -49,7 +48,6 @@ interface IAppProps {
   sampleQuery: IQuery;
   authenticated: boolean;
   actions: {
-    addRequestHeader: Function;
     clearQueryStatus: Function;
     clearTermsOfUse: Function;
     setSampleQuery: Function;
@@ -218,12 +216,19 @@ class App extends Component<IAppProps, IAppState> {
       if (actions) {
         const { queryVersion } = parseSampleUrl(url);
 
+        const requestHeaders = headers.map((header: any) => {
+          return {
+            name: Object.keys(header)[0],
+            value: Object.values(header)[0]
+          };
+        });
+
         const query: IQuery = {
           sampleUrl: url,
           selectedVerb: verb,
           sampleBody: body,
           selectedVersion: queryVersion,
-          sampleHeaders: headers
+          sampleHeaders: requestHeaders
         };
 
         substituteTokens(query, profile);
@@ -232,15 +237,6 @@ class App extends Component<IAppProps, IAppState> {
       }
     }, 1000);
 
-    if (actions) {
-      const requestHeaders = headers.map((header: any) => {
-        return {
-          name: Object.keys(header)[0],
-          value: Object.values(header)[0]
-        };
-      });
-      actions.addRequestHeader(requestHeaders);
-    }
   };
 
   public handleSelectVerb = (verb: string) => {
@@ -553,7 +549,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       clearTermsOfUse,
       runQuery,
       setSampleQuery,
-      addRequestHeader,
       toggleSidebar,
       ...authActionCreators,
       changeTheme: (newTheme: string) => {

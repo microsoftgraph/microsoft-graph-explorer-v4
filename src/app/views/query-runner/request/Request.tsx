@@ -7,7 +7,7 @@ import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
-import RequestHeaders from './headers/RequestHeaders';
+import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
 
