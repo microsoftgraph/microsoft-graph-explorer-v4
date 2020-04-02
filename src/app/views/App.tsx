@@ -138,12 +138,13 @@ class App extends Component<IAppProps, IAppState> {
     const version = urlParams.get('version');
     const graphUrl = urlParams.get('GraphUrl');
     const requestBody = urlParams.get('requestBody');
+    const headers = urlParams.get('headers');
 
-    return { request, method, version, graphUrl, requestBody };
+    return { request, method, version, graphUrl, requestBody, headers };
   }
 
   private generateQueryObjectFrom(queryParams: any) {
-    const { request, method, version, graphUrl, requestBody } = queryParams;
+    const { request, method, version, graphUrl, requestBody, headers } = queryParams;
 
     if (!request) {
       return null;
@@ -154,6 +155,7 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: method,
       selectedVersion: version,
       sampleBody: this.hashDecode(requestBody),
+      sampleHeaders: JSON.parse(this.hashDecode(headers)),
     };
   }
 
@@ -197,7 +199,7 @@ class App extends Component<IAppProps, IAppState> {
   private handleInitMsg = (msg: IInitMessage) => {
     const { actions, profile } = this.props;
     const { verb, headers, url, body }: any = parse(msg.code);
-
+    debugger;
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
