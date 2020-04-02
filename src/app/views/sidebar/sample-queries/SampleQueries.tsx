@@ -378,4 +378,4 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 const styledSampleQueries = styled(SampleQueries, sidebarStyles);
 // @ts-ignore
 const IntlSampleQueries = injectIntl(styledSampleQueries);
-export default connect(mapStateToProps, mapDispatchToProps)(IntlSampleQueries);;
+export default connect(mapStateToProps, mapDispatchToProps)(IntlSampleQueries);
