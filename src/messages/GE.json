@@ -258,7 +258,7 @@
   "back to classic": "Preview",
   "More actions": "More actions",
   "Permissions": "Permissions",
-  "Sign In to see your access token.": "Sign In to see your access token.",
+  "Sign In to see your access token.": "To view your access token, sign in to Graph Explorer.",
   "Sign In to try this sample": "Sign in to try this sample",
   "Signing you in...": "Signing you in...",
   "Share Query Message": "Share this link to let people try your current query in the Graph Explorer",
