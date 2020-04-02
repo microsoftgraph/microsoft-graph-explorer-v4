@@ -1,7 +1,6 @@
 import {
-  DefaultButton, Dialog, DialogFooter,
-  DialogType, getId, IconButton, IStackTokens, ITheme, Label, MessageBar,
-  MessageBarType, PrimaryButton, Stack, styled
+  IconButton, IStackTokens, ITheme, Label, MessageBar,
+  MessageBarType, Stack, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, InjectedIntl, injectIntl } from 'react-intl';
@@ -21,7 +20,7 @@ import { addRequestHeader } from '../services/actions/request-headers-action-cre
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { getLoginType, getSessionId, logIn } from '../services/graph-client/msal-service';
+import { getLoginType, logIn } from '../services/graph-client/msal-service';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { appStyles } from './App.styles';
@@ -311,9 +310,6 @@ class App extends Component<IAppProps, IAppState> {
     </div>;
   }
 
-  private showDialog = (): void => {
-    this.setState({ hideDialog: false });
-  };
 
   private closeDialog = (): void => {
     this.setState({ hideDialog: true });
@@ -494,23 +490,18 @@ class App extends Component<IAppProps, IAppState> {
                 {termsOfUse && (
                   <MessageBar
                     messageBarType={MessageBarType.info}
-                    isMultiline={true}
+                    isMultiline={false}
                     onDismiss={actions.clearTermsOfUse}
                   >
-                    <FormattedMessage id='use the Microsoft Graph API' />
-                    <br /><br />
-                    <div>
-                      <a className={classes.links}
+                    <FormattedMessage id='use the Microsoft Graph API' /><a className={classes.links}
                         href={'https://docs.microsoft.com/' + language +
                           '/legal/microsoft-apis/terms-of-use?context=graph/context'}
                         target='_blank'>
-                        <FormattedMessage id='Terms of use' /></a>
-                      &nbsp;,
-                        <a className={classes.links}
+                        <FormattedMessage id='Terms of use' /></a>.
+                        <FormattedMessage id='View the' /><a className={classes.links}
                         href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
                         target='_blank'>
                         <FormattedMessage id='Microsoft Privacy Statement' /></a>
-                    </div>
                   </MessageBar>
                 )}
                 {

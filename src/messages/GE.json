@@ -239,9 +239,9 @@
   "Canary": "Canary",
   "disable canary": "disable canary",
   "using canary": "You are using the canary version of Graph Explorer. Sign in to make requests",
-  "use the Microsoft Graph API": "When you use Microsoft Graph APIs, you agree to Microsoft APIs Terms of Use",
-  "Terms of use": "View Microsoft APIs Terms of Use",
-  "Microsoft Privacy Statement": "View Microsoft Privacy Statement",
+  "use the Microsoft Graph API": "When you use Microsoft Graph APIs, you agree to the",
+  "Terms of use": "Microsoft APIs Terms of Use",
+  "Microsoft Privacy Statement": "Microsoft Privacy Statement",
   "Add": "Add",
   "Snippets": "Code snippets",
   "Adaptive Cards": "Adaptive cards",
@@ -289,5 +289,6 @@
   "Admin consent required": "Admin consent required",
   "Consent": "Consent",
   "permissions required to run the query": "The following permissions are required to run the query. To consent to the permissions, click Consent.",
-  "tab": " tab"
+  "tab": " tab",
+  "View the":" View the"
 }
