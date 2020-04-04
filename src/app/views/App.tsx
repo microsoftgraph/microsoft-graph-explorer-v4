@@ -17,7 +17,6 @@ import * as authActionCreators from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
-import { addRequestHeader } from '../services/actions/request-headers-action-creators';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
@@ -49,7 +48,6 @@ interface IAppProps {
   sampleQuery: IQuery;
   authenticated: boolean;
   actions: {
-    addRequestHeader: Function;
     clearQueryStatus: Function;
     clearTermsOfUse: Function;
     setSampleQuery: Function;
@@ -138,12 +136,13 @@ class App extends Component<IAppProps, IAppState> {
     const version = urlParams.get('version');
     const graphUrl = urlParams.get('GraphUrl');
     const requestBody = urlParams.get('requestBody');
+    const headers = urlParams.get('headers');
 
-    return { request, method, version, graphUrl, requestBody };
+    return { request, method, version, graphUrl, requestBody, headers };
   }
 
   private generateQueryObjectFrom(queryParams: any) {
-    const { request, method, version, graphUrl, requestBody } = queryParams;
+    const { request, method, version, graphUrl, requestBody, headers } = queryParams;
 
     if (!request) {
       return null;
@@ -154,6 +153,7 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: method,
       selectedVersion: version,
       sampleBody: this.hashDecode(requestBody),
+      sampleHeaders: JSON.parse(this.hashDecode(headers)),
     };
   }
 
@@ -197,7 +197,6 @@ class App extends Component<IAppProps, IAppState> {
   private handleInitMsg = (msg: IInitMessage) => {
     const { actions, profile } = this.props;
     const { verb, headers, url, body }: any = parse(msg.code);
-
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
@@ -216,12 +215,19 @@ class App extends Component<IAppProps, IAppState> {
       if (actions) {
         const { queryVersion } = parseSampleUrl(url);
 
+        const requestHeaders = headers.map((header: any) => {
+          return {
+            name: Object.keys(header)[0],
+            value: Object.values(header)[0]
+          };
+        });
+
         const query: IQuery = {
           sampleUrl: url,
           selectedVerb: verb,
           sampleBody: body,
           selectedVersion: queryVersion,
-          sampleHeaders: headers
+          sampleHeaders: requestHeaders
         };
 
         substituteTokens(query, profile);
@@ -230,15 +236,6 @@ class App extends Component<IAppProps, IAppState> {
       }
     }, 1000);
 
-    if (actions) {
-      const requestHeaders = headers.map((header: any) => {
-        return {
-          name: Object.keys(header)[0],
-          value: Object.values(header)[0]
-        };
-      });
-      actions.addRequestHeader(requestHeaders);
-    }
   };
 
   public handleSelectVerb = (verb: string) => {
@@ -551,7 +548,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       clearTermsOfUse,
       runQuery,
       setSampleQuery,
-      addRequestHeader,
       toggleSidebar,
       ...authActionCreators,
       changeTheme: (newTheme: string) => {

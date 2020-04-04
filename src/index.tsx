@@ -52,7 +52,6 @@ loadGETheme(currentTheme);
 const appState: any = store({
   authToken: '',
   consentedScopes: [],
-  headersAdded: [{ name: '', value: '' }],
   isLoadingData: false,
   profile: null,
   queryRunnerStatus: null,
@@ -60,7 +59,7 @@ const appState: any = store({
     sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
     selectedVerb: 'GET',
     sampleBody: undefined,
-    sampleHeaders: {},
+    sampleHeaders: [],
     selectedVersion: 'v1.0',
   },
   termsOfUse: true,
