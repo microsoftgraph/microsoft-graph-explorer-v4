@@ -316,8 +316,17 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         {error && <MessageBar messageBarType={MessageBarType.warning}
           isMultiline={true}
           dismissButtonAriaLabel='Close'>
-          You are viewing a cached set of samples because of a network connection failure.
+          <FormattedMessage id='viewing a cached set' />
         </MessageBar>}
+        <MessageBar messageBarType={MessageBarType.info}
+          isMultiline={false}
+          dismissButtonAriaLabel='Close'>
+          <FormattedMessage id='see more queries' />
+          <a target='_blank'
+            href='https://docs.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0'>
+            <FormattedMessage id='Microsoft Graph API Reference docs' />
+          </a>
+        </MessageBar>
         <DetailsList className={classes.queryList}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderItemColumn={this.renderItemColumn}
