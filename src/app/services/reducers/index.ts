@@ -9,7 +9,6 @@ import { sampleQuery } from './query-input-reducers';
 import { isLoadingData } from './query-loading-reducers';
 import { graphResponse } from './query-runner-reducers';
 import { queryRunnerStatus } from './query-runner-status-reducers';
-import { headersAdded } from './request-headers-reducers';
 import { history } from './request-history-reducers';
 import { samples } from './samples-reducers';
 import { snippets } from './snippet-reducer';
@@ -24,7 +23,6 @@ export default combineReducers({
   graphExplorerMode,
   graphResponse,
   devxApi,
-  headersAdded,
   history,
   isLoadingData,
   profile,

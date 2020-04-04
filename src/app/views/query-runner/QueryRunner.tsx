@@ -9,7 +9,6 @@ import {
 } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
-import { addRequestHeader } from '../../services/actions/request-headers-action-creators';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
@@ -67,11 +66,7 @@ export class QueryRunner extends Component<
 
   private handleOnRunQuery = () => {
     const { sampleBody } = this.state;
-    const { actions, headers, sampleQuery } = this.props;
-
-    if (headers) {
-      sampleQuery.sampleHeaders = headers;
-    }
+    const { actions, sampleQuery } = this.props;
 
     if (sampleBody) {
       sampleQuery.sampleBody = JSON.parse(sampleBody);
@@ -141,7 +136,7 @@ export class QueryRunner extends Component<
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators(
-      { ...queryActionCreators, ...queryInputActionCreators, addRequestHeader },
+      { ...queryActionCreators, ...queryInputActionCreators },
       dispatch
     )
   };
@@ -149,7 +144,6 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 function mapStateToProps(state: any) {
   return {
-    headers: state.headersAdded,
     sampleQuery: state.sampleQuery,
   };
 }
