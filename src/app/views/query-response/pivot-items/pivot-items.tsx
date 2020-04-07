@@ -1,6 +1,6 @@
+import { getId, Icon, IconButton, PivotItem, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
 
-import { IconButton, PivotItem } from 'office-ui-fabric-react';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { ContentType, Mode } from '../../../../types/enums';
 import { Image, Monaco } from '../../common';
@@ -21,6 +21,8 @@ export const getPivotItems = (properties: any) => {
       ariaLabel='Response Preview'
       itemIcon='Reply'
       headerText={(mobileScreen) ? '' : messages['Response Preview']}
+      title={messages['Response Preview']}
+      onRenderItemLink={getTooltipDisplay}
     >
       {resultComponent}
     </PivotItem>,
@@ -29,6 +31,8 @@ export const getPivotItems = (properties: any) => {
       ariaLabel='Response Headers'
       headerText={(mobileScreen) ? '' : messages['Response Headers']}
       itemIcon='FileComment'
+      title={messages['Response Headers']}
+      onRenderItemLink={getTooltipDisplay}
     >
       {headers && <div><IconButton style={{ float: 'right', zIndex: 1 }} iconProps={{
         iconName: 'copy',
@@ -43,7 +47,9 @@ export const getPivotItems = (properties: any) => {
         key='adaptive-cards'
         ariaLabel='Adaptive Cards'
         headerText={(mobileScreen) ? '' : messages['Adaptive Cards']}
+        title={messages['Adaptive Cards']}
         itemIcon='ContactCard'
+        onRenderItemLink={getTooltipDisplay}
       >
         <ThemeContext.Consumer >
           {(theme) => (
@@ -60,8 +66,10 @@ export const getPivotItems = (properties: any) => {
       <PivotItem
         key='code-snippets'
         ariaLabel='Code Snippets'
+        title={messages.Snippets}
         headerText={(mobileScreen) ? '' : messages.Snippets}
         itemIcon='PasteAsCode'
+        onRenderItemLink={getTooltipDisplay}
       >
         <Snippets />
       </PivotItem>
@@ -70,6 +78,15 @@ export const getPivotItems = (properties: any) => {
 
   return pivotItems;
 };
+
+function getTooltipDisplay(link: any) {
+  return (
+    <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}>
+      <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
+      {link.headerText}
+    </TooltipHost>
+  );
+}
 
 function displayResultComponent(headers: any, body: any, verb: string) {
   const language = 'json';
