@@ -1,4 +1,4 @@
-import { Pivot, PivotItem, TooltipHost, getId, Icon } from 'office-ui-fabric-react';
+import { getId, Icon, Pivot, PivotItem, TooltipHost } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
