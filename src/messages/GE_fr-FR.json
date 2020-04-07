@@ -293,5 +293,6 @@
   "View the":" Afficher",
   "viewing a cached set": "Vous affichez un ensemble d’exemples mis en cache en raison d’un échec de la connexion réseau.",
   "see more queries":"Afficher d’autres requêtes dans les",
-  "Microsoft Graph API Reference docs": "documents de référence d’API Microsoft Graph."
+  "Microsoft Graph API Reference docs": "Documents de référence d’API Microsoft Graph.",
+  "Fetching permissions": "Extraction d’autorisations"
 }
