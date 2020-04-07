@@ -77,6 +77,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public componentDidMount = async () => {
+
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
 
