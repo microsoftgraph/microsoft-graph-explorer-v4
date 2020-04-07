@@ -1,4 +1,4 @@
-import { Pivot, PivotItem } from 'office-ui-fabric-react';
+import { getId, Icon, Pivot, PivotItem, TooltipHost } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -30,6 +30,8 @@ export class Request extends Component<IRequestComponent, any> {
       <PivotItem
         key='request-body'
         itemIcon='Send'
+        onRenderItemLink={this.getTooltipDisplay}
+        title={messages['request body']}
         headerText={(mobileScreen) ? '' : messages['request body']}>
         <Monaco
           body={sampleBody}
@@ -38,12 +40,16 @@ export class Request extends Component<IRequestComponent, any> {
       <PivotItem
         key='request-header'
         itemIcon='FileComment'
+        onRenderItemLink={this.getTooltipDisplay}
+        title={messages['request header']}
         headerText={(mobileScreen) ? '' : messages['request header']}>
         <RequestHeaders />
       </PivotItem>,
       <PivotItem
         key='permissions'
         itemIcon='AzureKeyVault'
+        onRenderItemLink={this.getTooltipDisplay}
+        title={messages['modify permissions']}
         headerText={(mobileScreen) ? '' : messages['modify permissions']}>
         <Permission />
       </PivotItem>
@@ -54,6 +60,8 @@ export class Request extends Component<IRequestComponent, any> {
         <PivotItem
           key='auth'
           itemIcon='AuthenticatorApp'
+          onRenderItemLink={this.getTooltipDisplay}
+          title={messages['Access Token']}
           headerText={(mobileScreen) ? '' : messages['Access Token']}>
           <Auth />
         </PivotItem>
@@ -62,6 +70,15 @@ export class Request extends Component<IRequestComponent, any> {
 
     return pivotItems;
   };
+
+  private getTooltipDisplay(link: any) {
+    return (
+      <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}>
+        <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
+        {link.headerText}
+      </TooltipHost>
+    );
+  }
 
   public render() {
 
