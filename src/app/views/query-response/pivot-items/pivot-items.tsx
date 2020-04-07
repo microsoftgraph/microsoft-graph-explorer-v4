@@ -43,6 +43,7 @@ export const getPivotItems = (properties: any) => {
       key='code-snippets'
       ariaLabel='Code Snippets'
       headerText={(mobileScreen) ? '' : messages.Snippets}
+      itemIcon='PasteAsCode'
     >
       <Snippets />
     </PivotItem>,
