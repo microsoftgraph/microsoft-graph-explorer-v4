@@ -27,8 +27,12 @@ export const authStyles = (theme: ITheme) => {
       marginBottom: 5
     },
     emptyStateLabel: {
-      fontSize: FontSizes.large,
-      fontWeight: 600,
+      display: 'flex',
+      width: '100%',
+      minHeight: 200,
+      justifyContent: 'center',
+      alignItems: 'center'
+
     },
   };
 };

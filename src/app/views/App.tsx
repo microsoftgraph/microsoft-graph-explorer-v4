@@ -1,7 +1,6 @@
 import {
-  DefaultButton, Dialog, DialogFooter,
-  DialogType, getId, IconButton, IStackTokens, ITheme, Label, MessageBar,
-  MessageBarType, PrimaryButton, Stack, styled
+  IconButton, IStackTokens, ITheme, Label, MessageBar,
+  MessageBarType, Stack, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, InjectedIntl, injectIntl } from 'react-intl';
@@ -17,11 +16,10 @@ import * as authActionCreators from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
-import { addRequestHeader } from '../services/actions/request-headers-action-creators';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { getLoginType, getSessionId, logIn } from '../services/graph-client/msal-service';
+import { getLoginType, logIn } from '../services/graph-client/msal-service';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { appStyles } from './App.styles';
@@ -49,7 +47,6 @@ interface IAppProps {
   sampleQuery: IQuery;
   authenticated: boolean;
   actions: {
-    addRequestHeader: Function;
     clearQueryStatus: Function;
     clearTermsOfUse: Function;
     setSampleQuery: Function;
@@ -138,12 +135,13 @@ class App extends Component<IAppProps, IAppState> {
     const version = urlParams.get('version');
     const graphUrl = urlParams.get('GraphUrl');
     const requestBody = urlParams.get('requestBody');
+    const headers = urlParams.get('headers');
 
-    return { request, method, version, graphUrl, requestBody };
+    return { request, method, version, graphUrl, requestBody, headers };
   }
 
   private generateQueryObjectFrom(queryParams: any) {
-    const { request, method, version, graphUrl, requestBody } = queryParams;
+    const { request, method, version, graphUrl, requestBody, headers } = queryParams;
 
     if (!request) {
       return null;
@@ -154,6 +152,7 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: method,
       selectedVersion: version,
       sampleBody: this.hashDecode(requestBody),
+      sampleHeaders: JSON.parse(this.hashDecode(headers)),
     };
   }
 
@@ -197,7 +196,6 @@ class App extends Component<IAppProps, IAppState> {
   private handleInitMsg = (msg: IInitMessage) => {
     const { actions, profile } = this.props;
     const { verb, headers, url, body }: any = parse(msg.code);
-
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
@@ -216,12 +214,19 @@ class App extends Component<IAppProps, IAppState> {
       if (actions) {
         const { queryVersion } = parseSampleUrl(url);
 
+        const requestHeaders = headers.map((header: any) => {
+          return {
+            name: Object.keys(header)[0],
+            value: Object.values(header)[0]
+          };
+        });
+
         const query: IQuery = {
           sampleUrl: url,
           selectedVerb: verb,
           sampleBody: body,
           selectedVersion: queryVersion,
-          sampleHeaders: headers
+          sampleHeaders: requestHeaders
         };
 
         substituteTokens(query, profile);
@@ -230,15 +235,6 @@ class App extends Component<IAppProps, IAppState> {
       }
     }, 1000);
 
-    if (actions) {
-      const requestHeaders = headers.map((header: any) => {
-        return {
-          name: Object.keys(header)[0],
-          value: Object.values(header)[0]
-        };
-      });
-      actions.addRequestHeader(requestHeaders);
-    }
   };
 
   public handleSelectVerb = (verb: string) => {
@@ -311,9 +307,6 @@ class App extends Component<IAppProps, IAppState> {
     </div>;
   }
 
-  private showDialog = (): void => {
-    this.setState({ hideDialog: false });
-  };
 
   private closeDialog = (): void => {
     this.setState({ hideDialog: true });
@@ -481,28 +474,31 @@ class App extends Component<IAppProps, IAppState> {
                       {`- ${queryState.duration}`}<FormattedMessage id='milliseconds' />
                     </>}
 
+                    {queryState.status === 403 && <>.
+                      <FormattedMessage id='consent to scopes' />
+                      <span style={{ fontWeight: 600 }}>
+                        <FormattedMessage id='modify permissions' />
+                      </span>
+                      <FormattedMessage id='tab' />
+                    </>}
+
                   </MessageBar>
                 )}
                 {termsOfUse && (
                   <MessageBar
                     messageBarType={MessageBarType.info}
-                    isMultiline={true}
+                    isMultiline={false}
                     onDismiss={actions.clearTermsOfUse}
                   >
-                    <FormattedMessage id='use the Microsoft Graph API' />
-                    <br /><br />
-                    <div>
-                      <a className={classes.links}
+                    <FormattedMessage id='use the Microsoft Graph API' /><a className={classes.links}
                         href={'https://docs.microsoft.com/' + language +
                           '/legal/microsoft-apis/terms-of-use?context=graph/context'}
                         target='_blank'>
-                        <FormattedMessage id='Terms of use' /></a>
-                      &nbsp;,
-                        <a className={classes.links}
+                        <FormattedMessage id='Terms of use' /></a>.
+                        <FormattedMessage id='View the' /><a className={classes.links}
                         href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
                         target='_blank'>
                         <FormattedMessage id='Microsoft Privacy Statement' /></a>
-                    </div>
                   </MessageBar>
                 )}
                 {
@@ -543,7 +539,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       clearTermsOfUse,
       runQuery,
       setSampleQuery,
-      addRequestHeader,
       toggleSidebar,
       ...authActionCreators,
       changeTheme: (newTheme: string) => {

@@ -10,26 +10,25 @@ import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/Ada
 import GraphToolkit from '../graph-toolkit/GraphToolkit';
 import { Snippets } from '../snippets';
 
-export const getPivotItems = (messages: any,
-  body: any,
-  verb: string,
-  mode: Mode,
-  headers: any) => {
+export const getPivotItems = (properties: any) => {
 
+  const { headers, body, verb, messages, mobileScreen, mode } = properties;
   const resultComponent = displayResultComponent(headers, body, verb);
 
   const pivotItems = [
     <PivotItem
       key='response-preview'
       ariaLabel='Response Preview'
-      headerText={messages['Response Preview']}
+      itemIcon='Reply'
+      headerText={(mobileScreen) ? '' : messages['Response Preview']}
     >
       {resultComponent}
     </PivotItem>,
     <PivotItem
       key='response-headers'
       ariaLabel='Response Headers'
-      headerText={messages['Response Headers']}
+      headerText={(mobileScreen) ? '' : messages['Response Headers']}
+      itemIcon='FileComment'
     >
       {headers && <div><IconButton style={{ float: 'right', zIndex: 1 }} iconProps={{
         iconName: 'copy',
@@ -41,23 +40,26 @@ export const getPivotItems = (messages: any,
   if (mode === Mode.Complete) {
     pivotItems.push(
       <PivotItem
+      key='code-snippets'
+      ariaLabel='Code Snippets'
+      headerText={(mobileScreen) ? '' : messages.Snippets}
+    >
+      <Snippets />
+    </PivotItem>,
+      <PivotItem
         key='graph-toolkit'
         ariaLabel='Graph Toolkit'
-        headerText={messages['Graph toolkit']}
+        itemIcon='CustomizeToolbar'
+        headerText={(mobileScreen) ? '' : messages['Graph toolkit']}
       >
         <GraphToolkit />
       </PivotItem>,
-      <PivotItem
-        key='code-snippets'
-        ariaLabel='Code Snippets'
-        headerText={messages.Snippets}
-      >
-        <Snippets />
-      </PivotItem>,
+
       <PivotItem
         key='adaptive-cards'
         ariaLabel='Adaptive Cards'
-        headerText={messages['Adaptive Cards']}
+        headerText={(mobileScreen) ? '' : messages['Adaptive Cards']}
+        itemIcon='ContactCard'
       >
         <ThemeContext.Consumer >
           {(theme) => (
@@ -70,9 +72,7 @@ export const getPivotItems = (messages: any,
         </ThemeContext.Consumer>
       </PivotItem>
     );
-    pivotItems.push(
 
-    );
   }
 
   return pivotItems;
