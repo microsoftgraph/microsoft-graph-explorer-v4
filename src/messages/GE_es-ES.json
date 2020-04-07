@@ -293,5 +293,6 @@
   "View the":" Ver el",
   "viewing a cached set": "Está viendo un conjunto de ejemplos en caché debido a un error de conexión de red.",
   "see more queries":"Vea más consultas en los",
-  "Microsoft Graph API Reference docs": "documentos de referencia de la API de Microsoft Graph."
+  "Microsoft Graph API Reference docs": "Documentos de referencia de la API de Microsoft Graph.",
+  "Fetching permissions": "Obtener permisos"
 }
