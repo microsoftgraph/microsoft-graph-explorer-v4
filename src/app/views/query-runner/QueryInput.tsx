@@ -29,7 +29,13 @@ export class QueryInput extends Component<IQueryInputProps, any> {
 
   public handleKeyDown = (event: any) => {
     if (event.keyCode === 13) {
-      this.props.handleOnRunQuery();
+      this.props.handleOnBlur();
+
+      // allows the state to be populated with the new url before running it
+      setTimeout(() => {
+        this.props.handleOnRunQuery();
+      }, 500);
+
     }
   }
 

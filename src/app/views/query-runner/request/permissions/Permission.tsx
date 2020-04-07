@@ -162,7 +162,7 @@ function Permission(props: any) {
   return (
     <div className={classes.container}>
       {loading && <Label>
-        <FormattedMessage id={'Fetching permissions...'} />
+        <FormattedMessage id={'Fetching permissions'} />...
       </Label>}
       {permissions && !loading &&
         <div className={classes.permissions}>
