@@ -293,5 +293,6 @@
   "View the":" Посмотреть",
   "viewing a cached set": "Вы просматриваете кэшированный набор примеров из-за ошибки подключения к сети.",
   "see more queries":"Просмотрите другие запросы в",
-  "Microsoft Graph API Reference docs": "Справочные документы по API Microsoft Graph."
+  "Microsoft Graph API Reference docs": "Справочные документы по API Microsoft Graph.",
+  "Fetching permissions": "Извлечение разрешений"
 }
