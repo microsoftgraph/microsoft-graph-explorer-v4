@@ -43,11 +43,12 @@ class GraphToolkit extends Component<any> {
       return (
         <>
           <MessageBar messageBarType={MessageBarType.info}>
+            <FormattedMessage id='Open this example in' />
             <a
               tabIndex={0}
               href={exampleUrl} target='_blank'>
-              <FormattedMessage id='Open this example in mgt.dev' />.
-            </a>
+               <FormattedMessage id='graph toolkit playground' />
+            </a>.
           </MessageBar>
           <iframe width='100%' height='470px' src={toolkitUrl} />
         </>
