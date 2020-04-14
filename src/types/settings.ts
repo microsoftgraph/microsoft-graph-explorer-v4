@@ -15,4 +15,5 @@ export interface ISettingsProps {
 export interface ISettingsState {
   hideThemeChooserDialog: boolean;
   items: [];
+  panelIsOpen: boolean;
 }

@@ -1,8 +1,12 @@
 import {
   ChoiceGroup,
+  DefaultButton,
   Dialog,
   DialogType,
-  IconButton
+  IconButton,
+  Panel,
+  PanelType,
+  PrimaryButton
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -14,6 +18,7 @@ import { AppTheme } from '../../../types/enums';
 import { ISettingsProps, ISettingsState } from '../../../types/settings';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as themeActionCreators from '../../services/actions/theme-action-creator';
+import { Permission } from '../query-runner/request/permissions';
 
 
 class Settings extends Component<ISettingsProps, ISettingsState> {
@@ -21,7 +26,8 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
     super(props);
     this.state = {
       hideThemeChooserDialog: true,
-      items: []
+      items: [],
+      panelIsOpen: false
     };
   }
 
@@ -67,6 +73,24 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
     loadGETheme(newTheme);
   }
 
+  public togglePermissionsPanel = () => {
+    this.setState({ panelIsOpen: !this.state.panelIsOpen });
+  }
+
+  private handleConsent = () => {
+    throw null;
+  }
+
+  private onRenderFooterContent = () => {
+    return (
+    <div>
+      <PrimaryButton onClick={this.handleConsent} >
+        Save
+      </PrimaryButton>
+      <DefaultButton onClick={this.togglePermissionsPanel}>Cancel</DefaultButton>
+    </div>
+  ); };
+
   public render() {
 
     const {
@@ -75,18 +99,28 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
       authenticated,
     }: any = this.props;
 
-    const { hideThemeChooserDialog, items } = this.state;
+    const { hideThemeChooserDialog, items, panelIsOpen } = this.state;
     const menuOptions: any = [...items];
 
     if (authenticated) {
-      menuOptions.push({
-        key: 'sign-out',
-        text: messages['sign out'],
-        iconProps: {
-          iconName: 'SignOut',
+      menuOptions.push(
+        {
+          key: 'change-theme',
+          text: messages['view all permissions'],
+          iconProps: {
+            iconName: 'AzureKeyVault',
+          },
+          onClick: () => this.togglePermissionsPanel(),
         },
-        onClick: () => this.handleSignOut(),
-      });
+        {
+          key: 'sign-out',
+          text: messages['sign out'],
+          iconProps: {
+            iconName: 'SignOut',
+          },
+          onClick: () => this.handleSignOut(),
+        }
+      );
     }
 
     const menuProperties = {
@@ -141,6 +175,18 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
               onChange={(event, selectedTheme) => this.handleChangeTheme(selectedTheme)}
             />
           </Dialog>
+
+          <Panel
+            isOpen={panelIsOpen}
+            onDismiss={this.togglePermissionsPanel}
+            type={PanelType.medium}
+            closeButtonAriaLabel='Close'
+            headerText='All permissions'
+            onRenderFooterContent={this.onRenderFooterContent}
+            isFooterAtBottom={true}
+          >
+            <Permission panel={true} />
+          </Panel>
         </div>
       </div>
     );
