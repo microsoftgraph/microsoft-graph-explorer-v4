@@ -8,7 +8,8 @@ import {
   PrimaryButton,
   SelectionMode,
   styled,
-  TooltipHost
+  TooltipHost,
+  Checkbox
 } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -35,8 +36,11 @@ function Permission(props: any) {
   const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
   const {
+    panel,
     intl: { messages },
   }: any = props;
+
+  const panelView = !!panel;
 
   const columns = [{
     key: 'value',
@@ -45,36 +49,58 @@ function Permission(props: any) {
     minWidth: 100,
     maxWidth: 150,
     isResizable: true
-  },
-  {
-    key: 'consentDisplayName',
-    name: messages['Display string'],
-    fieldName: 'consentDisplayName',
-    isResizable: true,
-    minWidth: 150,
-    maxWidth: 200
-  },
-  {
-    key: 'consentDescription',
-    name: messages.Description,
-    fieldName: 'consentDescription',
-    isResizable: true,
-    minWidth: 200,
-    maxWidth: 300
-  },
-  {
+  }
+  ];
+
+  if (!panelView) {
+
+    columns.push({
+      key: 'consentDisplayName',
+      name: messages['Display string'],
+      fieldName: 'consentDisplayName',
+      isResizable: true,
+      minWidth: 150,
+      maxWidth: 200
+    },{
+      key: 'consentDescription',
+      name: messages.Description,
+      fieldName: 'consentDescription',
+      isResizable: true,
+      minWidth: 200,
+      maxWidth: 300
+    });
+  }
+
+  columns.push({
     key: 'isAdmin',
+    isResizable: false,
     name: messages['Admin consent required'],
     fieldName: 'isAdmin',
     minWidth: 100,
     maxWidth: 200
-  }
-];
+  });
 
   if (accessToken) {
     columns.push(
-      { key: 'consented', name: messages.Status, fieldName: 'consented', minWidth: 100, maxWidth: 200 }
-    );
+      {
+        key: 'consented',
+        name: messages.Status,
+        isResizable: false,
+        fieldName: 'consented',
+        minWidth: 100,
+        maxWidth: 200
+      });
+  }
+
+  if (panelView) {
+    columns.unshift({
+      key: 'checkbox',
+      name: '',
+      fieldName: '',
+      isResizable: true,
+      minWidth: 20,
+      maxWidth: 30
+    });
   }
 
   const classes = classNames(props);
@@ -110,7 +136,7 @@ function Permission(props: any) {
 
   const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
-
+    const consented = !!item.consented;
     if (column) {
       const content = item[column.fieldName as keyof any] as string;
 
@@ -118,24 +144,29 @@ function Permission(props: any) {
 
         case 'isAdmin':
           if (item.isAdmin) {
-            return <div style={{ textAlign: 'center'}}>
+            return <div style={{ textAlign: 'center' }}>
               <Icon iconName='checkmark' className={classes.checkIcon} />
             </div>;
           } else {
-            return <div style={{ textAlign: 'center'}}>
-            <Icon iconName='StatusCircleErrorX' className={classes.checkIcon} />
-          </div>;
+            return <div style={{ textAlign: 'center' }}>
+              <Icon iconName='StatusCircleErrorX' className={classes.checkIcon} />
+            </div>;
           }
 
+        case 'checkbox':
+          return <Checkbox disabled={consented} />;
+
         case 'consented':
-          const consented = !!item.consented;
           if (consented) {
             return <Label className={classes.consented}
             ><FormattedMessage id='Consented' /></Label>;
           } else {
-            return <PrimaryButton onClick={() => handleConsent(item)}>
-              <FormattedMessage id='Consent' />
-            </PrimaryButton>;
+            if (!panelView) {
+              return <PrimaryButton onClick={() => handleConsent(item)}>
+                <FormattedMessage id='Consent' />
+              </PrimaryButton>;
+            }
+            return null;
           }
 
         case 'consentDescription':
@@ -160,18 +191,18 @@ function Permission(props: any) {
   };
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} style={{ minHeight: (panelView) ? '800px' : '350px' }}>
       {loading && <Label>
         <FormattedMessage id={'Fetching permissions'} />...
       </Label>}
       {permissions && !loading &&
         <div className={classes.permissions}>
-          <Label className={classes.permissionLength}>
+          {!panelView && <><Label className={classes.permissionLength}>
             <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
           </Label>
           <Label className={classes.permissionText}>
             <FormattedMessage id='permissions required to run the query' />
-          </Label>
+          </Label></>}
           <DetailsList
             items={permissions}
             columns={columns}
