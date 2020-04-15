@@ -57,7 +57,7 @@ function Permission(props: any) {
     } else {
       dispatch(fetchScopes(sample));
     }
-  }, [sample]);
+  }, [sample.sampleUrl]);
 
   if (accessToken && permissions.length > 0) {
     permissions.forEach((permission: IPermission) => {
