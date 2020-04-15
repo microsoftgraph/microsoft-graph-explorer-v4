@@ -1,11 +1,19 @@
 import { IAction } from '../../../types/action';
+import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
-import { FETCH_SCOPES_ERROR, FETCH_SCOPES_SUCCESS } from '../redux-constants';
+import { parseSampleUrl } from '../../utils/sample-url-generation';
+import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../redux-constants';
 
 export function fetchScopesSuccess(response: object): IAction {
   return {
     type: FETCH_SCOPES_SUCCESS,
     response,
+  };
+}
+
+export function fetchScopesPending(): any {
+  return {
+    type: FETCH_SCOPES_PENDING,
   };
 }
 
@@ -16,40 +24,37 @@ export function fetchScopesError(response: object): IAction {
   };
 }
 
-export function fetchScopes(): Function {
+export function fetchScopes(query?: IQuery): Function {
   return async (dispatch: Function, getState: Function) => {
-    const { sampleQuery: { sampleUrl, selectedVerb } } = getState();
-    const urlObject: URL = new URL(sampleUrl);
-    const createdAt = new Date().toISOString();
-    // remove the prefix i.e. beta or v1.0 and any possible extra '/' character at the end
-    const requestUrl = urlObject.pathname.substr(5).replace(/\/$/, '');
-    const permissionsUrl = 'https://graphexplorerapi.azurewebsites.net/api/GraphExplorerPermissions?requesturl=' +
-      requestUrl + '&method=' + selectedVerb;
+    try {
+      const { devxApi } = getState();
+      let permissionsUrl = `${devxApi}/permissions`;
 
-    const headers = {
-      'Content-Type': 'application/json',
-    };
+      if (query) {
+        const { requestUrl, sampleUrl } = parseSampleUrl(query.sampleUrl);
 
-    const options: IRequestOptions = { headers };
-
-    return fetch(permissionsUrl, options)
-      .then(res => res.json())
-      .then(res => {
-        if (res.error) {
-          throw (res.error);
+        if (!sampleUrl) {
+          throw new Error('url is invalid');
         }
-        dispatch(fetchScopesSuccess(res));
-      })
-      .catch(() => {
-        const duration = (new Date()).getTime() - new Date(createdAt).getTime();
-        const response = {
-          /* Return 'Forbidden' regardless of error, as this was a
-           permission-centric operation with regards to user context */
-          statusText: 'Forbidden',
-          status: '403',
-          duration
-        };
-        return dispatch(fetchScopesError(response));
-      });
+
+        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}`;
+      }
+
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      const options: IRequestOptions = { headers };
+
+      dispatch(fetchScopesPending());
+
+      const response = await fetch(permissionsUrl, options);
+      if (response.ok) {
+        const scopes = await response.json();
+        return dispatch(fetchScopesSuccess(scopes));
+      }
+      throw (response);
+    } catch (error) {
+      return dispatch(fetchScopesError(error));
+    }
   };
 }
