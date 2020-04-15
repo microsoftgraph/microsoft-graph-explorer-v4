@@ -8,7 +8,7 @@ describe('Graph Explorer Snippet Reducer', () => {
       data: {},
       error: null
     };
-    const snippet = { "csharp": "GraphServiceClient graphClient = new GraphServiceClient( authProvider );" };
+    const snippet = { csharp: 'GraphServiceClient graphClient = new GraphServiceClient( authProvider );' };
 
     const response = {
       data: snippet,
