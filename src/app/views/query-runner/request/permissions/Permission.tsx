@@ -13,12 +13,12 @@ import {
 } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../../../services/actions/auth-action-creators';
+import { fetchScopes } from '../../../../services/actions/permissions-action-creator';
 import { acquireNewAccessToken } from '../../../../services/graph-client/msal-service';
 import { classNames } from '../../../classnames';
 import { permissionStyles } from './Permission.styles';
-import { fetchScopes } from './util';
 
 export interface IPermission {
   value: string;
@@ -29,13 +29,19 @@ export interface IPermission {
 }
 
 function Permission(props: any) {
-  const sample = useSelector((state: any) => state.sampleQuery, shallowEqual);
-  const accessToken = useSelector((state: any) => state.authToken);
+  const { accessToken, sample, scopes } = useSelector(
+    (state: any) => ({
+      sample: state.sampleQuery,
+      scopes: state.scopes,
+      accessToken: state.authToken
+    })
+  );
+
   const dispatch = useDispatch();
   const consentedScopes: string[] = useSelector((state: any) => state.consentedScopes);
-  const [permissions, setPermissions] = useState([]);
   const [permissionsToConsent, selectPermissions] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const { data: permissions, pending: loading } = scopes;
+
   const {
     panel,
     intl: { messages },
@@ -46,18 +52,14 @@ function Permission(props: any) {
   const classes = classNames(props);
 
   useEffect(() => {
-    setLoading(true);
-    setPermissions([]);
+    if (panelView) {
+      dispatch(fetchScopes());
+    } else {
+      dispatch(fetchScopes(sample));
+    }
+  }, [sample]);
 
-    fetchScopes(sample)
-      .then(res => { setLoading(false); setPermissions(res); })
-      .catch(() => {
-        setLoading(false);
-        setPermissions([]);
-      });
-  }, [sample.sampleUrl, sample.selectedVerb]);
-
-  if (accessToken) {
+  if (accessToken && permissions.length > 0) {
     permissions.forEach((permission: IPermission) => {
       if (consentedScopes.indexOf(permission.value) !== -1) {
         permission.consented = true;
@@ -66,13 +68,13 @@ function Permission(props: any) {
   }
 
   const handleConsent = async (permission?: IPermission) => {
-    let scopes = [];
+    let consentScopes = [];
     if (permission) {
-      scopes.push(permission.value);
+      consentScopes.push(permission.value);
     } else {
-      scopes = permissionsToConsent;
+      consentScopes = permissionsToConsent;
     }
-    const authResponse = await acquireNewAccessToken(scopes);
+    const authResponse = await acquireNewAccessToken(consentScopes);
     if (authResponse && authResponse.accessToken) {
       dispatch(getAuthTokenSuccess(authResponse.accessToken));
       dispatch(getConsentedScopesSuccess(authResponse.scopes));

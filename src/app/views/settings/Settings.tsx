@@ -74,7 +74,12 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
   }
 
   public togglePermissionsPanel = () => {
-    this.setState({ panelIsOpen: !this.state.panelIsOpen });
+    /*
+    * A bug in the panel does not allow closing the panel without a timeout
+    */
+    setTimeout(() => {
+      this.setState({ panelIsOpen: !this.state.panelIsOpen });
+    }, 5);
   }
 
   public render() {
@@ -167,7 +172,7 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
             onDismiss={this.togglePermissionsPanel}
             type={PanelType.medium}
             closeButtonAriaLabel='Close'
-            headerText='All permissions'
+            headerText={messages.Permissions}
           >
             <Permission panel={true} />
           </Panel>
