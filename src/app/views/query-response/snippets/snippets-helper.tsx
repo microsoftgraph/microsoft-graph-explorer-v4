@@ -1,7 +1,8 @@
-import { IconButton, PivotItem } from 'office-ui-fabric-react';
-import React, { useEffect, useState } from 'react';
+import { IconButton, Label, PivotItem } from 'office-ui-fabric-react';
+import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
+import { FormattedMessage } from 'react-intl';
 import { getSnippet } from '../../../services/actions/snippet-action-creator';
 import { Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
@@ -33,8 +34,9 @@ function Snippet(props: ISnippetProps) {
 
 
   const sampleQuery = useSelector((state: any) => state.sampleQuery, shallowEqual);
-  const snippet = useSelector((state: any) => (state.snippets)[language]);
-  const [ loadingState, setLoadingState ] = useState(false);
+  const snippets = useSelector((state: any) => (state.snippets));
+  const { data, pending: loadingState } = snippets;
+  const snippet = (!loadingState && data) ? data[language] : null;
 
   const dispatch = useDispatch();
 
@@ -43,20 +45,35 @@ function Snippet(props: ISnippetProps) {
   };
 
   useEffect(() => {
-      setLoadingState(true);
-
-      getSnippet(language, sampleQuery, dispatch)
-        .then(() => setLoadingState(false));
+    dispatch(getSnippet(language));
   }, [sampleQuery.sampleUrl]);
 
   return (
     <div style={{ display: 'block' }}>
-      <IconButton style={{ float: 'right', zIndex: 1}} iconProps={copyIcon} onClick={async () => genericCopy(snippet)}/>
-      <Monaco
-        body={loadingState ? 'Fetching code snippet...' : snippet}
-        language={language}
-        readOnly={true}
-      />
+      {loadingState &&
+        <Label style={{ padding: 10 }}>
+          <FormattedMessage id ='Fetching code snippet' />...
+        </Label>
+      }
+      {!loadingState && snippet &&
+        <>
+          <IconButton
+            style={{ float: 'right', zIndex: 1}}
+            iconProps={copyIcon}
+            onClick={async () => genericCopy(snippet)}
+          />
+          <Monaco
+            body={snippet}
+            language={language}
+            readOnly={true}
+          />
+        </>
+      }
+      {!loadingState && !snippet &&
+        <Label style={{ padding: 10 }}>
+          <FormattedMessage id ='Snippet not available' />
+        </Label>
+      }
     </div>
   );
 }
