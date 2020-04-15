@@ -1,4 +1,5 @@
 import {
+  Checkbox,
   DetailsList,
   DetailsListLayoutMode,
   getId,
@@ -8,8 +9,7 @@ import {
   PrimaryButton,
   SelectionMode,
   styled,
-  TooltipHost,
-  Checkbox
+  TooltipHost
 } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -34,6 +34,7 @@ function Permission(props: any) {
   const dispatch = useDispatch();
   const consentedScopes: string[] = useSelector((state: any) => state.consentedScopes);
   const [permissions, setPermissions] = useState([]);
+  const [permissionsToConsent, selectPermissions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const {
     panel,
@@ -41,69 +42,9 @@ function Permission(props: any) {
   }: any = props;
 
   const panelView = !!panel;
-
-  const columns = [{
-    key: 'value',
-    name: messages.Permission,
-    fieldName: 'value',
-    minWidth: 100,
-    maxWidth: 150,
-    isResizable: true
-  }
-  ];
-
-  if (!panelView) {
-
-    columns.push({
-      key: 'consentDisplayName',
-      name: messages['Display string'],
-      fieldName: 'consentDisplayName',
-      isResizable: true,
-      minWidth: 150,
-      maxWidth: 200
-    },{
-      key: 'consentDescription',
-      name: messages.Description,
-      fieldName: 'consentDescription',
-      isResizable: true,
-      minWidth: 200,
-      maxWidth: 300
-    });
-  }
-
-  columns.push({
-    key: 'isAdmin',
-    isResizable: false,
-    name: messages['Admin consent required'],
-    fieldName: 'isAdmin',
-    minWidth: 100,
-    maxWidth: 200
-  });
-
-  if (accessToken) {
-    columns.push(
-      {
-        key: 'consented',
-        name: messages.Status,
-        isResizable: false,
-        fieldName: 'consented',
-        minWidth: 100,
-        maxWidth: 200
-      });
-  }
-
-  if (panelView) {
-    columns.unshift({
-      key: 'checkbox',
-      name: '',
-      fieldName: '',
-      isResizable: true,
-      minWidth: 20,
-      maxWidth: 30
-    });
-  }
-
+  const columns = getColumns(messages, panelView, accessToken);
   const classes = classNames(props);
+
   useEffect(() => {
     setLoading(true);
     setPermissions([]);
@@ -124,14 +65,29 @@ function Permission(props: any) {
     });
   }
 
-  const handleConsent = async (permission: IPermission) => {
-    const scope = [permission.value];
-    const authResponse = await acquireNewAccessToken(scope);
-
+  const handleConsent = async (permission?: IPermission) => {
+    let scopes = [];
+    if (permission) {
+      scopes.push(permission.value);
+    } else {
+      scopes = permissionsToConsent;
+    }
+    const authResponse = await acquireNewAccessToken(scopes);
     if (authResponse && authResponse.accessToken) {
       dispatch(getAuthTokenSuccess(authResponse.accessToken));
       dispatch(getConsentedScopesSuccess(authResponse.scopes));
     }
+  };
+
+  const handlePermissionCheckboxChanged = (permission: IPermission) => {
+    const index = permissionsToConsent.indexOf(permission.value);
+    let selected = [...permissionsToConsent];
+    if (index !== -1) {
+      selected = permissionsToConsent.splice(index, 0);
+    } else {
+      selected.push(permission.value);
+    }
+    selectPermissions(selected);
   };
 
   const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
@@ -154,7 +110,7 @@ function Permission(props: any) {
           }
 
         case 'checkbox':
-          return <Checkbox disabled={consented} />;
+          return <Checkbox disabled={consented} onChange={() => handlePermissionCheckboxChanged(item)} />;
 
         case 'consented':
           if (consented) {
@@ -185,13 +141,24 @@ function Permission(props: any) {
             ;
 
         default:
-          return content;
+          return (
+            <TooltipHost
+              content={item.consentDescription}
+              id={hostId}
+              calloutProps={{ gapSpace: 0 }}
+              className={classes.tooltipHost}
+            >
+              <span aria-labelledby={hostId}>
+                {content}
+              </span>
+            </TooltipHost>
+          );
       }
     }
   };
 
   return (
-    <div className={classes.container} style={{ minHeight: (panelView) ? '800px' : '350px' }}>
+    <div className={classes.container} style={{ minHeight: (panelView) ? '800px' : '300px' }}>
       {loading && <Label>
         <FormattedMessage id={'Fetching permissions'} />...
       </Label>}
@@ -200,9 +167,9 @@ function Permission(props: any) {
           {!panelView && <><Label className={classes.permissionLength}>
             <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
           </Label>
-          <Label className={classes.permissionText}>
-            <FormattedMessage id='permissions required to run the query' />
-          </Label></>}
+            <Label className={classes.permissionText}>
+              <FormattedMessage id='permissions required to run the query' />
+            </Label></>}
           <DetailsList
             items={permissions}
             columns={columns}
@@ -212,8 +179,87 @@ function Permission(props: any) {
           />
         </div>
       }
+
+      {panelView &&
+        <PrimaryButton disabled={(permissionsToConsent.length === 0)} onClick={() => handleConsent()} >
+          Modify Permissions
+        </PrimaryButton>
+      }
     </div>
   );
+}
+
+function getColumns(messages: any, panelView: boolean, accessToken: any) {
+  const columns = [
+    {
+      key: 'value',
+      name: messages.Permission,
+      fieldName: 'value',
+      minWidth: 100,
+      maxWidth: 150,
+      isResizable: true
+    }
+  ];
+
+  if (!panelView) {
+    columns.push(
+      {
+        key: 'consentDisplayName',
+        name: messages['Display string'],
+        fieldName: 'consentDisplayName',
+        isResizable: true,
+        minWidth: 150,
+        maxWidth: 200
+      },
+      {
+        key: 'consentDescription',
+        name: messages.Description,
+        fieldName: 'consentDescription',
+        isResizable: true,
+        minWidth: 200,
+        maxWidth: 300
+      }
+    );
+  }
+
+  columns.push(
+    {
+      key: 'isAdmin',
+      isResizable: true,
+      name: messages['Admin consent required'],
+      fieldName: 'isAdmin',
+      minWidth: 100,
+      maxWidth: 200
+    }
+  );
+
+  if (accessToken) {
+    columns.push(
+      {
+        key: 'consented',
+        name: messages.Status,
+        isResizable: false,
+        fieldName: 'consented',
+        minWidth: 100,
+        maxWidth: 200
+      }
+    );
+  }
+
+  if (panelView) {
+    columns.unshift(
+      {
+        key: 'checkbox',
+        name: '',
+        fieldName: '',
+        isResizable: true,
+        minWidth: 20,
+        maxWidth: 30
+      }
+    );
+  }
+
+  return columns;
 }
 
 const IntlPermission = injectIntl(Permission);

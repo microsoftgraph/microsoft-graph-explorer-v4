@@ -77,20 +77,6 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
     this.setState({ panelIsOpen: !this.state.panelIsOpen });
   }
 
-  private handleConsent = () => {
-    throw null;
-  }
-
-  private onRenderFooterContent = () => {
-    return (
-    <div>
-      <PrimaryButton onClick={this.handleConsent} >
-        Save
-      </PrimaryButton>
-      <DefaultButton onClick={this.togglePermissionsPanel}>Cancel</DefaultButton>
-    </div>
-  ); };
-
   public render() {
 
     const {
@@ -182,8 +168,6 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
             type={PanelType.medium}
             closeButtonAriaLabel='Close'
             headerText='All permissions'
-            onRenderFooterContent={this.onRenderFooterContent}
-            isFooterAtBottom={true}
           >
             <Permission panel={true} />
           </Panel>
