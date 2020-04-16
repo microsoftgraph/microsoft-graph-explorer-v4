@@ -4,6 +4,7 @@ export interface ISettingsProps {
   actions?: {
     signOut: Function;
     changeTheme: Function;
+    consentToScopes: Function;
   };
   intl?: {
     message: object;
@@ -15,5 +16,6 @@ export interface ISettingsProps {
 export interface ISettingsState {
   hideThemeChooserDialog: boolean;
   items: [];
+  selectedPermissions: [];
   panelIsOpen: boolean;
 }

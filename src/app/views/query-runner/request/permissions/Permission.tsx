@@ -14,9 +14,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../../../services/actions/auth-action-creators';
-import { fetchScopes } from '../../../../services/actions/permissions-action-creator';
-import { acquireNewAccessToken } from '../../../../services/graph-client/msal-service';
+import { consentToScopes, fetchScopes } from '../../../../services/actions/permissions-action-creator';
 import { classNames } from '../../../classnames';
 import { permissionStyles } from './Permission.styles';
 
@@ -74,22 +72,19 @@ function Permission(props: any) {
     } else {
       consentScopes = permissionsToConsent;
     }
-    const authResponse = await acquireNewAccessToken(consentScopes);
-    if (authResponse && authResponse.accessToken) {
-      dispatch(getAuthTokenSuccess(authResponse.accessToken));
-      dispatch(getConsentedScopesSuccess(authResponse.scopes));
-    }
+    dispatch(consentToScopes(consentScopes));
   };
 
   const handlePermissionCheckboxChanged = (permission: IPermission) => {
     const index = permissionsToConsent.indexOf(permission.value);
     let selected = [...permissionsToConsent];
     if (index !== -1) {
-      selected = permissionsToConsent.splice(index, 0);
+      selected = permissionsToConsent.filter(item => item !== permission.value);
     } else {
       selected.push(permission.value);
     }
     selectPermissions(selected);
+    props.setPermissions(selected);
   };
 
   const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
@@ -160,7 +155,7 @@ function Permission(props: any) {
   };
 
   return (
-    <div className={classes.container} style={{ minHeight: (panelView) ? '800px' : '300px' }}>
+    <div className={classes.container}  style={{ minHeight: (panelView) ? '800px' : '300px' }}>
       {loading && <Label>
         <FormattedMessage id={'Fetching permissions'} />...
       </Label>}
@@ -180,12 +175,6 @@ function Permission(props: any) {
             layoutMode={DetailsListLayoutMode.justified}
           />
         </div>
-      }
-
-      {panelView &&
-        <PrimaryButton disabled={(permissionsToConsent.length === 0)} onClick={() => handleConsent()} >
-          Modify Permissions
-        </PrimaryButton>
       }
     </div>
   );

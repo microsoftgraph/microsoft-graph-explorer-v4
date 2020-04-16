@@ -9,7 +9,7 @@ import {
   PrimaryButton
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -17,9 +17,9 @@ import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
 import { ISettingsProps, ISettingsState } from '../../../types/settings';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
+import * as permissionsActionCreators from '../../services/actions/permissions-action-creator';
 import * as themeActionCreators from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
-
 
 class Settings extends Component<ISettingsProps, ISettingsState> {
   constructor(props: ISettingsProps) {
@@ -27,6 +27,7 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
     this.state = {
       hideThemeChooserDialog: true,
       items: [],
+      selectedPermissions: [],
       panelIsOpen: false
     };
   }
@@ -74,12 +75,29 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
   }
 
   public togglePermissionsPanel = () => {
-    /*
-    * A bug in the panel does not allow closing the panel without a timeout
-    */
-    setTimeout(() => {
-      this.setState({ panelIsOpen: !this.state.panelIsOpen });
-    }, 5);
+    this.setState({ panelIsOpen: !this.state.panelIsOpen });
+  }
+
+  public setPermissions = (permissions: []) => {
+    this.setState({ selectedPermissions: permissions });
+  }
+
+  public handleConsent = () => {
+    this.props.actions!.consentToScopes(this.state.selectedPermissions);
+  }
+
+  private onRenderFooterContent = () => {
+    const { selectedPermissions } = this.state;
+    return (
+      <div>
+        <PrimaryButton disabled={selectedPermissions.length === 0} onClick={() => this.handleConsent()}>
+          <FormattedMessage id='Modify permissions' />
+        </PrimaryButton>
+        <DefaultButton onClick={() => this.togglePermissionsPanel()}>
+          <FormattedMessage id='Cancel' />
+        </DefaultButton>
+      </div>
+    );
   }
 
   public render() {
@@ -135,7 +153,7 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
         <div>
           <Dialog
             hidden={hideThemeChooserDialog}
-            onDismiss={this.toggleThemeChooserDialogState}
+            onDismiss={() => this.toggleThemeChooserDialogState()}
             dialogContentProps={{
               type: DialogType.normal,
               title: messages['Change theme'],
@@ -169,12 +187,14 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
 
           <Panel
             isOpen={panelIsOpen}
-            onDismiss={this.togglePermissionsPanel}
+            onDismiss={() => this.togglePermissionsPanel}
             type={PanelType.medium}
             closeButtonAriaLabel='Close'
             headerText={messages.Permissions}
+            onRenderFooterContent={this.onRenderFooterContent}
+            isFooterAtBottom={true}
           >
-            <Permission panel={true} />
+            <Permission panel={true} setPermissions={this.setPermissions} />
           </Panel>
         </div>
       </div>
@@ -186,7 +206,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators({
       ...themeActionCreators,
-      ...authActionCreators
+      ...authActionCreators,
+      ...permissionsActionCreators,
     }, dispatch)
   };
 }
