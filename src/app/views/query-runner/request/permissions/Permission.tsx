@@ -14,7 +14,9 @@ import {
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import { SortOrder } from '../../../../../types/enums';
 import { consentToScopes, fetchScopes } from '../../../../services/actions/permissions-action-creator';
+import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { classNames } from '../../../classnames';
 import { permissionStyles } from './Permission.styles';
 
@@ -38,7 +40,8 @@ function Permission(props: any) {
   const dispatch = useDispatch();
   const consentedScopes: string[] = useSelector((state: any) => state.consentedScopes);
   const [permissionsToConsent, selectPermissions] = useState<string[]>([]);
-  const { data: permissions, pending: loading } = scopes;
+  // tslint:disable-next-line:prefer-const
+  let { data: permissions, pending: loading } = scopes;
 
   const {
     panel,
@@ -57,13 +60,19 @@ function Permission(props: any) {
     }
   }, [sample.sampleUrl, sample.selectedVerb]);
 
-  if (accessToken && permissions.length > 0) {
-    permissions.forEach((permission: IPermission) => {
-      if (consentedScopes.indexOf(permission.value) !== -1) {
-        permission.consented = true;
-      }
-    });
+  if (permissions.length > 0) {
+    permissions = (panelView) ? permissions.sort(dynamicSort('value', SortOrder.ASC)) : permissions;
+
+    if (accessToken) {
+      permissions.forEach((permission: IPermission) => {
+        if (consentedScopes.indexOf(permission.value) !== -1) {
+          permission.consented = true;
+        }
+      });
+    }
   }
+
+
 
   const handleConsent = async (permission?: IPermission) => {
     let consentScopes = [];
