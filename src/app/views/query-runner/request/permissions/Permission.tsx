@@ -19,6 +19,7 @@ import { consentToScopes, fetchScopes } from '../../../../services/actions/permi
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { classNames } from '../../../classnames';
 import { permissionStyles } from './Permission.styles';
+import { generatePermissionGroups } from './util';
 
 export interface IPermission {
   value: string;
@@ -109,7 +110,10 @@ function Permission(props: any) {
           }
 
         case 'checkbox':
-          return <Checkbox disabled={consented} onChange={() => handlePermissionCheckboxChanged(item)} />;
+          return <Checkbox
+            disabled={consented}
+            onChange={() => handlePermissionCheckboxChanged(item)}
+          />;
 
         case 'consented':
           if (consented) {
@@ -156,6 +160,46 @@ function Permission(props: any) {
     }
   };
 
+
+  const renderList = () => {
+    if (panelView) {
+      const groups = generatePermissionGroups(permissions);
+      return (
+        <>
+          <Label className={classes.permissionText}>
+            <FormattedMessage id='permissions required to run the query' />
+          </Label>
+          <DetailsList
+            items={permissions}
+            columns={columns}
+            groups={groups}
+            onRenderItemColumn={renderItemColumn}
+            layoutMode={DetailsListLayoutMode.justified}
+            compact={true}
+            usePageCache={true}
+            />
+        </>
+      );
+    }
+    return (
+      <>
+        <Label className={classes.permissionLength}>
+          <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
+        </Label>
+        <Label className={classes.permissionText}>
+          <FormattedMessage id='permissions required to run the query' />
+        </Label>
+        <DetailsList styles={{ root: { minHeight: '300px'}}}
+          items={permissions}
+          columns={columns}
+          onRenderItemColumn={renderItemColumn}
+          selectionMode={SelectionMode.none}
+          layoutMode={DetailsListLayoutMode.justified}
+        />
+      </>
+    );
+  };
+
   return (
     <div className={classes.container}  style={{ minHeight: (panelView) ? '800px' : '300px' }}>
       {loading && <Label>
@@ -163,19 +207,7 @@ function Permission(props: any) {
       </Label>}
       {permissions && !loading &&
         <div className={classes.permissions}>
-          {!panelView && <><Label className={classes.permissionLength}>
-            <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
-          </Label>
-            <Label className={classes.permissionText}>
-              <FormattedMessage id='permissions required to run the query' />
-            </Label></>}
-          <DetailsList
-            items={permissions}
-            columns={columns}
-            onRenderItemColumn={renderItemColumn}
-            selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.justified}
-          />
+          {renderList()}
         </div>
       }
     </div>
