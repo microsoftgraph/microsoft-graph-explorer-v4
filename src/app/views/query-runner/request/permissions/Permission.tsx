@@ -1,12 +1,14 @@
 import {
-  Checkbox,
   DetailsList,
   DetailsListLayoutMode,
+  FontSizes,
   getId,
   IColumn,
   Icon,
   Label,
   PrimaryButton,
+  SearchBox,
+  Selection,
   SelectionMode,
   styled,
   TooltipHost
@@ -30,7 +32,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     this.state = {
       permissions: [],
       groups: [],
-      permissionsToConsent: []
     };
   }
 
@@ -62,8 +63,10 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     }
   }
 
-  public shouldComponentUpdate(nextProps: IPermissionProps) {
-    const shouldUpdate = nextProps.sample !== this.props.sample || nextProps.scopes !== this.props.scopes;
+  public shouldComponentUpdate(nextProps: IPermissionProps, nextState: IPermissionState) {
+    const shouldUpdate = nextProps.sample !== this.props.sample
+    || nextProps.scopes !== this.props.scopes
+    || nextState.permissions !== this.state.permissions;
     return shouldUpdate;
   }
 
@@ -82,19 +85,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       groups
     });
   }
-
-  public handlePermissionCheckboxChanged = (permission: IPermission) => {
-    const { permissionsToConsent } = this.state;
-    const index = permissionsToConsent.indexOf(permission.value);
-    let selected = [...permissionsToConsent];
-    if (index !== -1) {
-      selected = permissionsToConsent.filter((item: string) => item !== permission.value);
-    } else {
-      selected.push(permission.value);
-    }
-    this.setState({ permissionsToConsent: selected });
-    this.props.setPermissions(selected);
-  };
 
   public handleConsent = async (permission: IPermission) => {
     const consentScopes = [permission.value];
@@ -125,12 +115,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               <Icon iconName='StatusCircleErrorX' className={classes.checkIcon} />
             </div>;
           }
-
-        case 'checkbox':
-          return <Checkbox
-            disabled={consented}
-            onChange={() => this.handlePermissionCheckboxChanged(item)}
-          />;
 
         case 'consented':
           if (consented) {
@@ -168,7 +152,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               calloutProps={{ gapSpace: 0 }}
               className={classes.tooltipHost}
             >
-              <span aria-labelledby={hostId}>
+              <span aria-labelledby={hostId} style={{ fontSize: FontSizes.medium}}>
                 {content}
               </span>
             </TooltipHost>
@@ -240,19 +224,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       );
     }
 
-    if (panel) {
-      columns.unshift(
-        {
-          key: 'checkbox',
-          name: '',
-          fieldName: '',
-          isResizable: true,
-          minWidth: 20,
-          maxWidth: 30
-        }
-      );
-    }
-
     return columns;
   }
 
@@ -281,20 +252,42 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       }
 
       const groups = generatePermissionGroups(permissions);
+      const selection = new Selection({
+        onSelectionChanged: () => {
+          const selected = selection.getSelection() as any;
+          const permissionsToConsent: string[] = [];
+          if (selected.length > 0) {
+            selected.forEach((option: IPermission) => {
+              permissionsToConsent.push(option.value);
+            });
+          }
+          this.props.setPermissions(permissionsToConsent);
+        }
+      });
 
       return (
         <>
           <Label className={classes.permissionText}>
             <FormattedMessage id='permissions required to run the query' />
           </Label>
+          <hr />
+          <SearchBox className={classes.searchBox} placeholder='Search sample queries'
+            onChange={(value) => this.searchValueChanged(value)}
+            styles={{ field: { paddingLeft: 10 } }}
+          />
+          <hr />
           <DetailsList
             items={permissions}
             columns={columns}
             groups={groups}
             onRenderItemColumn={this.renderItemColumn}
+            selectionMode={SelectionMode.multiple}
             layoutMode={DetailsListLayoutMode.justified}
+            selection={selection}
             compact={true}
-            usePageCache={true}
+            groupProps={{
+              showEmptyGroups: false,
+            }}
             />
         </>
       );
@@ -323,8 +316,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const { panel, scopes } = this.props;
     const { pending: loading } = scopes;
     const { permissions } = this.state;
-
-    console.log('render', this.state, this.props);
 
     return (
       <div className={classes.container}  style={{ minHeight: (panel) ? '800px' : '300px' }}>

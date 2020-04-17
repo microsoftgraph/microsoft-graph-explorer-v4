@@ -4,7 +4,7 @@ export function generatePermissionGroups(permissions: any) {
     const map = new Map();
     const groups: any[] = [];
 
-    let isCollapsed = false;
+    const isCollapsed = true;
     let previousCount = 0;
     let count = 0;
 
@@ -19,9 +19,6 @@ export function generatePermissionGroups(permissions: any) {
                     return value  === groupName;
                 }
             ).length;
-            if (groups.length > 0) {
-                isCollapsed = true;
-            }
             groups.push({
                 name: groupName,
                 key: groupName,

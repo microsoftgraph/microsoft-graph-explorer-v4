@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogType,
   IconButton,
+  Label,
   Panel,
   PanelType,
   PrimaryButton
@@ -75,7 +76,7 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
   }
 
   public togglePermissionsPanel = () => {
-    this.setState({ panelIsOpen: !this.state.panelIsOpen });
+    this.setState({ panelIsOpen: !this.state.panelIsOpen, selectedPermissions: []});
   }
 
   public setPermissions = (permissions: []) => {
@@ -86,13 +87,27 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
     this.props.actions!.consentToScopes(this.state.selectedPermissions);
   }
 
+  private getSelectionDetails(): string {
+    const { selectedPermissions } = this.state;
+    const selectionCount = selectedPermissions.length;
+
+    switch (selectionCount) {
+      case 0:
+        return '';
+      case 1:
+        return '1 selected: ' + selectedPermissions[0];
+      default:
+        return `${selectionCount} selected`;
+    }
+  }
+
   private onRenderFooterContent = () => {
     const { selectedPermissions } = this.state;
     return (
       <div>
+        <Label>{this.getSelectionDetails()}</Label>
         <PrimaryButton disabled={selectedPermissions.length === 0} onClick={() => this.handleConsent()}>
           <FormattedMessage id='Modify permissions' />
-          {selectedPermissions.length > 0 && <>({selectedPermissions.length})</>}
         </PrimaryButton>
         <DefaultButton onClick={() => this.togglePermissionsPanel()}>
           <FormattedMessage id='Cancel' />

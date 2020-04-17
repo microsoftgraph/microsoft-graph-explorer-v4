@@ -34,5 +34,4 @@ export interface IPermissionProps {
 export interface IPermissionState {
   permissions: IPermission[];
   groups: string[];
-  permissionsToConsent: string[];
 }
