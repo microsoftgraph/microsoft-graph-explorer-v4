@@ -72,15 +72,8 @@ function Permission(props: any) {
     }
   }
 
-
-
-  const handleConsent = async (permission?: IPermission) => {
-    let consentScopes = [];
-    if (permission) {
-      consentScopes.push(permission.value);
-    } else {
-      consentScopes = permissionsToConsent;
-    }
+  const handleConsent = async (permission: IPermission) => {
+    const consentScopes = [permission.value];
     dispatch(consentToScopes(consentScopes));
   };
 
