@@ -1,4 +1,4 @@
-import { IPermission } from './Permission';
+import { IPermission } from '../../../../../types/permissions';
 
 export function generatePermissionGroups(permissions: any) {
     const map = new Map();

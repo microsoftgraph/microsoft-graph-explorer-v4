@@ -11,88 +11,105 @@ import {
   styled,
   TooltipHost
 } from 'office-ui-fabric-react';
-import React, { useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import { SortOrder } from '../../../../../types/enums';
-import { consentToScopes, fetchScopes } from '../../../../services/actions/permissions-action-creator';
+import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
+import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { classNames } from '../../../classnames';
 import { permissionStyles } from './Permission.styles';
 import { generatePermissionGroups } from './util';
 
-export interface IPermission {
-  value: string;
-  consentDisplayName: string;
-  consentDescription: string;
-  isAdmin: boolean;
-  consented: boolean;
-}
+export class Permission extends Component<IPermissionProps, IPermissionState> {
 
-function Permission(props: any) {
-  const { accessToken, sample, scopes } = useSelector(
-    (state: any) => ({
-      sample: state.sampleQuery,
-      scopes: state.scopes,
-      accessToken: state.authToken
-    })
-  );
+  constructor(props: IPermissionProps) {
+    super(props);
+    this.state = {
+      permissions: [],
+      groups: [],
+      permissionsToConsent: []
+    };
+  }
 
-  const dispatch = useDispatch();
-  const consentedScopes: string[] = useSelector((state: any) => state.consentedScopes);
-  const [permissionsToConsent, selectPermissions] = useState<string[]>([]);
-  // tslint:disable-next-line:prefer-const
-  let { data: permissions, pending: loading } = scopes;
+  public componentDidMount = () => {
+    this.getPermissions();
+  }
 
-  const {
-    panel,
-    intl: { messages },
-  }: any = props;
-
-  const panelView = !!panel;
-  const columns = getColumns(messages, panelView, accessToken);
-  const classes = classNames(props);
-
-  useEffect(() => {
-    if (panelView) {
-      dispatch(fetchScopes());
-    } else {
-      dispatch(fetchScopes(sample));
+  public componentDidUpdate = (prevProps: IPermissionProps) => {
+    if (prevProps.sample !== this.props.sample) {
+      this.getPermissions();
     }
-  }, [sample.sampleUrl, sample.selectedVerb]);
-
-  if (permissions.length > 0) {
-    permissions = (panelView) ? permissions.sort(dynamicSort('value', SortOrder.ASC)) : permissions;
-
-    if (accessToken) {
-      permissions.forEach((permission: IPermission) => {
-        if (consentedScopes.indexOf(permission.value) !== -1) {
-          permission.consented = true;
-        }
+    const permissions = this.props.scopes.data;
+    if (prevProps.scopes.data !== permissions) {
+      const groups = generatePermissionGroups(permissions);
+      this.setState({
+        permissions,
+        groups
       });
     }
   }
 
-  const handleConsent = async (permission: IPermission) => {
-    const consentScopes = [permission.value];
-    dispatch(consentToScopes(consentScopes));
-  };
+  private getPermissions() {
+    const { panel, sample } = this.props;
+    if (panel) {
+      this.props.actions!.fetchScopes();
+    }
+    else {
+      this.props.actions!.fetchScopes(sample);
+    }
+  }
 
-  const handlePermissionCheckboxChanged = (permission: IPermission) => {
+  public shouldComponentUpdate(nextProps: IPermissionProps) {
+    const shouldUpdate = nextProps.sample !== this.props.sample || nextProps.scopes !== this.props.scopes;
+    return shouldUpdate;
+  }
+
+  public searchValueChanged = (value: string): void => {
+    const { scopes } = this.props;
+    const keyword = value.toLowerCase();
+
+    const filteredPermissions = scopes.data.filter((permission: IPermission) => {
+      const name = permission.value.toLowerCase();
+      return name.includes(keyword);
+    });
+
+    const groups = generatePermissionGroups(filteredPermissions);
+    this.setState({
+      permissions: filteredPermissions,
+      groups
+    });
+  }
+
+  public handlePermissionCheckboxChanged = (permission: IPermission) => {
+    const { permissionsToConsent } = this.state;
     const index = permissionsToConsent.indexOf(permission.value);
     let selected = [...permissionsToConsent];
     if (index !== -1) {
-      selected = permissionsToConsent.filter(item => item !== permission.value);
+      selected = permissionsToConsent.filter((item: string) => item !== permission.value);
     } else {
       selected.push(permission.value);
     }
-    selectPermissions(selected);
-    props.setPermissions(selected);
+    this.setState({ permissionsToConsent: selected });
+    this.props.setPermissions(selected);
   };
 
-  const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+  public handleConsent = async (permission: IPermission) => {
+    const consentScopes = [permission.value];
+    this.props.actions!.consentToScopes(consentScopes);
+  };
+
+
+  private renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
     const consented = !!item.consented;
+    const classes = classNames(this.props);
+    const {
+      panel,
+    }: any = this.props;
+
     if (column) {
       const content = item[column.fieldName as keyof any] as string;
 
@@ -112,7 +129,7 @@ function Permission(props: any) {
         case 'checkbox':
           return <Checkbox
             disabled={consented}
-            onChange={() => handlePermissionCheckboxChanged(item)}
+            onChange={() => this.handlePermissionCheckboxChanged(item)}
           />;
 
         case 'consented':
@@ -120,8 +137,8 @@ function Permission(props: any) {
             return <Label className={classes.consented}
             ><FormattedMessage id='Consented' /></Label>;
           } else {
-            if (!panelView) {
-              return <PrimaryButton onClick={() => handleConsent(item)}>
+            if (!panel) {
+              return <PrimaryButton onClick={() => this.handleConsent(item)}>
                 <FormattedMessage id='Consent' />
               </PrimaryButton>;
             }
@@ -160,10 +177,111 @@ function Permission(props: any) {
     }
   };
 
+  private getColumns = () => {
+    const {
+      tokenPresent,
+      panel,
+      intl: { messages },
+    }: any = this.props;
 
-  const renderList = () => {
-    if (panelView) {
+    const columns = [
+      {
+        key: 'value',
+        name: messages.Permission,
+        fieldName: 'value',
+        minWidth: 100,
+        maxWidth: 150,
+        isResizable: true
+      }
+    ];
+
+    if (!panel) {
+      columns.push(
+        {
+          key: 'consentDisplayName',
+          name: messages['Display string'],
+          fieldName: 'consentDisplayName',
+          isResizable: true,
+          minWidth: 150,
+          maxWidth: 200
+        },
+        {
+          key: 'consentDescription',
+          name: messages.Description,
+          fieldName: 'consentDescription',
+          isResizable: true,
+          minWidth: 200,
+          maxWidth: 300
+        }
+      );
+    }
+
+    columns.push(
+      {
+        key: 'isAdmin',
+        isResizable: true,
+        name: messages['Admin consent required'],
+        fieldName: 'isAdmin',
+        minWidth: 100,
+        maxWidth: 200
+      }
+    );
+
+    if (tokenPresent) {
+      columns.push(
+        {
+          key: 'consented',
+          name: messages.Status,
+          isResizable: false,
+          fieldName: 'consented',
+          minWidth: 100,
+          maxWidth: 200
+        }
+      );
+    }
+
+    if (panel) {
+      columns.unshift(
+        {
+          key: 'checkbox',
+          name: '',
+          fieldName: '',
+          isResizable: true,
+          minWidth: 20,
+          maxWidth: 30
+        }
+      );
+    }
+
+    return columns;
+  }
+
+  private renderList = () => {
+    const {
+      panel,
+      tokenPresent,
+      consentedScopes,
+    } = this.props;
+    let { permissions } = this.state;
+    const classes = classNames(this.props);
+    const columns = this.getColumns();
+
+    if (tokenPresent) {
+      permissions.forEach((permission: IPermission) => {
+        if (consentedScopes.indexOf(permission.value) !== -1) {
+          permission.consented = true;
+        }
+      });
+    }
+
+    if (panel) {
+
+      if (permissions.length > 0) {
+        permissions = (panel) ? permissions.sort(dynamicSort('value', SortOrder.ASC)) : permissions;
+      }
+
       const groups = generatePermissionGroups(permissions);
+
       return (
         <>
           <Label className={classes.permissionText}>
@@ -173,7 +291,7 @@ function Permission(props: any) {
             items={permissions}
             columns={columns}
             groups={groups}
-            onRenderItemColumn={renderItemColumn}
+            onRenderItemColumn={this.renderItemColumn}
             layoutMode={DetailsListLayoutMode.justified}
             compact={true}
             usePageCache={true}
@@ -192,100 +310,55 @@ function Permission(props: any) {
         <DetailsList styles={{ root: { minHeight: '300px'}}}
           items={permissions}
           columns={columns}
-          onRenderItemColumn={renderItemColumn}
+          onRenderItemColumn={this.renderItemColumn}
           selectionMode={SelectionMode.none}
           layoutMode={DetailsListLayoutMode.justified}
         />
       </>
     );
+  }
+
+  public render() {
+    const classes = classNames(this.props);
+    const { panel, scopes } = this.props;
+    const { pending: loading } = scopes;
+    const { permissions } = this.state;
+
+    console.log('render', this.state, this.props);
+
+    return (
+      <div className={classes.container}  style={{ minHeight: (panel) ? '800px' : '300px' }}>
+        {loading && <Label>
+          <FormattedMessage id={'Fetching permissions'} />...
+        </Label>}
+        {permissions && !loading &&
+          <div className={classes.permissions}>
+            {this.renderList()}
+          </div>
+        }
+      </div>
+    );
+  }
+}
+
+function mapStateToProps(state: any) {
+  return {
+    sample: state.sampleQuery,
+    scopes: state.scopes,
+    tokenPresent: state.authToken,
+    consentedScopes: state.consentedScopes
   };
-
-  return (
-    <div className={classes.container}  style={{ minHeight: (panelView) ? '800px' : '300px' }}>
-      {loading && <Label>
-        <FormattedMessage id={'Fetching permissions'} />...
-      </Label>}
-      {permissions && !loading &&
-        <div className={classes.permissions}>
-          {renderList()}
-        </div>
-      }
-    </div>
-  );
 }
 
-function getColumns(messages: any, panelView: boolean, accessToken: any) {
-  const columns = [
-    {
-      key: 'value',
-      name: messages.Permission,
-      fieldName: 'value',
-      minWidth: 100,
-      maxWidth: 150,
-      isResizable: true
-    }
-  ];
-
-  if (!panelView) {
-    columns.push(
-      {
-        key: 'consentDisplayName',
-        name: messages['Display string'],
-        fieldName: 'consentDisplayName',
-        isResizable: true,
-        minWidth: 150,
-        maxWidth: 200
-      },
-      {
-        key: 'consentDescription',
-        name: messages.Description,
-        fieldName: 'consentDescription',
-        isResizable: true,
-        minWidth: 200,
-        maxWidth: 300
-      }
-    );
-  }
-
-  columns.push(
-    {
-      key: 'isAdmin',
-      isResizable: true,
-      name: messages['Admin consent required'],
-      fieldName: 'isAdmin',
-      minWidth: 100,
-      maxWidth: 200
-    }
-  );
-
-  if (accessToken) {
-    columns.push(
-      {
-        key: 'consented',
-        name: messages.Status,
-        isResizable: false,
-        fieldName: 'consented',
-        minWidth: 100,
-        maxWidth: 200
-      }
-    );
-  }
-
-  if (panelView) {
-    columns.unshift(
-      {
-        key: 'checkbox',
-        name: '',
-        fieldName: '',
-        isResizable: true,
-        minWidth: 20,
-        maxWidth: 30
-      }
-    );
-  }
-
-  return columns;
+function mapDispatchToProps(dispatch: Dispatch): object {
+  return {
+    actions: bindActionCreators({
+      ...permissionActionCreators,
+    }, dispatch),
+  };
 }
 
-const IntlPermission = injectIntl(Permission);
-export default styled(IntlPermission, permissionStyles as any);
+const styledPermissions = styled(Permission, permissionStyles as any);
+// @ts-ignore
+const IntlPermission = injectIntl(styledPermissions);
+export default connect(mapStateToProps, mapDispatchToProps)(IntlPermission);
