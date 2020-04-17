@@ -1,4 +1,5 @@
 import {
+  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   FontSizes,
@@ -271,7 +272,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
             <FormattedMessage id='permissions required to run the query' />
           </Label>
           <hr />
-          <SearchBox className={classes.searchBox} placeholder='Search sample queries'
+          <SearchBox className={classes.searchBox} placeholder='Search permissions'
             onChange={(value) => this.searchValueChanged(value)}
             styles={{ field: { paddingLeft: 10 } }}
           />
@@ -288,6 +289,9 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
             groupProps={{
               showEmptyGroups: false,
             }}
+            ariaLabelForSelectionColumn='Toggle selection'
+            ariaLabelForSelectAllCheckbox='Toggle selection for all items'
+            checkButtonAriaLabel='Row checkbox'
             />
         </>
       );
