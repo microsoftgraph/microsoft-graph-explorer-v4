@@ -233,7 +233,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       panel,
       tokenPresent,
       consentedScopes,
-    } = this.props;
+      intl: { messages },
+    }: any = this.props;
     let { permissions } = this.state;
     const classes = classNames(this.props);
     const columns = this.getColumns();
@@ -269,10 +270,10 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       return (
         <>
           <Label className={classes.permissionText}>
-            <FormattedMessage id='permissions required to run the query' />
+            <FormattedMessage id='Select different permissions' />
           </Label>
           <hr />
-          <SearchBox className={classes.searchBox} placeholder='Search permissions'
+          <SearchBox className={classes.searchBox} placeholder={messages['Search permissions']}
             onChange={(value) => this.searchValueChanged(value)}
             styles={{ field: { paddingLeft: 10 } }}
           />

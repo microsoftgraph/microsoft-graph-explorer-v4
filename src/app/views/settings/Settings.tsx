@@ -107,7 +107,7 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
       <div>
         <Label>{this.getSelectionDetails()}</Label>
         <PrimaryButton disabled={selectedPermissions.length === 0} onClick={() => this.handleConsent()}>
-          <FormattedMessage id='Modify permissions' />
+          <FormattedMessage id='Consent' />
         </PrimaryButton>
         <DefaultButton onClick={() => this.togglePermissionsPanel()}>
           <FormattedMessage id='Cancel' />
