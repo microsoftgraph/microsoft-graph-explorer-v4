@@ -7,6 +7,7 @@ import {
   IQueryRunnerProps,
   IQueryRunnerState,
 } from '../../../types/query-runner';
+import * as autoCompleteActionCreators from '../../services/actions/autocomplete-action-creators';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
@@ -43,8 +44,8 @@ export class QueryRunner extends Component<
 
   private handleOnUrlChange = (newUrl = '') => {
     this.setState({ url: newUrl });
-
     this.changeUrlVersion(newUrl);
+    this.initialiseAutoComplete(newUrl);
   };
 
   private handleOnBlur = () => {
@@ -88,6 +89,16 @@ export class QueryRunner extends Component<
       });
     }
   };
+
+  private initialiseAutoComplete(url: string) {
+    const lastCharacter = url.substring(url.length - 1);
+    if (lastCharacter === '?') {
+      const { requestUrl } = parseSampleUrl(url);
+      if (requestUrl) {
+        this.props.actions!.fetchAutoCompleteOptions(requestUrl);
+      }
+    }
+  }
 
   private changeUrlVersion(newUrl: string) {
     const query = { ...this.props.sampleQuery };
@@ -136,7 +147,11 @@ export class QueryRunner extends Component<
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators(
-      { ...queryActionCreators, ...queryInputActionCreators },
+      {
+        ...autoCompleteActionCreators,
+        ...queryActionCreators,
+        ...queryInputActionCreators,
+      },
       dispatch
     )
   };

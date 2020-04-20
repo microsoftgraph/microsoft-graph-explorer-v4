@@ -22,34 +22,70 @@ export function fetchAutocompletePending(): any {
   };
 }
 
-export function fetchAutocompleteOptions(url: string): Function {
+export function fetchAutoCompleteOptions(url: string): Function {
   return async (dispatch: Function, getState: Function) => {
     const devxApi = getState().devxApi;
-
-    let permissionsUrl = `${devxApi}/openapi`;
-
+    const sampleQuery = getState().sampleQuery;
     const headers = {
       'Content-Type': 'application/json',
     };
 
-    permissionsUrl += url + '&style=geautocomplete&format=json';
+    let permissionsUrl = `${devxApi}/openapi`;
+    permissionsUrl = `${permissionsUrl}?url=/${url}&style=geautocomplete&format=json`;
 
     const options: IRequestOptions = { headers };
 
     dispatch(fetchAutocompletePending());
 
-    return fetch(permissionsUrl, options)
-      .then(res => res.json())
-      .then(res => {
-        if (res.error) {
-          throw (res.error);
-        }
-        dispatch(fetchAutocompleteSuccess(res.paths));
-        return res;
-      })
-      .catch(error => {
-        dispatch(fetchAutocompleteError(error));
-      });
+    try {
+      const response = await fetch(permissionsUrl, options);
+      if (response.ok) {
+        const autoCompleteOptions = await response.json();
+        const params = {
+          options: autoCompleteOptions,
+          url,
+          verb: sampleQuery.selectedVerb.toLowerCase()
+        };
+        const reduced = getReducedVersion(params);
 
+        return dispatch(fetchAutocompleteSuccess(reduced));
+      }
+
+      throw (response);
+
+    } catch (error) {
+      return dispatch(fetchAutocompleteError(error));
+    }
   };
 }
+function getReducedVersion(params: any) {
+  const { options, url, verb } = params;
+  const { paths } = options;
+  try {
+    const parameters: any[] = [];
+    let rootPath = url;
+    if (url.includes('me/drive')) {
+      rootPath = url.substring(3);
+    }
+    const root = paths[`/${rootPath}`];
+    const verbContent = root[`${verb}`];
+    const queryParams = verbContent.parameters;
+    if (queryParams.length > 0) {
+      queryParams.forEach((param: any) => {
+        if (param.name) {
+          const newLocal = {
+            name: param.name,
+            items: param.items.enum || null
+          };
+          parameters.push(newLocal);
+        }
+      });
+    }
+    const resp = { url, parameters, verb };
+    return resp;
+
+  } catch (error) {
+    return { error };
+  }
+}
+

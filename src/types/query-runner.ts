@@ -22,6 +22,7 @@ export interface IQueryRunnerProps {
     runQuery: Function;
     addRequestHeader: Function;
     setSampleQuery: Function;
+    fetchAutoCompleteOptions: Function;
   };
 }
 
@@ -38,6 +39,7 @@ export interface IQueryInputProps {
   sampleUrl: string;
   submitting: boolean;
   authenticated: boolean;
+  autoCompleteOptions: object;
   mode: Mode;
   intl: {
     message: object;
