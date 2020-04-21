@@ -1,13 +1,17 @@
-import { Dropdown, TextField } from 'office-ui-fabric-react';
+import { Dropdown } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
+import { bindActionCreators, Dispatch } from 'redux';
 import { Mode } from '../../../../types/enums';
 import { IQueryInputProps } from '../../../../types/query-runner';
+import * as autoCompleteActionCreators from '../../../services/actions/autocomplete-action-creators';
 import { getStyleFor } from '../../../utils/badge-color';
+import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import SubmitButton from '../../common/submit-button/SubmitButton';
 import { queryRunnerStyles } from '../QueryRunner.styles';
+import AutoComplete from './AutoComplete';
 
 export class QueryInput extends Component<IQueryInputProps, any> {
   constructor(props: any) {
@@ -27,6 +31,11 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     };
   }
 
+  public contentChanged = (value: string) => {
+    this.props.handleOnUrlChange(value);
+    this.props.handleOnBlur();
+  }
+
   public handleKeyDown = (event: any) => {
     if (event.keyCode === 13) {
       this.props.handleOnBlur();
@@ -39,22 +48,28 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     }
   }
 
+
+
+  public selected = (value: any) => {
+    // allows the state to be populated with the new url before running it
+    setTimeout(() => {
+      this.props.handleOnUrlChange(value);
+      this.props.handleOnBlur();
+    }, 500);
+  }
+
   public render() {
     const { httpMethods, urlVersions } = this.state;
 
     const {
       handleOnRunQuery,
       handleOnMethodChange,
-      handleOnUrlChange,
       handleOnVersionChange,
-      handleOnBlur,
       selectedVerb,
       selectedVersion,
-      sampleUrl,
       submitting,
       mode,
       authenticated,
-      autoCompleteOptions,
     } = this.props;
 
     const {
@@ -92,14 +107,9 @@ export class QueryInput extends Component<IQueryInputProps, any> {
           />
         </div>
         <div className='col-7'>
-          <TextField
-            ariaLabel='Query Sample Input'
-            role='textbox'
-            placeholder={messages['Query Sample']}
-            onChange={(event, value) => handleOnUrlChange(value)}
-            defaultValue={sampleUrl}
-            onBlur={() => handleOnBlur()}
-            onKeyDown={this.handleKeyDown}
+          <AutoComplete
+            suggestionSelected={this.selected}
+            contentChanged={this.contentChanged}
           />
         </div>
         <div className='col-1'>
@@ -129,9 +139,20 @@ function mapStateToProps(state: any) {
   };
 }
 
+function mapDispatchToProps(dispatch: Dispatch): object {
+  return {
+    actions: bindActionCreators(
+      {
+        ...autoCompleteActionCreators,
+      },
+      dispatch
+    )
+  };
+}
+
 // @ts-ignore
 const IntlQueryInput = injectIntl(QueryInput);
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(IntlQueryInput);
