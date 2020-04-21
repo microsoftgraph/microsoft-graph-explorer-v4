@@ -11,8 +11,8 @@ import * as autoCompleteActionCreators from '../../services/actions/autocomplete
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
+import { QueryInput } from './query-input';
 import './query-runner.scss';
-import QueryInput from './QueryInput';
 import Request from './request/Request';
 
 export class QueryRunner extends Component<

@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Mode } from '../../../types/enums';
-import { IQueryInputProps } from '../../../types/query-runner';
-import { getStyleFor } from '../../utils/badge-color';
-import SubmitButton from '../common/submit-button/SubmitButton';
-import { queryRunnerStyles } from './QueryRunner.styles';
+import { Mode } from '../../../../types/enums';
+import { IQueryInputProps } from '../../../../types/query-runner';
+import { getStyleFor } from '../../../utils/badge-color';
+import SubmitButton from '../../common/submit-button/SubmitButton';
+import { queryRunnerStyles } from '../QueryRunner.styles';
 
 export class QueryInput extends Component<IQueryInputProps, any> {
   constructor(props: any) {
@@ -53,7 +53,8 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       sampleUrl,
       submitting,
       mode,
-      authenticated
+      authenticated,
+      autoCompleteOptions,
     } = this.props;
 
     const {
@@ -123,7 +124,8 @@ function mapStateToProps(state: any) {
     submitting: state.isLoadingData,
     theme: state.theme,
     mode: state.graphExplorerMode,
-    authenticated: !!state.authToken
+    authenticated: !!state.authToken,
+    autoCompleteOptions: state.autoComplete.data
   };
 }
 
