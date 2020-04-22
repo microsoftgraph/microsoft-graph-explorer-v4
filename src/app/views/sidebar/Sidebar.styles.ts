@@ -4,7 +4,7 @@ import {
 } from '@uifabric/styling';
 
 export const sidebarStyles = (theme: ITheme) => {
-  const pageHeight = '850px';
+  const pageHeight = '660px';
   return {
     searchBox: {
       marginTop: theme.spacing.s1,
@@ -28,6 +28,9 @@ export const sidebarStyles = (theme: ITheme) => {
     },
     pullLeft: {
       float: 'left'
+    },
+    pullRight: {
+      float: 'right'
     },
 
     /* Group Headers */
@@ -70,11 +73,17 @@ export const sidebarStyles = (theme: ITheme) => {
     queryRow: {
       background: 'inherit',
       lineHeight: '100%',
-      width: '80%',
       fontSize: FontSizes.medium,
+      borderBottom: '1px solid ' + theme.palette.neutralLight,
+      color: theme.palette.black,
+      selectors: {
+        ':hover': {
+          background: theme.palette.neutralLight,
+        },
+      },
+      marginLeft: '-5%',
     },
     queryContent: {
-      display: 'table-cell',
       float: 'left',
       textAlign: 'left',
     },
@@ -84,12 +93,23 @@ export const sidebarStyles = (theme: ITheme) => {
     badge: {
       fontWeight: FontWeights.bold,
       fontSize: FontSizes.small,
+      display: 'inline-block',
+      textAlign: 'center',
+      marginRight: '15px',
+      lineHeight: 'normal',
+      whiteSpace: 'nowrap',
+      paddingLeft: 5,
+      paddingRight: 5,
+      paddingTop: 3,
+      paddingBottom: 3,
+      color: '#fff',
+      minWidth: '55px'
     },
     docLink: {
-      display: 'table-cell',
       float: 'right',
       verticalAlign: 'center',
       marginTop: '-7.5%',
+      marginRight: theme.spacing.s1,
     },
 
   };

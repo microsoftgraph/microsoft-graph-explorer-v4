@@ -1,13 +1,15 @@
+import { Mode } from './enums';
+import { IQuery } from './query-runner';
+
 export interface IHeadersListControl {
     handleOnHeaderDelete: Function;
     headers?: Array<{ name: string; value: string; }>;
 }
 
 export interface IRequestHeadersProps {
-    headers?: Array<{ name: string; value: string; }>;
+    sampleQuery: IQuery;
     actions?: {
-        addRequestHeader: Function;
-        removeRequestHeader: Function;
+        setSampleQuery: Function;
     };
     intl: {
         message: object;
@@ -16,8 +18,12 @@ export interface IRequestHeadersProps {
 
 export interface IRequestComponent {
     sampleBody?: string;
+    mode: Mode;
     handleOnEditorChange: Function;
     headers?: Array<{ name: string; value: string; }>;
+    intl: {
+        message: object;
+    };
 }
 
 export interface IRequestOptions {

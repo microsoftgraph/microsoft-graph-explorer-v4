@@ -1,4 +1,5 @@
-import { Mode } from './action';
+import { Mode } from './enums';
+import { IQuery } from './query-runner';
 
 export interface IQueryResponseProps {
   mode: Mode;
@@ -12,4 +13,16 @@ export interface IQueryResponseProps {
   };
   verb: string;
   theme: string;
+  scopes: string[];
+  sampleQuery: IQuery;
+  actions: {
+    getConsent: Function;
+  };
+  mobileScreen: boolean;
+}
+
+export interface IQueryResponseState {
+  showShareQueryDialog: boolean;
+  showModal: boolean;
+  query: string;
 }

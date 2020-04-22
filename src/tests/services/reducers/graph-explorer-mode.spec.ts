@@ -1,6 +1,6 @@
 import { graphExplorerMode } from '../../../app/services/reducers/graph-explorer-mode-reducer';
 import { SET_GRAPH_EXPLORER_MODE_SUCCESS } from '../../../app/services/redux-constants';
-import { Mode } from '../../../types/action';
+import { Mode } from '../../../types/enums';
 
 describe('Graph Explorer Mode Reducer', () => {
   it('should change graph explorer Mode', () => {

@@ -1,8 +1,13 @@
-import { ResponseType } from '@microsoft/microsoft-graph-client';
+import { AuthenticationHandlerOptions, ResponseType } from '@microsoft/microsoft-graph-client';
+import { MSALAuthenticationProviderOptions } from
+  '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
 import { IAction } from '../../../types/action';
+import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
+import { authProvider } from '../graph-client/msal-agent';
+import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
@@ -16,7 +21,8 @@ export function queryResponse(response: object): IAction {
 export async function anonymousRequest(dispatch: Function, query: IQuery) {
 
   const authToken = '{token:https://graph.microsoft.com/}';
-  const graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${query.sampleUrl}`;
+  const escapedUrl = encodeURIComponent(query.sampleUrl);
+  const graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${escapedUrl}`;
   const sampleHeaders: any = {};
 
   if (query.sampleHeaders) {
@@ -30,6 +36,7 @@ export async function anonymousRequest(dispatch: Function, query: IQuery) {
   const headers = {
     'Authorization': `Bearer ${authToken}`,
     'Content-Type': 'application/json',
+    'SdkVersion': 'GraphExplorer/4.0',
     ...sampleHeaders
   };
 
@@ -40,8 +47,9 @@ export async function anonymousRequest(dispatch: Function, query: IQuery) {
   return fetch(graphUrl, options);
 }
 
-export function authenticatedRequest(dispatch: Function, query: IQuery) {
-  return makeRequest(query.selectedVerb)(dispatch, query);
+export function authenticatedRequest(dispatch: Function, query: IQuery,
+  scopes: string[] = DEFAULT_USER_SCOPES.split(' ')) {
+  return makeRequest(query.selectedVerb, scopes)(dispatch, query);
 }
 
 export function isImageResponse(contentType: string) {
@@ -64,24 +72,34 @@ export function getContentType(headers: Headers) {
   }
 }
 
-export function parseResponse(resp: any, respHeaders: any): Promise<any> {
-  if (resp && resp.headers) {
-    resp.headers.forEach((val: any, key: any) => {
+export function parseResponse(response: any, respHeaders: any): Promise<any> {
+  if (response && response.headers) {
+    response.headers.forEach((val: any, key: any) => {
       respHeaders[key] = val;
     });
-    const contentType = getContentType(resp.headers);
-    if (contentType && isImageResponse(contentType)) {
-      return resp;
-    } else {
-      return resp.json();
+
+    const contentType = getContentType(response.headers);
+    switch (contentType) {
+      case ContentType.Json:
+        return response.json();
+
+      case ContentType.XML:
+        return response.text();
+
+      case ContentType.TextPlain:
+        return response.text();
+
+      default:
+        return response;
     }
   }
-  return resp;
+  return response;
 }
 
-const makeRequest = (httpVerb: string): Function => {
+const makeRequest = (httpVerb: string, scopes: string[]): Function => {
   return async (dispatch: Function, query: IQuery) => {
     const sampleHeaders: any = {};
+    sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
 
     if (query.sampleHeaders) {
       query.sampleHeaders.forEach(header => {
@@ -91,8 +109,11 @@ const makeRequest = (httpVerb: string): Function => {
       });
     }
 
+    const msalAuthOptions = new MSALAuthenticationProviderOptions(scopes);
+    const middlewareOptions = new AuthenticationHandlerOptions(authProvider, msalAuthOptions);
     const client = GraphClient.getInstance()
       .api(query.sampleUrl)
+      .middlewareOptions([middlewareOptions])
       .headers(sampleHeaders)
       .responseType(ResponseType.RAW);
 

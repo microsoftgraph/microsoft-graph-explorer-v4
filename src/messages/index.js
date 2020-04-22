@@ -1,4 +1,4 @@
-import enUS from './en-US';
+import enUS from './GE';
 import deDe from './de-DE';
 import esES from './es-ES';
 import frFR from './fr-FR';

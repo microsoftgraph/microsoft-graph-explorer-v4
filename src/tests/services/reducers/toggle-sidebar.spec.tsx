@@ -4,12 +4,12 @@ import { TOGGLE_SIDEBAR_SUCCESS } from '../../../app/services/redux-constants';
 describe('Toggle Sidebar Reducer', () => {
   it('should toggle the sidebar', () => {
     const initialState = {
-      showToggle: false,
+      mobileScreen: false,
       showSidebar: false,
     };
 
     const properties = {
-      showToggle: true,
+      mobileScreen: true,
       showSidebar: true,
     };
 

@@ -3,10 +3,11 @@
 .query-response {
   width:100%;
   margin-top: $gutter;
-  margin-bottom: $gutter;
-  min-height: 500px;
+  min-height: 470px;
+  height: 610px;
   border: 1px solid silver;
   overflow: hidden;
+  display: block;
 
 
   .ms-Pivot.root-84 {
@@ -16,10 +17,25 @@
   .default-text {
     display: flex;
     width: 100%;
-    min-height: 500px;
+    min-height: 370px;
     font-size: 50px;
     justify-content: center;
     align-items: center;
   }
+
+  .share-query-btn {
+    float: right;
+    margin-top: 10px;
+    padding: 0px;
+    z-index: 1;
+  }
+}
+
+.share-query-params {
+  font-family: 'monospace';
+  font-size: 12px;
+  width: '100%';
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 

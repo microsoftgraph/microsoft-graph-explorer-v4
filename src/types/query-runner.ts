@@ -1,22 +1,21 @@
 import { ITheme } from '@uifabric/styling';
-import { Mode } from './action';
+import { Mode } from './enums';
 
 export interface IQueryRunnerState {
-  httpMethods: Array<{ key: string; text: string; }>;
   sampleBody?: string;
   url: string;
 }
 
 export interface IQuery {
   selectedVerb: string;
+  selectedVersion: string;
   sampleUrl: string;
   sampleBody?: string;
-  sampleHeaders: Array<{ name: string; value: string; }>;
+  sampleHeaders: Array<{ name: string; value: string }>;
 }
 
 export interface IQueryRunnerProps {
-  isLoadingData: boolean;
-  headers: Array<{ name: string; value: string; }>;
+  headers: Array<{ name: string; value: string }>;
   onSelectVerb: Function;
   sampleQuery: IQuery;
   actions?: {
@@ -29,17 +28,21 @@ export interface IQueryRunnerProps {
 export interface IQueryInputProps {
   theme?: ITheme;
   styles?: object;
-  mode?: Mode;
   handleOnRunQuery: Function;
   handleOnMethodChange: Function;
   handleOnUrlChange: Function;
+  handleOnVersionChange: Function;
   handleOnBlur: Function;
-  httpMethods: Array<{ key: string; text: string }>;
   selectedVerb: string;
+  selectedVersion: string;
   sampleUrl: string;
   submitting: boolean;
+  authenticated: boolean;
+  mode: Mode;
+  intl: {
+    message: object;
+  };
 }
-
 
 export interface IInitMessage {
   /** Message type. */
@@ -69,13 +72,14 @@ export interface ISampleQuery {
   humanName: string;
   tip?: string;
   postBody?: string;
-  headers?: Array<{ name: string; value: string; }>;
+  headers?: Array<{ name: string; value: string }>;
 }
 
 export interface ISampleQueriesProps {
   theme?: ITheme;
   styles?: object;
   tokenPresent: boolean;
+  profile: object;
   samples: {
     pending: boolean;
     queries: ISampleQuery[];
@@ -87,5 +91,9 @@ export interface ISampleQueriesProps {
     runQuery: Function;
     setSampleQuery: Function;
     fetchSamples: Function;
+    setQueryResponseStatus: Function;
+  };
+  intl: {
+    message: object;
   };
 }

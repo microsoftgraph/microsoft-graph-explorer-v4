@@ -10,6 +10,7 @@ steps:
   - script: |
       npm install
     displayName: 'npm install'
+
   - script: |
       npm run lint
     displayName: 'Runs linting checks'
@@ -20,9 +21,10 @@ steps:
 
   - script: |
       npm run build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     env:
-      REACT_APP_CLIENT_ID: $(REACT_APP_CLIENT_ID)
-    displayName: 'Build'
+      REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
+    displayName: 'Build staging assets'
 
   - task: PublishCodeCoverageResults@1
     inputs:
@@ -32,56 +34,30 @@ steps:
 
   - task: DeleteFiles@1
     inputs:
-      sourceFolder: '$(System.DefaultWorkingDirectory)/node_modules'
-    displayName: 'Deleting node_modules'
+      contents: node_modules
+    displayName: 'Delete node_modules'
 
-  - task: FtpUpload@2
+  - task: AzureRmWebAppDeployment@3
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     inputs:
-      credentialsOption: 'inputs'
-      serverUrl: $(FTP_SERVER_URL)
-      username: $(FTP_USERNAME)
-      password: $(FTP_PASSWORD)
-      rootDirectory: '$(Build.SourcesDirectory)/build'
-      filePatterns: '**'
-      remoteDirectory: '/site/wwwroot/build'
-    displayName: 'Copying into build folder'
+      azureSubscription: 'Graph-Explorer-ARM'
+      WebAppName: 'graphTryIt-staging'
+      Package: '$(System.DefaultWorkingDirectory)'
+      GenerateWebConfig: true
+      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
+    displayName: 'Deploy to staging'
 
-  - task: FtpUpload@2
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  - task: AzureFileCopy@2
     inputs:
-      credentialsOption: 'inputs'
-      serverUrl: $(FTP_SERVER_URL)
-      username: $(FTP_USERNAME)
-      password: $(FTP_PASSWORD)
-      rootDirectory: '$(Build.SourcesDirectory)/build/static'
-      filePatterns: '**'
-      remoteDirectory: '/site/wwwroot/build/static'
-    displayName: 'Copying into static folder'
-
-  - task: FtpUpload@2
+      sourcePath: 'build'
+      azureConnectionType: 'ConnectedServiceNameARM'
+      azureSubscription: 'arm-connection'
+      destination: 'azureBlob'
+      storage: 'graphstagingblobstorage'
+      containerName: 'staging/vendor/bower_components/explorer-v2/build'
+      cleanTargetBeforeCopy: true
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-    inputs:
-      credentialsOption: 'inputs'
-      serverUrl: $(FTP_SERVER_URL)
-      username: $(FTP_USERNAME)
-      password: $(FTP_PASSWORD)
-      rootDirectory: '$(Build.SourcesDirectory)/build/static/js'
-      filePatterns: '**'
-      remoteDirectory: '/site/wwwroot/build/static/js'
-    displayName: 'Copying into static js folder'
-
-  - task: FtpUpload@2
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-    inputs:
-      credentialsOption: 'inputs'
-      serverUrl: $(FTP_SERVER_URL)
-      username: $(FTP_USERNAME)
-      password: $(FTP_PASSWORD)
-      rootDirectory: '$(Build.SourcesDirectory)/build/static/css'
-      filePatterns: '**'
-      remoteDirectory: '/site/wwwroot/build/static/css'
-    displayName: 'Copying into static css folder'
+    displayName: 'Deploy to -tst'
 
   - task: AzureRmWebAppDeployment@3
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -91,5 +67,14 @@ steps:
       Package: '$(System.DefaultWorkingDirectory)'
       GenerateWebConfig: true
       WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
-    displayName: 'Production deployment'
+    displayName: 'Deploy to production'
 
+  - task: YodLabs.O365PostMessage.O365PostMessageBuild.O365PostMessageBuild@0
+    displayName: 'Graph Client Tooling pipeline fail notification'
+    inputs:
+      addressType: serviceEndpoint
+      serviceEndpointName: 'microsoftgraph pipeline status'
+      title: '$(Build.DefinitionName) failure notification'
+      text: 'This pipeline has failed. View the build details for further information. This is a blocking failure. '
+    condition: failed()
+    enabled: true

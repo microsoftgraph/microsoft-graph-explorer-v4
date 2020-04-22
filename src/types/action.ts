@@ -3,7 +3,4 @@ export interface IAction {
   response: object | string;
 }
 
-export enum Mode {
-  TryIt = 'TRYIT',
-  Complete = 'COMPLETE',
-}
+

@@ -1,10 +1,15 @@
 import { ITheme } from 'office-ui-fabric-react';
+import { Mode } from './enums';
 
 export interface IAuthenticationProps {
   theme?: ITheme;
   styles?: object;
   actions?: {
-    authenticateUser: Function;
+    signIn: Function;
+    storeScopes: Function;
   };
   tokenPresent: boolean;
+  mobileScreen: boolean;
+  minimised: boolean;
+  graphExplorerMode: Mode;
 }

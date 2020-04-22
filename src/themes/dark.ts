@@ -23,5 +23,6 @@ export const dark = {
     neutralDark: '#fefefe',
     black: '#ffffff',
     white: '#070707',
+    blueMid: '#09b1dd',
   },
 };

@@ -13,7 +13,7 @@ describe('Toggle Sidebar Action Creators', () => {
       {
         type: TOGGLE_SIDEBAR_SUCCESS,
         response: {
-          showToggle: true,
+          mobileScreen: true,
           showSidebar: false,
         }
       },
@@ -23,7 +23,7 @@ describe('Toggle Sidebar Action Creators', () => {
 
     // @ts-ignore
     store.dispatch(toggleSidebar({
-      showToggle: true,
+      mobileScreen: true,
       showSidebar: false,
     }));
     expect(store.getActions()).toEqual(expectedActions);

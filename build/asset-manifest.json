@@ -3,17 +3,11 @@
   "main.js": "/static/js/graph-explorer-v2.js",
   "main.css.map": "/static/css/graph-explorer-v2.css.map",
   "main.js.map": "/static/js/graph-explorer-v2.js.map",
-  "css.worker.js": "/css.worker.js",
-  "css.worker.js.map": "/css.worker.js.map",
   "editor.worker.js": "/editor.worker.js",
   "editor.worker.js.map": "/editor.worker.js.map",
-  "html.worker.js": "/html.worker.js",
-  "html.worker.js.map": "/html.worker.js.map",
   "index.html": "/index.html",
   "json.worker.js": "/json.worker.js",
   "json.worker.js.map": "/json.worker.js.map",
-  "precache-manifest.9394b5fbb257924a344cfeabb8752850.js": "/precache-manifest.9394b5fbb257924a344cfeabb8752850.js",
-  "service-worker.js": "/service-worker.js",
-  "typescript.worker.js": "/typescript.worker.js",
-  "typescript.worker.js.map": "/typescript.worker.js.map"
+  "precache-manifest.09207e68141989280db47ff10042ddd8.js": "/precache-manifest.09207e68141989280db47ff10042ddd8.js",
+  "service-worker.js": "/service-worker.js"
 }

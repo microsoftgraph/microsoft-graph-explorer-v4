@@ -1,10 +1,17 @@
-import { IAction, Mode } from '../../../types/action';
-import { HelloAuthProvider } from '../graph-client/HelloAuthProvider';
-import { GET_AUTH_TOKEN_SUCCESS, LOGOUT_SUCCESS, SET_GRAPH_EXPLORER_MODE_SUCCESS } from '../redux-constants';
+import { IAction } from '../../../types/action';
+import { Mode } from '../../../types/enums';
+import { logOut } from '../graph-client/msal-service';
+import { GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
 
 export function getAuthTokenSuccess(response: string): IAction {
   return {
     type: GET_AUTH_TOKEN_SUCCESS,
+    response,
+  };
+}
+export function getConsentedScopesSuccess(response: string[]): IAction {
+  return {
+    type: GET_CONSENTED_SCOPES_SUCCESS,
     response,
   };
 }
@@ -17,14 +24,19 @@ export function signOutSuccess(response: string): IAction {
 }
 
 export function signOut() {
-  new HelloAuthProvider()
-    .signOut();
-  return (dispatch: Function) => dispatch(signOutSuccess(''));
+  return (dispatch: Function, getState: Function) => {
+    const { graphExplorerMode } = getState();
+    if (graphExplorerMode === Mode.Complete) {
+      logOut();
+    }
+    dispatch(signOutSuccess(''));
+  };
 }
 
-export function setGraphExplorerMode(mode: Mode) {
-  return {
-    type: SET_GRAPH_EXPLORER_MODE_SUCCESS,
-    response: mode,
-  };
+export function signIn(token: string) {
+  return (dispatch: Function) => dispatch(getAuthTokenSuccess(token));
+}
+
+export function storeScopes(consentedScopes: string[]) {
+  return (dispatch: Function) => dispatch(getConsentedScopesSuccess(consentedScopes));
 }

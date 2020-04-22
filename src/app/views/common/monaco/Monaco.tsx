@@ -10,6 +10,7 @@ interface IMonaco {
   onChange?: ChangeHandler | undefined;
   verb?: string;
   language?: string;
+  readOnly?: boolean;
 }
 
 function editorDidMount(editor: any) {
@@ -31,7 +32,7 @@ function formatDocument(editor: any) {
 export function Monaco(props: IMonaco) {
 
   let { body } = props;
-  const { onChange, verb, language } = props;
+  const { onChange, verb, language, readOnly } = props;
 
   if (body && typeof body !== 'string') {
     body = JSON.stringify(body);
@@ -47,12 +48,13 @@ export function Monaco(props: IMonaco) {
             width='800 !important'
             height={verbIsGet ? '80vh' : '350px'}
             // @ts-ignore
-            value={body  ? body : ''}
+            value={body ? body : ''}
             language={language ? language : 'json'}
             options={{
               lineNumbers: 'off',
               automaticLayout: true,
               minimap: { enabled: false },
+              readOnly,
               scrollbar: {
                 horizontalHasArrows: true,
                 horizontal: 'visible',

@@ -1,16 +1,24 @@
-import { ITheme } from '@uifabric/styling';
+import { FontSizes, ITheme } from '@uifabric/styling';
 
 export const authenticationStyles = (theme: ITheme) => {
   return {
-    authenticationContainer: {
-      justifyContent: 'space-between',
+    authenticationLabel: {
+      fontSize: FontSizes.large,
+      fontWeight: 400,
     },
-    signInButton: {
-      textTransform: 'capitalize',
+    keyIcon: {
+      margin: '0 5px',
     },
-    profile: {
-      marginBottom: theme.spacing.s1,
-      width: '100%',
+    spinner: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      justifyContent: 'start',
+      marginRight: theme.spacing.s1,
+      padding: theme.spacing.s1,
     },
+    spinnerContainer: {
+      display: 'flex',
+      flexDirection: 'row'
+    }
   };
 };

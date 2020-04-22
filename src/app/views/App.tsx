@@ -1,52 +1,66 @@
 import {
-  FocusTrapZone,
-  IconButton,
-  ITheme,
-  MessageBar,
-  MessageBarType,
-  styled
+  IconButton, IStackTokens, ITheme, Label, MessageBar,
+  MessageBarType, Stack, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { FormattedMessage, InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
-import { Mode } from '../../types/action';
-import { IInitMessage, IThemeChangedMessage } from '../../types/query-runner';
+import { LoginType, Mode } from '../../types/enums';
+import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
+import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
-import { clearQueryError } from '../services/actions/error-action-creator';
+import * as authActionCreators from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
-import { addRequestHeader } from '../services/actions/request-headers-action-creators';
-import { changeTheme } from '../services/actions/theme-action-creator';
+import { clearQueryStatus } from '../services/actions/query-status-action-creator';
+import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
+import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
+import { getLoginType, logIn } from '../services/graph-client/msal-service';
+import { parseSampleUrl } from '../utils/sample-url-generation';
+import { substituteTokens } from '../utils/token-helpers';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
+import { createShareLink } from './common/share';
+import { Banner } from './opt-in-out-banner';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
+import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
+
+
 
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
-  error: object | null;
+  intl: InjectedIntl;
+  profile: object;
+  queryState: object | null;
+  termsOfUse: boolean;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
+  sampleQuery: IQuery;
+  authenticated: boolean;
   actions: {
-    addRequestHeader: Function;
-    clearQueryError: Function;
+    clearQueryStatus: Function;
+    clearTermsOfUse: Function;
     setSampleQuery: Function;
     runQuery: Function;
     toggleSidebar: Function;
+    signIn: Function;
+    storeScopes: Function;
   };
 }
 
 interface IAppState {
   selectedVerb: string;
-  showToggle: boolean;
+  mobileScreen: boolean;
+  hideDialog: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -57,15 +71,28 @@ class App extends Component<IAppProps, IAppState> {
     super(props);
     this.state = {
       selectedVerb: 'GET',
-      showToggle: false,
+      mobileScreen: false,
+      hideDialog: true,
     };
   }
 
-  public componentDidMount = () => {
+  public componentDidMount = async () => {
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
 
-    const { actions } = this.props;
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('sid');
+
+    if (sessionId) {
+      const authResp = await logIn(sessionId);
+      if (authResp) {
+        // @ts-ignore
+        this.props.actions!.signIn(authResp.accessToken);
+        // @ts-ignore
+        this.props.actions!.storeScopes(authResp.scopes);
+      }
+    }
+
     const whiteListedDomains = [
       'https://docs.microsoft.com',
       'https://review.docs.microsoft.com',
@@ -84,28 +111,60 @@ class App extends Component<IAppProps, IAppState> {
 
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const base64Token = urlParams.getAll('query')[0];
-
-    if (!base64Token) {
-      return;
-    }
-
-    const data = JSON.parse(atob(base64Token));
-    const { sampleVerb, sampleHeaders, sampleUrl, sampleBody } = data;
-
-    const query = {
-      sampleUrl,
-      sampleBody,
-      sampleHeaders,
-      selectedVerb: sampleVerb
-    };
-
-    if (actions) {
-      actions.setSampleQuery(query);
-    }
+    this.handleSharedQueries();
   };
+
+  public handleSharedQueries() {
+    const { actions } = this.props;
+    const queryStringParams = this.getQueryStringParams();
+    const query = this.generateQueryObjectFrom(queryStringParams);
+
+    if (query) {
+      // This timeout waits for monaco to initialize it's formatter.
+      setTimeout(() => {
+        actions!.setSampleQuery(query);
+      }, 700);
+    }
+  }
+
+  private getQueryStringParams(): ISharedQueryParams {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const request = urlParams.get('request');
+    const method = urlParams.get('method');
+    const version = urlParams.get('version');
+    const graphUrl = urlParams.get('GraphUrl');
+    const requestBody = urlParams.get('requestBody');
+    const headers = urlParams.get('headers');
+
+    return { request, method, version, graphUrl, requestBody, headers };
+  }
+
+  private generateQueryObjectFrom(queryParams: any) {
+    const { request, method, version, graphUrl, requestBody, headers } = queryParams;
+
+    if (!request) {
+      return null;
+    }
+
+    return {
+      sampleUrl: `${graphUrl}/${version}/${request}`,
+      selectedVerb: method,
+      selectedVersion: version,
+      sampleBody: this.hashDecode(requestBody),
+      sampleHeaders: JSON.parse(this.hashDecode(headers)),
+    };
+  }
+
+  private hashDecode(requestBody: string): string {
+    const decodedBody = atob(requestBody);
+
+    if (decodedBody === 'undefined') {
+      return '';
+    }
+
+    return decodedBody;
+  }
 
   public componentWillUnmount(): void {
     window.removeEventListener('message', this.receiveMessage);
@@ -135,9 +194,8 @@ class App extends Component<IAppProps, IAppState> {
   };
 
   private handleInitMsg = (msg: IInitMessage) => {
-    const { actions } = this.props;
+    const { actions, profile } = this.props;
     const { verb, headers, url, body }: any = parse(msg.code);
-
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
@@ -154,23 +212,29 @@ class App extends Component<IAppProps, IAppState> {
      */
     setTimeout(() => {
       if (actions) {
-        actions.setSampleQuery({
+        const { queryVersion } = parseSampleUrl(url);
+
+        const requestHeaders = headers.map((header: any) => {
+          return {
+            name: Object.keys(header)[0],
+            value: Object.values(header)[0]
+          };
+        });
+
+        const query: IQuery = {
           sampleUrl: url,
           selectedVerb: verb,
-          sampleBody: body
-        });
+          sampleBody: body,
+          selectedVersion: queryVersion,
+          sampleHeaders: requestHeaders
+        };
+
+        substituteTokens(query, profile);
+
+        actions.setSampleQuery(query);
       }
     }, 1000);
 
-    if (actions) {
-      const requestHeaders = headers.map((header: any) => {
-        return {
-          name: Object.keys(header)[0],
-          value: Object.values(header)[0]
-        };
-      });
-      actions.addRequestHeader(requestHeaders);
-    }
   };
 
   public handleSelectVerb = (verb: string) => {
@@ -178,6 +242,25 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: verb
     });
   };
+
+  public promptNewLogin = async () => {
+    this.closeDialog();
+    localStorage.clear();
+    const { mscc } = (window as any);
+
+    if (mscc) {
+      mscc.setConsent();
+    }
+
+    setTimeout(async () => {
+      const authResponse = await logIn();
+      if (authResponse) {
+        this.props.actions!.signIn(authResponse.accessToken);
+        this.props.actions!.storeScopes(authResponse.scopes);
+      }
+    }, 700);
+
+  }
 
   public toggleSidebar = (): void => {
     const { sidebarProperties } = this.props;
@@ -187,129 +270,288 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public displayToggleButton = (mediaQueryList: any) => {
-    const showToggle = mediaQueryList.matches;
+    const mobileScreen = mediaQueryList.matches;
     let showSidebar = true;
-    if (showToggle) {
+    if (mobileScreen) {
       showSidebar = false;
     }
 
     const properties = {
-      showToggle,
+      mobileScreen,
       showSidebar
     };
 
     this.props.actions!.toggleSidebar(properties);
   }
 
+  public optOut = () => {
+    const path = location.href;
+    const urlObject: URL = new URL(path);
+    const { protocol, hostname, pathname, port } = urlObject;
+    const url = `${protocol}//${hostname}${(port) ? ':' + port : ''}${pathname}`;
+    window.location.href = url.includes('localhost') ? 'http://localhost:3000' : `${url.replace('/preview', '')}`;
+  }
+
+  public displayAuthenticationSection = (minimised: boolean) => {
+    return <div style={{
+      display: minimised ? 'block' : 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
+      <div className={minimised ? '' : 'col-md-10'}>
+        <Authentication />
+      </div>
+      <div className={minimised ? '' : 'col-md-2'}>
+        <Settings />
+      </div>
+    </div>;
+  }
+
+
+  private closeDialog = (): void => {
+    this.setState({ hideDialog: true });
+  };
+
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, error, actions, sidebarProperties }: any = this.props;
-    const { showToggle, showSidebar } = sidebarProperties;
+    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
+      actions, sidebarProperties, intl: { messages } }: any = this.props;
+    const query = createShareLink(sampleQuery, authenticated);
+    const sampleHeaderText = messages['Sample Queries'];
+    // tslint:disable-next-line:no-string-literal
+    const historyHeaderText = messages['History'];
+    const { mobileScreen, showSidebar } = sidebarProperties;
+    const language = navigator.language || 'en-US';
+    const loginType = getLoginType();
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
-      if (showToggle && showSidebar) {
+      if (mobileScreen && showSidebar) {
         displayContent = false;
       }
     }
 
-    const layout =
+    const stackTokens: IStackTokens = {
+      childrenGap: 10,
+      padding: 10
+    };
+
+    let sidebarWidth = `col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`;
+
+    let layout =
       graphExplorerMode === Mode.TryIt
         ? 'col-xs-12 col-sm-12'
         : 'col-xs-12 col-sm-12 col-lg-9 col-md-8';
+
+    if (minimised) {
+      sidebarWidth = `col-lg-1 col-md-1 ${classes.sidebarMini}`;
+      layout = `col-xs-12 col-sm-12 col-lg-11 col-md-11 ${classes.layoutExtra}`;
+    }
+
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        <FocusTrapZone>
-          <div className={`container-fluid ${classes.app}`}>
-            <div className='row'>
-              {graphExplorerMode === Mode.Complete && (
-                <div className={`col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`}>
-                  {showToggle && <IconButton
-                    iconProps={{ iconName: 'GlobalNavButton' }}
-                    className={classes.sidebarToggle}
-                    title='Remove sidebar'
-                    ariaLabel='Remove sidebar'
-                    onClick={this.toggleSidebar}
-                  />}
-                  {showSidebar && <Sidebar />}
-                </div>
-              )}
-              <div className={layout}>
-                {graphExplorerMode === Mode.Complete && displayContent && <Authentication />}
-                {graphExplorerMode === Mode.TryIt && (
-                  <div style={{ marginBottom: 8 }}>
+        <main className={`container-fluid ${classes.app}`}>
+          <div className='row'>
+            {graphExplorerMode === Mode.Complete && (
+              <div className={sidebarWidth}>
+                {mobileScreen && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
+                  <>
+                    <IconButton
+                      iconProps={{ iconName: 'GlobalNavButton' }}
+                      className={classes.sidebarToggle}
+                      title='Remove sidebar'
+                      ariaLabel='Remove sidebar'
+                      onClick={this.toggleSidebar}
+                    />
+                    <div style={{ padding: 10 }}>
+                      <Label className={classes.graphExplorerLabel}>
+                        Graph Explorer
+                      </Label>
+                      <Banner optOut={this.optOut} />
+                    </div>
+                    <span style={{
+                      position: 'absolute',
+                      marginLeft: '70%',
+                      marginTop: '2.5%'
+                    }}>
+
+                      <Authentication />
+                    </span>
+                  </>
+                </Stack>
+                }
+
+                {!mobileScreen &&
+                  <div style={{ display: 'flex' }}>
+                    <IconButton
+                      iconProps={{ iconName: 'GlobalNavButton' }}
+                      className={classes.sidebarToggle}
+                      title='Minimise sidebar'
+                      ariaLabel='Minimise sidebar'
+                      onClick={this.toggleSidebar}
+                    />
+                    <div className={classes.graphExplorerLabelContainer}>
+
+                      {!minimised &&
+                        <>
+                          <Label className={classes.graphExplorerLabel}>
+                            Graph Explorer
+                      </Label>
+                          <span className={classes.previewButton} >
+                            <Banner optOut={this.optOut} />
+                          </span>
+                        </>
+                      }
+
+                    </div>
+                  </div>
+                }
+
+
+                <hr className={classes.separator} />
+                {!mobileScreen && <>
+                  {this.displayAuthenticationSection(minimised)}
+                  <hr className={classes.separator} /></>}
+
+                {showSidebar && <>
+                  <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
+                </>}
+              </div>
+            )}
+            <div className={layout}>
+              {graphExplorerMode === Mode.TryIt && (
+                <div style={{ marginBottom: 8 }}>
+                  {loginType === LoginType.Popup && <>
                     <MessageBar
-                      messageBarType={MessageBarType.warning}
+                      messageBarType={MessageBarType.info}
                       isMultiline={true}
                     >
                       <p>
-                        To try operations other than GET or to access your own data, sign in to
-                      <a className={classes.toGraphExplorer}
+                        <FormattedMessage id='To try the full features' />,
+                        <a className={classes.links}
                           tabIndex={0}
-                          href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
-                          Graph Explorer.
+                          href={query} target='_blank'>
+                          <FormattedMessage id='full Graph Explorer' />.
                       </a>
                       </p>
+                      <p>
+                        <FormattedMessage id='running the query' />.
+                      </p>
                     </MessageBar>
-                  </div>
-                )}
 
-                {displayContent && <>
-                  <div style={{ marginBottom: 8 }}>
-                    <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                  </div>
-                  {error && (
-                    <MessageBar
-                      messageBarType={MessageBarType.error}
-                      isMultiline={false}
-                      onDismiss={actions.clearQueryError}
-                    >
-                      {`${error.statusText} - ${error.status}`}
-                    </MessageBar>
-                  )}
-                  {
-                    // @ts-ignore
-                    <QueryResponse verb={this.state.selectedVerb} />
-                  }
-                </>}
-              </div>
+                    <Authentication />
+                  </>}
+                  {loginType === LoginType.Redirect && <MessageBar
+                    messageBarType={MessageBarType.warning}
+                    isMultiline={true}
+                  >
+                    <p>
+                      <FormattedMessage id='To try operations other than GET' />,
+
+                      <a className={classes.links}
+                        tabIndex={0}
+                        href={query} target='_blank'>
+                        <FormattedMessage id='sign in' />.
+                      </a>
+                    </p>
+                  </MessageBar>}
+                </div>
+              )}
+
+              {displayContent && <>
+                <div style={{ marginBottom: 8 }}>
+                  <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                </div>
+                {queryState && (
+                  <MessageBar
+                    messageBarType={queryState.messageType}
+                    isMultiline={false}
+                    onDismiss={actions.clearQueryStatus}
+                  >
+                    {`${queryState.statusText} - ${queryState.status} `}
+                    {queryState.duration && <>
+                      {`- ${queryState.duration}`}<FormattedMessage id='milliseconds' />
+                    </>}
+
+                    {queryState.status === 403 && <>.
+                      <FormattedMessage id='consent to scopes' />
+                      <span style={{ fontWeight: 600 }}>
+                        <FormattedMessage id='modify permissions' />
+                      </span>
+                      <FormattedMessage id='tab' />
+                    </>}
+
+                  </MessageBar>
+                )}
+                {termsOfUse && (
+                  <MessageBar
+                    messageBarType={MessageBarType.info}
+                    isMultiline={false}
+                    onDismiss={actions.clearTermsOfUse}
+                  >
+                    <FormattedMessage id='use the Microsoft Graph API' /><a className={classes.links}
+                        href={'https://docs.microsoft.com/' + language +
+                          '/legal/microsoft-apis/terms-of-use?context=graph/context'}
+                        target='_blank'>
+                        <FormattedMessage id='Terms of use' /></a>.
+                        <FormattedMessage id='View the' /><a className={classes.links}
+                        href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
+                        target='_blank'>
+                        <FormattedMessage id='Microsoft Privacy Statement' /></a>
+                  </MessageBar>
+                )}
+                {
+                  // @ts-ignore
+                  <QueryResponse verb={this.state.selectedVerb} />
+                }
+              </>}
             </div>
           </div>
-        </FocusTrapZone>
+        </main>
       </ThemeContext.Provider>
     );
   }
 }
 
 const mapStateToProps = (state: any) => {
+  const mobileScreen = !!state.sidebarProperties.mobileScreen;
+  const showSidebar = !!state.sidebarProperties.showSidebar;
+
   return {
-    error: state.queryRunnerError,
-    receivedSampleQuery: state.sampleQuery,
-    graphExplorerMode: state.graphExplorerMode,
     appTheme: state.theme,
+    graphExplorerMode: state.graphExplorerMode,
+    profile: state.profile,
+    queryState: state.queryRunnerStatus,
+    receivedSampleQuery: state.sampleQuery,
     sidebarProperties: state.sidebarProperties,
+    termsOfUse: state.termsOfUse,
+    minimised: !mobileScreen && !showSidebar,
+    sampleQuery: state.sampleQuery,
+    authenticated: !!state.authToken
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     actions: bindActionCreators({
-      clearQueryError,
+      clearQueryStatus,
+      clearTermsOfUse,
       runQuery,
       setSampleQuery,
-      addRequestHeader,
       toggleSidebar,
+      ...authActionCreators,
       changeTheme: (newTheme: string) => {
-        return (disp: Function) => disp(changeTheme(newTheme));
+        return (disp: Function) => disp(changeThemeSuccess(newTheme));
       }
     }, dispatch)
   };
 };
 
-const StyledApp = styled(App, appStyles);
+const StyledApp = styled(App, appStyles as any);
+const IntlApp = injectIntl(StyledApp);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(StyledApp);
+)(IntlApp);
