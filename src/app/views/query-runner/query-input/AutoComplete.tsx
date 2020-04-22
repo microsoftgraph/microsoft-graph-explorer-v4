@@ -1,4 +1,4 @@
-import { getTheme, Label, TextField } from 'office-ui-fabric-react';
+import { getTheme, KeyCodes, Label, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -8,7 +8,6 @@ import { queryInputStyles } from './QueryInput.styles';
 
 export interface IAutoCompleteProps {
   suggestions: string[];
-  suggestionSelected: Function;
   contentChanged: Function;
   sampleUrl: string;
   autoCompleteOptions: {
@@ -29,6 +28,7 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
     this.state = {
       activeSuggestion: 0,
       filteredSuggestions: [],
+      suggestions: [],
       showSuggestions: false,
       userInput: this.props.sampleUrl
     };
@@ -39,79 +39,68 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
 
     this.setState({
       activeSuggestion: 0,
-      showSuggestions: false,
+      showSuggestions: true,
       userInput
     });
-    this.initialiseAutoComplete(userInput);
     this.props.contentChanged(userInput);
+    this.filterParameters(userInput);
   };
 
   public onClick = (e: any) => {
-    const { userInput } = this.state;
     const selected =  e.currentTarget.innerText;
     this.appendSuggestionToUrl(selected);
-
-    this.props.suggestionSelected(userInput);
   };
 
   private initialiseAutoComplete = (url: string) => {
-    const lastCharacter = url.substring(url.length - 1);
-    if (lastCharacter === '?') {
-      const { requestUrl } = parseSampleUrl(url);
-      if (requestUrl) {
-        if (requestUrl !== this.props.autoCompleteOptions.url) {
-          this.props.actions!.fetchAutoCompleteOptions(requestUrl);
-        }
+    const { requestUrl } = parseSampleUrl(url);
+    if (requestUrl) {
+      if (requestUrl !== this.props.autoCompleteOptions.url) {
+        this.props.actions!.fetchAutoCompleteOptions(requestUrl);
+      } else {
+        this.generateSuggestions();
       }
-    }
-
-    if (lastCharacter === '=' || lastCharacter === ',') {
-      const str = this.state.userInput;
-      const param = str.split('$').pop().split('=')[0];
-      const { parameters } = this.props.autoCompleteOptions;
-      const section = parameters.find(k => k.name === `$${param}`);
-      const list: string[] = [];
-      section.items.forEach((element: string) => {
-        list.push(element);
-      });
-      this.setState({
-        filteredSuggestions: list,
-        showSuggestions: true
-      });
     }
   }
 
   public onKeyDown = (e: any) => {
-    const { activeSuggestion, filteredSuggestions, userInput } = this.state;
+    const { activeSuggestion, filteredSuggestions, userInput, showSuggestions } = this.state;
 
-    // selecting the suggestion is done by hitting tab
-    if (e.keyCode === 9) {
-      const selected = filteredSuggestions[activeSuggestion];
-      this.appendSuggestionToUrl(selected);
-      this.props.suggestionSelected(userInput);
-    }
+    switch (e.keyCode) {
+      case KeyCodes.tab:
+        if (showSuggestions) {
+          const selected = filteredSuggestions[activeSuggestion];
+          this.appendSuggestionToUrl(selected);
+        }
+        break;
 
-    else if (e.keyCode === 38) {
-      if (activeSuggestion === 0) {
-        return;
-      }
-      this.setState({ activeSuggestion: activeSuggestion - 1 });
-    }
+      case KeyCodes.up:
+        if (activeSuggestion === 0) {
+          return;
+        }
+        this.setState({ activeSuggestion: activeSuggestion - 1 });
+        break;
 
-    else if (e.keyCode === 40) {
-      if (activeSuggestion - 1 === filteredSuggestions.length) {
-        return;
-      }
-      this.setState({ activeSuggestion: activeSuggestion + 1 });
+      case KeyCodes.down:
+        if (activeSuggestion - 1 === filteredSuggestions.length) {
+          return;
+        }
+        this.setState({ activeSuggestion: activeSuggestion + 1 });
+        break;
+
+      case 191: // question mark key
+        this.initialiseAutoComplete(userInput);
+        break;
+
+      default:
+        break;
     }
 
   };
 
   public generateSuggestions = () => {
-    const lastCharacter = this.state.userInput.substring(this.state.userInput.length - 1);
     const { parameters } = this.props.autoCompleteOptions;
     const suggestions: string[] = [];
-    if (parameters && lastCharacter === '?') {
+    if (parameters) {
       parameters.forEach((element: any) => {
         suggestions.push(element.name);
       });
@@ -119,6 +108,7 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
 
     this.setState({
       filteredSuggestions: suggestions,
+      suggestions,
       showSuggestions: true
     });
   }
@@ -126,6 +116,26 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
   public componentDidUpdate = (prevProps: IAutoCompleteProps) => {
     if (prevProps.autoCompleteOptions !== this.props.autoCompleteOptions) {
       this.generateSuggestions();
+    }
+  }
+
+  private filterParameters = (url: string) => {
+    const lastCharacter = url.substring(url.length - 1);
+    if (lastCharacter === '=' || lastCharacter === ',') {
+      const param = url.split('$').pop()!.split('=')[0];
+      const { parameters } = this.props.autoCompleteOptions;
+      const section = parameters.find(k => k.name === `$${param}`);
+      const list: string[] = [];
+      if (section.items) {
+        section.items.forEach((element: string) => {
+          list.push(element);
+        });
+        this.setState({
+          filteredSuggestions: list,
+          suggestions: list,
+          showSuggestions: true
+        });
+      }
     }
   }
 
