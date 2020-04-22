@@ -5,6 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import * as autoCompleteActionCreators from '../../../services/actions/autocomplete-action-creators';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { queryInputStyles } from './QueryInput.styles';
+import { cleanUpSelectedSuggestion } from './util';
 
 export interface IAutoCompleteProps {
   suggestions: string[];
@@ -30,18 +31,39 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
       filteredSuggestions: [],
       suggestions: [],
       showSuggestions: false,
-      userInput: this.props.sampleUrl
+      userInput: this.props.sampleUrl,
+      compare: ''
     };
   }
 
   public onChange = (e: any) => {
+    const { suggestions, showSuggestions, userInput: previousUserInput, compare } = this.state;
     const userInput = e.target.value;
+
+    if (showSuggestions && suggestions.length ) {
+      let compareString = userInput.replace(previousUserInput, '');
+      if (compare) {
+        compareString = compare + compareString;
+      }
+      // Filter our suggestions that don't contain the user's input
+      const filteredSuggestions = suggestions.filter(
+        (suggestion: any) => {
+          return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
+        }
+      );
+
+      this.setState({
+        filteredSuggestions,
+        compare: compareString
+      });
+    }
 
     this.setState({
       activeSuggestion: 0,
       showSuggestions: true,
       userInput
     });
+
     this.props.contentChanged(userInput);
     this.filterParameters(userInput);
   };
@@ -140,13 +162,16 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
   }
 
   private appendSuggestionToUrl(selected: string) {
-    const { userInput } = this.state;
+    const { userInput, compare } = this.state;
+    const selectedSuggestion = cleanUpSelectedSuggestion(compare, userInput, selected);
     this.setState({
       activeSuggestion: 0,
       filteredSuggestions: [],
       showSuggestions: false,
-      userInput: `${userInput + selected}`
+      userInput: selectedSuggestion,
+      compare: ''
     });
+    this.props.contentChanged(selectedSuggestion);
   }
 
   public render() {
