@@ -38,15 +38,7 @@ export interface IQueryInputProps {
   sampleUrl: string;
   submitting: boolean;
   authenticated: boolean;
-  autoCompleteOptions: {
-    url: string;
-    parameters: any[],
-    verb: string;
-  };
   mode: Mode;
-  actions?: {
-    fetchAutoCompleteOptions: Function;
-  };
   intl: {
     message: object;
   };

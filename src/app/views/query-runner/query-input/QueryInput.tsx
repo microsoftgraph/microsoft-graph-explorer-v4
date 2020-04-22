@@ -3,12 +3,9 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { bindActionCreators, Dispatch } from 'redux';
 import { Mode } from '../../../../types/enums';
 import { IQueryInputProps } from '../../../../types/query-runner';
-import * as autoCompleteActionCreators from '../../../services/actions/autocomplete-action-creators';
 import { getStyleFor } from '../../../utils/badge-color';
-import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import SubmitButton from '../../common/submit-button/SubmitButton';
 import { queryRunnerStyles } from '../QueryRunner.styles';
 import AutoComplete from './AutoComplete';
@@ -46,16 +43,6 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       }, 500);
 
     }
-  }
-
-
-
-  public selected = (value: any) => {
-    // allows the state to be populated with the new url before running it
-    setTimeout(() => {
-      this.props.handleOnUrlChange(value);
-      this.props.handleOnBlur();
-    }, 500);
   }
 
   public render() {
@@ -108,7 +95,6 @@ export class QueryInput extends Component<IQueryInputProps, any> {
         </div>
         <div className='col-7'>
           <AutoComplete
-            suggestionSelected={this.selected}
             contentChanged={this.contentChanged}
           />
         </div>
@@ -135,24 +121,13 @@ function mapStateToProps(state: any) {
     theme: state.theme,
     mode: state.graphExplorerMode,
     authenticated: !!state.authToken,
-    autoCompleteOptions: state.autoComplete.data
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch): object {
-  return {
-    actions: bindActionCreators(
-      {
-        ...autoCompleteActionCreators,
-      },
-      dispatch
-    )
-  };
-}
 
 // @ts-ignore
 const IntlQueryInput = injectIntl(QueryInput);
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(IntlQueryInput);
