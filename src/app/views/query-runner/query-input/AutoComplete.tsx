@@ -53,7 +53,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     this.props.contentChanged(userInput);
     this.initialiseAutoComplete(userInput);
-    this.filterParameters(userInput);
   };
 
   public onClick = (e: any) => {
@@ -63,15 +62,25 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
   private initialiseAutoComplete = (url: string) => {
     const lastCharacter = url.substring(url.length - 1);
-    if (lastCharacter === '?') {
-      const { requestUrl } = parseSampleUrl(url);
-      if (requestUrl) {
-        if (`/${requestUrl}` !== this.props.autoCompleteOptions.url) {
-          this.props.actions!.fetchAutoCompleteOptions(requestUrl);
-        } else {
-          this.generateSuggestions();
-        }
-      }
+    switch (lastCharacter) {
+      case '?':
+        this.requestForAutocompleteOptions(url);
+        break;
+
+      case '=':
+        this.filterParameters(url);
+        break;
+
+      case ',':
+        this.filterParameters(url);
+        break;
+
+      case '&':
+        this.generateSuggestions();
+        break;
+
+      default:
+        break;
     }
   }
 
@@ -129,21 +138,30 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private filterParameters = (url: string) => {
-    const lastCharacter = url.substring(url.length - 1);
-    if (lastCharacter === '=' || lastCharacter === ',') {
-      const param = url.split('$').pop()!.split('=')[0];
-      const { parameters } = this.props.autoCompleteOptions;
-      const section = parameters.find(k => k.name === `$${param}`);
-      const list: string[] = [];
-      if (section.items) {
-        section.items.forEach((element: string) => {
-          list.push(element);
-        });
-        this.setState({
-          filteredSuggestions: list,
-          suggestions: list,
-          showSuggestions: true
-        });
+    const param = url.split('$').pop()!.split('=')[0];
+    const { parameters } = this.props.autoCompleteOptions;
+    const section = parameters.find(k => k.name === `$${param}`);
+    const list: string[] = [];
+    if (section.items) {
+      section.items.forEach((element: string) => {
+        list.push(element);
+      });
+      this.setState({
+        filteredSuggestions: list,
+        suggestions: list,
+        showSuggestions: true
+      });
+    }
+  }
+
+  private requestForAutocompleteOptions(url: string) {
+    const { requestUrl } = parseSampleUrl(url);
+    if (requestUrl) {
+      if (`/${requestUrl}` !== this.props.autoCompleteOptions.url) {
+        this.props.actions!.fetchAutoCompleteOptions(requestUrl);
+      }
+      else {
+        this.generateSuggestions();
       }
     }
   }
