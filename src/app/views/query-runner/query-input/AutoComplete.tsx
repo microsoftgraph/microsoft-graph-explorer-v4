@@ -2,26 +2,13 @@ import { getTheme, KeyCodes, Label, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { IAutoCompleteProps, IAutoCompleteState } from '../../../../types/auto-complete';
 import * as autoCompleteActionCreators from '../../../services/actions/autocomplete-action-creators';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { queryInputStyles } from './QueryInput.styles';
 import { cleanUpSelectedSuggestion } from './util';
 
-export interface IAutoCompleteProps {
-  suggestions: string[];
-  contentChanged: Function;
-  sampleUrl: string;
-  autoCompleteOptions: {
-    url: string;
-    parameters: any[],
-    verb: string;
-  };
-  actions?: {
-    fetchAutoCompleteOptions: Function;
-  };
-}
-
-class AutoComplete extends Component<IAutoCompleteProps, any> {
+class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
   constructor(props: IAutoCompleteProps) {
     super(props);
@@ -40,7 +27,7 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
     const { suggestions, showSuggestions, userInput: previousUserInput, compare } = this.state;
     const userInput = e.target.value;
 
-    if (showSuggestions && suggestions.length ) {
+    if (showSuggestions && suggestions.length) {
       let compareString = userInput.replace(previousUserInput, '');
       if (compare) {
         compareString = compare + compareString;
@@ -65,21 +52,25 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
     });
 
     this.props.contentChanged(userInput);
+    this.initialiseAutoComplete(userInput);
     this.filterParameters(userInput);
   };
 
   public onClick = (e: any) => {
-    const selected =  e.currentTarget.innerText;
+    const selected = e.currentTarget.innerText;
     this.appendSuggestionToUrl(selected);
   };
 
   private initialiseAutoComplete = (url: string) => {
-    const { requestUrl } = parseSampleUrl(url);
-    if (requestUrl) {
-      if (requestUrl !== this.props.autoCompleteOptions.url) {
-        this.props.actions!.fetchAutoCompleteOptions(requestUrl);
-      } else {
-        this.generateSuggestions();
+    const lastCharacter = url.substring(url.length - 1);
+    if (lastCharacter === '?') {
+      const { requestUrl } = parseSampleUrl(url);
+      if (requestUrl) {
+        if (`/${requestUrl}` !== this.props.autoCompleteOptions.url) {
+          this.props.actions!.fetchAutoCompleteOptions(requestUrl);
+        } else {
+          this.generateSuggestions();
+        }
       }
     }
   }
@@ -107,10 +98,6 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
           return;
         }
         this.setState({ activeSuggestion: activeSuggestion + 1 });
-        break;
-
-      case 191: // question mark key
-        this.initialiseAutoComplete(userInput);
         break;
 
       default:
@@ -182,6 +169,8 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
       userInput
     } = this.state;
 
+    const { fetchingSuggestions } = this.props;
+
     const currentTheme = getTheme();
     const suggestionClass: any = queryInputStyles(currentTheme).autoComplete.suggestions;
     const suggestionOption: any = queryInputStyles(currentTheme).autoComplete.suggestionOption;
@@ -209,12 +198,6 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
             })}
           </ul>
         );
-      } else {
-        suggestionsListComponent = (
-          <div className='no-suggestions'>
-            <em>No suggestions, you're on your own!</em>
-          </div>
-        );
       }
     }
 
@@ -228,6 +211,7 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
           onKeyDown={this.onKeyDown}
           defaultValue={userInput}
           value={userInput}
+          suffix={(fetchingSuggestions) ? '...' : undefined}
         />
         {suggestionsListComponent}
       </>
@@ -238,7 +222,8 @@ class AutoComplete extends Component<IAutoCompleteProps, any> {
 function mapStateToProps(state: any) {
   return {
     sampleUrl: state.sampleQuery.sampleUrl,
-    autoCompleteOptions: state.autoComplete.data
+    autoCompleteOptions: state.autoComplete.data,
+    fetchingSuggestions: state.autoComplete.pending
   };
 }
 
