@@ -42,11 +42,6 @@ export class QueryRunner extends Component<
     }
   };
 
-  private handleOnUrlChange = (newUrl = '') => {
-    this.setState({ url: newUrl });
-    this.changeUrlVersion(newUrl);
-  };
-
   private handleOnBlur = () => {
     const { url } = this.state;
     const query = { ...this.props.sampleQuery };
@@ -89,20 +84,6 @@ export class QueryRunner extends Component<
     }
   };
 
-  private changeUrlVersion(newUrl: string) {
-    const query = { ...this.props.sampleQuery };
-    const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);
-    const { queryVersion: oldQueryVersion } = parseSampleUrl(query.sampleUrl);
-
-    if (newQueryVersion !== oldQueryVersion) {
-      if (newQueryVersion === 'v1.0' || newQueryVersion === 'beta') {
-        const sampleQuery = { ...this.props.sampleQuery };
-        sampleQuery.selectedVersion = newQueryVersion;
-        this.props.actions!.setSampleQuery(sampleQuery);
-      }
-    }
-  }
-
   public render() {
     return (
       <div>
@@ -114,7 +95,6 @@ export class QueryRunner extends Component<
                 handleOnRunQuery={this.handleOnRunQuery}
                 handleOnMethodChange={this.handleOnMethodChange}
                 handleOnVersionChange={this.handleOnVersionChange}
-                handleOnUrlChange={this.handleOnUrlChange}
                 handleOnBlur={this.handleOnBlur}
               />
             }

@@ -1,7 +1,9 @@
+import { IQuery } from './query-runner';
+
 export interface IAutoCompleteProps {
     suggestions: string[];
     contentChanged: Function;
-    sampleUrl: string;
+    sampleQuery: IQuery;
     fetchingSuggestions: boolean;
     autoCompleteOptions: {
       url: string;

@@ -18,7 +18,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       filteredSuggestions: [],
       suggestions: [],
       showSuggestions: false,
-      userInput: this.props.sampleUrl,
+      userInput: this.props.sampleQuery.sampleUrl,
       compare: ''
     };
   }
@@ -27,31 +27,15 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     const { suggestions, showSuggestions, userInput: previousUserInput, compare } = this.state;
     const userInput = e.target.value;
 
-    if (showSuggestions && suggestions.length) {
-      let compareString = userInput.replace(previousUserInput, '');
-      if (compare) {
-        compareString = compare + compareString;
-      }
-      // Filter our suggestions that don't contain the user's input
-      const filteredSuggestions = suggestions.filter(
-        (suggestion: any) => {
-          return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
-        }
-      );
-
-      this.setState({
-        filteredSuggestions,
-        compare: compareString
-      });
-    }
+    this.props.contentChanged(userInput);
 
     this.setState({
-      activeSuggestion: 0,
-      showSuggestions: true,
       userInput
     });
 
-    this.props.contentChanged(userInput);
+    if (showSuggestions && suggestions.length) {
+      this.filterSuggestions(userInput, previousUserInput, compare, suggestions);
+    }
     this.initialiseAutoComplete(userInput);
   };
 
@@ -68,15 +52,15 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
 
       case '=':
-        this.filterParameters(url);
+        this.getParameterEnums(url);
         break;
 
       case ',':
-        this.filterParameters(url);
+        this.getParameterEnums(url);
         break;
 
       case '&':
-        this.generateSuggestions();
+        this.getPathParameters();
         break;
 
       default:
@@ -85,7 +69,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   public onKeyDown = (e: any) => {
-    const { activeSuggestion, filteredSuggestions, userInput, showSuggestions } = this.state;
+    const { activeSuggestion, filteredSuggestions, showSuggestions } = this.state;
 
     switch (e.keyCode) {
       case KeyCodes.tab:
@@ -115,7 +99,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
   };
 
-  public generateSuggestions = () => {
+  public getPathParameters = () => {
     const { parameters } = this.props.autoCompleteOptions;
     const suggestions: string[] = [];
     if (parameters) {
@@ -127,31 +111,48 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     this.setState({
       filteredSuggestions: suggestions,
       suggestions,
-      showSuggestions: true
+      showSuggestions: true,
+      compare: ''
     });
   }
 
   public componentDidUpdate = (prevProps: IAutoCompleteProps) => {
     if (prevProps.autoCompleteOptions !== this.props.autoCompleteOptions) {
-      this.generateSuggestions();
+      this.getPathParameters();
     }
   }
 
-  private filterParameters = (url: string) => {
+  private getParameterEnums = (url: string) => {
     const param = url.split('$').pop()!.split('=')[0];
     const { parameters } = this.props.autoCompleteOptions;
     const section = parameters.find(k => k.name === `$${param}`);
     const list: string[] = [];
-    if (section.items) {
+    if (section.items.length > 0) {
       section.items.forEach((element: string) => {
         list.push(element);
       });
       this.setState({
         filteredSuggestions: list,
         suggestions: list,
-        showSuggestions: true
+        showSuggestions: true,
+        compare: ''
       });
     }
+  }
+
+  private filterSuggestions(userInput: any, previousUserInput: string, compare: string, suggestions: string[]) {
+    let compareString = userInput.replace(previousUserInput, '');
+    if (compare) {
+      compareString = compare + compareString;
+    }
+    // Filter our suggestions that don't contain the user's input
+    const filteredSuggestions = suggestions.filter((suggestion: any) => {
+      return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
+    });
+    this.setState({
+      filteredSuggestions,
+      compare: compareString
+    });
   }
 
   private requestForAutocompleteOptions(url: string) {
@@ -161,7 +162,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         this.props.actions!.fetchAutoCompleteOptions(requestUrl);
       }
       else {
-        this.generateSuggestions();
+        this.getPathParameters();
       }
     }
   }
@@ -187,7 +188,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       userInput
     } = this.state;
 
-    const { fetchingSuggestions } = this.props;
+    const { fetchingSuggestions, sampleQuery } = this.props;
 
     const currentTheme = getTheme();
     const suggestionClass: any = queryInputStyles(currentTheme).autoComplete.suggestions;
@@ -229,7 +230,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
           defaultValue={userInput}
-          value={userInput}
+          value={sampleQuery.sampleUrl}
           suffix={(fetchingSuggestions) ? '...' : undefined}
         />
         {suggestionsListComponent}
@@ -240,7 +241,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
 function mapStateToProps(state: any) {
   return {
-    sampleUrl: state.sampleQuery.sampleUrl,
+    sampleQuery: state.sampleQuery,
     autoCompleteOptions: state.autoComplete.data,
     fetchingSuggestions: state.autoComplete.pending
   };
