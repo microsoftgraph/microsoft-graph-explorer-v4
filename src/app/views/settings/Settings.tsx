@@ -205,7 +205,7 @@ class Settings extends Component<ISettingsProps, ISettingsState> {
             isOpen={panelIsOpen}
             onDismiss={() => this.togglePermissionsPanel}
             type={PanelType.medium}
-            closeButtonAriaLabel='Close'
+            hasCloseButton={false}
             headerText={messages.Permissions}
             onRenderFooterContent={this.onRenderFooterContent}
             isFooterAtBottom={true}

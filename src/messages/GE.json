@@ -298,6 +298,7 @@
   "view all permissions": "Select permissions",
   "Fetching code snippet": "Fetching code snippet",
   "Snippet not available": "Snippet not available",
-  "Select different permissions": "To try out Microsoft Graph API endpoints, select different permissions then click Consent",
-  "Search permissions": "Search permissions"
+  "Select different permissions": "To try out different Microsoft Graph API endpoints, choose the permissions, and then click Consent.",
+  "Search permissions": "Search permissions",
+  "permissions not found": "We did not find permissions"
 }

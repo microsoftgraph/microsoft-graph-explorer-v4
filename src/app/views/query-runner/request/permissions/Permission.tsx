@@ -327,10 +327,21 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         {loading && <Label>
           <FormattedMessage id={'Fetching permissions'} />...
         </Label>}
-        {permissions && !loading &&
+        {permissions && permissions.length > 0 && !loading &&
           <div className={classes.permissions}>
             {this.renderList()}
           </div>
+        }
+        {permissions && permissions.length === 0 && !loading &&
+          <Label style={{
+            display: 'flex',
+            width: '100%',
+            minHeight: '200px',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <FormattedMessage id='permissions not found' />
+          </Label>
         }
       </div>
     );
