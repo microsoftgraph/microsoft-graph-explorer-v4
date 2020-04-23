@@ -7,7 +7,7 @@ export function cleanUpSelectedSuggestion(compare: string, userInput: string, se
      * together with the sign that was in the query string before
      * autosuggestion
      */
-      const availableSignPrefixes = ['?', ',', '='];
+      const availableSignPrefixes = ['?', ',', '=', '&'];
       let entryToRemove = '';
       let activeSign = '?';
       availableSignPrefixes.forEach(sign => {
