@@ -194,6 +194,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     const suggestionOption: any = queryInputStyles(currentTheme).autoComplete.suggestionOption;
     const activeSuggestionClass: any = queryInputStyles(currentTheme).autoComplete.suggestionActive;
     const autoInput: any = queryInputStyles(currentTheme).autoComplete.input;
+    const suggestionTitle: any = queryInputStyles(currentTheme).autoComplete.suggestionTitle;
 
     let suggestionsListComponent;
 
@@ -208,7 +209,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
                   key={index}
                   onClick={this.onClick}
                 >
-                  <Label>
+                  <Label style={suggestionTitle}>
                     {suggestion}
                   </Label>
                 </li>
