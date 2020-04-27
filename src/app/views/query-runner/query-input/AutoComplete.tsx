@@ -53,7 +53,9 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
 
       case '=':
-        this.getParameterEnums(url);
+        if (url.includes('?$')) {
+          this.getParameterEnums(url);
+        }
         break;
 
       case ',':
