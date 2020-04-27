@@ -31,15 +31,15 @@ export function fetchAutoCompleteOptions(url: string): Function {
       'Content-Type': 'application/json',
     };
 
-    let permissionsUrl = `${devxApi}/openapi`;
-    permissionsUrl = `${permissionsUrl}?url=/${url}&style=geautocomplete&format=json`;
+    let openApiUrl = `${devxApi}/openapi`;
+    openApiUrl = `${openApiUrl}?url=/${url}&style=geautocomplete&format=json`;
 
     const options: IRequestOptions = { headers };
 
     dispatch(fetchAutocompletePending());
 
     try {
-      const response = await fetch(permissionsUrl, options);
+      const response = await fetch(openApiUrl, options);
       if (response.ok) {
         const autoCompleteOptions = await response.json();
         const parameters = {
