@@ -50,9 +50,7 @@ export function fetchAutoCompleteOptions(url: string): Function {
         const parsedResponse = parseOpenApiResponse(parameters);
         return dispatch(fetchAutocompleteSuccess(parsedResponse));
       }
-
-      throw (response);
-
+      return dispatch(fetchAutocompleteError({}));
     } catch (error) {
       return dispatch(fetchAutocompleteError(error));
     }
