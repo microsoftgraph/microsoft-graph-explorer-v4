@@ -9,13 +9,4 @@ export interface ISettingsProps {
   intl?: {
     message: object;
   };
-  authenticated: boolean;
-  appTheme: AppTheme;
-}
-
-export interface ISettingsState {
-  hideThemeChooserDialog: boolean;
-  items: [];
-  selectedPermissions: string[];
-  panelIsOpen: boolean;
 }
