@@ -1,4 +1,4 @@
-import { getId, Icon, IconButton, PivotItem, TooltipHost } from 'office-ui-fabric-react';
+import { getId, getTheme, Icon, IconButton, PivotItem, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
 
 import { ThemeContext } from '../../../../themes/theme-context';
@@ -8,6 +8,8 @@ import { genericCopy } from '../../common/copy';
 import { formatXml } from '../../common/monaco/util/format-xml';
 import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
+import '../query-response.scss';
+import { queryResponseStyles } from '../queryResponse.styles';
 import { Snippets } from '../snippets';
 
 export const getPivotItems = (properties: any) => {
@@ -80,10 +82,15 @@ export const getPivotItems = (properties: any) => {
 };
 
 function getTooltipDisplay(link: any) {
+  const currentTheme = getTheme();
+  const dotStyle = queryResponseStyles(currentTheme).dot;
+
   return (
     <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}>
       <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
       {link.headerText}
+
+      {link.ariaLabel === 'Adaptive Cards' && <span style={dotStyle}/>}
     </TooltipHost>
   );
 }
