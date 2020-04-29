@@ -7,6 +7,7 @@ export interface IAuthenticationProps {
   actions?: {
     signIn: Function;
     storeScopes: Function;
+    setQueryResponseStatus: Function;
   };
   tokenPresent: boolean;
   mobileScreen: boolean;
