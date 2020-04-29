@@ -20,6 +20,9 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
   }
 
   public signIn = async (): Promise<void> => {
+    const {
+      intl: { messages },
+    }: any = this.props;
     this.setState({ loginInProgress: true });
 
     const { mscc } = (window as any);
@@ -40,7 +43,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
       const { errorCode } = error;
       this.props.actions!.setQueryResponseStatus({
         ok: false,
-        statusText: 'Authentication Failed',
+        statusText: messages['Authentication Failed'],
         status: errorCode.replace('_', ' '),
         messageType: MessageBarType.error
       });
