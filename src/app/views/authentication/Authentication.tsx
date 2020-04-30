@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { IAuthenticationProps } from '../../../types/authentication';
 import { Mode } from '../../../types/enums';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
@@ -43,7 +43,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
       const { errorCode } = error;
       this.props.actions!.setQueryResponseStatus({
         ok: false,
-        statusText: messages['Authentication Failed'],
+        statusText: messages['Authentication failed'],
         status: errorCode.replace('_', ' '),
         messageType: MessageBarType.error
       });
@@ -116,7 +116,9 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 }
 
 // @ts-ignore
-const StyledAuthentication = styled(Authentication, authenticationStyles);
+const IntlAuthentication = injectIntl(Authentication);
+// @ts-ignore
+const StyledAuthentication = styled(IntlAuthentication, authenticationStyles);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
