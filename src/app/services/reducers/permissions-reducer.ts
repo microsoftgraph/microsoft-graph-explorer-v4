@@ -1,5 +1,5 @@
 import { IAction } from '../../../types/action';
-import { FETCH_SCOPES_ERROR, FETCH_SCOPES_SUCCESS } from '../redux-constants';
+import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../redux-constants';
 
 const initialState = {
   pending: false,
@@ -11,15 +11,21 @@ export function scopes(state = initialState, action: IAction): any {
   switch (action.type) {
     case FETCH_SCOPES_SUCCESS:
       return {
-        ...state,
         pending: false,
-        data: action.response
+        data: action.response,
+        error: null
       };
     case FETCH_SCOPES_ERROR:
       return {
-        ...state,
         pending: false,
-        error: action.response
+        error: action.response,
+        data: []
+      };
+    case FETCH_SCOPES_PENDING:
+      return {
+        pending: true,
+        data: [],
+        error: null
       };
     default:
       return state;
