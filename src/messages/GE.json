@@ -295,5 +295,12 @@
   "see more queries":"See more queries in the",
   "Microsoft Graph API Reference docs": "Microsoft Graph API Reference docs.",
   "Fetching permissions": "Fetching permissions",
-  "Authentication failed": "Authentication failed"
+  "Authentication failed": "Authentication failed",
+  "view all permissions": "Select permissions",
+  "Fetching code snippet": "Fetching code snippet",
+  "Snippet not available": "Snippet not available",
+  "Select different permissions": "To try out different Microsoft Graph API endpoints, choose the permissions, and then click Consent.",
+  "Search permissions": "Search permissions",
+  "permissions not found": "We did not find permissions",
+  "selected": "selected"
 }
