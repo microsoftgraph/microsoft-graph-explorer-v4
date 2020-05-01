@@ -30,7 +30,7 @@ steps:
       npm run build
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     env:
-      REACT_APP_CLIENT_ID: $(REACT_APP_PRODUCTION_CLIENT_ID)
+      REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
     displayName: 'Build static assets for prod'
 
   - task: PublishCodeCoverageResults@1
