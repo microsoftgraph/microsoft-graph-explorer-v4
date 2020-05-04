@@ -172,14 +172,14 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             <TooltipHost
               tooltipProps={{
                 onRenderContent: () => <div style={{ paddingBottom: 3 }}>
-                  {item.method} <FormattedMessage id={queryContent} /></div>
+                  {item.method} {queryContent} </div>
               }}
               id={getId()}
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}
             >
               <span aria-label={queryContent} className={classes.queryContent}>
-                <FormattedMessage id={queryContent} />
+                {queryContent}
               </span>
             </TooltipHost>
           </span>
