@@ -25,28 +25,25 @@ export function fetchSamplesPending(): any {
 export function fetchSamples(): Function {
   return async (dispatch: Function, getState: Function) => {
     const { devxApi } = getState();
+    const language = navigator.language || 'en-US';
     const samplesUrl = `${devxApi}/samples`;
 
     const headers = {
       'Content-Type': 'application/json',
+      'Accept-Language': language
     };
 
     const options: IRequestOptions = { headers };
 
     dispatch(fetchSamplesPending());
 
-    return fetch(samplesUrl, options)
-      .then(res => res.json())
-      .then(res => {
-        if (res.error) {
-          throw (res.error);
-        }
-        dispatch(fetchSamplesSuccess(res.sampleQueries));
-        return res.products;
-      })
-      .catch(error => {
-        dispatch(fetchSamplesError(error));
-      });
-
+    const response = await fetch(samplesUrl, options);
+    if (response.ok) {
+      const res = await response.json();
+      return dispatch(fetchSamplesSuccess(res.sampleQueries));
+    } else {
+      const error = await response.text();
+      return  dispatch(fetchSamplesError({ error }));
+    }
   };
 }

@@ -31,6 +31,7 @@ export function fetchScopes(query?: IQuery): Function {
     try {
       const { devxApi } = getState();
       let permissionsUrl = `${devxApi}/permissions`;
+      const language = navigator.language || 'en-US';
 
       if (query) {
         const { requestUrl, sampleUrl } = parseSampleUrl(query.sampleUrl);
@@ -44,7 +45,9 @@ export function fetchScopes(query?: IQuery): Function {
 
       const headers = {
         'Content-Type': 'application/json',
+        'Accept-Language': language
       };
+
       const options: IRequestOptions = { headers };
 
       dispatch(fetchScopesPending());
