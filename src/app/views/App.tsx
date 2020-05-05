@@ -155,7 +155,7 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: method,
       selectedVersion: version,
       sampleBody: this.hashDecode(requestBody),
-      sampleHeaders: JSON.parse(this.hashDecode(headers)),
+      sampleHeaders: (headers) ? JSON.parse(this.hashDecode(headers)) : [],
     };
   }
 
@@ -245,25 +245,6 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: verb
     });
   };
-
-  public promptNewLogin = async () => {
-    this.closeDialog();
-    localStorage.clear();
-    const { mscc } = (window as any);
-
-    if (mscc) {
-      mscc.setConsent();
-    }
-
-    setTimeout(async () => {
-      const authResponse = await logIn();
-      if (authResponse) {
-        this.props.actions!.signIn(authResponse.accessToken);
-        this.props.actions!.storeScopes(authResponse.scopes);
-      }
-    }, 700);
-
-  }
 
   public toggleSidebar = (): void => {
     const { sidebarProperties } = this.props;
