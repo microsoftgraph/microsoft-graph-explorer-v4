@@ -393,6 +393,8 @@ class App extends Component<IAppProps, IAppState> {
             <div className={layout}>
               {graphExplorerMode.TryIt && headerMessaging(loginType, classes, query)}
 
+              {this.displayAuthenticationSection(minimised)}
+
               {displayContent && <>
                 <div style={{ marginBottom: 8 }}>
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
