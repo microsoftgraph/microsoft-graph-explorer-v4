@@ -72,6 +72,20 @@ export function logOut() {
   msalApplication.logout();
 }
 
+export function logOutPopUp() {
+  // @ts-ignore
+  msalApplication.clearCache();
+  // @ts-ignore
+  msalApplication.account = null;
+  // @ts-ignore
+  msalApplication.authorityInstance.resolveEndpointsAsync().then(authority => {
+    const urlNavigate = authority.EndSessionEndpoint
+        ? authority.EndSessionEndpoint
+        : `${msalApplication.authority}oauth2/v2.0/logout`;
+    (msalApplication as any).openPopup(urlNavigate, 'msal', 400, 600);
+  });
+}
+
 /**
  * Generates a new access token from passed in scopes
  * @param {string[]} scopes passed to generate token
