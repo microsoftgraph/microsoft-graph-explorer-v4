@@ -26,9 +26,6 @@ export interface IPermissionProps {
     fetchScopes: Function;
     consentToScopes: Function;
   };
-  intl: {
-    message: object;
-  };
 }
 
 export interface IPermissionState {
