@@ -18,6 +18,7 @@ export function getSessionId() {
 export async function logIn(sessionId = ''): Promise<any> {
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
+    prompt: 'select_account'
   };
 
   if (sessionId !== '') {
