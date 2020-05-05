@@ -1,3 +1,4 @@
+import { geLocale } from '../../../appLocale';
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
 import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_PENDING, SAMPLES_FETCH_SUCCESS } from '../redux-constants';
@@ -25,12 +26,11 @@ export function fetchSamplesPending(): any {
 export function fetchSamples(): Function {
   return async (dispatch: Function, getState: Function) => {
     const { devxApi } = getState();
-    const language = navigator.language || 'en-US';
     const samplesUrl = `${devxApi}/samples`;
 
     const headers = {
       'Content-Type': 'application/json',
-      'Accept-Language': language
+      'Accept-Language': geLocale
     };
 
     const options: IRequestOptions = { headers };

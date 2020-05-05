@@ -1,3 +1,4 @@
+import { geLocale } from '../../../appLocale';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
@@ -31,7 +32,6 @@ export function fetchScopes(query?: IQuery): Function {
     try {
       const { devxApi } = getState();
       let permissionsUrl = `${devxApi}/permissions`;
-      const language = navigator.language || 'en-US';
 
       if (query) {
         const { requestUrl, sampleUrl } = parseSampleUrl(query.sampleUrl);
@@ -45,7 +45,7 @@ export function fetchScopes(query?: IQuery): Function {
 
       const headers = {
         'Content-Type': 'application/json',
-        'Accept-Language': language
+        'Accept-Language': geLocale
       };
 
       const options: IRequestOptions = { headers };
