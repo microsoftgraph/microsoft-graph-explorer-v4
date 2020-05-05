@@ -308,7 +308,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     return (
       <div>
-        <SearchBox className={classes.searchBox} placeholder='Search sample queries'
+        <SearchBox className={classes.searchBox} placeholder={messages['Search sample queries']}
           onChange={(value) => this.searchValueChanged(value)}
           styles={{ field: { paddingLeft: 10 } }}
         />
