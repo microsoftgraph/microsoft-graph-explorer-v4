@@ -3,13 +3,6 @@ export interface ISidebarProps {
   mobileScreen: boolean;
 }
 
-export interface IBanner {
-  optOut: Function;
-  intl: {
-    message: object;
-  };
-}
-
 /**
  * Tokens are used as placeholder values in sample queries to cover many scenarios:
  * - ID tokens for sample tenant nodes like user IDs, file IDs and other string constants

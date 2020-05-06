@@ -347,14 +347,12 @@ class App extends Component<IAppProps, IAppState> {
                 {mobileScreen && appTitleDisplayOnMobileScreen(
                   stackTokens,
                   classes,
-                  this.toggleSidebar,
-                this.optOut)}
+                  this.toggleSidebar)}
 
                 {!mobileScreen && appTitleDisplayOnFullScreen(
                   classes,
                   minimised,
-                  classes,
-                  this.toggleSidebar,
+                  this.toggleSidebar
                 )}
 
                 <hr className={classes.separator} />

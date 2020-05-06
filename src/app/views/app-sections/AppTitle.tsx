@@ -1,13 +1,11 @@
 import { IconButton, IStackTokens, Label, Stack } from 'office-ui-fabric-react';
 import React from 'react';
 import { Authentication } from '../authentication';
-import { Banner } from '../opt-in-out-banner';
 
 export function appTitleDisplayOnFullScreen(
     classes: any,
     minimised: any,
     toggleSidebar: Function,
-    optOut: Function
     ): React.ReactNode {
 
     return <div style={{ display: 'flex', width: '100%' }}>
@@ -23,9 +21,6 @@ export function appTitleDisplayOnFullScreen(
             <Label className={classes.graphExplorerLabel}>
               Graph Explorer
             </Label>
-            <span className={classes.previewButton}>
-              <Banner optOut={() => optOut()} />
-            </span>
           </>}
       </div>
     </div>;
@@ -34,8 +29,7 @@ export function appTitleDisplayOnFullScreen(
   export function appTitleDisplayOnMobileScreen(
     stackTokens: IStackTokens,
     classes: any,
-    toggleSidebar: Function,
-    optOut: Function
+    toggleSidebar: Function
     ): React.ReactNode {
     return <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
       <>
@@ -50,7 +44,6 @@ export function appTitleDisplayOnFullScreen(
           <Label className={classes.graphExplorerLabel}>
             Graph Explorer
           </Label>
-          <Banner optOut={() => optOut()} />
         </div>
         <span style={{
           position: 'absolute',
