@@ -3,9 +3,11 @@ import * as React from 'react';
 import { IHeadersListControl } from '../../../../../types/request';
 import { headerStyles } from './Headers.styles';
 
+
 const HeadersList = ({
   handleOnHeaderDelete,
-  headers
+  headers,
+  messages
 }: IHeadersListControl) => {
 
   const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
@@ -40,8 +42,8 @@ const HeadersList = ({
   };
 
   const columns = [
-    { key: 'key', name: 'Key', fieldName: 'name', minWidth: 300, maxWidth: 400 },
-    { key: 'value', name: 'Value', fieldName: 'value', minWidth: 300, maxWidth: 400 },
+    { key: 'key', name: messages.Key, fieldName: 'name', minWidth: 300, maxWidth: 400 },
+    { key: 'value', name: messages.Value, fieldName: 'value', minWidth: 300, maxWidth: 400 },
     { key: 'button', name: '', fieldName: 'button', minWidth: 200, maxWidth: 300 }
   ];
 
