@@ -110,7 +110,9 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
         </div>
         <br />
         <hr />
-        <HeadersList handleOnHeaderDelete={(event: any, header: any) => this.handleOnHeaderDelete(header)}
+        <HeadersList
+          messages={messages}
+          handleOnHeaderDelete={(event: any, header: any) => this.handleOnHeaderDelete(header)}
           headers={headers}
         />
       </div>
