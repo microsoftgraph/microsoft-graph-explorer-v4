@@ -37,13 +37,16 @@ export function fetchSamples(): Function {
 
     dispatch(fetchSamplesPending());
 
-    const response = await fetch(samplesUrl, options);
-    if (response.ok) {
+    try {
+      const response = await fetch(samplesUrl, options);
+      if (!response.ok) {
+        throw response;
+      }
       const res = await response.json();
       return dispatch(fetchSamplesSuccess(res.sampleQueries));
-    } else {
-      const error = await response.text();
-      return  dispatch(fetchSamplesError({ error }));
+    } catch (error) {
+      const errorCode = await error.text();
+      return  dispatch(fetchSamplesError({ error: errorCode }));
     }
   };
 }
