@@ -30,7 +30,7 @@ export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): s
     // tslint:disable-next-line:max-line-length
     `${appUrl}?request=${graphUrlRequest}&method=${selectedVerb}&version=${queryVersion}&GraphUrl=${graphUrl}&requestBody=${requestBody}`;
 
-  if (sampleHeaders.length > 0) {
+  if (sampleHeaders && sampleHeaders.length > 0) {
     const headers = hashEncode(JSON.stringify(sampleHeaders));
     shareLink = `${shareLink}&headers=${headers}`;
   }
