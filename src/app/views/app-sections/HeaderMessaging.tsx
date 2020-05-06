@@ -1,9 +1,14 @@
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+
 import { LoginType } from '../../../types/enums';
+import { getLoginType } from '../../services/graph-client/msal-service';
 import { Authentication } from '../authentication';
-export function headerMessaging(loginType: LoginType, classes: any, query: string): React.ReactNode {
+
+export function headerMessaging(classes: any, query: string): React.ReactNode {
+  const loginType = getLoginType();
+
   return (
   <div style={{ marginBottom: 8 }}>
     {loginType === LoginType.Popup && <>

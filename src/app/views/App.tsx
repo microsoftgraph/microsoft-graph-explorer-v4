@@ -18,7 +18,7 @@ import { clearQueryStatus } from '../services/actions/query-status-action-creato
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { getLoginType, logIn } from '../services/graph-client/msal-service';
+import { logIn } from '../services/graph-client/msal-service';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { appTitleDisplayOnFullScreen, appTitleDisplayOnMobileScreen } from './app-sections/AppTitle';
@@ -155,7 +155,7 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: method,
       selectedVersion: version,
       sampleBody: this.hashDecode(requestBody),
-      sampleHeaders: JSON.parse(this.hashDecode(headers)),
+      sampleHeaders: (headers) ? JSON.parse(this.hashDecode(headers)) : [],
     };
   }
 
@@ -246,25 +246,6 @@ class App extends Component<IAppProps, IAppState> {
     });
   };
 
-  public promptNewLogin = async () => {
-    this.closeDialog();
-    localStorage.clear();
-    const { mscc } = (window as any);
-
-    if (mscc) {
-      mscc.setConsent();
-    }
-
-    setTimeout(async () => {
-      const authResponse = await logIn();
-      if (authResponse) {
-        this.props.actions!.signIn(authResponse.accessToken);
-        this.props.actions!.storeScopes(authResponse.scopes);
-      }
-    }, 700);
-
-  }
-
   public toggleSidebar = (): void => {
     const { sidebarProperties } = this.props;
     const properties = { ...sidebarProperties };
@@ -324,7 +305,6 @@ class App extends Component<IAppProps, IAppState> {
     const historyHeaderText = messages['History'];
     const { mobileScreen, showSidebar } = sidebarProperties;
     const language = navigator.language || 'en-US';
-    const loginType = getLoginType();
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
@@ -391,7 +371,7 @@ class App extends Component<IAppProps, IAppState> {
               </div>
             )}
             <div className={layout}>
-              {graphExplorerMode.TryIt && headerMessaging(loginType, classes, query)}
+              {graphExplorerMode === Mode.TryIt && headerMessaging(classes, query)}
 
               {graphExplorerMode === Mode.TryIt && this.displayAuthenticationSection(minimised)}
 
