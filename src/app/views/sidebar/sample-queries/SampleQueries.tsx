@@ -172,14 +172,14 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             <TooltipHost
               tooltipProps={{
                 onRenderContent: () => <div style={{ paddingBottom: 3 }}>
-                  {item.method} <FormattedMessage id={queryContent} /></div>
+                  {item.method} {queryContent} </div>
               }}
               id={getId()}
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}
             >
               <span aria-label={queryContent} className={classes.queryContent}>
-                <FormattedMessage id={queryContent} />
+                {queryContent}
               </span>
             </TooltipHost>
           </span>
@@ -308,7 +308,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     return (
       <div>
-        <SearchBox className={classes.searchBox} placeholder='Search sample queries'
+        <SearchBox className={classes.searchBox} placeholder={messages['Search sample queries']}
           onChange={(value) => this.searchValueChanged(value)}
           styles={{ field: { paddingLeft: 10 } }}
         />

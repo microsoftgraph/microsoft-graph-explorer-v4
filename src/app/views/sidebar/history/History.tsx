@@ -426,7 +426,7 @@ export class History extends Component<IHistoryProps, any> {
     return (
       <>
         <div>
-          <SearchBox placeholder='Search history items' className={classes.searchBox}
+          <SearchBox placeholder={messages['Search history items']} className={classes.searchBox}
             onChange={(value) => this.searchValueChanged(value)}
             styles={{ field: { paddingLeft: 10 } }}
           />

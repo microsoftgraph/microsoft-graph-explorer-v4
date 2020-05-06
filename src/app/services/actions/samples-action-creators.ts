@@ -1,3 +1,4 @@
+import { geLocale } from '../../../appLocale';
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
 import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_PENDING, SAMPLES_FETCH_SUCCESS } from '../redux-constants';
@@ -29,24 +30,23 @@ export function fetchSamples(): Function {
 
     const headers = {
       'Content-Type': 'application/json',
+      'Accept-Language': geLocale
     };
 
     const options: IRequestOptions = { headers };
 
     dispatch(fetchSamplesPending());
 
-    return fetch(samplesUrl, options)
-      .then(res => res.json())
-      .then(res => {
-        if (res.error) {
-          throw (res.error);
-        }
-        dispatch(fetchSamplesSuccess(res.sampleQueries));
-        return res.products;
-      })
-      .catch(error => {
-        dispatch(fetchSamplesError(error));
-      });
-
+    try {
+      const response = await fetch(samplesUrl, options);
+      if (!response.ok) {
+        throw response;
+      }
+      const res = await response.json();
+      return dispatch(fetchSamplesSuccess(res.sampleQueries));
+    } catch (error) {
+      const errorCode = await error.text();
+      return  dispatch(fetchSamplesError({ error: errorCode }));
+    }
   };
 }

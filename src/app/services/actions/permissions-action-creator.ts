@@ -1,3 +1,4 @@
+import { geLocale } from '../../../appLocale';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
@@ -44,7 +45,9 @@ export function fetchScopes(query?: IQuery): Function {
 
       const headers = {
         'Content-Type': 'application/json',
+        'Accept-Language': geLocale
       };
+
       const options: IRequestOptions = { headers };
 
       dispatch(fetchScopesPending());
