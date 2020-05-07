@@ -136,7 +136,9 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               content={item.consentDescription}
               id={hostId}
               calloutProps={{ gapSpace: 0 }}
-              className={classes.tooltipHost}
+              styles={{
+                root: { display: 'block'}
+              }}
             >
               <span aria-labelledby={hostId}>
                 {item.consentDescription}
@@ -195,8 +197,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           name: messages.Description,
           fieldName: 'consentDescription',
           isResizable: true,
-          minWidth: (tokenPresent) ? 500 : 650,
-          maxWidth: (tokenPresent) ? 600 : 700
+          minWidth: (tokenPresent) ? 400 : 650,
+          maxWidth: (tokenPresent) ? 500 : 700
         }
       );
     }
