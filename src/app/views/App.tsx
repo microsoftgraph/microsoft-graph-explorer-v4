@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { geLocale } from '../../appLocale';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
@@ -293,7 +294,6 @@ class App extends Component<IAppProps, IAppState> {
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
     const { mobileScreen, showSidebar } = sidebarProperties;
-    const language = navigator.language || 'en-US';
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
@@ -365,7 +365,7 @@ class App extends Component<IAppProps, IAppState> {
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
                 {statusMessages(queryState, actions)}
-                {termsOfUseMessage(termsOfUse, actions, classes, language)}
+                {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
                 {
                   // @ts-ignore
                   <QueryResponse verb={this.state.selectedVerb} />

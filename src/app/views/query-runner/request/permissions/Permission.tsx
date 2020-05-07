@@ -148,8 +148,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         default:
           return (
             <TooltipHost
-              content={item.consentDescription}
-              id={hostId}
+            content={content}
+            id={hostId}
               calloutProps={{ gapSpace: 0 }}
               className={classes.tooltipHost}
             >
@@ -174,8 +174,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         key: 'value',
         name: messages.Permission,
         fieldName: 'value',
-        minWidth: 100,
-        maxWidth: 150,
+        minWidth: 150,
+        maxWidth: 200,
         isResizable: true
       }
     ];
@@ -187,16 +187,16 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           name: messages['Display string'],
           fieldName: 'consentDisplayName',
           isResizable: true,
-          minWidth: 150,
-          maxWidth: 200
+          minWidth: 250,
+          maxWidth: 300
         },
         {
           key: 'consentDescription',
           name: messages.Description,
           fieldName: 'consentDescription',
           isResizable: true,
-          minWidth: 200,
-          maxWidth: 300
+          minWidth: (tokenPresent) ? 500 : 650,
+          maxWidth: (tokenPresent) ? 600 : 700
         }
       );
     }
@@ -207,8 +207,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         isResizable: true,
         name: messages['Admin consent required'],
         fieldName: 'isAdmin',
-        minWidth: 100,
-        maxWidth: 200
+        minWidth: (tokenPresent) ? 150 : 100,
+        maxWidth: (tokenPresent) ? 150 : 100,
       }
     );
 
@@ -220,7 +220,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           isResizable: false,
           fieldName: 'consented',
           minWidth: 100,
-          maxWidth: 200
+          maxWidth: 100
         }
       );
     }

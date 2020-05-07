@@ -13,6 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { geLocale } from '../../../appLocale';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
 import { ISettingsProps } from '../../../types/settings';
@@ -41,7 +42,7 @@ function Settings(props: ISettingsProps) {
       {
         key: 'office-dev-program',
         text: messages['Office Dev Program'],
-        href: 'https://developer.microsoft.com/en-us/office/dev-program',
+        href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
         target: '_blank',
         iconProps: {
           iconName: 'CommandPrompt',
