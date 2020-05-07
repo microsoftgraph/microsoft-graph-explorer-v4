@@ -295,6 +295,7 @@
   "see more queries":"Vea más consultas en los",
   "Microsoft Graph API Reference docs": "Documentos de referencia de la API de Microsoft Graph.",
   "Fetching permissions": "Obteniendo permisos",
+  "Authentication failed": "Error de autenticación",
   "view all permissions": "Seleccionar permisos",
   "Fetching code snippet": "Recuperando fragmento de código",
   "Snippet not available": "Fragmento de código no disponible",
