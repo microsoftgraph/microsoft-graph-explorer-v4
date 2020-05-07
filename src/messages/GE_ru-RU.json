@@ -295,6 +295,7 @@
   "see more queries":"Просмотрите другие запросы в",
   "Microsoft Graph API Reference docs": "Справочные документы по API Microsoft Graph.",
   "Fetching permissions": "Извлечение разрешений",
+  "Authentication failed": "Сбой проверки подлинности",
   "view all permissions": "Выбор разрешений",
   "Fetching code snippet": "Извлечение фрагмента кода",
   "Snippet not available": "Фрагмент недоступен",

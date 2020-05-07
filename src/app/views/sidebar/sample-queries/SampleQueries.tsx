@@ -8,6 +8,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { geLocale } from '../../../../appLocale';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
@@ -168,8 +169,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           </TooltipHost>;
 
         default:
-          return <span aria-label={queryContent}>
-            <TooltipHost
+          return <TooltipHost
               tooltipProps={{
                 onRenderContent: () => <div style={{ paddingBottom: 3 }}>
                   {item.method} {queryContent} </div>
@@ -181,9 +181,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               <span aria-label={queryContent} className={classes.queryContent}>
                 {queryContent}
               </span>
-            </TooltipHost>
-          </span>
-            ;
+            </TooltipHost>;
       }
     }
   };
@@ -323,7 +321,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           dismissButtonAriaLabel='Close'>
           <FormattedMessage id='see more queries' />
           <a target='_blank'
-            href='https://docs.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0'>
+            href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}>
             <FormattedMessage id='Microsoft Graph API Reference docs' />
           </a>
         </MessageBar>
