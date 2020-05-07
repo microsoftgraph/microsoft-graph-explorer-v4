@@ -168,8 +168,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           </TooltipHost>;
 
         default:
-          return <span aria-label={queryContent}>
-            <TooltipHost
+          return <TooltipHost
               tooltipProps={{
                 onRenderContent: () => <div style={{ paddingBottom: 3 }}>
                   {item.method} {queryContent} </div>
@@ -181,9 +180,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               <span aria-label={queryContent} className={classes.queryContent}>
                 {queryContent}
               </span>
-            </TooltipHost>
-          </span>
-            ;
+            </TooltipHost>;
       }
     }
   };
