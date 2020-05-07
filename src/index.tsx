@@ -3,12 +3,12 @@ import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { addLocaleData, IntlProvider } from 'react-intl';
-import br from 'react-intl/locale-data/br';
 import de from 'react-intl/locale-data/de';
 import en from 'react-intl/locale-data/en';
 import es from 'react-intl/locale-data/es';
 import fr from 'react-intl/locale-data/fr';
 import jp from 'react-intl/locale-data/ja';
+import pt from 'react-intl/locale-data/pt';
 import ru from 'react-intl/locale-data/ru';
 import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
@@ -78,7 +78,7 @@ msalApplication.acquireTokenSilent({ scopes: DEFAULT_USER_SCOPES.split(' ') }).t
 });
 
 addLocaleData([
-  ...br,
+  ...pt,
   ...de,
   ...en,
   ...fr,
