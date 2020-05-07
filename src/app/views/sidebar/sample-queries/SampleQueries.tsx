@@ -170,9 +170,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           return <span aria-label={queryContent}>
             <TooltipHost
               tooltipProps={{
-                onRenderContent: () => <div className={classes.query}>
-                  <div>{item.method}</div>
-                  <div>{queryContent} </div>
+                onRenderContent: () => <div style={{ padding: 3 }}>
+                {item.method} {queryContent}
                 </div>
               }}
               id={getId()}
