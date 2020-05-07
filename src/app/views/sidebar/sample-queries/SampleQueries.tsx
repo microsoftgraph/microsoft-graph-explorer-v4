@@ -326,6 +326,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           </a>
         </MessageBar>
         <DetailsList className={classes.queryList}
+         cellStyleProps={{
+          cellRightPadding: 0,
+          cellExtraRightPadding: 0,
+          cellLeftPadding: 0,
+        }}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderItemColumn={this.renderItemColumn}
           items={groupedList.samples}

@@ -68,7 +68,7 @@ interface IAppState {
 
 class App extends Component<IAppProps, IAppState> {
 
-  private mediaQueryList = window.matchMedia('(max-width: 1260px)');
+  private mediaQueryList = window.matchMedia('(max-width: 992px)');
 
   constructor(props: IAppProps) {
     super(props);
