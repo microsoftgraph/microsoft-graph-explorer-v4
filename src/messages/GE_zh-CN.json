@@ -295,6 +295,7 @@
   "see more queries":"查看更多查询",
   "Microsoft Graph API Reference docs": "Microsoft Graph API 参考文档。",
   "Fetching permissions": "正在获取权限",
+  "Authentication failed": "身份验证失败",
   "view all permissions": "选择权限",
   "Fetching code snippet": "获取代码片段",
   "Snippet not available": "代码片段不可用",
