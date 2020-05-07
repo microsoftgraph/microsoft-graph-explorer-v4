@@ -148,7 +148,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         default:
           return (
             <TooltipHost
-            content={item.consentDescription}
+            content={content}
             id={hostId}
               calloutProps={{ gapSpace: 0 }}
               className={classes.tooltipHost}
