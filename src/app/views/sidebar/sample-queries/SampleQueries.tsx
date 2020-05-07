@@ -1,7 +1,7 @@
 import {
-  DetailsList, DetailsListLayoutMode, DetailsRow, getId,
-  IColumn, IconButton, MessageBar, MessageBarType, SearchBox,
-  Selection, SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
+  DetailsList, DetailsListLayoutMode, DetailsRow, FontSizes,
+  FontWeights, getId, GroupHeader, IColumn, IconButton,
+  MessageBar, MessageBarType, SearchBox, Selection, SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -208,27 +208,28 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   public renderGroupHeader = (props: any): any => {
-    const classes = classNames(this.props);
+    const onToggleSelectGroup = () => {
+      props.onToggleCollapse(props.group);
+    };
 
     return (
-      <div aria-label={props.group!.name} onClick={this.onToggleCollapse(props)}>
-        <div className={classes.groupHeaderRow}>
-          <IconButton
-            className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
-            iconProps={{ iconName: props.group!.isCollapsed ? 'ChevronRightSmall' : 'ChevronDownSmall' }}
-            title={props.group!.isCollapsed ?
-              `Expand ${props.group!.name}` : `Collapse ${props.group!.name}`}
-            ariaLabel='expand collapse group'
-            onClick={() => this.onToggleCollapse(props)}
-          />
-          <div className={classes.groupTitle}>
-            <span>{props.group!.name}</span>
-            <span className={classes.headerCount}>({props.group!.count})</span>
-          </div>
-        </div>
-      </div>
+      <GroupHeader
+        compact={true}
+        styles={{
+          check: { display: 'none' },
+          title: {
+          fontSize: FontSizes.medium,
+          fontWeight: FontWeights.semibold
+        },
+        expand: {
+          fontSize: FontSizes.small,
+          }
+        }}
+        {...props}
+        onToggleSelectGroup={onToggleSelectGroup}
+      />
     );
-  };
+  }
 
   private renderDetailsHeader() {
     return (
