@@ -109,7 +109,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
-
       switch (column.key) {
         case 'authRequiredIcon':
           if (item.method !== 'GET' && !tokenPresent) {
@@ -155,7 +154,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         case 'method':
           return <TooltipHost
             tooltipProps={{
-              onRenderContent: () => <div style={{ paddingBottom: 3 }}>
+              onRenderContent: () => <div style={classes.query}>
                 {queryContent}</div>
             }}
             id={getId()}
@@ -171,8 +170,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           return <span aria-label={queryContent}>
             <TooltipHost
               tooltipProps={{
-                onRenderContent: () => <div style={{ paddingBottom: 3 }}>
-                  {item.method} {queryContent} </div>
+                onRenderContent: () => <div className={classes.query}>
+                  <div>{item.method}</div>
+                  <div>{queryContent} </div>
+                </div>
               }}
               id={getId()}
               calloutProps={{ gapSpace: 0 }}
@@ -197,6 +198,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       if (!tokenPresent && props.item.method !== 'GET') {
         selectionDisabled = true;
       }
+
       return (
         <div className={classes.groupHeader}>
           <DetailsRow
@@ -328,6 +330,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           </a>
         </MessageBar>
         <DetailsList className={classes.queryList}
+          cellStyleProps={{
+            cellRightPadding: 0,
+            cellExtraRightPadding: 0,
+            cellLeftPadding: 0,
+          }}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderItemColumn={this.renderItemColumn}
           items={groupedList.samples}
