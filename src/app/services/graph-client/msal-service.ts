@@ -1,4 +1,5 @@
 import { AuthenticationParameters } from 'msal';
+import { geLocale } from '../../../appLocale';
 import { LoginType } from '../../../types/enums';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { msalApplication } from './msal-agent';
@@ -18,7 +19,8 @@ export function getSessionId() {
 export async function logIn(sessionId = ''): Promise<any> {
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
-    prompt: 'select_account'
+    prompt: 'select_account',
+    extraQueryParameters: { mkt: geLocale }
   };
 
   if (sessionId !== '') {
