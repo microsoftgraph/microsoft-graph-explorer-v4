@@ -274,6 +274,7 @@ class App extends Component<IAppProps, IAppState> {
       display: minimised ? 'block' : 'flex',
       justifyContent: minimised ? '' : 'center',
       alignItems: minimised ? '' : 'center',
+      marginLeft: minimised ? '' : '-0.9em',
     }}>
       <div className={minimised ? '' : 'col-10'}>
         <Authentication />

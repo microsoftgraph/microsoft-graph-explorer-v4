@@ -64,7 +64,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
           mobileScreen ? showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn, minimised) :
             <>
               {!tokenPresent && graphExplorerMode === Mode.Complete && !minimised && showUnAuthenticatedText(classes)}
-              <span><br />{showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn, minimised)}<br /> </span>
+              <br />{showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn, minimised)}<br />
             </>}
       </>
     );
