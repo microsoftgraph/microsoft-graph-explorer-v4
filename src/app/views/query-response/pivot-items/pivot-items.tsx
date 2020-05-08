@@ -52,7 +52,7 @@ export const getPivotItems = (properties: any) => {
         headerText={(mobileScreen) ? '' : messages['Adaptive Cards']}
         title={messages['Adaptive Cards']}
         itemIcon='ContactCard'
-        resource={sampleQuery}
+        resource={(!!body) ? sampleQuery : null}
         onRenderItemLink={getTooltipDisplay}
       >
         <ThemeContext.Consumer >
@@ -89,7 +89,7 @@ function getTooltipDisplay(link: any) {
       <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
       {link.headerText}
 
-      {link.ariaLabel === 'Adaptive Cards' && adaptiveCardPresentDot(link.resource)}
+      {link.ariaLabel === 'Adaptive Cards' && link.resource && adaptiveCardPresentDot(link.resource)}
     </TooltipHost>
   );
 }
