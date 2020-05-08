@@ -159,9 +159,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     return (
       <div className={classes.profile}>
         {mobileScreen &&
-          <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-            <Persona {...persona} size={PersonaSize.size40} hidePersonaDetails={true} />
-          </ActionButton>
+          <Persona {...persona} size={PersonaSize.size40}  />
         }
 
         {!mobileScreen && this.showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
