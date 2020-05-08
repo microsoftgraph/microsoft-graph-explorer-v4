@@ -45,13 +45,6 @@ export function appTitleDisplayOnFullScreen(
             Graph Explorer
           </Label>
         </div>
-        <span style={{
-          position: 'absolute',
-          marginLeft: '70%',
-          marginTop: '2.5%'
-        }}>
-          <Authentication />
-        </span>
       </>
     </Stack>;
   }

@@ -272,13 +272,13 @@ class App extends Component<IAppProps, IAppState> {
   public displayAuthenticationSection = (minimised: boolean) => {
     return <div style={{
       display: minimised ? 'block' : 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
+      justifyContent: minimised ? '' : 'center',
+      alignItems: minimised ? '' : 'center',
     }}>
-      <div className={minimised ? '' : 'col-md-10'}>
+      <div className={minimised ? '' : 'col-10'}>
         <Authentication />
       </div>
-      <div className={minimised ? '' : 'col-md-2'}>
+      <div className={minimised ? '' : 'col-2'}>
         <Settings />
       </div>
     </div>;
@@ -345,12 +345,9 @@ class App extends Component<IAppProps, IAppState> {
                 )}
 
                 <hr className={classes.separator} />
-                {!mobileScreen &&
-                  <>
-                    {this.displayAuthenticationSection(minimised)}
-                    <hr className={classes.separator} />
-                  </>
-                }
+
+                {this.displayAuthenticationSection(minimised)}
+                <hr className={classes.separator} />
 
                 {showSidebar && <>
                   <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
