@@ -103,9 +103,13 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
 
     if (query.sampleHeaders) {
       query.sampleHeaders.forEach(header => {
-        if (header.name !== '' && header.value !== '') {
-          sampleHeaders[header.name] = header.value;
+        if (header.name.toLowerCase() === 'content-type') {
+          return;
         }
+        if (header.name === '' && header.value === '') {
+          return;
+        }
+        sampleHeaders[header.name] = header.value;
       });
     }
 
