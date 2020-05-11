@@ -24,12 +24,9 @@ export async function anonymousRequest(dispatch: Function, query: IQuery) {
   const escapedUrl = encodeURIComponent(query.sampleUrl);
   const graphUrl = `https://proxy.apisandbox.msdn.microsoft.com/svc?url=${escapedUrl}`;
   const sampleHeaders: any = {};
-
-  if (query.sampleHeaders) {
+  if (query.sampleHeaders && query.sampleHeaders.length > 0) {
     query.sampleHeaders.forEach(header => {
-      if (header.name !== '' && header.value !== '') {
-        sampleHeaders[header.name] = header.value;
-      }
+      sampleHeaders[header.name] = header.value;
     });
   }
 
@@ -101,11 +98,14 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
     const sampleHeaders: any = {};
     sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
 
-    if (query.sampleHeaders) {
+    if (query.sampleHeaders && query.sampleHeaders.length > 0) {
       query.sampleHeaders.forEach(header => {
-        if (header.name !== '' && header.value !== '') {
-          sampleHeaders[header.name] = header.value;
+
+        // We are relying on the graph client to set the content type header.
+        if (header.name.toLowerCase() === 'content-type') {
+          return;
         }
+        sampleHeaders[header.name] = header.value;
       });
     }
 
