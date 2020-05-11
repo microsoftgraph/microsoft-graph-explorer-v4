@@ -45,8 +45,7 @@ export function fetchSamples(): Function {
       const res = await response.json();
       return dispatch(fetchSamplesSuccess(res.sampleQueries));
     } catch (error) {
-      const errorCode = await error.text();
-      return  dispatch(fetchSamplesError({ error: errorCode }));
+      return dispatch(fetchSamplesError({ error }));
     }
   };
 }
