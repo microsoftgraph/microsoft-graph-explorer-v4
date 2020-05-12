@@ -302,5 +302,7 @@
   "Select different permissions": "Um verschiedene Microsoft Graph API-Endpunkte auszuprobieren, wählen Sie die Berechtigungen aus und klicken Sie dann auf Zustimmen.",
   "Search permissions": "Suchberechtigungen",
   "permissions not found": "Wir haben keine Genehmigungen gefunden",
-  "selected": "Ausgewählt"
+  "selected": "ausgewählt",
+  "Search sample queries": "Beispielabfragen durchsuchen",
+  "Search history items": "Verlaufselemente durchsuchen"
 }
