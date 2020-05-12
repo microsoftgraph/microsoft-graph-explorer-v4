@@ -302,5 +302,7 @@
   "Select different permissions": "Pour tester plusieurs points de terminaison de l’API Microsoft Graph, sélectionnez les autorisations, puis cliquez sur Consentement.",
   "Search permissions": "Autorisations de recherche",
   "permissions not found": "Nous n’avons pas trouvé d’autorisations",
-  "selected": "sélectionnées"
+  "selected": "sélectionnées",
+  "Search sample queries": "Exemples de requêtes de recherche",
+  "Search history items": "Éléments de l’historique de recherche"
 }
