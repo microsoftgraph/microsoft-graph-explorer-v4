@@ -302,5 +302,7 @@
   "Select different permissions": "さまざまな Microsoft Graph API エンドポイントを試すには、アクセス許可を選択し、[同意] をクリックします。",
   "Search permissions": "検索アクセス許可",
   "permissions not found": "アクセス許可が見つかりませんでした",
-  "selected": "選択されました"
+  "selected": "選択されました",
+  "Search sample queries": "サンプル クエリの検索",
+  "Search history items": "検索履歴アイテム"
 }
