@@ -302,5 +302,7 @@
   "Select different permissions": "Чтобы испытать различные конечные точки API Microsoft Graph, выберите разрешения и нажмите кнопку \"Согласие\".",
   "Search permissions": "Разрешения поиска",
   "permissions not found": "Не удалось найти разрешения",
-  "selected": "выбрано"
+  "selected": "выбрано",
+  "Search sample queries": "Примеры поисковых запросов",
+  "Search history items": "Элементы истории поиска"
 }
