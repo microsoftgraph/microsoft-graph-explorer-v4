@@ -20,6 +20,7 @@ export async function logIn(sessionId = ''): Promise<any> {
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
     prompt: 'select_account',
+    redirectUri: window.location.href.toLowerCase(),
     extraQueryParameters: { mkt: geLocale }
   };
 
@@ -82,8 +83,8 @@ export function logOutPopUp() {
   // @ts-ignore
   msalApplication.authorityInstance.resolveEndpointsAsync().then(authority => {
     const urlNavigate = authority.EndSessionEndpoint
-        ? authority.EndSessionEndpoint
-        : `${msalApplication.authority}oauth2/v2.0/logout`;
+      ? authority.EndSessionEndpoint
+      : `${msalApplication.authority}oauth2/v2.0/logout`;
     (msalApplication as any).openPopup(urlNavigate, 'msal', 400, 600);
   });
 }
