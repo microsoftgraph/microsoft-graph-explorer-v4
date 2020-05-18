@@ -70,37 +70,37 @@ export class QueryInput extends Component<IQueryInputProps, any> {
 
     return (
       <div className='row'>
-          <div className='col-xs-12 col-lg-2'>
-            <Dropdown
-              ariaLabel='Query sample option'
-              role='listbox'
-              selectedKey={selectedVerb}
-              options={httpMethodsToDisplay}
-              styles={verbSelector}
-              onChange={(event, method) => handleOnMethodChange(method)}
-            />
-          </div>
-          <div className='col-xs-12 col-lg-2'>
-            <Dropdown
-              ariaLabel='Query sample option'
-              role='listbox'
-              selectedKey={selectedVersion || 'v1.0'}
-              options={urlVersions}
-              onChange={(event, method) => handleOnVersionChange(method)}
-            />
-          </div>
-          <div className='col-xs-12 col-lg-6'>
-            <TextField
-              ariaLabel='Query Sample Input'
-              role='textbox'
-              placeholder={messages['Query Sample']}
-              onChange={(event, value) => handleOnUrlChange(value)}
-              defaultValue={sampleUrl}
-              onBlur={() => handleOnBlur()}
-              onKeyDown={this.handleKeyDown}
-            />
-          </div>
-          <div className='col-xs-12 col-lg-2'>
+        <div className='col-xs-12 col-lg-2'>
+          <Dropdown
+            ariaLabel='Query sample option'
+            role='listbox'
+            selectedKey={selectedVerb}
+            options={httpMethodsToDisplay}
+            styles={verbSelector}
+            onChange={(event, method) => handleOnMethodChange(method)}
+          />
+        </div>
+        <div className='col-xs-12 col-lg-2'>
+          <Dropdown
+            ariaLabel='Query sample option'
+            role='listbox'
+            selectedKey={selectedVersion || 'v1.0'}
+            options={urlVersions}
+            onChange={(event, method) => handleOnVersionChange(method)}
+          />
+        </div>
+        <div className='col-xs-12 col-lg-6'>
+          <TextField
+            ariaLabel='Query Sample Input'
+            role='textbox'
+            placeholder={messages['Query Sample']}
+            onChange={(event, value) => handleOnUrlChange(value)}
+            defaultValue={sampleUrl}
+            onBlur={() => handleOnBlur()}
+            onKeyDown={this.handleKeyDown}
+          />
+        </div>
+        <div className='col-xs-12 col-lg-2'>
           <SubmitButton
             className='run-query-button'
             text={messages['Run Query']}
