@@ -141,9 +141,9 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
                 root: { display: 'block' }
               }}
             >
-              <span aria-labelledby={hostId}>
+              <Label aria-labelledby={hostId}>
                 {item.consentDescription}
-              </span>
+              </Label>
             </TooltipHost>
           </>
             ;
@@ -156,9 +156,9 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               calloutProps={{ gapSpace: 0 }}
               className={classes.tooltipHost}
             >
-              <span aria-labelledby={hostId} style={{ fontSize: FontSizes.medium }}>
+              <Label aria-labelledby={hostId}>
                 {content}
-              </span>
+              </Label>
             </TooltipHost>
           );
       }
@@ -190,8 +190,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           name: messages['Display string'],
           fieldName: 'consentDisplayName',
           isResizable: true,
-          minWidth: 250,
-          maxWidth: 300
+          minWidth: 150,
+          maxWidth: 200
         },
         {
           key: 'consentDescription',
@@ -199,7 +199,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           fieldName: 'consentDescription',
           isResizable: true,
           minWidth: (tokenPresent) ? 400 : 650,
-          maxWidth: (tokenPresent) ? 500 : 700
+          maxWidth: (tokenPresent) ? 450 : 700
         }
       );
     }
@@ -211,7 +211,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         name: messages['Admin consent required'],
         fieldName: 'isAdmin',
         minWidth: (tokenPresent) ? 150 : 100,
-        maxWidth: (tokenPresent) ? 150 : 100,
+        maxWidth: (tokenPresent) ? 150 : 200
       }
     );
 
