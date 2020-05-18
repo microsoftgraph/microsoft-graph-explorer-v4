@@ -292,7 +292,7 @@
   "tab": " タブ",
   "View the":" を表示する",
   "viewing a cached set": "ネットワーク接続に失敗したため、キャッシュされたサンプルのセットを表示しています。",
-  "see more queries":"のクエリをもっと見る",
+  "see more queries":"さらにクエリを見る: ",
   "Microsoft Graph API Reference docs": "Microsoft Graph API の参照ドキュメント。",
   "Fetching permissions": "アクセス許可を取得する",
   "Authentication failed": "認証に失敗しました",
