@@ -25,10 +25,10 @@ import { Permission } from '../query-runner/request/permissions';
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
 
-  const [ themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
-  const [ items, setItems] = useState([]);
-  const [ selectedPermissions, setSelectedPermissions] = useState([]);
-  const [ panelIsOpen, setPanelState] = useState(false);
+  const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
+  const [items, setItems] = useState([]);
+  const [selectedPermissions, setSelectedPermissions] = useState([]);
+  const [panelIsOpen, setPanelState] = useState(false);
 
   const {
     intl: { messages }
@@ -58,7 +58,7 @@ function Settings(props: ISettingsProps) {
       }
     ];
 
-    if (authenticated) {
+    if (!authenticated) {
       menuItems.push(
         {
           key: 'change-theme',
@@ -194,7 +194,7 @@ function Settings(props: ISettingsProps) {
 
         <Panel
           isOpen={panelIsOpen}
-          onDismiss={() => togglePermissionsPanel}
+          onDismiss={() => togglePermissionsPanel()}
           type={PanelType.medium}
           hasCloseButton={true}
           headerText={messages.Permissions}
