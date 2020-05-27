@@ -58,7 +58,7 @@ function Settings(props: ISettingsProps) {
       }
     ];
 
-    if (!authenticated) {
+    if (authenticated) {
       menuItems.push(
         {
           key: 'change-theme',
