@@ -3,12 +3,12 @@ import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { addLocaleData, IntlProvider } from 'react-intl';
-import br from 'react-intl/locale-data/br';
 import de from 'react-intl/locale-data/de';
 import en from 'react-intl/locale-data/en';
 import es from 'react-intl/locale-data/es';
 import fr from 'react-intl/locale-data/fr';
 import jp from 'react-intl/locale-data/ja';
+import pt from 'react-intl/locale-data/pt';
 import ru from 'react-intl/locale-data/ru';
 import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
@@ -22,6 +22,7 @@ import { msalApplication } from './app/services/graph-client/msal-agent';
 import { DEFAULT_USER_SCOPES } from './app/services/graph-constants';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
+import { geLocale } from './appLocale';
 import messages from './messages';
 import { store } from './store';
 import './styles/index.scss';
@@ -76,31 +77,8 @@ msalApplication.acquireTokenSilent({ scopes: DEFAULT_USER_SCOPES.split(' ') }).t
   // ignore the error as it means that a User login is required
 });
 
-const localeMap: any = {
-  'de-de': 'de-DE',
-  'en-us': 'en-US',
-  'es-es': 'es-ES',
-  'fr-fr': 'fr-FR',
-  'ja-jp': 'ja-JP',
-  'pt-br': 'pt-BR',
-  'ru-ru': 'ru-RU',
-  'zh-cn': 'zh-CN'
-};
-
-function getTryItLocale() {
-  return new URLSearchParams(location.search).get('locale');
-}
-
-function getPortalLocale(): string {
-  return location.pathname.split('/')[1].toLocaleLowerCase();
-}
-
-const hostDocumentLocale = getTryItLocale() || getPortalLocale();
-
-const geLocale = hostDocumentLocale && localeMap[hostDocumentLocale] || 'en-US';
-
 addLocaleData([
-  ...br,
+  ...pt,
   ...de,
   ...en,
   ...fr,

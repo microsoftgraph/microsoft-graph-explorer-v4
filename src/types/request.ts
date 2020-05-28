@@ -4,6 +4,7 @@ import { IQuery } from './query-runner';
 export interface IHeadersListControl {
     handleOnHeaderDelete: Function;
     headers?: Array<{ name: string; value: string; }>;
+    messages: any;
 }
 
 export interface IRequestHeadersProps {

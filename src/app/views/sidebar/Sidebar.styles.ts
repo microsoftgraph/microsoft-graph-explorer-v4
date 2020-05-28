@@ -22,7 +22,7 @@ export const sidebarStyles = (theme: ITheme) => {
       maxHeight: pageHeight,
       minHeight: pageHeight,
       overflowY: 'auto',
-      overflowX: 'hidden',
+      overflowX: 'auto',
       fontSize: FontSizes.medium,
       background: 'inherit'
     },

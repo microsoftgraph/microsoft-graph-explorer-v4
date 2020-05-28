@@ -293,5 +293,14 @@
   "View the":" Visualize o",
   "viewing a cached set": "Você está visualizando um conjunto de amostras em cache por causa de um erro na conexão da rede.",
   "see more queries":"Veja mais consultas nos",
-  "Microsoft Graph API Reference docs": "Documentos de referência dos APIs do Microsoft Graph."
+  "Microsoft Graph API Reference docs": "Documentos de referência da API do Microsoft Graph.",
+  "Fetching permissions": "Buscar permissões",
+  "Authentication failed": "Falha na autenticação",
+  "view all permissions": "Selecionar permissões",
+  "Fetching code snippet": "Buscar trecho do código",
+  "Snippet not available": "Trecho indisponível",
+  "Select different permissions": "Para experimentar diferentes terminais da API do Microsoft Graph, escolha as permissões e clique em Consentir.",
+  "Search permissions": "Permissões de pesquisa",
+  "permissions not found": "Não encontramos permissões",
+  "selected": "selecionado"
 }

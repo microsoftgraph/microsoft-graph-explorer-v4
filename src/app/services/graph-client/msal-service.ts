@@ -1,4 +1,5 @@
 import { AuthenticationParameters } from 'msal';
+import { geLocale } from '../../../appLocale';
 import { LoginType } from '../../../types/enums';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { msalApplication } from './msal-agent';
@@ -18,6 +19,8 @@ export function getSessionId() {
 export async function logIn(sessionId = ''): Promise<any> {
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
+    prompt: 'select_account',
+    extraQueryParameters: { mkt: geLocale }
   };
 
   if (sessionId !== '') {
@@ -69,6 +72,20 @@ export function getAccount() {
 
 export function logOut() {
   msalApplication.logout();
+}
+
+export function logOutPopUp() {
+  // @ts-ignore
+  msalApplication.clearCache();
+  // @ts-ignore
+  msalApplication.account = null;
+  // @ts-ignore
+  msalApplication.authorityInstance.resolveEndpointsAsync().then(authority => {
+    const urlNavigate = authority.EndSessionEndpoint
+        ? authority.EndSessionEndpoint
+        : `${msalApplication.authority}oauth2/v2.0/logout`;
+    (msalApplication as any).openPopup(urlNavigate, 'msal', 400, 600);
+  });
 }
 
 /**

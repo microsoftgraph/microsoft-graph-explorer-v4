@@ -293,5 +293,14 @@
   "View the":" Посмотреть",
   "viewing a cached set": "Вы просматриваете кэшированный набор примеров из-за ошибки подключения к сети.",
   "see more queries":"Просмотрите другие запросы в",
-  "Microsoft Graph API Reference docs": "Справочные документы по API Microsoft Graph."
+  "Microsoft Graph API Reference docs": "Справочные документы по API Microsoft Graph.",
+  "Fetching permissions": "Извлечение разрешений",
+  "Authentication failed": "Сбой проверки подлинности",
+  "view all permissions": "Выбор разрешений",
+  "Fetching code snippet": "Извлечение фрагмента кода",
+  "Snippet not available": "Фрагмент недоступен",
+  "Select different permissions": "Чтобы испытать различные конечные точки API Microsoft Graph, выберите разрешения и нажмите кнопку \"Согласие\".",
+  "Search permissions": "Разрешения поиска",
+  "permissions not found": "Не удалось найти разрешения",
+  "selected": "выбрано"
 }

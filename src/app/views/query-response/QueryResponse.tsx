@@ -57,7 +57,8 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     let headers;
     const {
       intl: { messages },
-      verb
+      verb,
+      sampleQuery
     }: any = this.props;
 
     const { showShareQueryDialog, query, showModal } = this.state;
@@ -69,7 +70,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     }
 
     const pivotProperties = {
-      messages, body, verb, mode, headers, mobileScreen
+      messages, body, verb, mode, headers, mobileScreen, sampleQuery
     };
 
     const pivotItems = getPivotItems(pivotProperties);

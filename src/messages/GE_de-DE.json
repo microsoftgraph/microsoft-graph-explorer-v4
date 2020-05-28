@@ -293,5 +293,14 @@
   "View the":" anzeigen",
   "viewing a cached set": "Aufgrund eines Netzwerkverbindungsfehlers sehen Sie einen zwischengespeicherten Satz von Beispielen.",
   "see more queries":"Weitere Abfragen finden Sie in den",
-  "Microsoft Graph API Reference docs": "Microsoft Graph-API-Referenzdokumenten."
+  "Microsoft Graph API Reference docs": "Microsoft Graph-API-Referenzdokumenten.",
+  "Fetching permissions": "Berechtigungen werden abgerufen",
+  "Authentication failed": "Authentifizierung fehlgeschlagen",
+  "view all permissions": "Berechtigungen auswählen",
+  "Fetching code snippet": "Code-Schnipsel abrufen",
+  "Snippet not available": "Snippet nicht verfügbar",
+  "Select different permissions": "Um verschiedene Microsoft Graph API-Endpunkte auszuprobieren, wählen Sie die Berechtigungen aus und klicken Sie dann auf Zustimmen.",
+  "Search permissions": "Suchberechtigungen",
+  "permissions not found": "Wir haben keine Genehmigungen gefunden",
+  "selected": "Ausgewählt"
 }

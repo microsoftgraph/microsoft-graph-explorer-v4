@@ -293,5 +293,14 @@
   "View the":" 查看",
   "viewing a cached set": "由于网络连接失败，你正在查看一组缓存的样本。",
   "see more queries":"查看更多查询",
-  "Microsoft Graph API Reference docs": "Microsoft Graph API 参考文档。"
+  "Microsoft Graph API Reference docs": "Microsoft Graph API 参考文档。",
+  "Fetching permissions": "正在获取权限",
+  "Authentication failed": "身份验证失败",
+  "view all permissions": "选择权限",
+  "Fetching code snippet": "获取代码片段",
+  "Snippet not available": "代码片段不可用",
+  "Select different permissions": "若要尝试不同的 Microsoft Graph API 终结点，请选择权限，然后单击 “同意”。",
+  "Search permissions": "搜索权限",
+  "permissions not found": "未找到权限",
+  "selected": "已选中"
 }

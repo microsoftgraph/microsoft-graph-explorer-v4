@@ -8,6 +8,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { SortOrder } from '../../../../types/enums';
 import { IHarPayload } from '../../../../types/har';
 import { IHistoryItem, IHistoryProps } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
@@ -16,11 +17,11 @@ import * as queryInputActionCreators from '../../../services/actions/query-input
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as requestHistoryActionCreators from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
+import { dynamicSort } from '../../../utils/dynamic-sort';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
-import { dynamicSort } from './history-utils';
 
 export class History extends Component<IHistoryProps, any> {
 
@@ -96,7 +97,7 @@ export class History extends Component<IHistoryProps, any> {
       element.category = date;
       items.push(element);
     });
-    return items.sort(dynamicSort('-createdAt'));
+    return items.sort(dynamicSort('createdAt', SortOrder.DESC));
   }
 
   public generateGroupedList(history: any) {
@@ -425,7 +426,7 @@ export class History extends Component<IHistoryProps, any> {
     return (
       <>
         <div>
-          <SearchBox placeholder='Search history items' className={classes.searchBox}
+          <SearchBox placeholder={messages['Search history items']} className={classes.searchBox}
             onChange={(value) => this.searchValueChanged(value)}
             styles={{ field: { paddingLeft: 10 } }}
           />

@@ -1,11 +1,11 @@
 import enUS from './GE';
-import deDe from './de-DE';
-import esES from './es-ES';
-import frFR from './fr-FR';
-import jaJP from './ja-JP';
-import ptBR from './pt-BR';
-import ruRU from './ru-RU';
-import zhCN from './zh-CN';
+import deDe from './GE_de-DE';
+import esES from './GE_es-ES';
+import frFR from './GE_fr-FR';
+import jaJP from './GE_ja-JP';
+import ptBR from './GE_pt-BR';
+import ruRU from './GE_ru-RU';
+import zhCN from './GE_zh-CN';
 
 export default {
   'en-US': enUS,

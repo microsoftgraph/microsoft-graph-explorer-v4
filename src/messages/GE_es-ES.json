@@ -293,5 +293,14 @@
   "View the":" Ver el",
   "viewing a cached set": "Está viendo un conjunto de ejemplos en caché debido a un error de conexión de red.",
   "see more queries":"Vea más consultas en los",
-  "Microsoft Graph API Reference docs": "documentos de referencia de la API de Microsoft Graph."
+  "Microsoft Graph API Reference docs": "Documentos de referencia de la API de Microsoft Graph.",
+  "Fetching permissions": "Obteniendo permisos",
+  "Authentication failed": "Error de autenticación",
+  "view all permissions": "Seleccionar permisos",
+  "Fetching code snippet": "Recuperando fragmento de código",
+  "Snippet not available": "Fragmento de código no disponible",
+  "Select different permissions": "Para probar otros puntos de conexión de la API de Microsoft Graph, elija los permisos y, luego, haga clic en Consentir.",
+  "Search permissions": "Permisos de búsqueda",
+  "permissions not found": "No se encontraron permisos",
+  "selected": "seleccionados"
 }

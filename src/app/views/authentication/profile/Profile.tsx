@@ -4,6 +4,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { geLocale } from '../../../../appLocale';
 import { Mode } from '../../../../types/enums';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
@@ -118,7 +119,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         {
           key: 'office-dev-program',
           text: messages['Office Dev Program'],
-          href: 'https://developer.microsoft.com/en-us/office/dev-program',
+          href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
           target: '_blank',
           iconProps: {
             iconName: 'CommandPrompt',
@@ -158,9 +159,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     return (
       <div className={classes.profile}>
         {mobileScreen &&
-          <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-            <Persona {...persona} size={PersonaSize.size40} hidePersonaDetails={true} />
-          </ActionButton>
+          <Persona {...persona} size={PersonaSize.size40}  />
         }
 
         {!mobileScreen && this.showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
