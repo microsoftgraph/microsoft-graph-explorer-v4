@@ -89,7 +89,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, method) => handleOnVersionChange(method)}
           />
         </div>
-        <div className='col-xs-12 col-lg-7'>
+        <div className='col-xs-12 col-lg-6'>
           <TextField
             ariaLabel='Query Sample Input'
             role='textbox'
@@ -100,7 +100,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onKeyDown={this.handleKeyDown}
           />
         </div>
-        <div className='col-xs-12 col-lg-1'>
+        <div className='col-xs-12 col-lg-2'>
           <SubmitButton
             className='run-query-button'
             text={messages['Run Query']}
