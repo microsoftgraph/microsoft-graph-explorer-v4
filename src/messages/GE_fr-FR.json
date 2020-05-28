@@ -239,6 +239,7 @@
   "Canary": "Canary",
   "disable canary": "désactiver canary",
   "using canary": "Vous utilisez la version canary de l’Afficheur Graph. Se connecter pour formuler des demandes",
+<<<<<<<< HEAD:src/messages/GE_fr-FR.json
   "use the Microsoft Graph API": "Lorsque vous utilisez des API Microsoft Graph, vous acceptez les",
   "Terms of use": "Conditions d’utilisation des API Microsoft",
   "Microsoft Privacy Statement": "Déclaration de confidentialité Microsoft",
@@ -249,6 +250,18 @@
   "Fetching Adaptive Card": "Récupération de la carte adaptative",
   "The Adaptive Card for this response is not available": "La carte adaptative de cette réponse n’est pas disponible",
   "loading samples": "Chargement des exemples",
+========
+  "use the Microsoft Graph API": "Lorsque vous utilisez des API Microsoft, vous acceptez les Conditions d’utilisation des l’API Microsoft",
+  "Terms of use": "Afficher les Conditions d’utilisation des API Microsoft",
+  "Microsoft Privacy Statement": "Afficher la déclaration de confidentialité Microsoft",
+  "Add": "Ajouter",
+  "Snippets": "Extraits de code",
+  "Adaptive Cards": "Cartes adaptatives",
+  "Office Dev Program": "Programme de développement Office",
+  "Fetching Adaptive Card": "Récupération de la carte adaptative",
+  "The Adaptive Card for this response is not available": "La carte adaptative de cette réponse n’est pas disponible",
+  "loading samples": "chargement des exemples",
+>>>>>>>> origin/master:src/messages/fr-FR.json
   "older": "Plus ancien",
   "today": "Aujourd'hui",
   "yesterday": "Hier",
@@ -258,14 +271,20 @@
   "back to classic": "Aperçu",
   "More actions": "Autres actions",
   "Permissions": "Autorisations",
+<<<<<<<< HEAD:src/messages/GE_fr-FR.json
   "Sign In to see your access token.": "Pour afficher votre jeton d’accès, connectez-vous à l’Explorateur de graphiques.",
   "Sign In to try this sample": "Connectez-vous pour tester cet exemple",
+========
+  "Sign In to see your access token.": "Connectez-vous pour voir votre jeton d’accès.",
+  "Sign In to try this sample": "Connectez-vous pour essayer cet exemple",
+>>>>>>>> origin/master:src/messages/fr-FR.json
   "Signing you in...": "Connexion en cours...",
   "Share Query Message": "Partagez ce lien pour permettre aux utilisateurs d’essayer votre requête actuelle dans l’Afficheur Graph.",
   "Copy": "Copier",
   "Change theme": "Modifier le thème",
   "Dark": "Foncé",
   "Light": "Clair",
+<<<<<<<< HEAD:src/messages/GE_fr-FR.json
   "High Contrast": "Contraste élevé",
   "Auth": "Authentification",
   "Collapse": "Réduire",
@@ -305,4 +324,7 @@
   "selected": "sélectionnées",
   "Search sample queries": "Exemples de requêtes de recherche",
   "Search history items": "Éléments de l’historique de recherche"
+========
+  "High Contrast": "Contraste élevé"
+>>>>>>>> origin/master:src/messages/fr-FR.json
 }

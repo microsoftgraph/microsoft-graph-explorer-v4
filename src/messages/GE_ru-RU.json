@@ -18,7 +18,11 @@
   "Submit": "Отправить",
   "Using demo tenant": "Вы используете тестовую учетную запись.",
   "To access your own data:": "Для доступа к собственным данным:",
+<<<<<<<< HEAD:src/messages/GE_ru-RU.json
   "sign out": "Выйти",
+========
+  "sign out": "Выход",
+>>>>>>>> origin/master:src/messages/ru-RU.json
   "History": "Журнал",
   "Method": "Метод",
   "Query": "Запрос",
@@ -54,7 +58,11 @@
   "Response Headers": "Заголовки откликов",
   "Response headers viewer": "Заголовки откликов, возвращаемые Microsoft Graph",
   "Response body": "Текст отклика, возвращаемый Microsoft Graph",
+<<<<<<<< HEAD:src/messages/GE_ru-RU.json
   "Response Preview": "Предварительный просмотр отклика",
+========
+  "Response Preview": "Просмотр отклика",
+>>>>>>>> origin/master:src/messages/ru-RU.json
   "Sample Queries": "Примеры запросов",
   "show more samples": "показать другие примеры",
   "Sample Categories": "Примеры категорий",
@@ -238,6 +246,7 @@
   "Action": "Действие",
   "Canary": "Предохранитель",
   "disable canary": "отключение предохранителя",
+<<<<<<<< HEAD:src/messages/GE_ru-RU.json
   "using canary": "Вы используете версию песочницы Graph с предохранителем. Войдите для создания запросов",
   "use the Microsoft Graph API": "Используя API Microsoft Graph, вы принимаете",
   "Terms of use": "условия использования API корпорации Майкрософт",
@@ -249,6 +258,19 @@
   "Fetching Adaptive Card": "Получение адаптивной карточки",
   "The Adaptive Card for this response is not available": "Адаптивная карточка для этого отклика недоступна",
   "loading samples": "Загрузка образцов",
+========
+  "using canary": "Вы используете версию песочницы Graph с предохранителем. Войти для создания запросов",
+  "use the Microsoft Graph API": "Применяя API Microsoft, вы соглашаетесь с условиями использования API Microsoft",
+  "Terms of use": "Просмотреть условия использования API Microsoft",
+  "Microsoft Privacy Statement": "Просмотреть заявление о конфиденциальности корпорации Майкрософт",
+  "Add": "Добавить",
+  "Snippets": "Фрагменты кода",
+  "Adaptive Cards": "Адаптивные карточки",
+  "Office Dev Program": "Программа для разработчиков Office",
+  "Fetching Adaptive Card": "Получение адаптивной карточки",
+  "The Adaptive Card for this response is not available": "Адаптивная карточка для этого ответа недоступна",
+  "loading samples": "загрузка образцов",
+>>>>>>>> origin/master:src/messages/ru-RU.json
   "older": "Более старые версии",
   "today": "Сегодня",
   "yesterday": "Вчера",
@@ -258,14 +280,21 @@
   "back to classic": "Предварительная версия",
   "More actions": "Дополнительные действия",
   "Permissions": "Разрешения",
+<<<<<<<< HEAD:src/messages/GE_ru-RU.json
   "Sign In to see your access token.": "Для просмотра маркера доступа войдите в песочницу Graph.",
   "Sign In to try this sample": "Войдите, чтобы попробовать этот пример",
   "Signing you in...": "Выполняется вход…",
+========
+  "Sign In to see your access token.": "Войдите в систему, чтобы просмотреть свой маркер доступа.",
+  "Sign In to try this sample": "Войдите в систему, чтобы попробовать этот пример",
+  "Signing you in...": "Выполняется вход...",
+>>>>>>>> origin/master:src/messages/ru-RU.json
   "Share Query Message": "Поделитесь этой ссылкой, чтобы другие пользователи могли попробовать ваш текущий запрос в песочнице Graph",
   "Copy": "Копировать",
   "Change theme": "Изменить тему",
   "Dark": "Темная",
   "Light": "Светлая",
+<<<<<<<< HEAD:src/messages/GE_ru-RU.json
   "High Contrast": "Высокая контрастность",
   "Auth": "Проверка подлинности",
   "Collapse": "Collapse",
@@ -305,4 +334,7 @@
   "selected": "выбрано",
   "Search sample queries": "Примеры поисковых запросов",
   "Search history items": "Элементы истории поиска"
+========
+  "High Contrast": "Высокая контрастность"
+>>>>>>>> origin/master:src/messages/ru-RU.json
 }

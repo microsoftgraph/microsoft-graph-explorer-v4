@@ -239,6 +239,7 @@
   "Canary": "Canary",
   "disable canary": "禁用 Canary",
   "using canary": "你使用的是 Graph 浏览器的 Canary 版本。登录以发出请求",
+<<<<<<<< HEAD:src/messages/GE_zh-CN.json
   "use the Microsoft Graph API": "使用 Microsoft Graph API 即表示你同意",
   "Terms of use": "Microsoft API 使用条款",
   "Microsoft Privacy Statement": "Microsoft 隐私声明",
@@ -246,6 +247,15 @@
   "Snippets": "代码段",
   "Adaptive Cards": "自适应卡",
   "Office Dev Program": "获取含示例数据的沙盒",
+========
+  "use the Microsoft Graph API": "使用 Microsoft API 即表示你同意 Microsoft API 使用条款",
+  "Terms of use": "查看 Microsoft API 使用条款",
+  "Microsoft Privacy Statement": "查看 Microsoft 隐私声明",
+  "Add": "添加",
+  "Snippets": "代码片段",
+  "Adaptive Cards": "自适应卡",
+  "Office Dev Program": "Office 开发人员计划",
+>>>>>>>> origin/master:src/messages/zh-CN.json
   "Fetching Adaptive Card": "提取自适应卡",
   "The Adaptive Card for this response is not available": "此响应的自适应卡不可用",
   "loading samples": "加载示例",
@@ -258,13 +268,18 @@
   "back to classic": "预览",
   "More actions": "更多操作",
   "Permissions": "权限",
+<<<<<<<< HEAD:src/messages/GE_zh-CN.json
   "Sign In to see your access token.": "若要查看访问令牌，请登录Graph Explorer。",
+========
+  "Sign In to see your access token.": "登录以查看你的访问令牌。",
+>>>>>>>> origin/master:src/messages/zh-CN.json
   "Sign In to try this sample": "登录以尝试此示例",
   "Signing you in...": "登录到...",
   "Share Query Message": "共享此链接可让其他人在图形浏览器中尝试执行当前查询",
   "Copy": "复制",
   "Change theme": "更改主题",
   "Dark": "深色",
+<<<<<<<< HEAD:src/messages/GE_zh-CN.json
   "Light": "浅色",
   "High Contrast": "高对比度",
   "Auth": "身份验证",
@@ -305,4 +320,8 @@
   "selected": "已选中",
   "Search sample queries": "搜索示例查询",
   "Search history items": "搜索历史记录项"
+========
+  "Light": "轻负载",
+  "High Contrast": "高对比度"
+>>>>>>>> origin/master:src/messages/zh-CN.json
 }

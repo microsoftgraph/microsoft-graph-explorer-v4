@@ -18,7 +18,11 @@
   "Submit": "Enviar",
   "Using demo tenant": "Actualmente está utilizando una cuenta de muestra.",
   "To access your own data:": "Para tener acceso a sus propios datos:",
+<<<<<<<< HEAD:src/messages/GE_es-ES.json
   "sign out": "Cerrar sesión",
+========
+  "sign out": "Cierre de sesión",
+>>>>>>>> origin/master:src/messages/es-ES.json
   "History": "Historial",
   "Method": "Método",
   "Query": "Consulta",
@@ -239,6 +243,7 @@
   "Canary": "Valor controlado",
   "disable canary": "deshabilitar valor controlado",
   "using canary": "Está usando la versión de valor controlado de Graph Explorer. Inicie sesión para realizar solicitudes",
+<<<<<<<< HEAD:src/messages/GE_es-ES.json
   "use the Microsoft Graph API": "Al usar las API de Microsoft Graph, acepta los",
   "Terms of use": "términos de uso de las API de Microsoft",
   "Microsoft Privacy Statement": "Declaración de privacidad de Microsoft",
@@ -249,6 +254,18 @@
   "Fetching Adaptive Card": "Obtener una tarjeta adaptable",
   "The Adaptive Card for this response is not available": "La tarjeta adaptativa para esta respuesta no se encuentra disponible",
   "loading samples": "Cargando ejemplos",
+========
+  "use the Microsoft Graph API": "Al usar las API de Microsoft, usted acepta las Condiciones de uso de las API Microsoft",
+  "Terms of use": "Ver las Condiciones de uso de las API de Microsoft",
+  "Microsoft Privacy Statement": "Ver la Declaración de privacidad de Microsoft",
+  "Add": "Agregar",
+  "Snippets": "Fragmentos de código",
+  "Adaptive Cards": "Tarjetas adaptables",
+  "Office Dev Program": "Programa para desarrolladores",
+  "Fetching Adaptive Card": "Obteniendo una tarjeta adaptable",
+  "The Adaptive Card for this response is not available": "La tarjeta adaptativa para esta respuesta no se encuentra disponible",
+  "loading samples": "cargando ejemplos",
+>>>>>>>> origin/master:src/messages/es-ES.json
   "older": "Anteriores",
   "today": "Hoy",
   "yesterday": "Ayer",
@@ -258,14 +275,20 @@
   "back to classic": "Vista previa",
   "More actions": "Más acciones",
   "Permissions": "Permisos",
+<<<<<<<< HEAD:src/messages/GE_es-ES.json
   "Sign In to see your access token.": "Para ver el token de acceso, inicie sesión en el explorador de Graph.",
   "Sign In to try this sample": "Inicie sesión para probar este ejemplo",
+========
+  "Sign In to see your access token.": "Inicie sesión para ver el token de acceso.",
+  "Sign In to try this sample": "Inicie sesión para probar el ejemplo",
+>>>>>>>> origin/master:src/messages/es-ES.json
   "Signing you in...": "Iniciando sesión...",
   "Share Query Message": "Comparta este vínculo para permitir que la gente intente la consulta actual en el Probador de Graph.",
   "Copy": "Copiar",
   "Change theme": "Cambiar el tema",
   "Dark": "Oscuro",
   "Light": "Claro",
+<<<<<<<< HEAD:src/messages/GE_es-ES.json
   "High Contrast": "Contraste alto",
   "Auth": "Autenticación",
   "Collapse": "Contraer",
@@ -305,4 +328,7 @@
   "selected": "seleccionados",
   "Search sample queries": "Buscar consultas de ejemplo",
   "Search history items": "Buscar elementos de historial"
+========
+  "High Contrast": "Contraste alto"
+>>>>>>>> origin/master:src/messages/es-ES.json
 }

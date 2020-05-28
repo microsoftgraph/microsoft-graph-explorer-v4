@@ -239,6 +239,7 @@
   "Canary": "Canary",
   "disable canary": "Canary deaktivieren",
   "using canary": "Sie verwenden die Canary-Version von Graph Explorer. Melden Sie sich an, um Anfragen zu stellen",
+<<<<<<<< HEAD:src/messages/GE_de-DE.json
   "use the Microsoft Graph API": "Wenn Sie Microsoft Graph-APIs verwenden, stimmen Sie den",
   "Terms of use": "Nutzungsbedingungen für Microsoft-APIs",
   "Microsoft Privacy Statement": "Microsoft-Datenschutzbestimmungen zu",
@@ -246,6 +247,15 @@
   "Snippets": "Codeausschnitte",
   "Adaptive Cards": "Adaptive Karten",
   "Office Dev Program": "Abrufen eines Sandkastens mit Beispieldaten",
+========
+  "use the Microsoft Graph API": "Wenn Sie Microsoft-APIs verwenden, stimmen Sie den Nutzungsbedingungen für Microsoft-APIs zu",
+  "Terms of use": "Microsoft-APIs-Nutzungsbedingungen anzeigen",
+  "Microsoft Privacy Statement": "Microsoft-Datenschutzbestimmungen anzeigen",
+  "Add": "Hinzufügen",
+  "Snippets": "Codeausschnitte",
+  "Adaptive Cards": "Adaptive Karten",
+  "Office Dev Program": "Office Dev-Programm",
+>>>>>>>> origin/master:src/messages/de-DE.json
   "Fetching Adaptive Card": "Adaptive Karte wird abgerufen",
   "The Adaptive Card for this response is not available": "Die adaptive Karte für diese Antwort ist nicht verfügbar",
   "loading samples": "Beispiele werden geladen",
@@ -258,7 +268,11 @@
   "back to classic": "Vorschau",
   "More actions": "Weitere Aktionen",
   "Permissions": "Berechtigungen",
+<<<<<<<< HEAD:src/messages/GE_de-DE.json
   "Sign In to see your access token.": "Wenn Sie Ihr Zugriffstoken anzeigen möchten, melden Sie sich bei Graph Explorer an.",
+========
+  "Sign In to see your access token.": "Melden Sie sich an, um sich Ihr Zugriffstoken anzeigen zu lassen.",
+>>>>>>>> origin/master:src/messages/de-DE.json
   "Sign In to try this sample": "Melden Sie sich an, um dieses Beispiel zu testen",
   "Signing you in...": "Anmelden...",
   "Share Query Message": "Teilen Sie diesen Link, damit Benutzer Ihre aktuelle Abfrage im Graph-Tester testen können.",
@@ -266,6 +280,7 @@
   "Change theme": "Design ändern",
   "Dark": "Dunkel",
   "Light": "Hell",
+<<<<<<<< HEAD:src/messages/GE_de-DE.json
   "High Contrast": "Hoher Kontrast",
   "Auth": "Auth",
   "Collapse": "Collapse",
@@ -305,4 +320,7 @@
   "selected": "ausgewählt",
   "Search sample queries": "Beispielabfragen durchsuchen",
   "Search history items": "Verlaufselemente durchsuchen"
+========
+  "High Contrast": "Hoher KontrastHoher Kontrast"
+>>>>>>>> origin/master:src/messages/de-DE.json
 }

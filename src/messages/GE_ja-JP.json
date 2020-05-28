@@ -239,6 +239,7 @@
   "Canary": "カナリア",
   "disable canary": "カナリアを無効にする",
   "using canary": "Graph エクスプローラーのカナリア バージョンを使用しています。サインインして要求を実行する",
+<<<<<<<< HEAD:src/messages/GE_ja-JP.json
   "use the Microsoft Graph API": "Microsoft Graph API を使用する場合は、に同意したものとします。",
   "Terms of use": "Microsoft API の使用条件",
   "Microsoft Privacy Statement": "Microsoft のプライバシーに関する声明",
@@ -246,6 +247,15 @@
   "Snippets": "コード スニペット",
   "Adaptive Cards": "アダプティブ カード",
   "Office Dev Program": "サンプル データを含むサンドボックスを入手する",
+========
+  "use the Microsoft Graph API": "Microsoft API を使用する場合は、Microsoft API の使用条件に同意したものとします。",
+  "Terms of use": "Microsoft API の使用条件を表示する",
+  "Microsoft Privacy Statement": "Microsoft のプライバシーに関する声明を表示する",
+  "Add": "追加する",
+  "Snippets": "スニペット",
+  "Adaptive Cards": "アダプティブ カード",
+  "Office Dev Program": "Office 開発プログラム",
+>>>>>>>> origin/master:src/messages/ja-JP.json
   "Fetching Adaptive Card": "アダプティブ カードの取得",
   "The Adaptive Card for this response is not available": "この返信のアダプティブ カードは使用できません",
   "loading samples": "サンプルの読み込み",
@@ -258,7 +268,11 @@
   "back to classic": "プレビュー",
   "More actions": "その他の操作",
   "Permissions": "アクセス許可",
+<<<<<<<< HEAD:src/messages/GE_ja-JP.json
   "Sign In to see your access token.": "アクセス トークンを表示するには、Graph エクスプローラーにサインインします。",
+========
+  "Sign In to see your access token.": "サインインすると、アクセス トークンが表示されます。",
+>>>>>>>> origin/master:src/messages/ja-JP.json
   "Sign In to try this sample": "サインインしてこのサンプルを試す",
   "Signing you in...": "サインイン中...",
   "Share Query Message": "このリンクを共有して、他のユーザーが Graph エクスプローラーで現在のクエリを試せるようにする",
@@ -266,6 +280,7 @@
   "Change theme": "テーマを変更",
   "Dark": "ダーク",
   "Light": "ライト",
+<<<<<<<< HEAD:src/messages/GE_ja-JP.json
   "High Contrast": "ハイ コントラスト",
   "Auth": "認証",
   "Collapse": "折りたたむ",
@@ -305,4 +320,7 @@
   "selected": "選択されました",
   "Search sample queries": "サンプル クエリの検索",
   "Search history items": "検索履歴アイテム"
+========
+  "High Contrast": "ハイ コントラスト"
+>>>>>>>> origin/master:src/messages/ja-JP.json
 }
