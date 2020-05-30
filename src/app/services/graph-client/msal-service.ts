@@ -16,24 +16,27 @@ export function getSessionId() {
   }
 }
 
-export async function logIn(sessionId = ''): Promise<any> {
- 
-  // support for tenanted endpoint
-  const urlParams = new URLSearchParams(location.search);
-  let tenant = urlParams.get('tenant');
+function getAuthority() : string {
+    // support for tenanted endpoint
+    const urlParams = new URLSearchParams(location.search);
+    let tenant = urlParams.get('tenant');
 
-  if (tenant === null) {
-    tenant = 'common';
+    if (tenant === null) {
+      tenant = 'common';
   }
+
+  return `https://login.microsoftonline.com/${tenant}/`;
+}
+
+export async function logIn(sessionId = ''): Promise<any> {
 
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
-    authority: `https://login.microsoftonline.com/${tenant}/`,
+    authority: getAuthority(),
     prompt: 'select_account',
-    redirectUri: window.location.href.toLowerCase(),
     extraQueryParameters: { mkt: geLocale }
   };
-  
+
   if (sessionId !== '') {
     loginRequest.sid = sessionId;
 
@@ -107,6 +110,7 @@ export function logOutPopUp() {
 export async function acquireNewAccessToken(scopes: string[] = []): Promise<any> {
   const loginRequest: AuthenticationParameters = {
     scopes,
+    authority: getAuthority(),
   };
   if (loginType === LoginType.Popup) {
     try {
