@@ -16,7 +16,7 @@ export function getSessionId() {
   }
 }
 
-function getAuthority() : string {
+function getAuthority(): string {
     // support for tenanted endpoint
     const urlParams = new URLSearchParams(location.search);
     let tenant = urlParams.get('tenant');
