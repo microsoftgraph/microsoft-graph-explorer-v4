@@ -17,23 +17,23 @@ export function getSessionId() {
 }
 
 export async function logIn(sessionId = ''): Promise<any> {
-
+ 
   // support for tenanted endpoint
-  let params = new URLSearchParams(location.search);
-  let tenantId = params.get('tenantId');
+  const urlParams = new URLSearchParams(location.search);
+  let tenant = urlParams.get('tenant');
 
-  if (tenantId == null) {
-    tenantId = 'common';
+  if (tenant === null) {
+    tenant = 'common';
   }
 
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
-    authority: `https://login.microsoftonline.com/${tenantId}/`,
+    authority: `https://login.microsoftonline.com/${tenant}/`,
     prompt: 'select_account',
     redirectUri: window.location.href.toLowerCase(),
     extraQueryParameters: { mkt: geLocale }
   };
-
+  
   if (sessionId !== '') {
     loginRequest.sid = sessionId;
 
