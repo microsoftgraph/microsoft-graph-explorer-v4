@@ -17,8 +17,18 @@ export function getSessionId() {
 }
 
 export async function logIn(sessionId = ''): Promise<any> {
+
+  // support for tenanted endpoint
+  let params = new URLSearchParams(location.search);
+  let tenantId = params.get('tenantId');
+
+  if (tenantId == null) {
+    tenantId = 'common';
+  }
+
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
+    authority: `https://login.microsoftonline.com/${tenantId}/`,
     prompt: 'select_account',
     redirectUri: window.location.href.toLowerCase(),
     extraQueryParameters: { mkt: geLocale }
