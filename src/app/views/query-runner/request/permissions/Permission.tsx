@@ -66,8 +66,9 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
 
   public shouldComponentUpdate(nextProps: IPermissionProps, nextState: IPermissionState) {
     const shouldUpdate = nextProps.sample !== this.props.sample
-    || nextProps.scopes !== this.props.scopes
-    || nextState.permissions !== this.state.permissions;
+      || nextProps.scopes !== this.props.scopes
+      || nextProps.consentedScopes !== this.props.consentedScopes
+      || nextState.permissions !== this.state.permissions;
     return shouldUpdate;
   }
 
@@ -137,7 +138,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               id={hostId}
               calloutProps={{ gapSpace: 0 }}
               styles={{
-                root: { display: 'block'}
+                root: { display: 'block' }
               }}
             >
               <span aria-labelledby={hostId}>
@@ -150,12 +151,12 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         default:
           return (
             <TooltipHost
-            content={content}
-            id={hostId}
+              content={content}
+              id={hostId}
               calloutProps={{ gapSpace: 0 }}
               className={classes.tooltipHost}
             >
-              <span aria-labelledby={hostId} style={{ fontSize: FontSizes.medium}}>
+              <span aria-labelledby={hostId} style={{ fontSize: FontSizes.medium }}>
                 {content}
               </span>
             </TooltipHost>
@@ -295,7 +296,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
             ariaLabelForSelectionColumn='Toggle selection'
             ariaLabelForSelectAllCheckbox='Toggle selection for all items'
             checkButtonAriaLabel='Row checkbox'
-            />
+          />
         </>
       );
     }
@@ -307,7 +308,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         <Label className={classes.permissionText}>
           <FormattedMessage id='permissions required to run the query' />
         </Label>
-        <DetailsList styles={{ root: { minHeight: '300px'}}}
+        <DetailsList styles={{ root: { minHeight: '300px' } }}
           items={permissions}
           columns={columns}
           onRenderItemColumn={this.renderItemColumn}
@@ -325,7 +326,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const { permissions } = this.state;
 
     return (
-      <div className={classes.container}  style={{ minHeight: (panel) ? '800px' : '300px' }}>
+      <div className={classes.container} style={{ minHeight: (panel) ? '800px' : '300px' }}>
         {loading && <Label>
           <FormattedMessage id={'Fetching permissions'} />...
         </Label>}
