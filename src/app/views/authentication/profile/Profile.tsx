@@ -98,7 +98,6 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const { user } = this.state;
     const {
       intl: { messages },
-      mobileScreen,
       minimised,
       graphExplorerMode,
     }: any = this.props;
@@ -158,11 +157,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
     return (
       <div className={classes.profile}>
-        {mobileScreen &&
-          <Persona {...persona} size={PersonaSize.size40}  />
-        }
-
-        {!mobileScreen && this.showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
+        {this.showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
       </div>
     );
   }
@@ -175,13 +170,13 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       styles={profileProperties.styles}
       hidePersonaDetails={profileProperties.hidePersonaDetails} />;
 
-      if (graphExplorerMode === Mode.TryIt) {
-        return <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-            {persona}
-          </ActionButton>;
-      }
+    if (graphExplorerMode === Mode.TryIt) {
+      return <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+        {persona}
+      </ActionButton>;
+    }
 
-      return persona;
+    return persona;
   }
 }
 
