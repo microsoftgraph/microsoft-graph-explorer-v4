@@ -16,11 +16,32 @@ export function getSessionId() {
   }
 }
 
+// get current uri for redirect uri purpose
+// ref - https://github.com/AzureAD/microsoft-authentication-library-for
+//  -js/blob/9274fac6d100a6300eb2faa4c94aa2431b1ca4b0/lib/msal-browser/src/utils/BrowserUtils.ts#L49
+function getCurrentUri(): string {
+  return window.location.href.split('?')[0].split('#')[0];
+}
+
+function getAuthority(): string {
+    // support for tenanted endpoint
+    const urlParams = new URLSearchParams(location.search);
+    let tenant = urlParams.get('tenant');
+
+    if (tenant === null) {
+      tenant = 'common';
+  }
+
+  return `https://login.microsoftonline.com/${tenant}/`;
+}
+
 export async function logIn(sessionId = ''): Promise<any> {
+
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
+    authority: getAuthority(),
     prompt: 'select_account',
-    redirectUri: window.location.href.toLowerCase(),
+    redirectUri: getCurrentUri().toLowerCase(),
     extraQueryParameters: { mkt: geLocale }
   };
 
@@ -97,6 +118,7 @@ export function logOutPopUp() {
 export async function acquireNewAccessToken(scopes: string[] = []): Promise<any> {
   const loginRequest: AuthenticationParameters = {
     scopes,
+    authority: getAuthority(),
   };
   if (loginType === LoginType.Popup) {
     try {
