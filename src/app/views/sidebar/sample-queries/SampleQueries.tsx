@@ -170,18 +170,18 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
         default:
           return <TooltipHost
-              tooltipProps={{
-                onRenderContent: () => <div style={{ paddingBottom: 3 }}>
-                  {item.method} {queryContent} </div>
-              }}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
-              styles={{ root: { display: 'inline-block' } }}
-            >
-              <span aria-label={queryContent} className={classes.queryContent}>
-                {queryContent}
-              </span>
-            </TooltipHost>;
+            tooltipProps={{
+              onRenderContent: () => <div style={{ paddingBottom: 3 }}>
+                {item.method} {queryContent} </div>
+            }}
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+            styles={{ root: { display: 'inline-block' } }}
+          >
+            <span aria-label={queryContent} className={classes.queryContent}>
+              {queryContent}
+            </span>
+          </TooltipHost>;
       }
     }
   };
@@ -218,11 +218,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         styles={{
           check: { display: 'none' },
           title: {
-          fontSize: FontSizes.medium,
-          fontWeight: FontWeights.semibold
-        },
-        expand: {
-          fontSize: FontSizes.small,
+            fontSize: FontSizes.medium,
+            fontWeight: FontWeights.semibold
+          },
+          expand: {
+            fontSize: FontSizes.small,
           }
         }}
         {...props}
@@ -318,20 +318,20 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           <FormattedMessage id='viewing a cached set' />
         </MessageBar>}
         <MessageBar messageBarType={MessageBarType.info}
-          isMultiline={false}
+          isMultiline={true}
           dismissButtonAriaLabel='Close'>
           <FormattedMessage id='see more queries' />
-          <a target='_blank'
+          <a target='_blank' className={classes.links}
             href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}>
             <FormattedMessage id='Microsoft Graph API Reference docs' />
           </a>
         </MessageBar>
         <DetailsList className={classes.queryList}
-         cellStyleProps={{
-          cellRightPadding: 0,
-          cellExtraRightPadding: 0,
-          cellLeftPadding: 0,
-        }}
+          cellStyleProps={{
+            cellRightPadding: 0,
+            cellExtraRightPadding: 0,
+            cellLeftPadding: 0,
+          }}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderItemColumn={this.renderItemColumn}
           items={groupedList.samples}
