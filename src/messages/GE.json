@@ -304,5 +304,6 @@
   "permissions not found": "We did not find permissions",
   "selected": "selected",
   "Search sample queries": "Search sample queries",
-  "Search history items": "Search history items"
+  "Search history items": "Search history items",
+  "Malformed JSON body": "Malformed JSON body"
 }
