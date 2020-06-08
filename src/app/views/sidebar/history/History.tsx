@@ -136,7 +136,8 @@ export class History extends Component<IHistoryProps, any> {
     const classes = classNames(this.props);
     return (
       <div className={classes.groupHeader}>
-        <DetailsRow {...props} className={classes.queryRow} />
+        <DetailsRow {...props} className={classes.queryRow}
+          onClick={() => this.onViewQuery(props.item)} />
       </div>
     );
   };
