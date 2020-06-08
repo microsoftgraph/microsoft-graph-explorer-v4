@@ -68,7 +68,7 @@ export class QueryRunner extends Component<
 
   private handleOnRunQuery = () => {
     const { sampleBody } = this.state;
-    const { actions, sampleQuery,  } = this.props;
+    const { actions, sampleQuery, } = this.props;
     const { intl: { messages } }: any = this.props;
 
     if (sampleBody) {
@@ -78,7 +78,7 @@ export class QueryRunner extends Component<
         actions!.setQueryResponseStatus({
           ok: false,
           statusText: messages['Malformed JSON body'],
-          status: error,
+          status: `${messages['Review the request body']} ${error}`,
           messageType: MessageBarType.error
         });
         return;
