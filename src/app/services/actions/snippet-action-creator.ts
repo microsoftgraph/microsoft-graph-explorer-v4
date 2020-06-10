@@ -28,7 +28,7 @@ export function getSnippet(language: string): Function {
       const { devxApi, sampleQuery } = getState();
       let snippetsUrl = `${devxApi}/api/graphexplorersnippets`;
 
-      const { requestUrl, sampleUrl, queryVersion } = parseSampleUrl(sampleQuery.sampleUrl);
+      const { requestUrl, sampleUrl, queryVersion, search } = parseSampleUrl(sampleQuery.sampleUrl);
       if (!sampleUrl) {
         throw new Error('url is invalid');
       }
@@ -39,7 +39,7 @@ export function getSnippet(language: string): Function {
       dispatch(getSnippetPending());
 
       // tslint:disable-next-line: max-line-length
-      const body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl} HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(sampleQuery.sampleBody)}`;
+      const body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search} HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(sampleQuery.sampleBody)}`;
       const obj: any = {};
       const response = await fetch(snippetsUrl, {
         method: 'POST',

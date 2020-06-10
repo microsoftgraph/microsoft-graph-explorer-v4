@@ -302,5 +302,7 @@
   "Select different permissions": "Para experimentar diferentes terminais da API do Microsoft Graph, escolha as permissões e clique em Consentir.",
   "Search permissions": "Permissões de pesquisa",
   "permissions not found": "Não encontramos permissões",
-  "selected": "selecionado"
+  "selected": "selecionado",
+  "Search sample queries": "Pesquisar consultas de amostra",
+  "Search history items": "Pesquisar itens do histórico"
 }

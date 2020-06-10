@@ -111,6 +111,8 @@ export const sidebarStyles = (theme: ITheme) => {
       marginTop: '-7.5%',
       marginRight: theme.spacing.s1,
     },
-
+    links: {
+      color: `${theme.palette.blueMid} !important`,
+    },
   };
 };
