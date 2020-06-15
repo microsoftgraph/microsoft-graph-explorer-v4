@@ -157,7 +157,7 @@ class App extends Component<IAppProps, IAppState> {
       sampleUrl: `${graphUrl}/${version}/${request}`,
       selectedVerb: method,
       selectedVersion: version,
-      sampleBody: this.hashDecode(requestBody),
+      sampleBody: requestBody ? this.hashDecode(requestBody) : null,
       sampleHeaders: (headers) ? JSON.parse(this.hashDecode(headers)) : [],
     };
   }
