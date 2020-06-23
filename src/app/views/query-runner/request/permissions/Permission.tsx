@@ -1,5 +1,4 @@
 import {
-  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   FontSizes,
@@ -72,14 +71,17 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     return shouldUpdate;
   }
 
-  public searchValueChanged = (value: string): void => {
+  public searchValueChanged = (value?: string): void => {
     const { scopes } = this.props;
-    const keyword = value.toLowerCase();
+    let filteredPermissions = scopes.data;
+    if (value) {
+      const keyword = value.toLowerCase();
 
-    const filteredPermissions = scopes.data.filter((permission: IPermission) => {
-      const name = permission.value.toLowerCase();
-      return name.includes(keyword);
-    });
+      filteredPermissions = scopes.data.filter((permission: IPermission) => {
+        const name = permission.value.toLowerCase();
+        return name.includes(keyword);
+      });
+    }
 
     const groups = generatePermissionGroups(filteredPermissions);
     this.setState({
@@ -276,8 +278,10 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
             <FormattedMessage id='Select different permissions' />
           </Label>
           <hr />
-          <SearchBox className={classes.searchBox} placeholder={messages['Search permissions']}
-            onChange={(value) => this.searchValueChanged(value)}
+          <SearchBox
+            className={classes.searchBox}
+            placeholder={messages['Search permissions']}
+            onChange={(event, value) => this.searchValueChanged(value)}
             styles={{ field: { paddingLeft: 10 } }}
           />
           <hr />

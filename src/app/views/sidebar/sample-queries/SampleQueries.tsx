@@ -48,17 +48,17 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     }
   }
 
-  public searchValueChanged = (e: ChangeEvent<HTMLInputElement>): void => {
-    const value = e.target.value;
+  public searchValueChanged = (value?: string): void => {
     const { queries } = this.props.samples;
-    const keyword = value.toLowerCase();
-
-    const filteredSamples = queries.filter((sample: any) => {
-      const name = sample.humanName.toLowerCase();
-      const category = sample.category.toLowerCase();
-      return name.includes(keyword) || category.includes(keyword);
-    });
-
+    let filteredSamples = queries;
+    if (value) {
+      const keyword = value.toLowerCase();
+      filteredSamples = queries.filter((sample: any) => {
+        const name = sample.humanName.toLowerCase();
+        const category = sample.category.toLowerCase();
+        return name.includes(keyword) || category.includes(keyword);
+      });
+    }
     this.generateSamples(filteredSamples);
   }
 
@@ -310,7 +310,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     return (
       <div>
         <SearchBox className={classes.searchBox} placeholder={messages['Search sample queries']}
-          onChange={() => this.searchValueChanged}
+          onChange={(event, value) => this.searchValueChanged(value)}
           styles={{ field: { paddingLeft: 10 } }}
         />
         <hr />

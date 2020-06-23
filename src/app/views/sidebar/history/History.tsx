@@ -48,14 +48,16 @@ export class History extends Component<IHistoryProps, any> {
     }
   }
 
-  public searchValueChanged = (value: any): void => {
+  public searchValueChanged = (value?: string): void => {
     const { history } = this.props;
-    const keyword = value.toLowerCase();
-
-    const filteredSamples = history.filter((sample: any) => {
-      const name = sample.url.toLowerCase();
-      return name.toLowerCase().includes(keyword);
-    });
+    let filteredSamples = history;
+    if (value) {
+      const keyword = value.toLowerCase();
+      filteredSamples = history.filter((sample: any) => {
+        const name = sample.url.toLowerCase();
+        return name.toLowerCase().includes(keyword);
+      });
+    }
 
     this.generateGroupedList(filteredSamples);
   }
@@ -428,7 +430,7 @@ export class History extends Component<IHistoryProps, any> {
       <>
         <div>
           <SearchBox placeholder={messages['Search history items']} className={classes.searchBox}
-            onChange={(value) => this.searchValueChanged(value)}
+            onChange={(event, value) => this.searchValueChanged(value)}
             styles={{ field: { paddingLeft: 10 } }}
           />
           <hr />
