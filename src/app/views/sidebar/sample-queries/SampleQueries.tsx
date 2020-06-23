@@ -1,9 +1,10 @@
 import {
-  DetailsList, DetailsListLayoutMode, DetailsRow, FontSizes,
-  FontWeights, getId, GroupHeader, IColumn, IconButton,
-  MessageBar, MessageBarType, SearchBox, Selection, SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
+  DetailsList, DetailsRow, FontIcon,
+  FontSizes, FontWeights, getId, GroupHeader, IColumn,
+  MessageBar, MessageBarType, SearchBox,
+  SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from 'office-ui-fabric-react';
-import React, { Component } from 'react';
+import React, { ChangeEvent, Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -47,7 +48,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     }
   }
 
-  public searchValueChanged = (value: any): void => {
+  public searchValueChanged = (e: ChangeEvent<HTMLInputElement>): void => {
+    const value = e.target.value;
     const { queries } = this.props.samples;
     const keyword = value.toLowerCase();
 
@@ -60,12 +62,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     this.generateSamples(filteredSamples);
   }
 
-
   public onDocumentationLinkClicked = (event: any, item: any) => {
     window.open(item.docLink, '_blank');
   };
-
-
 
   public generateSamples(samples: any) {
     const map = new Map();
@@ -110,29 +109,33 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
+      const signInText = messages['Sign In to try this sample'];
 
       switch (column.key) {
         case 'authRequiredIcon':
           if (item.method !== 'GET' && !tokenPresent) {
-            const signInText = messages['Sign In to try this sample'];
             return <TooltipHost
               tooltipProps={{
                 onRenderContent: () => <div style={{ paddingBottom: 3 }}>
-                  <FormattedMessage id={'Sign In to try this sample'} /></div>
+                  <FormattedMessage id={signInText} /></div>
               }}
               id={getId()}
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}
             >
-              <IconButton
-                className={classes.docLink}
-                iconProps={{ iconName: 'Lock' }}
+              <FontIcon
+                iconName='Lock'
                 title={signInText}
-                ariaLabel={signInText}
-              />
+                style={{
+                  fontSize: 15,
+                  height: 10,
+                  width: 10,
+                  verticalAlign: 'center'
+                }} />
             </TooltipHost>;
+          } else {
+            return null;
           }
-          return null;
 
         case 'button':
           return <TooltipHost
@@ -142,14 +145,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             }}
             id={getId()}
             calloutProps={{ gapSpace: 0 }}
-            styles={{ root: { display: 'inline-block' } }}
           >
-            <IconButton
-              style={{ marginTop: '-7.5%' }}
-              iconProps={{ iconName: 'NavigateExternalInline' }}
-              title={item.docLink}
-              ariaLabel={item.docLink}
+            <FontIcon iconName='NavigateExternalInline'
               onClick={(event) => this.onDocumentationLinkClicked(event, item)}
+              className={classes.docLink}
+              style={{
+                marginRight: '20%'
+              }}
             />
           </TooltipHost>;
 
@@ -164,8 +166,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             styles={{ root: { display: 'inline-block' } }}
           >
             <span className={classes.badge}
-              style={{ background: getStyleFor(item.method) }}
-            >{item.method}</span>;
+              style={{ background: getStyleFor(item.method), textAlign: 'center' }}
+            >
+              {item.method}
+            </span>;
           </TooltipHost>;
 
         default:
@@ -176,9 +180,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             }}
             id={getId()}
             calloutProps={{ gapSpace: 0 }}
-            styles={{ root: { display: 'inline-block' } }}
           >
-            <span aria-label={queryContent} className={classes.queryContent}>
+            <span
+              aria-label={queryContent} className={classes.queryContent}
+            >
               {queryContent}
             </span>
           </TooltipHost>;
@@ -199,6 +204,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         <div className={classes.groupHeader}>
           <DetailsRow
             {...props}
+            onClick={() => {
+              if (!selectionDisabled) {
+                this.querySelected(props.item);
+              }
+            }}
             className={classes.queryRow + ' ' + (selectionDisabled ? classes.rowDisabled : '')}
             data-selection-disabled={selectionDisabled}
           />
@@ -206,6 +216,39 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       );
     }
   };
+
+  private querySelected = (query: any) => {
+    const { actions, tokenPresent, profile } = this.props;
+    const selectedQuery = query;
+    if (!selectedQuery) { return; }
+
+    const queryVersion = selectedQuery.requestUrl.substring(1, 5);
+    const sampleQuery: IQuery = {
+      sampleUrl: GRAPH_URL + selectedQuery.requestUrl,
+      selectedVerb: selectedQuery.method,
+      sampleBody: selectedQuery.postBody,
+      sampleHeaders: selectedQuery.headers || [],
+      selectedVersion: queryVersion,
+    };
+
+    substituteTokens(sampleQuery, profile);
+
+    if (actions) {
+      if (sampleQuery.selectedVerb === 'GET') {
+        sampleQuery.sampleBody = JSON.parse('{}');
+        if (tokenPresent) {
+          if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
+          else { actions.runQuery(sampleQuery); }
+        } else {
+          actions.runQuery(sampleQuery);
+        }
+      } else {
+        sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
+        if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
+      }
+      actions.setSampleQuery(sampleQuery);
+    }
+  }
 
   public renderGroupHeader = (props: any): any => {
     const onToggleSelectGroup = () => {
@@ -237,12 +280,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     );
   }
 
-  private onToggleCollapse(props: any): () => void {
-    return () => {
-      props!.onToggleCollapse!(props!.group!);
-    };
-  }
-
   public render() {
     const { error, pending } = this.props.samples;
     const {
@@ -264,51 +301,16 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     const { groupedList } = this.state;
     const columns = [
-      { key: 'authRequiredIcon', name: '', fieldName: 'authRequiredIcon', minWidth: 14, maxWidth: 15 },
+      { key: 'authRequiredIcon', name: '', fieldName: 'authRequiredIcon', minWidth: 20, maxWidth: 20 },
       { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
-      { key: 'category', name: '', fieldName: 'humanName', minWidth: 105, maxWidth: 205 },
-      { key: 'button', name: '', fieldName: 'button', minWidth: 15, maxWidth: 15, },
+      { key: 'humanName', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: 180 },
+      { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20 },
     ];
-
-    const selection = new Selection({
-      onSelectionChanged: () => {
-        const { actions, tokenPresent, profile } = this.props;
-        const selectedQuery = selection.getSelection()[0] as any;
-        if (!selectedQuery) { return; }
-
-        const queryVersion = selectedQuery.requestUrl.substring(1, 5);
-        const sampleQuery: IQuery = {
-          sampleUrl: GRAPH_URL + selectedQuery.requestUrl,
-          selectedVerb: selectedQuery.method,
-          sampleBody: selectedQuery.postBody,
-          sampleHeaders: selectedQuery.headers || [],
-          selectedVersion: queryVersion,
-        };
-
-        substituteTokens(sampleQuery, profile);
-
-        if (actions) {
-          if (sampleQuery.selectedVerb === 'GET') {
-            sampleQuery.sampleBody = JSON.parse('{}');
-            if (tokenPresent) {
-              if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
-              else { actions.runQuery(sampleQuery); }
-            } else {
-              actions.runQuery(sampleQuery);
-            }
-          } else {
-            sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
-            if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
-          }
-          actions.setSampleQuery(sampleQuery);
-        }
-      }
-    });
 
     return (
       <div>
         <SearchBox className={classes.searchBox} placeholder={messages['Search sample queries']}
-          onChange={(value) => this.searchValueChanged(value)}
+          onChange={() => this.searchValueChanged}
           styles={{ field: { paddingLeft: 10 } }}
         />
         <hr />
@@ -332,12 +334,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             cellExtraRightPadding: 0,
             cellLeftPadding: 0,
           }}
-          layoutMode={DetailsListLayoutMode.justified}
           onRenderItemColumn={this.renderItemColumn}
           items={groupedList.samples}
           selectionMode={SelectionMode.none}
           columns={columns} groups={groupedList.categories}
-          selection={selection}
           groupProps={{
             showEmptyGroups: true,
             onRenderHeader: this.renderGroupHeader,
@@ -350,6 +350,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   }
 
 }
+
 function displayTipMessage(actions: any, selectedQuery: ISampleQuery) {
   actions.setQueryResponseStatus({
     messageType: MessageBarType.warning,

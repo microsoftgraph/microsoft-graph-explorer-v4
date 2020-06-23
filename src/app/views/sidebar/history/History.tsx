@@ -273,7 +273,7 @@ export class History extends Component<IHistoryProps, any> {
             </div>
           </div>
         </div>
-        <div className={'col-md-4'} style={{display: 'inline-block'}}>
+        <div className={'col-md-4'} style={{ display: 'inline-block' }}>
           <IconButton
             className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
             iconProps={{ iconName: 'Delete' }}
@@ -333,7 +333,7 @@ export class History extends Component<IHistoryProps, any> {
 
     const generatedHarData = generateHar(entries);
     const { origin } = new URL(itemsToExport[0].url);
-    const exportTitle =  `${origin}/${category.toLowerCase()}/${itemsToExport[0].createdAt.substr(0, 10)}/`;
+    const exportTitle = `${origin}/${category.toLowerCase()}/${itemsToExport[0].createdAt.substr(0, 10)}/`;
 
     exportQuery(generatedHarData, exportTitle);
   }
