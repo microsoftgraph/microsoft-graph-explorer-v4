@@ -124,7 +124,6 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
           <Modal
             isOpen={showModal}
             onDismiss={this.toggleModal}
-            dragOptions={false}
             styles={{ main: { width: '80%', height: '90%' }, }}
           >
 
