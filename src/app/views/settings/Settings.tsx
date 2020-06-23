@@ -2,6 +2,7 @@ import {
   ChoiceGroup,
   DefaultButton,
   Dialog,
+  DialogFooter,
   DialogType,
   IconButton,
   Label,
@@ -190,6 +191,11 @@ function Settings(props: ISettingsProps) {
             ]}
             onChange={(event, selectedTheme) => handleChangeTheme(selectedTheme)}
           />
+          <DialogFooter>
+            <DefaultButton
+              text={messages.Close}
+              onClick={() => toggleThemeChooserDialogState()} />
+          </DialogFooter>
         </Dialog>
 
         <Panel
