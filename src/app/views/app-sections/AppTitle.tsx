@@ -1,4 +1,4 @@
-import { IconButton, IStackTokens, Label, Stack } from 'office-ui-fabric-react';
+import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
 import { Authentication } from '../authentication';
 
@@ -9,12 +9,17 @@ export function appTitleDisplayOnFullScreen(
     ): React.ReactNode {
 
     return <div style={{ display: 'flex', width: '100%' }}>
-      <IconButton
-        iconProps={{ iconName: 'GlobalNavButton' }}
-        className={classes.sidebarToggle}
-        title='Minimise sidebar'
-        ariaLabel='Minimise sidebar'
-        onClick={() => toggleSidebar()} />
+      <TooltipHost
+        content='Minimise sidebar'
+        id={getId()}
+        calloutProps={{ gapSpace: 0 }}>
+          <IconButton
+            iconProps={{ iconName: 'GlobalNavButton' }}
+            className={classes.sidebarToggle}
+            title='Minimise sidebar'
+            ariaLabel='Minimise sidebar'
+            onClick={() => toggleSidebar()} />
+      </TooltipHost>
       <div className={classes.graphExplorerLabelContainer}>
         {!minimised &&
           <>
