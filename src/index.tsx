@@ -68,14 +68,19 @@ const appState: any = store({
 
 });
 
-msalApplication.acquireTokenSilent({ scopes: DEFAULT_USER_SCOPES.split(' ') }).then((authResponse: any) => {
-  if (authResponse && authResponse.accessToken) {
-    appState.dispatch(getAuthTokenSuccess(authResponse.accessToken));
-    appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
-  }
-}).catch(() => {
-  // ignore the error as it means that a User login is required
-});
+function refreshAccessToken() {
+  msalApplication.acquireTokenSilent({ scopes: DEFAULT_USER_SCOPES.split(' ') }).then((authResponse: any) => {
+    if (authResponse && authResponse.accessToken) {
+      appState.dispatch(getAuthTokenSuccess(authResponse.accessToken));
+      appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
+    }
+  }).catch(() => {
+    // ignore the error as it means that a User login is required
+  });
+}
+refreshAccessToken();
+
+setInterval(refreshAccessToken, 1000 * 60 * 10); // refresh access token every 10 minutes
 
 addLocaleData([
   ...pt,

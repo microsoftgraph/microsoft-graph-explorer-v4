@@ -290,9 +290,9 @@
   "Consent": "Consent",
   "permissions required to run the query": "The following permissions are required to run the query. To consent to the permissions, click Consent.",
   "tab": " tab",
-  "View the":" View the",
+  "View the": " View the",
   "viewing a cached set": "You are viewing a cached set of samples because of a network connection failure.",
-  "see more queries":"See more queries in the",
+  "see more queries": "See more queries in the",
   "Microsoft Graph API Reference docs": "Microsoft Graph API Reference docs.",
   "Fetching permissions": "Fetching permissions",
   "Authentication failed": "Authentication failed",
@@ -304,5 +304,7 @@
   "permissions not found": "We did not find permissions",
   "selected": "selected",
   "Search sample queries": "Search sample queries",
-  "Search history items": "Search history items"
+  "Search history items": "Search history items",
+  "Malformed JSON body": "Malformed JSON body",
+  "Review the request body": "Review the request body and fix any malformed JSON."
 }
