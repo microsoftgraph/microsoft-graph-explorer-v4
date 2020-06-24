@@ -57,7 +57,7 @@ class Telemetry implements ITelemetry {
   }
 
   private getInstrumentationKey() {
-    return process.env.REACT_APP_INSTRUMENTATION_KEY || '';
+    return (window as any).InstrumentationKey || process.env.REACT_APP_INSTRUMENTATION_KEY || '';
   }
 }
 
