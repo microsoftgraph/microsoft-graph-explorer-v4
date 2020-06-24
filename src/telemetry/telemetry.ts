@@ -9,7 +9,7 @@ class Telemetry implements ITelemetry {
   private reactPlugin: any;
 
   constructor() {
-    this.reactPlugin  = new ReactPlugin();
+    this.reactPlugin = new ReactPlugin();
 
     this.config = {
       instrumentationKey: this.getInstrumentationKey(),
@@ -57,7 +57,7 @@ class Telemetry implements ITelemetry {
   }
 
   private getInstrumentationKey() {
-    return (window as any).InstrumentationKey || '';
+    return process.env.REACT_APP_INSTRUMENTATION_KEY || '';
   }
 }
 
