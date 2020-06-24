@@ -334,7 +334,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         {loading && <Label>
           <FormattedMessage id={'Fetching permissions'} />...
         </Label>}
-        {permissions && permissions.length > 0 && !loading &&
+        {!loading && panel &&
           <div className={classes.permissions}>
             {this.renderList()}
           </div>
