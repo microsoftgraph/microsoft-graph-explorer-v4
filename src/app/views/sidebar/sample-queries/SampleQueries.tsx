@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
+import { telemetry } from '../../../../telemetry';
+import { RUN_QUERY_EVENT } from '../../../../telemetry/event-types';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
@@ -296,6 +298,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             } else {
               actions.runQuery(sampleQuery);
             }
+            telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
           } else {
             sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
             if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }

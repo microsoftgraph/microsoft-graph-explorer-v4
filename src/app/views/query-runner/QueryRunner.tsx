@@ -4,6 +4,8 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { telemetry } from '../../../telemetry';
+import { RUN_QUERY_EVENT } from '../../../telemetry/event-types';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
@@ -15,7 +17,6 @@ import { parseSampleUrl } from '../../utils/sample-url-generation';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
 import Request from './request/Request';
-
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
@@ -88,6 +89,7 @@ export class QueryRunner extends Component<
     if (actions) {
       actions.runQuery(sampleQuery);
     }
+    telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
