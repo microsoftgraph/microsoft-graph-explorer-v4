@@ -71,7 +71,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     return shouldUpdate;
   }
 
-  public searchValueChanged = (value?: string): void => {
+  public searchValueChanged = (event: any, value?: string): void => {
     const { scopes } = this.props;
     let filteredPermissions = scopes.data;
     if (value) {
@@ -281,7 +281,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           <SearchBox
             className={classes.searchBox}
             placeholder={messages['Search permissions']}
-            onChange={(event, value) => this.searchValueChanged(value)}
+            onChange={(event, value) => this.searchValueChanged(event, value)}
             styles={{ field: { paddingLeft: 10 } }}
           />
           <hr />

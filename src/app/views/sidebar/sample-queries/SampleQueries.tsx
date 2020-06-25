@@ -1,6 +1,6 @@
 import {
-  DetailsList, DetailsRow, FontIcon,
-  FontSizes, FontWeights, getId, GroupHeader, IColumn,
+  DetailsList, DetailsRow, FontSizes,
+  FontWeights, getId, GroupHeader, IColumn, Icon,
   MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from 'office-ui-fabric-react';
@@ -50,7 +50,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     }
   }
 
-  public searchValueChanged = (value?: string): void => {
+  public searchValueChanged = (event: any, value?: string): void => {
     const { queries } = this.props.samples;
     let filteredSamples = queries;
     if (value) {
@@ -125,7 +125,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}
             >
-              <FontIcon
+              <Icon
                 iconName='Lock'
                 title={signInText}
                 style={{
@@ -148,7 +148,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             id={getId()}
             calloutProps={{ gapSpace: 0 }}
           >
-            <FontIcon iconName='NavigateExternalInline'
+            <Icon iconName='NavigateExternalInline'
               onClick={() => this.onDocumentationLinkClicked(item)}
               className={classes.docLink}
               style={{
@@ -244,6 +244,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         } else {
           actions.runQuery(sampleQuery);
         }
+        telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
       } else {
         sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
         if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
@@ -311,8 +312,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     return (
       <div>
-        <SearchBox className={classes.searchBox} placeholder={messages['Search sample queries']}
-          onChange={(event: any, value: string | undefined) => this.searchValueChanged(value)}
+        <SearchBox
+          className={classes.searchBox}
+          placeholder={messages['Search sample queries']}
+          onChange={(event: any, value: string | undefined) => this.searchValueChanged(event, value)}
           styles={{ field: { paddingLeft: 10 } }}
         />
         <hr />

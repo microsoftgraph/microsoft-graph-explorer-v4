@@ -48,7 +48,7 @@ export class History extends Component<IHistoryProps, any> {
     }
   }
 
-  public searchValueChanged = (value?: string): void => {
+  public searchValueChanged = (event: any, value?: string): void => {
     const { history } = this.props;
     let filteredSamples = history;
     if (value) {
@@ -429,8 +429,10 @@ export class History extends Component<IHistoryProps, any> {
     return (
       <>
         <div>
-          <SearchBox placeholder={messages['Search history items']} className={classes.searchBox}
-            onChange={(event, value) => this.searchValueChanged(value)}
+          <SearchBox
+            placeholder={messages['Search history items']}
+            className={classes.searchBox}
+            onChange={(event: any, value: string | undefined) => this.searchValueChanged(event, value)}
             styles={{ field: { paddingLeft: 10 } }}
           />
           <hr />
