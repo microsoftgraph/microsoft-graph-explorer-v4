@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { geLocale } from '../../appLocale';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
@@ -20,6 +21,7 @@ import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { logIn } from '../services/graph-client/msal-service';
+import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { appTitleDisplayOnFullScreen, appTitleDisplayOnMobileScreen } from './app-sections/AppTitle';
@@ -137,7 +139,7 @@ class App extends Component<IAppProps, IAppState> {
     const request = urlParams.get('request');
     const method = urlParams.get('method');
     const version = urlParams.get('version');
-    const graphUrl = urlParams.get('GraphUrl');
+    const graphUrl = urlParams.get('GraphUrl') || GRAPH_URL;
     const requestBody = urlParams.get('requestBody');
     const headers = urlParams.get('headers');
 
@@ -155,7 +157,7 @@ class App extends Component<IAppProps, IAppState> {
       sampleUrl: `${graphUrl}/${version}/${request}`,
       selectedVerb: method,
       selectedVersion: version,
-      sampleBody: this.hashDecode(requestBody),
+      sampleBody: requestBody ? this.hashDecode(requestBody) : null,
       sampleHeaders: (headers) ? JSON.parse(this.hashDecode(headers)) : [],
     };
   }

@@ -10,6 +10,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
+import { telemetry } from '../../../../telemetry';
+import { RUN_QUERY_EVENT } from '../../../../telemetry/event-types';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
@@ -62,7 +64,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     this.generateSamples(filteredSamples);
   }
 
-  public onDocumentationLinkClicked = (event: any, item: any) => {
+  public onDocumentationLinkClicked = (item: any) => {
     window.open(item.docLink, '_blank');
   };
 
@@ -147,7 +149,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             calloutProps={{ gapSpace: 0 }}
           >
             <FontIcon iconName='NavigateExternalInline'
-              onClick={(event) => this.onDocumentationLinkClicked(event, item)}
+              onClick={() => this.onDocumentationLinkClicked(item)}
               className={classes.docLink}
               style={{
                 marginRight: '20%'
@@ -310,7 +312,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     return (
       <div>
         <SearchBox className={classes.searchBox} placeholder={messages['Search sample queries']}
-          onChange={(event, value) => this.searchValueChanged(value)}
+          onChange={(event: any, value: string | undefined) => this.searchValueChanged(value)}
           styles={{ field: { paddingLeft: 10 } }}
         />
         <hr />
