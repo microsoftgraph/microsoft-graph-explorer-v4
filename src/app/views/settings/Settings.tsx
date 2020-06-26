@@ -161,7 +161,6 @@ function Settings(props: ISettingsProps) {
               icon: { marginBottom: -20 }
             }}
             menuIconProps={{ iconName: 'Settings' }}
-            title='More actions'
             menuProps={menuProperties} />
       </TooltipHost>
       <div>

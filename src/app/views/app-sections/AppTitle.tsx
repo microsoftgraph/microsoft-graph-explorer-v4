@@ -16,7 +16,6 @@ export function appTitleDisplayOnFullScreen(
           <IconButton
             iconProps={{ iconName: 'GlobalNavButton' }}
             className={classes.sidebarToggle}
-            title='Minimise sidebar'
             ariaLabel='Minimise sidebar'
             onClick={() => toggleSidebar()} />
       </TooltipHost>
