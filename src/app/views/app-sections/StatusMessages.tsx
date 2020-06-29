@@ -5,7 +5,7 @@ export function statusMessages(queryState: any, actions: any) {
   return queryState && (
   <MessageBar messageBarType={queryState.messageType}
   isMultiline={false} onDismiss={actions.clearQueryStatus}
-  dismissButtonAriaLabel='Close'>
+  dismissButtonAriaLabel='Close' aria-live={'assertive'}>
     {`${queryState.statusText} - ${queryState.status} `}
     {queryState.duration && <>
       {`- ${queryState.duration}`}<FormattedMessage id='milliseconds' />
