@@ -10,13 +10,13 @@ export function appTitleDisplayOnFullScreen(
 
     return <div style={{ display: 'flex', width: '100%' }}>
       <TooltipHost
-        content='Minimise sidebar'
+        content='Minimize sidebar'
         id={getId()}
         calloutProps={{ gapSpace: 0 }}>
           <IconButton
             iconProps={{ iconName: 'GlobalNavButton' }}
             className={classes.sidebarToggle}
-            ariaLabel='Minimise sidebar'
+            ariaLabel='Minimize sidebar'
             onClick={() => toggleSidebar()} />
       </TooltipHost>
       <div className={classes.graphExplorerLabelContainer}>
