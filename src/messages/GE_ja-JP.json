@@ -304,5 +304,6 @@
   "permissions not found": "アクセス許可が見つかりませんでした",
   "selected": "選択されました",
   "Search sample queries": "サンプル クエリの検索",
-  "Search history items": "検索履歴アイテム"
+  "Search history items": "検索履歴アイテム",
+  "Minimize sidebar": "サイドバーを最小化"
 }

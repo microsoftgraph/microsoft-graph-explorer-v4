@@ -304,5 +304,6 @@
   "permissions not found": "未找到权限",
   "selected": "已选中",
   "Search sample queries": "搜索示例查询",
-  "Search history items": "搜索历史记录项"
+  "Search history items": "搜索历史记录项",
+  "Minimize sidebar": "最小化边栏"
 }

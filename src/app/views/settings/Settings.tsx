@@ -3,11 +3,13 @@ import {
   DefaultButton,
   Dialog,
   DialogType,
+  getId,
   IconButton,
   Label,
   Panel,
   PanelType,
-  PrimaryButton
+  PrimaryButton,
+  TooltipHost
 } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -147,16 +149,20 @@ function Settings(props: ISettingsProps) {
 
   return (
     <div>
-      <IconButton
-        ariaLabel='More actions'
-        role='button'
-        styles={{
-          label: { marginBottom: -20 },
-          icon: { marginBottom: -20 }
-        }}
-        menuIconProps={{ iconName: 'Settings' }}
-        title='More actions'
-        menuProps={menuProperties} />
+       <TooltipHost
+        content='More actions'
+        id={getId()}
+        calloutProps={{ gapSpace: 0 }}>
+          <IconButton
+            ariaLabel='More actions'
+            role='button'
+            styles={{
+              label: { marginBottom: -20 },
+              icon: { marginBottom: -20 }
+            }}
+            menuIconProps={{ iconName: 'Settings' }}
+            menuProps={menuProperties} />
+      </TooltipHost>
       <div>
         <Dialog
           hidden={themeChooserDialogHidden}
