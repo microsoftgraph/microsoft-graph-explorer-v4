@@ -1,5 +1,6 @@
 import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Authentication } from '../authentication';
 
 export function appTitleDisplayOnFullScreen(
@@ -12,7 +13,11 @@ export function appTitleDisplayOnFullScreen(
       <TooltipHost
         content='Minimize sidebar'
         id={getId()}
-        calloutProps={{ gapSpace: 0 }}>
+        calloutProps={{ gapSpace: 0 }}
+        tooltipProps={{
+          onRenderContent: () => <div>
+            <FormattedMessage id={'Minimize sidebar'} /></div>
+        }}>
           <IconButton
             iconProps={{ iconName: 'GlobalNavButton' }}
             className={classes.sidebarToggle}
