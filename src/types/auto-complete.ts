@@ -8,7 +8,6 @@ export interface IAutoCompleteProps {
     autoCompleteOptions: {
       url: string;
       parameters: any[];
-      verb: string;
     };
     actions?: {
       fetchAutoCompleteOptions: Function;

@@ -2,6 +2,7 @@ import { getTheme, KeyCodes, Label, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { IAutoCompleteProps, IAutoCompleteState } from '../../../../types/auto-complete';
 import * as autoCompleteActionCreators from '../../../services/actions/autocomplete-action-creators';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
@@ -52,7 +53,11 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
 
       case '=':
-        this.getParameterEnums(url);
+
+        if (url.includes('?$')) {
+          this.getParameterEnums(url);
+        }
+
         break;
 
       case ',':
@@ -100,20 +105,27 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   public getPathParameters = () => {
-    const { parameters } = this.props.autoCompleteOptions;
-    const suggestions: string[] = [];
-    if (parameters) {
-      parameters.forEach((element: any) => {
-        suggestions.push(element.name);
-      });
+    const { autoCompleteOptions, sampleQuery: { selectedVerb } } = this.props;
+    if (autoCompleteOptions) {
+      const suggestions: string[] = [];
+      const parameters = autoCompleteOptions.parameters;
+      if (parameters) {
+        const parametersWithVerb = parameters.find(parameter => parameter.verb === selectedVerb.toLowerCase());
+        if (parametersWithVerb) {
+          parametersWithVerb.values.forEach((value: any) => {
+            suggestions.push(value.name);
+          });
+
+          this.setState({
+            filteredSuggestions: suggestions,
+            suggestions,
+            showSuggestions: true,
+            compare: ''
+          });
+        }
+      }
     }
 
-    this.setState({
-      filteredSuggestions: suggestions,
-      suggestions,
-      showSuggestions: true,
-      compare: ''
-    });
   }
 
   public componentDidUpdate = (prevProps: IAutoCompleteProps) => {
@@ -123,16 +135,31 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private getParameterEnums = (url: string) => {
+    const { autoCompleteOptions, sampleQuery: { selectedVerb } } = this.props;
+    if (!autoCompleteOptions) {
+      return;
+    }
+    const parameters = autoCompleteOptions.parameters;
     const param = url.split('$').pop()!.split('=')[0];
-    const { parameters } = this.props.autoCompleteOptions;
-    const section = parameters.find(k => k.name === `$${param}`);
-    const list: string[] = section.items;
-    this.setState({
-      filteredSuggestions: list,
-      suggestions: list,
-      showSuggestions: true,
-      compare: ''
-    });
+    if (parameters) {
+      const parametersWithVerb = parameters.find(parameter => parameter.verb === selectedVerb.toLowerCase());
+      if (parametersWithVerb) {
+        const section = parametersWithVerb.values.find((k: { name: string; }) => {
+          return k.name === `$${param}`;
+        });
+
+        let list: string[] = [];
+        if (section && section.items && section.items.length > 0) {
+          list = section.items;
+          this.setState({
+            filteredSuggestions: list,
+            suggestions: list,
+            showSuggestions: true,
+            compare: ''
+          });
+        }
+      }
+    }
   }
 
   private filterSuggestions(userInput: any, previousUserInput: string, compare: string, suggestions: string[]) {
@@ -153,7 +180,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private requestForAutocompleteOptions(url: string) {
     const { requestUrl } = parseSampleUrl(url);
     if (requestUrl) {
-      if (`/${requestUrl}` !== this.props.autoCompleteOptions.url) {
+      if (!this.props.autoCompleteOptions || `${requestUrl}` !== this.props.autoCompleteOptions.url) {
         this.props.actions!.fetchAutoCompleteOptions(requestUrl);
       }
       else {
