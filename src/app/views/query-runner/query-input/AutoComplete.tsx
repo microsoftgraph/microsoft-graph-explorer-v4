@@ -126,18 +126,13 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     const param = url.split('$').pop()!.split('=')[0];
     const { parameters } = this.props.autoCompleteOptions;
     const section = parameters.find(k => k.name === `$${param}`);
-    const list: string[] = [];
-    if (section.items.length > 0) {
-      section.items.forEach((element: string) => {
-        list.push(element);
-      });
-      this.setState({
-        filteredSuggestions: list,
-        suggestions: list,
-        showSuggestions: true,
-        compare: ''
-      });
-    }
+    const list: string[] = section.items;
+    this.setState({
+      filteredSuggestions: list,
+      suggestions: list,
+      showSuggestions: true,
+      compare: ''
+    });
   }
 
   private filterSuggestions(userInput: any, previousUserInput: string, compare: string, suggestions: string[]) {
