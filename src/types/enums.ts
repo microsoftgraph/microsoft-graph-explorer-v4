@@ -20,3 +20,8 @@ export enum AppTheme {
   HighContrast = 'high-contrast',
   Light = 'light',
 }
+
+export enum SortOrder {
+  ASC = 'ASC',
+  DESC = 'DESC'
+}

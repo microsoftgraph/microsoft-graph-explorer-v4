@@ -292,7 +292,18 @@
   "tab": " タブ",
   "View the":" を表示する",
   "viewing a cached set": "ネットワーク接続に失敗したため、キャッシュされたサンプルのセットを表示しています。",
-  "see more queries":"のクエリをもっと見る",
+  "see more queries":"さらにクエリを見る: ",
   "Microsoft Graph API Reference docs": "Microsoft Graph API の参照ドキュメント。",
-  "Fetching permissions": "アクセス許可を取得する"
+  "Fetching permissions": "アクセス許可を取得する",
+  "Authentication failed": "認証に失敗しました",
+  "view all permissions": "アクセス許可を選択する",
+  "Fetching code snippet": "コード スニペットを取得しています",
+  "Snippet not available": "スニペットを使用できません",
+  "Select different permissions": "さまざまな Microsoft Graph API エンドポイントを試すには、アクセス許可を選択し、[同意] をクリックします。",
+  "Search permissions": "検索アクセス許可",
+  "permissions not found": "アクセス許可が見つかりませんでした",
+  "selected": "選択されました",
+  "Search sample queries": "サンプル クエリの検索",
+  "Search history items": "検索履歴アイテム",
+  "Minimize sidebar": "サイドバーを最小化"
 }

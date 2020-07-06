@@ -25,11 +25,9 @@ export function showSignInButtonOrProfile(
     </PrimaryButton>;
 
   return (
-    <Stack>
-      <Stack.Item align='start'>
-        {!tokenPresent && signInButton}
-      </Stack.Item>
+    <div>
+      {!tokenPresent && signInButton}
       {tokenPresent && <Profile />}
-    </Stack>
+    </div>
   );
 }

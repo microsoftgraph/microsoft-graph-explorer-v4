@@ -292,7 +292,18 @@
   "tab": " onglet",
   "View the":" Afficher",
   "viewing a cached set": "Vous affichez un ensemble d’exemples mis en cache en raison d’un échec de la connexion réseau.",
-  "see more queries":"Afficher d’autres requêtes dans les",
-  "Microsoft Graph API Reference docs": "Documents de référence d’API Microsoft Graph.",
-  "Fetching permissions": "Extraction d’autorisations"
+  "see more queries":"Découvrez d’autres requêtes",
+  "Microsoft Graph API Reference docs": "dans la documentation de référence de l’API Microsoft Graph.",
+  "Fetching permissions": "Extraction d’autorisations",
+  "Authentication failed": "Message d’échec d’authentification",
+  "view all permissions": "Sélectionner des autorisations",
+  "Fetching code snippet": "Récupération d’un extrait de code",
+  "Snippet not available": "Extrait non disponible",
+  "Select different permissions": "Pour tester plusieurs points de terminaison de l’API Microsoft Graph, sélectionnez les autorisations, puis cliquez sur Consentement.",
+  "Search permissions": "Autorisations de recherche",
+  "permissions not found": "Nous n’avons pas trouvé d’autorisations",
+  "selected": "sélectionnées",
+  "Search sample queries": "Exemples de requêtes de recherche",
+  "Search history items": "Éléments de l’historique de recherche",
+  "Minimize sidebar": "Réduire la barre latérale"
 }

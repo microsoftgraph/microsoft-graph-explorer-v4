@@ -99,6 +99,10 @@ export function getTokens(user?: any) {
       demoTenantValue: '1.2.3.5',
     },
     {
+      placeholder: 'user-id',
+      demoTenantValue: 'd4957c9d-869e-4364-830c-d0c95be72738',
+    },
+    {
       placeholder: 'today',
       defaultValueFn: () => {
         return (new Date()).toISOString();

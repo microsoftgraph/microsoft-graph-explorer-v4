@@ -1,8 +1,11 @@
-import { IDropdownOption } from 'office-ui-fabric-react';
+import { IDropdownOption, MessageBarType } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { telemetry } from '../../../telemetry';
+import { RUN_QUERY_EVENT } from '../../../telemetry/event-types';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
@@ -10,11 +13,11 @@ import {
 
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
+import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { QueryInput } from './query-input';
 import './query-runner.scss';
 import Request from './request/Request';
-
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
@@ -61,15 +64,27 @@ export class QueryRunner extends Component<
 
   private handleOnRunQuery = () => {
     const { sampleBody } = this.state;
-    const { actions, sampleQuery } = this.props;
+    const { actions, sampleQuery, } = this.props;
+    const { intl: { messages } }: any = this.props;
 
     if (sampleBody) {
-      sampleQuery.sampleBody = JSON.parse(sampleBody);
+      try {
+        sampleQuery.sampleBody = JSON.parse(sampleBody);
+      } catch (error) {
+        actions!.setQueryResponseStatus({
+          ok: false,
+          statusText: messages['Malformed JSON body'],
+          status: `${messages['Review the request body']} ${error}`,
+          messageType: MessageBarType.error
+        });
+        return;
+      }
     }
 
     if (actions) {
       actions.runQuery(sampleQuery);
     }
+    telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
@@ -119,6 +134,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
       {
         ...queryActionCreators,
         ...queryInputActionCreators,
+        ...queryStatusActionCreators
       },
       dispatch
     )
@@ -131,7 +147,9 @@ function mapStateToProps(state: any) {
   };
 }
 
+// @ts-ignore
+const IntlQueryRunner = injectIntl(QueryRunner);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(QueryRunner);
+)(IntlQueryRunner);

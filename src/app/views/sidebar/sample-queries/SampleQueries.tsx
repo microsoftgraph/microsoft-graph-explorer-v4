@@ -1,13 +1,16 @@
 import {
-  DetailsList, DetailsListLayoutMode, DetailsRow, getId,
-  IColumn, IconButton, MessageBar, MessageBarType, SearchBox,
-  Selection, SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
+  DetailsList, DetailsListLayoutMode, DetailsRow, FontSizes,
+  FontWeights, getId, GroupHeader, IColumn, IconButton,
+  MessageBar, MessageBarType, SearchBox, Selection, SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { geLocale } from '../../../../appLocale';
+import { telemetry } from '../../../../telemetry';
+import { RUN_QUERY_EVENT } from '../../../../telemetry/event-types';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
@@ -168,22 +171,19 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           </TooltipHost>;
 
         default:
-          return <span aria-label={queryContent}>
-            <TooltipHost
-              tooltipProps={{
-                onRenderContent: () => <div style={{ paddingBottom: 3 }}>
-                  {item.method} <FormattedMessage id={queryContent} /></div>
-              }}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
-              styles={{ root: { display: 'inline-block' } }}
-            >
-              <span aria-label={queryContent} className={classes.queryContent}>
-                <FormattedMessage id={queryContent} />
-              </span>
-            </TooltipHost>
-          </span>
-            ;
+          return <TooltipHost
+            tooltipProps={{
+              onRenderContent: () => <div style={{ paddingBottom: 3 }}>
+                {item.method} {queryContent} </div>
+            }}
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+            styles={{ root: { display: 'inline-block' } }}
+          >
+            <span aria-label={queryContent} className={classes.queryContent}>
+              {queryContent}
+            </span>
+          </TooltipHost>;
       }
     }
   };
@@ -210,27 +210,28 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   public renderGroupHeader = (props: any): any => {
-    const classes = classNames(this.props);
+    const onToggleSelectGroup = () => {
+      props.onToggleCollapse(props.group);
+    };
 
     return (
-      <div aria-label={props.group!.name} onClick={this.onToggleCollapse(props)}>
-        <div className={classes.groupHeaderRow}>
-          <IconButton
-            className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
-            iconProps={{ iconName: props.group!.isCollapsed ? 'ChevronRightSmall' : 'ChevronDownSmall' }}
-            title={props.group!.isCollapsed ?
-              `Expand ${props.group!.name}` : `Collapse ${props.group!.name}`}
-            ariaLabel='expand collapse group'
-            onClick={() => this.onToggleCollapse(props)}
-          />
-          <div className={classes.groupTitle}>
-            <span>{props.group!.name}</span>
-            <span className={classes.headerCount}>({props.group!.count})</span>
-          </div>
-        </div>
-      </div>
+      <GroupHeader
+        compact={true}
+        styles={{
+          check: { display: 'none' },
+          title: {
+            fontSize: FontSizes.medium,
+            fontWeight: FontWeights.semibold
+          },
+          expand: {
+            fontSize: FontSizes.small,
+          }
+        }}
+        {...props}
+        onToggleSelectGroup={onToggleSelectGroup}
+      />
     );
-  };
+  }
 
   private renderDetailsHeader() {
     return (
@@ -297,6 +298,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             } else {
               actions.runQuery(sampleQuery);
             }
+            telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
           } else {
             sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
             if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
@@ -308,7 +310,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     return (
       <div>
-        <SearchBox className={classes.searchBox} placeholder='Search sample queries'
+        <SearchBox className={classes.searchBox} placeholder={messages['Search sample queries']}
           onChange={(value) => this.searchValueChanged(value)}
           styles={{ field: { paddingLeft: 10 } }}
         />
@@ -319,15 +321,20 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           <FormattedMessage id='viewing a cached set' />
         </MessageBar>}
         <MessageBar messageBarType={MessageBarType.info}
-          isMultiline={false}
+          isMultiline={true}
           dismissButtonAriaLabel='Close'>
           <FormattedMessage id='see more queries' />
-          <a target='_blank'
-            href='https://docs.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0'>
+          <a target='_blank' className={classes.links}
+            href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}>
             <FormattedMessage id='Microsoft Graph API Reference docs' />
           </a>
         </MessageBar>
         <DetailsList className={classes.queryList}
+          cellStyleProps={{
+            cellRightPadding: 0,
+            cellExtraRightPadding: 0,
+            cellLeftPadding: 0,
+          }}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderItemColumn={this.renderItemColumn}
           items={groupedList.samples}

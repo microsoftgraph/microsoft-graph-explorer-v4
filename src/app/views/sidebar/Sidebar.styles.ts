@@ -22,7 +22,7 @@ export const sidebarStyles = (theme: ITheme) => {
       maxHeight: pageHeight,
       minHeight: pageHeight,
       overflowY: 'auto',
-      overflowX: 'hidden',
+      overflowX: 'auto',
       fontSize: FontSizes.medium,
       background: 'inherit'
     },
@@ -111,6 +111,8 @@ export const sidebarStyles = (theme: ITheme) => {
       marginTop: '-7.5%',
       marginRight: theme.spacing.s1,
     },
-
+    links: {
+      color: `${theme.palette.blueMid} !important`,
+    },
   };
 };

@@ -1,22 +1,34 @@
-import { IQuery } from '../../../../../types/query-runner';
-import { IRequestOptions } from '../../../../../types/request';
-import { parseSampleUrl } from '../../../../utils/sample-url-generation';
+import { IPermission } from '../../../../../types/permissions';
 
-export function fetchScopes(sample: IQuery): Promise<any> {
-  const { requestUrl, sampleUrl } = parseSampleUrl(sample.sampleUrl);
-  if (!sampleUrl) {
-    Promise.reject('url is invalid');
-  }
+export function generatePermissionGroups(permissions: any) {
+    const map = new Map();
+    const groups: any[] = [];
 
-  const permissionsUrl = 'https://graphexplorerapi.azurewebsites.net/api/GraphExplorerPermissions?requesturl=/' +
-    requestUrl + '&method=' + sample.selectedVerb;
+    const isCollapsed = true;
+    let previousCount = 0;
+    let count = 0;
 
-  const headers = {
-    'Content-Type': 'application/json',
-  };
+    for (const permission of permissions) {
+        const permissionValue = permission.value;
+        const groupName = permissionValue.split('.')[0];
+        if (!map.has(groupName)) {
+            map.set(groupName, true);
+            count = permissions.filter(
+                (perm: IPermission) => {
+                    const value = perm.value.split('.')[0];
+                    return value  === groupName;
+                }
+            ).length;
+            groups.push({
+                name: groupName,
+                key: groupName,
+                startIndex: previousCount,
+                isCollapsed,
+                count,
+            });
+            previousCount += count;
+        }
+    }
 
-  const options: IRequestOptions = { headers };
-
-  return fetch(permissionsUrl, options)
-    .then(res => res.json());
+    return groups;
 }

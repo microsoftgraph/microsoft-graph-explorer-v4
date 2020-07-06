@@ -87,11 +87,11 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       background: getStyleFor(sampleQuery.selectedVerb),
     };
 
-    const httpMethodsToDisplay = (mode === Mode.TryIt && !authenticated ) ? [httpMethods[0]] : httpMethods;
+    const httpMethodsToDisplay = (mode === Mode.TryIt && !authenticated) ? [httpMethods[0]] : httpMethods;
 
     return (
       <div className='row'>
-        <div className='col-2'>
+        <div className='col-xs-12 col-lg-2'>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
@@ -101,8 +101,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </div>
-
-        <div className='col-2'>
+        <div className='col-xs-12 col-lg-1'>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
@@ -111,12 +110,12 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, method) => handleOnVersionChange(method)}
           />
         </div>
-        <div className='col-7'>
+        <div className='col-xs-12 col-lg-7'>
           <AutoComplete
             contentChanged={this.contentChanged}
           />
         </div>
-        <div className='col-1'>
+        <div className='col-xs-12 col-lg-2'>
           <SubmitButton
             className='run-query-button'
             text={messages['Run Query']}

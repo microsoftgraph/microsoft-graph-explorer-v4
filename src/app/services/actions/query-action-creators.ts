@@ -16,6 +16,17 @@ export function runQuery(query: IQuery): Function {
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query).then(async (response: Response) => {
         await processResponse(response, respHeaders, dispatch, createdAt);
+      }).catch(async (error: any) => {
+        dispatch(queryResponse({
+          body: error,
+          headers: null
+        }));
+        return dispatch(setQueryResponseStatus({
+          messageType: MessageBarType.error,
+          ok: false,
+          status: 400,
+          statusText: 'Bad Request'
+        }));
       });
     }
 

@@ -4,6 +4,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { geLocale } from '../../../../appLocale';
 import { Mode } from '../../../../types/enums';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
@@ -97,7 +98,6 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const { user } = this.state;
     const {
       intl: { messages },
-      mobileScreen,
       minimised,
       graphExplorerMode,
     }: any = this.props;
@@ -118,7 +118,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         {
           key: 'office-dev-program',
           text: messages['Office Dev Program'],
-          href: 'https://developer.microsoft.com/en-us/office/dev-program',
+          href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
           target: '_blank',
           iconProps: {
             iconName: 'CommandPrompt',
@@ -157,13 +157,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
     return (
       <div className={classes.profile}>
-        {mobileScreen &&
-          <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-            <Persona {...persona} size={PersonaSize.size40} hidePersonaDetails={true} />
-          </ActionButton>
-        }
-
-        {!mobileScreen && this.showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
+        {this.showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
       </div>
     );
   }
@@ -176,13 +170,13 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       styles={profileProperties.styles}
       hidePersonaDetails={profileProperties.hidePersonaDetails} />;
 
-      if (graphExplorerMode === Mode.TryIt) {
-        return <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-            {persona}
-          </ActionButton>;
-      }
+    if (graphExplorerMode === Mode.TryIt) {
+      return <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+        {persona}
+      </ActionButton>;
+    }
 
-      return persona;
+    return persona;
   }
 }
 
