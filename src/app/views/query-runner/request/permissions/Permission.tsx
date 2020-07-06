@@ -32,6 +32,10 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     this.state = {
       permissions: [],
       groups: [],
+      paging: {
+        content: [],
+        page: 1
+      }
     };
   }
 
@@ -46,9 +50,14 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const permissions = this.props.scopes.data;
     if (prevProps.scopes.data !== permissions) {
       const groups = generatePermissionGroups(permissions);
+      const paging = {
+        content: permissions.sort(dynamicSort('value', SortOrder.ASC)).slice(0, 100),
+        page: 1
+      };
       this.setState({
         permissions,
-        groups
+        groups,
+        paging
       });
     }
   }
@@ -73,7 +82,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
 
   public searchValueChanged = (event: any, value?: string): void => {
     const { scopes } = this.props;
-    let filteredPermissions = scopes.data;
+    let filteredPermissions = scopes.data.sort(dynamicSort('value', SortOrder.ASC)).slice(0, 100);
     if (value) {
       const keyword = value.toLowerCase();
 
@@ -84,10 +93,16 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     }
 
     const groups = generatePermissionGroups(filteredPermissions);
+    const paging = {
+      content: filteredPermissions,
+      page: (value) ? 0 : null
+    };
+
     this.setState({
-      permissions: filteredPermissions,
+      paging,
       groups
     });
+    this.forceUpdate();
   }
 
   public handleConsent = async (permission: IPermission) => {
@@ -233,17 +248,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     return columns;
   }
 
-  private renderList = () => {
-    const {
-      panel,
-      tokenPresent,
-      consentedScopes,
-      intl: { messages },
-    }: any = this.props;
-    let { permissions } = this.state;
-    const classes = classNames(this.props);
-    const columns = this.getColumns();
-
+  private setConsentedStatus(tokenPresent: any, permissions: IPermission[], consentedScopes: any) {
     if (tokenPresent) {
       permissions.forEach((permission: IPermission) => {
         if (consentedScopes.indexOf(permission.value) !== -1) {
@@ -251,59 +256,110 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         }
       });
     }
+  }
 
-    if (panel) {
+  private renderPanelList = () => {
+    const {
+      tokenPresent,
+      consentedScopes,
+      intl: { messages },
+    }: any = this.props;
+    const { paging } = this.state;
+    const classes = classNames(this.props);
+    const columns = this.getColumns();
 
-      if (permissions.length > 0) {
-        permissions = (panel) ? permissions.sort(dynamicSort('value', SortOrder.ASC)) : permissions;
-      }
+    this.setConsentedStatus(tokenPresent, paging.content, consentedScopes);
 
-      const groups = generatePermissionGroups(permissions);
-      const selection = new Selection({
-        onSelectionChanged: () => {
-          const selected = selection.getSelection() as any;
-          const permissionsToConsent: string[] = [];
-          if (selected.length > 0) {
-            selected.forEach((option: IPermission) => {
-              permissionsToConsent.push(option.value);
-            });
-          }
-          this.props.setPermissions(permissionsToConsent);
+    const permissionsToDisplay = paging.content;
+
+    const groups = generatePermissionGroups(permissionsToDisplay);
+    const selection = new Selection({
+      onSelectionChanged: () => {
+        const selected = selection.getSelection() as any;
+        const permissionsToConsent: string[] = [];
+        if (selected.length > 0) {
+          selected.forEach((option: IPermission) => {
+            permissionsToConsent.push(option.value);
+          });
         }
-      });
+        this.props.setPermissions(permissionsToConsent);
+      }
+    });
 
-      return (
-        <>
-          <Label className={classes.permissionText}>
-            <FormattedMessage id='Select different permissions' />
-          </Label>
-          <hr />
-          <SearchBox
-            className={classes.searchBox}
-            placeholder={messages['Search permissions']}
-            onChange={(event, value) => this.searchValueChanged(event, value)}
-            styles={{ field: { paddingLeft: 10 } }}
-          />
-          <hr />
-          <DetailsList
-            items={permissions}
-            columns={columns}
-            groups={groups}
-            onRenderItemColumn={this.renderItemColumn}
-            selectionMode={SelectionMode.multiple}
-            layoutMode={DetailsListLayoutMode.justified}
-            selection={selection}
-            compact={true}
-            groupProps={{
-              showEmptyGroups: false,
-            }}
-            ariaLabelForSelectionColumn='Toggle selection'
-            ariaLabelForSelectAllCheckbox='Toggle selection for all items'
-            checkButtonAriaLabel='Row checkbox'
-          />
-        </>
-      );
-    }
+    return (
+      <>
+        <Label className={classes.permissionText}>
+          <FormattedMessage id='Select different permissions' />
+        </Label>
+        <hr />
+        <SearchBox
+          className={classes.searchBox}
+          placeholder={messages['Search permissions']}
+          onChange={(event, value) => this.searchValueChanged(event, value)}
+          styles={{ field: { paddingLeft: 10 } }}
+        />
+        <hr />
+        <DetailsList
+          items={permissionsToDisplay}
+          columns={columns}
+          groups={groups}
+          onRenderItemColumn={this.renderItemColumn}
+          selectionMode={SelectionMode.multiple}
+          layoutMode={DetailsListLayoutMode.justified}
+          selection={selection}
+          compact={true}
+          groupProps={{
+            showEmptyGroups: false,
+          }}
+          ariaLabelForSelectionColumn='Toggle selection'
+          ariaLabelForSelectAllCheckbox='Toggle selection for all items'
+          checkButtonAriaLabel='Row checkbox'
+        />
+      </>
+    );
+  }
+
+  private previousPage() {
+    const { paging } = this.state;
+    const { page } = paging;
+    const pageNumber = page! - 1;
+    this.goToPage(pageNumber);
+  }
+
+  private nextPage() {
+    const { paging } = this.state;
+    const { page } = paging;
+    const pageNumber = page! + 1;
+    this.goToPage(pageNumber);
+  }
+
+  private goToPage(pageNumber: number) {
+    const { permissions } = this.state;
+    const skip = (pageNumber - 1) * 100;
+    const take = skip + 100;
+    const paged = {
+      content: permissions.sort(dynamicSort('value', SortOrder.ASC)).slice(skip, take),
+      page: pageNumber
+    };
+    this.setState({ paging: paged });
+    this.renderPanelList();
+    this.forceUpdate();
+  }
+
+  private renderTabList() {
+    const classes = classNames(this.props);
+    const columns = this.getColumns();
+    const {
+      panel,
+      tokenPresent,
+      consentedScopes,
+      intl: { messages },
+    }: any = this.props;
+
+    const { permissions } = this.state;
+
+    this.setConsentedStatus(tokenPresent, permissions, consentedScopes);
+
     return (
       <>
         <Label className={classes.permissionLength}>
@@ -317,8 +373,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           columns={columns}
           onRenderItemColumn={this.renderItemColumn}
           selectionMode={SelectionMode.none}
-          layoutMode={DetailsListLayoutMode.justified}
-        />
+          layoutMode={DetailsListLayoutMode.justified} />
       </>
     );
   }
@@ -327,16 +382,27 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const classes = classNames(this.props);
     const { panel, scopes } = this.props;
     const { pending: loading } = scopes;
-    const { permissions } = this.state;
+    const { permissions, paging } = this.state;
+
 
     return (
       <div className={classes.container} style={{ minHeight: (panel) ? '800px' : '300px' }}>
         {loading && <Label>
           <FormattedMessage id={'Fetching permissions'} />...
-        </Label>}
-        {!loading && panel &&
+        </Label>}        {permissions && permissions.length > 0 && !loading &&
           <div className={classes.permissions}>
-            {this.renderList()}
+            {!panel && this.renderTabList()}
+            {panel &&
+              this.renderPanelList()
+            }
+            {panel && paging && <div>
+              {paging.page && paging.content.length === 100 && <PrimaryButton onClick={() => this.nextPage()}>
+                Next
+              </PrimaryButton>}
+              {paging.page && paging.page > 1 && <PrimaryButton onClick={() => this.previousPage()}>
+                Previous
+              </PrimaryButton>}
+            </div>}
           </div>
         }
         {permissions && permissions.length === 0 && !loading &&
@@ -354,6 +420,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     );
   }
 }
+
+
 
 function mapStateToProps(state: any) {
   return {

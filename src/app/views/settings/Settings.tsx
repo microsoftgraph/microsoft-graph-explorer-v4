@@ -62,7 +62,7 @@ function Settings(props: ISettingsProps) {
     if (authenticated) {
       menuItems.push(
         {
-          key: 'change-theme',
+          key: 'view-all-permissions',
           text: messages['view all permissions'],
           iconProps: {
             iconName: 'AzureKeyVault',
