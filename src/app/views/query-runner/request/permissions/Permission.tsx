@@ -389,21 +389,28 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       <div className={classes.container} style={{ minHeight: (panel) ? '800px' : '300px' }}>
         {loading && <Label>
           <FormattedMessage id={'Fetching permissions'} />...
-        </Label>}        {permissions && permissions.length > 0 && !loading &&
-          <div className={classes.permissions}>
-            {!panel && this.renderTabList()}
-            {panel &&
-              this.renderPanelList()
-            }
+        </Label>}
+        {permissions && permissions.length > 0 && !loading &&
+          <>
+            <div className={classes.permissions}>
+              {!panel && this.renderTabList()}
+              {panel &&
+                this.renderPanelList()
+              }
+            </div>
             {panel && paging && <div>
-              {paging.page && paging.content.length === 100 && <PrimaryButton onClick={() => this.nextPage()}>
+              {paging.page && paging.content.length === 100 && <PrimaryButton style={{
+                float: 'left'
+              }} onClick={() => this.nextPage()}>
                 Next
               </PrimaryButton>}
-              {paging.page && paging.page > 1 && <PrimaryButton onClick={() => this.previousPage()}>
+              {paging.page && paging.page > 1 && <PrimaryButton style={{
+                float: 'right'
+              }} onClick={() => this.previousPage()}>
                 Previous
               </PrimaryButton>}
             </div>}
-          </div>
+          </>
         }
         {permissions && permissions.length === 0 && !loading &&
           <Label style={{
