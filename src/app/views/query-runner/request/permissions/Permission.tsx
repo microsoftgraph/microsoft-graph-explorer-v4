@@ -27,6 +27,8 @@ import { generatePermissionGroups } from './util';
 
 export class Permission extends Component<IPermissionProps, IPermissionState> {
 
+  private contentSize = 70;
+
   constructor(props: IPermissionProps) {
     super(props);
     this.state = {
@@ -51,7 +53,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     if (prevProps.scopes.data !== permissions) {
       const groups = generatePermissionGroups(permissions);
       const paging = {
-        content: permissions.sort(dynamicSort('value', SortOrder.ASC)).slice(0, 100),
+        content: permissions.sort(dynamicSort('value', SortOrder.ASC)).slice(0, this.contentSize),
         page: 1
       };
       this.setState({
@@ -82,7 +84,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
 
   public searchValueChanged = (event: any, value?: string): void => {
     const { scopes } = this.props;
-    let filteredPermissions = scopes.data.sort(dynamicSort('value', SortOrder.ASC)).slice(0, 100);
+    let filteredPermissions = scopes.data.sort(dynamicSort('value', SortOrder.ASC)).slice(0, this.contentSize);
     if (value) {
       const keyword = value.toLowerCase();
 
@@ -95,7 +97,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const groups = generatePermissionGroups(filteredPermissions);
     const paging = {
       content: filteredPermissions,
-      page: (value) ? 0 : null
+      page: 1
     };
 
     this.setState({
@@ -335,8 +337,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
 
   private goToPage(pageNumber: number) {
     const { permissions } = this.state;
-    const skip = (pageNumber - 1) * 100;
-    const take = skip + 100;
+    const skip = (pageNumber - 1) * this.contentSize;
+    const take = skip + this.contentSize;
     const paged = {
       content: permissions.sort(dynamicSort('value', SortOrder.ASC)).slice(skip, take),
       page: pageNumber
@@ -350,10 +352,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const classes = classNames(this.props);
     const columns = this.getColumns();
     const {
-      panel,
       tokenPresent,
       consentedScopes,
-      intl: { messages },
     }: any = this.props;
 
     const { permissions } = this.state;
@@ -384,7 +384,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const { pending: loading } = scopes;
     const { permissions, paging } = this.state;
 
-
     return (
       <div className={classes.container} style={{ minHeight: (panel) ? '800px' : '300px' }}>
         {loading && <Label>
@@ -399,7 +398,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               }
             </div>
             {panel && paging && <div>
-              {paging.page && paging.content.length === 100 && <PrimaryButton style={{
+              {paging.page && paging.content.length >= this.contentSize && <PrimaryButton style={{
                 float: 'left'
               }} onClick={() => this.nextPage()}>
                 Next
@@ -427,8 +426,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     );
   }
 }
-
-
 
 function mapStateToProps(state: any) {
   return {
