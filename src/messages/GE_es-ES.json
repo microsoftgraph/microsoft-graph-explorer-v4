@@ -304,5 +304,6 @@
   "permissions not found": "No se encontraron permisos",
   "selected": "seleccionados",
   "Search sample queries": "Buscar consultas de ejemplo",
-  "Search history items": "Buscar elementos de historial"
+  "Search history items": "Buscar elementos de historial",
+  "Minimize sidebar": "Minimizar barra lateral"
 }
