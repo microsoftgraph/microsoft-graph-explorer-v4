@@ -145,11 +145,9 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           return k.name === `$${param}`;
         });
 
-        const list: string[] = [];
+        let list: string[] = [];
         if (section && section.items && section.items.length > 0) {
-          section.items.forEach((element: string) => {
-            list.push(element);
-          });
+          list = section.items;
           this.setState({
             filteredSuggestions: list,
             suggestions: list,
