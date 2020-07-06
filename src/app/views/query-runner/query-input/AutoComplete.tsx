@@ -53,9 +53,11 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
 
       case '=':
+
         if (url.includes('?$')) {
           this.getParameterEnums(url);
         }
+
         break;
 
       case ',':
@@ -123,6 +125,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         }
       }
     }
+
   }
 
   public componentDidUpdate = (prevProps: IAutoCompleteProps) => {
