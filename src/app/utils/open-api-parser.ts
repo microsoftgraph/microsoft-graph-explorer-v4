@@ -10,7 +10,8 @@ export function parseOpenApiResponse(params: any) {
     verbs.forEach((verb: string) => {
       parameters.push({
         verb,
-        values: getVerbParameterValues(pathValues[`${verb}`])
+        values: getVerbParameterValues(pathValues[`${verb}`]),
+        links: getLinkValues(pathValues[`${verb}`])
       });
     });
 
@@ -34,4 +35,18 @@ function getVerbParameterValues(values: any) {
     });
   }
   return parameterValues;
+}
+
+function getLinkValues(values: any) {
+  const responses = values.responses;
+  if (responses) {
+    const responsesAtIndex200 = responses['200'];
+    if (responsesAtIndex200 && responsesAtIndex200.links) {
+      const links = Object.keys(responsesAtIndex200.links);
+      return links;
+    } else {
+      return null;
+    }
+  }
+  return null;
 }
