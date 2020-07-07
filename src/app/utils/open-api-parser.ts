@@ -28,7 +28,7 @@ function getVerbParameterValues(values: any) {
       if (parameter.name) {
         parameterValues.push({
           name: parameter.name,
-          items: (parameter.items && parameter.items.enum) ? parameter.items.enum : null
+          items: (parameter.schema && parameter.schema.items) ? parameter.schema.items.enum : []
         });
       }
     });

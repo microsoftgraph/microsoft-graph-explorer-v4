@@ -101,7 +101,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </div>
-        <div className='col-xs-12 col-lg-1'>
+        <div className='col-xs-12 col-lg-2'>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
@@ -110,7 +110,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, method) => handleOnVersionChange(method)}
           />
         </div>
-        <div className='col-xs-12 col-lg-7'>
+        <div className='col-xs-12 col-lg-6'>
           <AutoComplete
             contentChanged={this.contentChanged}
           />
