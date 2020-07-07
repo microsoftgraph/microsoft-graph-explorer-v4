@@ -44,9 +44,7 @@ function getLinkValues(values: any) {
     if (responsesAtIndex200 && responsesAtIndex200.links) {
       const links = Object.keys(responsesAtIndex200.links);
       return links;
-    } else {
-      return null;
     }
   }
-  return null;
+  return [];
 }

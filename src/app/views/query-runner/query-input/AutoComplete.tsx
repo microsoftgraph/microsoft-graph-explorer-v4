@@ -48,6 +48,10 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private initialiseAutoComplete = (url: string) => {
     const lastCharacter = url.substring(url.length - 1);
     switch (lastCharacter) {
+      case '/':
+        this.requestForAutocompleteOptions(url);
+        break;
+
       case '?':
         this.requestForAutocompleteOptions(url);
         break;
@@ -65,7 +69,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
 
       case '&':
-        this.getPathParameters();
+        this.getQueryParameters();
         break;
 
       default:
@@ -104,7 +108,30 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
   };
 
-  public getPathParameters = () => {
+  public displayLinkOptions = () => {
+    const { autoCompleteOptions, sampleQuery: { selectedVerb } } = this.props;
+    if (autoCompleteOptions) {
+      const suggestions: string[] = [];
+      const parameters = autoCompleteOptions.parameters;
+      if (parameters) {
+        const parametersWithVerb = parameters.find(parameter => parameter.verb === selectedVerb.toLowerCase());
+        if (parametersWithVerb) {
+          parametersWithVerb.links.forEach((value: any) => {
+            suggestions.push(value);
+          });
+
+          this.setState({
+            filteredSuggestions: suggestions,
+            suggestions,
+            showSuggestions: true,
+            compare: ''
+          });
+        }
+      }
+    }
+  }
+
+  public getQueryParameters = () => {
     const { autoCompleteOptions, sampleQuery: { selectedVerb } } = this.props;
     if (autoCompleteOptions) {
       const suggestions: string[] = [];
@@ -125,12 +152,13 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         }
       }
     }
-
   }
 
   public componentDidUpdate = (prevProps: IAutoCompleteProps) => {
     if (prevProps.autoCompleteOptions !== this.props.autoCompleteOptions) {
-      this.getPathParameters();
+      if (this.props.autoCompleteOptions) {
+        this.performLocalSearch(this.props.sampleQuery.sampleUrl);
+      }
     }
   }
 
@@ -184,8 +212,24 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         this.props.actions!.fetchAutoCompleteOptions(requestUrl);
       }
       else {
-        this.getPathParameters();
+        this.performLocalSearch(url);
       }
+    }
+  }
+
+  private performLocalSearch(url: string) {
+    const lastCharacter = url.substring(url.length - 1);
+    switch (lastCharacter) {
+      case '/':
+        this.displayLinkOptions();
+        break;
+
+      case '?':
+        this.getQueryParameters();
+        break;
+
+      default:
+        break;
     }
   }
 
