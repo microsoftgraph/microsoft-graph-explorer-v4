@@ -10,9 +10,12 @@ import { queryInputStyles } from './QueryInput.styles';
 import { cleanUpSelectedSuggestion } from './util';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
+  private autoCompleteRef: any;
 
   constructor(props: IAutoCompleteProps) {
     super(props);
+
+    this.autoCompleteRef = React.createRef();
 
     this.state = {
       activeSuggestion: 0,
@@ -22,6 +25,10 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       userInput: this.props.sampleQuery.sampleUrl,
       compare: ''
     };
+  }
+
+  public setFocus() {
+    this.autoCompleteRef.current.focus();
   }
 
   public onChange = (e: any) => {
@@ -81,7 +88,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     const { activeSuggestion, filteredSuggestions, showSuggestions } = this.state;
 
     switch (e.keyCode) {
-      case KeyCodes.tab:
+      case KeyCodes.enter:
         if (showSuggestions) {
           const selected = filteredSuggestions[activeSuggestion];
           this.appendSuggestionToUrl(selected);
@@ -244,6 +251,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       compare: ''
     });
     this.props.contentChanged(selectedSuggestion);
+    this.setFocus();
   }
 
   public render() {
@@ -298,6 +306,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           defaultValue={userInput}
           value={sampleQuery.sampleUrl}
           suffix={(fetchingSuggestions) ? '...' : undefined}
+          componentRef={this.autoCompleteRef}
         />
         {suggestionsListComponent}
       </>
