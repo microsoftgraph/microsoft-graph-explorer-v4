@@ -101,28 +101,21 @@ export class QueryRunner extends Component<
 
   public render() {
     return (
-      <div>
-        <div className='row'>
-          <div className='col-sm-12 col-lg-12'>
-            {
-              // @ts-ignore
-              <QueryInput
-                handleOnRunQuery={this.handleOnRunQuery}
-                handleOnMethodChange={this.handleOnMethodChange}
-                handleOnVersionChange={this.handleOnVersionChange}
-                handleOnBlur={this.handleOnBlur}
-              />
-            }
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-sm-12 col-lg-12'>
-            {
-              // @ts-ignore
-              <Request handleOnEditorChange={this.handleOnEditorChange} />
-            }
-          </div>
-        </div>
+      <div className='row'>
+        {
+          // @ts-ignore
+          <QueryInput
+            handleOnRunQuery={this.handleOnRunQuery}
+            handleOnMethodChange={this.handleOnMethodChange}
+            handleOnVersionChange={this.handleOnVersionChange}
+            handleOnBlur={this.handleOnBlur}
+          />
+        }
+
+        {
+          // @ts-ignore
+          <Request handleOnEditorChange={this.handleOnEditorChange} />
+        }
       </div>
     );
   }
