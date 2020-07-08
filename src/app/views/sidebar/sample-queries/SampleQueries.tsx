@@ -313,6 +313,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         <SearchBox className={classes.searchBox} placeholder={messages['Search sample queries']}
           onChange={(value) => this.searchValueChanged(value)}
           styles={{ field: { paddingLeft: 10 } }}
+          role='searchbox'
         />
         <hr />
         {error && <MessageBar messageBarType={MessageBarType.warning}
@@ -347,6 +348,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           }}
           onRenderRow={this.renderRow}
           onRenderDetailsHeader={this.renderDetailsHeader}
+          aria-live={'polite'}
         />
       </div>
     );
