@@ -317,6 +317,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 function mapStateToProps(state: any) {
   return {
     sampleQuery: state.sampleQuery,
+    appTheme: state.theme,
     autoCompleteOptions: state.autoComplete.data,
     fetchingSuggestions: state.autoComplete.pending
   };
