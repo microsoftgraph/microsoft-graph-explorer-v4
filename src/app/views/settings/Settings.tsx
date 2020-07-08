@@ -113,6 +113,7 @@ function Settings(props: ISettingsProps) {
 
   const handleConsent = () => {
     dispatch(consentToScopes(selectedPermissions));
+    setSelectedPermissions([]);
   };
 
   const getSelectionDetails = () => {
@@ -150,19 +151,19 @@ function Settings(props: ISettingsProps) {
 
   return (
     <div>
-       <TooltipHost
+      <TooltipHost
         content='More actions'
         id={getId()}
         calloutProps={{ gapSpace: 0 }}>
-          <IconButton
-            ariaLabel='More actions'
-            role='button'
-            styles={{
-              label: { marginBottom: -20 },
-              icon: { marginBottom: -20 }
-            }}
-            menuIconProps={{ iconName: 'Settings' }}
-            menuProps={menuProperties} />
+        <IconButton
+          ariaLabel='More actions'
+          role='button'
+          styles={{
+            label: { marginBottom: -20 },
+            icon: { marginBottom: -20 }
+          }}
+          menuIconProps={{ iconName: 'Settings' }}
+          menuProps={menuProperties} />
       </TooltipHost>
       <div>
         <Dialog

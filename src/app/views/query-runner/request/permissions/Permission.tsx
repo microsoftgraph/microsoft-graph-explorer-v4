@@ -385,44 +385,44 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const { permissions, paging } = this.state;
 
     return (
-      <div className={classes.container} style={{ minHeight: (panel) ? '800px' : '300px' }}>
-        {loading && <Label>
-          <FormattedMessage id={'Fetching permissions'} />...
+      <>
+        <div className={classes.container} style={{ minHeight: (panel) ? '800px' : '300px' }}>
+          {loading && <Label>
+            <FormattedMessage id={'Fetching permissions'} />...
         </Label>}
-        {permissions && permissions.length > 0 && !loading &&
-          <>
+          {permissions && permissions.length > 0 && !loading &&
             <div className={classes.permissions}>
               {!panel && this.renderTabList()}
               {panel &&
                 this.renderPanelList()
               }
             </div>
-            {panel && paging && <div>
-              {paging.page && paging.content.length >= this.contentSize && <PrimaryButton style={{
-                float: 'left'
-              }} onClick={() => this.nextPage()}>
-                Next
+          }
+          {permissions && permissions.length === 0 && !loading &&
+            <Label style={{
+              display: 'flex',
+              width: '100%',
+              minHeight: '200px',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <FormattedMessage id='permissions not found' />
+            </Label>
+          }
+        </div>
+        {panel && paging && <div>
+          {paging.page && paging.content.length >= this.contentSize && <PrimaryButton style={{
+            float: 'left'
+          }} onClick={() => this.nextPage()}>
+            Next
               </PrimaryButton>}
-              {paging.page && paging.page > 1 && <PrimaryButton style={{
-                float: 'right'
-              }} onClick={() => this.previousPage()}>
-                Previous
+          {paging.page && paging.page > 1 && <PrimaryButton style={{
+            float: 'right'
+          }} onClick={() => this.previousPage()}>
+            Previous
               </PrimaryButton>}
-            </div>}
-          </>
-        }
-        {permissions && permissions.length === 0 && !loading &&
-          <Label style={{
-            display: 'flex',
-            width: '100%',
-            minHeight: '200px',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}>
-            <FormattedMessage id='permissions not found' />
-          </Label>
-        }
-      </div>
+        </div>}
+      </>
     );
   }
 }
