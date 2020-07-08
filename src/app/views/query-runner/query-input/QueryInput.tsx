@@ -28,6 +28,10 @@ export class QueryInput extends Component<IQueryInputProps, any> {
         { key: 'v1.0', text: 'v1.0' },
         { key: 'beta', text: 'beta' }
       ],
+      classes: {
+        textField: 'col-sm-12 col-lg-9',
+        gridElements: 'col-sm-12 col-lg-1',
+      }
     };
   }
 
@@ -52,16 +56,11 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     return version;
   }
 
-  public handleKeyDown = (event: any) => {
-    if (event.keyCode === 13) {
-      this.props.handleOnBlur();
-
-      // allows the state to be populated with the new url before running it
-      setTimeout(() => {
-        this.props.handleOnRunQuery();
-      }, 500);
-
-    }
+  public handleOnRunQuery = (event: any) => {
+    // allows the state to be populated with the new url before running it
+    setTimeout(() => {
+      this.props.handleOnRunQuery();
+    }, 500);
   }
 
   public render() {
@@ -90,8 +89,11 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     const httpMethodsToDisplay = (mode === Mode.TryIt && !authenticated) ? [httpMethods[0]] : httpMethods;
 
     return (
-      <div className='row'>
-        <div className='col-xs-12 col-lg-2'>
+      <>
+        <div className={this.state.classes.gridElements} style={{
+          paddingRight: 0,
+          paddingLeft: 0,
+        }}>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
@@ -101,7 +103,10 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </div>
-        <div className='col-xs-12 col-lg-2'>
+        <div className={this.state.classes.gridElements} style={{
+          paddingRight: 0,
+          paddingLeft: 0,
+        }}>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
@@ -110,12 +115,19 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, method) => handleOnVersionChange(method)}
           />
         </div>
-        <div className='col-xs-12 col-lg-6'>
+        <div className={this.state.classes.textField} style={{
+          paddingRight: 0,
+          paddingLeft: 0,
+        }}>
           <AutoComplete
             contentChanged={this.contentChanged}
+            runQuery={this.handleOnRunQuery}
           />
         </div>
-        <div className='col-xs-12 col-lg-2'>
+        <div className={this.state.classes.gridElements} style={{
+          paddingRight: 0,
+          paddingLeft: 0,
+        }}>
           <SubmitButton
             className='run-query-button'
             text={messages['Run Query']}
@@ -124,7 +136,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             submitting={submitting}
           />
         </div>
-      </div>
+      </>
     );
   }
 }
