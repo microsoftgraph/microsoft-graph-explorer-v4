@@ -23,7 +23,7 @@ export const getPivotItems = (properties: any) => {
       key='response-preview'
       ariaLabel='Response Preview'
       itemIcon='Reply'
-      headerText={(mobileScreen) ? '' : messages['Response Preview']}
+      headerText={messages['Response Preview']}
       title={messages['Response Preview']}
       onRenderItemLink={getTooltipDisplay}
     >
@@ -32,7 +32,7 @@ export const getPivotItems = (properties: any) => {
     <PivotItem
       key='response-headers'
       ariaLabel='Response Headers'
-      headerText={(mobileScreen) ? '' : messages['Response Headers']}
+      headerText={messages['Response Headers']}
       itemIcon='FileComment'
       title={messages['Response Headers']}
       onRenderItemLink={getTooltipDisplay}
@@ -49,7 +49,7 @@ export const getPivotItems = (properties: any) => {
       <PivotItem
         key='adaptive-cards'
         ariaLabel='Adaptive Cards'
-        headerText={(mobileScreen) ? '' : messages['Adaptive Cards']}
+        headerText={messages['Adaptive Cards']}
         title={messages['Adaptive Cards']}
         itemIcon='ContactCard'
         resource={(!!body) ? sampleQuery : null}
@@ -71,7 +71,7 @@ export const getPivotItems = (properties: any) => {
         key='code-snippets'
         ariaLabel='Code Snippets'
         title={messages.Snippets}
-        headerText={(mobileScreen) ? '' : messages.Snippets}
+        headerText={messages.Snippets}
         itemIcon='PasteAsCode'
         onRenderItemLink={getTooltipDisplay}
       >
