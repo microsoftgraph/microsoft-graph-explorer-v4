@@ -1,12 +1,15 @@
+import { DetailsList, DetailsListLayoutMode, Label, SearchBox, SelectionMode } from 'office-ui-fabric-react';
 import React from 'react';
-import { Label, SearchBox, DetailsList, SelectionMode, DetailsListLayoutMode } from 'office-ui-fabric-react';
 import { FormattedMessage } from 'react-intl';
 
-import { generatePermissionGroups } from './util';
-import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { SortOrder } from '../../../../../types/enums';
+import { dynamicSort } from '../../../../utils/dynamic-sort';
+import { generatePermissionGroups } from './util';
 
-const PanelList = ({ messages, permissions, columns, classes, selection, renderItemColumn, searchValueChanged }: any) => {
+
+const PanelList = ({ messages, permissions,
+  columns, classes, selection,
+  renderItemColumn, searchValueChanged }: any) => {
   const groups = generatePermissionGroups(permissions);
   permissions = permissions.sort(dynamicSort('value', SortOrder.ASC));
 
@@ -41,5 +44,5 @@ const PanelList = ({ messages, permissions, columns, classes, selection, renderI
       />
     </>
   );
-}
+};
 export default PanelList;

@@ -1,5 +1,5 @@
+import { DetailsList, DetailsListLayoutMode, Label, SelectionMode } from 'office-ui-fabric-react';
 import React from 'react';
-import { Label, DetailsList, SelectionMode, DetailsListLayoutMode } from 'office-ui-fabric-react';
 import { FormattedMessage } from 'react-intl';
 
 const TabList = ({ permissions, columns, classes, renderItemColumn }: any) => {
@@ -20,6 +20,6 @@ const TabList = ({ permissions, columns, classes, renderItemColumn }: any) => {
         layoutMode={DetailsListLayoutMode.justified} />
     </>
   );
-}
+};
 
 export default TabList;

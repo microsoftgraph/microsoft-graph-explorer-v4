@@ -32,7 +32,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     const { sampleUrl } = this.props;
     this.setState({
       url: sampleUrl
-    })
+    });
   }
 
   private handleOnUrlChange = (newUrl = '') => {

@@ -17,10 +17,10 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
 import { classNames } from '../../../classnames';
-import { permissionStyles } from './Permission.styles';
-import { generatePermissionGroups, setConsentedStatus } from './util';
-import TabList from './TabList';
 import PanelList from './PanelList';
+import { permissionStyles } from './Permission.styles';
+import TabList from './TabList';
+import { generatePermissionGroups, setConsentedStatus } from './util';
 
 export class Permission extends Component<IPermissionProps, IPermissionState> {
 
