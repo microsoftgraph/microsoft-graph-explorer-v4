@@ -66,7 +66,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       background: getStyleFor(selectedVerb),
     };
 
-    const httpMethodsToDisplay = (mode === Mode.TryIt || !authenticated) ? [httpMethods[0]] : httpMethods;
+    const httpMethodsToDisplay = (!authenticated) ? [httpMethods[0]] : httpMethods;
 
     return (
       <div className='row'>
