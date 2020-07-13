@@ -16,7 +16,7 @@ export function generatePermissionGroups(permissions: any) {
             count = permissions.filter(
                 (perm: IPermission) => {
                     const value = perm.value.split('.')[0];
-                    return value  === groupName;
+                    return value === groupName;
                 }
             ).length;
             groups.push({
@@ -31,4 +31,14 @@ export function generatePermissionGroups(permissions: any) {
     }
 
     return groups;
+}
+
+export function setConsentedStatus(tokenPresent: any, permissions: IPermission[], consentedScopes: any) {
+    if (tokenPresent) {
+        permissions.forEach((permission: IPermission) => {
+            if (consentedScopes.indexOf(permission.value) !== -1) {
+                permission.consented = true;
+            }
+        });
+    }
 }

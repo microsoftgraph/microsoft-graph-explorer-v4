@@ -1,15 +1,11 @@
 import {
-  DetailsList,
-  DetailsListLayoutMode,
   FontSizes,
   getId,
   IColumn,
   Icon,
   Label,
   PrimaryButton,
-  SearchBox,
   Selection,
-  SelectionMode,
   styled,
   TooltipHost
 } from 'office-ui-fabric-react';
@@ -17,13 +13,14 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { SortOrder } from '../../../../../types/enums';
+
 import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
-import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { classNames } from '../../../classnames';
 import { permissionStyles } from './Permission.styles';
-import { generatePermissionGroups } from './util';
+import { generatePermissionGroups, setConsentedStatus } from './util';
+import TabList from './TabList';
+import PanelList from './PanelList';
 
 export class Permission extends Component<IPermissionProps, IPermissionState> {
 
@@ -72,7 +69,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 
   public searchValueChanged = (event: any, value?: string): void => {
-    event.preventDefault();
     const { scopes } = this.props;
     let filteredPermissions = scopes.data;
     if (value) {
@@ -93,7 +89,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const consentScopes = [permission.value];
     this.props.actions!.consentToScopes(consentScopes);
   };
-
 
   private renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
@@ -232,60 +227,21 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     return columns;
   }
 
-  private setConsentedStatus(tokenPresent: any, permissions: IPermission[], consentedScopes: any) {
-    if (tokenPresent) {
-      permissions.forEach((permission: IPermission) => {
-        if (consentedScopes.indexOf(permission.value) !== -1) {
-          permission.consented = true;
-        }
-      });
-    }
-  }
 
-  private renderTabList() {
+
+
+  public render() {
     const classes = classNames(this.props);
-    const columns = this.getColumns();
-    const {
-      tokenPresent,
-      consentedScopes,
-    }: any = this.props;
-
+    const { panel, scopes, tokenPresent, consentedScopes } = this.props;
+    const { pending: loading } = scopes;
     const { permissions } = this.state;
 
-    this.setConsentedStatus(tokenPresent, permissions, consentedScopes);
-
-    return (
-      <>
-        <Label className={classes.permissionLength}>
-          <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
-        </Label>
-        <Label className={classes.permissionText}>
-          <FormattedMessage id='permissions required to run the query' />
-        </Label>
-        <DetailsList styles={{ root: { minHeight: '300px' } }}
-          items={permissions}
-          columns={columns}
-          onRenderItemColumn={this.renderItemColumn}
-          selectionMode={SelectionMode.none}
-          layoutMode={DetailsListLayoutMode.justified} />
-      </>
-    );
-  }
-
-  private renderPanelList = () => {
     const {
-      tokenPresent,
-      consentedScopes,
       intl: { messages },
     }: any = this.props;
-    let { permissions } = this.state;
-    const classes = classNames(this.props);
-    const columns = this.getColumns();
 
-    permissions = permissions.sort(dynamicSort('value', SortOrder.ASC));
+    setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
-    this.setConsentedStatus(tokenPresent, permissions, consentedScopes);
-    const groups = generatePermissionGroups(permissions);
     const selection = new Selection({
       onSelectionChanged: () => {
         const selected = selection.getSelection() as any;
@@ -300,45 +256,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     });
 
     return (
-      <>
-        <Label className={classes.permissionText}>
-          <FormattedMessage id='Select different permissions' />
-        </Label>
-        <hr />
-        <SearchBox
-          className={classes.searchBox}
-          placeholder={messages['Search permissions']}
-          onChange={(event: any, value: any) => this.searchValueChanged(event, value)}
-          styles={{ field: { paddingLeft: 10 } }}
-        />
-        <hr />
-        <DetailsList
-          items={permissions}
-          columns={columns}
-          groups={groups}
-          onRenderItemColumn={this.renderItemColumn}
-          selectionMode={SelectionMode.multiple}
-          layoutMode={DetailsListLayoutMode.justified}
-          selection={selection}
-          compact={true}
-          groupProps={{
-            showEmptyGroups: false,
-          }}
-          ariaLabelForSelectionColumn='Toggle selection'
-          ariaLabelForSelectAllCheckbox='Toggle selection for all items'
-          checkButtonAriaLabel='Row checkbox'
-        />
-      </>
-    );
-  }
-
-  public render() {
-    const classes = classNames(this.props);
-    const { panel, scopes } = this.props;
-    const { pending: loading } = scopes;
-    const { permissions } = this.state;
-
-    return (
       <div className={classes.container} data-is-scrollable={true}
         style={{ minHeight: (panel) ? '800px' : '300px' }}>
         {loading && <Label>
@@ -346,8 +263,21 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         </Label>}
         {!loading &&
           <div className={classes.permissions}>
-            {!panel && this.renderTabList()}
-            {panel && this.renderPanelList()}
+            {!panel && <TabList
+              permissions={permissions}
+              columns={this.getColumns()}
+              classes={classes}
+              renderItemColumn={this.renderItemColumn}
+            />}
+            {panel && <PanelList
+              classes={classes}
+              permissions={permissions}
+              messages={messages}
+              selection={selection}
+              columns={this.getColumns()}
+              renderItemColumn={this.renderItemColumn}
+              searchValueChanged={this.searchValueChanged}
+            />}
           </div>
         }
         {permissions && permissions.length === 0 && !loading &&
