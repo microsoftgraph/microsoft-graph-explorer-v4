@@ -24,8 +24,21 @@ export class QueryInput extends Component<IQueryInputProps, any> {
         { key: 'v1.0', text: 'v1.0' },
         { key: 'beta', text: 'beta' }
       ],
+      url: ''
     };
   }
+
+  public componentDidMount() {
+    const { sampleUrl } = this.props;
+    this.setState({
+      url: sampleUrl
+    })
+  }
+
+  private handleOnUrlChange = (newUrl = '') => {
+    this.setState({ url: newUrl });
+    this.props.handleOnUrlChange(newUrl);
+  };
 
   public handleKeyDown = (event: any) => {
     if (event.keyCode === 13) {
@@ -60,13 +73,15 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       intl: { messages },
     }: any = this.props;
 
+    const { url } = this.state;
+
     const verbSelector: any = queryRunnerStyles().verbSelector;
     verbSelector.title = {
       ...verbSelector.title,
       background: getStyleFor(selectedVerb),
     };
 
-    const httpMethodsToDisplay = (mode === Mode.TryIt && !authenticated ) ? [httpMethods[0]] : httpMethods;
+    const httpMethodsToDisplay = (mode === Mode.TryIt && !authenticated) ? [httpMethods[0]] : httpMethods;
 
     return (
       <div className='row'>
@@ -94,10 +109,11 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             ariaLabel='Query Sample Input'
             role='textbox'
             placeholder={messages['Query Sample']}
-            onChange={(event, value) => handleOnUrlChange(value)}
-            defaultValue={sampleUrl}
+            onChange={(event, value) => this.handleOnUrlChange(value)}
+            value={url}
             onBlur={() => handleOnBlur()}
             onKeyDown={this.handleKeyDown}
+            autoComplete='off'
           />
         </div>
         <div className='col-xs-12 col-lg-2'>
