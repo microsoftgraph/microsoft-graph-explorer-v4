@@ -27,17 +27,11 @@ import { generatePermissionGroups } from './util';
 
 export class Permission extends Component<IPermissionProps, IPermissionState> {
 
-  private contentSize = 70;
-
   constructor(props: IPermissionProps) {
     super(props);
     this.state = {
       permissions: [],
       groups: [],
-      paging: {
-        content: [],
-        page: 1
-      }
     };
   }
 
@@ -52,14 +46,9 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const permissions = this.props.scopes.data;
     if (prevProps.scopes.data !== permissions) {
       const groups = generatePermissionGroups(permissions);
-      const paging = {
-        content: permissions.sort(dynamicSort('value', SortOrder.ASC)).slice(0, this.contentSize),
-        page: 1
-      };
       this.setState({
         permissions,
-        groups,
-        paging
+        groups
       });
     }
   }
@@ -83,8 +72,9 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 
   public searchValueChanged = (event: any, value?: string): void => {
+    event.preventDefault();
     const { scopes } = this.props;
-    let filteredPermissions = scopes.data.sort(dynamicSort('value', SortOrder.ASC)).slice(0, this.contentSize);
+    let filteredPermissions = scopes.data;
     if (value) {
       const keyword = value.toLowerCase();
 
@@ -94,17 +84,9 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       });
     }
 
-    const groups = generatePermissionGroups(filteredPermissions);
-    const paging = {
-      content: filteredPermissions,
-      page: 1
-    };
-
     this.setState({
-      paging,
-      groups
+      permissions: filteredPermissions
     });
-    this.forceUpdate();
   }
 
   public handleConsent = async (permission: IPermission) => {
@@ -260,94 +242,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     }
   }
 
-  private renderPanelList = () => {
-    const {
-      tokenPresent,
-      consentedScopes,
-      intl: { messages },
-    }: any = this.props;
-    const { paging } = this.state;
-    const classes = classNames(this.props);
-    const columns = this.getColumns();
-
-    this.setConsentedStatus(tokenPresent, paging.content, consentedScopes);
-
-    const permissionsToDisplay = paging.content;
-
-    const groups = generatePermissionGroups(permissionsToDisplay);
-    const selection = new Selection({
-      onSelectionChanged: () => {
-        const selected = selection.getSelection() as any;
-        const permissionsToConsent: string[] = [];
-        if (selected.length > 0) {
-          selected.forEach((option: IPermission) => {
-            permissionsToConsent.push(option.value);
-          });
-        }
-        this.props.setPermissions(permissionsToConsent);
-      }
-    });
-
-    return (
-      <>
-        <Label className={classes.permissionText}>
-          <FormattedMessage id='Select different permissions' />
-        </Label>
-        <hr />
-        <SearchBox
-          className={classes.searchBox}
-          placeholder={messages['Search permissions']}
-          onChange={(event, value) => this.searchValueChanged(event, value)}
-          styles={{ field: { paddingLeft: 10 } }}
-        />
-        <hr />
-        <DetailsList
-          items={permissionsToDisplay}
-          columns={columns}
-          groups={groups}
-          onRenderItemColumn={this.renderItemColumn}
-          selectionMode={SelectionMode.multiple}
-          layoutMode={DetailsListLayoutMode.justified}
-          selection={selection}
-          compact={true}
-          groupProps={{
-            showEmptyGroups: false,
-          }}
-          ariaLabelForSelectionColumn='Toggle selection'
-          ariaLabelForSelectAllCheckbox='Toggle selection for all items'
-          checkButtonAriaLabel='Row checkbox'
-        />
-      </>
-    );
-  }
-
-  private previousPage() {
-    const { paging } = this.state;
-    const { page } = paging;
-    const pageNumber = page! - 1;
-    this.goToPage(pageNumber);
-  }
-
-  private nextPage() {
-    const { paging } = this.state;
-    const { page } = paging;
-    const pageNumber = page! + 1;
-    this.goToPage(pageNumber);
-  }
-
-  private goToPage(pageNumber: number) {
-    const { permissions } = this.state;
-    const skip = (pageNumber - 1) * this.contentSize;
-    const take = skip + this.contentSize;
-    const paged = {
-      content: permissions.sort(dynamicSort('value', SortOrder.ASC)).slice(skip, take),
-      page: pageNumber
-    };
-    this.setState({ paging: paged });
-    this.renderPanelList();
-    this.forceUpdate();
-  }
-
   private renderTabList() {
     const classes = classNames(this.props);
     const columns = this.getColumns();
@@ -378,51 +272,96 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     );
   }
 
+  private renderPanelList = () => {
+    const {
+      tokenPresent,
+      consentedScopes,
+      intl: { messages },
+    }: any = this.props;
+    let { permissions } = this.state;
+    const classes = classNames(this.props);
+    const columns = this.getColumns();
+
+    permissions = permissions.sort(dynamicSort('value', SortOrder.ASC));
+
+    this.setConsentedStatus(tokenPresent, permissions, consentedScopes);
+    const groups = generatePermissionGroups(permissions);
+    const selection = new Selection({
+      onSelectionChanged: () => {
+        const selected = selection.getSelection() as any;
+        const permissionsToConsent: string[] = [];
+        if (selected.length > 0) {
+          selected.forEach((option: IPermission) => {
+            permissionsToConsent.push(option.value);
+          });
+        }
+        this.props.setPermissions(permissionsToConsent);
+      }
+    });
+
+    return (
+      <>
+        <Label className={classes.permissionText}>
+          <FormattedMessage id='Select different permissions' />
+        </Label>
+        <hr />
+        <SearchBox
+          className={classes.searchBox}
+          placeholder={messages['Search permissions']}
+          onChange={(event: any, value: any) => this.searchValueChanged(event, value)}
+          styles={{ field: { paddingLeft: 10 } }}
+        />
+        <hr />
+        <DetailsList
+          items={permissions}
+          columns={columns}
+          groups={groups}
+          onRenderItemColumn={this.renderItemColumn}
+          selectionMode={SelectionMode.multiple}
+          layoutMode={DetailsListLayoutMode.justified}
+          selection={selection}
+          compact={true}
+          groupProps={{
+            showEmptyGroups: false,
+          }}
+          ariaLabelForSelectionColumn='Toggle selection'
+          ariaLabelForSelectAllCheckbox='Toggle selection for all items'
+          checkButtonAriaLabel='Row checkbox'
+        />
+      </>
+    );
+  }
+
   public render() {
     const classes = classNames(this.props);
     const { panel, scopes } = this.props;
     const { pending: loading } = scopes;
-    const { permissions, paging } = this.state;
+    const { permissions } = this.state;
 
     return (
-      <>
-        <div className={classes.container} style={{ minHeight: (panel) ? '800px' : '300px' }}>
-          {loading && <Label>
-            <FormattedMessage id={'Fetching permissions'} />...
+      <div className={classes.container} data-is-scrollable={true}
+        style={{ minHeight: (panel) ? '800px' : '300px' }}>
+        {loading && <Label>
+          <FormattedMessage id={'Fetching permissions'} />...
         </Label>}
-          {permissions && permissions.length > 0 && !loading &&
-            <div className={classes.permissions}>
-              {!panel && this.renderTabList()}
-              {panel &&
-                this.renderPanelList()
-              }
-            </div>
-          }
-          {permissions && permissions.length === 0 && !loading &&
-            <Label style={{
-              display: 'flex',
-              width: '100%',
-              minHeight: '200px',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}>
-              <FormattedMessage id='permissions not found' />
-            </Label>
-          }
-        </div>
-        {panel && paging && <div>
-          {paging.page && paging.content.length >= this.contentSize && <PrimaryButton style={{
-            float: 'left'
-          }} onClick={() => this.nextPage()}>
-            Next
-              </PrimaryButton>}
-          {paging.page && paging.page > 1 && <PrimaryButton style={{
-            float: 'right'
-          }} onClick={() => this.previousPage()}>
-            Previous
-              </PrimaryButton>}
-        </div>}
-      </>
+        {!loading &&
+          <div className={classes.permissions}>
+            {!panel && this.renderTabList()}
+            {panel && this.renderPanelList()}
+          </div>
+        }
+        {permissions && permissions.length === 0 && !loading &&
+          <Label style={{
+            display: 'flex',
+            width: '100%',
+            minHeight: '200px',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <FormattedMessage id='permissions not found' />
+          </Label>
+        }
+      </div>
     );
   }
 }
