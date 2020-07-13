@@ -38,9 +38,9 @@ const PanelList = ({ messages, permissions,
         groupProps={{
           showEmptyGroups: false,
         }}
-        ariaLabelForSelectionColumn='Toggle selection'
-        ariaLabelForSelectAllCheckbox='Toggle selection for all items'
-        checkButtonAriaLabel='Row checkbox'
+        ariaLabelForSelectionColumn={messages['Toggle selection'] || 'Toggle selection'}
+        ariaLabelForSelectAllCheckbox={messages['Toggle selection for all items'] || 'Toggle selection for all items'}
+        checkButtonAriaLabel={messages['Row checkbox'] || 'Row checkbox'}
       />
     </>
   );

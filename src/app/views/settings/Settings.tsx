@@ -152,11 +152,11 @@ function Settings(props: ISettingsProps) {
   return (
     <div>
       <TooltipHost
-        content='More actions'
+        content={messages['More actions']}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}>
         <IconButton
-          ariaLabel='More actions'
+          ariaLabel={messages['More actions']}
           role='button'
           styles={{
             label: { marginBottom: -20 },
