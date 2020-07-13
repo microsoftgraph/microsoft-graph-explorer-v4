@@ -432,11 +432,11 @@ export class History extends Component<IHistoryProps, any> {
           <SearchBox
             placeholder={messages['Search history items']}
             className={classes.searchBox}
-            onChange={(event: any, value: string | undefined) => this.searchValueChanged(event, value)}
+            onChange={this.searchValueChanged}
             styles={{ field: { paddingLeft: 10 } }}
           />
           <hr />
-          {groupedList.items.length > 0 && <DetailsList
+          <DetailsList
             className={classes.queryList}
             onRenderItemColumn={this.renderItemColumn}
             items={groupedList.items}
@@ -449,7 +449,7 @@ export class History extends Component<IHistoryProps, any> {
             }}
             onRenderRow={this.renderRow}
             onRenderDetailsHeader={this.renderDetailsHeader}
-          />}
+          />
         </div>
         <Dialog
           hidden={hideDialog}
