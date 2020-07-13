@@ -27,23 +27,23 @@ export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): s
 
   if (sampleBody && Object.keys(sampleBody).length > 0) {
     const requestBody = hashEncode(JSON.stringify(sampleBody));
-    shareLink = `&requestBody=${requestBody}`;
+    shareLink += `&requestBody=${requestBody}`;
   }
 
   if (sampleHeaders && sampleHeaders.length > 0) {
     const headers = hashEncode(JSON.stringify(sampleHeaders));
-    shareLink = `${shareLink}&headers=${headers}`;
+    shareLink += `${shareLink}&headers=${headers}`;
   }
 
   if (authenticated) {
     const sessionId = getSessionId();
     if (sessionId) {
-      shareLink = `${shareLink}&sid=${sessionId}`;
+      shareLink += `${shareLink}&sid=${sessionId}`;
     }
   }
   return shareLink;
 };
 
 const hashEncode = (requestBody: string): string => {
-  return btoa(requestBody);
+  return btoa(unescape(encodeURIComponent(requestBody)));
 };
