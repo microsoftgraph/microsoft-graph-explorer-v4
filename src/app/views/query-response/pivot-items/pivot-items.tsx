@@ -12,6 +12,7 @@ import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Snippets } from '../snippets';
+import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 
 export const getPivotItems = (properties: any) => {
 
@@ -112,14 +113,14 @@ function displayResultComponent(headers: any, body: any, verb: string) {
       case ContentType.XML:
         return <Monaco body={formatXml(body)} verb={verb} language='xml' />;
 
-      case ContentType.Image:
-        return <Image
-          styles={{ padding: '10px' }}
-          body={body}
-          alt='profile image'
-        />;
-
       default:
+        if (isImageResponse(contentType)) {
+          return <Image
+            styles={{ padding: '10px' }}
+            body={body}
+            alt='profile image'
+          />;
+        }
         return <Monaco body={body} verb={verb} language={language} />;
     }
   }
