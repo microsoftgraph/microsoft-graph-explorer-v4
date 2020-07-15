@@ -27,6 +27,7 @@ const PanelList = ({ messages, permissions,
       />
       <hr />
       <DetailsList
+        onShouldVirtualize={() => false}
         items={permissions}
         columns={columns}
         groups={groups}
