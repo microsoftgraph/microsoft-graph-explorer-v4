@@ -256,7 +256,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     });
 
     return (
-      <div className={classes.container} data-is-scrollable={true}
+      <div className={panel ? classes.panelContainer : classes.container} data-is-scrollable={true}
         style={{ minHeight: (panel) ? '800px' : '300px' }}>
         {loading && <Label>
           <FormattedMessage id={'Fetching permissions'} />...
