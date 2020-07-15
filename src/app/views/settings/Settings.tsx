@@ -133,7 +133,11 @@ function Settings(props: ISettingsProps) {
     return (
       <div>
         <Label>{getSelectionDetails()}</Label>
-        <PrimaryButton disabled={selectedPermissions.length === 0} onClick={() => handleConsent()} style={{ marginRight: 10 }}>
+        <PrimaryButton
+          disabled={selectedPermissions.length === 0}
+          onClick={() => handleConsent()}
+          style={{ marginRight: 10 }}
+        >
           <FormattedMessage id='Consent' />
         </PrimaryButton>
         <DefaultButton onClick={() => togglePermissionsPanel()}>
