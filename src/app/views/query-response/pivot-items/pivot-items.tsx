@@ -4,6 +4,7 @@ import React from 'react';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { ContentType, Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
+import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { Image, Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
@@ -12,7 +13,6 @@ import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Snippets } from '../snippets';
-import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 
 export const getPivotItems = (properties: any) => {
 
