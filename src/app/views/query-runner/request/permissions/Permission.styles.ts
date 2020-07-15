@@ -16,9 +16,6 @@ export const permissionStyles = (theme: ITheme) => {
       padding: 10,
       overflowY: 'auto',
       overflowX: 'auto',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between'
     },
     consented: {
       fontSize: FontSizes.small,

@@ -256,7 +256,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     });
 
     return (
-      <div className={panel ? classes.panelContainer : classes.container} data-is-scrollable={true}
+      <div className={panel ? classes.panelContainer : classes.container}
         style={{ minHeight: (panel) ? '800px' : '300px' }}>
         {loading && <Label>
           <FormattedMessage id={'Fetching permissions'} />...
@@ -269,15 +269,19 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               classes={classes}
               renderItemColumn={this.renderItemColumn}
             />}
-            {panel && <PanelList
-              classes={classes}
-              permissions={permissions}
-              messages={messages}
-              selection={selection}
-              columns={this.getColumns()}
-              renderItemColumn={this.renderItemColumn}
-              searchValueChanged={this.searchValueChanged}
-            />}
+            {panel &&
+              <div data-is-scrollable={true}>
+                <PanelList
+                  classes={classes}
+                  permissions={permissions}
+                  messages={messages}
+                  selection={selection}
+                  columns={this.getColumns()}
+                  renderItemColumn={this.renderItemColumn}
+                  searchValueChanged={this.searchValueChanged}
+                />
+              </div>
+            }
           </div>
         }
         {permissions && permissions.length === 0 && !loading &&
