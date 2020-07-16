@@ -103,9 +103,14 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
 
         // We are relying on the graph client to set the content type header.
         if (header.name.toLowerCase() === 'content-type') {
-          return;
+          if (header.value !== 'application/json') {
+            sampleHeaders[header.name] = header.value;
+          } else {
+            return;
+          }
+        } else {
+          sampleHeaders[header.name] = header.value;
         }
-        sampleHeaders[header.name] = header.value;
       });
     }
 
