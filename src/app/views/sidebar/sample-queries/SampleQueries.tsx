@@ -21,6 +21,7 @@ import { getStyleFor } from '../../../utils/badge-color';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
+import { isJsonString } from './sample-query-utils';
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
@@ -300,7 +301,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             }
             telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
           } else {
-            sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
+            if (sampleQuery.sampleBody) {
+              if (isJsonString(sampleQuery.sampleBody)) {
+                sampleQuery.sampleBody = JSON.parse(sampleQuery.sampleBody);
+              }
+            } else {
+              sampleQuery.sampleBody = undefined;
+            }
             if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
           }
           actions.setSampleQuery(sampleQuery);
