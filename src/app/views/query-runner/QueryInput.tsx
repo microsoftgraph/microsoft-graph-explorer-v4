@@ -23,8 +23,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       urlVersions: [
         { key: 'v1.0', text: 'v1.0' },
         { key: 'beta', text: 'beta' }
-      ],
-      url: ''
+      ]
     };
   }
 
@@ -34,11 +33,6 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       url: sampleUrl
     });
   }
-
-  private handleOnUrlChange = (newUrl = '') => {
-    this.setState({ url: newUrl });
-    this.props.handleOnUrlChange(newUrl);
-  };
 
   public handleKeyDown = (event: any) => {
     if (event.keyCode === 13) {
@@ -72,8 +66,6 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     const {
       intl: { messages },
     }: any = this.props;
-
-    const { url } = this.state;
 
     const verbSelector: any = queryRunnerStyles().verbSelector;
     verbSelector.title = {
@@ -109,11 +101,10 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             ariaLabel='Query Sample Input'
             role='textbox'
             placeholder={messages['Query Sample']}
-            onChange={(event, value) => this.handleOnUrlChange(value)}
-            value={url}
+            onChange={(event, value) => handleOnUrlChange(value)}
+            defaultValue={sampleUrl}
             onBlur={() => handleOnBlur()}
             onKeyDown={this.handleKeyDown}
-            autoComplete='off'
           />
         </div>
         <div className='col-xs-12 col-lg-2'>
