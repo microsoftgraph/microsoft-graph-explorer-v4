@@ -2,6 +2,7 @@ import { IAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
 import { logOut, logOutPopUp } from '../graph-client/msal-service';
 import { GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
+import { bulkRemoveHistoryItems } from './request-history-action-creators';
 
 export function getAuthTokenSuccess(response: string): IAction {
   return {
@@ -26,6 +27,7 @@ export function signOutSuccess(response: string): IAction {
 export function signOut() {
   return (dispatch: Function, getState: Function) => {
     const { graphExplorerMode } = getState();
+    dispatch(bulkRemoveHistoryItems(null, true))
     if (graphExplorerMode === Mode.Complete) {
       logOut();
     } else {

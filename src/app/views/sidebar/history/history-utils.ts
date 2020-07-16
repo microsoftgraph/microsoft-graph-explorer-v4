@@ -24,9 +24,12 @@ export const removeHistoryData = async (historyItem: IHistoryItem) => {
   return true;
 };
 
-export const bulkRemoveHistoryData = async (listOfKeys: string[]) => {
+export const bulkRemoveHistoryData = async (listOfKeys: string[], all?: boolean) => {
   historyStorage.iterate((value, key, iterationNumber) => {
-    if (listOfKeys.includes(key)) {
+    if(all){
+      historyStorage.removeItem(key);
+    }
+    else if (listOfKeys.includes(key)) {
       historyStorage.removeItem(key);
     }
   }).then(() => {
