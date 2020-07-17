@@ -1,9 +1,13 @@
 import { MessageBarType } from 'office-ui-fabric-react';
+
 import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
-import { anonymousRequest, authenticatedRequest, parseResponse, queryResponse } from './query-action-creator-util';
+import {
+  anonymousRequest, authenticatedRequest,
+  isImageResponse, parseResponse, queryResponse
+} from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
 
@@ -83,7 +87,7 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
   const responseHeaders = { ...respHeaders };
   const contentType = respHeaders['content-type'];
 
-  if (contentType === ContentType.Image) {
+  if (isImageResponse(contentType)) {
     result = {
       message: 'Run the query to view the image'
     };
