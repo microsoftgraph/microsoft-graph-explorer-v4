@@ -47,7 +47,7 @@ export class QueryRunner extends Component<
   private handleOnUrlChange = (newUrl = '') => {
     const { actions, sampleQuery } = this.props;
 
-    const newQuery = Object.assign({}, sampleQuery, { sampleUrl: newUrl })
+    const newQuery = { ...sampleQuery, ...{ sampleUrl: newUrl } };
 
     if (actions) {
       actions.setSampleQuery(newQuery);

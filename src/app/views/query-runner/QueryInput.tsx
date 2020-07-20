@@ -27,13 +27,6 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     };
   }
 
-  public componentDidMount() {
-    const { sampleUrl } = this.props;
-    this.setState({
-      url: sampleUrl
-    });
-  }
-
   public handleKeyDown = (event: any) => {
     if (event.keyCode === 13) {
       this.props.handleOnBlur();
