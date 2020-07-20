@@ -114,7 +114,9 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
               </TooltipHost>
             </div>
           </>}
-          <Pivot className='pivot-response'>
+          <Pivot className='pivot-response'
+            styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
+            >
             {pivotItems}
           </Pivot>
         </div>
