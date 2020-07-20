@@ -1,9 +1,17 @@
-import { DetailsList, DetailsListLayoutMode, Label, SelectionMode } from 'office-ui-fabric-react';
+import { DetailsList, DetailsListLayoutMode, Label, SelectionMode, IColumn } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-const TabList = ({ permissions, columns, classes, renderItemColumn }: any) => {
+import { IPermission } from '../../../../../types/permissions';
 
+interface ITabList {
+  permissions: IPermission[];
+  columns: any[];
+  classes: any;
+  renderItemColumn: Function;
+}
+
+const TabList = ({ permissions, columns, classes, renderItemColumn }: ITabList) => {
   return (
     <>
       <Label className={classes.permissionLength}>
@@ -15,7 +23,7 @@ const TabList = ({ permissions, columns, classes, renderItemColumn }: any) => {
       <DetailsList styles={{ root: { minHeight: '300px' } }}
         items={permissions}
         columns={columns}
-        onRenderItemColumn={renderItemColumn}
+        onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}
         selectionMode={SelectionMode.none}
         layoutMode={DetailsListLayoutMode.justified} />
     </>

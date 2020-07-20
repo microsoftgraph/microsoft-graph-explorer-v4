@@ -1,15 +1,26 @@
-import { DetailsList, DetailsListLayoutMode, Label, SearchBox, SelectionMode } from 'office-ui-fabric-react';
+import { DetailsList, DetailsListLayoutMode, Label, SearchBox, SelectionMode, IColumn } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { SortOrder } from '../../../../../types/enums';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generatePermissionGroups } from './util';
+import { IPermission } from '../../../../../types/permissions';
 
+interface IPanelList {
+  messages: any;
+  permissions: IPermission[];
+  columns: any[];
+  classes: any;
+  selection: any,
+  renderItemColumn: any;
+  searchValueChanged: Function;
+}
 
 const PanelList = ({ messages, permissions,
   columns, classes, selection,
-  renderItemColumn, searchValueChanged }: any) => {
+  renderItemColumn, searchValueChanged }: IPanelList) => {
+
   const groups = generatePermissionGroups(permissions);
   permissions = permissions.sort(dynamicSort('value', SortOrder.ASC));
 
@@ -22,7 +33,7 @@ const PanelList = ({ messages, permissions,
       <SearchBox
         className={classes.searchBox}
         placeholder={messages['Search permissions']}
-        onChange={searchValueChanged}
+        onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) => searchValueChanged(event, newValue)}
         styles={{ field: { paddingLeft: 10 } }}
       />
       <hr />
@@ -31,7 +42,7 @@ const PanelList = ({ messages, permissions,
         items={permissions}
         columns={columns}
         groups={groups}
-        onRenderItemColumn={renderItemColumn}
+        onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}
         selectionMode={SelectionMode.multiple}
         layoutMode={DetailsListLayoutMode.justified}
         selection={selection}
