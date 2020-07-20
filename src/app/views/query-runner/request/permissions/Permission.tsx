@@ -267,7 +267,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               permissions={permissions}
               columns={this.getColumns()}
               classes={classes}
-              renderItemColumn={(item?: any, index?: number, column?: IColumn) => this.renderItemColumn(item, index, column)}
+              renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
+                this.renderItemColumn(item, index, column)}
             />}
             {panel &&
               <div data-is-scrollable={true}>
@@ -277,8 +278,10 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
                   messages={messages}
                   selection={selection}
                   columns={this.getColumns()}
-                  renderItemColumn={(item?: any, index?: number, column?: IColumn) => this.renderItemColumn(item, index, column)}
-                  searchValueChanged={(event?: React.ChangeEvent<HTMLInputElement>, value?: string) => this.searchValueChanged(event, value)}
+                  renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
+                    this.renderItemColumn(item, index, column)}
+                  searchValueChanged={(event?: React.ChangeEvent<HTMLInputElement>, value?: string) =>
+                    this.searchValueChanged(event, value)}
                 />
               </div>
             }

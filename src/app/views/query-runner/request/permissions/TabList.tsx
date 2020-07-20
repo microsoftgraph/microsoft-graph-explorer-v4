@@ -1,4 +1,4 @@
-import { DetailsList, DetailsListLayoutMode, Label, SelectionMode, IColumn } from 'office-ui-fabric-react';
+import { DetailsList, DetailsListLayoutMode, IColumn, Label, SelectionMode } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 

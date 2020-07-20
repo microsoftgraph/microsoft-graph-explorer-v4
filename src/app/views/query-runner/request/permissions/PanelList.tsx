@@ -1,18 +1,18 @@
-import { DetailsList, DetailsListLayoutMode, Label, SearchBox, SelectionMode, IColumn } from 'office-ui-fabric-react';
+import { DetailsList, DetailsListLayoutMode, IColumn, Label, SearchBox, SelectionMode } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { SortOrder } from '../../../../../types/enums';
+import { IPermission } from '../../../../../types/permissions';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generatePermissionGroups } from './util';
-import { IPermission } from '../../../../../types/permissions';
 
 interface IPanelList {
   messages: any;
   permissions: IPermission[];
   columns: any[];
   classes: any;
-  selection: any,
+  selection: any;
   renderItemColumn: any;
   searchValueChanged: Function;
 }
@@ -33,7 +33,8 @@ const PanelList = ({ messages, permissions,
       <SearchBox
         className={classes.searchBox}
         placeholder={messages['Search permissions']}
-        onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) => searchValueChanged(event, newValue)}
+        onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
+          searchValueChanged(event, newValue)}
         styles={{ field: { paddingLeft: 10 } }}
       />
       <hr />
