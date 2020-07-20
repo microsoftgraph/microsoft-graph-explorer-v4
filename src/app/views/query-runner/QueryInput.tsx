@@ -102,7 +102,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             role='textbox'
             placeholder={messages['Query Sample']}
             onChange={(event, value) => handleOnUrlChange(value)}
-            defaultValue={sampleUrl}
+            value={sampleUrl}
             onBlur={() => handleOnBlur()}
             onKeyDown={this.handleKeyDown}
           />
