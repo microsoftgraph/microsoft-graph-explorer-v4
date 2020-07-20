@@ -45,7 +45,13 @@ export class QueryRunner extends Component<
   };
 
   private handleOnUrlChange = (newUrl = '') => {
-    this.setState({ url: newUrl });
+    const { actions, sampleQuery } = this.props;
+
+    const newQuery = { ...sampleQuery, ...{ sampleUrl: newUrl } };
+
+    if (actions) {
+      actions.setSampleQuery(newQuery);
+    }
 
     this.changeUrlVersion(newUrl);
   };
