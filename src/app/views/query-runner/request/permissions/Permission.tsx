@@ -1,16 +1,11 @@
 import {
-  CheckboxVisibility,
-  DetailsList,
-  DetailsListLayoutMode,
   FontSizes,
   getId,
   IColumn,
   Icon,
   Label,
   PrimaryButton,
-  SearchBox,
   Selection,
-  SelectionMode,
   styled,
   TooltipHost
 } from 'office-ui-fabric-react';
@@ -18,13 +13,14 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { SortOrder } from '../../../../../types/enums';
+
 import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
-import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { classNames } from '../../../classnames';
+import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
-import { generatePermissionGroups } from './util';
+import TabList from './TabList';
+import { generatePermissionGroups, setConsentedStatus } from './util';
 
 export class Permission extends Component<IPermissionProps, IPermissionState> {
 
@@ -72,19 +68,20 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     return shouldUpdate;
   }
 
-  public searchValueChanged = (value: string): void => {
+  public searchValueChanged = (event: any, value?: string): void => {
     const { scopes } = this.props;
-    const keyword = value.toLowerCase();
+    let filteredPermissions = scopes.data;
+    if (value) {
+      const keyword = value.toLowerCase();
 
-    const filteredPermissions = scopes.data.filter((permission: IPermission) => {
-      const name = permission.value.toLowerCase();
-      return name.includes(keyword);
-    });
+      filteredPermissions = scopes.data.filter((permission: IPermission) => {
+        const name = permission.value.toLowerCase();
+        return name.includes(keyword);
+      });
+    }
 
-    const groups = generatePermissionGroups(filteredPermissions);
     this.setState({
-      permissions: filteredPermissions,
-      groups
+      permissions: filteredPermissions
     });
   }
 
@@ -92,7 +89,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const consentScopes = [permission.value];
     this.props.actions!.consentToScopes(consentScopes);
   };
-
 
   private renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
@@ -231,108 +227,64 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     return columns;
   }
 
-  private renderList = () => {
-    const {
-      panel,
-      tokenPresent,
-      consentedScopes,
-      intl: { messages },
-    }: any = this.props;
-    let { permissions } = this.state;
-    const classes = classNames(this.props);
-    const columns = this.getColumns();
 
-    if (tokenPresent) {
-      permissions.forEach((permission: IPermission) => {
-        if (consentedScopes.indexOf(permission.value) !== -1) {
-          permission.consented = true;
-        }
-      });
-    }
 
-    if (panel) {
-
-      if (permissions.length > 0) {
-        permissions = (panel) ? permissions.sort(dynamicSort('value', SortOrder.ASC)) : permissions;
-      }
-
-      const groups = generatePermissionGroups(permissions);
-      const selection = new Selection({
-        onSelectionChanged: () => {
-          const selected = selection.getSelection() as any;
-          const permissionsToConsent: string[] = [];
-          if (selected.length > 0) {
-            selected.forEach((option: IPermission) => {
-              permissionsToConsent.push(option.value);
-            });
-          }
-          this.props.setPermissions(permissionsToConsent);
-        }
-      });
-
-      return (
-        <>
-          <Label className={classes.permissionText}>
-            <FormattedMessage id='Select different permissions' />
-          </Label>
-          <hr />
-          <SearchBox className={classes.searchBox} placeholder={messages['Search permissions']}
-            onChange={(value) => this.searchValueChanged(value)}
-            styles={{ field: { paddingLeft: 10 } }}
-          />
-          <hr />
-          <DetailsList
-            items={permissions}
-            columns={columns}
-            groups={groups}
-            onRenderItemColumn={this.renderItemColumn}
-            selectionMode={SelectionMode.multiple}
-            layoutMode={DetailsListLayoutMode.justified}
-            selection={selection}
-            compact={true}
-            groupProps={{
-              showEmptyGroups: false,
-            }}
-            ariaLabelForSelectionColumn='Toggle selection'
-            ariaLabelForSelectAllCheckbox='Toggle selection for all items'
-            checkButtonAriaLabel='Row checkbox'
-          />
-        </>
-      );
-    }
-    return (
-      <>
-        <Label className={classes.permissionLength}>
-          <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
-        </Label>
-        <Label className={classes.permissionText}>
-          <FormattedMessage id='permissions required to run the query' />
-        </Label>
-        <DetailsList styles={{ root: { minHeight: '300px' } }}
-          items={permissions}
-          columns={columns}
-          onRenderItemColumn={this.renderItemColumn}
-          selectionMode={SelectionMode.none}
-          layoutMode={DetailsListLayoutMode.justified}
-        />
-      </>
-    );
-  }
 
   public render() {
     const classes = classNames(this.props);
-    const { panel, scopes } = this.props;
+    const { panel, scopes, tokenPresent, consentedScopes } = this.props;
     const { pending: loading } = scopes;
     const { permissions } = this.state;
 
+    const {
+      intl: { messages },
+    }: any = this.props;
+
+    setConsentedStatus(tokenPresent, permissions, consentedScopes);
+
+    const selection = new Selection({
+      onSelectionChanged: () => {
+        const selected = selection.getSelection() as any;
+        const permissionsToConsent: string[] = [];
+        if (selected.length > 0) {
+          selected.forEach((option: IPermission) => {
+            permissionsToConsent.push(option.value);
+          });
+        }
+        this.props.setPermissions(permissionsToConsent);
+      }
+    });
+
     return (
-      <div className={classes.container} style={{ minHeight: (panel) ? '800px' : '300px' }}>
+      <div className={panel ? classes.panelContainer : classes.container}
+        style={{ minHeight: (panel) ? '800px' : '300px' }}>
         {loading && <Label>
           <FormattedMessage id={'Fetching permissions'} />...
         </Label>}
-        {permissions && permissions.length > 0 && !loading &&
+        {!loading &&
           <div className={classes.permissions}>
-            {this.renderList()}
+            {!panel && <TabList
+              permissions={permissions}
+              columns={this.getColumns()}
+              classes={classes}
+              renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
+                this.renderItemColumn(item, index, column)}
+            />}
+            {panel &&
+              <div data-is-scrollable={true}>
+                <PanelList
+                  classes={classes}
+                  permissions={permissions}
+                  messages={messages}
+                  selection={selection}
+                  columns={this.getColumns()}
+                  renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
+                    this.renderItemColumn(item, index, column)}
+                  searchValueChanged={(event?: React.ChangeEvent<HTMLInputElement>, value?: string) =>
+                    this.searchValueChanged(event, value)}
+                />
+              </div>
+            }
           </div>
         }
         {permissions && permissions.length === 0 && !loading &&
