@@ -95,7 +95,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
                   onClick={this.handleShareQuery}
                   className='share-query-btn'
                   iconProps={{ iconName: 'Share'}}
-                  aria-label={'Share'}
+                  aria-label={'Share query message'}
                 />
               </TooltipHost>
             </div>
