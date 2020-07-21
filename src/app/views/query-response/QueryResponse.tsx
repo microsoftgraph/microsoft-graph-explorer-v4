@@ -91,9 +91,12 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
                 calloutProps={{ gapSpace: 0 }}
                 styles={{ root: { display: 'inline-block' } }}
               >
-                <IconButton onClick={this.handleShareQuery} className='share-query-btn' iconProps={{
-                  iconName: 'Share'
-                }} />
+                <IconButton
+                  onClick={this.handleShareQuery}
+                  className='share-query-btn'
+                  iconProps={{ iconName: 'Share'}}
+                  aria-label={'Share'}
+                />
               </TooltipHost>
             </div>
 
@@ -108,9 +111,12 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
                 calloutProps={{ gapSpace: 0 }}
                 styles={{ root: { display: 'inline-block' } }}
               >
-                <IconButton onClick={this.toggleModal} className='share-query-btn' iconProps={{
-                  iconName: 'MiniExpandMirrored'
-                }} />
+                <IconButton
+                  onClick={this.toggleModal}
+                  className='share-query-btn'
+                  iconProps={{ iconName: 'MiniExpandMirrored'}}
+                  aria-label={'Expand response'}
+                />
               </TooltipHost>
             </div>
           </>}
