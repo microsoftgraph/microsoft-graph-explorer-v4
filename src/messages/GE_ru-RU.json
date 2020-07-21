@@ -304,5 +304,6 @@
   "permissions not found": "Не удалось найти разрешения",
   "selected": "выбрано",
   "Search sample queries": "Примеры поисковых запросов",
-  "Search history items": "Элементы истории поиска"
+  "Search history items": "Элементы истории поиска",
+  "Minimize sidebar": "Свернуть боковую панель"
 }
