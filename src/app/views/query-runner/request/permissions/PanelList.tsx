@@ -1,6 +1,11 @@
 import {
-  Announced, DetailsList, DetailsListLayoutMode, IColumn,
-  Label, SearchBox, SelectionMode
+  Announced,
+  DetailsList,
+  DetailsListLayoutMode,
+  IColumn,
+  Label,
+  SearchBox,
+  SelectionMode
 } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';

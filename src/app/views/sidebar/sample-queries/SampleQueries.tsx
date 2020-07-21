@@ -1,8 +1,21 @@
 import {
-  Announced, DetailsList, DetailsRow,
-  FontSizes, FontWeights, getId, GroupHeader, IColumn,
-  Icon, MessageBar, MessageBarType,
-  SearchBox, SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
+  Announced,
+  DetailsList,
+  DetailsRow,
+  FontSizes,
+  FontWeights,
+  getId,
+  GroupHeader,
+  IColumn,
+  Icon,
+  MessageBar,
+  MessageBarType,
+  SearchBox,
+  SelectionMode,
+  Spinner,
+  SpinnerSize,
+  styled,
+  TooltipHost
 } from 'office-ui-fabric-react';
 import React, { ChangeEvent, Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
