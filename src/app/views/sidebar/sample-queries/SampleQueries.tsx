@@ -330,7 +330,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           placeholder={messages['Search sample queries']}
           onChange={this.searchValueChanged}
           styles={{ field: { paddingLeft: 10 } }}
-          ariaLabel={'Search'}
+          aria-label={'Search'}
         />
         <hr />
         {error && <MessageBar messageBarType={MessageBarType.warning}
