@@ -1,4 +1,12 @@
-import { DetailsList, DetailsListLayoutMode, IColumn, Label, SearchBox, SelectionMode } from 'office-ui-fabric-react';
+import {
+  Announced,
+  DetailsList,
+  DetailsListLayoutMode,
+  IColumn,
+  Label,
+  SearchBox,
+  SelectionMode
+} from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -37,6 +45,7 @@ const PanelList = ({ messages, permissions,
           searchValueChanged(event, newValue)}
         styles={{ field: { paddingLeft: 10 } }}
       />
+      <Announced message={`${permissions.length} search results available.`}/>
       <hr />
       <DetailsList
         onShouldVirtualize={() => false}
