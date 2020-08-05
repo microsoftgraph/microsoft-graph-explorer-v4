@@ -26,7 +26,7 @@ function getVerbParameterValues(values: any) {
   const queryParameters = values.parameters;
   if (queryParameters && queryParameters.length > 0) {
     queryParameters.forEach((parameter: any) => {
-      if (parameter.name) {
+      if (parameter.name && parameter.in === 'query') {
         parameterValues.push({
           name: parameter.name,
           items: (parameter.schema && parameter.schema.items) ? parameter.schema.items.enum : []
