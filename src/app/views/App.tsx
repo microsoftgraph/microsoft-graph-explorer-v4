@@ -361,7 +361,7 @@ class App extends Component<IAppProps, IAppState> {
               {graphExplorerMode === Mode.TryIt && headerMessaging(classes, query)}
 
               {displayContent && <>
-                <div style={{ marginBottom: 8, paddingLeft: 15, paddingRight: 15 }}>
+                <div style={{ marginBottom: 8 }}>
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
                 {statusMessages(queryState, actions)}
