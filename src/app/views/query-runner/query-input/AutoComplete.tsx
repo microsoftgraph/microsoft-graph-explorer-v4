@@ -217,8 +217,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private requestForAutocompleteOptions(url: string) {
-    const { requestUrl } = parseSampleUrl(url);
-    if (requestUrl) {
+    const { requestUrl, queryVersion } = parseSampleUrl(url);
+    if (requestUrl || queryVersion) {
       if (!this.props.autoCompleteOptions || `${requestUrl}` !== this.props.autoCompleteOptions.url) {
         this.props.actions!.fetchAutoCompleteOptions(requestUrl);
       }
