@@ -10,7 +10,7 @@ export function cleanUpSelectedSuggestion(compare: string, userInput: string, se
     const availableSignPrefixes = ['?', ',', '=', '&', '/'];
     let entryToRemove = '';
     let activeSign = '/';
-    for (let sign of availableSignPrefixes) {
+    for (const sign of availableSignPrefixes) {
       const compareStringWithSign = `${sign + compare}`;
       if (userInput.includes(compareStringWithSign)) {
         entryToRemove = compareStringWithSign;
