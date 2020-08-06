@@ -1,4 +1,4 @@
-import { getTheme, KeyCodes, Label, TextField } from 'office-ui-fabric-react';
+import { getTheme, ITextField, KeyCodes, Label, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -10,7 +10,7 @@ import { queryInputStyles } from './QueryInput.styles';
 import { cleanUpSelectedSuggestion } from './util';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
-  private autoCompleteRef: any;
+  private autoCompleteRef: React.RefObject<ITextField>;
 
   constructor(props: IAutoCompleteProps) {
     super(props);
@@ -28,7 +28,9 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   public setFocus() {
-    this.autoCompleteRef.current.focus();
+    if (this.autoCompleteRef && this.autoCompleteRef.current) {
+      this.autoCompleteRef.current.focus();
+    }
   }
 
   public onChange = (e: any) => {
@@ -125,7 +127,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       if (parameters) {
         const parametersWithVerb = parameters.find(parameter => parameter.verb === selectedVerb.toLowerCase());
         if (parametersWithVerb) {
-          parametersWithVerb.links.forEach((value: any) => {
+          parametersWithVerb.links.forEach((value: string) => {
             suggestions.push(value);
           });
 
@@ -199,13 +201,13 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }
   }
 
-  private filterSuggestions(userInput: any, previousUserInput: string, compare: string, suggestions: string[]) {
+  private filterSuggestions(userInput: string, previousUserInput: string, compare: string, suggestions: string[]) {
     let compareString = userInput.replace(previousUserInput, '');
     if (compare) {
       compareString = compare + compareString;
     }
     // Filter our suggestions that don't contain the user's input
-    const filteredSuggestions = suggestions.filter((suggestion: any) => {
+    const filteredSuggestions = suggestions.filter((suggestion: string) => {
       return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
     });
     this.setState({
@@ -279,7 +281,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       if (filteredSuggestions.length) {
         suggestionsListComponent = (
           <ul style={suggestionClass} aria-haspopup='true'>
-            {filteredSuggestions.map((suggestion: {} | null | undefined, index: any) => {
+            {filteredSuggestions.map((suggestion: {} | null | undefined, index: number) => {
               return (
                 <li
                   style={(index === activeSuggestion) ? activeSuggestionClass : suggestionOption}
