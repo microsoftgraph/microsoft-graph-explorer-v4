@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.1.6](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v4.1.4...v4.1.6) (2020-08-07)
+
+
+### Bug Fixes
+
+* copy paste query address bar ([#658](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/658)) ([f47d237](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/f47d23733a73b9e4dc33b5c328e2e87feed318a1))
+
 ### 4.1.5 (2020-07-23)
 
 
