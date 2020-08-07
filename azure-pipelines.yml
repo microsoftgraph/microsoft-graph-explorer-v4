@@ -1,11 +1,11 @@
 pool:
-  vmImage: 'vs2017-win2016'
+  vmImage: 'ubuntu-latest'
 
 steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '8.x'
-    displayName: 'Install Node.js'
+      displayName: 'Install Node.js'
 
   - script: |
       npm install
@@ -16,11 +16,11 @@ steps:
     displayName: 'Runs linting checks'
 
   - task: PowerShell@1
-    displayName: 'Set version-number $(System.DefaultWorkingDirectory)'
+    displayName: 'Set version-number'
     inputs:
       targetType: 'inline'
       script: |
-        $lernaPath = "$Env:SYSTEM.DEFAULTWORKINGDIRECTORY\package.json"
+        $lernaPath = "$Env:BUILD_SOURCESDIRECTORY\package.json"
         $json = Get-Content "$lernaPath" | Out-String | ConvertFrom-Json
         $versionNumber = $json.version;
 
