@@ -1,5 +1,5 @@
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'vs2017-win2016'
 
 steps:
   - task: NodeTool@0
@@ -16,7 +16,7 @@ steps:
     displayName: 'Runs linting checks'
 
   - task: PowerShell@1
-    displayName: 'Set version-number'
+    displayName: 'Set version-number $(Build.SourcesDirectory)'
     inputs:
       targetType: 'inline'
       script: |
