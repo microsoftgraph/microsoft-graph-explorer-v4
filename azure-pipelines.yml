@@ -16,11 +16,11 @@ steps:
     displayName: 'Runs linting checks'
 
   - task: PowerShell@1
-    displayName: 'Set version-number $(Build.SourcesDirectory)'
+    displayName: 'Set version-number $(System.DefaultWorkingDirectory)'
     inputs:
       targetType: 'inline'
       script: |
-        $lernaPath = "$Env:BUILD_SOURCESDIRECTORY\package.json"
+        $lernaPath = "$Env:SYSTEM.DEFAULTWORKINGDIRECTORY\package.json"
         $json = Get-Content "$lernaPath" | Out-String | ConvertFrom-Json
         $versionNumber = $json.version;
 
