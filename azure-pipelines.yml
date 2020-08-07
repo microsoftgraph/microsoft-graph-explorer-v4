@@ -15,19 +15,15 @@ steps:
       npm run lint
     displayName: 'Runs linting checks'
 
-  - script: |
-      npm test -- --coverage
-    displayName: 'Runs tests'
-
-  - task: PowerShell@2
-    displayName: 'set version-number'
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  - task: PowerShell@1
+    displayName: 'Set version-number'
     inputs:
       targetType: 'inline'
       script: |
         $lernaPath = "$Env:BUILD_SOURCESDIRECTORY\package.json"
         $json = Get-Content "$lernaPath" | Out-String | ConvertFrom-Json
         $versionNumber = $json.version;
+
         Write-Host "Setting the build number variable to '$versionNumber'."
         Write-Host "##vso[build.updatebuildnumber]$versionNumber"
 
@@ -47,15 +43,8 @@ steps:
       REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
     displayName: 'Build static assets for prod'
 
-  - task: PublishCodeCoverageResults@1
-    inputs:
-      codeCoverageTool: Cobertura
-      summaryFileLocation: 'coverage/clover.xml'
-      reportDirectory: 'coverage'
-
   - task: CopyFiles@1
-    displayName: 'copy files to: $(Build.ArtifactStagingDirectory)'
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
     inputs:
       SourceFolder: '$(System.DefaultWorkingDirectory)/build'
       TargetFolder: '$(Build.ArtifactStagingDirectory)'
