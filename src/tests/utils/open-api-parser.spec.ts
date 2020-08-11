@@ -1,4 +1,3 @@
-import { DEVX_API_URL } from '../../app/services/graph-constants';
 import { parseOpenApiResponse } from '../../app/utils/open-api-parser';
 import { parseSampleUrl } from '../../app/utils/sample-url-generation';
 import { getSample } from './open-api-sample';
