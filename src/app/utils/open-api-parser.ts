@@ -1,8 +1,13 @@
-export function parseOpenApiResponse(params: any) {
-  const { options: { paths }, url } = params;
+import {
+  IOpenApiParseContent, IParameters, IParameterValue,
+  IParsedOpenApiResponse, IPathValue, IQueryParameter
+} from '../../types/open-api';
+
+export function parseOpenApiResponse(params: IOpenApiParseContent): IParsedOpenApiResponse {
+  const { response: { paths }, url } = params;
 
   try {
-    const parameters: any[] = [];
+    const parameters: IParameters[] = [];
     const requestUrl = Object.keys(paths)[0];
     const verbs = Object.keys(paths[`${requestUrl}`]);
     const pathValues: any = Object.values(paths)[0];
@@ -17,15 +22,15 @@ export function parseOpenApiResponse(params: any) {
 
     return { url, parameters };
   } catch (error) {
-    return { error };
+    throw new Error(error);
   }
 }
 
-function getVerbParameterValues(values: any) {
-  const parameterValues: any[] = [];
+function getVerbParameterValues(values: IPathValue): IParameterValue[] {
+  const parameterValues: IParameterValue[] = [];
   const queryParameters = values.parameters;
   if (queryParameters && queryParameters.length > 0) {
-    queryParameters.forEach((parameter: any) => {
+    queryParameters.forEach((parameter: IQueryParameter) => {
       if (parameter.name && parameter.in === 'query') {
         parameterValues.push({
           name: parameter.name,
@@ -37,13 +42,12 @@ function getVerbParameterValues(values: any) {
   return parameterValues;
 }
 
-function getLinkValues(values: any) {
+function getLinkValues(values: IPathValue): string[] {
   const responses = values.responses;
   if (responses) {
     const responsesAtIndex200 = responses['200'];
     if (responsesAtIndex200 && responsesAtIndex200.links) {
-      const links = Object.keys(responsesAtIndex200.links);
-      return links;
+      return Object.keys(responsesAtIndex200.links);
     }
   }
   return [];
