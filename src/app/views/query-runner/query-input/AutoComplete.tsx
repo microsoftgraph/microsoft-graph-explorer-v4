@@ -107,7 +107,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
 
       case KeyCodes.down:
-        if (activeSuggestion - 1 === filteredSuggestions.length) {
+        if (activeSuggestion === filteredSuggestions.length - 1) {
           return;
         }
         this.setState({ activeSuggestion: activeSuggestion + 1 });
