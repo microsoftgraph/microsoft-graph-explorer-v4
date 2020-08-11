@@ -7,7 +7,7 @@ import { IAutoCompleteProps, IAutoCompleteState } from '../../../../types/auto-c
 import * as autoCompleteActionCreators from '../../../services/actions/autocomplete-action-creators';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { queryInputStyles } from './QueryInput.styles';
-import { cleanUpSelectedSuggestion, getParametersWithVerb } from './util';
+import { cleanUpSelectedSuggestion, getLastCharacterOf, getParametersWithVerb } from './util';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
@@ -55,8 +55,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   private initialiseAutoComplete = (url: string) => {
-    const lastCharacter = url.substring(url.length - 1);
-    switch (lastCharacter) {
+    switch (getLastCharacterOf(url)) {
       case '/':
         this.requestForAutocompleteOptions(url);
         break;
@@ -195,8 +194,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private performLocalSearch(url: string) {
-    const lastCharacter = url.substring(url.length - 1);
-    switch (lastCharacter) {
+    switch (getLastCharacterOf(url)) {
       case '/':
         this.displayLinkOptions();
         break;

@@ -37,3 +37,7 @@ export function getParametersWithVerb(properties: IAutoCompleteProps) {
   }
   return parameters.find(parameter => parameter.verb === selectedVerb.toLowerCase());
 }
+
+export function getLastCharacterOf(content: string) {
+  return content.slice(-1);
+}
