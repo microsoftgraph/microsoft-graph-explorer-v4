@@ -235,11 +235,11 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     const { fetchingSuggestions, sampleQuery } = this.props;
 
     const currentTheme = getTheme();
-  const { suggestions : suggestionClass,
-        suggestionOption,
-        suggestionActive : activeSuggestionClass,
-        input : autoInput,
-        suggestionTitle } = queryInputStyles(currentTheme).autoComplete;
+    const { suggestions: suggestionClass,
+      suggestionOption,
+      suggestionActive: activeSuggestionClass,
+      input: autoInput,
+      suggestionTitle }: any = queryInputStyles(currentTheme).autoComplete;
 
     let suggestionsListComponent;
 

@@ -1,4 +1,4 @@
-import { IAutoCompleteProps } from "../../../../types/auto-complete";
+import { IAutoCompleteProps } from '../../../../types/auto-complete';
 
 export function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
   let finalSelectedSuggestion = `${userInput + selected}`;
