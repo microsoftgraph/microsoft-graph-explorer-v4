@@ -7,7 +7,7 @@ import { IAutoCompleteProps, IAutoCompleteState } from '../../../../types/auto-c
 import * as autoCompleteActionCreators from '../../../services/actions/autocomplete-action-creators';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { queryInputStyles } from './QueryInput.styles';
-import { cleanUpSelectedSuggestion } from './util';
+import { cleanUpSelectedSuggestion, getParametersWithVerb } from './util';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
@@ -120,83 +120,49 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   public displayLinkOptions = () => {
-    const { autoCompleteOptions, sampleQuery: { selectedVerb } } = this.props;
-    if (autoCompleteOptions) {
-      const suggestions: string[] = [];
-      const parameters = autoCompleteOptions.parameters;
-      if (parameters) {
-        const parametersWithVerb = parameters.find(parameter => parameter.verb === selectedVerb.toLowerCase());
-        if (parametersWithVerb) {
-          parametersWithVerb.links.forEach((value: string) => {
-            suggestions.push(value);
-          });
-
-          this.setState({
-            filteredSuggestions: suggestions,
-            suggestions,
-            showSuggestions: true,
-            compare: ''
-          });
-        }
-      }
+    const parametersWithVerb = getParametersWithVerb(this.props);
+    if (!parametersWithVerb) {
+      return;
     }
+    this.setSuggestions(parametersWithVerb.links);
   }
 
   public getQueryParameters = () => {
-    const { autoCompleteOptions, sampleQuery: { selectedVerb } } = this.props;
-    if (autoCompleteOptions) {
-      const suggestions: string[] = [];
-      const parameters = autoCompleteOptions.parameters;
-      if (parameters) {
-        const parametersWithVerb = parameters.find(parameter => parameter.verb === selectedVerb.toLowerCase());
-        if (parametersWithVerb) {
-          parametersWithVerb.values.forEach((value: any) => {
-            suggestions.push(value.name);
-          });
-
-          this.setState({
-            filteredSuggestions: suggestions,
-            suggestions,
-            showSuggestions: true,
-            compare: ''
-          });
-        }
-      }
+    const parametersWithVerb = getParametersWithVerb(this.props);
+    if (!parametersWithVerb) {
+      return;
     }
+    this.setSuggestions(parametersWithVerb.values.map((value: { name: any; }) => value.name));
+  }
+
+  private getParameterEnums = (url: string) => {
+    const parametersWithVerb = getParametersWithVerb(this.props);
+    if (!parametersWithVerb) {
+      return;
+    }
+    const param = url.split('$').pop()!.split('=')[0];
+    const section = parametersWithVerb.values.find((k: { name: string; }) => {
+      return k.name === `$${param}`;
+    });
+
+    if (section && section.items && section.items.length > 0) {
+      this.setSuggestions(section.items);
+    }
+  }
+
+  private setSuggestions(suggestions: string[]) {
+    this.setState({
+      filteredSuggestions: suggestions,
+      suggestions,
+      showSuggestions: true,
+      compare: ''
+    });
   }
 
   public componentDidUpdate = (prevProps: IAutoCompleteProps) => {
     if (prevProps.autoCompleteOptions !== this.props.autoCompleteOptions) {
       if (this.props.autoCompleteOptions) {
         this.performLocalSearch(this.props.sampleQuery.sampleUrl);
-      }
-    }
-  }
-
-  private getParameterEnums = (url: string) => {
-    const { autoCompleteOptions, sampleQuery: { selectedVerb } } = this.props;
-    if (!autoCompleteOptions) {
-      return;
-    }
-    const parameters = autoCompleteOptions.parameters;
-    const param = url.split('$').pop()!.split('=')[0];
-    if (parameters) {
-      const parametersWithVerb = parameters.find(parameter => parameter.verb === selectedVerb.toLowerCase());
-      if (parametersWithVerb) {
-        const section = parametersWithVerb.values.find((k: { name: string; }) => {
-          return k.name === `$${param}`;
-        });
-
-        let list: string[] = [];
-        if (section && section.items && section.items.length > 0) {
-          list = section.items;
-          this.setState({
-            filteredSuggestions: list,
-            suggestions: list,
-            showSuggestions: true,
-            compare: ''
-          });
-        }
       }
     }
   }
