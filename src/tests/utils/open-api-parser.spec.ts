@@ -13,7 +13,7 @@ describe('Open api spec parser should', () => {
 
     let result = null;
     const parameters = {
-      options: JSON.parse(autoCompleteOptions),
+      response: JSON.parse(autoCompleteOptions),
       url: requestUrl,
       verb: 'GET'
     };
