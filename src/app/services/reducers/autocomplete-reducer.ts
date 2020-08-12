@@ -7,7 +7,7 @@ const initialState: IApiResponse = {
   error: null
 };
 
-export function autoComplete(state = initialState, action: IAction): any {
+export function autoComplete(state = initialState, action: IAction): IApiResponse {
   switch (action.type) {
     case AUTOCOMPLETE_FETCH_PENDING:
       return {
@@ -22,7 +22,6 @@ export function autoComplete(state = initialState, action: IAction): any {
       };
     case AUTOCOMPLETE_FETCH_ERROR:
       return {
-        ...state,
         pending: false,
         data: null,
         error: action.response

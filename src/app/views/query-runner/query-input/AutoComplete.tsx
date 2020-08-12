@@ -1,4 +1,4 @@
-import { getTheme, ITextField, KeyCodes, Label, TextField } from 'office-ui-fabric-react';
+import { getTheme, ITextField, KeyCodes, Label, TextField, Spinner, IRenderFunction, ITextFieldProps } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -222,6 +222,10 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     this.setFocus();
   }
 
+  private renderSuffix = () => {
+    return (<Spinner />);
+  }
+
   public render() {
     const {
       activeSuggestion,
@@ -273,8 +277,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           onKeyDown={this.onKeyDown}
           defaultValue={userInput}
           value={sampleQuery.sampleUrl}
-          suffix={(fetchingSuggestions) ? '...' : undefined}
           componentRef={this.autoCompleteRef}
+          onRenderSuffix={(fetchingSuggestions) ? this.renderSuffix : undefined}
         />
         {suggestionsListComponent}
       </>
