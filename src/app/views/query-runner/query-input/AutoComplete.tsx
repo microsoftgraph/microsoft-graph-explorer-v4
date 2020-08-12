@@ -99,19 +99,22 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
 
       case KeyCodes.up:
-        if (activeSuggestion === 0) {
-          return;
+        if (showSuggestions) {
+          if (activeSuggestion === 0) {
+            return;
+          }
+          this.setState({ activeSuggestion: activeSuggestion - 1 });
         }
-        this.setState({ activeSuggestion: activeSuggestion - 1 });
         break;
 
       case KeyCodes.down:
-        if (activeSuggestion === filteredSuggestions.length - 1) {
-          return;
+        if (showSuggestions) {
+          if (activeSuggestion === filteredSuggestions.length - 1) {
+            return;
+          }
+          this.setState({ activeSuggestion: activeSuggestion + 1 });
+          break;
         }
-        this.setState({ activeSuggestion: activeSuggestion + 1 });
-        break;
-
       default:
         break;
     }
@@ -210,6 +213,9 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
   private appendSuggestionToUrl(selected: string) {
     const { userInput, compare } = this.state;
+    if (selected.startsWith('$')) {
+      selected += '=';
+    }
     const selectedSuggestion = cleanUpSelectedSuggestion(compare, userInput, selected);
     this.setState({
       activeSuggestion: 0,
@@ -220,6 +226,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     });
     this.props.contentChanged(selectedSuggestion);
     this.setFocus();
+    this.initialiseAutoComplete(selectedSuggestion);
   }
 
   private renderSuffix = () => {
