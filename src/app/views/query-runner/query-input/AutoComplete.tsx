@@ -1,4 +1,4 @@
-import { getTheme, ITextField, KeyCodes, Label, TextField, Spinner, IRenderFunction, ITextFieldProps } from 'office-ui-fabric-react';
+import { getTheme, ITextField, KeyCodes, Label, Spinner, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -282,8 +282,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           autoComplete='off'
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
-          defaultValue={userInput}
-          value={sampleQuery.sampleUrl}
+          defaultValue={sampleQuery.sampleUrl}
           componentRef={this.autoCompleteRef}
           onRenderSuffix={(fetchingSuggestions) ? this.renderSuffix : undefined}
         />
