@@ -1,4 +1,5 @@
 import { AuthenticationParameters } from 'msal';
+import { geLocale } from '../../../appLocale';
 import { LoginType } from '../../../types/enums';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { msalApplication } from './msal-agent';
@@ -7,10 +8,55 @@ const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
 const loginType = getLoginType();
 msalApplication.handleRedirectCallback(authCallback);
 
-export async function logIn(): Promise<any> {
+export function getSessionId() {
+  const account = msalApplication.getAccount();
+
+  if (account) {
+    return account.idTokenClaims.sid;
+  }
+}
+
+// get current uri for redirect uri purpose
+// ref - https://github.com/AzureAD/microsoft-authentication-library-for
+//  -js/blob/9274fac6d100a6300eb2faa4c94aa2431b1ca4b0/lib/msal-browser/src/utils/BrowserUtils.ts#L49
+function getCurrentUri(): string {
+  return window.location.href.split('?')[0].split('#')[0];
+}
+
+function getAuthority(): string {
+    // support for tenanted endpoint
+    const urlParams = new URLSearchParams(location.search);
+    let tenant = urlParams.get('tenant');
+
+    if (tenant === null) {
+      tenant = 'common';
+  }
+
+  return `https://login.microsoftonline.com/${tenant}/`;
+}
+
+export async function logIn(sessionId = ''): Promise<any> {
+
   const loginRequest: AuthenticationParameters = {
     scopes: defaultUserScopes,
+    authority: getAuthority(),
+    prompt: 'select_account',
+    redirectUri: getCurrentUri().toLowerCase(),
+    extraQueryParameters: { mkt: geLocale }
   };
+
+  if (sessionId !== '') {
+    loginRequest.sid = sessionId;
+
+    try {
+      const authResponse = await msalApplication.acquireTokenSilent(loginRequest);
+      return authResponse;
+    } catch (error) {
+      delete loginRequest.sid;
+      const authResp = await logIn();
+      return authResp;
+    }
+  }
 
   if (loginType === LoginType.Popup) {
     try {
@@ -42,8 +88,26 @@ function authCallback(error: any, response: any) {
   return;
 }
 
+export function getAccount() {
+  return msalApplication.getAccount();
+}
+
 export function logOut() {
   msalApplication.logout();
+}
+
+export function logOutPopUp() {
+  // @ts-ignore
+  msalApplication.clearCache();
+  // @ts-ignore
+  msalApplication.account = null;
+  // @ts-ignore
+  msalApplication.authorityInstance.resolveEndpointsAsync().then(authority => {
+    const urlNavigate = authority.EndSessionEndpoint
+      ? authority.EndSessionEndpoint
+      : `${msalApplication.authority}oauth2/v2.0/logout`;
+    (msalApplication as any).openPopup(urlNavigate, 'msal', 400, 600);
+  });
 }
 
 /**
@@ -54,6 +118,7 @@ export function logOut() {
 export async function acquireNewAccessToken(scopes: string[] = []): Promise<any> {
   const loginRequest: AuthenticationParameters = {
     scopes,
+    authority: getAuthority(),
   };
   if (loginType === LoginType.Popup) {
     try {

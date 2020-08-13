@@ -15,7 +15,7 @@ export function getStyleFor (method: string) {
       return currentTheme.palette.magentaDark;
 
     case 'PATCH':
-      return currentTheme.palette.yellowDark;
+      return currentTheme.palette.orange;
 
     case 'DELETE':
       return currentTheme.palette.redDark;

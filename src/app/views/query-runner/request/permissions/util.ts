@@ -1,20 +1,44 @@
-import { IQuery } from '../../../../../types/query-runner';
-import { IRequestOptions } from '../../../../../types/request';
+import { IPermission } from '../../../../../types/permissions';
 
-export function fetchScopes(sample: IQuery): Promise<any> {
-    const { sampleUrl, selectedVerb } = sample;
-    const urlObject: URL = new URL(sampleUrl);
-    // remove the prefix i.e. beta or v1.0 and any possible extra '/' character at the end
-    const requestUrl = urlObject.pathname.substr(5).replace(/\/$/, '');
-    const permissionsUrl = 'https://graphexplorerapi.azurewebsites.net/api/GraphExplorerPermissions?requesturl=' +
-      requestUrl + '&method=' + selectedVerb;
+export function generatePermissionGroups(permissions: any) {
+    const map = new Map();
+    const groups: any[] = [];
 
-    const headers = {
-      'Content-Type': 'application/json',
-    };
+    const isCollapsed = true;
+    let previousCount = 0;
+    let count = 0;
 
-    const options: IRequestOptions = { headers };
+    for (const permission of permissions) {
+        const permissionValue = permission.value;
+        const groupName = permissionValue.split('.')[0];
+        if (!map.has(groupName)) {
+            map.set(groupName, true);
+            count = permissions.filter(
+                (perm: IPermission) => {
+                    const value = perm.value.split('.')[0];
+                    return value === groupName;
+                }
+            ).length;
+            groups.push({
+                name: groupName,
+                key: groupName,
+                startIndex: previousCount,
+                isCollapsed,
+                count,
+            });
+            previousCount += count;
+        }
+    }
 
-    return fetch(permissionsUrl, options)
-      .then(res => res.json());
+    return groups;
+}
+
+export function setConsentedStatus(tokenPresent: any, permissions: IPermission[], consentedScopes: string[]) {
+    if (tokenPresent) {
+        permissions.forEach((permission: IPermission) => {
+            if (consentedScopes.indexOf(permission.value) !== -1) {
+                permission.consented = true;
+            }
+        });
+    }
 }

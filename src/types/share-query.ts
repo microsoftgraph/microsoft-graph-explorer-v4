@@ -4,4 +4,6 @@ export interface ISharedQueryParams {
   version: string | null;
   requestBody?: string | null;
   graphUrl: string | null;
+  sid?: string | null;
+  headers?: string | null;
 }

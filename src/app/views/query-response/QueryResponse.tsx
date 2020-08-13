@@ -1,11 +1,17 @@
-import { DefaultButton, FontSizes, IconButton, Modal, Pivot, PivotItem, PrimaryButton } from 'office-ui-fabric-react';
+import {
+  DefaultButton, FontSizes,
+  getId, IconButton, Modal, Pivot,
+  PrimaryButton, TooltipHost
+} from 'office-ui-fabric-react';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
+import { Mode } from '../../../types/enums';
 import { IQueryResponseProps, IQueryResponseState } from '../../../types/query-response';
 import { copy } from '../common/copy';
+import { createShareLink } from '../common/share';
 import { getPivotItems } from './pivot-items/pivot-items';
 import './query-response.scss';
 
@@ -19,14 +25,22 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     };
   }
 
+  public shouldComponentUpdate(nextProps: IQueryResponseProps, nextState: IQueryResponseState) {
+    return nextProps.graphResponse !== this.props.graphResponse
+      || nextProps.mobileScreen !== this.props.mobileScreen
+      || nextState !== this.state
+      || nextProps.theme !== this.props.theme;
+  }
+
   public handleCopy = () => {
     copy('share-query-text')
       .then(() => this.toggleShareQueryDialogState());
   }
 
   public handleShareQuery = () => {
-    const query = this.generateShareQueryParams();
-    this.setState({ query });
+    const { sampleQuery } = this.props;
+    const shareableLink = createShareLink(sampleQuery);
+    this.setState({ query: shareableLink });
     this.toggleShareQueryDialogState();
   }
 
@@ -38,58 +52,77 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     this.setState({ showModal: !this.state.showModal });
   }
 
-  private generateShareQueryParams = (): string => {
-    const { sampleQuery: { sampleBody, sampleUrl, selectedVerb, selectedVersion } } = this.props;
-    const { origin, pathname } = window.location;
-    const url = new URL(sampleUrl);
-    const graphUrl = url.origin;
-    /**
-     * To ensure backward compatibility the version is removed from the pathname.
-     * V3 expects the request query param to not have the version number.
-     */
-    const graphUrlRequest = url.pathname.substr(6) + url.search;
-    const requestBody = this.hashEncode(JSON.stringify(sampleBody));
-
-    return origin + pathname
-      + '?request=' + graphUrlRequest
-      + '&method=' + selectedVerb
-      + '&version=' + selectedVersion
-      + '&GraphUrl=' + graphUrl
-      + '&requestBody=' + requestBody;
-  }
-
-  private hashEncode(requestBody: string): string {
-    return btoa(requestBody);
-  }
-
   public render() {
     let body: any;
     let headers;
     const {
       intl: { messages },
-      verb
+      verb,
+      sampleQuery
     }: any = this.props;
 
     const { showShareQueryDialog, query, showModal } = this.state;
-    const { graphResponse, mode } = this.props;
+    const { graphResponse, mode, mobileScreen } = this.props;
 
     if (graphResponse) {
       body = graphResponse.body;
       headers = graphResponse.headers;
     }
 
-    const pivotItems = getPivotItems(messages, body, verb, mode, headers);
+    const pivotProperties = {
+      messages, body, verb, mode, headers, mobileScreen, sampleQuery
+    };
+
+    const pivotItems = getPivotItems(pivotProperties);
 
     return (
       <div>
         <div className='query-response'>
-          <IconButton onClick={this.handleShareQuery} className='share-query-btn' iconProps={{
-            iconName: 'Share'
-          }} />
-          <IconButton onClick={this.toggleModal} className='share-query-btn' iconProps={{
-            iconName: 'MiniExpandMirrored'
-          }} />
-          <Pivot className='pivot-response'>
+          {mode === Mode.Complete && <>
+            <div style={{
+              float: 'right',
+              padding: '0px',
+              zIndex: 1,
+            }}>
+
+              <TooltipHost
+                content={`${messages['Share Query Message']}`}
+                id={getId()}
+                calloutProps={{ gapSpace: 0 }}
+                styles={{ root: { display: 'inline-block' } }}
+              >
+                <IconButton
+                  onClick={this.handleShareQuery}
+                  className='share-query-btn'
+                  iconProps={{ iconName: 'Share'}}
+                  aria-label={'Share query message'}
+                />
+              </TooltipHost>
+            </div>
+
+            <div style={{
+              float: 'right',
+              padding: '0px',
+              zIndex: 1,
+            }}>
+              <TooltipHost
+                content={`${messages['Expand response']}`}
+                id={getId()}
+                calloutProps={{ gapSpace: 0 }}
+                styles={{ root: { display: 'inline-block' } }}
+              >
+                <IconButton
+                  onClick={this.toggleModal}
+                  className='share-query-btn'
+                  iconProps={{ iconName: 'MiniExpandMirrored'}}
+                  aria-label={'Expand response'}
+                />
+              </TooltipHost>
+            </div>
+          </>}
+          <Pivot className='pivot-response'
+            styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
+            >
             {pivotItems}
           </Pivot>
         </div>
@@ -99,9 +132,20 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
           <Modal
             isOpen={showModal}
             onDismiss={this.toggleModal}
-            dragOptions={false}
             styles={{ main: { width: '80%', height: '90%' }, }}
           >
+
+            <IconButton
+              styles={{
+                root: {
+                  float: 'right',
+                  zIndex: 1
+                },
+              }}
+              iconProps={{ iconName: 'Cancel' }}
+              ariaLabel='Close popup modal'
+              onClick={this.toggleModal}
+            />
             <Pivot className='pivot-response'>
               {pivotItems}
             </Pivot>
@@ -132,7 +176,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
             <DefaultButton text={messages.Close} onClick={this.toggleShareQueryDialogState} />
           </DialogFooter>
         </Dialog>
-      </div>
+      </div >
     );
   }
 }
@@ -140,10 +184,11 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
 function mapStateToProps(state: any) {
   return {
     graphResponse: state.graphResponse,
-    appTheme: state.theme,
+    theme: state.theme,
     mode: state.graphExplorerMode,
     scopes: state.scopes.data,
-    sampleQuery: state.sampleQuery
+    sampleQuery: state.sampleQuery,
+    mobileScreen: !!state.sidebarProperties.mobileScreen
   };
 }
 

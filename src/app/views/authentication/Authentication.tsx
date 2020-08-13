@@ -1,11 +1,13 @@
-import { Icon, Label, Spinner, SpinnerSize, styled } from 'office-ui-fabric-react';
+import { Icon, Label, MessageBarType, Spinner, SpinnerSize, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { IAuthenticationProps } from '../../../types/authentication';
+import { Mode } from '../../../types/enums';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
+import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
 import { logIn } from '../../services/graph-client/msal-service';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
@@ -18,6 +20,9 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
   }
 
   public signIn = async (): Promise<void> => {
+    const {
+      intl: { messages },
+    }: any = this.props;
     this.setState({ loginInProgress: true });
 
     const { mscc } = (window as any);
@@ -26,19 +31,29 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
       mscc.setConsent();
     }
 
-    const authResponse = await logIn();
-    if (authResponse) {
-      this.setState({ loginInProgress: false });
+    try {
+      const authResponse = await logIn();
+      if (authResponse) {
+        this.setState({ loginInProgress: false });
 
-      this.props.actions!.signIn(authResponse.accessToken);
-      this.props.actions!.storeScopes(authResponse.scopes);
+        this.props.actions!.signIn(authResponse.accessToken);
+        this.props.actions!.storeScopes(authResponse.scopes);
+      }
+    } catch (error) {
+      const { errorCode } = error;
+      this.props.actions!.setQueryResponseStatus({
+        ok: false,
+        statusText: messages['Authentication failed'],
+        status: errorCode.replace('_', ' '),
+        messageType: MessageBarType.error
+      });
+      this.setState({ loginInProgress: false });
     }
 
-    this.setState({ loginInProgress: false });
   };
 
   public render() {
-    const { minimised, tokenPresent, mobileScreen } = this.props;
+    const { minimised, tokenPresent, mobileScreen, graphExplorerMode } = this.props;
     const classes = classNames(this.props);
     const { loginInProgress } = this.state;
 
@@ -48,8 +63,8 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
           :
           mobileScreen ? showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn, minimised) :
             <>
-              {!tokenPresent && showUnAuthenticatedText(classes)}
-              <span><br />{showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn, minimised)}<br /> </span>
+              {!tokenPresent && graphExplorerMode === Mode.Complete && !minimised && showUnAuthenticatedText(classes)}
+              <br />{showSignInButtonOrProfile(tokenPresent, mobileScreen, this.signIn, minimised)}<br />
             </>}
       </>
     );
@@ -86,18 +101,24 @@ function mapStateToProps(state: any) {
     tokenPresent: !!state.authToken,
     mobileScreen,
     appTheme: state.theme,
-    minimised: !mobileScreen && !showSidebar
+    minimised: !mobileScreen && !showSidebar,
+    graphExplorerMode: state.graphExplorerMode
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators(authActionCreators, dispatch)
+    actions: bindActionCreators({
+      ...authActionCreators,
+      ...queryStatusActionCreators},
+      dispatch)
   };
 }
 
 // @ts-ignore
-const StyledAuthentication = styled(Authentication, authenticationStyles);
+const IntlAuthentication = injectIntl(Authentication);
+// @ts-ignore
+const StyledAuthentication = styled(IntlAuthentication, authenticationStyles);
 export default connect(
   mapStateToProps,
   mapDispatchToProps

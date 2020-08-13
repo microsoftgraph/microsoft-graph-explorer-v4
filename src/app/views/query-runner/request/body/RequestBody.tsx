@@ -1,5 +1,5 @@
 import React from 'react';
-import { Monaco } from '../../common';
+import { Monaco } from '../../../common';
 
 export const RequestBodyControl = () => {
     return (

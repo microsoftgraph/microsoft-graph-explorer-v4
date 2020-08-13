@@ -13,7 +13,6 @@ export interface IHistoryItem {
   responseHeaders: Array<{ name: string; value: string; }>;
   duration: number;
   result: object;
-  har: string;
 }
 
 export interface IHistoryProps {
@@ -23,6 +22,7 @@ export interface IHistoryProps {
     removeHistoryItem: Function;
     viewHistoryItem: Function;
     setQueryResponseStatus: Function;
+    bulkRemoveHistoryItems: Function;
   };
   theme?: ITheme;
   styles?: object;

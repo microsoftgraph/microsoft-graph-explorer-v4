@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
+import { geLocale } from '../../../../appLocale';
+import { Mode } from '../../../../types/enums';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
@@ -95,8 +98,8 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const { user } = this.state;
     const {
       intl: { messages },
-      mobileScreen,
       minimised,
+      graphExplorerMode,
     }: any = this.props;
 
     const persona: IPersonaSharedProps = {
@@ -115,7 +118,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         {
           key: 'office-dev-program',
           text: messages['Office Dev Program'],
-          href: 'https://developer.microsoft.com/en-us/office/dev-program',
+          href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
           target: '_blank',
           iconProps: {
             iconName: 'CommandPrompt',
@@ -133,6 +136,9 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     };
 
     const personaStyleToken: any = {
+      primaryText: {
+        paddingBottom: 5,
+      },
       secondaryText:
       {
         paddingBottom: 10,
@@ -140,22 +146,37 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       },
     };
 
+    const defaultSize = minimised ? PersonaSize.size32 : PersonaSize.size48;
+
+    const profileProperties = {
+      persona,
+      styles: personaStyleToken,
+      hidePersonaDetails: minimised,
+      size: graphExplorerMode === Mode.TryIt ? PersonaSize.size40 : defaultSize
+    };
+
     return (
       <div className={classes.profile}>
-        {mobileScreen &&
-          <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-            <Persona {...persona} size={PersonaSize.size40} hidePersonaDetails={true} />
-          </ActionButton>
-        }
-
-        {!mobileScreen && <Persona
-          {...persona}
-          size={minimised ? PersonaSize.size32 : PersonaSize.size72}
-          styles={personaStyleToken}
-          hidePersonaDetails={minimised}
-        />}
+        {this.showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
       </div>
     );
+  }
+
+  private showProfileComponent(profileProperties: any, graphExplorerMode: Mode, menuProperties: any): React.ReactNode {
+
+    const persona = <Persona
+      {...profileProperties.persona}
+      size={profileProperties.size}
+      styles={profileProperties.styles}
+      hidePersonaDetails={profileProperties.hidePersonaDetails} />;
+
+    if (graphExplorerMode === Mode.TryIt) {
+      return <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+        {persona}
+      </ActionButton>;
+    }
+
+    return persona;
   }
 }
 
@@ -176,6 +197,7 @@ function mapStateToProps(state: any) {
     mobileScreen: !!state.sidebarProperties.mobileScreen,
     appTheme: state.theme,
     minimised: !mobileScreen && !showSidebar,
+    graphExplorerMode: state.graphExplorerMode
   };
 }
 

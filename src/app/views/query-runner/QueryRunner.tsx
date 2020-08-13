@@ -1,22 +1,22 @@
-import { IDropdownOption } from 'office-ui-fabric-react';
+import { IDropdownOption, MessageBarType } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { telemetry } from '../../../telemetry';
 import { RUN_QUERY_EVENT } from '../../../telemetry/event-types';
-import { Mode } from '../../../types/enums';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
 } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
-import { addRequestHeader } from '../../services/actions/request-headers-action-creators';
+import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
 import Request from './request/Request';
-
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
@@ -44,15 +44,16 @@ export class QueryRunner extends Component<
     }
   };
 
-  private handleOnUrlChange = (newQuery = '') => {
-    this.setState({ url: newQuery });
+  private handleOnUrlChange = (newUrl = '') => {
+    const { actions, sampleQuery } = this.props;
 
-    const { queryVersion } = parseSampleUrl(newQuery);
-    if (queryVersion === 'v1.0' || queryVersion === 'beta') {
-      const query = { ...this.props.sampleQuery };
-      query.selectedVersion = queryVersion;
-      this.props.actions!.setSampleQuery(query);
+    const newQuery = { ...sampleQuery, ...{ sampleUrl: newUrl } };
+
+    if (actions) {
+      actions.setSampleQuery(newQuery);
     }
+
+    this.changeUrlVersion(newUrl);
   };
 
   private handleOnBlur = () => {
@@ -74,19 +75,27 @@ export class QueryRunner extends Component<
 
   private handleOnRunQuery = () => {
     const { sampleBody } = this.state;
-    const { actions, headers, sampleQuery } = this.props;
-
-    if (headers) {
-      sampleQuery.sampleHeaders = headers;
-    }
+    const { actions, sampleQuery, } = this.props;
+    const { intl: { messages } }: any = this.props;
 
     if (sampleBody) {
-      sampleQuery.sampleBody = JSON.parse(sampleBody);
+      try {
+        sampleQuery.sampleBody = JSON.parse(sampleBody);
+      } catch (error) {
+        actions!.setQueryResponseStatus({
+          ok: false,
+          statusText: messages['Malformed JSON body'],
+          status: `${messages['Review the request body']} ${error}`,
+          messageType: MessageBarType.error
+        });
+        return;
+      }
     }
 
     if (actions) {
       actions.runQuery(sampleQuery);
     }
+    telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
@@ -101,10 +110,22 @@ export class QueryRunner extends Component<
     }
   };
 
-  public render() {
-    const { graphExplorerMode } = this.props;
-    const displayRequestComponent = (graphExplorerMode === Mode.Complete);
+  private changeUrlVersion(newUrl: string) {
+    const query = { ...this.props.sampleQuery };
+    const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);
+    const { queryVersion: oldQueryVersion } = parseSampleUrl(query.sampleUrl);
 
+    if (newQueryVersion !== oldQueryVersion) {
+      if (newQueryVersion === 'v1.0' || newQueryVersion === 'beta') {
+        const sampleQuery = { ...query };
+        sampleQuery.selectedVersion = newQueryVersion;
+        sampleQuery.sampleUrl = newUrl;
+        this.props.actions!.setSampleQuery(sampleQuery);
+      }
+    }
+  }
+
+  public render() {
     return (
       <div>
         <div className='row'>
@@ -121,16 +142,14 @@ export class QueryRunner extends Component<
             }
           </div>
         </div>
-        {displayRequestComponent && (
-          <div className='row'>
-            <div className='col-sm-12 col-lg-12'>
-              {
-                // @ts-ignore
-                <Request handleOnEditorChange={this.handleOnEditorChange} />
-              }
-            </div>
+        <div className='row'>
+          <div className='col-sm-12 col-lg-12'>
+            {
+              // @ts-ignore
+              <Request handleOnEditorChange={this.handleOnEditorChange} />
+            }
           </div>
-        )}
+        </div>
       </div>
     );
   }
@@ -139,7 +158,7 @@ export class QueryRunner extends Component<
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators(
-      { ...queryActionCreators, ...queryInputActionCreators, addRequestHeader },
+      { ...queryActionCreators, ...queryInputActionCreators, ...queryStatusActionCreators },
       dispatch
     )
   };
@@ -147,13 +166,13 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 function mapStateToProps(state: any) {
   return {
-    graphExplorerMode: state.graphExplorerMode,
-    headers: state.headersAdded,
     sampleQuery: state.sampleQuery,
   };
 }
 
+// @ts-ignore
+const IntlQueryRunner = injectIntl(QueryRunner);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(QueryRunner);
+)(IntlQueryRunner);

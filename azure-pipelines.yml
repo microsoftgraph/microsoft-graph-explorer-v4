@@ -24,7 +24,16 @@ steps:
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     env:
       REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
-    displayName: 'Build staging assets'
+      REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
+    displayName: 'Build static assets for staging'
+
+  - script: |
+      npm run build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    env:
+      REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
+      REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
+    displayName: 'Build static assets for prod'
 
   - task: PublishCodeCoverageResults@1
     inputs:
@@ -69,3 +78,12 @@ steps:
       WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
     displayName: 'Deploy to production'
 
+  - task: YodLabs.O365PostMessage.O365PostMessageBuild.O365PostMessageBuild@0
+    displayName: 'Graph Client Tooling pipeline fail notification'
+    inputs:
+      addressType: serviceEndpoint
+      serviceEndpointName: 'microsoftgraph pipeline status'
+      title: '$(Build.DefinitionName) failure notification'
+      text: 'This pipeline has failed. View the build details for further information. This is a blocking failure. '
+    condition: failed()
+    enabled: true

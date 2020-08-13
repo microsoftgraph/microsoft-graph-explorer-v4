@@ -1,31 +1,37 @@
 import {
-  IconButton, IStackTokens, ITheme,
-  Label, MessageBar, MessageBarType, Stack, styled
+  IStackTokens, ITheme, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
+import { geLocale } from '../../appLocale';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
-import { LoginType, Mode } from '../../types/enums';
+import { Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
+import * as authActionCreators from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
-import { addRequestHeader } from '../services/actions/request-headers-action-creators';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { getLoginType } from '../services/graph-client/msal-service';
+import { logIn } from '../services/graph-client/msal-service';
+import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
+import { appTitleDisplayOnFullScreen, appTitleDisplayOnMobileScreen } from './app-sections/AppTitle';
+import { headerMessaging } from './app-sections/HeaderMessaging';
+import { statusMessages } from './app-sections/StatusMessages';
+import { termsOfUseMessage } from './app-sections/TermsOfUseMessage';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
-import { Banner } from './opt-in-out-banner';
+import { createShareLink } from './common/share';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
@@ -33,43 +39,65 @@ import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
 
 
+
 interface IAppProps {
+  theme?: ITheme;
   styles?: object;
+  intl: InjectedIntl;
   profile: object;
   queryState: object | null;
   termsOfUse: boolean;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
+  sampleQuery: IQuery;
+  authenticated: boolean;
   actions: {
-    addRequestHeader: Function;
     clearQueryStatus: Function;
     clearTermsOfUse: Function;
     setSampleQuery: Function;
     runQuery: Function;
     toggleSidebar: Function;
+    signIn: Function;
+    storeScopes: Function;
   };
 }
 
 interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
+  hideDialog: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
 
-  private mediaQueryList = window.matchMedia('(max-width: 767px)');
+  private mediaQueryList = window.matchMedia('(max-width: 992px)');
 
   constructor(props: IAppProps) {
     super(props);
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false,
+      hideDialog: true,
     };
   }
 
-  public componentDidMount = () => {
+  public componentDidMount = async () => {
+
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('sid');
+
+    if (sessionId) {
+      const authResp = await logIn(sessionId);
+      if (authResp) {
+        // @ts-ignore
+        this.props.actions!.signIn(authResp.accessToken);
+        // @ts-ignore
+        this.props.actions!.storeScopes(authResp.scopes);
+      }
+    }
 
     const whiteListedDomains = [
       'https://docs.microsoft.com',
@@ -111,14 +139,16 @@ class App extends Component<IAppProps, IAppState> {
     const request = urlParams.get('request');
     const method = urlParams.get('method');
     const version = urlParams.get('version');
-    const graphUrl = urlParams.get('GraphUrl');
+    const graphUrl = urlParams.get('GraphUrl') || GRAPH_URL;
     const requestBody = urlParams.get('requestBody');
+    const headers = urlParams.get('headers');
 
-    return { request, method, version, graphUrl, requestBody };
+    return { request, method, version, graphUrl, requestBody, headers };
   }
 
   private generateQueryObjectFrom(queryParams: any) {
-    const { request, method, version, graphUrl, requestBody } = queryParams;
+    const { request, method, version, graphUrl, requestBody, headers } = queryParams;
+
     if (!request) {
       return null;
     }
@@ -127,7 +157,8 @@ class App extends Component<IAppProps, IAppState> {
       sampleUrl: `${graphUrl}/${version}/${request}`,
       selectedVerb: method,
       selectedVersion: version,
-      sampleBody: this.hashDecode(requestBody)
+      sampleBody: requestBody ? this.hashDecode(requestBody) : null,
+      sampleHeaders: (headers) ? JSON.parse(this.hashDecode(headers)) : [],
     };
   }
 
@@ -171,7 +202,6 @@ class App extends Component<IAppProps, IAppState> {
   private handleInitMsg = (msg: IInitMessage) => {
     const { actions, profile } = this.props;
     const { verb, headers, url, body }: any = parse(msg.code);
-
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
@@ -190,12 +220,19 @@ class App extends Component<IAppProps, IAppState> {
       if (actions) {
         const { queryVersion } = parseSampleUrl(url);
 
+        const requestHeaders = headers.map((header: any) => {
+          return {
+            name: Object.keys(header)[0],
+            value: Object.values(header)[0]
+          };
+        });
+
         const query: IQuery = {
           sampleUrl: url,
           selectedVerb: verb,
           sampleBody: body,
           selectedVersion: queryVersion,
-          sampleHeaders: headers
+          sampleHeaders: requestHeaders
         };
 
         substituteTokens(query, profile);
@@ -204,15 +241,6 @@ class App extends Component<IAppProps, IAppState> {
       }
     }, 1000);
 
-    if (actions) {
-      const requestHeaders = headers.map((header: any) => {
-        return {
-          name: Object.keys(header)[0],
-          value: Object.values(header)[0]
-        };
-      });
-      actions.addRequestHeader(requestHeaders);
-    }
   };
 
   public handleSelectVerb = (verb: string) => {
@@ -243,39 +271,32 @@ class App extends Component<IAppProps, IAppState> {
     this.props.actions!.toggleSidebar(properties);
   }
 
-  public optOut = () => {
-    const path = location.href;
-    const urlObject: URL = new URL(path);
-    const { protocol, hostname, pathname, port } = urlObject;
-    const url = `${protocol}//${hostname}${(port) ? ':' + port : ''}${pathname}`;
-    window.location.href = url.includes('localhost') ? 'http://localhost:3000' : `${url.replace('/preview', '')}`;
-  }
-
   public displayAuthenticationSection = (minimised: boolean) => {
     return <div style={{
       display: minimised ? 'block' : 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
+      justifyContent: minimised ? '' : 'center',
+      alignItems: minimised ? '' : 'center',
+      marginLeft: minimised ? '' : '-0.9em',
     }}>
-      <div className={minimised ? '' : 'col-md-10'}>
+      <div className={minimised ? '' : 'col-10'}>
         <Authentication />
       </div>
-      <div className={minimised ? '' : 'col-md-2'}>
+      <div className={minimised ? '' : 'col-2'}>
         <Settings />
       </div>
     </div>;
   }
 
+
   public render() {
     const classes = classNames(this.props);
-    const { graphExplorerMode, queryState, minimised, termsOfUse,
+    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
+    const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
     const historyHeaderText = messages['History'];
     const { mobileScreen, showSidebar } = sidebarProperties;
-    const language = navigator.language || 'en-US';
-    const loginType = getLoginType();
 
     let displayContent = true;
     if (graphExplorerMode === Mode.Complete) {
@@ -297,9 +318,16 @@ class App extends Component<IAppProps, IAppState> {
         : 'col-xs-12 col-sm-12 col-lg-9 col-md-8';
 
     if (minimised) {
-      sidebarWidth = `col-lg-1 col-md-1 ${classes.sidebarMini}`;
+      sidebarWidth = `${classes.sidebarMini}`;
       layout = `col-xs-12 col-sm-12 col-lg-11 col-md-11 ${classes.layoutExtra}`;
     }
+
+    if (mobileScreen) {
+      sidebarWidth = layout = 'col-xs-12 col-sm-12';
+    }
+
+
+
 
     return (
       // @ts-ignore
@@ -308,63 +336,21 @@ class App extends Component<IAppProps, IAppState> {
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={sidebarWidth}>
-                {mobileScreen && <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
-                  <>
-                    <IconButton
-                      iconProps={{ iconName: 'GlobalNavButton' }}
-                      className={classes.sidebarToggle}
-                      title='Remove sidebar'
-                      ariaLabel='Remove sidebar'
-                      onClick={this.toggleSidebar}
-                    />
-                    <div style={{ padding: 10 }}>
-                      <Label className={classes.graphExplorerLabel}>
-                        Graph Explorer
-                      </Label>
-                      <Banner optOut={this.optOut} />
-                    </div>
-                    <span style={{
-                      position: 'absolute',
-                      marginLeft: '70%',
-                    }}>
+                {mobileScreen && appTitleDisplayOnMobileScreen(
+                  stackTokens,
+                  classes,
+                  this.toggleSidebar)}
 
-                      <Authentication />
-                    </span>
-                  </>
-                </Stack>
-                }
-
-                {!mobileScreen &&
-                  <div style={{ display: 'flex' }}>
-                    <IconButton
-                      iconProps={{ iconName: 'GlobalNavButton' }}
-                      className={classes.sidebarToggle}
-                      title='Minimise sidebar'
-                      ariaLabel='Minimise sidebar'
-                      onClick={this.toggleSidebar}
-                    />
-                    <div className={classes.graphExplorerLabelContainer}>
-
-                      {!minimised &&
-                        <>
-                          <Label className={classes.graphExplorerLabel}>
-                            Graph Explorer
-                      </Label>
-                          <span className={classes.previewButton} >
-                            <Banner optOut={this.optOut} />
-                          </span>
-                        </>
-                      }
-
-                    </div>
-                  </div>
-                }
-
+                {!mobileScreen && appTitleDisplayOnFullScreen(
+                  classes,
+                  minimised,
+                  this.toggleSidebar
+                )}
 
                 <hr className={classes.separator} />
-                {!mobileScreen && <>
-                  {this.displayAuthenticationSection(minimised)}
-                  <hr className={classes.separator} /></>}
+
+                {this.displayAuthenticationSection(minimised)}
+                <hr className={classes.separator} />
 
                 {showSidebar && <>
                   <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
@@ -372,64 +358,14 @@ class App extends Component<IAppProps, IAppState> {
               </div>
             )}
             <div className={layout}>
-              {graphExplorerMode === Mode.TryIt && (
-                <div style={{ marginBottom: 8 }}>
-                  {loginType === LoginType.Popup && this.displayAuthenticationSection(false)}
-                  {loginType === LoginType.Redirect && <MessageBar
-                    messageBarType={MessageBarType.warning}
-                    isMultiline={true}
-                  >
-                    <p>
-                      To try operations other than GET or to access your own data, sign in to
-                      <a className={classes.links}
-                        tabIndex={0}
-                        href='https://developer.microsoft.com/en-us/graph/graph-explorer' target='_blank'>
-                        Graph Explorer.
-                      </a>
-                    </p>
-                  </MessageBar>}
-                </div>
-              )}
+              {graphExplorerMode === Mode.TryIt && headerMessaging(classes, query)}
 
               {displayContent && <>
                 <div style={{ marginBottom: 8 }}>
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
-                {queryState && (
-                  <MessageBar
-                    messageBarType={queryState.messageType}
-                    isMultiline={false}
-                    onDismiss={actions.clearQueryStatus}
-                  >
-                    {`${queryState.statusText} - ${queryState.status} `}
-                    {queryState.duration && <>
-                      {`- ${queryState.duration}`}<FormattedMessage id='milliseconds' />
-                    </>}
-
-                  </MessageBar>
-                )}
-                {graphExplorerMode === Mode.Complete && termsOfUse && (
-                  <MessageBar
-                    messageBarType={MessageBarType.info}
-                    isMultiline={true}
-                    onDismiss={actions.clearTermsOfUse}
-                  >
-                    <FormattedMessage id='use the Microsoft Graph API' />
-                    <br /><br />
-                    <div>
-                      <a className={classes.links}
-                        href={'https://docs.microsoft.com/' + language +
-                          '/legal/microsoft-apis/terms-of-use?context=graph/context'}
-                        target='_blank'>
-                        <FormattedMessage id='Terms of use' /></a>
-                      &nbsp;,
-                        <a className={classes.links}
-                        href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
-                        target='_blank'>
-                        <FormattedMessage id='Microsoft Privacy Statement' /></a>
-                    </div>
-                  </MessageBar>
-                )}
+                {statusMessages(queryState, actions)}
+                {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
                 {
                   // @ts-ignore
                   <QueryResponse verb={this.state.selectedVerb} />
@@ -455,7 +391,9 @@ const mapStateToProps = (state: any) => {
     receivedSampleQuery: state.sampleQuery,
     sidebarProperties: state.sidebarProperties,
     termsOfUse: state.termsOfUse,
-    minimised: !mobileScreen && !showSidebar
+    minimised: !mobileScreen && !showSidebar,
+    sampleQuery: state.sampleQuery,
+    authenticated: !!state.authToken
   };
 };
 
@@ -466,8 +404,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       clearTermsOfUse,
       runQuery,
       setSampleQuery,
-      addRequestHeader,
       toggleSidebar,
+      ...authActionCreators,
       changeTheme: (newTheme: string) => {
         return (disp: Function) => disp(changeThemeSuccess(newTheme));
       }
@@ -476,7 +414,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 };
 
 const StyledApp = styled(App, appStyles as any);
-// @ts-ignore
 const IntlApp = injectIntl(StyledApp);
 
 export default connect(

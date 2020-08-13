@@ -23,13 +23,19 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       urlVersions: [
         { key: 'v1.0', text: 'v1.0' },
         { key: 'beta', text: 'beta' }
-      ],
+      ]
     };
   }
 
   public handleKeyDown = (event: any) => {
     if (event.keyCode === 13) {
-      this.props.handleOnRunQuery();
+      this.props.handleOnBlur();
+
+      // allows the state to be populated with the new url before running it
+      setTimeout(() => {
+        this.props.handleOnRunQuery();
+      }, 500);
+
     }
   }
 
@@ -46,7 +52,8 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       selectedVersion,
       sampleUrl,
       submitting,
-      mode
+      mode,
+      authenticated
     } = this.props;
 
     const {
@@ -59,21 +66,21 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       background: getStyleFor(selectedVerb),
     };
 
+    const httpMethodsToDisplay = (!authenticated) ? [httpMethods[0]] : httpMethods;
+
     return (
       <div className='row'>
-        <div className='col-sm-3 col-md-2'>
+        <div className='col-xs-12 col-lg-2'>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
             selectedKey={selectedVerb}
-            options={httpMethods}
-            disabled={mode === Mode.TryIt}
+            options={httpMethodsToDisplay}
             styles={verbSelector}
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </div>
-
-        <div className='col-sm-2 col-md-2'>
+        <div className='col-xs-12 col-lg-2'>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
@@ -82,18 +89,18 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, method) => handleOnVersionChange(method)}
           />
         </div>
-        <div className='col-sm-5 col-md-6'>
+        <div className='col-xs-12 col-lg-6'>
           <TextField
             ariaLabel='Query Sample Input'
             role='textbox'
             placeholder={messages['Query Sample']}
             onChange={(event, value) => handleOnUrlChange(value)}
-            defaultValue={sampleUrl}
+            value={sampleUrl}
             onBlur={() => handleOnBlur()}
             onKeyDown={this.handleKeyDown}
           />
         </div>
-        <div className='col-sm-1 col-md-2 run-query-button'>
+        <div className='col-xs-12 col-lg-2'>
           <SubmitButton
             className='run-query-button'
             text={messages['Run Query']}
@@ -109,12 +116,13 @@ export class QueryInput extends Component<IQueryInputProps, any> {
 
 function mapStateToProps(state: any) {
   return {
-    mode: state.graphExplorerMode,
     sampleUrl: state.sampleQuery.sampleUrl,
     selectedVerb: state.sampleQuery.selectedVerb,
     selectedVersion: state.sampleQuery.selectedVersion,
     submitting: state.isLoadingData,
     theme: state.theme,
+    mode: state.graphExplorerMode,
+    authenticated: !!state.authToken
   };
 }
 

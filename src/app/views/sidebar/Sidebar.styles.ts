@@ -22,12 +22,15 @@ export const sidebarStyles = (theme: ITheme) => {
       maxHeight: pageHeight,
       minHeight: pageHeight,
       overflowY: 'auto',
-      overflowX: 'hidden',
+      overflowX: 'auto',
       fontSize: FontSizes.medium,
       background: 'inherit'
     },
     pullLeft: {
       float: 'left'
+    },
+    pullRight: {
+      float: 'right'
     },
 
     /* Group Headers */
@@ -70,7 +73,6 @@ export const sidebarStyles = (theme: ITheme) => {
     queryRow: {
       background: 'inherit',
       lineHeight: '100%',
-      width: '80%',
       fontSize: FontSizes.medium,
       borderBottom: '1px solid ' + theme.palette.neutralLight,
       color: theme.palette.black,
@@ -81,9 +83,9 @@ export const sidebarStyles = (theme: ITheme) => {
       },
     },
     queryContent: {
-      display: 'table-cell',
-      float: 'left',
       textAlign: 'left',
+      textOverflow: 'ellipsis',
+      marginLeft: theme.spacing.s1,
     },
     rowDisabled: {
       cursor: 'not-allowed',
@@ -92,24 +94,22 @@ export const sidebarStyles = (theme: ITheme) => {
       fontWeight: FontWeights.bold,
       fontSize: FontSizes.small,
       display: 'inline-block',
-      textAlign: 'center',
-      marginRight: '15px',
-      lineHeight: 'normal',
-      whiteSpace: 'nowrap',
-      paddingLeft: 5,
-      paddingRight: 5,
+      paddingLeft: 3,
+      paddingRight: 3,
       paddingTop: 3,
       paddingBottom: 3,
       color: '#fff',
-      minWidth: '55px'
+      minWidth: '55px',
+      marginRight: '-10%'
     },
     docLink: {
-      display: 'table-cell',
       float: 'right',
+      fontSize: FontSizes.icon,
+      textAlign: 'left',
       verticalAlign: 'center',
-      marginTop: '-7.5%',
-      marginRight: theme.spacing.s1,
     },
-
+    links: {
+      color: `${theme.palette.blueMid} !important`,
+    },
   };
 };
