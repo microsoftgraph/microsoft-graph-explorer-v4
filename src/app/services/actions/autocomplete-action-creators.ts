@@ -31,7 +31,7 @@ export function fetchAutoCompleteOptions(url: string): Function {
     const headers = {
       'Content-Type': 'application/json',
     };
-    const openApiUrl = `${devxApi}/openapi?url=/${url}&style=geautocomplete&format=json`;
+    const openApiUrl = `${devxApi}/openapi?url=/${url}&style=geautocomplete`;
     const options: IRequestOptions = { headers };
 
     dispatch(fetchAutocompletePending());
