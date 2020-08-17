@@ -91,9 +91,12 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
                 calloutProps={{ gapSpace: 0 }}
                 styles={{ root: { display: 'inline-block' } }}
               >
-                <IconButton onClick={this.handleShareQuery} className='share-query-btn' iconProps={{
-                  iconName: 'Share'
-                }} />
+                <IconButton
+                  onClick={this.handleShareQuery}
+                  className='share-query-btn'
+                  iconProps={{ iconName: 'Share'}}
+                  aria-label={'Share query message'}
+                />
               </TooltipHost>
             </div>
 
@@ -108,13 +111,18 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
                 calloutProps={{ gapSpace: 0 }}
                 styles={{ root: { display: 'inline-block' } }}
               >
-                <IconButton onClick={this.toggleModal} className='share-query-btn' iconProps={{
-                  iconName: 'MiniExpandMirrored'
-                }} />
+                <IconButton
+                  onClick={this.toggleModal}
+                  className='share-query-btn'
+                  iconProps={{ iconName: 'MiniExpandMirrored'}}
+                  aria-label={'Expand response'}
+                />
               </TooltipHost>
             </div>
           </>}
-          <Pivot className='pivot-response'>
+          <Pivot className='pivot-response'
+            styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
+            >
             {pivotItems}
           </Pivot>
         </div>
@@ -124,7 +132,6 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
           <Modal
             isOpen={showModal}
             onDismiss={this.toggleModal}
-            dragOptions={false}
             styles={{ main: { width: '80%', height: '90%' }, }}
           >
 

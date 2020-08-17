@@ -53,7 +53,7 @@ export function isImageResponse(contentType: string) {
   if (!contentType) { return false; }
   return (
     contentType === 'application/octet-stream' ||
-    contentType.substr(0, 6) === 'image/'
+    contentType.includes('image/')
   );
 }
 

@@ -290,9 +290,9 @@
   "Consent": "Consentement",
   "permissions required to run the query": "Les autorisations suivantes sont requises pour exécuter la requête. Pour accepter les autorisations, cliquez sur Consentement.",
   "tab": " onglet",
-  "View the":" Afficher",
+  "View the": " Afficher",
   "viewing a cached set": "Vous affichez un ensemble d’exemples mis en cache en raison d’un échec de la connexion réseau.",
-  "see more queries":"Découvrez d’autres requêtes",
+  "see more queries": "Découvrez d’autres requêtes",
   "Microsoft Graph API Reference docs": "dans la documentation de référence de l’API Microsoft Graph.",
   "Fetching permissions": "Extraction d’autorisations",
   "Authentication failed": "Message d’échec d’authentification",
@@ -305,5 +305,10 @@
   "selected": "sélectionnées",
   "Search sample queries": "Exemples de requêtes de recherche",
   "Search history items": "Éléments de l’historique de recherche",
-  "Minimize sidebar": "Réduire la barre latérale"
+  "Malformed JSON body": "Corps JSON incorrect",
+  "Review the request body": "Examinez le corps de la demande et résolvez tout JSON mal formé.",
+  "Minimize sidebar": "Réduire la barre latérale",
+  "Toggle selection for all items": "Modifier la sélection pour tous les éléments",
+  "Toggle selection": "Modifier la sélection",
+  "Row checkbox": "Case à cocher Ligne"
 }
