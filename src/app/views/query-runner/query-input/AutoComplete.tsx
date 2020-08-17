@@ -100,21 +100,30 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
       case KeyCodes.up:
         if (showSuggestions) {
+          let active = activeSuggestion - 1;
           if (activeSuggestion === 0) {
-            return;
+            active = filteredSuggestions.length - 1;
           }
-          this.setState({ activeSuggestion: activeSuggestion - 1 });
+          this.setState({ activeSuggestion: active });
         }
         break;
 
       case KeyCodes.down:
         if (showSuggestions) {
+          let active = activeSuggestion + 1;
           if (activeSuggestion === filteredSuggestions.length - 1) {
-            return;
+            active = 0;
           }
-          this.setState({ activeSuggestion: activeSuggestion + 1 });
+          this.setState({ activeSuggestion: active });
           break;
         }
+
+      case KeyCodes.escape:
+        if (showSuggestions) {
+          this.setState({ showSuggestions: false });
+        }
+        break;
+
       default:
         break;
     }
@@ -156,7 +165,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     this.setState({
       filteredSuggestions: suggestions,
       suggestions,
-      showSuggestions: true,
+      showSuggestions: (suggestions.length > 0),
       compare: ''
     });
   }
