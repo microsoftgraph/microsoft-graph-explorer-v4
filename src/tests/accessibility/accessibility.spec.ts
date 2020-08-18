@@ -1,10 +1,9 @@
-import * as Axe from 'axe-core';
-import { convertAxeToSarif } from 'axe-sarif-converter';
 import AxeBuilder from 'axe-webdriverjs';
 import chromeDriver from 'chromedriver';
-import webdriver, { By, ThenableWebDriver, until } from 'selenium-webdriver';
+import webdriver, { ThenableWebDriver } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 300000;
 const TEST_TIMEOUT_MS = 300000;
 
 describe('Graph Explorer', () => {
@@ -24,13 +23,15 @@ describe('Graph Explorer', () => {
   }, TEST_TIMEOUT_MS);
 
   beforeEach(async() => {
+    await driver.manage().setTimeouts( { implicit: 0, pageLoad:
+      60000, script: TEST_TIMEOUT_MS });
     await driver.get('https://developer.microsoft.com/en-us/graph/graph-explorer/preview');
-    await driver.wait(until.elementLocated(By.css('p')));
   }, TEST_TIMEOUT_MS);
 
   it('checks for accessibility violations', async() => {
     // @ts-ignore
     const accessibilityScanResults = await AxeBuilder(driver)
+      .include('#root')
       .analyze();
     expect(accessibilityScanResults.violations).toStrictEqual([]);
   });
