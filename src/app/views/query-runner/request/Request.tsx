@@ -32,7 +32,7 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='Send'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['request body']}
-        headerText={(mobileScreen) ? '' : messages['request body']}>
+        headerText={messages['request body']}>
         <Monaco
           body={sampleBody}
           onChange={(value) => handleOnEditorChange(value)} />
@@ -42,7 +42,7 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='FileComment'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['request header']}
-        headerText={(mobileScreen) ? '' : messages['request header']}>
+        headerText={messages['request header']}>
         <RequestHeaders />
       </PivotItem>,
       <PivotItem
@@ -50,7 +50,7 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='AzureKeyVault'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['modify permissions']}
-        headerText={(mobileScreen) ? '' : messages['modify permissions']}>
+        headerText={messages['modify permissions']}>
         <Permission />
       </PivotItem>
     ];
@@ -62,7 +62,7 @@ export class Request extends Component<IRequestComponent, any> {
           itemIcon='AuthenticatorApp'
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Access Token']}
-          headerText={(mobileScreen) ? '' : messages['Access Token']}>
+          headerText={ messages['Access Token']}>
           <Auth />
         </PivotItem>
       );
@@ -86,7 +86,7 @@ export class Request extends Component<IRequestComponent, any> {
 
     return (
       <div className='request-editors'>
-        <Pivot>
+        <Pivot styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}>
           {requestPivotItems}
         </Pivot>
       </div>
