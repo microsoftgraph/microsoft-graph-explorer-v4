@@ -18,7 +18,8 @@ describe('Query input util should', () => {
     const selected = 'subject desc';
     const selectedSuggestion = cleanUpSelectedSuggestion(compareString, userInput, selected);
 
-    expect(selectedSuggestion).toEqual('https://graph.microsoft.com/v1.0/me/messages?$select=id,subject&orderby=subject desc');
+    expect(selectedSuggestion)
+      .toEqual('https://graph.microsoft.com/v1.0/me/messages?$select=id,subject&orderby=subject desc');
   });
 
 });
