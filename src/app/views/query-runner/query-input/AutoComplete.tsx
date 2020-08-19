@@ -99,6 +99,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
 
       case KeyCodes.up:
+        e.preventDefault();
         if (showSuggestions) {
           let active = activeSuggestion - 1;
           if (activeSuggestion === 0) {
@@ -109,6 +110,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
 
       case KeyCodes.down:
+        e.preventDefault();
         if (showSuggestions) {
           let active = activeSuggestion + 1;
           if (activeSuggestion === filteredSuggestions.length - 1) {
