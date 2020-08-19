@@ -1,4 +1,4 @@
-import { getTheme, ITextField, KeyCodes, Label, Spinner, TextField } from 'office-ui-fabric-react';
+import { getTheme, ITextField, KeyCodes, Spinner, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -7,7 +7,9 @@ import { IAutoCompleteProps, IAutoCompleteState } from '../../../../types/auto-c
 import * as autoCompleteActionCreators from '../../../services/actions/autocomplete-action-creators';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { queryInputStyles } from './QueryInput.styles';
+import SuggestionsList from './SuggestionsList';
 import { cleanUpSelectedSuggestion, getLastCharacterOf, getParametersWithVerb } from './util';
+
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
@@ -255,35 +257,9 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     const { fetchingSuggestions, sampleQuery } = this.props;
 
     const currentTheme = getTheme();
-    const { suggestions: suggestionClass,
-      suggestionOption,
-      suggestionActive: activeSuggestionClass,
+    const {
       input: autoInput,
-      suggestionTitle }: any = queryInputStyles(currentTheme).autoComplete;
-
-    let suggestionsListComponent;
-
-    if (showSuggestions && userInput) {
-      if (filteredSuggestions.length) {
-        suggestionsListComponent = (
-          <ul style={suggestionClass} aria-haspopup='true'>
-            {filteredSuggestions.map((suggestion: {} | null | undefined, index: number) => {
-              return (
-                <li
-                  style={(index === activeSuggestion) ? activeSuggestionClass : suggestionOption}
-                  key={index}
-                  onClick={this.onClick}
-                >
-                  <Label style={suggestionTitle}>
-                    {suggestion}
-                  </Label>
-                </li>
-              );
-            })}
-          </ul>
-        );
-      }
-    }
+    }: any = queryInputStyles(currentTheme).autoComplete;
 
     return (
       <>
@@ -297,7 +273,11 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           componentRef={this.autoCompleteRef}
           onRenderSuffix={(fetchingSuggestions) ? this.renderSuffix : undefined}
         />
-        {suggestionsListComponent}
+        {showSuggestions && userInput && filteredSuggestions.length &&
+          <SuggestionsList
+            filteredSuggestions={filteredSuggestions}
+            activeSuggestion={activeSuggestion}
+            onClick={this.onClick} />}
       </>
     );
   }

@@ -24,3 +24,9 @@ export interface IAutoCompleteState {
   compare: string;
 
 }
+
+export interface ISuggestionsList {
+  activeSuggestion: number;
+  filteredSuggestions: string[];
+  onClick: Function;
+}
