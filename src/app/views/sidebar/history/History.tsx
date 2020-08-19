@@ -21,6 +21,8 @@ import { dynamicSort } from '../../../utils/dynamic-sort';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
+import { BUTTON_CLICK_EVENT, TAB_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
+import { telemetry } from '../../../../telemetry';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
 
 export class History extends Component<IHistoryProps, any> {
@@ -39,7 +41,8 @@ export class History extends Component<IHistoryProps, any> {
 
 
   public componentDidMount = () => {
-    this.generateGroupedList(this.props.history);
+      this.generateGroupedList(this.props.history);
+      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: "History Tab" });
   }
 
   public componentDidUpdate = (prevProps: IHistoryProps) => {
@@ -99,7 +102,8 @@ export class History extends Component<IHistoryProps, any> {
       element.category = date;
       items.push(element);
     });
-    return items.sort(dynamicSort('createdAt', SortOrder.DESC));
+    items.sort(dynamicSort('createdAt', SortOrder.DESC)).forEach((value, index) => { value.index = index });
+    return items;
   }
 
   public generateGroupedList(history: any) {
@@ -139,7 +143,9 @@ export class History extends Component<IHistoryProps, any> {
     return (
       <div className={classes.groupHeader}>
         <DetailsRow {...props} className={classes.queryRow}
-          onClick={() => this.onViewQuery(props.item)} />
+          onClick={() => { 
+            this.onViewQuery(props.item); 
+            this.trackHistoryItemEvent(LISTITEM_CLICK_EVENT, 'View History List Item', props.item)}} />
       </div>
     );
   };
@@ -185,7 +191,10 @@ export class History extends Component<IHistoryProps, any> {
               iconProps: {
                 iconName: 'View'
               },
-              onClick: () => this.onViewQuery(item)
+              onClick: () => { 
+                  this.onViewQuery(item);
+                  this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'View History Item Button', item);
+              }
             },
             {
               key: 'runQuery',
@@ -364,19 +373,22 @@ export class History extends Component<IHistoryProps, any> {
       actions.setSampleQuery(sampleQuery);
       actions.runQuery(sampleQuery);
     }
+    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Run History Item Button', query);
   }
 
   private onExportQuery = (query: IHistoryItem) => {
     const harPayload = createHarPayload(query);
-    const generatedHarData = generateHar([harPayload]);
+    const generatedHarData = generateHar([harPayload]);   
     exportQuery(generatedHarData, `${query.url}/`);
+    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Export History Item Button', query);
   }
 
   private deleteQuery = async (query: IHistoryItem) => {
-    const { actions } = this.props;
+    const { actions } = this.props;     
     if (actions) {
-      actions.removeHistoryItem(query);
+        actions.removeHistoryItem(query);
     }
+    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Delete History Item Button', query);
   }
 
   private onViewQuery = (query: IHistoryItem) => {
@@ -404,6 +416,18 @@ export class History extends Component<IHistoryProps, any> {
         statusText
       });
     }
+  }
+
+  private trackHistoryItemEvent = (eventName: string, componentName: string, 
+      query: IHistoryItem) => {
+    telemetry.trackEvent(
+      eventName,
+      {
+        ComponentName: componentName,
+        ItemIndex: query.index,
+        QueryUrl: query.url,
+        HttpVerb: query.method
+      });
   }
 
   public render() {
