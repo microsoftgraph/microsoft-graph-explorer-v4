@@ -273,7 +273,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           componentRef={this.autoCompleteRef}
           onRenderSuffix={(fetchingSuggestions) ? this.renderSuffix : undefined}
         />
-        {showSuggestions && userInput && filteredSuggestions.length &&
+        {showSuggestions && userInput && filteredSuggestions.length > 0 &&
           <SuggestionsList
             filteredSuggestions={filteredSuggestions}
             activeSuggestion={activeSuggestion}
