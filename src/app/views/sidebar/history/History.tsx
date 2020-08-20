@@ -21,9 +21,10 @@ import { dynamicSort } from '../../../utils/dynamic-sort';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import { BUTTON_CLICK_EVENT, TAB_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
-import { telemetry } from '../../../../telemetry';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
+
+import { BUTTON_CLICK_EVENT, LISTITEM_CLICK_EVENT, TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
+import { telemetry } from '../../../../telemetry';
 
 export class History extends Component<IHistoryProps, any> {
 
@@ -42,7 +43,7 @@ export class History extends Component<IHistoryProps, any> {
 
   public componentDidMount = () => {
       this.generateGroupedList(this.props.history);
-      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: "History Tab" });
+      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: 'History Tab' });
   }
 
   public componentDidUpdate = (prevProps: IHistoryProps) => {
@@ -102,7 +103,7 @@ export class History extends Component<IHistoryProps, any> {
       element.category = date;
       items.push(element);
     });
-    items.sort(dynamicSort('createdAt', SortOrder.DESC)).forEach((value, index) => { value.index = index });
+    items.sort(dynamicSort('createdAt', SortOrder.DESC)).forEach((value, index) => { value.index = index; });
     return items;
   }
 
@@ -145,7 +146,9 @@ export class History extends Component<IHistoryProps, any> {
         <DetailsRow {...props} className={classes.queryRow}
           onClick={() => { 
             this.onViewQuery(props.item); 
-            this.trackHistoryItemEvent(LISTITEM_CLICK_EVENT, 'View History List Item', props.item)}} />
+            this.trackHistoryItemEvent(LISTITEM_CLICK_EVENT, 'View History List Item', props.item);
+            }
+          } />
       </div>
     );
   };

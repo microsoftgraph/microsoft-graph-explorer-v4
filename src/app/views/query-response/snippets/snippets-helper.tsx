@@ -8,12 +8,12 @@ import { Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
 
 import { telemetry } from '../../../../telemetry';
-import { TAB_CLICK_EVENT, BUTTON_CLICK_EVENT } from '../../../../telemetry/event-types';
+import { BUTTON_CLICK_EVENT, TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { IQuery } from '../../../../types/query-runner';
 
 interface ISnippetProps {
   language: string;
-  sampleQuery: IQuery
+  sampleQuery: IQuery;
 }
 
 export function renderSnippets(supportedLanguages: string[]) {
@@ -37,7 +37,9 @@ export function renderSnippets(supportedLanguages: string[]) {
 
 
 function Snippet(props: ISnippetProps) {
-  let { language, sampleQuery } = props;
+  let { language } = props;
+  const { sampleQuery } = props;
+
   /**
    * Converting language lowercase so that we won't have to call toLowerCase() in multiple places.
    *
@@ -80,7 +82,8 @@ function Snippet(props: ISnippetProps) {
                  QueryUrl: sampleQuery.sampleUrl,
                  HttpVerb: sampleQuery.selectedVerb,
                  SelectedLanguage: language
-               });}}
+                  });
+            }}
           />
           <Monaco
             body={snippet}

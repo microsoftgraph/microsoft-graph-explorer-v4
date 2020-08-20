@@ -28,7 +28,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
      {
        ComponentName: 'Adaptive Cards Tab',
        QueryUrl: sampleQuery ? sampleQuery.sampleUrl : null,
-       HttpVerb: sampleQuery? sampleQuery.selectedVerb : null
+       HttpVerb: sampleQuery ? sampleQuery.selectedVerb : null
      });
   }
 

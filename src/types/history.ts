@@ -1,7 +1,7 @@
 import { ITheme } from '@uifabric/styling';
 
 export interface IHistoryItem {
-  index: number,
+  index: number;
   url: string;
   method: string;
   headers: Array<{ name: string; value: string; }>;

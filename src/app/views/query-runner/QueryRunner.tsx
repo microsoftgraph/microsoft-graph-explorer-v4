@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { telemetry } from '../../../telemetry';
-import { RUN_QUERY_EVENT, DROPDOWN_CHANGE_EVENT } from '../../../telemetry/event-types';
+import { DROPDOWN_CHANGE_EVENT, RUN_QUERY_EVENT } from '../../../telemetry/event-types';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
