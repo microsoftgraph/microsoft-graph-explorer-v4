@@ -24,6 +24,9 @@ import { signOut } from '../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../services/actions/permissions-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
+import { telemetry } from '../../../telemetry';
+import { BUTTON_CLICK_EVENT } from '../../../telemetry/event-types';
+
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
@@ -88,6 +91,7 @@ function Settings(props: ISettingsProps) {
     let hidden = themeChooserDialogHidden;
     hidden = !hidden;
     hideThemeChooserDialog(hidden);
+    telemetry.trackEvent(BUTTON_CLICK_EVENT, { ComponentName: 'Theme Change Button' });
   };
 
   const handleSignOut = () => {
@@ -98,6 +102,7 @@ function Settings(props: ISettingsProps) {
     const newTheme: AppTheme = selectedTheme.key;
     dispatch(changeTheme(newTheme));
     loadGETheme(newTheme);
+    telemetry.trackEvent(BUTTON_CLICK_EVENT, { ComponentName: 'Selected Theme Button', SelectedTheme: selectedTheme.text });
   };
 
   const togglePermissionsPanel = () => {
