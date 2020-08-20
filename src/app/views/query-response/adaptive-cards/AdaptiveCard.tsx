@@ -8,6 +8,9 @@ import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { Monaco } from '../../common';
 
+import { telemetry } from '../../../../telemetry';
+import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
+
 class AdaptiveCard extends Component<IAdaptiveCardProps> {
   private adaptiveCard: AdaptiveCardsAPI.AdaptiveCard;
   constructor(props: IAdaptiveCardProps) {
@@ -21,6 +24,12 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     if (hostConfig) {
       this.adaptiveCard.hostConfig = new AdaptiveCardsAPI.HostConfig(hostConfig);
     }
+    telemetry.trackEvent(TAB_CLICK_EVENT, 
+     {
+       ComponentName: 'Adaptive Cards Tab',
+       QueryUrl: sampleQuery ? sampleQuery.sampleUrl : null,
+       HttpVerb: sampleQuery? sampleQuery.selectedVerb : null
+     });
   }
 
   public componentDidUpdate(nextProps: IAdaptiveCardProps) {
