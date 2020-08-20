@@ -25,7 +25,7 @@ import { consentToScopes } from '../../services/actions/permissions-action-creat
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 import { telemetry } from '../../../telemetry';
-import { BUTTON_CLICK_EVENT } from '../../../telemetry/event-types';
+import { BUTTON_CLICK_EVENT, LINK_CLICK_EVENT } from '../../../telemetry/event-types';
 
 
 function Settings(props: ISettingsProps) {
@@ -53,6 +53,7 @@ function Settings(props: ISettingsProps) {
         iconProps: {
           iconName: 'CommandPrompt',
         },
+        onClick: () => trackOfficeDevProgramLinkClickEvent(),
       },
       {
         key: 'change-theme',
@@ -119,6 +120,10 @@ function Settings(props: ISettingsProps) {
   const handleConsent = () => {
     dispatch(consentToScopes(selectedPermissions));
     setSelectedPermissions([]);
+  };
+
+  const trackOfficeDevProgramLinkClickEvent = () => {
+    telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: 'Office Dev Program Link'});
   };
 
   const getSelectionDetails = () => {
