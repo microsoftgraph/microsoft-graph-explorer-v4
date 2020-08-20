@@ -122,8 +122,9 @@ export class QueryRunner extends Component<
 
     if (newQueryVersion !== oldQueryVersion) {
       if (newQueryVersion === 'v1.0' || newQueryVersion === 'beta') {
-        const sampleQuery = { ...this.props.sampleQuery };
+        const sampleQuery = { ...query };
         sampleQuery.selectedVersion = newQueryVersion;
+        sampleQuery.sampleUrl = newUrl;
         this.props.actions!.setSampleQuery(sampleQuery);
       }
     }
