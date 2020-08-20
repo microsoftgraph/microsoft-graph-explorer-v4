@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { telemetry } from '../../../telemetry';
-import { RUN_QUERY_EVENT } from '../../../telemetry/event-types';
+import { RUN_QUERY_EVENT, DROPDOWN_CHANGE_EVENT } from '../../../telemetry/event-types';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
@@ -107,6 +107,11 @@ export class QueryRunner extends Component<
         sampleUrl,
         selectedVersion: queryVersion
       });
+      telemetry.trackEvent(DROPDOWN_CHANGE_EVENT, 
+       { 
+         ComponentName: 'Version Change Dropdown', 
+         SelectedVersion: queryVersion 
+       });
     }
   };
 
