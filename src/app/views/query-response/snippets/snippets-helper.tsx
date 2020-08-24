@@ -34,8 +34,6 @@ export function renderSnippets(supportedLanguages: string[]) {
   ));
 }
 
-
-
 function Snippet(props: ISnippetProps) {
   let { language } = props;
   const { sampleQuery } = props;
