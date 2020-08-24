@@ -25,8 +25,8 @@ import { consentToScopes } from '../../services/actions/permissions-action-creat
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 
-import { BUTTON_CLICK_EVENT, LINK_CLICK_EVENT } from '../../../telemetry/event-types';
 import { telemetry } from '../../../telemetry';
+import { BUTTON_CLICK_EVENT, LINK_CLICK_EVENT } from '../../../telemetry/event-types';
 
 
 function Settings(props: ISettingsProps) {
@@ -104,8 +104,8 @@ function Settings(props: ISettingsProps) {
     const newTheme: AppTheme = selectedTheme.key;
     dispatch(changeTheme(newTheme));
     loadGETheme(newTheme);
-    telemetry.trackEvent(BUTTON_CLICK_EVENT, 
-     { 
+    telemetry.trackEvent(BUTTON_CLICK_EVENT,
+     {
        ComponentName: 'Selected Theme Button',
        SelectedTheme: selectedTheme.text
      });

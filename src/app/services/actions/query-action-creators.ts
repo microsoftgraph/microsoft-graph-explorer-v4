@@ -96,7 +96,7 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
 
 
   const historyItem: IHistoryItem = {
-    index: 0,
+    index: -1,
     url: query.sampleUrl,
     method: query.selectedVerb,
     headers: query.sampleHeaders,

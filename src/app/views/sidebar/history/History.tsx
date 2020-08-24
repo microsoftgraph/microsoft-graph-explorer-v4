@@ -23,8 +23,8 @@ import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
 
-import { BUTTON_CLICK_EVENT, LISTITEM_CLICK_EVENT, TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { telemetry } from '../../../../telemetry';
+import { BUTTON_CLICK_EVENT, LISTITEM_CLICK_EVENT, TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 
 export class History extends Component<IHistoryProps, any> {
 

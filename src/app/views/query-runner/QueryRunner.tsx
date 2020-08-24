@@ -101,17 +101,22 @@ export class QueryRunner extends Component<
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
     const { sampleQuery } = this.props;
     if (urlVersion) {
-      const { sampleUrl, queryVersion } = parseSampleUrl(sampleQuery.sampleUrl, urlVersion.text);
+      const { queryVersion: oldQueryVersion } = parseSampleUrl(sampleQuery.sampleUrl);
+      const { sampleUrl, queryVersion: newQueryVersion } = parseSampleUrl(sampleQuery.sampleUrl, urlVersion.text);
       this.props.actions!.setSampleQuery({
         ...sampleQuery,
         sampleUrl,
-        selectedVersion: queryVersion
+        selectedVersion: newQueryVersion
       });
-      telemetry.trackEvent(DROPDOWN_CHANGE_EVENT, 
-       { 
-         ComponentName: 'Version Change Dropdown', 
-         SelectedVersion: queryVersion 
-       });
+      if (oldQueryVersion != newQueryVersion)
+      {
+        telemetry.trackEvent(DROPDOWN_CHANGE_EVENT,
+          {
+            ComponentName: 'Version Change Dropdown',
+            NewVersion: newQueryVersion,
+            OldVersion: oldQueryVersion
+          });
+      }
     }
   };
 
