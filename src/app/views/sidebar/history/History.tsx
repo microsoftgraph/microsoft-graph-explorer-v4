@@ -48,14 +48,16 @@ export class History extends Component<IHistoryProps, any> {
     }
   }
 
-  public searchValueChanged = (value: any): void => {
+  public searchValueChanged = (event: any, value?: string): void => {
     const { history } = this.props;
-    const keyword = value.toLowerCase();
-
-    const filteredSamples = history.filter((sample: any) => {
-      const name = sample.url.toLowerCase();
-      return name.toLowerCase().includes(keyword);
-    });
+    let filteredSamples = history;
+    if (value) {
+      const keyword = value.toLowerCase();
+      filteredSamples = history.filter((sample: any) => {
+        const name = sample.url.toLowerCase();
+        return name.toLowerCase().includes(keyword);
+      });
+    }
 
     this.generateGroupedList(filteredSamples);
   }
@@ -273,7 +275,7 @@ export class History extends Component<IHistoryProps, any> {
             </div>
           </div>
         </div>
-        <div className={'col-md-4'} style={{display: 'inline-block'}}>
+        <div className={'col-md-4'} style={{ display: 'inline-block' }}>
           <IconButton
             className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
             iconProps={{ iconName: 'Delete' }}
@@ -333,7 +335,7 @@ export class History extends Component<IHistoryProps, any> {
 
     const generatedHarData = generateHar(entries);
     const { origin } = new URL(itemsToExport[0].url);
-    const exportTitle =  `${origin}/${category.toLowerCase()}/${itemsToExport[0].createdAt.substr(0, 10)}/`;
+    const exportTitle = `${origin}/${category.toLowerCase()}/${itemsToExport[0].createdAt.substr(0, 10)}/`;
 
     exportQuery(generatedHarData, exportTitle);
   }
@@ -427,12 +429,14 @@ export class History extends Component<IHistoryProps, any> {
     return (
       <>
         <div>
-          <SearchBox placeholder={messages['Search history items']} className={classes.searchBox}
-            onChange={(value) => this.searchValueChanged(value)}
+          <SearchBox
+            placeholder={messages['Search history items']}
+            className={classes.searchBox}
+            onChange={this.searchValueChanged}
             styles={{ field: { paddingLeft: 10 } }}
           />
           <hr />
-          {groupedList.items.length > 0 && <DetailsList
+          <DetailsList
             className={classes.queryList}
             onRenderItemColumn={this.renderItemColumn}
             items={groupedList.items}
@@ -445,7 +449,7 @@ export class History extends Component<IHistoryProps, any> {
             }}
             onRenderRow={this.renderRow}
             onRenderDetailsHeader={this.renderDetailsHeader}
-          />}
+          />
         </div>
         <Dialog
           hidden={hideDialog}

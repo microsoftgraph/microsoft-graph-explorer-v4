@@ -15,9 +15,9 @@ The Graph Explorer is written in [TypeScript](https://www.typescriptlang.org/) a
 
 #### Enabling authentication with your own credentials
 * Signing to your Microsoft account or Create one if you don't have.
-* In the Dashboard, click `Add an app in the Azure portal`. You will be redirected to Microsoft Azure portal where you Register an application.
+* In the Dashboard, click `Add an app in the Azure portal`. You will be redirected to the Microsoft Azure portal where you Register an application.
     Set Redirect URI to `http://localhost:3000`.You can also set it from authentication tab in the app you have just created.
-* Create `.env` file in the root of the project and add the following keys.
+* Create a `.env` file at the root of the project and add the following keys.
     - REACT_APP_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     - REACT_APP_INSTRUMENTATION_KEY=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 

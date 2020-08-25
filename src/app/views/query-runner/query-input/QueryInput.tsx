@@ -4,7 +4,6 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { bindActionCreators, Dispatch } from 'redux';
-import { Mode } from '../../../../types/enums';
 import { IQueryInputProps } from '../../../../types/query-runner';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import { getStyleFor } from '../../../utils/badge-color';
@@ -36,9 +35,9 @@ export class QueryInput extends Component<IQueryInputProps, any> {
   }
 
   public contentChanged = (value: string) => {
-    const query = { ...this.props.sampleQuery };
-    query.sampleUrl = value;
-    query.selectedVersion = this.changeUrlVersion(value);
+    const { sampleQuery } = this.props;
+    const query = { ...sampleQuery, ...{ sampleUrl: value } };
+    this.changeUrlVersion(value);
     this.props.actions!.setSampleQuery(query);
   }
 
@@ -46,14 +45,15 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     const query = { ...this.props.sampleQuery };
     const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);
     const { queryVersion: oldQueryVersion } = parseSampleUrl(query.sampleUrl);
-    let version = oldQueryVersion;
 
     if (newQueryVersion !== oldQueryVersion) {
       if (newQueryVersion === 'v1.0' || newQueryVersion === 'beta') {
-        version = newQueryVersion;
+        const sampleQuery = { ...query };
+        sampleQuery.selectedVersion = newQueryVersion;
+        sampleQuery.sampleUrl = newUrl;
+        this.props.actions!.setSampleQuery(sampleQuery);
       }
     }
-    return version;
   }
 
   public handleOnRunQuery = (event: any) => {
@@ -86,7 +86,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       background: getStyleFor(sampleQuery.selectedVerb),
     };
 
-    const httpMethodsToDisplay = (mode === Mode.TryIt && !authenticated) ? [httpMethods[0]] : httpMethods;
+    const httpMethodsToDisplay = (!authenticated) ? [httpMethods[0]] : httpMethods;
 
     return (
       <div className='row'>
@@ -124,7 +124,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             submitting={submitting}
           />
         </div>
-      </div>
+      </div >
     );
   }
 }

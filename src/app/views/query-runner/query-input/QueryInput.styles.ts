@@ -82,7 +82,8 @@ export const queryInputStyles = (theme: ITheme) => {
         height: '100%',
         flexWrap: 'nowrap',
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
+        fontWeight: 400
       }
     }
   };

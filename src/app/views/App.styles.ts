@@ -18,6 +18,7 @@ export const appStyles = (theme: ITheme) => {
       background: theme.palette.neutralLighter,
       maxWidth: '65px',
       minWidth: '55px',
+      padding: 10
     },
     layoutExtra: {
       minWidth: '95%',
