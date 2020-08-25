@@ -18,7 +18,7 @@ export const light = {
     neutralQuaternary: '#d0d0d0',
     neutralTertiaryAlt: '#c8c8c8',
     neutralTertiary: '#c2c2c2',
-    neutralSecondary: '#858585',
+    neutralSecondary: '#535353',
     neutralPrimaryAlt: '#4b4b4b',
     neutralPrimary: '#333333',
     neutralDark: '#272727',

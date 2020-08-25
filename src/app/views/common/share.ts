@@ -27,7 +27,7 @@ export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): s
 
   if (sampleBody && Object.keys(sampleBody).length > 0) {
     const requestBody = hashEncode(JSON.stringify(sampleBody));
-    shareLink = `&requestBody=${requestBody}`;
+    shareLink = `${shareLink}&requestBody=${requestBody}`;
   }
 
   if (sampleHeaders && sampleHeaders.length > 0) {
@@ -45,5 +45,5 @@ export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): s
 };
 
 const hashEncode = (requestBody: string): string => {
-  return btoa(requestBody);
+  return btoa(unescape(encodeURIComponent(requestBody)));
 };
