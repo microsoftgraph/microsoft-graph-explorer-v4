@@ -269,7 +269,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           autoComplete='off'
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
-          defaultValue={sampleQuery.sampleUrl}
+          value={sampleQuery.sampleUrl}
           componentRef={this.autoCompleteRef}
           onRenderSuffix={(fetchingSuggestions) ? this.renderSuffix : undefined}
         />
