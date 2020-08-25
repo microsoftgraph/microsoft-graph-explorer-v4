@@ -108,7 +108,7 @@ export class QueryRunner extends Component<
         sampleUrl,
         selectedVersion: newQueryVersion
       });
-      if (oldQueryVersion != newQueryVersion)
+      if (oldQueryVersion !== newQueryVersion)
       {
         telemetry.trackEvent(DROPDOWN_CHANGE_EVENT,
           {
