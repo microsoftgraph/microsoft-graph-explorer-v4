@@ -24,7 +24,7 @@ import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
 
 import { telemetry } from '../../../../telemetry';
-import { BUTTON_CLICK_EVENT, LISTITEM_CLICK_EVENT, TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
+import { BUTTON_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
 
 export class History extends Component<IHistoryProps, any> {
 
@@ -43,7 +43,6 @@ export class History extends Component<IHistoryProps, any> {
 
   public componentDidMount = () => {
       this.generateGroupedList(this.props.history);
-      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: 'History Tab' });
   }
 
   public componentDidUpdate = (prevProps: IHistoryProps) => {
