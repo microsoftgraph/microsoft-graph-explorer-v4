@@ -7,10 +7,16 @@ import { telemetry } from '../../../telemetry';
 import { TAB_CLICK_EVENT } from '../../../telemetry/event-types';
 
 
-function onPivotItemClick (item?: PivotItem): void {
+function onPivotItemClick (item?: PivotItem) {
   if (!item) { return; }
-  const itemKey = item.props.itemKey;
-  switch (itemKey) {
+  const key = item.props.itemKey;
+  if (key) {
+    trackTabClickEvent(key);
+  }
+}
+
+function trackTabClickEvent(tabKey: string) {
+  switch (tabKey) {
     case 'history': {
       telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: 'History Tab' });
       break;
