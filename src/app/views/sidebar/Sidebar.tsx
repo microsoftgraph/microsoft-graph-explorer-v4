@@ -1,14 +1,14 @@
-import { Pivot, PivotItem, IPivotItemProps, IButton } from 'office-ui-fabric-react';
+import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React from 'react';
 
 import History from './history/History';
 import SampleQueries from './sample-queries/SampleQueries';
-
+import { telemetry } from '../../../telemetry';
 import { TAB_CLICK_EVENT } from '../../../telemetry/event-types';
-import {telemetry } from '../../../telemetry';
 
-function onPivotItemClick (item?: PivotItem) : void {
-  if (!item) return;
+
+function onPivotItemClick (item?: PivotItem): void {
+  if (!item) { return; }
   const itemKey = item.props.itemKey;
   switch (itemKey) {
     case 'history': {
