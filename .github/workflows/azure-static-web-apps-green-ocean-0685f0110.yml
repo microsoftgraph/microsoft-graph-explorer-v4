@@ -5,11 +5,6 @@ on:
     branches-ignore:
       - master
       - dev
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches-ignore:
-      - master
-      - dev
 
 jobs:
   build_and_deploy_job:
