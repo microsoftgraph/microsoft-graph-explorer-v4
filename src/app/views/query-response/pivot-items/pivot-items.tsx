@@ -17,7 +17,7 @@ import { Snippets } from '../snippets';
 export const getPivotItems = (properties: any) => {
 
   const { headers, body, verb, messages, mobileScreen, mode, sampleQuery } = properties;
-  const resultComponent = displayResultComponent(headers, body, verb);
+  const resultComponent = displayResultComponent(headers, body);
 
   const pivotItems = [
     <PivotItem
@@ -105,7 +105,7 @@ function adaptiveCardPresentDot(sampleQuery: IQuery) {
   return null;
 }
 
-function displayResultComponent(headers: any, body: any, verb: string) {
+function displayResultComponent(headers: any, body: any) {
   const language = 'json';
   let contentType = null;
 
@@ -120,7 +120,7 @@ function displayResultComponent(headers: any, body: any, verb: string) {
 
     switch (contentType) {
       case ContentType.XML:
-        return <Monaco body={formatXml(body)} verb={verb} language='xml' />;
+        return <Monaco body={formatXml(body)} language='xml' />;
 
       default:
         if (isImageResponse(contentType)) {
@@ -130,7 +130,7 @@ function displayResultComponent(headers: any, body: any, verb: string) {
             alt='profile image'
           />;
         }
-        return <Monaco body={body} verb={verb} language={language} />;
+        return <Monaco body={body} language={language} />;
     }
   }
 }
