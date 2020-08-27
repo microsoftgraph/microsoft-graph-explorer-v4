@@ -35,7 +35,7 @@ const SuggestionsList = ({ filteredSuggestions, activeSuggestion, onClick }: ISu
             style={(index === activeSuggestion) ? activeSuggestionClass : suggestionOption}
             key={index}
             ref={refs[index]}
-            onClick={() => onClick}
+            onClick={(e: any) => onClick(e)}
           >
             <Label style={suggestionTitle}>
               {suggestion}

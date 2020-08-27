@@ -277,7 +277,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           <SuggestionsList
             filteredSuggestions={filteredSuggestions}
             activeSuggestion={activeSuggestion}
-            onClick={this.onClick} />}
+            onClick={(e: any) => this.onClick(e)} />}
       </>
     );
   }
