@@ -107,8 +107,17 @@ function adaptiveCardPresentDot(sampleQuery: IQuery) {
 
 function displayResultComponent(headers: any, body: any, verb: string) {
   const language = 'json';
+  let contentType = null;
+
   if (headers) {
-    const contentType = headers['content-type'].split(';')[0];
+    const contentTypes = headers['content-type'];
+    if (contentTypes) {
+      const splitContentTypes = contentTypes.split(';');
+      if (splitContentTypes.length > 0) {
+        contentType = splitContentTypes[0];
+      }
+    }
+
     switch (contentType) {
       case ContentType.XML:
         return <Monaco body={formatXml(body)} verb={verb} language='xml' />;
