@@ -2,12 +2,14 @@ name: Azure Static Web Apps CI/CD
 
 on:
   push:
-    branches:
-      - deploy-autocomplete
+    branches-ignore:
+      - master
+      - dev
   pull_request:
     types: [opened, synchronize, reopened, closed]
-    branches:
-      - deploy-autocomplete
+    branches-ignore:
+      - master
+      - dev
 
 jobs:
   build_and_deploy_job:
