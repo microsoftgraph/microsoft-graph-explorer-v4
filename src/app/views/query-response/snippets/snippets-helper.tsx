@@ -8,7 +8,7 @@ import { Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
 
 import { telemetry } from '../../../../telemetry';
-import { BUTTON_CLICK_EVENT, TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
+import { BUTTON_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { IQuery } from '../../../../types/query-runner';
 
 interface ISnippetProps {
@@ -18,12 +18,6 @@ interface ISnippetProps {
 
 export function renderSnippets(supportedLanguages: string[]) {
   const sampleQuery = useSelector((state: any) => state.sampleQuery, shallowEqual);
-  telemetry.trackEvent(TAB_CLICK_EVENT, 
-   {
-     ComponentName: 'Code Snippets Tab',
-     QueryUrl: sampleQuery.sampleUrl,
-     HttpVerb: sampleQuery.selectedVerb
-   });
   return supportedLanguages.map((language: string) => (
     <PivotItem
       key={language}
@@ -74,13 +68,7 @@ function Snippet(props: ISnippetProps) {
             iconProps={copyIcon}
             onClick={async () => {
               genericCopy(snippet);
-              telemetry.trackEvent(BUTTON_CLICK_EVENT,
-               {
-                 ComponentName: 'Code Snippets Copy Button',
-                 QueryUrl: sampleQuery.sampleUrl,
-                 HttpVerb: sampleQuery.selectedVerb,
-                 SelectedLanguage: language
-                  });
+              trackCopyEvent(sampleQuery, language);
             }}
           />
           <Monaco
@@ -97,4 +85,13 @@ function Snippet(props: ISnippetProps) {
       }
     </div>
   );
+}
+
+function trackCopyEvent(query: IQuery, language: string) {
+  telemetry.trackEvent(BUTTON_CLICK_EVENT,
+    {
+      ComponentName: 'Code Snippets Copy Button',
+      QueryUrl: query.selectedVerb + ' ' + query.sampleUrl,
+      SelectedLanguage: language
+    });
 }

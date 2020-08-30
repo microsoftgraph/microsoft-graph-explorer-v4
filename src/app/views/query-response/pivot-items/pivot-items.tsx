@@ -1,6 +1,8 @@
 import { getId, getTheme, Icon, IconButton, PivotItem, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
 
+import { telemetry } from '../../../../telemetry';
+import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { ContentType, Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
@@ -22,6 +24,7 @@ export const getPivotItems = (properties: any) => {
   const pivotItems = [
     <PivotItem
       key='response-preview'
+      itemKey='response-preview'
       ariaLabel='Response Preview'
       itemIcon='Reply'
       headerText={messages['Response Preview']}
@@ -32,6 +35,7 @@ export const getPivotItems = (properties: any) => {
     </PivotItem>,
     <PivotItem
       key='response-headers'
+      itemKey='response-headers'
       ariaLabel='Response Headers'
       headerText={messages['Response Headers']}
       itemIcon='FileComment'
@@ -49,6 +53,7 @@ export const getPivotItems = (properties: any) => {
     pivotItems.push(
       <PivotItem
         key='adaptive-cards'
+        itemKey='adaptive-cards'
         ariaLabel='Adaptive Cards'
         headerText={messages['Adaptive Cards']}
         title={messages['Adaptive Cards']}
@@ -70,6 +75,7 @@ export const getPivotItems = (properties: any) => {
     pivotItems.push(
       <PivotItem
         key='code-snippets'
+        itemKey='code-snippets'
         ariaLabel='Code Snippets'
         title={messages.Snippets}
         headerText={messages.Snippets}
@@ -83,6 +89,29 @@ export const getPivotItems = (properties: any) => {
 
   return pivotItems;
 };
+
+export const onPivotItemClick = (query: IQuery, item?: PivotItem) => {
+  if (!item) { return; }
+  const key = item.props.itemKey;
+  if (key) { trackTabClickEvent(query, key); }
+};
+
+function trackTabClickEvent(query: IQuery, tabKey: string) {
+  const queryUrl = query.selectedVerb + ' ' + query.sampleUrl;
+  switch (tabKey) {
+    case 'adaptive-cards': {
+      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: 'Adaptive Cards Tab', QueryUrl: queryUrl });
+      break;
+    }
+    case 'code-snippets': {
+      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: 'Code Snippets Tab', QueryUrl: queryUrl});
+      break;
+    }
+    default: {
+      break;
+    }
+  }
+}
 
 function getTooltipDisplay(link: any) {
   return (
