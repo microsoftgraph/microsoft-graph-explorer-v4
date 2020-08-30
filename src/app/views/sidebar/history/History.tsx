@@ -8,6 +8,8 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { telemetry } from '../../../../telemetry';
+import { BUTTON_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { SortOrder } from '../../../../types/enums';
 import { IHarPayload } from '../../../../types/har';
 import { IHistoryItem, IHistoryProps } from '../../../../types/history';
@@ -23,8 +25,6 @@ import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
 
-import { telemetry } from '../../../../telemetry';
-import { BUTTON_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
 
 export class History extends Component<IHistoryProps, any> {
 

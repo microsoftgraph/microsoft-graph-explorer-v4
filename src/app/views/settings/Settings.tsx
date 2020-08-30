@@ -17,6 +17,8 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
+import { telemetry } from '../../../telemetry';
+import { BUTTON_CLICK_EVENT, LINK_CLICK_EVENT } from '../../../telemetry/event-types';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
 import { ISettingsProps } from '../../../types/settings';
@@ -24,9 +26,6 @@ import { signOut } from '../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../services/actions/permissions-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
-
-import { telemetry } from '../../../telemetry';
-import { BUTTON_CLICK_EVENT, LINK_CLICK_EVENT } from '../../../telemetry/event-types';
 
 
 function Settings(props: ISettingsProps) {

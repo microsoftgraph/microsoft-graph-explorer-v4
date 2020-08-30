@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
+import { telemetry } from '../../../../telemetry';
+import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
 import { RequestHeaders } from './headers';
-import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
-import { telemetry } from '../../../../telemetry';
 import { Permission } from './permissions';
 import './request.scss';
 
