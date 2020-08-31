@@ -13,24 +13,21 @@ import { IQuery } from '../../../../types/query-runner';
 
 interface ISnippetProps {
   language: string;
-  sampleQuery: IQuery;
 }
 
 export function renderSnippets(supportedLanguages: string[]) {
-  const sampleQuery = useSelector((state: any) => state.sampleQuery, shallowEqual);
   return supportedLanguages.map((language: string) => (
     <PivotItem
       key={language}
       headerText={language}
     >
-      <Snippet language={language} sampleQuery={sampleQuery} />
+      <Snippet language={language} />
     </PivotItem>
   ));
 }
 
 function Snippet(props: ISnippetProps) {
   let { language } = props;
-  const { sampleQuery } = props;
 
   /**
    * Converting language lowercase so that we won't have to call toLowerCase() in multiple places.
@@ -40,6 +37,7 @@ function Snippet(props: ISnippetProps) {
    */
   language = language.toLowerCase();
 
+  const sampleQuery = useSelector((state: any) => state.sampleQuery, shallowEqual);
   const snippets = useSelector((state: any) => (state.snippets));
   const { data, pending: loadingState } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
