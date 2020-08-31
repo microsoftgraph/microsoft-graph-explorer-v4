@@ -17,7 +17,7 @@ steps:
 
   - script: |
       npm start --port 3000
-    displayName: npm start'
+    displayName: 'npm start'
 
   - script: |
       npm test -- --coverage
