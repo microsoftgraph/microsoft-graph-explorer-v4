@@ -16,6 +16,7 @@ steps:
     displayName: 'Runs linting checks'
 
   - script: |
+      npm start --port 3000
       npm test -- --coverage
     displayName: 'Runs tests'
 
