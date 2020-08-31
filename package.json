@@ -83,7 +83,9 @@
     "test": "node scripts/test.js",
     "lint": "tslint --project tsconfig.json -c tslint.json",
     "prebuild:prod": "standard-version",
-    "build:prod": "npm run build"
+    "build:prod": "npm run build",
+    "start-server": "npm start",
+    "ci": "start-server-and-test start-server http://localhost:3000 test"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -122,6 +124,7 @@
     "redux-mock-store": "1.5.3",
     "selenium-webdriver": "4.0.0-alpha.7",
     "standard-version": "8.0.2",
+    "start-server-and-test": "^1.11.3",
     "ts-jest": "25.2.0",
     "tslint": "5.12.1",
     "tslint-config-prettier": "1.18.0",
