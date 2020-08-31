@@ -97,8 +97,8 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@types/axe-webdriverjs": "^2.1.0",
-    "@types/chromedriver": "^2.38.0",
+    "@types/axe-webdriverjs": "2.1.0",
+    "@types/chromedriver": "2.38.0",
     "@types/enzyme": "3.9.0",
     "@types/enzyme-adapter-react-16": "1.0.5",
     "@types/jest": "24.0.6",
@@ -110,7 +110,7 @@
     "@types/react-redux": "7.1.0",
     "@types/redux-logger": "3.0.7",
     "@types/redux-mock-store": "1.0.0",
-    "@types/selenium-webdriver": "^4.0.6",
+    "@types/selenium-webdriver": "4.0.6",
     "axe-core": "3.4.2",
     "axe-sarif-converter": "2.3.0",
     "axe-webdriverjs": "2.3.0",
@@ -124,7 +124,7 @@
     "redux-mock-store": "1.5.3",
     "selenium-webdriver": "4.0.0-alpha.7",
     "standard-version": "8.0.2",
-    "start-server-and-test": "^1.11.3",
+    "start-server-and-test": "1.11.3",
     "ts-jest": "25.2.0",
     "tslint": "5.12.1",
     "tslint-config-prettier": "1.18.0",
