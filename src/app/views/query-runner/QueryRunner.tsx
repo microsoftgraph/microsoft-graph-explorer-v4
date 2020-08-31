@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { telemetry } from '../../../telemetry';
-import { DROPDOWN_CHANGE_EVENT, RUN_QUERY_EVENT } from '../../../telemetry/event-types';
+import { BUTTON_CLICK_EVENT, DROPDOWN_CHANGE_EVENT } from '../../../telemetry/event-types';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
@@ -95,7 +95,12 @@ export class QueryRunner extends Component<
     if (actions) {
       actions.runQuery(sampleQuery);
     }
-    telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
+    telemetry.trackEvent(BUTTON_CLICK_EVENT,
+      {
+         ComponentName: 'Run Query Button',
+         QueryUrl: sampleQuery.selectedVerb + ' ' + sampleQuery.sampleUrl,
+         SelectedVersion: sampleQuery.selectedVersion
+      });
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {

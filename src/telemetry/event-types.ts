@@ -1,6 +1,5 @@
 // Event names MUST end with the word EVENT
 
-export const RUN_QUERY_EVENT = 'RUN_QUERY_EVENT';
 export const BUTTON_CLICK_EVENT = 'BUTTON_CLICK_EVENT';
 export const TAB_CLICK_EVENT = 'TAB_CLICK_EVENT';
 export const LINK_CLICK_EVENT = 'LINK_CLICK_EVENT';
