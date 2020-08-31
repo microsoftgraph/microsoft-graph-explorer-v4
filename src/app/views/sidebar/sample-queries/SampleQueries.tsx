@@ -79,16 +79,20 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   public onDocumentationLinkClicked = (item: any) => {
     window.open(item.docLink, '_blank');
-    telemetry.trackEvent(
-     LINK_CLICK_EVENT,
-     {
-        ComponentName: 'Documentation Link',
-        SampleId: item.id,
-        SampleName: item.humanName,
-        SampleCategory: item.category,
-        Link: item.docLink
-     });
+    this.trackDocumentLinkClickedEvent(item);
   };
+
+  private trackDocumentLinkClickedEvent(item: any) {
+    telemetry.trackEvent(
+      LINK_CLICK_EVENT,
+      {
+         ComponentName: 'Documentation Link',
+         SampleId: item.id,
+         SampleName: item.humanName,
+         SampleCategory: item.category,
+         Link: item.docLink
+      });
+  }
 
   public generateSamples(samples: any) {
     const map = new Map();
