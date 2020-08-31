@@ -1,7 +1,7 @@
 import AxeBuilder from 'axe-webdriverjs';
 import chromeDriver from 'chromedriver';
 import webdriver, { ThenableWebDriver } from 'selenium-webdriver';
-import chrome from 'selenium-webdriver/chrome';
+import chrome, { Options } from 'selenium-webdriver/chrome';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 300000;
 const TEST_TIMEOUT_MS = 300000;
@@ -14,6 +14,8 @@ describe('Graph Explorer', () => {
 
     driver = new webdriver
     .Builder()
+    .forBrowser('chrome')
+    .setChromeOptions(new Options().headless())
     .withCapabilities(webdriver.Capabilities.chrome())
     .build();
   }, TEST_TIMEOUT_MS);
@@ -25,7 +27,7 @@ describe('Graph Explorer', () => {
   beforeEach(async() => {
     await driver.manage().setTimeouts( { implicit: 0, pageLoad:
       60000, script: TEST_TIMEOUT_MS });
-    await driver.get('https://developer.microsoft.com/en-us/graph/graph-explorer/preview');
+    await driver.get('http://localhost:3000/');
   }, TEST_TIMEOUT_MS);
 
   it('checks for accessibility violations', async() => {
