@@ -1,10 +1,12 @@
+name: $(rev:.r)
+
 pool:
-  vmImage: 'vs2017-win2016'
+  vmImage: 'ubuntu-latest'
 
 steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: '8.x'
+      versionSpec: '10.x'
     displayName: 'Install Node.js'
 
   - script: |
@@ -15,7 +17,7 @@ steps:
       npm run lint
     displayName: 'Runs linting checks'
 
-  - task: PowerShell@1
+  - task: PowerShell@2
     displayName: 'Set version-number'
     inputs:
       targetType: 'inline'
