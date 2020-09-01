@@ -13,27 +13,24 @@ export async function writeHistoryData(historyItem: IHistoryItem) {
 export async function readHistoryData(): Promise<IHistoryItem[]> {
   let historyData: IHistoryItem[] = [];
   const keys = await historyStorage.keys();
-  for (const element of keys) {
-    if (historyItemAgeYoungerThan(30, element)) {
-      const historyItem: IHistoryItem = await historyStorage.getItem(element);
+  for (const creationTime of keys) {
+    if (historyItemHasExpired(creationTime)) {
+      const historyItem: IHistoryItem = await historyStorage.getItem(creationTime);
       historyData = [...historyData, historyItem];
     } else {
-      historyStorage.removeItem(element);
+      historyStorage.removeItem(creationTime);
     }
   }
   return historyData;
 }
 
-function historyItemAgeYoungerThan(ageInDays: number, createdAt: string): boolean {
+function historyItemHasExpired(createdAt: string): boolean {
+  const ageInDays: number = 30;
   const dateToCompare = new Date();
   dateToCompare.setDate(dateToCompare.getDate() - ageInDays);
-  const compareDate = dateToCompare.getTime();
-
-  const createdDate = new Date(createdAt).getTime();
-  if (createdDate < compareDate) {
-    return false;
-  }
-  return true;
+  const expiryDate = dateToCompare.getTime();
+  const createdTime = new Date(createdAt).getTime();
+  return (createdTime >= expiryDate);
 }
 
 export const removeHistoryData = async (historyItem: IHistoryItem) => {
