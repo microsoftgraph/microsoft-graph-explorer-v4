@@ -6,13 +6,8 @@ pool:
 steps:
   - task: NodeTool@0
     inputs:
-<<<<<<< HEAD
       versionSpec: '10.x'
     displayName: 'Install Node.js'
-=======
-      versionSpec: '8.x'
-      displayName: 'Install Node.js'
->>>>>>> 1d1e9ec8cc22928c203ed277c9d3a21870079f03
 
   - script: |
       npm install
