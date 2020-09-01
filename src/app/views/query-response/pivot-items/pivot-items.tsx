@@ -112,6 +112,9 @@ function displayResultComponent(headers: any, body: any) {
   if (headers) {
     const contentTypes = headers['content-type'];
     if (contentTypes) {
+      /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
+      * Take the first option after splitting since it is the only value useful in the description of the content
+      */
       const splitContentTypes = contentTypes.split(';');
       if (splitContentTypes.length > 0) {
         contentType = splitContentTypes[0];
