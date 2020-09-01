@@ -17,7 +17,7 @@ import { Snippets } from '../snippets';
 export const getPivotItems = (properties: any) => {
 
   const { headers, body, verb, messages, mobileScreen, mode, sampleQuery } = properties;
-  const resultComponent = displayResultComponent(headers, body, verb);
+  const resultComponent = displayResultComponent(headers, body);
 
   const pivotItems = [
     <PivotItem
@@ -105,13 +105,25 @@ function adaptiveCardPresentDot(sampleQuery: IQuery) {
   return null;
 }
 
-function displayResultComponent(headers: any, body: any, verb: string) {
+function displayResultComponent(headers: any, body: any) {
   const language = 'json';
+  let contentType = null;
+
   if (headers) {
-    const contentType = headers['content-type'].split(';')[0];
+    const contentTypes = headers['content-type'];
+    if (contentTypes) {
+      /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
+      * Take the first option after splitting since it is the only value useful in the description of the content
+      */
+      const splitContentTypes = contentTypes.split(';');
+      if (splitContentTypes.length > 0) {
+        contentType = splitContentTypes[0];
+      }
+    }
+
     switch (contentType) {
       case ContentType.XML:
-        return <Monaco body={formatXml(body)} verb={verb} language='xml' />;
+        return <Monaco body={formatXml(body)} language='xml' />;
 
       default:
         if (isImageResponse(contentType)) {
@@ -121,7 +133,7 @@ function displayResultComponent(headers: any, body: any, verb: string) {
             alt='profile image'
           />;
         }
-        return <Monaco body={body} verb={verb} language={language} />;
+        return <Monaco body={body} language={language} />;
     }
   }
 }

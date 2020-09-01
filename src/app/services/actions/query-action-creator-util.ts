@@ -49,7 +49,7 @@ export function authenticatedRequest(dispatch: Function, query: IQuery,
   return makeRequest(query.selectedVerb, scopes)(dispatch, query);
 }
 
-export function isImageResponse(contentType: string) {
+export function isImageResponse(contentType: string | undefined) {
   if (!contentType) { return false; }
   return (
     contentType === 'application/octet-stream' ||
