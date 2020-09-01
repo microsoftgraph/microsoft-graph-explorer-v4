@@ -1,4 +1,4 @@
-name: $(rev:.r)
+name: $(rev:.r)-$(build.buildid)
 
 pool:
   vmImage: 'ubuntu-latest'
