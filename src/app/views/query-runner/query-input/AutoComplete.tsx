@@ -265,12 +265,20 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       <>
         <TextField
           className={autoInput}
+          styles={() => ({
+            fieldGroup: { minHeight: 30 },
+            field: { height: 30 },
+
+          })}
           type='text'
+          autoAdjustHeight={true}
           autoComplete='off'
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
           value={sampleQuery.sampleUrl}
           componentRef={this.autoCompleteRef}
+          multiline={true}
+          resizable={false}
           onRenderSuffix={(fetchingSuggestions) ? this.renderSuffix : undefined}
         />
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&

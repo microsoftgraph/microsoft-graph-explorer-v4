@@ -6,6 +6,7 @@ export const queryInputStyles = (theme: ITheme) => {
     autoComplete: {
       input: {
         minWidth: controlWidth,
+        overflowY: 'visible'
       },
       noSuggestions: {
         color: theme.palette.black,
