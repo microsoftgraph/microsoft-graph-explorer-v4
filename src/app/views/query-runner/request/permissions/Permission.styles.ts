@@ -7,7 +7,15 @@ export const permissionStyles = (theme: ITheme) => {
       maxHeight: '350px',
       minHeight: '300px',
       overflowY: 'auto',
-      overflowX: 'auto'
+      overflowX: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between'
+    },
+    panelContainer: {
+      padding: 10,
+      overflowY: 'auto',
+      overflowX: 'auto',
     },
     consented: {
       fontSize: FontSizes.small,

@@ -1,19 +1,22 @@
-import { IDropdownOption } from 'office-ui-fabric-react';
+import { IDropdownOption, MessageBarType } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { telemetry } from '../../../telemetry';
+import { RUN_QUERY_EVENT } from '../../../telemetry/event-types';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
 } from '../../../types/query-runner';
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
+import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
 import Request from './request/Request';
-
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
@@ -42,7 +45,13 @@ export class QueryRunner extends Component<
   };
 
   private handleOnUrlChange = (newUrl = '') => {
-    this.setState({ url: newUrl });
+    const { actions, sampleQuery } = this.props;
+
+    const newQuery = { ...sampleQuery, ...{ sampleUrl: newUrl } };
+
+    if (actions) {
+      actions.setSampleQuery(newQuery);
+    }
 
     this.changeUrlVersion(newUrl);
   };
@@ -66,15 +75,27 @@ export class QueryRunner extends Component<
 
   private handleOnRunQuery = () => {
     const { sampleBody } = this.state;
-    const { actions, sampleQuery } = this.props;
+    const { actions, sampleQuery, } = this.props;
+    const { intl: { messages } }: any = this.props;
 
     if (sampleBody) {
-      sampleQuery.sampleBody = JSON.parse(sampleBody);
+      try {
+        sampleQuery.sampleBody = JSON.parse(sampleBody);
+      } catch (error) {
+        actions!.setQueryResponseStatus({
+          ok: false,
+          statusText: messages['Malformed JSON body'],
+          status: `${messages['Review the request body']} ${error}`,
+          messageType: MessageBarType.error
+        });
+        return;
+      }
     }
 
     if (actions) {
       actions.runQuery(sampleQuery);
     }
+    telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
@@ -96,8 +117,9 @@ export class QueryRunner extends Component<
 
     if (newQueryVersion !== oldQueryVersion) {
       if (newQueryVersion === 'v1.0' || newQueryVersion === 'beta') {
-        const sampleQuery = { ...this.props.sampleQuery };
+        const sampleQuery = { ...query };
         sampleQuery.selectedVersion = newQueryVersion;
+        sampleQuery.sampleUrl = newUrl;
         this.props.actions!.setSampleQuery(sampleQuery);
       }
     }
@@ -136,7 +158,7 @@ export class QueryRunner extends Component<
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators(
-      { ...queryActionCreators, ...queryInputActionCreators },
+      { ...queryActionCreators, ...queryInputActionCreators, ...queryStatusActionCreators },
       dispatch
     )
   };
@@ -148,7 +170,9 @@ function mapStateToProps(state: any) {
   };
 }
 
+// @ts-ignore
+const IntlQueryRunner = injectIntl(QueryRunner);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(QueryRunner);
+)(IntlQueryRunner);

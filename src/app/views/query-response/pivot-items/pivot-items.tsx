@@ -1,27 +1,31 @@
-import { getId, Icon, IconButton, PivotItem, TooltipHost } from 'office-ui-fabric-react';
+import { getId, getTheme, Icon, IconButton, PivotItem, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
 
 import { ThemeContext } from '../../../../themes/theme-context';
 import { ContentType, Mode } from '../../../../types/enums';
+import { IQuery } from '../../../../types/query-runner';
+import { isImageResponse } from '../../../services/actions/query-action-creator-util';
+import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { Image, Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
 import { formatXml } from '../../common/monaco/util/format-xml';
 import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import GraphToolkit from '../graph-toolkit/GraphToolkit';
+import { queryResponseStyles } from '../queryResponse.styles';
 import { Snippets } from '../snippets';
 
 export const getPivotItems = (properties: any) => {
 
-  const { headers, body, verb, messages, mobileScreen, mode } = properties;
-  const resultComponent = displayResultComponent(headers, body, verb);
+  const { headers, body, messages, mobileScreen, mode, sampleQuery } = properties;
+  const resultComponent = displayResultComponent(headers, body);
 
   const pivotItems = [
     <PivotItem
       key='response-preview'
       ariaLabel='Response Preview'
       itemIcon='Reply'
-      headerText={(mobileScreen) ? '' : messages['Response Preview']}
+      headerText={messages['Response Preview']}
       title={messages['Response Preview']}
       onRenderItemLink={getTooltipDisplay}
     >
@@ -30,7 +34,7 @@ export const getPivotItems = (properties: any) => {
     <PivotItem
       key='response-headers'
       ariaLabel='Response Headers'
-      headerText={(mobileScreen) ? '' : messages['Response Headers']}
+      headerText={messages['Response Headers']}
       itemIcon='FileComment'
       title={messages['Response Headers']}
       onRenderItemLink={getTooltipDisplay}
@@ -68,9 +72,10 @@ export const getPivotItems = (properties: any) => {
       <PivotItem
         key='adaptive-cards'
         ariaLabel='Adaptive Cards'
-        headerText={(mobileScreen) ? '' : messages['Adaptive Cards']}
+        headerText={messages['Adaptive Cards']}
         title={messages['Adaptive Cards']}
         itemIcon='ContactCard'
+        resource={(!!body) ? sampleQuery : null}
         onRenderItemLink={getTooltipDisplay}
       >
         <ThemeContext.Consumer >
@@ -84,6 +89,18 @@ export const getPivotItems = (properties: any) => {
         </ThemeContext.Consumer>
       </PivotItem>
     );
+    pivotItems.push(
+      <PivotItem
+        key='code-snippets'
+        ariaLabel='Code Snippets'
+        title={messages.Snippets}
+        headerText={messages.Snippets}
+        itemIcon='PasteAsCode'
+        onRenderItemLink={getTooltipDisplay}
+      >
+        <Snippets />
+      </PivotItem>
+    );
   }
 
   return pivotItems;
@@ -94,27 +111,51 @@ function getTooltipDisplay(link: any) {
     <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}>
       <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
       {link.headerText}
+
+      {link.ariaLabel === 'Adaptive Cards' && link.resource && adaptiveCardPresentDot(link.resource)}
     </TooltipHost>
   );
 }
 
-function displayResultComponent(headers: any, body: any, verb: string) {
+function adaptiveCardPresentDot(sampleQuery: IQuery) {
+  const currentTheme = getTheme();
+  const dotStyle = queryResponseStyles(currentTheme).dot;
+  const template = lookupTemplate(sampleQuery);
+  if (template) {
+    return <span style={dotStyle} />;
+  }
+  return null;
+}
+
+function displayResultComponent(headers: any, body: any) {
   const language = 'json';
+  let contentType = null;
+
   if (headers) {
-    const contentType = headers['content-type'].split(';')[0];
+    const contentTypes = headers['content-type'];
+    if (contentTypes) {
+      /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
+      * Take the first option after splitting since it is the only value useful in the description of the content
+      */
+      const splitContentTypes = contentTypes.split(';');
+      if (splitContentTypes.length > 0) {
+        contentType = splitContentTypes[0];
+      }
+    }
+
     switch (contentType) {
       case ContentType.XML:
-        return <Monaco body={formatXml(body)} verb={verb} language='xml' />;
-
-      case ContentType.Image:
-        return <Image
-          styles={{ padding: '10px' }}
-          body={body}
-          alt='profile image'
-        />;
+        return <Monaco body={formatXml(body)} language='xml' />;
 
       default:
-        return <Monaco body={body} verb={verb} language={language} />;
+        if (isImageResponse(contentType)) {
+          return <Image
+            styles={{ padding: '10px' }}
+            body={body}
+            alt='profile image'
+          />;
+        }
+        return <Monaco body={body} language={language} />;
     }
   }
 }

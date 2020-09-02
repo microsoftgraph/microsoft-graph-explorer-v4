@@ -23,7 +23,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       urlVersions: [
         { key: 'v1.0', text: 'v1.0' },
         { key: 'beta', text: 'beta' }
-      ],
+      ]
     };
   }
 
@@ -66,11 +66,11 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       background: getStyleFor(selectedVerb),
     };
 
-    const httpMethodsToDisplay = (mode === Mode.TryIt && !authenticated ) ? [httpMethods[0]] : httpMethods;
+    const httpMethodsToDisplay = (!authenticated) ? [httpMethods[0]] : httpMethods;
 
     return (
       <div className='row'>
-        <div className='col-2'>
+        <div className='col-xs-12 col-lg-2'>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
@@ -80,8 +80,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </div>
-
-        <div className='col-2'>
+        <div className='col-xs-12 col-lg-2'>
           <Dropdown
             ariaLabel='Query sample option'
             role='listbox'
@@ -90,18 +89,18 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             onChange={(event, method) => handleOnVersionChange(method)}
           />
         </div>
-        <div className='col-7'>
+        <div className='col-xs-12 col-lg-6'>
           <TextField
             ariaLabel='Query Sample Input'
             role='textbox'
             placeholder={messages['Query Sample']}
             onChange={(event, value) => handleOnUrlChange(value)}
-            defaultValue={sampleUrl}
+            value={sampleUrl}
             onBlur={() => handleOnBlur()}
             onKeyDown={this.handleKeyDown}
           />
         </div>
-        <div className='col-1'>
+        <div className='col-xs-12 col-lg-2'>
           <SubmitButton
             className='run-query-button'
             text={messages['Run Query']}

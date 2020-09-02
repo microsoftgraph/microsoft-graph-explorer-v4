@@ -1,6 +1,6 @@
 {
   "name": "graph-explorer-v2",
-  "version": "4.1.0",
+  "version": "4.1.5",
   "private": true,
   "dependencies": {
     "@babel/core": "7.2.2",
@@ -8,8 +8,8 @@
     "@microsoft/applicationinsights-web": "2.3.1",
     "@microsoft/microsoft-graph-client": "2.0.0",
     "@svgr/webpack": "4.1.0",
-    "@uifabric/react-cards": "0.108.2",
-    "@uifabric/styling": "6.46.0",
+    "@uifabric/react-cards": "0.109.101",
+    "@uifabric/styling": "7.13.1",
     "adaptivecards": "1.2.3",
     "adaptivecards-templating": "0.1.0-alpha.1",
     "babel-core": "7.0.0-bridge.0",
@@ -50,8 +50,8 @@
     "monaco-editor": "0.15.6",
     "monaco-editor-webpack-plugin": "1.7.0",
     "msal": "1.2.1",
-    "node-sass": "4.12.0",
-    "office-ui-fabric-react": "6.140.0",
+    "node-sass": "^4.14.1",
+    "office-ui-fabric-react": "7.121.2",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.2.1",
     "postcss-flexbugs-fixes": "4.1.0",
@@ -74,7 +74,7 @@
     "typescript": "3.3.3",
     "url-loader": "1.1.2",
     "webpack": "4.28.3",
-    "webpack-dev-server": "3.1.14",
+    "webpack-dev-server": "^3.11.0",
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "3.6.3"
   },
@@ -82,7 +82,9 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js && node versioned-build.js",
     "test": "node scripts/test.js",
-    "lint": "tslint --project tsconfig.json -c tslint.json"
+    "lint": "tslint --project tsconfig.json -c tslint.json",
+    "prebuild:prod": "standard-version",
+    "build:prod": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -111,6 +113,7 @@
     "react-test-renderer": "16.8.3",
     "redux-logger": "3.0.6",
     "redux-mock-store": "1.5.3",
+    "standard-version": "^8.0.2",
     "tslint": "5.12.1",
     "tslint-config-prettier": "1.18.0",
     "tslint-react": "4.0.0"

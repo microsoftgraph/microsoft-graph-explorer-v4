@@ -22,6 +22,7 @@ export interface IQueryRunnerProps {
     runQuery: Function;
     addRequestHeader: Function;
     setSampleQuery: Function;
+    setQueryResponseStatus: Function;
   };
 }
 

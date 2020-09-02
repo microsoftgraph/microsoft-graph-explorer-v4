@@ -1,3 +1,4 @@
+import { geLocale } from '../../../appLocale';
 import { IQuery } from '../../../types/query-runner';
 import { getSessionId } from '../../services/graph-client/msal-service';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
@@ -17,20 +18,19 @@ export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): s
 
   const url = new URL(sampleUrl);
   const graphUrl = url.origin;
-  const language = navigator.language || 'en-US';
-  const appUrl = 'https://developer.microsoft.com/' + language + '/graph/graph-explorer/preview';
-  /**
-   * To ensure backward compatibility the version is removed from the pathname.
-   * V3 expects the request query param to not have the version number.
-   */
-  const graphUrlRequest = requestUrl + search;
-  const requestBody = hashEncode(JSON.stringify(sampleBody));
+  const appUrl = 'https://developer.microsoft.com/' + geLocale.toLowerCase() + '/graph/graph-explorer';
 
+  const graphUrlRequest = encodeURIComponent(requestUrl + search);
   let shareLink =
     // tslint:disable-next-line:max-line-length
-    `${appUrl}?request=${graphUrlRequest}&method=${selectedVerb}&version=${queryVersion}&GraphUrl=${graphUrl}&requestBody=${requestBody}`;
+    `${appUrl}?request=${graphUrlRequest}&method=${selectedVerb}&version=${queryVersion}&GraphUrl=${graphUrl}`;
 
-  if (sampleHeaders.length > 0) {
+  if (sampleBody && Object.keys(sampleBody).length > 0) {
+    const requestBody = hashEncode(JSON.stringify(sampleBody));
+    shareLink = `${shareLink}&requestBody=${requestBody}`;
+  }
+
+  if (sampleHeaders && sampleHeaders.length > 0) {
     const headers = hashEncode(JSON.stringify(sampleHeaders));
     shareLink = `${shareLink}&headers=${headers}`;
   }
@@ -41,10 +41,9 @@ export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): s
       shareLink = `${shareLink}&sid=${sessionId}`;
     }
   }
-
   return shareLink;
 };
 
 const hashEncode = (requestBody: string): string => {
-  return btoa(requestBody);
+  return btoa(unescape(encodeURIComponent(requestBody)));
 };

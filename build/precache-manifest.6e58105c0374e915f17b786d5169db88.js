@@ -1,14 +1,14 @@
 self.__precacheManifest = [
   {
-    "revision": "de4b5ac4710acc3caa7d",
+    "revision": "8bc98e185b037015353d",
     "url": "/static/js/graph-explorer-v2.js"
   },
   {
-    "revision": "de4b5ac4710acc3caa7d",
+    "revision": "8bc98e185b037015353d",
     "url": "/static/css/graph-explorer-v2.css"
   },
   {
-    "revision": "dabb6794539dcffa626977241f045733",
+    "revision": "8f5dd1897ec24d5e4e35feed058934ff",
     "url": "/json.worker.js"
   },
   {
@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/index.html"
   },
   {
-    "revision": "28fb5d03fade2944cf2e027e36c7517b",
+    "revision": "6aef05468ee3a048494fd41e47bdaaee",
     "url": "/editor.worker.js"
   }
 ];

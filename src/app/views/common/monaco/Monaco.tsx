@@ -1,4 +1,4 @@
-import { FocusZone, getTheme } from 'office-ui-fabric-react';
+import { FocusZone } from 'office-ui-fabric-react';
 import React from 'react';
 import MonacoEditor, { ChangeHandler } from 'react-monaco-editor';
 
@@ -32,13 +32,11 @@ function formatDocument(editor: any) {
 export function Monaco(props: IMonaco) {
 
   let { body } = props;
-  const { onChange, verb, language, readOnly } = props;
+  const { onChange, language, readOnly } = props;
 
   if (body && typeof body !== 'string') {
     body = JSON.stringify(body);
   }
-
-  const verbIsGet = verb === 'GET';
 
   return (
     <FocusZone disabled={true}>
@@ -46,7 +44,7 @@ export function Monaco(props: IMonaco) {
         <ThemeContext.Consumer >
           {(theme) => (<MonacoEditor
             width='800 !important'
-            height={verbIsGet ? '80vh' : '350px'}
+            height={'80vh'}
             // @ts-ignore
             value={body ? body : ''}
             language={language ? language : 'json'}
