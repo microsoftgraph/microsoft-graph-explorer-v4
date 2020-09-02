@@ -29,10 +29,12 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     };
   }
 
+  private getRef(): ITextField | null {
+    return this.autoCompleteRef.current
+  }
+
   public setFocus() {
-    if (this.autoCompleteRef && this.autoCompleteRef.current) {
-      this.autoCompleteRef.current.focus();
-    }
+    this.getRef()!.focus()
   }
 
   public onChange = (e: any) => {
@@ -180,6 +182,9 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         this.performLocalSearch(this.props.sampleQuery.sampleUrl);
       }
     }
+
+    this.getRef()!.blur()
+    this.getRef()!.focus()
   }
 
   private filterSuggestions(userInput: string, previousUserInput: string, compare: string, suggestions: string[]) {
@@ -265,20 +270,12 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       <>
         <TextField
           className={autoInput}
-          styles={() => ({
-            fieldGroup: { minHeight: 30 },
-            field: { height: 30 },
-
-          })}
           type='text'
-          autoAdjustHeight={true}
           autoComplete='off'
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
           value={sampleQuery.sampleUrl}
           componentRef={this.autoCompleteRef}
-          multiline={true}
-          resizable={false}
           onRenderSuffix={(fetchingSuggestions) ? this.renderSuffix : undefined}
         />
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
