@@ -29,10 +29,12 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     };
   }
 
+  private getRef(): ITextField | null {
+    return this.autoCompleteRef.current;
+  }
+
   public setFocus() {
-    if (this.autoCompleteRef && this.autoCompleteRef.current) {
-      this.autoCompleteRef.current.focus();
-    }
+    this.getRef()!.focus();
   }
 
   public onChange = (e: any) => {
@@ -180,6 +182,9 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         this.performLocalSearch(this.props.sampleQuery.sampleUrl);
       }
     }
+
+    this.getRef()!.blur();
+    this.getRef()!.focus();
   }
 
   private filterSuggestions(userInput: string, previousUserInput: string, compare: string, suggestions: string[]) {
