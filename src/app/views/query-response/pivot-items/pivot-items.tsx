@@ -18,7 +18,7 @@ import { Snippets } from '../snippets';
 
 export const getPivotItems = (properties: any) => {
 
-  const { headers, body, messages, mobileScreen, mode, sampleQuery } = properties;
+  const { headers, body, messages, mode, sampleQuery } = properties;
   const resultComponent = displayResultComponent(headers, body);
   const currentTheme = getTheme();
   const dotStyle = queryResponseStyles(currentTheme).dot;
@@ -87,7 +87,7 @@ export const getPivotItems = (properties: any) => {
         key='code-snippets'
         ariaLabel='Code Snippets'
         title={messages.Snippets}
-        headerText={(mobileScreen) ? '' : messages.Snippets}
+        headerText={messages.Snippets}
         itemIcon='PasteAsCode'
         onRenderItemLink={renderItemLink}
       >
@@ -97,7 +97,7 @@ export const getPivotItems = (properties: any) => {
         key='graph-toolkit'
         ariaLabel='Graph Toolkit'
         itemIcon='CustomizeToolbar'
-        headerText={(mobileScreen) ? '' : messages['Graph toolkit']}
+        headerText={messages['Graph toolkit']}
         title={messages['Graph toolkit']}
         onRenderItemLink={renderItemLink}
       >
