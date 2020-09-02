@@ -38,7 +38,7 @@ class GraphToolkit extends Component<any> {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <FormattedMessage id='We did not find a Graph toolkit for this query' /> <a
+        <FormattedMessage id='We did not find a Graph toolkit for this query' /> &nbsp; <a
           tabIndex={0}
           href='https://aka.ms/mgt' target='_blank'>
           <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />.
