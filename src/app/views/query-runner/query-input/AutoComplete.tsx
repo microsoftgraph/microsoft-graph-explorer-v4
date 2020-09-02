@@ -30,11 +30,11 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private getRef(): ITextField | null {
-    return this.autoCompleteRef.current
+    return this.autoCompleteRef.current;
   }
 
   public setFocus() {
-    this.getRef()!.focus()
+    this.getRef()!.focus();
   }
 
   public onChange = (e: any) => {
@@ -183,8 +183,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       }
     }
 
-    this.getRef()!.blur()
-    this.getRef()!.focus()
+    this.getRef()!.blur();
+    this.getRef()!.focus();
   }
 
   private filterSuggestions(userInput: string, previousUserInput: string, compare: string, suggestions: string[]) {
