@@ -3,43 +3,18 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { Label, MessageBar, MessageBarType } from 'office-ui-fabric-react';
-import templates from '../../../../graph-toolkit-examples';
-import { IQuery } from '../../../../types/query-runner';
-import { parseSampleUrl } from '../../../utils/sample-url-generation';
+import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 
 class GraphToolkit extends Component<any> {
   constructor(props: any) {
     super(props);
   }
 
-  public lookupToolkitUrl = (sampleQuery: IQuery): any => {
-    if (sampleQuery) {
-      const { requestUrl, search } = parseSampleUrl(sampleQuery.sampleUrl);
-      const query = '/' + requestUrl + search;
-      for (const templateMapKey in templates) {
-        if (templates.hasOwnProperty(templateMapKey)) {
-          const isMatch = new RegExp(templateMapKey + '$', 'i').test(query);
-          if (isMatch) {
-            const url: string = (templates as any)[templateMapKey];
-            let { search: componentUrl } = parseSampleUrl(url);
-            componentUrl = componentUrl.replace('?id=', '');
-            return {
-              exampleUrl: `https://mgt.dev/?path=/story/${componentUrl}`,
-              toolkitUrl: url
-            };
-          }
-        }
-      }
-
-    }
-    return { toolkitUrl: null, exampleUrl: null };
-  }
-
   public render() {
     const { sampleQuery } = this.props;
-    const { toolkitUrl, exampleUrl } = this.lookupToolkitUrl(sampleQuery);
+    const { toolkitUrl, exampleUrl } = lookupToolkitUrl(sampleQuery);
 
-    if (toolkitUrl) {
+    if (toolkitUrl && exampleUrl) {
       return (
         <>
           <MessageBar messageBarType={MessageBarType.info}>
@@ -47,7 +22,7 @@ class GraphToolkit extends Component<any> {
             <a
               tabIndex={0}
               href={exampleUrl} target='_blank'>
-               <FormattedMessage id='graph toolkit playground' />
+              <FormattedMessage id='graph toolkit playground' />
             </a>.
           </MessageBar>
           <iframe width='100%' height='470px' src={toolkitUrl} />
