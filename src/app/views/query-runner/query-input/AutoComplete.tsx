@@ -25,6 +25,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       suggestions: [],
       showSuggestions: false,
       userInput: this.props.sampleQuery.sampleUrl,
+      selectedSuggestion: false,
       compare: ''
     };
   }
@@ -54,6 +55,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   public onClick = (e: any) => {
+    this.setState({ selectedSuggestion: true })
     const selected = e.currentTarget.innerText;
     this.appendSuggestionToUrl(selected);
   };
@@ -191,8 +193,12 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       }
     }
 
-    this.getRef()!.blur();
-    this.getRef()!.focus();
+    const { selectedSuggestion } = this.state
+
+    if (selectedSuggestion) {
+      this.getRef()!.blur();
+      this.getRef()!.focus();
+    }
   }
 
   private filterSuggestions(userInput: string, previousUserInput: string, compare: string, suggestions: string[]) {
