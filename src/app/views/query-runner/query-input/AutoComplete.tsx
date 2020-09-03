@@ -102,6 +102,14 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         }
         break;
 
+      case KeyCodes.tab:
+        if (showSuggestions) {
+          e.preventDefault();
+          const selected = filteredSuggestions[activeSuggestion];
+          this.appendSuggestionToUrl(selected);
+        }
+        break;
+
       case KeyCodes.up:
         e.preventDefault();
         if (showSuggestions) {
