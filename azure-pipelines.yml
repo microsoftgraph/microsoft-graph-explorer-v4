@@ -15,6 +15,10 @@ steps:
       npm run lint
     displayName: 'Runs linting checks'
 
+  - script: |
+      npm test -- --coverage
+    displayName: 'Runs tests'
+
   - task: PowerShell@2
     displayName: 'Set version-number'
     inputs:
@@ -23,7 +27,6 @@ steps:
         $lernaPath = "$Env:BUILD_SOURCESDIRECTORY\package.json"
         $json = Get-Content "$lernaPath" | Out-String | ConvertFrom-Json
         $versionNumber = $json.version;
-
         Write-Host "Setting the build number variable to '$versionNumber'."
         Write-Host "##vso[build.updatebuildnumber]$versionNumber"
 
