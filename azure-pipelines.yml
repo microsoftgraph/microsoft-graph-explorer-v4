@@ -16,10 +16,6 @@ steps:
     displayName: 'Runs linting checks'
 
   - script: |
-      npm install chromedriver --chromedriver_cdnurl=https://npm.taobao.org/mirrors/chromedriver
-    displayName: 'Install chrome binaries'
-
-  - script: |
       npm run ci
     displayName: 'Runs tests'
 
