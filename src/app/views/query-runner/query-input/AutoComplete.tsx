@@ -10,7 +10,6 @@ import { queryInputStyles } from './QueryInput.styles';
 import SuggestionsList from './SuggestionsList';
 import { cleanUpSelectedSuggestion, getLastCharacterOf, getParametersWithVerb } from './util';
 
-
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
 
@@ -25,6 +24,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       suggestions: [],
       showSuggestions: false,
       userInput: this.props.sampleQuery.sampleUrl,
+      queryUrl: this.props.sampleQuery.sampleUrl,
       selectedSuggestion: false,
       compare: ''
     };
@@ -38,14 +38,18 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     this.getRef()!.focus();
   }
 
+  public onBlur = (e: any) => {
+    const userInput = e.target.value;
+    this.props.contentChanged(userInput);
+  };
+
   public onChange = (e: any) => {
     const { suggestions, showSuggestions, userInput: previousUserInput, compare } = this.state;
     const userInput = e.target.value;
 
-    this.props.contentChanged(userInput);
-
     this.setState({
-      userInput
+      userInput,
+      queryUrl: userInput
     });
 
     if (showSuggestions && suggestions.length) {
@@ -55,7 +59,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   public onClick = (e: any) => {
-    this.setState({ selectedSuggestion: true })
     const selected = e.currentTarget.innerText;
     this.appendSuggestionToUrl(selected);
   };
@@ -92,7 +95,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   public onKeyDown = (e: any) => {
-    const { activeSuggestion, filteredSuggestions, showSuggestions } = this.state;
+    const { activeSuggestion, filteredSuggestions, showSuggestions, queryUrl } = this.state;
 
     switch (e.keyCode) {
       case KeyCodes.enter:
@@ -100,6 +103,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           const selected = filteredSuggestions[activeSuggestion];
           this.appendSuggestionToUrl(selected);
         } else {
+          this.props.contentChanged(queryUrl);
           this.props.runQuery();
         }
         break;
@@ -189,11 +193,21 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   public componentDidUpdate = (prevProps: IAutoCompleteProps) => {
     if (prevProps.autoCompleteOptions !== this.props.autoCompleteOptions) {
       if (this.props.autoCompleteOptions) {
-        this.performLocalSearch(this.props.sampleQuery.sampleUrl);
+        this.performLocalSearch(this.state.queryUrl);
       }
     }
 
-    const { selectedSuggestion } = this.state
+    const newUrl = this.props.sampleQuery.sampleUrl;
+    if ((this.state.queryUrl === prevProps.sampleQuery.sampleUrl) && newUrl !== this.state.queryUrl) {
+      if (newUrl !== this.state.queryUrl) {
+        this.setState({
+          queryUrl: newUrl,
+          userInput: newUrl
+        });
+      }
+    }
+
+    const { selectedSuggestion } = this.state;
 
     if (selectedSuggestion) {
       this.getRef()!.blur();
@@ -254,7 +268,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       filteredSuggestions: [],
       showSuggestions: false,
       userInput: selectedSuggestion,
-      compare: ''
+      compare: '',
+      queryUrl: selectedSuggestion
     });
     this.props.contentChanged(selectedSuggestion);
     this.setFocus();
@@ -270,7 +285,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       activeSuggestion,
       filteredSuggestions,
       showSuggestions,
-      userInput
+      userInput,
+      queryUrl
     } = this.state;
 
     const { fetchingSuggestions, sampleQuery } = this.props;
@@ -287,8 +303,9 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           type='text'
           autoComplete='off'
           onChange={this.onChange}
+          onBlur={this.onBlur}
           onKeyDown={this.onKeyDown}
-          value={sampleQuery.sampleUrl}
+          value={queryUrl}
           componentRef={this.autoCompleteRef}
           onRenderSuffix={(fetchingSuggestions) ? this.renderSuffix : undefined}
         />

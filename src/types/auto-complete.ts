@@ -23,7 +23,7 @@ export interface IAutoCompleteState {
   showSuggestions: boolean;
   userInput: string;
   compare: string;
-
+  queryUrl: string;
 }
 
 export interface ISuggestionsList {
