@@ -25,7 +25,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       showSuggestions: false,
       userInput: this.props.sampleQuery.sampleUrl,
       queryUrl: this.props.sampleQuery.sampleUrl,
-      selectedSuggestion: false,
       compare: ''
     };
   }
@@ -35,7 +34,11 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   public setFocus() {
-    this.getRef()!.focus();
+    this.getRef()!.blur();
+    // Gives the chance for the focus to take effect
+    setTimeout(() => {
+      this.getRef()!.focus();
+    }, 10);
   }
 
   public onBlur = (e: any) => {
@@ -206,13 +209,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         });
       }
     }
-
-    const { selectedSuggestion } = this.state;
-
-    if (selectedSuggestion) {
-      this.getRef()!.blur();
-      this.getRef()!.focus();
-    }
   }
 
   private filterSuggestions(userInput: string, previousUserInput: string, compare: string, suggestions: string[]) {
@@ -269,7 +265,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       showSuggestions: false,
       userInput: selectedSuggestion,
       compare: '',
-      queryUrl: selectedSuggestion
+      queryUrl: selectedSuggestion,
     });
     this.props.contentChanged(selectedSuggestion);
     this.setFocus();
@@ -289,7 +285,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       queryUrl
     } = this.state;
 
-    const { fetchingSuggestions, sampleQuery } = this.props;
+    const { fetchingSuggestions } = this.props;
 
     const currentTheme = getTheme();
     const {

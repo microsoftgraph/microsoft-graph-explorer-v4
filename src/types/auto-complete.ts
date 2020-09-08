@@ -16,7 +16,6 @@ export interface IAutoCompleteProps {
 }
 
 export interface IAutoCompleteState {
-  selectedSuggestion: boolean;
   activeSuggestion: number;
   filteredSuggestions: string[];
   suggestions: string[];
