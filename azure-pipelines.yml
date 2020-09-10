@@ -25,7 +25,6 @@ steps:
       REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
       REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
     displayName: 'Build static assets for staging'
-    enabled: false
 
   - script: |
       npm run build
@@ -34,7 +33,6 @@ steps:
       REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
       REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
     displayName: 'Build static assets for prod'
-    enabled: false
 
   - task: PublishCodeCoverageResults@1
     inputs:
@@ -56,7 +54,6 @@ steps:
       GenerateWebConfig: true
       WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
     displayName: 'Deploy to staging'
-    enabled: false
 
   - task: AzureFileCopy@2
     inputs:
@@ -69,7 +66,6 @@ steps:
       cleanTargetBeforeCopy: true
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     displayName: 'Deploy to -tst'
-    enabled: false
 
   - task: AzureRmWebAppDeployment@3
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -80,7 +76,6 @@ steps:
       GenerateWebConfig: true
       WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
     displayName: 'Deploy to production'
-    enabled: false
 
   - task: YodLabs.O365PostMessage.O365PostMessageBuild.O365PostMessageBuild@0
     displayName: 'Graph Client Tooling pipeline fail notification'
