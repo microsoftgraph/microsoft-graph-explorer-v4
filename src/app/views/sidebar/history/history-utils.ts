@@ -15,10 +15,10 @@ export async function readHistoryData(): Promise<IHistoryItem[]> {
   const keys = await historyStorage.keys();
   for (const creationTime of keys) {
     if (historyItemHasExpired(creationTime)) {
+      historyStorage.removeItem(creationTime);
+    } else {
       const historyItem: IHistoryItem = await historyStorage.getItem(creationTime);
       historyData = [...historyData, historyItem];
-    } else {
-      historyStorage.removeItem(creationTime);
     }
   }
   return historyData;
@@ -30,7 +30,7 @@ function historyItemHasExpired(createdAt: string): boolean {
   dateToCompare.setDate(dateToCompare.getDate() - ageInDays);
   const expiryDate = dateToCompare.getTime();
   const createdTime = new Date(createdAt).getTime();
-  return (createdTime >= expiryDate);
+  return (createdTime < expiryDate);
 }
 
 export const removeHistoryData = async (historyItem: IHistoryItem) => {
