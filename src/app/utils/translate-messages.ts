@@ -1,8 +1,8 @@
-import messages from '../../messages';
 import { geLocale } from '../../appLocale';
+import messages from '../../messages';
 
-export function translateMessage(messageId: string) {
-  const translatedMessage: string = getTranslation(messageId, geLocale);
+export function translateMessage(messageId: string): string {
+  const translatedMessage = getTranslation(messageId, geLocale);
   if (translatedMessage) {
     return translatedMessage;
   }
@@ -10,11 +10,12 @@ export function translateMessage(messageId: string) {
 }
 
 function getTranslation(messageId: string, locale: string) {
-  const localeMessages = (messages as { [key: string]: object })[locale];
+  const localeMessages: object = (messages as { [key: string]: object })[locale];
   if (localeMessages) {
-    const message: any = Object.keys(localeMessages).find(k => k === messageId);
+    const key: any = Object.keys(localeMessages).find(k => k === messageId);
+    const message = (localeMessages as { [key: string]: object })[key];
     if (message) {
-      return message;
+      return message.toString();
     }
   }
   return null;
