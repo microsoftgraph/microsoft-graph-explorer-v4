@@ -32,7 +32,6 @@ steps:
 
   - script: |
       npm run build
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
     env:
       REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
       REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
