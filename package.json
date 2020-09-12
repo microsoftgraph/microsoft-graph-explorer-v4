@@ -83,8 +83,7 @@
     "build": "node scripts/build.js && node versioned-build.js",
     "test": "node scripts/test.js",
     "lint": "tslint --project tsconfig.json -c tslint.json",
-    "prebuild:prod": "standard-version",
-    "build:prod": "npm run build"
+    "bump": "standard-version --skip.tag"
   },
   "eslintConfig": {
     "extends": "react-app"
