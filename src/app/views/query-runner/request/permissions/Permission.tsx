@@ -16,6 +16,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
+import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
@@ -219,7 +220,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         fieldName: 'isAdmin',
         minWidth: (tokenPresent) ? 150 : 100,
         maxWidth: (tokenPresent) ? 150 : 100,
-        ariaLabel: messages['Administrator permission']
+        ariaLabel: translateMessage('Administrator permission')
       }
     );
 
