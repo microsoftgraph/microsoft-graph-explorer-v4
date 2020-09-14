@@ -297,6 +297,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
                     this.renderItemColumn(item, index, column)}
                   searchValueChanged={(event?: React.ChangeEvent<HTMLInputElement>, value?: string) =>
                     this.searchValueChanged(event, value)}
+                  renderDetailsHeader={this.renderDetailsHeader}
                 />
               </div>
             }
