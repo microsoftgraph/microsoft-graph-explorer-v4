@@ -1,42 +1,77 @@
 import { getId, getTheme, Icon, IconButton, PivotItem, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
-
 import { ThemeContext } from '../../../../themes/theme-context';
 import { ContentType, Mode } from '../../../../types/enums';
-import { IQuery } from '../../../../types/query-runner';
 import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
+import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
+import { translateMessage } from '../../../utils/translate-messages';
 import { Image, Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
 import { formatXml } from '../../common/monaco/util/format-xml';
 import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
+import GraphToolkit from '../graph-toolkit/GraphToolkit';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Snippets } from '../snippets';
 
 export const getPivotItems = (properties: any) => {
 
-  const { headers, body, verb, messages, mobileScreen, mode, sampleQuery } = properties;
+  const { headers, body, mode, sampleQuery } = properties;
   const resultComponent = displayResultComponent(headers, body);
+  const currentTheme = getTheme();
+  const dotStyle = queryResponseStyles(currentTheme).dot;
+
+  function showDotIfAdaptiveCardPresent() {
+    if (!!body) {
+      const template = lookupTemplate(sampleQuery);
+      if (template) {
+        return <span style={dotStyle} />;
+      }
+    }
+    return null;
+  }
+
+  function showDotIfGraphToolkitPresent() {
+    if (!!body) {
+      const { toolkitUrl, exampleUrl } = lookupToolkitUrl(sampleQuery);
+      if (toolkitUrl && exampleUrl) {
+        return <span style={dotStyle} />;
+      }
+    }
+    return null;
+  }
+
+  function renderItemLink(link: any) {
+    return (
+      <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}>
+        <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
+        {link.headerText}
+
+        {link.ariaLabel === 'Adaptive Cards' && showDotIfAdaptiveCardPresent()}
+        {link.ariaLabel === 'Graph Toolkit' && showDotIfGraphToolkitPresent()}
+      </TooltipHost>
+    );
+  }
 
   const pivotItems = [
     <PivotItem
       key='response-preview'
       ariaLabel='Response Preview'
       itemIcon='Reply'
-      headerText={messages['Response Preview']}
-      title={messages['Response Preview']}
-      onRenderItemLink={getTooltipDisplay}
+      headerText={translateMessage('Response Preview')}
+      title={translateMessage('Response Preview')}
+      onRenderItemLink={renderItemLink}
     >
       {resultComponent}
     </PivotItem>,
     <PivotItem
       key='response-headers'
       ariaLabel='Response Headers'
-      headerText={messages['Response Headers']}
+      headerText={translateMessage('Response Headers')}
       itemIcon='FileComment'
-      title={messages['Response Headers']}
-      onRenderItemLink={getTooltipDisplay}
+      title={translateMessage('Response Headers')}
+      onRenderItemLink={renderItemLink}
     >
       {headers && <div><IconButton style={{ float: 'right', zIndex: 1 }} iconProps={{
         iconName: 'copy',
@@ -48,13 +83,33 @@ export const getPivotItems = (properties: any) => {
   if (mode === Mode.Complete) {
     pivotItems.push(
       <PivotItem
+        key='code-snippets'
+        ariaLabel='Code Snippets'
+        title={translateMessage('Snippets')}
+        headerText={translateMessage('Snippets')}
+        itemIcon='PasteAsCode'
+        onRenderItemLink={renderItemLink}
+      >
+        <Snippets />
+      </PivotItem>,
+      <PivotItem
+        key='graph-toolkit'
+        ariaLabel='Graph Toolkit'
+        itemIcon='CustomizeToolbar'
+        headerText={translateMessage('Graph toolkit')}
+        title={translateMessage('Graph toolkit')}
+        onRenderItemLink={renderItemLink}
+      >
+        <GraphToolkit />
+      </PivotItem>,
+
+      <PivotItem
         key='adaptive-cards'
         ariaLabel='Adaptive Cards'
-        headerText={messages['Adaptive Cards']}
-        title={messages['Adaptive Cards']}
+        headerText={translateMessage('Adaptive Cards')}
+        title={translateMessage('Adaptive Cards')}
         itemIcon='ContactCard'
-        resource={(!!body) ? sampleQuery : null}
-        onRenderItemLink={getTooltipDisplay}
+        onRenderItemLink={renderItemLink}
       >
         <ThemeContext.Consumer >
           {(theme) => (
@@ -71,10 +126,10 @@ export const getPivotItems = (properties: any) => {
       <PivotItem
         key='code-snippets'
         ariaLabel='Code Snippets'
-        title={messages.Snippets}
-        headerText={messages.Snippets}
+        title={translateMessage('Snippets')}
+        headerText={translateMessage('Snippets')}
         itemIcon='PasteAsCode'
-        onRenderItemLink={getTooltipDisplay}
+        onRenderItemLink={renderItemLink}
       >
         <Snippets />
       </PivotItem>
@@ -84,26 +139,8 @@ export const getPivotItems = (properties: any) => {
   return pivotItems;
 };
 
-function getTooltipDisplay(link: any) {
-  return (
-    <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}>
-      <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
-      {link.headerText}
 
-      {link.ariaLabel === 'Adaptive Cards' && link.resource && adaptiveCardPresentDot(link.resource)}
-    </TooltipHost>
-  );
-}
 
-function adaptiveCardPresentDot(sampleQuery: IQuery) {
-  const currentTheme = getTheme();
-  const dotStyle = queryResponseStyles(currentTheme).dot;
-  const template = lookupTemplate(sampleQuery);
-  if (template) {
-    return <span style={dotStyle} />;
-  }
-  return null;
-}
 
 function displayResultComponent(headers: any, body: any) {
   const language = 'json';
