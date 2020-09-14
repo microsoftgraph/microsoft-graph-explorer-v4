@@ -1,5 +1,5 @@
 import AxeBuilder from 'axe-webdriverjs';
-import chromeDriver from 'chromedriver';
+import chromedriver from 'chromedriver';
 import webdriver, { ThenableWebDriver } from 'selenium-webdriver';
 import chrome, { Options } from 'selenium-webdriver/chrome';
 
@@ -7,11 +7,11 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 300000;
 const TEST_TIMEOUT_MS = 300000;
 
 describe('Graph Explorer', () => {
-  let driver: ThenableWebDriver;
+   let driver: ThenableWebDriver;
 
   // set browser environment to use headless Chrome
   beforeAll(async () => {
-    chrome.setDefaultService(new chrome.ServiceBuilder(chromeDriver.path).build());
+    chrome.setDefaultService(new chrome.ServiceBuilder(chromedriver.path).build());
 
     driver = new webdriver
     .Builder()
