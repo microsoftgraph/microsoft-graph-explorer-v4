@@ -95,6 +95,10 @@ jobs:
             Write-Host "##vso[build.updatebuildnumber]$versionNumber"
 
       - script: |
+          npm install
+        displayName: 'npm install'
+
+      - script: |
           npm run build
         env:
           REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
