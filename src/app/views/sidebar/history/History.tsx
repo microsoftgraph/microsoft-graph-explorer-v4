@@ -42,7 +42,7 @@ export class History extends Component<IHistoryProps, any> {
 
 
   public componentDidMount = () => {
-      this.generateGroupedList(this.props.history);
+    this.generateGroupedList(this.props.history);
   }
 
   public componentDidUpdate = (prevProps: IHistoryProps) => {
@@ -382,7 +382,7 @@ export class History extends Component<IHistoryProps, any> {
   private deleteQuery = async (query: IHistoryItem) => {
     const { actions } = this.props;
     if (actions) {
-        actions.removeHistoryItem(query);
+      actions.removeHistoryItem(query);
     }
     this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Delete History Item Button', query);
   }
