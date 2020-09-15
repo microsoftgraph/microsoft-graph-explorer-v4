@@ -1,6 +1,7 @@
 import { ReactPlugin, withAITracking } from '@microsoft/applicationinsights-react-js';
 import { ApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
+import { sanitizeUrl } from '../app/utils/sample-url-sanitizer';
 import ITelemetry from './ITelemetry';
 
 class Telemetry implements ITelemetry {
@@ -43,7 +44,15 @@ class Telemetry implements ITelemetry {
 
   private filterFunction(envelope: any) {
     // Identifies the source of telemetry events
-    envelope.baseData.name = 'Graph Explorer v4';
+    // Redact PII from query url
+    const properties = envelope.baseData.properties || {};
+    for (const property in properties) {
+      if (property === 'QueryUrl')
+      {
+        const queryUrl = sanitizeUrl(properties[property]);
+        envelope.baseData.properties[property] = queryUrl;
+      }
+    }
 
     // Removes access token from uri
     const uri = envelope.baseData.uri;
