@@ -80,12 +80,6 @@ jobs:
           npm run build
         displayName: 'Run build'
 
-      - task: PublishCodeCoverageResults@1
-        inputs:
-          codeCoverageTool: Cobertura
-          summaryFileLocation: 'coverage/clover.xml'
-          reportDirectory: 'coverage'
-
   - job: Two
     displayName: 'Publish artifacts'
     dependsOn: One
