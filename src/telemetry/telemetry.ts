@@ -31,7 +31,7 @@ class Telemetry implements ITelemetry {
   }
 
   public trackEvent(eventName: string, payload: any) {
-    this.appInsights.trackEvent({ name: eventName }, payload);
+    this.appInsights.trackEvent({ name: eventName, properties: payload });
   }
 
   public trackException(error: Error, severityLevel: SeverityLevel) {
