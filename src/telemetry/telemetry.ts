@@ -1,6 +1,7 @@
 import { ReactPlugin, withAITracking } from '@microsoft/applicationinsights-react-js';
 import { ApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
+
 import { sanitizeUrl } from '../app/utils/sample-url-sanitizer';
 import ITelemetry from './ITelemetry';
 
@@ -63,6 +64,11 @@ class Telemetry implements ITelemetry {
       const sanitisedUri = uri.substring(0, startOfFragment);
       envelope.baseData.uri = sanitisedUri;
     }
+
+    // Checks if user is authenticated
+    const accessTokenKey = 'msal.idtoken';
+    const accessToken = localStorage.getItem(accessTokenKey);
+    envelope.baseData.properties.IsAuthenticated = accessToken ? true : false;
 
     return true;
   }
