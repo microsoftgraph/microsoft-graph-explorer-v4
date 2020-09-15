@@ -44,6 +44,8 @@ class Telemetry implements ITelemetry {
 
   private filterFunction(envelope: any) {
     // Identifies the source of telemetry events
+    envelope.tags['ai.cloud.role'] = 'Graph Explorer v4';
+
     // Redact PII from query url
     const properties = envelope.baseData.properties || {};
     for (const property in properties) {
