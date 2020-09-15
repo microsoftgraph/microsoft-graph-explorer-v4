@@ -74,6 +74,15 @@ jobs:
           npm test -- --coverage
         displayName: 'Runs tests'
 
+      - script: |
+          npm run build
+        displayName: 'Run build'
+
+  - job: Two
+    displayName: 'Publish artifacts'
+    dependsOn: One
+    condition: succeeded()
+    steps:
       - task: PowerShell@2
         displayName: 'Set version-number'
         inputs:
@@ -100,69 +109,63 @@ jobs:
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
         displayName: 'Build static assets for prod'
 
-  - job: Two
-    displayName: 'Publish artifacts'
-    dependsOn: One
-    condition: succeeded()
-    steps:
-    - task: CopyFiles@1
-      displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
-      inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/build'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      - task: CopyFiles@1
+        displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
+        inputs:
+          SourceFolder: '$(System.DefaultWorkingDirectory)/build'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: drop'
-      inputs:
-        PathtoPublish: '$(build.ArtifactStagingDirectory)'
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: drop'
+        inputs:
+          PathtoPublish: '$(build.ArtifactStagingDirectory)'
 
-    - task: DeleteFiles@1
-      inputs:
-        contents: node_modules
-      displayName: 'Delete node_modules'
+      - task: DeleteFiles@1
+        inputs:
+          contents: node_modules
+        displayName: 'Delete node_modules'
 
-    - task: AzureRmWebAppDeployment@3
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-      inputs:
-        azureSubscription: 'Graph-Explorer-ARM'
-        WebAppName: 'graphTryIt-staging'
-        Package: '$(System.DefaultWorkingDirectory)'
-        GenerateWebConfig: true
-        WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
-      displayName: 'Deploy to staging'
-      enabled: false
+      - task: AzureRmWebAppDeployment@3
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+        inputs:
+          azureSubscription: 'Graph-Explorer-ARM'
+          WebAppName: 'graphTryIt-staging'
+          Package: '$(System.DefaultWorkingDirectory)'
+          GenerateWebConfig: true
+          WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
+        displayName: 'Deploy to staging'
+        enabled: false
 
-    - task: AzureFileCopy@2
-      inputs:
-        sourcePath: 'build'
-        azureConnectionType: 'ConnectedServiceNameARM'
-        azureSubscription: 'arm-connection'
-        destination: 'azureBlob'
-        storage: 'graphstagingblobstorage'
-        containerName: 'staging/vendor/bower_components/explorer-v2/build'
-        cleanTargetBeforeCopy: true
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-      displayName: 'Deploy to -tst'
-      enabled: false
+      - task: AzureFileCopy@2
+        inputs:
+          sourcePath: 'build'
+          azureConnectionType: 'ConnectedServiceNameARM'
+          azureSubscription: 'arm-connection'
+          destination: 'azureBlob'
+          storage: 'graphstagingblobstorage'
+          containerName: 'staging/vendor/bower_components/explorer-v2/build'
+          cleanTargetBeforeCopy: true
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+        displayName: 'Deploy to -tst'
+        enabled: false
 
-    - task: AzureRmWebAppDeployment@3
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-      inputs:
-        azureSubscription: 'Graph-Explorer-ARM'
-        WebAppName: 'graphTryIt'
-        Package: '$(System.DefaultWorkingDirectory)'
-        GenerateWebConfig: true
-        WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
-      displayName: 'Deploy to production'
-      enabled: false
+      - task: AzureRmWebAppDeployment@3
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+        inputs:
+          azureSubscription: 'Graph-Explorer-ARM'
+          WebAppName: 'graphTryIt'
+          Package: '$(System.DefaultWorkingDirectory)'
+          GenerateWebConfig: true
+          WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
+        displayName: 'Deploy to production'
+        enabled: false
 
-
-    # - task: YodLabs.O365PostMessage.O365PostMessageBuild.O365PostMessageBuild@0
-    #   displayName: 'Graph Client Tooling pipeline fail notification'
-    #   inputs:
-    #     addressType: serviceEndpoint
-    #     serviceEndpointName: 'microsoftgraph pipeline status'
-    #     title: '$(Build.DefinitionName) failure notification'
-    #     text: 'This pipeline has failed. View the build details for further information. This is a blocking failure. '
-    #   condition: failed()
-    #   enabled: false
+      # - task: YodLabs.O365PostMessage.O365PostMessageBuild.O365PostMessageBuild@0
+      #   displayName: 'Graph Client Tooling pipeline fail notification'
+      #   inputs:
+      #     addressType: serviceEndpoint
+      #     serviceEndpointName: 'microsoftgraph pipeline status'
+      #     title: '$(Build.DefinitionName) failure notification'
+      #     text: 'This pipeline has failed. View the build details for further information. This is a blocking failure. '
+      #   condition: failed()
+      #   enabled: false
