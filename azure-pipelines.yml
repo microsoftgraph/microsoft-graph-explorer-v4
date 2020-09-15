@@ -5,7 +5,8 @@
 #
 # 1. Validates the repository's pull requests and commits
 # 2. Builds and publishes release artifacts
-name: $(Build.SourceBranch)-$(date:yyyyMMdd)$(rev:.r)
+
+name: $(date:yyyyMMdd)$(rev:.r)
 
 pool:
   vmImage: 'ubuntu-latest'
