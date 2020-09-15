@@ -97,19 +97,23 @@ export const onPivotItemClick = (query: IQuery, item?: PivotItem) => {
 };
 
 function trackTabClickEvent(query: IQuery, tabKey: string) {
-  const queryUrl = query.selectedVerb + ' ' + query.sampleUrl;
+  let componentName = '';
   switch (tabKey) {
     case 'adaptive-cards': {
-      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: 'Adaptive Cards Tab', QueryUrl: queryUrl });
+      componentName = 'Adaptive Cards Tab';
       break;
     }
     case 'code-snippets': {
-      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: 'Code Snippets Tab', QueryUrl: queryUrl});
+      componentName = 'Code Snippets Tab';
       break;
     }
     default: {
       break;
     }
+  }
+  if (componentName) {
+    const queryUrl = query.selectedVerb + ' ' + query.sampleUrl;
+    telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: componentName, QueryUrl: queryUrl });
   }
 }
 
