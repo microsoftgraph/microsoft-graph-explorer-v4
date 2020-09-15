@@ -85,16 +85,6 @@ jobs:
     dependsOn: One
     condition: succeeded()
     steps:
-      - task: PowerShell@2
-        displayName: 'Set version-number'
-        inputs:
-          targetType: 'inline'
-          script: |
-            $lernaPath = "$Env:BUILD_SOURCESDIRECTORY\package.json"
-            $json = Get-Content "$lernaPath" | Out-String | ConvertFrom-Json
-            $versionNumber = $json.version;
-            Write-Host "Setting the build number variable to '$versionNumber'."
-            Write-Host "##vso[build.updatebuildnumber]$versionNumber"
 
       - script: |
           npm install
@@ -106,6 +96,18 @@ jobs:
           REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
         displayName: 'Build static assets for staging'
+
+      - task: PowerShell@2
+        displayName: 'Set version-number'
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+        inputs:
+          targetType: 'inline'
+          script: |
+            $lernaPath = "$Env:BUILD_SOURCESDIRECTORY\package.json"
+            $json = Get-Content "$lernaPath" | Out-String | ConvertFrom-Json
+            $versionNumber = $json.version;
+            Write-Host "Setting the build number variable to '$versionNumber'."
+            Write-Host "##vso[build.updatebuildnumber]$versionNumber"
 
       - script: |
           npm run build
