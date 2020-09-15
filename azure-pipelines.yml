@@ -54,7 +54,8 @@ trigger:
       - package-lock.json
 
 jobs:
-  - job: 'Build and test validation'
+  - job:
+    displayName: 'Build and test validation'
     steps:
       - task: NodeTool@0
         inputs:
@@ -99,7 +100,8 @@ jobs:
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
         displayName: 'Build static assets for prod'
 
-  - job: 'Publish artifacts'
+  - job: 2
+    displayName: 'Publish artifacts'
     condition: succeeded()
     steps:
     - task: CopyFiles@1
