@@ -281,7 +281,12 @@
   "We did not find any history items": "Es wurden keine Historienelemente gefunden.",
   "Expand response": "Antwort erweitern",
   "Access Token": "Zugriffstoken",
-  "consent to scopes": " Sie den Berechtigungen zustimmen für ",
+  "Graph toolkit": "Toolkit-Komponente",
+  "We did not find a Graph toolkit for this query": "Keine Toolkit-Komponente ist für diese Antwort verfügbar. Weitere Informationen darüber und wie Sie zum Toolkit beitragen, finden Sie im",
+  "Learn more about the Microsoft Graph Toolkit": "Öffentliches Repo des Microsoft Graph-Toolkit",
+  "Open this example in": "Öffnen Sie dieses Beispiel in",
+  "graph toolkit playground": "Graph-Toolkit-Spielplatz",
+  "consent to scopes": " Sie müssen den Berechtigungen zustimmen ",
   "Permission": "Berechtigung",
   "Display string": "Anzeigezeichenfolge",
   "Description": "Beschreibung",
@@ -310,5 +315,6 @@
   "Minimize sidebar": "Minimieren der Randleiste",
   "Toggle selection for all items": "Auswahl für alle Elemente umschalten",
   "Toggle selection": "Auswahl umschalten",
-  "Row checkbox": "Zeilenkontrollkästchen"
+  "Row checkbox": "Zeilenkontrollkästchen",
+  "Administrator permission": "Der Administrator des Mandanten muss zuerst die Autorisierung vornehmen, bevor Sie dieser Berechtigung zustimmen können."
 }
