@@ -102,7 +102,6 @@ export const getPivotItems = (properties: any) => {
       >
         <GraphToolkit />
       </PivotItem>,
-
       <PivotItem
         key='adaptive-cards'
         ariaLabel='Adaptive Cards'
@@ -120,18 +119,6 @@ export const getPivotItems = (properties: any) => {
             />
           )}
         </ThemeContext.Consumer>
-      </PivotItem>
-    );
-    pivotItems.push(
-      <PivotItem
-        key='code-snippets'
-        ariaLabel='Code Snippets'
-        title={translateMessage('Snippets')}
-        headerText={translateMessage('Snippets')}
-        itemIcon='PasteAsCode'
-        onRenderItemLink={renderItemLink}
-      >
-        <Snippets />
       </PivotItem>
     );
   }
