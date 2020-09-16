@@ -315,5 +315,6 @@
   "Minimize sidebar": "Minimize sidebar",
   "Toggle selection for all items": "Toggle selection for all items",
   "Toggle selection": "Toggle selection",
-  "Row checkbox": "Row checkbox"
+  "Row checkbox": "Row checkbox",
+  "Administrator permission": "Admin of the tenant needs to authorize first before you can consent to this permission"
 }
