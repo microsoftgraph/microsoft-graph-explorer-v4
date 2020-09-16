@@ -83,7 +83,7 @@
     "test": "node scripts/test.js --no-watch",
     "lint": "tslint --project tsconfig.json -c tslint.json",
     "start-server": "npm start",
-    "ci": "start-server-and-test start-server http://localhost:3000 test"
+    "ci": "start-server-and-test start-server http://localhost:3000 test",
     "bump": "standard-version --skip.tag"
   },
   "eslintConfig": {

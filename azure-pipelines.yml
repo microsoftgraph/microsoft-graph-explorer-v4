@@ -73,7 +73,7 @@ jobs:
         displayName: 'Runs linting checks'
 
       - script: |
-          npm test -- --coverage
+          npm run ci
         displayName: 'Runs tests'
 
       - script: |
