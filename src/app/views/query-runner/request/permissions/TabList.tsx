@@ -9,9 +9,10 @@ interface ITabList {
   columns: any[];
   classes: any;
   renderItemColumn: Function;
+  renderDetailsHeader: Function;
 }
 
-const TabList = ({ permissions, columns, classes, renderItemColumn }: ITabList) => {
+const TabList = ({ permissions, columns, classes, renderItemColumn, renderDetailsHeader }: ITabList) => {
   return (
     <>
       <Label className={classes.permissionLength}>
@@ -25,7 +26,8 @@ const TabList = ({ permissions, columns, classes, renderItemColumn }: ITabList) 
         columns={columns}
         onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}
         selectionMode={SelectionMode.none}
-        layoutMode={DetailsListLayoutMode.justified} />
+        layoutMode={DetailsListLayoutMode.justified}
+        onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
     </>
   );
 };
