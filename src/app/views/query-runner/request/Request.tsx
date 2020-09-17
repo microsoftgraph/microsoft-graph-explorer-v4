@@ -31,7 +31,6 @@ export class Request extends Component<IRequestComponent, any> {
     const pivotItems = [
       <PivotItem
         key='request-body'
-        itemKey='request-body'
         itemIcon='Send'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['request body']}
@@ -42,7 +41,6 @@ export class Request extends Component<IRequestComponent, any> {
       </PivotItem>,
       <PivotItem
         key='request-header'
-        itemKey='request-header'
         itemIcon='FileComment'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['request header']}
@@ -51,7 +49,6 @@ export class Request extends Component<IRequestComponent, any> {
       </PivotItem>,
       <PivotItem
         key='permissions'
-        itemKey='permissions'
         itemIcon='AzureKeyVault'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['modify permissions']}
@@ -64,7 +61,6 @@ export class Request extends Component<IRequestComponent, any> {
       pivotItems.push(
         <PivotItem
           key='auth'
-          itemKey='auth'
           itemIcon='AuthenticatorApp'
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Access Token']}
@@ -86,19 +82,9 @@ export class Request extends Component<IRequestComponent, any> {
     );
   }
 
-  private trackTabClickEvent(tabKey: string) {
-    switch (tabKey) {
-      case 'permissions': {
-        telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: 'Permissions Tab'});
-        break;
-      }
-      case 'auth': {
-        telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: 'Auth Tab'});
-        break;
-      }
-      default: {
-        break;
-      }
+  private trackTabClickEvent(tabTitle: string) {
+    if (tabTitle) {
+      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: `${tabTitle} tab` });
     }
   }
 

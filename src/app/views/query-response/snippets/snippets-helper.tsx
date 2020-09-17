@@ -88,7 +88,7 @@ function Snippet(props: ISnippetProps) {
 function trackCopyEvent(query: IQuery, language: string) {
   telemetry.trackEvent(BUTTON_CLICK_EVENT,
     {
-      ComponentName: 'Code Snippets Copy Button',
+      ComponentName: 'Code snippets copy button',
       QueryUrl: query.selectedVerb + ' ' + query.sampleUrl,
       SelectedLanguage: language
     });

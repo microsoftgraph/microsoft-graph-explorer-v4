@@ -86,7 +86,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     telemetry.trackEvent(
       LINK_CLICK_EVENT,
       {
-         ComponentName: 'Documentation Link',
+         ComponentName: 'Documentation link',
          SampleId: item.id,
          SampleName: item.humanName,
          SampleCategory: item.category,
@@ -273,7 +273,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         telemetry.trackEvent(
          LISTITEM_CLICK_EVENT,
          {
-           ComponentName: 'Sample Query List Item',
+           ComponentName: 'Sample query list item',
            SampleId: selectedQuery.id,
            SampleName: selectedQuery.humanName,
            SampleCategory: selectedQuery.category,

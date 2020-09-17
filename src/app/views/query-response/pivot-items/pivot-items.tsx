@@ -61,7 +61,6 @@ export const getPivotItems = (properties: any) => {
   const pivotItems = [
     <PivotItem
       key='response-preview'
-      itemKey='response-preview'
       ariaLabel='Response Preview'
       itemIcon='Reply'
       headerText={translateMessage('Response Preview')}
@@ -72,7 +71,6 @@ export const getPivotItems = (properties: any) => {
     </PivotItem>,
     <PivotItem
       key='response-headers'
-      itemKey='response-headers'
       ariaLabel='Response Headers'
       headerText={translateMessage('Response Headers')}
       itemIcon='FileComment'
@@ -111,7 +109,6 @@ export const getPivotItems = (properties: any) => {
 
       <PivotItem
         key='adaptive-cards'
-        itemKey='adaptive-cards'
         ariaLabel='Adaptive Cards'
         headerText={translateMessage('Adaptive Cards')}
         title={translateMessage('Adaptive Cards')}
@@ -132,7 +129,6 @@ export const getPivotItems = (properties: any) => {
     pivotItems.push(
       <PivotItem
         key='code-snippets'
-        itemKey='code-snippets'
         ariaLabel='Code Snippets'
         title={translateMessage('Snippets')}
         headerText={translateMessage('Snippets')}
@@ -149,28 +145,14 @@ export const getPivotItems = (properties: any) => {
 
 export const onPivotItemClick = (query: IQuery, item?: PivotItem) => {
   if (!item) { return; }
-  const key = item.props.itemKey;
-  if (key) { trackTabClickEvent(query, key); }
+  const tabTitle = item.props.title;
+  if (tabTitle) { trackTabClickEvent(query, tabTitle); }
 };
 
-function trackTabClickEvent(query: IQuery, tabKey: string) {
-  let componentName = '';
-  switch (tabKey) {
-    case 'adaptive-cards': {
-      componentName = 'Adaptive Cards Tab';
-      break;
-    }
-    case 'code-snippets': {
-      componentName = 'Code Snippets Tab';
-      break;
-    }
-    default: {
-      break;
-    }
-  }
-  if (componentName) {
+function trackTabClickEvent(query: IQuery, tabTitle: string) {
+  if (tabTitle) {
     const queryUrl = query.selectedVerb + ' ' + query.sampleUrl;
-    telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: componentName, QueryUrl: queryUrl });
+    telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: `${tabTitle} tab`, QueryUrl: queryUrl });
   }
 }
 

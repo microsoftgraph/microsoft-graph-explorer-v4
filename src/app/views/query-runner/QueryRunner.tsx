@@ -97,7 +97,7 @@ export class QueryRunner extends Component<
     }
     telemetry.trackEvent(BUTTON_CLICK_EVENT,
       {
-         ComponentName: 'Run Query Button',
+         ComponentName: 'Run query button',
          QueryUrl: sampleQuery.selectedVerb + ' ' + sampleQuery.sampleUrl,
          SelectedVersion: sampleQuery.selectedVersion
       });
@@ -117,7 +117,7 @@ export class QueryRunner extends Component<
       {
         telemetry.trackEvent(DROPDOWN_CHANGE_EVENT,
           {
-            ComponentName: 'Version Change Dropdown',
+            ComponentName: 'Version change dropdown',
             NewVersion: newQueryVersion,
             OldVersion: oldQueryVersion
           });

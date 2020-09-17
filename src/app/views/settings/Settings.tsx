@@ -92,7 +92,7 @@ function Settings(props: ISettingsProps) {
     let hidden = themeChooserDialogHidden;
     hidden = !hidden;
     hideThemeChooserDialog(hidden);
-    telemetry.trackEvent(BUTTON_CLICK_EVENT, { ComponentName: 'Theme Change Button' });
+    telemetry.trackEvent(BUTTON_CLICK_EVENT, { ComponentName: 'Theme change button' });
   };
 
   const handleSignOut = () => {
@@ -105,7 +105,7 @@ function Settings(props: ISettingsProps) {
     loadGETheme(newTheme);
     telemetry.trackEvent(BUTTON_CLICK_EVENT,
      {
-       ComponentName: 'Selected Theme Button',
+       ComponentName: 'Select theme button',
        SelectedTheme: selectedTheme.text
      });
   };
@@ -127,7 +127,7 @@ function Settings(props: ISettingsProps) {
   };
 
   const trackOfficeDevProgramLinkClickEvent = () => {
-    telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: 'Office Dev Program Link'});
+    telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: 'Office dev program link'});
   };
 
   const getSelectionDetails = () => {

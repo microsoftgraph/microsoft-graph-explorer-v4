@@ -369,14 +369,14 @@ export class History extends Component<IHistoryProps, any> {
       actions.setSampleQuery(sampleQuery);
       actions.runQuery(sampleQuery);
     }
-    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Run History Item Button', query);
+    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Run history item button', query);
   }
 
   private onExportQuery = (query: IHistoryItem) => {
     const harPayload = createHarPayload(query);
     const generatedHarData = generateHar([harPayload]);
     exportQuery(generatedHarData, `${query.url}/`);
-    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Export History Item Button', query);
+    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Export history item button', query);
   }
 
   private deleteQuery = async (query: IHistoryItem) => {
@@ -384,17 +384,17 @@ export class History extends Component<IHistoryProps, any> {
     if (actions) {
       actions.removeHistoryItem(query);
     }
-    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Delete History Item Button', query);
+    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Delete history item button', query);
   }
 
   private onViewQueryButton = (query: IHistoryItem) => {
     this.onViewQuery(query);
-    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'View History Item Button', query);
+    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'View history item button', query);
   }
 
   private onViewQueryListItem = (query: IHistoryItem) => {
     this.onViewQuery(query);
-    this.trackHistoryItemEvent(LISTITEM_CLICK_EVENT, 'View History List Item', query);
+    this.trackHistoryItemEvent(LISTITEM_CLICK_EVENT, 'View history list item', query);
   }
 
   private onViewQuery = (query: IHistoryItem) => {

@@ -33,7 +33,7 @@ function onPivotItemClick (item?: PivotItem) {
 function trackTabClickEvent(tabKey: string) {
   switch (tabKey) {
     case 'history': {
-      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: 'History Tab' });
+      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: 'History tab' });
       break;
     }
     default: {
