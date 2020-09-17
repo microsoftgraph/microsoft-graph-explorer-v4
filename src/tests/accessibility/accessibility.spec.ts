@@ -1,5 +1,4 @@
 import AxeBuilder from 'axe-webdriverjs';
-import chromedriver from 'chromedriver';
 import webdriver, { ThenableWebDriver } from 'selenium-webdriver';
 import chrome, { Options } from 'selenium-webdriver/chrome';
 
