@@ -108,7 +108,6 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
             </PrimaryButton>
           </div>
         </div>
-        <br />
         <hr />
         <HeadersList
           messages={messages}

@@ -281,7 +281,12 @@
   "We did not find any history items": "履歴項目が見つかりませんでした",
   "Expand response": "返信の展開",
   "Access Token": "アクセス トークン",
-  "consent to scopes": " アクセス許可に同意する必要があります。 ",
+  "Graph toolkit": "ツールキットコンポーネント",
+  "We did not find a Graph toolkit for this query": "この応答には、使用可能なツールキットコンポーネントはありません。詳細情報とツールキットへの提供については、こちらをご覧ください。",
+  "Learn more about the Microsoft Graph Toolkit": "Microsoft Graph ツールキット パブリック リポジトリ",
+  "Open this example in": "この例をこちらで開く",
+  "graph toolkit playground": "Graph のツールキット プレイグラウンド",
+  "consent to scopes": " こちらの許可に同意する必要があります。 ",
   "Permission": "アクセス許可",
   "Display string": "表示文字列",
   "Description": "説明",
@@ -310,5 +315,6 @@
   "Minimize sidebar": "サイドバーを最小化する",
   "Toggle selection for all items": "すべてのアイテムの選択を切り替える",
   "Toggle selection": "選択の切り替え",
-  "Row checkbox": "行チェックボックス"
+  "Row checkbox": "行チェックボックス",
+  "Administrator permission": "このアクセス許可を承認するには、テナントの管理者が最初に承認する必要があります"
 }
