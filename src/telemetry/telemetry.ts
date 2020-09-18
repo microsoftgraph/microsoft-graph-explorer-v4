@@ -39,8 +39,8 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackException({ error, severityLevel });
   }
 
-  public trackReactComponent(ComponentToTrack: ComponentType): ComponentType {
-    return withAITracking(this.reactPlugin, ComponentToTrack);
+  public trackReactComponent(ComponentToTrack: ComponentType, componentName?: string): ComponentType {
+    return withAITracking(this.reactPlugin, ComponentToTrack, componentName);
   }
 
   private filterFunction(envelope: any) {
