@@ -82,16 +82,12 @@ export class Request extends Component<IRequestComponent, any> {
     );
   }
 
-  private trackTabClickEvent(tabTitle: string) {
+  private onPivotItemClick = (item?: PivotItem) => {
+    if (!item) { return; }
+    const tabTitle = item.props.title;
     if (tabTitle) {
       telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: `${tabTitle} tab` });
     }
-  }
-
-  private onPivotItemClick = (item?: PivotItem) => {
-    if (!item) { return; }
-    const key = item.props.itemKey;
-    if (key) { this.trackTabClickEvent(key); }
   }
 
   public render() {
