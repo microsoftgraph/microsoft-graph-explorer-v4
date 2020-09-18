@@ -122,7 +122,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
           </>}
           <Pivot className='pivot-response'
             styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
-            onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}
+            onLinkClick={(pivotItem) => onPivotItemClick(pivotItem)}
             >
             {pivotItems}
           </Pivot>

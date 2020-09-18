@@ -130,16 +130,13 @@ export const getPivotItems = (properties: any) => {
   return pivotItems;
 };
 
-export const onPivotItemClick = (query: IQuery, item?: PivotItem) => {
+export const onPivotItemClick = (item?: PivotItem) => {
   if (!item) { return; }
   const tabTitle = item.props.title;
-  if (tabTitle) { trackTabClickEvent(query, tabTitle); }
+  if (tabTitle) {
+    telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: `${tabTitle} tab` });
+  }
 };
-
-function trackTabClickEvent(query: IQuery, tabTitle: string) {
-  const queryUrl = query.selectedVerb + ' ' + query.sampleUrl;
-  telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: `${tabTitle} tab`, QueryUrl: queryUrl });
-}
 
 function displayResultComponent(headers: any, body: any) {
   const language = 'json';

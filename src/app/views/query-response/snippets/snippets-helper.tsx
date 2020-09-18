@@ -66,7 +66,7 @@ function Snippet(props: ISnippetProps) {
             iconProps={copyIcon}
             onClick={async () => {
               genericCopy(snippet);
-              trackCopyEvent(sampleQuery, language);
+              trackCopyEvent(language);
             }}
           />
           <Monaco
@@ -85,11 +85,10 @@ function Snippet(props: ISnippetProps) {
   );
 }
 
-function trackCopyEvent(query: IQuery, language: string) {
+function trackCopyEvent(language: string) {
   telemetry.trackEvent(BUTTON_CLICK_EVENT,
     {
       ComponentName: 'Code snippets copy button',
-      QueryUrl: query.selectedVerb + ' ' + query.sampleUrl,
       SelectedLanguage: language
     });
 }
