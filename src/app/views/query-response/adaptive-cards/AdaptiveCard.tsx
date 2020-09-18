@@ -4,6 +4,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { Monaco } from '../../common';
@@ -99,4 +100,6 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 // @ts-ignore
 const IntlAdaptiveCard = injectIntl(AdaptiveCard);
-export default connect(mapStateToProps, mapDispatchToProps)(IntlAdaptiveCard);
+// @ts-ignore
+const trackedComponent = telemetry.trackReactComponent(IntlAdaptiveCard, AdaptiveCard.name);
+export default connect(mapStateToProps, mapDispatchToProps)(trackedComponent);

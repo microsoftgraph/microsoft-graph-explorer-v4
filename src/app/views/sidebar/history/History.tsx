@@ -24,6 +24,7 @@ import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
+import { Permission } from '../../query-runner/request/permissions/Permission';
 
 
 export class History extends Component<IHistoryProps, any> {
@@ -524,9 +525,9 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-
-// @ts-ignore
-const styledHistory = styled(History, sidebarStyles);
+const styledHistory = styled(History, sidebarStyles as any);
 // @ts-ignore
 const IntlHistory = injectIntl(styledHistory);
-export default connect(mapStateToProps, mapDispatchToProps)(IntlHistory);
+// @ts-ignore
+const trackedComponent = telemetry.trackReactComponent(IntlHistory, History.name);
+export default connect(mapStateToProps, mapDispatchToProps)(trackedComponent);

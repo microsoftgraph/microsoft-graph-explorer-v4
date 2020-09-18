@@ -1,6 +1,7 @@
 import { IconButton, Pivot } from 'office-ui-fabric-react';
 import React from 'react';
 
+import { telemetry } from '../../../../telemetry';
 import { renderSnippets } from './snippets-helper';
 
 export function Snippets() {
@@ -12,3 +13,4 @@ export function Snippets() {
     </Pivot>
   );
 }
+export default telemetry.trackReactComponent(Snippets);
