@@ -281,6 +281,11 @@
   "We did not find any history items": "找不到任何历史记录项",
   "Expand response": "展开响应",
   "Access Token": "访问令牌",
+  "Graph toolkit": "工具包组件",
+  "We did not find a Graph toolkit for this query": "没有可用于该答复的工具包组件。若要了解有关该工具包的详细信息，请参阅",
+  "Learn more about the Microsoft Graph Toolkit": "Microsoft Graph 工具包公共资源库",
+  "Open this example in": "在 中打开这个号示例",
+  "graph toolkit playground": "图形工具包样本",
   "consent to scopes": " 您需要同意以下权限 ",
   "Permission": "权限",
   "Display string": "显示字符串",
@@ -310,5 +315,6 @@
   "Minimize sidebar": "最小化边栏",
   "Toggle selection for all items": "切换所有项的选择",
   "Toggle selection": "切换选择",
-  "Row checkbox": "行复选框"
+  "Row checkbox": "行复选框",
+  "Administrator permission": "需要租户的管理员授权，你才能同意此权限"
 }

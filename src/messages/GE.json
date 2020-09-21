@@ -281,6 +281,11 @@
   "We did not find any history items": "We did not find any history items",
   "Expand response": "Expand response",
   "Access Token": "Access token",
+  "Graph toolkit": "Toolkit component",
+  "We did not find a Graph toolkit for this query": "No toolkit component is available for this response. To learn more about and contribute to the toolkit, see the",
+  "Learn more about the Microsoft Graph Toolkit": "Microsoft Graph Toolkit public repo",
+  "Open this example in": "Open this example in",
+  "graph toolkit playground": "Graph toolkit playground",
   "consent to scopes": " You need to consent to the permissions on the ",
   "Permission": "Permission",
   "Display string": "Display string",
@@ -310,5 +315,6 @@
   "Minimize sidebar": "Minimize sidebar",
   "Toggle selection for all items": "Toggle selection for all items",
   "Toggle selection": "Toggle selection",
-  "Row checkbox": "Row checkbox"
+  "Row checkbox": "Row checkbox",
+  "Administrator permission": "Admin of the tenant needs to authorize first before you can consent to this permission"
 }

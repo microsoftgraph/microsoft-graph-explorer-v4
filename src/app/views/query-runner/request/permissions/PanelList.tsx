@@ -23,11 +23,12 @@ interface IPanelList {
   selection: any;
   renderItemColumn: any;
   searchValueChanged: Function;
+  renderDetailsHeader: Function;
 }
 
 const PanelList = ({ messages, permissions,
   columns, classes, selection,
-  renderItemColumn, searchValueChanged }: IPanelList) => {
+  renderItemColumn, searchValueChanged, renderDetailsHeader }: IPanelList) => {
 
   const groups = generatePermissionGroups(permissions);
   permissions = permissions.sort(dynamicSort('value', SortOrder.ASC));
@@ -63,6 +64,7 @@ const PanelList = ({ messages, permissions,
         ariaLabelForSelectionColumn={messages['Toggle selection'] || 'Toggle selection'}
         ariaLabelForSelectAllCheckbox={messages['Toggle selection for all items'] || 'Toggle selection for all items'}
         checkButtonAriaLabel={messages['Row checkbox'] || 'Row checkbox'}
+        onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)}
       />
     </>
   );
