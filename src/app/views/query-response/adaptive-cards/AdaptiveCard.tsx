@@ -1,6 +1,7 @@
 import * as AdaptiveCardsAPI from 'adaptivecards';
+import { Label } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -74,10 +75,26 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
       } catch (err) {
         return <div style={{ color: 'red' }}>{err.message}</div>;
       }
-    } else {
-        return (<Monaco
-          body={data === null ? `${messages['The Adaptive Card for this response is not available']}` : ''}
-        />);
+    } else if (data === null) {
+        return (
+        <Label style={{
+          display: 'flex',
+          width: '100%',
+          minHeight: '470px',
+          justifyContent: 'center',
+          alignItems: 'center'
+          }}>
+            <FormattedMessage id='The Adaptive Card for this response is not available' />&nbsp;
+            <a href={'https://adaptivecards.io/designer/'} tabIndex={0} target='_blank'>
+              <FormattedMessage id='adaptive cards designer'/>
+            </a>
+            </Label>
+        );
+    }
+    else {
+      return (
+        <div/>
+      );
     }
   }
 }
