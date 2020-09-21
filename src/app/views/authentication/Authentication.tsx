@@ -25,12 +25,6 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
     }: any = this.props;
     this.setState({ loginInProgress: true });
 
-    const { mscc } = (window as any);
-
-    if (mscc) {
-      mscc.setConsent();
-    }
-
     try {
       const authResponse = await logIn();
       if (authResponse) {
@@ -110,7 +104,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators({
       ...authActionCreators,
-      ...queryStatusActionCreators},
+      ...queryStatusActionCreators
+    },
       dispatch)
   };
 }

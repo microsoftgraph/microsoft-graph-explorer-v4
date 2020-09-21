@@ -1,89 +1,144 @@
+# ------------------------------------------------------------------------------
+# Copyright (c) Microsoft Corporation.  All Rights Reserved.  Licensed under the MIT License.
+# See License in the project root for license information.
+# ------------------------------------------------------------------------------
+#
+# 1. Validates the repository's pull requests and commits
+# 2. Builds and publishes release artifacts
+
+name: $(date:yyyyMMdd)$(rev:.r)
+
 pool:
-  vmImage: 'vs2017-win2016'
+  vmImage: 'ubuntu-latest'
 
-steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '8.x'
-    displayName: 'Install Node.js'
+pr:
+  branches:
+    include:
+      - master
+      - dev
+      - feature/*
+      - task/*
+      - fix/*
+  paths:
+    exclude:
+      - .github/*
+      - .vscode/*
+      - build/*
+      - .gitignore
+      - .prettierrc
+      - CHANGELOG.md
+      - CONTRIBUTING.md
+      - LICENSE
+      - README.md
+      - azure-pipelines.yml
+      - package-lock.json
 
-  - script: |
-      npm install
-    displayName: 'npm install'
+trigger:
+  branches:
+    include:
+      - master
+      - dev
+      - feature/*
+      - task/*
+      - fix/*
+  paths:
+    exclude:
+      - .github/*
+      - .vscode/*
+      - build/*
+      - .gitignore
+      - .prettierrc
+      - CHANGELOG.md
+      - CONTRIBUTING.md
+      - LICENSE
+      - README.md
+      - azure-pipelines.yml
+      - package-lock.json
 
-  - script: |
-      npm run lint
-    displayName: 'Runs linting checks'
+jobs:
+  - job: One
+    displayName: 'Build and test validation'
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '10.x'
+        displayName: 'Install Node.js'
 
-  - script: |
-      npm test -- --coverage
-    displayName: 'Runs tests'
+      - script: |
+          npm install
+        displayName: 'npm install'
 
-  - script: |
-      npm run build
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-    env:
-      REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
-      REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
-    displayName: 'Build static assets for staging'
+      - script: |
+          npm run lint
+        displayName: 'Runs linting checks'
 
-  - script: |
-      npm run build
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    env:
-      REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
-      REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
-    displayName: 'Build static assets for prod'
+      - script: |
+          npm test -- --coverage
+        displayName: 'Runs tests'
 
-  - task: PublishCodeCoverageResults@1
-    inputs:
-      codeCoverageTool: Cobertura
-      summaryFileLocation: 'coverage/clover.xml'
-      reportDirectory: 'coverage'
+      - script: |
+          npm run build
+        displayName: 'Run build'
 
-  - task: DeleteFiles@1
-    inputs:
-      contents: node_modules
-    displayName: 'Delete node_modules'
+  - job: Two
+    displayName: 'Publish artifacts'
+    dependsOn: One
+    condition: succeeded()
+    steps:
 
-  - task: AzureRmWebAppDeployment@3
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-    inputs:
-      azureSubscription: 'Graph-Explorer-ARM'
-      WebAppName: 'graphTryIt-staging'
-      Package: '$(System.DefaultWorkingDirectory)'
-      GenerateWebConfig: true
-      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
-    displayName: 'Deploy to staging'
+      - script: |
+          npm install
+        displayName: 'npm install'
 
-  - task: AzureFileCopy@2
-    inputs:
-      sourcePath: 'build'
-      azureConnectionType: 'ConnectedServiceNameARM'
-      azureSubscription: 'arm-connection'
-      destination: 'azureBlob'
-      storage: 'graphstagingblobstorage'
-      containerName: 'staging/vendor/bower_components/explorer-v2/build'
-      cleanTargetBeforeCopy: true
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
-    displayName: 'Deploy to -tst'
+      - script: |
+          npm run build
+        env:
+          REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
+          REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
+        displayName: 'Build static assets for staging'
 
-  - task: AzureRmWebAppDeployment@3
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    inputs:
-      azureSubscription: 'Graph-Explorer-ARM'
-      WebAppName: 'graphTryIt'
-      Package: '$(System.DefaultWorkingDirectory)'
-      GenerateWebConfig: true
-      WebConfigParameters: '-Handler iisnode -NodeStartFile server.js -appType node'
-    displayName: 'Deploy to production'
+      - task: PowerShell@2
+        displayName: 'Set version-number'
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+        inputs:
+          targetType: 'inline'
+          script: |
+            $lernaPath = "$Env:BUILD_SOURCESDIRECTORY\package.json"
+            $json = Get-Content "$lernaPath" | Out-String | ConvertFrom-Json
+            $versionNumber = $json.version;
+            Write-Host "Setting the build number variable to '$versionNumber'."
+            Write-Host "##vso[build.updatebuildnumber]$versionNumber"
 
-  - task: YodLabs.O365PostMessage.O365PostMessageBuild.O365PostMessageBuild@0
-    displayName: 'Graph Client Tooling pipeline fail notification'
-    inputs:
-      addressType: serviceEndpoint
-      serviceEndpointName: 'microsoftgraph pipeline status'
-      title: '$(Build.DefinitionName) failure notification'
-      text: 'This pipeline has failed. View the build details for further information. This is a blocking failure. '
-    condition: failed()
-    enabled: true
+      - script: |
+          npm run build
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+        env:
+          REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
+          REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
+        displayName: 'Build static assets for prod'
+
+      - task: CopyFiles@1
+        displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
+        inputs:
+          SourceFolder: '$(System.DefaultWorkingDirectory)/build'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: drop'
+        inputs:
+          PathtoPublish: '$(build.ArtifactStagingDirectory)'
+
+      - task: DeleteFiles@1
+        inputs:
+          contents: node_modules
+        displayName: 'Delete node_modules'
+
+      # - task: YodLabs.O365PostMessage.O365PostMessageBuild.O365PostMessageBuild@0
+      #   displayName: 'Graph Client Tooling pipeline fail notification'
+      #   inputs:
+      #     addressType: serviceEndpoint
+      #     serviceEndpointName: 'microsoftgraph pipeline status'
+      #     title: '$(Build.DefinitionName) failure notification'
+      #     text: 'This pipeline has failed. View the build details for further information. This is a blocking failure. '
+      #   condition: failed()
+      #   enabled: false

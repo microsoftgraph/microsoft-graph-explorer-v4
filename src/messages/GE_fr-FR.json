@@ -281,6 +281,11 @@
   "We did not find any history items": "Nous n’avons trouvé aucun élément d’historique",
   "Expand response": "Développer la réponse",
   "Access Token": "Jeton d’accès",
+  "Graph toolkit": "Composant de kit de ressources",
+  "We did not find a Graph toolkit for this query": "Aucun composant du kit d’outils n’est disponible pour cette réponse. Pour en savoir plus sur et contribuer au kit de ressources, voir le",
+  "Learn more about the Microsoft Graph Toolkit": "Référentiel public du kit de ressources Microsoft Graph",
+  "Open this example in": "Ouvrir cet exemple dans",
+  "graph toolkit playground": "Air de jeu du kit de ressources Graph",
   "consent to scopes": " Vous devez accepter les autorisations sur le ",
   "Permission": "Autorisation",
   "Display string": "Chaîne d’affichage",
@@ -310,5 +315,6 @@
   "Minimize sidebar": "Réduire la barre latérale",
   "Toggle selection for all items": "Modifier la sélection pour tous les éléments",
   "Toggle selection": "Modifier la sélection",
-  "Row checkbox": "Case à cocher Ligne"
+  "Row checkbox": "Case à cocher Ligne",
+  "Administrator permission": "L'administration du client doit d'abord autoriser avant que vous ne puissiez donner votre accord à cette autorisation"
 }
