@@ -4,6 +4,7 @@ import React from 'react';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { ContentType, Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
+import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { Image, Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
@@ -112,14 +113,14 @@ function displayResultComponent(headers: any, body: any, verb: string) {
       case ContentType.XML:
         return <Monaco body={formatXml(body)} verb={verb} language='xml' />;
 
-      case ContentType.Image:
-        return <Image
-          styles={{ padding: '10px' }}
-          body={body}
-          alt='profile image'
-        />;
-
       default:
+        if (isImageResponse(contentType)) {
+          return <Image
+            styles={{ padding: '10px' }}
+            body={body}
+            alt='profile image'
+          />;
+        }
         return <Monaco body={body} verb={verb} language={language} />;
     }
   }

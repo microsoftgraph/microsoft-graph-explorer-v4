@@ -23,7 +23,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       urlVersions: [
         { key: 'v1.0', text: 'v1.0' },
         { key: 'beta', text: 'beta' }
-      ],
+      ]
     };
   }
 
@@ -95,7 +95,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             role='textbox'
             placeholder={messages['Query Sample']}
             onChange={(event, value) => handleOnUrlChange(value)}
-            defaultValue={sampleUrl}
+            value={sampleUrl}
             onBlur={() => handleOnBlur()}
             onKeyDown={this.handleKeyDown}
           />
