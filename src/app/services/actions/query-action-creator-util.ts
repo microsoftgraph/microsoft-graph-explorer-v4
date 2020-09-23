@@ -100,7 +100,7 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
 
     if (query.sampleHeaders && query.sampleHeaders.length > 0) {
       query.sampleHeaders.forEach(header => {
-        // We are relying on the graph client to set the content type header.
+        // We are relying on the graph client to set the 'application/json' content type header.
         if (header.name.toLowerCase() === 'content-type') {
           if (header.value !== 'application/json') {
             sampleHeaders[header.name] = header.value;
