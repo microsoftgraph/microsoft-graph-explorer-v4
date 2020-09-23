@@ -1,4 +1,4 @@
-import { FontSizes, ITheme } from '@uifabric/styling';
+import { ITheme } from '@uifabric/styling';
 
 export const queryResponseStyles = (theme: ITheme) => {
     return {
@@ -9,6 +9,13 @@ export const queryResponseStyles = (theme: ITheme) => {
             backgroundColor: theme.palette.blue,
             borderRadius: '50%',
             display: 'inline-block'
+          },
+          labelStyles: {
+            display: 'flex',
+            width: '100%',
+            minHeight: '470px',
+            justifyContent: 'center',
+            alignItems: 'center'
           }
     };
 };
