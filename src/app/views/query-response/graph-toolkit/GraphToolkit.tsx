@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Label, MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import { getTheme, Label, MessageBar, MessageBarType } from 'office-ui-fabric-react';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
+import { queryResponseStyles } from '../queryResponse.styles';
 
 class GraphToolkit extends Component<any> {
   constructor(props: any) {
@@ -31,18 +32,13 @@ class GraphToolkit extends Component<any> {
     }
 
     return (
-      <Label style={{
-        display: 'flex',
-        width: '100%',
-        minHeight: '470px',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-        <FormattedMessage id='We did not find a Graph toolkit for this query' /> &nbsp; <a
-          tabIndex={0}
-          href='https://aka.ms/mgt' target='_blank'>
-          <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />.
-          </a>
+      <Label style={queryResponseStyles(getTheme()).labelStyles}>
+        <FormattedMessage id='We did not find a Graph toolkit for this query' />
+        &nbsp;
+        <a tabIndex={0} href='https://aka.ms/mgt' target='_blank'>
+          <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />
+          .
+        </a>
       </Label>
     );
   }
