@@ -247,7 +247,7 @@
   "Adaptive Cards": "Adaptive cards",
   "Office Dev Program": "Get a sandbox with sample data",
   "Fetching Adaptive Card": "Fetching adaptive card",
-  "The Adaptive Card for this response is not available": "No adaptive card is available for this response. To learn more about how to create adaptive cards, see the",
+  "The Adaptive Card for this response is not available": "No Adaptive Card is available for this response. To learn more about how to create Adaptive Cards, see the",
   "loading samples": "Loading samples",
   "older": "Older",
   "today": "Today",
@@ -317,5 +317,6 @@
   "Toggle selection": "Toggle selection",
   "Row checkbox": "Row checkbox",
   "Administrator permission": "Admin of the tenant needs to authorize first before you can consent to this permission",
-  "adaptive cards designer": "adaptive cards designer."
+  "Adaptive Cards designer": "Adaptive Cards designer.",
+  "Click Run Query button above to fetch Adaptive Card": "Click Run Query button above to fetch Adaptive Card."
 }
