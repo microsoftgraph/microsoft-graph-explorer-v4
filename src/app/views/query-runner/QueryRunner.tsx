@@ -45,7 +45,13 @@ export class QueryRunner extends Component<
   };
 
   private handleOnUrlChange = (newUrl = '') => {
-    this.setState({ url: newUrl });
+    const { actions, sampleQuery } = this.props;
+
+    const newQuery = { ...sampleQuery, ...{ sampleUrl: newUrl } };
+
+    if (actions) {
+      actions.setSampleQuery(newQuery);
+    }
 
     this.changeUrlVersion(newUrl);
   };
@@ -111,8 +117,9 @@ export class QueryRunner extends Component<
 
     if (newQueryVersion !== oldQueryVersion) {
       if (newQueryVersion === 'v1.0' || newQueryVersion === 'beta') {
-        const sampleQuery = { ...this.props.sampleQuery };
+        const sampleQuery = { ...query };
         sampleQuery.selectedVersion = newQueryVersion;
+        sampleQuery.sampleUrl = newUrl;
         this.props.actions!.setSampleQuery(sampleQuery);
       }
     }

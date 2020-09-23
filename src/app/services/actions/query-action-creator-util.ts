@@ -53,7 +53,7 @@ export function isImageResponse(contentType: string) {
   if (!contentType) { return false; }
   return (
     contentType === 'application/octet-stream' ||
-    contentType.substr(0, 6) === 'image/'
+    contentType.includes('image/')
   );
 }
 
@@ -100,7 +100,16 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
 
     if (query.sampleHeaders && query.sampleHeaders.length > 0) {
       query.sampleHeaders.forEach(header => {
-        sampleHeaders[header.name] = header.value;
+        // We are relying on the graph client to set the content type header.
+        if (header.name.toLowerCase() === 'content-type') {
+          if (header.value !== 'application/json') {
+            sampleHeaders[header.name] = header.value;
+          } else {
+            return;
+          }
+        } else {
+          sampleHeaders[header.name] = header.value;
+        }
       });
     }
 

@@ -12,6 +12,11 @@ export const permissionStyles = (theme: ITheme) => {
       flexDirection: 'column',
       justifyContent: 'space-between'
     },
+    panelContainer: {
+      padding: 10,
+      overflowY: 'auto',
+      overflowX: 'auto',
+    },
     consented: {
       fontSize: FontSizes.small,
       fontStyle: 'italic'

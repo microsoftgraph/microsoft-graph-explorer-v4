@@ -81,11 +81,11 @@ export const sidebarStyles = (theme: ITheme) => {
           background: theme.palette.neutralLight,
         },
       },
-      marginLeft: '-5%',
     },
     queryContent: {
-      float: 'left',
       textAlign: 'left',
+      textOverflow: 'ellipsis',
+      marginLeft: theme.spacing.s1,
     },
     rowDisabled: {
       cursor: 'not-allowed',
@@ -94,22 +94,19 @@ export const sidebarStyles = (theme: ITheme) => {
       fontWeight: FontWeights.bold,
       fontSize: FontSizes.small,
       display: 'inline-block',
-      textAlign: 'center',
-      marginRight: '15px',
-      lineHeight: 'normal',
-      whiteSpace: 'nowrap',
-      paddingLeft: 5,
-      paddingRight: 5,
+      paddingLeft: 3,
+      paddingRight: 3,
       paddingTop: 3,
       paddingBottom: 3,
       color: '#fff',
-      minWidth: '55px'
+      minWidth: '55px',
+      marginRight: '-10%'
     },
     docLink: {
       float: 'right',
+      fontSize: FontSizes.icon,
+      textAlign: 'left',
       verticalAlign: 'center',
-      marginTop: '-7.5%',
-      marginRight: theme.spacing.s1,
     },
     links: {
       color: `${theme.palette.blueMid} !important`,

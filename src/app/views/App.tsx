@@ -318,7 +318,7 @@ class App extends Component<IAppProps, IAppState> {
         : 'col-xs-12 col-sm-12 col-lg-9 col-md-8';
 
     if (minimised) {
-      sidebarWidth = `col-lg-1 col-md-1 ${classes.sidebarMini}`;
+      sidebarWidth = `${classes.sidebarMini}`;
       layout = `col-xs-12 col-sm-12 col-lg-11 col-md-11 ${classes.layoutExtra}`;
     }
 

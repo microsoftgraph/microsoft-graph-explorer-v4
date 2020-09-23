@@ -2,6 +2,7 @@ import {
   ChoiceGroup,
   DefaultButton,
   Dialog,
+  DialogFooter,
   DialogType,
   getId,
   IconButton,
@@ -63,7 +64,7 @@ function Settings(props: ISettingsProps) {
     if (authenticated) {
       menuItems.push(
         {
-          key: 'change-theme',
+          key: 'view-all-permissions',
           text: messages['view all permissions'],
           iconProps: {
             iconName: 'AzureKeyVault',
@@ -112,6 +113,7 @@ function Settings(props: ISettingsProps) {
 
   const handleConsent = () => {
     dispatch(consentToScopes(selectedPermissions));
+    setSelectedPermissions([]);
   };
 
   const getSelectionDetails = () => {
@@ -131,7 +133,11 @@ function Settings(props: ISettingsProps) {
     return (
       <div>
         <Label>{getSelectionDetails()}</Label>
-        <PrimaryButton disabled={selectedPermissions.length === 0} onClick={() => handleConsent()}>
+        <PrimaryButton
+          disabled={selectedPermissions.length === 0}
+          onClick={() => handleConsent()}
+          style={{ marginRight: 10 }}
+        >
           <FormattedMessage id='Consent' />
         </PrimaryButton>
         <DefaultButton onClick={() => togglePermissionsPanel()}>
@@ -149,19 +155,19 @@ function Settings(props: ISettingsProps) {
 
   return (
     <div>
-       <TooltipHost
-        content='More actions'
+      <TooltipHost
+        content={messages['More actions']}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}>
-          <IconButton
-            ariaLabel='More actions'
-            role='button'
-            styles={{
-              label: { marginBottom: -20 },
-              icon: { marginBottom: -20 }
-            }}
-            menuIconProps={{ iconName: 'Settings' }}
-            menuProps={menuProperties} />
+        <IconButton
+          ariaLabel={messages['More actions']}
+          role='button'
+          styles={{
+            label: { marginBottom: -20 },
+            icon: { marginBottom: -20 }
+          }}
+          menuIconProps={{ iconName: 'Settings' }}
+          menuProps={menuProperties} />
       </TooltipHost>
       <div>
         <Dialog
@@ -196,6 +202,11 @@ function Settings(props: ISettingsProps) {
             ]}
             onChange={(event, selectedTheme) => handleChangeTheme(selectedTheme)}
           />
+          <DialogFooter>
+            <DefaultButton
+              text={messages.Close}
+              onClick={() => toggleThemeChooserDialogState()} />
+          </DialogFooter>
         </Dialog>
 
         <Panel

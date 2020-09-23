@@ -307,5 +307,8 @@
   "Search history items": "Search history items",
   "Malformed JSON body": "Malformed JSON body",
   "Review the request body": "Review the request body and fix any malformed JSON.",
-  "Minimize sidebar": "Minimize sidebar"
+  "Minimize sidebar": "Minimize sidebar",
+  "Toggle selection for all items": "Toggle selection for all items",
+  "Toggle selection": "Toggle selection",
+  "Row checkbox": "Row checkbox"
 }
