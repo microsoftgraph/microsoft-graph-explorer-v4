@@ -59,30 +59,10 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     const labelStyles = queryResponseStyles(currentTheme).labelStyles;
     const links = appStyles(currentTheme).links;
     const { data, pending } = this.props.card;
-    const { body } = this.props;
-    const {
-      intl: { messages },
-    }: any = this.props;
+    const { body, queryStatus } = this.props;
 
     if (!body) {
       return <div />;
-    }
-
-    if (body && !pending && !data) {
-      return (
-        <Label style={labelStyles}>
-          <FormattedMessage id='The Adaptive Card for this response is not available' />{' '}
-          &nbsp;
-          <a
-            style={links}
-            href={'https://adaptivecards.io/designer/'}
-            tabIndex={0}
-            target='_blank'
-          >
-            <FormattedMessage id='Adaptive Cards designer' />
-          </a>
-        </Label>
-      );
     }
 
     if (body && pending) {
@@ -93,6 +73,26 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
         </Label>
       );
     }
+
+    if (body && !pending) {
+      if (!data || (queryStatus && !queryStatus.ok)) {
+        return (
+          <Label style={labelStyles}>
+            <FormattedMessage id='The Adaptive Card for this response is not available' />
+            &nbsp;
+            <a
+              style={links}
+              href={'https://adaptivecards.io/designer/'}
+              tabIndex={0}
+              target='_blank'
+            >
+              <FormattedMessage id='Adaptive Cards designer' />
+            </a>
+          </Label>
+        );
+      }
+    }
+
     try {
       this.adaptiveCard.parse(data);
       const renderedCard = this.adaptiveCard.render();
@@ -124,6 +124,7 @@ function mapStateToProps(state: any) {
   return {
     card: state.adaptiveCard,
     sampleQuery: state.sampleQuery,
+    queryStatus: state.queryRunnerStatus,
   };
 }
 
