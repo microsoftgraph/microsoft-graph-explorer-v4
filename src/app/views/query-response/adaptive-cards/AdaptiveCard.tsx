@@ -56,8 +56,8 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
 
   public render() {
     const currentTheme = getTheme();
-    const labelStyles = queryResponseStyles(currentTheme).labelStyles;
-    const links = appStyles(currentTheme).links;
+    const labelStyles = queryResponseStyles(currentTheme).emptyStateLabel;
+    const link = queryResponseStyles(currentTheme).link;
     const { data, pending } = this.props.card;
     const { body, queryStatus } = this.props;
 
@@ -81,7 +81,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             <FormattedMessage id='The Adaptive Card for this response is not available' />
             &nbsp;
             <a
-              style={links}
+              style={link}
               href={'https://adaptivecards.io/designer/'}
               tabIndex={0}
               target='_blank'
