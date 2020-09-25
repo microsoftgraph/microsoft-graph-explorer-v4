@@ -51,10 +51,7 @@ const HeadersList = ({
     return header.value !== '';
   }) : [];
 
-  const headersList: any = headerStyles().headersList;
-
   return (
-    <div style={headersList}>
       <DetailsList
         items={headerItems}
         columns={columns}
@@ -62,7 +59,6 @@ const HeadersList = ({
         onRenderRow={renderRow}
         selectionMode={SelectionMode.none}
       />
-    </div>
   );
 };
 

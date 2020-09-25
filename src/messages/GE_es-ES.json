@@ -281,6 +281,11 @@
   "We did not find any history items": "No se encuentra ningún elemento de historial",
   "Expand response": "Expandir respuesta",
   "Access Token": "Token de acceso",
+  "Graph toolkit": "Componente Toolkit",
+  "We did not find a Graph toolkit for this query": "No hay ningún componente del kit de herramientas disponible para esta respuesta. Para obtener más información sobre el kit de herramientas y colaborar en él, consulte",
+  "Learn more about the Microsoft Graph Toolkit": "Repositorio público de Microsoft Graph Toolkit",
+  "Open this example in": "Abra este ejemplo en",
+  "graph toolkit playground": "Animación de Graph Toolkit",
   "consent to scopes": " Debe dar su consentimiento para conceder los permisos en el ",
   "Permission": "Permiso",
   "Display string": "Mostrar cadena",
@@ -310,5 +315,6 @@
   "Minimize sidebar": "Minimizar la barra lateral",
   "Toggle selection for all items": "Activar o desactivar la selección de todos los elementos",
   "Toggle selection": "Activar o desactivar la selección",
-  "Row checkbox": "Casilla de verificación de fila"
+  "Row checkbox": "Casilla de verificación de la fila",
+  "Administrator permission": "El administrador de la cuenta empresarial debe autorizarlo antes de que usted pueda dar su consentimiento para este permiso."
 }
