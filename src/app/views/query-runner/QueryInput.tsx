@@ -1,9 +1,8 @@
-import { Dropdown, TextField } from 'office-ui-fabric-react';
+import { Dropdown, Icon, IDropdownOption, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Mode } from '../../../types/enums';
 import { IQueryInputProps } from '../../../types/query-runner';
 import { getStyleFor } from '../../utils/badge-color';
 import SubmitButton from '../common/submit-button/SubmitButton';
@@ -52,7 +51,6 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       selectedVersion,
       sampleUrl,
       submitting,
-      mode,
       authenticated
     } = this.props;
 
@@ -66,7 +64,34 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       background: getStyleFor(selectedVerb),
     };
 
-    const httpMethodsToDisplay = (!authenticated) ? [httpMethods[0]] : httpMethods;
+    const httpMethodsToDisplay: IDropdownOption[] = [];
+    httpMethods.forEach((method: IDropdownOption) => {
+      method.disabled = true;
+      if (method.key === 'GET' || authenticated) {
+        method.disabled = false;
+      }
+      httpMethodsToDisplay.push(method);
+    });
+
+    const onRenderOption = (option: any): JSX.Element => {
+      if (option.key === 'GET') {
+        return (
+          <span>{option.text}</span>
+        );
+      }
+
+      return (
+        <>
+          {!authenticated &&  (
+            <Icon
+              style={{ marginRight: '8px' }}
+              iconName={'Lock'}
+            />
+          )}
+          <span>{option.text}</span>
+        </>
+      );
+    };
 
     return (
       <div className='row'>
@@ -78,6 +103,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             options={httpMethodsToDisplay}
             styles={verbSelector}
             onChange={(event, method) => handleOnMethodChange(method)}
+            onRenderOption={onRenderOption}
           />
         </div>
         <div className='col-xs-12 col-lg-2'>
