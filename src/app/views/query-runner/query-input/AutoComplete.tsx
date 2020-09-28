@@ -254,6 +254,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private appendSuggestionToUrl(selected: string) {
+    if (!selected) return;
     const { userInput, compare } = this.state;
     if (selected.startsWith('$')) {
       selected += '=';
