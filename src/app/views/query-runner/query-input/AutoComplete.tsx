@@ -4,11 +4,17 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { IAutoCompleteProps, IAutoCompleteState } from '../../../../types/auto-complete';
-import * as autoCompleteActionCreators from '../../../services/actions/autocomplete-action-creators';
+import { SortOrder } from '../../../../types/enums';
+import * as autoCompleteActionCreators
+  from '../../../services/actions/autocomplete-action-creators';
+import { dynamicSort } from '../../../utils/dynamic-sort';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { queryInputStyles } from './QueryInput.styles';
 import SuggestionsList from './SuggestionsList';
-import { cleanUpSelectedSuggestion, getLastCharacterOf, getParametersWithVerb } from './util';
+import {
+  cleanUpSelectedSuggestion, getLastCharacterOf,
+  getParametersWithVerb
+} from './util';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
@@ -185,9 +191,10 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private setSuggestions(suggestions: string[]) {
+    const sortedSuggestions = suggestions.sort(dynamicSort(null, SortOrder.ASC));
     this.setState({
-      filteredSuggestions: suggestions,
-      suggestions,
+      filteredSuggestions: sortedSuggestions,
+      suggestions: sortedSuggestions,
       showSuggestions: (suggestions.length > 0),
       compare: ''
     });
