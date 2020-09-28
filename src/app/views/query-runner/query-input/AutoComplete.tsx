@@ -103,10 +103,11 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }
   }
 
-  public onKeyDown = (e: any) => {
-    const { activeSuggestion, filteredSuggestions, showSuggestions, queryUrl } = this.state;
+  public onKeyDown = (event: any) => {
+    const { activeSuggestion, filteredSuggestions,
+      showSuggestions, queryUrl, suggestions } = this.state;
 
-    switch (e.keyCode) {
+    switch (event.keyCode) {
       case KeyCodes.enter:
         if (showSuggestions) {
           const selected = filteredSuggestions[activeSuggestion];
@@ -119,14 +120,14 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
       case KeyCodes.tab:
         if (showSuggestions) {
-          e.preventDefault();
+          event.preventDefault();
           const selected = filteredSuggestions[activeSuggestion];
           this.appendSuggestionToUrl(selected);
         }
         break;
 
       case KeyCodes.up:
-        e.preventDefault();
+        event.preventDefault();
         if (showSuggestions) {
           let active = activeSuggestion - 1;
           if (activeSuggestion === 0) {
@@ -137,15 +138,15 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
 
       case KeyCodes.down:
-        e.preventDefault();
+        event.preventDefault();
         if (showSuggestions) {
           let active = activeSuggestion + 1;
           if (activeSuggestion === filteredSuggestions.length - 1) {
             active = 0;
           }
           this.setState({ activeSuggestion: active });
-          break;
         }
+        break;
 
       case KeyCodes.escape:
         if (showSuggestions) {
@@ -157,6 +158,13 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
     }
 
+    const controlSpace = event.ctrlKey && event.keyCode == KeyCodes.space;
+    const controlPeriod = event.ctrlKey && event.keyCode == KeyCodes.period;
+    if (controlSpace || controlPeriod) {
+      if (suggestions.length) {
+        this.setSuggestions(suggestions);
+      }
+    }
   };
 
   public displayLinkOptions = () => {
