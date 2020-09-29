@@ -162,7 +162,11 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     const controlPeriod = event.ctrlKey && event.keyCode == KeyCodes.period;
     if (controlSpace || controlPeriod) {
       if (suggestions.length) {
-        this.setSuggestions(suggestions);
+        const userInput = event.target.value;
+        const lastSymbol = this.getLastSymbolInUrl(userInput);
+        const previousUserInput = userInput.substring(0, lastSymbol.value + 1);
+        const filteredSuggestions = this.filterSuggestions(userInput, previousUserInput, '', suggestions);
+        this.setSuggestions(filteredSuggestions);
       }
     }
   };
@@ -239,6 +243,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       filteredSuggestions,
       compare: compareString
     });
+    return filteredSuggestions;
   }
 
   private requestForAutocompleteOptions(url: string) {
@@ -291,6 +296,40 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private renderSuffix = () => {
     return (<Spinner />);
   }
+
+  private getLastSymbolInUrl(url: string) {
+    const availableSymbols = [
+      {
+        key: '/',
+        value: 0
+      },
+      {
+        key: ',',
+        value: 0
+      },
+      {
+        key: '$',
+        value: 0
+      },
+      {
+        key: '=',
+        value: 0
+      },
+      {
+        key: '&',
+        value: 0
+      }
+    ];
+
+    availableSymbols.forEach(element => {
+      element.value = url.lastIndexOf(element.key);
+    });
+    const max = availableSymbols.reduce(function (prev, current) {
+      return (prev.value > current.value) ? prev : current
+    });
+    return max;
+  }
+
 
   public render() {
     const {
