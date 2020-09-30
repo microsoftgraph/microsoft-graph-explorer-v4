@@ -273,10 +273,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         telemetry.trackEvent(
          LISTITEM_CLICK_EVENT,
          {
-           ComponentName: 'Sample query list item',
-           SampleId: selectedQuery.id,
-           SampleName: selectedQuery.humanName,
-           SampleCategory: selectedQuery.category,
+            ComponentName: 'Sample query list item',
+            SampleId: selectedQuery.id,
+            SampleName: selectedQuery.humanName,
+            SampleCategory: selectedQuery.category,
+            QueryUrl: ''
          });
       } else {
         sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
