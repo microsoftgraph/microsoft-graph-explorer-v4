@@ -89,6 +89,7 @@ function trackCopyEvent(language: string) {
   telemetry.trackEvent(BUTTON_CLICK_EVENT,
     {
       ComponentName: 'Code snippets copy button',
-      SelectedLanguage: language
+      SelectedLanguage: language,
+      QueryUrl: ''
     });
 }

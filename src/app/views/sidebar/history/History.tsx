@@ -431,7 +431,8 @@ export class History extends Component<IHistoryProps, any> {
       eventName,
       {
         ComponentName: componentName,
-        ItemIndex: query.index
+        ItemIndex: query.index,
+        QueryUrl: ''
       });
   }
 

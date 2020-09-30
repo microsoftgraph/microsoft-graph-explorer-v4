@@ -98,7 +98,8 @@ export class QueryRunner extends Component<
     telemetry.trackEvent(BUTTON_CLICK_EVENT,
       {
          ComponentName: 'Run query button',
-         SelectedVersion: sampleQuery.selectedVersion
+         SelectedVersion: sampleQuery.selectedVersion,
+         QueryUrl: ''
       });
   };
 
