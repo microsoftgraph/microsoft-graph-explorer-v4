@@ -55,6 +55,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   public onChange = (e: any) => {
     const { suggestions, showSuggestions, userInput: previousUserInput, compare } = this.state;
     const userInput = e.target.value;
+    console.log({ input: e.target.value, userInput: previousUserInput, compare })
 
     this.setState({
       userInput,
@@ -166,7 +167,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         const lastSymbol = this.getLastSymbolInUrl(userInput);
         const previousUserInput = userInput.substring(0, lastSymbol.value + 1);
         const filteredSuggestions = this.filterSuggestions(userInput, previousUserInput, '', suggestions);
-        this.setSuggestions(filteredSuggestions);
+        this.setSuggestions(filteredSuggestions, userInput.replace(previousUserInput, ''));
       }
     }
   };
@@ -202,13 +203,13 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }
   }
 
-  private setSuggestions(suggestions: string[]) {
+  private setSuggestions(suggestions: string[], compare?: string) {
     const sortedSuggestions = suggestions.sort(dynamicSort(null, SortOrder.ASC));
     this.setState({
       filteredSuggestions: sortedSuggestions,
       suggestions: sortedSuggestions,
       showSuggestions: (suggestions.length > 0),
-      compare: ''
+      compare: compare || ''
     });
   }
 
