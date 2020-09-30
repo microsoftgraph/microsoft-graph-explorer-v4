@@ -24,7 +24,6 @@ import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
-import { Permission } from '../../query-runner/request/permissions/Permission';
 
 
 export class History extends Component<IHistoryProps, any> {
