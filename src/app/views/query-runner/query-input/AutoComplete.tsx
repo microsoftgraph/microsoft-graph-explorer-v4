@@ -55,7 +55,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   public onChange = (e: any) => {
     const { suggestions, showSuggestions, userInput: previousUserInput, compare } = this.state;
     const userInput = e.target.value;
-    console.log({ input: e.target.value, userInput: previousUserInput, compare })
 
     this.setState({
       userInput,
@@ -318,6 +317,10 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       },
       {
         key: '&',
+        value: 0
+      },
+      {
+        key: '?',
         value: 0
       }
     ];
