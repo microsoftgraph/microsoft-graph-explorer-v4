@@ -99,7 +99,7 @@ export class QueryRunner extends Component<
       {
          ComponentName: 'Run query button',
          SelectedVersion: sampleQuery.selectedVersion,
-         QueryUrl: ''
+         QuerySignature: ''
       });
   };
 

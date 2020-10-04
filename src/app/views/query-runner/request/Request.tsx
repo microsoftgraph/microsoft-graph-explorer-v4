@@ -86,7 +86,7 @@ export class Request extends Component<IRequestComponent, any> {
     if (!item) { return; }
     const tabTitle = item.props.title;
     if (tabTitle) {
-      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: `${tabTitle} tab`, QueryUrl: '' });
+      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: `${tabTitle} tab`, QuerySignature: '' });
     }
   }
 

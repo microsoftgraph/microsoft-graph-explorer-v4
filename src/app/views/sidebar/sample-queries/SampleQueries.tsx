@@ -277,7 +277,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             SampleId: selectedQuery.id,
             SampleName: selectedQuery.humanName,
             SampleCategory: selectedQuery.category,
-            QueryUrl: ''
+            QuerySignature: ''
          });
       } else {
         sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;

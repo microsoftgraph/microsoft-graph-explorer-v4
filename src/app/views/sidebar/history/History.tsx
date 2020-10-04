@@ -431,7 +431,7 @@ export class History extends Component<IHistoryProps, any> {
       {
         ComponentName: componentName,
         ItemIndex: query.index,
-        QueryUrl: ''
+        QuerySignature: ''
       });
   }
 

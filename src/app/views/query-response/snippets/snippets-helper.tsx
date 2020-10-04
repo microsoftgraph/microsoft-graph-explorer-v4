@@ -90,6 +90,6 @@ function trackCopyEvent(language: string) {
     {
       ComponentName: 'Code snippets copy button',
       SelectedLanguage: language,
-      QueryUrl: ''
+      QuerySignature: ''
     });
 }
