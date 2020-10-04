@@ -77,12 +77,12 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     this.generateSamples(filteredSamples);
   }
 
-  public onDocumentationLinkClicked = (item: any) => {
+  public onDocumentationLinkClicked = (item: ISampleQuery) => {
     window.open(item.docLink, '_blank');
     this.trackDocumentLinkClickedEvent(item);
   };
 
-  private trackDocumentLinkClickedEvent(item: any) {
+  private trackDocumentLinkClickedEvent(item: ISampleQuery) {
     telemetry.trackEvent(
       LINK_CLICK_EVENT,
       {
