@@ -14,7 +14,7 @@ class Telemetry implements ITelemetry {
     this.config = {
       instrumentationKey: this.getInstrumentationKey(),
       disableExceptionTracking: true,
-      disableTelemetry: true,
+      disableTelemetry: false,
       extensions: [this.reactPlugin]
     };
 
@@ -26,7 +26,7 @@ class Telemetry implements ITelemetry {
   public initialize() {
     this.appInsights.loadAppInsights();
     this.appInsights.addTelemetryInitializer(this.filterFunction);
-    // this.appInsights.trackPageView();
+    this.appInsights.trackPageView();
   }
 
   public trackEvent(eventName: string, payload: any) {
