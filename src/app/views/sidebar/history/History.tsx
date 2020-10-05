@@ -25,7 +25,6 @@ import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
 
-
 export class History extends Component<IHistoryProps, any> {
 
   constructor(props: any) {
