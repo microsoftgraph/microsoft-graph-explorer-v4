@@ -84,7 +84,7 @@ export class QueryRunner extends Component<
     if (actions) {
       actions.runQuery(sampleQuery);
     }
-    telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
+    // telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
