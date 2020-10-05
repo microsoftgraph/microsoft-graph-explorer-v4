@@ -316,5 +316,7 @@
   "Toggle selection for all items": "Toggle selection for all items",
   "Toggle selection": "Toggle selection",
   "Row checkbox": "Row checkbox",
-  "Administrator permission": "Admin of the tenant needs to authorize first before you can consent to this permission"
+  "Administrator permission": "Admin of the tenant needs to authorize first before you can consent to this permission",
+  "Fetching suggestions": "Fetching suggestions",
+  "No auto-complete suggestions available": "No auto-complete suggestions available"
 }

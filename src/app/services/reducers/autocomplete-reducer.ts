@@ -11,14 +11,15 @@ export function autoComplete(state = initialState, action: IAction): IApiRespons
   switch (action.type) {
     case AUTOCOMPLETE_FETCH_PENDING:
       return {
-        ...state,
+        error: null,
+        data: null,
         pending: true
       };
     case AUTOCOMPLETE_FETCH_SUCCESS:
       return {
-        ...state,
         pending: false,
-        data: action.response
+        data: action.response,
+        error: null
       };
     case AUTOCOMPLETE_FETCH_ERROR:
       return {

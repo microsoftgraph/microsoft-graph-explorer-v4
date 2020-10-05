@@ -6,6 +6,7 @@ export interface IAutoCompleteProps {
   runQuery: Function;
   sampleQuery: IQuery;
   fetchingSuggestions: boolean;
+  autoCompleteError: any;
   autoCompleteOptions: {
     url: string;
     parameters: any[];
