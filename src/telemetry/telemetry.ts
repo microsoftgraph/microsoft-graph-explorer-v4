@@ -14,7 +14,7 @@ class Telemetry implements ITelemetry {
     this.config = {
       instrumentationKey: this.getInstrumentationKey(),
       disableExceptionTracking: true,
-      disableTelemetry: false,
+      disableTelemetry: this.getInstrumentationKey() ? false : true,
       extensions: [this.reactPlugin]
     };
 

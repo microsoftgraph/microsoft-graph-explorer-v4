@@ -525,7 +525,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-const styledHistory = styled(History, sidebarStyles as any);
+// @ts-ignore
+const styledHistory = styled(History, sidebarStyles);
 // @ts-ignore
 const IntlHistory = injectIntl(styledHistory);
 // @ts-ignore
