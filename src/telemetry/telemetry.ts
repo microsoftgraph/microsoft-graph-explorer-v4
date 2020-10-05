@@ -1,5 +1,5 @@
 import { ReactPlugin, withAITracking } from '@microsoft/applicationinsights-react-js';
-import { ApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
+import { ApplicationInsights, ITelemetryItem, SeverityLevel } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
 import ITelemetry from './ITelemetry';
 
@@ -41,22 +41,25 @@ class Telemetry implements ITelemetry {
     return withAITracking(this.reactPlugin, ComponentToTrack, componentName);
   }
 
-  private filterFunction(envelope: any) {
-    // Identifies the source of telemetry events
-    envelope.tags['ai.cloud.role'] = 'Graph Explorer v4';
+  private filterFunction(envelope: ITelemetryItem) {
+    const telemetryItem = envelope.baseData || {};
+    telemetryItem.properties = telemetryItem.properties || {};
 
     // Removes access token from uri
-    const uri = envelope.baseData.uri;
+    const uri = telemetryItem.uri;
     if (uri) {
       const startOfFragment = uri.indexOf('#');
       const sanitisedUri = uri.substring(0, startOfFragment);
-      envelope.baseData.uri = sanitisedUri;
+      telemetryItem.uri = sanitisedUri;
     }
+
+    // Identifies the source of telemetry events
+    telemetryItem.properties.ApplicationName = 'Graph Explorer v4';
 
     // Checks if user is authenticated
     const accessTokenKey = 'msal.idtoken';
     const accessToken = localStorage.getItem(accessTokenKey);
-    envelope.baseData.properties.IsAuthenticated = accessToken ? true : false;
+    telemetryItem.properties.IsAuthenticated = accessToken ? true : false;
 
     return true;
   }
