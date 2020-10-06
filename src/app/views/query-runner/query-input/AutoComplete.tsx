@@ -77,9 +77,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private initialiseAutoComplete = (url: string) => {
     switch (getLastCharacterOf(url)) {
       case '/':
-        this.requestForAutocompleteOptions(url);
-        break;
-
       case '?':
         this.requestForAutocompleteOptions(url);
         break;
