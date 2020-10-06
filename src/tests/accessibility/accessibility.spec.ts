@@ -39,7 +39,9 @@ describe('Graph Explorer', () => {
   // scan the page and return an analysis
   it('checks for accessibility violations', async () => {
     // @ts-ignore
-    const accessibilityScanResults = await AxeBuilder(driver).analyze();
+    const accessibilityScanResults = await AxeBuilder(driver)
+      .disableRules(['landmark-one-main', 'region']) // disabled as main landmark already exists on live site
+      .analyze();
     expect(accessibilityScanResults.violations).toStrictEqual([]);
   });
 });
