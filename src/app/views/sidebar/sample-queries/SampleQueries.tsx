@@ -257,7 +257,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         } else {
           actions.runQuery(sampleQuery);
         }
-        telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
+        // telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
       } else {
         sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
         if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
