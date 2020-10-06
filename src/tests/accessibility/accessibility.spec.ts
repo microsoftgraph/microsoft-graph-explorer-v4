@@ -12,7 +12,7 @@ describe('Graph Explorer', () => {
   beforeAll(async () => {
     chrome.setDefaultService(
       new chrome.ServiceBuilder(
-        '\\usr\\lib\\chromium-browser\\chromedriver'
+        'C:\\SeleniumWebDrivers\\ChromeDriver\\chromedriver.exe'
       ).build()
     );
 
