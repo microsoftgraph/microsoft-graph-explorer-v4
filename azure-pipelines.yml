@@ -9,7 +9,7 @@
 name: $(date:yyyyMMdd)$(rev:.r)
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'vs2017-win2016'
 
 pr:
   branches:
@@ -85,7 +85,6 @@ jobs:
     dependsOn: One
     condition: succeeded()
     steps:
-
       - script: |
           npm install
         displayName: 'npm install'
