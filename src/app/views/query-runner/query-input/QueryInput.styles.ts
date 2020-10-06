@@ -1,7 +1,7 @@
 import { ITheme } from '@uifabric/styling';
 
 export const queryInputStyles = (theme: ITheme) => {
-  const controlWidth = '350px';
+  const controlWidth = '96.5%';
   return {
     autoComplete: {
       input: {
