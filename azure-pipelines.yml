@@ -8,8 +8,7 @@
 
 name: $(date:yyyyMMdd)$(rev:.r)
 
-pool:
-  vmImage: 'vs2017-win2016'
+pool: MsGraphDevXAzureAgents
 
 pr:
   branches:
