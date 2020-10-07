@@ -141,7 +141,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 }
 
 // @ts-ignore
-const IntlAdaptiveCard = injectIntl(AdaptiveCard);
+const trackedComponent = telemetry.trackReactComponent(AdaptiveCard);
 // @ts-ignore
-const trackedComponent = telemetry.trackReactComponent(IntlAdaptiveCard, AdaptiveCard.name);
-export default connect(mapStateToProps, mapDispatchToProps)(trackedComponent);
+const IntlAdaptiveCard = injectIntl(trackedComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(IntlAdaptiveCard);

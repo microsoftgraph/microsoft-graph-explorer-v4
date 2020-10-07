@@ -1,10 +1,10 @@
-import { IconButton, Pivot } from 'office-ui-fabric-react';
+import { Pivot } from 'office-ui-fabric-react';
 import React from 'react';
 
 import { telemetry } from '../../../../telemetry';
 import { renderSnippets } from './snippets-helper';
 
-export function Snippets() {
+function GetSnippets() {
   const supportedLanguages = ['CSharp', 'JavaScript', 'Java', 'Objective-C'];
 
   return (
@@ -13,4 +13,4 @@ export function Snippets() {
     </Pivot>
   );
 }
-export default telemetry.trackReactComponent(Snippets);
+export const Snippets = telemetry.trackReactComponent(GetSnippets, 'Snippets');

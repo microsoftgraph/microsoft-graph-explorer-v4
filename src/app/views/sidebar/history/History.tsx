@@ -524,10 +524,9 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
+
+const trackedComponent = telemetry.trackReactComponent(History);
 // @ts-ignore
-const styledHistory = styled(History, sidebarStyles);
-// @ts-ignore
+const styledHistory = styled(trackedComponent, sidebarStyles);
 const IntlHistory = injectIntl(styledHistory);
-// @ts-ignore
-const trackedComponent = telemetry.trackReactComponent(IntlHistory, History.name);
-export default connect(mapStateToProps, mapDispatchToProps)(trackedComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(IntlHistory);

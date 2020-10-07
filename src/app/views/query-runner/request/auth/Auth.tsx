@@ -36,5 +36,5 @@ export function Auth(props: any) {
     }
   </div>);
 }
-const trackedComponent = telemetry.trackReactComponent(Auth, Auth.name);
+const trackedComponent = telemetry.trackReactComponent(Auth);
 export default styled(trackedComponent, authStyles as any);

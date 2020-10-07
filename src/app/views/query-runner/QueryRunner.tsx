@@ -17,6 +17,7 @@ import { parseSampleUrl } from '../../utils/sample-url-generation';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
 import Request from './request/Request';
+
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
