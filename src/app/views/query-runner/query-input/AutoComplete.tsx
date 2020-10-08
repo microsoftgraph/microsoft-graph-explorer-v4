@@ -160,14 +160,12 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     const controlSpace = event.ctrlKey && event.keyCode == KeyCodes.space;
     const controlPeriod = event.ctrlKey && event.keyCode == KeyCodes.period;
-    if (controlSpace || controlPeriod) {
-      if (suggestions.length) {
-        const userInput = event.target.value;
-        const lastSymbol = this.getLastSymbolInUrl(userInput);
-        const previousUserInput = userInput.substring(0, lastSymbol.value + 1);
-        const filteredSuggestions = this.filterSuggestions(userInput, previousUserInput, '', suggestions);
-        this.setSuggestions(filteredSuggestions, userInput.replace(previousUserInput, ''));
-      }
+    if ((controlSpace || controlPeriod) && suggestions.length) {
+      const userInput = event.target.value;
+      const lastSymbol = this.getLastSymbolInUrl(userInput);
+      const previousUserInput = userInput.substring(0, lastSymbol.value + 1);
+      const filteredSuggestions = this.filterSuggestions(userInput, previousUserInput, '', suggestions);
+      this.setSuggestions(filteredSuggestions, userInput.replace(previousUserInput, ''));
     }
   };
 
