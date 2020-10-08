@@ -158,14 +158,14 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
     }
 
-    const controlSpace = event.ctrlKey && event.keyCode == KeyCodes.space;
-    const controlPeriod = event.ctrlKey && event.keyCode == KeyCodes.period;
+    const controlSpace = event.ctrlKey && event.keyCode === KeyCodes.space;
+    const controlPeriod = event.ctrlKey && event.keyCode === KeyCodes.period;
     if ((controlSpace || controlPeriod) && suggestions.length) {
       const userInput = event.target.value;
       const lastSymbol = this.getLastSymbolInUrl(userInput);
       const previousUserInput = userInput.substring(0, lastSymbol.value + 1);
-      const filteredSuggestions = this.filterSuggestions(userInput, previousUserInput, '', suggestions);
-      this.setSuggestions(filteredSuggestions, userInput.replace(previousUserInput, ''));
+      const filtered = this.filterSuggestions(userInput, previousUserInput, '', suggestions);
+      this.setSuggestions(filtered, userInput.replace(previousUserInput, ''));
     }
   };
 
@@ -272,7 +272,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private appendSuggestionToUrl(selected: string) {
-    if (!selected) return;
+    if (!selected) { return; }
     const { userInput, compare } = this.state;
     if (selected.startsWith('$')) {
       selected += '=';
@@ -326,9 +326,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     availableSymbols.forEach(element => {
       element.value = url.lastIndexOf(element.key);
     });
-    const max = availableSymbols.reduce(function (prev, current) {
-      return (prev.value > current.value) ? prev : current
-    });
+    const max = availableSymbols.reduce((prev, current) => (prev.value > current.value) ? prev : current);
     return max;
   }
 
