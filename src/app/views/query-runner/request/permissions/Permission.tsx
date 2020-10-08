@@ -337,9 +337,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-// @ts-ignore
-const trackedComponent = telemetry.trackReactComponent(Permission);
-const styledPermissions = styled(trackedComponent, permissionStyles as any);
+const styledPermissions = styled(Permission, permissionStyles as any);
 // @ts-ignore
 const IntlPermission = injectIntl(styledPermissions);
 export default connect(mapStateToProps, mapDispatchToProps)(IntlPermission);
