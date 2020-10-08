@@ -6,6 +6,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { appStyles } from './../../App.styles';
@@ -140,5 +141,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 }
 
 // @ts-ignore
-const IntlAdaptiveCard = injectIntl(AdaptiveCard);
+const trackedComponent = telemetry.trackReactComponent(AdaptiveCard);
+// @ts-ignore
+const IntlAdaptiveCard = injectIntl(trackedComponent);
 export default connect(mapStateToProps, mapDispatchToProps)(IntlAdaptiveCard);
