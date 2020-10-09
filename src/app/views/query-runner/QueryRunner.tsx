@@ -13,6 +13,7 @@ import {
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
+import { normalizeQueryUrl } from '../../utils/query-url-normalization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
@@ -100,8 +101,9 @@ export class QueryRunner extends Component<
       {
          ComponentName: 'Run query button',
          SelectedVersion: sampleQuery.selectedVersion,
-         QuerySignature: ''
+         QuerySignature: normalizeQueryUrl(sampleQuery.selectedVerb + ' ' + sampleQuery.sampleUrl)
       });
+    alert(normalizeQueryUrl(sampleQuery.sampleUrl));
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
