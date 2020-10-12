@@ -246,8 +246,8 @@
   "Snippets": "Trechos de código",
   "Adaptive Cards": "Placas adaptáveis",
   "Office Dev Program": "Obter uma área restrita com dados de exemplo",
-  "Fetching Adaptive Card": "Buscando placa adaptável",
-  "The Adaptive Card for this response is not available": "A placa adaptável para esta resposta não está disponível",
+  "Fetching Adaptive Card": "Buscando cartão adaptável",
+  "The Adaptive Card for this response is not available": "Não há cartão adaptável disponível para essa resposta. Para saber mais sobre como criar cartões adaptáveis, confira",
   "loading samples": "Carregando exemplos",
   "older": "Mais antigo",
   "today": "Hoje",
@@ -316,5 +316,7 @@
   "Toggle selection for all items": "Seleção de alternância para todos os itens",
   "Toggle selection": "Seleção de alternância",
   "Row checkbox": "Caixa de seleção de registro",
-  "Administrator permission": "O administrador do locatário deve autoriza-lo primeiro para que você possa concordar com essa permissão"
+  "Administrator permission": "O administrador do locatário deve autorizá-lo primeiro para que você possa concordar com essa permissão",
+  "Adaptive Cards designer": "Criador de Cartões Adaptáveis.",
+  "Click Run Query button above to fetch Adaptive Card": "Clique no botão Executar consulta acima para buscar um cartão adaptável."
 }

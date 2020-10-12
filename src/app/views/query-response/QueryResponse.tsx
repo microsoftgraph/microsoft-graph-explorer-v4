@@ -12,7 +12,7 @@ import { Mode } from '../../../types/enums';
 import { IQueryResponseProps, IQueryResponseState } from '../../../types/query-response';
 import { copy } from '../common/copy';
 import { createShareLink } from '../common/share';
-import { getPivotItems } from './pivot-items/pivot-items';
+import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 
 class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> {
@@ -122,6 +122,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
           </>}
           <Pivot className='pivot-response'
             styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
+            onLinkClick={(pivotItem) => onPivotItemClick(pivotItem)}
             >
             {pivotItems}
           </Pivot>
