@@ -102,10 +102,11 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }
   }
 
-  public onKeyDown = (e: any) => {
-    const { activeSuggestion, filteredSuggestions, showSuggestions, queryUrl } = this.state;
+  public onKeyDown = (event: any) => {
+    const { activeSuggestion, filteredSuggestions,
+      showSuggestions, queryUrl, suggestions } = this.state;
 
-    switch (e.keyCode) {
+    switch (event.keyCode) {
       case KeyCodes.enter:
         if (showSuggestions) {
           const selected = filteredSuggestions[activeSuggestion];
@@ -118,14 +119,14 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
       case KeyCodes.tab:
         if (showSuggestions) {
-          e.preventDefault();
+          event.preventDefault();
           const selected = filteredSuggestions[activeSuggestion];
           this.appendSuggestionToUrl(selected);
         }
         break;
 
       case KeyCodes.up:
-        e.preventDefault();
+        event.preventDefault();
         if (showSuggestions) {
           let active = activeSuggestion - 1;
           if (activeSuggestion === 0) {
@@ -136,15 +137,15 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
 
       case KeyCodes.down:
-        e.preventDefault();
+        event.preventDefault();
         if (showSuggestions) {
           let active = activeSuggestion + 1;
           if (activeSuggestion === filteredSuggestions.length - 1) {
             active = 0;
           }
           this.setState({ activeSuggestion: active });
-          break;
         }
+        break;
 
       case KeyCodes.escape:
         if (showSuggestions) {
@@ -156,6 +157,15 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         break;
     }
 
+    const controlSpace = event.ctrlKey && event.keyCode === KeyCodes.space;
+    const controlPeriod = event.ctrlKey && event.keyCode === KeyCodes.period;
+    if ((controlSpace || controlPeriod) && suggestions.length) {
+      const userInput = event.target.value;
+      const lastSymbol = this.getLastSymbolInUrl(userInput);
+      const previousUserInput = userInput.substring(0, lastSymbol.value + 1);
+      const filtered = this.filterSuggestions(userInput, previousUserInput, '', suggestions);
+      this.setSuggestions(filtered, userInput.replace(previousUserInput, ''));
+    }
   };
 
   public displayLinkOptions = () => {
@@ -189,13 +199,13 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }
   }
 
-  private setSuggestions(suggestions: string[]) {
+  private setSuggestions(suggestions: string[], compare?: string) {
     const sortedSuggestions = suggestions.sort(dynamicSort(null, SortOrder.ASC));
     this.setState({
       filteredSuggestions: sortedSuggestions,
       suggestions: sortedSuggestions,
       showSuggestions: (suggestions.length > 0),
-      compare: ''
+      compare: compare || ''
     });
   }
 
@@ -230,6 +240,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       filteredSuggestions,
       compare: compareString
     });
+    return filteredSuggestions;
   }
 
   private requestForAutocompleteOptions(url: string) {
@@ -260,7 +271,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private appendSuggestionToUrl(selected: string) {
-    if (!selected) return;
+    if (!selected) { return; }
     const { userInput, compare } = this.state;
     if (selected.startsWith('$')) {
       selected += '=';
@@ -311,6 +322,42 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     return null;
   }
+
+  private getLastSymbolInUrl(url: string) {
+    const availableSymbols = [
+      {
+        key: '/',
+        value: 0
+      },
+      {
+        key: ',',
+        value: 0
+      },
+      {
+        key: '$',
+        value: 0
+      },
+      {
+        key: '=',
+        value: 0
+      },
+      {
+        key: '&',
+        value: 0
+      },
+      {
+        key: '?',
+        value: 0
+      }
+    ];
+
+    availableSymbols.forEach(element => {
+      element.value = url.lastIndexOf(element.key);
+    });
+    const max = availableSymbols.reduce((prev, current) => (prev.value > current.value) ? prev : current);
+    return max;
+  }
+
 
   public render() {
     const {
