@@ -24,7 +24,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
 import { telemetry } from '../../../../telemetry';
-import { RUN_QUERY_EVENT } from '../../../../telemetry/event-types';
+import { LINK_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
@@ -77,9 +77,22 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     this.generateSamples(filteredSamples);
   }
 
-  public onDocumentationLinkClicked = (item: any) => {
+  public onDocumentationLinkClicked = (item: ISampleQuery) => {
     window.open(item.docLink, '_blank');
+    this.trackDocumentLinkClickedEvent(item);
   };
+
+  private trackDocumentLinkClickedEvent(item: ISampleQuery) {
+    telemetry.trackEvent(
+      LINK_CLICK_EVENT,
+      {
+         ComponentName: 'Documentation link',
+         SampleId: item.id,
+         SampleName: item.humanName,
+         SampleCategory: item.category,
+         Link: item.docLink
+      });
+  }
 
   public generateSamples(samples: any) {
     const map = new Map();
@@ -257,7 +270,15 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         } else {
           actions.runQuery(sampleQuery);
         }
-        telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
+        telemetry.trackEvent(
+         LISTITEM_CLICK_EVENT,
+         {
+            ComponentName: 'Sample query list item',
+            SampleId: selectedQuery.id,
+            SampleName: selectedQuery.humanName,
+            SampleCategory: selectedQuery.category,
+            QuerySignature: ''
+         });
       } else {
         sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
         if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }

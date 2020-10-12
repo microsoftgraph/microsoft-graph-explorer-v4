@@ -1,6 +1,6 @@
 {
   "name": "graph-explorer-v2",
-  "version": "4.1.7",
+  "version": "4.1.9",
   "private": true,
   "dependencies": {
     "@babel/core": "7.2.2",
@@ -83,7 +83,7 @@
     "build": "node scripts/build.js && node versioned-build.js",
     "test": "node scripts/test.js",
     "lint": "tslint --project tsconfig.json -c tslint.json",
-    "bump": "standard-version --skip.tag"
+    "bump": "standard-version --skip.tag --skip.changelog"
   },
   "eslintConfig": {
     "extends": "react-app"

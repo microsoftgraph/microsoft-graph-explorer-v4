@@ -1,14 +1,16 @@
-import { getTheme, ITextField, KeyCodes, Spinner, TextField } from 'office-ui-fabric-react';
+import { getId, getTheme, ITextField, KeyCodes, Spinner, TextField, TooltipHost } from 'office-ui-fabric-react';
+import { Icon } from 'office-ui-fabric-react/lib/components/Icon/Icon';
+import { ITooltipHostStyles } from 'office-ui-fabric-react/lib/components/Tooltip/TooltipHost.types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { IAutoCompleteProps, IAutoCompleteState } from '../../../../types/auto-complete';
 import { SortOrder } from '../../../../types/enums';
-import * as autoCompleteActionCreators
-  from '../../../services/actions/autocomplete-action-creators';
+import * as autoCompleteActionCreators from '../../../services/actions/autocomplete-action-creators';
 import { dynamicSort } from '../../../utils/dynamic-sort';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
+import { translateMessage } from '../../../utils/translate-messages';
 import { queryInputStyles } from './QueryInput.styles';
 import SuggestionsList from './SuggestionsList';
 import {
@@ -75,9 +77,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private initialiseAutoComplete = (url: string) => {
     switch (getLastCharacterOf(url)) {
       case '/':
-        this.requestForAutocompleteOptions(url);
-        break;
-
       case '?':
         this.requestForAutocompleteOptions(url);
         break;
@@ -292,7 +291,36 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private renderSuffix = () => {
-    return (<Spinner />);
+    const { fetchingSuggestions, autoCompleteError } = this.props;
+
+    const calloutProps = { gapSpace: 0 };
+    const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
+
+    if (fetchingSuggestions) {
+      return (<TooltipHost
+        content={translateMessage('Fetching suggestions')}
+        id={getId()}
+        calloutProps={calloutProps}
+        styles={hostStyles}
+      >
+        <Spinner />
+      </TooltipHost>
+      );
+    }
+
+    if (autoCompleteError) {
+      return (
+        <TooltipHost
+          content={translateMessage('No auto-complete suggestions available')}
+          id={getId()}
+          calloutProps={calloutProps}
+          styles={hostStyles}
+        >
+          <Icon iconName='MuteChat' />
+        </TooltipHost>);
+    }
+
+    return null;
   }
 
   private getLastSymbolInUrl(url: string) {
@@ -340,8 +368,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       queryUrl
     } = this.state;
 
-    const { fetchingSuggestions } = this.props;
-
     const currentTheme = getTheme();
     const {
       input: autoInput,
@@ -358,7 +384,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           onKeyDown={this.onKeyDown}
           value={queryUrl}
           componentRef={this.autoCompleteRef}
-          onRenderSuffix={(fetchingSuggestions) ? this.renderSuffix : undefined}
+          onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
         />
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
           <SuggestionsList
@@ -375,7 +401,8 @@ function mapStateToProps(state: any) {
     sampleQuery: state.sampleQuery,
     appTheme: state.theme,
     autoCompleteOptions: state.autoComplete.data,
-    fetchingSuggestions: state.autoComplete.pending
+    fetchingSuggestions: state.autoComplete.pending,
+    autoCompleteError: state.autoComplete.error
   };
 }
 
