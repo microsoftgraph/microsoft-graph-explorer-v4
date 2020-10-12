@@ -317,7 +317,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           styles={hostStyles}
         >
           <Icon iconName='MuteChat' />
-        </TooltipHost>)
+        </TooltipHost>);
     }
 
     return null;
