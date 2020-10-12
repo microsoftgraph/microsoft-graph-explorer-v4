@@ -19,11 +19,16 @@ export function normalizeQueryUrl(incomingUrl: string) {
   incomingUrl = decodeURIComponent(incomingUrl);
 
   // Extract query string
-  let queryString = new URL(incomingUrl).search;
-  queryString = processQueryParams(queryString.slice(1));
+  let queryString: string = '';
+  const urlParts = incomingUrl.split('?');
+  if (urlParts.length > 1) {
+    const startOfQueryString = incomingUrl.indexOf('?');
+    queryString = incomingUrl.substring(startOfQueryString, incomingUrl.length - startOfQueryString);
+    queryString = processQueryParams(queryString.slice(1));
+  }
 
   // Drop query string
-  incomingUrl = incomingUrl.split('?')[0];
+  incomingUrl = urlParts[0];
 
   // Drop casts that use the /$/ pattern
   incomingUrl = incomingUrl.split('/$/')[0];
