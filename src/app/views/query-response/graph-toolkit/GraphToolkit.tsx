@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Label, MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import {
+  getTheme,
+  Label,
+  MessageBar,
+  MessageBarType,
+} from 'office-ui-fabric-react';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
+import { queryResponseStyles } from '../queryResponse.styles';
 
 class GraphToolkit extends Component<any> {
   constructor(props: any) {
@@ -19,11 +25,10 @@ class GraphToolkit extends Component<any> {
         <>
           <MessageBar messageBarType={MessageBarType.info}>
             <FormattedMessage id='Open this example in' />
-            <a
-              tabIndex={0}
-              href={exampleUrl} target='_blank'>
+            <a tabIndex={0} href={exampleUrl} target='_blank'>
               <FormattedMessage id='graph toolkit playground' />
-            </a>.
+            </a>
+            .
           </MessageBar>
           <iframe width='100%' height='470px' src={toolkitUrl} />
         </>
@@ -31,18 +36,18 @@ class GraphToolkit extends Component<any> {
     }
 
     return (
-      <Label style={{
-        display: 'flex',
-        width: '100%',
-        minHeight: '470px',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-        <FormattedMessage id='We did not find a Graph toolkit for this query' /> &nbsp; <a
+      <Label style={queryResponseStyles(getTheme()).emptyStateLabel}>
+        <FormattedMessage id='We did not find a Graph toolkit for this query' />
+        &nbsp;
+        <a
+          style={queryResponseStyles(getTheme()).link}
           tabIndex={0}
-          href='https://aka.ms/mgt' target='_blank'>
-          <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />.
-          </a>
+          href='https://aka.ms/mgt'
+          target='_blank'
+        >
+          <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />
+          .
+        </a>
       </Label>
     );
   }
@@ -50,7 +55,7 @@ class GraphToolkit extends Component<any> {
 
 function mapStateToProps(state: any) {
   return {
-    sampleQuery: state.sampleQuery
+    sampleQuery: state.sampleQuery,
   };
 }
 

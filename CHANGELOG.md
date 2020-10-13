@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.1.9](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/compare/v4.1.7...v4.1.9) (2020-09-24)
+
+* disabled query related telemetry in SampleQueries.tsx
+
+### [4.1.8](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/compare/v4.1.8...v4.1.7) (2020-09-24)
+
+* disabled query related telemetry
+
 ### [4.1.7](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/compare/v4.1.4...v4.1.7) (2020-09-16)
 
 

@@ -247,7 +247,7 @@
   "Adaptive Cards": "Adaptive Karten",
   "Office Dev Program": "Abrufen eines Sandkastens mit Beispieldaten",
   "Fetching Adaptive Card": "Adaptive Karte wird abgerufen",
-  "The Adaptive Card for this response is not available": "Die adaptive Karte für diese Antwort ist nicht verfügbar",
+  "The Adaptive Card for this response is not available": "Für diese Antwort ist keine adaptive Karte verfügbar. Weitere Informationen zur Erstellung von adaptiven Karten finden Sie unter",
   "loading samples": "Beispiele werden geladen",
   "older": "Älter",
   "today": "Heute",
@@ -316,5 +316,7 @@
   "Toggle selection for all items": "Auswahl für alle Elemente umschalten",
   "Toggle selection": "Auswahl umschalten",
   "Row checkbox": "Zeilenkontrollkästchen",
-  "Administrator permission": "Der Administrator des Mandanten muss zuerst die Autorisierung vornehmen, bevor Sie dieser Berechtigung zustimmen können."
+  "Administrator permission": "Der Administrator des Mandanten muss zuerst die Autorisierung vornehmen, bevor Sie dieser Berechtigung zustimmen können",
+  "Adaptive Cards designer": "Designer für adaptive Karten.",
+  "Click Run Query button above to fetch Adaptive Card": "Klicken Sie oben auf die Schaltfläche \"Abfrage ausführen\", um die adaptive Karte abzurufen."
 }
