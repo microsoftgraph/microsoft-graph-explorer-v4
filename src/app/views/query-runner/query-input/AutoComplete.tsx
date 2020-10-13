@@ -1,5 +1,4 @@
-import { getId, getTheme, ITextField, KeyCodes, Spinner, TextField, TooltipHost } from 'office-ui-fabric-react';
-import { Icon } from 'office-ui-fabric-react/lib/components/Icon/Icon';
+import { getId, getTheme, Icon, ITextField, KeyCodes, Spinner, TextField, TooltipHost } from 'office-ui-fabric-react';
 import { ITooltipHostStyles } from 'office-ui-fabric-react/lib/components/Tooltip/TooltipHost.types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -17,6 +16,7 @@ import {
   cleanUpSelectedSuggestion, getLastCharacterOf,
   getParametersWithVerb
 } from './util';
+
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
