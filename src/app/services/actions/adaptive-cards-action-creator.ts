@@ -1,6 +1,4 @@
 import * as AdaptiveCardsTemplateAPI from 'adaptivecards-templating';
-import { GlobalSettings, IEvaluationContext } from 'adaptivecards-templating';
-import { values } from 'office-ui-fabric-react';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { lookupTemplate } from '../../utils/adaptive-cards-lookup';
@@ -64,8 +62,10 @@ export function getAdaptiveCard(
         }
         // create a card from the template
         const template = new AdaptiveCardsTemplateAPI.Template(fetchResult);
-        const context: IEvaluationContext = { $root: payload };
-        GlobalSettings.getUndefinedFieldValueSubstitutionString = (
+        const context: AdaptiveCardsTemplateAPI.IEvaluationContext = {
+          $root: payload,
+        };
+        AdaptiveCardsTemplateAPI.GlobalSettings.getUndefinedFieldValueSubstitutionString = (
           path: string
         ) => ' ';
         const card = template.expand(context);
