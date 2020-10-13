@@ -19,7 +19,7 @@ const SuggestionsList = ({ filteredSuggestions, activeSuggestion, onClick }: ISu
 
   useEffect(() => {
     if (refs && filteredSuggestions.length > 0) {
-      if (refs[activeSuggestion].current) {
+      if (refs[activeSuggestion] && refs[activeSuggestion].current) {
         refs[activeSuggestion].current.scrollIntoView({
           behavior: 'smooth', block: 'nearest', inline: 'start'
         });
