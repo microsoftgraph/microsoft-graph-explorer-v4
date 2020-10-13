@@ -163,12 +163,17 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       const userInput = event.target.value;
       const lastSymbol = this.getLastSymbolInUrl(userInput);
       const previousUserInput = userInput.substring(0, lastSymbol.value + 1);
-      const compare = userInput.replace(previousUserInput, '');
-      this.setState({
-        compare,
-        userInput: previousUserInput
-      });
-      this.requestForAutocompleteOptions(previousUserInput);
+      if (lastSymbol.key === '/' || lastSymbol.key === '?') {
+        const compare = userInput.replace(previousUserInput, '');
+        this.setState({
+          compare,
+          userInput: previousUserInput
+        });
+        this.requestForAutocompleteOptions(previousUserInput);
+      } else {
+        const filtered = this.filterSuggestions(userInput, previousUserInput, '', suggestions);
+        this.setSuggestions(filtered, userInput.replace(previousUserInput, ''));
+      }
     }
   };
 
