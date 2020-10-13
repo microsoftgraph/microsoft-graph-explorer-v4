@@ -159,29 +159,56 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     const controlSpace = event.ctrlKey && event.keyCode === KeyCodes.space;
     const controlPeriod = event.ctrlKey && event.keyCode === KeyCodes.period;
-    if ((controlSpace || controlPeriod) && suggestions.length) {
+    if (controlSpace || controlPeriod) {
       const userInput = event.target.value;
       const lastSymbol = this.getLastSymbolInUrl(userInput);
       const previousUserInput = userInput.substring(0, lastSymbol.value + 1);
-      const filtered = this.filterSuggestions(userInput, previousUserInput, '', suggestions);
-      this.setSuggestions(filtered, userInput.replace(previousUserInput, ''));
+      if (lastSymbol.key === '/' || lastSymbol.key === '?') {
+        const compare = userInput.replace(previousUserInput, '');
+        this.setState({
+          compare,
+          userInput: previousUserInput
+        });
+        this.requestForAutocompleteOptions(previousUserInput);
+      } else {
+        const filtered = this.filterSuggestions(userInput, previousUserInput, '', suggestions);
+        this.setSuggestions(filtered, userInput.replace(previousUserInput, ''));
+      }
     }
   };
 
   public displayLinkOptions = () => {
+    const { compare } = this.state;
     const parametersWithVerb = getParametersWithVerb(this.props);
     if (!parametersWithVerb) {
       return;
     }
-    this.setSuggestions(parametersWithVerb.links);
+
+    let filteredSuggestions = parametersWithVerb.links;
+    if (compare) {
+      filteredSuggestions = filteredSuggestions.filter((suggestion: string) => {
+        return suggestion.toLowerCase().indexOf(compare.toLowerCase()) > -1;
+      });
+    }
+
+    this.setSuggestions(filteredSuggestions);
   }
 
   public getQueryParameters = () => {
+    const { compare } = this.state;
     const parametersWithVerb = getParametersWithVerb(this.props);
     if (!parametersWithVerb) {
       return;
     }
-    this.setSuggestions(parametersWithVerb.values.map((value: { name: any; }) => value.name));
+
+    let filteredSuggestions = parametersWithVerb.values.map((value: { name: any; }) => value.name);
+    if (compare) {
+      filteredSuggestions = filteredSuggestions.filter((suggestion: string) => {
+        return suggestion.toLowerCase().indexOf(compare.toLowerCase()) > -1;
+      });
+    }
+
+    this.setSuggestions(filteredSuggestions);
   }
 
   private getParameterEnums = (url: string) => {
@@ -212,7 +239,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   public componentDidUpdate = (prevProps: IAutoCompleteProps) => {
     if (prevProps.autoCompleteOptions !== this.props.autoCompleteOptions) {
       if (this.props.autoCompleteOptions) {
-        this.performLocalSearch(this.state.queryUrl);
+        this.performLocalSearch(this.state.userInput);
       }
     }
 
