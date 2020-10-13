@@ -183,9 +183,14 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     if (!parametersWithVerb) {
       return;
     }
-    const filteredSuggestions = parametersWithVerb.links.filter((suggestion: string) => {
-      return suggestion.toLowerCase().indexOf(compare.toLowerCase()) > -1;
-    });
+
+    let filteredSuggestions = parametersWithVerb.links;
+    if (compare) {
+      filteredSuggestions = filteredSuggestions.filter((suggestion: string) => {
+        return suggestion.toLowerCase().indexOf(compare.toLowerCase()) > -1;
+      });
+    }
+
     this.setSuggestions(filteredSuggestions);
   }
 
@@ -195,10 +200,14 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     if (!parametersWithVerb) {
       return;
     }
-    const items: string[] = parametersWithVerb.values.map((value: { name: any; }) => value.name);
-    const filteredSuggestions = items.filter((suggestion: string) => {
-      return suggestion.toLowerCase().indexOf(compare.toLowerCase()) > -1;
-    });
+
+    let filteredSuggestions = parametersWithVerb.values.map((value: { name: any; }) => value.name);
+    if (compare) {
+      filteredSuggestions = filteredSuggestions.filter((suggestion: string) => {
+        return suggestion.toLowerCase().indexOf(compare.toLowerCase()) > -1;
+      });
+    }
+
     this.setSuggestions(filteredSuggestions);
   }
 
