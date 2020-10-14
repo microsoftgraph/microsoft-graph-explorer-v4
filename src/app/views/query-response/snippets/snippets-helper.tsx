@@ -10,7 +10,7 @@ import { genericCopy } from '../../common/copy';
 import { telemetry } from '../../../../telemetry';
 import { BUTTON_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { IQuery } from '../../../../types/query-runner';
-import { normalizeQueryUrl } from '../../../utils/query-url-normalization';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 
 interface ISnippetProps {
   language: string;
@@ -87,12 +87,11 @@ function Snippet(props: ISnippetProps) {
 }
 
 function trackCopyEvent(query: IQuery, language: string, ) {
-  const normalizedUrl = normalizeQueryUrl(query.sampleUrl);
+  const sanitizedUrl = sanitizeQueryUrl(query.sampleUrl);
   telemetry.trackEvent(BUTTON_CLICK_EVENT,
     {
       ComponentName: 'Code snippets copy button',
       SelectedLanguage: language,
-      QuerySignature: `${query.selectedVerb} ${normalizedUrl.incomingUrl}`,
-      QueryString: normalizedUrl.queryString
+      QuerySignature: `${query.selectedVerb} ${sanitizedUrl}`
     });
 }

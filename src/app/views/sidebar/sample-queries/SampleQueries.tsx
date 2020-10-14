@@ -32,7 +32,7 @@ import * as queryStatusActionCreators from '../../../services/actions/query-stat
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
-import { normalizeQueryUrl } from '../../../utils/query-url-normalization';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -282,7 +282,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   private trackSampleQueryClickEvent(selectedQuery: ISampleQuery)
   {
-    const normalizedUrl = normalizeQueryUrl(GRAPH_URL + selectedQuery.requestUrl);
+    const sanitizedUrl = sanitizeQueryUrl(GRAPH_URL + selectedQuery.requestUrl);
     telemetry.trackEvent(
       LISTITEM_CLICK_EVENT,
       {
@@ -290,8 +290,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
          SampleId: selectedQuery.id,
          SampleName: selectedQuery.humanName,
          SampleCategory: selectedQuery.category,
-         QuerySignature: `${selectedQuery.method} ${normalizedUrl.incomingUrl}`,
-         QueryString: normalizedUrl.queryString
+         QuerySignature: `${selectedQuery.method} ${sanitizedUrl}`
       });
   }
 

@@ -9,7 +9,7 @@ import { IQuery } from '../../../../types/query-runner';
 import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
-import { normalizeQueryUrl } from '../../../utils/query-url-normalization';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../utils/translate-messages';
 import { Image, Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
@@ -140,12 +140,11 @@ export const onPivotItemClick = (query: IQuery, item?: PivotItem) => {
 };
 
 function trackTabClickEvent(query: IQuery, tabTitle: string) {
-  const normalizedUrl = normalizeQueryUrl(query.sampleUrl);
+  const sanitizedUrl = sanitizeQueryUrl(query.sampleUrl);
   telemetry.trackEvent(TAB_CLICK_EVENT,
     {
       ComponentName: `${tabTitle} tab`,
-      QuerySignature: `${query.selectedVerb} ${normalizedUrl.incomingUrl}`,
-      QueryString: normalizedUrl.queryString
+      QuerySignature: `${query.selectedVerb} ${sanitizedUrl}`
     });
 }
 

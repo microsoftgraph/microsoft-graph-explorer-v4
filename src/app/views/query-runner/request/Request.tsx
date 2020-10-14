@@ -8,7 +8,7 @@ import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
 import { IRequestComponent } from '../../../../types/request';
-import { normalizeQueryUrl } from '../../../utils/query-url-normalization';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
 import { RequestHeaders } from './headers';
@@ -94,12 +94,11 @@ export class Request extends Component<IRequestComponent, any> {
 
   private trackTabClickEvent(tabTitle: string) {
     const { sampleQuery }: any = this.props;
-    const normalizedUrl = normalizeQueryUrl(sampleQuery.sampleUrl);
+    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
     telemetry.trackEvent(TAB_CLICK_EVENT,
       {
         ComponentName: `${tabTitle} tab`,
-        QuerySignature: `${sampleQuery.selectedVerb} ${normalizedUrl.incomingUrl}`,
-        QueryString: normalizedUrl.queryString
+        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
       });
   }
 

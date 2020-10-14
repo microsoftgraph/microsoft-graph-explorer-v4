@@ -13,7 +13,7 @@ import {
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
-import { normalizeQueryUrl } from '../../utils/query-url-normalization';
+import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
@@ -97,13 +97,12 @@ export class QueryRunner extends Component<
     if (actions) {
       actions.runQuery(sampleQuery);
     }
-    const normalizedUrl = normalizeQueryUrl(sampleQuery.sampleUrl);
+    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
     telemetry.trackEvent(BUTTON_CLICK_EVENT,
       {
          ComponentName: 'Run query button',
          SelectedVersion: sampleQuery.selectedVersion,
-         QuerySignature: `${sampleQuery.selectedVerb} ${normalizedUrl.incomingUrl}`,
-         QueryString: normalizedUrl.queryString
+         QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
       });
   };
 

@@ -20,7 +20,7 @@ import * as queryStatusActionCreators from '../../../services/actions/query-stat
 import * as requestHistoryActionCreators from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { dynamicSort } from '../../../utils/dynamic-sort';
-import { normalizeQueryUrl } from '../../../utils/query-url-normalization';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -426,14 +426,13 @@ export class History extends Component<IHistoryProps, any> {
 
   private trackHistoryItemEvent = (eventName: string, componentName: string,
       query: IHistoryItem) => {
-    const normalizedUrl = normalizeQueryUrl(query.url);
+    const sanitizedUrl = sanitizeQueryUrl(query.url);
     telemetry.trackEvent(
       eventName,
       {
         ComponentName: componentName,
         ItemIndex: query.index,
-        QuerySignature: `${query.method} ${normalizedUrl.incomingUrl}`,
-        QueryString: normalizedUrl.queryString
+        QuerySignature: `${query.method} ${sanitizedUrl}`
       });
   }
 

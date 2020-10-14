@@ -1,3 +1,5 @@
+import { parseSampleUrl } from './sample-url-generation';
+
 // Matches patterns like "('<1f7ff346-c174-45e5-af38-294e51d9969a>')" or "('<key>')"
 const keyIdRegex = /\(\'\<?\{?[ ?0-9a-zA-Z-]*\}?\>?\'\)/g;
 
@@ -15,74 +17,44 @@ const guidRegex =
  /(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}/gi;
 
 
-export function normalizeQueryUrl(incomingUrl: string) {
-  incomingUrl = decodeURIComponent(incomingUrl);
+export function sanitizeQueryUrl(url: string): string {
+  url = decodeURIComponent(url);
 
   // Extract query string
-  let queryString: string = '';
-  const urlParts = incomingUrl.split('?');
-  if (urlParts.length > 1) {
-    const startOfQueryString = incomingUrl.indexOf('?');
-    queryString = incomingUrl.substring(startOfQueryString, incomingUrl.length - startOfQueryString);
-    queryString = processQueryParams(queryString.slice(1));
-  }
+  const { search } = parseSampleUrl(url);
+  const queryString: string = sanitizeQueryParameters(search);
 
   // Drop query string
-  incomingUrl = urlParts[0];
-
-  // Drop casts that use the /$/ pattern
-  incomingUrl = incomingUrl.split('/$/')[0];
+  let sanitizedUrl = url.split('?')[0];
 
   // Normalize parameters in param=<arbitraryKey> format with param={value} format
-  incomingUrl = incomingUrl.replace(functionParamInitialRegex, '<value>');
-  incomingUrl = incomingUrl.replace(functionParamFinalRegex, '<value>');
+  sanitizedUrl = sanitizedUrl.replace(functionParamInitialRegex, '<value>');
+  sanitizedUrl = sanitizedUrl.replace(functionParamFinalRegex, '<value>');
 
   // Replace IDs and ID placeholders with generic {id}
-  incomingUrl = incomingUrl.replace(keyIdRegex, '/<id>');
-  incomingUrl = incomingUrl.replace(guidRegex, '<id>');
-  incomingUrl = incomingUrl.replace(numberRegex, '<id>');
+  sanitizedUrl = sanitizedUrl.replace(keyIdRegex, '/<id>');
+  sanitizedUrl = sanitizedUrl.replace(guidRegex, '<guid>');
+  sanitizedUrl = sanitizedUrl.replace(numberRegex, '<number>');
 
   // Redact PII
-  incomingUrl = incomingUrl.replace(emailRegex, '<email>');
-
-  // Drop entity/action namespace
-  incomingUrl = incomingUrl.replace('microsoft.graph.', '');
-
-  // Trim off $value
-  if (incomingUrl.endsWith('/$value') || incomingUrl.endsWith('/$count'))
-  {
-    incomingUrl = incomingUrl.substring(0, incomingUrl.length - 7);
-  }
-
-  // Trim off $ref
-  if (incomingUrl.endsWith('/$ref'))
-  {
-    incomingUrl = incomingUrl.substring(0, incomingUrl.length - 5);
-  }
-
-  // Trim any delta queries
-  if (incomingUrl.endsWith('/delta'))
-  {
-    incomingUrl = incomingUrl.substring(0, incomingUrl.length - 6);
-  }
-
-  return { incomingUrl, queryString };
+  sanitizedUrl = sanitizedUrl.replace(emailRegex, '<email>');
+  return `${sanitizedUrl}${queryString}` ;
 }
 
-function processQueryParams(queryString: string) {
+function sanitizeQueryParameters(queryString: string): string {
    const params = queryString.split('&');
    let result: string = '';
    if (params.length)
    {
       params.forEach(param => {
-       result += removeSensitiveQueryParamValues(param) + '&';
+       result += sanitizeQueryParameterValue(param) + '&';
       });
       result = result.slice(0, -1);
    }
    return result;
 }
 
-function removeSensitiveQueryParamValues(param: string) {
+function sanitizeQueryParameterValue(param: string) {
   if (!param.includes('='))
   {
     return param;
