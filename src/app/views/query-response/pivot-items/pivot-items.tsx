@@ -1,7 +1,11 @@
 import { getId, getTheme, Icon, IconButton, PivotItem, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
+
+import { telemetry } from '../../../../telemetry';
+import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { ContentType, Mode } from '../../../../types/enums';
+import { IQuery } from '../../../../types/query-runner';
 import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
@@ -126,8 +130,13 @@ export const getPivotItems = (properties: any) => {
   return pivotItems;
 };
 
-
-
+export const onPivotItemClick = (item?: PivotItem) => {
+  if (!item) { return; }
+  const tabTitle = item.props.title;
+  if (tabTitle) {
+    telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: `${tabTitle} tab`, QuerySignature: '' });
+  }
+};
 
 function displayResultComponent(headers: any, body: any) {
   const language = 'json';
@@ -161,6 +170,3 @@ function displayResultComponent(headers: any, body: any) {
     }
   }
 }
-
-
-

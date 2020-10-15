@@ -17,14 +17,14 @@ import {
   styled,
   TooltipHost
 } from 'office-ui-fabric-react';
-import React, { ChangeEvent, Component } from 'react';
+import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
 import { telemetry } from '../../../../telemetry';
-import { RUN_QUERY_EVENT } from '../../../../telemetry/event-types';
+import { LINK_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
@@ -35,6 +35,7 @@ import { getStyleFor } from '../../../utils/badge-color';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
+import { isJsonString } from './sample-query-utils';
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
@@ -77,9 +78,22 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     this.generateSamples(filteredSamples);
   }
 
-  public onDocumentationLinkClicked = (item: any) => {
+  public onDocumentationLinkClicked = (item: ISampleQuery) => {
     window.open(item.docLink, '_blank');
+    this.trackDocumentLinkClickedEvent(item);
   };
+
+  private trackDocumentLinkClickedEvent(item: ISampleQuery) {
+    telemetry.trackEvent(
+      LINK_CLICK_EVENT,
+      {
+        ComponentName: 'Documentation link',
+        SampleId: item.id,
+        SampleName: item.humanName,
+        SampleCategory: item.category,
+        Link: item.docLink
+      });
+  }
 
   public generateSamples(samples: any) {
     const map = new Map();
@@ -257,9 +271,18 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         } else {
           actions.runQuery(sampleQuery);
         }
-        telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
+        telemetry.trackEvent(
+          LISTITEM_CLICK_EVENT,
+          {
+            ComponentName: 'Sample query list item',
+            SampleId: selectedQuery.id,
+            SampleName: selectedQuery.humanName,
+            SampleCategory: selectedQuery.category,
+            QuerySignature: ''
+          });
       } else {
-        sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
+        sampleQuery.sampleBody = (sampleQuery.sampleBody && isJsonString(sampleQuery.sampleBody))
+          ? JSON.parse(sampleQuery.sampleBody) : undefined;
         if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
       }
       actions.setSampleQuery(sampleQuery);
@@ -347,7 +370,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             <FormattedMessage id='Microsoft Graph API Reference docs' />
           </a>
         </MessageBar>
-        <Announced message={`${groupedList.samples.length} search results available.`}/>
+        <Announced message={`${groupedList.samples.length} search results available.`} />
         <DetailsList className={classes.queryList}
           cellStyleProps={{
             cellRightPadding: 0,
