@@ -318,5 +318,6 @@
   "Row checkbox": "Zeilenkontrollkästchen",
   "Administrator permission": "Der Administrator des Mandanten muss zuerst die Autorisierung vornehmen, bevor Sie dieser Berechtigung zustimmen können",
   "Adaptive Cards designer": "Designer für adaptive Karten.",
-  "Click Run Query button above to fetch Adaptive Card": "Klicken Sie oben auf die Schaltfläche \"Abfrage ausführen\", um die adaptive Karte abzurufen."
+  "Click Run Query button above to fetch Adaptive Card": "Klicken Sie oben auf die Schaltfläche „Abfrage ausführen“, um die adaptive Karte abzurufen.",
+  "Your history includes queries made in the last 30 days": "Ihr Verlauf enthält Abfragen, die in den letzten 30 Tagen durchgeführt wurden."
 }

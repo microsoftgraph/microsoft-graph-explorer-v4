@@ -318,5 +318,6 @@
   "Row checkbox": "Флажок строки",
   "Administrator permission": "Администратору клиента требуется сначала выполнить авторизацию, прежде чем вы сможете предоставить это разрешение",
   "Adaptive Cards designer": "Конструктор адаптивных карточек.",
-  "Click Run Query button above to fetch Adaptive Card": "Нажмите кнопку выполнения запроса выше, чтобы получить адаптивную карточку."
+  "Click Run Query button above to fetch Adaptive Card": "Нажмите кнопку \"Выполнить запрос\" выше, чтобы получить адаптивную карточку.",
+  "Your history includes queries made in the last 30 days": "Журнал содержит запросы, сделанные в течение последних 30 дней"
 }
