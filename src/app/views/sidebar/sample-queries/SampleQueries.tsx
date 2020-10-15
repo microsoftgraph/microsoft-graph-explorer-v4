@@ -17,7 +17,7 @@ import {
   styled,
   TooltipHost
 } from 'office-ui-fabric-react';
-import React, { ChangeEvent, Component } from 'react';
+import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -35,6 +35,7 @@ import { getStyleFor } from '../../../utils/badge-color';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
+import { isJsonString } from './sample-query-utils';
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
@@ -86,11 +87,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     telemetry.trackEvent(
       LINK_CLICK_EVENT,
       {
-         ComponentName: 'Documentation link',
-         SampleId: item.id,
-         SampleName: item.humanName,
-         SampleCategory: item.category,
-         Link: item.docLink
+        ComponentName: 'Documentation link',
+        SampleId: item.id,
+        SampleName: item.humanName,
+        SampleCategory: item.category,
+        Link: item.docLink
       });
   }
 
@@ -271,16 +272,17 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           actions.runQuery(sampleQuery);
         }
         telemetry.trackEvent(
-         LISTITEM_CLICK_EVENT,
-         {
+          LISTITEM_CLICK_EVENT,
+          {
             ComponentName: 'Sample query list item',
             SampleId: selectedQuery.id,
             SampleName: selectedQuery.humanName,
             SampleCategory: selectedQuery.category,
             QuerySignature: ''
-         });
+          });
       } else {
-        sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
+        sampleQuery.sampleBody = (sampleQuery.sampleBody && isJsonString(sampleQuery.sampleBody))
+          ? JSON.parse(sampleQuery.sampleBody) : undefined;
         if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
       }
       actions.setSampleQuery(sampleQuery);
@@ -368,7 +370,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             <FormattedMessage id='Microsoft Graph API Reference docs' />
           </a>
         </MessageBar>
-        <Announced message={`${groupedList.samples.length} search results available.`}/>
+        <Announced message={`${groupedList.samples.length} search results available.`} />
         <DetailsList className={classes.queryList}
           cellStyleProps={{
             cellRightPadding: 0,
