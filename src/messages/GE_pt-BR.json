@@ -318,5 +318,6 @@
   "Row checkbox": "Caixa de seleção de registro",
   "Administrator permission": "O administrador do locatário deve autorizá-lo primeiro para que você possa concordar com essa permissão",
   "Adaptive Cards designer": "Criador de Cartões Adaptáveis.",
-  "Click Run Query button above to fetch Adaptive Card": "Clique no botão Executar consulta acima para buscar um cartão adaptável."
+  "Click Run Query button above to fetch Adaptive Card": "Clique no botão Executar Consulta acima para buscar um Cartão Adaptável.",
+  "Your history includes queries made in the last 30 days": "Seu histórico inclui consultas feitas nos últimos 30 dias"
 }

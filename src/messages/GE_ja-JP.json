@@ -318,5 +318,6 @@
   "Row checkbox": "行チェックボックス",
   "Administrator permission": "このアクセス許可を承認するには、テナントの管理者が最初に承認する必要があります",
   "Adaptive Cards designer": "アダプティブ カード デザイナー。",
-  "Click Run Query button above to fetch Adaptive Card": "上の [クエリの実行] ボタンをクリックして、アダプティブ カードを取り込みます。"
+  "Click Run Query button above to fetch Adaptive Card": "上の [クエリの実行] ボタンをクリックして、アダプティブ カードを取り込みます。",
+  "Your history includes queries made in the last 30 days": "履歴には、過去 30 日間に行われたクエリが含まれます"
 }

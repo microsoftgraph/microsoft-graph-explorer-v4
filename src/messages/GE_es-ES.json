@@ -318,5 +318,6 @@
   "Row checkbox": "Casilla de verificación de la fila",
   "Administrator permission": "El administrador de la cuenta empresarial debe autorizarlo antes de que usted pueda dar su consentimiento para este permiso.",
   "Adaptive Cards designer": "Diseñador de tarjetas adaptables.",
-  "Click Run Query button above to fetch Adaptive Card": "Haga clic en el botón Ejecutar consulta que se encuentra más arriba para obtener la Tarjeta adaptable."
+  "Click Run Query button above to fetch Adaptive Card": "Haga clic en el botón Ejecutar Consulta, que se encuentra más arriba, para obtener la Tarjeta Adaptable.",
+  "Your history includes queries made in the last 30 days": "Su historial incluye las consultas realizadas en los últimos 30 días"
 }

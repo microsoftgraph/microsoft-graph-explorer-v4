@@ -318,5 +318,6 @@
   "Row checkbox": "Case à cocher Ligne",
   "Administrator permission": "L'administration du locataire doit d'abord obtenir une autorisation avant que vous puissiez donner votre consentement",
   "Adaptive Cards designer": "Concepteur de cartes adaptatives.",
-  "Click Run Query button above to fetch Adaptive Card": "Cliquez sur le bouton Exécuter la requête ci-dessus pour aller chercher la carte adaptative."
+  "Click Run Query button above to fetch Adaptive Card": "Cliquez sur le bouton Exécuter la requête ci-dessus pour aller chercher la carte adaptative.",
+  "Your history includes queries made in the last 30 days": "Votre historique inclut les requêtes effectuées au cours des 30 derniers jours"
 }
