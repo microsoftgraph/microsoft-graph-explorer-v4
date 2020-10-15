@@ -52,9 +52,7 @@ export function getAdaptiveCard(
 
     dispatch(getAdaptiveCardPending());
 
-    return fetch(
-      `https://templates.adaptivecards.io/graph.microsoft.com/${templateFileName}`
-    )
+    return fetch(`https://templates.adaptivecards.io/graph.microsoft.com/${templateFileName}`)
       .then((resp) => resp.json())
       .then((fetchResult) => {
         if (fetchResult.error) {
