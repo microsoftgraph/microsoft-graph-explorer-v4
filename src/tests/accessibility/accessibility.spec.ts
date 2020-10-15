@@ -10,11 +10,8 @@ describe('Graph Explorer', () => {
 
   // set browser environment to use headless Chrome
   beforeAll(async () => {
-    chrome.setDefaultService(
-      new chrome.ServiceBuilder(
-        'C:\\SeleniumWebDrivers\\ChromeDriver\\chromedriver.exe'
-      ).build()
-    );
+    chrome.setDefaultService(new chrome.ServiceBuilder(process.env.REACT_APP_CHROMEDRIVER_PATH)
+      .build());
 
     driver = new webdriver.Builder()
       .forBrowser('chrome')
