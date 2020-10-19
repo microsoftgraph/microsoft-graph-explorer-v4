@@ -4,6 +4,7 @@ import { parseSampleUrl } from './sample-url-generation';
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const quotedTextRegex = /"([^"]*)"/g;
 
+// Matches patterns with alphanumeric characters e.g <CONGZUWfGUu4msTgNP66e2UAAySi>
 const alphaNumericRegex = /[^a-z0-9]/g;
 
 

@@ -32,6 +32,12 @@ describe('Sanitize Query Url should', () => {
       check: 'without section id',
       url: 'https://graph.microsoft.com/v1.0/me/onenote/sections/1f7ff346-c174-45e5-af38-294e51d9969a/pages',
       sanitized: 'https://graph.microsoft.com/v1.0/me/onenote/sections/{sections-id}/pages'
+    },
+    {
+      check: 'with all parameters replaced',
+      // tslint:disable-next-line: max-line-length
+      url: 'https://graph.microsoft.com/v1.0/teams/02bd9fd6-8f93-4758-87c3-1fb73740a315/channels/19:09fc54a3141a45d0bc769cf506d2e079@thread.skype',
+      sanitized: 'https://graph.microsoft.com/v1.0/teams/{teams-id}/channels/{channels-id}'
     }
   ];
 
