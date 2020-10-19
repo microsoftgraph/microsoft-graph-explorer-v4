@@ -54,9 +54,9 @@ function sanitizeQueryParameters(queryString: string): string {
 * Special characters present in the url show that the
 * segment contains an identifier
 */
-function hasSpecialCharacters(segment: string) {
+function hasSpecialCharacters(segment: string): boolean {
   const specialCharacters = ['.', '=', '@', '-'];
-  return specialCharacters.some((character) =>  segment.includes(character) || segment.match(alphaNumericRegex));
+  return !!specialCharacters.some((character) =>  segment.includes(character) || segment.match(alphaNumericRegex));
 }
 
 function sanitizeQueryParameterValue(param: string) {
