@@ -26,7 +26,7 @@ describe('Sanitize Query Url should', () => {
     {
       check: 'without plan id',
       url: 'https://graph.microsoft.com/v1.0/planner/plans/CONGZUWfGUu4msTgNP66e2UAAySi',
-      sanitized: 'https://graph.microsoft.com/v1.0/planner/plans/CONGZUWfGUu4msTgNP66e2UAAySi'
+      sanitized: 'https://graph.microsoft.com/v1.0/planner/plans/{plans-id}'
     },
     {
       check: 'without section id',
