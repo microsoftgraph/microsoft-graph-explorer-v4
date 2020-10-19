@@ -26,18 +26,27 @@ export function sanitizeQueryUrl(url: string): string {
 
   // Drop query string
   let sanitizedUrl = url.split('?')[0];
+  const items = sanitizedUrl.split('/');
+  const item = `{${items[items.length - 2]}-id}`;
 
   // Normalize parameters in param=<arbitraryKey> format with param={value} format
-  sanitizedUrl = sanitizedUrl.replace(functionParamInitialRegex, '<value>');
-  sanitizedUrl = sanitizedUrl.replace(functionParamFinalRegex, '<value>');
+  sanitizedUrl = sanitizedUrl.replace(functionParamInitialRegex, item);
+  sanitizedUrl = sanitizedUrl.replace(functionParamFinalRegex, item);
 
   // Replace IDs and ID placeholders with generic {id}
-  sanitizedUrl = sanitizedUrl.replace(keyIdRegex, '/<id>');
-  sanitizedUrl = sanitizedUrl.replace(guidRegex, '<guid>');
-  sanitizedUrl = sanitizedUrl.replace(numberRegex, '<number>');
-
+  sanitizedUrl = sanitizedUrl.replace(keyIdRegex, `/${item}`);
+  sanitizedUrl = sanitizedUrl.replace(guidRegex, item);
+  sanitizedUrl = sanitizedUrl.replace(numberRegex, item);
   // Redact PII
-  sanitizedUrl = sanitizedUrl.replace(emailRegex, '<email>');
+  sanitizedUrl = sanitizedUrl.replace(emailRegex, item);
+
+  if (!sanitizedUrl.includes('{')) {
+    const segment = items[items.length - 1];
+    if (hasSpecialCharacters(segment)) {
+      sanitizedUrl = sanitizedUrl.replace(segment, item);
+    }
+  }
+
   return `${sanitizedUrl}${queryString}` ;
 }
 
@@ -52,6 +61,17 @@ function sanitizeQueryParameters(queryString: string): string {
       result = result.slice(0, -1);
    }
    return result;
+}
+
+function hasSpecialCharacters(segment: string) {
+  const specialCharacters = ['.', '=', '@', '-'];
+  const contains = [];
+  specialCharacters.forEach(character => {
+    if (segment.includes(character)) {
+      contains.push(character);
+    }
+  });
+  return contains.length > 0;
 }
 
 function sanitizeQueryParameterValue(param: string) {
