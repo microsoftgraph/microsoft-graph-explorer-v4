@@ -1,3 +1,4 @@
+import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from './sample-url-generation';
 
 // Matches patterns like "('<1f7ff346-c174-45e5-af38-294e51d9969a>')" or "('<key>')"
@@ -21,33 +22,49 @@ export function sanitizeQueryUrl(url: string): string {
   url = decodeURIComponent(url);
 
   // Extract query string
-  const { search } = parseSampleUrl(url);
+  const { search, queryVersion } = parseSampleUrl(url);
   const queryString: string = sanitizeQueryParameters(search);
 
   // Drop query string
   let sanitizedUrl = url.split('?')[0];
-  const items = sanitizedUrl.split('/');
-  const item = `{${items[items.length - 2]}-id}`;
+
+  /*
+  * Remove url prefix and query version.
+  * They have special characters used in the check that follows
+  */
+  const urlPrefix = `${GRAPH_URL}/${queryVersion}`;
+  sanitizedUrl = sanitizedUrl.replace(urlPrefix, '');
+
+  const sections = sanitizedUrl.split('/');
+  sections.forEach(sec => {
+    if (hasSpecialCharacters(sec)) {
+      const index = sections.indexOf(sec);
+      const replacementItemWithPrefix = `{${sections[index - 1]}-id}`;
+      sanitizedUrl = replaceWithRegexValues(sanitizedUrl, replacementItemWithPrefix);
+
+      // if pattern was not replaced by the regex values
+      if (!sanitizedUrl.includes('{')) {
+        sanitizedUrl = sanitizedUrl.replace(sec, replacementItemWithPrefix);
+      }
+    }
+  });
+
+  return `${urlPrefix}${sanitizedUrl}${queryString}` ;
+}
+
+function replaceWithRegexValues(sanitizedUrl: string, replacementItem: string) {
 
   // Normalize parameters in param=<arbitraryKey> format with param={value} format
-  sanitizedUrl = sanitizedUrl.replace(functionParamInitialRegex, item);
-  sanitizedUrl = sanitizedUrl.replace(functionParamFinalRegex, item);
+  sanitizedUrl = sanitizedUrl.replace(functionParamInitialRegex, replacementItem);
+  sanitizedUrl = sanitizedUrl.replace(functionParamFinalRegex, replacementItem);
 
   // Replace IDs and ID placeholders with generic {id}
-  sanitizedUrl = sanitizedUrl.replace(keyIdRegex, `/${item}`);
-  sanitizedUrl = sanitizedUrl.replace(guidRegex, item);
-  sanitizedUrl = sanitizedUrl.replace(numberRegex, item);
+  sanitizedUrl = sanitizedUrl.replace(keyIdRegex, `/${replacementItem}`);
+  sanitizedUrl = sanitizedUrl.replace(guidRegex, replacementItem);
+  sanitizedUrl = sanitizedUrl.replace(numberRegex, replacementItem);
   // Redact PII
-  sanitizedUrl = sanitizedUrl.replace(emailRegex, item);
-
-  if (!sanitizedUrl.includes('{')) {
-    const segment = items[items.length - 1];
-    if (hasSpecialCharacters(segment)) {
-      sanitizedUrl = sanitizedUrl.replace(segment, item);
-    }
-  }
-
-  return `${sanitizedUrl}${queryString}` ;
+  sanitizedUrl = sanitizedUrl.replace(emailRegex, replacementItem);
+  return sanitizedUrl;
 }
 
 function sanitizeQueryParameters(queryString: string): string {
@@ -63,15 +80,13 @@ function sanitizeQueryParameters(queryString: string): string {
    return result;
 }
 
+/*
+* Special characters present in the url show that the
+* segment contains an identifier
+*/
 function hasSpecialCharacters(segment: string) {
   const specialCharacters = ['.', '=', '@', '-'];
-  const contains = [];
-  specialCharacters.forEach(character => {
-    if (segment.includes(character)) {
-      contains.push(character);
-    }
-  });
-  return contains.length > 0;
+  return specialCharacters.some((character) =>  segment.includes(character));
 }
 
 function sanitizeQueryParameterValue(param: string) {
