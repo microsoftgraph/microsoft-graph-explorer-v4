@@ -4,10 +4,6 @@ import { parseSampleUrl } from './sample-url-generation';
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const quotedTextRegex = /"([^"]*)"/g;
 
-// Matches patterns with alphanumeric characters e.g <CONGZUWfGUu4msTgNP66e2UAAySi>
-const alphaNumericRegex = /^[a-z0-9]+$/i;
-
-
 export function sanitizeQueryUrl(url: string): string {
   url = decodeURIComponent(url);
 
@@ -34,48 +30,70 @@ export function sanitizeQueryUrl(url: string): string {
     }
   });
 
-  return `${urlPrefix}${sanitizedUrl}${queryString}` ;
+  return `${urlPrefix}${sanitizedUrl}${queryString}`;
 }
 
 function sanitizeQueryParameters(queryString: string): string {
-   const params = queryString.split('&');
-   let result: string = '';
-   if (params.length)
-   {
-      params.forEach(param => {
-       result += sanitizeQueryParameterValue(param) + '&';
-      });
-      result = result.slice(0, -1);
-   }
-   return result;
+  const params = queryString.split('&');
+  let result: string = '';
+  if (params.length) {
+    params.forEach(param => {
+      result += sanitizeQueryParameterValue(param) + '&';
+    });
+    result = result.slice(0, -1);
+  }
+  return result;
 }
 
 /*
-* A string contains an identifier if:
-*   1. is an alphanumeric string
+* A string contains an identifier if either:
+*   1. it is an alphanumeric string
 *   2. special characters are present
 */
-function containsIdentifier(segment: string): boolean {
+export function containsIdentifier(segment: string): boolean {
   return isAlphaNumericString(segment) || hasSpecialCharacters(segment);
 }
 
-function hasSpecialCharacters(segment: string): boolean {
+export function hasSpecialCharacters(segment: string): boolean {
   const specialCharacters = ['.', '=', '@', '-'];
-  return specialCharacters.some((character) =>  segment.includes(character));
+  return specialCharacters.some((character) => segment.includes(character));
 }
 
-function isAlphaNumericString(segment: string): boolean {
-  return !!segment.match(alphaNumericRegex);
+export function isAlphaNumericString(str: string): boolean {
+  let code, i, len;
+  let isNumeric = false;
+  let isAlpha = false;
+
+  for (i = 0, len = str.length; i < len; i++) {
+    code = str.charCodeAt(i);
+
+    switch (true) {
+      // check if all values are 0-9
+      case code > 47 && code < 58:
+        isNumeric = true;
+        break;
+
+      // check if all values are A-Z or a-z
+      case (code > 64 && code < 91) || (code > 96 && code < 123):
+        isAlpha = true;
+        break;
+
+      // not 0-9, not A-Z or a-z
+      default:
+        return false;
+    }
+  }
+
+  return isNumeric && isAlpha;
 }
 
 function sanitizeQueryParameterValue(param: string) {
-  if (!param.includes('='))
-  {
+  if (!param.includes('=')) {
     return param;
   }
   param = decodeURIComponent(param);
   const key = param.split('=')[0];
-  switch (key){
+  switch (key) {
     // We do not expect sensitive data in these OData query params, nothing needs to be done
     case '$top':
     case '$skip':
@@ -84,7 +102,7 @@ function sanitizeQueryParameterValue(param: string) {
     case '$select':
     case '$format':
     case '$orderby': {
-        break;
+      break;
     }
     /**
      * Query URLs will look like the examples below after processing,
@@ -93,16 +111,16 @@ function sanitizeQueryParameterValue(param: string) {
      * GET /users?$search=displayName:<value> OR mail:<value>
      */
     case '$search': {
-      param = param.replace(quotedTextRegex,  (capture) => {
+      param = param.replace(quotedTextRegex, (capture) => {
         if (!capture.includes(':')) {
-            return '<value>';
+          return '<value>';
         }
         // Drop quotes enclosing property and text to search
         capture = capture.replace('"', '');
         const property = capture.split(':')[0];
         return `${property}:<value>`;
-        });
-        break;
+      });
+      break;
     }
     /**
      * Examples
@@ -114,9 +132,9 @@ function sanitizeQueryParameterValue(param: string) {
       break;
     }
     default: {
-        param = `${key}=<value>`;
-        break;
+      param = `${key}=<value>`;
+      break;
     }
   }
-  return  param;
+  return param;
 }

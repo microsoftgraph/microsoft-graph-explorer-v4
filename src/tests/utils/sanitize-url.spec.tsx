@@ -1,4 +1,33 @@
-import { sanitizeQueryUrl } from '../../app/utils/query-url-sanitization';
+import { containsIdentifier, isAlphaNumericString, sanitizeQueryUrl } from '../../app/utils/query-url-sanitization';
+
+describe('containsIdentifier should ', () => {
+  const list = [
+    { key: 'oIx3zN98jEmVOM', contains: true },
+    { key: 'oIx3zN98jEmVOM-4mUJzSGUANeje', contains: true },
+    { key: 'planner', contains: false }
+  ];
+  list.forEach(element => {
+    it(`return ${element.contains} for ${element.key}`, () => {
+      const isIdentifier = containsIdentifier(element.key);
+      expect(isIdentifier).toBe(element.contains);
+    });
+  });
+});
+
+describe('isAlphaNumericString should ', () => {
+  const list = [
+    { key: 'aaa', isAlphaNumeric: false },
+    { key: '111', isAlphaNumeric: false },
+    { key: '1a1', isAlphaNumeric: true }
+  ];
+  list.forEach(element => {
+    it(`return ${element.isAlphaNumeric} for ${element.key}`, () => {
+      const isIdentifier = isAlphaNumericString(element.key);
+      expect(isIdentifier).toBe(element.isAlphaNumeric);
+    });
+  });
+});
+
 
 describe('Sanitize Query Url should', () => {
   const list = [
