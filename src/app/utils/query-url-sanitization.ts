@@ -60,12 +60,12 @@ export function hasSpecialCharacters(segment: string): boolean {
 }
 
 export function isAlphaNumericString(str: string): boolean {
-  let code, i, len;
+  let code = 0;
   let isNumeric = false;
   let isAlpha = false;
 
-  for (i = 0, len = str.length; i < len; i++) {
-    code = str.charCodeAt(i);
+  for (let index = 0; index < str.length; index++) {
+    code = str.charCodeAt(index);
 
     switch (true) {
       // check if all values are 0-9
