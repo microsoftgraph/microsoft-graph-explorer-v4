@@ -56,7 +56,7 @@ function sanitizeQueryParameters(queryString: string): string {
 */
 function hasSpecialCharacters(segment: string): boolean {
   const specialCharacters = ['.', '=', '@', '-'];
-  return !!specialCharacters.some((character) =>  segment.includes(character) || segment.match(alphaNumericRegex));
+  return specialCharacters.some((character) =>  segment.includes(character) || !!segment.match(alphaNumericRegex));
 }
 
 function sanitizeQueryParameterValue(param: string) {
