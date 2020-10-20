@@ -5,7 +5,7 @@ import { parseSampleUrl } from './sample-url-generation';
 const quotedTextRegex = /"([^"]*)"/g;
 
 // Matches patterns with alphanumeric characters e.g <CONGZUWfGUu4msTgNP66e2UAAySi>
-const alphaNumericRegex = /[^a-z0-9]/g;
+const alphaNumericRegex = /^[a-z0-9]+$/i;
 
 
 export function sanitizeQueryUrl(url: string): string {
@@ -27,7 +27,7 @@ export function sanitizeQueryUrl(url: string): string {
 
   const sections = sanitizedUrl.split('/');
   sections.forEach(sec => {
-    if (hasSpecialCharacters(sec)) {
+    if (containsIdentifier(sec)) {
       const index = sections.indexOf(sec);
       const replacementItemWithPrefix = `{${sections[index - 1]}-id}`;
       sanitizedUrl = sanitizedUrl.replace(sec, replacementItemWithPrefix);
@@ -51,12 +51,21 @@ function sanitizeQueryParameters(queryString: string): string {
 }
 
 /*
-* Special characters present in the url show that the
-* segment contains an identifier
+* A string contains an identifier if:
+*   1. is an alphanumeric string
+*   2. special characters are present
 */
+function containsIdentifier(segment: string): boolean {
+  return isAlphaNumericString(segment) || hasSpecialCharacters(segment);
+}
+
 function hasSpecialCharacters(segment: string): boolean {
   const specialCharacters = ['.', '=', '@', '-'];
-  return specialCharacters.some((character) =>  segment.includes(character) || !!segment.match(alphaNumericRegex));
+  return specialCharacters.some((character) =>  segment.includes(character));
+}
+
+function isAlphaNumericString(segment: string): boolean {
+  return !!segment.match(alphaNumericRegex);
 }
 
 function sanitizeQueryParameterValue(param: string) {
