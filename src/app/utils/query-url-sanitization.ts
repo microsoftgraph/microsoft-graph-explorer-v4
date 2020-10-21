@@ -44,12 +44,19 @@ function sanitizeQueryParameters(queryString: string): string {
 *   2. special characters are present
 */
 export function containsIdentifier(segment: string): boolean {
-  return isAlphaNumericString(segment) || hasSpecialCharacters(segment);
+  return isAlphaNumericString(segment)
+  || isNumericString(segment)
+  || hasSpecialCharacters(segment);
 }
 
 export function hasSpecialCharacters(segment: string): boolean {
   const specialCharacters = ['.', '=', '@', '-'];
   return specialCharacters.some((character) => segment.includes(character));
+}
+
+export function isNumericString(segment: string): boolean {
+  const numberRegex = /^[0-9]*$/;
+  return !!segment.match(numberRegex);
 }
 
 export function isAlphaNumericString(str: string): boolean {

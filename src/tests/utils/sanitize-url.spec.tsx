@@ -1,4 +1,7 @@
-import { containsIdentifier, isAlphaNumericString, sanitizeQueryUrl } from '../../app/utils/query-url-sanitization';
+import {
+  containsIdentifier, isAlphaNumericString,
+  isNumericString, sanitizeQueryUrl
+} from '../../app/utils/query-url-sanitization';
 
 describe('containsIdentifier should ', () => {
   const list = [
@@ -24,6 +27,20 @@ describe('isAlphaNumericString should ', () => {
     it(`return ${element.isAlphaNumeric} for ${element.key}`, () => {
       const isIdentifier = isAlphaNumericString(element.key);
       expect(isIdentifier).toBe(element.isAlphaNumeric);
+    });
+  });
+});
+
+describe('isNumericString should ', () => {
+  const list = [
+    { key: 'aaa', isNumeric: false },
+    { key: '111', isNumeric: true },
+    { key: '1a1', isNumeric: false }
+  ];
+  list.forEach(element => {
+    it(`return ${element.isNumeric} for ${element.key}`, () => {
+      const isIdentifier = isNumericString(element.key);
+      expect(isIdentifier).toBe(element.isNumeric);
     });
   });
 });
