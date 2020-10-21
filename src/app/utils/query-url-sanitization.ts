@@ -8,18 +8,11 @@ export function sanitizeQueryUrl(url: string): string {
   url = decodeURIComponent(url);
 
   // Extract query string
-  const { search, queryVersion } = parseSampleUrl(url);
+  const { search, queryVersion, requestUrl } = parseSampleUrl(url);
   const queryString: string = sanitizeQueryParameters(search);
 
   // Drop query string
-  let sanitizedUrl = url.split('?')[0];
-
-  /*
-  * Remove url prefix and query version.
-  * They have special characters used in the check that follows
-  */
-  const urlPrefix = `${GRAPH_URL}/${queryVersion}`;
-  sanitizedUrl = sanitizedUrl.replace(urlPrefix, '');
+  let sanitizedUrl = requestUrl;
 
   const sections = sanitizedUrl.split('/');
   sections.forEach(sec => {
@@ -30,7 +23,7 @@ export function sanitizeQueryUrl(url: string): string {
     }
   });
 
-  return `${urlPrefix}${sanitizedUrl}${queryString}`;
+  return `${GRAPH_URL}/${queryVersion}/${sanitizedUrl}${queryString}`;
 }
 
 function sanitizeQueryParameters(queryString: string): string {
