@@ -14,7 +14,7 @@ export function sanitizeQueryUrl(url: string): string {
   // Drop query string
   let sanitizedUrl = '';
 
-  const sections = sanitizedUrl.split('/');
+  const sections = requestUrl.split('/');
   sections.forEach(sec => {
     if (containsIdentifier(sec)) {
       const index = sections.indexOf(sec);
