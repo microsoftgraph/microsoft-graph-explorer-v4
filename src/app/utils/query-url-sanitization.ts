@@ -12,7 +12,7 @@ export function sanitizeQueryUrl(url: string): string {
   const queryString: string = sanitizeQueryParameters(search);
 
   // Drop query string
-  let sanitizedUrl = requestUrl;
+  let sanitizedUrl = '';
 
   const sections = sanitizedUrl.split('/');
   sections.forEach(sec => {
