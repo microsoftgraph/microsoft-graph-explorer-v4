@@ -1,50 +1,23 @@
 import {
-  containsIdentifier, isAlphaNumericString,
-  isNumericString, sanitizeQueryUrl
+  isAllAlpha, sanitizeQueryUrl
 } from '../../app/utils/query-url-sanitization';
 
-describe('containsIdentifier should ', () => {
+
+describe('isAllAlpha should ', () => {
   const list = [
-    { key: 'oIx3zN98jEmVOM', contains: true },
-    { key: 'oIx3zN98jEmVOM-4mUJzSGUANeje', contains: true },
-    { key: 'planner', contains: false }
+    { key: 'aaa', isAllAlphabetic: true },
+    { key: 'aZa', isAllAlphabetic: true },
+    { key: '111', isAllAlphabetic: false },
+    { key: '1a1', isAllAlphabetic: false }
   ];
+
   list.forEach(element => {
-    it(`return ${element.contains} for ${element.key}`, () => {
-      const isIdentifier = containsIdentifier(element.key);
-      expect(isIdentifier).toBe(element.contains);
+    it(`return ${element.isAllAlphabetic} for ${element.key}`, () => {
+      const key = isAllAlpha(element.key);
+      expect(key).toBe(element.isAllAlphabetic);
     });
   });
 });
-
-describe('isAlphaNumericString should ', () => {
-  const list = [
-    { key: 'aaa', isAlphaNumeric: false },
-    { key: '111', isAlphaNumeric: false },
-    { key: '1a1', isAlphaNumeric: true }
-  ];
-  list.forEach(element => {
-    it(`return ${element.isAlphaNumeric} for ${element.key}`, () => {
-      const isIdentifier = isAlphaNumericString(element.key);
-      expect(isIdentifier).toBe(element.isAlphaNumeric);
-    });
-  });
-});
-
-describe('isNumericString should ', () => {
-  const list = [
-    { key: 'aaa', isNumeric: false },
-    { key: '111', isNumeric: true },
-    { key: '1a1', isNumeric: false }
-  ];
-  list.forEach(element => {
-    it(`return ${element.isNumeric} for ${element.key}`, () => {
-      const isIdentifier = isNumericString(element.key);
-      expect(isIdentifier).toBe(element.isNumeric);
-    });
-  });
-});
-
 
 describe('Sanitize Query Url should', () => {
   const list = [

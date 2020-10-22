@@ -4,6 +4,9 @@ import { parseSampleUrl } from './sample-url-generation';
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const quotedTextRegex = /"([^"]*)"/g;
 
+// matches strings that are all alphabets
+const allAlphaRegex = /^[A-Za-z]+$/;
+
 export function sanitizeQueryUrl(url: string): string {
   url = decodeURIComponent(url);
 
@@ -14,12 +17,13 @@ export function sanitizeQueryUrl(url: string): string {
   let resourceUrl = requestUrl;
   const sections = requestUrl.split('/');
   sections.forEach(sec => {
-    if (containsIdentifier(sec)) {
-      const index = sections.indexOf(sec);
-      const replacementItemWithPrefix = `{${sections[index - 1]}-id}`;
-      resourceUrl = resourceUrl.replace(sec, replacementItemWithPrefix);
+    if (isAllAlpha(sec)) {
+      return;
     }
-  });
+    const index = sections.indexOf(sec);
+    const replacementItemWithPrefix = `{${sections[index - 1]}-id}`;
+    resourceUrl = resourceUrl.replace(sec, replacementItemWithPrefix);
+});
 
   return `${GRAPH_URL}/${queryVersion}/${resourceUrl}${queryString}`;
 }
@@ -36,53 +40,13 @@ function sanitizeQueryParameters(queryString: string): string {
   return result;
 }
 
-/*
-* A string contains an identifier if either:
-*   1. it is an alphanumeric string
-*   2. special characters are present
-*/
-export function containsIdentifier(segment: string): boolean {
-  return isAlphaNumericString(segment)
-  || isNumericString(segment)
-  || hasSpecialCharacters(segment);
-}
-
-export function hasSpecialCharacters(segment: string): boolean {
-  const specialCharacters = ['.', '=', '@', '-'];
-  return specialCharacters.some((character) => segment.includes(character));
-}
-
-export function isNumericString(segment: string): boolean {
-  const numberRegex = /^[0-9]*$/;
-  return !!segment.match(numberRegex);
-}
-
-export function isAlphaNumericString(str: string): boolean {
-  let code = 0;
-  let isNumeric = false;
-  let isAlpha = false;
-
-  for (let index = 0; index < str.length; index++) {
-    code = str.charCodeAt(index);
-
-    switch (true) {
-      // check if all values are 0-9
-      case code > 47 && code < 58:
-        isNumeric = true;
-        break;
-
-      // check if all values are A-Z or a-z
-      case (code > 64 && code < 91) || (code > 96 && code < 123):
-        isAlpha = true;
-        break;
-
-      // not 0-9, not A-Z or a-z
-      default:
-        return false;
-    }
-  }
-
-  return isNumeric && isAlpha;
+/**
+ * @param segment part of the url string to test
+ * Currently, non-ID strings are all alphabetic characters
+ * @returns boolean
+ */
+export function isAllAlpha(segment: string): boolean {
+  return !!segment.match(allAlphaRegex);
 }
 
 function sanitizeQueryParameterValue(param: string) {
