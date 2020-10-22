@@ -4,6 +4,6 @@ import { ComponentType } from 'react';
 export default interface ITelemetry {
   initialize(): void;
   trackEvent(eventName: string, payload: any): void;
-  trackReactComponent(Component: ComponentType): ComponentType;
+  trackReactComponent(Component: ComponentType, componentName?: string): ComponentType;
   trackException(error: Error, severityLevel: SeverityLevel): void;
 }

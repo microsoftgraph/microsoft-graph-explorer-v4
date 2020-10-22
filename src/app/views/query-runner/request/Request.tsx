@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
+import { telemetry } from '../../../../telemetry';
+import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { Monaco } from '../../common/monaco/Monaco';
@@ -22,7 +24,6 @@ export class Request extends Component<IRequestComponent, any> {
       handleOnEditorChange,
       sampleBody,
       mode,
-      mobileScreen,
       intl: { messages },
     }: any = this.props;
 
@@ -62,7 +63,7 @@ export class Request extends Component<IRequestComponent, any> {
           itemIcon='AuthenticatorApp'
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Access Token']}
-          headerText={ messages['Access Token']}>
+          headerText={messages['Access Token']}>
           <Auth />
         </PivotItem>
       );
@@ -80,13 +81,21 @@ export class Request extends Component<IRequestComponent, any> {
     );
   }
 
+  private onPivotItemClick = (item?: PivotItem) => {
+    if (!item) { return; }
+    const tabTitle = item.props.title;
+    if (tabTitle) {
+      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: `${tabTitle} tab`, QuerySignature: '' });
+    }
+  }
+
   public render() {
 
     const requestPivotItems = this.getPivotItems();
 
     return (
       <div className='request-editors'>
-        <Pivot styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}>
+        <Pivot onLinkClick={this.onPivotItemClick} styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}>
           {requestPivotItems}
         </Pivot>
       </div>
