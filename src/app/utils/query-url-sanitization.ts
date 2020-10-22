@@ -7,6 +7,9 @@ const quotedTextRegex = /"([^"]*)"/g;
 // matches strings that are all alphabets
 const allAlphaRegex = /^[A-Za-z]+$/;
 
+// matches strings with depracation identifier
+const depracationRegex = /_v2/gi;
+
 export function sanitizeQueryUrl(url: string): string {
   url = decodeURIComponent(url);
 
@@ -16,13 +19,14 @@ export function sanitizeQueryUrl(url: string): string {
 
   let resourceUrl = requestUrl;
   const sections = requestUrl.split('/');
-  sections.forEach(sec => {
-    if (isAllAlpha(sec)) {
+  sections.forEach(segment => {
+    if (isAllAlpha(segment) || isDeprecation(segment)) {
       return;
     }
-    const index = sections.indexOf(sec);
+
+    const index = sections.indexOf(segment);
     const replacementItemWithPrefix = `{${sections[index - 1]}-id}`;
-    resourceUrl = resourceUrl.replace(sec, replacementItemWithPrefix);
+    resourceUrl = resourceUrl.replace(segment, replacementItemWithPrefix);
 });
 
   return `${GRAPH_URL}/${queryVersion}/${resourceUrl}${queryString}`;
@@ -47,6 +51,15 @@ function sanitizeQueryParameters(queryString: string): string {
  */
 export function isAllAlpha(segment: string): boolean {
   return !!segment.match(allAlphaRegex);
+}
+
+/**
+ * @param segment part of the url string to test
+ * depracated resources may have `_v2` temporarily
+ * @returns boolean
+ */
+export function isDeprecation(segment: string): boolean {
+  return !!segment.match(depracationRegex);
 }
 
 function sanitizeQueryParameterValue(param: string) {

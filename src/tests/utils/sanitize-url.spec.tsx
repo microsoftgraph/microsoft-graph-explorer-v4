@@ -1,5 +1,5 @@
 import {
-  isAllAlpha, sanitizeQueryUrl
+  isAllAlpha, isDeprecation, sanitizeQueryUrl
 } from '../../app/utils/query-url-sanitization';
 
 
@@ -15,6 +15,22 @@ describe('isAllAlpha should ', () => {
     it(`return ${element.isAllAlphabetic} for ${element.key}`, () => {
       const key = isAllAlpha(element.key);
       expect(key).toBe(element.isAllAlphabetic);
+    });
+  });
+});
+
+describe('isDepraction should ', () => {
+  const list = [
+    { key: 'messages_V2', depracated: true },
+    { key: 'messages', depracated: false },
+    { key: 'users_v2', depracated: true },
+    { key: 'users', depracated: false }
+  ];
+
+  list.forEach(element => {
+    it(`return ${element.depracated} for ${element.key}`, () => {
+      const key = isDeprecation(element.key);
+      expect(key).toBe(element.depracated);
     });
   });
 });
@@ -57,6 +73,11 @@ describe('Sanitize Query Url should', () => {
       // tslint:disable-next-line: max-line-length
       url: 'https://graph.microsoft.com/v1.0/teams/02bd9fd6-8f93-4758-87c3-1fb73740a315/channels/19:09fc54a3141a45d0bc769cf506d2e079@thread.skype',
       sanitized: 'https://graph.microsoft.com/v1.0/teams/{teams-id}/channels/{channels-id}'
+    },
+    {
+      check: 'with depracated resource and without id',
+      url: 'https://graph.microsoft.com/v1.0/applications_v2/02bd9fd6-8f93-4758-87c3-1fb73740a315',
+      sanitized: 'https://graph.microsoft.com/v1.0/applications_v2/{applications_v2-id}'
     }
   ];
 
