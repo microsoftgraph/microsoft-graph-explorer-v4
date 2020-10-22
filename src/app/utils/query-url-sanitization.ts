@@ -11,19 +11,17 @@ export function sanitizeQueryUrl(url: string): string {
   const { search, queryVersion, requestUrl } = parseSampleUrl(url);
   const queryString: string = sanitizeQueryParameters(search);
 
-  // Drop query string
-  let sanitizedUrl = requestUrl;
-
-  const sections = requestUrl.split('/');
+  let resourceUrl = requestUrl;
+  const sections = resourceUrl.split('/');
   sections.forEach(sec => {
     if (containsIdentifier(sec)) {
       const index = sections.indexOf(sec);
       const replacementItemWithPrefix = `{${sections[index - 1]}-id}`;
-      sanitizedUrl = sanitizedUrl.replace(sec, replacementItemWithPrefix);
+      resourceUrl = resourceUrl.replace(sec, replacementItemWithPrefix);
     }
   });
 
-  return `${GRAPH_URL}/${queryVersion}/${sanitizedUrl}${queryString}`;
+  return `${GRAPH_URL}/${queryVersion}/${resourceUrl}${queryString}`;
 }
 
 function sanitizeQueryParameters(queryString: string): string {
