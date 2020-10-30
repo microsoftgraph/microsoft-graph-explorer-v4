@@ -1,67 +1,86 @@
+import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from './sample-url-generation';
-
-// Matches patterns like "('<1f7ff346-c174-45e5-af38-294e51d9969a>')" or "('<key>')"
-const keyIdRegex = /\(\'\<?\{?[ ?0-9a-zA-Z-]*\}?\>?\'\)/g;
-
-// Matches patterns like "(query=<key>)" or "(itemat=<key>,mode=<mode>)"
-const functionParamInitialRegex = /(?<=\=).*?(?=,)/g;
-const functionParamFinalRegex = /(?<=\=).[^,]*(?=\))/g;
 
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const quotedTextRegex = /"([^"]*)"/g;
 
-// Matches PII patterns
-const numberRegex =  /(?<=\/)\d+\b/g; // number between forward slashes
-const emailRegex = /([a-z0-9_\-.+]+)@\w+(\.\w+)*/gi;
-const guidRegex =
- /(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}/gi;
+// Matches strings that are all letters. Will match abc, won't match ab2c
+const allAlphaRegex = /^[A-Za-z]+$/;
 
+// Matches strings with deprecation identifier
+const deprecationRegex = /^[A-Za-z]+_v2$/gi;
 
+/**
+ *
+ * @param url - query url to be sanitized e.g.
+ *  - https://graph.microsoft.com/v1.0/planner/tasks/oIx3zN98jEmVOM-4mUJzSGUANeje
+ *  - https://graph.microsoft.com/v1.0/users?$search="MeganB@M365x214355.onmicrosoft.com"
+ */
 export function sanitizeQueryUrl(url: string): string {
   url = decodeURIComponent(url);
 
   // Extract query string
-  const { search } = parseSampleUrl(url);
+  const { search, queryVersion, requestUrl } = parseSampleUrl(url);
   const queryString: string = sanitizeQueryParameters(search);
 
-  // Drop query string
-  let sanitizedUrl = url.split('?')[0];
+  /**
+   * Non-IDs skipped during the sanitization process:
+   *   - Entities/entity sets/navigations from metadata, expected to contain alphabetic characters only
+   *   - Non-IDs that indicate deprecation in the form <non_id>_v2
+   *  The remaining URL segments are assumed to be variable IDs that need to be sanitized
+   */
+  let resourceUrl = requestUrl;
+  const urlSegments = requestUrl.split('/');
+  urlSegments.forEach(segment => {
+    if (isAllAlpha(segment) || isDeprecation(segment)) {
+      return;
+    }
 
-  // Normalize parameters in param=<arbitraryKey> format with param={value} format
-  sanitizedUrl = sanitizedUrl.replace(functionParamInitialRegex, '<value>');
-  sanitizedUrl = sanitizedUrl.replace(functionParamFinalRegex, '<value>');
+    const index = urlSegments.indexOf(segment);
+    const replacementItemWithPrefix = `{${urlSegments[index - 1]}-id}`;
+    resourceUrl = resourceUrl.replace(segment, replacementItemWithPrefix);
+});
 
-  // Replace IDs and ID placeholders with generic {id}
-  sanitizedUrl = sanitizedUrl.replace(keyIdRegex, '/<id>');
-  sanitizedUrl = sanitizedUrl.replace(guidRegex, '<guid>');
-  sanitizedUrl = sanitizedUrl.replace(numberRegex, '<number>');
-
-  // Redact PII
-  sanitizedUrl = sanitizedUrl.replace(emailRegex, '<email>');
-  return `${sanitizedUrl}${queryString}` ;
+  return `${GRAPH_URL}/${queryVersion}/${resourceUrl}${queryString}`;
 }
 
 function sanitizeQueryParameters(queryString: string): string {
-   const params = queryString.split('&');
-   let result: string = '';
-   if (params.length)
-   {
-      params.forEach(param => {
-       result += sanitizeQueryParameterValue(param) + '&';
-      });
-      result = result.slice(0, -1);
-   }
-   return result;
+  const params = queryString.split('&');
+  let result: string = '';
+  if (params.length) {
+    params.forEach(param => {
+      result += sanitizeQueryParameterValue(param) + '&';
+    });
+    result = result.slice(0, -1);
+  }
+  return result;
+}
+
+/**
+ * @param segment - part of the url string to test
+ * Currently, non-ID strings are all alphabetic characters
+ * @returns boolean
+ */
+export function isAllAlpha(segment: string): boolean {
+  return !!segment.match(allAlphaRegex);
+}
+
+/**
+ * @param segment part of the url string to test
+ * depracated resources may have `_v2` temporarily
+ * @returns boolean
+ */
+export function isDeprecation(segment: string): boolean {
+  return !!segment.match(deprecationRegex);
 }
 
 function sanitizeQueryParameterValue(param: string) {
-  if (!param.includes('='))
-  {
+  if (!param.includes('=')) {
     return param;
   }
   param = decodeURIComponent(param);
   const key = param.split('=')[0];
-  switch (key){
+  switch (key) {
     // We do not expect sensitive data in these OData query params, nothing needs to be done
     case '$top':
     case '$skip':
@@ -70,7 +89,7 @@ function sanitizeQueryParameterValue(param: string) {
     case '$select':
     case '$format':
     case '$orderby': {
-        break;
+      break;
     }
     /**
      * Query URLs will look like the examples below after processing,
@@ -79,16 +98,16 @@ function sanitizeQueryParameterValue(param: string) {
      * GET /users?$search=displayName:<value> OR mail:<value>
      */
     case '$search': {
-      param = param.replace(quotedTextRegex,  (capture) => {
+      param = param.replace(quotedTextRegex, (capture) => {
         if (!capture.includes(':')) {
-            return '<value>';
+          return '<value>';
         }
         // Drop quotes enclosing property and text to search
         capture = capture.replace('"', '');
         const property = capture.split(':')[0];
         return `${property}:<value>`;
-        });
-        break;
+      });
+      break;
     }
     /**
      * Examples
@@ -100,9 +119,9 @@ function sanitizeQueryParameterValue(param: string) {
       break;
     }
     default: {
-        param = `${key}=<value>`;
-        break;
+      param = `${key}=<value>`;
+      break;
     }
   }
-  return  param;
+  return param;
 }
