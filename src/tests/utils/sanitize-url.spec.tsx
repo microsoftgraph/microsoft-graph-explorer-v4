@@ -83,8 +83,8 @@ describe('Sanitize Query Url should', () => {
 
   list.forEach(element => {
     it(`return url ${element.check}`, () => {
-      const normalizedUrl = sanitizeQueryUrl(element.url);
-      expect(normalizedUrl).toEqual(element.sanitized);
+      const sanitizedUrl = sanitizeQueryUrl(element.url);
+      expect(sanitizedUrl).toEqual(element.sanitized);
     });
   });
 

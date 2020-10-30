@@ -4,12 +4,18 @@ import { parseSampleUrl } from './sample-url-generation';
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const quotedTextRegex = /"([^"]*)"/g;
 
-// matches strings that are all alphabets
+// Matches strings that are all letters. Will match abc, won't match ab2c
 const allAlphaRegex = /^[A-Za-z]+$/;
 
-// matches strings with depracation identifier
-const depracationRegex = /_v2/gi;
+// Matches strings with deprecation identifier
+const deprecationRegex = /^[A-Za-z]+_v2$/gi;
 
+/**
+ *
+ * @param url - query url to be sanitized e.g.
+ *  - https://graph.microsoft.com/v1.0/planner/tasks/oIx3zN98jEmVOM-4mUJzSGUANeje
+ *  - https://graph.microsoft.com/v1.0/users?$search="MeganB@M365x214355.onmicrosoft.com"
+ */
 export function sanitizeQueryUrl(url: string): string {
   url = decodeURIComponent(url);
 
@@ -17,15 +23,21 @@ export function sanitizeQueryUrl(url: string): string {
   const { search, queryVersion, requestUrl } = parseSampleUrl(url);
   const queryString: string = sanitizeQueryParameters(search);
 
+  /**
+   * Non-IDs skipped during the sanitization process:
+   *   - Entities/entity sets/navigations from metadata, expected to contain alphabetic characters only
+   *   - Non-IDs that indicate deprecation in the form <non_id>_v2
+   *  The remaining URL segments are assumed to be variable IDs that need to be sanitized
+   */
   let resourceUrl = requestUrl;
-  const sections = requestUrl.split('/');
-  sections.forEach(segment => {
+  const urlSegments = requestUrl.split('/');
+  urlSegments.forEach(segment => {
     if (isAllAlpha(segment) || isDeprecation(segment)) {
       return;
     }
 
-    const index = sections.indexOf(segment);
-    const replacementItemWithPrefix = `{${sections[index - 1]}-id}`;
+    const index = urlSegments.indexOf(segment);
+    const replacementItemWithPrefix = `{${urlSegments[index - 1]}-id}`;
     resourceUrl = resourceUrl.replace(segment, replacementItemWithPrefix);
 });
 
@@ -45,7 +57,7 @@ function sanitizeQueryParameters(queryString: string): string {
 }
 
 /**
- * @param segment part of the url string to test
+ * @param segment - part of the url string to test
  * Currently, non-ID strings are all alphabetic characters
  * @returns boolean
  */
@@ -59,7 +71,7 @@ export function isAllAlpha(segment: string): boolean {
  * @returns boolean
  */
 export function isDeprecation(segment: string): boolean {
-  return !!segment.match(depracationRegex);
+  return !!segment.match(deprecationRegex);
 }
 
 function sanitizeQueryParameterValue(param: string) {
