@@ -247,7 +247,7 @@
   "Adaptive Cards": "アダプティブ カード",
   "Office Dev Program": "サンプル データを含むサンドボックスを入手する",
   "Fetching Adaptive Card": "アダプティブ カードの取得",
-  "The Adaptive Card for this response is not available": "この返信のアダプティブ カードは使用できません",
+  "The Adaptive Card for this response is not available": "この応答に使用できるアダプティブ カードはありません。アダプティブ カードの作成方法の詳細については、次を参照してください",
   "loading samples": "サンプルの読み込み",
   "older": "以前",
   "today": "今日",
@@ -281,7 +281,12 @@
   "We did not find any history items": "履歴項目が見つかりませんでした",
   "Expand response": "返信の展開",
   "Access Token": "アクセス トークン",
-  "consent to scopes": " アクセス許可に同意する必要があります。 ",
+  "Graph toolkit": "ツールキットコンポーネント",
+  "We did not find a Graph toolkit for this query": "この応答には、使用可能なツールキットコンポーネントはありません。詳細情報とツールキットへの提供については、こちらをご覧ください。",
+  "Learn more about the Microsoft Graph Toolkit": "Microsoft Graph ツールキット パブリック リポジトリ",
+  "Open this example in": "この例をこちらで開く",
+  "graph toolkit playground": "Graph のツールキット プレイグラウンド",
+  "consent to scopes": " こちらの許可に同意する必要があります。 ",
   "Permission": "アクセス許可",
   "Display string": "表示文字列",
   "Description": "説明",
@@ -310,5 +315,9 @@
   "Minimize sidebar": "サイドバーを最小化する",
   "Toggle selection for all items": "すべてのアイテムの選択を切り替える",
   "Toggle selection": "選択の切り替え",
-  "Row checkbox": "行チェックボックス"
+  "Row checkbox": "行チェックボックス",
+  "Administrator permission": "このアクセス許可を承認するには、テナントの管理者が最初に承認する必要があります",
+  "Adaptive Cards designer": "アダプティブ カード デザイナー。",
+  "Click Run Query button above to fetch Adaptive Card": "上の [クエリの実行] ボタンをクリックして、アダプティブ カードを取り込みます。",
+  "Your history includes queries made in the last 30 days": "履歴には、過去 30 日間に行われたクエリが含まれます"
 }

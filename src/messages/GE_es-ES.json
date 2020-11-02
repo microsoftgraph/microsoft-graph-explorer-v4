@@ -247,7 +247,7 @@
   "Adaptive Cards": "Tarjetas adaptables",
   "Office Dev Program": "Obtener un espacio aislado con datos de ejemplo",
   "Fetching Adaptive Card": "Obtener una tarjeta adaptable",
-  "The Adaptive Card for this response is not available": "La tarjeta adaptativa para esta respuesta no se encuentra disponible",
+  "The Adaptive Card for this response is not available": "No hay disponible una tarjeta adaptable para esta respuesta. Para obtener más información sobre crear cómo Tarjetas adaptables, consulte",
   "loading samples": "Cargando ejemplos",
   "older": "Anteriores",
   "today": "Hoy",
@@ -281,6 +281,11 @@
   "We did not find any history items": "No se encuentra ningún elemento de historial",
   "Expand response": "Expandir respuesta",
   "Access Token": "Token de acceso",
+  "Graph toolkit": "Componente Toolkit",
+  "We did not find a Graph toolkit for this query": "No hay ningún componente del kit de herramientas disponible para esta respuesta. Para obtener más información sobre el kit de herramientas y colaborar en él, consulte",
+  "Learn more about the Microsoft Graph Toolkit": "Repositorio público de Microsoft Graph Toolkit",
+  "Open this example in": "Abra este ejemplo en",
+  "graph toolkit playground": "Animación de Graph Toolkit",
   "consent to scopes": " Debe dar su consentimiento para conceder los permisos en el ",
   "Permission": "Permiso",
   "Display string": "Mostrar cadena",
@@ -310,5 +315,9 @@
   "Minimize sidebar": "Minimizar la barra lateral",
   "Toggle selection for all items": "Activar o desactivar la selección de todos los elementos",
   "Toggle selection": "Activar o desactivar la selección",
-  "Row checkbox": "Casilla de verificación de fila"
+  "Row checkbox": "Casilla de verificación de la fila",
+  "Administrator permission": "El administrador de la cuenta empresarial debe autorizarlo antes de que usted pueda dar su consentimiento para este permiso.",
+  "Adaptive Cards designer": "Diseñador de tarjetas adaptables.",
+  "Click Run Query button above to fetch Adaptive Card": "Haga clic en el botón Ejecutar Consulta, que se encuentra más arriba, para obtener la Tarjeta Adaptable.",
+  "Your history includes queries made in the last 30 days": "Su historial incluye las consultas realizadas en los últimos 30 días"
 }

@@ -14,8 +14,10 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { telemetry } from '../../../../../telemetry';
 import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
+import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
@@ -161,6 +163,17 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     }
   };
 
+  private renderDetailsHeader(props: any, defaultRender?: any) {
+    return defaultRender!({
+      ...props,
+      onRenderColumnHeaderTooltip: (tooltipHostProps: any) => {
+        return (
+          <TooltipHost {...tooltipHostProps} />
+        );
+      }
+    });
+  }
+
   private getColumns = () => {
     const {
       tokenPresent,
@@ -168,7 +181,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       intl: { messages },
     }: any = this.props;
 
-    const columns = [
+    const columns: IColumn[] = [
       {
         key: 'value',
         name: messages.Permission,
@@ -208,6 +221,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         fieldName: 'isAdmin',
         minWidth: (tokenPresent) ? 150 : 100,
         maxWidth: (tokenPresent) ? 150 : 100,
+        ariaLabel: translateMessage('Administrator permission')
       }
     );
 
@@ -269,6 +283,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               classes={classes}
               renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
                 this.renderItemColumn(item, index, column)}
+              renderDetailsHeader={this.renderDetailsHeader}
+
             />}
             {panel &&
               <div data-is-scrollable={true}>
@@ -282,6 +298,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
                     this.renderItemColumn(item, index, column)}
                   searchValueChanged={(event?: React.ChangeEvent<HTMLInputElement>, value?: string) =>
                     this.searchValueChanged(event, value)}
+                  renderDetailsHeader={this.renderDetailsHeader}
                 />
               </div>
             }

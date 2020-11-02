@@ -246,8 +246,8 @@
   "Snippets": "Trechos de código",
   "Adaptive Cards": "Placas adaptáveis",
   "Office Dev Program": "Obter uma área restrita com dados de exemplo",
-  "Fetching Adaptive Card": "Buscando placa adaptável",
-  "The Adaptive Card for this response is not available": "A placa adaptável para esta resposta não está disponível",
+  "Fetching Adaptive Card": "Buscando cartão adaptável",
+  "The Adaptive Card for this response is not available": "Não há cartão adaptável disponível para essa resposta. Para saber mais sobre como criar cartões adaptáveis, confira",
   "loading samples": "Carregando exemplos",
   "older": "Mais antigo",
   "today": "Hoje",
@@ -281,6 +281,11 @@
   "We did not find any history items": "Não encontramos itens do histórico",
   "Expand response": "Expandir resposta",
   "Access Token": "Token de acesso",
+  "Graph toolkit": "Componente do kit de ferramentas",
+  "We did not find a Graph toolkit for this query": "Nenhum componente do kit de ferramentas está disponível para esta resposta. Para saber mais sobre e contribuir com o kit de ferramentas, confira o",
+  "Learn more about the Microsoft Graph Toolkit": "Repositório público do Microsoft Graph Toolkit",
+  "Open this example in": "Abrir este exemplo no",
+  "graph toolkit playground": "Graph Toolkit playground",
   "consent to scopes": " Você precisa consentir com as permissões no ",
   "Permission": "Permissão",
   "Display string": "Sequência de exibição",
@@ -310,5 +315,9 @@
   "Minimize sidebar": "Minimizar barra lateral",
   "Toggle selection for all items": "Seleção de alternância para todos os itens",
   "Toggle selection": "Seleção de alternância",
-  "Row checkbox": "Linha da caixa de seleção"
+  "Row checkbox": "Caixa de seleção de registro",
+  "Administrator permission": "O administrador do locatário deve autorizá-lo primeiro para que você possa concordar com essa permissão",
+  "Adaptive Cards designer": "Criador de Cartões Adaptáveis.",
+  "Click Run Query button above to fetch Adaptive Card": "Clique no botão Executar Consulta acima para buscar um Cartão Adaptável.",
+  "Your history includes queries made in the last 30 days": "Seu histórico inclui consultas feitas nos últimos 30 dias"
 }

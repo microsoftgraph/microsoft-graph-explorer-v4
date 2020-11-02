@@ -247,7 +247,7 @@
   "Adaptive Cards": "Адаптивные карточки",
   "Office Dev Program": "Получить песочницу с образцами данных",
   "Fetching Adaptive Card": "Получение адаптивной карточки",
-  "The Adaptive Card for this response is not available": "Адаптивная карточка для этого отклика недоступна",
+  "The Adaptive Card for this response is not available": "Адаптивная карточка для этого отклика недоступна. Подробнее о создании адаптивных карточек читайте в статье",
   "loading samples": "Загрузка образцов",
   "older": "Более старые версии",
   "today": "Сегодня",
@@ -281,6 +281,11 @@
   "We did not find any history items": "Не удалось найти элементы журнала",
   "Expand response": "Развернуть отклик",
   "Access Token": "Маркер доступа",
+  "Graph toolkit": "Компонент набора инструментов",
+  "We did not find a Graph toolkit for this query": "Для этого отклика нет компонента набора инструментов. Узнать подробнее о наборе инструментов и дополнить его можно в разделе",
+  "Learn more about the Microsoft Graph Toolkit": "Общедоступный репозиторий набора инструментов Microsoft Graph",
+  "Open this example in": "Открыть этот пример в",
+  "graph toolkit playground": "Интерактивная среда набора инструментов Graph",
   "consent to scopes": " Необходимо дать согласие на разрешения ",
   "Permission": "Разрешение",
   "Display string": "Отображаемая строка",
@@ -310,5 +315,9 @@
   "Minimize sidebar": "Свернуть боковую панель",
   "Toggle selection for all items": "Включить или отключить выделение всех элементов",
   "Toggle selection": "Включить или отключить выделение",
-  "Row checkbox": "Флажок строки"
+  "Row checkbox": "Флажок строки",
+  "Administrator permission": "Администратору клиента требуется сначала выполнить авторизацию, прежде чем вы сможете предоставить это разрешение",
+  "Adaptive Cards designer": "Конструктор адаптивных карточек.",
+  "Click Run Query button above to fetch Adaptive Card": "Нажмите кнопку \"Выполнить запрос\" выше, чтобы получить адаптивную карточку.",
+  "Your history includes queries made in the last 30 days": "Журнал содержит запросы, сделанные в течение последних 30 дней"
 }
