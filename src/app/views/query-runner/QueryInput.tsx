@@ -72,7 +72,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       <div className='row'>
         <div className='col-xs-12 col-lg-2'>
           <Dropdown
-            ariaLabel='Query sample option'
+            ariaLabel='HTTP request method option'
             role='listbox'
             selectedKey={selectedVerb}
             options={httpMethodsToDisplay}
@@ -82,7 +82,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
         </div>
         <div className='col-xs-12 col-lg-2'>
           <Dropdown
-            ariaLabel='Query sample option'
+            ariaLabel='Microsoft Graph API Version option'
             role='listbox'
             selectedKey={selectedVersion || 'v1.0'}
             options={urlVersions}
