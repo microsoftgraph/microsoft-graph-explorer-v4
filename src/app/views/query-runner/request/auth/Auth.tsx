@@ -20,12 +20,17 @@ export function Auth(props: any) {
     iconName: 'copy'
   };
 
+  const tokenDetailsIcon: IIconProps = {
+    iconName: 'code'
+  };
+
   return (<div className={classes.auth}>
     {accessToken ?
       <div>
         <div className={classes.accessTokenContainer}>
           <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
           <IconButton onClick={handleCopy} iconProps={copyIcon} title='Copy' ariaLabel='Copy' />
+          <IconButton iconProps={tokenDetailsIcon} title='Get token details (Powered by jwt.ms)' ariaLabel='Get token details (Powered by jwt.ms)' href={`https://jwt.ms#access_token=${accessToken}`} target="_blank" />
         </div>
         <Label className={classes.accessToken} >{accessToken}</Label>
       </div>
