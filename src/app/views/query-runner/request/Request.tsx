@@ -6,7 +6,9 @@ import { connect } from 'react-redux';
 import { telemetry } from '../../../../telemetry';
 import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { Mode } from '../../../../types/enums';
+import { IQuery } from '../../../../types/query-runner';
 import { IRequestComponent } from '../../../../types/request';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
 import { RequestHeaders } from './headers';
@@ -86,8 +88,18 @@ export class Request extends Component<IRequestComponent, any> {
     if (!item) { return; }
     const tabTitle = item.props.title;
     if (tabTitle) {
-      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: `${tabTitle} tab`, QuerySignature: '' });
+      this.trackTabClickEvent(tabTitle);
     }
+  }
+
+  private trackTabClickEvent(tabTitle: string) {
+    const { sampleQuery }: any = this.props;
+    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+    telemetry.trackEvent(TAB_CLICK_EVENT,
+      {
+        ComponentName: `${tabTitle} tab`,
+        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
+      });
   }
 
   public render() {
@@ -96,8 +108,9 @@ export class Request extends Component<IRequestComponent, any> {
 
     return (
       <div className='request-editors'>
-        <Pivot onLinkClick={this.onPivotItemClick} styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}>
-          {requestPivotItems}
+        <Pivot onLinkClick={this.onPivotItemClick}
+          styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}>
+            {requestPivotItems}
         </Pivot>
       </div>
     );

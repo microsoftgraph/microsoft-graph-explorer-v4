@@ -9,6 +9,7 @@ import { IQuery } from '../../../../types/query-runner';
 import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../utils/translate-messages';
 import { Image, Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
@@ -130,13 +131,22 @@ export const getPivotItems = (properties: any) => {
   return pivotItems;
 };
 
-export const onPivotItemClick = (item?: PivotItem) => {
+export const onPivotItemClick = (query: IQuery, item?: PivotItem) => {
   if (!item) { return; }
   const tabTitle = item.props.title;
   if (tabTitle) {
-    telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: `${tabTitle} tab`, QuerySignature: '' });
+    trackTabClickEvent(query, tabTitle);
   }
 };
+
+function trackTabClickEvent(query: IQuery, tabTitle: string) {
+  const sanitizedUrl = sanitizeQueryUrl(query.sampleUrl);
+  telemetry.trackEvent(TAB_CLICK_EVENT,
+    {
+      ComponentName: `${tabTitle} tab`,
+      QuerySignature: `${query.selectedVerb} ${sanitizedUrl}`
+    });
+}
 
 function displayResultComponent(headers: any, body: any) {
   const language = 'json';
