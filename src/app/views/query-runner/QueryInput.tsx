@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Mode } from '../../../types/enums';
 import { IQueryInputProps } from '../../../types/query-runner';
 import { getStyleFor } from '../../utils/badge-color';
+import { translateMessage } from '../../utils/translate-messages';
 import SubmitButton from '../common/submit-button/SubmitButton';
 import { queryRunnerStyles } from './QueryRunner.styles';
 
@@ -72,7 +73,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       <div className='row'>
         <div className='col-xs-12 col-lg-2'>
           <Dropdown
-            ariaLabel='HTTP request method option'
+            ariaLabel={translateMessage('HTTP request method option')}
             role='listbox'
             selectedKey={selectedVerb}
             options={httpMethodsToDisplay}
@@ -82,7 +83,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
         </div>
         <div className='col-xs-12 col-lg-2'>
           <Dropdown
-            ariaLabel='Microsoft Graph API Version option'
+            ariaLabel={translateMessage('Microsoft Graph API Version option')}
             role='listbox'
             selectedKey={selectedVersion || 'v1.0'}
             options={urlVersions}
@@ -91,7 +92,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
         </div>
         <div className='col-xs-12 col-lg-6'>
           <TextField
-            ariaLabel='Query Sample Input'
+            ariaLabel={translateMessage('Query Sample Input')}
             role='textbox'
             placeholder={messages['Query Sample']}
             onChange={(event, value) => handleOnUrlChange(value)}
