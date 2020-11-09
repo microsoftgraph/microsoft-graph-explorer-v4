@@ -37,7 +37,7 @@ export function sanitizeQueryUrl(url: string): string {
     }
 
     const index = urlSegments.indexOf(segment);
-    const replacementItemWithPrefix = `{${urlSegments[index - 1]}-id}`;
+    const replacementItemWithPrefix = index ? `{${urlSegments[index - 1]}-id}` : '';
     resourceUrl = resourceUrl.replace(segment, replacementItemWithPrefix);
 });
 
