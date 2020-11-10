@@ -32,6 +32,7 @@ import * as queryStatusActionCreators from '../../../services/actions/query-stat
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -270,21 +271,27 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         } else {
           actions.runQuery(sampleQuery);
         }
-        telemetry.trackEvent(
-         LISTITEM_CLICK_EVENT,
-         {
-            ComponentName: 'Sample query list item',
-            SampleId: selectedQuery.id,
-            SampleName: selectedQuery.humanName,
-            SampleCategory: selectedQuery.category,
-            QuerySignature: ''
-         });
+        this.trackSampleQueryClickEvent(selectedQuery);
       } else {
         sampleQuery.sampleBody = (sampleQuery.sampleBody) ? JSON.parse(sampleQuery.sampleBody) : undefined;
         if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
       }
       actions.setSampleQuery(sampleQuery);
     }
+  }
+
+  private trackSampleQueryClickEvent(selectedQuery: ISampleQuery)
+  {
+    const sanitizedUrl = sanitizeQueryUrl(GRAPH_URL + selectedQuery.requestUrl);
+    telemetry.trackEvent(
+      LISTITEM_CLICK_EVENT,
+      {
+         ComponentName: 'Sample query list item',
+         SampleId: selectedQuery.id,
+         SampleName: selectedQuery.humanName,
+         SampleCategory: selectedQuery.category,
+         QuerySignature: `${selectedQuery.method} ${sanitizedUrl}`
+      });
   }
 
   public renderGroupHeader = (props: any): any => {

@@ -10,9 +10,12 @@ import { IAutoCompleteProps, IAutoCompleteState } from '../../../../../types/aut
 import { SortOrder } from '../../../../../types/enums';
 import * as autoCompleteActionCreators from '../../../../services/actions/autocomplete-action-creators';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
+import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
+
+
 import SuggestionsList from './SuggestionsList';
 import {
   cleanUpSelectedSuggestion, getLastCharacterOf,
@@ -273,7 +276,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private requestForAutocompleteOptions(url: string) {
-    const { requestUrl, queryVersion } = parseSampleUrl(url);
+    const signature = sanitizeQueryUrl(url);
+    const { requestUrl, queryVersion } = parseSampleUrl(signature);
     if (requestUrl || queryVersion) {
       if (!this.props.autoCompleteOptions || `${requestUrl}` !== this.props.autoCompleteOptions.url) {
         this.props.actions!.fetchAutoCompleteOptions(requestUrl);
