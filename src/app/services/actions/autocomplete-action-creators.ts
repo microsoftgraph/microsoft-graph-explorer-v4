@@ -2,6 +2,8 @@ import { IAction } from '../../../types/action';
 import { IOpenApiParseContent, IOpenApiResponse } from '../../../types/open-api';
 import { IRequestOptions } from '../../../types/request';
 import { parseOpenApiResponse } from '../../utils/open-api-parser';
+import { getAutoCompleteContentFromCache,
+  storeAutoCompleteContentInCache } from '../../views/query-runner/query-input/auto-complete/auto-complete.cache';
 import { AUTOCOMPLETE_FETCH_ERROR, AUTOCOMPLETE_FETCH_PENDING, AUTOCOMPLETE_FETCH_SUCCESS } from '../redux-constants';
 
 export function fetchAutocompleteSuccess(response: object): IAction {
@@ -36,6 +38,13 @@ export function fetchAutoCompleteOptions(url: string): Function {
 
     dispatch(fetchAutocompletePending());
 
+    // checks locally whether options for the url are already available
+    // and returns them
+    const localOptions = await getAutoCompleteContentFromCache(url);
+    if (localOptions) {
+      return dispatch(fetchAutocompleteSuccess(localOptions));
+    }
+
     try {
       const response = await fetch(openApiUrl, options);
       if (response.ok) {
@@ -46,6 +55,7 @@ export function fetchAutoCompleteOptions(url: string): Function {
           verb: sampleQuery.selectedVerb.toLowerCase()
         };
         const parsedResponse = parseOpenApiResponse(content);
+        storeAutoCompleteContentInCache(parsedResponse);
         return dispatch(fetchAutocompleteSuccess(parsedResponse));
       }
       throw new Error(response.statusText);
