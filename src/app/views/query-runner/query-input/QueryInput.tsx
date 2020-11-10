@@ -10,7 +10,7 @@ import { getStyleFor } from '../../../utils/badge-color';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import SubmitButton from '../../common/submit-button/SubmitButton';
 import { queryRunnerStyles } from '../QueryRunner.styles';
-import AutoComplete from './AutoComplete';
+import AutoComplete from './auto-complete/AutoComplete';
 
 export class QueryInput extends Component<IQueryInputProps, any> {
   constructor(props: any) {
