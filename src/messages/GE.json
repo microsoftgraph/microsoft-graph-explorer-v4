@@ -320,5 +320,8 @@
   "Adaptive Cards designer": "Adaptive Cards designer.",
   "Click Run Query button above to fetch Adaptive Card": "Click Run Query button above to fetch Adaptive Card.",
   "Your history includes queries made in the last 30 days": "Your history includes queries made in the last 30 days",
-  "Get token details (Powered by jwt.ms)": "Get token details (Powered by jwt.ms)"
+  "Get token details (Powered by jwt.ms)": "Get token details (Powered by jwt.ms)",
+  "HTTP request method option": "HTTP request method option",
+  "Microsoft Graph API Version option": "Microsoft Graph API Version option",
+  "Query Sample Input": "Query sample input"
 }
