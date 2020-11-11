@@ -11,6 +11,7 @@ export interface IOpenApiParseContent {
 export interface IParsedOpenApiResponse {
   url: string;
   parameters: IParameters[];
+  createdAt: string;
 }
 
 export interface IParameters {
