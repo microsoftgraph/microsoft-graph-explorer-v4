@@ -58,9 +58,9 @@ function sanitizeQueryParameters(queryString: string): string {
 
 /**
  * Redact variable segments of query parameters
- * @param param
+ * @param param e.g. $top=5, $search="pizza", $filter=startswith(displayName, 'J')
  */
-function sanitizeQueryParameterValue(param: string) {
+export function sanitizeQueryParameterValue(param: string) {
   if (!param.includes('=')) {
     return param;
   }
@@ -167,7 +167,7 @@ function sanitizeQueryParameterValue(param: string) {
     }
 
     // GET /users?$filter=startsWith(displayName,'J')
-    // GET /me/messages?$filter=from/emailAddress/address eq 'someuser@example.com'
+    // GET /me/messages?$filter=from/emailAddress/address eq 'no-reply@microsoft.com'
     case '$filter': {
       // Remove the parameter key and sanitize the value only
       const paramValue = param.substring(param.indexOf('=') + 1).trim();
@@ -235,7 +235,7 @@ function sanitizeFilterQueryParameterValue (queryParameterValue: string): string
         const openingBracketIndex = part.indexOf('(');
         if (openingBracketIndex > 0) {
           const commaIndex = part.indexOf(',');
-          const closingBracketIndex = part.indexOf(')')
+          const closingBracketIndex = part.indexOf(')');
           const endIndex  = commaIndex > 0 ? commaIndex : closingBracketIndex > 0 ? closingBracketIndex : part.length;
 
           let propertyName: string = part.substring(openingBracketIndex + 1, endIndex);
