@@ -21,16 +21,16 @@ describe('isAllAlpha should ', () => {
 
 describe('isDepraction should ', () => {
   const list = [
-    { key: 'messages_V2', depracated: true },
-    { key: 'messages', depracated: false },
-    { key: 'users_v2', depracated: true },
-    { key: 'users', depracated: false }
+    { key: 'messages_V2', deprecated: true },
+    { key: 'messages', deprecated: false },
+    { key: 'users_v2', deprecated: true },
+    { key: 'users', deprecated: false }
   ];
 
   list.forEach(element => {
-    it(`return ${element.depracated} for ${element.key}`, () => {
+    it(`return ${element.deprecated} for ${element.key}`, () => {
       const key = isDeprecation(element.key);
-      expect(key).toBe(element.depracated);
+      expect(key).toBe(element.deprecated);
     });
   });
 });
@@ -75,7 +75,7 @@ describe('Sanitize Query Url should', () => {
       sanitized: 'https://graph.microsoft.com/v1.0/teams/{teams-id}/channels/{channels-id}'
     },
     {
-      check: 'with depracated resource and without id',
+      check: 'with deprecated resource and without id',
       url: 'https://graph.microsoft.com/v1.0/applications_v2/02bd9fd6-8f93-4758-87c3-1fb73740a315',
       sanitized: 'https://graph.microsoft.com/v1.0/applications_v2/{applications_v2-id}'
     }
