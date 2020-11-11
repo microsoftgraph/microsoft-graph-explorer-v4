@@ -69,7 +69,7 @@ export function sanitizeQueryParameterValue(param: string) {
   switch (key) {
     // GET /users?$top=5
     case '$top': {
-      const parsed = parseInt(value, 10);
+      const parsed = Number(value);
       if (isNaN(parsed)) {
         value = '<unexpected-value>';
       }
@@ -78,7 +78,7 @@ export function sanitizeQueryParameterValue(param: string) {
 
     // GET /users?$skip=5
     case '$skip': {
-      const parsed = parseInt(value, 10);
+      const parsed = Number(value);
       if (isNaN(parsed)) {
         value = '<unexpected-value>';
       }
