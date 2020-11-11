@@ -1,4 +1,3 @@
-import { arrayify } from 'tslint/lib/utils';
 import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from './sample-url-generation';
 
@@ -9,7 +8,7 @@ export function sanitizeQueryUrl(url: string): string {
   url = decodeURIComponent(url);
 
   const { search, queryVersion, requestUrl } = parseSampleUrl(url);
-  const queryString: string = sanitizeQueryParameters(search);
+  const queryString: string = search ? sanitizeQueryParameters(search) : '';
 
   // Split requestUrl into segments that can be sanitized individually
   let resourceUrl = requestUrl;
@@ -45,15 +44,18 @@ export function sanitizeQueryUrl(url: string): string {
  * @param queryString
  */
 function sanitizeQueryParameters(queryString: string): string {
+  // remove leading ? from query string
+  queryString = queryString.substring(1);
+
   const params = queryString.split('&');
-  let result: string = '';
+  let sanitizedQueryParams: string = '';
   if (params.length) {
     params.forEach(param => {
-      result += sanitizeQueryParameterValue(param) + '&';
+      sanitizedQueryParams += sanitizeQueryParameterValue(param) + '&';
     });
-    result = result.slice(0, -1);
+    sanitizedQueryParams = sanitizedQueryParams.slice(0, -1);
   }
-  return result;
+  return `?${sanitizedQueryParams}`;
 }
 
 /**
@@ -94,27 +96,28 @@ export function sanitizeQueryParameterValue(param: string) {
     }
 
     // GET /me/drive/root?$expand=children($select=id,name)
-    // GET /Employees?$expand=DirectReports($filter=FirstName eq 'mary'))
-    // GET /Orders?$expand=Items($expand=Product),Customer
+    // GET /employees?$expand=directreports($filter=firstName eq 'mary'))
+    // GET /orders?$expand=Items($expand=product),customer
     case '$expand': {
       break;
     }
 
-    // GET http://host/service/Products?$select=Rating,ReleaseDate
-    // GET http://host/service/Products?$select=*
-    // GET http://host/service/Products?$select=DemoService.*
+    // GET /products?$select=rating,releaseDate
+    // GET /products?$select=*
+    // GET /products?$select=demoservice.*
     case '$select': {
       const selectedProperties = value.split(',');
-      selectedProperties.forEach(property => {
-        if (!isAllAlpha(property) && property !== '*' || !property.match(actionsForEachEntityRegex)) {
-          value = '<unexpected-value>';
+      selectedProperties.forEach((property, index) => {
+        if (!isAllAlpha(property.trim()) && property !== '*' && !property.match(actionsForEachEntityRegex)) {
+          selectedProperties[index] = '<unexpected-value>';
         }
       });
+      value = selectedProperties.join(',');
       break;
     }
 
-    // GET /Orders?$format=application/json;metadata=full
-    // GET /Orders?$format=json
+    // GET /orders?$format=application/json;metadata=full
+    // GET /orders?$format=json
     case '$format': {
       const formattingExpressions = value.split(';');
       formattingExpressions.forEach((expression, index) => {
@@ -127,7 +130,7 @@ export function sanitizeQueryParameterValue(param: string) {
       break;
     }
 
-    // GET http://host/service/Products?$orderby=ReleaseDate asc, Rating desc
+    // GET /products?$orderby=releasedate asc,rating desc
     case '$orderby': {
       const sortingExpressions = value.split(',');
       sortingExpressions.forEach((expression, index) => {
@@ -169,9 +172,7 @@ export function sanitizeQueryParameterValue(param: string) {
     // GET /users?$filter=startsWith(displayName,'J')
     // GET /me/messages?$filter=from/emailAddress/address eq 'no-reply@microsoft.com'
     case '$filter': {
-      // Remove the parameter key and sanitize the value only
-      const paramValue = param.substring(param.indexOf('=') + 1).trim();
-      param = key + '=' + sanitizeFilterQueryParameterValue(paramValue);
+      value = sanitizeFilterQueryParameterValue(value);
       break;
     }
 
@@ -206,63 +207,76 @@ export function sanitizeQueryParameterValue(param: string) {
 function sanitizeFilterQueryParameterValue (queryParameterValue: string): string
 {
   let sanitizedQueryString: string = '';
-  const logicalOperators: string[] = ['and', 'or', 'in'];
-  const comparisonOperators: string[] = ['eq', 'ne', 'gt', 'ge', 'lt', 'le', 'has', 'in'];
 
   /**
-   * Our interest is only in the functions that take the form `functionName(<property>, <value>)
+   * Our interest is only in the functions that take the form `functionName(<property>,<value>)
    *  e.g. endsWith(mail,'@hotmail.com')
    */
   const queryFunctions: string[] = ['startswith', 'endswith', 'contains', 'substring', 'indexof', 'concat'];
 
   const filterSegments = queryParameterValue.match(filterSegmentRegex);
+  // This means $filter value is empty
   if (filterSegments === null) {
-    sanitizedQueryString += ' <unknown>';
     return sanitizedQueryString;
   }
-  const numberOfFilterSegments = filterSegments.length;
-  filterSegments.forEach((part, index) => {
 
-    // No processing needed for operators; append operator to query string
-    if (logicalOperators.includes(part) || comparisonOperators.includes(part)) {
-      sanitizedQueryString += ` ${part}`;
-      return;
+  const numberOfFilterSegments = filterSegments.length;
+  for (let index = 0; index < numberOfFilterSegments; index++) {
+    const segment = filterSegments[index];
+
+    // No processing needed for operators; append operator to query string.
+    if (logicalOperators.includes(segment) || comparisonOperators.includes(segment)) {
+      sanitizedQueryString += ` ${segment}`;
+      continue;
     }
 
-    // Transform query functions to look like 'startswith(userPrincipalName,<value>)'
+    // Check if segment is a query function then transform query functions to look like this,
+    // 'startswith(userPrincipalName,<value>)' as an example
+    let queryFunctionPrefix: string = '';
     queryFunctions.forEach(funcName => {
-      if (part.toLowerCase().startsWith(funcName)) {
-        const openingBracketIndex = part.indexOf('(');
-        if (openingBracketIndex > 0) {
-          const commaIndex = part.indexOf(',');
-          const closingBracketIndex = part.indexOf(')');
-          const endIndex  = commaIndex > 0 ? commaIndex : closingBracketIndex > 0 ? closingBracketIndex : part.length;
-
-          let propertyName: string = part.substring(openingBracketIndex + 1, endIndex);
-          if (!isAllAlpha(propertyName)) {
-            propertyName = '<property>';
-          }
-
-          sanitizedQueryString += ` ${funcName}(${propertyName}${commaIndex > 0 ? ',<value>' : ''})`;
-          return;
-        }
-      }
-    });
-
-    // Property names, (standing on their own) should be succeeded by comparison operators
-    if (part.match(propertyNameRegex)) {
-
-      // check if succeeded by comparison operator
-      if (index !== numberOfFilterSegments - 2 &&
-        comparisonOperators.includes(filterSegments[index + 1].toLowerCase())) {
-        sanitizedQueryString += ` ${part} ${index + 1} <value>`;
+      if (segment.toLowerCase().startsWith(funcName)) {
+        queryFunctionPrefix = funcName;
         return;
       }
+    });
+    if (queryFunctionPrefix) {
+
+      const commaIndex = segment.indexOf(',');
+      const openingBracketIndex = segment.indexOf('(');
+      const closingBracketIndex = segment.indexOf(')');
+
+      if (openingBracketIndex > 0) {
+        // End of property name is when we encounter a comma, bracket or end of segment, in that order
+        const endIndex  = commaIndex > 0 ? commaIndex :
+          closingBracketIndex > 0 ? closingBracketIndex : segment.length;
+        let propertyName: string = segment.substring(openingBracketIndex + 1, endIndex).trim();
+
+        if (!isAllAlpha(propertyName)) {
+          propertyName = '<property>';
+        }
+        sanitizedQueryString += `${queryFunctionPrefix}(${propertyName}${commaIndex > 0 ? ',<value>' : ''})`;
+      }
+      else {
+        sanitizedQueryString += `${queryFunctionPrefix}(<unknown>)`;
+        break;
+      }
+      continue;
     }
 
-    sanitizedQueryString += ' <unknown>';
+    // Property names, (standing on their own) should be succeeded by comparison operators
+    if (segment.match(propertyNameRegex)) {
+      // check if succeeded by comparison operator
+      if (index < numberOfFilterSegments - 2 &&
+        comparisonOperators.includes(filterSegments[index + 1].toLowerCase())) {
+        sanitizedQueryString += `${segment} ${filterSegments[index + 1]} <value>`;
+        index += 2;
+        continue;
+      }
+    }
 
-  });
+    // Anything that get's here is unknown
+    sanitizedQueryString += ' <unknown>';
+  }
   return sanitizedQueryString;
 }
 
@@ -292,6 +306,10 @@ export function isDeprecation(segment: string): boolean {
 export function hasIdWithinBracket(segment: string): boolean {
   return !!segment.match(idWithinBracketRegex);
 }
+
+const logicalOperators: string[] = ['and', 'or'];
+
+const comparisonOperators: string[] = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'];
 
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const quotedTextRegex = /"([^"]*)"/g;

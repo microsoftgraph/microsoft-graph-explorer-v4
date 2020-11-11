@@ -141,8 +141,8 @@ describe('Sanitize Query Parameters should', () => {
     },
     {
       check: 'returns value as is when $select value is requests for all actions/functions available for each entity',
-      queryParam: '$select=People*',
-      sanitizedQueryParam: '$select=People*'
+      queryParam: '$select=People.*',
+      sanitizedQueryParam: '$select=People.*'
     },
     {
       check: 'returns <unexpected-value> when $select value is not all alphabetic letters',
@@ -219,7 +219,7 @@ describe('Sanitize Query Parameters should', () => {
     {
       check: 'returns <value> for operand of $filter function operation',
       queryParam: '$filter=startsWith(displayName,\'J\')',
-      sanitizedQueryParam: '$filter=startsWith(displayName,<value>)'
+      sanitizedQueryParam: '$filter=startswith(displayName,<value>)'
     },
 
     // $expand
