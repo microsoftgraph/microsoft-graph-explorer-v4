@@ -1,6 +1,7 @@
 import {
   DefaultButton, FontSizes,
   getId, IconButton, Modal, Pivot,
+  PivotItem,
   PrimaryButton, TooltipHost
 } from 'office-ui-fabric-react';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
@@ -48,8 +49,18 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     this.setState({ showShareQueryDialog: !this.state.showShareQueryDialog });
   };
 
-  public toggleModal = () => {
+  public toggleExpandResponse = () => {
     this.setState({ showModal: !this.state.showModal });
+  }
+
+  public toggleModal = (event: any) => {
+    const { key } = event;
+    if (key && key.includes('expand')) {
+      this.toggleExpandResponse();
+    }
+    if (key && key.includes('share')) {
+      this.handleShareQuery();
+    }
   }
 
   public render() {
@@ -76,55 +87,16 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     const pivotItems = getPivotItems(pivotProperties);
 
     return (
-      <div>
+      <div >
         <div className='query-response'>
-          {mode === Mode.Complete && <>
-            <div style={{
-              float: 'right',
-              padding: '0px',
-              zIndex: 1,
-            }}>
-
-              <TooltipHost
-                content={`${messages['Share Query Message']}`}
-                id={getId()}
-                calloutProps={{ gapSpace: 0 }}
-                styles={{ root: { display: 'inline-block' } }}
-              >
-                <IconButton
-                  onClick={this.handleShareQuery}
-                  className='share-query-btn'
-                  iconProps={{ iconName: 'Share'}}
-                  aria-label={'Share query message'}
-                />
-              </TooltipHost>
-            </div>
-
-            <div style={{
-              float: 'right',
-              padding: '0px',
-              zIndex: 1,
-            }}>
-              <TooltipHost
-                content={`${messages['Expand response']}`}
-                id={getId()}
-                calloutProps={{ gapSpace: 0 }}
-                styles={{ root: { display: 'inline-block' } }}
-              >
-                <IconButton
-                  onClick={this.toggleModal}
-                  className='share-query-btn'
-                  iconProps={{ iconName: 'MiniExpandMirrored'}}
-                  aria-label={'Expand response'}
-                />
-              </TooltipHost>
-            </div>
-          </>}
-          <Pivot className='pivot-response'
-            styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
-            onLinkClick={(pivotItem) => onPivotItemClick(pivotItem)}
-            >
-            {pivotItems}
+          <Pivot styles={{ root: { float: 'right' } }}
+            onLinkClick={this.toggleModal}>
+            <PivotItem key='expand'
+              itemIcon='MiniExpandMirrored'
+            > {this.showResponse(pivotItems)}</PivotItem>
+            <PivotItem key='share'
+              itemIcon='Share'
+            > {this.showResponse(pivotItems)} </PivotItem>
           </Pivot>
         </div>
 
@@ -132,7 +104,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
           // @ts-ignore
           <Modal
             isOpen={showModal}
-            onDismiss={this.toggleModal}
+            onDismiss={this.toggleExpandResponse}
             styles={{ main: { width: '80%', height: '90%' }, }}
           >
 
@@ -145,7 +117,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
               }}
               iconProps={{ iconName: 'Cancel' }}
               ariaLabel='Close popup modal'
-              onClick={this.toggleModal}
+              onClick={this.toggleExpandResponse}
             />
             <Pivot className='pivot-response'>
               {pivotItems}
@@ -180,6 +152,15 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
       </div >
     );
   }
+
+  private showResponse(pivotItems: JSX.Element[]) {
+    return <Pivot className='pivot-response'
+      styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
+      onLinkClick={(pivotItem) => onPivotItemClick(pivotItem)}
+    >
+      {pivotItems}
+    </Pivot>;
+  }
 }
 
 function mapStateToProps(state: any) {
@@ -196,4 +177,3 @@ function mapStateToProps(state: any) {
 // @ts-ignore
 const WithIntl = injectIntl(QueryResponse);
 export default connect(mapStateToProps)(WithIntl);
-
