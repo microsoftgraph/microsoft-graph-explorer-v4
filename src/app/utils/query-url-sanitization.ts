@@ -69,7 +69,6 @@ export function sanitizeQueryParameterValue(param: string) {
   let key: string = param.split('=')[0].toLowerCase().trim();
   let value: string = param.substring(param.indexOf('=') + 1).trim();
   switch (key) {
-    // GET /users?$top=5
     case '$top': {
       const parsed = Number(value);
       if (isNaN(parsed)) {
@@ -78,7 +77,6 @@ export function sanitizeQueryParameterValue(param: string) {
       break;
     }
 
-    // GET /users?$skip=5
     case '$skip': {
       const parsed = Number(value);
       if (isNaN(parsed)) {
@@ -87,7 +85,6 @@ export function sanitizeQueryParameterValue(param: string) {
       break;
     }
 
-    // GET /users?$count=true
     case '$count': {
       if (value !== 'true' && value !== 'false') {
         value = '<unexpected-value>';
@@ -95,89 +92,36 @@ export function sanitizeQueryParameterValue(param: string) {
       break;
     }
 
-    // GET /me/drive/root?$expand=children($select=id,name)
-    // GET /employees?$expand=directreports($filter=firstName eq 'mary'))
-    // GET /orders?$expand=Items($expand=product),customer
-    case '$expand': {
-      break;
-    }
-
-    // GET /products?$select=rating,releaseDate
-    // GET /products?$select=*
-    // GET /products?$select=demoservice.*
     case '$select': {
-      const selectedProperties = value.split(',');
-      selectedProperties.forEach((property, index) => {
-        if (!isAllAlpha(property.trim()) && property !== '*' && !property.match(actionsForEachEntityRegex)) {
-          selectedProperties[index] = '<unexpected-value>';
-        }
-      });
-      value = selectedProperties.join(',');
+      value = sanitizeSelectQueryParameterValue(value);
       break;
     }
 
-    // GET /orders?$format=application/json;metadata=full
-    // GET /orders?$format=json
     case '$format': {
-      const formattingExpressions = value.split(';');
-      formattingExpressions.forEach((expression, index) => {
-        const trimmed = expression.trim();
-        if (!trimmed.match(formatSegmentRegex)) {
-          formattingExpressions[index] = '<unexpected-value>';
-        }
-      });
-      value = formattingExpressions.join(';');
+      value = sanitizeFormatQueryParameterValue(value);
       break;
     }
 
-    // GET /products?$orderby=releasedate asc,rating desc
     case '$orderby': {
-      const sortingExpressions = value.split(',');
-      sortingExpressions.forEach((expression, index) => {
-        let sanitizedExpression: string = '';
-        const expressionParts = expression.split(' ') // i.e. property name and sort order
-        .filter(x => x !== '');
-
-        expressionParts.forEach(exprPart => {
-          if (!isAllAlpha(exprPart)) {
-            sanitizedExpression += '<unexpected-value> ';
-            return;
-          }
-
-          sanitizedExpression += `${exprPart} `;
-        });
-
-        sortingExpressions[index] = sanitizedExpression.trim();
-      });
-      value = sortingExpressions.join(',');
+      value = sanitizeOrderQueryParameterValue(value);
       break;
     }
 
-    // GET /me/messages?$search="pizza"
-    // GET /me/messages?$search="body:excitement"
-    // GET /groups?$search="description:One" AND ("displayName:Video" OR "displayName:Drive")
     case '$search': {
-      param = param.replace(quotedTextRegex, (capture) => {
-        if (!capture.includes(':')) {
-          return '<value>';
-        }
-        // Drop quotes enclosing property and text to search
-        capture = capture.replace('"', '');
-        const property = capture.split(':')[0];
-        return `${property}:<value>`;
-      });
+      value = sanitizeSearchQueryParameterValue(value);
       break;
     }
 
-    // GET /users?$filter=startsWith(displayName,'J')
-    // GET /me/messages?$filter=from/emailAddress/address eq 'no-reply@microsoft.com'
+    case '$expand': {
+      value = sanitizeExpandQueryParameterValue(value);
+      break;
+    }
+
     case '$filter': {
       value = sanitizeFilterQueryParameterValue(value);
       break;
     }
 
-    // GET /teams/{id}/channels/{id}/messages/delta?$skiptoken=c3RhcnRUaW1lPTE1NTEyMTUzMjU0NTkmcGFnZVNpemU9MjA%3d
-    // GET /teams/{id}/channels/{id}/messages/delta?$deltatoken=c3RhcnRUaW1lPTE1NTEyODc1ODA0OTAmcGFnZVNpemU9MjA%3d
     // Redact $skiptoken and $deltatoken values without processing.
     case '$skiptoken':
     case '$deltatoken': {
@@ -202,6 +146,10 @@ export function sanitizeQueryParameterValue(param: string) {
  * Operators e.g. and, not, eq,
  * Properties e.g Surname, UserPrincipalName,
  * Variables, likely to be enclosed within single quotes
+ *
+ * Examples:
+ * GET /users?$filter=startsWith(displayName,'J')
+ * GET /me/messages?$filter=from/emailAddress/address eq 'no-reply@microsoft.com'
  * @param value
  */
 function sanitizeFilterQueryParameterValue (queryParameterValue: string): string
@@ -281,6 +229,90 @@ function sanitizeFilterQueryParameterValue (queryParameterValue: string): string
 }
 
 /**
+ * Examples:
+ * GET /products?$select=rating,releaseDate
+ * GET /products?$select=*
+ * GET /products?$select=demoservice.*
+ * @param queryParameterValue
+ */
+function sanitizeSelectQueryParameterValue (queryParameterValue: string): string {
+  const selectedProperties = queryParameterValue.split(',');
+  selectedProperties.forEach((property, index) => {
+    if (!isAllAlpha(property.trim()) && property !== '*' && !property.match(actionsForEachEntityRegex)) {
+      selectedProperties[index] = '<unexpected-value>';
+    }
+  });
+  queryParameterValue = selectedProperties.join(',');
+  return queryParameterValue;
+}
+
+/**
+ * Examples:
+ * GET /products?$orderby=releasedate asc,rating desc
+ * @param queryParameterValue
+ */
+function sanitizeOrderQueryParameterValue (queryParameterValue: string): string {
+  const sortingExpressions = queryParameterValue.split(',');
+  sortingExpressions.forEach((expression, index) => {
+    let sanitizedExpression: string = '';
+    const expressionParts = expression.split(' ') // i.e. property name and sort order
+    .filter(x => x !== '');
+
+    expressionParts.forEach(exprPart => {
+      if (!isAllAlpha(exprPart)) {
+        sanitizedExpression += '<unexpected-value> ';
+        return;
+      }
+      sanitizedExpression += `${exprPart} `;
+    });
+    sortingExpressions[index] = sanitizedExpression.trim();
+  });
+  queryParameterValue = sortingExpressions.join(',');
+  return queryParameterValue;
+}
+
+/**
+ * Examples:
+ * GET /orders?$format=application/json;metadata=full
+ * GET /orders?$format=json
+ * @param queryParameterValue
+ */
+function sanitizeFormatQueryParameterValue (queryParameterValue: string): string {
+  const formattingExpressions = queryParameterValue.split(';');
+  formattingExpressions.forEach((expression, index) => {
+    const trimmed = expression.trim();
+    if (!trimmed.match(formatSegmentRegex)) {
+      formattingExpressions[index] = '<unexpected-value>';
+    }
+  });
+  queryParameterValue = formattingExpressions.join(';');
+  return queryParameterValue;
+}
+
+/**
+ * Examples:
+ * GET /me/drive/root?$expand=children($select=id,name)
+ * GET /employees?$expand=directreports($filter=firstName eq 'mary'))
+ * GET /orders?$expand=Items($expand=product),customer
+ * @param segment
+ */
+function sanitizeExpandQueryParameterValue (queryParameterValue: string): string {
+  return queryParameterValue;
+}
+
+/**
+ * Examples:
+ * GET /me/messages?$search="pizza"
+ * GET /me/messages?$search="body:excitement"
+ * GET /groups?$search="description:One" AND ("displayName:Video" OR "displayName:Drive")
+ * @param queryParameterValue
+ */
+function sanitizeSearchQueryParameterValue (queryParameterValue: string): string {
+  return queryParameterValue;
+}
+
+
+/**
  * @param segment - part of the url string to test
  * Currently, non-Id strings are all alphabetic characters
  * @returns boolean
@@ -307,7 +339,7 @@ export function hasIdWithinBracket(segment: string): boolean {
   return !!segment.match(idWithinBracketRegex);
 }
 
-const logicalOperators: string[] = ['and', 'or'];
+const logicalOperators: string[] = ['and', 'or', 'not'];
 
 const comparisonOperators: string[] = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'];
 
