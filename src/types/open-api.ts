@@ -5,7 +5,6 @@ export interface IOpenApiResponse {
 export interface IOpenApiParseContent {
   response: IOpenApiResponse;
   url: string;
-  verb: string;
 }
 
 export interface IParsedOpenApiResponse {

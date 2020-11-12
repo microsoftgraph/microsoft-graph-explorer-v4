@@ -16,11 +16,11 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
 
 
-import SuggestionsList from './SuggestionsList';
 import {
   cleanUpSelectedSuggestion, getLastCharacterOf,
   getParametersWithVerb
-} from './util';
+} from './auto-complete.util';
+import SuggestionsList from './SuggestionsList';
 
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
