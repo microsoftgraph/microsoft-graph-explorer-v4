@@ -31,7 +31,11 @@ export function Auth(props: any) {
         <div className={classes.accessTokenContainer}>
           <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
           <IconButton onClick={handleCopy} iconProps={copyIcon} title='Copy' ariaLabel='Copy' />
-          <IconButton iconProps={tokenDetailsIcon} title={translateMessage('Get token details (Powered by jwt.ms)')} ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')} href={`https://jwt.ms#access_token=${accessToken}`} target="_blank" />
+          <IconButton iconProps={tokenDetailsIcon}
+            title={translateMessage('Get token details (Powered by jwt.ms)')}
+            ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
+            href={`https://jwt.ms#access_token=${accessToken}`}
+            target='_blank' />
         </div>
         <Label className={classes.accessToken} >{accessToken}</Label>
       </div>
