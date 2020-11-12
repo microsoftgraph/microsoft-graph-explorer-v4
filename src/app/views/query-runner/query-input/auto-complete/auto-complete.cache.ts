@@ -1,5 +1,6 @@
 import localforage from 'localforage';
 import { IParsedOpenApiResponse } from '../../../../../types/open-api';
+import { stringToHash } from '../../../../utils/hash-string';
 
 const autoCompleteStorage = localforage.createInstance({
   storeName: 'autocomplete',
@@ -7,14 +8,16 @@ const autoCompleteStorage = localforage.createInstance({
 });
 
 export async function storeAutoCompleteContentInCache(content: IParsedOpenApiResponse) {
-  autoCompleteStorage.setItem(content.url, content);
+  const hashedUrl = stringToHash(content.url).toString();
+  autoCompleteStorage.setItem(hashedUrl, content);
 }
 
 export async function getAutoCompleteContentFromCache(url: string): Promise<IParsedOpenApiResponse | null> {
+  const hashedUrl = stringToHash(url).toString();
   try {
-    const options: IParsedOpenApiResponse = await autoCompleteStorage.getItem(url);
+    const options: IParsedOpenApiResponse = await autoCompleteStorage.getItem(hashedUrl);
     if (autoCompleteOptionHasExpired(options.createdAt)) {
-      autoCompleteStorage.removeItem(url);
+      autoCompleteStorage.removeItem(hashedUrl);
       return null;
     }
     return options;
