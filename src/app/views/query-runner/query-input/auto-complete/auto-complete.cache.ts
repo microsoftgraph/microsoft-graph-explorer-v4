@@ -10,7 +10,7 @@ export async function storeAutoCompleteContentInCache(content: IParsedOpenApiRes
   autoCompleteStorage.setItem(content.url, content);
 }
 
-export async function getAutoCompleteContentFromCache(url: string) {
+export async function getAutoCompleteContentFromCache(url: string): Promise<IParsedOpenApiResponse | null> {
   try {
     const options: IParsedOpenApiResponse = await autoCompleteStorage.getItem(url);
     if (autoCompleteOptionHasExpired(options.createdAt)) {
