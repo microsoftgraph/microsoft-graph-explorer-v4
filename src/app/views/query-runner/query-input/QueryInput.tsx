@@ -2,15 +2,15 @@ import { Dropdown } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { IQueryInputProps } from '../../../../types/query-runner';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import { getStyleFor } from '../../../utils/badge-color';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import SubmitButton from '../../common/submit-button/SubmitButton';
 import { queryRunnerStyles } from '../QueryRunner.styles';
-import AutoComplete from './auto-complete/AutoComplete';
+import { AutoComplete } from './auto-complete';
 
 export class QueryInput extends Component<IQueryInputProps, any> {
   constructor(props: any) {
