@@ -7,12 +7,12 @@ const suggestionsStorage = localforage.createInstance({
   name: 'GE_V4'
 });
 
-export async function storeAutoCompleteContentInCache(content: IParsedOpenApiResponse) {
+export async function storeSuggestionsInCache(content: IParsedOpenApiResponse) {
   const hashedUrl = stringToHash(content.url).toString();
   suggestionsStorage.setItem(hashedUrl, content);
 }
 
-export async function getAutoCompleteContentFromCache(url: string): Promise<IParsedOpenApiResponse | null> {
+export async function getSuggestionsFromCache(url: string): Promise<IParsedOpenApiResponse | null> {
   const hashedUrl = stringToHash(url).toString();
   try {
     const options: IParsedOpenApiResponse = await suggestionsStorage.getItem(hashedUrl);

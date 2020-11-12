@@ -2,7 +2,7 @@ import { parseOpenApiResponse } from '../../app/utils/open-api-parser';
 import { IOpenApiParseContent, IOpenApiResponse, IParsedOpenApiResponse } from '../../types/open-api';
 import { IRequestOptions } from '../../types/request';
 import ISuggestions from './ISuggestions';
-import { getAutoCompleteContentFromCache, storeAutoCompleteContentInCache } from './suggestions.cache';
+import { getSuggestionsFromCache, storeSuggestionsInCache } from './suggestions.cache';
 
 class Suggestions implements ISuggestions {
 
@@ -15,9 +15,9 @@ class Suggestions implements ISuggestions {
 
     // checks locally whether options for the url are already available
     // and returns them
-    const localOptions = await getAutoCompleteContentFromCache(url);
+    const localOptions = await getSuggestionsFromCache(url);
     if (localOptions) {
-      return getAutoCompleteContentFromCache(url);
+      return getSuggestionsFromCache(url);
     }
 
     try {
@@ -29,7 +29,7 @@ class Suggestions implements ISuggestions {
           url
         };
         const parsedResponse = parseOpenApiResponse(content);
-        storeAutoCompleteContentInCache(parsedResponse);
+        storeSuggestionsInCache(parsedResponse);
         return parsedResponse;
       }
       throw new Error(response.statusText);
