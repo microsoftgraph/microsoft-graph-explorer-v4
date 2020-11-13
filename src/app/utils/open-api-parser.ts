@@ -20,7 +20,8 @@ export function parseOpenApiResponse(params: IOpenApiParseContent): IParsedOpenA
       });
     });
 
-    return { url, parameters };
+    const createdAt = new Date().toISOString();
+    return { url, parameters, createdAt };
   } catch (error) {
     throw new Error(error);
   }

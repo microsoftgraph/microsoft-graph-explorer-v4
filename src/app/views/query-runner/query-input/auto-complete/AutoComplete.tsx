@@ -4,21 +4,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { telemetry } from '../../../../telemetry';
-import { DROPDOWN_CHANGE_EVENT } from '../../../../telemetry/event-types';
-import { IAutoCompleteProps, IAutoCompleteState } from '../../../../types/auto-complete';
-import { SortOrder } from '../../../../types/enums';
-import * as autoCompleteActionCreators from '../../../services/actions/autocomplete-action-creators';
-import { dynamicSort } from '../../../utils/dynamic-sort';
-import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
-import { parseSampleUrl } from '../../../utils/sample-url-generation';
-import { translateMessage } from '../../../utils/translate-messages';
-import { queryInputStyles } from './QueryInput.styles';
-import SuggestionsList from './SuggestionsList';
+import { telemetry } from '../../../../../telemetry';
+import { DROPDOWN_CHANGE_EVENT } from '../../../../../telemetry/event-types';
+import { IAutoCompleteProps, IAutoCompleteState } from '../../../../../types/auto-complete';
+import { SortOrder } from '../../../../../types/enums';
+import * as autoCompleteActionCreators from '../../../../services/actions/autocomplete-action-creators';
+import { dynamicSort } from '../../../../utils/dynamic-sort';
+import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
+import { parseSampleUrl } from '../../../../utils/sample-url-generation';
+import { translateMessage } from '../../../../utils/translate-messages';
+import { queryInputStyles } from '../QueryInput.styles';
+
+
 import {
   cleanUpSelectedSuggestion, getLastCharacterOf,
   getParametersWithVerb
-} from './util';
+} from './auto-complete.util';
+import SuggestionsList from './SuggestionsList';
 
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {

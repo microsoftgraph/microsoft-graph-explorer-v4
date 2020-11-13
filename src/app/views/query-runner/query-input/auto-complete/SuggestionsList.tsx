@@ -1,8 +1,8 @@
 import { getTheme, Label } from 'office-ui-fabric-react';
 import React, { useEffect } from 'react';
 
-import { ISuggestionsList } from '../../../../types/auto-complete';
-import { queryInputStyles } from './QueryInput.styles';
+import { ISuggestionsList } from '../../../../../types/auto-complete';
+import { queryInputStyles } from '../QueryInput.styles';
 
 const SuggestionsList = ({ filteredSuggestions, activeSuggestion, onClick }: ISuggestionsList) => {
   const currentTheme = getTheme();

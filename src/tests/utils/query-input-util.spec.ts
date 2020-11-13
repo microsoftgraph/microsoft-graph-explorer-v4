@@ -1,4 +1,4 @@
-import { cleanUpSelectedSuggestion } from '../../app/views/query-runner/query-input/util';
+import { cleanUpSelectedSuggestion } from '../../app/views/query-runner/query-input/auto-complete/auto-complete.util';
 
 
 describe('Query input util should', () => {

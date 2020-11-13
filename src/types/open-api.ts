@@ -5,12 +5,12 @@ export interface IOpenApiResponse {
 export interface IOpenApiParseContent {
   response: IOpenApiResponse;
   url: string;
-  verb: string;
 }
 
 export interface IParsedOpenApiResponse {
   url: string;
   parameters: IParameters[];
+  createdAt: string;
 }
 
 export interface IParameters {
