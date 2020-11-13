@@ -24,7 +24,7 @@ export class Request extends Component<IRequestComponent, any> {
 
     const {
       handleOnEditorChange,
-      sampleBody,
+      sampleQuery,
       mode,
       mobileScreen,
       intl: { messages },
@@ -38,7 +38,7 @@ export class Request extends Component<IRequestComponent, any> {
         title={messages['request body']}
         headerText={messages['request body']}>
         <Monaco
-          body={sampleBody}
+          body={sampleQuery.sampleBody}
           onChange={(value) => handleOnEditorChange(value)} />
       </PivotItem>,
       <PivotItem
@@ -93,7 +93,7 @@ export class Request extends Component<IRequestComponent, any> {
   }
 
   private trackTabClickEvent(tabTitle: string) {
-    const { sampleQuery }: any = this.props;
+    const { sampleQuery } = this.props;
     const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
     telemetry.trackEvent(TAB_CLICK_EVENT,
       {

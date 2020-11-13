@@ -164,7 +164,7 @@ export class QueryRunner extends Component<
           <div className='col-sm-12 col-lg-12'>
             {
               // @ts-ignore
-              <Request handleOnEditorChange={this.handleOnEditorChange} />
+              <Request handleOnEditorChange={this.handleOnEditorChange} sampleQuery={this.props.sampleQuery} />
             }
           </div>
         </div>
