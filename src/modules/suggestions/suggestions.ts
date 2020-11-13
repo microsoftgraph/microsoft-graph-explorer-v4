@@ -17,7 +17,7 @@ class Suggestions implements ISuggestions {
     return this.fetchSuggestionsFromNetwork(url, api);
   }
 
-  public async fetchSuggestionsFromNetwork(url: string, api: string): Promise<IParsedOpenApiResponse | null> {
+  private async fetchSuggestionsFromNetwork(url: string, api: string): Promise<IParsedOpenApiResponse | null> {
     const headers = {
       'Content-Type': 'application/json',
     };
