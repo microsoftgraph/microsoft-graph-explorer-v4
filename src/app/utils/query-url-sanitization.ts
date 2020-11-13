@@ -297,7 +297,37 @@ function sanitizeFormatQueryParameterValue (queryParameterValue: string): string
  * @param segment
  */
 function sanitizeExpandQueryParameterValue (queryParameterValue: string): string {
-  return queryParameterValue;
+  let sanitizedQueryString: string = '';
+
+  // Split comma separated list of navigation properties
+  const expandSegments = queryParameterValue.split(expandSegmentRegex);
+
+  for (let segment of expandSegments) {
+    segment = segment.trim();
+
+    if (isAllAlpha(segment)) {
+      sanitizedQueryString += ` ${segment},`;
+      continue;
+    }
+
+    const openingBracketIndex = segment.indexOf('(');
+    if (openingBracketIndex > 0) {
+      let propertyName = segment.substring(0, openingBracketIndex).trim();
+      if (!isAllAlpha(propertyName)) {
+        propertyName = '<property>';
+      }
+      // Sanitize text within brackets which should be key-value pairs of OData query options
+      const textWithinBrackets = segment.substring(openingBracketIndex + 1, segment.length - 1).trim();
+      const sanitizedText = sanitizeQueryParameterValue(textWithinBrackets);
+      sanitizedQueryString += `${propertyName}(${sanitizedText})`;
+      continue;
+    }
+
+    // Anything that get's here is unknown
+    sanitizedQueryString += ' <unknown>';
+  }
+
+  return sanitizedQueryString;
 }
 
 /**
@@ -315,9 +345,8 @@ function sanitizeSearchQueryParameterValue(queryParameterValue: string): string 
     return sanitizedQueryString;
   }
 
-  const numberOfSearchSegments = searchSegments.length;
-  for (let index = 0; index < numberOfSearchSegments; index++) {
-    const segment = searchSegments[index].trim();
+  for (let segment of searchSegments) {
+    segment = segment.trim();
 
     // No processing needed for logicalOperators operators; append operator to query string.
     if (logicalOperators.includes(segment.toLowerCase())) {
@@ -408,6 +437,9 @@ const formatSegmentRegex = /^([a-z]+(\/|\=){0,1}[a-z]+)$/;
 
 // Matches segments of $search query option
 const searchSegmentRegex = /\(.*\)|(['"][\w\s]+['"])|[^\s]+/g;
+
+// Matches segments of $expand query option
+const expandSegmentRegex = /,(?![^()]*\))/g;
 
 // Matches text that ends with .* e.g. DemoService.*
 const actionsForEachEntityRegex = /^[A-Za-z]*\.\*$/;
