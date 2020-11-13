@@ -26,7 +26,6 @@ export class Request extends Component<IRequestComponent, any> {
       handleOnEditorChange,
       sampleQuery,
       mode,
-      mobileScreen,
       intl: { messages },
     }: any = this.props;
 
@@ -66,7 +65,7 @@ export class Request extends Component<IRequestComponent, any> {
           itemIcon='AuthenticatorApp'
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Access Token']}
-          headerText={ messages['Access Token']}>
+          headerText={messages['Access Token']}>
           <Auth />
         </PivotItem>
       );

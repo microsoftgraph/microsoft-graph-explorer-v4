@@ -1,12 +1,13 @@
 import {
   ContextualMenuItemType, DefaultButton, DetailsList, DetailsRow, Dialog,
   DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
-  Label, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
+  Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { geLocale } from '../../../../appLocale';
 
 import { telemetry } from '../../../../telemetry';
 import { BUTTON_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
@@ -424,8 +425,7 @@ export class History extends Component<IHistoryProps, any> {
     }
   }
 
-  private trackHistoryItemEvent = (eventName: string, componentName: string,
-      query: IHistoryItem) => {
+  private trackHistoryItemEvent = (eventName: string, componentName: string, query: IHistoryItem) => {
     const sanitizedUrl = sanitizeQueryUrl(query.url);
     telemetry.trackEvent(
       eventName,
@@ -466,6 +466,11 @@ export class History extends Component<IHistoryProps, any> {
             styles={{ field: { paddingLeft: 10 } }}
           />
           <hr />
+          <MessageBar messageBarType={MessageBarType.info}
+            isMultiline={true}
+            dismissButtonAriaLabel='Close'>
+            <FormattedMessage id='Your history includes queries made in the last 30 days' />.
+          </MessageBar>
           <DetailsList
             className={classes.queryList}
             onRenderItemColumn={this.renderItemColumn}
