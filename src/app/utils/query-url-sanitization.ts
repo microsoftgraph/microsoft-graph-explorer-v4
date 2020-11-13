@@ -302,11 +302,15 @@ function sanitizeExpandQueryParameterValue (queryParameterValue: string): string
   // Split comma separated list of navigation properties
   const expandSegments = queryParameterValue.split(expandSegmentRegex);
 
-  for (let segment of expandSegments) {
-    segment = segment.trim();
+  for (let index = 0; index < expandSegments.length; index++) {
+    const segment = expandSegments[index].trim();
+
+    if (index > 0) {
+      sanitizedQueryString += ',';
+    }
 
     if (isAllAlpha(segment)) {
-      sanitizedQueryString += ` ${segment},`;
+      sanitizedQueryString += ` ${segment}`;
       continue;
     }
 
@@ -327,7 +331,7 @@ function sanitizeExpandQueryParameterValue (queryParameterValue: string): string
     sanitizedQueryString += ' <unknown>';
   }
 
-  return sanitizedQueryString;
+  return sanitizedQueryString.trim();
 }
 
 /**
