@@ -307,8 +307,53 @@ function sanitizeExpandQueryParameterValue (queryParameterValue: string): string
  * GET /groups?$search="description:One" AND ("displayName:Video" OR "displayName:Drive")
  * @param queryParameterValue
  */
-function sanitizeSearchQueryParameterValue (queryParameterValue: string): string {
-  return queryParameterValue;
+function sanitizeSearchQueryParameterValue(queryParameterValue: string): string {
+  let sanitizedQueryString: string = '';
+  const searchSegments = queryParameterValue.match(searchSegmentRegex);
+  // This means $search value is empty
+  if (searchSegments === null) {
+    return sanitizedQueryString;
+  }
+
+  const numberOfSearchSegments = searchSegments.length;
+  for (let index = 0; index < numberOfSearchSegments; index++) {
+    const segment = searchSegments[index].trim();
+
+    // No processing needed for logicalOperators operators; append operator to query string.
+    if (logicalOperators.includes(segment.toLowerCase())) {
+      sanitizedQueryString += ` ${segment}`;
+      continue;
+    }
+
+    // Sanitize segment in the form of "pizza" and "body:excitement"
+    if (quotedTextRegex.test(segment)) {
+      if (!segment.includes(':')) {
+        sanitizedQueryString += ` <value>`;
+      }
+      else {
+        // Extract property name
+        let propertyName = segment.substring(1, segment.indexOf(':')).trim();
+        if (!isAllAlpha(propertyName)) {
+          propertyName = '<property>';
+        }
+        sanitizedQueryString += ` "${propertyName}:<value>"`;
+      }
+      continue;
+    }
+
+    // Sanitize segments within brackets
+    if (segment.startsWith('(')) {
+      const textWithinBrackets = segment.substr(1, segment.length - 2);
+      const sanitizedText = sanitizeSearchQueryParameterValue(textWithinBrackets);
+      sanitizedQueryString += ` (${sanitizedText})`;
+      continue;
+    }
+
+    // Anything that get's here is unknown
+    sanitizedQueryString += ' <unknown>';
+
+  }
+  return sanitizedQueryString.trim();
 }
 
 
@@ -344,7 +389,7 @@ const logicalOperators: string[] = ['and', 'or', 'not'];
 const comparisonOperators: string[] = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'];
 
 // Matches pattterns within quotes e.g "displayName: Gupta"
-const quotedTextRegex = /"([^"]*)"/g;
+const quotedTextRegex = /^["']([^"]*)['"]$/;
 
 // Matches strings that are all letters. Will match abc, won't match ab2c
 const allAlphaRegex = /^[A-Za-z]+$/;
@@ -360,6 +405,9 @@ const filterSegmentRegex = /([a-z]+\(.*?\))|(['"][\w\s]+['"])|[^\s]+/gi;
 
 // Matches application/json or metadata=full
 const formatSegmentRegex = /^([a-z]+(\/|\=){0,1}[a-z]+)$/;
+
+// Matches segments of $search query option
+const searchSegmentRegex = /\(.*\)|(['"][\w\s]+['"])|[^\s]+/g;
 
 // Matches text that ends with .* e.g. DemoService.*
 const actionsForEachEntityRegex = /^[A-Za-z]*\.\*$/;
