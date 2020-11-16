@@ -1,5 +1,8 @@
 import {
-  isAllAlpha, isDeprecation, sanitizeQueryParameterValue, sanitizeQueryUrl
+  isAllAlpha, sanitizeQueryParameter
+} from '../../app/utils/query-parameter-sanitization';
+import {
+  isDeprecation, sanitizeQueryUrl
 } from '../../app/utils/query-url-sanitization';
 
 
@@ -104,9 +107,9 @@ describe('Sanitize Query Parameters should', () => {
       sanitizedQueryParam: '$top=5'
     },
     {
-      check: 'returns <unexpected-value> when $top value is not integer',
+      check: 'returns <invalid-value> when $top value is not integer',
       queryParam: '$top=five',
-      sanitizedQueryParam: '$top=<unexpected-value>'
+      sanitizedQueryParam: '$top=<invalid-value>'
     },
 
     // $skip
@@ -116,9 +119,9 @@ describe('Sanitize Query Parameters should', () => {
       sanitizedQueryParam: '$skip=5'
     },
     {
-      check: 'returns <unexpected-value> when $skip value is not integer',
+      check: 'returns <invalid-value> when $skip value is not integer',
       queryParam: '$skip=ten',
-      sanitizedQueryParam: '$skip=<unexpected-value>'
+      sanitizedQueryParam: '$skip=<invalid-value>'
     },
 
     // $count
@@ -128,9 +131,9 @@ describe('Sanitize Query Parameters should', () => {
       sanitizedQueryParam: '$count=true'
     },
     {
-      check: 'returns <unexpected-value> when $count value is not boolean true or false',
+      check: 'returns <invalid-value> when $count value is not boolean true or false',
       queryParam: '$count=who',
-      sanitizedQueryParam: '$count=<unexpected-value>'
+      sanitizedQueryParam: '$count=<invalid-value>'
     },
 
     // $select
@@ -145,9 +148,9 @@ describe('Sanitize Query Parameters should', () => {
       sanitizedQueryParam: '$select=People.*'
     },
     {
-      check: 'returns <unexpected-value> when $select value is not all alphabetic letters',
+      check: 'returns <invalid-value> when $select value is not all alphabetic letters',
       queryParam: '$select=displayName123,mail',
-      sanitizedQueryParam: '$select=<unexpected-value>,mail'
+      sanitizedQueryParam: '$select=<invalid-value>,mail'
     },
 
     // $orderby
@@ -157,9 +160,9 @@ describe('Sanitize Query Parameters should', () => {
       sanitizedQueryParam: '$orderby=officeLocation,displayName desc'
     },
     {
-      check: 'returns <unexpected-value> when $orderby value is not all alphabetic letters',
-      queryParam: '$orderby=<unexpected-value> asc',
-      sanitizedQueryParam: '$orderby=<unexpected-value> asc'
+      check: 'returns <invalid-value> when $orderby value is not all alphabetic letters',
+      queryParam: '$orderby=property123 asc',
+      sanitizedQueryParam: '$orderby=<invalid-value> asc'
     },
 
     // $format
@@ -174,9 +177,9 @@ describe('Sanitize Query Parameters should', () => {
       sanitizedQueryParam: '$format=application/json;metadata=full'
     },
     {
-      check: 'returns <unexpected-value> when $format value contains characters that are not letters, semicolon or /',
+      check: 'returns <invalid-media-type> when $format value contains characters that are not letters, semicolon or /',
       queryParam: '$format=json123',
-      sanitizedQueryParam: '$format=<unexpected-value>'
+      sanitizedQueryParam: '$format=<invalid-media-type>'
     },
 
     // $skiptoken
@@ -236,7 +239,7 @@ describe('Sanitize Query Parameters should', () => {
     {
       check: 'returns property sanitized values for $expand value with multiple navigation properties',
       queryParam: '$expand=children($select=firstname),customers($top="five")',
-      sanitizedQueryParam: '$expand=children($select=firstname),customers($top=<unexpected-value>)'
+      sanitizedQueryParam: '$expand=children($select=firstname),customers($top=<invalid-value>)'
     },
 
     // regular query parameters
@@ -248,14 +251,14 @@ describe('Sanitize Query Parameters should', () => {
     {
       check: 'returns <key> when query parameter key is not OData and is not all letters',
       queryParam: 'someone@onmicrosoft.com=mail',
-      sanitizedQueryParam: '<key>=<value>'
+      sanitizedQueryParam: '<invalid-key>=<value>'
     },
 
   ];
 
   list.forEach(element => {
     it(`${element.check}`, () => {
-      const sanitizedQueryParam = sanitizeQueryParameterValue(element.queryParam);
+      const sanitizedQueryParam = sanitizeQueryParameter(element.queryParam);
       expect(sanitizedQueryParam).toEqual(element.sanitizedQueryParam);
     });
   });
