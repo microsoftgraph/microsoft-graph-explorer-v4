@@ -1,8 +1,11 @@
 import {
   DefaultButton, FontSizes,
+  getId,
+  Icon,
   IconButton, Modal, Pivot,
   PivotItem,
-  PrimaryButton
+  PrimaryButton,
+  TooltipHost
 } from 'office-ui-fabric-react';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import React, { Component } from 'react';
@@ -63,6 +66,15 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     }
   }
 
+  public renderItemLink(link: any) {
+    return (
+      <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }} >
+        <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
+        {link.headerText}
+      </TooltipHost>
+    );
+  }
+
   public render() {
     let body: any;
     let headers;
@@ -95,9 +107,15 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
             {pivotItems}
             <PivotItem headerText='Share' key='share'
               itemIcon='Share'
+              ariaLabel={`${messages['Share Query Message']}`}
+              title={`${messages['Share Query Message']}`}
+              onRenderItemLink={this.renderItemLink}
             />
             <PivotItem headerText='Expand' key='expand'
               itemIcon='MiniExpandMirrored'
+              ariaLabel={`${messages['Expand response']}`}
+              title={`${messages['Expand response']}`}
+              onRenderItemLink={this.renderItemLink}
             />
           </Pivot>
         </div>
