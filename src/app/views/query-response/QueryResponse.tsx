@@ -172,15 +172,6 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
       </div >
     );
   }
-
-  private showResponse(pivotItems: JSX.Element[]) {
-    return <Pivot className='pivot-response'
-      styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
-      onLinkClick={(pivotItem) => onPivotItemClick(pivotItem)}
-    >
-      {pivotItems}
-    </Pivot>;
-  }
 }
 
 function mapStateToProps(state: any) {
