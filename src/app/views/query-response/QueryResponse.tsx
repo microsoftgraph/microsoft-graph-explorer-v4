@@ -12,11 +12,11 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { Mode } from '../../../types/enums';
 import { IQueryResponseProps, IQueryResponseState } from '../../../types/query-response';
+import { translateMessage } from '../../utils/translate-messages';
 import { copy } from '../common/copy';
 import { createShareLink } from '../common/share';
-import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
+import { getPivotItems } from './pivot-items/pivot-items';
 import './query-response.scss';
 
 class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> {
@@ -107,14 +107,14 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
             {pivotItems}
             <PivotItem headerText='Share' key='share'
               itemIcon='Share'
-              ariaLabel={`${messages['Share Query Message']}`}
-              title={`${messages['Share Query Message']}`}
+              ariaLabel={translateMessage('Share Query Message')}
+              title={translateMessage('Share Query Message')}
               onRenderItemLink={this.renderItemLink}
             />
             <PivotItem headerText='Expand' key='expand'
               itemIcon='MiniExpandMirrored'
-              ariaLabel={`${messages['Expand response']}`}
-              title={`${messages['Expand response']}`}
+              ariaLabel={translateMessage('Expand response')}
+              title={translateMessage('Expand response')}
               onRenderItemLink={this.renderItemLink}
             />
           </Pivot>
