@@ -1,8 +1,8 @@
 import {
   DefaultButton, FontSizes,
-  getId, IconButton, Modal, Pivot,
+  IconButton, Modal, Pivot,
   PivotItem,
-  PrimaryButton, TooltipHost
+  PrimaryButton
 } from 'office-ui-fabric-react';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import React, { Component } from 'react';
@@ -89,14 +89,16 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
     return (
       <div >
         <div className='query-response'>
-          <Pivot styles={{ root: { float: 'right' } }}
-            onLinkClick={this.toggleModal}>
-            <PivotItem key='expand'
-              itemIcon='MiniExpandMirrored'
-            > {this.showResponse(pivotItems)}</PivotItem>
-            <PivotItem key='share'
+          <Pivot className='pivot-response'
+            onLinkClick={this.toggleModal}
+          >
+            {pivotItems}
+            <PivotItem headerText='Share' key='share'
               itemIcon='Share'
-            > {this.showResponse(pivotItems)} </PivotItem>
+            />
+            <PivotItem headerText='Expand' key='expand'
+              itemIcon='MiniExpandMirrored'
+            />
           </Pivot>
         </div>
 
