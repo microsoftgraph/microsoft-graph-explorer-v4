@@ -6,20 +6,23 @@ const LOGICAL_OPERATORS = ['and', 'or', 'not'];
 
 // REGEXES
 const ALL_ALPHA_REGEX = /^[a-z]+$/i;
-const POSITIVE_INTEGER_REGEX = /^[1-9]+$/;
+const POSITIVE_INTEGER_REGEX = /^[1-9]\d*$/;
 // Matches the format json or application/json
 const MEDIA_TYPE_REGEX = /^[a-z]+\/{0,1}[a-z]+$/i;
 // Matches the format key=value
 const KEY_VALUE_REGEX = /^[a-z]+=[a-z]+$/i;
 // Matches property name patterns e.g. displayName or from/emailAddress/address
-const PROPERTY_NAME_REGEX = /^([a-z]+(\/?\b[a-z]+\b)+)|([a-zA-Z]+)$/i;
+const PROPERTY_NAME_REGEX = /^([a-z]+(\/?\b[a-z]+\b)+)|([a-z]+)$/i;
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const QUOTED_TEXT_REGEX = /^["']([^"]*)['"]$/;
-// Matches segments of $filter query option values e.g. isRead eq false will match isRead, eq and false
+// Matches segments of $filter query option values e.g. isRead eq false will match isRead, eq, false
 const FILTER_SEGMENT_REGEX = /([a-z]+\(.*?\))|(['"][\w\s]+['"])|\([\s\w]+\)|[^\s]+/gi;
-// Matches segments of $search query option
+// Matches segments of $search query option e.g.
+// "description:One" AND ("displayName:Video" OR "displayName:Drive") will match
+// "description:One", AND, ("displayName:Video" OR "displayName:Drive")
 const SEARCH_SEGMENT_REGEX = /\(.*\)|(['"][\w\s]+['"])|[^\s]+/g;
-// Matches segments of $expand query option
+// Matches comma separating segments of $expand query option  e.g. children($select=id,name),customer
+// will match comma between children($select=id,name) and customer
 const EXPAND_SEGMENT_REGEX = /,(?![^()]*\))/g;
 
 function isPositiveInteger(str: string): boolean {
@@ -141,7 +144,7 @@ function sanitizeSelectQueryOptionValue(queryOptionValue: string): string {
   selectedProperties.forEach((property, index) => {
     property = property.trim();
     if (!isAllAlpha(property) && property !== '*' && !property.endsWith('.*')) {
-      selectedProperties[index] = '<invalid-value>';
+      selectedProperties[index] = '<invalid-property>';
     }
   });
 
@@ -190,7 +193,7 @@ function sanitizeOrderByQueryOptionValue(queryOptionValue: string): string {
     const expressionParts = expr.split(' ').filter(x => x !== ''); // i.e. property name and sort order
     let propertyName = expressionParts[0].trim();
     if (!isPropertyName(propertyName)) {
-      propertyName = '<invalid-value>';
+      propertyName = '<invalid-property>';
     }
     let sanitizedExpression = propertyName;
 
@@ -244,7 +247,7 @@ function sanitizeSearchQueryOptionValue(queryOptionValue: string): string {
       else {
         // Extract property name
         let propertyName = segment.substring(1, segment.indexOf(':')).trim();
-        if (!isAllAlpha(propertyName)) {
+        if (!isPropertyName(propertyName)) {
           propertyName = '<property>';
         }
         sanitizedQueryString += ` "${propertyName}:<value>"`;
@@ -261,7 +264,7 @@ function sanitizeSearchQueryOptionValue(queryOptionValue: string): string {
     }
 
     // Anything that get's here is unknown
-    sanitizedQueryString += ' <unknown>';
+    sanitizedQueryString += isAllAlpha(segment) ? ' <value>' : ' <unknown>';
 
   }
   return sanitizedQueryString.trim();

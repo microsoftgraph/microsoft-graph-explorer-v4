@@ -3,7 +3,7 @@ import { isAllAlpha, sanitizeQueryParameter } from './query-parameter-sanitizati
 import { parseSampleUrl } from './sample-url-generation';
 
 // Matches strings with deprecation identifier
-const DEPRECATION_REGEX = /^[A-Za-z]+_v2$/gi;
+const DEPRECATION_REGEX = /^[a-z]+_v2$/gi;
 // Matches patterns like users('MeganB@M365x214355.onmicrosoft.com')
 const TEXT_WITHIN_BRACKETS_REGEX  = /^[a-z]+\(.*(\))*/i;
 
@@ -32,7 +32,7 @@ export function sanitizeQueryUrl(url: string): string {
   url = decodeURIComponent(url);
 
   const { search, queryVersion, requestUrl } = parseSampleUrl(url);
-  const queryString: string = search ? sanitizeQueryParameters(search) : '';
+  const queryString: string = search ? `?${sanitizeQueryParameters(search)}` : '';
 
   // Split requestUrl into segments that can be sanitized individually
   let resourceUrl = requestUrl;
@@ -66,14 +66,5 @@ export function sanitizeQueryUrl(url: string): string {
 function sanitizeQueryParameters(queryString: string): string {
   // remove leading ? from query string
   queryString = queryString.substring(1);
-
-  const params = queryString.split('&');
-  let sanitizedQueryParams: string = '';
-  if (params.length) {
-    params.forEach(param => {
-      sanitizedQueryParams += sanitizeQueryParameter(param) + '&';
-    });
-    sanitizedQueryParams = sanitizedQueryParams.slice(0, -1);
-  }
-  return `?${sanitizedQueryParams}`;
+  return queryString.split('&').map(sanitizeQueryParameter).join('&');
 }

@@ -148,9 +148,9 @@ describe('Sanitize Query Parameters should', () => {
       sanitizedQueryParam: '$select=People.*'
     },
     {
-      check: 'returns <invalid-value> when $select value is not all alphabetic letters',
+      check: 'returns <invalid-property> when $select value is not all alphabetic letters',
       queryParam: '$select=displayName123,mail',
-      sanitizedQueryParam: '$select=<invalid-value>,mail'
+      sanitizedQueryParam: '$select=<invalid-property>,mail'
     },
 
     // $orderby
@@ -162,7 +162,7 @@ describe('Sanitize Query Parameters should', () => {
     {
       check: 'returns <invalid-value> when $orderby value is not all alphabetic letters',
       queryParam: '$orderby=property123 asc',
-      sanitizedQueryParam: '$orderby=<invalid-value> asc'
+      sanitizedQueryParam: '$orderby=<invalid-property> asc'
     },
 
     // $format
