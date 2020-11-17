@@ -35,7 +35,10 @@ export function Monaco(props: IMonaco) {
   const { onChange, language, readOnly } = props;
 
   if (body && typeof body !== 'string') {
-    body = JSON.stringify(body);
+    body = JSON.stringify(body).replace(/(?:\\[rnt]|[\r\n\t]+)+/g, '');
+    // remove whitespace, tabs or raw string (Safari related issue)
+    body = JSON.parse(body); // convert back to javascript object
+    body = JSON.stringify(body, null, 4); // format the string (works for all browsers)
   }
 
   return (
@@ -59,7 +62,7 @@ export function Monaco(props: IMonaco) {
                 horizontalScrollbarSize: 17,
               },
             }}
-            editorDidMount={editorDidMount}
+            // editorDidMount={editorDidMount}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
           />)}
