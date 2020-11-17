@@ -224,6 +224,16 @@ describe('Sanitize Query Parameters should', () => {
       queryParam: '$filter=startsWith(displayName,\'J\')',
       sanitizedQueryParam: '$filter=startswith(displayName,<value>)'
     },
+    {
+      check: 'returns sanitized value for $filter arithmetic operators',
+      queryParam: '$filter=price sub 5 gt 10',
+      sanitizedQueryParam: '$filter=price sub <value> gt <value>'
+    },
+    {
+      check: 'returns sanitized value for $filter arithmetic operators within brackets',
+      queryParam: '$filter=(price sub 5) gt 10',
+      sanitizedQueryParam: '$filter=(price sub <value>) gt <value>'
+    },
 
     // $expand
     {

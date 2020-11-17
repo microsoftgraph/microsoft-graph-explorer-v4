@@ -1,8 +1,8 @@
 // OData filter operators
+const QUERY_FUNCTIONS = ['startswith', 'endswith', 'contains', 'substring', 'indexof', 'concat'];
+const ARITHMETIC_OPERATORS = ['add', 'sub', 'mul', 'div', 'divby', 'mod'];
 const COMPARISON_OPERATORS = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'];
 const LOGICAL_OPERATORS = ['and', 'or', 'not'];
-const COLLECTION_OPERATORS = ['any', 'all'];
-const QUERY_FUNCTIONS = ['startswith', 'endswith', 'contains', 'substring', 'indexof', 'concat'];
 
 // REGEXES
 const ALL_ALPHA_REGEX = /^[a-z]+$/i;
@@ -16,7 +16,7 @@ const PROPERTY_NAME_REGEX = /^([a-z]+(\/?\b[a-z]+\b)+)|([a-zA-Z]+)$/i;
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const QUOTED_TEXT_REGEX = /^["']([^"]*)['"]$/;
 // Matches segments of $filter query option values e.g. isRead eq false will match isRead, eq and false
-const FILTER_SEGMENT_REGEX = /([a-z]+\(.*?\))|(['"][\w\s]+['"])|[^\s]+/gi;
+const FILTER_SEGMENT_REGEX = /([a-z]+\(.*?\))|(['"][\w\s]+['"])|\([\s\w]+\)|[^\s]+/gi;
 // Matches segments of $search query option
 const SEARCH_SEGMENT_REGEX = /\(.*\)|(['"][\w\s]+['"])|[^\s]+/g;
 // Matches segments of $expand query option
@@ -295,7 +295,7 @@ function sanitizeExpandQueryOptionValue (queryParameterValue: string): string {
     const openingBracketIndex = segment.indexOf('(');
     if (openingBracketIndex > 0) {
       let propertyName = segment.substring(0, openingBracketIndex).trim();
-      if (!isAllAlpha(propertyName)) {
+      if (!isPropertyName(propertyName)) {
         propertyName = '<property>';
       }
       // Sanitize text within brackets which should be key-value pairs of OData query options
@@ -328,8 +328,8 @@ function sanitizeExpandQueryOptionValue (queryParameterValue: string): string {
 function sanitizeFilterQueryOptionValue (queryParameterValue: string): string
 {
   let sanitizedQueryString: string = '';
-  const filterSegments = queryParameterValue.match(FILTER_SEGMENT_REGEX);
 
+  const filterSegments = queryParameterValue.match(FILTER_SEGMENT_REGEX);
   // This means $filter value is empty
   if (filterSegments === null) {
     return sanitizedQueryString;
@@ -340,8 +340,10 @@ function sanitizeFilterQueryOptionValue (queryParameterValue: string): string
     const segment = filterSegments[index];
 
     // No processing needed for operators; append operator to query string.
-    if (LOGICAL_OPERATORS.includes(segment) || COMPARISON_OPERATORS.includes(segment)) {
-      sanitizedQueryString += ` ${segment}`;
+    const lowerCaseOperator = segment.toLowerCase();
+    if (LOGICAL_OPERATORS.includes(lowerCaseOperator) || COMPARISON_OPERATORS.includes(lowerCaseOperator) ||
+      ARITHMETIC_OPERATORS.includes(lowerCaseOperator)) {
+      sanitizedQueryString += ` ${lowerCaseOperator} `;
       continue;
     }
 
@@ -366,7 +368,7 @@ function sanitizeFilterQueryOptionValue (queryParameterValue: string): string
           closingBracketIndex > 0 ? closingBracketIndex : segment.length;
         let propertyName: string = segment.substring(openingBracketIndex + 1, endIndex).trim();
 
-        if (!isAllAlpha(propertyName)) {
+        if (!isPropertyName(propertyName)) {
           propertyName = '<property>';
         }
         sanitizedQueryString += `${queryFunctionPrefix}(${propertyName}${commaIndex > 0 ? ',<value>' : ''})`;
@@ -378,13 +380,31 @@ function sanitizeFilterQueryOptionValue (queryParameterValue: string): string
       continue;
     }
 
-    // Property names, (standing on their own) should be succeeded by comparison operators
-    if (segment.match(PROPERTY_NAME_REGEX)) {
+    // Sanitize segments within brackets
+    if (segment.startsWith('(')) {
+      const textWithinBrackets = segment.substr(1, segment.length - 2);
+      const sanitizedText = sanitizeFilterQueryOptionValue(textWithinBrackets);
+      sanitizedQueryString += ` (${sanitizedText})`;
+      continue;
+    }
+
+    // Property names, (standing on their own) should be succeeded by comparison or arithmetic operators
+    if (PROPERTY_NAME_REGEX.test(segment)) {
       // check if succeeded by comparison operator
-      if (index < numberOfFilterSegments - 2 &&
-        COMPARISON_OPERATORS.includes(filterSegments[index + 1].toLowerCase())) {
-        sanitizedQueryString += `${segment} ${filterSegments[index + 1]} <value>`;
-        index += 2;
+      if (index < numberOfFilterSegments - 2) {
+        const expectedOperator = filterSegments[index + 1].toLowerCase();
+        if (COMPARISON_OPERATORS.includes(expectedOperator) || ARITHMETIC_OPERATORS.includes(expectedOperator)) {
+          sanitizedQueryString += `${segment} ${filterSegments[index + 1]} <value>`;
+          index += 2;
+          continue;
+        }
+      }
+    }
+    else if (index > 0) {
+      // We are checking if this is a value following a comparison or arithmetic operator
+      const expectedOperator = filterSegments[index - 1];
+      if (COMPARISON_OPERATORS.includes(expectedOperator) || ARITHMETIC_OPERATORS.includes(expectedOperator)) {
+        sanitizedQueryString += '<value>';
         continue;
       }
     }
@@ -392,5 +412,5 @@ function sanitizeFilterQueryOptionValue (queryParameterValue: string): string
     // Anything that get's here is unknown
     sanitizedQueryString += ' <unknown>';
   }
-  return sanitizedQueryString;
+  return sanitizedQueryString.trim();
 }
