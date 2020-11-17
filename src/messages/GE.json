@@ -323,5 +323,6 @@
   "Get token details (Powered by jwt.ms)": "Get token details (Powered by jwt.ms)",
   "HTTP request method option": "HTTP request method option",
   "Microsoft Graph API Version option": "Microsoft Graph API Version option",
-  "Query Sample Input": "Query sample input"
+  "Query Sample Input": "Query sample input",
+  "popup blocked, allow pop-up windows in your browser": "popup blocked, allow pop-up windows in your browser"
 }
