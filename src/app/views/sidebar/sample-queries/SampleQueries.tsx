@@ -338,11 +338,16 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       );
     }
 
+    let maxWidthOfHumanName = 180;
+    if (window.innerWidth > 1280) {
+      maxWidthOfHumanName = 300;
+    }
+
     const { groupedList } = this.state;
     const columns = [
       { key: 'authRequiredIcon', name: '', fieldName: 'authRequiredIcon', minWidth: 20, maxWidth: 20 },
       { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
-      { key: 'humanName', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: 300 },
+      { key: 'humanName', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: maxWidthOfHumanName },
       { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20 },
     ];
 
