@@ -67,6 +67,17 @@ interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
   hideDialog: boolean;
+  dimensions: IDimensions;
+}
+
+interface IDimensionProperies {
+  width: string;
+  height: string;
+}
+
+interface IDimensions {
+  sidebar: IDimensionProperies;
+  content: IDimensionProperies;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -79,6 +90,16 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: 'GET',
       mobileScreen: false,
       hideDialog: true,
+      dimensions: {
+        sidebar: {
+          width: '35%',
+          height: '98%',
+        },
+        content: {
+          width: '63%',
+          height: '98%',
+        }
+      }
     };
   }
 
@@ -327,8 +348,9 @@ class App extends Component<IAppProps, IAppState> {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
 
-
-
+    const { dimensions } = this.state;
+    const { sidebar, content } = dimensions;
+    console.log({ sidebar })
 
     return (
       // @ts-ignore
@@ -338,15 +360,28 @@ class App extends Component<IAppProps, IAppState> {
             <Resizable style={{
               borderRight: 'solid 2px #ddd',
             }}
+              onResizeStop={(e, direction, ref, d) => {
+                const dimen = { ...this.state.dimensions };
+                if (ref.style.width) {
+                  let width = parseFloat(ref.style.width.replace('%', ''));
+                  if (width < 20) {
+                    width = 4;
+                  }
+                  dimen.content.width = `${98 - width}%`;
+                  dimen.sidebar.width = `${width}%`;
+                }
+                this.setState({
+                  dimensions: dimen,
+                });
+              }}
               className={minimised ? `${classes.sidebarMini}` : `${classes.sidebar}`}
-              minWidth={minimised ? '4vw' : '20vw'}
+              minWidth={minimised ? '4vw' : '4vw'}
               enable={{
                 right: true,
               }}
-              maxWidth={'33vw'}
               bounds={'window'}
               size={{
-                width: minimised ? '4vw' : '25vw',
+                width: minimised ? '4vw' : sidebar.width,
                 height: '98vh',
               }}
             >
@@ -368,15 +403,14 @@ class App extends Component<IAppProps, IAppState> {
                 {showSidebar && <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />}
               </div>
             </Resizable>
+            {graphExplorerMode === Mode.TryIt && headerMessaging(classes, query)}
             {displayContent && <Resizable bounds={'parent'} style={{
-              marginLeft: 10,
-              background: '#f0f0f0',
-              overflow: 'wrap'
+              marginLeft: 5,
             }} enable={{
               right: true,
-            }} minWidth={'48vw'} maxWidth={'80vw'}
+            }}
               size={{
-                width: minimised ? '94vw' : '73vw',
+                width: minimised ? '94vw' : content.width,
                 height: '98vh',
               }}>
               <div style={{ width: '100%', padding: 2 }}>
