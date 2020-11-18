@@ -339,22 +339,15 @@ class App extends Component<IAppProps, IAppState> {
               borderRight: 'solid 2px #ddd',
             }}
               className={minimised ? `${classes.sidebarMini}` : `${classes.sidebar}`}
-              minWidth={'2vw'}
+              minWidth={minimised ? '4vw' : '20vw'}
               enable={{
-                bottom: false,
-                bottomLeft: false,
-                bottomRight: false,
-                left: false,
                 right: true,
-                top: false,
-                topLeft: false,
-                topRight: false
               }}
-              maxWidth={'32%'}
+              maxWidth={'33vw'}
               bounds={'window'}
               size={{
-                width: minimised ? '3%' : '25%',
-                height: '90vh',
+                width: minimised ? '4vw' : '25vw',
+                height: '98vh',
               }}
             >
               <div style={{
@@ -372,113 +365,51 @@ class App extends Component<IAppProps, IAppState> {
                 <hr className={classes.separator} />
                 {this.displayAuthenticationSection(minimised)}
                 <hr className={classes.separator} />
+                {showSidebar && <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />}
               </div>
             </Resizable>
-            <Resizable bounds={'parent'} style={{
-              display: 'flex',
-              height: '90vh',
+            {displayContent && <Resizable bounds={'parent'} style={{
               marginLeft: 10,
               background: '#f0f0f0',
               overflow: 'wrap'
             }} enable={{
-              bottom: false,
-              bottomLeft: false,
-              bottomRight: false,
-              left: false,
               right: true,
-              top: false,
-              topLeft: false,
-              topRight: false
-            }} minWidth={'48%'} maxWidth={'80%'}
+            }} minWidth={'48vw'} maxWidth={'80vw'}
               size={{
-                width: minimised ? '94%' : '73%',
-                height: '90vh',
+                width: minimised ? '94vw' : '73vw',
+                height: '98vh',
               }}>
-              <div style={{ width: '100%', padding: 10 }}>
+              <div style={{ width: '100%', padding: 2 }}>
                 <Resizable style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
                   borderBottom: 'solid 2px #ddd',
                   background: '#ffffff',
                   marginBottom: 10
                 }} minWidth={'100%'} minHeight={200} bounds={'window'} defaultSize={{
                   width: '100%',
-                  height: '400px',
+                  height: '40vh',
                 }} enable={{
                   bottom: true,
-                  bottomLeft: false,
-                  bottomRight: false,
-                  left: false,
-                  right: false,
-                  top: false,
-                  topLeft: false,
-                  topRight: false
                 }}>
-                  Request
-          </Resizable>
+                  <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                </Resizable>
                 {statusMessages(queryState, actions)}
                 {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
                 <Resizable style={{
-                  display: 'flex',
-                  alignItems: 'center',
                   marginTop: 10,
-                  justifyContent: 'center',
                   borderBottom: 'solid 2px #ddd',
                   background: '#fefefe'
                 }} minWidth={'50%'} minHeight={200} bounds={'window'} enable={{
                   bottom: true,
-                  bottomLeft: false,
-                  bottomRight: false,
-                  left: false,
-                  right: false,
-                  top: true,
-                  topLeft: false,
-                  topRight: false
+                  top: true
                 }} defaultSize={{
                   width: '100%',
-                  height: '400px',
+                  height: '52vh',
                 }}>
-                  Response
-          </Resizable>
+                  <QueryResponse verb={this.state.selectedVerb} />
+                </Resizable>
               </div>
             </Resizable>
-          </div>
-          <div className='row' style={{ display: 'none' }}>
-            {graphExplorerMode === Mode.Complete && (
-              <div className={sidebarWidth}>
-                {mobileScreen && appTitleDisplayOnMobileScreen(
-                  stackTokens,
-                  classes,
-                  this.toggleSidebar)}
-                {!mobileScreen && appTitleDisplayOnFullScreen(
-                  classes,
-                  minimised,
-                  this.toggleSidebar
-                )}
-                <hr className={classes.separator} />
-                {this.displayAuthenticationSection(minimised)}
-                <hr className={classes.separator} />
-                {showSidebar && <>
-                  <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
-                </>}
-              </div>
-            )}
-            <div className={layout}>
-              {graphExplorerMode === Mode.TryIt && headerMessaging(classes, query)}
-              {displayContent && <>
-                <div style={{ marginBottom: 8 }}>
-                  <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                </div>
-                {statusMessages(queryState, actions)}
-                {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
-                {
-                  // @ts-ignore
-                  <QueryResponse verb={this.state.selectedVerb} />
-                }
-              </>}
-            </div>
-          </div>
+            }</div>
         </div>
       </ThemeContext.Provider>
     );
