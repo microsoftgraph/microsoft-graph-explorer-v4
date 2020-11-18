@@ -7,8 +7,9 @@ const LOGICAL_OPERATORS = ['and', 'or', 'not'];
 // REGEXES
 const ALL_ALPHA_REGEX = /^[a-z]+$/i;
 const POSITIVE_INTEGER_REGEX = /^[1-9]\d*$/;
-// Matches the format json or application/json
-const MEDIA_TYPE_REGEX = /^[a-z]+\/{0,1}[a-z]+$/i;
+// Matches media type formats
+// Examples: https://www.iana.org/assignments/media-types/media-types.xhtml
+const MEDIA_TYPE_REGEX = /^(([a-z]+\/)?\w[\w+-.]+)$/i;
 // Matches the format key=value
 const KEY_VALUE_REGEX = /^[a-z]+=[a-z]+$/i;
 // Matches property name patterns e.g. displayName or from/emailAddress/address
@@ -147,9 +148,7 @@ function sanitizeSelectQueryOptionValue(queryOptionValue: string): string {
       selectedProperties[index] = '<invalid-property>';
     }
   });
-
-  queryOptionValue = selectedProperties.join(',');
-  return queryOptionValue;
+  return selectedProperties.join(',');
 }
 
 /**
@@ -160,21 +159,20 @@ function sanitizeSelectQueryOptionValue(queryOptionValue: string): string {
  * - GET /orders?$format=json
  */
 function sanitizeFormatQueryOptionValue(queryOptionValue: string): string {
-  // Separate media type from parameters. Only one parameter is expected.
-  const formatSegments = queryOptionValue.split(';', 2);
-  const mediaType = formatSegments[0].trim();
-  queryOptionValue = !isMediaType(mediaType) ? '<invalid-media-type>' : mediaType;
-
-  // Check if there are parameters, key-value pairs
-  if (formatSegments.length > 1) {
-    let parameter = formatSegments[1].trim();
-    if (!isKeyValuePair(parameter)) {
-      parameter = '<invalid-parameter>';
+  // Separate media type from parameters.
+  const formatSegments = queryOptionValue.split(';');
+  formatSegments.forEach((segment, index) => {
+    // first segment is supposed to be media type
+    if (index === 0) {
+      const mediaType = segment.trim();
+      formatSegments[index] = !isMediaType(mediaType) ? '<invalid-media-type>' : mediaType;
     }
-    queryOptionValue += `;${parameter}`;
-  }
-
-  return queryOptionValue;
+    // This should be a parameter, key-value pair e.g. odata=minimalmetadata
+    else if (!isKeyValuePair(segment)) {
+        formatSegments[index] = '<invalid-parameter>';
+    }
+  });
+  return formatSegments.join(';');
 }
 
 /**
@@ -209,9 +207,7 @@ function sanitizeOrderByQueryOptionValue(queryOptionValue: string): string {
     }
     sortingExpressions[index] = sanitizedExpression;
   });
-
-  queryOptionValue = sortingExpressions.join(',');
-  return queryOptionValue;
+  return sortingExpressions.join(',');
 }
 
 /**
