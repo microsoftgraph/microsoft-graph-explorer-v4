@@ -318,5 +318,9 @@
   "Row checkbox": "行复选框",
   "Administrator permission": "需要租户的管理员授权，你才能同意此权限",
   "Adaptive Cards designer": "自适应卡设计器。",
-  "Click Run Query button above to fetch Adaptive Card": "单击上面的“运行查询”按钮获取自适应卡。"
+  "Click Run Query button above to fetch Adaptive Card": "单击上面的“运行查询”按钮获取自适应卡。",
+  "Your history includes queries made in the last 30 days": "历史记录中包括过去 30 天进行的查询",
+  "HTTP request method option": "HTTP 请求方法选项：",
+  "Microsoft Graph API Version option": "Microsoft Graph API 版本选项",
+  "Query Sample Input": "查询示例输入"
 }
