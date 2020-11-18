@@ -1,6 +1,7 @@
 import {
   IStackTokens, ITheme, styled
 } from 'office-ui-fabric-react';
+import { Resizable } from 're-resizable';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -334,24 +335,130 @@ class App extends Component<IAppProps, IAppState> {
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`container-fluid ${classes.app}`}>
           <div className='row'>
+            <Resizable style={{
+              borderRight: 'solid 2px #ddd',
+            }}
+              className={minimised ? `${classes.sidebarMini}` : `${classes.sidebar}`}
+              minWidth={'2vw'}
+              enable={{
+                bottom: false,
+                bottomLeft: false,
+                bottomRight: false,
+                left: false,
+                right: true,
+                top: false,
+                topLeft: false,
+                topRight: false
+              }}
+              maxWidth={'32%'}
+              bounds={'window'}
+              size={{
+                width: minimised ? '3%' : '25%',
+                height: '90vh',
+              }}
+            >
+              <div style={{
+                padding: 10
+              }}>
+                {mobileScreen && appTitleDisplayOnMobileScreen(
+                  stackTokens,
+                  classes,
+                  this.toggleSidebar)}
+                {!mobileScreen && appTitleDisplayOnFullScreen(
+                  classes,
+                  minimised,
+                  this.toggleSidebar
+                )}
+                <hr className={classes.separator} />
+                {this.displayAuthenticationSection(minimised)}
+                <hr className={classes.separator} />
+              </div>
+            </Resizable>
+            <Resizable bounds={'parent'} style={{
+              display: 'flex',
+              height: '90vh',
+              marginLeft: 10,
+              background: '#f0f0f0',
+              overflow: 'wrap'
+            }} enable={{
+              bottom: false,
+              bottomLeft: false,
+              bottomRight: false,
+              left: false,
+              right: true,
+              top: false,
+              topLeft: false,
+              topRight: false
+            }} minWidth={'48%'} maxWidth={'80%'}
+              size={{
+                width: minimised ? '94%' : '73%',
+                height: '90vh',
+              }}>
+              <div style={{ width: '100%', padding: 10 }}>
+                <Resizable style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderBottom: 'solid 2px #ddd',
+                  background: '#ffffff',
+                  marginBottom: 10
+                }} minWidth={'100%'} minHeight={200} bounds={'window'} defaultSize={{
+                  width: '100%',
+                  height: '400px',
+                }} enable={{
+                  bottom: true,
+                  bottomLeft: false,
+                  bottomRight: false,
+                  left: false,
+                  right: false,
+                  top: false,
+                  topLeft: false,
+                  topRight: false
+                }}>
+                  Request
+          </Resizable>
+                {statusMessages(queryState, actions)}
+                {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
+                <Resizable style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginTop: 10,
+                  justifyContent: 'center',
+                  borderBottom: 'solid 2px #ddd',
+                  background: '#fefefe'
+                }} minWidth={'50%'} minHeight={200} bounds={'window'} enable={{
+                  bottom: true,
+                  bottomLeft: false,
+                  bottomRight: false,
+                  left: false,
+                  right: false,
+                  top: true,
+                  topLeft: false,
+                  topRight: false
+                }} defaultSize={{
+                  width: '100%',
+                  height: '400px',
+                }}>
+                  Response
+          </Resizable>
+              </div>
+            </Resizable>
+          </div>
+          <div className='row' style={{ display: 'none' }}>
             {graphExplorerMode === Mode.Complete && (
               <div className={sidebarWidth}>
                 {mobileScreen && appTitleDisplayOnMobileScreen(
                   stackTokens,
                   classes,
                   this.toggleSidebar)}
-
                 {!mobileScreen && appTitleDisplayOnFullScreen(
                   classes,
                   minimised,
                   this.toggleSidebar
                 )}
-
                 <hr className={classes.separator} />
-
                 {this.displayAuthenticationSection(minimised)}
                 <hr className={classes.separator} />
-
                 {showSidebar && <>
                   <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                 </>}
@@ -359,7 +466,6 @@ class App extends Component<IAppProps, IAppState> {
             )}
             <div className={layout}>
               {graphExplorerMode === Mode.TryIt && headerMessaging(classes, query)}
-
               {displayContent && <>
                 <div style={{ marginBottom: 8 }}>
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
