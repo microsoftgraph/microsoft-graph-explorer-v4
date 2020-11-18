@@ -177,9 +177,19 @@ describe('Sanitize Query Parameters should', () => {
       sanitizedQueryParam: '$format=application/json;metadata=full'
     },
     {
-      check: 'returns <invalid-media-type> when $format value contains characters that are not letters, semicolon or /',
-      queryParam: '$format=json123',
+      check: 'returns <invalid-media-type> when media type in $format value contains characters that are not letters',
+      queryParam: '$format=applicati0n/json',
       sanitizedQueryParam: '$format=<invalid-media-type>'
+    },
+    {
+      check: 'returns <invalid-media-type> when media subtype type in $format value contains special characters',
+      queryParam: '$format=application/json$',
+      sanitizedQueryParam: '$format=<invalid-media-type>'
+    },
+    {
+      check: 'returns <invalid-media-type> when parameters are not all letters',
+      queryParam: '$format=application/json;odata=@minimalmetadata',
+      sanitizedQueryParam: '$format=application/json;<invalid-parameter>'
     },
 
     // $skiptoken
