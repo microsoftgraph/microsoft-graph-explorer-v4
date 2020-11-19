@@ -98,7 +98,6 @@ export class QueryRunner extends Component<
       actions.runQuery(sampleQuery);
     }
     const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
-    alert(sanitizedUrl);
     telemetry.trackEvent(BUTTON_CLICK_EVENT,
       {
         ComponentName: 'Run query button',
