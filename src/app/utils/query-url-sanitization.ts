@@ -5,7 +5,7 @@ import { parseSampleUrl } from './sample-url-generation';
 // Matches strings with deprecation identifier
 const DEPRECATION_REGEX = /^[a-z]+_v2$/gi;
 // Matches patterns like users('MeganB@M365x214355.onmicrosoft.com')
-const TEXT_WITHIN_BRACKETS_REGEX  = /^[a-z]+\(.*(\))*/i;
+const TEXT_WITHIN_BRACKETS_REGEX = /^[a-z]+\(.*(\))*/i;
 
 /**
  * @param segment part of the url string to test
@@ -37,13 +37,15 @@ export function sanitizeQueryUrl(url: string): string {
   // Split requestUrl into segments that can be sanitized individually
   let resourceUrl = requestUrl;
   const urlSegments = requestUrl.split('/');
+  const segmentsToIgnore = ['$value', '$count', '$ref'];
 
   // Skipped segments: entities, entity sets
   // 1. Entities, entity sets and navigation properties, expected to contain alphabetic letters only
   // 2. Deprecated entities in the form <entity>_v2
   // The remaining URL segments are assumed to be variable Ids that need to be sanitized
   urlSegments.forEach(segment => {
-    if (isAllAlpha(segment) || isDeprecation(segment)) {
+    if (isAllAlpha(segment) || isDeprecation(segment)
+      || segmentsToIgnore.includes(segment.toLowerCase())) {
       return;
     }
 

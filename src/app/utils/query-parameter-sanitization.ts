@@ -9,7 +9,7 @@ const ALL_ALPHA_REGEX = /^[a-z]+$/i;
 const POSITIVE_INTEGER_REGEX = /^[1-9]\d*$/;
 // Matches media type formats
 // Examples: https://www.iana.org/assignments/media-types/media-types.xhtml
-const MEDIA_TYPE_REGEX = /^(([a-z]+\/)?\w[\w+-.]+)$/i;
+const MEDIA_TYPE_REGEX = /^(([a-z]+\/)?\w[\w+-.]*)$/i;
 // Matches the format key=value
 const KEY_VALUE_REGEX = /^[a-z]+=[a-z]+$/i;
 // Matches property name patterns e.g. displayName or from/emailAddress/address
@@ -169,7 +169,7 @@ function sanitizeFormatQueryOptionValue(queryOptionValue: string): string {
     }
     // This should be a parameter, key-value pair e.g. odata=minimalmetadata
     else if (!isKeyValuePair(segment)) {
-        formatSegments[index] = '<invalid-parameter>';
+      formatSegments[index] = '<invalid-parameter>';
     }
   });
   return formatSegments.join(';');
@@ -273,7 +273,7 @@ function sanitizeSearchQueryOptionValue(queryOptionValue: string): string {
  * - GET /employees?$expand=directreports($filter=firstName eq 'mary'))
  * - GET /orders?$expand=Items($expand=product),customer
  */
-function sanitizeExpandQueryOptionValue (queryParameterValue: string): string {
+function sanitizeExpandQueryOptionValue(queryParameterValue: string): string {
   let sanitizedQueryString: string = '';
 
   // Split comma separated list of navigation properties
@@ -324,8 +324,7 @@ function sanitizeExpandQueryOptionValue (queryParameterValue: string): string {
  * GET /users?$filter=startsWith(displayName,'J')
  * GET /me/messages?$filter=from/emailAddress/address eq 'no-reply@microsoft.com'
  */
-function sanitizeFilterQueryOptionValue (queryParameterValue: string): string
-{
+function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
   let sanitizedQueryString: string = '';
 
   const filterSegments = queryParameterValue.match(FILTER_SEGMENT_REGEX);
@@ -363,7 +362,7 @@ function sanitizeFilterQueryOptionValue (queryParameterValue: string): string
 
       if (openingBracketIndex > 0) {
         // End of property name is when we encounter a comma, bracket or end of segment, in that order
-        const endIndex  = commaIndex > 0 ? commaIndex :
+        const endIndex = commaIndex > 0 ? commaIndex :
           closingBracketIndex > 0 ? closingBracketIndex : segment.length;
         let propertyName: string = segment.substring(openingBracketIndex + 1, endIndex).trim();
 

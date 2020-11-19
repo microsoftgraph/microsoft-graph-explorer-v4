@@ -98,11 +98,12 @@ export class QueryRunner extends Component<
       actions.runQuery(sampleQuery);
     }
     const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+    alert(sanitizedUrl);
     telemetry.trackEvent(BUTTON_CLICK_EVENT,
       {
-         ComponentName: 'Run query button',
-         SelectedVersion: sampleQuery.selectedVersion,
-         QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
+        ComponentName: 'Run query button',
+        SelectedVersion: sampleQuery.selectedVersion,
+        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
       });
   };
 
@@ -116,8 +117,7 @@ export class QueryRunner extends Component<
         sampleUrl,
         selectedVersion: newQueryVersion
       });
-      if (oldQueryVersion !== newQueryVersion)
-      {
+      if (oldQueryVersion !== newQueryVersion) {
         telemetry.trackEvent(DROPDOWN_CHANGE_EVENT,
           {
             ComponentName: 'Version change dropdown',
