@@ -146,7 +146,7 @@ class QueryResponse extends Component<IQueryResponseProps, IQueryResponseState> 
               ariaLabel='Close popup modal'
               onClick={this.toggleExpandResponse}
             />
-            <Pivot className='pivot-response'>
+            <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
               {pivotItems}
             </Pivot>
           </Modal>
