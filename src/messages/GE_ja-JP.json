@@ -13,7 +13,7 @@
   "secure score control profiles (beta)": "プロファイルを制御するセキュリティ スコア (ベータ版)",
   "update alert": "警告の更新",
   "To try the explorer, please ": "エクスプローラーを試すには、 ",
-  "sign in": "サインイン",
+  "sign in": "Microsoft の職場または学校のアカウントで",
   " with your work or school account from Microsoft.": " Graph Explorer にサインインしてください。",
   "Submit": "送信",
   "Using demo tenant": "現在、サンプル アカウントを使用しています。",
@@ -320,7 +320,9 @@
   "Adaptive Cards designer": "アダプティブ カード デザイナー。",
   "Click Run Query button above to fetch Adaptive Card": "上の [クエリの実行] ボタンをクリックして、アダプティブ カードを取り込みます。",
   "Your history includes queries made in the last 30 days": "履歴には、過去 30 日間に行われたクエリが含まれます",
+  "Get token details (Powered by jwt.ms)": "トークンの詳細を取得する (提供: jwt.ms)",
   "HTTP request method option": "HTTP 要求メソッド オプション",
   "Microsoft Graph API Version option": "Microsoft Graph API バージョン オプション",
-  "Query Sample Input": "クエリ のサンプル入力"
+  "Query Sample Input": "クエリのサンプル入力",
+  "popup blocked, allow pop-up windows in your browser": "ポップアップがブロックされています。ブラウザーでポップアップ ウィンドウを許可してください"
 }
