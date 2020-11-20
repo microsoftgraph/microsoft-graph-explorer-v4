@@ -9,6 +9,7 @@ import { Mode } from '../../../types/enums';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
 import { logIn } from '../../services/graph-client/msal-service';
+import { translateMessage } from '../../utils/translate-messages';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
@@ -38,7 +39,9 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
       this.props.actions!.setQueryResponseStatus({
         ok: false,
         statusText: messages['Authentication failed'],
-        status: errorCode.replace('_', ' '),
+        status: errorCode === 'popup_window_error'
+          ? translateMessage('popup blocked, allow pop-up windows in your browser')
+          : errorCode.replace('_', ' '),
         messageType: MessageBarType.error
       });
       this.setState({ loginInProgress: false });

@@ -6,7 +6,7 @@ export const authStyles = (theme: ITheme) => {
       padding: 10
     },
     accessTokenContainer: {
-      width: 120,
+      width: 160,
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',

@@ -13,7 +13,7 @@
   "secure score control profiles (beta)": "profils de contrôle des scores sécurisés (bêta)",
   "update alert": "mettre à jour l’alerte",
   "To try the explorer, please ": "Pour essayer l’afficheur, veuillez ",
-  "sign in": "Se connecter",
+  "sign in": "vous connecter à l’Afficheur Graph",
   " with your work or school account from Microsoft.": " avec votre compte Microsoft scolaire ou professionnel.",
   "Submit": "Submit",
   "Using demo tenant": "Vous utilisez actuellement un compte factice.",
@@ -319,5 +319,10 @@
   "Administrator permission": "L'administration du locataire doit d'abord obtenir une autorisation avant que vous puissiez donner votre consentement",
   "Adaptive Cards designer": "Concepteur de cartes adaptatives.",
   "Click Run Query button above to fetch Adaptive Card": "Cliquez sur le bouton Exécuter la requête ci-dessus pour aller chercher la carte adaptative.",
-  "Your history includes queries made in the last 30 days": "Votre historique inclut les requêtes effectuées au cours des 30 derniers jours"
+  "Your history includes queries made in the last 30 days": "Votre historique inclut les requêtes effectuées au cours des 30 derniers jours",
+  "Get token details (Powered by jwt.ms)": "Obtenir des détails des jetons (avec jwt.ms)",
+  "HTTP request method option": "Option de méthode de requête HTTP",
+  "Microsoft Graph API Version option": "Option de version de l’API Microsoft Graph",
+  "Query Sample Input": "Exemple d’entrée de requête",
+  "popup blocked, allow pop-up windows in your browser": "fenêtre contextuelle bloquée, autoriser les fenêtres contextuelles dans votre navigateur"
 }
