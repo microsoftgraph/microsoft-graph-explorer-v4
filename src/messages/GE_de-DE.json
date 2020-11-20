@@ -13,7 +13,7 @@
   "secure score control profiles (beta)": "Profile für Steuerung der Sicherheitsbewertung (Beta)",
   "update alert": "Warnung aktualisieren",
   "To try the explorer, please ": "Um den Explorer auszuprobieren, bitte ",
-  "sign in": "Anmelden",
+  "sign in": "Beim Graph Explorer anmelden",
   " with your work or school account from Microsoft.": " mit Ihrem Geschäfts-, Schul- oder Unikonto von Microsoft.",
   "Submit": "Senden",
   "Using demo tenant": "Sie verwenden derzeit ein Beispielkonto.",
@@ -320,7 +320,9 @@
   "Adaptive Cards designer": "Designer für adaptive Karten.",
   "Click Run Query button above to fetch Adaptive Card": "Klicken Sie oben auf die Schaltfläche „Abfrage ausführen“, um die adaptive Karte abzurufen.",
   "Your history includes queries made in the last 30 days": "Ihr Verlauf enthält Abfragen, die in den letzten 30 Tagen durchgeführt wurden.",
+  "Get token details (Powered by jwt.ms)": "Abrufen von Token-Details (unterstützt von jwt.ms)",
   "HTTP request method option": "HTTP-Anforderungsmethode (Option)",
   "Microsoft Graph API Version option": "Microsoft Graph-API-Version (Option)",
-  "Query Sample Input": "Beispieleingabe für eine Abfrage"
+  "Query Sample Input": "Beispieleingabe für eine Abfrage",
+  "popup blocked, allow pop-up windows in your browser": "Popup blockiert, Popup-Fenster in Ihrem Browser zulassen"
 }
