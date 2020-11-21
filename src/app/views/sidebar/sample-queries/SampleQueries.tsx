@@ -343,6 +343,12 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       maxWidthOfHumanName = 300;
     }
 
+    window.onresize = function () {
+      if (window.innerWidth > 1280) {
+        maxWidthOfHumanName = 300;
+      }
+    }
+
     const { groupedList } = this.state;
     const columns = [
       { key: 'authRequiredIcon', name: '', fieldName: 'authRequiredIcon', minWidth: 20, maxWidth: 20 },
