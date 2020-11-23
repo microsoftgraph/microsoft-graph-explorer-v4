@@ -14,6 +14,7 @@ class Telemetry implements ITelemetry {
     this.config = {
       instrumentationKey: this.getInstrumentationKey(),
       disableExceptionTracking: true,
+      disableAjaxTracking: true,
       disableTelemetry: this.getInstrumentationKey() ? false : true,
       extensions: [this.reactPlugin]
     };
@@ -25,6 +26,7 @@ class Telemetry implements ITelemetry {
 
   public initialize() {
     this.appInsights.loadAppInsights();
+    this.appInsights.addTelemetryInitializer(this.excludeSelectedTelemetryTypes);
     this.appInsights.addTelemetryInitializer(this.filterFunction);
     this.appInsights.trackPageView();
   }
@@ -61,6 +63,15 @@ class Telemetry implements ITelemetry {
     const accessToken = localStorage.getItem(accessTokenKey);
     telemetryItem.properties.IsAuthenticated = accessToken ? true : false;
 
+    return true;
+  }
+
+  private excludeSelectedTelemetryTypes(envelope: ITelemetryItem) {
+    const baseType = envelope.baseType || '';
+    const excludedTypes = ['RemoteDependencyData', 'MessageData'];
+    if (excludedTypes.includes(baseType)) {
+      return false;
+    }
     return true;
   }
 
