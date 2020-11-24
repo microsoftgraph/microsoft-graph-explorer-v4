@@ -13,6 +13,7 @@ import {
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
+import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
@@ -96,11 +97,12 @@ export class QueryRunner extends Component<
     if (actions) {
       actions.runQuery(sampleQuery);
     }
+    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
     telemetry.trackEvent(BUTTON_CLICK_EVENT,
       {
-         ComponentName: 'Run query button',
-         SelectedVersion: sampleQuery.selectedVersion,
-         QuerySignature: ''
+        ComponentName: 'Run query button',
+        SelectedVersion: sampleQuery.selectedVersion,
+        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
       });
   };
 
@@ -114,8 +116,7 @@ export class QueryRunner extends Component<
         sampleUrl,
         selectedVersion: newQueryVersion
       });
-      if (oldQueryVersion !== newQueryVersion)
-      {
+      if (oldQueryVersion !== newQueryVersion) {
         telemetry.trackEvent(DROPDOWN_CHANGE_EVENT,
           {
             ComponentName: 'Version change dropdown',
@@ -162,7 +163,7 @@ export class QueryRunner extends Component<
           <div className='col-sm-12 col-lg-12'>
             {
               // @ts-ignore
-              <Request handleOnEditorChange={this.handleOnEditorChange} />
+              <Request handleOnEditorChange={this.handleOnEditorChange} sampleQuery={this.props.sampleQuery} />
             }
           </div>
         </div>
