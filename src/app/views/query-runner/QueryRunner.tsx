@@ -5,7 +5,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { telemetry } from '../../../telemetry';
-import { BUTTON_CLICK_EVENT, DROPDOWN_CHANGE_EVENT } from '../../../telemetry/event-types';
+import {
+  BUTTON_CLICK_EVENT,
+  DROPDOWN_CHANGE_EVENT,
+} from '../../../telemetry/event-types';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
@@ -21,8 +24,7 @@ import Request from './request/Request';
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
-  > {
-
+> {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
@@ -76,8 +78,10 @@ export class QueryRunner extends Component<
 
   private handleOnRunQuery = () => {
     const { sampleBody } = this.state;
-    const { actions, sampleQuery, } = this.props;
-    const { intl: { messages } }: any = this.props;
+    const { actions, sampleQuery } = this.props;
+    const {
+      intl: { messages },
+    }: any = this.props;
 
     if (sampleBody) {
       try {
@@ -87,7 +91,7 @@ export class QueryRunner extends Component<
           ok: false,
           statusText: messages['Malformed JSON body'],
           status: `${messages['Review the request body']} ${error}`,
-          messageType: MessageBarType.error
+          messageType: MessageBarType.error,
         });
         return;
       }
@@ -96,32 +100,34 @@ export class QueryRunner extends Component<
     if (actions) {
       actions.runQuery(sampleQuery);
     }
-    telemetry.trackEvent(BUTTON_CLICK_EVENT,
-      {
-         ComponentName: 'Run query button',
-         SelectedVersion: sampleQuery.selectedVersion,
-         QuerySignature: ''
-      });
+    telemetry.trackEvent(BUTTON_CLICK_EVENT, {
+      ComponentName: 'Run query button',
+      SelectedVersion: sampleQuery.selectedVersion,
+      QuerySignature: '',
+    });
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
     const { sampleQuery } = this.props;
     if (urlVersion) {
-      const { queryVersion: oldQueryVersion } = parseSampleUrl(sampleQuery.sampleUrl);
-      const { sampleUrl, queryVersion: newQueryVersion } = parseSampleUrl(sampleQuery.sampleUrl, urlVersion.text);
+      const { queryVersion: oldQueryVersion } = parseSampleUrl(
+        sampleQuery.sampleUrl
+      );
+      const { sampleUrl, queryVersion: newQueryVersion } = parseSampleUrl(
+        sampleQuery.sampleUrl,
+        urlVersion.text
+      );
       this.props.actions!.setSampleQuery({
         ...sampleQuery,
         sampleUrl,
-        selectedVersion: newQueryVersion
+        selectedVersion: newQueryVersion,
       });
-      if (oldQueryVersion !== newQueryVersion)
-      {
-        telemetry.trackEvent(DROPDOWN_CHANGE_EVENT,
-          {
-            ComponentName: 'Version change dropdown',
-            NewVersion: newQueryVersion,
-            OldVersion: oldQueryVersion
-          });
+      if (oldQueryVersion !== newQueryVersion) {
+        telemetry.trackEvent(DROPDOWN_CHANGE_EVENT, {
+          ComponentName: 'Version change dropdown',
+          NewVersion: newQueryVersion,
+          OldVersion: oldQueryVersion,
+        });
       }
     }
   };
@@ -143,30 +149,24 @@ export class QueryRunner extends Component<
 
   public render() {
     return (
-      <div>
+      <>
         <div className='row'>
           <div className='col-sm-12 col-lg-12'>
-            {
-              // @ts-ignore
-              <QueryInput
-                handleOnRunQuery={this.handleOnRunQuery}
-                handleOnMethodChange={this.handleOnMethodChange}
-                handleOnVersionChange={this.handleOnVersionChange}
-                handleOnUrlChange={this.handleOnUrlChange}
-                handleOnBlur={this.handleOnBlur}
-              />
-            }
+            <QueryInput
+              handleOnRunQuery={this.handleOnRunQuery}
+              handleOnMethodChange={this.handleOnMethodChange}
+              handleOnVersionChange={this.handleOnVersionChange}
+              handleOnUrlChange={this.handleOnUrlChange}
+              handleOnBlur={this.handleOnBlur}
+            />
           </div>
         </div>
         <div className='row'>
           <div className='col-sm-12 col-lg-12'>
-            {
-              // @ts-ignore
-              <Request handleOnEditorChange={this.handleOnEditorChange} />
-            }
+            <Request handleOnEditorChange={this.handleOnEditorChange} />
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
@@ -174,9 +174,13 @@ export class QueryRunner extends Component<
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators(
-      { ...queryActionCreators, ...queryInputActionCreators, ...queryStatusActionCreators },
+      {
+        ...queryActionCreators,
+        ...queryInputActionCreators,
+        ...queryStatusActionCreators,
+      },
       dispatch
-    )
+    ),
   };
 }
 
@@ -188,7 +192,4 @@ function mapStateToProps(state: any) {
 
 // @ts-ignore
 const IntlQueryRunner = injectIntl(QueryRunner);
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(IntlQueryRunner);
+export default connect(mapStateToProps, mapDispatchToProps)(IntlQueryRunner);

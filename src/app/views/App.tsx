@@ -282,10 +282,15 @@ class App extends Component<IAppProps, IAppState> {
 
   public toggleSidebar = (): void => {
     const { sidebarProperties } = this.props;
+    const { sidebar } = this.state.dimensions;
     const properties = { ...sidebarProperties };
     properties.showSidebar = !properties.showSidebar;
-    if (properties.showSidebar) {
+    const width = parseFloat(sidebar.width);
+    if (properties.showSidebar && width < this.defaultSidebarSize) {
       this.setSidebarAndContentDimensions(`${this.defaultSidebarSize}%`);
+    }
+    if (!properties.showSidebar && width === this.defaultSidebarSize) {
+      this.setSidebarAndContentDimensions(`4%`);
     }
     this.props.actions!.toggleSidebar(properties);
   };
@@ -326,11 +331,7 @@ class App extends Component<IAppProps, IAppState> {
   };
 
   private setSidebarAndContentDimensions(sidebarWidth: string) {
-    let width = parseFloat(sidebarWidth.replace('%', ''));
-    if (width < 20) {
-      width = 4;
-    }
-
+    const width = parseFloat(sidebarWidth.replace('%', ''));
     const dimen = { ...this.state.dimensions };
     dimen.content.width = `${this.maxWidth - width}%`;
     dimen.sidebar.width = `${width}%`;
@@ -338,7 +339,12 @@ class App extends Component<IAppProps, IAppState> {
     this.setState({
       dimensions: dimen,
     });
-    if (width === 4) {
+
+    const { sidebarProperties } = this.props;
+    const properties = { ...sidebarProperties };
+    if (width <= 17 && properties.showSidebar) {
+      this.toggleSidebar();
+    } else if (!properties.showSidebar) {
       this.toggleSidebar();
     }
   }
@@ -402,21 +408,21 @@ class App extends Component<IAppProps, IAppState> {
               style={{
                 borderRight: 'solid 2px #ddd',
               }}
-              onResizeStop={(e: any, direction: any, ref: any, d: any) => {
+              onResize={(e: any, direction: any, ref: any, d: any) => {
                 if (ref && ref.style && ref.style.width) {
                   this.setSidebarAndContentDimensions(ref.style.width);
                 }
               }}
               className={
-                minimised ? `${classes.sidebarMini}` : `${classes.sidebar}`
+                minimised ? `${classes.sidebar}` : `${classes.sidebar}`
               }
-              minWidth={minimised ? '4vw' : '4vw'}
+              minWidth={'4vw'}
               enable={{
                 right: true,
               }}
               bounds={'window'}
               size={{
-                width: minimised ? '4vw' : sidebar.width,
+                width: sidebar.width,
                 height: '98vh',
               }}
             >
@@ -460,7 +466,7 @@ class App extends Component<IAppProps, IAppState> {
                   right: true,
                 }}
                 size={{
-                  width: minimised ? '94vw' : content.width,
+                  width: content.width,
                   height: '98vh',
                 }}
               >
@@ -468,7 +474,7 @@ class App extends Component<IAppProps, IAppState> {
                   <Resizable
                     style={{
                       borderBottom: 'solid 2px #ddd',
-                      background: '#ffffff',
+                      border: 'solid 1px #ddd',
                       marginBottom: 10,
                     }}
                     minWidth={'100%'}
@@ -497,7 +503,6 @@ class App extends Component<IAppProps, IAppState> {
                     bounds={'window'}
                     enable={{
                       bottom: true,
-                      top: true,
                     }}
                     defaultSize={{
                       width: '100%',
