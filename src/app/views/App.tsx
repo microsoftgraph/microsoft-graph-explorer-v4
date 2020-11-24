@@ -342,10 +342,14 @@ class App extends Component<IAppProps, IAppState> {
 
     const { sidebarProperties } = this.props;
     const properties = { ...sidebarProperties };
-    if (width <= 17 && properties.showSidebar) {
-      this.toggleSidebar();
-    } else if (!properties.showSidebar) {
-      this.toggleSidebar();
+    if (width <= 15) {
+      if (properties.showSidebar) {
+        this.toggleSidebar();
+      }
+    } else {
+      if (!properties.showSidebar) {
+        this.toggleSidebar();
+      }
     }
   }
 
@@ -417,6 +421,7 @@ class App extends Component<IAppProps, IAppState> {
                 minimised ? `${classes.sidebar}` : `${classes.sidebar}`
               }
               minWidth={'4vw'}
+              maxWidth={'50vw'}
               enable={{
                 right: true,
               }}
