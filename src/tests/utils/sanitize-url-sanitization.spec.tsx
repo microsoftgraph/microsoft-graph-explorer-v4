@@ -123,6 +123,11 @@ describe('Sanitize Query Url should', () => {
       check: 'with relative path as segment',
       url: 'https://graph.microsoft.com/beta/me/drive/root:/FolderA/FileB.txt:/content',
       sanitized: 'https://graph.microsoft.com/beta/me/drive/root:<value>/content'
+    },
+    {
+      check: 'with relative path as last segment',
+      url: 'https://graph.microsoft.com/v1.0/me/drive/root:/book1.xlsx',
+      sanitized: 'https://graph.microsoft.com/v1.0/me/drive/root:<value>'
     }
   ];
 
