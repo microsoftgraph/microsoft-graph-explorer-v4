@@ -65,6 +65,13 @@ class QueryResponse extends Component<
     this.toggleShareQueryDialogState();
   };
 
+  public handlePivotItemClick = (pivotItem?: PivotItem) => {
+    if (!pivotItem) { return; }
+    const { sampleQuery } = this.props;
+    onPivotItemClick(sampleQuery, pivotItem);
+    this.toggleModal(pivotItem);
+  }
+
   public toggleShareQueryDialogState = () => {
     this.setState({ showShareQueryDialog: !this.state.showShareQueryDialog });
   };
@@ -128,7 +135,9 @@ class QueryResponse extends Component<
     return (
       <div>
         <div className='query-response'>
-          <Pivot className='pivot-response' onLinkClick={this.toggleModal}>
+          <Pivot className='pivot-response'
+            onLinkClick={this.handlePivotItemClick}
+          >
             {pivotItems}
             <PivotItem
               headerText='Share'
@@ -167,7 +176,9 @@ class QueryResponse extends Component<
               ariaLabel='Close popup modal'
               onClick={this.toggleExpandResponse}
             />
-            <Pivot className='pivot-response'>{pivotItems}</Pivot>
+            <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
+              {pivotItems}
+            </Pivot>
           </Modal>
         }
         <Dialog
