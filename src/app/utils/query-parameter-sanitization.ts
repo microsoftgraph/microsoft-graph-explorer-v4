@@ -3,6 +3,7 @@ const QUERY_FUNCTIONS = ['startswith', 'endswith', 'contains', 'substring', 'ind
 const ARITHMETIC_OPERATORS = ['add', 'sub', 'mul', 'div', 'divby', 'mod'];
 const COMPARISON_OPERATORS = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'];
 const LOGICAL_OPERATORS = ['and', 'or', 'not'];
+const LAMBDA_OPERATORS = ['/any', '/all'];
 
 // REGEXES
 const ALL_ALPHA_REGEX = /^[a-z]+$/i;
@@ -12,12 +13,13 @@ const POSITIVE_INTEGER_REGEX = /^[1-9]\d*$/;
 const MEDIA_TYPE_REGEX = /^(([a-z]+\/)?\w[\w+-.]*)$/i;
 // Matches the format key=value
 const KEY_VALUE_REGEX = /^[a-z]+=[a-z]+$/i;
-// Matches property name patterns e.g. displayName or from/emailAddress/address
-const PROPERTY_NAME_REGEX = /^([a-z]+(\/?\b[a-z]+\b)+)|([a-z]+)$/i;
+// Matches property name patterns e.g. displayName or from/emailAddress/address or microsoft.graph.itemAttachment/item
+const PROPERTY_NAME_REGEX = /^((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)$/i;
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const QUOTED_TEXT_REGEX = /^["']([^"]*)['"]$/;
 // Matches segments of $filter query option values e.g. isRead eq false will match isRead, eq, false
-const FILTER_SEGMENT_REGEX = /([a-z]+\(.*?\))|(['"][\w\s]+['"])|\([\s\w]+\)|[^\s]+/gi;
+// tslint:disable-next-line: max-line-length
+const FILTER_SEGMENT_REGEX = /(((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)\(.*?\))|("[^\"]+")|('[^\']+')|\(.*?\)|[^\s]+/gi;
 // Matches segments of $search query option e.g.
 // "description:One" AND ("displayName:Video" OR "displayName:Drive") will match
 // "description:One", AND, ("displayName:Video" OR "displayName:Drive")
@@ -51,7 +53,7 @@ export function isAllAlpha(str: string): boolean {
 }
 
 /**
- * Redact variable segments of query parameters a
+ * Redact variable segments of query parameters
  * @param queryParameter e.g. $top=5, $search="pizza", $filter=startswith(displayName, 'J')
  */
 export function sanitizeQueryParameter(queryParameter: string): string {
@@ -122,7 +124,8 @@ export function sanitizeQueryParameter(queryParameter: string): string {
     }
 
     default: {
-      if (!isAllAlpha(key)) {
+      // Parameters like $id, $levels will be left as they are
+      if (!isAllAlpha(key) && !key.startsWith('$') && !isAllAlpha(key.substring(1))) {
         key = '<invalid-key>';
       }
       value = '<value>';
@@ -190,7 +193,8 @@ function sanitizeOrderByQueryOptionValue(queryOptionValue: string): string {
   sortingExpressions.forEach((expr, index) => {
     const expressionParts = expr.split(' ').filter(x => x !== ''); // i.e. property name and sort order
     let propertyName = expressionParts[0].trim();
-    if (!isPropertyName(propertyName)) {
+    if (!isPropertyName(propertyName) && !propertyName.endsWith('/$count') &&
+      !isPropertyName(propertyName.slice(-7))) {
       propertyName = '<invalid-property>';
     }
     let sanitizedExpression = propertyName;
@@ -286,7 +290,7 @@ function sanitizeExpandQueryOptionValue(queryParameterValue: string): string {
       sanitizedQueryString += ',';
     }
 
-    if (isAllAlpha(segment)) {
+    if (isPropertyName(segment)) {
       sanitizedQueryString += ` ${segment}`;
       continue;
     }
@@ -299,7 +303,7 @@ function sanitizeExpandQueryOptionValue(queryParameterValue: string): string {
       }
       // Sanitize text within brackets which should be key-value pairs of OData query options
       const textWithinBrackets = segment.substring(openingBracketIndex + 1, segment.length - 1).trim();
-      const sanitizedText = sanitizeQueryParameter(textWithinBrackets);
+      const sanitizedText = textWithinBrackets.split(';').map(sanitizeQueryParameter).join(';');
       sanitizedQueryString += `${propertyName}(${sanitizedText})`;
       continue;
     }
@@ -345,6 +349,29 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
       continue;
     }
 
+    // Check for collection operators
+    const openingBracketIndex = segment.indexOf('(');
+    const closingBracketIndex = segment.indexOf(')');
+    let propertyName = segment.substring(0, openingBracketIndex);
+    const lambdaOperator = propertyName.slice(-4);
+    if (LAMBDA_OPERATORS.includes(lambdaOperator)) {
+      propertyName = propertyName.substring(0, propertyName.length - 4);
+      if (!isPropertyName(propertyName)) {
+        propertyName = '<property-name>';
+      }
+      let textWithinBrackets = segment.substring(openingBracketIndex + 1, segment.length - 1).trim();
+      if (textWithinBrackets) {
+        let key = '';
+        if (textWithinBrackets.includes(':')) {
+          key = textWithinBrackets.substring(0, textWithinBrackets.indexOf(':')).trim();
+          textWithinBrackets = textWithinBrackets.substring(textWithinBrackets.indexOf(':') + 1);
+        }
+        textWithinBrackets = `${key}: ${sanitizeFilterQueryOptionValue(textWithinBrackets)}`;
+      }
+      sanitizedQueryString += `${propertyName}${lambdaOperator}(${textWithinBrackets})`;
+      continue;
+    }
+
     // Check if segment is a query function then transform query functions to look like this,
     // 'startswith(userPrincipalName,<value>)' as an example
     let queryFunctionPrefix: string = '';
@@ -355,16 +382,12 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
       }
     });
     if (queryFunctionPrefix) {
-
       const commaIndex = segment.indexOf(',');
-      const openingBracketIndex = segment.indexOf('(');
-      const closingBracketIndex = segment.indexOf(')');
-
       if (openingBracketIndex > 0) {
         // End of property name is when we encounter a comma, bracket or end of segment, in that order
         const endIndex = commaIndex > 0 ? commaIndex :
           closingBracketIndex > 0 ? closingBracketIndex : segment.length;
-        let propertyName: string = segment.substring(openingBracketIndex + 1, endIndex).trim();
+        propertyName = segment.substring(openingBracketIndex + 1, endIndex).trim();
 
         if (!isPropertyName(propertyName)) {
           propertyName = '<property>';
@@ -382,7 +405,7 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
     if (segment.startsWith('(')) {
       const textWithinBrackets = segment.substr(1, segment.length - 2);
       const sanitizedText = sanitizeFilterQueryOptionValue(textWithinBrackets);
-      sanitizedQueryString += ` (${sanitizedText})`;
+      sanitizedQueryString += `(${sanitizedText})`;
       continue;
     }
 

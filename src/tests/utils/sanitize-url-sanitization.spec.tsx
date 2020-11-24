@@ -85,12 +85,12 @@ describe('Sanitize Query Url should', () => {
     {
       check: 'with id within brackets',
       url: 'https://graph.microsoft.com/v1.0/users(\'48d31887-5fad-4d73-a9f5-3c356e68a038\')',
-      sanitized: 'https://graph.microsoft.com/v1.0/users(users-id)'
+      sanitized: 'https://graph.microsoft.com/v1.0/users(<value>)'
     },
     {
       check: 'with $ref path segment',
       url: 'https://graph.microsoft.com/beta/groups/02bd9fd6-8f93-4758-87c3-1fb73740a315/owners/$ref',
-      sanitized: 'https://graph.microsoft.com/beta//groups/{group-id}/owners/$ref'
+      sanitized: 'https://graph.microsoft.com/beta/groups/{groups-id}/owners/$ref'
     },
     {
       check: 'with $value path segment',
@@ -110,7 +110,7 @@ describe('Sanitize Query Url should', () => {
     {
       check: 'with multiple key-value parameters within path segment',
       // tslint:disable-next-line: max-line-length
-      url: 'https://graph.microsoft.com/beta/items/getActivitiesByInterval(startDateTime=\'2017-01-01\,endDateTime=\2017- 01-03\',interval=\'day\')',
+      url: 'https://graph.microsoft.com/beta/items/getActivitiesByInterval(startDateTime=\'2017-01-01\',endDateTime=\'2017- 01-03\',interval=\'day\')',
       // tslint:disable-next-line: max-line-length
       sanitized: 'https://graph.microsoft.com/beta/items/getActivitiesByInterval(startDateTime=<value>,endDateTime=<value>,interval=<value>)'
     },
@@ -120,7 +120,7 @@ describe('Sanitize Query Url should', () => {
       sanitized: 'https://graph.microsoft.com/beta/directory/deleteditems/microsoft.graph.group'
     },
     {
-      check: 'with relative path as segement',
+      check: 'with relative path as segment',
       url: 'https://graph.microsoft.com/beta/me/drive/root:/FolderA/FileB.txt:/content',
       sanitized: 'https://graph.microsoft.com/beta/me/drive/root:<value>/content'
     }

@@ -68,6 +68,11 @@ describe('Sanitize Query Parameters should', () => {
       queryParam: '$orderby=property123 asc',
       sanitizedQueryParam: '$orderby=<invalid-property> asc'
     },
+    {
+      check: 'returns value as is when $orderby value contains $count',
+      queryParam: '$orderby=products/$count',
+      sanitizedQueryParam: '$orderby=products/$count'
+    },
 
     // $format
     {
@@ -149,19 +154,18 @@ describe('Sanitize Query Parameters should', () => {
       sanitizedQueryParam: '$filter=(price sub <value>) gt <value>'
     },
     {
-      check: 'returns sanitized html decoded value for $filter query option',
-      // tslint:disable-next-line: max-line-length
-      queryParam: '$filter=(creationDateTime%20ge%202017-06-25T07:00:00Z)%20and%20(creationDateTime%20le%202017-07-25T17:30:17Z)',
+      check: 'returns sanitize value for $filter query option value within quoted text',
+      queryParam: '$filter=(creationDateTime ge 2017-06-25T07:00:00Z) and (creationDateTime le 2017-07-25T17:30:17Z)',
       sanitizedQueryParam: '$filter=(creationDateTime ge <value>) and (creationDateTime le <value>)'
     },
     {
       check: 'returns sanitized value with `any` collection operator for $filter query option',
-      queryParam: '$filter=identities/any(c:c/issuerAssignedId eq \'j.smith@yahoo.com\'',
-      sanitizedQueryParam: '$filter=identities/any(c:c/issuerAssignedId eq <value>'
+      queryParam: '$filter=identities/any(c:c/issuerAssignedId eq \'j.smith@yahoo.com\')',
+      sanitizedQueryParam: '$filter=identities/any(c: c/issuerAssignedId eq <value>)'
     },
     {
       check: 'returns sanitized value for $filter with `any` collection operator with fully qualified entity name',
-      queryParam: '$filter=microsoft.graph.countryNamedLocation/countriesAndRegions/any(c:%20c%20eq%20\'CA\')',
+      queryParam: '$filter=microsoft.graph.countryNamedLocation/countriesAndRegions/any(c:c eq \'CA\')',
       sanitizedQueryParam: '$filter=microsoft.graph.countryNamedLocation/countriesAndRegions/any(c: c eq <value>)'
     },
     {
@@ -176,8 +180,8 @@ describe('Sanitize Query Parameters should', () => {
     },
     {
       check: 'returns sanitized value with complex `all` collection operator for $filter query option',
-      queryParam: '$filter=rooms/all(room: room/amenities/any(a: a eq \'tv\') and room/baseRate lt 100.0)',
-      sanitizedQueryParam: '$filter=rooms/all(room: room/amenities/any(a: a eq <value>) and room/baseRate lt <value>)'
+      queryParam: '$filter=rooms/all(room: room/from/address eq \'street\'  and room/baseRate lt 100.0)',
+      sanitizedQueryParam: '$filter=rooms/all(room: room/from/address eq <value> and room/baseRate lt <value>)'
     },
 
     // $expand
@@ -187,14 +191,19 @@ describe('Sanitize Query Parameters should', () => {
       sanitizedQueryParam: '$expand=children'
     },
     {
-      check: 'returns sanitized value of inner OData query option within $expand value',
+      check: 'returns sanitized value of nested OData query option within $expand value',
       queryParam: '$expand=children($filter=firstname eq \'mary\')',
       sanitizedQueryParam: '$expand=children($filter=firstname eq <value>)'
     },
     {
-      check: 'returns property sanitized values for $expand value with multiple navigation properties',
-      queryParam: '$expand=children($select=firstname, lastname),customers($skip=10, $top="five")',
-      sanitizedQueryParam: '$expand=children($select=firstname),customers($skip=10, $top=<invalid-value>)'
+      check: 'returns properly sanitized values for $expand value with multiple navigation properties',
+      queryParam: '$expand=children($select=firstname,lastname),customers($top="five")',
+      sanitizedQueryParam: '$expand=children($select=firstname,lastname),customers($top=<invalid-value>)'
+    },
+    {
+      check: 'returns sanitized values with nested non-standard query option within $expand value',
+      queryParam: '$expand=manager($levels=max;$select=id,displayName)',
+      sanitizedQueryParam: '$expand=manager($levels=<value>;$select=id,displayName)'
     },
     {
       check: 'returns value as is for fully qualified entity name',
@@ -215,8 +224,8 @@ describe('Sanitize Query Parameters should', () => {
     },
     {
       check: 'returns value as is when query parameter key starts with $',
-      queryParam: '$level=max',
-      sanitizedQueryParam: '$level=<value>'
+      queryParam: '$id=max',
+      sanitizedQueryParam: '$id=<value>'
     }
 
   ];
