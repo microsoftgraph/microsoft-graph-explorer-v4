@@ -81,6 +81,8 @@ interface IDimensionProperies {
 interface IDimensions {
   sidebar: IDimensionProperies;
   content: IDimensionProperies;
+  request: IDimensionProperies;
+  response: IDimensionProperies;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -102,6 +104,14 @@ class App extends Component<IAppProps, IAppState> {
         content: {
           width: `${this.maxWidth - this.defaultSidebarSize}%`,
           height: '98%',
+        },
+        request: {
+          width: `100%`,
+          height: '40vh',
+        },
+        response: {
+          width: `100%`,
+          height: '62vh',
         },
       },
     };
@@ -353,6 +363,15 @@ class App extends Component<IAppProps, IAppState> {
     }
   }
 
+  private setRequestAndResponseHeights(requestHeight: string) {
+    const height = parseFloat(requestHeight.replace('vh', ''));
+    const dimensions = { ...this.state.dimensions };
+    dimensions.response.height = `${92 - height}vh`;
+    dimensions.request.height = `${height}vh`;
+
+    this.setState({ dimensions });
+  }
+
   public render() {
     const classes = classNames(this.props);
     const {
@@ -401,7 +420,7 @@ class App extends Component<IAppProps, IAppState> {
     }
 
     const { dimensions } = this.state;
-    const { sidebar, content } = dimensions;
+    const { sidebar, content, request, response } = dimensions;
 
     return (
       // @ts-ignore
@@ -410,7 +429,7 @@ class App extends Component<IAppProps, IAppState> {
           <div className='row'>
             <Resizable
               style={{
-                borderRight: 'solid 2px #ddd',
+                borderRight: 'solid 3px #ddd',
               }}
               onResize={(e: any, direction: any, ref: any, d: any) => {
                 if (ref && ref.style && ref.style.width) {
@@ -475,19 +494,24 @@ class App extends Component<IAppProps, IAppState> {
                   height: '98vh',
                 }}
               >
-                <div style={{ width: '100%', padding: 2 }}>
+                <div style={{ width: '100%', padding: 5 }}>
                   <Resizable
                     style={{
-                      borderBottom: 'solid 2px #ddd',
                       border: 'solid 1px #ddd',
+                      borderBottom: 'solid 2px red',
                       marginBottom: 10,
                     }}
-                    minWidth={'100%'}
-                    minHeight={200}
+                    onResize={(e: any, direction: any, ref: any, d: any) => {
+                      if (ref && ref.style && ref.style.height) {
+                        this.setRequestAndResponseHeights(ref.style.height);
+                      }
+                    }}
+                    maxHeight={'80vh'}
+                    minHeight={'20vh'}
                     bounds={'window'}
-                    defaultSize={{
+                    size={{
+                      height: request.height,
                       width: '100%',
-                      height: '40vh',
                     }}
                     enable={{
                       bottom: true,
@@ -500,18 +524,18 @@ class App extends Component<IAppProps, IAppState> {
                   <Resizable
                     style={{
                       marginTop: 10,
-                      borderBottom: 'solid 2px #ddd',
-                      background: '#fefefe',
+                      borderBottom: 'solid 2px red',
                     }}
                     minWidth={'50%'}
-                    minHeight={200}
+                    minHeight={'20vh'}
+                    maxHeight={'80vh'}
                     bounds={'window'}
                     enable={{
-                      bottom: true,
+                      bottom: false,
                     }}
-                    defaultSize={{
+                    size={{
+                      height: response.height,
                       width: '100%',
-                      height: '52vh',
                     }}
                   >
                     <QueryResponse verb={this.state.selectedVerb} />
