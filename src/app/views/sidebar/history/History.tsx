@@ -1,13 +1,16 @@
 import {
   ContextualMenuItemType, DefaultButton, DetailsList, DetailsRow, Dialog,
   DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
-  Label, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
+  Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { geLocale } from '../../../../appLocale';
 
+import { telemetry } from '../../../../telemetry';
+import { BUTTON_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { SortOrder } from '../../../../types/enums';
 import { IHarPayload } from '../../../../types/har';
 import { IHistoryItem, IHistoryProps } from '../../../../types/history';
@@ -18,6 +21,7 @@ import * as queryStatusActionCreators from '../../../services/actions/query-stat
 import * as requestHistoryActionCreators from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { dynamicSort } from '../../../utils/dynamic-sort';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -99,7 +103,8 @@ export class History extends Component<IHistoryProps, any> {
       element.category = date;
       items.push(element);
     });
-    return items.sort(dynamicSort('createdAt', SortOrder.DESC));
+    items.sort(dynamicSort('createdAt', SortOrder.DESC)).forEach((value, index) => { value.index = index; });
+    return items;
   }
 
   public generateGroupedList(history: any) {
@@ -139,7 +144,8 @@ export class History extends Component<IHistoryProps, any> {
     return (
       <div className={classes.groupHeader}>
         <DetailsRow {...props} className={classes.queryRow}
-          onClick={() => this.onViewQuery(props.item)} />
+          onClick={() => this.onViewQueryListItem(props.item)
+          } />
       </div>
     );
   };
@@ -185,7 +191,7 @@ export class History extends Component<IHistoryProps, any> {
               iconProps: {
                 iconName: 'View'
               },
-              onClick: () => this.onViewQuery(item)
+              onClick: () => this.onViewQueryButton(item)
             },
             {
               key: 'runQuery',
@@ -364,12 +370,14 @@ export class History extends Component<IHistoryProps, any> {
       actions.setSampleQuery(sampleQuery);
       actions.runQuery(sampleQuery);
     }
+    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Run history item button', query);
   }
 
   private onExportQuery = (query: IHistoryItem) => {
     const harPayload = createHarPayload(query);
     const generatedHarData = generateHar([harPayload]);
     exportQuery(generatedHarData, `${query.url}/`);
+    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Export history item button', query);
   }
 
   private deleteQuery = async (query: IHistoryItem) => {
@@ -377,6 +385,17 @@ export class History extends Component<IHistoryProps, any> {
     if (actions) {
       actions.removeHistoryItem(query);
     }
+    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'Delete history item button', query);
+  }
+
+  private onViewQueryButton = (query: IHistoryItem) => {
+    this.onViewQuery(query);
+    this.trackHistoryItemEvent(BUTTON_CLICK_EVENT, 'View history item button', query);
+  }
+
+  private onViewQueryListItem = (query: IHistoryItem) => {
+    this.onViewQuery(query);
+    this.trackHistoryItemEvent(LISTITEM_CLICK_EVENT, 'View history list item', query);
   }
 
   private onViewQuery = (query: IHistoryItem) => {
@@ -404,6 +423,17 @@ export class History extends Component<IHistoryProps, any> {
         statusText
       });
     }
+  }
+
+  private trackHistoryItemEvent = (eventName: string, componentName: string, query: IHistoryItem) => {
+    const sanitizedUrl = sanitizeQueryUrl(query.url);
+    telemetry.trackEvent(
+      eventName,
+      {
+        ComponentName: componentName,
+        ItemIndex: query.index,
+        QuerySignature: `${query.method} ${sanitizedUrl}`
+      });
   }
 
   public render() {
@@ -436,6 +466,11 @@ export class History extends Component<IHistoryProps, any> {
             styles={{ field: { paddingLeft: 10 } }}
           />
           <hr />
+          <MessageBar messageBarType={MessageBarType.info}
+            isMultiline={true}
+            dismissButtonAriaLabel='Close'>
+            <FormattedMessage id='Your history includes queries made in the last 30 days' />.
+          </MessageBar>
           <DetailsList
             className={classes.queryList}
             onRenderItemColumn={this.renderItemColumn}
@@ -497,8 +532,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 }
 
 
+const trackedComponent = telemetry.trackReactComponent(History);
 // @ts-ignore
-const styledHistory = styled(History, sidebarStyles);
-// @ts-ignore
+const styledHistory = styled(trackedComponent, sidebarStyles);
 const IntlHistory = injectIntl(styledHistory);
 export default connect(mapStateToProps, mapDispatchToProps)(IntlHistory);

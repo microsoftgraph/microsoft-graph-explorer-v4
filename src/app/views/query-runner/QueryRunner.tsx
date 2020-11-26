@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { telemetry } from '../../../telemetry';
-import { RUN_QUERY_EVENT } from '../../../telemetry/event-types';
+import { BUTTON_CLICK_EVENT, DROPDOWN_CHANGE_EVENT } from '../../../telemetry/event-types';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
@@ -13,10 +13,12 @@ import {
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
+import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import './query-runner.scss';
 import QueryInput from './QueryInput';
 import Request from './request/Request';
+
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
@@ -95,18 +97,33 @@ export class QueryRunner extends Component<
     if (actions) {
       actions.runQuery(sampleQuery);
     }
-    // telemetry.trackEvent(RUN_QUERY_EVENT, sampleQuery);
+    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+    telemetry.trackEvent(BUTTON_CLICK_EVENT,
+      {
+        ComponentName: 'Run query button',
+        SelectedVersion: sampleQuery.selectedVersion,
+        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
+      });
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
     const { sampleQuery } = this.props;
     if (urlVersion) {
-      const { sampleUrl, queryVersion } = parseSampleUrl(sampleQuery.sampleUrl, urlVersion.text);
+      const { queryVersion: oldQueryVersion } = parseSampleUrl(sampleQuery.sampleUrl);
+      const { sampleUrl, queryVersion: newQueryVersion } = parseSampleUrl(sampleQuery.sampleUrl, urlVersion.text);
       this.props.actions!.setSampleQuery({
         ...sampleQuery,
         sampleUrl,
-        selectedVersion: queryVersion
+        selectedVersion: newQueryVersion
       });
+      if (oldQueryVersion !== newQueryVersion) {
+        telemetry.trackEvent(DROPDOWN_CHANGE_EVENT,
+          {
+            ComponentName: 'Version change dropdown',
+            NewVersion: newQueryVersion,
+            OldVersion: oldQueryVersion
+          });
+      }
     }
   };
 
@@ -146,7 +163,7 @@ export class QueryRunner extends Component<
           <div className='col-sm-12 col-lg-12'>
             {
               // @ts-ignore
-              <Request handleOnEditorChange={this.handleOnEditorChange} />
+              <Request handleOnEditorChange={this.handleOnEditorChange} sampleQuery={this.props.sampleQuery} />
             }
           </div>
         </div>

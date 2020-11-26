@@ -13,7 +13,7 @@
   "secure score control profiles (beta)": "プロファイルを制御するセキュリティ スコア (ベータ版)",
   "update alert": "警告の更新",
   "To try the explorer, please ": "エクスプローラーを試すには、 ",
-  "sign in": "サインイン",
+  "sign in": "Microsoft の職場または学校のアカウントで",
   " with your work or school account from Microsoft.": " Graph Explorer にサインインしてください。",
   "Submit": "送信",
   "Using demo tenant": "現在、サンプル アカウントを使用しています。",
@@ -247,7 +247,7 @@
   "Adaptive Cards": "アダプティブ カード",
   "Office Dev Program": "サンプル データを含むサンドボックスを入手する",
   "Fetching Adaptive Card": "アダプティブ カードの取得",
-  "The Adaptive Card for this response is not available": "この返信のアダプティブ カードは使用できません",
+  "The Adaptive Card for this response is not available": "この応答に使用できるアダプティブ カードはありません。アダプティブ カードの作成方法の詳細については、次を参照してください",
   "loading samples": "サンプルの読み込み",
   "older": "以前",
   "today": "今日",
@@ -316,5 +316,13 @@
   "Toggle selection for all items": "すべてのアイテムの選択を切り替える",
   "Toggle selection": "選択の切り替え",
   "Row checkbox": "行チェックボックス",
-  "Administrator permission": "このアクセス許可を承認するには、テナントの管理者が最初に承認する必要があります"
+  "Administrator permission": "このアクセス許可を承認するには、テナントの管理者が最初に承認する必要があります",
+  "Adaptive Cards designer": "アダプティブ カード デザイナー。",
+  "Click Run Query button above to fetch Adaptive Card": "上の [クエリの実行] ボタンをクリックして、アダプティブ カードを取り込みます。",
+  "Your history includes queries made in the last 30 days": "履歴には、過去 30 日間に行われたクエリが含まれます",
+  "Get token details (Powered by jwt.ms)": "トークンの詳細を取得する (提供: jwt.ms)",
+  "HTTP request method option": "HTTP 要求メソッド オプション",
+  "Microsoft Graph API Version option": "Microsoft Graph API バージョン オプション",
+  "Query Sample Input": "クエリのサンプル入力",
+  "popup blocked, allow pop-up windows in your browser": "ポップアップがブロックされています。ブラウザーでポップアップ ウィンドウを許可してください"
 }

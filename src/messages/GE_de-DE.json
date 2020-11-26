@@ -13,7 +13,7 @@
   "secure score control profiles (beta)": "Profile für Steuerung der Sicherheitsbewertung (Beta)",
   "update alert": "Warnung aktualisieren",
   "To try the explorer, please ": "Um den Explorer auszuprobieren, bitte ",
-  "sign in": "Anmelden",
+  "sign in": "Beim Graph Explorer anmelden",
   " with your work or school account from Microsoft.": " mit Ihrem Geschäfts-, Schul- oder Unikonto von Microsoft.",
   "Submit": "Senden",
   "Using demo tenant": "Sie verwenden derzeit ein Beispielkonto.",
@@ -247,7 +247,7 @@
   "Adaptive Cards": "Adaptive Karten",
   "Office Dev Program": "Abrufen eines Sandkastens mit Beispieldaten",
   "Fetching Adaptive Card": "Adaptive Karte wird abgerufen",
-  "The Adaptive Card for this response is not available": "Die adaptive Karte für diese Antwort ist nicht verfügbar",
+  "The Adaptive Card for this response is not available": "Für diese Antwort ist keine adaptive Karte verfügbar. Weitere Informationen zur Erstellung von adaptiven Karten finden Sie unter",
   "loading samples": "Beispiele werden geladen",
   "older": "Älter",
   "today": "Heute",
@@ -316,5 +316,13 @@
   "Toggle selection for all items": "Auswahl für alle Elemente umschalten",
   "Toggle selection": "Auswahl umschalten",
   "Row checkbox": "Zeilenkontrollkästchen",
-  "Administrator permission": "Der Administrator des Mandanten muss zuerst die Autorisierung vornehmen, bevor Sie dieser Berechtigung zustimmen können."
+  "Administrator permission": "Der Administrator des Mandanten muss zuerst die Autorisierung vornehmen, bevor Sie dieser Berechtigung zustimmen können",
+  "Adaptive Cards designer": "Designer für adaptive Karten.",
+  "Click Run Query button above to fetch Adaptive Card": "Klicken Sie oben auf die Schaltfläche „Abfrage ausführen“, um die adaptive Karte abzurufen.",
+  "Your history includes queries made in the last 30 days": "Ihr Verlauf enthält Abfragen, die in den letzten 30 Tagen durchgeführt wurden.",
+  "Get token details (Powered by jwt.ms)": "Abrufen von Token-Details (unterstützt von jwt.ms)",
+  "HTTP request method option": "HTTP-Anforderungsmethode (Option)",
+  "Microsoft Graph API Version option": "Microsoft Graph-API-Version (Option)",
+  "Query Sample Input": "Beispieleingabe für eine Abfrage",
+  "popup blocked, allow pop-up windows in your browser": "Popup blockiert, Popup-Fenster in Ihrem Browser zulassen"
 }

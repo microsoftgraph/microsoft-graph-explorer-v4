@@ -3,8 +3,12 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
+import { telemetry } from '../../../../telemetry';
+import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { Mode } from '../../../../types/enums';
+import { IQuery } from '../../../../types/query-runner';
 import { IRequestComponent } from '../../../../types/request';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
 import { RequestHeaders } from './headers';
@@ -20,9 +24,8 @@ export class Request extends Component<IRequestComponent, any> {
 
     const {
       handleOnEditorChange,
-      sampleBody,
+      sampleQuery,
       mode,
-      mobileScreen,
       intl: { messages },
     }: any = this.props;
 
@@ -34,7 +37,7 @@ export class Request extends Component<IRequestComponent, any> {
         title={messages['request body']}
         headerText={messages['request body']}>
         <Monaco
-          body={sampleBody}
+          body={sampleQuery.sampleBody}
           onChange={(value) => handleOnEditorChange(value)} />
       </PivotItem>,
       <PivotItem
@@ -62,7 +65,7 @@ export class Request extends Component<IRequestComponent, any> {
           itemIcon='AuthenticatorApp'
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Access Token']}
-          headerText={ messages['Access Token']}>
+          headerText={messages['Access Token']}>
           <Auth />
         </PivotItem>
       );
@@ -80,14 +83,33 @@ export class Request extends Component<IRequestComponent, any> {
     );
   }
 
+  private onPivotItemClick = (item?: PivotItem) => {
+    if (!item) { return; }
+    const tabTitle = item.props.title;
+    if (tabTitle) {
+      this.trackTabClickEvent(tabTitle);
+    }
+  }
+
+  private trackTabClickEvent(tabTitle: string) {
+    const { sampleQuery } = this.props;
+    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+    telemetry.trackEvent(TAB_CLICK_EVENT,
+      {
+        ComponentName: `${tabTitle} tab`,
+        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
+      });
+  }
+
   public render() {
 
     const requestPivotItems = this.getPivotItems();
 
     return (
       <div className='request-editors'>
-        <Pivot styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}>
-          {requestPivotItems}
+        <Pivot onLinkClick={this.onPivotItemClick}
+          styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}>
+            {requestPivotItems}
         </Pivot>
       </div>
     );
