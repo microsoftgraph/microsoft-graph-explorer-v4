@@ -6,22 +6,24 @@ import ISuggestions from './ISuggestions';
 
 class Suggestions implements ISuggestions {
 
-  public async getSuggestions(url: string, api: string): Promise<IParsedOpenApiResponse | null> {
+  public async getSuggestions(url: string, api: string, version: string): Promise<IParsedOpenApiResponse | null> {
     // checks locally whether options for the url are already available
     // and returns them
-    const localOptions = await getSuggestionsFromCache(url);
+    const key = `${version}/${url}`;
+    const localOptions = await getSuggestionsFromCache(key);
     if (localOptions) {
-      return getSuggestionsFromCache(url);
+      return getSuggestionsFromCache(key);
     }
 
-    return this.fetchSuggestionsFromNetwork(url, api);
+    return this.fetchSuggestionsFromNetwork(url, api, version);
   }
 
-  private async fetchSuggestionsFromNetwork(url: string, api: string): Promise<IParsedOpenApiResponse | null> {
+  private async fetchSuggestionsFromNetwork(url: string, api: string, version: string):
+    Promise<IParsedOpenApiResponse | null> {
     const headers = {
       'Content-Type': 'application/json',
     };
-    const openApiUrl = `${api}/openapi?url=/${url}&style=geautocomplete`;
+    const openApiUrl = `${api}/openapi?url=/${url}&style=geautocomplete&graphVersion=${version}`;
     const options: IRequestOptions = { headers };
 
     try {
@@ -33,7 +35,7 @@ class Suggestions implements ISuggestions {
           url
         };
         const parsedResponse = parseOpenApiResponse(content);
-        storeSuggestionsInCache(parsedResponse);
+        storeSuggestionsInCache(parsedResponse, version);
         return parsedResponse;
       }
       throw new Error(response.statusText);

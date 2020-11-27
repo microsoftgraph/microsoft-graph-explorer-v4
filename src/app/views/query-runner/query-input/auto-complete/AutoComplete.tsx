@@ -278,13 +278,13 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private requestForAutocompleteOptions(url: string) {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
-    if (requestUrl || queryVersion) {
-      if (!this.props.autoCompleteOptions || `${requestUrl}` !== this.props.autoCompleteOptions.url) {
-        this.props.actions!.fetchAutoCompleteOptions(requestUrl);
+    if (queryVersion) {
+      if (!requestUrl) {
+        this.props.actions!.fetchAutoCompleteOptions('', queryVersion);
+      } else {
+        this.props.actions!.fetchAutoCompleteOptions(requestUrl, queryVersion);
       }
-      else {
-        this.performLocalSearch(url);
-      }
+      this.performLocalSearch(url);
     }
   }
 

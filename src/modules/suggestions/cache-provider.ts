@@ -7,8 +7,9 @@ const suggestionsStorage = localforage.createInstance({
   name: 'GE_V4'
 });
 
-export async function storeSuggestionsInCache(content: IParsedOpenApiResponse) {
-  const hashedUrl = stringToHash(content.url).toString();
+export async function storeSuggestionsInCache(content: IParsedOpenApiResponse, version: string) {
+  const key = `${version}/${content.url}`;
+  const hashedUrl = stringToHash(key).toString();
   suggestionsStorage.setItem(hashedUrl, content);
 }
 
