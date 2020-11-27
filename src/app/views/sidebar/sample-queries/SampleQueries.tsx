@@ -297,7 +297,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       sampleHeaders: selectedQuery.headers || [],
       selectedVersion: queryVersion,
     };
-    console.log(sampleQuery, profile);
 
     substituteTokens(sampleQuery, profile);
 
@@ -315,10 +314,14 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         }
         this.trackSampleQueryClickEvent(selectedQuery);
       } else {
-        sampleQuery.sampleBody =
-          sampleQuery.sampleBody && isJsonString(sampleQuery.sampleBody)
+        if (sampleQuery.sampleBody) {
+          sampleQuery.sampleBody = isJsonString(sampleQuery.sampleBody)
             ? JSON.parse(sampleQuery.sampleBody)
             : sampleQuery.sampleBody;
+        } else {
+          sampleQuery.sampleBody = undefined;
+        }
+
         if (selectedQuery.tip) {
           displayTipMessage(actions, selectedQuery);
         }
