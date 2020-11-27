@@ -1,7 +1,9 @@
 import { suggestions } from '../../../modules/suggestions';
 import { IAction } from '../../../types/action';
-import { AUTOCOMPLETE_FETCH_ERROR, AUTOCOMPLETE_FETCH_PENDING,
-  AUTOCOMPLETE_FETCH_SUCCESS } from '../redux-constants';
+import {
+  AUTOCOMPLETE_FETCH_ERROR, AUTOCOMPLETE_FETCH_PENDING,
+  AUTOCOMPLETE_FETCH_SUCCESS
+} from '../redux-constants';
 
 export function fetchAutocompleteSuccess(response: object): IAction {
   return {
@@ -23,11 +25,11 @@ export function fetchAutocompletePending(): any {
   };
 }
 
-export function fetchAutoCompleteOptions(url: string): Function {
+export function fetchAutoCompleteOptions(url: string, version: string): Function {
   return async (dispatch: Function, getState: Function) => {
     const devxApi = getState().devxApi;
     dispatch(fetchAutocompletePending());
-    const autoOptions = await suggestions.getSuggestions(url, devxApi);
+    const autoOptions = await suggestions.getSuggestions(url, devxApi, version);
     if (autoOptions) {
       return dispatch(fetchAutocompleteSuccess(autoOptions));
     }
