@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import { IQueryInputProps } from '../../../../types/query-runner';
+
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import { getStyleFor } from '../../../utils/badge-color';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
-import SubmitButton from '../../common/submit-button/SubmitButton';
+import { translateMessage } from '../../../utils/translate-messages';
+import SubmitButton from '../../../views/common/submit-button/SubmitButton';
 import { queryRunnerStyles } from '../QueryRunner.styles';
 import { AutoComplete } from './auto-complete';
 
@@ -21,16 +22,16 @@ export class QueryInput extends Component<IQueryInputProps, any> {
         { key: 'POST', text: 'POST' },
         { key: 'PUT', text: 'PUT' },
         { key: 'PATCH', text: 'PATCH' },
-        { key: 'DELETE', text: 'DELETE' }
+        { key: 'DELETE', text: 'DELETE' },
       ],
       urlVersions: [
         { key: 'v1.0', text: 'v1.0' },
-        { key: 'beta', text: 'beta' }
+        { key: 'beta', text: 'beta' },
       ],
       classes: {
         textField: 'col-sm-12 col-lg-9',
         gridElements: 'col-sm-12 col-lg-1',
-      }
+      },
     };
   }
 
@@ -39,7 +40,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     const query = { ...sampleQuery, ...{ sampleUrl: value } };
     this.changeUrlVersion(value);
     this.props.actions!.setSampleQuery(query);
-  }
+  };
 
   private changeUrlVersion(newUrl: string) {
     const query = { ...this.props.sampleQuery };
@@ -61,7 +62,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     setTimeout(() => {
       this.props.handleOnRunQuery();
     }, 500);
-  }
+  };
 
   public render() {
     const { httpMethods, urlVersions } = this.state;
@@ -86,13 +87,15 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       background: getStyleFor(sampleQuery.selectedVerb),
     };
 
-    const httpMethodsToDisplay = (!authenticated) ? [httpMethods[0]] : httpMethods;
+    const httpMethodsToDisplay = !authenticated
+      ? [httpMethods[0]]
+      : httpMethods;
 
     return (
       <div className='row'>
         <div className='col-xs-12 col-lg-2'>
           <Dropdown
-            ariaLabel='Query sample option'
+            ariaLabel={translateMessage('HTTP request method option')}
             role='listbox'
             selectedKey={sampleQuery.selectedVerb}
             options={httpMethodsToDisplay}
@@ -102,7 +105,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
         </div>
         <div className='col-xs-12 col-lg-2'>
           <Dropdown
-            ariaLabel='Query sample option'
+            ariaLabel={translateMessage('Microsoft Graph API Version option')}
             role='listbox'
             selectedKey={sampleQuery.selectedVersion || 'v1.0'}
             options={urlVersions}
@@ -124,7 +127,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             submitting={submitting}
           />
         </div>
-      </div >
+      </div>
     );
   }
 }
@@ -146,13 +149,10 @@ function mapDispatchToProps(dispatch: Dispatch): object {
         ...queryInputActionCreators,
       },
       dispatch
-    )
+    ),
   };
 }
 
 // @ts-ignore
 const IntlQueryInput = injectIntl(QueryInput);
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(IntlQueryInput);
+export default connect(mapStateToProps, mapDispatchToProps)(IntlQueryInput);

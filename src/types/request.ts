@@ -18,7 +18,7 @@ export interface IRequestHeadersProps {
 }
 
 export interface IRequestComponent {
-    sampleBody?: string;
+    sampleQuery: IQuery;
     mode: Mode;
     handleOnEditorChange: Function;
     headers?: Array<{ name: string; value: string; }>;

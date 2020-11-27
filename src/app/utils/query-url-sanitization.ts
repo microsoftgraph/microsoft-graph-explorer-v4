@@ -1,127 +1,104 @@
 import { GRAPH_URL } from '../services/graph-constants';
+import { isAllAlpha, sanitizeQueryParameter } from './query-parameter-sanitization';
 import { parseSampleUrl } from './sample-url-generation';
 
-// Matches pattterns within quotes e.g "displayName: Gupta"
-const quotedTextRegex = /"([^"]*)"/g;
-
-// Matches strings that are all letters. Will match abc, won't match ab2c
-const allAlphaRegex = /^[A-Za-z]+$/;
-
 // Matches strings with deprecation identifier
-const deprecationRegex = /^[A-Za-z]+_v2$/gi;
+const DEPRECATION_REGEX = /^[a-z]+_v2$/gi;
+// Matches patterns like users('MeganB@M365x214355.onmicrosoft.com')
+const FUNCTION_CALL_REGEX = /^[a-z]+\(.*\)$/i;
+// Matches entity and entity set name patterns like microsoft.graph.group or all letters
+const ENTITY_NAME_REGEX = /^((microsoft.graph(.[a-z]+)+)|[a-z]+)$/i;
+// Matches folder/file path which is part of url  e.g. /root:/FolderA/FileB.txt:/
+const ITEM_PATH_REGEX = /(?<=\/)[\w]+:[\w\/.]+(:(?=\/)|$)/g;
+// Matches patterns like root: <value>
+const SANITIZED_ITEM_PATH_REGEX = /^[a-z]+:<value>$/i;
 
 /**
- *
- * @param url - query url to be sanitized e.g.
- *  - https://graph.microsoft.com/v1.0/planner/tasks/oIx3zN98jEmVOM-4mUJzSGUANeje
- *  - https://graph.microsoft.com/v1.0/users?$search="MeganB@M365x214355.onmicrosoft.com"
+ * @param segment part of the url string to test
+ * deprecated resources may have `_v2` temporarily
+ * @returns boolean
+ */
+export function isDeprecation(segment: string): boolean {
+  return DEPRECATION_REGEX.test(segment);
+}
+
+/**
+ * Matches patterns like users('MeganB@M365x214355.onmicrosoft.com').
+ * Characters before bracket must be letters only
+ * @param segment
+ */
+export function isFunctionCall(segment: string): boolean {
+  return FUNCTION_CALL_REGEX.test(segment);
+}
+
+/**
+ * @param url - query url to be sanitized e.g. https://graph.microsoft.com/v1.0/users/{user-id}
  */
 export function sanitizeQueryUrl(url: string): string {
   url = decodeURIComponent(url);
 
-  // Extract query string
   const { search, queryVersion, requestUrl } = parseSampleUrl(url);
-  const queryString: string = sanitizeQueryParameters(search);
+  const queryString: string = search ? `?${sanitizeQueryParameters(search)}` : '';
 
-  /**
-   * Non-IDs skipped during the sanitization process:
-   *   - Entities/entity sets/navigations from metadata, expected to contain alphabetic characters only
-   *   - Non-IDs that indicate deprecation in the form <non_id>_v2
-   *  The remaining URL segments are assumed to be variable IDs that need to be sanitized
-   */
+  // Sanitize item path specified in query url
   let resourceUrl = requestUrl;
-  const urlSegments = requestUrl.split('/');
-  urlSegments.forEach(segment => {
-    if (isAllAlpha(segment) || isDeprecation(segment)) {
-      return;
-    }
+  resourceUrl = requestUrl.replace(ITEM_PATH_REGEX, (match: string): string => {
+    return `${match.substring(0, match.indexOf(':'))}:<value>`;
+  });
 
-    const index = urlSegments.indexOf(segment);
-    const replacementItemWithPrefix = index ? `{${urlSegments[index - 1]}-id}` : '';
-    resourceUrl = resourceUrl.replace(segment, replacementItemWithPrefix);
-});
+  // Split requestUrl into segments that can be sanitized individually
+  const urlSegments = resourceUrl.split('/');
+  urlSegments.forEach((segment, index) => {
+    const sanitizedSegment = sanitizePathSegment(urlSegments[index - 1], segment);
+    resourceUrl = resourceUrl.replace(segment, sanitizedSegment);
+  });
 
   return `${GRAPH_URL}/${queryVersion}/${resourceUrl}${queryString}`;
 }
 
+/**
+ * Skipped segments:
+ * - Entities, entity sets and navigation properties, expected to contain alphabetic letters only
+ * - Deprecated entities in the form <entity>_v2
+ * The remaining URL segments are assumed to be variables that need to be sanitized
+ * @param segment
+ */
+function sanitizePathSegment(previousSegment: string, segment: string): string {
+  const segmentsToIgnore = ['$value', '$count', '$ref'];
+
+  if (isAllAlpha(segment) || isDeprecation(segment) || SANITIZED_ITEM_PATH_REGEX.test(segment)
+    || segmentsToIgnore.includes(segment.toLowerCase()) || ENTITY_NAME_REGEX.test(segment)) {
+    return segment;
+  }
+
+  // Check if segment is in this form: users('<some-id>|<UPN>') and tranform to users(<value>)
+  if (isFunctionCall(segment)) {
+    const openingBracketIndex = segment.indexOf('(');
+    const textWithinBrackets = segment.substr(openingBracketIndex + 1, segment.length - 2);
+    const sanitizedText = textWithinBrackets.split(',').map(text => {
+      if (text.includes('=')) {
+        let key = text.split('=')[0];
+        key = !isAllAlpha(key) ? '<key>' : key;
+        return `${key}=<value>`;
+      }
+      return '<value>';
+    }).join(',');
+    return `${segment.substring(0, openingBracketIndex)}(${sanitizedText})`;
+  }
+
+  if (!isAllAlpha(previousSegment) && !isDeprecation(previousSegment)) {
+    previousSegment = 'unknown';
+  }
+
+  return `{${previousSegment}-id}`;
+}
+
+/**
+ * Remove variable data from each query parameter
+ * @param queryString
+ */
 function sanitizeQueryParameters(queryString: string): string {
-  const params = queryString.split('&');
-  let result: string = '';
-  if (params.length) {
-    params.forEach(param => {
-      result += sanitizeQueryParameterValue(param) + '&';
-    });
-    result = result.slice(0, -1);
-  }
-  return result;
-}
-
-/**
- * @param segment - part of the url string to test
- * Currently, non-ID strings are all alphabetic characters
- * @returns boolean
- */
-export function isAllAlpha(segment: string): boolean {
-  return !!segment.match(allAlphaRegex);
-}
-
-/**
- * @param segment part of the url string to test
- * depracated resources may have `_v2` temporarily
- * @returns boolean
- */
-export function isDeprecation(segment: string): boolean {
-  return !!segment.match(deprecationRegex);
-}
-
-function sanitizeQueryParameterValue(param: string) {
-  if (!param.includes('=')) {
-    return param;
-  }
-  param = decodeURIComponent(param);
-  const key = param.split('=')[0];
-  switch (key) {
-    // We do not expect sensitive data in these OData query params, nothing needs to be done
-    case '$top':
-    case '$skip':
-    case '$count':
-    case '$expand':
-    case '$select':
-    case '$format':
-    case '$orderby': {
-      break;
-    }
-    /**
-     * Query URLs will look like the examples below after processing,
-     * GET /me/people/?$search=<value>
-     * GET /users?$search=displayName:<value>
-     * GET /users?$search=displayName:<value> OR mail:<value>
-     */
-    case '$search': {
-      param = param.replace(quotedTextRegex, (capture) => {
-        if (!capture.includes(':')) {
-          return '<value>';
-        }
-        // Drop quotes enclosing property and text to search
-        capture = capture.replace('"', '');
-        const property = capture.split(':')[0];
-        return `${property}:<value>`;
-      });
-      break;
-    }
-    /**
-     * Examples
-     * GET /users?$filter=endsWith(mail,<value>)
-     * GET /me/messages?$filter=from/emailAddress/address eq <value>
-     */
-    case '$filter': {
-      // TO DO
-      break;
-    }
-    default: {
-      param = `${key}=<value>`;
-      break;
-    }
-  }
-  return param;
+  // remove leading ? from query string
+  queryString = queryString.substring(1);
+  return queryString.split('&').map(sanitizeQueryParameter).join('&');
 }
