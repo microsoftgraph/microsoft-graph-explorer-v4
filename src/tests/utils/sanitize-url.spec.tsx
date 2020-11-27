@@ -53,8 +53,7 @@ describe('Sanitize Query Url should', () => {
     {
       check: 'without message id',
       // tslint:disable-next-line: max-line-length
-      url:
-        'https://graph.microsoft.com/v1.0/me/messages/AAMkAGVmMDEzMTM4LTZmYWUtNDdkNC1hMDZiLTU1OGY5OTZhYmY4OABGAAAAAAAiQ8W967B7TKBjgx9rVEURBwAiIsqMbYjsT5e-T7KzowPTAAAAAAEMAAAiIsqMbYjsT5e-T7KzowPTAAMCzwJpAAA=',
+      url: 'https://graph.microsoft.com/v1.0/me/messages/AAMkAGVmMDEzMTM4LTZmYWUtNDdkNC1hMDZiLTU1OGY5OTZhYmY4OABGAAAAAAAiQ8W967B7TKBjgx9rVEURBwAiIsqMbYjsT5e-T7KzowPTAAAAAAEMAAAiIsqMbYjsT5e-T7KzowPTAAMCzwJpAAA=',
       sanitized: 'https://graph.microsoft.com/v1.0/me/messages/{messages-id}',
     },
     {
@@ -80,8 +79,7 @@ describe('Sanitize Query Url should', () => {
     {
       check: 'with all parameters replaced',
       // tslint:disable-next-line: max-line-length
-      url:
-        'https://graph.microsoft.com/v1.0/teams/02bd9fd6-8f93-4758-87c3-1fb73740a315/channels/19:09fc54a3141a45d0bc769cf506d2e079@thread.skype',
+      url: 'https://graph.microsoft.com/v1.0/teams/02bd9fd6-8f93-4758-87c3-1fb73740a315/channels/19:09fc54a3141a45d0bc769cf506d2e079@thread.skype',
       sanitized:
         'https://graph.microsoft.com/v1.0/teams/{teams-id}/channels/{channels-id}',
     },
