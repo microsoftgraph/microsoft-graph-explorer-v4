@@ -15,7 +15,6 @@ export async function storeSuggestionsInCache(content: IParsedOpenApiResponse, v
 
 export async function getSuggestionsFromCache(url: string): Promise<IParsedOpenApiResponse | null> {
   const hashedUrl = stringToHash(url).toString();
-  console.log({ hashedUrl });
   try {
     const options: IParsedOpenApiResponse = await suggestionsStorage.getItem(hashedUrl);
     if (suggestionHasExpired(options.createdAt)) {
