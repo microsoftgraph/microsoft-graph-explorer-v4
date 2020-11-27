@@ -13,7 +13,7 @@
   "secure score control profiles (beta)": "perfis de controle da classificação de segurança (beta)",
   "update alert": "alerta de atualização",
   "To try the explorer, please ": "Para experimentar o Explorador, ",
-  "sign in": "Entrar",
+  "sign in": "Entrar no Explorador do Graph",
   " with your work or school account from Microsoft.": " com a sua conta corporativa ou de estudante da Microsoft.",
   "Submit": "Enviar",
   "Using demo tenant": "No momento, você está usando uma conta de amostra.",
@@ -318,5 +318,11 @@
   "Row checkbox": "Caixa de seleção de registro",
   "Administrator permission": "O administrador do locatário deve autorizá-lo primeiro para que você possa concordar com essa permissão",
   "Adaptive Cards designer": "Criador de Cartões Adaptáveis.",
-  "Click Run Query button above to fetch Adaptive Card": "Clique no botão Executar consulta acima para buscar um cartão adaptável."
+  "Click Run Query button above to fetch Adaptive Card": "Clique no botão Executar Consulta acima para buscar um Cartão Adaptável.",
+  "Your history includes queries made in the last 30 days": "Seu histórico inclui consultas feitas nos últimos 30 dias",
+  "Get token details (Powered by jwt.ms)": "Obter detalhes do token (do site jwt.ms)",
+  "HTTP request method option": "Opção de método de solicitação HTTP",
+  "Microsoft Graph API Version option": "Opção de versão da API do Microsoft Graph",
+  "Query Sample Input": "Entrada de exemplo de consulta",
+  "popup blocked, allow pop-up windows in your browser": "popup bloqueado, permitir janelas pop-up em seu navegador"
 }

@@ -3,6 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { telemetry } from '../../../../../telemetry';
+import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { genericCopy } from '../../../common/copy';
 import { authStyles } from './Auth.styles';
@@ -20,12 +21,21 @@ export function Auth(props: any) {
     iconName: 'copy'
   };
 
+  const tokenDetailsIcon: IIconProps = {
+    iconName: 'code'
+  };
+
   return (<div className={classes.auth}>
     {accessToken ?
       <div>
         <div className={classes.accessTokenContainer}>
           <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
           <IconButton onClick={handleCopy} iconProps={copyIcon} title='Copy' ariaLabel='Copy' />
+          <IconButton iconProps={tokenDetailsIcon}
+            title={translateMessage('Get token details (Powered by jwt.ms)')}
+            ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
+            href={`https://jwt.ms#access_token=${accessToken}`}
+            target='_blank' />
         </div>
         <Label className={classes.accessToken} >{accessToken}</Label>
       </div>
