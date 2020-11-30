@@ -39,6 +39,7 @@ import * as queryStatusActionCreators from '../../../services/actions/query-stat
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
+import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
@@ -49,17 +50,14 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   constructor(props: ISampleQueriesProps) {
     super(props);
     this.state = {
-      groupedList: {
-        samples: [],
-        categories: [],
-      },
+      sampleQueries: [],
     };
   }
 
   public componentDidMount = () => {
     const { queries } = this.props.samples;
     if (queries && queries.length > 0) {
-      this.generateSamples(queries);
+      this.setState({ sampleQueries: queries });
     } else {
       this.props.actions!.fetchSamples();
     }
@@ -67,22 +65,22 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
     if (prevProps.samples.queries !== this.props.samples.queries) {
-      this.generateSamples(this.props.samples.queries);
+      this.setState({ sampleQueries: this.props.samples.queries });
     }
   };
 
   public searchValueChanged = (event: any, value?: string): void => {
     const { queries } = this.props.samples;
-    let filteredSamples = queries;
+    let sampleQueries = queries;
     if (value) {
       const keyword = value.toLowerCase();
-      filteredSamples = queries.filter((sample: any) => {
+      sampleQueries = queries.filter((sample: any) => {
         const name = sample.humanName.toLowerCase();
         const category = sample.category.toLowerCase();
         return name.includes(keyword) || category.includes(keyword);
       });
     }
-    this.generateSamples(filteredSamples);
+    this.setState({ sampleQueries });
   };
 
   public onDocumentationLinkClicked = (item: ISampleQuery) => {
@@ -97,42 +95,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       SampleName: item.humanName,
       SampleCategory: item.category,
       Link: item.docLink,
-    });
-  }
-
-  public generateSamples(samples: any) {
-    const map = new Map();
-    const categories: any[] = [];
-
-    let isCollapsed = false;
-    let previousCount = 0;
-    let count = 0;
-
-    for (const query of samples) {
-      if (!map.has(query.category)) {
-        map.set(query.category, true);
-        count = samples.filter(
-          (sample: ISampleQuery) => sample.category === query.category
-        ).length;
-        if (categories.length > 0) {
-          isCollapsed = true;
-        }
-        categories.push({
-          name: query.category,
-          key: query.category,
-          startIndex: previousCount,
-          isCollapsed,
-          count,
-        });
-        previousCount += count;
-      }
-    }
-
-    this.setState({
-      groupedList: {
-        samples,
-        categories,
-      },
     });
   }
 
@@ -375,7 +337,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       intl: { messages },
     }: any = this.props;
 
+    const { sampleQueries } = this.state;
     const classes = classNames(this.props);
+    const groups = generateGroupsFromList(sampleQueries, 'category');
 
     if (pending) {
       return (
@@ -389,7 +353,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       );
     }
 
-    const { groupedList } = this.state;
     const columns = [
       {
         key: 'authRequiredIcon',
@@ -455,7 +418,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           </a>
         </MessageBar>
         <Announced
-          message={`${groupedList.samples.length} search results available.`}
+          message={`${sampleQueries.length} search results available.`}
         />
         <DetailsList
           className={classes.queryList}
@@ -465,10 +428,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             cellLeftPadding: 0,
           }}
           onRenderItemColumn={this.renderItemColumn}
-          items={groupedList.samples}
+          items={sampleQueries}
           selectionMode={SelectionMode.none}
           columns={columns}
-          groups={groupedList.categories}
+          groups={groups}
           groupProps={{
             showEmptyGroups: true,
             onRenderHeader: this.renderGroupHeader,
