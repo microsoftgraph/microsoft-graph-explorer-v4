@@ -113,16 +113,6 @@ export class Request extends Component<IRequestComponent, any> {
     });
   }
 
-  private trackTabClickEvent(tabTitle: string) {
-    const { sampleQuery } = this.props;
-    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
-    telemetry.trackEvent(TAB_CLICK_EVENT,
-      {
-        ComponentName: `${tabTitle} tab`,
-        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
-      });
-  }
-
   public render() {
     const requestPivotItems = this.getPivotItems();
 

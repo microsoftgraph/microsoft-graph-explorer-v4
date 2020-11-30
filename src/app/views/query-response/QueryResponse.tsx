@@ -216,8 +216,8 @@ class QueryResponse extends Component<
             />
           </DialogFooter>
         </Dialog>;
-      </div >;
-    )
+      </div>
+    );
   }
 }
 
