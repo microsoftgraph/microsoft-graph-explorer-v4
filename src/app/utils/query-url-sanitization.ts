@@ -42,16 +42,18 @@ export function sanitizeQueryUrl(url: string): string {
 
   // Sanitize item path specified in query url
   let resourceUrl = requestUrl;
-  resourceUrl = requestUrl.replace(ITEM_PATH_REGEX, (match: string): string => {
-    return `${match.substring(0, match.indexOf(':'))}:<value>`;
-  });
+  if (resourceUrl) {
+    resourceUrl = requestUrl.replace(ITEM_PATH_REGEX, (match: string): string => {
+      return `${match.substring(0, match.indexOf(':'))}:<value>`;
+    });
 
-  // Split requestUrl into segments that can be sanitized individually
-  const urlSegments = resourceUrl.split('/');
-  urlSegments.forEach((segment, index) => {
-    const sanitizedSegment = sanitizePathSegment(urlSegments[index - 1], segment);
-    resourceUrl = resourceUrl.replace(segment, sanitizedSegment);
-  });
+    // Split requestUrl into segments that can be sanitized individually
+    const urlSegments = resourceUrl.split('/');
+    urlSegments.forEach((segment, index) => {
+      const sanitizedSegment = sanitizePathSegment(urlSegments[index - 1], segment);
+      resourceUrl = resourceUrl.replace(segment, sanitizedSegment);
+    });
+  }
 
   return `${GRAPH_URL}/${queryVersion}/${resourceUrl}${queryString}`;
 }
