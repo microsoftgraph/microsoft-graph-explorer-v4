@@ -6,7 +6,7 @@ export function generateGroupsFromList(list: any[], property: string) {
     let previousCount = 0;
     let count = 0;
 
-    if (list.some(e => !e[property])) {
+    if (!list || list.length === 0 || list.some(e => !e[property])) {
         return groups;
     }
 

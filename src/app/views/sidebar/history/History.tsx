@@ -1,4 +1,5 @@
 import {
+  Announced,
   ContextualMenuItemType, DefaultButton, DetailsList, DetailsRow, Dialog,
   DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
   Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
@@ -32,7 +33,7 @@ export class History extends Component<IHistoryProps, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      filteredItems: [],
+      historyItems: [],
       hideDialog: true,
       category: ''
     };
@@ -40,12 +41,12 @@ export class History extends Component<IHistoryProps, any> {
 
 
   public componentDidMount = () => {
-    this.setState({ filteredItems: this.props.history});
+    this.setState({ historyItems: this.props.history});
   }
 
   public componentDidUpdate = (prevProps: IHistoryProps) => {
     if (prevProps.history !== this.props.history) {
-      this.setState({ filteredItems: this.props.history});
+      this.setState({ historyItems: this.props.history});
     }
   }
 
@@ -72,7 +73,7 @@ export class History extends Component<IHistoryProps, any> {
     return `${year}-${month}-${day}`;
   }
 
-  public getItems(history: any) {
+  public getItems(history: any[]) {
     const {
       intl: { messages },
     }: any = this.props;
@@ -413,7 +414,7 @@ export class History extends Component<IHistoryProps, any> {
       { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20, },
     ];
 
-    if (historyItems.length === 0) {
+    if (!historyItems ) {
       return (
         <Label className={classes.spinner}>
           <FormattedMessage id='We did not find any history items' />
@@ -421,7 +422,8 @@ export class History extends Component<IHistoryProps, any> {
       );
     }
 
-    const groups = generateGroupsFromList(historyItems, 'category');
+    const items = this.getItems(historyItems);
+    const groups = generateGroupsFromList(items, 'category');
 
     return (
       <>
@@ -438,10 +440,16 @@ export class History extends Component<IHistoryProps, any> {
             dismissButtonAriaLabel='Close'>
             <FormattedMessage id='Your history includes queries made in the last 30 days' />.
           </MessageBar>
-          <DetailsList
+          {items.length === 0 && <Label className={classes.spinner}>
+            <FormattedMessage id='We did not find any history items' />
+          </Label>}
+          <Announced
+            message={`${items.length} search results available.`}
+          />
+          {items.length > 0 && <DetailsList
             className={classes.queryList}
             onRenderItemColumn={this.renderItemColumn}
-            items={historyItems}
+            items={items}
             columns={columns}
             selectionMode={SelectionMode.none}
             groups={groups}
@@ -451,7 +459,7 @@ export class History extends Component<IHistoryProps, any> {
             }}
             onRenderRow={this.renderRow}
             onRenderDetailsHeader={this.renderDetailsHeader}
-          />
+          />}
         </div>
         <Dialog
           hidden={hideDialog}
