@@ -507,18 +507,16 @@ export class History extends Component<IHistoryProps, any> {
     }
   };
 
-  private trackHistoryItemEvent = (
-    eventName: string,
-    componentName: string,
-    query: IHistoryItem
-  ) => {
+  private trackHistoryItemEvent = (eventName: string, componentName: string, query: IHistoryItem) => {
     const sanitizedUrl = sanitizeQueryUrl(query.url);
-    telemetry.trackEvent(eventName, {
-      ComponentName: componentName,
-      ItemIndex: query.index,
-      QuerySignature: `${query.method} ${sanitizedUrl}`,
-    });
-  };
+    telemetry.trackEvent(
+      eventName,
+      {
+        ComponentName: componentName,
+        ItemIndex: query.index,
+        QuerySignature: `${query.method} ${sanitizedUrl}`
+      });
+  }
 
   public render() {
     const { groupedList, hideDialog, category } = this.state;

@@ -137,8 +137,7 @@ class QueryResponse extends Component<
     return (
       <div>
         <div className='query-response'>
-          <Pivot
-            className='pivot-response'
+          <Pivot className='pivot-response'
             onLinkClick={this.handlePivotItemClick}
           >
             {pivotItems}
@@ -178,13 +177,8 @@ class QueryResponse extends Component<
               iconProps={{ iconName: 'Cancel' }}
               ariaLabel='Close popup modal'
               onClick={this.toggleExpandResponse}
-            />
-            <Pivot
-              className='pivot-response'
-              onLinkClick={(pivotItem) =>
-                onPivotItemClick(sampleQuery, pivotItem)
-              }
-            >
+            />;
+            <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
               {pivotItems}
             </Pivot>
           </Modal>
@@ -221,9 +215,9 @@ class QueryResponse extends Component<
               onClick={this.toggleShareQueryDialogState}
             />
           </DialogFooter>
-        </Dialog>
-      </div>
-    );
+        </Dialog>;
+      </div >;
+    )
   }
 }
 
