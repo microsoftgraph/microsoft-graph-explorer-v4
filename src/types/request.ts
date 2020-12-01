@@ -9,6 +9,7 @@ export interface IHeadersListControl {
 
 export interface IRequestHeadersProps {
     sampleQuery: IQuery;
+    height: string;
     actions?: {
         setSampleQuery: Function;
     };
