@@ -1,3 +1,4 @@
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import {
   Announced,
   DetailsList,
@@ -24,6 +25,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
 import { telemetry } from '../../../../telemetry';
+import { LINK_ERROR } from '../../../../telemetry/error-types';
 import { LINK_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
@@ -84,16 +86,25 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     this.trackDocumentLinkClickedEvent(item);
   };
 
-  private trackDocumentLinkClickedEvent(item: ISampleQuery) {
-    telemetry.trackEvent(
-      LINK_CLICK_EVENT,
-      {
-        ComponentName: 'Documentation link',
-        SampleId: item.id,
-        SampleName: item.humanName,
-        SampleCategory: item.category,
-        Link: item.docLink
-      });
+  private async trackDocumentLinkClickedEvent(item: ISampleQuery): Promise<void> {
+    let properties: { [key: string]: any } = {};
+    properties = {
+      ComponentName: 'Documentation link',
+      SampleId: item.id,
+      SampleName: item.humanName,
+      SampleCategory: item.category,
+      Link: item.docLink
+    }
+    item.docLink = item.docLink || '';
+    const linkStatus = await fetch(item.docLink);
+    if (linkStatus.ok) {
+      telemetry.trackEvent(LINK_CLICK_EVENT, properties);
+    }
+    else {
+      properties.StatusCode = linkStatus.status;
+      properties.Message = 'Documentation link failed to open';
+      telemetry.trackException(new Error(LINK_ERROR), SeverityLevel.Error, properties);
+    }
   }
 
   public generateSamples(samples: any) {
