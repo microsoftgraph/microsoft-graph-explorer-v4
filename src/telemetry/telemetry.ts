@@ -29,12 +29,12 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackPageView();
   }
 
-  public trackEvent(eventName: string, payload: any) {
-    this.appInsights.trackEvent({ name: eventName, properties: payload });
+  public trackEvent(eventName: string, properties: {}) {
+    this.appInsights.trackEvent({ name: eventName, properties: properties });
   }
 
-  public trackException(error: Error, severityLevel: SeverityLevel) {
-    this.appInsights.trackException({ error, severityLevel });
+  public trackException(error: Error, severityLevel: SeverityLevel, properties: {}) {
+    this.appInsights.trackException({ error, severityLevel, properties });
   }
 
   public trackReactComponent(ComponentToTrack: ComponentType, componentName?: string): ComponentType {
