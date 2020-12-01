@@ -1,5 +1,6 @@
-import { IStackTokens, ITheme, styled } from 'office-ui-fabric-react';
-import { Resizable } from 're-resizable';
+import {
+  IStackTokens, ITheme, styled
+} from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -9,11 +10,7 @@ import { geLocale } from '../../appLocale';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
-import {
-  IInitMessage,
-  IQuery,
-  IThemeChangedMessage,
-} from '../../types/query-runner';
+import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import * as authActionCreators from '../services/actions/auth-action-creators';
@@ -27,10 +24,7 @@ import { logIn } from '../services/graph-client/msal-service';
 import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
-import {
-  appTitleDisplayOnFullScreen,
-  appTitleDisplayOnMobileScreen,
-} from './app-sections/AppTitle';
+import { appTitleDisplayOnFullScreen, appTitleDisplayOnMobileScreen } from './app-sections/AppTitle';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { statusMessages } from './app-sections/StatusMessages';
 import { termsOfUseMessage } from './app-sections/TermsOfUseMessage';
@@ -70,25 +64,10 @@ interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
   hideDialog: boolean;
-  dimensions: IDimensions;
-}
-
-interface IDimensionProperies {
-  width: string;
-  height: string;
-}
-
-interface IDimensions {
-  sidebar: IDimensionProperies;
-  content: IDimensionProperies;
-  request: IDimensionProperies;
-  response: IDimensionProperies;
 }
 
 class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
-  private defaultSidebarSize = 27;
-  private maxWidth = 98;
 
   constructor(props: IAppProps) {
     super(props);
@@ -96,24 +75,6 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: 'GET',
       mobileScreen: false,
       hideDialog: true,
-      dimensions: {
-        sidebar: {
-          width: `${this.defaultSidebarSize}%`,
-          height: '98%',
-        },
-        content: {
-          width: `${this.maxWidth - this.defaultSidebarSize}%`,
-          height: '98%',
-        },
-        request: {
-          width: `100%`,
-          height: '40vh',
-        },
-        response: {
-          width: `100%`,
-          height: '62vh',
-        },
-      },
     };
   }
 
@@ -138,7 +99,7 @@ class App extends Component<IAppProps, IAppState> {
       'https://docs.microsoft.com',
       'https://review.docs.microsoft.com',
       'https://ppe.docs.microsoft.com',
-      'https://docs.azure.cn',
+      'https://docs.azure.cn'
     ];
 
     // Notify host document that GE is ready to receive messages
@@ -182,14 +143,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private generateQueryObjectFrom(queryParams: any) {
-    const {
-      request,
-      method,
-      version,
-      graphUrl,
-      requestBody,
-      headers,
-    } = queryParams;
+    const { request, method, version, graphUrl, requestBody, headers } = queryParams;
 
     if (!request) {
       return null;
@@ -200,7 +154,7 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: method,
       selectedVersion: version,
       sampleBody: requestBody ? this.hashDecode(requestBody) : null,
-      sampleHeaders: headers ? JSON.parse(this.hashDecode(headers)) : [],
+      sampleHeaders: (headers) ? JSON.parse(this.hashDecode(headers)) : [],
     };
   }
 
@@ -247,7 +201,7 @@ class App extends Component<IAppProps, IAppState> {
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
-        selectedVerb: verb,
+        selectedVerb: verb
       });
     }
 
@@ -265,7 +219,7 @@ class App extends Component<IAppProps, IAppState> {
         const requestHeaders = headers.map((header: any) => {
           return {
             name: Object.keys(header)[0],
-            value: Object.values(header)[0],
+            value: Object.values(header)[0]
           };
         });
 
@@ -274,7 +228,7 @@ class App extends Component<IAppProps, IAppState> {
           selectedVerb: verb,
           sampleBody: body,
           selectedVersion: queryVersion,
-          sampleHeaders: requestHeaders,
+          sampleHeaders: requestHeaders
         };
 
         substituteTokens(query, profile);
@@ -282,28 +236,21 @@ class App extends Component<IAppProps, IAppState> {
         actions.setSampleQuery(query);
       }
     }, 1000);
+
   };
 
   public handleSelectVerb = (verb: string) => {
     this.setState({
-      selectedVerb: verb,
+      selectedVerb: verb
     });
   };
 
   public toggleSidebar = (): void => {
     const { sidebarProperties } = this.props;
-    const { sidebar } = this.state.dimensions;
     const properties = { ...sidebarProperties };
     properties.showSidebar = !properties.showSidebar;
-    const width = parseFloat(sidebar.width);
-    if (properties.showSidebar && width < this.defaultSidebarSize) {
-      this.setSidebarAndContentDimensions(`${this.defaultSidebarSize}%`);
-    }
-    if (!properties.showSidebar && width === this.defaultSidebarSize) {
-      this.setSidebarAndContentDimensions(`4%`);
-    }
     this.props.actions!.toggleSidebar(properties);
-  };
+  }
 
   public displayToggleButton = (mediaQueryList: any) => {
     const mobileScreen = mediaQueryList.matches;
@@ -314,77 +261,33 @@ class App extends Component<IAppProps, IAppState> {
 
     const properties = {
       mobileScreen,
-      showSidebar,
+      showSidebar
     };
 
     this.props.actions!.toggleSidebar(properties);
-  };
+  }
 
   public displayAuthenticationSection = (minimised: boolean) => {
-    return (
-      <div
-        style={{
-          display: minimised ? 'block' : 'flex',
-          justifyContent: minimised ? '' : 'center',
-          alignItems: minimised ? '' : 'center',
-          marginLeft: minimised ? '' : '-0.9em',
-        }}
-      >
-        <div className={minimised ? '' : 'col-10'}>
-          <Authentication />
-        </div>
-        <div className={minimised ? '' : 'col-2'}>
-          <Settings />
-        </div>
+    return <div style={{
+      display: minimised ? 'block' : 'flex',
+      justifyContent: minimised ? '' : 'center',
+      alignItems: minimised ? '' : 'center',
+      marginLeft: minimised ? '' : '-0.9em',
+    }}>
+      <div className={minimised ? '' : 'col-10'}>
+        <Authentication />
       </div>
-    );
-  };
-
-  private setSidebarAndContentDimensions(sidebarWidth: string) {
-    const width = parseFloat(sidebarWidth.replace('%', ''));
-    const dimen = { ...this.state.dimensions };
-    dimen.content.width = `${this.maxWidth - width}%`;
-    dimen.sidebar.width = `${width}%`;
-
-    this.setState({
-      dimensions: dimen,
-    });
-
-    const { sidebarProperties } = this.props;
-    const properties = { ...sidebarProperties };
-    if (width <= 15) {
-      if (properties.showSidebar) {
-        this.toggleSidebar();
-      }
-    } else {
-      if (!properties.showSidebar) {
-        this.toggleSidebar();
-      }
-    }
+      <div className={minimised ? '' : 'col-2'}>
+        <Settings />
+      </div>
+    </div>;
   }
 
-  private setRequestAndResponseHeights(requestHeight: string) {
-    const height = parseFloat(requestHeight.replace('vh', ''));
-    const dimensions = { ...this.state.dimensions };
-    dimensions.response.height = `${92 - height}vh`;
-    dimensions.request.height = `${height}vh`;
-
-    this.setState({ dimensions });
-  }
 
   public render() {
     const classes = classNames(this.props);
-    const {
-      authenticated,
-      graphExplorerMode,
-      queryState,
-      minimised,
-      termsOfUse,
-      sampleQuery,
-      actions,
-      sidebarProperties,
-      intl: { messages },
-    }: any = this.props;
+    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
+      actions, sidebarProperties, intl: { messages } }: any = this.props;
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
@@ -400,7 +303,7 @@ class App extends Component<IAppProps, IAppState> {
 
     const stackTokens: IStackTokens = {
       childrenGap: 10,
-      padding: 10,
+      padding: 10
     };
 
     let sidebarWidth = `col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`;
@@ -419,130 +322,52 @@ class App extends Component<IAppProps, IAppState> {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
 
-    const { dimensions } = this.state;
-    const { sidebar, content, request, response } = dimensions;
+
+
 
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`container-fluid ${classes.app}`}>
           <div className='row'>
-            <Resizable
-              style={{
-                borderRight: 'solid 3px #ddd',
-              }}
-              onResize={(e: any, direction: any, ref: any, d: any) => {
-                if (ref && ref.style && ref.style.width) {
-                  this.setSidebarAndContentDimensions(ref.style.width);
-                }
-              }}
-              className={
-                minimised ? `${classes.sidebar}` : `${classes.sidebar}`
-              }
-              minWidth={'4vw'}
-              maxWidth={'50vw'}
-              enable={{
-                right: true,
-              }}
-              bounds={'window'}
-              size={{
-                width: sidebar.width,
-                height: '98vh',
-              }}
-            >
-              <div
-                style={{
-                  padding: 10,
-                }}
-              >
-                {mobileScreen &&
-                  appTitleDisplayOnMobileScreen(
-                    stackTokens,
-                    classes,
-                    this.toggleSidebar
-                  )}
-                {!mobileScreen &&
-                  appTitleDisplayOnFullScreen(
-                    classes,
-                    minimised,
-                    this.toggleSidebar
-                  )}
+            {graphExplorerMode === Mode.Complete && (
+              <div className={sidebarWidth}>
+                {mobileScreen && appTitleDisplayOnMobileScreen(
+                  stackTokens,
+                  classes,
+                  this.toggleSidebar)}
+
+                {!mobileScreen && appTitleDisplayOnFullScreen(
+                  classes,
+                  minimised,
+                  this.toggleSidebar
+                )}
+
                 <hr className={classes.separator} />
+
                 {this.displayAuthenticationSection(minimised)}
                 <hr className={classes.separator} />
-                {showSidebar && (
-                  <Sidebar
-                    sampleHeaderText={sampleHeaderText}
-                    historyHeaderText={historyHeaderText}
-                  />
-                )}
+
+                {showSidebar && <>
+                  <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
+                </>}
               </div>
-            </Resizable>
-            {graphExplorerMode === Mode.TryIt &&
-              headerMessaging(classes, query)}
-            {displayContent && (
-              <Resizable
-                bounds={'parent'}
-                style={{
-                  marginLeft: 5,
-                }}
-                enable={{
-                  right: true,
-                }}
-                size={{
-                  width: content.width,
-                  height: '98vh',
-                }}
-              >
-                <div style={{ width: '100%', padding: 5 }}>
-                  <Resizable
-                    style={{
-                      border: 'solid 1px #ddd',
-                      borderBottom: 'solid 2px red',
-                      marginBottom: 10,
-                    }}
-                    onResize={(e: any, direction: any, ref: any, d: any) => {
-                      if (ref && ref.style && ref.style.height) {
-                        this.setRequestAndResponseHeights(ref.style.height);
-                      }
-                    }}
-                    maxHeight={'80vh'}
-                    minHeight={'20vh'}
-                    bounds={'window'}
-                    size={{
-                      height: request.height,
-                      width: '100%',
-                    }}
-                    enable={{
-                      bottom: true,
-                    }}
-                  >
-                    <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                  </Resizable>
-                  {statusMessages(queryState, actions)}
-                  {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
-                  <Resizable
-                    style={{
-                      marginTop: 10,
-                      borderBottom: 'solid 2px red',
-                    }}
-                    minWidth={'50%'}
-                    minHeight={'20vh'}
-                    maxHeight={'80vh'}
-                    bounds={'window'}
-                    enable={{
-                      bottom: false,
-                    }}
-                    size={{
-                      height: response.height,
-                      width: '100%',
-                    }}
-                  >
-                    <QueryResponse verb={this.state.selectedVerb} />
-                  </Resizable>
-                </div>
-              </Resizable>
             )}
+            <div className={layout}>
+              {graphExplorerMode === Mode.TryIt && headerMessaging(classes, query)}
+
+              {displayContent && <>
+                <div style={{ marginBottom: 8 }}>
+                  <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                </div>
+                {statusMessages(queryState, actions)}
+                {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
+                {
+                  // @ts-ignore
+                  <QueryResponse verb={this.state.selectedVerb} />
+                }
+              </>}
+            </div>
           </div>
         </div>
       </ThemeContext.Provider>
@@ -564,30 +389,30 @@ const mapStateToProps = (state: any) => {
     termsOfUse: state.termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery: state.sampleQuery,
-    authenticated: !!state.authToken,
+    authenticated: !!state.authToken
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions: bindActionCreators(
-      {
-        clearQueryStatus,
-        clearTermsOfUse,
-        runQuery,
-        setSampleQuery,
-        toggleSidebar,
-        ...authActionCreators,
-        changeTheme: (newTheme: string) => {
-          return (disp: Function) => disp(changeThemeSuccess(newTheme));
-        },
-      },
-      dispatch
-    ),
+    actions: bindActionCreators({
+      clearQueryStatus,
+      clearTermsOfUse,
+      runQuery,
+      setSampleQuery,
+      toggleSidebar,
+      ...authActionCreators,
+      changeTheme: (newTheme: string) => {
+        return (disp: Function) => disp(changeThemeSuccess(newTheme));
+      }
+    }, dispatch)
   };
 };
 
 const StyledApp = styled(App, appStyles as any);
 const IntlApp = injectIntl(StyledApp);
 
-export default connect(mapStateToProps, mapDispatchToProps)(IntlApp);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(IntlApp);
