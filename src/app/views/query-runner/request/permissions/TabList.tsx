@@ -10,9 +10,10 @@ interface ITabList {
   classes: any;
   renderItemColumn: Function;
   renderDetailsHeader: Function;
+  maxHeight: any;
 }
 
-const TabList = ({ permissions, columns, classes, renderItemColumn, renderDetailsHeader }: ITabList) => {
+const TabList = ({ permissions, columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) => {
   return (
     <>
       <Label className={classes.permissionLength}>
@@ -21,7 +22,7 @@ const TabList = ({ permissions, columns, classes, renderItemColumn, renderDetail
       <Label className={classes.permissionText}>
         <FormattedMessage id='permissions required to run the query' />
       </Label>
-      <DetailsList styles={{ root: { minHeight: '300px' } }}
+      <DetailsList styles={{ root: { maxHeight } }}
         items={permissions}
         columns={columns}
         onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}

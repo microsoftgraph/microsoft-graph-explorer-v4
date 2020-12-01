@@ -44,7 +44,7 @@ export function Monaco(props: IMonaco) {
         <ThemeContext.Consumer >
           {(theme) => (<MonacoEditor
             width='800 !important'
-            height={'80vh'}
+            height={'80%'}
             // @ts-ignore
             value={body ? body : ''}
             language={language ? language : 'json'}

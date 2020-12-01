@@ -1,4 +1,5 @@
 import { ITheme } from '@uifabric/styling';
+import { IDimensions } from './dimensions';
 import { IQuery } from './query-runner';
 
 export interface IPermission {
@@ -12,6 +13,7 @@ export interface IPermission {
 export interface IPermissionProps {
   theme?: ITheme;
   styles?: object;
+  dimensions: IDimensions;
   scopes: {
     data: IPermission[];
     pending: boolean;

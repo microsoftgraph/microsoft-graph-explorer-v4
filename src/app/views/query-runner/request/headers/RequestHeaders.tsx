@@ -6,6 +6,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { IRequestHeadersProps } from '../../../../../types/request';
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
+import { convertVhToPx } from '../../../common/dimensions-adjustment';
 import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
 
@@ -78,9 +79,10 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
 
   public render() {
     // @ts-ignore
-    const { sampleQuery, intl: { messages } } = this.props;
+    const { sampleQuery, intl: { messages }, height } = this.props;
     const headers = sampleQuery.sampleHeaders;
     const container: any = headerStyles().container;
+    container.height = convertVhToPx(height, 60);
 
     return (
       <div style={container}>
@@ -129,7 +131,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 function mapStateToProps(state: any) {
   return {
-    sampleQuery: state.sampleQuery,
+    sampleQuery: state.sampleQuery
   };
 }
 

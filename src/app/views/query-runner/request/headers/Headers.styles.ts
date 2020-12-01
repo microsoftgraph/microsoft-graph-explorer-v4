@@ -4,10 +4,9 @@ export const headerStyles = () => {
   return {
     container: {
       width: '100%',
+      height: '100%',
       textAlign: 'center',
       padding: 10,
-      maxHeight: '350px',
-      minHeight: '300px',
       overflowY: 'auto',
       overflowX: 'auto'
     },
