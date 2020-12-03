@@ -26,7 +26,7 @@ class Telemetry implements ITelemetry {
 
   public initialize() {
     this.appInsights.loadAppInsights();
-    this.appInsights.addTelemetryInitializer(this.excludeSelectedTelemetryTypes);
+    this.appInsights.addTelemetryInitializer(this.includeSpecifiedTelemetryTypes);
     this.appInsights.addTelemetryInitializer(this.filterFunction);
     this.appInsights.trackPageView();
   }
@@ -66,10 +66,10 @@ class Telemetry implements ITelemetry {
     return true;
   }
 
-  private excludeSelectedTelemetryTypes(envelope: ITelemetryItem) {
+  private includeSpecifiedTelemetryTypes(envelope: ITelemetryItem) {
     const baseType = envelope.baseType || '';
-    const excludedTypes = ['RemoteDependencyData', 'MessageData'];
-    if (excludedTypes.includes(baseType)) {
+    const typesToInclude = ['EventData', 'MetricData', 'ExceptionData', 'PageviewData'];
+    if (!typesToInclude.includes(baseType)) {
       return false;
     }
     return true;
