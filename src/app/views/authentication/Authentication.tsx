@@ -13,6 +13,9 @@ import { translateMessage } from '../../utils/translate-messages';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
+import { telemetry } from '../../../telemetry';
+import { OPERATIONAL_ERROR } from '../../../telemetry/error-types';
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 
 export class Authentication extends Component<IAuthenticationProps, { loginInProgress: boolean }> {
   constructor(props: IAuthenticationProps) {
@@ -45,6 +48,13 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
         messageType: MessageBarType.error
       });
       this.setState({ loginInProgress: false });
+      telemetry.trackException(
+        new Error(OPERATIONAL_ERROR),
+        SeverityLevel.Error,
+        {
+          ComponentName: 'Authentication action',
+          Message: `Authentication failed: ${errorCode.replace('_', ' ')}`,
+        });
     }
 
   };
