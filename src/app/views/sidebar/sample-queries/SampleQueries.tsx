@@ -87,24 +87,28 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   private async trackDocumentLinkClickedEvent(item: ISampleQuery): Promise<void> {
-    let properties: { [key: string]: any } = {};
-    properties = {
-      ComponentName: 'Documentation link',
-      SampleId: item.id,
-      SampleName: item.humanName,
-      SampleCategory: item.category,
-      Link: item.docLink
-    }
-    item.docLink = item.docLink || '';
-    const linkStatus = await fetch(item.docLink);
-    if (linkStatus.ok) {
-      telemetry.trackEvent(LINK_CLICK_EVENT, properties);
-    }
-    else {
-      properties.StatusCode = linkStatus.status;
-      properties.Message = 'Documentation link failed to open';
-      telemetry.trackException(new Error(LINK_ERROR), SeverityLevel.Error, properties);
-    }
+    let properties: { [key: string]: any } = {
+        ComponentName: 'Documentation link',
+        SampleId: item.id,
+        SampleName: item.humanName,
+        SampleCategory: item.category,
+        Link: item.docLink
+    };
+    telemetry.trackEvent( LINK_CLICK_EVENT, properties);
+
+    // Check if link throws error
+    await fetch(item.docLink || '')
+      .then(response => {
+        console.log(response)
+        console.log("response")
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+      })
+      .catch(error => {
+        properties.Message = `An error was encountered trying to open the link: ${error}`;
+        telemetry.trackException(new Error(LINK_ERROR), SeverityLevel.Error, properties);
+      });
   }
 
   public generateSamples(samples: any) {
