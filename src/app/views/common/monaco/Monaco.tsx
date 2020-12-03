@@ -11,6 +11,7 @@ interface IMonaco {
   verb?: string;
   language?: string;
   readOnly?: boolean;
+  height?: string;
 }
 
 function editorDidMount(editor: any) {
@@ -32,10 +33,15 @@ function formatDocument(editor: any) {
 export function Monaco(props: IMonaco) {
 
   let { body } = props;
-  const { onChange, language, readOnly } = props;
+  const { onChange, language, readOnly, height } = props;
 
   if (body && typeof body !== 'string') {
     body = JSON.stringify(body);
+  }
+
+  let itemHeight = '300px';
+  if (height) {
+    itemHeight = height;
   }
 
   return (
@@ -44,7 +50,7 @@ export function Monaco(props: IMonaco) {
         <ThemeContext.Consumer >
           {(theme) => (<MonacoEditor
             width='800 !important'
-            height={'80%'}
+            height={itemHeight}
             // @ts-ignore
             value={body ? body : ''}
             language={language ? language : 'json'}

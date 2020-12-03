@@ -13,7 +13,7 @@ const initialState: IDimensions = {
     },
     request: {
         width: `100%`,
-        height: '40vh',
+        height: '36vh',
     },
     response: {
         width: `100%`,

@@ -47,11 +47,10 @@ const Request = (props: any)  => {
         title={messages['request body']}
         headerText={messages['request body']}
       >
-        <div style={{ position: 'relative', height: convertVhToPx(height, 100) }}>
-          <Monaco
-            body={sampleBody}
-            onChange={(value) => handleOnEditorChange(value)} />
-        </div>
+        <Monaco
+          body={sampleBody}
+          height={convertVhToPx(height, 140)}
+          onChange={(value) => handleOnEditorChange(value)} />
       </PivotItem>,
       <PivotItem
         key='request-header'
@@ -123,6 +122,8 @@ const Request = (props: any)  => {
   const setRequestAndResponseHeights = (requestHeight: string) => {
     const dimen = { ...dimensions };
     dimen.request.height = requestHeight;
+    const response = 90 - parseFloat(requestHeight.replace('vh', ''));
+    dimen.response.height = response + 'vh';
     dispatch(setDimensions(dimen));
   };
 
@@ -139,8 +140,8 @@ const Request = (props: any)  => {
           setRequestAndResponseHeights(ref.style.height);
         }
       }}
-      maxHeight={'800'}
-      minHeight={'350'}
+      maxHeight={800}
+      minHeight={250}
       bounds={'window'}
       size={{
       height: dimensions.request.height,
