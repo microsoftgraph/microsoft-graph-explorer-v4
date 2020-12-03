@@ -69,10 +69,10 @@ class Telemetry implements ITelemetry {
   private includeSpecifiedTelemetryTypes(envelope: ITelemetryItem) {
     const baseType = envelope.baseType || '';
     const typesToInclude = ['EventData', 'MetricData', 'ExceptionData', 'PageviewData'];
-    if (!typesToInclude.includes(baseType)) {
-      return false;
+    if (typesToInclude.includes(baseType)) {
+      return true;
     }
-    return true;
+    return false;
   }
 
   private getInstrumentationKey() {
