@@ -282,9 +282,12 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       if (!requestUrl) {
         this.props.actions!.fetchAutoCompleteOptions('', queryVersion);
       } else {
-        this.props.actions!.fetchAutoCompleteOptions(requestUrl, queryVersion);
+        if (!this.props.autoCompleteOptions || `${requestUrl}` !== this.props.autoCompleteOptions.url) {
+          this.props.actions!.fetchAutoCompleteOptions(requestUrl, queryVersion);
+        } else {
+          this.performLocalSearch(url);
+        }
       }
-      this.performLocalSearch(url);
     }
   }
 
