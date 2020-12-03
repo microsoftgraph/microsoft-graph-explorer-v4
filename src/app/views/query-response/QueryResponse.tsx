@@ -5,7 +5,7 @@ import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dia
 import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import {
   IQueryResponseProps,
@@ -40,11 +40,11 @@ const QueryResponse = (props: IQueryResponseProps) => {
   }, [graphResponse, theme, mobileScreen, dimensions]);
 
   const toggleShareQueryDialogState = () => {
-    setShareQuaryDialogStatus(showShareQueryDialog);
+    setShareQuaryDialogStatus(!showShareQueryDialog);
   };
 
   const toggleExpandResponse = () => {
-    setShowModal(showModal);
+    setShowModal(!showModal);
   };
 
   const handleCopy = () => {

@@ -1,3 +1,4 @@
+import { IDimensions } from './dimensions';
 import { Mode } from './enums';
 import { IQuery } from './query-runner';
 
@@ -22,9 +23,13 @@ export interface IRequestComponent {
     sampleQuery: IQuery;
     mode: Mode;
     handleOnEditorChange: Function;
+    dimensions: IDimensions;
     headers?: Array<{ name: string; value: string; }>;
     intl: {
         message: object;
+    };
+    actions: {
+        setDimensions: Function;
     };
 }
 
