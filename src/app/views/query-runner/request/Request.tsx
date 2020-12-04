@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { telemetry } from '../../../../telemetry';
 import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { Mode } from '../../../../types/enums';
-import { IQuery } from '../../../../types/query-runner';
 import { IRequestComponent } from '../../../../types/request';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { Monaco } from '../../common/monaco/Monaco';
