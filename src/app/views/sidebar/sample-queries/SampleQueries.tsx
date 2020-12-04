@@ -99,8 +99,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     // Check if link throws error
     await fetch(item.docLink || '')
       .then(response => {
-        console.log(response)
-        console.log("response")
         if (!response.ok) {
           throw Error(response.statusText);
         }
