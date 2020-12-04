@@ -53,7 +53,7 @@ export function fetchSamples(): Function {
         SeverityLevel.Error,
         {
           ComponentName: 'Fetch samples action',
-          Message: error
+          Message: `${error}`
         });
       return dispatch(fetchSamplesError({ error }));
     }

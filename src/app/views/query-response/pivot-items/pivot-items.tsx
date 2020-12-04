@@ -8,7 +8,7 @@ import { ContentType, Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
 import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
-import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
+import { lookupToolkitUrl, validateToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../utils/translate-messages';
 import { Image, Monaco } from '../../common';
@@ -41,6 +41,7 @@ export const getPivotItems = (properties: any) => {
     if (!!body) {
       const { toolkitUrl, exampleUrl } = lookupToolkitUrl(sampleQuery);
       if (toolkitUrl && exampleUrl) {
+        validateToolkitUrl(toolkitUrl, sampleQuery);
         return <span style={dotStyle} />;
       }
     }

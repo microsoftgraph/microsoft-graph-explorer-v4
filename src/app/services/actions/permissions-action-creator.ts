@@ -67,7 +67,7 @@ export function fetchScopes(query?: IQuery): Function {
         SeverityLevel.Error,
         {
           ComponentName: 'Fetch permissions action',
-          Message: error
+          Message: `${error}`
         });
       return dispatch(fetchScopesError(error));
     }

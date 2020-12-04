@@ -96,14 +96,14 @@ export class QueryRunner extends Component<
 
     if (actions) {
       actions.runQuery(sampleQuery);
+      const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+      telemetry.trackEvent(BUTTON_CLICK_EVENT,
+        {
+          ComponentName: 'Run query button',
+          SelectedVersion: sampleQuery.selectedVersion,
+          QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
+        });
     }
-    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
-    telemetry.trackEvent(BUTTON_CLICK_EVENT,
-      {
-        ComponentName: 'Run query button',
-        SelectedVersion: sampleQuery.selectedVersion,
-        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
-      });
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {

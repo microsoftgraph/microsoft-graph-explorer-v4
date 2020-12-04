@@ -83,7 +83,7 @@ export function getAdaptiveCard(
           {
             ComponentName: 'Get adaptive card action',
             QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
-            Message: error
+            Message: `${error}`
           }
         );
         return dispatch(getAdaptiveCardError(error));

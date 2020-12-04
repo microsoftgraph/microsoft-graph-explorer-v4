@@ -67,7 +67,7 @@ export function getSnippet(language: string): Function {
         {
           ComponentName: 'Get snippet action',
           QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
-          Message: error
+          Message: `${error}`
         }
       );
       return dispatch(getSnippetError(error));

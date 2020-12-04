@@ -3,10 +3,11 @@ import templates from '../../graph-toolkit-examples';
 import { telemetry } from '../../telemetry';
 import { LINK_ERROR } from '../../telemetry/error-types';
 import { IQuery } from '../../types/query-runner';
+import { sanitizeQueryUrl } from './query-url-sanitization';
 import { parseSampleUrl } from './sample-url-generation';
 
 
-async function validateToolkitUrl(url: string, componentName: string): Promise<void> {
+export async function validateToolkitUrl(url: string, sampleQuery: IQuery): Promise<void> {
   await fetch(url)
       .then(response => {
         if (!response.ok) {
@@ -14,12 +15,15 @@ async function validateToolkitUrl(url: string, componentName: string): Promise<v
         }
       })
       .catch(error => {
+        const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
         telemetry.trackException(
           new Error(LINK_ERROR),
           SeverityLevel.Error,
           {
-            ComponentName: componentName,
-            Message: error
+            ComponentName: 'Graph toolkit link',
+            QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
+            Link: url,
+            Message: `${error}`
           });
       });
  }
@@ -35,11 +39,8 @@ export function lookupToolkitUrl(sampleQuery: IQuery) {
           const toolkitUrl: string = (templates as any)[templateMapKey];
           let { search: componentUrl } = parseSampleUrl(toolkitUrl);
           componentUrl = componentUrl.replace('?id=', '');
-          const exampleUrl = `https://mgt.dev/?path=/story/${componentUrl}`;
-          validateToolkitUrl(toolkitUrl, 'Graph toolkit link');
-          validateToolkitUrl(exampleUrl, 'Graph toolkit example link');
           return {
-            exampleUrl: exampleUrl,
+            exampleUrl: `https://mgt.dev/?path=/story/${componentUrl}`,
             toolkitUrl: toolkitUrl
           };
         }
