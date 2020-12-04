@@ -87,7 +87,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   private async trackDocumentLinkClickedEvent(item: ISampleQuery): Promise<void> {
-    let properties: { [key: string]: any } = {
+    const properties: { [key: string]: any } = {
         ComponentName: 'Documentation link',
         SampleId: item.id,
         SampleName: item.humanName,

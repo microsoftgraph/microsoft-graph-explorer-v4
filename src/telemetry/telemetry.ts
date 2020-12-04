@@ -31,8 +31,8 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackPageView();
   }
 
-  public trackEvent(eventName: string, properties: {}) {
-    this.appInsights.trackEvent({ name: eventName, properties: properties });
+  public trackEvent(name: string, properties: {}) {
+    this.appInsights.trackEvent({ name, properties });
   }
 
   public trackException(error: Error, severityLevel: SeverityLevel, properties: {}) {

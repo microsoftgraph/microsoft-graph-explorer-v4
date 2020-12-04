@@ -36,12 +36,12 @@ export function lookupToolkitUrl(sampleQuery: IQuery) {
       if (templates.hasOwnProperty(templateMapKey)) {
         const isMatch = new RegExp(templateMapKey + '$', 'i').test(query);
         if (isMatch) {
-          const toolkitUrl: string = (templates as any)[templateMapKey];
-          let { search: componentUrl } = parseSampleUrl(toolkitUrl);
+          const url: string = (templates as any)[templateMapKey];
+          let { search: componentUrl } = parseSampleUrl(url);
           componentUrl = componentUrl.replace('?id=', '');
           return {
             exampleUrl: `https://mgt.dev/?path=/story/${componentUrl}`,
-            toolkitUrl: toolkitUrl
+            toolkitUrl: url
           };
         }
       }

@@ -1,9 +1,13 @@
+
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { Icon, Label, MessageBarType, Spinner, SpinnerSize, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { telemetry } from '../../../telemetry';
+import { OPERATIONAL_ERROR } from '../../../telemetry/error-types';
 import { IAuthenticationProps } from '../../../types/authentication';
 import { Mode } from '../../../types/enums';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
@@ -13,9 +17,6 @@ import { translateMessage } from '../../utils/translate-messages';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
-import { telemetry } from '../../../telemetry';
-import { OPERATIONAL_ERROR } from '../../../telemetry/error-types';
-import { SeverityLevel } from '@microsoft/applicationinsights-web';
 
 export class Authentication extends Component<IAuthenticationProps, { loginInProgress: boolean }> {
   constructor(props: IAuthenticationProps) {
