@@ -86,7 +86,7 @@ function Snippet(props: ISnippetProps) {
   );
 }
 
-function trackCopyEvent(query: IQuery, language: string, ) {
+function trackCopyEvent(query: IQuery, language: string) {
   const sanitizedUrl = sanitizeQueryUrl(query.sampleUrl);
   telemetry.trackEvent(BUTTON_CLICK_EVENT,
     {
