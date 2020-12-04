@@ -14,7 +14,6 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { telemetry } from '../../../../../telemetry';
 import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -22,7 +21,7 @@ import { classNames } from '../../../classnames';
 import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
 import TabList from './TabList';
-import { generatePermissionGroups, setConsentedStatus } from './util';
+import { setConsentedStatus } from './util';
 
 export class Permission extends Component<IPermissionProps, IPermissionState> {
 
@@ -30,7 +29,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     super(props);
     this.state = {
       permissions: [],
-      groups: [],
     };
   }
 
@@ -44,10 +42,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     }
     const permissions = this.props.scopes.data;
     if (prevProps.scopes.data !== permissions) {
-      const groups = generatePermissionGroups(permissions);
       this.setState({
-        permissions,
-        groups
+        permissions
       });
     }
   }
