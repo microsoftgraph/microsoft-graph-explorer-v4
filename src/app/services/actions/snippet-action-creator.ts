@@ -1,5 +1,10 @@
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
+import { telemetry } from '../../../telemetry';
+import { NETWORK_ERROR } from '../../../telemetry/error-types';
 import { IAction } from '../../../types/action';
+import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
+import { sampleQuery } from '../reducers/query-input-reducers';
 import { GET_SNIPPET_ERROR, GET_SNIPPET_PENDING, GET_SNIPPET_SUCCESS } from '../redux-constants';
 
 export function getSnippetSuccess(response: string): IAction {
@@ -24,8 +29,8 @@ export function getSnippetPending(): any {
 
 export function getSnippet(language: string): Function {
   return async (dispatch: Function, getState: Function) => {
+    const { devxApi, sampleQuery } = getState();
     try {
-      const { devxApi, sampleQuery } = getState();
       let snippetsUrl = `${devxApi}/api/graphexplorersnippets`;
 
       const { requestUrl, sampleUrl, queryVersion, search } = parseSampleUrl(sampleQuery.sampleUrl);
@@ -55,6 +60,16 @@ export function getSnippet(language: string): Function {
       }
       throw (response);
     } catch (error) {
+      const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+      telemetry.trackException(
+        new Error(NETWORK_ERROR),
+        SeverityLevel.Error,
+        {
+          ComponentName: 'Get snippet action',
+          QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
+          Message: error
+        }
+      );
       return dispatch(getSnippetError(error));
     }
   };
