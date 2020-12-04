@@ -1,4 +1,10 @@
-import { getId, Icon, Pivot, PivotItem, TooltipHost } from 'office-ui-fabric-react';
+import {
+  getId,
+  Icon,
+  Pivot,
+  PivotItem,
+  TooltipHost,
+} from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -20,7 +26,6 @@ export class Request extends Component<IRequestComponent, any> {
   }
 
   private getPivotItems = () => {
-
     const {
       handleOnEditorChange,
       sampleQuery,
@@ -34,7 +39,8 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='Send'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['request body']}
-        headerText={messages['request body']}>
+        headerText={messages['request body']}
+      >
         <Monaco
           body={sampleQuery.sampleBody}
           onChange={(value) => handleOnEditorChange(value)} />
@@ -44,7 +50,8 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='FileComment'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['request header']}
-        headerText={messages['request header']}>
+        headerText={messages['request header']}
+      >
         <RequestHeaders />
       </PivotItem>,
       <PivotItem
@@ -52,9 +59,10 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='AzureKeyVault'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['modify permissions']}
-        headerText={messages['modify permissions']}>
+        headerText={messages['modify permissions']}
+      >
         <Permission />
-      </PivotItem>
+      </PivotItem>,
     ];
 
     if (mode === Mode.Complete) {
@@ -75,7 +83,11 @@ export class Request extends Component<IRequestComponent, any> {
 
   private getTooltipDisplay(link: any) {
     return (
-      <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}>
+      <TooltipHost
+        content={link.title}
+        id={getId()}
+        calloutProps={{ gapSpace: 0 }}
+      >
         <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
         {link.headerText}
       </TooltipHost>
@@ -83,36 +95,38 @@ export class Request extends Component<IRequestComponent, any> {
   }
 
   private onPivotItemClick = (item?: PivotItem) => {
-    if (!item) { return; }
+    if (!item) {
+      return;
+    }
     const tabTitle = item.props.title;
     if (tabTitle) {
       this.trackTabClickEvent(tabTitle);
     }
-  }
+  };
 
   private trackTabClickEvent(tabTitle: string) {
-    const { sampleQuery } = this.props;
+    const { sampleQuery }: any = this.props;
     const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
-    telemetry.trackEvent(TAB_CLICK_EVENT,
-      {
-        ComponentName: `${tabTitle} tab`,
-        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
-      });
+    telemetry.trackEvent(TAB_CLICK_EVENT, {
+      ComponentName: `${tabTitle} tab`,
+      QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
+    });
   }
 
   public render() {
-
     const requestPivotItems = this.getPivotItems();
 
     return (
+
       <div className='request-editors'>
-        <Pivot onLinkClick={this.onPivotItemClick}
-          styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}>
-            {requestPivotItems}
+        <Pivot
+          onLinkClick={this.onPivotItemClick}
+          styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
+        >
+          {requestPivotItems}
         </Pivot>
       </div>
     );
-
   }
 }
 
@@ -121,7 +135,7 @@ function mapStateToProps(state: any) {
     mode: state.graphExplorerMode,
     sampleBody: state.sampleQuery.sampleBody,
     theme: state.theme,
-    mobileScreen: !!state.sidebarProperties.mobileScreen
+    mobileScreen: !!state.sidebarProperties.mobileScreen,
   };
 }
 

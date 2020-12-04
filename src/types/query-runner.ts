@@ -34,14 +34,15 @@ export interface IQueryInputProps {
   handleOnUrlChange: Function;
   handleOnVersionChange: Function;
   handleOnBlur: Function;
-  selectedVerb: string;
-  selectedVersion: string;
-  sampleUrl: string;
+  sampleQuery: IQuery;
   submitting: boolean;
   authenticated: boolean;
   mode: Mode;
   intl: {
     message: object;
+  };
+  actions?: {
+    setSampleQuery: Function;
   };
 }
 

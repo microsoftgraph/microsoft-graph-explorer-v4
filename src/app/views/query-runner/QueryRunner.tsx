@@ -5,25 +5,28 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { telemetry } from '../../../telemetry';
-import { BUTTON_CLICK_EVENT, DROPDOWN_CHANGE_EVENT } from '../../../telemetry/event-types';
+import {
+  BUTTON_CLICK_EVENT,
+  DROPDOWN_CHANGE_EVENT,
+} from '../../../telemetry/event-types';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
 } from '../../../types/query-runner';
+
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
+import { QueryInput } from './query-input';
 import './query-runner.scss';
-import QueryInput from './QueryInput';
 import Request from './request/Request';
 
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
-  > {
-
+> {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
@@ -46,18 +49,6 @@ export class QueryRunner extends Component<
     }
   };
 
-  private handleOnUrlChange = (newUrl = '') => {
-    const { actions, sampleQuery } = this.props;
-
-    const newQuery = { ...sampleQuery, ...{ sampleUrl: newUrl } };
-
-    if (actions) {
-      actions.setSampleQuery(newQuery);
-    }
-
-    this.changeUrlVersion(newUrl);
-  };
-
   private handleOnBlur = () => {
     const { url } = this.state;
     const query = { ...this.props.sampleQuery };
@@ -77,8 +68,10 @@ export class QueryRunner extends Component<
 
   private handleOnRunQuery = () => {
     const { sampleBody } = this.state;
-    const { actions, sampleQuery, } = this.props;
-    const { intl: { messages } }: any = this.props;
+    const { actions, sampleQuery } = this.props;
+    const {
+      intl: { messages },
+    }: any = this.props;
 
     if (sampleBody) {
       try {
@@ -88,7 +81,7 @@ export class QueryRunner extends Component<
           ok: false,
           statusText: messages['Malformed JSON body'],
           status: `${messages['Review the request body']} ${error}`,
-          messageType: MessageBarType.error
+          messageType: MessageBarType.error,
         });
         return;
       }
@@ -109,38 +102,27 @@ export class QueryRunner extends Component<
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
     const { sampleQuery } = this.props;
     if (urlVersion) {
-      const { queryVersion: oldQueryVersion } = parseSampleUrl(sampleQuery.sampleUrl);
-      const { sampleUrl, queryVersion: newQueryVersion } = parseSampleUrl(sampleQuery.sampleUrl, urlVersion.text);
+      const { queryVersion: oldQueryVersion } = parseSampleUrl(
+        sampleQuery.sampleUrl
+      );
+      const { sampleUrl, queryVersion: newQueryVersion } = parseSampleUrl(
+        sampleQuery.sampleUrl,
+        urlVersion.text
+      );
       this.props.actions!.setSampleQuery({
         ...sampleQuery,
         sampleUrl,
-        selectedVersion: newQueryVersion
+        selectedVersion: newQueryVersion,
       });
       if (oldQueryVersion !== newQueryVersion) {
-        telemetry.trackEvent(DROPDOWN_CHANGE_EVENT,
-          {
-            ComponentName: 'Version change dropdown',
-            NewVersion: newQueryVersion,
-            OldVersion: oldQueryVersion
-          });
+        telemetry.trackEvent(DROPDOWN_CHANGE_EVENT, {
+          ComponentName: 'Version change dropdown',
+          NewVersion: newQueryVersion,
+          OldVersion: oldQueryVersion,
+        });
       }
     }
   };
-
-  private changeUrlVersion(newUrl: string) {
-    const query = { ...this.props.sampleQuery };
-    const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);
-    const { queryVersion: oldQueryVersion } = parseSampleUrl(query.sampleUrl);
-
-    if (newQueryVersion !== oldQueryVersion) {
-      if (newQueryVersion === 'v1.0' || newQueryVersion === 'beta') {
-        const sampleQuery = { ...query };
-        sampleQuery.selectedVersion = newQueryVersion;
-        sampleQuery.sampleUrl = newUrl;
-        this.props.actions!.setSampleQuery(sampleQuery);
-      }
-    }
-  }
 
   public render() {
     return (
@@ -153,7 +135,6 @@ export class QueryRunner extends Component<
                 handleOnRunQuery={this.handleOnRunQuery}
                 handleOnMethodChange={this.handleOnMethodChange}
                 handleOnVersionChange={this.handleOnVersionChange}
-                handleOnUrlChange={this.handleOnUrlChange}
                 handleOnBlur={this.handleOnBlur}
               />
             }
@@ -163,7 +144,10 @@ export class QueryRunner extends Component<
           <div className='col-sm-12 col-lg-12'>
             {
               // @ts-ignore
-              <Request handleOnEditorChange={this.handleOnEditorChange} sampleQuery={this.props.sampleQuery} />
+              <Request
+                handleOnEditorChange={this.handleOnEditorChange}
+                sampleQuery={this.props.sampleQuery}
+              />
             }
           </div>
         </div>
@@ -175,9 +159,13 @@ export class QueryRunner extends Component<
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators(
-      { ...queryActionCreators, ...queryInputActionCreators, ...queryStatusActionCreators },
+      {
+        ...queryActionCreators,
+        ...queryInputActionCreators,
+        ...queryStatusActionCreators,
+      },
       dispatch
-    )
+    ),
   };
 }
 
@@ -189,7 +177,4 @@ function mapStateToProps(state: any) {
 
 // @ts-ignore
 const IntlQueryRunner = injectIntl(QueryRunner);
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(IntlQueryRunner);
+export default connect(mapStateToProps, mapDispatchToProps)(IntlQueryRunner);
