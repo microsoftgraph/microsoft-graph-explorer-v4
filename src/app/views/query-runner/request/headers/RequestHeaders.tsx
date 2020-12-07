@@ -82,7 +82,7 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
     const { sampleQuery, intl: { messages }, height } = this.props;
     const headers = sampleQuery.sampleHeaders;
     const container: any = headerStyles().container;
-    container.height = convertVhToPx(height, 60);
+    container.height = height;
 
     return (
       <div style={container}>

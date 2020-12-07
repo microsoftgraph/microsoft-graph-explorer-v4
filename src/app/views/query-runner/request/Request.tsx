@@ -57,7 +57,7 @@ export class Request extends Component<IRequestComponent, any> {
         title={messages['request header']}
         headerText={messages['request header']}
       >
-        <RequestHeaders />
+        <RequestHeaders height={convertVhToPx(height, 60)} />
       </PivotItem>,
       <PivotItem
         key='permissions'
