@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { geLocale } from '../../../../appLocale';
 
 import { telemetry } from '../../../../telemetry';
 import {
@@ -455,6 +456,17 @@ export class History extends Component<IHistoryProps, any> {
         ComponentName: componentName,
         ItemIndex: query.index,
         QuerySignature: `${query.method} ${sanitizedUrl}`
+      });
+  }
+
+  private trackHistoryItemEvent = (eventName: string, componentName: string,
+    query: IHistoryItem) => {
+    telemetry.trackEvent(
+      eventName,
+      {
+        ComponentName: componentName,
+        ItemIndex: query.index,
+        QuerySignature: ''
       });
   }
 
