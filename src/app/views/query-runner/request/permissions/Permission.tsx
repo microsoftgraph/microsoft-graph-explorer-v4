@@ -22,7 +22,7 @@ import { classNames } from '../../../classnames';
 import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
 import TabList from './TabList';
-import { generatePermissionGroups, setConsentedStatus } from './util';
+import { setConsentedStatus } from './util';
 
 export class Permission extends Component<IPermissionProps, IPermissionState> {
 
@@ -30,7 +30,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     super(props);
     this.state = {
       permissions: [],
-      groups: [],
     };
   }
 
@@ -44,10 +43,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     }
     const permissions = this.props.scopes.data;
     if (prevProps.scopes.data !== permissions) {
-      const groups = generatePermissionGroups(permissions);
       this.setState({
-        permissions,
-        groups
+        permissions
       });
     }
   }

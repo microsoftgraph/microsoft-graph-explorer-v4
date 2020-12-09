@@ -319,6 +319,8 @@
   "Administrator permission": "Admin of the tenant needs to authorize first before you can consent to this permission",
   "Adaptive Cards designer": "Adaptive Cards designer.",
   "Click Run Query button above to fetch Adaptive Card": "Click Run Query button above to fetch Adaptive Card.",
+  "Fetching suggestions": "Fetching suggestions",
+  "No auto-complete suggestions available": "No auto-complete suggestions available",
   "Your history includes queries made in the last 30 days": "Your history includes queries made in the last 30 days",
   "Get token details (Powered by jwt.ms)": "Get token details (Powered by jwt.ms)",
   "HTTP request method option": "HTTP request method option",
