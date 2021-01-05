@@ -191,20 +191,13 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     if (!panel) {
       columns.push(
         {
-          key: 'consentDisplayName',
-          name: messages['Display string'],
-          fieldName: 'consentDisplayName',
-          isResizable: true,
-          minWidth: 250,
-          maxWidth: 300
-        },
-        {
           key: 'consentDescription',
           name: messages.Description,
           fieldName: 'consentDescription',
           isResizable: true,
           minWidth: (tokenPresent) ? 400 : 650,
-          maxWidth: (tokenPresent) ? 500 : 700
+          maxWidth: (tokenPresent) ? 600 : 700,
+          isMultiline: true
         }
       );
     }
@@ -280,6 +273,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
                 this.renderItemColumn(item, index, column)}
               renderDetailsHeader={this.renderDetailsHeader}
+              permissionToken={tokenPresent}
 
             />}
             {panel &&

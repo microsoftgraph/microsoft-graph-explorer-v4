@@ -3,7 +3,6 @@ import { IQuery } from './query-runner';
 
 export interface IPermission {
   value: string;
-  consentDisplayName: string;
   consentDescription: string;
   isAdmin: boolean;
   consented: boolean;
