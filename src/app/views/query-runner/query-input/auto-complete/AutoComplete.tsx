@@ -430,6 +430,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           value={queryUrl}
           componentRef={this.autoCompleteRef}
           onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
+          ariaLabel={translateMessage('Query Sample Input')}
+          role='textbox'
         />
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
           <SuggestionsList
