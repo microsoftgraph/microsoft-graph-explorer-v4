@@ -10,16 +10,20 @@ interface ITabList {
   classes: any;
   renderItemColumn: Function;
   renderDetailsHeader: Function;
+  permissionToken: boolean;
 }
 
-const TabList = ({ permissions, columns, classes, renderItemColumn, renderDetailsHeader }: ITabList) => {
+
+const TabList = ({ permissions, columns, classes, renderItemColumn, renderDetailsHeader, permissionToken }
+  : ITabList) => {
   return (
     <>
       <Label className={classes.permissionLength}>
         <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
       </Label>
       <Label className={classes.permissionText}>
-        <FormattedMessage id='permissions required to run the query' />
+        {!permissionToken && <FormattedMessage id='sign in to consent to permissions' />}
+        {permissionToken && <FormattedMessage id='permissions required to run the query' />}
       </Label>
       <DetailsList styles={{ root: { minHeight: '300px' } }}
         items={permissions}
