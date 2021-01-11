@@ -44,7 +44,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       this.getPermissions();
     }
     const permissions = this.props.scopes.data;
-    if (prevProps.scopes.data !== permissions ) {
+    if (prevProps.scopes.data !== permissions) {
       const groups = generatePermissionGroups(permissions);
       this.setState({
         permissions,
@@ -275,7 +275,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
 
     return (
       <div className={panel ? classes.panelContainer : ''}
-        style={{ minHeight: (panel) ? '800px' :  '', maxHeight: (panel) ? '800px' :  tabHeight, }}>
+        style={{ minHeight: (panel) ? '800px' : '', maxHeight: (panel) ? '800px' : tabHeight, }}>
         {loading && <Label>
           <FormattedMessage id={'Fetching permissions'} />...
         </Label>}
@@ -285,7 +285,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               permissions={permissions}
               columns={this.getColumns()}
               maxHeight={tabHeight}
-              classes={''}
               renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
                 this.renderItemColumn(item, index, column)}
               renderDetailsHeader={this.renderDetailsHeader}

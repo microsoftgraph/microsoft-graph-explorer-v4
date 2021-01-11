@@ -7,7 +7,7 @@ import { IPermission } from '../../../../../types/permissions';
 interface ITabList {
   permissions: IPermission[];
   columns: any[];
-  classes: any;
+  classes?: any;
   renderItemColumn: Function;
   renderDetailsHeader: Function;
   maxHeight: any;
