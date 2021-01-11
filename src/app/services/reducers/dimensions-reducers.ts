@@ -3,14 +3,6 @@ import { IDimensions } from '../../../types/dimensions';
 import { RESIZE_SUCCESS } from '../redux-constants';
 
 const initialState: IDimensions = {
-    sidebar: {
-        width: `27%`,
-        height: '98%',
-    },
-    content: {
-        width: `61%`,
-        height: '98%',
-    },
     request: {
         width: `100%`,
         height: '36vh',
