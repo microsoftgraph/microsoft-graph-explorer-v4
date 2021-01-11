@@ -26,7 +26,7 @@ import Request from './request/Request';
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
-> {
+  > {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
@@ -142,7 +142,7 @@ export class QueryRunner extends Component<
             }
           </div>
         </div>
-        <div className='row'>
+        <div className='row' style={{ marginTop: 10 }}>
           <div className='col-sm-12 col-lg-12'>
             {
               // @ts-ignore
