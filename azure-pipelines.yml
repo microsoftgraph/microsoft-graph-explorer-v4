@@ -60,7 +60,7 @@ jobs:
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: '10.x'
+          versionSpec: '12.x'
         displayName: 'Install Node.js'
 
       - script: |
@@ -74,6 +74,13 @@ jobs:
       - script: |
           npm run ci
         displayName: 'Runs tests'
+
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '**/TEST-*.xml'
+          mergeTestResults: true
+        displayName: 'Publish Test Results'
 
       - script: |
           npm run build
