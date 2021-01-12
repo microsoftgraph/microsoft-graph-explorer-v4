@@ -38,5 +38,6 @@ module.exports = {
   watchPlugins: [
     "jest-watch-typeahead/filename",
     "jest-watch-typeahead/testname"
-  ]
+  ],
+  testResultsProcessor: "./node_modules/jest-junit-reporter"
 };

@@ -79,7 +79,7 @@ jobs:
         condition: succeededOrFailed()
         inputs:
           testResultsFormat: 'JUnit'
-          testResultsFiles: 'coverage/clover.xml'
+          testResultsFiles: 'test-report.xml'
         displayName: 'Publish Test Results'
 
       - script: |
