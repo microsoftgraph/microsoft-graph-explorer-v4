@@ -306,7 +306,7 @@
   "Snippet not available": "Snippet not available",
   "Select different permissions": "To try out different Microsoft Graph API endpoints, choose the permissions, and then click Consent.",
   "Search permissions": "Search permissions",
-  "permissions not found": "We did not find permissions. To view a list of all available permissions, click on the Settings gearbox and then click on Select Permissions.",
+  "permissions not found": "We did not find any permissions. To view a list of all available permissions, click on the Settings icon and Select Permissions.",
   "selected": "selected",
   "Search sample queries": "Search sample queries",
   "Search history items": "Search history items",
