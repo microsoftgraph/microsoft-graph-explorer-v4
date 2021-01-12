@@ -76,7 +76,7 @@ jobs:
         displayName: 'Runs tests'
 
       - task: PublishTestResults@2
-      condition: succeededOrFailed()
+        condition: succeededOrFailed()
         inputs:
           testResultsFormat: 'JUnit'
           testResultsFiles: '**/TEST-RESULTS.xml'
