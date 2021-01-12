@@ -288,7 +288,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
                 this.renderItemColumn(item, index, column)}
               renderDetailsHeader={this.renderDetailsHeader}
-
+              classes={classes}
             />}
             {panel &&
               <div data-is-scrollable={true}>

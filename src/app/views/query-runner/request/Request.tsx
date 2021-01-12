@@ -78,7 +78,7 @@ export class Request extends Component<IRequestComponent, any> {
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Access Token']}
           headerText={messages['Access Token']}>
-          <Auth style={{ height}} />
+          <Auth style={{ height }} />
         </PivotItem>
       );
     }
@@ -132,26 +132,26 @@ export class Request extends Component<IRequestComponent, any> {
 
     return (
       <Resizable
-      style={{
-        border: 'solid 1px #ddd',
-        marginBottom: 10,
-      }}
-      onResize={(e: any, direction: any, ref: any, d: any) => {
-        if (ref && ref.style && ref.style.height) {
-          this.setRequestAndResponseHeights(ref.style.height);
-        }
-      }}
-      maxHeight={800}
-      minHeight={250}
-      bounds={'window'}
-      size={{
-      height: this.props.dimensions.request.height,
-      width: '100%',
-      }}
-      enable={{
-      bottom: true,
-      }}
-    >
+        style={{
+          border: 'solid 1px #ddd',
+          marginBottom: 10,
+        }}
+        onResize={(e: any, direction: any, ref: any, d: any) => {
+          if (ref && ref.style && ref.style.height) {
+            this.setRequestAndResponseHeights(ref.style.height);
+          }
+        }}
+        maxHeight={800}
+        minHeight={250}
+        bounds={'window'}
+        size={{
+          height: this.props.dimensions.request.height,
+          width: '100%',
+        }}
+        enable={{
+          bottom: true,
+        }}
+      >
         <Pivot
           onLinkClick={this.onPivotItemClick}
           styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}

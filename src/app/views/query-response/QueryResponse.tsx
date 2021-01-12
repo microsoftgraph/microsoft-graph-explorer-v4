@@ -1,4 +1,5 @@
-import { DefaultButton, FontSizes, getId, Icon, IconButton,
+import {
+  DefaultButton, FontSizes, getId, Icon, IconButton,
   Modal, Pivot, PivotItem, PrimaryButton, TooltipHost,
 } from 'office-ui-fabric-react';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
@@ -107,7 +108,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const pivotItems = getPivotItems(pivotProperties);
 
   return (
-    <div className='query-response'>
+    <>
       <Resizable
         style={{
           marginBottom: 10,
@@ -124,8 +125,11 @@ const QueryResponse = (props: IQueryResponseProps) => {
           bottom: false,
         }}
       >
-        <>
-          <Pivot onLinkClick={handlePivotItemClick} styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}>
+        <div className='query-response' style={{
+          minHeight: responseHeight,
+          height: responseHeight
+        }}>
+          <Pivot onLinkClick={handlePivotItemClick} className='pivot-response'>
             {pivotItems}
             <PivotItem
               headerText='Share'
@@ -144,7 +148,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
               onRenderItemLink={renderItemLink}
             />
           </Pivot>
-        </>
+        </div>
       </Resizable>
       <Modal
         isOpen={showModal}
@@ -199,7 +203,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           />
         </DialogFooter>
       </Dialog>
-    </div>
+    </>
   );
 };
 
