@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken, consentedScopes } from './auth-reducers';
+import { autoComplete } from './autocomplete-reducer';
 import { devxApi } from './devxApi-reducers';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
 import { scopes } from './permissions-reducer';
@@ -19,6 +20,7 @@ import { sidebarProperties } from './toggle-sidebar-reducer';
 export default combineReducers({
   adaptiveCard,
   authToken,
+  autoComplete,
   consentedScopes,
   graphExplorerMode,
   graphResponse,

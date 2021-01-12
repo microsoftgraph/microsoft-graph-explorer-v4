@@ -319,6 +319,8 @@
   "Administrator permission": "Администратору клиента требуется сначала выполнить авторизацию, прежде чем вы сможете предоставить это разрешение",
   "Adaptive Cards designer": "Конструктор адаптивных карточек.",
   "Click Run Query button above to fetch Adaptive Card": "Нажмите кнопку \"Выполнить запрос\" выше, чтобы получить адаптивную карточку.",
+  "Fetching suggestions": "Получение предложений",
+  "No auto-complete suggestions available": "Нет доступных вариантов автозаполнения",
   "Your history includes queries made in the last 30 days": "Журнал содержит запросы, сделанные в течение последних 30 дней",
   "Get token details (Powered by jwt.ms)": "Сведения о маркерах (на платформе jwt.ms)",
   "HTTP request method option": "Параметр метода HTTP-запроса",

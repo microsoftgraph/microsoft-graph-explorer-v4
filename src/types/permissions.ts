@@ -3,7 +3,6 @@ import { IQuery } from './query-runner';
 
 export interface IPermission {
   value: string;
-  consentDisplayName: string;
   consentDescription: string;
   isAdmin: boolean;
   consented: boolean;
@@ -30,5 +29,4 @@ export interface IPermissionProps {
 
 export interface IPermissionState {
   permissions: IPermission[];
-  groups: string[];
 }

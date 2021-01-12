@@ -15,7 +15,7 @@ import {
   Spinner,
   SpinnerSize,
   styled,
-  TooltipHost
+  TooltipHost,
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -24,14 +24,22 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
 import { telemetry } from '../../../../telemetry';
-import { LINK_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
-import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
+import {
+  LINK_CLICK_EVENT,
+  LISTITEM_CLICK_EVENT,
+} from '../../../../telemetry/event-types';
+import {
+  IQuery,
+  ISampleQueriesProps,
+  ISampleQuery,
+} from '../../../../types/query-runner';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
+import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
@@ -39,45 +47,41 @@ import { sidebarStyles } from '../Sidebar.styles';
 import { isJsonString } from './sample-query-utils';
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
-
   constructor(props: ISampleQueriesProps) {
     super(props);
     this.state = {
-      groupedList: {
-        samples: [],
-        categories: [],
-      }
+      sampleQueries: [],
     };
   }
 
   public componentDidMount = () => {
     const { queries } = this.props.samples;
     if (queries && queries.length > 0) {
-      this.generateSamples(queries);
+      this.setState({ sampleQueries: queries });
     } else {
       this.props.actions!.fetchSamples();
     }
-  }
+  };
 
   public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
     if (prevProps.samples.queries !== this.props.samples.queries) {
-      this.generateSamples(this.props.samples.queries);
+      this.setState({ sampleQueries: this.props.samples.queries });
     }
-  }
+  };
 
   public searchValueChanged = (event: any, value?: string): void => {
     const { queries } = this.props.samples;
-    let filteredSamples = queries;
+    let sampleQueries = queries;
     if (value) {
       const keyword = value.toLowerCase();
-      filteredSamples = queries.filter((sample: any) => {
+      sampleQueries = queries.filter((sample: any) => {
         const name = sample.humanName.toLowerCase();
         const category = sample.category.toLowerCase();
         return name.includes(keyword) || category.includes(keyword);
       });
     }
-    this.generateSamples(filteredSamples);
-  }
+    this.setState({ sampleQueries });
+  };
 
   public onDocumentationLinkClicked = (item: ISampleQuery) => {
     window.open(item.docLink, '_blank');
@@ -85,52 +89,20 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   private trackDocumentLinkClickedEvent(item: ISampleQuery) {
-    telemetry.trackEvent(
-      LINK_CLICK_EVENT,
-      {
-        ComponentName: 'Documentation link',
-        SampleId: item.id,
-        SampleName: item.humanName,
-        SampleCategory: item.category,
-        Link: item.docLink
-      });
-  }
-
-  public generateSamples(samples: any) {
-    const map = new Map();
-    const categories: any[] = [];
-
-    let isCollapsed = false;
-    let previousCount = 0;
-    let count = 0;
-
-    for (const query of samples) {
-      if (!map.has(query.category)) {
-        map.set(query.category, true);
-        count = samples.filter((sample: ISampleQuery) => sample.category === query.category).length;
-        if (categories.length > 0) {
-          isCollapsed = true;
-        }
-        categories.push({
-          name: query.category,
-          key: query.category,
-          startIndex: previousCount,
-          isCollapsed,
-          count,
-        });
-        previousCount += count;
-      }
-    }
-
-    this.setState({
-      groupedList: {
-        samples,
-        categories,
-      }
+    telemetry.trackEvent(LINK_CLICK_EVENT, {
+      ComponentName: 'Documentation link',
+      SampleId: item.id,
+      SampleName: item.humanName,
+      SampleCategory: item.category,
+      Link: item.docLink,
     });
   }
 
-  public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+  public renderItemColumn = (
+    item: any,
+    index: number | undefined,
+    column: IColumn | undefined
+  ) => {
     const classes = classNames(this.props);
     const {
       tokenPresent,
@@ -144,79 +116,100 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       switch (column.key) {
         case 'authRequiredIcon':
           if (item.method !== 'GET' && !tokenPresent) {
-            return <TooltipHost
-              tooltipProps={{
-                onRenderContent: () => <div style={{ paddingBottom: 3 }}>
-                  <FormattedMessage id={signInText} /></div>
-              }}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
-              styles={{ root: { display: 'inline-block' } }}
-            >
-              <Icon
-                iconName='Lock'
-                title={signInText}
-                style={{
-                  fontSize: 15,
-                  height: 10,
-                  width: 10,
-                  verticalAlign: 'center'
-                }} />
-            </TooltipHost>;
+            return (
+              <TooltipHost
+                tooltipProps={{
+                  onRenderContent: () => (
+                    <div style={{ paddingBottom: 3 }}>
+                      <FormattedMessage id={signInText} />
+                    </div>
+                  ),
+                }}
+                id={getId()}
+                calloutProps={{ gapSpace: 0 }}
+                styles={{ root: { display: 'inline-block' } }}
+              >
+                <Icon
+                  iconName='Lock'
+                  title={signInText}
+                  style={{
+                    fontSize: 15,
+                    height: 10,
+                    width: 10,
+                    verticalAlign: 'center',
+                  }}
+                />
+              </TooltipHost>
+            );
           } else {
             return null;
           }
 
         case 'button':
-          return <TooltipHost
-            tooltipProps={{
-              onRenderContent: () => <div style={{ paddingBottom: 3 }}>
-                {item.docLink}</div>
-            }}
-            id={getId()}
-            calloutProps={{ gapSpace: 0 }}
-          >
-            <Icon iconName='NavigateExternalInline'
-              onClick={() => this.onDocumentationLinkClicked(item)}
-              className={classes.docLink}
-              style={{
-                marginRight: '20%'
+          return (
+            <TooltipHost
+              tooltipProps={{
+                onRenderContent: () => (
+                  <div style={{ paddingBottom: 3 }}>{item.docLink}</div>
+                ),
               }}
-            />
-          </TooltipHost>;
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+            >
+              <Icon
+                iconName='NavigateExternalInline'
+                onClick={() => this.onDocumentationLinkClicked(item)}
+                className={classes.docLink}
+                style={{
+                  marginRight: '20%',
+                }}
+              />
+            </TooltipHost>
+          );
 
         case 'method':
-          return <TooltipHost
-            tooltipProps={{
-              onRenderContent: () => <div style={{ paddingBottom: 3 }}>
-                {queryContent}</div>
-            }}
-            id={getId()}
-            calloutProps={{ gapSpace: 0 }}
-            styles={{ root: { display: 'inline-block' } }}
-          >
-            <span className={classes.badge}
-              style={{ background: getStyleFor(item.method), textAlign: 'center' }}
+          return (
+            <TooltipHost
+              tooltipProps={{
+                onRenderContent: () => (
+                  <div style={{ paddingBottom: 3 }}>{queryContent}</div>
+                ),
+              }}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+              styles={{ root: { display: 'inline-block' } }}
             >
-              {item.method}
-            </span>;
-          </TooltipHost>;
+              <span
+                className={classes.badge}
+                style={{
+                  background: getStyleFor(item.method),
+                  textAlign: 'center',
+                }}
+              >
+                {item.method}
+              </span>
+              ;
+            </TooltipHost>
+          );
 
         default:
-          return <TooltipHost
-            tooltipProps={{
-              onRenderContent: () => <div style={{ paddingBottom: 3 }}>
-                {item.method} {queryContent} </div>
-            }}
-            id={getId()}
-            calloutProps={{ gapSpace: 0 }}
-          >
-            <span
-              aria-label={queryContent} className={classes.queryContent}
+          return (
+            <TooltipHost
+              tooltipProps={{
+                onRenderContent: () => (
+                  <div style={{ paddingBottom: 3 }}>
+                    {item.method} {queryContent}{' '}
+                  </div>
+                ),
+              }}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
             >
-              {queryContent}
-            </span>
-          </TooltipHost>;
+              <span aria-label={queryContent} className={classes.queryContent}>
+                {queryContent}
+              </span>
+            </TooltipHost>
+          );
       }
     }
   };
@@ -239,7 +232,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
                 this.querySelected(props.item);
               }
             }}
-            className={classes.queryRow + ' ' + (selectionDisabled ? classes.rowDisabled : '')}
+            className={
+              classes.queryRow +
+              ' ' +
+              (selectionDisabled ? classes.rowDisabled : '')
+            }
             data-selection-disabled={selectionDisabled}
           />
         </div>
@@ -250,7 +247,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   private querySelected = (query: any) => {
     const { actions, tokenPresent, profile } = this.props;
     const selectedQuery = query;
-    if (!selectedQuery) { return; }
+    if (!selectedQuery) {
+      return;
+    }
 
     const queryVersion = selectedQuery.requestUrl.substring(1, 5);
     const sampleQuery: IQuery = {
@@ -267,33 +266,41 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       if (sampleQuery.selectedVerb === 'GET') {
         sampleQuery.sampleBody = JSON.parse('{}');
         if (tokenPresent) {
-          if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
-          else { actions.runQuery(sampleQuery); }
+          if (selectedQuery.tip) {
+            displayTipMessage(actions, selectedQuery);
+          } else {
+            actions.runQuery(sampleQuery);
+          }
         } else {
           actions.runQuery(sampleQuery);
         }
         this.trackSampleQueryClickEvent(selectedQuery);
       } else {
-        sampleQuery.sampleBody = (sampleQuery.sampleBody && isJsonString(sampleQuery.sampleBody))
-          ? JSON.parse(sampleQuery.sampleBody) : undefined;
-        if (selectedQuery.tip) { displayTipMessage(actions, selectedQuery); }
+        if (sampleQuery.sampleBody) {
+          sampleQuery.sampleBody = isJsonString(sampleQuery.sampleBody)
+            ? JSON.parse(sampleQuery.sampleBody)
+            : sampleQuery.sampleBody;
+        } else {
+          sampleQuery.sampleBody = undefined;
+        }
+
+        if (selectedQuery.tip) {
+          displayTipMessage(actions, selectedQuery);
+        }
       }
       actions.setSampleQuery(sampleQuery);
     }
-  }
+  };
 
-  private trackSampleQueryClickEvent(selectedQuery: ISampleQuery)
-  {
+  private trackSampleQueryClickEvent(selectedQuery: ISampleQuery) {
     const sanitizedUrl = sanitizeQueryUrl(GRAPH_URL + selectedQuery.requestUrl);
-    telemetry.trackEvent(
-      LISTITEM_CLICK_EVENT,
-      {
-         ComponentName: 'Sample query list item',
-         SampleId: selectedQuery.id,
-         SampleName: selectedQuery.humanName,
-         SampleCategory: selectedQuery.category,
-         QuerySignature: `${selectedQuery.method} ${sanitizedUrl}`
-      });
+    telemetry.trackEvent(LISTITEM_CLICK_EVENT, {
+      ComponentName: 'Sample query list item',
+      SampleId: selectedQuery.id,
+      SampleName: selectedQuery.humanName,
+      SampleCategory: selectedQuery.category,
+      QuerySignature: `${selectedQuery.method} ${sanitizedUrl}`,
+    });
   }
 
   public renderGroupHeader = (props: any): any => {
@@ -308,22 +315,20 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           check: { display: 'none' },
           title: {
             fontSize: FontSizes.medium,
-            fontWeight: FontWeights.semibold
+            fontWeight: FontWeights.semibold,
           },
           expand: {
             fontSize: FontSizes.small,
-          }
+          },
         }}
         {...props}
         onToggleSelectGroup={onToggleSelectGroup}
       />
     );
-  }
+  };
 
   private renderDetailsHeader() {
-    return (
-      <div />
-    );
+    return <div />;
   }
 
   public render() {
@@ -332,7 +337,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       intl: { messages },
     }: any = this.props;
 
+    const { sampleQueries } = this.state;
     const classes = classNames(this.props);
+    const groups = generateGroupsFromList(sampleQueries, 'category');
 
     if (pending) {
       return (
@@ -341,16 +348,40 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           size={SpinnerSize.large}
           label={`${messages['loading samples']} ...`}
           ariaLive='assertive'
-          labelPosition='top' />
+          labelPosition='top'
+        />
       );
     }
 
-    const { groupedList } = this.state;
     const columns = [
-      { key: 'authRequiredIcon', name: '', fieldName: 'authRequiredIcon', minWidth: 20, maxWidth: 20 },
-      { key: 'method', name: '', fieldName: 'method', minWidth: 20, maxWidth: 50 },
-      { key: 'humanName', name: '', fieldName: 'humanName', minWidth: 100, maxWidth: 180 },
-      { key: 'button', name: '', fieldName: 'button', minWidth: 20, maxWidth: 20 },
+      {
+        key: 'authRequiredIcon',
+        name: '',
+        fieldName: 'authRequiredIcon',
+        minWidth: 20,
+        maxWidth: 20,
+      },
+      {
+        key: 'method',
+        name: '',
+        fieldName: 'method',
+        minWidth: 20,
+        maxWidth: 50,
+      },
+      {
+        key: 'humanName',
+        name: '',
+        fieldName: 'humanName',
+        minWidth: 100,
+        maxWidth: 180,
+      },
+      {
+        key: 'button',
+        name: '',
+        fieldName: 'button',
+        minWidth: 20,
+        maxWidth: 20,
+      },
     ];
 
     return (
@@ -363,31 +394,44 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           aria-label={'Search'}
         />
         <hr />
-        {error && <MessageBar messageBarType={MessageBarType.warning}
+        {error && (
+          <MessageBar
+            messageBarType={MessageBarType.warning}
+            isMultiline={true}
+            dismissButtonAriaLabel='Close'
+          >
+            <FormattedMessage id='viewing a cached set' />
+          </MessageBar>
+        )}
+        <MessageBar
+          messageBarType={MessageBarType.info}
           isMultiline={true}
-          dismissButtonAriaLabel='Close'>
-          <FormattedMessage id='viewing a cached set' />
-        </MessageBar>}
-        <MessageBar messageBarType={MessageBarType.info}
-          isMultiline={true}
-          dismissButtonAriaLabel='Close'>
+          dismissButtonAriaLabel='Close'
+        >
           <FormattedMessage id='see more queries' />
-          <a target='_blank' className={classes.links}
-            href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}>
+          <a
+            target='_blank'
+            className={classes.links}
+            href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
+          >
             <FormattedMessage id='Microsoft Graph API Reference docs' />
           </a>
         </MessageBar>
-        <Announced message={`${groupedList.samples.length} search results available.`} />
-        <DetailsList className={classes.queryList}
+        <Announced
+          message={`${sampleQueries.length} search results available.`}
+        />
+        <DetailsList
+          className={classes.queryList}
           cellStyleProps={{
             cellRightPadding: 0,
             cellExtraRightPadding: 0,
             cellLeftPadding: 0,
           }}
           onRenderItemColumn={this.renderItemColumn}
-          items={groupedList.samples}
+          items={sampleQueries}
           selectionMode={SelectionMode.none}
-          columns={columns} groups={groupedList.categories}
+          columns={columns}
+          groups={groups}
           groupProps={{
             showEmptyGroups: true,
             onRenderHeader: this.renderGroupHeader,
@@ -398,14 +442,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       </div>
     );
   }
-
 }
 
 function displayTipMessage(actions: any, selectedQuery: ISampleQuery) {
   actions.setQueryResponseStatus({
     messageType: MessageBarType.warning,
     statusText: 'Tip',
-    status: selectedQuery.tip
+    status: selectedQuery.tip,
   });
 }
 
@@ -420,12 +463,15 @@ function mapStateToProps(state: any) {
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators({
-      ...queryActionCreators,
-      ...queryInputActionCreators,
-      ...samplesActionCreators,
-      ...queryStatusActionCreators,
-    }, dispatch),
+    actions: bindActionCreators(
+      {
+        ...queryActionCreators,
+        ...queryInputActionCreators,
+        ...samplesActionCreators,
+        ...queryStatusActionCreators,
+      },
+      dispatch
+    ),
   };
 }
 
