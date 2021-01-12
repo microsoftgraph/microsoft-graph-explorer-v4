@@ -89,9 +89,6 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "jest": {
-    "testResultsProcessor": "./node_modules/jest-junit-reporter"
-  },
   "browserslist": [
     ">0.2%",
     "not dead",
@@ -121,7 +118,6 @@
     "enzyme": "3.9.0",
     "enzyme-adapter-react-16": "1.9.1",
     "jest-fetch-mock": "2.1.1",
-    "jest-junit-reporter": "^1.1.0",
     "react-test-renderer": "16.8.3",
     "redux-logger": "3.0.6",
     "redux-mock-store": "1.5.3",
