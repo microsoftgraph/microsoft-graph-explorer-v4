@@ -5,7 +5,7 @@ import chrome, { Options } from 'selenium-webdriver/chrome';
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 300000;
 const TEST_TIMEOUT_MS = 300000;
 
-describe('Graph Explorer', () => {
+describe('Graph Explorer accessibility', () => {
   let driver: ThenableWebDriver;
 
   // set browser environment to use headless Chrome
