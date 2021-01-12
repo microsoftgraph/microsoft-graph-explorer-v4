@@ -182,8 +182,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         key: 'value',
         name: messages.Permission,
         fieldName: 'value',
-        minWidth: 150,
-        maxWidth: 200,
+        minWidth: 200,
+        maxWidth: 250,
         isResizable: true
       }
     ];
@@ -195,8 +195,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           name: messages.Description,
           fieldName: 'consentDescription',
           isResizable: true,
-          minWidth: (tokenPresent) ? 400 : 650,
-          maxWidth: (tokenPresent) ? 600 : 700,
+          minWidth: (tokenPresent) ? 400 : 700,
+          maxWidth: (tokenPresent) ? 700 : 1000,
           isMultiline: true
         }
       );
@@ -208,8 +208,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         isResizable: true,
         name: messages['Admin consent required'],
         fieldName: 'isAdmin',
-        minWidth: (tokenPresent) ? 150 : 100,
-        maxWidth: (tokenPresent) ? 150 : 100,
+        minWidth: (tokenPresent) ? 150 : 150,
+        maxWidth: (tokenPresent) ? 200 : 300,
         ariaLabel: translateMessage('Administrator permission')
       }
     );
