@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { geLocale } from '../../../../appLocale';
 
 import { telemetry } from '../../../../telemetry';
 import {
@@ -42,11 +43,11 @@ export class History extends Component<IHistoryProps, any> {
   }
 
   public componentDidMount = () => {
-    this.setState({ historyItems: this.props.history});
+    this.setState({ historyItems: this.props.history });
   }
   public componentDidUpdate = (prevProps: IHistoryProps) => {
     if (prevProps.history !== this.props.history) {
-      this.setState({ historyItems: this.props.history});
+      this.setState({ historyItems: this.props.history });
     }
   };
 
@@ -476,7 +477,7 @@ export class History extends Component<IHistoryProps, any> {
       { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20 },
     ];
 
-    if (!historyItems ) {
+    if (!historyItems) {
       return (
         <Label className={classes.spinner}>
           <FormattedMessage id='We did not find any history items' />
