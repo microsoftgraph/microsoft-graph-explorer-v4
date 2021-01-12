@@ -13,7 +13,7 @@ import { FormattedMessage } from 'react-intl';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
-import { generatePermissionGroups } from './util';
+import { generateGroupsFromList } from '../../../../utils/generate-groups';
 
 interface IPanelList {
   messages: any;
@@ -30,7 +30,16 @@ const PanelList = ({ messages, permissions,
   columns, classes, selection,
   renderItemColumn, searchValueChanged, renderDetailsHeader }: IPanelList) => {
 
-  const groups = generatePermissionGroups(permissions);
+  const permissionsList: any[] = [];
+  permissions.forEach(perm => {
+    const permission: any = {...perm};
+    const permissionValue = permission.value;
+    const groupName = permissionValue.split('.')[0];
+    permission.groupName = groupName;
+    permissionsList.push(permission);
+  });
+
+  const groups = generateGroupsFromList(permissionsList, 'groupName');
   permissions = permissions.sort(dynamicSort('value', SortOrder.ASC));
 
   return (

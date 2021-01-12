@@ -282,9 +282,12 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       if (!requestUrl) {
         this.props.actions!.fetchAutoCompleteOptions('', queryVersion);
       } else {
-        this.props.actions!.fetchAutoCompleteOptions(requestUrl, queryVersion);
+        if (!this.props.autoCompleteOptions || `${requestUrl}` !== this.props.autoCompleteOptions.url) {
+          this.props.actions!.fetchAutoCompleteOptions(requestUrl, queryVersion);
+        } else {
+          this.performLocalSearch(url);
+        }
       }
-      this.performLocalSearch(url);
     }
   }
 
@@ -427,6 +430,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           value={queryUrl}
           componentRef={this.autoCompleteRef}
           onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
+          ariaLabel={translateMessage('Query Sample Input')}
+          role='textbox'
         />
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
           <SuggestionsList

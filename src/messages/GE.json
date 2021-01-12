@@ -293,7 +293,7 @@
   "Status": "Status",
   "Admin consent required": "Admin consent required",
   "Consent": "Consent",
-  "permissions required to run the query": "The following permissions are required to run the query. To consent to the permissions, click Consent.",
+  "permissions required to run the query": "One of the following permissions is required to run the query. Select a permission and click Consent.",
   "tab": " tab",
   "View the": " View the",
   "viewing a cached set": "You are viewing a cached set of samples because of a network connection failure.",
@@ -306,7 +306,7 @@
   "Snippet not available": "Snippet not available",
   "Select different permissions": "To try out different Microsoft Graph API endpoints, choose the permissions, and then click Consent.",
   "Search permissions": "Search permissions",
-  "permissions not found": "We did not find permissions",
+  "permissions not found": "We did not find any permissions. To view a list of all available permissions, click on the Settings icon and Select Permissions.",
   "selected": "selected",
   "Search sample queries": "Search sample queries",
   "Search history items": "Search history items",
@@ -326,5 +326,6 @@
   "HTTP request method option": "HTTP request method option",
   "Microsoft Graph API Version option": "Microsoft Graph API Version option",
   "Query Sample Input": "Query sample input",
-  "popup blocked, allow pop-up windows in your browser": "popup blocked, allow pop-up windows in your browser"
+  "popup blocked, allow pop-up windows in your browser": "popup blocked, allow pop-up windows in your browser",
+  "sign in to consent to permissions": "One of the following permissions is required to run the query. Sign in with an account that can consent to the permission you will choose."
 }
