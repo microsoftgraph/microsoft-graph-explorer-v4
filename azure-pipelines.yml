@@ -79,7 +79,7 @@ jobs:
         condition: succeededOrFailed()
         inputs:
           testResultsFormat: 'JUnit'
-          testResultsFiles: '**/TEST-RESULTS.xml'
+          testResultsFiles: 'TEST-RESULTS.xml'
         displayName: 'Publish Test Results'
 
       - script: |
