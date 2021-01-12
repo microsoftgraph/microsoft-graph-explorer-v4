@@ -76,10 +76,10 @@ jobs:
         displayName: 'Runs tests'
 
       - task: PublishTestResults@2
+      condition: succeededOrFailed()
         inputs:
           testResultsFormat: 'JUnit'
-          testResultsFiles: 'TEST-*.xml'
-          mergeTestResults: true
+          testResultsFiles: '**/TEST-RESULTS.xml'
         displayName: 'Publish Test Results'
 
       - script: |
