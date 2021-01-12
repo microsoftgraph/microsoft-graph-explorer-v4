@@ -273,7 +273,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
               renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
                 this.renderItemColumn(item, index, column)}
               renderDetailsHeader={this.renderDetailsHeader}
-              permissionToken={tokenPresent}
 
             />}
             {panel &&
