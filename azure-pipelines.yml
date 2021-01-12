@@ -78,7 +78,7 @@ jobs:
       - task: PublishTestResults@2
         inputs:
           testResultsFormat: 'JUnit'
-          testResultsFiles: '**/TEST-*.xml'
+          testResultsFiles: 'TEST-*.xml'
           mergeTestResults: true
         displayName: 'Publish Test Results'
 
