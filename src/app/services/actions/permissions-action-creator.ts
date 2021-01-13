@@ -1,4 +1,8 @@
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { geLocale } from '../../../appLocale';
+import { telemetry } from '../../../telemetry';
+import { FETCH_PERMISSIONS_ACTION } from '../../../telemetry/component-names';
+import { NETWORK_ERROR } from '../../../telemetry/error-types';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
@@ -59,6 +63,13 @@ export function fetchScopes(query?: IQuery): Function {
       }
       throw (response);
     } catch (error) {
+      telemetry.trackException(
+        new Error(NETWORK_ERROR),
+        SeverityLevel.Error,
+        {
+          ComponentName: FETCH_PERMISSIONS_ACTION,
+          Message: `${error}`
+        });
       return dispatch(fetchScopesError(error));
     }
   };
