@@ -1,8 +1,8 @@
-import { SeverityLevel } from "@microsoft/applicationinsights-web";
-import { telemetry } from "../../telemetry";
-import { LINK_ERROR } from "../../telemetry/error-types";
-import { IQuery } from "../../types/query-runner";
-import { sanitizeQueryUrl } from "./query-url-sanitization";
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
+import { telemetry } from '../../telemetry';
+import { LINK_ERROR } from '../../telemetry/error-types';
+import { IQuery } from '../../types/query-runner';
+import { sanitizeQueryUrl } from './query-url-sanitization';
 
 export async function validateExternalLink(url: string, componentName: string,
   sampleId: string | null = null,  sampleQuery: IQuery | null = null): Promise<void> {
@@ -17,7 +17,7 @@ export async function validateExternalLink(url: string, componentName: string,
         ComponentName: componentName,
         Link: url,
         Message: `${error}`
-      }
+      };
       if (sampleQuery) {
         const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
         properties.QuerySignature = `${sampleQuery.selectedVerb} ${sanitizedUrl}`;
