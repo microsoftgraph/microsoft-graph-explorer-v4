@@ -1,4 +1,3 @@
-import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import {
   Announced,
   DetailsList,
@@ -25,12 +24,10 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
 import { telemetry } from '../../../../telemetry';
-<<<<<<< HEAD
-import { DOCUMENTATION_LINK, SAMPLE_QUERY_LIST_ITEM } from '../../../../telemetry/component-names';
-import { LINK_ERROR } from '../../../../telemetry/error-types';
-import { LINK_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
-import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
-=======
+import {
+  DOCUMENTATION_LINK,
+  SAMPLE_QUERY_LIST_ITEM
+} from '../../../../telemetry/component-names';
 import {
   LINK_CLICK_EVENT,
   LISTITEM_CLICK_EVENT,
@@ -40,13 +37,13 @@ import {
   ISampleQueriesProps,
   ISampleQuery,
 } from '../../../../types/query-runner';
->>>>>>> dcefa4b573e6eb609fccc6fa079541ff0fade99b
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
+import { validateExternalLink } from '../../../utils/external-link-validation';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { substituteTokens } from '../../../utils/token-helpers';
@@ -107,16 +104,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     telemetry.trackEvent( LINK_CLICK_EVENT, properties);
 
     // Check if link throws error
-    await fetch(item.docLink || '')
-      .then(response => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-      })
-      .catch(error => {
-        properties.Message = `An error was encountered trying to open the link: ${error}`;
-        telemetry.trackException(new Error(LINK_ERROR), SeverityLevel.Error, properties);
-      });
+    validateExternalLink(item.docLink || '', DOCUMENTATION_LINK, item.id);
   }
 
   public renderItemColumn = (
@@ -315,7 +303,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   private trackSampleQueryClickEvent(selectedQuery: ISampleQuery) {
     const sanitizedUrl = sanitizeQueryUrl(GRAPH_URL + selectedQuery.requestUrl);
-<<<<<<< HEAD
     telemetry.trackEvent(
       LISTITEM_CLICK_EVENT,
       {
@@ -325,15 +312,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
          SampleCategory: selectedQuery.category,
          QuerySignature: `${selectedQuery.method} ${sanitizedUrl}`
       });
-=======
-    telemetry.trackEvent(LISTITEM_CLICK_EVENT, {
-      ComponentName: 'Sample query list item',
-      SampleId: selectedQuery.id,
-      SampleName: selectedQuery.humanName,
-      SampleCategory: selectedQuery.category,
-      QuerySignature: `${selectedQuery.method} ${sanitizedUrl}`,
-    });
->>>>>>> dcefa4b573e6eb609fccc6fa079541ff0fade99b
   }
 
   public renderGroupHeader = (props: any): any => {
