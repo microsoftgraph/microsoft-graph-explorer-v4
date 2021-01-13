@@ -8,10 +8,10 @@ import { Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
 
 import { telemetry } from '../../../../telemetry';
+import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { BUTTON_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { IQuery } from '../../../../types/query-runner';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
-import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 
 interface ISnippetProps {
   language: string;
