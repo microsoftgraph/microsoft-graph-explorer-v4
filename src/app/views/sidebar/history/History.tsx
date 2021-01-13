@@ -1,28 +1,14 @@
 import {
-  ContextualMenuItemType,
-  DefaultButton,
-  DetailsList,
-  DetailsRow,
-  Dialog,
-  DialogFooter,
-  DialogType,
-  getId,
-  getTheme,
-  IColumn,
-  IconButton,
-  Label,
-  MessageBar,
-  MessageBarType,
-  PrimaryButton,
-  SearchBox,
-  SelectionMode,
-  styled,
-  TooltipHost,
+  Announced,
+  ContextualMenuItemType, DefaultButton, DetailsList, DetailsRow, Dialog,
+  DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
+  Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { geLocale } from '../../../../appLocale';
 
 import { telemetry } from '../../../../telemetry';
 import {
@@ -46,6 +32,7 @@ import * as queryStatusActionCreators from '../../../services/actions/query-stat
 import * as requestHistoryActionCreators from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { dynamicSort } from '../../../utils/dynamic-sort';
+import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
@@ -56,38 +43,35 @@ export class History extends Component<IHistoryProps, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      groupedList: {
-        items: [],
-        categories: [],
-      },
+      historyItems: [],
       hideDialog: true,
       category: '',
     };
   }
 
   public componentDidMount = () => {
-    this.generateGroupedList(this.props.history);
-  };
-
+    this.setState({ historyItems: this.props.history });
+  }
   public componentDidUpdate = (prevProps: IHistoryProps) => {
     if (prevProps.history !== this.props.history) {
-      this.generateGroupedList(this.props.history);
+      this.setState({ historyItems: this.props.history });
     }
   };
 
   public searchValueChanged = (event: any, value?: string): void => {
     const { history } = this.props;
-    let filteredSamples = history;
+    let historyItems = history;
     if (value) {
       const keyword = value.toLowerCase();
-      filteredSamples = history.filter((sample: any) => {
+      historyItems = history.filter((sample: any) => {
         const name = sample.url.toLowerCase();
         return name.toLowerCase().includes(keyword);
       });
     }
 
-    this.generateGroupedList(filteredSamples);
-  };
+    this.setState({ historyItems });
+  }
+
 
   public formatDate = (date: any) => {
     const year = date.getFullYear();
@@ -98,7 +82,7 @@ export class History extends Component<IHistoryProps, any> {
     return `${year}-${month}-${day}`;
   };
 
-  public getItems(history: any) {
+  public getItems(history: any[]) {
     const {
       intl: { messages },
     }: any = this.props;
@@ -133,40 +117,6 @@ export class History extends Component<IHistoryProps, any> {
         value.index = index;
       });
     return items;
-  }
-
-  public generateGroupedList(history: any) {
-    const map = new Map();
-    const categories: any[] = [];
-    const items = this.getItems(history);
-
-    const isCollapsed = false;
-    let previousCount = 0;
-    let count = 0;
-
-    for (const historyItem of items) {
-      if (!map.has(historyItem.category)) {
-        map.set(historyItem.category, true);
-        count = items.filter(
-          (sample: IHistoryItem) => sample.category === historyItem.category
-        ).length;
-        categories.push({
-          name: historyItem.category,
-          key: historyItem.category,
-          startIndex: previousCount,
-          isCollapsed,
-          count,
-        });
-        previousCount += count;
-      }
-    }
-
-    this.setState({
-      groupedList: {
-        items,
-        categories,
-      },
-    });
   }
 
   public renderRow = (props: any): any => {
@@ -376,14 +326,9 @@ export class History extends Component<IHistoryProps, any> {
   };
 
   private deleteHistoryCategory = (): any => {
-    const {
-      category,
-      groupedList: { items },
-    } = this.state;
+    const { category, historyItems } = this.state;
     const { actions } = this.props;
-    const itemsToDelete = items.filter(
-      (query: IHistoryItem) => query.category === category
-    );
+    const itemsToDelete = historyItems.filter((query: IHistoryItem) => query.category === category);
 
     if (actions) {
       actions.bulkRemoveHistoryItems(itemsToDelete);
@@ -393,12 +338,8 @@ export class History extends Component<IHistoryProps, any> {
   };
 
   private exportHistoryByCategory = (category: string) => {
-    const {
-      groupedList: { items },
-    } = this.state;
-    const itemsToExport = items.filter(
-      (query: IHistoryItem) => query.category === category
-    );
+    const { historyItems } = this.state;
+    const itemsToExport = historyItems.filter((query: IHistoryItem) => query.category === category);
     const entries: IHarPayload[] = [];
 
     itemsToExport.forEach((query: IHistoryItem) => {
@@ -526,7 +467,7 @@ export class History extends Component<IHistoryProps, any> {
   }
 
   public render() {
-    const { groupedList, hideDialog, category } = this.state;
+    const { hideDialog, category, historyItems } = this.state;
     const {
       intl: { messages },
     }: any = this.props;
@@ -543,13 +484,16 @@ export class History extends Component<IHistoryProps, any> {
       { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20 },
     ];
 
-    if (groupedList.items.length === 0) {
+    if (!historyItems) {
       return (
         <Label className={classes.spinner}>
           <FormattedMessage id='We did not find any history items' />
         </Label>
       );
     }
+
+    const items = this.getItems(historyItems);
+    const groups = generateGroupsFromList(items, 'category');
 
     return (
       <>
@@ -569,20 +513,26 @@ export class History extends Component<IHistoryProps, any> {
             <FormattedMessage id='Your history includes queries made in the last 30 days' />
             .
           </MessageBar>
-          <DetailsList
+          {items.length === 0 && <Label className={classes.spinner}>
+            <FormattedMessage id='We did not find any history items' />
+          </Label>}
+          <Announced
+            message={`${items.length} search results available.`}
+          />
+          {items.length > 0 && <DetailsList
             className={classes.queryList}
             onRenderItemColumn={this.renderItemColumn}
-            items={groupedList.items}
+            items={items}
             columns={columns}
             selectionMode={SelectionMode.none}
-            groups={groupedList.categories}
+            groups={groups}
             groupProps={{
               showEmptyGroups: true,
               onRenderHeader: this.renderGroupHeader,
             }}
             onRenderRow={this.renderRow}
             onRenderDetailsHeader={this.renderDetailsHeader}
-          />
+          />}
         </div>
         <Dialog
           hidden={hideDialog}
