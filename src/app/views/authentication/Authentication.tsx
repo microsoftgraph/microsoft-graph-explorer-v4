@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { telemetry } from '../../../telemetry';
+import { AUTHENTICATION_ACTION } from '../../../telemetry/component-names';
 import { OPERATIONAL_ERROR } from '../../../telemetry/error-types';
 import { IAuthenticationProps } from '../../../types/authentication';
 import { Mode } from '../../../types/enums';
@@ -53,7 +54,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
         new Error(OPERATIONAL_ERROR),
         SeverityLevel.Error,
         {
-          ComponentName: 'Authentication action',
+          ComponentName: AUTHENTICATION_ACTION,
           Message: `Authentication failed: ${errorCode.replace('_', ' ')}`,
         });
     }

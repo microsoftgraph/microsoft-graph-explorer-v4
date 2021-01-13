@@ -11,6 +11,7 @@ import { telemetry } from '../../../../telemetry';
 import { BUTTON_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { IQuery } from '../../../../types/query-runner';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
+import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 
 interface ISnippetProps {
   language: string;
@@ -90,7 +91,7 @@ function trackCopyEvent(query: IQuery, language: string) {
   const sanitizedUrl = sanitizeQueryUrl(query.sampleUrl);
   telemetry.trackEvent(BUTTON_CLICK_EVENT,
     {
-      ComponentName: 'Code snippets copy button',
+      ComponentName: CODE_SNIPPETS_COPY_BUTTON,
       SelectedLanguage: language,
       QuerySignature: `${query.selectedVerb} ${sanitizedUrl}`
     });

@@ -25,6 +25,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
 import { telemetry } from '../../../../telemetry';
+import { DOCUMENTATION_LINK, SAMPLE_QUERY_LIST_ITEM } from '../../../../telemetry/component-names';
 import { LINK_ERROR } from '../../../../telemetry/error-types';
 import { LINK_CLICK_EVENT, LISTITEM_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
@@ -88,7 +89,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   private async trackDocumentLinkClickedEvent(item: ISampleQuery): Promise<void> {
     const properties: { [key: string]: any } = {
-        ComponentName: 'Documentation link',
+        ComponentName: DOCUMENTATION_LINK,
         SampleId: item.id,
         SampleName: item.humanName,
         SampleCategory: item.category,
@@ -301,7 +302,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     telemetry.trackEvent(
       LISTITEM_CLICK_EVENT,
       {
-         ComponentName: 'Sample query list item',
+         ComponentName: SAMPLE_QUERY_LIST_ITEM,
          SampleId: selectedQuery.id,
          SampleName: selectedQuery.humanName,
          SampleCategory: selectedQuery.category,

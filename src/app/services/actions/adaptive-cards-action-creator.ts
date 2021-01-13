@@ -1,6 +1,7 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import * as AdaptiveCardsTemplateAPI from 'adaptivecards-templating';
 import { telemetry } from '../../../telemetry';
+import { GET_ADAPTIVE_CARD_ACTION } from '../../../telemetry/component-names';
 import { NETWORK_ERROR } from '../../../telemetry/error-types';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
@@ -81,7 +82,7 @@ export function getAdaptiveCard(
           new Error(NETWORK_ERROR),
           SeverityLevel.Error,
           {
-            ComponentName: 'Get adaptive card action',
+            ComponentName: GET_ADAPTIVE_CARD_ACTION,
             QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
             Message: `${error}`
           }

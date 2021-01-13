@@ -26,6 +26,13 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { telemetry } from '../../../../telemetry';
 import {
+  DELETE_HISTORY_ITEM_BUTTON,
+  EXPORT_HISTORY_ITEM_BUTTON,
+  HISTORY_LIST_ITEM,
+  RUN_HISTORY_ITEM_BUTTON,
+  VIEW_HISTORY_ITEM_BUTTON
+} from '../../../../telemetry/component-names';
+import {
   BUTTON_CLICK_EVENT,
   LISTITEM_CLICK_EVENT,
 } from '../../../../telemetry/event-types';
@@ -433,7 +440,7 @@ export class History extends Component<IHistoryProps, any> {
     }
     this.trackHistoryItemEvent(
       BUTTON_CLICK_EVENT,
-      'Run history item button',
+      RUN_HISTORY_ITEM_BUTTON,
       query
     );
   };
@@ -444,7 +451,7 @@ export class History extends Component<IHistoryProps, any> {
     exportQuery(generatedHarData, `${query.url}/`);
     this.trackHistoryItemEvent(
       BUTTON_CLICK_EVENT,
-      'Export history item button',
+      EXPORT_HISTORY_ITEM_BUTTON,
       query
     );
   };
@@ -456,7 +463,7 @@ export class History extends Component<IHistoryProps, any> {
     }
     this.trackHistoryItemEvent(
       BUTTON_CLICK_EVENT,
-      'Delete history item button',
+      DELETE_HISTORY_ITEM_BUTTON,
       query
     );
   };
@@ -465,7 +472,7 @@ export class History extends Component<IHistoryProps, any> {
     this.onViewQuery(query);
     this.trackHistoryItemEvent(
       BUTTON_CLICK_EVENT,
-      'View history item button',
+      VIEW_HISTORY_ITEM_BUTTON,
       query
     );
   };
@@ -474,7 +481,7 @@ export class History extends Component<IHistoryProps, any> {
     this.onViewQuery(query);
     this.trackHistoryItemEvent(
       LISTITEM_CLICK_EVENT,
-      'View history list item',
+      HISTORY_LIST_ITEM,
       query
     );
   };

@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
 import { telemetry } from '../../../telemetry';
+import { OFFICE_DEV_PROGRAM_LINK, SELECT_THEME_BUTTON, THEME_CHANGE_BUTTON } from '../../../telemetry/component-names';
 import { BUTTON_CLICK_EVENT, LINK_CLICK_EVENT } from '../../../telemetry/event-types';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
@@ -92,7 +93,7 @@ function Settings(props: ISettingsProps) {
     let hidden = themeChooserDialogHidden;
     hidden = !hidden;
     hideThemeChooserDialog(hidden);
-    telemetry.trackEvent(BUTTON_CLICK_EVENT, { ComponentName: 'Theme change button' });
+    telemetry.trackEvent(BUTTON_CLICK_EVENT, { ComponentName: THEME_CHANGE_BUTTON });
   };
 
   const handleSignOut = () => {
@@ -105,7 +106,7 @@ function Settings(props: ISettingsProps) {
     loadGETheme(newTheme);
     telemetry.trackEvent(BUTTON_CLICK_EVENT,
      {
-       ComponentName: 'Select theme button',
+       ComponentName: SELECT_THEME_BUTTON,
        SelectedTheme: selectedTheme.text
      });
   };
@@ -127,7 +128,7 @@ function Settings(props: ISettingsProps) {
   };
 
   const trackOfficeDevProgramLinkClickEvent = () => {
-    telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: 'Office dev program link'});
+    telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: OFFICE_DEV_PROGRAM_LINK});
   };
 
   const getSelectionDetails = () => {

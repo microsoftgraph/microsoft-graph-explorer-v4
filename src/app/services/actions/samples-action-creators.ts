@@ -1,6 +1,7 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { geLocale } from '../../../appLocale';
 import { telemetry } from '../../../telemetry';
+import { FETCH_SAMPLES_ACTION } from '../../../telemetry/component-names';
 import { NETWORK_ERROR } from '../../../telemetry/error-types';
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
@@ -52,7 +53,7 @@ export function fetchSamples(): Function {
         new Error(NETWORK_ERROR),
         SeverityLevel.Error,
         {
-          ComponentName: 'Fetch samples action',
+          ComponentName: FETCH_SAMPLES_ACTION,
           Message: `${error}`
         });
       return dispatch(fetchSamplesError({ error }));

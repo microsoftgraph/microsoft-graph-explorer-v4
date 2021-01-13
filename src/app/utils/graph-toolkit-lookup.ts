@@ -1,6 +1,7 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import templates from '../../graph-toolkit-examples';
 import { telemetry } from '../../telemetry';
+import { GRAPH_TOOLKIT_LINK } from '../../telemetry/component-names';
 import { LINK_ERROR } from '../../telemetry/error-types';
 import { IQuery } from '../../types/query-runner';
 import { sanitizeQueryUrl } from './query-url-sanitization';
@@ -20,7 +21,7 @@ export async function validateToolkitUrl(url: string, sampleQuery: IQuery): Prom
           new Error(LINK_ERROR),
           SeverityLevel.Error,
           {
-            ComponentName: 'Graph toolkit link',
+            ComponentName: GRAPH_TOOLKIT_LINK,
             QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
             Link: url,
             Message: `${error}`

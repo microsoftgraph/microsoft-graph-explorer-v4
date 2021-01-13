@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { telemetry } from '../../../telemetry';
+import { RUN_QUERY_BUTTON, VERSION_CHANGE_DROPDOWN } from '../../../telemetry/component-names';
 import {
   BUTTON_CLICK_EVENT,
   DROPDOWN_CHANGE_EVENT,
@@ -92,7 +93,7 @@ export class QueryRunner extends Component<
       const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
       telemetry.trackEvent(BUTTON_CLICK_EVENT,
         {
-          ComponentName: 'Run query button',
+          ComponentName: RUN_QUERY_BUTTON,
           SelectedVersion: sampleQuery.selectedVersion,
           QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
         });
@@ -116,7 +117,7 @@ export class QueryRunner extends Component<
       });
       if (oldQueryVersion !== newQueryVersion) {
         telemetry.trackEvent(DROPDOWN_CHANGE_EVENT, {
-          ComponentName: 'Version change dropdown',
+          ComponentName: VERSION_CHANGE_DROPDOWN,
           NewVersion: newQueryVersion,
           OldVersion: oldQueryVersion,
         });
