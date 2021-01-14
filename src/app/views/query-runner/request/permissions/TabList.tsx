@@ -1,12 +1,11 @@
 import { DetailsList, DetailsListLayoutMode, IColumn, Label, SelectionMode } from 'office-ui-fabric-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
-import { IPermission } from '../../../../../types/permissions';
+import { setConsentedStatus } from './util';
 
 interface ITabList {
-  permissions: IPermission[];
   columns: any[];
   classes: any;
   renderItemColumn: Function;
@@ -14,8 +13,17 @@ interface ITabList {
 }
 
 
-const TabList = ({ permissions, columns, classes, renderItemColumn, renderDetailsHeader }: ITabList) => {
-  const tokenPresent = useSelector((state: any) => state.authToken);
+const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader }: ITabList) => {
+  let permissions: any[] = [];
+  const { consentedScopes, scopes, tokenPresent } = useSelector((state: any) => state);
+
+  if (scopes.hasUrl) {
+    permissions = scopes.data;
+  }
+  useEffect(() => {
+    setConsentedStatus(tokenPresent, permissions, consentedScopes);
+  }, [scopes.data, consentedScopes])
+
   return (
     <>
       <Label className={classes.permissionLength}>
@@ -32,6 +40,17 @@ const TabList = ({ permissions, columns, classes, renderItemColumn, renderDetail
         selectionMode={SelectionMode.none}
         layoutMode={DetailsListLayoutMode.justified}
         onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
+      {permissions && permissions.length === 0 &&
+        <Label style={{
+          display: 'flex',
+          width: '100%',
+          minHeight: '200px',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <FormattedMessage id='permissions not found' />
+        </Label>
+      }
     </>
   );
 };
