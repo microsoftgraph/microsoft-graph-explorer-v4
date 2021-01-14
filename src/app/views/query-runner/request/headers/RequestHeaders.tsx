@@ -1,4 +1,4 @@
-import { PrimaryButton, TextField } from 'office-ui-fabric-react';
+import { Announced, PrimaryButton, TextField } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -6,6 +6,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { IRequestHeadersProps } from '../../../../../types/request';
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
+import { translateMessage } from '../../../../utils/translate-messages';
 import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
 
@@ -15,6 +16,7 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
     this.state = {
       headerName: '',
       headerValue: '',
+      announcedMessage: ''
     };
   }
 
@@ -45,6 +47,7 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
     }
 
     this.setState(this.state);
+    this.setState({ announcedMessage: translateMessage('Request Header deleted') });
   };
 
   private handleOnHeaderAdd = () => {
@@ -66,6 +69,7 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
       this.setState({
         headerName: '',
         headerValue: '',
+        announcedMessage: translateMessage('Request Header added')
       });
 
       if (actions) {
@@ -84,6 +88,7 @@ class RequestHeaders extends Component<IRequestHeadersProps, any> {
 
     return (
       <div style={container}>
+        <Announced message={this.state.announcedMessage} />
         <div className='row'>
           <div className='col-sm-5'>
             <TextField className='header-input'

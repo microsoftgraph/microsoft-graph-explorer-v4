@@ -1,4 +1,5 @@
 import {
+  Announced,
   IStackTokens, ITheme, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
@@ -24,6 +25,7 @@ import { logIn } from '../services/graph-client/msal-service';
 import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
+import { translateMessage } from '../utils/translate-messages';
 import { appTitleDisplayOnFullScreen, appTitleDisplayOnMobileScreen } from './app-sections/AppTitle';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { statusMessages } from './app-sections/StatusMessages';
@@ -66,6 +68,7 @@ interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
   hideDialog: boolean;
+  announcedMessage: string;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -78,6 +81,7 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: 'GET',
       mobileScreen: false,
       hideDialog: true,
+      announcedMessage: ''
     };
   }
 
@@ -254,6 +258,7 @@ class App extends Component<IAppProps, IAppState> {
     const properties = { ...sidebarProperties };
     properties.showSidebar = !properties.showSidebar;
     this.props.actions!.toggleSidebar(properties);
+    this.setState({ announcedMessage: translateMessage('Sidebar minimized') });
   }
 
   public displayToggleButton = (mediaQueryList: any) => {
@@ -333,6 +338,7 @@ class App extends Component<IAppProps, IAppState> {
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`container-fluid ${classes.app}`}>
+          <Announced message={this.state.announcedMessage} />
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={sidebarWidth}>
