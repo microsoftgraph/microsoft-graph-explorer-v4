@@ -57,7 +57,7 @@ const PanelList = ({ messages,
       });
     }
     setPermissions(filteredPermissions);
-  }
+  };
 
   const groups = generateGroupsFromList(permissionsList, 'groupName');
 
