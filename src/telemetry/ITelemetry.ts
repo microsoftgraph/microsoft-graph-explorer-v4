@@ -3,7 +3,7 @@ import { ComponentType } from 'react';
 
 export default interface ITelemetry {
   initialize(): void;
-  trackEvent(eventName: string, payload: any): void;
+  trackEvent(name: string, properties: {}): void;
   trackReactComponent(Component: ComponentType, componentName?: string): ComponentType;
-  trackException(error: Error, severityLevel: SeverityLevel): void;
+  trackException(error: Error, severityLevel: SeverityLevel, properties: {}): void;
 }

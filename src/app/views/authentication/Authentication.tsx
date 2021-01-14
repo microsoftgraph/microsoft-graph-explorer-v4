@@ -1,9 +1,14 @@
+
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { Icon, Label, MessageBarType, Spinner, SpinnerSize, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { telemetry } from '../../../telemetry';
+import { AUTHENTICATION_ACTION } from '../../../telemetry/component-names';
+import { OPERATIONAL_ERROR } from '../../../telemetry/error-types';
 import { IAuthenticationProps } from '../../../types/authentication';
 import { Mode } from '../../../types/enums';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
@@ -45,6 +50,13 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
         messageType: MessageBarType.error
       });
       this.setState({ loginInProgress: false });
+      telemetry.trackException(
+        new Error(OPERATIONAL_ERROR),
+        SeverityLevel.Error,
+        {
+          ComponentName: AUTHENTICATION_ACTION,
+          Message: `Authentication failed: ${errorCode.replace('_', ' ')}`,
+        });
     }
 
   };
