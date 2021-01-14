@@ -22,7 +22,11 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader }: IT
   }
   useEffect(() => {
     setConsentedStatus(tokenPresent, permissions, consentedScopes);
-  }, [scopes.data, consentedScopes])
+  }, [scopes.data, consentedScopes]);
+
+  if (!scopes.hasUrl) {
+    return displayNoPermissionsFoundMessage();
+  }
 
   return (
     <>
@@ -41,18 +45,22 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader }: IT
         layoutMode={DetailsListLayoutMode.justified}
         onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
       {permissions && permissions.length === 0 &&
-        <Label style={{
-          display: 'flex',
-          width: '100%',
-          minHeight: '200px',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          <FormattedMessage id='permissions not found' />
-        </Label>
+        displayNoPermissionsFoundMessage()
       }
     </>
   );
 };
 
 export default TabList;
+
+function displayNoPermissionsFoundMessage() {
+  return (<Label style={{
+    display: 'flex',
+    width: '100%',
+    minHeight: '200px',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }}>
+    <FormattedMessage id='permissions not found' />
+  </Label>);
+}
