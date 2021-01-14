@@ -293,7 +293,7 @@
   "Status": "État",
   "Admin consent required": "Autorisation de l’administrateur requise",
   "Consent": "Consentement",
-  "permissions required to run the query": "Les autorisations suivantes sont requises pour exécuter la requête. Pour accepter les autorisations, cliquez sur Consentement.",
+  "permissions required to run the query": "L’une des autorisations suivantes est requise pour exécuter la requête. Sélectionnez une autorisation, puis cliquez sur consentement.",
   "tab": " onglet",
   "View the": " Afficher",
   "viewing a cached set": "Vous affichez un ensemble d’exemples mis en cache en raison d’un échec de la connexion réseau.",
@@ -306,7 +306,7 @@
   "Snippet not available": "Extrait non disponible",
   "Select different permissions": "Pour tester plusieurs points de terminaison de l’API Microsoft Graph, sélectionnez les autorisations, puis cliquez sur Consentement.",
   "Search permissions": "Autorisations de recherche",
-  "permissions not found": "Nous n’avons pas trouvé d’autorisations",
+  "permissions not found": "Nous n’avons trouvé aucune autorisation. Pour afficher la liste de toutes les autorisations disponibles, cliquez sur l’icône Paramètres, puis sélectionnez autorisations.",
   "selected": "sélectionnées",
   "Search sample queries": "Exemples de requêtes de recherche",
   "Search history items": "Éléments de l’historique de recherche",
@@ -326,5 +326,6 @@
   "HTTP request method option": "Option de méthode de requête HTTP",
   "Microsoft Graph API Version option": "Option de version de l’API Microsoft Graph",
   "Query Sample Input": "Exemple d’entrée de requête",
-  "popup blocked, allow pop-up windows in your browser": "fenêtre contextuelle bloquée, autoriser les fenêtres contextuelles dans votre navigateur"
+  "popup blocked, allow pop-up windows in your browser": "fenêtre contextuelle bloquée, autoriser les fenêtres contextuelles dans votre navigateur",
+  "sign in to consent to permissions": "L’une des autorisations suivantes est requise pour exécuter la requête. Connectez-vous à l’aide d’un compte pouvant accepter l’autorisation que vous allez choisir."
 }

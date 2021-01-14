@@ -1,7 +1,12 @@
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { geLocale } from '../../../appLocale';
+import { telemetry } from '../../../telemetry';
+import { FETCH_PERMISSIONS_ACTION } from '../../../telemetry/component-names';
+import { NETWORK_ERROR } from '../../../telemetry/error-types';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
+import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { acquireNewAccessToken } from '../graph-client/msal-service';
 import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../redux-constants';
@@ -34,7 +39,8 @@ export function fetchScopes(query?: IQuery): Function {
       let permissionsUrl = `${devxApi}/permissions`;
 
       if (query) {
-        const { requestUrl, sampleUrl } = parseSampleUrl(query.sampleUrl);
+        const signature = sanitizeQueryUrl(query.sampleUrl);
+        const { requestUrl, sampleUrl } = parseSampleUrl(signature);
 
         if (!sampleUrl) {
           throw new Error('url is invalid');
@@ -59,6 +65,13 @@ export function fetchScopes(query?: IQuery): Function {
       }
       throw (response);
     } catch (error) {
+      telemetry.trackException(
+        new Error(NETWORK_ERROR),
+        SeverityLevel.Error,
+        {
+          ComponentName: FETCH_PERMISSIONS_ACTION,
+          Message: `${error}`
+        });
       return dispatch(fetchScopesError(error));
     }
   };
@@ -66,10 +79,10 @@ export function fetchScopes(query?: IQuery): Function {
 
 export function consentToScopes(scopes: string[]): Function {
   return async (dispatch: Function) => {
-      const authResponse = await acquireNewAccessToken(scopes);
-      if (authResponse && authResponse.accessToken) {
-        dispatch(getAuthTokenSuccess(authResponse.accessToken));
-        dispatch(getConsentedScopesSuccess(authResponse.scopes));
-      }
+    const authResponse = await acquireNewAccessToken(scopes);
+    if (authResponse && authResponse.accessToken) {
+      dispatch(getAuthTokenSuccess(authResponse.accessToken));
+      dispatch(getConsentedScopesSuccess(authResponse.scopes));
+    }
   };
 }
