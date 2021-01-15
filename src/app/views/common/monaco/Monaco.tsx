@@ -13,22 +13,6 @@ interface IMonaco {
   readOnly?: boolean;
 }
 
-function editorDidMount(editor: any) {
-  const editorHasText = !!editor.getModel().getValue();
-
-  if (editorHasText) {
-    formatDocument(editor);
-  }
-
-  editor.onDidChangeModelContent(() => {
-    formatDocument(editor);
-  });
-}
-
-function formatDocument(editor: any) {
-  editor.getAction('editor.action.formatDocument').run();
-}
-
 export function Monaco(props: IMonaco) {
 
   let { body } = props;
@@ -62,7 +46,6 @@ export function Monaco(props: IMonaco) {
                 horizontalScrollbarSize: 17,
               },
             }}
-            // editorDidMount={editorDidMount}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
           />)}
