@@ -369,11 +369,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       maxWidthOfHumanName = 300;
     }
 
-    window.onresize = function () {
+    window.onresize = () => {
       if (window.innerWidth > 1280) {
         maxWidthOfHumanName = 300;
       }
-    }
+    };
 
     const columns = [
       {
