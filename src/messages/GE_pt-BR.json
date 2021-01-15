@@ -293,7 +293,7 @@
   "Status": "Status",
   "Admin consent required": "É necessário o consentimento do administrador",
   "Consent": "Consentimento",
-  "permissions required to run the query": "As seguintes permissões são necessárias para executar a consulta. Para consentir as permissões, clique em Consentir.",
+  "permissions required to run the query": "Uma das seguintes permissões é obrigatória para executar esta API. Selecione uma permissão e clique em Consentimento.",
   "tab": " TAB",
   "View the": " Visualize o",
   "viewing a cached set": "Você está visualizando um conjunto de amostras em cache por causa de um erro na conexão da rede.",
@@ -306,7 +306,7 @@
   "Snippet not available": "Trecho indisponível",
   "Select different permissions": "Para experimentar diferentes terminais da API do Microsoft Graph, escolha as permissões e clique em Consentir.",
   "Search permissions": "Permissões de pesquisa",
-  "permissions not found": "Não encontramos permissões",
+  "permissions not found": "Não encontramos nenhuma permissão. Para exibir uma lista de todas as permissões disponíveis, clique no ícone Configurações e Selecione Permissões.",
   "selected": "selecionado",
   "Search sample queries": "Pesquisar consultas de amostra",
   "Search history items": "Pesquisar itens do histórico",
@@ -319,10 +319,13 @@
   "Administrator permission": "O administrador do locatário deve autorizá-lo primeiro para que você possa concordar com essa permissão",
   "Adaptive Cards designer": "Criador de Cartões Adaptáveis.",
   "Click Run Query button above to fetch Adaptive Card": "Clique no botão Executar Consulta acima para buscar um Cartão Adaptável.",
-  "Your history includes queries made in the last 30 days": "Seu histórico inclui consultas feitas nos últimos 30 dias",
+  "Fetching suggestions": "Buscando sugestões",
+  "No auto-complete suggestions available": "Sem sugestões de preenchimento automático disponíveis",
+  "Your history includes queries made in the last 30 days": "O histórico inclui consultas feitas nos últimos 30 dias",
   "Get token details (Powered by jwt.ms)": "Obter detalhes do token (do site jwt.ms)",
   "HTTP request method option": "Opção de método de solicitação HTTP",
   "Microsoft Graph API Version option": "Opção de versão da API do Microsoft Graph",
   "Query Sample Input": "Entrada de exemplo de consulta",
-  "popup blocked, allow pop-up windows in your browser": "popup bloqueado, permitir janelas pop-up em seu navegador"
+  "popup blocked, allow pop-up windows in your browser": "popup bloqueado, permitir janelas pop-up em seu navegador",
+  "sign in to consent to permissions": "Uma das seguintes permissões é obrigatória para executar esta API. Entre com uma conta que possa ser consentida pela permissão que você escolher."
 }

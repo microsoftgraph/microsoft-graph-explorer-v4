@@ -293,7 +293,7 @@
   "Status": "状态",
   "Admin consent required": "需经过管理员同意",
   "Consent": "同意",
-  "permissions required to run the query": "运行查询需要以下权限。若要同意权限，请单击“同意”。",
+  "permissions required to run the query": "运行查询需要以下权限之一。选择权限，然后单击 \"同意\"。",
   "tab": " 选项卡",
   "View the": " 查看",
   "viewing a cached set": "由于网络连接失败，你正在查看一组缓存的样本。",
@@ -306,7 +306,7 @@
   "Snippet not available": "代码片段不可用",
   "Select different permissions": "若要尝试不同的 Microsoft Graph API 终结点，请选择权限，然后单击 “同意”。",
   "Search permissions": "搜索权限",
-  "permissions not found": "未找到权限",
+  "permissions not found": "找不到任何权限。若要查看所有可用权限的列表，请单击 \"设置\" 图标并选择 \"权限\"。",
   "selected": "已选中",
   "Search sample queries": "搜索示例查询",
   "Search history items": "搜索历史记录项",
@@ -319,10 +319,13 @@
   "Administrator permission": "需要租户的管理员授权，你才能同意此权限",
   "Adaptive Cards designer": "自适应卡设计器。",
   "Click Run Query button above to fetch Adaptive Card": "单击上面的“运行查询”按钮获取自适应卡。",
-  "Your history includes queries made in the last 30 days": "历史记录中包括过去 30 天进行的查询",
+  "Fetching suggestions": "正在获取建议",
+  "No auto-complete suggestions available": "没有可用的自动完成建议",
+  "Your history includes queries made in the last 30 days": "你的历史记录中包括过去 30 天进行的查询",
   "Get token details (Powered by jwt.ms)": "获取令牌详细信息（jwt.ms 提供支持）",
   "HTTP request method option": "HTTP 请求方法选项：",
   "Microsoft Graph API Version option": "Microsoft Graph API 版本选项",
   "Query Sample Input": "查询示例输入",
-  "popup blocked, allow pop-up windows in your browser": "已阻止弹出窗口，允许浏览器中的弹出窗口"
+  "popup blocked, allow pop-up windows in your browser": "已阻止弹出窗口，允许浏览器中的弹出窗口",
+  "sign in to consent to permissions": "运行查询需要以下权限之一。使用可同意你选择的权限的帐户登录。"
 }

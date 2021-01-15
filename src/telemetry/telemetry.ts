@@ -14,6 +14,7 @@ class Telemetry implements ITelemetry {
     this.config = {
       instrumentationKey: this.getInstrumentationKey(),
       disableExceptionTracking: true,
+      disableAjaxTracking: true,
       disableTelemetry: this.getInstrumentationKey() ? false : true,
       extensions: [this.reactPlugin]
     };
@@ -25,16 +26,17 @@ class Telemetry implements ITelemetry {
 
   public initialize() {
     this.appInsights.loadAppInsights();
+    this.appInsights.addTelemetryInitializer(this.includeSpecifiedTelemetryTypes);
     this.appInsights.addTelemetryInitializer(this.filterFunction);
     this.appInsights.trackPageView();
   }
 
-  public trackEvent(eventName: string, payload: any) {
-    this.appInsights.trackEvent({ name: eventName, properties: payload });
+  public trackEvent(name: string, properties: {}) {
+    this.appInsights.trackEvent({ name, properties });
   }
 
-  public trackException(error: Error, severityLevel: SeverityLevel) {
-    this.appInsights.trackException({ error, severityLevel });
+  public trackException(error: Error, severityLevel: SeverityLevel, properties: {}) {
+    this.appInsights.trackException({ error, severityLevel, properties });
   }
 
   public trackReactComponent(ComponentToTrack: ComponentType, componentName?: string): ComponentType {
@@ -62,6 +64,15 @@ class Telemetry implements ITelemetry {
     telemetryItem.properties.IsAuthenticated = accessToken ? true : false;
 
     return true;
+  }
+
+  private includeSpecifiedTelemetryTypes(envelope: ITelemetryItem) {
+    const baseType = envelope.baseType || '';
+    const typesToInclude = ['EventData', 'MetricData', 'ExceptionData', 'PageviewData'];
+    if (typesToInclude.includes(baseType)) {
+      return true;
+    }
+    return false;
   }
 
   private getInstrumentationKey() {

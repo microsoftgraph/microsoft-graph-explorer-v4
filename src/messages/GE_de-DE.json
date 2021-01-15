@@ -293,7 +293,7 @@
   "Status": "Status",
   "Admin consent required": "Administratorzustimmung erforderlich",
   "Consent": "Zustimmung",
-  "permissions required to run the query": "Zum Ausführen einer Abfrage sind die folgenden Berechtigungen erforderlich: Um den Berechtigungen zuzustimmen, klicken Sie auf \"Zustimmung\".",
+  "permissions required to run the query": "Eine der nachfolgenden Berechtigungen ist erforderlich, um diese Abfrage ausführen zu können. Wählen Sie eine Berechtigung und klicken Sie auf Zustimmung.",
   "tab": " Registerkarte",
   "View the": " anzeigen",
   "viewing a cached set": "Aufgrund eines Netzwerkverbindungsfehlers sehen Sie einen zwischengespeicherten Satz von Beispielen.",
@@ -306,7 +306,7 @@
   "Snippet not available": "Snippet nicht verfügbar",
   "Select different permissions": "Um verschiedene Microsoft Graph API-Endpunkte auszuprobieren, wählen Sie die Berechtigungen aus und klicken Sie dann auf Zustimmen.",
   "Search permissions": "Suchberechtigungen",
-  "permissions not found": "Wir haben keine Genehmigungen gefunden",
+  "permissions not found": "Wir haben keine Genehmigungen gefunden. Um eine Liste aller verfügbaren Berechtigungen zu sehen, klicken Sie auf das Symbol „Einstellungen“ und wählen Sie „Berechtigungen“ aus.",
   "selected": "ausgewählt",
   "Search sample queries": "Beispielabfragen durchsuchen",
   "Search history items": "Verlaufselemente durchsuchen",
@@ -319,10 +319,13 @@
   "Administrator permission": "Der Administrator des Mandanten muss zuerst die Autorisierung vornehmen, bevor Sie dieser Berechtigung zustimmen können",
   "Adaptive Cards designer": "Designer für adaptive Karten.",
   "Click Run Query button above to fetch Adaptive Card": "Klicken Sie oben auf die Schaltfläche „Abfrage ausführen“, um die adaptive Karte abzurufen.",
-  "Your history includes queries made in the last 30 days": "Ihr Verlauf enthält Abfragen, die in den letzten 30 Tagen durchgeführt wurden.",
+  "Fetching suggestions": "Vorschläge werden abgerufen",
+  "No auto-complete suggestions available": "Keine Vorschläge für die automatische Vervollständigung vorhanden",
+  "Your history includes queries made in the last 30 days": "Ihr Verlauf enthält Abfragen, die in den letzten 30 Tagen durchgeführt wurden",
   "Get token details (Powered by jwt.ms)": "Abrufen von Token-Details (unterstützt von jwt.ms)",
   "HTTP request method option": "HTTP-Anforderungsmethode (Option)",
   "Microsoft Graph API Version option": "Microsoft Graph-API-Version (Option)",
   "Query Sample Input": "Beispieleingabe für eine Abfrage",
-  "popup blocked, allow pop-up windows in your browser": "Popup blockiert, Popup-Fenster in Ihrem Browser zulassen"
+  "popup blocked, allow pop-up windows in your browser": "Popup blockiert, Popup-Fenster in Ihrem Browser zulassen",
+  "sign in to consent to permissions": "Eine der nachfolgenden Berechtigungen ist erforderlich, um diese Abfrage ausführen zu können. Melden Sie sich mit einem Konto an, über das Sie den von Ihnen ausgewählten Berechtigungen zustimmen können."
 }

@@ -7,31 +7,59 @@ import {
   SearchBox,
   SelectionMode
 } from 'office-ui-fabric-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { useSelector } from 'react-redux';
 
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
-import { generatePermissionGroups } from './util';
+import { generateGroupsFromList } from '../../../../utils/generate-groups';
+import { setConsentedStatus } from './util';
 
 interface IPanelList {
   messages: any;
-  permissions: IPermission[];
   columns: any[];
   classes: any;
   selection: any;
   renderItemColumn: any;
-  searchValueChanged: Function;
   renderDetailsHeader: Function;
 }
 
-const PanelList = ({ messages, permissions,
+const PanelList = ({ messages,
   columns, classes, selection,
-  renderItemColumn, searchValueChanged, renderDetailsHeader }: IPanelList) => {
+  renderItemColumn, renderDetailsHeader }: IPanelList) => {
 
-  const groups = generatePermissionGroups(permissions);
-  permissions = permissions.sort(dynamicSort('value', SortOrder.ASC));
+  const { consentedScopes, scopes, tokenPresent } = useSelector((state: any) => state);
+  const [permissions, setPermissions] = useState(scopes.data.sort(dynamicSort('value', SortOrder.ASC)));
+  const permissionsList: any[] = [];
+
+  useEffect(() => {
+    setConsentedStatus(tokenPresent, permissions, consentedScopes);
+  }, [scopes, consentedScopes]);
+
+  permissions.forEach((perm: any) => {
+    const permission: any = { ...perm };
+    const permissionValue = permission.value;
+    const groupName = permissionValue.split('.')[0];
+    permission.groupName = groupName;
+    permissionsList.push(permission);
+  });
+
+  const searchValueChanged = (event: any, value?: string): void => {
+    let filteredPermissions = scopes.data;
+    if (value) {
+      const keyword = value.toLowerCase();
+
+      filteredPermissions = scopes.data.filter((permission: IPermission) => {
+        const name = permission.value.toLowerCase();
+        return name.includes(keyword);
+      });
+    }
+    setPermissions(filteredPermissions);
+  };
+
+  const groups = generateGroupsFromList(permissionsList, 'groupName');
 
   return (
     <>
@@ -46,7 +74,7 @@ const PanelList = ({ messages, permissions,
           searchValueChanged(event, newValue)}
         styles={{ field: { paddingLeft: 10 } }}
       />
-      <Announced message={`${permissions.length} search results available.`}/>
+      <Announced message={`${permissions.length} search results available.`} />
       <hr />
       <DetailsList
         onShouldVirtualize={() => false}
@@ -66,6 +94,17 @@ const PanelList = ({ messages, permissions,
         checkButtonAriaLabel={messages['Row checkbox'] || 'Row checkbox'}
         onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)}
       />
+      {permissions && permissions.length === 0 &&
+        <Label style={{
+          display: 'flex',
+          width: '100%',
+          minHeight: '200px',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <FormattedMessage id='permissions not found' />
+        </Label>
+      }
     </>
   );
 };
