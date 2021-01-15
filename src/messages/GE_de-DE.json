@@ -306,7 +306,7 @@
   "Snippet not available": "Snippet nicht verfügbar",
   "Select different permissions": "Um verschiedene Microsoft Graph API-Endpunkte auszuprobieren, wählen Sie die Berechtigungen aus und klicken Sie dann auf Zustimmen.",
   "Search permissions": "Suchberechtigungen",
-  "permissions not found": "Wir haben keine Genehmigungen gefunden. Um eine Liste aller verfügbaren Berechtigungen zu sehen, klicken Sie auf das Symbol „Einstellungen“ und wählen Sie „Berechtigungen“ aus.",
+  "permissions not found": "Wir haben keine Genehmigungen gefunden.",
   "selected": "ausgewählt",
   "Search sample queries": "Beispielabfragen durchsuchen",
   "Search history items": "Verlaufselemente durchsuchen",
