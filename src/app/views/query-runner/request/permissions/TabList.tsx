@@ -1,12 +1,12 @@
 import { DetailsList, DetailsListLayoutMode, IColumn, Label, SelectionMode } from 'office-ui-fabric-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
-
 import { IPermission } from '../../../../../types/permissions';
 
+import { setConsentedStatus } from './util';
+
 interface ITabList {
-  permissions: IPermission[];
   columns: any[];
   classes: any;
   renderItemColumn: Function;
@@ -14,8 +14,17 @@ interface ITabList {
   maxHeight: any;
 }
 
-const TabList = ({ permissions, columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) => {
-  const tokenPresent = useSelector((state: any) => state.authToken);
+const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) => {
+  const { consentedScopes, scopes, tokenPresent } = useSelector((state: any) => state);
+  const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
+
+  useEffect(() => {
+    setConsentedStatus(tokenPresent, permissions, consentedScopes);
+  }, [scopes.data, consentedScopes]);
+
+  if (!scopes.hasUrl) {
+    return displayNoPermissionsFoundMessage();
+  }
 
   return (
     <>
@@ -33,8 +42,23 @@ const TabList = ({ permissions, columns, classes, renderItemColumn, renderDetail
         selectionMode={SelectionMode.none}
         layoutMode={DetailsListLayoutMode.justified}
         onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
+      {permissions && permissions.length === 0 &&
+        displayNoPermissionsFoundMessage()
+      }
     </>
   );
 };
 
 export default TabList;
+
+function displayNoPermissionsFoundMessage() {
+  return (<Label style={{
+    display: 'flex',
+    width: '100%',
+    minHeight: '200px',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }}>
+    <FormattedMessage id='permissions not found' />
+  </Label>);
+}

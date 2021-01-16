@@ -3,6 +3,8 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { telemetry } from '../../../../../telemetry';
+import { ACCESS_TOKEN_COPY_BUTTON } from '../../../../../telemetry/component-names';
+import { BUTTON_CLICK_EVENT } from '../../../../../telemetry/event-types';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { genericCopy } from '../../../common/copy';
@@ -14,6 +16,7 @@ export function Auth(props: any) {
 
   const handleCopy = async () => {
     await genericCopy(accessToken);
+    trackCopyEvent();
   };
 
   const classes = classNames(props);
@@ -46,4 +49,13 @@ export function Auth(props: any) {
     }
   </div>);
 }
+
+function trackCopyEvent() {
+  telemetry.trackEvent(
+    BUTTON_CLICK_EVENT,
+    {
+      ComponentName: ACCESS_TOKEN_COPY_BUTTON
+    });
+}
+
 export default styled(Auth, authStyles as any);

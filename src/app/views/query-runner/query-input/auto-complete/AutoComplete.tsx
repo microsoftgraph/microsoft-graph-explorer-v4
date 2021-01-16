@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { telemetry } from '../../../../../telemetry';
+import { QUERY_URL_AUTOCOMPLETE_DROPDOWN } from '../../../../../telemetry/component-names';
 import { DROPDOWN_CHANGE_EVENT } from '../../../../../telemetry/event-types';
 import { IAutoCompleteProps, IAutoCompleteState } from '../../../../../types/auto-complete';
 import { SortOrder } from '../../../../../types/enums';
@@ -309,7 +310,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   public trackSuggestionSelectionEvent = (suggestion: string) => {
     telemetry.trackEvent(DROPDOWN_CHANGE_EVENT,
       {
-        ComponentName: 'Query URL autocomplete dropdown',
+        ComponentName: QUERY_URL_AUTOCOMPLETE_DROPDOWN,
         SelectedSuggestion: suggestion
       });
   }

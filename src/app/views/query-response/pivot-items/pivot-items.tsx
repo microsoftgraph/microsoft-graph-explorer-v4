@@ -2,12 +2,14 @@ import { getId, getTheme, Icon, IconButton, PivotItem, TooltipHost } from 'offic
 import React from 'react';
 
 import { telemetry } from '../../../../telemetry';
+import { GRAPH_TOOLKIT_LINK } from '../../../../telemetry/component-names';
 import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { ContentType, Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
 import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
+import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -45,6 +47,7 @@ export const getPivotItems = (properties: any) => {
     if (!!body) {
       const { toolkitUrl, exampleUrl } = lookupToolkitUrl(sampleQuery);
       if (toolkitUrl && exampleUrl) {
+        validateExternalLink(toolkitUrl, GRAPH_TOOLKIT_LINK, null, sampleQuery);
         return <span style={dotStyle} />;
       }
     }
