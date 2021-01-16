@@ -38,11 +38,7 @@ export function Monaco(props: IMonaco) {
   if (body && typeof body !== 'string') {
     body = JSON.stringify(body);
   }
-
-  let itemHeight = '300px';
-  if (height) {
-    itemHeight = height;
-  }
+  let itemHeight = height ? height : '300px';
 
   return (
     <FocusZone disabled={true}>

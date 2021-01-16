@@ -119,9 +119,10 @@ export class Request extends Component<IRequestComponent, any> {
   }
 
   private setRequestAndResponseHeights = (requestHeight: string) => {
+    const maxHeight = 90;
     const dimen = { ...this.props.dimensions };
     dimen.request.height = requestHeight;
-    const response = 90 - parseFloat(requestHeight.replace('vh', ''));
+    const response = maxHeight - parseFloat(requestHeight.replace('vh', ''));
     dimen.response.height = response + 'vh';
     this.props.actions!.setDimensions(dimen);
   };
