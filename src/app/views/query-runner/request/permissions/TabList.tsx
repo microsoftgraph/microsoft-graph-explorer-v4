@@ -11,7 +11,7 @@ interface ITabList {
   classes: any;
   renderItemColumn: Function;
   renderDetailsHeader: Function;
-  maxHeight: any;
+  maxHeight: string;
 }
 
 const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) => {
