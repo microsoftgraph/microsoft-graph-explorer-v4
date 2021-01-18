@@ -1,11 +1,8 @@
 import { Announced, PrimaryButton, TextField } from 'office-ui-fabric-react';
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
-import { ISampleQuery } from '../../../../../types/query-runner';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { IRequestHeadersProps } from '../../../../../types/request';
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { headerStyles } from './Headers.styles';
