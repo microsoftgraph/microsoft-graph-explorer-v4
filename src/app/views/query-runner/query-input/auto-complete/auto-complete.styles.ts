@@ -71,5 +71,5 @@ export const autoCompleteStyles = (theme: ITheme) => {
       alignItems: 'center',
       fontWeight: 400
     }
-  }
-}
+  };
+};

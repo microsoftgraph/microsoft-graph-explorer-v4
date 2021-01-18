@@ -1,10 +1,10 @@
-import { styled } from 'office-ui-fabric-react';
-import { Label } from 'office-ui-fabric-react';
+import { Label, styled } from 'office-ui-fabric-react';
 import React, { useEffect } from 'react';
 
 import { ISuggestionsList } from '../../../../../types/auto-complete';
 import { classNames } from '../../../classnames';
 import { autoCompleteStyles } from './auto-complete.styles';
+
 const SuggestionsList = (props: any) => {
   const { filteredSuggestions, activeSuggestion, onClick }: ISuggestionsList = props;
   const classes = classNames(props);
