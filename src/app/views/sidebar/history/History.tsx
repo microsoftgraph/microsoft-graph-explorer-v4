@@ -1,13 +1,27 @@
 import {
+  Announced,
   ContextualMenuItemType, DefaultButton, DetailsList, DetailsRow, Dialog,
   DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
-  Label, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
+  Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { geLocale } from '../../../../appLocale';
 
+import { telemetry } from '../../../../telemetry';
+import {
+  DELETE_HISTORY_ITEM_BUTTON,
+  EXPORT_HISTORY_ITEM_BUTTON,
+  HISTORY_LIST_ITEM,
+  RUN_HISTORY_ITEM_BUTTON,
+  VIEW_HISTORY_ITEM_BUTTON
+} from '../../../../telemetry/component-names';
+import {
+  BUTTON_CLICK_EVENT,
+  LISTITEM_CLICK_EVENT,
+} from '../../../../telemetry/event-types';
 import { SortOrder } from '../../../../types/enums';
 import { IHarPayload } from '../../../../types/har';
 import { IHistoryItem, IHistoryProps } from '../../../../types/history';
@@ -18,60 +32,57 @@ import * as queryStatusActionCreators from '../../../services/actions/query-stat
 import * as requestHistoryActionCreators from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { dynamicSort } from '../../../utils/dynamic-sort';
+import { generateGroupsFromList } from '../../../utils/generate-groups';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
 
 export class History extends Component<IHistoryProps, any> {
-
   constructor(props: any) {
     super(props);
     this.state = {
-      groupedList: {
-        items: [],
-        categories: [],
-      },
+      historyItems: [],
       hideDialog: true,
-      category: ''
+      category: '',
     };
   }
 
-
   public componentDidMount = () => {
-    this.generateGroupedList(this.props.history);
+    this.setState({ historyItems: this.props.history });
   }
-
   public componentDidUpdate = (prevProps: IHistoryProps) => {
     if (prevProps.history !== this.props.history) {
-      this.generateGroupedList(this.props.history);
+      this.setState({ historyItems: this.props.history });
     }
-  }
+  };
 
   public searchValueChanged = (event: any, value?: string): void => {
     const { history } = this.props;
-    let filteredSamples = history;
+    let historyItems = history;
     if (value) {
       const keyword = value.toLowerCase();
-      filteredSamples = history.filter((sample: any) => {
+      historyItems = history.filter((sample: any) => {
         const name = sample.url.toLowerCase();
         return name.toLowerCase().includes(keyword);
       });
     }
 
-    this.generateGroupedList(filteredSamples);
+    this.setState({ historyItems });
   }
+
 
   public formatDate = (date: any) => {
     const year = date.getFullYear();
-    let month = (date.getMonth() + 1);
+    let month = date.getMonth() + 1;
     month = (month < 10 ? '0' : '') + month;
     let day = date.getDate();
     day = (day < 10 ? '0' : '') + day;
     return `${year}-${month}-${day}`;
-  }
+  };
 
-  public getItems(history: any) {
+  public getItems(history: any[]) {
     const {
       intl: { messages },
     }: any = this.props;
@@ -87,7 +98,8 @@ export class History extends Component<IHistoryProps, any> {
 
     let date = olderText;
     const today = this.formatDate(new Date());
-    const yesterdaysDate = new Date(); yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
+    const yesterdaysDate = new Date();
+    yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
     const yesterday = this.formatDate(yesterdaysDate);
 
     history.forEach((element: any) => {
@@ -99,52 +111,32 @@ export class History extends Component<IHistoryProps, any> {
       element.category = date;
       items.push(element);
     });
-    return items.sort(dynamicSort('createdAt', SortOrder.DESC));
-  }
-
-  public generateGroupedList(history: any) {
-    const map = new Map();
-    const categories: any[] = [];
-    const items = this.getItems(history);
-
-    const isCollapsed = false;
-    let previousCount = 0;
-    let count = 0;
-
-    for (const historyItem of items) {
-      if (!map.has(historyItem.category)) {
-        map.set(historyItem.category, true);
-        count = items.filter((sample: IHistoryItem) => sample.category === historyItem.category).length;
-        categories.push({
-          name: historyItem.category,
-          key: historyItem.category,
-          startIndex: previousCount,
-          isCollapsed,
-          count,
-        });
-        previousCount += count;
-      }
-    }
-
-    this.setState({
-      groupedList: {
-        items,
-        categories,
-      }
-    });
+    items
+      .sort(dynamicSort('createdAt', SortOrder.DESC))
+      .forEach((value, index) => {
+        value.index = index;
+      });
+    return items;
   }
 
   public renderRow = (props: any): any => {
     const classes = classNames(this.props);
     return (
       <div className={classes.groupHeader}>
-        <DetailsRow {...props} className={classes.queryRow}
-          onClick={() => this.onViewQuery(props.item)} />
+        <DetailsRow
+          {...props}
+          className={classes.queryRow}
+          onClick={() => this.onViewQueryListItem(props.item)}
+        />
       </div>
     );
   };
 
-  public renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+  public renderItemColumn = (
+    item: any,
+    index: number | undefined,
+    column: IColumn | undefined
+  ) => {
     const classes = classNames(this.props);
     const hostId: string = getId('tooltipHost');
     const currentTheme = getTheme();
@@ -168,9 +160,12 @@ export class History extends Component<IHistoryProps, any> {
       }
 
       switch (column.key) {
-
         case 'status':
-          return <span style={{ color }} className={classes.badge}>{item.status}</span>;
+          return (
+            <span style={{ color }} className={classes.badge}>
+              {item.status}
+            </span>
+          );
 
         case 'button':
           const buttonActions = [
@@ -183,60 +178,67 @@ export class History extends Component<IHistoryProps, any> {
               key: 'view',
               text: viewText,
               iconProps: {
-                iconName: 'View'
+                iconName: 'View',
               },
-              onClick: () => this.onViewQuery(item)
+              onClick: () => this.onViewQueryButton(item),
             },
             {
               key: 'runQuery',
               text: runQueryText,
               iconProps: {
-                iconName: 'Refresh'
+                iconName: 'Refresh',
               },
-              onClick: () => this.onRunQuery(item)
+              onClick: () => this.onRunQuery(item),
             },
             {
               key: 'exportQuery',
               text: exportQueryText,
               iconProps: {
-                iconName: 'Download'
+                iconName: 'Download',
               },
-              onClick: () => this.onExportQuery(item)
+              onClick: () => this.onExportQuery(item),
             },
             {
               key: 'remove',
               text: removeText,
               iconProps: {
-                iconName: 'Delete'
+                iconName: 'Delete',
               },
-              onClick: () => this.deleteQuery(item)
+              onClick: () => this.deleteQuery(item),
             },
           ];
 
-          return <IconButton
-            className={classes.docLink}
-            title='Actions'
-            ariaLabel='Actions'
-            menuIconProps={{ iconName: 'More' }}
-            menuProps={{
-              shouldFocusOnMount: true,
-              items: buttonActions
-            }}
-          />;
+          return (
+            <IconButton
+              className={classes.docLink}
+              title='Actions'
+              ariaLabel='Actions'
+              menuIconProps={{ iconName: 'More' }}
+              menuProps={{
+                shouldFocusOnMount: true,
+                items: buttonActions,
+              }}
+            />
+          );
 
         default:
-          return <>
-            <TooltipHost
-              content={`${item.method} - ${queryContent}`}
-              id={hostId}
-              calloutProps={{ gapSpace: 0 }}
-              styles={{ root: { display: 'inline-block' } }}
-            >
-              <span aria-describedby={hostId} className={classes.queryContent}>
-                {queryContent.replace(GRAPH_URL, '')}
-              </span>
-            </TooltipHost>
-          </>;
+          return (
+            <>
+              <TooltipHost
+                content={`${item.method} - ${queryContent}`}
+                id={hostId}
+                calloutProps={{ gapSpace: 0 }}
+                styles={{ root: { display: 'inline-block' } }}
+              >
+                <span
+                  aria-describedby={hostId}
+                  className={classes.queryContent}
+                >
+                  {queryContent.replace(GRAPH_URL, '')}
+                </span>
+              </TooltipHost>
+            </>
+          );
       }
     }
   };
@@ -253,25 +255,39 @@ export class History extends Component<IHistoryProps, any> {
     // tslint:enable
 
     return (
-      <div aria-label={props.group!.name} style={
-        {
+      <div
+        aria-label={props.group!.name}
+        style={{
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
-        }}>
+          alignItems: 'center',
+        }}
+      >
         <div className={'col-md-8'}>
-          <div className={classes.groupHeaderRow} onClick={this.onToggleCollapse(props)}>
+          <div
+            className={classes.groupHeaderRow}
+            onClick={this.onToggleCollapse(props)}
+          >
             <IconButton
               className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
-              iconProps={{ iconName: props.group!.isCollapsed ? 'ChevronRightSmall' : 'ChevronDownSmall' }}
-              title={props.group!.isCollapsed ?
-                `${expandText} ${props.group!.name}` : `${collapseText} ${props.group!.name}`}
+              iconProps={{
+                iconName: props.group!.isCollapsed
+                  ? 'ChevronRightSmall'
+                  : 'ChevronDownSmall',
+              }}
+              title={
+                props.group!.isCollapsed
+                  ? `${expandText} ${props.group!.name}`
+                  : `${collapseText} ${props.group!.name}`
+              }
               ariaLabel='expand collapse group'
               onClick={() => this.onToggleCollapse(props)}
             />
             <div className={classes.groupTitle}>
               <span>{props.group!.name}</span>
-              <span className={classes.headerCount}>({props.group!.count})</span>
+              <span className={classes.headerCount}>
+                ({props.group!.count})
+              </span>
             </div>
           </div>
         </div>
@@ -310,22 +326,20 @@ export class History extends Component<IHistoryProps, any> {
   };
 
   private deleteHistoryCategory = (): any => {
-
-    const { category, groupedList: { items } } = this.state;
+    const { category, historyItems } = this.state;
     const { actions } = this.props;
-    const itemsToDelete = items.filter((query: IHistoryItem) => query.category === category);
+    const itemsToDelete = historyItems.filter((query: IHistoryItem) => query.category === category);
 
     if (actions) {
       actions.bulkRemoveHistoryItems(itemsToDelete);
     }
 
     this.closeDialog();
-
-  }
+  };
 
   private exportHistoryByCategory = (category: string) => {
-    const { groupedList: { items } } = this.state;
-    const itemsToExport = items.filter((query: IHistoryItem) => query.category === category);
+    const { historyItems } = this.state;
+    const itemsToExport = historyItems.filter((query: IHistoryItem) => query.category === category);
     const entries: IHarPayload[] = [];
 
     itemsToExport.forEach((query: IHistoryItem) => {
@@ -335,15 +349,16 @@ export class History extends Component<IHistoryProps, any> {
 
     const generatedHarData = generateHar(entries);
     const { origin } = new URL(itemsToExport[0].url);
-    const exportTitle = `${origin}/${category.toLowerCase()}/${itemsToExport[0].createdAt.substr(0, 10)}/`;
+    const exportTitle = `${origin}/${category.toLowerCase()}/${itemsToExport[0].createdAt.substr(
+      0,
+      10
+    )}/`;
 
     exportQuery(generatedHarData, exportTitle);
-  }
+  };
 
   private renderDetailsHeader() {
-    return (
-      <div />
-    );
+    return <div />;
   }
 
   private onRunQuery = (query: IHistoryItem) => {
@@ -364,20 +379,53 @@ export class History extends Component<IHistoryProps, any> {
       actions.setSampleQuery(sampleQuery);
       actions.runQuery(sampleQuery);
     }
-  }
+    this.trackHistoryItemEvent(
+      BUTTON_CLICK_EVENT,
+      RUN_HISTORY_ITEM_BUTTON,
+      query
+    );
+  };
 
   private onExportQuery = (query: IHistoryItem) => {
     const harPayload = createHarPayload(query);
     const generatedHarData = generateHar([harPayload]);
     exportQuery(generatedHarData, `${query.url}/`);
-  }
+    this.trackHistoryItemEvent(
+      BUTTON_CLICK_EVENT,
+      EXPORT_HISTORY_ITEM_BUTTON,
+      query
+    );
+  };
 
   private deleteQuery = async (query: IHistoryItem) => {
     const { actions } = this.props;
     if (actions) {
       actions.removeHistoryItem(query);
     }
-  }
+    this.trackHistoryItemEvent(
+      BUTTON_CLICK_EVENT,
+      DELETE_HISTORY_ITEM_BUTTON,
+      query
+    );
+  };
+
+  private onViewQueryButton = (query: IHistoryItem) => {
+    this.onViewQuery(query);
+    this.trackHistoryItemEvent(
+      BUTTON_CLICK_EVENT,
+      VIEW_HISTORY_ITEM_BUTTON,
+      query
+    );
+  };
+
+  private onViewQueryListItem = (query: IHistoryItem) => {
+    this.onViewQuery(query);
+    this.trackHistoryItemEvent(
+      LISTITEM_CLICK_EVENT,
+      HISTORY_LIST_ITEM,
+      query
+    );
+  };
 
   private onViewQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
@@ -394,37 +442,58 @@ export class History extends Component<IHistoryProps, any> {
       actions.setSampleQuery(sampleQuery);
       actions.viewHistoryItem({
         body: query.result,
-        headers: query.responseHeaders
+        headers: query.responseHeaders,
       });
       actions.setQueryResponseStatus({
         duration,
-        messageType: (status < 300) ? MessageBarType.success : MessageBarType.error,
+        messageType:
+          status < 300 ? MessageBarType.success : MessageBarType.error,
         ok: status < 300,
         status,
-        statusText
+        statusText,
       });
     }
+  };
+
+  private trackHistoryItemEvent = (eventName: string, componentName: string, query: IHistoryItem) => {
+    const sanitizedUrl = sanitizeQueryUrl(query.url);
+    telemetry.trackEvent(
+      eventName,
+      {
+        ComponentName: componentName,
+        ItemIndex: query.index,
+        QuerySignature: `${query.method} ${sanitizedUrl}`
+      });
   }
 
   public render() {
-    const { groupedList, hideDialog, category } = this.state;
+    const { hideDialog, category, historyItems } = this.state;
     const {
       intl: { messages },
     }: any = this.props;
     const classes = classNames(this.props);
     const columns = [
-      { key: 'status', name: '', fieldName: 'status', minWidth: 20, maxWidth: 50 },
+      {
+        key: 'status',
+        name: '',
+        fieldName: 'status',
+        minWidth: 20,
+        maxWidth: 50,
+      },
       { key: 'url', name: '', fieldName: 'url', minWidth: 100, maxWidth: 200 },
-      { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20, },
+      { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20 },
     ];
 
-    if (groupedList.items.length === 0) {
+    if (!historyItems) {
       return (
         <Label className={classes.spinner}>
           <FormattedMessage id='We did not find any history items' />
         </Label>
       );
     }
+
+    const items = this.getItems(historyItems);
+    const groups = generateGroupsFromList(items, 'category');
 
     return (
       <>
@@ -436,20 +505,34 @@ export class History extends Component<IHistoryProps, any> {
             styles={{ field: { paddingLeft: 10 } }}
           />
           <hr />
-          <DetailsList
+          <MessageBar
+            messageBarType={MessageBarType.info}
+            isMultiline={true}
+            dismissButtonAriaLabel='Close'
+          >
+            <FormattedMessage id='Your history includes queries made in the last 30 days' />
+            .
+          </MessageBar>
+          {items.length === 0 && <Label className={classes.spinner}>
+            <FormattedMessage id='We did not find any history items' />
+          </Label>}
+          <Announced
+            message={`${items.length} search results available.`}
+          />
+          {items.length > 0 && <DetailsList
             className={classes.queryList}
             onRenderItemColumn={this.renderItemColumn}
-            items={groupedList.items}
+            items={items}
             columns={columns}
             selectionMode={SelectionMode.none}
-            groups={groupedList.categories}
+            groups={groups}
             groupProps={{
               showEmptyGroups: true,
               onRenderHeader: this.renderGroupHeader,
             }}
             onRenderRow={this.renderRow}
             onRenderDetailsHeader={this.renderDetailsHeader}
-          />
+          />}
         </div>
         <Dialog
           hidden={hideDialog}
@@ -458,7 +541,7 @@ export class History extends Component<IHistoryProps, any> {
             type: DialogType.normal,
             title: `${messages['Delete requests']} : ${category}`,
             closeButtonAriaLabel: 'Close',
-            subText: `${messages['Are you sure you want to delete these requests?']}`
+            subText: `${messages['Are you sure you want to delete these requests?']}`,
           }}
           modalProps={{
             titleAriaId: getId(),
@@ -468,7 +551,10 @@ export class History extends Component<IHistoryProps, any> {
           }}
         >
           <DialogFooter>
-            <PrimaryButton onClick={this.deleteHistoryCategory} text={messages.Delete} />
+            <PrimaryButton
+              onClick={this.deleteHistoryCategory}
+              text={messages.Delete}
+            />
             <DefaultButton onClick={this.closeDialog} text={messages.Cancel} />
           </DialogFooter>
         </Dialog>
@@ -486,19 +572,20 @@ function mapStateToProps(state: any) {
 
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
-    actions: bindActionCreators({
-      ...queryActionCreators,
-      ...queryInputActionCreators,
-      ...requestHistoryActionCreators,
-      ...queryStatusActionCreators,
-    },
-      dispatch),
+    actions: bindActionCreators(
+      {
+        ...queryActionCreators,
+        ...queryInputActionCreators,
+        ...requestHistoryActionCreators,
+        ...queryStatusActionCreators,
+      },
+      dispatch
+    ),
   };
 }
 
-
+const trackedComponent = telemetry.trackReactComponent(History);
 // @ts-ignore
-const styledHistory = styled(History, sidebarStyles);
-// @ts-ignore
+const styledHistory = styled(trackedComponent, sidebarStyles);
 const IntlHistory = injectIntl(styledHistory);
 export default connect(mapStateToProps, mapDispatchToProps)(IntlHistory);

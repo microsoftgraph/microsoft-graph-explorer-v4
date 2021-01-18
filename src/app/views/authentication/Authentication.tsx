@@ -1,14 +1,20 @@
+
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { Icon, Label, MessageBarType, Spinner, SpinnerSize, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { telemetry } from '../../../telemetry';
+import { AUTHENTICATION_ACTION } from '../../../telemetry/component-names';
+import { OPERATIONAL_ERROR } from '../../../telemetry/error-types';
 import { IAuthenticationProps } from '../../../types/authentication';
 import { Mode } from '../../../types/enums';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
 import { logIn } from '../../services/graph-client/msal-service';
+import { translateMessage } from '../../utils/translate-messages';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
@@ -25,12 +31,6 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
     }: any = this.props;
     this.setState({ loginInProgress: true });
 
-    const { mscc } = (window as any);
-
-    if (mscc) {
-      mscc.setConsent();
-    }
-
     try {
       const authResponse = await logIn();
       if (authResponse) {
@@ -44,10 +44,19 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
       this.props.actions!.setQueryResponseStatus({
         ok: false,
         statusText: messages['Authentication failed'],
-        status: errorCode.replace('_', ' '),
+        status: errorCode === 'popup_window_error'
+          ? translateMessage('popup blocked, allow pop-up windows in your browser')
+          : errorCode.replace('_', ' '),
         messageType: MessageBarType.error
       });
       this.setState({ loginInProgress: false });
+      telemetry.trackException(
+        new Error(OPERATIONAL_ERROR),
+        SeverityLevel.Error,
+        {
+          ComponentName: AUTHENTICATION_ACTION,
+          Message: `Authentication failed: ${errorCode.replace('_', ' ')}`,
+        });
     }
 
   };
@@ -110,7 +119,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators({
       ...authActionCreators,
-      ...queryStatusActionCreators},
+      ...queryStatusActionCreators
+    },
       dispatch)
   };
 }

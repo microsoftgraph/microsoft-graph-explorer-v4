@@ -17,6 +17,9 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
+import { telemetry } from '../../../telemetry';
+import { OFFICE_DEV_PROGRAM_LINK, SELECT_THEME_BUTTON, THEME_CHANGE_BUTTON } from '../../../telemetry/component-names';
+import { BUTTON_CLICK_EVENT, LINK_CLICK_EVENT } from '../../../telemetry/event-types';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
 import { ISettingsProps } from '../../../types/settings';
@@ -24,6 +27,7 @@ import { signOut } from '../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../services/actions/permissions-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
+
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
@@ -50,6 +54,7 @@ function Settings(props: ISettingsProps) {
         iconProps: {
           iconName: 'CommandPrompt',
         },
+        onClick: () => trackOfficeDevProgramLinkClickEvent(),
       },
       {
         key: 'change-theme',
@@ -88,6 +93,7 @@ function Settings(props: ISettingsProps) {
     let hidden = themeChooserDialogHidden;
     hidden = !hidden;
     hideThemeChooserDialog(hidden);
+    telemetry.trackEvent(BUTTON_CLICK_EVENT, { ComponentName: THEME_CHANGE_BUTTON });
   };
 
   const handleSignOut = () => {
@@ -98,6 +104,11 @@ function Settings(props: ISettingsProps) {
     const newTheme: AppTheme = selectedTheme.key;
     dispatch(changeTheme(newTheme));
     loadGETheme(newTheme);
+    telemetry.trackEvent(BUTTON_CLICK_EVENT,
+     {
+       ComponentName: SELECT_THEME_BUTTON,
+       SelectedTheme: selectedTheme.text
+     });
   };
 
   const togglePermissionsPanel = () => {
@@ -114,6 +125,10 @@ function Settings(props: ISettingsProps) {
   const handleConsent = () => {
     dispatch(consentToScopes(selectedPermissions));
     setSelectedPermissions([]);
+  };
+
+  const trackOfficeDevProgramLinkClickEvent = () => {
+    telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: OFFICE_DEV_PROGRAM_LINK});
   };
 
   const getSelectionDetails = () => {

@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 export function statusMessages(queryState: any, actions: any) {
   return queryState && (
   <MessageBar messageBarType={queryState.messageType}
-    isMultiline={false}
+    isMultiline={true}
     onDismiss={actions.clearQueryStatus}
     dismissButtonAriaLabel='Close'
     aria-live={'assertive'}>

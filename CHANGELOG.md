@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.1.9](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/compare/v4.1.7...v4.1.9) (2020-09-24)
+
+* disabled query related telemetry in SampleQueries.tsx
+
+### [4.1.8](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/compare/v4.1.8...v4.1.7) (2020-09-24)
+
+* disabled query related telemetry
+
+### [4.1.7](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/compare/v4.1.4...v4.1.7) (2020-09-16)
+
+
+### Bug Fixes
+
+* add fallback texts to placeholder text ([#690](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/issues/690)) ([4419110](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/commit/441911079035b2cbbe137f168c8fb3baa0887dec))
+* copy paste query address bar ([#658](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/issues/658)) ([f47d237](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/commit/f47d23733a73b9e4dc33b5c328e2e87feed318a1))
+* Message bar truncation ([#679](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/issues/679)) ([569bf53](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/commit/569bf53eef99179bfe811de5a09835fb86656bea))
+* Remove main tag ([#680](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/issues/680)) ([5e634dd](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/commit/5e634ddbbcc20bdd5662b11e94fc3307e5c6e84f))
+* remove unnecessary code snippets tab ([#695](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/issues/695)) ([7aca4fc](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/commit/7aca4fca87f0e09fea706f254ce3ae4799740a9b))
+* sovereign clouds metadata ([#676](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/issues/676)) ([d0de298](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/commit/d0de298e0d4068defaa9b135e99820c28a366d6f))
+
+### [4.1.6](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v4.1.4...v4.1.6) (2020-08-07)
+
+
+### Bug Fixes
+
+* add fallback texts to placeholder text ([#690](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/issues/690)) ([4419110](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/commit/441911079035b2cbbe137f168c8fb3baa0887dec))
+* copy paste query address bar ([#658](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/issues/658)) ([f47d237](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/commit/f47d23733a73b9e4dc33b5c328e2e87feed318a1))
+* Message bar truncation ([#679](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/issues/679)) ([569bf53](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/commit/569bf53eef99179bfe811de5a09835fb86656bea))
+* Remove main tag ([#680](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/issues/680)) ([5e634dd](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/commit/5e634ddbbcc20bdd5662b11e94fc3307e5c6e84f))
+* remove unnecessary code snippets tab ([#695](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/issues/695)) ([7aca4fc](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/commit/7aca4fca87f0e09fea706f254ce3ae4799740a9b))
+* sovereign clouds metadata ([#676](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/issues/676)) ([d0de298](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/commit/d0de298e0d4068defaa9b135e99820c28a366d6f))
+* copy paste query address bar ([#658](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/658)) ([f47d237](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/f47d23733a73b9e4dc33b5c328e2e87feed318a1))
+
 ### 4.1.5 (2020-07-23)
 
 

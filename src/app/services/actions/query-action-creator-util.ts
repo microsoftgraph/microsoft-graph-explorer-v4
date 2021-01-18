@@ -49,7 +49,7 @@ export function authenticatedRequest(dispatch: Function, query: IQuery,
   return makeRequest(query.selectedVerb, scopes)(dispatch, query);
 }
 
-export function isImageResponse(contentType: string) {
+export function isImageResponse(contentType: string | undefined) {
   if (!contentType) { return false; }
   return (
     contentType === 'application/octet-stream' ||
@@ -100,11 +100,6 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
 
     if (query.sampleHeaders && query.sampleHeaders.length > 0) {
       query.sampleHeaders.forEach(header => {
-
-        // We are relying on the graph client to set the content type header.
-        if (header.name.toLowerCase() === 'content-type') {
-          return;
-        }
         sampleHeaders[header.name] = header.value;
       });
     }

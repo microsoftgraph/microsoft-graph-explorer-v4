@@ -1,5 +1,5 @@
 import { ReactPlugin, withAITracking } from '@microsoft/applicationinsights-react-js';
-import { ApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
+import { ApplicationInsights, ITelemetryItem, SeverityLevel } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
 import ITelemetry from './ITelemetry';
 
@@ -14,6 +14,7 @@ class Telemetry implements ITelemetry {
     this.config = {
       instrumentationKey: this.getInstrumentationKey(),
       disableExceptionTracking: true,
+      disableAjaxTracking: true,
       disableTelemetry: this.getInstrumentationKey() ? false : true,
       extensions: [this.reactPlugin]
     };
@@ -25,35 +26,53 @@ class Telemetry implements ITelemetry {
 
   public initialize() {
     this.appInsights.loadAppInsights();
+    this.appInsights.addTelemetryInitializer(this.includeSpecifiedTelemetryTypes);
     this.appInsights.addTelemetryInitializer(this.filterFunction);
     this.appInsights.trackPageView();
   }
 
-  public trackEvent(eventName: string, payload: any) {
-    this.appInsights.trackEvent({ name: eventName }, payload);
+  public trackEvent(name: string, properties: {}) {
+    this.appInsights.trackEvent({ name, properties });
   }
 
-  public trackException(error: Error, severityLevel: SeverityLevel) {
-    this.appInsights.trackException({ error, severityLevel });
+  public trackException(error: Error, severityLevel: SeverityLevel, properties: {}) {
+    this.appInsights.trackException({ error, severityLevel, properties });
   }
 
-  public trackReactComponent(ComponentToTrack: ComponentType): ComponentType {
-    return withAITracking(this.reactPlugin, ComponentToTrack);
+  public trackReactComponent(ComponentToTrack: ComponentType, componentName?: string): ComponentType {
+    return withAITracking(this.reactPlugin, ComponentToTrack, componentName);
   }
 
-  private filterFunction(envelope: any) {
-    // Identifies the source of telemetry events
-    envelope.baseData.name = 'Graph Explorer v4';
+  private filterFunction(envelope: ITelemetryItem) {
+    const telemetryItem = envelope.baseData || {};
+    telemetryItem.properties = telemetryItem.properties || {};
 
     // Removes access token from uri
-    const uri = envelope.baseData.uri;
+    const uri = telemetryItem.uri;
     if (uri) {
       const startOfFragment = uri.indexOf('#');
       const sanitisedUri = uri.substring(0, startOfFragment);
-      envelope.baseData.uri = sanitisedUri;
+      telemetryItem.uri = sanitisedUri;
     }
 
+    // Identifies the source of telemetry events
+    telemetryItem.properties.ApplicationName = 'Graph Explorer v4';
+
+    // Checks if user is authenticated
+    const accessTokenKey = 'msal.idtoken';
+    const accessToken = localStorage.getItem(accessTokenKey);
+    telemetryItem.properties.IsAuthenticated = accessToken ? true : false;
+
     return true;
+  }
+
+  private includeSpecifiedTelemetryTypes(envelope: ITelemetryItem) {
+    const baseType = envelope.baseType || '';
+    const typesToInclude = ['EventData', 'MetricData', 'ExceptionData', 'PageviewData'];
+    if (typesToInclude.includes(baseType)) {
+      return true;
+    }
+    return false;
   }
 
   private getInstrumentationKey() {
