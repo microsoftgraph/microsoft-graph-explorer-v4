@@ -9,12 +9,13 @@ const SubmitButtonControl = ({
   className,
   text,
   ariaLabel,
-  role
+  role,
+  disabled
 }: ISubmitButtonControl) => {
 
   return (
     <div className={className}>
-      <PrimaryButton disabled={submitting}
+      <PrimaryButton disabled={submitting || disabled }
         onClick={() => handleOnClick()}
         ariaLabel={ariaLabel}
         role={role}

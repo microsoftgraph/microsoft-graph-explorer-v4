@@ -5,4 +5,5 @@ export interface ISubmitButtonControl {
     className: string;
     ariaLabel?: string;
     role?: string;
+    disabled?: boolean;
 }
