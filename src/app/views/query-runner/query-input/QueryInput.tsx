@@ -80,16 +80,12 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     const {
       intl: { messages },
     }: any = this.props;
-
+    const showError = !authenticated && sampleQuery.selectedVerb != 'GET';
     const verbSelector: any = queryRunnerStyles().verbSelector;
     verbSelector.title = {
       ...verbSelector.title,
       background: getStyleFor(sampleQuery.selectedVerb),
     };
-
-    const httpMethodsToDisplay = !authenticated
-      ? [httpMethods[0]]
-      : httpMethods;
 
     return (
       <div className='row'>
@@ -98,8 +94,9 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             ariaLabel={translateMessage('HTTP request method option')}
             role='listbox'
             selectedKey={sampleQuery.selectedVerb}
-            options={httpMethodsToDisplay}
+            options={httpMethods}
             styles={verbSelector}
+            errorMessage={showError ? translateMessage('Sign in to use this method') : undefined }
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </div>
@@ -122,6 +119,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
           <SubmitButton
             className='run-query-button'
             text={messages['Run Query']}
+              disabled={showError}
             role='button'
             handleOnClick={() => handleOnRunQuery()}
             submitting={submitting}
