@@ -68,7 +68,7 @@ interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
   hideDialog: boolean;
-  announcedMessage: string;
+  onToggleSidebar: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -81,7 +81,7 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: 'GET',
       mobileScreen: false,
       hideDialog: true,
-      announcedMessage: ''
+      onToggleSidebar: false
     };
   }
 
@@ -258,7 +258,9 @@ class App extends Component<IAppProps, IAppState> {
     const properties = { ...sidebarProperties };
     properties.showSidebar = !properties.showSidebar;
     this.props.actions!.toggleSidebar(properties);
-    this.setState({ announcedMessage: translateMessage('Sidebar minimized') });
+    this.setState(state => ({
+      onToggleSidebar: !this.state.onToggleSidebar
+    }));
   }
 
   public displayToggleButton = (mediaQueryList: any) => {
@@ -291,7 +293,6 @@ class App extends Component<IAppProps, IAppState> {
       </div>
     </div>;
   }
-
 
   public render() {
     const classes = classNames(this.props);
@@ -331,14 +332,12 @@ class App extends Component<IAppProps, IAppState> {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
 
-
-
-
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`container-fluid ${classes.app}`}>
-          <Announced message={this.state.announcedMessage} />
+          <Announced message={this.state.onToggleSidebar ?
+            translateMessage('Sidebar minimized') : translateMessage('Sidebar maximized')} />
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={sidebarWidth}>
