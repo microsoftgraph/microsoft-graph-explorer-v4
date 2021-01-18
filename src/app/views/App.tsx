@@ -68,7 +68,6 @@ interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
   hideDialog: boolean;
-  isSidebarToggled: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -80,8 +79,7 @@ class App extends Component<IAppProps, IAppState> {
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false,
-      hideDialog: true,
-      isSidebarToggled: false
+      hideDialog: true
     };
   }
 
@@ -258,9 +256,6 @@ class App extends Component<IAppProps, IAppState> {
     const properties = { ...sidebarProperties };
     properties.showSidebar = !properties.showSidebar;
     this.props.actions!.toggleSidebar(properties);
-    this.setState(state => ({
-      isSidebarToggled: !this.state.isSidebarToggled
-    }));
   }
 
   public displayToggleButton = (mediaQueryList: any) => {
@@ -336,7 +331,7 @@ class App extends Component<IAppProps, IAppState> {
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`container-fluid ${classes.app}`}>
-          <Announced message={this.state.isSidebarToggled ?
+          <Announced message={!showSidebar ?
             translateMessage('Sidebar minimized') : translateMessage('Sidebar maximized')} />
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
