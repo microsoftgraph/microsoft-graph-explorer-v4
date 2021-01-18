@@ -306,7 +306,7 @@
   "Snippet not available": "Extrait non disponible",
   "Select different permissions": "Pour tester plusieurs points de terminaison de l’API Microsoft Graph, sélectionnez les autorisations, puis cliquez sur Consentement.",
   "Search permissions": "Autorisations de recherche",
-  "permissions not found": "Nous n’avons trouvé aucune autorisation. Pour afficher la liste de toutes les autorisations disponibles, cliquez sur l’icône Paramètres, puis sélectionnez autorisations.",
+  "permissions not found": "Nous n’avons trouvé aucune autorisation.",
   "selected": "sélectionnées",
   "Search sample queries": "Exemples de requêtes de recherche",
   "Search history items": "Éléments de l’historique de recherche",
