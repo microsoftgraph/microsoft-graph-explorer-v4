@@ -1,6 +1,6 @@
 import {
   DefaultButton, FontSizes, getId, Icon, IconButton,
-  Modal, Pivot, PivotItem, PrimaryButton, TooltipHost,
+  Modal, Pivot, PivotItem, PrimaryButton, TooltipHost
 } from 'office-ui-fabric-react';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { Resizable } from 're-resizable';
@@ -9,7 +9,7 @@ import { injectIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
 import {
-  IQueryResponseProps,
+  IQueryResponseProps
 } from '../../../types/query-response';
 import { translateMessage } from '../../utils/translate-messages';
 import { copy } from '../common/copy';
@@ -24,21 +24,16 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [query, setQuery] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
 
-  const { graphResponse, dimensions, theme, graphExplorerMode: mode, sampleQuery,
-    sidebarProperties } = useSelector((state: any) => state);
-  const mobileScreen = !!sidebarProperties.mobileScreen;
+  const { dimensions, sampleQuery } = useSelector((state: any) => state);
 
   const {
     intl: { messages },
-    verb,
   }: any = props;
 
-  let body: any;
-  let headers;
 
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
-  }, [graphResponse, theme, mobileScreen, dimensions]);
+  }, [dimensions]);
 
   const toggleShareQueryDialogState = () => {
     setShareQuaryDialogStatus(!showShareQueryDialog);
@@ -89,24 +84,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
     );
   };
 
-  if (graphResponse) {
-    body = graphResponse.body;
-    headers = graphResponse.headers;
-  }
-
-  const pivotProperties = {
-    messages,
-    body,
-    verb,
-    mode,
-    headers,
-    mobileScreen,
-    sampleQuery,
-    height: dimensions.response.height
-  };
-
-  const pivotItems = getPivotItems(pivotProperties);
-
   return (
     <>
       <Resizable
@@ -130,7 +107,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           height: responseHeight
         }}>
           <Pivot onLinkClick={handlePivotItemClick} className='pivot-response'>
-            {pivotItems}
+            {getPivotItems()}
             <PivotItem
               headerText='Share'
               key='share'
@@ -167,7 +144,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           onClick={toggleExpandResponse}
         />;
         <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
-          {pivotItems}
+          {getPivotItems()}
         </Pivot>
       </Modal>
       <Dialog

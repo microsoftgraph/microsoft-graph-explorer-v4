@@ -60,7 +60,7 @@ function Snippet(props: ISnippetProps) {
     <div style={{ display: 'block' }}>
       {loadingState &&
         <Label style={{ padding: 10 }}>
-          <FormattedMessage id ='Fetching code snippet' />...
+          <FormattedMessage id='Fetching code snippet' />...
         </Label>
       }
       {!loadingState && snippet &&
@@ -83,7 +83,7 @@ function Snippet(props: ISnippetProps) {
       }
       {!loadingState && !snippet &&
         <Label style={{ padding: 10 }}>
-          <FormattedMessage id ='Snippet not available' />
+          <FormattedMessage id='Snippet not available' />
         </Label>
       }
     </div>
