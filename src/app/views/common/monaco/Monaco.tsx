@@ -14,29 +14,17 @@ interface IMonaco {
   height?: string;
 }
 
-function editorDidMount(editor: any) {
-  const editorHasText = !!editor.getModel().getValue();
-
-  if (editorHasText) {
-    formatDocument(editor);
-  }
-
-  editor.onDidChangeModelContent(() => {
-    formatDocument(editor);
-  });
-}
-
-function formatDocument(editor: any) {
-  editor.getAction('editor.action.formatDocument').run();
-}
-
 export function Monaco(props: IMonaco) {
 
   let { body } = props;
   const { onChange, language, readOnly, height } = props;
 
   if (body && typeof body !== 'string') {
-    body = JSON.stringify(body, null, '\t');
+    // body = JSON.stringify(body, null, '\t');
+    body = JSON.stringify(body).replace(/(?:\\[rnt]|[\r\n\t]+)+/g, '');
+    // remove whitespace, tabs or raw string (Safari related issue)
+    body = JSON.parse(body); // convert back to javascript object
+    body = JSON.stringify(body, null, 4); // format the string (works for all browsers)
   }
   const itemHeight = height ? height : '300px';
 
@@ -61,7 +49,6 @@ export function Monaco(props: IMonaco) {
                 horizontalScrollbarSize: 17,
               },
             }}
-            editorDidMount={editorDidMount}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
           />)}

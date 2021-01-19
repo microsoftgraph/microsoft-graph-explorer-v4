@@ -306,7 +306,7 @@
   "Snippet not available": "代码片段不可用",
   "Select different permissions": "若要尝试不同的 Microsoft Graph API 终结点，请选择权限，然后单击 “同意”。",
   "Search permissions": "搜索权限",
-  "permissions not found": "找不到任何权限。若要查看所有可用权限的列表，请单击 \"设置\" 图标并选择 \"权限\"。",
+  "permissions not found": "找不到任何权限。",
   "selected": "已选中",
   "Search sample queries": "搜索示例查询",
   "Search history items": "搜索历史记录项",
