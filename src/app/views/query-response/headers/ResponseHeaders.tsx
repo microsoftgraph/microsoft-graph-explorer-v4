@@ -28,6 +28,6 @@ const ResponseHeaders = () => {
   return (
     <div />
   );
-}
+};
 
 export default ResponseHeaders;
