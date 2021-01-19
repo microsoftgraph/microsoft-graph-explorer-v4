@@ -36,7 +36,7 @@ export function Monaco(props: IMonaco) {
   const { onChange, language, readOnly, height } = props;
 
   if (body && typeof body !== 'string') {
-    body = JSON.stringify(body);
+    body = JSON.stringify(body, null, '\t');
   }
   const itemHeight = height ? height : '300px';
 
