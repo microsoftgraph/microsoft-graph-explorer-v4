@@ -130,6 +130,8 @@ export class Request extends Component<IRequestComponent, any> {
   public render() {
     const { dimensions } = this.props;
     const requestPivotItems = this.getPivotItems(dimensions.request.height);
+    const minHeight = 250;
+    const maxHeight = 800;
 
     return (
       <Resizable
@@ -142,8 +144,8 @@ export class Request extends Component<IRequestComponent, any> {
             this.setRequestAndResponseHeights(ref.style.height);
           }
         }}
-        maxHeight={800}
-        minHeight={250}
+        maxHeight={maxHeight}
+        minHeight={minHeight}
         bounds={'window'}
         size={{
           height: this.props.dimensions.request.height,
