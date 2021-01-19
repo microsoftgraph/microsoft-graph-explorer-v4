@@ -44,7 +44,7 @@ const RequestHeaders = (props: any) => {
   };
 
   const handleOnHeaderAdd = () => {
-    if (headerName !== '') {
+    if (headerName) {
       let { sampleHeaders } = sampleQuery;
       const header = { name: headerName, value: headerValue };
 
@@ -89,7 +89,7 @@ const RequestHeaders = (props: any) => {
         <div className='col-sm-2 col-md-2'>
           <PrimaryButton
             style={{ width: '100%' }}
-            onClick={() => handleOnHeaderAdd()}>
+            onClick={handleOnHeaderAdd}>
             <FormattedMessage id='Add' />
           </PrimaryButton>
         </div>
