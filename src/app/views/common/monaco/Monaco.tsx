@@ -20,11 +20,7 @@ export function Monaco(props: IMonaco) {
   const { onChange, language, readOnly, height } = props;
 
   if (body && typeof body !== 'string') {
-    // body = JSON.stringify(body, null, '\t');
-    body = JSON.stringify(body).replace(/(?:\\[rnt]|[\r\n\t]+)+/g, '');
-    // remove whitespace, tabs or raw string (Safari related issue)
-    body = JSON.parse(body); // convert back to javascript object
-    body = JSON.stringify(body, null, 4); // format the string (works for all browsers)
+    body = formatJsonStringForAllBrowsers(body);
   }
   const itemHeight = height ? height : '300px';
 
@@ -56,4 +52,15 @@ export function Monaco(props: IMonaco) {
       </div>
     </FocusZone>
   );
+}
+
+function formatJsonStringForAllBrowsers(body: string | object | undefined) {
+  /**
+   * 1. Remove whitespace, tabs or raw string (Safari related issue)
+   * 2. Convert back to javascript object
+   * 3. format the string (works for all browsers)
+   */
+  body = JSON.stringify(body).replace(/(?:\\[rnt]|[\r\n\t]+)+/g, '');
+  body = JSON.parse(body);
+  return JSON.stringify(body, null, 4);
 }
