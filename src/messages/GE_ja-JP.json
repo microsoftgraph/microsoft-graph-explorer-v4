@@ -327,5 +327,6 @@
   "Microsoft Graph API Version option": "Microsoft Graph API バージョン オプション",
   "Query Sample Input": "クエリのサンプル入力",
   "popup blocked, allow pop-up windows in your browser": "ポップアップがブロックされています。ブラウザーでポップアップ ウィンドウを許可してください",
-  "sign in to consent to permissions": "このクエリを実行するには、次のいずれかのアクセス許可が必要です。選ぶアクセス許可に同意できるアカウントでサインインします。"
+  "sign in to consent to permissions": "このクエリを実行するには、次のいずれかのアクセス許可が必要です。選択するアクセス許可に同意可能なアカウントでサインインします。",
+  "Sign in to use this method": "サインインしてこの方法を使用する"
 }

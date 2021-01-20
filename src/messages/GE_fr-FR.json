@@ -327,5 +327,6 @@
   "Microsoft Graph API Version option": "Option de version de l’API Microsoft Graph",
   "Query Sample Input": "Exemple d’entrée de requête",
   "popup blocked, allow pop-up windows in your browser": "fenêtre contextuelle bloquée, autoriser les fenêtres contextuelles dans votre navigateur",
-  "sign in to consent to permissions": "L’une des autorisations suivantes est requise pour exécuter la requête. Connectez-vous à l’aide d’un compte pouvant accepter l’autorisation que vous allez choisir."
+  "sign in to consent to permissions": "L’une des autorisations suivantes est requise pour exécuter la requête. Connectez-vous à l’aide d’un compte pouvant accepter l’autorisation que vous allez choisir.",
+  "Sign in to use this method": "Connectez-vous pour utiliser cette méthode"
 }
