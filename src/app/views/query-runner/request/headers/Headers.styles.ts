@@ -4,7 +4,6 @@ export const headerStyles = () => {
   return {
     container: {
       width: '100%',
-      height: '100%',
       textAlign: 'center',
       padding: 10,
       overflowY: 'auto',

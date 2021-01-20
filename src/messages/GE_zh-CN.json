@@ -327,5 +327,6 @@
   "Microsoft Graph API Version option": "Microsoft Graph API 版本选项",
   "Query Sample Input": "查询示例输入",
   "popup blocked, allow pop-up windows in your browser": "已阻止弹出窗口，允许浏览器中的弹出窗口",
-  "sign in to consent to permissions": "运行查询需要以下权限之一。使用可同意你选择的权限的帐户登录。"
+  "sign in to consent to permissions": "运行查询需要以下权限之一。使用同意你所选权限的帐户登录。",
+  "Sign in to use this method": "登录以使用此方法"
 }

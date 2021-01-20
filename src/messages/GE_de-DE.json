@@ -327,5 +327,6 @@
   "Microsoft Graph API Version option": "Microsoft Graph-API-Version (Option)",
   "Query Sample Input": "Beispieleingabe für eine Abfrage",
   "popup blocked, allow pop-up windows in your browser": "Popup blockiert, Popup-Fenster in Ihrem Browser zulassen",
-  "sign in to consent to permissions": "Eine der nachfolgenden Berechtigungen ist erforderlich, um diese Abfrage ausführen zu können. Melden Sie sich mit einem Konto an, über das Sie den von Ihnen ausgewählten Berechtigungen zustimmen können."
+  "sign in to consent to permissions": "Eine der nachfolgenden Berechtigungen ist erforderlich, um diese Abfrage ausführen zu können. Melden Sie sich mit einem Konto an, über das Sie den von Ihnen ausgewählten Berechtigungen zustimmen können.",
+  "Sign in to use this method": "Anmelden, um diese Methode zu verwenden"
 }

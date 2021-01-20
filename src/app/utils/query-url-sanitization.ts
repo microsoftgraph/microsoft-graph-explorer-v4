@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { GRAPH_URL } from '../services/graph-constants';
 import { isAllAlpha, sanitizeQueryParameter } from './query-parameter-sanitization';
 import { parseSampleUrl } from './sample-url-generation';

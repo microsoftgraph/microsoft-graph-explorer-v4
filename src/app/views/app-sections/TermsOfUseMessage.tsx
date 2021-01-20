@@ -3,17 +3,17 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 export function termsOfUseMessage(termsOfUse: any, actions: any, classes: any, language: string) {
   return termsOfUse && (
-  <MessageBar messageBarType={MessageBarType.info}
-    isMultiline={true}
-    onDismiss={actions.clearTermsOfUse}
-    dismissButtonAriaLabel='Close'>
-    <FormattedMessage id='use the Microsoft Graph API' />
-        <a className={classes.links} href={'https://docs.microsoft.com/' + language +
-      '/legal/microsoft-apis/terms-of-use?context=graph/context'} target='_blank'>
-      <FormattedMessage id='Terms of use' /></a>.
-    <FormattedMessage id='View the' />
-        <a className={classes.links} href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
-        target='_blank'>
-      <FormattedMessage id='Microsoft Privacy Statement' /></a>
-  </MessageBar>);
+    <MessageBar messageBarType={MessageBarType.info}
+      isMultiline={true}
+      onDismiss={actions.clearTermsOfUse}
+      dismissButtonAriaLabel='Close'>
+      <FormattedMessage id='use the Microsoft Graph API' />
+      <a className={classes.links} href={'https://docs.microsoft.com/' + language +
+        '/legal/microsoft-apis/terms-of-use?context=graph/context'} target='_blank' rel='noopener noreferrer'>
+        <FormattedMessage id='Terms of use' /></a>.
+      <FormattedMessage id='View the' />
+      <a className={classes.links} href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
+        target='_blank' rel='noopener noreferrer'>
+        <FormattedMessage id='Microsoft Privacy Statement' /></a>
+    </MessageBar>);
 }

@@ -1,4 +1,5 @@
 import {
+  Announced,
   DefaultButton, FontSizes, getId, Icon, IconButton,
   Modal, Pivot, PivotItem, PrimaryButton, TooltipHost
 } from 'office-ui-fabric-react';
@@ -127,26 +128,30 @@ const QueryResponse = (props: IQueryResponseProps) => {
           </Pivot>
         </div>
       </Resizable>
-      <Modal
-        isOpen={showModal}
-        onDismiss={toggleExpandResponse}
-        styles={{ main: { width: '80%', height: '90%' } }}
-      >
-        <IconButton
-          styles={{
-            root: {
-              float: 'right',
-              zIndex: 1,
-            },
-          }}
-          iconProps={{ iconName: 'Cancel' }}
-          ariaLabel='Close popup modal'
-          onClick={toggleExpandResponse}
-        />;
-        <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
-          {getPivotItems()}
-        </Pivot>
-      </Modal>
+      <Announced message={showModal ? translateMessage('Response area expanded') : ''} />
+      {
+        // @ts-ignore
+        <Modal
+          isOpen={showModal}
+          onDismiss={toggleExpandResponse}
+          styles={{ main: { width: '80%', height: '90%' } }}
+        >
+          <IconButton
+            styles={{
+              root: {
+                float: 'right',
+                zIndex: 1,
+              },
+            }}
+            iconProps={{ iconName: 'Cancel' }}
+            ariaLabel={translateMessage('Close expanded response area')}
+            onClick={toggleExpandResponse}
+          />
+          <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
+            {getPivotItems()}
+          </Pivot>
+        </Modal>
+      }
       <Dialog
         hidden={showShareQueryDialog}
         onDismiss={toggleShareQueryDialogState}
@@ -166,10 +171,10 @@ const QueryResponse = (props: IQueryResponseProps) => {
             height: 63,
             overflowY: 'scroll',
             border: 'none',
-            resize: 'none',
+            resize: 'none'
           }}
-          className='share-query-params'
           id='share-query-text'
+          className='share-query-params'
           defaultValue={query}
         />
         <DialogFooter>
