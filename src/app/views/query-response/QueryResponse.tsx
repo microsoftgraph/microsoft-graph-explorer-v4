@@ -1,4 +1,5 @@
 import {
+  Announced,
   DefaultButton,
   FontSizes,
   getId,
@@ -32,7 +33,7 @@ import './query-response.scss';
 class QueryResponse extends Component<
   IQueryResponseProps,
   IQueryResponseState
-> {
+  > {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -159,7 +160,7 @@ class QueryResponse extends Component<
             />
           </Pivot>
         </div>
-
+        <Announced message={this.state.showModal ? translateMessage('Response area expanded') : ''} />
         {
           // @ts-ignore
           <Modal
@@ -175,9 +176,9 @@ class QueryResponse extends Component<
                 },
               }}
               iconProps={{ iconName: 'Cancel' }}
-              ariaLabel='Close popup modal'
+              ariaLabel={translateMessage('Close expanded response area')}
               onClick={this.toggleExpandResponse}
-            />;
+            />
             <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
               {pivotItems}
             </Pivot>
