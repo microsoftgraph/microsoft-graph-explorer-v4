@@ -6,8 +6,6 @@ export const headerStyles = () => {
       width: '100%',
       textAlign: 'center',
       padding: 10,
-      maxHeight: '350px',
-      minHeight: '300px',
       overflowY: 'auto',
       overflowX: 'auto'
     },

@@ -4,6 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
+import { convertVhToPx } from '../../../common/dimensions-adjustment';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { headerStyles } from './Headers.styles';
@@ -15,7 +16,7 @@ interface IHeader {
 }
 
 const RequestHeaders = (props: any) => {
-  const sampleQuery = useSelector((state: any) => state.sampleQuery);
+  const { sampleQuery, dimensions: { request: { height } } } = useSelector((state: any) => state);
   const [headerName, setHeaderName] = useState('');
   const [headerValue, setHeaderValue] = useState('');
   const [announcedMessage, setAnnouncedMessage] = useState('');
@@ -74,7 +75,7 @@ const RequestHeaders = (props: any) => {
   };
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} style={{ height: convertVhToPx(height, 60) }}>
       <Announced message={announcedMessage} />
       <div className='row'>
         <div className='col-sm-5'>

@@ -4,7 +4,7 @@ import {
 } from '@uifabric/styling';
 
 export const sidebarStyles = (theme: ITheme) => {
-  const pageHeight = '660px';
+  const pageHeightInVh = '60vh';
   return {
     searchBox: {
       marginTop: theme.spacing.s1,
@@ -12,15 +12,15 @@ export const sidebarStyles = (theme: ITheme) => {
     spinner: {
       display: 'flex',
       width: '100%',
-      minHeight: pageHeight,
+      minHeight: pageHeightInVh,
       justifyContent: 'center',
       alignItems: 'center'
     },
     queryList: {
       marginBottom: theme.spacing.s1,
       cursor: 'pointer',
-      maxHeight: pageHeight,
-      minHeight: pageHeight,
+      maxHeight: pageHeightInVh,
+      minHeight: pageHeightInVh,
       overflowY: 'auto',
       overflowX: 'auto',
       fontSize: FontSizes.medium,

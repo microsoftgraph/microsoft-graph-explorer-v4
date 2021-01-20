@@ -40,8 +40,6 @@ import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
 
-
-
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -71,7 +69,6 @@ interface IAppState {
 }
 
 class App extends Component<IAppProps, IAppState> {
-
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
 
   constructor(props: IAppProps) {
@@ -84,7 +81,6 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public componentDidMount = async () => {
-
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
 

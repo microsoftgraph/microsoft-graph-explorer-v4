@@ -11,19 +11,18 @@ interface IMonaco {
   verb?: string;
   language?: string;
   readOnly?: boolean;
+  height?: string;
 }
 
 export function Monaco(props: IMonaco) {
 
   let { body } = props;
-  const { onChange, language, readOnly } = props;
+  const { onChange, language, readOnly, height } = props;
 
   if (body && typeof body !== 'string') {
-    body = JSON.stringify(body).replace(/(?:\\[rnt]|[\r\n\t]+)+/g, '');
-    // remove whitespace, tabs or raw string (Safari related issue)
-    body = JSON.parse(body); // convert back to javascript object
-    body = JSON.stringify(body, null, 4); // format the string (works for all browsers)
+    body = formatJsonStringForAllBrowsers(body);
   }
+  const itemHeight = height ? height : '300px';
 
   return (
     <FocusZone disabled={true}>
@@ -31,7 +30,7 @@ export function Monaco(props: IMonaco) {
         <ThemeContext.Consumer >
           {(theme) => (<MonacoEditor
             width='800 !important'
-            height={'80vh'}
+            height={itemHeight}
             // @ts-ignore
             value={body ? body : ''}
             language={language ? language : 'json'}
@@ -53,4 +52,15 @@ export function Monaco(props: IMonaco) {
       </div>
     </FocusZone>
   );
+}
+
+function formatJsonStringForAllBrowsers(body: string | object | undefined) {
+  /**
+   * 1. Remove whitespace, tabs or raw string (Safari related issue)
+   * 2. Convert back to javascript object
+   * 3. format the string (works for all browsers)
+   */
+  body = JSON.stringify(body).replace(/(?:\\[rnt]|[\r\n\t]+)+/g, '');
+  body = JSON.parse(body);
+  return JSON.stringify(body, null, 4);
 }

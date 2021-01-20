@@ -27,7 +27,7 @@ import Request from './request/Request';
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
-> {
+  > {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
@@ -65,6 +65,9 @@ export class QueryRunner extends Component<
 
   private handleOnEditorChange = (body?: string) => {
     this.setState({ sampleBody: body });
+    const query = { ...this.props.sampleQuery };
+    query.sampleBody = body;
+    this.props.actions!.setSampleQuery(query);
   };
 
   private handleOnRunQuery = () => {
@@ -127,7 +130,7 @@ export class QueryRunner extends Component<
 
   public render() {
     return (
-      <div>
+      <>
         <div className='row'>
           <div className='col-sm-12 col-lg-12'>
             {
@@ -141,7 +144,7 @@ export class QueryRunner extends Component<
             }
           </div>
         </div>
-        <div className='row'>
+        <div className='row' style={{ marginTop: 10 }}>
           <div className='col-sm-12 col-lg-12'>
             {
               // @ts-ignore
@@ -152,7 +155,7 @@ export class QueryRunner extends Component<
             }
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }
