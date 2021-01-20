@@ -1,12 +1,18 @@
-import { Announced, PrimaryButton, TextField } from 'office-ui-fabric-react';
+import { Announced, PrimaryButton, styled, TextField } from 'office-ui-fabric-react';
 import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
+import { classNames } from '../../../classnames';
 import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
+
+interface IHeader {
+  name: string;
+  value: string;
+}
 
 const RequestHeaders = (props: any) => {
   const sampleQuery = useSelector((state: any) => state.sampleQuery);
@@ -16,9 +22,9 @@ const RequestHeaders = (props: any) => {
 
   const { intl: { messages } } = props;
   const sampleQueryHeaders = sampleQuery.sampleHeaders;
-  const container: any = headerStyles().container;
 
   const dispatch = useDispatch();
+  const classes = classNames(props);
 
   const handleOnHeaderNameChange = (name?: string) => {
     if (name) {
@@ -32,7 +38,7 @@ const RequestHeaders = (props: any) => {
     }
   };
 
-  const handleOnHeaderDelete = (header: any) => {
+  const handleOnHeaderDelete = (header: IHeader) => {
     let headers = [...sampleQuery.sampleHeaders];
     headers = headers.filter(head => head.name !== header.name);
 
@@ -68,7 +74,7 @@ const RequestHeaders = (props: any) => {
   };
 
   return (
-    <div style={container}>
+    <div className={classes.container}>
       <Announced message={announcedMessage} />
       <div className='row'>
         <div className='col-sm-5'>
@@ -97,12 +103,12 @@ const RequestHeaders = (props: any) => {
       <hr />
       <HeadersList
         messages={messages}
-        handleOnHeaderDelete={(event: any, header: any) => handleOnHeaderDelete(header)}
+        handleOnHeaderDelete={(event: any, header: IHeader) => handleOnHeaderDelete(header)}
         headers={sampleQueryHeaders}
       />
     </div>
   );
 };
 // @ts-ignore
-const WithIntl = injectIntl(RequestHeaders);
-export default WithIntl;
+const styledRequestHeaders = styled(injectIntl(RequestHeaders), headerStyles);
+export default styledRequestHeaders;
