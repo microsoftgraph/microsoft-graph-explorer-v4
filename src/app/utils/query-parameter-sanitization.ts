@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 // OData filter operators
 const QUERY_FUNCTIONS = ['startswith', 'endswith', 'contains', 'substring', 'indexof', 'concat'];
 const ARITHMETIC_OPERATORS = ['add', 'sub', 'mul', 'div', 'divby', 'mod'];

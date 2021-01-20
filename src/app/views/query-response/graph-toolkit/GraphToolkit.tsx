@@ -25,7 +25,7 @@ class GraphToolkit extends Component<any> {
         <>
           <MessageBar messageBarType={MessageBarType.info}>
             <FormattedMessage id='Open this example in' />
-            <a tabIndex={0} href={exampleUrl} target='_blank'>
+            <a tabIndex={0} href={exampleUrl} target='_blank' rel='noopener noreferrer'>
               <FormattedMessage id='graph toolkit playground' />
             </a>
             .
@@ -43,6 +43,7 @@ class GraphToolkit extends Component<any> {
           style={queryResponseStyles(getTheme()).link}
           tabIndex={0}
           href='https://aka.ms/mgt'
+          rel='noopener noreferrer'
           target='_blank'
         >
           <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />

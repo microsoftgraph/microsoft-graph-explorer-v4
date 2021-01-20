@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /**
  * Formats the xml content so that it can be readable. Monaco does not have an inbuilt xml formatter
  * @returns string

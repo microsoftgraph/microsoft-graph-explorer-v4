@@ -80,7 +80,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     const {
       intl: { messages },
     }: any = this.props;
-    const showError = !authenticated && sampleQuery.selectedVerb != 'GET';
+    const showError = !authenticated && sampleQuery.selectedVerb !== 'GET';
     const verbSelector: any = queryRunnerStyles().verbSelector;
     verbSelector.title = {
       ...verbSelector.title,
@@ -96,7 +96,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
             selectedKey={sampleQuery.selectedVerb}
             options={httpMethods}
             styles={verbSelector}
-            errorMessage={showError ? translateMessage('Sign in to use this method') : undefined }
+            errorMessage={showError ? translateMessage('Sign in to use this method') : undefined}
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </div>
@@ -119,7 +119,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
           <SubmitButton
             className='run-query-button'
             text={messages['Run Query']}
-              disabled={showError}
+            disabled={showError}
             role='button'
             handleOnClick={() => handleOnRunQuery()}
             submitting={submitting}

@@ -24,7 +24,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/adjacent-overload-signatures': 'error',
     '@typescript-eslint/array-type': 'warn',
-    '@typescript-eslint/ban-types': 'error',
+    '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/consistent-type-assertions': 'error',
     '@typescript-eslint/consistent-type-definitions': 'error',
     '@typescript-eslint/explicit-member-accessibility': [
@@ -73,7 +73,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/prefer-for-of': 'error',
-    '@typescript-eslint/prefer-function-type': 'error',
+    '@typescript-eslint/prefer-function-type': 'off',
     '@typescript-eslint/prefer-namespace-keyword': 'error',
     '@typescript-eslint/quotes': 'off',
     '@typescript-eslint/semi': ['off', null],

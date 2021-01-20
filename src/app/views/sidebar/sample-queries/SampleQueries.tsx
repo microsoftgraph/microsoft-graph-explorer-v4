@@ -95,13 +95,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   private async trackDocumentLinkClickedEvent(item: ISampleQuery): Promise<void> {
     const properties: { [key: string]: any } = {
-        ComponentName: DOCUMENTATION_LINK,
-        SampleId: item.id,
-        SampleName: item.humanName,
-        SampleCategory: item.category,
-        Link: item.docLink
+      ComponentName: DOCUMENTATION_LINK,
+      SampleId: item.id,
+      SampleName: item.humanName,
+      SampleCategory: item.category,
+      Link: item.docLink
     };
-    telemetry.trackEvent( LINK_CLICK_EVENT, properties);
+    telemetry.trackEvent(LINK_CLICK_EVENT, properties);
 
     // Check if link throws error
     validateExternalLink(item.docLink || '', DOCUMENTATION_LINK, item.id);
@@ -306,11 +306,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     telemetry.trackEvent(
       LISTITEM_CLICK_EVENT,
       {
-         ComponentName: SAMPLE_QUERY_LIST_ITEM,
-         SampleId: selectedQuery.id,
-         SampleName: selectedQuery.humanName,
-         SampleCategory: selectedQuery.category,
-         QuerySignature: `${selectedQuery.method} ${sanitizedUrl}`
+        ComponentName: SAMPLE_QUERY_LIST_ITEM,
+        SampleId: selectedQuery.id,
+        SampleName: selectedQuery.humanName,
+        SampleCategory: selectedQuery.category,
+        QuerySignature: `${selectedQuery.method} ${sanitizedUrl}`
       });
   }
 
@@ -422,6 +422,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           <FormattedMessage id='see more queries' />
           <a
             target='_blank'
+            rel="noopener noreferrer"
             className={classes.links}
             href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
           >
