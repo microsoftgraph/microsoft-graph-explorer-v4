@@ -327,5 +327,6 @@
   "Microsoft Graph API Version option": "Opción de la versión de la API de Microsoft Graph",
   "Query Sample Input": "Entrada de ejemplo de consulta",
   "popup blocked, allow pop-up windows in your browser": "elemento emergente bloqueado, permitir ventanas emergentes en el explorador",
-  "sign in to consent to permissions": "Se requiere uno de los siguientes permisos para ejecutar la consulta. Inicie sesión con una cuenta que pueda consentir el permiso que elija."
+  "sign in to consent to permissions": "Se requiere uno de los siguientes permisos para ejecutar la consulta. Inicie sesión con una cuenta que pueda otorgar el permiso que elija.",
+  "Sign in to use this method": "Inicie sesión para usar este método"
 }
