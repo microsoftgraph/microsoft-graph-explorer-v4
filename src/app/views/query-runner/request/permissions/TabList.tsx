@@ -2,6 +2,7 @@ import { DetailsList, DetailsListLayoutMode, IColumn, Label, SelectionMode } fro
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { IPermission } from '../../../../../types/permissions';
 
 import { setConsentedStatus } from './util';
 
@@ -10,16 +11,13 @@ interface ITabList {
   classes: any;
   renderItemColumn: Function;
   renderDetailsHeader: Function;
+  maxHeight: string;
 }
 
-
-const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader }: ITabList) => {
-  let permissions: any[] = [];
+const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) => {
   const { consentedScopes, scopes, tokenPresent } = useSelector((state: any) => state);
+  const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
 
-  if (scopes.hasUrl) {
-    permissions = scopes.data;
-  }
   useEffect(() => {
     setConsentedStatus(tokenPresent, permissions, consentedScopes);
   }, [scopes.data, consentedScopes]);
@@ -37,7 +35,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader }: IT
         {!tokenPresent && <FormattedMessage id='sign in to consent to permissions' />}
         {tokenPresent && <FormattedMessage id='permissions required to run the query' />}
       </Label>
-      <DetailsList styles={{ root: { minHeight: '300px' } }}
+      <DetailsList styles={{ root: { maxHeight } }}
         items={permissions}
         columns={columns}
         onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}

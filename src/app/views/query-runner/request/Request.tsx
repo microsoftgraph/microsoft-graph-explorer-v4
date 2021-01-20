@@ -5,15 +5,19 @@ import {
   PivotItem,
   TooltipHost,
 } from 'office-ui-fabric-react';
+import { Resizable } from 're-resizable';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
 import { telemetry } from '../../../../telemetry';
 import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
+import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
+import { convertVhToPx } from '../../common/dimensions-adjustment';
 import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
 import { RequestHeaders } from './headers';
@@ -25,7 +29,7 @@ export class Request extends Component<IRequestComponent, any> {
     super(props);
   }
 
-  private getPivotItems = () => {
+  private getPivotItems = (height: string) => {
     const {
       handleOnEditorChange,
       sampleQuery,
@@ -43,6 +47,7 @@ export class Request extends Component<IRequestComponent, any> {
       >
         <Monaco
           body={sampleQuery.sampleBody}
+          height={convertVhToPx(height, 100)}
           onChange={(value) => handleOnEditorChange(value)} />
       </PivotItem>,
       <PivotItem
@@ -52,7 +57,7 @@ export class Request extends Component<IRequestComponent, any> {
         title={messages['request header']}
         headerText={messages['request header']}
       >
-        <RequestHeaders />
+        <RequestHeaders height={convertVhToPx(height, 60)} />
       </PivotItem>,
       <PivotItem
         key='permissions'
@@ -73,13 +78,13 @@ export class Request extends Component<IRequestComponent, any> {
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Access Token']}
           headerText={messages['Access Token']}>
-          <Auth />
+          <Auth style={{ height }} />
         </PivotItem>
       );
     }
 
     return pivotItems;
-  };
+  }
 
   private getTooltipDisplay(link: any) {
     return (
@@ -113,19 +118,50 @@ export class Request extends Component<IRequestComponent, any> {
     });
   }
 
+  private setRequestAndResponseHeights = (requestHeight: string) => {
+    const maxDeviceVerticalHeight = 90;
+    const dimen = { ...this.props.dimensions };
+    dimen.request.height = requestHeight;
+    const response = maxDeviceVerticalHeight - parseFloat(requestHeight.replace('vh', ''));
+    dimen.response.height = response + 'vh';
+    this.props.actions!.setDimensions(dimen);
+  };
+
   public render() {
-    const requestPivotItems = this.getPivotItems();
+    const { dimensions } = this.props;
+    const requestPivotItems = this.getPivotItems(dimensions.request.height);
+    const minHeight = 250;
+    const maxHeight = 800;
 
     return (
-
-      <div className='request-editors'>
+      <Resizable
+        style={{
+          border: 'solid 1px #ddd',
+          marginBottom: 10,
+        }}
+        onResize={(e: any, direction: any, ref: any, d: any) => {
+          if (ref && ref.style && ref.style.height) {
+            this.setRequestAndResponseHeights(ref.style.height);
+          }
+        }}
+        maxHeight={maxHeight}
+        minHeight={minHeight}
+        bounds={'window'}
+        size={{
+          height: this.props.dimensions.request.height,
+          width: '100%',
+        }}
+        enable={{
+          bottom: true,
+        }}
+      >
         <Pivot
           onLinkClick={this.onPivotItemClick}
           styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
         >
           {requestPivotItems}
         </Pivot>
-      </div>
+      </Resizable>
     );
   }
 }
@@ -136,9 +172,18 @@ function mapStateToProps(state: any) {
     sampleBody: state.sampleQuery.sampleBody,
     theme: state.theme,
     mobileScreen: !!state.sidebarProperties.mobileScreen,
+    dimensions: state.dimensions
+  };
+}
+
+function mapDispatchToProps(dispatch: Dispatch) {
+  return {
+    actions: bindActionCreators({
+      setDimensions,
+    }, dispatch)
   };
 }
 
 // @ts-ignore
 const IntlRequest = injectIntl(Request);
-export default connect(mapStateToProps, null)(IntlRequest);
+export default connect(mapStateToProps, mapDispatchToProps)(IntlRequest);

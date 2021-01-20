@@ -433,6 +433,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           <FormattedMessage id='see more queries' />
           <a
             target='_blank'
+            rel="noopener noreferrer"
             className={classes.links}
             href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
           >

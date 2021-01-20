@@ -18,6 +18,7 @@ import { IPermission, IPermissionProps, IPermissionState } from '../../../../../
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
+import { convertVhToPx } from '../../../common/dimensions-adjustment';
 import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
 import TabList from './TabList';
@@ -61,6 +62,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const shouldUpdate = nextProps.sample !== this.props.sample
       || nextProps.scopes !== this.props.scopes
       || nextProps.consentedScopes !== this.props.consentedScopes
+      || nextProps.dimensions !== this.props.dimensions
       || nextState.permissions !== this.state.permissions;
     return shouldUpdate;
   }
@@ -213,7 +215,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { panel, scopes } = this.props;
+    const { panel, scopes, dimensions } = this.props;
     const { pending: loading } = scopes;
 
     const {
@@ -233,9 +235,11 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       }
     });
 
+    const tabHeight = convertVhToPx(dimensions.request.height, 110);
+
     return (
-      <div className={panel ? classes.panelContainer : classes.container}
-        style={{ minHeight: (panel) ? '800px' : '300px' }}>
+      <div className={panel ? classes.panelContainer : ''}
+        style={{ minHeight: (panel) ? '800px' : '', maxHeight: (panel) ? '800px' : tabHeight, }}>
         {loading && <Label>
           <FormattedMessage id={'Fetching permissions'} />...
         </Label>}
@@ -243,10 +247,11 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           <div className={classes.permissions}>
             {!panel && <TabList
               columns={this.getColumns()}
-              classes={classes}
+              maxHeight={tabHeight}
               renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
                 this.renderItemColumn(item, index, column)}
               renderDetailsHeader={this.renderDetailsHeader}
+              classes={classes}
             />}
             {panel &&
               <div data-is-scrollable={true}>
@@ -273,7 +278,8 @@ function mapStateToProps(state: any) {
     sample: state.sampleQuery,
     scopes: state.scopes,
     tokenPresent: state.authToken,
-    consentedScopes: state.consentedScopes
+    consentedScopes: state.consentedScopes,
+    dimensions: state.dimensions
   };
 }
 
