@@ -296,7 +296,7 @@ class App extends Component<IAppProps, IAppState> {
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
-    const historyHeaderText = messages['History'];
+    const historyHeaderText = messages.History;
     const { mobileScreen, showSidebar } = sidebarProperties;
 
     let displayContent = true;

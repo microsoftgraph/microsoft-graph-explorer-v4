@@ -8,7 +8,6 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { geLocale } from '../../../../appLocale';
 
 import { telemetry } from '../../../../telemetry';
 import {
@@ -90,11 +89,11 @@ export class History extends Component<IHistoryProps, any> {
     const items: any[] = [];
 
     // tslint:disable-next-line:no-string-literal
-    const olderText = messages['older'];
+    const olderText = messages.older;
     // tslint:disable-next-line:no-string-literal
-    const todayText = messages['today'];
+    const todayText = messages.today;
     // tslint:disable-next-line:no-string-literal
-    const yesterdayText = messages['yesterday'];
+    const yesterdayText = messages.yesterday;
 
     let date = olderText;
     const today = this.formatDate(new Date());
@@ -145,11 +144,11 @@ export class History extends Component<IHistoryProps, any> {
       intl: { messages },
     }: any = this.props;
     // tslint:disable
-    const actionsText = messages['actions'];
+    const actionsText = messages.actions;
     const runQueryText = messages['Run Query'];
-    const viewText = messages['view'];
-    const removeText = messages['Delete'];
-    const exportQueryText = messages['Export'];
+    const viewText = messages.view;
+    const removeText = messages.Delete;
+    const exportQueryText = messages.Export;
     // tslint:enable
 
     if (column) {
@@ -250,8 +249,8 @@ export class History extends Component<IHistoryProps, any> {
     }: any = this.props;
 
     // tslint:disable
-    const expandText = messages['Expand'];
-    const collapseText = messages['Collapse'];
+    const expandText = messages.Expand;
+    const collapseText = messages.Collapse;
     // tslint:enable
 
     return (

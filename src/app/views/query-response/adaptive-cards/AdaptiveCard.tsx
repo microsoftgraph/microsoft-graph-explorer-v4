@@ -9,11 +9,11 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
-import { appStyles } from './../../App.styles';
 import { queryResponseStyles } from './../queryResponse.styles';
 
 class AdaptiveCard extends Component<IAdaptiveCardProps> {
   private adaptiveCard: AdaptiveCardsAPI.AdaptiveCard;
+
   constructor(props: IAdaptiveCardProps) {
     super(props);
     this.adaptiveCard = new AdaptiveCardsAPI.AdaptiveCard();
@@ -86,6 +86,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               href={'https://adaptivecards.io/designer/'}
               tabIndex={0}
               target='_blank'
+              rel='noopener noreferrer'
             >
               <FormattedMessage id='Adaptive Cards designer' />
             </a>
