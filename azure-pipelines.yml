@@ -72,8 +72,12 @@ jobs:
         displayName: 'Runs linting checks'
 
       - script: |
+          npm test
+        displayName: 'Runs Unit tests'
+
+      - script: |
           npm run ci
-        displayName: 'Runs tests'
+        displayName: 'Runs Accessibility tests'
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
