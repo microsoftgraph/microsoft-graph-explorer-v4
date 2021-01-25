@@ -15,8 +15,9 @@ interface ITabList {
 }
 
 const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) => {
-  const { consentedScopes, scopes, tokenPresent } = useSelector((state: any) => state);
+  const { consentedScopes, scopes, authToken } = useSelector((state: any) => state);
   const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
+  const tokenPresent = !!authToken;
 
   useEffect(() => {
     setConsentedStatus(tokenPresent, permissions, consentedScopes);
