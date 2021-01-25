@@ -450,6 +450,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           }}
           onRenderRow={this.renderRow}
           onRenderDetailsHeader={this.renderDetailsHeader}
+          onItemInvoked={this.querySelected}
         />
       </div>
     );
