@@ -52,6 +52,9 @@ function displayComponent(properties: any) {
     case ContentType.XML:
       return <Monaco body={formatXml(body)} language='xml' height={height} />;
 
+    case ContentType.HTML:
+      return <Monaco body={body} language='html' height={height} />;
+
     default:
       if (isImageResponse(contentType)) {
         return <Image
