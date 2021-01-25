@@ -39,7 +39,7 @@ function getContentType(headers: any) {
     */
     const splitContentTypes = contentTypes.split(';');
     if (splitContentTypes.length > 0) {
-      contentType = splitContentTypes[0];
+      contentType = splitContentTypes[0].toLowerCase();
     }
   }
   return contentType;

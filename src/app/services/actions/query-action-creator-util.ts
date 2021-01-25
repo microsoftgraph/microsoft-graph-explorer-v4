@@ -80,8 +80,13 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
       case ContentType.Json:
         return response.json();
 
-      default:
+      case ContentType.XML:
+      case ContentType.HTML:
+      case ContentType.TextPlain:
         return response.text();
+
+      default:
+        return response;
     }
   }
   return response;
