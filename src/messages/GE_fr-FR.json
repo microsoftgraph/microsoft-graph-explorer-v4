@@ -306,7 +306,7 @@
   "Snippet not available": "Extrait non disponible",
   "Select different permissions": "Pour tester plusieurs points de terminaison de l’API Microsoft Graph, sélectionnez les autorisations, puis cliquez sur Consentement.",
   "Search permissions": "Autorisations de recherche",
-  "permissions not found": "Nous n’avons trouvé aucune autorisation. Pour afficher la liste de toutes les autorisations disponibles, cliquez sur l’icône Paramètres, puis sélectionnez autorisations.",
+  "permissions not found": "Nous n’avons trouvé aucune autorisation.",
   "selected": "sélectionnées",
   "Search sample queries": "Exemples de requêtes de recherche",
   "Search history items": "Éléments de l’historique de recherche",
@@ -327,5 +327,14 @@
   "Microsoft Graph API Version option": "Option de version de l’API Microsoft Graph",
   "Query Sample Input": "Exemple d’entrée de requête",
   "popup blocked, allow pop-up windows in your browser": "fenêtre contextuelle bloquée, autoriser les fenêtres contextuelles dans votre navigateur",
-  "sign in to consent to permissions": "L’une des autorisations suivantes est requise pour exécuter la requête. Connectez-vous à l’aide d’un compte pouvant accepter l’autorisation que vous allez choisir."
+  "sign in to consent to permissions": "L’une des autorisations suivantes est requise pour exécuter la requête. Connectez-vous à l’aide d’un compte pouvant accepter l’autorisation que vous allez choisir.",
+  "Sign in to use this method": "Connectez-vous pour utiliser cette méthode",
+  "Request Header deleted": "Suppression de l'en-tête de la demande",
+  "Request Header added": "En-tête de la demande ajoutée",
+  "Sidebar minimized": "Encadré minimisé",
+  "Sidebar maximized": "Encadré maximisé",
+  "Response area expanded": "Extension de la zone d'intervention",
+  "Close expanded response area": "Fermer la zone de réponse élargie"
+  
 }
+

@@ -1,15 +1,13 @@
-import { getTheme, Label } from 'office-ui-fabric-react';
+import { Label, styled } from 'office-ui-fabric-react';
 import React, { useEffect } from 'react';
 
 import { ISuggestionsList } from '../../../../../types/auto-complete';
-import { queryInputStyles } from '../QueryInput.styles';
+import { classNames } from '../../../classnames';
+import { autoCompleteStyles } from './auto-complete.styles';
 
-const SuggestionsList = ({ filteredSuggestions, activeSuggestion, onClick }: ISuggestionsList) => {
-  const currentTheme = getTheme();
-  const { suggestions: suggestionClass,
-    suggestionOption,
-    suggestionActive: activeSuggestionClass,
-    suggestionTitle }: any = queryInputStyles(currentTheme).autoComplete;
+const SuggestionsList = (props: any) => {
+  const { filteredSuggestions, activeSuggestion, onClick }: ISuggestionsList = props;
+  const classes = classNames(props);
 
   const refs = filteredSuggestions.reduce((ref: any, value: any) => {
     const itemIndex = filteredSuggestions.findIndex(k => k === value);
@@ -28,16 +26,16 @@ const SuggestionsList = ({ filteredSuggestions, activeSuggestion, onClick }: ISu
   }, [activeSuggestion]);
 
   return (
-    <ul style={suggestionClass} aria-haspopup='true'>
+    <ul className={classes.suggestions} aria-haspopup='true'>
       {filteredSuggestions.map((suggestion: {} | null | undefined, index: number) => {
         return (
           <li
-            style={(index === activeSuggestion) ? activeSuggestionClass : suggestionOption}
+            className={(index === activeSuggestion) ? classes.suggestionActive : classes.suggestionOption}
             key={index}
             ref={refs[index]}
             onClick={(e: any) => onClick(e)}
           >
-            <Label style={suggestionTitle}>
+            <Label className={classes.suggestionTitle}>
               {suggestion}
             </Label>
           </li>
@@ -47,4 +45,6 @@ const SuggestionsList = ({ filteredSuggestions, activeSuggestion, onClick }: ISu
   );
 };
 
-export default SuggestionsList;
+// @ts-ignore
+const styledSuggesions = styled(SuggestionsList, autoCompleteStyles);
+export default styledSuggesions;

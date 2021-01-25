@@ -306,7 +306,7 @@
   "Snippet not available": "Snippet nicht verfügbar",
   "Select different permissions": "Um verschiedene Microsoft Graph API-Endpunkte auszuprobieren, wählen Sie die Berechtigungen aus und klicken Sie dann auf Zustimmen.",
   "Search permissions": "Suchberechtigungen",
-  "permissions not found": "Wir haben keine Genehmigungen gefunden. Um eine Liste aller verfügbaren Berechtigungen zu sehen, klicken Sie auf das Symbol „Einstellungen“ und wählen Sie „Berechtigungen“ aus.",
+  "permissions not found": "Wir haben keine Genehmigungen gefunden.",
   "selected": "ausgewählt",
   "Search sample queries": "Beispielabfragen durchsuchen",
   "Search history items": "Verlaufselemente durchsuchen",
@@ -327,5 +327,14 @@
   "Microsoft Graph API Version option": "Microsoft Graph-API-Version (Option)",
   "Query Sample Input": "Beispieleingabe für eine Abfrage",
   "popup blocked, allow pop-up windows in your browser": "Popup blockiert, Popup-Fenster in Ihrem Browser zulassen",
-  "sign in to consent to permissions": "Eine der nachfolgenden Berechtigungen ist erforderlich, um diese Abfrage ausführen zu können. Melden Sie sich mit einem Konto an, über das Sie den von Ihnen ausgewählten Berechtigungen zustimmen können."
+  "sign in to consent to permissions": "Eine der nachfolgenden Berechtigungen ist erforderlich, um diese Abfrage ausführen zu können. Melden Sie sich mit einem Konto an, über das Sie den von Ihnen ausgewählten Berechtigungen zustimmen können.",
+  "Sign in to use this method": "Anmelden, um diese Methode zu verwenden",
+  "Request Header deleted": "Anforderungsheader gelöscht",
+  "Request Header added": "Anforderungsheader hinzugefügt",
+  "Sidebar minimized": "Randleiste minimiert",
+  "Sidebar maximized": "Randleiste maximiert",
+  "Response area expanded": "Antwortbereich erweitert",
+  "Close expanded response area": "Den erweiterten Antwortbereich schließen"
+  
 }
+

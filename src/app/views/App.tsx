@@ -1,4 +1,5 @@
 import {
+  Announced,
   IStackTokens, ITheme, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
@@ -24,6 +25,7 @@ import { logIn } from '../services/graph-client/msal-service';
 import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
+import { translateMessage } from '../utils/translate-messages';
 import { appTitleDisplayOnFullScreen, appTitleDisplayOnMobileScreen } from './app-sections/AppTitle';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { statusMessages } from './app-sections/StatusMessages';
@@ -37,8 +39,6 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
-
-
 
 interface IAppProps {
   theme?: ITheme;
@@ -69,7 +69,6 @@ interface IAppState {
 }
 
 class App extends Component<IAppProps, IAppState> {
-
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
 
   constructor(props: IAppProps) {
@@ -77,12 +76,11 @@ class App extends Component<IAppProps, IAppState> {
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false,
-      hideDialog: true,
+      hideDialog: true
     };
   }
 
   public componentDidMount = async () => {
-
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
 
@@ -287,7 +285,6 @@ class App extends Component<IAppProps, IAppState> {
     </div>;
   }
 
-
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
@@ -295,7 +292,7 @@ class App extends Component<IAppProps, IAppState> {
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
-    const historyHeaderText = messages['History'];
+    const historyHeaderText = messages.History;
     const { mobileScreen, showSidebar } = sidebarProperties;
 
     let displayContent = true;
@@ -326,13 +323,12 @@ class App extends Component<IAppProps, IAppState> {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
 
-
-
-
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`container-fluid ${classes.app}`}>
+          <Announced message={!showSidebar ?
+            translateMessage('Sidebar minimized') : translateMessage('Sidebar maximized')} />
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={sidebarWidth}>
