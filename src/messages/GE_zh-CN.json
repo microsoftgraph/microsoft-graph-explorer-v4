@@ -328,5 +328,13 @@
   "Query Sample Input": "查询示例输入",
   "popup blocked, allow pop-up windows in your browser": "已阻止弹出窗口，允许浏览器中的弹出窗口",
   "sign in to consent to permissions": "运行查询需要以下权限之一。使用同意你所选权限的帐户登录。",
-  "Sign in to use this method": "登录以使用此方法"
+  "Sign in to use this method": "登录以使用此方法",
+  "Request Header deleted": "已删除请求头",
+  "Request Header added": "已添加请求头",
+  "Sidebar minimized": "已最小化边栏",
+  "Sidebar maximized": "已最大化边栏",
+  "Response area expanded": "响应区域已展开",
+  "Close expanded response area": "关闭展开的响应区域"
+  
 }
+
