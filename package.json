@@ -125,7 +125,7 @@
     "redux-mock-store": "1.5.3",
     "selenium-webdriver": "4.0.0-alpha.7",
     "standard-version": "8.0.2",
-    "start-server-and-test": "1.11.3",
+    "start-server-and-test": "1.11.7",
     "ts-jest": "25.2.0",
     "tslint": "5.12.1",
     "tslint-config-prettier": "1.18.0",
