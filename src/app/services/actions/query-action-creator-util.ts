@@ -58,13 +58,13 @@ export function isImageResponse(contentType: string | undefined) {
 }
 
 export function getContentType(headers: Headers) {
-  const full = headers.get('content-type');
-  if (full) {
-    const delimiterPos = full.indexOf(';');
+  const contentType = headers.get('content-type');
+  if (contentType) {
+    const delimiterPos = contentType.indexOf(';');
     if (delimiterPos !== -1) {
-      return full.substr(0, delimiterPos);
+      return contentType.substr(0, delimiterPos);
     } else {
-      return full;
+      return contentType;
     }
   }
 }
@@ -80,14 +80,8 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
       case ContentType.Json:
         return response.json();
 
-      case ContentType.XML:
-        return response.text();
-
-      case ContentType.TextPlain:
-        return response.text();
-
       default:
-        return response;
+        return response.text();
     }
   }
   return response;
