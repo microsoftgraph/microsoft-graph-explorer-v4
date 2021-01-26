@@ -25,7 +25,7 @@ export function appTitleDisplayOnFullScreen(
         ariaLabel='Minimize sidebar'
         onClick={() => toggleSidebar()} />
     </TooltipHost>
-    <div className={classes.graphExplorerLabelContainer}>
+      <div className={classes.graphExplorerLabelContainer} role={'heading'} aria-level={1}>
       {!minimised &&
         <>
           <Label className={classes.graphExplorerLabel}>
@@ -50,7 +50,7 @@ export function appTitleDisplayOnMobileScreen(
         ariaLabel='Remove sidebar'
         onClick={() => toggleSidebar()}
       />
-      <div style={{ padding: 10 }}>
+        <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
         <Label className={classes.graphExplorerLabel}>
           Graph Explorer
           </Label>
