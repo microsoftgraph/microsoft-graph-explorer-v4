@@ -328,5 +328,13 @@
   "Query Sample Input": "Entrada de exemplo de consulta",
   "popup blocked, allow pop-up windows in your browser": "popup bloqueado, permitir janelas pop-up em seu navegador",
   "sign in to consent to permissions": "Uma das seguintes permissões é obrigatória para executar esta API. Entre com uma conta que possa concordar com a permissão que você escolher.",
-  "Sign in to use this method": "Entre para usar este método"
+  "Sign in to use this method": "Entrar para usar este método",
+  "Request Header deleted": "Solicitar Cabeçalho excluído",
+  "Request Header added": "Solicitar Cabeçalho adicionado",
+  "Sidebar minimized": "Barra lateral minimizada",
+  "Sidebar maximized": "Barra lateral maximizada",
+  "Response area expanded": "Área de resposta expandida",
+  "Close expanded response area": "Fechar a área de resposta expandida"
+  
 }
+

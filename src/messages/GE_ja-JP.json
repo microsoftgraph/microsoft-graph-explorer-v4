@@ -328,5 +328,13 @@
   "Query Sample Input": "クエリのサンプル入力",
   "popup blocked, allow pop-up windows in your browser": "ポップアップがブロックされています。ブラウザーでポップアップ ウィンドウを許可してください",
   "sign in to consent to permissions": "このクエリを実行するには、次のいずれかのアクセス許可が必要です。選択するアクセス許可に同意可能なアカウントでサインインします。",
-  "Sign in to use this method": "サインインしてこの方法を使用する"
+  "Sign in to use this method": "サインインしてこのメソッドを使用する",
+  "Request Header deleted": "要求ヘッダーが削除されました",
+  "Request Header added": "要求ヘッダーが追加されました",
+  "Sidebar minimized": "サイドバーが最小化されました",
+  "Sidebar maximized": "サイドバーが最大化されました",
+  "Response area expanded": "応答領域が拡張されました",
+  "Close expanded response area": "拡張された応答領域を閉じる"
+  
 }
+
