@@ -14,6 +14,7 @@ import {
   DELETE_HISTORY_ITEM_BUTTON,
   EXPORT_HISTORY_ITEM_BUTTON,
   HISTORY_LIST_ITEM,
+  HISTORY_TAB,
   RUN_HISTORY_ITEM_BUTTON,
   VIEW_HISTORY_ITEM_BUTTON
 } from '../../../../telemetry/component-names';
@@ -583,7 +584,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-const trackedComponent = telemetry.trackReactComponent(History);
+const trackedComponent = telemetry.trackReactComponent(History, HISTORY_TAB);
 // @ts-ignore
 const styledHistory = styled(trackedComponent, sidebarStyles);
 const IntlHistory = injectIntl(styledHistory);

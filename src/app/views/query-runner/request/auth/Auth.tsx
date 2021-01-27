@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { telemetry } from '../../../../../telemetry';
-import { ACCESS_TOKEN_COPY_BUTTON } from '../../../../../telemetry/component-names';
+import { ACCESS_TOKEN_COPY_BUTTON, ACCESS_TOKEN_TAB } from '../../../../../telemetry/component-names';
 import { BUTTON_CLICK_EVENT } from '../../../../../telemetry/event-types';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
@@ -58,4 +58,6 @@ function trackCopyEvent() {
     });
 }
 
-export default styled(Auth, authStyles as any);
+const trackedComponent = telemetry.trackReactComponent(Auth, ACCESS_TOKEN_TAB);
+// @ts-ignore
+export default styled(trackedComponent, authStyles);
