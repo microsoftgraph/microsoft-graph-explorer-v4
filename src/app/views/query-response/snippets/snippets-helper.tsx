@@ -12,7 +12,7 @@ import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names
 import { BUTTON_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { IQuery } from '../../../../types/query-runner';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
-import { convertVhToPx } from '../../common/dimensions-adjustment';
+import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
 
 interface ISnippetProps {
   language: string;
@@ -45,10 +45,7 @@ function Snippet(props: ISnippetProps) {
   const { data, pending: loadingState } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
 
-  let responseHeight = response.height;
-  if (responseAreaExpanded) {
-    responseHeight = '90vh';
-  }
+  const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
   const height = convertVhToPx(responseHeight, 140);
 
   const dispatch = useDispatch();

@@ -5,17 +5,13 @@ import { useSelector } from 'react-redux';
 
 import { Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
-import { convertVhToPx } from '../../common/dimensions-adjustment';
+import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
 
 const ResponseHeaders = () => {
   const { dimensions: { response }, graphResponse, responseAreaExpanded } = useSelector((state: any) => state);
   const { headers } = graphResponse;
 
-  let responseHeight = response.height;
-  if (responseAreaExpanded) {
-    responseHeight = '90vh';
-  }
-  const height = convertVhToPx(responseHeight, 100);
+  const height = convertVhToPx(getResponseHeight(response, responseAreaExpanded), 100);
 
   if (headers) {
     return (

@@ -5,19 +5,16 @@ import { useSelector } from 'react-redux';
 import { ContentType } from '../../../../types/enums';
 import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 import { Image, Monaco } from '../../common';
-import { convertVhToPx } from '../../common/dimensions-adjustment';
+import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
 import { formatXml } from '../../common/monaco/util/format-xml';
 
 const Response = () => {
   const language = 'json';
 
   const { dimensions: { response }, graphResponse, responseAreaExpanded } = useSelector((state: any) => state);
-  let responseHeight = response.height;
-  if (responseAreaExpanded) {
-    responseHeight = '90vh';
-  }
-  const height = convertVhToPx(responseHeight, 100);
   const { body, headers } = graphResponse;
+
+  const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
 
   if (headers) {
     const contentType = getContentType(headers);
