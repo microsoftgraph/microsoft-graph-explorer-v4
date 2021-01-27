@@ -145,6 +145,7 @@ class QueryResponse extends Component<
               headerText='Share'
               key='share'
               itemIcon='Share'
+              itemKey='share-query' // To be used to construct component name for telemetry data
               ariaLabel={translateMessage('Share Query Message')}
               title={translateMessage('Share Query Message')}
               onRenderItemLink={this.renderItemLink}
@@ -153,6 +154,7 @@ class QueryResponse extends Component<
               headerText='Expand'
               key='expand'
               itemIcon='MiniExpandMirrored'
+              itemKey='expand-response'
               ariaLabel={translateMessage('Expand response')}
               title={translateMessage('Expand response')}
               onRenderItemLink={this.renderItemLink}

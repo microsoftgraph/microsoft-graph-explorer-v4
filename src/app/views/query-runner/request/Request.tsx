@@ -10,10 +10,8 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { telemetry } from '../../../../telemetry';
-import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
-import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
 import { RequestHeaders } from './headers';
@@ -37,6 +35,7 @@ export class Request extends Component<IRequestComponent, any> {
       <PivotItem
         key='request-body'
         itemIcon='Send'
+        itemKey='request-body' // To be used to construct component name for telemetry data
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['request body']}
         headerText={messages['request body']}
@@ -46,8 +45,9 @@ export class Request extends Component<IRequestComponent, any> {
           onChange={(value) => handleOnEditorChange(value)} />
       </PivotItem>,
       <PivotItem
-        key='request-header'
+        key='request-headers'
         itemIcon='FileComment'
+        itemKey='request-headers'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['request header']}
         headerText={messages['request header']}
@@ -57,6 +57,7 @@ export class Request extends Component<IRequestComponent, any> {
       <PivotItem
         key='permissions'
         itemIcon='AzureKeyVault'
+        itemKey='modify-permissions'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['modify permissions']}
         headerText={messages['modify permissions']}
@@ -70,6 +71,7 @@ export class Request extends Component<IRequestComponent, any> {
         <PivotItem
           key='auth'
           itemIcon='AuthenticatorApp'
+          itemKey='access-token'
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Access Token']}
           headerText={messages['Access Token']}>
@@ -95,23 +97,13 @@ export class Request extends Component<IRequestComponent, any> {
   }
 
   private onPivotItemClick = (item?: PivotItem) => {
-    if (!item) {
-      return;
-    }
-    const tabTitle = item.props.title;
-    if (tabTitle) {
-      this.trackTabClickEvent(tabTitle);
+    if (!item) { return; }
+    const tabKey = item.props.itemKey;
+    const { sampleQuery }: any = this.props;
+    if (tabKey) {
+      telemetry.trackTabClickEvent(tabKey, sampleQuery);
     }
   };
-
-  private trackTabClickEvent(tabTitle: string) {
-    const { sampleQuery }: any = this.props;
-    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
-    telemetry.trackEvent(TAB_CLICK_EVENT, {
-      ComponentName: `${tabTitle} tab`,
-      QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
-    });
-  }
 
   public render() {
     const requestPivotItems = this.getPivotItems();
