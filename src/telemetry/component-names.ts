@@ -13,13 +13,17 @@ export const DELETE_HISTORY_ITEM_BUTTON = 'Delete history item button';
 
 // List items
 export const SAMPLE_QUERY_LIST_ITEM = 'Sample query list item';
-export const HISTORY_LIST_ITEM =  'History list item';
+export const HISTORY_LIST_ITEM = 'History list item';
 
 // Tabs
 export const HISTORY_TAB = 'History tab';
+export const SHARE_QUERY_TAB = 'Share query tab';
 export const ACCESS_TOKEN_TAB = 'Access token tab';
+export const REQUEST_BODY_TAB = 'Request body tab';
 export const CODE_SNIPPETS_TAB = 'Code snippets tab';
 export const ADAPTIVE_CARDS_TAB = 'Adaptive cards tab';
+export const REQUEST_HEADERS_TAB= 'Request headers tab';
+export const EXPAND_RESPONSE_TAB = 'Expand response tab';
 export const RESPONSE_PREVIEW_TAB = 'Response preview tab';
 export const RESPONSE_HEADERS_TAB = 'Response headers tab';
 export const TOOLKIT_COMPONENT_TAB = 'Toolkit component tab';
