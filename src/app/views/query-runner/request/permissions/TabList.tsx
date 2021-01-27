@@ -23,8 +23,11 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     setConsentedStatus(tokenPresent, permissions, consentedScopes);
   }, [scopes.data, consentedScopes]);
 
-  if (!scopes.hasUrl) {
+  if (tokenPresent && !scopes.hasUrl) {
     return displayNoPermissionsFoundMessage();
+  }
+  if (!tokenPresent && !scopes.hasUrl) {
+    return displayNotSignedInMessage();
   }
 
   return (
@@ -64,4 +67,18 @@ function displayNoPermissionsFoundMessage() {
   }}>
     <FormattedMessage id='permissions not found in permissions tab' />
   </Label>);
+}
+
+function displayNotSignedInMessage() {
+  return (<Label style={{
+    display: 'flex',
+    paddingLeft: '10px',
+    paddingRight: '10px',
+    width: '100%',
+    minHeight: '200px',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }}>
+    <FormattedMessage id='sign in to view a list of all permissions' />
+  </Label>)
 }
