@@ -255,7 +255,7 @@ class App extends Component<IAppProps, IAppState> {
     const properties = { ...sidebarProperties };
     properties.showSidebar = !properties.showSidebar;
     this.props.actions!.toggleSidebar(properties);
-    telemetry.trackEvent(BUTTON_CLICK_EVENT, SIDEBAR_HAMBURGER_BUTTON);
+    telemetry.trackEvent(BUTTON_CLICK_EVENT, { ComponentName: SIDEBAR_HAMBURGER_BUTTON });
   }
 
   public displayToggleButton = (mediaQueryList: any) => {
