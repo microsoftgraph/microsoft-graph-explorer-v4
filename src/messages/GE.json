@@ -306,7 +306,7 @@
   "Snippet not available": "Snippet not available",
   "Select different permissions": "To try out different Microsoft Graph API endpoints, choose the permissions, and then click Consent.",
   "Search permissions": "Search permissions",
-  "permissions not found": "We did not find any permissions. To view a list of all available permissions, click on the Settings icon and Select Permissions.",
+  "permissions not found": "We did not find any permissions.",
   "selected": "selected",
   "Search sample queries": "Search sample queries",
   "Search history items": "Search history items",
@@ -327,5 +327,14 @@
   "Microsoft Graph API Version option": "Microsoft Graph API Version option",
   "Query Sample Input": "Query sample input",
   "popup blocked, allow pop-up windows in your browser": "popup blocked, allow pop-up windows in your browser",
-  "sign in to consent to permissions": "One of the following permissions is required to run the query. Sign in with an account that can consent to the permission you will choose."
+  "sign in to consent to permissions": "One of the following permissions is required to run the query. Sign in with an account that can consent to the permission you will choose.",
+  "Sign in to use this method": "Sign in to use this method",
+  "Request Header deleted": "Request Header deleted",
+  "Request Header added": "Request Header added",
+  "Sidebar minimized": "Sidebar minimized",
+  "Sidebar maximized": "Sidebar maximized",
+  "Response area expanded": "Response area expanded",
+  "Close expanded response area": "Close expanded response area"
+  
 }
+

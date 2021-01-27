@@ -3,6 +3,7 @@ import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken, consentedScopes } from './auth-reducers';
 import { autoComplete } from './autocomplete-reducer';
 import { devxApi } from './devxApi-reducers';
+import { dimensions } from './dimensions-reducers';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
 import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
@@ -36,4 +37,5 @@ export default combineReducers({
   snippets,
   termsOfUse,
   theme,
+  dimensions
 });

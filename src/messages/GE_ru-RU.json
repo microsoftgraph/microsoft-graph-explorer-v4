@@ -306,7 +306,7 @@
   "Snippet not available": "Фрагмент недоступен",
   "Select different permissions": "Чтобы испытать различные конечные точки API Microsoft Graph, выберите разрешения и нажмите кнопку \"Согласие\".",
   "Search permissions": "Разрешения поиска",
-  "permissions not found": "Не удалось найти никаких разрешений. Чтобы просмотреть список всех доступных разрешений, щелкните значок параметров и выберите разрешения.",
+  "permissions not found": "Не удалось найти никаких разрешений.",
   "selected": "выбрано",
   "Search sample queries": "Примеры поисковых запросов",
   "Search history items": "Элементы истории поиска",
@@ -327,5 +327,14 @@
   "Microsoft Graph API Version option": "Параметр версии API Microsoft Graph",
   "Query Sample Input": "Пример ввода запроса",
   "popup blocked, allow pop-up windows in your browser": "всплывающее окно заблокировано, разрешить всплывающие окна в браузере",
-  "sign in to consent to permissions": "Для выполнения этого запроса требуется одно из следующих разрешений. Войдите с помощью учетной записи, которая может предоставить согласие для выбираемого вами разрешения."
+  "sign in to consent to permissions": "Для выполнения этого запроса требуется одно из следующих разрешений. Войдите с помощью учетной записи, которая может предоставить согласие для выбираемого вами разрешения.",
+  "Sign in to use this method": "Войдите, чтобы использовать этот способ",
+  "Request Header deleted": "Заголовок запроса удален",
+  "Request Header added": "Заголовок запроса добавлен",
+  "Sidebar minimized": "Боковая панель свернута",
+  "Sidebar maximized": "Боковая панель развернута",
+  "Response area expanded": "Область отклика развернута",
+  "Close expanded response area": "Закрыть развернутую область отклика"
+  
 }
+

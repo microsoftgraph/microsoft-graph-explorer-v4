@@ -25,12 +25,22 @@ Where `REACT_APP_CLIENT_ID` is the `Application (client) ID` from the Azure port
 
 ## Other commands
 * `npm test` to run tests from the command line for scenarios like parsing metadata and functional explorer tests.
+* `npm run ci` to run accessibility tests from the command line
 * `npm run lint` linting your files
 
 ## Contributing
 Please see the [contributing guidelines](CONTRIBUTING.md).
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+## Testing Accessbility
+* Download the latest stable chromedriver from [here](https://chromedriver.chromium.org/).
+* In your `.env` file, create a variable `REACT_APP_CHROMEDRIVER_PATH` and save the path to your `chromedriver.exe` file.
+    For example (on a Windows PC)  it would be : `REACT_APP_CHROMEDRIVER_PATH=C:\\SeleniumWebDrivers\\ChromeDriver\\chromedriver.exe`
+    Take note of the format.
+* Save your changes.
+* On your terminal run the command `npm install`.
+* Once the installation is complete run the command `npm run ci`.
 
 ## Known issues
 * You cannot remove permissions by using the Graph Explorer UI. You will need to [remove the application consent](http://shawntabrizi.com/aad/revoking-consent-azure-active-directory-applications/) and then re-consent to remove permissions. I know, this is far from a good experience.

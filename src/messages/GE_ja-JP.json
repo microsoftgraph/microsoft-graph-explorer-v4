@@ -306,7 +306,7 @@
   "Snippet not available": "スニペットを使用できません",
   "Select different permissions": "さまざまな Microsoft Graph API エンドポイントを試すには、アクセス許可を選択し、[同意] をクリックします。",
   "Search permissions": "検索アクセス許可",
-  "permissions not found": "アクセス許可が見つかりませんでした。利用可能なすべてのアクセス許可の一覧を表示するには、[設定] アイコンをクリックし、[アクセス許可] を選択します。",
+  "permissions not found": "アクセス許可が見つかりませんでした。",
   "selected": "選択されました",
   "Search sample queries": "サンプル クエリの検索",
   "Search history items": "検索履歴アイテム",
@@ -327,5 +327,14 @@
   "Microsoft Graph API Version option": "Microsoft Graph API バージョン オプション",
   "Query Sample Input": "クエリのサンプル入力",
   "popup blocked, allow pop-up windows in your browser": "ポップアップがブロックされています。ブラウザーでポップアップ ウィンドウを許可してください",
-  "sign in to consent to permissions": "このクエリを実行するには、次のいずれかのアクセス許可が必要です。選ぶアクセス許可に同意できるアカウントでサインインします。"
+  "sign in to consent to permissions": "このクエリを実行するには、次のいずれかのアクセス許可が必要です。選択するアクセス許可に同意可能なアカウントでサインインします。",
+  "Sign in to use this method": "サインインしてこのメソッドを使用する",
+  "Request Header deleted": "要求ヘッダーが削除されました",
+  "Request Header added": "要求ヘッダーが追加されました",
+  "Sidebar minimized": "サイドバーが最小化されました",
+  "Sidebar maximized": "サイドバーが最大化されました",
+  "Response area expanded": "応答領域が拡張されました",
+  "Close expanded response area": "拡張された応答領域を閉じる"
+  
 }
+
