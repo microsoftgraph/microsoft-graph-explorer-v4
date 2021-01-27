@@ -18,7 +18,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
 import { telemetry } from '../../../telemetry';
-import { OFFICE_DEV_PROGRAM_LINK, SELECT_THEME_BUTTON, THEME_CHANGE_BUTTON } from '../../../telemetry/component-names';
+import {
+  OFFICE_DEV_PROGRAM_LINK,
+  SELECT_THEME_BUTTON,
+  THEME_CHANGE_BUTTON,
+  VIEW_ALL_PERMISSIONS_BUTTON
+} from '../../../telemetry/component-names';
 import { BUTTON_CLICK_EVENT, LINK_CLICK_EVENT } from '../../../telemetry/event-types';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
@@ -116,7 +121,12 @@ function Settings(props: ISettingsProps) {
     open = !open;
     setPanelState(open);
     setSelectedPermissions([]);
+    trackSelectPermissionsButtonClickEvent();
   };
+
+  const trackSelectPermissionsButtonClickEvent = () => {
+    telemetry.trackEvent(BUTTON_CLICK_EVENT, { ComponentName: VIEW_ALL_PERMISSIONS_BUTTON });
+  }
 
   const setPermissions = (permissions: []) => {
     setSelectedPermissions(permissions);
@@ -128,7 +138,7 @@ function Settings(props: ISettingsProps) {
   };
 
   const trackOfficeDevProgramLinkClickEvent = () => {
-    telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: OFFICE_DEV_PROGRAM_LINK});
+    telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: OFFICE_DEV_PROGRAM_LINK });
   };
 
   const getSelectionDetails = () => {

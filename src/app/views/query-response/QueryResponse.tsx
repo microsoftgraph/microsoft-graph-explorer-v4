@@ -8,10 +8,14 @@ import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { telemetry } from '../../../telemetry';
+import { SHARE_QUERY_COPY_BUTTON } from '../../../telemetry/component-names';
+import { BUTTON_CLICK_EVENT } from '../../../telemetry/event-types';
 
 import {
   IQueryResponseProps
 } from '../../../types/query-response';
+import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { translateMessage } from '../../utils/translate-messages';
 import { copy } from '../common/copy';
 import { convertVhToPx } from '../common/dimensions-adjustment';
@@ -46,7 +50,17 @@ const QueryResponse = (props: IQueryResponseProps) => {
 
   const handleCopy = () => {
     copy('share-query-text').then(() => toggleShareQueryDialogState());
+    trackCopyEvent();
   };
+
+  const trackCopyEvent = () => {
+    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+    telemetry.trackEvent(BUTTON_CLICK_EVENT,
+      {
+        ComponentName: SHARE_QUERY_COPY_BUTTON,
+        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
+      });
+  }
 
   const handlePivotItemClick = (pivotItem?: PivotItem) => {
     if (!pivotItem) {

@@ -1,9 +1,10 @@
 import { ReactPlugin, withAITracking } from '@microsoft/applicationinsights-react-js';
 import { ApplicationInsights, ITelemetryItem, SeverityLevel } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
+import { validateExternalLink } from '../app/utils/external-link-validation';
 import { sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
 import { IQuery } from '../types/query-runner';
-import { TAB_CLICK_EVENT } from './event-types';
+import { LINK_CLICK_EVENT, TAB_CLICK_EVENT } from './event-types';
 import ITelemetry from './ITelemetry';
 
 class Telemetry implements ITelemetry {
@@ -55,6 +56,11 @@ class Telemetry implements ITelemetry {
       ComponentName: componentName,
       QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
     });
+  }
+
+  public trackLinkClickEvent(url: string, componentName: string)  {
+    telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: componentName });
+    validateExternalLink(url, componentName);
   }
 
   private filterFunction(envelope: ITelemetryItem) {

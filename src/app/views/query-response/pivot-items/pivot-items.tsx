@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { telemetry } from '../../../../telemetry';
-import { GRAPH_TOOLKIT_LINK } from '../../../../telemetry/component-names';
+import { GRAPH_TOOLKIT_PLAYGROUND_LINK } from '../../../../telemetry/component-names';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
@@ -40,7 +40,7 @@ export const getPivotItems = () => {
     if (!!body) {
       const { toolkitUrl, exampleUrl } = lookupToolkitUrl(sampleQuery);
       if (toolkitUrl && exampleUrl) {
-        validateExternalLink(toolkitUrl, GRAPH_TOOLKIT_LINK, null, sampleQuery);
+        validateExternalLink(toolkitUrl, GRAPH_TOOLKIT_PLAYGROUND_LINK, null, sampleQuery);
         return <span style={dotStyle} />;
       }
     }

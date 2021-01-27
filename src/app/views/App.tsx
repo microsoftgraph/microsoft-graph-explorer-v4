@@ -8,6 +8,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../appLocale';
+import { telemetry } from '../../telemetry';
+import { SIDEBAR_HAMBURGER_BUTTON } from '../../telemetry/component-names';
+import { BUTTON_CLICK_EVENT } from '../../telemetry/event-types';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
@@ -252,6 +255,7 @@ class App extends Component<IAppProps, IAppState> {
     const properties = { ...sidebarProperties };
     properties.showSidebar = !properties.showSidebar;
     this.props.actions!.toggleSidebar(properties);
+    telemetry.trackEvent(BUTTON_CLICK_EVENT, SIDEBAR_HAMBURGER_BUTTON);
   }
 
   public displayToggleButton = (mediaQueryList: any) => {

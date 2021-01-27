@@ -26,6 +26,7 @@ import { geLocale } from '../../../../appLocale';
 import { telemetry } from '../../../../telemetry';
 import {
   DOCUMENTATION_LINK,
+  MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK,
   SAMPLE_QUERY_LIST_ITEM
 } from '../../../../telemetry/component-names';
 import {
@@ -424,6 +425,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             target='_blank'
             rel="noopener noreferrer"
             className={classes.links}
+            onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href, MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
             href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
           >
             <FormattedMessage id='Microsoft Graph API Reference docs' />
