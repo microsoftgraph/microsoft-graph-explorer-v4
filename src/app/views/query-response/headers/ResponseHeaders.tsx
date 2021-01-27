@@ -8,9 +8,14 @@ import { genericCopy } from '../../common/copy';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
 
 const ResponseHeaders = () => {
-  const { dimensions, graphResponse } = useSelector((state: any) => state);
+  const { dimensions: { response }, graphResponse, responseAreaExpanded } = useSelector((state: any) => state);
   const { headers } = graphResponse;
-  const height = convertVhToPx(dimensions.response.height, 100);
+
+  let responseHeight = response.height;
+  if (responseAreaExpanded) {
+    responseHeight = '90vh';
+  }
+  const height = convertVhToPx(responseHeight, 100);
 
   if (headers) {
     return (

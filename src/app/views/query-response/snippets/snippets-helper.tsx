@@ -41,10 +41,15 @@ function Snippet(props: ISnippetProps) {
   language = language.toLowerCase();
 
   const sampleQuery = useSelector((state: any) => state.sampleQuery, shallowEqual);
-  const { dimensions, snippets } = useSelector((state: any) => state);
+  const { dimensions: { response }, snippets, responseAreaExpanded } = useSelector((state: any) => state);
   const { data, pending: loadingState } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
-  const height = convertVhToPx(dimensions.response.height, 140);
+
+  let responseHeight = response.height;
+  if (responseAreaExpanded) {
+    responseHeight = '90vh';
+  }
+  const height = convertVhToPx(responseHeight, 140);
 
   const dispatch = useDispatch();
 

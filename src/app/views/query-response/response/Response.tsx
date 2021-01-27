@@ -11,8 +11,12 @@ import { formatXml } from '../../common/monaco/util/format-xml';
 const Response = () => {
   const language = 'json';
 
-  const { dimensions, graphResponse } = useSelector((state: any) => state);
-  const height = convertVhToPx(dimensions.response.height, 100);
+  const { dimensions: { response }, graphResponse, responseAreaExpanded } = useSelector((state: any) => state);
+  let responseHeight = response.height;
+  if (responseAreaExpanded) {
+    responseHeight = '90vh';
+  }
+  const height = convertVhToPx(responseHeight, 100);
   const { body, headers } = graphResponse;
 
   if (headers) {
