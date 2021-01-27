@@ -55,11 +55,13 @@ export default TabList;
 function displayNoPermissionsFoundMessage() {
   return (<Label style={{
     display: 'flex',
+    paddingLeft: '10px',
+    paddingRight: '10px',
     width: '100%',
     minHeight: '200px',
     justifyContent: 'center',
     alignItems: 'center'
   }}>
-    <FormattedMessage id='permissions not found' />
+    <FormattedMessage id='permissions not found in permissions tab' />
   </Label>);
 }
