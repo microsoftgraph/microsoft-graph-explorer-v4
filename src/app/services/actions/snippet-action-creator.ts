@@ -1,7 +1,5 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
-import { telemetry } from '../../../telemetry';
-import { GET_SNIPPET_ACTION } from '../../../telemetry/component-names';
-import { NETWORK_ERROR } from '../../../telemetry/error-types';
+import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAction } from '../../../types/action';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
@@ -62,10 +60,10 @@ export function getSnippet(language: string): Function {
     } catch (error) {
       const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
       telemetry.trackException(
-        new Error(NETWORK_ERROR),
+        new Error(errorTypes.NETWORK_ERROR),
         SeverityLevel.Error,
         {
-          ComponentName: GET_SNIPPET_ACTION,
+          ComponentName: componentNames.GET_SNIPPET_ACTION,
           QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
           Message: `${error}`
         }

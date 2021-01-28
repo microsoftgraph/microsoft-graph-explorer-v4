@@ -10,6 +10,7 @@ import {
 } from 'office-ui-fabric-react';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { queryResponseStyles } from '../queryResponse.styles';
+import { componentNames, telemetry } from '../../../../telemetry';
 
 class GraphToolkit extends Component<any> {
   constructor(props: any) {
@@ -25,7 +26,8 @@ class GraphToolkit extends Component<any> {
         <>
           <MessageBar messageBarType={MessageBarType.info}>
             <FormattedMessage id='Open this example in' />
-            <a tabIndex={0} href={exampleUrl} target='_blank' rel='noopener noreferrer'>
+            <a onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK)}
+              tabIndex={0} href={exampleUrl} target='_blank' rel='noopener noreferrer'>
               <FormattedMessage id='graph toolkit playground' />
             </a>
             .
