@@ -1,7 +1,7 @@
 import { telemetry } from './telemetry';
-
+import * as eventTypes from './event-types'
 export {
-  telemetry
+  telemetry, eventTypes
 };
 
 

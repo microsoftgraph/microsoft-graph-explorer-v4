@@ -7,15 +7,14 @@ import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dia
 import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
-import { telemetry } from '../../../telemetry';
-import { SHARE_QUERY_COPY_BUTTON } from '../../../telemetry/component-names';
-import { BUTTON_CLICK_EVENT } from '../../../telemetry/event-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { telemetry, eventTypes, componentNames } from '../../../telemetry';
 
 import {
   IQueryResponseProps
 } from '../../../types/query-response';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
+import { expandResponseArea } from '../../services/actions/response-expanded-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
 import { copy } from '../common/copy';
 import { convertVhToPx } from '../common/dimensions-adjustment';
@@ -24,6 +23,8 @@ import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 
 const QueryResponse = (props: IQueryResponseProps) => {
+  const dispatch = useDispatch();
+
   const [showShareQueryDialog, setShareQuaryDialogStatus] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [query, setQuery] = useState('');
@@ -35,7 +36,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
     intl: { messages },
   }: any = props;
 
-
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
   }, [dimensions]);
@@ -46,6 +46,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
 
   const toggleExpandResponse = () => {
     setShowModal(!showModal);
+    dispatch(expandResponseArea(!showModal));
   };
 
   const handleCopy = () => {
@@ -55,9 +56,9 @@ const QueryResponse = (props: IQueryResponseProps) => {
 
   const trackCopyEvent = () => {
     const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
-    telemetry.trackEvent(BUTTON_CLICK_EVENT,
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
       {
-        ComponentName: SHARE_QUERY_COPY_BUTTON,
+        ComponentName: componentNames.SHARE_QUERY_COPY_BUTTON,
         QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
       });
   }
