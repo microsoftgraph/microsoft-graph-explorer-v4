@@ -8,7 +8,7 @@ import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { telemetry, eventTypes, componentNames } from '../../../telemetry';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 
 import {
   IQueryResponseProps

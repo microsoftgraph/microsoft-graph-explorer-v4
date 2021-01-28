@@ -13,8 +13,7 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { telemetry } from '../../../../../telemetry';
-import { MODIFY_PERMISSIONS_TAB } from '../../../../../telemetry/component-names';
+import { componentNames, telemetry } from '../../../../../telemetry';
 
 import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
@@ -297,5 +296,5 @@ const styledPermissions = styled(Permission, permissionStyles as any);
 // @ts-ignore
 const IntlPermission = injectIntl(styledPermissions);
 // @ts-ignore
-const trackedComponent = telemetry.trackReactComponent(IntlPermission, MODIFY_PERMISSIONS_TAB);
+const trackedComponent = telemetry.trackReactComponent(IntlPermission, componentNames.MODIFY_PERMISSIONS_TAB);
 export default connect(mapStateToProps, mapDispatchToProps)(trackedComponent);

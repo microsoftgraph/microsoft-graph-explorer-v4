@@ -17,14 +17,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
-import { telemetry } from '../../../telemetry';
-import {
-  OFFICE_DEV_PROGRAM_LINK,
-  SELECT_THEME_BUTTON,
-  THEME_CHANGE_BUTTON,
-  VIEW_ALL_PERMISSIONS_BUTTON
-} from '../../../telemetry/component-names';
-import { BUTTON_CLICK_EVENT, LINK_CLICK_EVENT } from '../../../telemetry/event-types';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
 import { ISettingsProps } from '../../../types/settings';
@@ -98,7 +91,11 @@ function Settings(props: ISettingsProps) {
     let hidden = themeChooserDialogHidden;
     hidden = !hidden;
     hideThemeChooserDialog(hidden);
-    telemetry.trackEvent(BUTTON_CLICK_EVENT, { ComponentName: THEME_CHANGE_BUTTON });
+    telemetry.trackEvent(
+      eventTypes.BUTTON_CLICK_EVENT,
+      {
+        ComponentName: componentNames.THEME_CHANGE_BUTTON
+      });
   };
 
   const handleSignOut = () => {
@@ -109,11 +106,12 @@ function Settings(props: ISettingsProps) {
     const newTheme: AppTheme = selectedTheme.key;
     dispatch(changeTheme(newTheme));
     loadGETheme(newTheme);
-    telemetry.trackEvent(BUTTON_CLICK_EVENT,
-     {
-       ComponentName: SELECT_THEME_BUTTON,
-       SelectedTheme: selectedTheme.text
-     });
+    telemetry.trackEvent(
+      eventTypes.BUTTON_CLICK_EVENT,
+      {
+        ComponentName: componentNames.SELECT_THEME_BUTTON,
+        SelectedTheme: selectedTheme.text
+      });
   };
 
   const togglePermissionsPanel = () => {
@@ -125,7 +123,11 @@ function Settings(props: ISettingsProps) {
   };
 
   const trackSelectPermissionsButtonClickEvent = () => {
-    telemetry.trackEvent(BUTTON_CLICK_EVENT, { ComponentName: VIEW_ALL_PERMISSIONS_BUTTON });
+    telemetry.trackEvent(
+      eventTypes.BUTTON_CLICK_EVENT,
+      {
+        ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
+      });
   }
 
   const setPermissions = (permissions: []) => {
@@ -138,7 +140,11 @@ function Settings(props: ISettingsProps) {
   };
 
   const trackOfficeDevProgramLinkClickEvent = () => {
-    telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: OFFICE_DEV_PROGRAM_LINK });
+    telemetry.trackEvent(
+      eventTypes.LINK_CLICK_EVENT,
+      {
+        ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
+      });
   };
 
   const getSelectionDetails = () => {

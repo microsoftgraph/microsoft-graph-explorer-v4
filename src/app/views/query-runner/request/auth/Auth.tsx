@@ -2,9 +2,7 @@ import { IconButton, IIconProps, Label, styled } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { telemetry } from '../../../../../telemetry';
-import { ACCESS_TOKEN_COPY_BUTTON, ACCESS_TOKEN_TAB } from '../../../../../telemetry/component-names';
-import { BUTTON_CLICK_EVENT } from '../../../../../telemetry/event-types';
+import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { genericCopy } from '../../../common/copy';
@@ -52,12 +50,12 @@ export function Auth(props: any) {
 
 function trackCopyEvent() {
   telemetry.trackEvent(
-    BUTTON_CLICK_EVENT,
+    eventTypes.BUTTON_CLICK_EVENT,
     {
-      ComponentName: ACCESS_TOKEN_COPY_BUTTON
+      ComponentName: componentNames.ACCESS_TOKEN_COPY_BUTTON
     });
 }
 
-const trackedComponent = telemetry.trackReactComponent(Auth, ACCESS_TOKEN_TAB);
+const trackedComponent = telemetry.trackReactComponent(Auth, componentNames.ACCESS_TOKEN_TAB);
 // @ts-ignore
 export default styled(trackedComponent, authStyles);

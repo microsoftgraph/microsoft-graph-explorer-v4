@@ -23,16 +23,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
-import { telemetry } from '../../../../telemetry';
-import {
-  DOCUMENTATION_LINK,
-  MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK,
-  SAMPLE_QUERY_LIST_ITEM
-} from '../../../../telemetry/component-names';
-import {
-  LINK_CLICK_EVENT,
-  LISTITEM_CLICK_EVENT,
-} from '../../../../telemetry/event-types';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import {
   IQuery,
   ISampleQueriesProps,
@@ -96,16 +87,16 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   private async trackDocumentLinkClickedEvent(item: ISampleQuery): Promise<void> {
     const properties: { [key: string]: any } = {
-      ComponentName: DOCUMENTATION_LINK,
+      ComponentName: componentNames.DOCUMENTATION_LINK,
       SampleId: item.id,
       SampleName: item.humanName,
       SampleCategory: item.category,
       Link: item.docLink
     };
-    telemetry.trackEvent(LINK_CLICK_EVENT, properties);
+    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, properties);
 
     // Check if link throws error
-    validateExternalLink(item.docLink || '', DOCUMENTATION_LINK, item.id);
+    validateExternalLink(item.docLink || '', componentNames.DOCUMENTATION_LINK, item.id);
   }
 
   public renderItemColumn = (
@@ -305,9 +296,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   private trackSampleQueryClickEvent(selectedQuery: ISampleQuery) {
     const sanitizedUrl = sanitizeQueryUrl(GRAPH_URL + selectedQuery.requestUrl);
     telemetry.trackEvent(
-      LISTITEM_CLICK_EVENT,
+      eventTypes.LISTITEM_CLICK_EVENT,
       {
-        ComponentName: SAMPLE_QUERY_LIST_ITEM,
+        ComponentName: componentNames.SAMPLE_QUERY_LIST_ITEM,
         SampleId: selectedQuery.id,
         SampleName: selectedQuery.humanName,
         SampleCategory: selectedQuery.category,
@@ -425,7 +416,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             target='_blank'
             rel="noopener noreferrer"
             className={classes.links}
-            onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href, MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
+            onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
             href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
           >
             <FormattedMessage id='Microsoft Graph API Reference docs' />
