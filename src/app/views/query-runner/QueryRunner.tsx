@@ -6,6 +6,10 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import {
+  BUTTON_CLICK_EVENT,
+  DROPDOWN_CHANGE_EVENT,
+} from '../../../telemetry/event-types';
+import {
   IQueryRunnerProps,
   IQueryRunnerState,
 } from '../../../types/query-runner';

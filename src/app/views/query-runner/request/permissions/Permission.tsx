@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { componentNames, telemetry } from '../../../../../telemetry';
 
+import { telemetry } from '../../../../../telemetry';
 import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';

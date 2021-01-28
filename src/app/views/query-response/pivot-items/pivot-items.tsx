@@ -9,6 +9,7 @@ import { IQuery } from '../../../../types/query-runner';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../utils/translate-messages';
 import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
