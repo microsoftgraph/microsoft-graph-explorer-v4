@@ -11,7 +11,7 @@ const ResponseHeaders = () => {
   const { dimensions: { response }, graphResponse, responseAreaExpanded } = useSelector((state: any) => state);
   const { headers } = graphResponse;
 
-  const height = convertVhToPx(getResponseHeight(response, responseAreaExpanded), 100);
+  const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
 
   if (headers) {
     return (
