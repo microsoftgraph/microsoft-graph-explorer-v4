@@ -16,8 +16,8 @@ import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
-import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
+import { RequestBody } from './body';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
@@ -30,10 +30,11 @@ export class Request extends Component<IRequestComponent, any> {
   private getPivotItems = (height: string) => {
     const {
       handleOnEditorChange,
-      sampleQuery,
       mode,
       intl: { messages },
     }: any = this.props;
+
+    const heightAdjustment = 55;
 
     const pivotItems = [
       <PivotItem
@@ -44,10 +45,9 @@ export class Request extends Component<IRequestComponent, any> {
         title={messages['request body']}
         headerText={messages['request body']}
       >
-        <Monaco
-          body={sampleQuery.sampleBody}
-          height={convertVhToPx(height, 100)}
-          onChange={(value) => handleOnEditorChange(value)} />
+        <div style={{ height: convertVhToPx(height, heightAdjustment), overflowY: 'hidden', borderBottom: '1px solid #ddd' }}>
+          <RequestBody handleOnEditorChange={handleOnEditorChange} />
+        </div>
       </PivotItem>,
       <PivotItem
         key='request-headers'
@@ -57,7 +57,9 @@ export class Request extends Component<IRequestComponent, any> {
         title={messages['request header']}
         headerText={messages['request header']}
       >
-        <RequestHeaders height={convertVhToPx(height, 60)} />
+        <div style={{ height: convertVhToPx(height, heightAdjustment), overflowY: 'hidden' }}>
+          <RequestHeaders />
+        </div>
       </PivotItem>,
       <PivotItem
         key='permissions'
@@ -67,7 +69,9 @@ export class Request extends Component<IRequestComponent, any> {
         title={messages['modify permissions']}
         headerText={messages['modify permissions']}
       >
-        <Permission />
+        <div style={{ height: convertVhToPx(height, heightAdjustment), overflowY: 'hidden' }}>
+          <Permission />
+        </div>
       </PivotItem>,
     ];
 
@@ -80,7 +84,9 @@ export class Request extends Component<IRequestComponent, any> {
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Access Token']}
           headerText={messages['Access Token']}>
-          <Auth style={{ height }} />
+          <div style={{ height: convertVhToPx(height, heightAdjustment), overflowY: 'hidden' }}>
+            <Auth />
+          </div>
         </PivotItem>
       );
     }
@@ -122,7 +128,7 @@ export class Request extends Component<IRequestComponent, any> {
   public render() {
     const { dimensions } = this.props;
     const requestPivotItems = this.getPivotItems(dimensions.request.height);
-    const minHeight = 250;
+    const minHeight = 60;
     const maxHeight = 800;
 
     return (
