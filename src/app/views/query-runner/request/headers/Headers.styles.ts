@@ -3,7 +3,6 @@ import { FontSizes } from '@uifabric/styling';
 export const headerStyles = () => {
   return {
     container: {
-      // width: '98%',
       textAlign: 'center',
       padding: 10,
       overflowY: 'auto',

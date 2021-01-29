@@ -6,7 +6,7 @@ import {
   TooltipHost,
 } from 'office-ui-fabric-react';
 import { Resizable } from 're-resizable';
-import React, { Component } from 'react';
+import React, { Component, CSSProperties } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -15,7 +15,6 @@ import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
-import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../utils/translate-messages';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
@@ -37,6 +36,11 @@ export class Request extends Component<IRequestComponent, any> {
     }: any = this.props;
 
     const heightAdjustment = 55;
+    const containerStyle: CSSProperties = {
+      height: convertVhToPx(height, heightAdjustment),
+      overflowY: 'hidden',
+      borderBottom: '1px solid #ddd'
+    };
 
     const pivotItems = [
       <PivotItem
@@ -47,7 +51,7 @@ export class Request extends Component<IRequestComponent, any> {
         title={messages['request body']}
         headerText={messages['request body']}
       >
-        <div style={{ height: convertVhToPx(height, heightAdjustment), overflowY: 'hidden', borderBottom: '1px solid #ddd' }}>
+        <div style={containerStyle}>
           <RequestBody handleOnEditorChange={handleOnEditorChange} />
         </div>
       </PivotItem>,
@@ -59,7 +63,7 @@ export class Request extends Component<IRequestComponent, any> {
         title={messages['request header']}
         headerText={messages['request header']}
       >
-        <div style={{ height: convertVhToPx(height, heightAdjustment), overflowY: 'hidden' }}>
+        <div style={containerStyle}>
           <RequestHeaders />
         </div>
       </PivotItem>,
@@ -71,7 +75,7 @@ export class Request extends Component<IRequestComponent, any> {
         title={translateMessage('permissions preview')}
         headerText={messages['modify permissions']}
       >
-        <div style={{ height: convertVhToPx(height, heightAdjustment), overflowY: 'hidden' }}>
+        <div style={containerStyle}>
           <Permission />
         </div>
       </PivotItem>,
@@ -139,7 +143,7 @@ export class Request extends Component<IRequestComponent, any> {
           border: 'solid 1px #ddd',
           marginBottom: 10,
         }}
-        onResize={(e: any, direction: any, ref: any, d: any) => {
+        onResize={(e: any, direction: any, ref: any) => {
           if (ref && ref.style && ref.style.height) {
             this.setRequestAndResponseHeights(ref.style.height);
           }
