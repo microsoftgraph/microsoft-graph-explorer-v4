@@ -9,18 +9,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { telemetry } from '../../../../telemetry';
-import {
-  DELETE_HISTORY_ITEM_BUTTON,
-  EXPORT_HISTORY_ITEM_BUTTON,
-  HISTORY_LIST_ITEM,
-  RUN_HISTORY_ITEM_BUTTON,
-  VIEW_HISTORY_ITEM_BUTTON
-} from '../../../../telemetry/component-names';
-import {
-  BUTTON_CLICK_EVENT,
-  LISTITEM_CLICK_EVENT,
-} from '../../../../telemetry/event-types';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { SortOrder } from '../../../../types/enums';
 import { IHarPayload } from '../../../../types/har';
 import { IHistoryItem, IHistoryProps } from '../../../../types/history';
@@ -379,8 +368,8 @@ export class History extends Component<IHistoryProps, any> {
       actions.runQuery(sampleQuery);
     }
     this.trackHistoryItemEvent(
-      BUTTON_CLICK_EVENT,
-      RUN_HISTORY_ITEM_BUTTON,
+      eventTypes.BUTTON_CLICK_EVENT,
+      componentNames.RUN_HISTORY_ITEM_BUTTON,
       query
     );
   };
@@ -390,8 +379,8 @@ export class History extends Component<IHistoryProps, any> {
     const generatedHarData = generateHar([harPayload]);
     exportQuery(generatedHarData, `${query.url}/`);
     this.trackHistoryItemEvent(
-      BUTTON_CLICK_EVENT,
-      EXPORT_HISTORY_ITEM_BUTTON,
+      eventTypes.BUTTON_CLICK_EVENT,
+      componentNames.EXPORT_HISTORY_ITEM_BUTTON,
       query
     );
   };
@@ -402,8 +391,8 @@ export class History extends Component<IHistoryProps, any> {
       actions.removeHistoryItem(query);
     }
     this.trackHistoryItemEvent(
-      BUTTON_CLICK_EVENT,
-      DELETE_HISTORY_ITEM_BUTTON,
+      eventTypes.BUTTON_CLICK_EVENT,
+      componentNames.DELETE_HISTORY_ITEM_BUTTON,
       query
     );
   };
@@ -411,8 +400,8 @@ export class History extends Component<IHistoryProps, any> {
   private onViewQueryButton = (query: IHistoryItem) => {
     this.onViewQuery(query);
     this.trackHistoryItemEvent(
-      BUTTON_CLICK_EVENT,
-      VIEW_HISTORY_ITEM_BUTTON,
+      eventTypes.BUTTON_CLICK_EVENT,
+      componentNames.VIEW_HISTORY_ITEM_BUTTON,
       query
     );
   };
@@ -420,8 +409,8 @@ export class History extends Component<IHistoryProps, any> {
   private onViewQueryListItem = (query: IHistoryItem) => {
     this.onViewQuery(query);
     this.trackHistoryItemEvent(
-      LISTITEM_CLICK_EVENT,
-      HISTORY_LIST_ITEM,
+      eventTypes.LISTITEM_CLICK_EVENT,
+      componentNames.HISTORY_LIST_ITEM,
       query
     );
   };
@@ -583,7 +572,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-const trackedComponent = telemetry.trackReactComponent(History);
+const trackedComponent = telemetry.trackReactComponent(History, componentNames.HISTORY_TAB);
 // @ts-ignore
 const styledHistory = styled(trackedComponent, sidebarStyles);
 const IntlHistory = injectIntl(styledHistory);

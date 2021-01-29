@@ -1,8 +1,6 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import * as AdaptiveCardsTemplateAPI from 'adaptivecards-templating';
-import { telemetry } from '../../../telemetry';
-import { GET_ADAPTIVE_CARD_ACTION } from '../../../telemetry/component-names';
-import { NETWORK_ERROR } from '../../../telemetry/error-types';
+import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { lookupTemplate } from '../../utils/adaptive-cards-lookup';
@@ -79,10 +77,10 @@ export function getAdaptiveCard(
         // something wrong happened
         const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
         telemetry.trackException(
-          new Error(NETWORK_ERROR),
+          new Error(errorTypes.NETWORK_ERROR),
           SeverityLevel.Error,
           {
-            ComponentName: GET_ADAPTIVE_CARD_ACTION,
+            ComponentName: componentNames.GET_ADAPTIVE_CARD_ACTION,
             QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
             Message: `${error}`
           }
