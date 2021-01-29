@@ -328,5 +328,13 @@
   "Query Sample Input": "Exemple d’entrée de requête",
   "popup blocked, allow pop-up windows in your browser": "fenêtre contextuelle bloquée, autoriser les fenêtres contextuelles dans votre navigateur",
   "sign in to consent to permissions": "L’une des autorisations suivantes est requise pour exécuter la requête. Connectez-vous à l’aide d’un compte pouvant accepter l’autorisation que vous allez choisir.",
-  "Sign in to use this method": "Connectez-vous pour utiliser cette méthode"
+  "Sign in to use this method": "Connectez-vous pour utiliser cette méthode",
+  "Request Header deleted": "Suppression de l'en-tête de la demande",
+  "Request Header added": "En-tête de la demande ajoutée",
+  "Sidebar minimized": "Encadré minimisé",
+  "Sidebar maximized": "Encadré maximisé",
+  "Response area expanded": "Extension de la zone d'intervention",
+  "Close expanded response area": "Fermer la zone de réponse élargie"
+  
 }
+

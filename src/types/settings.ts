@@ -1,5 +1,3 @@
-import { AppTheme } from './enums';
-
 export interface ISettingsProps {
   actions?: {
     signOut: Function;

@@ -3,7 +3,8 @@ import { FontSizes, ITheme } from '@uifabric/styling';
 export const authStyles = (theme: ITheme) => {
   return {
     auth: {
-      padding: 10
+      padding: 5,
+      overflowY: 'auto',
     },
     accessTokenContainer: {
       width: 160,
@@ -18,7 +19,7 @@ export const authStyles = (theme: ITheme) => {
       fontFamily: 'monospace',
       fontSize: FontSizes.xSmall,
       width: '100%',
-      height: 150,
+      height: '100%',
       border: 'none',
       resize: 'none'
     },
@@ -29,7 +30,7 @@ export const authStyles = (theme: ITheme) => {
     emptyStateLabel: {
       display: 'flex',
       width: '100%',
-      minHeight: 200,
+      minHeight: '100%',
       justifyContent: 'center',
       alignItems: 'center'
 

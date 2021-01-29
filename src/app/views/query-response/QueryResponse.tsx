@@ -7,11 +7,14 @@ import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dia
 import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 
 import {
   IQueryResponseProps
 } from '../../../types/query-response';
+import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
+import { expandResponseArea } from '../../services/actions/response-expanded-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
 import { copy } from '../common/copy';
 import { convertVhToPx } from '../common/dimensions-adjustment';
@@ -20,6 +23,8 @@ import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 
 const QueryResponse = (props: IQueryResponseProps) => {
+  const dispatch = useDispatch();
+
   const [showShareQueryDialog, setShareQuaryDialogStatus] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [query, setQuery] = useState('');
@@ -31,7 +36,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
     intl: { messages },
   }: any = props;
 
-
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
   }, [dimensions]);
@@ -42,11 +46,22 @@ const QueryResponse = (props: IQueryResponseProps) => {
 
   const toggleExpandResponse = () => {
     setShowModal(!showModal);
+    dispatch(expandResponseArea(!showModal));
   };
 
   const handleCopy = () => {
     copy('share-query-text').then(() => toggleShareQueryDialogState());
+    trackCopyEvent();
   };
+
+  const trackCopyEvent = () => {
+    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
+      {
+        ComponentName: componentNames.SHARE_QUERY_COPY_BUTTON,
+        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
+      });
+  }
 
   const handlePivotItemClick = (pivotItem?: PivotItem) => {
     if (!pivotItem) {
@@ -113,6 +128,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
               headerText='Share'
               key='share'
               itemIcon='Share'
+              itemKey='share-query' // To be used to construct component name for telemetry data
               ariaLabel={translateMessage('Share Query Message')}
               title={translateMessage('Share Query Message')}
               onRenderItemLink={renderItemLink}
@@ -121,6 +137,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
               headerText='Expand'
               key='expand'
               itemIcon='MiniExpandMirrored'
+              itemKey='expand-response'
               ariaLabel={translateMessage('Expand response')}
               title={translateMessage('Expand response')}
               onRenderItemLink={renderItemLink}

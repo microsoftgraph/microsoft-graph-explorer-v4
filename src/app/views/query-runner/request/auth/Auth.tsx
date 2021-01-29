@@ -1,18 +1,19 @@
 import { IconButton, IIconProps, Label, styled } from 'office-ui-fabric-react';
 import React from 'react';
+import { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
-import { telemetry } from '../../../../../telemetry';
-import { ACCESS_TOKEN_COPY_BUTTON } from '../../../../../telemetry/component-names';
-import { BUTTON_CLICK_EVENT } from '../../../../../telemetry/event-types';
+import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { genericCopy } from '../../../common/copy';
+import { convertVhToPx } from '../../../common/dimensions-adjustment';
 import { authStyles } from './Auth.styles';
 
 
 export function Auth(props: any) {
-  const accessToken = useSelector((state: any) => state.authToken);
+  const { authToken: accessToken, dimensions: { request: { height } } } = useSelector((state: any) => state);
+  const requestHeight = convertVhToPx(height, 60);
 
   const handleCopy = async () => {
     await genericCopy(accessToken);
@@ -28,7 +29,7 @@ export function Auth(props: any) {
     iconName: 'code'
   };
 
-  return (<div className={classes.auth}>
+  return (<div className={classes.auth} style={{ height: requestHeight }}>
     {accessToken ?
       <div>
         <div className={classes.accessTokenContainer}>
@@ -52,10 +53,12 @@ export function Auth(props: any) {
 
 function trackCopyEvent() {
   telemetry.trackEvent(
-    BUTTON_CLICK_EVENT,
+    eventTypes.BUTTON_CLICK_EVENT,
     {
-      ComponentName: ACCESS_TOKEN_COPY_BUTTON
+      ComponentName: componentNames.ACCESS_TOKEN_COPY_BUTTON
     });
 }
 
-export default styled(Auth, authStyles as any);
+const trackedComponent = telemetry.trackReactComponent(Auth, componentNames.ACCESS_TOKEN_TAB);
+// @ts-ignore
+export default styled(trackedComponent, authStyles);

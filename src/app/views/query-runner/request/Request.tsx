@@ -6,20 +6,19 @@ import {
   TooltipHost,
 } from 'office-ui-fabric-react';
 import { Resizable } from 're-resizable';
-import React, { Component } from 'react';
+import React, { Component, CSSProperties } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { telemetry } from '../../../../telemetry';
-import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
 import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
-import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
+import { translateMessage } from '../../../utils/translate-messages';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
-import { Monaco } from '../../common/monaco/Monaco';
 import { Auth } from './auth';
+import { RequestBody } from './body';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
@@ -32,41 +31,53 @@ export class Request extends Component<IRequestComponent, any> {
   private getPivotItems = (height: string) => {
     const {
       handleOnEditorChange,
-      sampleQuery,
       mode,
       intl: { messages },
     }: any = this.props;
+
+    const heightAdjustment = 55;
+    const containerStyle: CSSProperties = {
+      height: convertVhToPx(height, heightAdjustment),
+      overflowY: 'hidden',
+      borderBottom: '1px solid #ddd'
+    };
 
     const pivotItems = [
       <PivotItem
         key='request-body'
         itemIcon='Send'
+        itemKey='request-body' // To be used to construct component name for telemetry data
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['request body']}
         headerText={messages['request body']}
       >
-        <Monaco
-          body={sampleQuery.sampleBody}
-          height={convertVhToPx(height, 100)}
-          onChange={(value) => handleOnEditorChange(value)} />
+        <div style={containerStyle}>
+          <RequestBody handleOnEditorChange={handleOnEditorChange} />
+        </div>
       </PivotItem>,
       <PivotItem
-        key='request-header'
+        key='request-headers'
         itemIcon='FileComment'
+        itemKey='request-headers'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages['request header']}
         headerText={messages['request header']}
       >
-        <RequestHeaders height={convertVhToPx(height, 60)} />
+        <div style={containerStyle}>
+          <RequestHeaders />
+        </div>
       </PivotItem>,
       <PivotItem
         key='permissions'
         itemIcon='AzureKeyVault'
+        itemKey='modify-permissions'
         onRenderItemLink={this.getTooltipDisplay}
-        title={messages['modify permissions']}
+        title={translateMessage('permissions preview')}
         headerText={messages['modify permissions']}
       >
-        <Permission />
+        <div style={containerStyle}>
+          <Permission />
+        </div>
       </PivotItem>,
     ];
 
@@ -75,10 +86,13 @@ export class Request extends Component<IRequestComponent, any> {
         <PivotItem
           key='auth'
           itemIcon='AuthenticatorApp'
+          itemKey='access-token'
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Access Token']}
           headerText={messages['Access Token']}>
-          <Auth style={{ height }} />
+          <div style={containerStyle}>
+            <Auth />
+          </div>
         </PivotItem>
       );
     }
@@ -100,23 +114,13 @@ export class Request extends Component<IRequestComponent, any> {
   }
 
   private onPivotItemClick = (item?: PivotItem) => {
-    if (!item) {
-      return;
-    }
-    const tabTitle = item.props.title;
-    if (tabTitle) {
-      this.trackTabClickEvent(tabTitle);
+    if (!item) { return; }
+    const tabKey = item.props.itemKey;
+    const { sampleQuery }: any = this.props;
+    if (tabKey) {
+      telemetry.trackTabClickEvent(tabKey, sampleQuery);
     }
   };
-
-  private trackTabClickEvent(tabTitle: string) {
-    const { sampleQuery }: any = this.props;
-    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
-    telemetry.trackEvent(TAB_CLICK_EVENT, {
-      ComponentName: `${tabTitle} tab`,
-      QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
-    });
-  }
 
   private setRequestAndResponseHeights = (requestHeight: string) => {
     const maxDeviceVerticalHeight = 90;
@@ -130,7 +134,7 @@ export class Request extends Component<IRequestComponent, any> {
   public render() {
     const { dimensions } = this.props;
     const requestPivotItems = this.getPivotItems(dimensions.request.height);
-    const minHeight = 250;
+    const minHeight = 60;
     const maxHeight = 800;
 
     return (
@@ -139,7 +143,7 @@ export class Request extends Component<IRequestComponent, any> {
           border: 'solid 1px #ddd',
           marginBottom: 10,
         }}
-        onResize={(e: any, direction: any, ref: any, d: any) => {
+        onResize={(e: any, direction: any, ref: any) => {
           if (ref && ref.style && ref.style.height) {
             this.setRequestAndResponseHeights(ref.style.height);
           }

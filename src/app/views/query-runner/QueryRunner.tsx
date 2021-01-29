@@ -4,12 +4,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { telemetry } from '../../../telemetry';
-import { RUN_QUERY_BUTTON, VERSION_CHANGE_DROPDOWN } from '../../../telemetry/component-names';
-import {
-  BUTTON_CLICK_EVENT,
-  DROPDOWN_CHANGE_EVENT,
-} from '../../../telemetry/event-types';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
@@ -94,9 +89,9 @@ export class QueryRunner extends Component<
     if (actions) {
       actions.runQuery(sampleQuery);
       const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
-      telemetry.trackEvent(BUTTON_CLICK_EVENT,
+      telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
         {
-          ComponentName: RUN_QUERY_BUTTON,
+          ComponentName: componentNames.RUN_QUERY_BUTTON,
           SelectedVersion: sampleQuery.selectedVersion,
           QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
         });
@@ -119,8 +114,8 @@ export class QueryRunner extends Component<
         selectedVersion: newQueryVersion,
       });
       if (oldQueryVersion !== newQueryVersion) {
-        telemetry.trackEvent(DROPDOWN_CHANGE_EVENT, {
-          ComponentName: VERSION_CHANGE_DROPDOWN,
+        telemetry.trackEvent(eventTypes.DROPDOWN_CHANGE_EVENT, {
+          ComponentName: componentNames.VERSION_CHANGE_DROPDOWN,
           NewVersion: newQueryVersion,
           OldVersion: oldQueryVersion,
         });
