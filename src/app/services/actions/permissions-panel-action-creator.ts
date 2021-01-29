@@ -1,4 +1,3 @@
-import { IAction } from "../../../types/action";
 import { PERMISSIONS_PANEL_OPEN } from "../redux-constants";
 
 export function togglePermissionsPanel(open: boolean): any {
