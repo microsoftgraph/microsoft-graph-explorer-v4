@@ -1,16 +1,19 @@
 import { IconButton, IIconProps, Label, styled } from 'office-ui-fabric-react';
 import React from 'react';
+import { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { genericCopy } from '../../../common/copy';
+import { convertVhToPx } from '../../../common/dimensions-adjustment';
 import { authStyles } from './Auth.styles';
 
 
 export function Auth(props: any) {
-  const accessToken = useSelector((state: any) => state.authToken);
+  const { authToken: accessToken, dimensions: { request: { height } } } = useSelector((state: any) => state);
+  const requestHeight = convertVhToPx(height, 60);
 
   const handleCopy = async () => {
     await genericCopy(accessToken);
@@ -26,7 +29,7 @@ export function Auth(props: any) {
     iconName: 'code'
   };
 
-  return (<div className={classes.auth}>
+  return (<div className={classes.auth} style={{ height: requestHeight }}>
     {accessToken ?
       <div>
         <div className={classes.accessTokenContainer}>
