@@ -90,7 +90,7 @@ export class Request extends Component<IRequestComponent, any> {
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Access Token']}
           headerText={messages['Access Token']}>
-          <div style={{ height: convertVhToPx(height, heightAdjustment), overflowY: 'hidden' }}>
+          <div style={containerStyle}>
             <Auth />
           </div>
         </PivotItem>
