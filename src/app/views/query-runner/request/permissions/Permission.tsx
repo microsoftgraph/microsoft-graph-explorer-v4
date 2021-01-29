@@ -238,39 +238,42 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
 
     const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
-    return (
-      <div className={panel ? classes.panelContainer : ''}
-        style={{ minHeight: (panel) ? '800px' : '', maxHeight: (panel) ? '800px' : tabHeight, }}>
-        {loading && <Label>
-          <FormattedMessage id={'Fetching permissions'} />...
-        </Label>}
-        {!loading &&
-          <div className={classes.permissions}>
-            {!panel && <TabList
-              columns={this.getColumns()}
-              maxHeight={tabHeight}
-              renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
-                this.renderItemColumn(item, index, column)}
-              renderDetailsHeader={this.renderDetailsHeader}
-              classes={classes}
-            />}
-            {panel &&
-              <div data-is-scrollable={true}>
-                <PanelList
-                  classes={classes}
-                  messages={messages}
-                  selection={selection}
-                  columns={this.getColumns()}
-                  renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
-                    this.renderItemColumn(item, index, column)}
-                  renderDetailsHeader={this.renderDetailsHeader}
-                />
-              </div>
-            }
-          </div>
-        }
+    if (loading) {
+      return <Label>
+        <FormattedMessage id={'Fetching permissions'} />...
+        </Label>;
+    }
+
+    const displayPermissionsPanel = () => {
+      return <div data-is-scrollable={true} className={classes.panelContainer}>
+        <PanelList
+          classes={classes}
+          messages={messages}
+          selection={selection}
+          columns={this.getColumns()}
+          renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
+            this.renderItemColumn(item, index, column)}
+          renderDetailsHeader={this.renderDetailsHeader}
+        />
       </div>
-    );
+    };
+
+    const displayPermissionsAsTab = () => {
+      return <TabList
+        columns={this.getColumns()}
+        maxHeight={tabHeight}
+        renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
+          this.renderItemColumn(item, index, column)}
+        renderDetailsHeader={this.renderDetailsHeader}
+        classes={classes}
+      />;
+    };
+
+    if (panel) {
+      return displayPermissionsPanel();
+    }
+
+    return displayPermissionsAsTab();
   }
 }
 
