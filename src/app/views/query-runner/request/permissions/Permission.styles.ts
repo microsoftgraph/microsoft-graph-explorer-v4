@@ -23,11 +23,13 @@ export const permissionStyles = (theme: ITheme) => {
     },
     permissionLength: {
       fontWeight: 'bold',
-      marginBottom: 5
+      marginBottom: 5,
+      paddingLeft: 10
     },
     permissionText: {
       fontSize: FontSizes.small,
-      marginBottom: 5
+      marginBottom: 5,
+      paddingLeft: 10
     },
     toolTipHost: {
       root: {
@@ -41,6 +43,12 @@ export const permissionStyles = (theme: ITheme) => {
     checkIcon: {
       fontSize: theme.fonts.large,
       color: theme.palette.accent
+    },
+    permissionLabel: {
+      marginTop: 10,
+      paddingLeft: 10,
+      paddingRight: 20,
+      minHeight: 200
     }
   };
 };

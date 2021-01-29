@@ -335,7 +335,9 @@
   "Sidebar maximized": "Sidebar maximized",
   "Response area expanded": "Response area expanded",
   "Close expanded response area": "Close expanded response area",
-  "permissions not found in permissions tab": "Permissions for the query are missing on this tab, use Select permissions option in the settings icon next to your profile to see the full list of Microsoft Graph permissions and select the permission(s) you want and consent to them from there.",
+  "permissions not found in permissions tab": "Permissions for the query are missing on this tab. ",
   "permissions preview": "This feature is in preview and might not currently show all permissions for some queries.",
-  "sign in to view a list of all permissions": "Permissions for the query are missing on this tab. Sign in to use the Select permissions option in the settings icon next to your profile to see the full list of Microsoft Graph permissions and select the permission(s) you want and consent to them from there."
+  "sign in to view a list of all permissions": "Permissions for the query are missing on this tab. Sign in to use the Select permissions option in the settings icon next to your profile to see the full list of Microsoft Graph permissions and select the permission(s) you want and consent to them from there.",
+  "open permissions panel": "Open the permissions panel",
+  "permissions list": " to see the full list of Microsoft Graph permissions and select the permission(s) you want and consent to them from there."
 }

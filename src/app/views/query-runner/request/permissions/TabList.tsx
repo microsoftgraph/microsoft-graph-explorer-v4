@@ -30,32 +30,17 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   }
 
   const displayNoPermissionsFoundMessage = () => {
-    return (<Label style={{
-      display: 'flex',
-      paddingLeft: '10px',
-      paddingRight: '10px',
-      width: '100%',
-      minHeight: '200px',
-      justifyContent: 'center',
-      alignItems: 'center'
-    }}>
+    return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='permissions not found in permissions tab' />
       <Link onClick={openPermissionsPanel}>
         <FormattedMessage id='open permissions panel' />
       </Link>
+      <FormattedMessage id='permissions list' />
     </Label>);
   }
 
   const displayNotSignedInMessage = () => {
-    return (<Label style={{
-      display: 'flex',
-      paddingLeft: '10px',
-      paddingRight: '10px',
-      width: '100%',
-      minHeight: '200px',
-      justifyContent: 'center',
-      alignItems: 'center'
-    }}>
+    return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='sign in to view a list of all permissions' />
     </Label>)
   }
