@@ -15,6 +15,8 @@ import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
+import { translateMessage } from '../../../utils/translate-messages';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
@@ -66,7 +68,7 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='AzureKeyVault'
         itemKey='modify-permissions'
         onRenderItemLink={this.getTooltipDisplay}
-        title={messages['modify permissions']}
+        title={translateMessage('permissions preview')}
         headerText={messages['modify permissions']}
       >
         <div style={{ height: convertVhToPx(height, heightAdjustment), overflowY: 'hidden' }}>

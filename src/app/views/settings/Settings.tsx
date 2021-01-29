@@ -23,17 +23,17 @@ import { AppTheme } from '../../../types/enums';
 import { ISettingsProps } from '../../../types/settings';
 import { signOut } from '../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../services/actions/permissions-action-creator';
+import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
-
+  const { permissionsPanelOpen } = useSelector((state: any) => state);
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
-  const [panelIsOpen, setPanelState] = useState(false);
 
   const {
     intl: { messages }
@@ -72,7 +72,7 @@ function Settings(props: ISettingsProps) {
           iconProps: {
             iconName: 'AzureKeyVault',
           },
-          onClick: () => togglePermissionsPanel(),
+          onClick: () => changePanelState(),
         },
         {
           key: 'sign-out',
@@ -114,10 +114,10 @@ function Settings(props: ISettingsProps) {
       });
   };
 
-  const togglePermissionsPanel = () => {
-    let open = !!panelIsOpen;
+  const changePanelState = () => {
+    let open = !!permissionsPanelOpen;
     open = !open;
-    setPanelState(open);
+    dispatch(togglePermissionsPanel(open));
     setSelectedPermissions([]);
     trackSelectPermissionsButtonClickEvent();
   };
@@ -171,7 +171,7 @@ function Settings(props: ISettingsProps) {
         >
           <FormattedMessage id='Consent' />
         </PrimaryButton>
-        <DefaultButton onClick={() => togglePermissionsPanel()}>
+        <DefaultButton onClick={() => changePanelState()}>
           <FormattedMessage id='Cancel' />
         </DefaultButton>
       </div>
@@ -241,8 +241,8 @@ function Settings(props: ISettingsProps) {
         </Dialog>
 
         <Panel
-          isOpen={panelIsOpen}
-          onDismiss={() => togglePermissionsPanel()}
+          isOpen={permissionsPanelOpen}
+          onDismiss={() => changePanelState()}
           type={PanelType.medium}
           hasCloseButton={true}
           headerText={messages.Permissions}
