@@ -21,9 +21,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
   const tokenPresent = !!authToken;
 
-  useEffect(() => {
-    setConsentedStatus(tokenPresent, permissions, consentedScopes);
-  }, [scopes.data, consentedScopes]);
+  setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
   const openPermissionsPanel = () => {
     dispatch(togglePermissionsPanel(true));
