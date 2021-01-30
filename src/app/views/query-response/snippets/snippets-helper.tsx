@@ -7,10 +7,10 @@ import { getSnippet } from '../../../services/actions/snippet-action-creator';
 import { Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
 
-import { telemetry } from '../../../../telemetry';
-import { BUTTON_CLICK_EVENT } from '../../../../telemetry/event-types';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
+import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
 
 interface ISnippetProps {
   language: string;
@@ -39,9 +39,12 @@ function Snippet(props: ISnippetProps) {
   language = language.toLowerCase();
 
   const sampleQuery = useSelector((state: any) => state.sampleQuery, shallowEqual);
-  const snippets = useSelector((state: any) => (state.snippets));
+  const { dimensions: { response }, snippets, responseAreaExpanded } = useSelector((state: any) => state);
   const { data, pending: loadingState } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
+
+  const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
+  const height = convertVhToPx(responseHeight, 140);
 
   const dispatch = useDispatch();
 
@@ -57,7 +60,7 @@ function Snippet(props: ISnippetProps) {
     <div style={{ display: 'block' }}>
       {loadingState &&
         <Label style={{ padding: 10 }}>
-          <FormattedMessage id ='Fetching code snippet' />...
+          <FormattedMessage id='Fetching code snippet' />...
         </Label>
       }
       {!loadingState && snippet &&
@@ -74,23 +77,24 @@ function Snippet(props: ISnippetProps) {
             body={snippet}
             language={language}
             readOnly={true}
+            height={height}
           />
         </>
       }
       {!loadingState && !snippet &&
         <Label style={{ padding: 10 }}>
-          <FormattedMessage id ='Snippet not available' />
+          <FormattedMessage id='Snippet not available' />
         </Label>
       }
     </div>
   );
 }
 
-function trackCopyEvent(query: IQuery, language: string, ) {
+function trackCopyEvent(query: IQuery, language: string) {
   const sanitizedUrl = sanitizeQueryUrl(query.sampleUrl);
-  telemetry.trackEvent(BUTTON_CLICK_EVENT,
+  telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
     {
-      ComponentName: 'Code snippets copy button',
+      ComponentName: componentNames.CODE_SNIPPETS_COPY_BUTTON,
       SelectedLanguage: language,
       QuerySignature: `${query.selectedVerb} ${sanitizedUrl}`
     });

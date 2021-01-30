@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { telemetry } from '../../../telemetry';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import {
   BUTTON_CLICK_EVENT,
   DROPDOWN_CHANGE_EVENT,
@@ -26,7 +26,7 @@ import Request from './request/Request';
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
-> {
+  > {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
@@ -64,6 +64,9 @@ export class QueryRunner extends Component<
 
   private handleOnEditorChange = (body?: string) => {
     this.setState({ sampleBody: body });
+    const query = { ...this.props.sampleQuery };
+    query.sampleBody = body;
+    this.props.actions!.setSampleQuery(query);
   };
 
   private handleOnRunQuery = () => {
@@ -89,13 +92,14 @@ export class QueryRunner extends Component<
 
     if (actions) {
       actions.runQuery(sampleQuery);
+      const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+      telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
+        {
+          ComponentName: componentNames.RUN_QUERY_BUTTON,
+          SelectedVersion: sampleQuery.selectedVersion,
+          QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
+        });
     }
-    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
-    telemetry.trackEvent(BUTTON_CLICK_EVENT, {
-      ComponentName: 'Run query button',
-      SelectedVersion: sampleQuery.selectedVersion,
-      QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
-    });
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
@@ -114,8 +118,8 @@ export class QueryRunner extends Component<
         selectedVersion: newQueryVersion,
       });
       if (oldQueryVersion !== newQueryVersion) {
-        telemetry.trackEvent(DROPDOWN_CHANGE_EVENT, {
-          ComponentName: 'Version change dropdown',
+        telemetry.trackEvent(eventTypes.DROPDOWN_CHANGE_EVENT, {
+          ComponentName: componentNames.VERSION_CHANGE_DROPDOWN,
           NewVersion: newQueryVersion,
           OldVersion: oldQueryVersion,
         });
@@ -125,7 +129,7 @@ export class QueryRunner extends Component<
 
   public render() {
     return (
-      <div>
+      <>
         <div className='row'>
           <div className='col-sm-12 col-lg-12'>
             {
@@ -139,7 +143,7 @@ export class QueryRunner extends Component<
             }
           </div>
         </div>
-        <div className='row'>
+        <div className='row' style={{ marginTop: 10 }}>
           <div className='col-sm-12 col-lg-12'>
             {
               // @ts-ignore
@@ -150,7 +154,7 @@ export class QueryRunner extends Component<
             }
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }

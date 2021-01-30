@@ -1,4 +1,6 @@
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { geLocale } from '../../../appLocale';
+import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
 import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_PENDING, SAMPLES_FETCH_SUCCESS } from '../redux-constants';
@@ -45,6 +47,13 @@ export function fetchSamples(): Function {
       const res = await response.json();
       return dispatch(fetchSamplesSuccess(res.sampleQueries));
     } catch (error) {
+      telemetry.trackException(
+        new Error(errorTypes.NETWORK_ERROR),
+        SeverityLevel.Error,
+        {
+          ComponentName: componentNames.FETCH_SAMPLES_ACTION,
+          Message: `${error}`
+        });
       return dispatch(fetchSamplesError({ error }));
     }
   };

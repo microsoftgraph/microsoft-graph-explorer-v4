@@ -293,7 +293,7 @@
   "Status": "状態",
   "Admin consent required": "管理者の同意が必要",
   "Consent": "同意",
-  "permissions required to run the query": "クエリを実行するには、以下の権限が必要です。許可に同意するには、「同意」をクリックします。",
+  "permissions required to run the query": "このクエリを実行するには、次のいずれかのアクセス許可が必要です。アクセス許可を選び、[同意する] をクリックします。",
   "tab": " タブ",
   "View the": " を表示する",
   "viewing a cached set": "ネットワーク接続に失敗したため、キャッシュされたサンプルのセットを表示しています。",
@@ -306,7 +306,7 @@
   "Snippet not available": "スニペットを使用できません",
   "Select different permissions": "さまざまな Microsoft Graph API エンドポイントを試すには、アクセス許可を選択し、[同意] をクリックします。",
   "Search permissions": "検索アクセス許可",
-  "permissions not found": "アクセス許可が見つかりませんでした",
+  "permissions not found": "アクセス許可が見つかりませんでした。",
   "selected": "選択されました",
   "Search sample queries": "サンプル クエリの検索",
   "Search history items": "検索履歴アイテム",
@@ -326,5 +326,15 @@
   "HTTP request method option": "HTTP 要求メソッド オプション",
   "Microsoft Graph API Version option": "Microsoft Graph API バージョン オプション",
   "Query Sample Input": "クエリのサンプル入力",
-  "popup blocked, allow pop-up windows in your browser": "ポップアップがブロックされています。ブラウザーでポップアップ ウィンドウを許可してください"
+  "popup blocked, allow pop-up windows in your browser": "ポップアップがブロックされています。ブラウザーでポップアップ ウィンドウを許可してください",
+  "sign in to consent to permissions": "このクエリを実行するには、次のいずれかのアクセス許可が必要です。選択するアクセス許可に同意可能なアカウントでサインインします。",
+  "Sign in to use this method": "サインインしてこのメソッドを使用する",
+  "Request Header deleted": "要求ヘッダーが削除されました",
+  "Request Header added": "要求ヘッダーが追加されました",
+  "Sidebar minimized": "サイドバーが最小化されました",
+  "Sidebar maximized": "サイドバーが最大化されました",
+  "Response area expanded": "応答領域が拡張されました",
+  "Close expanded response area": "拡張された応答領域を閉じる"
+  
 }
+

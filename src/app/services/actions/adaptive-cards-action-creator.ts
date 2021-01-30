@@ -1,7 +1,10 @@
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import * as AdaptiveCardsTemplateAPI from 'adaptivecards-templating';
+import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { lookupTemplate } from '../../utils/adaptive-cards-lookup';
+import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import {
   FETCH_ADAPTIVE_CARD_ERROR,
   FETCH_ADAPTIVE_CARD_PENDING,
@@ -72,6 +75,16 @@ export function getAdaptiveCard(
       })
       .catch((error) => {
         // something wrong happened
+        const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+        telemetry.trackException(
+          new Error(errorTypes.NETWORK_ERROR),
+          SeverityLevel.Error,
+          {
+            ComponentName: componentNames.GET_ADAPTIVE_CARD_ACTION,
+            QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
+            Message: `${error}`
+          }
+        );
         return dispatch(getAdaptiveCardError(error));
       });
   };

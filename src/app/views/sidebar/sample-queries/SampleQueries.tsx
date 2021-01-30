@@ -23,11 +23,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
-import { telemetry } from '../../../../telemetry';
-import {
-  LINK_CLICK_EVENT,
-  LISTITEM_CLICK_EVENT,
-} from '../../../../telemetry/event-types';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import {
   IQuery,
   ISampleQueriesProps,
@@ -39,6 +35,7 @@ import * as queryStatusActionCreators from '../../../services/actions/query-stat
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
+import { validateExternalLink } from '../../../utils/external-link-validation';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { substituteTokens } from '../../../utils/token-helpers';
@@ -88,14 +85,18 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     this.trackDocumentLinkClickedEvent(item);
   };
 
-  private trackDocumentLinkClickedEvent(item: ISampleQuery) {
-    telemetry.trackEvent(LINK_CLICK_EVENT, {
-      ComponentName: 'Documentation link',
+  private async trackDocumentLinkClickedEvent(item: ISampleQuery): Promise<void> {
+    const properties: { [key: string]: any } = {
+      ComponentName: componentNames.DOCUMENTATION_LINK,
       SampleId: item.id,
       SampleName: item.humanName,
       SampleCategory: item.category,
-      Link: item.docLink,
-    });
+      Link: item.docLink
+    };
+    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, properties);
+
+    // Check if link throws error
+    validateExternalLink(item.docLink || '', componentNames.DOCUMENTATION_LINK, item.id);
   }
 
   public renderItemColumn = (
@@ -294,13 +295,15 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   private trackSampleQueryClickEvent(selectedQuery: ISampleQuery) {
     const sanitizedUrl = sanitizeQueryUrl(GRAPH_URL + selectedQuery.requestUrl);
-    telemetry.trackEvent(LISTITEM_CLICK_EVENT, {
-      ComponentName: 'Sample query list item',
-      SampleId: selectedQuery.id,
-      SampleName: selectedQuery.humanName,
-      SampleCategory: selectedQuery.category,
-      QuerySignature: `${selectedQuery.method} ${sanitizedUrl}`,
-    });
+    telemetry.trackEvent(
+      eventTypes.LISTITEM_CLICK_EVENT,
+      {
+        ComponentName: componentNames.SAMPLE_QUERY_LIST_ITEM,
+        SampleId: selectedQuery.id,
+        SampleName: selectedQuery.humanName,
+        SampleCategory: selectedQuery.category,
+        QuerySignature: `${selectedQuery.method} ${sanitizedUrl}`
+      });
   }
 
   public renderGroupHeader = (props: any): any => {
@@ -411,7 +414,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           <FormattedMessage id='see more queries' />
           <a
             target='_blank'
+            rel="noopener noreferrer"
             className={classes.links}
+            onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
             href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
           >
             <FormattedMessage id='Microsoft Graph API Reference docs' />
@@ -438,6 +443,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           }}
           onRenderRow={this.renderRow}
           onRenderDetailsHeader={this.renderDetailsHeader}
+          onItemInvoked={this.querySelected}
         />
       </div>
     );

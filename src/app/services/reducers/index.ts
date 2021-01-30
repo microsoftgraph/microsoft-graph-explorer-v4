@@ -3,6 +3,8 @@ import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken, consentedScopes } from './auth-reducers';
 import { autoComplete } from './autocomplete-reducer';
 import { devxApi } from './devxApi-reducers';
+import { dimensions } from './dimensions-reducers';
+import { permissionsPanelOpen } from './permissions-panel-reducer';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
 import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
@@ -11,6 +13,7 @@ import { isLoadingData } from './query-loading-reducers';
 import { graphResponse } from './query-runner-reducers';
 import { queryRunnerStatus } from './query-runner-status-reducers';
 import { history } from './request-history-reducers';
+import { responseAreaExpanded } from './response-expanded-reducer';
 import { samples } from './samples-reducers';
 import { snippets } from './snippet-reducer';
 import { termsOfUse } from './terms-of-use-reducer';
@@ -29,6 +32,7 @@ export default combineReducers({
   isLoadingData,
   profile,
   queryRunnerStatus,
+  responseAreaExpanded,
   sampleQuery,
   samples,
   scopes,
@@ -36,4 +40,6 @@ export default combineReducers({
   snippets,
   termsOfUse,
   theme,
+  dimensions,
+  permissionsPanelOpen
 });

@@ -17,24 +17,23 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
-import { telemetry } from '../../../telemetry';
-import { BUTTON_CLICK_EVENT, LINK_CLICK_EVENT } from '../../../telemetry/event-types';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
 import { ISettingsProps } from '../../../types/settings';
 import { signOut } from '../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../services/actions/permissions-action-creator';
+import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
-
+  const { permissionsPanelOpen } = useSelector((state: any) => state);
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
-  const [panelIsOpen, setPanelState] = useState(false);
 
   const {
     intl: { messages }
@@ -73,7 +72,7 @@ function Settings(props: ISettingsProps) {
           iconProps: {
             iconName: 'AzureKeyVault',
           },
-          onClick: () => togglePermissionsPanel(),
+          onClick: () => changePanelState(),
         },
         {
           key: 'sign-out',
@@ -92,7 +91,11 @@ function Settings(props: ISettingsProps) {
     let hidden = themeChooserDialogHidden;
     hidden = !hidden;
     hideThemeChooserDialog(hidden);
-    telemetry.trackEvent(BUTTON_CLICK_EVENT, { ComponentName: 'Theme change button' });
+    telemetry.trackEvent(
+      eventTypes.BUTTON_CLICK_EVENT,
+      {
+        ComponentName: componentNames.THEME_CHANGE_BUTTON
+      });
   };
 
   const handleSignOut = () => {
@@ -103,19 +106,29 @@ function Settings(props: ISettingsProps) {
     const newTheme: AppTheme = selectedTheme.key;
     dispatch(changeTheme(newTheme));
     loadGETheme(newTheme);
-    telemetry.trackEvent(BUTTON_CLICK_EVENT,
-     {
-       ComponentName: 'Select theme button',
-       SelectedTheme: selectedTheme.text
-     });
+    telemetry.trackEvent(
+      eventTypes.BUTTON_CLICK_EVENT,
+      {
+        ComponentName: componentNames.SELECT_THEME_BUTTON,
+        SelectedTheme: selectedTheme.text
+      });
   };
 
-  const togglePermissionsPanel = () => {
-    let open = !!panelIsOpen;
+  const changePanelState = () => {
+    let open = !!permissionsPanelOpen;
     open = !open;
-    setPanelState(open);
+    dispatch(togglePermissionsPanel(open));
     setSelectedPermissions([]);
+    trackSelectPermissionsButtonClickEvent();
   };
+
+  const trackSelectPermissionsButtonClickEvent = () => {
+    telemetry.trackEvent(
+      eventTypes.BUTTON_CLICK_EVENT,
+      {
+        ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
+      });
+  }
 
   const setPermissions = (permissions: []) => {
     setSelectedPermissions(permissions);
@@ -127,7 +140,11 @@ function Settings(props: ISettingsProps) {
   };
 
   const trackOfficeDevProgramLinkClickEvent = () => {
-    telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: 'Office dev program link'});
+    telemetry.trackEvent(
+      eventTypes.LINK_CLICK_EVENT,
+      {
+        ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
+      });
   };
 
   const getSelectionDetails = () => {
@@ -154,7 +171,7 @@ function Settings(props: ISettingsProps) {
         >
           <FormattedMessage id='Consent' />
         </PrimaryButton>
-        <DefaultButton onClick={() => togglePermissionsPanel()}>
+        <DefaultButton onClick={() => changePanelState()}>
           <FormattedMessage id='Cancel' />
         </DefaultButton>
       </div>
@@ -224,8 +241,8 @@ function Settings(props: ISettingsProps) {
         </Dialog>
 
         <Panel
-          isOpen={panelIsOpen}
-          onDismiss={() => togglePermissionsPanel()}
+          isOpen={permissionsPanelOpen}
+          onDismiss={() => changePanelState()}
           type={PanelType.medium}
           hasCloseButton={true}
           headerText={messages.Permissions}

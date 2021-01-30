@@ -1,98 +1,93 @@
 import {
-  DefaultButton,
-  FontSizes,
-  getId,
-  Icon,
-  IconButton,
-  Modal,
-  Pivot,
-  PivotItem,
-  PrimaryButton,
-  TooltipHost,
+  Announced,
+  DefaultButton, FontSizes, getId, Icon, IconButton,
+  Modal, Pivot, PivotItem, PrimaryButton, TooltipHost
 } from 'office-ui-fabric-react';
-import {
-  Dialog,
-  DialogFooter,
-  DialogType,
-} from 'office-ui-fabric-react/lib/Dialog';
-import React, { Component } from 'react';
+import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { Resizable } from 're-resizable';
+import React, { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 
 import {
-  IQueryResponseProps,
-  IQueryResponseState,
+  IQueryResponseProps
 } from '../../../types/query-response';
+import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
+import { expandResponseArea } from '../../services/actions/response-expanded-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
 import { copy } from '../common/copy';
+import { convertVhToPx } from '../common/dimensions-adjustment';
 import { createShareLink } from '../common/share';
 import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 
-class QueryResponse extends Component<
-  IQueryResponseProps,
-  IQueryResponseState
-> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      showShareQueryDialog: true,
-      showModal: false,
-      query: '',
-    };
-  }
+const QueryResponse = (props: IQueryResponseProps) => {
+  const dispatch = useDispatch();
 
-  public shouldComponentUpdate(
-    nextProps: IQueryResponseProps,
-    nextState: IQueryResponseState
-  ) {
-    return (
-      nextProps.graphResponse !== this.props.graphResponse ||
-      nextProps.mobileScreen !== this.props.mobileScreen ||
-      nextState !== this.state ||
-      nextProps.theme !== this.props.theme
-    );
-  }
+  const [showShareQueryDialog, setShareQuaryDialogStatus] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [query, setQuery] = useState('');
+  const [responseHeight, setResponseHeight] = useState('610px');
 
-  public handleCopy = () => {
-    copy('share-query-text').then(() => this.toggleShareQueryDialogState());
+  const { dimensions, sampleQuery } = useSelector((state: any) => state);
+
+  const {
+    intl: { messages },
+  }: any = props;
+
+  useEffect(() => {
+    setResponseHeight(convertVhToPx(dimensions.response.height, 50));
+  }, [dimensions]);
+
+  const toggleShareQueryDialogState = () => {
+    setShareQuaryDialogStatus(!showShareQueryDialog);
   };
 
-  public handleShareQuery = () => {
-    const { sampleQuery } = this.props;
-    const shareableLink = createShareLink(sampleQuery);
-    this.setState({ query: shareableLink });
-    this.toggleShareQueryDialogState();
+  const toggleExpandResponse = () => {
+    setShowModal(!showModal);
+    dispatch(expandResponseArea(!showModal));
   };
 
-  public handlePivotItemClick = (pivotItem?: PivotItem) => {
+  const handleCopy = () => {
+    copy('share-query-text').then(() => toggleShareQueryDialogState());
+    trackCopyEvent();
+  };
+
+  const trackCopyEvent = () => {
+    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
+      {
+        ComponentName: componentNames.SHARE_QUERY_COPY_BUTTON,
+        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
+      });
+  }
+
+  const handlePivotItemClick = (pivotItem?: PivotItem) => {
     if (!pivotItem) {
       return;
     }
-    const { sampleQuery } = this.props;
     onPivotItemClick(sampleQuery, pivotItem);
-    this.toggleModal(pivotItem);
+    toggleModal(pivotItem);
   };
 
-  public toggleShareQueryDialogState = () => {
-    this.setState({ showShareQueryDialog: !this.state.showShareQueryDialog });
+  const handleShareQuery = () => {
+    const shareableLink = createShareLink(sampleQuery);
+    setQuery(shareableLink);
+    toggleShareQueryDialogState();
   };
 
-  public toggleExpandResponse = () => {
-    this.setState({ showModal: !this.state.showModal });
-  };
-
-  public toggleModal = (event: any) => {
+  const toggleModal = (event: any) => {
     const { key } = event;
     if (key && key.includes('expand')) {
-      this.toggleExpandResponse();
+      toggleExpandResponse();
     }
     if (key && key.includes('share')) {
-      this.handleShareQuery();
+      handleShareQuery();
     }
   };
 
-  public renderItemLink(link: any) {
+  const renderItemLink = (link: any) => {
     return (
       <TooltipHost
         content={link.title}
@@ -103,135 +98,112 @@ class QueryResponse extends Component<
         {link.headerText}
       </TooltipHost>
     );
-  }
+  };
 
-  public render() {
-    let body: any;
-    let headers;
-    const {
-      intl: { messages },
-      verb,
-      sampleQuery,
-    }: any = this.props;
-
-    const { showShareQueryDialog, query, showModal } = this.state;
-    const { graphResponse, mode, mobileScreen } = this.props;
-
-    if (graphResponse) {
-      body = graphResponse.body;
-      headers = graphResponse.headers;
-    }
-
-    const pivotProperties = {
-      messages,
-      body,
-      verb,
-      mode,
-      headers,
-      mobileScreen,
-      sampleQuery,
-    };
-
-    const pivotItems = getPivotItems(pivotProperties);
-
-    return (
-      <div>
-        <div className='query-response'>
-          <Pivot className='pivot-response'
-            onLinkClick={this.handlePivotItemClick}
-          >
-            {pivotItems}
+  return (
+    <>
+      <Resizable
+        style={{
+          marginBottom: 10,
+          marginTop: 10
+        }}
+        maxHeight={800}
+        minHeight={350}
+        bounds={'window'}
+        size={{
+          height: responseHeight,
+          width: '100%',
+        }}
+        enable={{
+          bottom: false,
+        }}
+      >
+        <div className='query-response' style={{
+          minHeight: responseHeight,
+          height: responseHeight
+        }}>
+          <Pivot onLinkClick={handlePivotItemClick} className='pivot-response'>
+            {getPivotItems()}
             <PivotItem
               headerText='Share'
               key='share'
               itemIcon='Share'
+              itemKey='share-query' // To be used to construct component name for telemetry data
               ariaLabel={translateMessage('Share Query Message')}
               title={translateMessage('Share Query Message')}
-              onRenderItemLink={this.renderItemLink}
+              onRenderItemLink={renderItemLink}
             />
             <PivotItem
               headerText='Expand'
               key='expand'
               itemIcon='MiniExpandMirrored'
+              itemKey='expand-response'
               ariaLabel={translateMessage('Expand response')}
               title={translateMessage('Expand response')}
-              onRenderItemLink={this.renderItemLink}
+              onRenderItemLink={renderItemLink}
             />
           </Pivot>
         </div>
-
-        {
-          // @ts-ignore
-          <Modal
-            isOpen={showModal}
-            onDismiss={this.toggleExpandResponse}
-            styles={{ main: { width: '80%', height: '90%' } }}
-          >
-            <IconButton
-              styles={{
-                root: {
-                  float: 'right',
-                  zIndex: 1,
-                },
-              }}
-              iconProps={{ iconName: 'Cancel' }}
-              ariaLabel='Close popup modal'
-              onClick={this.toggleExpandResponse}
-            />;
-            <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
-              {pivotItems}
-            </Pivot>
-          </Modal>
-        }
-        <Dialog
-          hidden={showShareQueryDialog}
-          onDismiss={this.toggleShareQueryDialogState}
-          dialogContentProps={{
-            type: DialogType.normal,
-            title: 'Share Query',
-            isMultiline: true,
-            subText: messages['Share Query Message'],
-          }}
+      </Resizable>
+      <Announced message={showModal ? translateMessage('Response area expanded') : ''} />
+      {
+        // @ts-ignore
+        <Modal
+          isOpen={showModal}
+          onDismiss={toggleExpandResponse}
+          styles={{ main: { width: '80%', height: '90%' } }}
         >
-          <textarea
-            style={{
-              wordWrap: 'break-word',
-              fontFamily: 'monospace',
-              fontSize: FontSizes.xSmall,
-              width: '100%',
-              height: 63,
-              overflowY: 'scroll',
-              border: 'none',
-              resize: 'none',
+          <IconButton
+            styles={{
+              root: {
+                float: 'right',
+                zIndex: 1,
+              },
             }}
-            className='share-query-params'
-            id='share-query-text'
-            defaultValue={query}
+            iconProps={{ iconName: 'Cancel' }}
+            ariaLabel={translateMessage('Close expanded response area')}
+            onClick={toggleExpandResponse}
           />
-          <DialogFooter>
-            <PrimaryButton text={messages.Copy} onClick={this.handleCopy} />
-            <DefaultButton
-              text={messages.Close}
-              onClick={this.toggleShareQueryDialogState}
-            />
-          </DialogFooter>
-        </Dialog>;
-      </div>
-    );
-  }
-}
+          <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
+            {getPivotItems()}
+          </Pivot>
+        </Modal>
+      }
+      <Dialog
+        hidden={showShareQueryDialog}
+        onDismiss={toggleShareQueryDialogState}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: 'Share Query',
+          isMultiline: true,
+          subText: messages['Share Query Message'],
+        }}
+      >
+        <textarea
+          style={{
+            wordWrap: 'break-word',
+            fontFamily: 'monospace',
+            fontSize: FontSizes.xSmall,
+            width: '100%',
+            height: 63,
+            overflowY: 'scroll',
+            border: 'none',
+            resize: 'none'
+          }}
+          id='share-query-text'
+          className='share-query-params'
+          defaultValue={query}
+        />
+        <DialogFooter>
+          <PrimaryButton text={messages.Copy} onClick={handleCopy} />
+          <DefaultButton
+            text={messages.Close}
+            onClick={toggleShareQueryDialogState}
+          />
+        </DialogFooter>
+      </Dialog>
+    </>
+  );
+};
 
-function mapStateToProps(state: any) {
-  return {
-    graphResponse: state.graphResponse,
-    theme: state.theme,
-    mode: state.graphExplorerMode,
-    scopes: state.scopes.data,
-    sampleQuery: state.sampleQuery,
-    mobileScreen: !!state.sidebarProperties.mobileScreen,
-  };
-}
-
-// @ts-ignore
-const WithIntl = injectIntl(QueryResponse);
-export default connect(mapStateToProps)(WithIntl);
+export default injectIntl(QueryResponse);

@@ -10,11 +10,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { geLocale } from '../../../../appLocale';
 
-import { telemetry } from '../../../../telemetry';
-import {
-  BUTTON_CLICK_EVENT,
-  LISTITEM_CLICK_EVENT,
-} from '../../../../telemetry/event-types';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { SortOrder } from '../../../../types/enums';
 import { IHarPayload } from '../../../../types/har';
 import { IHistoryItem, IHistoryProps } from '../../../../types/history';
@@ -83,11 +79,11 @@ export class History extends Component<IHistoryProps, any> {
     const items: any[] = [];
 
     // tslint:disable-next-line:no-string-literal
-    const olderText = messages['older'];
+    const olderText = messages.older;
     // tslint:disable-next-line:no-string-literal
-    const todayText = messages['today'];
+    const todayText = messages.today;
     // tslint:disable-next-line:no-string-literal
-    const yesterdayText = messages['yesterday'];
+    const yesterdayText = messages.yesterday;
 
     let date = olderText;
     const today = this.formatDate(new Date());
@@ -138,11 +134,11 @@ export class History extends Component<IHistoryProps, any> {
       intl: { messages },
     }: any = this.props;
     // tslint:disable
-    const actionsText = messages['actions'];
+    const actionsText = messages.actions;
     const runQueryText = messages['Run Query'];
-    const viewText = messages['view'];
-    const removeText = messages['Delete'];
-    const exportQueryText = messages['Export'];
+    const viewText = messages.view;
+    const removeText = messages.Delete;
+    const exportQueryText = messages.Export;
     // tslint:enable
 
     if (column) {
@@ -243,8 +239,8 @@ export class History extends Component<IHistoryProps, any> {
     }: any = this.props;
 
     // tslint:disable
-    const expandText = messages['Expand'];
-    const collapseText = messages['Collapse'];
+    const expandText = messages.Expand;
+    const collapseText = messages.Collapse;
     // tslint:enable
 
     return (
@@ -373,8 +369,8 @@ export class History extends Component<IHistoryProps, any> {
       actions.runQuery(sampleQuery);
     }
     this.trackHistoryItemEvent(
-      BUTTON_CLICK_EVENT,
-      'Run history item button',
+      eventTypes.BUTTON_CLICK_EVENT,
+      componentNames.RUN_HISTORY_ITEM_BUTTON,
       query
     );
   };
@@ -384,8 +380,8 @@ export class History extends Component<IHistoryProps, any> {
     const generatedHarData = generateHar([harPayload]);
     exportQuery(generatedHarData, `${query.url}/`);
     this.trackHistoryItemEvent(
-      BUTTON_CLICK_EVENT,
-      'Export history item button',
+      eventTypes.BUTTON_CLICK_EVENT,
+      componentNames.EXPORT_HISTORY_ITEM_BUTTON,
       query
     );
   };
@@ -396,8 +392,8 @@ export class History extends Component<IHistoryProps, any> {
       actions.removeHistoryItem(query);
     }
     this.trackHistoryItemEvent(
-      BUTTON_CLICK_EVENT,
-      'Delete history item button',
+      eventTypes.BUTTON_CLICK_EVENT,
+      componentNames.DELETE_HISTORY_ITEM_BUTTON,
       query
     );
   };
@@ -405,8 +401,8 @@ export class History extends Component<IHistoryProps, any> {
   private onViewQueryButton = (query: IHistoryItem) => {
     this.onViewQuery(query);
     this.trackHistoryItemEvent(
-      BUTTON_CLICK_EVENT,
-      'View history item button',
+      eventTypes.BUTTON_CLICK_EVENT,
+      componentNames.VIEW_HISTORY_ITEM_BUTTON,
       query
     );
   };
@@ -414,8 +410,8 @@ export class History extends Component<IHistoryProps, any> {
   private onViewQueryListItem = (query: IHistoryItem) => {
     this.onViewQuery(query);
     this.trackHistoryItemEvent(
-      LISTITEM_CLICK_EVENT,
-      'View history list item',
+      eventTypes.LISTITEM_CLICK_EVENT,
+      componentNames.HISTORY_LIST_ITEM,
       query
     );
   };
@@ -577,7 +573,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-const trackedComponent = telemetry.trackReactComponent(History);
+const trackedComponent = telemetry.trackReactComponent(History, componentNames.HISTORY_TAB);
 // @ts-ignore
 const styledHistory = styled(trackedComponent, sidebarStyles);
 const IntlHistory = injectIntl(styledHistory);

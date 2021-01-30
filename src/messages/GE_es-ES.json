@@ -293,7 +293,7 @@
   "Status": "Estado",
   "Admin consent required": "Se requiere el consentimiento del administrador",
   "Consent": "Consentimiento",
-  "permissions required to run the query": "Se requieren los siguientes permisos para ejecutar la consulta. Para conceder los permisos, haga clic en Consentir",
+  "permissions required to run the query": "Se requiere uno de los siguientes permisos para ejecutar la consulta. Seleccione un permiso y haga clic en Consentimiento",
   "tab": " pestaña",
   "View the": " Ver el",
   "viewing a cached set": "Está viendo un conjunto de ejemplos en caché debido a un error de conexión de red.",
@@ -306,7 +306,7 @@
   "Snippet not available": "Fragmento de código no disponible",
   "Select different permissions": "Para probar otros puntos de conexión de la API de Microsoft Graph, elija los permisos y, luego, haga clic en Consentir.",
   "Search permissions": "Permisos de búsqueda",
-  "permissions not found": "No se encontraron permisos",
+  "permissions not found": "No se encontró ningún permiso",
   "selected": "seleccionados",
   "Search sample queries": "Buscar consultas de ejemplo",
   "Search history items": "Buscar elementos de historial",
@@ -326,5 +326,15 @@
   "HTTP request method option": "Opción de operador de la solicitud",
   "Microsoft Graph API Version option": "Opción de la versión de la API de Microsoft Graph",
   "Query Sample Input": "Entrada de ejemplo de consulta",
-  "popup blocked, allow pop-up windows in your browser": "elemento emergente bloqueado, permitir ventanas emergentes en el explorador"
+  "popup blocked, allow pop-up windows in your browser": "elemento emergente bloqueado, permitir ventanas emergentes en el explorador",
+  "sign in to consent to permissions": "Se requiere uno de los siguientes permisos para ejecutar la consulta. Inicie sesión con una cuenta que pueda otorgar el permiso que elija.",
+  "Sign in to use this method": "Inicie sesión para usar este método",
+  "Request Header deleted": "Solicitar un encabezado eliminado",
+  "Request Header added": "Solicitar un encabezado agregado",
+  "Sidebar minimized": "Barra lateral minimizada",
+  "Sidebar maximized": "Barra lateral maximizada",
+  "Response area expanded": "Área de respuesta expandida",
+  "Close expanded response area": "Cerrar el área de respuesta expandida"
+  
 }
+

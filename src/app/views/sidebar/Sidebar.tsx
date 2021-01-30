@@ -1,8 +1,7 @@
 import { Pivot, PivotItem } from 'office-ui-fabric-react';
 import React from 'react';
 
-import { telemetry } from '../../../telemetry';
-import { TAB_CLICK_EVENT } from '../../../telemetry/event-types';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import History from './history/History';
 import SampleQueries from './sample-queries/SampleQueries';
 
@@ -33,7 +32,11 @@ function onPivotItemClick (item?: PivotItem) {
 function trackTabClickEvent(tabKey: string) {
   switch (tabKey) {
     case 'history': {
-      telemetry.trackEvent(TAB_CLICK_EVENT, { ComponentName: 'History tab' });
+      telemetry.trackEvent(
+        eventTypes.TAB_CLICK_EVENT,
+        {
+          ComponentName: componentNames.HISTORY_TAB
+        });
       break;
     }
     default: {
