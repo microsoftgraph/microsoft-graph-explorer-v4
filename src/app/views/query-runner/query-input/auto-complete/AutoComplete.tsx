@@ -79,6 +79,10 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   private initialiseAutoComplete = (url: string) => {
+    const isSlashPreceed = url.substring(url.length - 1, url.length - 2);
+    if (isSlashPreceed === '/') {
+      return;
+    }
     switch (getLastCharacterOf(url)) {
       case '/':
       case '?':
