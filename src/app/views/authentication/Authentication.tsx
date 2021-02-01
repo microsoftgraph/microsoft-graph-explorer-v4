@@ -6,9 +6,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { telemetry } from '../../../telemetry';
-import { AUTHENTICATION_ACTION } from '../../../telemetry/component-names';
-import { OPERATIONAL_ERROR } from '../../../telemetry/error-types';
+import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAuthenticationProps } from '../../../types/authentication';
 import { Mode } from '../../../types/enums';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
@@ -51,10 +49,10 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
       });
       this.setState({ loginInProgress: false });
       telemetry.trackException(
-        new Error(OPERATIONAL_ERROR),
+        new Error(errorTypes.OPERATIONAL_ERROR),
         SeverityLevel.Error,
         {
-          ComponentName: AUTHENTICATION_ACTION,
+          ComponentName: componentNames.AUTHENTICATION_ACTION,
           Message: `Authentication failed: ${errorCode.replace('_', ' ')}`,
         });
     }

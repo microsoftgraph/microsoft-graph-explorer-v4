@@ -1,8 +1,9 @@
-import { DetailsList, DetailsListLayoutMode, IColumn, Label, SelectionMode } from 'office-ui-fabric-react';
+import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode } from 'office-ui-fabric-react';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IPermission } from '../../../../../types/permissions';
+import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 
 import { setConsentedStatus } from './util';
 
@@ -15,17 +16,42 @@ interface ITabList {
 }
 
 const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) => {
+  const dispatch = useDispatch();
   const { consentedScopes, scopes, authToken } = useSelector((state: any) => state);
   const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
   const tokenPresent = !!authToken;
 
-  useEffect(() => {
-    setConsentedStatus(tokenPresent, permissions, consentedScopes);
-  }, [scopes.data, consentedScopes]);
+  setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
-  if (!scopes.hasUrl) {
+  const openPermissionsPanel = () => {
+    dispatch(togglePermissionsPanel(true));
+  }
+
+  const displayNoPermissionsFoundMessage = () => {
+    return (<Label className={classes.permissionLabel}>
+      <FormattedMessage id='permissions not found in permissions tab' />
+      <Link onClick={openPermissionsPanel}>
+        <FormattedMessage id='open permissions panel' />
+      </Link>
+      <FormattedMessage id='permissions list' />
+    </Label>);
+  }
+
+  const displayNotSignedInMessage = () => {
+    return (<Label className={classes.permissionLabel}>
+      <FormattedMessage id='sign in to view a list of all permissions' />
+    </Label>)
+  }
+
+  if (tokenPresent && !scopes.hasUrl) {
     return displayNoPermissionsFoundMessage();
   }
+
+  if (!tokenPresent && !scopes.hasUrl) {
+    return displayNotSignedInMessage();
+  }
+
+
 
   return (
     <>
@@ -52,14 +78,6 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
 
 export default TabList;
 
-function displayNoPermissionsFoundMessage() {
-  return (<Label style={{
-    display: 'flex',
-    width: '100%',
-    minHeight: '200px',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }}>
-    <FormattedMessage id='permissions not found' />
-  </Label>);
-}
+
+
+

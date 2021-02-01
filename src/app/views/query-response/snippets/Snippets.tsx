@@ -1,7 +1,7 @@
 import { Pivot } from 'office-ui-fabric-react';
 import React from 'react';
 
-import { telemetry } from '../../../../telemetry';
+import { componentNames, telemetry } from '../../../../telemetry';
 import { renderSnippets } from './snippets-helper';
 
 function GetSnippets() {
@@ -13,4 +13,4 @@ function GetSnippets() {
     </Pivot>
   );
 }
-export const Snippets = telemetry.trackReactComponent(GetSnippets, 'Snippets');
+export const Snippets = telemetry.trackReactComponent(GetSnippets, componentNames.CODE_SNIPPETS_TAB);

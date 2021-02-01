@@ -1,6 +1,5 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
-import { telemetry } from '../../telemetry';
-import { LINK_ERROR } from '../../telemetry/error-types';
+import { errorTypes, telemetry } from '../../telemetry';
 import { IQuery } from '../../types/query-runner';
 import { sanitizeQueryUrl } from './query-url-sanitization';
 
@@ -25,6 +24,6 @@ export async function validateExternalLink(url: string, componentName: string,
       if (sampleId) {
         properties.SampleId = sampleId;
       }
-      telemetry.trackException(new Error(LINK_ERROR), SeverityLevel.Error, properties);
+      telemetry.trackException(new Error(errorTypes.LINK_ERROR), SeverityLevel.Error, properties);
     });
 }

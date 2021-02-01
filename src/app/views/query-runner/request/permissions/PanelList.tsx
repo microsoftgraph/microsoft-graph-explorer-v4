@@ -35,9 +35,7 @@ const PanelList = ({ messages,
   const permissionsList: any[] = [];
   const tokenPresent = !!authToken;
 
-  useEffect(() => {
-    setConsentedStatus(tokenPresent, permissions, consentedScopes);
-  }, [scopes, consentedScopes]);
+  setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
   permissions.forEach((perm: any) => {
     const permission: any = { ...perm };
