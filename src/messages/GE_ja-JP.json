@@ -65,7 +65,7 @@
   "Key": "キー",
   "Value": "値",
   "Login to try this request": "ログインしてこの要求を試す",
-  "modify permissions": "アクセス許可の修正",
+  "modify permissions": "アクセス許可の修正 (プレビュー)",
   "Save changes": "変更の保存",
   "To change permissions, you will need to log-in again.": "アクセス許可を変更するには、もう一度ログインする必要があります。",
   "all the items in my drive": "自分のドライブ内のすべての項目",
@@ -334,7 +334,10 @@
   "Sidebar minimized": "サイドバーが最小化されました",
   "Sidebar maximized": "サイドバーが最大化されました",
   "Response area expanded": "応答領域が拡張されました",
-  "Close expanded response area": "拡張された応答領域を閉じる"
-  
+  "Close expanded response area": "拡張された応答領域を閉じる",
+  "permissions not found in permissions tab": "このタブにはクエリの権限がありません。",
+  "permissions preview": "この機能はプレビュー段階にあり、現在、一部のクエリのすべてのアクセス許可が表示されていない可能性があります。",
+  "sign in to view a list of all permissions": "このタブにはクエリのアクセス許可がありません。サインインして、プロファイルの横にある設定アイコンの [アクセス許可を選択する] オプションを使用して、[Microsoft Graph のアクセス許可] の完全なリストを表示し、必要なアクセス許可を選択して、そこから同意します。",
+  "open permissions panel": "[アクセス許可] パネルを開きます。",
+  "permissions list": " [Microsoft Graph のアクセス許可] の完全なリストを表示し、必要なアクセス許可を選択して、そこから同意します。"
 }
-
