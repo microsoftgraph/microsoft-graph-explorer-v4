@@ -65,7 +65,7 @@
   "Key": "Schlüssel",
   "Value": "Wert",
   "Login to try this request": "Melden Sie sich an, um diese Anforderung zu testen",
-  "modify permissions": "Berechtigungen ändern",
+  "modify permissions": "Berechtigungen ändern (Vorschau)",
   "Save changes": "Änderungen speichern",
   "To change permissions, you will need to log-in again.": "Um Berechtigungen zu ändern, müssen Sie sich erneut anmelden.",
   "all the items in my drive": "Alle Elemente in meinem Laufwerk",
@@ -334,7 +334,10 @@
   "Sidebar minimized": "Randleiste minimiert",
   "Sidebar maximized": "Randleiste maximiert",
   "Response area expanded": "Antwortbereich erweitert",
-  "Close expanded response area": "Den erweiterten Antwortbereich schließen"
-  
+  "Close expanded response area": "Den erweiterten Antwortbereich schließen",
+  "permissions not found in permissions tab": "Auf dieser Registerkarte fehlen Berechtigungen für die Abfrage. ",
+  "permissions preview": "Diese Funktion befindet sich in der Vorschau und zeigt möglicherweise derzeit nicht alle Berechtigungen für einige Abfragen an.",
+  "sign in to view a list of all permissions": "Auf dieser Registerkarte fehlen Berechtigungen für die Abfrage. Melden Sie sich an und verwenden Sie die Option \"Berechtigungen auswählen\" im Einstellungssymbol neben Ihrem Profil, um die vollständige Liste der Microsoft Graph-Berechtigungen anzuzeigen, und wählen Sie die gewünschte(n) Berechtigung(en) aus und stimmen Sie diese von dort aus zu.",
+  "open permissions panel": "Öffnen Sie das Berechtigungsfenster",
+  "permissions list": " um die vollständige Liste der Microsoft Graph-Berechtigungen anzuzeigen, wählen Sie die gewünschte(n) Berechtigung(en) aus und stimmen Sie diese von dort aus zu."
 }
-
