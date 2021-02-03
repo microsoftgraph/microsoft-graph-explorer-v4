@@ -88,7 +88,7 @@ export class QueryRunner extends Component<
 
     if (actions) {
       // remove whitespaces
-      sampleQuery.sampleUrl = sampleQuery.sampleUrl.replace(/\s+/g, '');
+      sampleQuery.sampleUrl = sampleQuery.sampleUrl.trim();
       actions.runQuery(sampleQuery);
       const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
       telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
