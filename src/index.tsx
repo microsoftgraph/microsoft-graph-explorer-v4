@@ -107,7 +107,18 @@ if (theme) {
 const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
 
 if (devxApiUrl) {
-  appState.dispatch(setDevxApiUrl(devxApiUrl));
+  const org = new URLSearchParams(location.search).get('org');
+  const branchName = new URLSearchParams(location.search).get('branchName');
+
+  const devxApi = {
+    baseUrl: devxApiUrl,
+    parameters: ''
+  };
+
+  if (org && branchName) {
+    devxApi.parameters = `org=${org}&branchName=${branchName}`;
+  }
+  appState.dispatch(setDevxApiUrl(devxApi));
 }
 
 readHistoryData().then((data: any) => {
