@@ -40,7 +40,7 @@ function getContentType(headers: any) {
     */
     const splitContentTypes = contentTypes.split(';');
     if (splitContentTypes.length > 0) {
-      contentType = splitContentTypes[0];
+      contentType = splitContentTypes[0].toLowerCase();
     }
   }
   return contentType;
@@ -51,7 +51,10 @@ function displayComponent(properties: any) {
 
   switch (contentType) {
     case ContentType.XML:
-      return <Monaco body={formatXml(body)} language='xml' height={height} />;
+      return <Monaco body={formatXml(body)} language='xml' readOnly={true} height={height} />;
+
+    case ContentType.HTML:
+      return <Monaco body={body} language='html' readOnly={true} height={height} />;
 
     default:
       if (isImageResponse(contentType)) {
@@ -61,7 +64,7 @@ function displayComponent(properties: any) {
           alt='profile image'
         />;
       }
-      return <Monaco body={body} language={language} height={height} />;
+      return <Monaco body={body} readOnly={true} language={language} height={height} />;
   }
 }
 
