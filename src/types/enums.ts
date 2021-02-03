@@ -12,7 +12,9 @@ export enum ContentType {
   XML = 'application/xml',
   Json = 'application/json',
   Image = 'image/jpeg',
-  TextPlain = 'text/plain'
+  TextPlain = 'text/plain',
+  HTML = 'text/html',
+  BinaryResponse = 'application/octet-stream',
 }
 
 export enum AppTheme {
