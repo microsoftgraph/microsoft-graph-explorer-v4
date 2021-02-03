@@ -87,7 +87,6 @@ export class QueryRunner extends Component<
     }
 
     if (actions) {
-      // remove whitespaces
       sampleQuery.sampleUrl = sampleQuery.sampleUrl.trim();
       actions.runQuery(sampleQuery);
       const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
