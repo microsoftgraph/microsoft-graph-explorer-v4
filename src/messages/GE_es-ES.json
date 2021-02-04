@@ -65,7 +65,7 @@
   "Key": "Clave",
   "Value": "Valor",
   "Login to try this request": "Inicie sesión para probar esta solicitud",
-  "modify permissions": "Modificar permisos",
+  "modify permissions": "Modificar permisos (previsualización)",
   "Save changes": "Guardar cambios",
   "To change permissions, you will need to log-in again.": "Para cambiar los permisos, debe volver a iniciar sesión.",
   "all the items in my drive": "todos los elementos de la unidad",
@@ -328,5 +328,16 @@
   "Query Sample Input": "Entrada de ejemplo de consulta",
   "popup blocked, allow pop-up windows in your browser": "elemento emergente bloqueado, permitir ventanas emergentes en el explorador",
   "sign in to consent to permissions": "Se requiere uno de los siguientes permisos para ejecutar la consulta. Inicie sesión con una cuenta que pueda otorgar el permiso que elija.",
-  "Sign in to use this method": "Inicie sesión para usar este método"
+  "Sign in to use this method": "Inicie sesión para usar este método",
+  "Request Header deleted": "Solicitar un encabezado eliminado",
+  "Request Header added": "Solicitar un encabezado agregado",
+  "Sidebar minimized": "Barra lateral minimizada",
+  "Sidebar maximized": "Barra lateral maximizada",
+  "Response area expanded": "Área de respuesta expandida",
+  "Close expanded response area": "Cerrar el área de respuesta expandida",
+  "permissions not found in permissions tab": "Faltan los permisos para realizar la consulta en esta pestaña. ",
+  "permissions preview": "Esta función está en vista previa y es posible que actualmente no muestre todos los permisos para algunas consultas.",
+  "sign in to view a list of all permissions": "Faltan los permisos para realizar la consulta en esta pestaña. Inicie sesión para usar la opción Seleccionar permisos en el icono de configuración junto a su perfil y ver la lista completa de permisos de Microsoft Graph, y seleccione los permisos que desea y consiente desde aquí.",
+  "open permissions panel": "Abra el panel de permisos",
+  "permissions list": " para ver la lista completa de permisos de Microsoft Graph y seleccione los permisos que desea y consiente desde aquí."
 }

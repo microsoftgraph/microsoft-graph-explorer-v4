@@ -1,5 +1,5 @@
 import {
-  getAdaptiveCard, getAdaptiveCardError,
+  getAdaptiveCardError,
   getAdaptiveCardPending,
   getAdaptiveCardSuccess
 } from '../../../app/services/actions/adaptive-cards-action-creator';

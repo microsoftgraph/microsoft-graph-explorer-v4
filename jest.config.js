@@ -10,10 +10,10 @@ module.exports = {
   testEnvironment: "jsdom",
   testURL: "http://localhost",
   transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
+    "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js",
     "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
     "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)":
-      "<rootDir>/config/jest/fileTransform.js"
+      "<rootDir>/node_modules/ts-jest/preprocessor.js"
   },
   transformIgnorePatterns: [
     "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
@@ -38,5 +38,6 @@ module.exports = {
   watchPlugins: [
     "jest-watch-typeahead/filename",
     "jest-watch-typeahead/testname"
-  ]
+  ],
+  testResultsProcessor: "./node_modules/jest-junit-reporter"
 };
