@@ -61,6 +61,8 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     const currentTheme = getTheme();
     const labelStyles = queryResponseStyles(currentTheme).emptyStateLabel;
     const link = queryResponseStyles(currentTheme).link;
+    const cardStyles: any = queryResponseStyles(currentTheme).card;
+    const copyIcon: any = queryResponseStyles(currentTheme).copyIcon;
     const { data, pending } = this.props.card;
     const { body, queryStatus } = this.props;
 
@@ -106,11 +108,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             key='card'
             ariaLabel={translateMessage('card')}
             headerText={'Card'}
-            style={{
-              minHeight: '500px',
-              maxHeight: '800px',
-              overflowY: 'auto',
-            }}
+            style={cardStyles}
           >
             <div
               ref={(n) => {
@@ -126,8 +124,8 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
           </PivotItem>
           <PivotItem
             key='templateJSON'
-            ariaLabel={translateMessage('Template JSON')}
-            headerText={'Template JSON'}
+            ariaLabel={translateMessage('JSON Schema')}
+            headerText={'JSON Schema'}
           >
             <MessageBar messageBarType={MessageBarType.info}>
               <FormattedMessage id='Get started with adaptive cards on' />
@@ -139,7 +137,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                 <FormattedMessage id='Adaptive Cards Templating SDK' />
               </a>
             </MessageBar>
-            <IconButton style={{ float: 'right', zIndex: 1 }}
+            <IconButton style={copyIcon}
               iconProps={{
                 iconName: 'copy',
               }}
