@@ -9,6 +9,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
+import { translateMessage } from '../../../utils/translate-messages';
 import { Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
 import { queryResponseStyles } from './../queryResponse.styles';
@@ -103,7 +104,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
         <Pivot className='pivot-response'>
           <PivotItem
             key='card'
-            ariaLabel='card'
+            ariaLabel={translateMessage('card')}
             headerText={'Card'}
             style={{
               minHeight: '500px',
@@ -124,8 +125,8 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             />
           </PivotItem>
           <PivotItem
-            key='code'
-            ariaLabel='Template JSON'
+            key='templateJSON'
+            ariaLabel={translateMessage('Template JSON')}
             headerText={'Template JSON'}
           >
             <MessageBar messageBarType={MessageBarType.info}>
