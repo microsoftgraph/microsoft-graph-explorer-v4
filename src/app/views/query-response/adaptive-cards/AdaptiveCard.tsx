@@ -1,6 +1,6 @@
 import { getTheme } from '@uifabric/styling/lib/styles/theme';
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { Label } from 'office-ui-fabric-react';
+import { IconButton, Label, Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -9,6 +9,8 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
+import { Monaco } from '../../common';
+import { genericCopy } from '../../common/copy';
 import { queryResponseStyles } from './../queryResponse.styles';
 
 class AdaptiveCard extends Component<IAdaptiveCardProps> {
@@ -47,8 +49,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
       return true; // body has changed so card will too
     }
     if (
-      JSON.stringify(nextProps.card.data) ===
-      JSON.stringify(this.props.card.data)
+      JSON.stringify(nextProps.card.data) === JSON.stringify(this.props.card.data)
     ) {
       return false; // card still the same no need to re-render
     }
@@ -99,22 +100,47 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
       this.adaptiveCard.parse(data);
       const renderedCard = this.adaptiveCard.render();
       return (
-        <div
-          style={{
-            minHeight: '500px',
-            maxHeight: '800px',
-            overflowY: 'auto',
-          }}
-          ref={(n) => {
-            if (n && !n.firstChild) {
-              n.appendChild(renderedCard);
-            } else {
-              if (n && n.firstChild) {
-                n.replaceChild(renderedCard, n.firstChild);
-              }
-            }
-          }}
-        />
+        <Pivot className='pivot-response'>
+          <PivotItem
+            key='card'
+            ariaLabel='card'
+            headerText={'Card'}
+            style={{
+              minHeight: '500px',
+              maxHeight: '800px',
+              overflowY: 'auto',
+            }}
+          >
+            <div
+              ref={(n) => {
+                if (n && !n.firstChild) {
+                  n.appendChild(renderedCard);
+                } else {
+                  if (n && n.firstChild) {
+                    n.replaceChild(renderedCard, n.firstChild);
+                  }
+                }
+              }}
+            />
+          </PivotItem>
+          <PivotItem
+            key='code'
+            ariaLabel='Template JSON'
+            headerText={'Template JSON'}
+          >
+            <IconButton style={{ float: 'right', zIndex: 1 }}
+              iconProps={{
+                iconName: 'copy',
+              }}
+              onClick={async () => genericCopy(JSON.stringify(data, null, 4))}
+            />
+            <Monaco
+              language='json'
+              body={data}
+              height={'800px'}
+            />
+          </PivotItem>
+        </Pivot>
       );
     } catch (err) {
       return <div style={{ color: 'red' }}>{err.message}</div>;
