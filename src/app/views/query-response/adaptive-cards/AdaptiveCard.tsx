@@ -1,6 +1,6 @@
 import { getTheme } from '@uifabric/styling/lib/styles/theme';
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { IconButton, Label, Pivot, PivotItem } from 'office-ui-fabric-react';
+import { IconButton, Label, MessageBar, MessageBarType, Pivot, PivotItem } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -128,6 +128,16 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             ariaLabel='Template JSON'
             headerText={'Template JSON'}
           >
+            <MessageBar messageBarType={MessageBarType.info}>
+              <FormattedMessage id='Get started with adaptive cards on' />
+              <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
+                target='_blank'
+                rel='noopener noreferrer'
+                tabIndex={0}
+              >
+                <FormattedMessage id='Adaptive Cards Templating SDK' />
+              </a>
+            </MessageBar>
             <IconButton style={{ float: 'right', zIndex: 1 }}
               iconProps={{
                 iconName: 'copy',
