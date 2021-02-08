@@ -20,5 +20,14 @@ export const queryResponseStyles = (theme: ITheme) => {
     link: {
       color: theme.palette.blue,
     },
+    card: {
+      minHeight: '500px',
+      maxHeight: '800px',
+      overflowY: 'auto',
+    },
+    copyIcon: {
+      float: 'right',
+      zIndex: 1
+    }
   };
 };
