@@ -32,7 +32,7 @@ import { loadGETheme } from './themes';
 import { readTheme } from './themes/theme-utils';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
-import { IDevxAPI } from './types/IDevxAPI';
+import { IDevxAPI } from './types/devx-api';
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
