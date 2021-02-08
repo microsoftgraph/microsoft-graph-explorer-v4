@@ -339,5 +339,9 @@
   "permissions preview": "Esta función está en vista previa y es posible que actualmente no muestre todos los permisos para algunas consultas.",
   "sign in to view a list of all permissions": "Faltan los permisos para realizar la consulta en esta pestaña. Inicie sesión para usar la opción Seleccionar permisos en el icono de configuración junto a su perfil y ver la lista completa de permisos de Microsoft Graph, y seleccione los permisos que desea y consiente desde aquí.",
   "open permissions panel": "Abra el panel de permisos",
-  "permissions list": " para ver la lista completa de permisos de Microsoft Graph y seleccione los permisos que desea y consiente desde aquí."
+  "permissions list": " para ver la lista completa de permisos de Microsoft Graph y seleccione los permisos que quiere y consiente desde ahí.",
+  "Get started with adaptive cards on": "Introducción a las tarjetas adaptables en",
+  "Adaptive Cards Templating SDK": "SDK de plantillas de tarjetas adaptables",
+  "card": "Tarjeta",
+  "JSON Schema": "Esquema JSON"
 }

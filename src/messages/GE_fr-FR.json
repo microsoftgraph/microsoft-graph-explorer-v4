@@ -339,5 +339,9 @@
   "permissions preview": "Cette fonctionnalité est en version préliminaire et n’affiche peut-être pas toutes les autorisations pour certaines requêtes pour le moment.",
   "sign in to view a list of all permissions": "Les autorisations pour la requête sont manquantes sur cet onglet. Connectez-vous pour utiliser l’option Sélectionner des autorisations dans l’icône Paramètres en regard de votre profil pour consulter la liste complète des autorisations Microsoft Graph, puis sélectionnez les autorisations de votre choix et donnez votre consentement.",
   "open permissions panel": "Ouvrez le panneau d’autorisations",
-  "permissions list": " pour consulter la liste complète des autorisations Microsoft Graph, sélectionnez les autorisations de votre choix et donnez votre consentement."
+  "permissions list": " pour consulter la liste complète des autorisations Microsoft Graph, sélectionnez les autorisations de votre choix et donnez votre consentement.",
+  "Get started with adaptive cards on": "Prise en main les cartes adaptatives sur",
+  "Adaptive Cards Templating SDK": "SDK création de modèles de cartes adaptatives",
+  "card": "Carte",
+  "JSON Schema": "Schéma JSON"
 }
