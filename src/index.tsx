@@ -32,6 +32,7 @@ import { loadGETheme } from './themes';
 import { readTheme } from './themes/theme-utils';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
+import { IDevxAPI } from './types/IDevxAPI';
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
@@ -110,7 +111,7 @@ if (devxApiUrl) {
   const org = new URLSearchParams(location.search).get('org');
   const branchName = new URLSearchParams(location.search).get('branchName');
 
-  const devxApi = {
+  const devxApi: IDevxAPI = {
     baseUrl: devxApiUrl,
     parameters: ''
   };
