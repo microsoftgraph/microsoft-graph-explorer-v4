@@ -30,13 +30,12 @@ const PanelList = ({ messages,
   columns, classes, selection,
   renderItemColumn, renderDetailsHeader }: IPanelList) => {
 
-  const { consentedScopes, scopes, tokenPresent } = useSelector((state: any) => state);
+  const { consentedScopes, scopes, authToken } = useSelector((state: any) => state);
   const [permissions, setPermissions] = useState(scopes.data.sort(dynamicSort('value', SortOrder.ASC)));
   const permissionsList: any[] = [];
+  const tokenPresent = !!authToken;
 
-  useEffect(() => {
-    setConsentedStatus(tokenPresent, permissions, consentedScopes);
-  }, [scopes, consentedScopes]);
+  setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
   permissions.forEach((perm: any) => {
     const permission: any = { ...perm };

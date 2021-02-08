@@ -2,9 +2,7 @@ import { getId, getTheme, Icon, PivotItem, TooltipHost } from 'office-ui-fabric-
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { telemetry } from '../../../../telemetry';
-import { GRAPH_TOOLKIT_LINK } from '../../../../telemetry/component-names';
-import { TAB_CLICK_EVENT } from '../../../../telemetry/event-types';
+import { componentNames, telemetry } from '../../../../telemetry';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
@@ -42,7 +40,7 @@ export const getPivotItems = () => {
     if (!!body) {
       const { toolkitUrl, exampleUrl } = lookupToolkitUrl(sampleQuery);
       if (toolkitUrl && exampleUrl) {
-        validateExternalLink(toolkitUrl, GRAPH_TOOLKIT_LINK, null, sampleQuery);
+        validateExternalLink(toolkitUrl, componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK, null, sampleQuery);
         return <span style={dotStyle} />;
       }
     }
@@ -66,6 +64,7 @@ export const getPivotItems = () => {
       key='response-preview'
       ariaLabel='Response Preview'
       itemIcon='Reply'
+      itemKey='response-preview' // To be used to construct component name for telemetry data
       headerText={translateMessage('Response Preview')}
       title={translateMessage('Response Preview')}
       onRenderItemLink={renderItemLink}
@@ -77,6 +76,7 @@ export const getPivotItems = () => {
       ariaLabel='Response Headers'
       headerText={translateMessage('Response Headers')}
       itemIcon='FileComment'
+      itemKey='response-headers'
       title={translateMessage('Response Headers')}
       onRenderItemLink={renderItemLink}
     >
@@ -92,6 +92,7 @@ export const getPivotItems = () => {
         title={translateMessage('Snippets')}
         headerText={translateMessage('Snippets')}
         itemIcon='PasteAsCode'
+        itemKey='code-snippets'
         onRenderItemLink={renderItemLink}
       >
         <Snippets />
@@ -100,6 +101,7 @@ export const getPivotItems = () => {
         key='graph-toolkit'
         ariaLabel='Graph Toolkit'
         itemIcon='CustomizeToolbar'
+        itemKey='toolkit-component'
         headerText={translateMessage('Graph toolkit')}
         title={translateMessage('Graph toolkit')}
         onRenderItemLink={renderItemLink}
@@ -112,6 +114,7 @@ export const getPivotItems = () => {
         headerText={translateMessage('Adaptive Cards')}
         title={translateMessage('Adaptive Cards')}
         itemIcon='ContactCard'
+        itemKey='adaptive-cards'
         onRenderItemLink={renderItemLink}
       >
         <ThemeContext.Consumer >
@@ -132,19 +135,8 @@ export const getPivotItems = () => {
 
 export const onPivotItemClick = (query: IQuery, item?: PivotItem) => {
   if (!item) { return; }
-  const tabTitle = item.props.title;
-  if (tabTitle) {
-    trackTabClickEvent(query, tabTitle);
+  const tabKey = item.props.itemKey;
+  if (tabKey) {
+    telemetry.trackTabClickEvent(tabKey, query);
   }
 };
-
-function trackTabClickEvent(query: IQuery, tabTitle: string) {
-  const sanitizedUrl = sanitizeQueryUrl(query.sampleUrl);
-  telemetry.trackEvent(TAB_CLICK_EVENT,
-    {
-      ComponentName: `${tabTitle} tab`,
-      QuerySignature: `${query.selectedVerb} ${sanitizedUrl}`
-    });
-}
-
-
