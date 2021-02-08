@@ -28,7 +28,9 @@ export function fetchSamplesPending(): any {
 export function fetchSamples(): Function {
   return async (dispatch: Function, getState: Function) => {
     const { devxApi } = getState();
-    const samplesUrl = `${devxApi}/samples`;
+    let samplesUrl = `${devxApi.baseUrl}/samples`;
+
+    samplesUrl = (devxApi.parameters) ? `${samplesUrl}?${devxApi.parameters}` : `${samplesUrl}`;
 
     const headers = {
       'Content-Type': 'application/json',
