@@ -30,9 +30,7 @@ export function fetchSamples(): Function {
     const { devxApi } = getState();
     let samplesUrl = `${devxApi.baseUrl}/samples`;
 
-    if (devxApi.parameters) {
-      samplesUrl = `${samplesUrl}?${devxApi.parameters}`;
-    }
+    samplesUrl = (devxApi.parameters) ? `${samplesUrl}?${devxApi.parameters}` : `${samplesUrl}`;
 
     const headers = {
       'Content-Type': 'application/json',
