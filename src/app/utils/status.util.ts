@@ -32,12 +32,10 @@ export function linkExists(value: string): boolean {
   return exists;
 }
 
-export function extractUrl(value: string): string[] {
-  const listOfLinks: string[] = [];
-  value.split(' ').forEach((element: string) => {
-    if (linkExists(element)) {
-      listOfLinks.push(element);
-    }
-  });
-  return listOfLinks;
+export function extractUrl(value: string): any {
+  const matches = value.match(/\bhttps?:\/\/\S+/gi);
+  if (matches) {
+    return matches;
+  }
+  return [];
 }
