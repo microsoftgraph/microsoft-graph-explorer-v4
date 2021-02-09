@@ -81,7 +81,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js && node versioned-build.js",
-    "test": "node scripts/test.js --no-watch --testPathIgnorePatterns=src/tests/accessibility",
+    "test": "node scripts/test.js --watch --testPathIgnorePatterns=src/tests/accessibility",
     "lint": "eslint . \"**/*.{js,ts,tsx}\"",
     "start-server": "npm start",
     "ci": "start-server-and-test start-server http://localhost:3000 test-ci",

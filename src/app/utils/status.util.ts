@@ -1,17 +1,17 @@
 export function replaceLinks(message: string): string {
   if (linkExists(message)) {
     const urls = extractUrl(message);
-    urls.forEach(url => {
-      const link = createLinkFromUrl(url);
-      message = message.replace(url, link);
-    });
+    for (let index = 0; index < urls.length; index++) {
+      const url = urls[index];
+      message = message.replace(url, `${index}`);
+    }
   }
   return message;
 }
 
 export function linkExists(value: string): boolean {
   const linkParts = ['https://', 'http://', 'www.'];
-  value = value.toLowerCase();
+  value = value.toString().toLowerCase();
   let exists = false;
   linkParts.forEach(part => {
     if (value.includes(part.toLowerCase())) {
@@ -20,10 +20,6 @@ export function linkExists(value: string): boolean {
     }
   });
   return exists;
-}
-
-export function createLinkFromUrl(url: string): string {
-  return `<a href="${url}">${url}</a>`;
 }
 
 export function extractUrl(value: string): string[] {

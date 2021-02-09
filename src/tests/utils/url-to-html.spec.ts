@@ -1,4 +1,4 @@
-import { linkExists, extractUrl, createLinkFromUrl, replaceLinks } from "../../app/utils/status.util";
+import { linkExists, extractUrl, replaceLinks } from "../../app/utils/status.util";
 
 describe('url should', () => {
 
@@ -20,15 +20,9 @@ describe('url should', () => {
     expect(url).toEqual(["https://aka.ms/appTemplateAPISurvey"]);
   });
 
-  it(`should create a link`, () => {
-    const url = 'https://aka.ms/appTemplateAPISurvey';
-    const link = createLinkFromUrl(url);
-    expect(link).toEqual(`<a href="${url}">${url}</a>`);
-  });
-
   it(`should replace urls with links`, () => {
     const message = 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/appTemplateAPISurvey';
     const replaced = replaceLinks(message);
-    expect(replaced).toBe("We’d like to hear from you. Please leave your feedback on this API here: <a href=\"https://aka.ms/appTemplateAPISurvey\">https://aka.ms/appTemplateAPISurvey</a>");
+    expect(replaced).toBe("We’d like to hear from you. Please leave your feedback on this API here: 0");
   });
 })
