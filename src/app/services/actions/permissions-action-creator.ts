@@ -34,7 +34,8 @@ export function fetchScopes(query?: IQuery): Function {
   return async (dispatch: Function, getState: Function) => {
     try {
       const { devxApi } = getState();
-      let permissionsUrl = `${devxApi}/permissions`;
+      let permissionsUrl = `${devxApi.baseUrl}/permissions`;
+
       let hasUrl = false; // whether permissions are for a specific url
 
       if (query) {
@@ -47,6 +48,10 @@ export function fetchScopes(query?: IQuery): Function {
 
         permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}`;
         hasUrl = true;
+      }
+
+      if (devxApi.parameters) {
+        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters}`;
       }
 
       const headers = {
