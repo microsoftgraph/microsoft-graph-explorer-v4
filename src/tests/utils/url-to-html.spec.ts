@@ -1,4 +1,4 @@
-import { linkExists, extractUrl, replaceLinks } from "../../app/utils/status.util";
+import { linkExists, extractUrl, replaceLinks, convertArrayToObject } from "../../app/utils/status.util";
 
 describe('url should', () => {
 
@@ -23,6 +23,14 @@ describe('url should', () => {
   it(`should replace urls with links`, () => {
     const message = 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/appTemplateAPISurvey';
     const replaced = replaceLinks(message);
-    expect(replaced).toBe("We’d like to hear from you. Please leave your feedback on this API here: 0");
+    expect(replaced).toBe("We’d like to hear from you. Please leave your feedback on this API here: $0");
+  });
+
+  it(`should convert urls array to object`, () => {
+    const message = 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/appTemplateAPISurvey';
+    const urls = extractUrl(message);
+    const objectUrls = convertArrayToObject(urls);
+    const expected = { $0: "https://aka.ms/appTemplateAPISurvey" };
+    expect(objectUrls).toEqual(expected);
   });
 })
