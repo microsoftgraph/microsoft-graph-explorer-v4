@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogFooter,
   DialogType,
+  DropdownMenuItemType,
   getId,
   IconButton,
   Label,
@@ -55,6 +56,20 @@ function Settings(props: ISettingsProps) {
         onClick: () => trackOfficeDevProgramLinkClickEvent(),
       },
       {
+        key: 'report-issue',
+        text: messages['Report an Issue'],
+        href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
+        target: '_blank',
+        iconProps: {
+          iconName: 'ReportWarning',
+        },
+      },
+      {
+        key: 'divider',
+        text: '-',
+        itemType: DropdownMenuItemType.Divider
+      },
+      {
         key: 'change-theme',
         text: messages['Change theme'],
         iconProps: {
@@ -84,17 +99,6 @@ function Settings(props: ISettingsProps) {
         },
       );
     }
-    menuItems.push(
-      {
-        key: 'report-issue',
-        text: messages['Report an Issue'],
-        href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
-        target: '_blank',
-        iconProps: {
-          iconName: 'ReportWarning',
-        },
-      }
-    );
     setItems(menuItems);
   }, [authenticated]);
 
