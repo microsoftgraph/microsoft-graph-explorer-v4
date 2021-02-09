@@ -1,7 +1,7 @@
 import { Link, MessageBar } from 'office-ui-fabric-react';
 import React, { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { extractUrl, linkExists, replaceLinks } from '../../utils/status.util';
+import { convertArrayToObject, extractUrl, linkExists, replaceLinks } from '../../utils/status.util';
 
 function displayStatusMessage(text: string, values: any) {
   const pattern = /([$0-9]+)/g;
@@ -29,7 +29,7 @@ export function statusMessages(queryState: any, actions: any) {
     let message = status;
     if (linkExists(status)) {
       message = replaceLinks(status);
-      urls = Object.assign({}, extractUrl(status));
+      urls = convertArrayToObject(extractUrl(status));
     }
 
     return (
