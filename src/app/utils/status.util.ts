@@ -20,9 +20,14 @@ export function convertArrayToObject(array: any[]) {
 };
 
 export function linkExists(value: string): boolean {
+  let exists = false;
+
+  if (!value) {
+    return exists;
+  }
+
   const linkParts = ['https://', 'http://', 'www.'];
   value = value.toString().toLowerCase();
-  let exists = false;
   linkParts.forEach(part => {
     if (value.includes(part.toLowerCase())) {
       exists = true;
