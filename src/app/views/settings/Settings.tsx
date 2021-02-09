@@ -82,17 +82,19 @@ function Settings(props: ISettingsProps) {
           },
           onClick: () => handleSignOut(),
         },
-        {
-          key: 'report-issue',
-          text: messages['Report an Issue'],
-          href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
-          target: '_blank',
-          iconProps: {
-            iconName: 'ReportWarning',
-          },
-        }
       );
     }
+    menuItems.push(
+      {
+        key: 'report-issue',
+        text: messages['Report an Issue'],
+        href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
+        target: '_blank',
+        iconProps: {
+          iconName: 'ReportWarning',
+        },
+      }
+    );
     setItems(menuItems);
   }, [authenticated]);
 
