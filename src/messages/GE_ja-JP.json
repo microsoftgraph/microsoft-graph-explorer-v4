@@ -339,5 +339,9 @@
   "permissions preview": "この機能はプレビュー段階にあり、現在、一部のクエリのすべてのアクセス許可が表示されていない可能性があります。",
   "sign in to view a list of all permissions": "このタブにはクエリのアクセス許可がありません。サインインして、プロファイルの横にある設定アイコンの [アクセス許可を選択する] オプションを使用して、[Microsoft Graph のアクセス許可] の完全なリストを表示し、必要なアクセス許可を選択して、そこから同意します。",
   "open permissions panel": "[アクセス許可] パネルを開きます。",
-  "permissions list": " [Microsoft Graph のアクセス許可] の完全なリストを表示し、必要なアクセス許可を選択して、そこから同意します。"
+  "permissions list": " [Microsoft Graph のアクセス許可] の完全なリストを表示し、必要なアクセス許可を選択して、そこから同意します。",
+  "Get started with adaptive cards on": "アダプティブ カードを使ってみる",
+  "Adaptive Cards Templating SDK": "アダプティブ カード テンプレート SDK",
+  "card": "カード",
+  "JSON Schema": "JSON スキーマ"
 }
