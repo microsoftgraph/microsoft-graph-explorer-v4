@@ -20,24 +20,11 @@ export function convertArrayToObject(array: any[]) {
 };
 
 export function linkExists(value: string): boolean {
-  let exists = false;
-
-  if (!value) {
-    return exists;
-  }
-
-  const linkParts = ['https://', 'http://', 'www.'];
-  value = value.toString().toLowerCase();
-  linkParts.forEach(part => {
-    if (value.includes(part.toLowerCase())) {
-      exists = true;
-      return;
-    }
-  });
-  return exists;
+  const urlRegex = "([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?";
+  return new RegExp(urlRegex).test(value);
 }
 
-export function extractUrl(value: string): any {
+export function extractUrl(value: string): string[] {
   const matches = value.match(/\bhttps?:\/\/\S+/gi);
   if (matches) {
     return matches;
