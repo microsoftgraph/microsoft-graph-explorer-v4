@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { IQuery } from '../../../types/query-runner';
 import { GRAPH_URL } from '../../services/graph-constants';
-import { convertArrayToObject, extractUrl, linkExists, replaceLinks } from '../../utils/status.util';
+import { convertArrayToObject, extractUrl, replaceLinks } from '../../utils/status-message';
 
 export function statusMessages(queryState: any, sampleQuery: IQuery, actions: any) {
   function displayStatusMessage(message: string, urls: any) {
@@ -45,9 +45,10 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
     const { messageType, statusText, status, duration } = queryState;
     let urls: any = {};
     let message = status;
-    if (linkExists(status)) {
+    const extractedUrls = extractUrl(status);
+    if (extractedUrls) {
       message = replaceLinks(status);
-      urls = convertArrayToObject(extractUrl(status));
+      urls = convertArrayToObject(extractedUrls);
     }
 
     return (
