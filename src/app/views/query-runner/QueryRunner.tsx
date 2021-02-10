@@ -103,17 +103,6 @@ export class QueryRunner extends Component<
     }
   };
 
-  private validateInput(sampleBody: string) {
-    const { actions } = this.props;
-    try {
-      const parsedSampleBody = JSON.parse(sampleBody);
-      return parsedSampleBody;
-    } catch (error) {
-
-    }
-    return sampleBody;
-  }
-
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
     const { sampleQuery } = this.props;
     if (urlVersion) {
