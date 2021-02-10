@@ -339,5 +339,9 @@
   "permissions preview": "此功能处于预览状态，当前可能不会显示某些查询的所有权限。",
   "sign in to view a list of all permissions": "此选项卡上缺少针对该查询的权限。登录以使用个人资料旁边的设置图标中的\"选择权限\"选项，查看 Microsoft Graph 权限的完整列表，然后从中选择想要及同意的权限。",
   "open permissions panel": "打开权限面板",
-  "permissions list": " 查看 Microsoft Graph 权限的完整列表，然后从中选择所需的权限和许可权限。"
+  "permissions list": " 查看 Microsoft Graph 权限的完整列表，然后从中选择所需的权限和许可权限。",
+  "Get started with adaptive cards on": "开始使用自适应卡片",
+  "Adaptive Cards Templating SDK": "自适应卡片模板 SDK",
+  "card": "卡片",
+  "JSON Schema": "JSON 架构"
 }

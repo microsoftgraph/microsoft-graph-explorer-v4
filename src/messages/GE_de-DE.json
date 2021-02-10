@@ -339,5 +339,9 @@
   "permissions preview": "Diese Funktion befindet sich in der Vorschau und zeigt möglicherweise derzeit nicht alle Berechtigungen für einige Abfragen an.",
   "sign in to view a list of all permissions": "Auf dieser Registerkarte fehlen Berechtigungen für die Abfrage. Melden Sie sich an und verwenden Sie die Option \"Berechtigungen auswählen\" im Einstellungssymbol neben Ihrem Profil, um die vollständige Liste der Microsoft Graph-Berechtigungen anzuzeigen, und wählen Sie die gewünschte(n) Berechtigung(en) aus und stimmen Sie diese von dort aus zu.",
   "open permissions panel": "Öffnen Sie das Berechtigungsfenster",
-  "permissions list": " um die vollständige Liste der Microsoft Graph-Berechtigungen anzuzeigen, wählen Sie die gewünschte(n) Berechtigung(en) aus und stimmen Sie diese von dort aus zu."
+  "permissions list": " um die vollständige Liste der Microsoft Graph-Berechtigungen anzuzeigen. Wählen Sie die gewünschte(n) Berechtigung(en) aus und stimmen Sie diese(n) von dort aus zu.",
+  "Get started with adaptive cards on": "Erste Schritte mit angepassten Karten auf",
+  "Adaptive Cards Templating SDK": "Adaptive Cards Templating SDK",
+  "card": "Karte",
+  "JSON Schema": "JSON-Schema"
 }
