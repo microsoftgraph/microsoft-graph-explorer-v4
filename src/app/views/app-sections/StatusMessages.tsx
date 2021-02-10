@@ -60,7 +60,7 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
         {`${statusText} - `}{displayStatusMessage(message, urls)}
 
         {duration && <>
-          {`- ${duration}`}<FormattedMessage id='milliseconds' />
+          {` - ${duration}`}<FormattedMessage id='milliseconds' />
         </>}
 
         {status === 403 && <>.
