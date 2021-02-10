@@ -366,7 +366,7 @@ class App extends Component<IAppProps, IAppState> {
                 <div style={{ marginBottom: 8 }}>
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
-                {statusMessages(queryState, actions)}
+                {statusMessages(queryState, sampleQuery, actions)}
                 {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
                 {
                   // @ts-ignore
