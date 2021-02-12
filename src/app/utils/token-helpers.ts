@@ -56,6 +56,7 @@ export function substituteTokens(query: IQuery, profile: object) {
         if (!substitutedValue) {
           continue;
         }
+        // @ts-ignore
         query[queryField] = (query[queryField] as string).replace(`{${token.placeholder}}`, substitutedValue);
       }
     }
