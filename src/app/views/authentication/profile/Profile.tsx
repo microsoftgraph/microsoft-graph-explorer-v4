@@ -204,6 +204,7 @@ function mapStateToProps(state: any) {
 
 // @ts-ignore
 const styledProfile = styled(Profile, authenticationStyles);
+// @ts-ignore
 const IntlProfile = injectIntl(styledProfile);
 export default connect(
   mapStateToProps,
