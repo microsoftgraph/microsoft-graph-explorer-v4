@@ -15,4 +15,5 @@ export interface IAdaptiveCardProps {
     getAdaptiveCard: Function;
   };
   queryStatus?: any;
+  styles?: object;
 }
