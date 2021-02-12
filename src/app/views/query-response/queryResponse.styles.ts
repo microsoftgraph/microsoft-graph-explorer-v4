@@ -18,7 +18,7 @@ export const queryResponseStyles = (theme: ITheme) => {
       alignItems: 'center',
     },
     link: {
-      color: theme.palette.themeDarkAlt,
+      color: theme.palette.blueMid,
     },
     card: {
       minHeight: '500px',
