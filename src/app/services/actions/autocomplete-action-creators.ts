@@ -27,9 +27,9 @@ export function fetchAutocompletePending(): any {
 
 export function fetchAutoCompleteOptions(url: string, version: string): Function {
   return async (dispatch: Function, getState: Function) => {
-    const devxApi = getState().devxApi;
+    const devxApiUrl = getState().devxApi.baseUrl;
     dispatch(fetchAutocompletePending());
-    const autoOptions = await suggestions.getSuggestions(url, devxApi, version);
+    const autoOptions = await suggestions.getSuggestions(url, devxApiUrl, version);
     if (autoOptions) {
       return dispatch(fetchAutocompleteSuccess(autoOptions));
     }
