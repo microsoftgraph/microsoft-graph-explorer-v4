@@ -6,7 +6,7 @@ export const highContrast = {
     themeLight: '#4d4d00',
     themeTertiary: '#999900',
     themeSecondary: '#e0e000',
-    themeDarkAlt: '#ffff19',
+    themeDarkAlt: '#37a0f1',
     themeDark: '#ffff3d',
     themeDarker: '#ffff70',
     neutralLighterAlt: '#000000',
