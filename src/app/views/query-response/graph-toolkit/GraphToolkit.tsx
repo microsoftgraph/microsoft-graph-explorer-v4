@@ -27,7 +27,8 @@ class GraphToolkit extends Component<any> {
           <MessageBar messageBarType={MessageBarType.info}>
             <FormattedMessage id='Open this example in' />
             <a onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK)}
-              tabIndex={0} href={exampleUrl} target='_blank' rel='noopener noreferrer'>
+              tabIndex={0} href={exampleUrl} target='_blank' rel='noopener noreferrer'
+              style={queryResponseStyles(getTheme()).link}>
               <FormattedMessage id='graph toolkit playground' />
             </a>
             .

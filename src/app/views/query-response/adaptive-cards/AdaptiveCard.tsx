@@ -133,6 +133,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                 target='_blank'
                 rel='noopener noreferrer'
                 tabIndex={0}
+                style={queryResponseStyles(getTheme()).link}
               >
                 <FormattedMessage id='Adaptive Cards Templating SDK' />
               </a>
