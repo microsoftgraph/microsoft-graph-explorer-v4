@@ -41,7 +41,6 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 
   public componentWillUnmount() {
-    // Remove all references
     this.adaptiveCard = new AdaptiveCardsAPI.AdaptiveCard();
   }
 
