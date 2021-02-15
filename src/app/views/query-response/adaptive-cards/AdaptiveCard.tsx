@@ -1,6 +1,5 @@
-import { getTheme } from '@uifabric/styling/lib/styles/theme';
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { IconButton, Label, MessageBar, MessageBarType, Pivot, PivotItem } from 'office-ui-fabric-react';
+import { IconButton, Label, MessageBar, MessageBarType, Pivot, PivotItem, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -10,6 +9,7 @@ import { componentNames, telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
+import { classNames } from '../../classnames';
 import { Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
 import { queryResponseStyles } from './../queryResponse.styles';
@@ -58,13 +58,9 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 
   public render() {
-    const currentTheme = getTheme();
-    const labelStyles = queryResponseStyles(currentTheme).emptyStateLabel;
-    const link = queryResponseStyles(currentTheme).link;
-    const cardStyles: any = queryResponseStyles(currentTheme).card;
-    const copyIcon: any = queryResponseStyles(currentTheme).copyIcon;
     const { data, pending } = this.props.card;
     const { body, queryStatus } = this.props;
+    const classes = classNames(this.props);
 
     if (!body) {
       return <div />;
@@ -72,7 +68,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
 
     if (body && pending) {
       return (
-        <Label style={labelStyles}>
+        <Label className={classes.emptyStateLabel}>
           <FormattedMessage id='Fetching Adaptive Card' />
           ...
         </Label>
@@ -82,11 +78,11 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     if (body && !pending) {
       if (!data || (queryStatus && !queryStatus.ok)) {
         return (
-          <Label style={labelStyles}>
+          <Label className={classes.emptyStateLabel}>
             <FormattedMessage id='The Adaptive Card for this response is not available' />
             &nbsp;
             <a
-              style={link}
+              className={classes.link}
               href={'https://adaptivecards.io/designer/'}
               tabIndex={0}
               target='_blank'
@@ -108,7 +104,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             key='card'
             ariaLabel={translateMessage('card')}
             headerText={'Card'}
-            style={cardStyles}
+            className={classes.cardStyles}
           >
             <div
               ref={(n) => {
@@ -133,11 +129,12 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                 target='_blank'
                 rel='noopener noreferrer'
                 tabIndex={0}
+                className={classes.link}
               >
                 <FormattedMessage id='Adaptive Cards Templating SDK' />
               </a>
             </MessageBar>
-            <IconButton style={copyIcon}
+            <IconButton className={classes.copyIcon}
               iconProps={{
                 iconName: 'copy',
               }}
@@ -175,9 +172,9 @@ function mapDispatchToProps(dispatch: Dispatch): object {
     ),
   };
 }
-
 // @ts-ignore
-const trackedComponent = telemetry.trackReactComponent(AdaptiveCard, componentNames.ADAPTIVE_CARDS_TAB);
+const styledAdaptiveCard = styled(AdaptiveCard, queryResponseStyles as any);
+const trackedComponent = telemetry.trackReactComponent(styledAdaptiveCard, componentNames.ADAPTIVE_CARDS_TAB);
 // @ts-ignore
 const IntlAdaptiveCard = injectIntl(trackedComponent);
 export default connect(mapStateToProps, mapDispatchToProps)(IntlAdaptiveCard);
