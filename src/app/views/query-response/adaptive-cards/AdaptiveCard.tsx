@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { componentNames, telemetry } from '../../../../telemetry';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -99,9 +99,9 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
       this.adaptiveCard!.parse(data);
       const renderedCard = this.adaptiveCard!.render();
       return (
-        <Pivot className='pivot-response'>
+        <Pivot className='pivot-response' onLinkClick={onPivotItemClick}>
           <PivotItem
-            key='card'
+            itemKey='card'
             ariaLabel={translateMessage('card')}
             headerText={'Card'}
             className={classes.cardStyles}
@@ -119,7 +119,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             />
           </PivotItem>
           <PivotItem
-            key='templateJSON'
+            itemKey='templateJSON'
             ariaLabel={translateMessage('JSON Schema')}
             headerText={'JSON Schema'}
           >
@@ -150,6 +150,30 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
       );
     } catch (err) {
       return <div style={{ color: 'red' }}>{err.message}</div>;
+    }
+  }
+}
+
+function onPivotItemClick(item?: PivotItem) {
+  if (!item) { return; }
+  const key = item.props.itemKey;
+  if (key) {
+    trackTabClickEvent(key);
+  }
+}
+
+function trackTabClickEvent(tabKey: string) {
+  switch (tabKey) {
+    case 'templateJSON': {
+      telemetry.trackEvent(
+        eventTypes.TAB_CLICK_EVENT,
+        {
+          ComponentName: componentNames.JSON_SCHEMA_TAB
+        });
+      break;
+    }
+    default: {
+      break;
     }
   }
 }

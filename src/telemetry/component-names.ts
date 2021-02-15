@@ -25,12 +25,13 @@ export const ACCESS_TOKEN_TAB = 'Access token tab';
 export const REQUEST_BODY_TAB = 'Request body tab';
 export const CODE_SNIPPETS_TAB = 'Code snippets tab';
 export const ADAPTIVE_CARDS_TAB = 'Adaptive cards tab';
-export const REQUEST_HEADERS_TAB= 'Request headers tab';
+export const REQUEST_HEADERS_TAB = 'Request headers tab';
 export const EXPAND_RESPONSE_TAB = 'Expand response tab';
 export const RESPONSE_PREVIEW_TAB = 'Response preview tab';
 export const RESPONSE_HEADERS_TAB = 'Response headers tab';
 export const TOOLKIT_COMPONENT_TAB = 'Toolkit component tab';
 export const MODIFY_PERMISSIONS_TAB = 'Modify permissions tab';
+export const JSON_SCHEMA_TAB = 'JSON schema tab';
 
 // Dropdowns
 export const VERSION_CHANGE_DROPDOWN = 'Version change dropdown';
