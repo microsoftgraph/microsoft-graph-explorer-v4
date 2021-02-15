@@ -172,8 +172,8 @@ function mapDispatchToProps(dispatch: Dispatch): object {
     ),
   };
 }
-const styledAdaptiveCard = styled(AdaptiveCard, queryResponseStyles as any);
 // @ts-ignore
+const styledAdaptiveCard = styled(AdaptiveCard, queryResponseStyles as any);
 const trackedComponent = telemetry.trackReactComponent(styledAdaptiveCard, componentNames.ADAPTIVE_CARDS_TAB);
 // @ts-ignore
 const IntlAdaptiveCard = injectIntl(trackedComponent);
