@@ -15,7 +15,7 @@ import { genericCopy } from '../../common/copy';
 import { queryResponseStyles } from './../queryResponse.styles';
 
 class AdaptiveCard extends Component<IAdaptiveCardProps> {
-  private adaptiveCard: AdaptiveCardsAPI.AdaptiveCard;
+  private adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null;
 
   constructor(props: IAdaptiveCardProps) {
     super(props);
@@ -26,7 +26,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     const { body, sampleQuery, hostConfig } = this.props;
     this.props.actions!.getAdaptiveCard(body, sampleQuery);
     if (hostConfig) {
-      this.adaptiveCard.hostConfig = new AdaptiveCardsAPI.HostConfig(
+      this.adaptiveCard!.hostConfig = new AdaptiveCardsAPI.HostConfig(
         hostConfig
       );
     }
@@ -41,7 +41,8 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 
   public componentWillUnmount() {
-    this.adaptiveCard = new AdaptiveCardsAPI.AdaptiveCard();
+    // Remove all references
+    this.adaptiveCard = null;
   }
 
   public shouldComponentUpdate(nextProps: IAdaptiveCardProps) {
@@ -99,8 +100,8 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     }
 
     try {
-      this.adaptiveCard.parse(data);
-      const renderedCard = this.adaptiveCard.render();
+      this.adaptiveCard!.parse(data);
+      const renderedCard = this.adaptiveCard!.render();
       return (
         <Pivot className='pivot-response'>
           <PivotItem
