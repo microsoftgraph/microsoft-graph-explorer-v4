@@ -41,7 +41,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 
   public componentWillUnmount() {
-    // Remove all references
+    // setting the adaptive card reference to null so as to avoid memory leaks
     this.adaptiveCard = null;
   }
 
