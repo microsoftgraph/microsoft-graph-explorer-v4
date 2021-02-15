@@ -22,6 +22,6 @@ export const highContrast = {
     neutralDark: '#f4f4f4',
     black: '#f8f8f8',
     white: '#000000',
-    blueMid: '#09b1dd',
+    blueMid: '#266ea6',
   }
 };
