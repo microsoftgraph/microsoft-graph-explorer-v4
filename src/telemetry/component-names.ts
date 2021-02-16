@@ -13,6 +13,7 @@ export const CODE_SNIPPETS_COPY_BUTTON = 'Code snippets copy button';
 export const VIEW_ALL_PERMISSIONS_BUTTON = 'View all permissions button';
 export const EXPORT_HISTORY_ITEM_BUTTON = 'Export history item button';
 export const DELETE_HISTORY_ITEM_BUTTON = 'Delete history item button';
+export const JSON_SCHEMA_COPY_BUTTON = 'JSON schema copy button';
 
 // List items
 export const SAMPLE_QUERY_LIST_ITEM = 'Sample query list item';

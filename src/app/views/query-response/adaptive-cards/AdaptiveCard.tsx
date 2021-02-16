@@ -7,7 +7,9 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
+import { IQuery } from '../../../../types/query-runner';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { Monaco } from '../../common';
@@ -59,7 +61,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
 
   public render() {
     const { data, pending } = this.props.card;
-    const { body, queryStatus } = this.props;
+    const { body, queryStatus, sampleQuery } = this.props;
     const classes = classNames(this.props);
 
     if (!body) {
@@ -99,7 +101,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
       this.adaptiveCard!.parse(data);
       const renderedCard = this.adaptiveCard!.render();
       return (
-        <Pivot className='pivot-response' onLinkClick={onPivotItemClick}>
+        <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
           <PivotItem
             itemKey='card'
             ariaLabel={translateMessage('card')}
@@ -119,7 +121,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             />
           </PivotItem>
           <PivotItem
-            itemKey='templateJSON'
+            itemKey='JSON-schema'
             ariaLabel={translateMessage('JSON Schema')}
             headerText={'JSON Schema'}
           >
@@ -138,7 +140,10 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               iconProps={{
                 iconName: 'copy',
               }}
-              onClick={async () => genericCopy(JSON.stringify(data, null, 4))}
+              onClick={async () => {
+                genericCopy(JSON.stringify(data, null, 4));
+                trackJsonSchemaCopyEvent(sampleQuery)
+              }}
             />
             <Monaco
               language='json'
@@ -154,28 +159,24 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 }
 
-function onPivotItemClick(item?: PivotItem) {
+function onPivotItemClick(query: IQuery | undefined, item?: PivotItem) {
   if (!item) { return; }
   const key = item.props.itemKey;
   if (key) {
-    trackTabClickEvent(key);
+    telemetry.trackTabClickEvent(key, query);
   }
 }
 
-function trackTabClickEvent(tabKey: string) {
-  switch (tabKey) {
-    case 'templateJSON': {
-      telemetry.trackEvent(
-        eventTypes.TAB_CLICK_EVENT,
-        {
-          ComponentName: componentNames.JSON_SCHEMA_TAB
-        });
-      break;
-    }
-    default: {
-      break;
-    }
+function trackJsonSchemaCopyEvent(query: IQuery | undefined) {
+  if (!query) {
+    return;
   }
+  const sanitizedUrl = sanitizeQueryUrl(query.sampleUrl);
+  telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
+    {
+      ComponentName: componentNames.CODE_SNIPPETS_COPY_BUTTON,
+      QuerySignature: `${query.selectedVerb} ${sanitizedUrl}`
+    });
 }
 
 function mapStateToProps(state: any) {
