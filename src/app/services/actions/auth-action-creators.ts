@@ -3,7 +3,7 @@ import { Mode } from '../../../types/enums';
 import { logOut, logOutPopUp } from '../graph-client/msal-service';
 import { GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
 
-export function getAuthTokenSuccess(response: string): IAction {
+export function getAuthTokenSuccess(response: boolean): any {
   return {
     type: GET_AUTH_TOKEN_SUCCESS,
     response,
@@ -16,7 +16,7 @@ export function getConsentedScopesSuccess(response: string[]): IAction {
   };
 }
 
-export function signOutSuccess(response: string): IAction {
+export function signOutSuccess(response: boolean): any {
   return {
     type: LOGOUT_SUCCESS,
     response,
@@ -31,12 +31,12 @@ export function signOut() {
     } else {
       logOutPopUp();
     }
-    dispatch(signOutSuccess(''));
+    dispatch(signOutSuccess(false));
   };
 }
 
-export function signIn(token: string) {
-  return (dispatch: Function) => dispatch(getAuthTokenSuccess(token));
+export function signIn() {
+  return (dispatch: Function) => dispatch(getAuthTokenSuccess(true));
 }
 
 export function storeScopes(consentedScopes: string[]) {

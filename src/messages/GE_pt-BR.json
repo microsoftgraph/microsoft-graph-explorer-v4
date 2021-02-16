@@ -64,8 +64,8 @@
   "Enter new header": "Inserir novo cabeçalho",
   "Key": "Chave",
   "Value": "Valor",
-  "Login to try this request": "Entre para testar esta solicitação",
-  "modify permissions": "Modificar permissões",
+  "Login to try this request": "Entrar para testar esta solicitação",
+  "modify permissions": "Modificar permissões (Versão prévia)",
   "Save changes": "Salvar alterações",
   "To change permissions, you will need to log-in again.": "Para alterar permissões, entre novamente.",
   "all the items in my drive": "todos os itens da minha unidade",
@@ -334,7 +334,14 @@
   "Sidebar minimized": "Barra lateral minimizada",
   "Sidebar maximized": "Barra lateral maximizada",
   "Response area expanded": "Área de resposta expandida",
-  "Close expanded response area": "Fechar a área de resposta expandida"
-  
+  "Close expanded response area": "Fechar a área de resposta expandida",
+  "permissions not found in permissions tab": "As permissões para a consulta estão ausentes nesta guia. ",
+  "permissions preview": "Este recurso está na versão prévia e pode não mostrar todas as permissões para algumas consultas.",
+  "sign in to view a list of all permissions": "As permissões para a consulta estão ausentes nesta guia. Entre para usar a opção Selecionar permissões no ícone de configurações próximo ao seu perfil para ver a lista completa de permissões do Microsoft Graph e selecione as permissões desejadas e autorize-as a partir daí.",
+  "open permissions panel": "Abrir o painel de permissões",
+  "permissions list": " para ver a lista completa das permissões do Microsoft Graph e selecionar a(s) permissão(ões) desejada(s) e autorizar a partir daí.",
+  "Get started with adaptive cards on": "Comece com cartões adaptáveis em",
+  "Adaptive Cards Templating SDK": "Modelagem SDK de Cartões adaptáveis",
+  "card": "Cartão",
+  "JSON Schema": "Esquema JSON"
 }
-

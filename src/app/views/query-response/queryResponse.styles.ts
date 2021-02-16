@@ -18,7 +18,16 @@ export const queryResponseStyles = (theme: ITheme) => {
       alignItems: 'center',
     },
     link: {
-      color: theme.palette.blue,
+      color: theme.palette.blueMid,
     },
+    card: {
+      minHeight: '500px',
+      maxHeight: '800px',
+      overflowY: 'auto',
+    },
+    copyIcon: {
+      float: 'right',
+      zIndex: 1
+    }
   };
 };

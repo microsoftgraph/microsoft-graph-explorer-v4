@@ -32,6 +32,7 @@ import { loadGETheme } from './themes';
 import { readTheme } from './themes/theme-utils';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
+import { IDevxAPI } from './types/devx-api';
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
@@ -71,7 +72,7 @@ const appState: any = store({
 function refreshAccessToken() {
   msalApplication.acquireTokenSilent({ scopes: DEFAULT_USER_SCOPES.split(' ') }).then((authResponse: any) => {
     if (authResponse && authResponse.accessToken) {
-      appState.dispatch(getAuthTokenSuccess(authResponse.accessToken));
+      appState.dispatch(getAuthTokenSuccess(true));
       appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
     }
   }).catch(() => {
@@ -107,7 +108,18 @@ if (theme) {
 const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
 
 if (devxApiUrl) {
-  appState.dispatch(setDevxApiUrl(devxApiUrl));
+  const org = new URLSearchParams(location.search).get('org');
+  const branchName = new URLSearchParams(location.search).get('branchName');
+
+  const devxApi: IDevxAPI = {
+    baseUrl: devxApiUrl,
+    parameters: ''
+  };
+
+  if (org && branchName) {
+    devxApi.parameters = `org=${org}&branchName=${branchName}`;
+  }
+  appState.dispatch(setDevxApiUrl(devxApi));
 }
 
 readHistoryData().then((data: any) => {

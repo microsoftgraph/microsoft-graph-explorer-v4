@@ -65,7 +65,7 @@
   "Key": "Ключ",
   "Value": "Значение",
   "Login to try this request": "Войдите, чтобы сделать этот запрос",
-  "modify permissions": "Изменить разрешения",
+  "modify permissions": "Изменить разрешения (Предварительная версия)",
   "Save changes": "Сохранить изменения",
   "To change permissions, you will need to log-in again.": "Чтобы изменить разрешения, необходимо войти еще раз.",
   "all the items in my drive": "все элементы на моем диске",
@@ -334,7 +334,14 @@
   "Sidebar minimized": "Боковая панель свернута",
   "Sidebar maximized": "Боковая панель развернута",
   "Response area expanded": "Область отклика развернута",
-  "Close expanded response area": "Закрыть развернутую область отклика"
-  
+  "Close expanded response area": "Закрыть развернутую область отклика",
+  "permissions not found in permissions tab": "На этой вкладке отсутствуют разрешения для запроса. ",
+  "permissions preview": "Эта функция доступна только в предварительной версии. В настоящее время все разрешения на доступ могут не отображаться к некоторым запросам.",
+  "sign in to view a list of all permissions": "На этой вкладке отсутствуют разрешения для запроса. Войдите, чтобы использовать параметр \"Выберите разрешения\" на вкладке \"Параметры\" рядом с профилем, чтобы просмотреть полный список разрешений Microsoft Graph, а также выбрать нужные разрешения и дать свое согласие.",
+  "open permissions panel": "Открыть панель \"Разрешения\"",
+  "permissions list": " чтобы просмотреть полный список разрешений Microsoft Graph, выбрать нужные разрешения и дать свое согласие.",
+  "Get started with adaptive cards on": "Начните работу с адаптивными картами",
+  "Adaptive Cards Templating SDK": "Шаблоны адаптивных карт SDK",
+  "card": "Карта",
+  "JSON Schema": "Схема JSON"
 }
-

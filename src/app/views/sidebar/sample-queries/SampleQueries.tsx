@@ -356,6 +356,17 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       );
     }
 
+    let maxWidthOfHumanName = 180;
+    if (window.innerWidth > 1280) {
+      maxWidthOfHumanName = 200;
+    }
+
+    window.onresize = () => {
+      if (window.innerWidth > 1280) {
+        maxWidthOfHumanName = 200;
+      }
+    };
+
     const columns = [
       {
         key: 'authRequiredIcon',
@@ -376,14 +387,14 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         name: '',
         fieldName: 'humanName',
         minWidth: 100,
-        maxWidth: 180,
+        maxWidth: maxWidthOfHumanName,
       },
       {
         key: 'button',
         name: '',
         fieldName: 'button',
-        minWidth: 20,
-        maxWidth: 20,
+        minWidth: 15,
+        maxWidth: 25,
       },
     ];
 

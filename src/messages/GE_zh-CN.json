@@ -65,7 +65,7 @@
   "Key": "键",
   "Value": "值",
   "Login to try this request": "登录以尝试此请求",
-  "modify permissions": "修改权限",
+  "modify permissions": "修改权限（预览版）",
   "Save changes": "保存更改",
   "To change permissions, you will need to log-in again.": "若要更改权限，必须重新登录。",
   "all the items in my drive": "我的驱动器中的所有项",
@@ -334,7 +334,14 @@
   "Sidebar minimized": "已最小化边栏",
   "Sidebar maximized": "已最大化边栏",
   "Response area expanded": "响应区域已展开",
-  "Close expanded response area": "关闭展开的响应区域"
-  
+  "Close expanded response area": "关闭展开的响应区域",
+  "permissions not found in permissions tab": "此选项卡上缺少针对该查询的权限。",
+  "permissions preview": "此功能处于预览状态，当前可能不会显示某些查询的所有权限。",
+  "sign in to view a list of all permissions": "此选项卡上缺少针对该查询的权限。登录以使用个人资料旁边的设置图标中的\"选择权限\"选项，查看 Microsoft Graph 权限的完整列表，然后从中选择想要及同意的权限。",
+  "open permissions panel": "打开权限面板",
+  "permissions list": " 查看 Microsoft Graph 权限的完整列表，然后从中选择所需的权限和许可权限。",
+  "Get started with adaptive cards on": "开始使用自适应卡片",
+  "Adaptive Cards Templating SDK": "自适应卡片模板 SDK",
+  "card": "卡片",
+  "JSON Schema": "JSON 架构"
 }
-

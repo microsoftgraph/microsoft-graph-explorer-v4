@@ -65,7 +65,7 @@
   "Key": "Clé",
   "Value": "Valeur",
   "Login to try this request": "Connectez-vous pour tester cette requête",
-  "modify permissions": "Modifier les autorisations",
+  "modify permissions": "Modifier les autorisations (préversion)",
   "Save changes": "Enregistrer les modifications",
   "To change permissions, you will need to log-in again.": "Pour modifier les autorisations, vous devez vous reconnecter.",
   "all the items in my drive": "tous les éléments de mon disque",
@@ -334,7 +334,14 @@
   "Sidebar minimized": "Encadré minimisé",
   "Sidebar maximized": "Encadré maximisé",
   "Response area expanded": "Extension de la zone d'intervention",
-  "Close expanded response area": "Fermer la zone de réponse élargie"
-  
+  "Close expanded response area": "Fermer la zone de réponse élargie",
+  "permissions not found in permissions tab": "Les autorisations pour la requête sont manquantes sur cet onglet. ",
+  "permissions preview": "Cette fonctionnalité est en version préliminaire et n’affiche peut-être pas toutes les autorisations pour certaines requêtes pour le moment.",
+  "sign in to view a list of all permissions": "Les autorisations pour la requête sont manquantes sur cet onglet. Connectez-vous pour utiliser l’option Sélectionner des autorisations dans l’icône Paramètres en regard de votre profil pour consulter la liste complète des autorisations Microsoft Graph, puis sélectionnez les autorisations de votre choix et donnez votre consentement.",
+  "open permissions panel": "Ouvrez le panneau d’autorisations",
+  "permissions list": " pour consulter la liste complète des autorisations Microsoft Graph, sélectionnez les autorisations de votre choix et donnez votre consentement.",
+  "Get started with adaptive cards on": "Prise en main les cartes adaptatives sur",
+  "Adaptive Cards Templating SDK": "SDK création de modèles de cartes adaptatives",
+  "card": "Carte",
+  "JSON Schema": "Schéma JSON"
 }
-
