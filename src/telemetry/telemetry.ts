@@ -47,18 +47,20 @@ class Telemetry implements ITelemetry {
     return withAITracking(this.reactPlugin, ComponentToTrack, componentName);
   }
 
-  public trackTabClickEvent(tabKey: string, sampleQuery: IQuery) {
-    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+  public trackTabClickEvent(tabKey: string, sampleQuery: IQuery | null = null) {
     let componentName = tabKey.replace('-', ' ');
     componentName = `${componentName.charAt(0).toUpperCase()}${componentName.slice(1)} tab`;
-    telemetry.trackEvent(TAB_CLICK_EVENT,
-    {
-      ComponentName: componentName,
-      QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
-    });
+    const properties: { [key: string]: any } = {
+      ComponentName: componentName
+    }
+    if (sampleQuery) {
+      const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+      properties.QuerySignature = `${sampleQuery.selectedVerb} ${sanitizedUrl}`;
+    }
+    telemetry.trackEvent(TAB_CLICK_EVENT, properties);
   }
 
-  public trackLinkClickEvent(url: string, componentName: string)  {
+  public trackLinkClickEvent(url: string, componentName: string) {
     telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: componentName });
     validateExternalLink(url, componentName);
   }
