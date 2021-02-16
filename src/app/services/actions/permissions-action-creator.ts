@@ -88,7 +88,7 @@ export function consentToScopes(scopes: string[]): Function {
   return async (dispatch: Function) => {
     const authResponse = await acquireNewAccessToken(scopes);
     if (authResponse && authResponse.accessToken) {
-      dispatch(getAuthTokenSuccess(authResponse.accessToken));
+      dispatch(getAuthTokenSuccess(true));
       dispatch(getConsentedScopesSuccess(authResponse.scopes));
     }
   };
