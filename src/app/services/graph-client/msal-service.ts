@@ -8,12 +8,25 @@ const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
 const loginType = getLoginType();
 msalApplication.handleRedirectCallback(authCallback);
 
+const loginRequest: AuthenticationParameters = {
+  scopes: defaultUserScopes,
+  authority: getAuthority(),
+  prompt: 'select_account',
+  redirectUri: getCurrentUri().toLowerCase(),
+  extraQueryParameters: { mkt: geLocale }
+};
+
 export function getSessionId() {
   const account = msalApplication.getAccount();
 
   if (account) {
     return account.idTokenClaims.sid;
   }
+}
+
+export async function getToken() {
+  const authResponse = await msalApplication.acquireTokenSilent(loginRequest);
+  return authResponse;
 }
 
 // get current uri for redirect uri purpose
@@ -24,26 +37,18 @@ function getCurrentUri(): string {
 }
 
 function getAuthority(): string {
-    // support for tenanted endpoint
-    const urlParams = new URLSearchParams(location.search);
-    let tenant = urlParams.get('tenant');
+  // support for tenanted endpoint
+  const urlParams = new URLSearchParams(location.search);
+  let tenant = urlParams.get('tenant');
 
-    if (tenant === null) {
-      tenant = 'common';
+  if (tenant === null) {
+    tenant = 'common';
   }
 
   return `https://login.microsoftonline.com/${tenant}/`;
 }
 
 export async function logIn(sessionId = ''): Promise<any> {
-
-  const loginRequest: AuthenticationParameters = {
-    scopes: defaultUserScopes,
-    authority: getAuthority(),
-    prompt: 'select_account',
-    redirectUri: getCurrentUri().toLowerCase(),
-    extraQueryParameters: { mkt: geLocale }
-  };
 
   if (sessionId !== '') {
     loginRequest.sid = sessionId;
@@ -61,11 +66,10 @@ export async function logIn(sessionId = ''): Promise<any> {
   if (loginType === LoginType.Popup) {
     try {
       await msalApplication.loginPopup(loginRequest);
-      const authResponse = await msalApplication.acquireTokenSilent(loginRequest);
-      return authResponse;
+      return await getToken();
     } catch (error) {
       if (requiresInteraction(error)) {
-        return acquireTokenWIthInteraction(loginRequest);
+        return acquireTokenWIthInteraction();
       } else {
         throw error;
       }
@@ -75,7 +79,7 @@ export async function logIn(sessionId = ''): Promise<any> {
   }
 }
 
-async function acquireTokenWIthInteraction(loginRequest: AuthenticationParameters) {
+async function acquireTokenWIthInteraction() {
   try {
     const authResponse = await msalApplication.acquireTokenPopup(loginRequest);
     return authResponse;
@@ -116,10 +120,7 @@ export function logOutPopUp() {
  *  @returns {Promise.<any>}
  */
 export async function acquireNewAccessToken(scopes: string[] = []): Promise<any> {
-  const loginRequest: AuthenticationParameters = {
-    scopes,
-    authority: getAuthority(),
-  };
+  loginRequest.scopes = scopes;
   if (loginType === LoginType.Popup) {
     try {
       const authResponse = await msalApplication.acquireTokenPopup(loginRequest);

@@ -72,7 +72,7 @@ const appState: any = store({
 function refreshAccessToken() {
   msalApplication.acquireTokenSilent({ scopes: DEFAULT_USER_SCOPES.split(' ') }).then((authResponse: any) => {
     if (authResponse && authResponse.accessToken) {
-      appState.dispatch(getAuthTokenSuccess(authResponse.accessToken));
+      appState.dispatch(getAuthTokenSuccess(true));
       appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
     }
   }).catch(() => {

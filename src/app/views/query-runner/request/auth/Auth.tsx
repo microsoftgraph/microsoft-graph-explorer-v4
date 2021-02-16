@@ -1,24 +1,37 @@
 import { IconButton, IIconProps, Label, styled } from 'office-ui-fabric-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
+
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
+import { getToken } from '../../../../services/graph-client/msal-service';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { genericCopy } from '../../../common/copy';
 import { convertVhToPx } from '../../../common/dimensions-adjustment';
 import { authStyles } from './Auth.styles';
 
-
 export function Auth(props: any) {
-  const { authToken: accessToken, dimensions: { request: { height } } } = useSelector((state: any) => state);
+  const { authToken, dimensions: { request: { height } } } = useSelector((state: any) => state);
   const requestHeight = convertVhToPx(height, 60);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false)
 
   const handleCopy = async () => {
-    await genericCopy(accessToken);
+    await genericCopy(accessToken!);
     trackCopyEvent();
   };
+
+  useEffect(() => {
+    setLoading(true);
+    getToken().then((response) => {
+      setAccessToken(response.accessToken);
+      setLoading(false);
+    }).catch(() => {
+      setLoading(false);
+    });
+  }, []);
 
   const classes = classNames(props);
   const copyIcon: IIconProps = {
@@ -29,8 +42,14 @@ export function Auth(props: any) {
     iconName: 'code'
   };
 
+  if (!authToken) {
+    return <Label className={classes.emptyStateLabel}>
+      <FormattedMessage id='Sign In to see your access token.' />
+    </Label>;
+  }
+
   return (<div className={classes.auth} style={{ height: requestHeight }}>
-    {accessToken ?
+    {!loading ?
       <div>
         <div className={classes.accessTokenContainer}>
           <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
@@ -45,7 +64,7 @@ export function Auth(props: any) {
       </div>
       :
       <Label className={classes.emptyStateLabel}>
-        <FormattedMessage id='Sign In to see your access token.' />
+        <FormattedMessage id='Getting your access token' /> ...
       </Label>
     }
   </div>);
