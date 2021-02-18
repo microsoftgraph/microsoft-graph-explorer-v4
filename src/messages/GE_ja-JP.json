@@ -343,5 +343,8 @@
   "Get started with adaptive cards on": "アダプティブ カードを使ってみる",
   "Adaptive Cards Templating SDK": "アダプティブ カード テンプレート SDK",
   "card": "カード",
-  "JSON Schema": "JSON スキーマ"
+  "JSON Schema": "JSON スキーマ",
+  "Report an Issue": "問題の報告",
+  "Maximize sidebar": "サイド バーを最大化する",
+  "Getting your access token": "アクセス トークンを取得する"
 }

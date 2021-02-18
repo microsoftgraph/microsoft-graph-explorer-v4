@@ -343,5 +343,8 @@
   "Get started with adaptive cards on": "Начните работу с адаптивными картами",
   "Adaptive Cards Templating SDK": "Шаблоны адаптивных карт SDK",
   "card": "Карта",
-  "JSON Schema": "Схема JSON"
+  "JSON Schema": "Схема JSON",
+  "Report an Issue": "Сообщить о проблеме",
+  "Maximize sidebar": "Развернуть боковую панель",
+  "Getting your access token": "Получение маркера доступа"
 }
