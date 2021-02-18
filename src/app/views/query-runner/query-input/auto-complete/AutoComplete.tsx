@@ -402,6 +402,14 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     return max;
   }
 
+  onFocusOut = (event: any) => {
+    const { currentTarget, relatedTarget } = event;
+    if (!currentTarget.contains(relatedTarget as Node) && this.state.showSuggestions) {
+      this.setState({
+        showSuggestions: false
+      })
+    }
+  }
 
   public render() {
     const {
@@ -418,7 +426,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }: any = queryInputStyles(currentTheme).autoComplete;
 
     return (
-      <>
+      <div tabIndex={0} onBlur={this.onFocusOut}>
         <TextField
           className={autoInput}
           type='text'
@@ -437,7 +445,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
             filteredSuggestions={filteredSuggestions}
             activeSuggestion={activeSuggestion}
             onClick={(e: any) => this.onClick(e)} />}
-      </>
+      </div>
     );
   }
 }

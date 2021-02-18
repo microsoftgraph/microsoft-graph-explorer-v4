@@ -30,6 +30,7 @@ const SuggestionsList = (props: any) => {
       {filteredSuggestions.map((suggestion: {} | null | undefined, index: number) => {
         return (
           <li
+            tabIndex={index}
             className={(index === activeSuggestion) ? classes.suggestionActive : classes.suggestionOption}
             key={index}
             ref={refs[index]}
