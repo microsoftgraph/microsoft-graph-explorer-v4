@@ -174,7 +174,7 @@ function trackJsonSchemaCopyEvent(query: IQuery | undefined) {
   const sanitizedUrl = sanitizeQueryUrl(query.sampleUrl);
   telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
     {
-      ComponentName: componentNames.CODE_SNIPPETS_COPY_BUTTON,
+      ComponentName: componentNames.JSON_SCHEMA_COPY_BUTTON,
       QuerySignature: `${query.selectedVerb} ${sanitizedUrl}`
     });
 }
