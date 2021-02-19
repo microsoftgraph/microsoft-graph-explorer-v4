@@ -343,5 +343,8 @@
   "Get started with adaptive cards on": "Prise en main les cartes adaptatives sur",
   "Adaptive Cards Templating SDK": "SDK création de modèles de cartes adaptatives",
   "card": "Carte",
-  "JSON Schema": "Schéma JSON"
+  "JSON Schema": "Schéma JSON",
+  "Report an Issue": "Signaler un problème",
+  "Maximize sidebar": "Agrandir la barre latérale",
+  "Getting your access token": "Obtenir le jeton d'accès"
 }
