@@ -343,5 +343,9 @@
   "Get started with adaptive cards on": "Erste Schritte mit angepassten Karten auf",
   "Adaptive Cards Templating SDK": "Adaptive Cards Templating SDK",
   "card": "Karte",
-  "JSON Schema": "JSON-Schema"
+  "JSON Schema": "JSON-Schema",
+  "Report an Issue": "Melden eines Problems",
+  "Maximize sidebar": "Maximieren der Randleiste",
+  "Getting your access token": "Zugriffstoken wird abgerufen"
+
 }
