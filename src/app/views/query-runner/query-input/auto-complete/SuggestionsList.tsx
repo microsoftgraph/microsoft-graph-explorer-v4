@@ -26,11 +26,10 @@ const SuggestionsList = (props: any) => {
   }, [activeSuggestion]);
 
   return (
-    <ul className={classes.suggestions} aria-haspopup='true'>
+    <ul className={classes.suggestions} tabIndex={-1}>
       {filteredSuggestions.map((suggestion: {} | null | undefined, index: number) => {
         return (
           <li
-            tabIndex={index}
             className={(index === activeSuggestion) ? classes.suggestionActive : classes.suggestionOption}
             key={index}
             ref={refs[index]}
