@@ -21,7 +21,7 @@ const Response = () => {
 
   const setQuery = () => {
     const query: IQuery = { ...sampleQuery };
-    query.sampleUrl = nextLink;
+    query.sampleUrl = nextLink!;
     dispatch(setSampleQuery(query));
     dispatch(runQuery(query));
   }
@@ -51,7 +51,7 @@ const Response = () => {
 
 function getNextLinkFromBody(body: any) {
   if (body && body['@odata.nextLink']) {
-    return body['@odata.nextLink'];
+    return decodeURIComponent(body['@odata.nextLink']);
   }
   return null;
 }
