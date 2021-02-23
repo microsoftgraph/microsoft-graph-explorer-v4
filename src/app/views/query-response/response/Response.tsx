@@ -1,15 +1,13 @@
 
+import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
-import { ContentType } from '../../../../types/enums';
-import { isImageResponse } from '../../../services/actions/query-action-creator-util';
-import { Image, Monaco } from '../../common';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
-import { formatXml } from '../../common/monaco/util/format-xml';
+import ResponseDisplay from './ResponseDisplay';
 
 const Response = () => {
-  const language = 'json';
 
   const { dimensions: { response }, graphResponse, responseAreaExpanded } = useSelector((state: any) => state);
   const { body, headers } = graphResponse;
@@ -18,14 +16,25 @@ const Response = () => {
 
   if (headers) {
     const contentType = getContentType(headers);
-    return (<div style={{ display: 'block' }}>
-      {displayComponent({
-        contentType,
-        body,
-        height,
-        language
-      })}
-    </div>);
+    return (
+      <div style={{ display: 'block' }}>
+        <MessageBar messageBarType={MessageBarType.info}>
+          <FormattedMessage id='This response contains a next link property.' />
+          <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
+            target='_blank'
+            rel='noopener noreferrer'
+            tabIndex={0}
+          >
+            <FormattedMessage id='Click here to go to the next page' />
+          </a>
+        </MessageBar>
+        <ResponseDisplay
+          contentType={contentType}
+          body={body}
+          height={height}
+        />
+      </div>
+    );
   }
   return <div />;
 };
@@ -44,28 +53,6 @@ function getContentType(headers: any) {
     }
   }
   return contentType;
-}
-
-function displayComponent(properties: any) {
-  const { contentType, body, height, language } = properties;
-
-  switch (contentType) {
-    case ContentType.XML:
-      return <Monaco body={formatXml(body)} language='xml' readOnly={true} height={height} />;
-
-    case ContentType.HTML:
-      return <Monaco body={body} language='html' readOnly={true} height={height} />;
-
-    default:
-      if (isImageResponse(contentType)) {
-        return <Image
-          styles={{ padding: '10px' }}
-          body={body}
-          alt='profile image'
-        />;
-      }
-      return <Monaco body={body} readOnly={true} language={language} height={height} />;
-  }
 }
 
 export default Response;
