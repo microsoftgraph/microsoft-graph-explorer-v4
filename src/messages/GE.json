@@ -347,6 +347,6 @@
   "Report an Issue": "Report an Issue",
   "Maximize sidebar": "Maximize sidebar",
   "Getting your access token": "Getting your access token",
-  "This response contains a next link property.": "This response contains a next link property.",
+  "This response contains an @odata.nextLink property.": "This response contains an @odata.nextLink property.",
   "Click here to go to the next page": "Click here to go to the next page"
 }

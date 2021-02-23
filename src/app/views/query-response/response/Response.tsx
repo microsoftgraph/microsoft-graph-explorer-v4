@@ -1,33 +1,43 @@
 
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import { Link, MessageBar, MessageBarType } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { IQuery } from '../../../../types/query-runner';
+import { runQuery } from '../../../services/actions/query-action-creators';
+import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
 import ResponseDisplay from './ResponseDisplay';
 
 const Response = () => {
+  const dispatch = useDispatch();
 
-  const { dimensions: { response }, graphResponse, responseAreaExpanded } = useSelector((state: any) => state);
+  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } = useSelector((state: any) => state);
   const { body, headers } = graphResponse;
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
+  const nextLink = getNextLinkFromBody(body);
+
+  const setQuery = () => {
+    const query: IQuery = { ...sampleQuery };
+    query.sampleUrl = nextLink;
+    dispatch(setSampleQuery(query));
+    dispatch(runQuery(query));
+  }
 
   if (headers) {
     const contentType = getContentType(headers);
     return (
       <div style={{ display: 'block' }}>
-        <MessageBar messageBarType={MessageBarType.info}>
-          <FormattedMessage id='This response contains a next link property.' />
-          <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
-            target='_blank'
-            rel='noopener noreferrer'
-            tabIndex={0}
-          >
-            <FormattedMessage id='Click here to go to the next page' />
-          </a>
-        </MessageBar>
+        {nextLink &&
+          <MessageBar messageBarType={MessageBarType.info}>
+            <FormattedMessage id='This response contains an @odata.nextLink property.' />
+            <Link onClick={() => setQuery()}>
+              &nbsp;<FormattedMessage id='Click here to go to the next page' />
+            </Link>
+          </MessageBar>
+        }
         <ResponseDisplay
           contentType={contentType}
           body={body}
@@ -38,6 +48,13 @@ const Response = () => {
   }
   return <div />;
 };
+
+function getNextLinkFromBody(body: any) {
+  if (body && body['@odata.nextLink']) {
+    return body['@odata.nextLink'];
+  }
+  return null;
+}
 
 function getContentType(headers: any) {
   let contentType = null;

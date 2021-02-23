@@ -4,7 +4,7 @@ import { isImageResponse } from '../../../services/actions/query-action-creator-
 import { Image, Monaco } from '../../common';
 import { formatXml } from '../../common/monaco/util/format-xml';
 
-const displayComponent = (properties: any) => {
+const ResponseDisplay = (properties: any) => {
   const { contentType, body, height } = properties;
 
   switch (contentType) {
@@ -25,4 +25,4 @@ const displayComponent = (properties: any) => {
   }
 }
 
-export default displayComponent;
+export default ResponseDisplay;
