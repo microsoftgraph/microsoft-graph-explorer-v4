@@ -426,7 +426,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }: any = queryInputStyles(currentTheme).autoComplete;
 
     return (
-      <div tabIndex={0} onBlur={this.onFocusOut}>
+      <div onBlur={this.onFocusOut}>
         <TextField
           className={autoInput}
           type='text'
