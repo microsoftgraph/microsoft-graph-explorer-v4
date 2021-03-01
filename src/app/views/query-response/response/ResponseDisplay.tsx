@@ -9,7 +9,7 @@ const ResponseDisplay = (properties: any) => {
 
   switch (contentType) {
     case ContentType.XML:
-      return <Monaco body={formatXml(body)} language={ContentType.XML} readOnly={true} height={height} />;
+      return <Monaco body={formatXml(body)} language={ContentType.HTML} readOnly={true} height={height} />;
 
     case ContentType.HTML:
       return <Monaco body={body} language={ContentType.HTML} readOnly={true} height={height} />;
