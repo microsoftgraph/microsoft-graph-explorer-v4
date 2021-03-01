@@ -8,6 +8,8 @@
     "@microsoft/applicationinsights-react-js": "2.3.1",
     "@microsoft/applicationinsights-web": "2.3.1",
     "@microsoft/microsoft-graph-client": "2.1.0",
+    "@ms-ofb/officebrowserfeedback": "^1.6.1",
+    "@ms-ofb/officebrowserfeedbacknpm": "^1.6.1",
     "@svgr/webpack": "4.1.0",
     "@uifabric/react-cards": "0.109.101",
     "@uifabric/styling": "7.13.1",
