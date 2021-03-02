@@ -198,7 +198,7 @@
   "update a Planner task": "Planner-Aufgabe aktualisieren",
   "update an open extension": "Offene Erweiterung aktualisieren",
   "user by email": "Benutzer nach E-Mail",
-  "explorer-error": "Beim Senden dieser Anforderung an die Graph-API ist ein Fehler aufgetreten.  Um Unterstützung zu erhalten, verbinden Sie sich mit uns auf StackOverflow, und verwenden Sie dazu das Tag [microsoftgraph].",
+  "explorer-error": "Beim Senden dieser Anforderung an die Graph-API ist ein Fehler aufgetreten. Um Unterstützung zu erhalten, verbinden Sie sich mit uns auf StackOverflow, und verwenden Sie dazu das Tag [microsoftgraph].",
   "search my OneDrive": "mein OneDrive durchsuchen",
   "User Activities": "Benutzeraktivitäten",
   "get recent user activities": "Aktuelle Benutzeraktivitäten abrufen",
@@ -346,5 +346,7 @@
   "JSON Schema": "JSON-Schema",
   "Report an Issue": "Melden eines Problems",
   "Maximize sidebar": "Maximieren der Randleiste",
-  "Getting your access token": "Zugriffstoken wird abgerufen"
+  "Getting your access token": "Ihr Zugriffstoken wird abgerufen",
+  "This response contains an @odata.nextLink property.": "Dies Antwort beinhaltet eine Eigenschaft @odata.nextLink.",
+  "Click here to go to the next page": "Klicken Sie hier, um zur nächsten Seite zu wechseln."
 }
