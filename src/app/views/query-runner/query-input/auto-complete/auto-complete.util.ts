@@ -28,3 +28,38 @@ export function getParametersWithVerb(properties: IAutoCompleteProps) {
 export function getLastCharacterOf(content: string) {
   return content.slice(-1);
 }
+
+export function getLastSymbolInUrl(url: string) {
+  const availableSymbols = [
+    {
+      key: '/',
+      value: 0
+    },
+    {
+      key: ',',
+      value: 0
+    },
+    {
+      key: '$',
+      value: 0
+    },
+    {
+      key: '=',
+      value: 0
+    },
+    {
+      key: '&',
+      value: 0
+    },
+    {
+      key: '?',
+      value: 0
+    }
+  ];
+
+  availableSymbols.forEach(element => {
+    element.value = url.lastIndexOf(element.key);
+  });
+  const max = availableSymbols.reduce((prev, current) => (prev.value > current.value) ? prev : current);
+  return max;
+}

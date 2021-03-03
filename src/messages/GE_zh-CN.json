@@ -198,7 +198,7 @@
   "update a Planner task": "更新规划器任务",
   "update an open extension": "更新开放扩展",
   "user by email": "按电子邮件地址排序的用户",
-  "explorer-error": "我们在向图形 API 发送此请求时遇到了问题。 若要获得帮助，请在 StackOverflow 上使用标签 [microsoftgraph] 与我们联系。",
+  "explorer-error": "我们在向图形 API 发送此请求时遇到了问题。若要获得帮助，请在 StackOverflow 上使用标签 [microsoftgraph] 与我们联系。",
   "search my OneDrive": "搜索我的 OneDrive",
   "User Activities": "用户活动",
   "get recent user activities": "获取最近用户活动",
@@ -346,5 +346,7 @@
   "JSON Schema": "JSON 架构",
   "Report an Issue": "报告问题",
   "Maximize sidebar": "最大化边栏",
-  "Getting your access token": "正在获取访问令牌"
+  "Getting your access token": "正在获取访问令牌",
+  "This response contains an @odata.nextLink property.": "此响应包含 @odata.nextLink 属性。",
+  "Click here to go to the next page": "单击此处转到下一页"
 }
