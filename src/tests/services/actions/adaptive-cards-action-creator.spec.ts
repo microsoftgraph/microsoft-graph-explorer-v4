@@ -18,7 +18,7 @@ describe('Graph Explorer Adaptive Cards Action Creators\'', () => {
 
   it('creates ADAPTIVE_FETCH_SUCCESS when getAdaptiveCardSuccess is called', () => {
 
-    const result = 'sample response';
+    const result = { sample: 'response' };
     const expectedAction = {
       type: FETCH_ADAPTIVE_CARD_SUCCESS,
       response: result
