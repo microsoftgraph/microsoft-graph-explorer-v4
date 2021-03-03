@@ -4,7 +4,10 @@ export interface IAdaptiveCardProps {
   body: any;
   card: {
     pending: boolean;
-    data?: any;
+    data?: {
+      card: object;
+      template: object;
+    }
   };
   intl: {
     message: object;

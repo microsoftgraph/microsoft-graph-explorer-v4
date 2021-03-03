@@ -95,66 +95,75 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
           </Label>
         );
       }
-    }
 
-    try {
-      this.adaptiveCard!.parse(data);
-      const renderedCard = this.adaptiveCard!.render();
-      return (
-        <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
-          <PivotItem
-            itemKey='card'
-            ariaLabel={translateMessage('card')}
-            headerText={'Card'}
-            className={classes.cardStyles}
-          >
-            <div
-              ref={(n) => {
-                if (n && !n.firstChild) {
-                  n.appendChild(renderedCard);
-                } else {
-                  if (n && n.firstChild) {
-                    n.replaceChild(renderedCard, n.firstChild);
+      try {
+        this.adaptiveCard!.parse(data.card);
+        const renderedCard = this.adaptiveCard!.render();
+        return (
+          <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
+            <PivotItem
+              itemKey='card'
+              ariaLabel={translateMessage('card')}
+              headerText={translateMessage('card')}
+              className={classes.card}
+            >
+              <div
+                ref={(n) => {
+                  if (n && !n.firstChild) {
+                    n.appendChild(renderedCard);
+                  } else {
+                    if (n && n.firstChild) {
+                      n.replaceChild(renderedCard, n.firstChild);
+                    }
                   }
-                }
-              }}
-            />
-          </PivotItem>
-          <PivotItem
-            itemKey='JSON-schema'
-            ariaLabel={translateMessage('JSON Schema')}
-            headerText={'JSON Schema'}
-          >
-            <MessageBar messageBarType={MessageBarType.info}>
-              <FormattedMessage id='Get started with adaptive cards on' />
-              <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
-                target='_blank'
-                rel='noopener noreferrer'
-                tabIndex={0}
-                className={classes.link}
-              >
-                <FormattedMessage id='Adaptive Cards Templating SDK' />
-              </a>
-            </MessageBar>
-            <IconButton className={classes.copyIcon}
-              iconProps={{
-                iconName: 'copy',
-              }}
-              onClick={async () => {
-                genericCopy(JSON.stringify(data, null, 4));
-                trackJsonSchemaCopyEvent(sampleQuery)
-              }}
-            />
-            <Monaco
-              language='json'
-              body={data}
-              height={'800px'}
-            />
-          </PivotItem>
-        </Pivot>
-      );
-    } catch (err) {
-      return <div style={{ color: 'red' }}>{err.message}</div>;
+                }}
+              />
+            </PivotItem>
+            <PivotItem
+              itemKey='JSON-schema'
+              ariaLabel={translateMessage('JSON Schema')}
+              headerText={translateMessage('JSON Schema')}
+            >
+              <MessageBar messageBarType={MessageBarType.info}>
+                <FormattedMessage id='Get started with adaptive cards on' />
+                <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  tabIndex={0}
+                  className={classes.link}
+                >
+                  <FormattedMessage id='Adaptive Cards Templating SDK' />
+                </a>
+                <FormattedMessage id='and experiment on' />
+                <a href={'https://adaptivecards.io/designer/'}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  tabIndex={0}
+                  className={classes.link}
+                >
+                  <FormattedMessage id='Adaptive Cards designer' />
+                </a>
+              </MessageBar>
+              <IconButton className={classes.copyIcon}
+                iconProps={{
+                  iconName: 'copy',
+                }}
+                onClick={async () => {
+                  genericCopy(JSON.stringify(data.template, null, 4));
+                  trackJsonSchemaCopyEvent(sampleQuery)
+                }}
+              />
+              <Monaco
+                language='json'
+                body={data.template}
+                height={'800px'}
+              />
+            </PivotItem>
+          </Pivot>
+        );
+      } catch (err) {
+        return <div style={{ color: 'red' }}>{err.message}</div>;
+      }
     }
   }
 }
