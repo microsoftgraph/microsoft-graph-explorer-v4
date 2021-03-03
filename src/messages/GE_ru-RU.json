@@ -198,7 +198,7 @@
   "update a Planner task": "Обновление задачи в Планировщике",
   "update an open extension": "Обновление открытого расширения",
   "user by email": "Пользователи по электронной почте",
-  "explorer-error": "Возникла проблема с отправкой этого запроса в API Graph.  Для получения помощи свяжитесь с нами через сайт StackOverflow, добавив к своему сообщению тег [microsoftgraph].",
+  "explorer-error": "Возникла проблема с отправкой этого запроса в API Graph. Для получения помощи свяжитесь с нами через сайт StackOverflow, добавив к своему сообщению тег [microsoftgraph].",
   "search my OneDrive": "Поиск в OneDrive",
   "User Activities": "Действия пользователей",
   "get recent user activities": "Получение сведений о последних действиях пользователей",
@@ -346,5 +346,7 @@
   "JSON Schema": "Схема JSON",
   "Report an Issue": "Сообщить о проблеме",
   "Maximize sidebar": "Развернуть боковую панель",
-  "Getting your access token": "Получение маркера доступа"
+  "Getting your access token": "Получение маркера доступа",
+  "This response contains an @odata.nextLink property.": "Этот ответ содержит свойство @odata.nextLink.",
+  "Click here to go to the next page": "Щелкните здесь, чтобы перейти к следующей странице"
 }
