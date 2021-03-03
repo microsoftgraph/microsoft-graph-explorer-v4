@@ -21,6 +21,7 @@ export const queryResponseStyles = (theme: ITheme) => {
       color: `${theme.palette.blueMid} !important`,
     },
     card: {
+      height: '450px',
       overflowY: 'auto'
     },
     copyIcon: {
