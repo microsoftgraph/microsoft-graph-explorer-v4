@@ -85,7 +85,6 @@ function createCardFromTemplate(templatePayload: any, payload: string) {
   AdaptiveCardsTemplateAPI.GlobalSettings.getUndefinedFieldValueSubstitutionString = (
     path: string
   ) => ' ';
-  const card = template.expand(context);
-  return card;
+  return template.expand(context);
 }
 
