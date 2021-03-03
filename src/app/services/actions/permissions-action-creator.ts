@@ -63,7 +63,8 @@ export function fetchScopes(query?: IQuery): Function {
 
       dispatch(fetchScopesPending());
 
-      const response = await fetch(permissionsUrl, options);
+      const response = await telemetry.trackApiCallEvent(
+        componentNames.FETCH_PERMISSIONS_ACTION, permissionsUrl, options);
       if (response.ok) {
         const scopes = await response.json();
         return dispatch(fetchScopesSuccess({
@@ -72,12 +73,14 @@ export function fetchScopes(query?: IQuery): Function {
       }
       throw (response);
     } catch (error) {
+      const errorMessage = error instanceof Response ?
+        `ApiError: ${error.status}` : `${error}`;
       telemetry.trackException(
         new Error(errorTypes.NETWORK_ERROR),
         SeverityLevel.Error,
         {
           ComponentName: componentNames.FETCH_PERMISSIONS_ACTION,
-          Message: `${error}`
+          Message: errorMessage
         });
       return dispatch(fetchScopesError(error));
     }

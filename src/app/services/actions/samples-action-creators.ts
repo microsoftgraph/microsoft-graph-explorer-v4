@@ -42,19 +42,22 @@ export function fetchSamples(): Function {
     dispatch(fetchSamplesPending());
 
     try {
-      const response = await fetch(samplesUrl, options);
+      const response = await telemetry.trackApiCallEvent(
+        componentNames.FETCH_SAMPLES_ACTION, samplesUrl, options);
       if (!response.ok) {
         throw response;
       }
       const res = await response.json();
       return dispatch(fetchSamplesSuccess(res.sampleQueries));
     } catch (error) {
+      const errorMessage = error instanceof Response ?
+        `ApiError: ${error.status}` : `${error}`;
       telemetry.trackException(
         new Error(errorTypes.NETWORK_ERROR),
         SeverityLevel.Error,
         {
           ComponentName: componentNames.FETCH_SAMPLES_ACTION,
-          Message: `${error}`
+          Message: errorMessage
         });
       return dispatch(fetchSamplesError({ error }));
     }

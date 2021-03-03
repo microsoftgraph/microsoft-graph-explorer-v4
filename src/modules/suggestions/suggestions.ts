@@ -1,4 +1,5 @@
 import { parseOpenApiResponse } from '../../app/utils/open-api-parser';
+import { componentNames, telemetry } from '../../telemetry';
 import { IOpenApiParseContent, IOpenApiResponse, IParsedOpenApiResponse } from '../../types/open-api';
 import { IRequestOptions } from '../../types/request';
 import { getSuggestionsFromCache, storeSuggestionsInCache } from './cache-provider';
@@ -27,7 +28,8 @@ class Suggestions implements ISuggestions {
     const options: IRequestOptions = { headers };
 
     try {
-      const response = await fetch(openApiUrl, options);
+      const response = await telemetry.trackApiCallEvent(
+        componentNames.FETCH_QUERY_AUTOCOMPLETE_OPTIONS_ACTION, openApiUrl, options);
       if (response.ok) {
         const openApiResponse: IOpenApiResponse = await response.json();
         const content: IOpenApiParseContent = {

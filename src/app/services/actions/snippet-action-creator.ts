@@ -1,6 +1,7 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAction } from '../../../types/action';
+import { IRequestOptions } from '../../../types/request';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { GET_SNIPPET_ERROR, GET_SNIPPET_PENDING, GET_SNIPPET_SUCCESS } from '../redux-constants';
@@ -41,16 +42,17 @@ export function getSnippet(language: string): Function {
 
       dispatch(getSnippetPending());
 
+      const method = 'POST';
+      const headers = {
+        'Content-Type': 'application/http'
+      };
       // tslint:disable-next-line: max-line-length
       const body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search} HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(sampleQuery.sampleBody)}`;
+      const options: IRequestOptions = { method, headers, body };
       const obj: any = {};
-      const response = await fetch(snippetsUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/http'
-        },
-        body
-      });
+
+      const response = await telemetry.trackApiCallEvent(
+        componentNames.GET_SNIPPET_ACTION, snippetsUrl, options);
       if (response.ok) {
         const result = await response.text();
         obj[language] = result;
@@ -58,6 +60,8 @@ export function getSnippet(language: string): Function {
       }
       throw (response);
     } catch (error) {
+      const errorMessage = error instanceof Response ?
+        `ApiError: ${error.status}` : `${error}`;
       const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
       telemetry.trackException(
         new Error(errorTypes.NETWORK_ERROR),
@@ -65,7 +69,8 @@ export function getSnippet(language: string): Function {
         {
           ComponentName: componentNames.GET_SNIPPET_ACTION,
           QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
-          Message: `${error}`
+          Language: language,
+          Message: errorMessage
         }
       );
       return dispatch(getSnippetError(error));

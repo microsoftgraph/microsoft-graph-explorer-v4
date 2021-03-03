@@ -4,7 +4,8 @@ import { ComponentType } from 'react';
 import { validateExternalLink } from '../app/utils/external-link-validation';
 import { sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
 import { IQuery } from '../types/query-runner';
-import { LINK_CLICK_EVENT, TAB_CLICK_EVENT } from './event-types';
+import { IRequestOptions } from '../types/request';
+import { EXTERNAL_API_CALL_EVENT, LINK_CLICK_EVENT, TAB_CLICK_EVENT } from './event-types';
 import ITelemetry from './ITelemetry';
 
 class Telemetry implements ITelemetry {
@@ -47,7 +48,7 @@ class Telemetry implements ITelemetry {
     return withAITracking(this.reactPlugin, ComponentToTrack, componentName);
   }
 
-  public trackTabClickEvent(tabKey: string, sampleQuery: IQuery | null = null) {
+  public trackTabClickEvent(tabKey: string, sampleQuery?: IQuery) {
     let componentName = tabKey.replace('-', ' ');
     componentName = `${componentName.charAt(0).toUpperCase()}${componentName.slice(1)} tab`;
     const properties: { [key: string]: any } = {
@@ -63,6 +64,27 @@ class Telemetry implements ITelemetry {
   public trackLinkClickEvent(url: string, componentName: string) {
     telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: componentName });
     validateExternalLink(url, componentName);
+  }
+
+  public async trackApiCallEvent(componentName: string, url: string,
+    options: IRequestOptions): Promise<Response> {
+    const properties: { [key: string]: string } = {
+      ComponentName: componentName,
+      IsRequestSuccessful: 'false',
+      Url: url
+    }
+    try {
+      this.appInsights.startTrackEvent(EXTERNAL_API_CALL_EVENT);
+      const response = await fetch(url, options);
+      properties.HttpStatusCode = `${response.status}`;
+      if (response.ok) {
+        properties.IsRequestSuccessful = 'true';
+      }
+      return response;
+    }
+    finally {
+      this.appInsights.stopTrackEvent(EXTERNAL_API_CALL_EVENT, properties);
+    }
   }
 
   private filterFunction(envelope: ITelemetryItem) {
