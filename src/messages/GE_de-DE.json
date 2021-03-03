@@ -346,7 +346,7 @@
   "JSON Schema": "JSON-Schema",
   "Report an Issue": "Melden eines Problems",
   "Maximize sidebar": "Maximieren der Randleiste",
-  "Getting your access token": "Ihr Zugriffstoken wird abgerufen",
   "This response contains an @odata.nextLink property.": "Dies Antwort beinhaltet eine Eigenschaft @odata.nextLink.",
   "Click here to go to the next page": "Klicken Sie hier, um zur nächsten Seite zu wechseln."
+  "Getting your access token": "Zugriffstoken wird abgerufen"
 }
