@@ -1,10 +1,6 @@
-import { ImplicitMSALAuthenticationProvider } from
-  '@microsoft/microsoft-graph-client/lib/src/ImplicitMSALAuthenticationProvider';
-import { MSALAuthenticationProviderOptions } from
-  '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
-import { UserAgentApplication } from 'msal';
-import { Configuration } from 'msal/lib-commonjs/Configuration';
-import { DEFAULT_USER_SCOPES } from '../graph-constants';
+import { Configuration, PublicClientApplication } from '@azure/msal-browser';
+
+import { CustomAuthenticationProvider } from './auth/custom-authentication-provider';
 
 function getClientIdFromWindow() {
   return (window as any).ClientId;
@@ -16,7 +12,6 @@ function getClientIdFromEnv() {
 
 const windowHasClientId = getClientIdFromWindow();
 const clientId = windowHasClientId ? getClientIdFromWindow() : getClientIdFromEnv();
-
 const configuration: Configuration = {
   auth: {
     clientId
@@ -24,9 +19,8 @@ const configuration: Configuration = {
   cache: {
     cacheLocation: 'localStorage',
     storeAuthStateInCookie: true,
-  },
+  }
 };
 
-const options = new MSALAuthenticationProviderOptions(DEFAULT_USER_SCOPES.split(' '));
-export const msalApplication = new UserAgentApplication(configuration);
-export const authProvider = new ImplicitMSALAuthenticationProvider(msalApplication, options);
+export const msalApplication = new PublicClientApplication(configuration);
+export const authProvider = new CustomAuthenticationProvider(msalApplication);

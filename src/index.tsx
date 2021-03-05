@@ -19,7 +19,6 @@ import { setGraphExplorerMode } from './app/services/actions/explorer-mode-actio
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
 import { msalApplication } from './app/services/graph-client/msal-agent';
-import { DEFAULT_USER_SCOPES } from './app/services/graph-constants';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
 import { geLocale } from './appLocale';
@@ -33,6 +32,7 @@ import { readTheme } from './themes/theme-utils';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
 import { IDevxAPI } from './types/devx-api';
+import { AuthenticationModule } from './app/services/graph-client/auth/authentication-module';
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
@@ -70,7 +70,8 @@ const appState: any = store({
 });
 
 function refreshAccessToken() {
-  msalApplication.acquireTokenSilent({ scopes: DEFAULT_USER_SCOPES.split(' ') }).then((authResponse: any) => {
+  const authModule = new AuthenticationModule(msalApplication);
+  authModule.getToken().then((authResponse: any) => {
     if (authResponse && authResponse.accessToken) {
       appState.dispatch(getAuthTokenSuccess(true));
       appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));

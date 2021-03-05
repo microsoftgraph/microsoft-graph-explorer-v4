@@ -1,7 +1,7 @@
 import { PublicClientApplication } from '@azure/msal-browser';
 import { AuthenticationProvider } from '@microsoft/microsoft-graph-client';
 
-import { AuthModule } from './authentication';
+import { AuthenticationModule } from './authentication-module';
 
 export class CustomAuthenticationProvider implements AuthenticationProvider {
 
@@ -16,7 +16,7 @@ export class CustomAuthenticationProvider implements AuthenticationProvider {
    */
   public async getAccessToken(): Promise<string> {
     try {
-      const authModule = new AuthModule(this.msalApplication);
+      const authModule = new AuthenticationModule(this.msalApplication);
       const authResult = await authModule.getAuthResult();
       return authResult.accessToken;
     } catch (error) {

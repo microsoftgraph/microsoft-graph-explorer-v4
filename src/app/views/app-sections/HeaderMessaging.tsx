@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { LoginType } from '../../../types/enums';
-import { getLoginType } from '../../services/graph-client/msal-service';
+import { getLoginType } from '../../services/graph-client/auth/login-type';
 import { Authentication } from '../authentication';
 
 export function headerMessaging(classes: any, query: string): React.ReactNode {
