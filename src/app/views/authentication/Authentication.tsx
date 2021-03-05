@@ -44,7 +44,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
         statusText: messages['Authentication failed'],
         status: errorCode === 'popup_window_error'
           ? translateMessage('popup blocked, allow pop-up windows in your browser')
-          : errorCode.replace('_', ' '),
+          : errorCode ? errorCode.replace('_', ' ') : '',
         messageType: MessageBarType.error
       });
       this.setState({ loginInProgress: false });
@@ -53,7 +53,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
         SeverityLevel.Error,
         {
           ComponentName: componentNames.AUTHENTICATION_ACTION,
-          Message: `Authentication failed: ${errorCode.replace('_', ' ')}`,
+          Message: `Authentication failed: ${errorCode ? errorCode.replace('_', ' ') : ''}`,
         });
     }
 
