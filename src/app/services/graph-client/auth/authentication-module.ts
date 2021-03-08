@@ -37,7 +37,7 @@ export class AuthenticationModule {
     return authResponse;
   }
 
-  public async getAuthResult(scopes: string[] = []): Promise<AuthenticationResult> {
+  public async getAuthResult(scopes: string[] = [], sessionId?: string): Promise<AuthenticationResult> {
     const userScopes = (scopes.length > 0) ? scopes : defaultScopes;
     const silentRequest: SilentRequest = {
       scopes: userScopes,
@@ -50,7 +50,7 @@ export class AuthenticationModule {
       return authResponse;
     } catch (error) {
       if (error instanceof InteractionRequiredAuthError || this.getAccount() === undefined) {
-        return this.loginWithInteraction(userScopes);
+        return this.loginWithInteraction(userScopes, sessionId);
       } else {
         throw error;
       }
@@ -69,7 +69,7 @@ export class AuthenticationModule {
     return `${AUTH_URL}/${tenant}/`;
   }
 
-  private async loginWithInteraction(userScopes: string[]) {
+  private async loginWithInteraction(userScopes: string[], sessionId?: string) {
     const popUpRequest: PopupRequest = {
       scopes: userScopes,
       authority: this.getAuthority(),
@@ -77,6 +77,10 @@ export class AuthenticationModule {
       redirectUri: this.getCurrentUri(),
       extraQueryParameters: { mkt: geLocale }
     };
+
+    if (sessionId) {
+      popUpRequest.sid = sessionId;
+    }
 
     try {
       const authResponse: AuthenticationResult = await this.msalApplication.loginPopup(popUpRequest);

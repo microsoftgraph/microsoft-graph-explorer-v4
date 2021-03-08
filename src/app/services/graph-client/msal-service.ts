@@ -6,7 +6,8 @@ import { msalApplication } from './msal-agent';
 export function getSessionId() {
   const authModule = new AuthenticationModule(msalApplication);
   const account = authModule.getAccount();
-  return account?.idTokenClaims;
+  const idTokenClaims: any = account?.idTokenClaims;
+  return idTokenClaims?.sid;
 }
 
 export async function getToken() {
@@ -18,7 +19,7 @@ export async function getToken() {
 export async function logIn(sessionId = ''): Promise<AuthenticationResult> {
   try {
     const authModule = new AuthenticationModule(msalApplication);
-    const authResult = await authModule.getAuthResult();
+    const authResult = await authModule.getAuthResult([], sessionId);
     return authResult;
   } catch (error) {
     throw error;
