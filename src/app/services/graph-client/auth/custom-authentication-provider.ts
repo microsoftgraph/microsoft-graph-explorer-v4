@@ -5,7 +5,7 @@ import { AuthenticationModule } from './authentication-module';
 
 export class CustomAuthenticationProvider implements AuthenticationProvider {
 
-  private msalApplication: PublicClientApplication;
+  private readonly msalApplication: PublicClientApplication;
 
   constructor(msalApplication: PublicClientApplication) {
     this.msalApplication = msalApplication;
