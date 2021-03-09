@@ -1,7 +1,7 @@
 import {
   AccountInfo,
   AuthenticationResult, InteractionRequiredAuthError,
-  PopupRequest, PublicClientApplication, SilentRequest
+  PopupRequest, SilentRequest
 } from '@azure/msal-browser';
 
 import { geLocale } from '../../../../appLocale';
@@ -12,12 +12,7 @@ const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 
 export class AuthenticationModule {
 
-  private readonly msalApplication: PublicClientApplication;
   private static instance: AuthenticationModule;
-
-  private constructor() {
-    this.msalApplication = msalApplication;
-  }
 
   public static getInstance(): AuthenticationModule {
     if (!AuthenticationModule.instance) {
@@ -27,8 +22,8 @@ export class AuthenticationModule {
   }
 
   public getAccount(): AccountInfo | undefined {
-    if (this.msalApplication) {
-      const allAccounts = this.msalApplication.getAllAccounts();
+    if (msalApplication) {
+      const allAccounts = msalApplication.getAllAccounts();
       if (allAccounts && allAccounts.length > 0) {
         return allAccounts[0];
       }
@@ -43,7 +38,7 @@ export class AuthenticationModule {
       account: this.getAccount()
     };
     try {
-      return await this.msalApplication.acquireTokenSilent(silentRequest);
+      return await msalApplication.acquireTokenSilent(silentRequest);
     } catch (error) {
       throw error;
     }
@@ -57,7 +52,7 @@ export class AuthenticationModule {
     };
 
     try {
-      return await this.msalApplication.acquireTokenSilent(silentRequest);
+      return await msalApplication.acquireTokenSilent(silentRequest);
     } catch (error) {
       if (error instanceof InteractionRequiredAuthError || this.getAccount() === undefined) {
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
@@ -94,14 +89,14 @@ export class AuthenticationModule {
     }
 
     try {
-      return await this.msalApplication.loginPopup(popUpRequest);
+      return await msalApplication.loginPopup(popUpRequest);
     } catch (error) {
       throw error;
     }
   }
 
   public async logOutPopUp() {
-    const endSessionEndpoint = (await this.msalApplication.getDiscoveredAuthority()).endSessionEndpoint;
+    const endSessionEndpoint = (await msalApplication.getDiscoveredAuthority()).endSessionEndpoint;
     (window as any).open(endSessionEndpoint, 'msal', 400, 600);
   }
 
