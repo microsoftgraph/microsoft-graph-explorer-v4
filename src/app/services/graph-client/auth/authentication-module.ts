@@ -33,7 +33,11 @@ export class AuthenticationModule {
       authority: this.getAuthority(),
       account: this.getAccount()
     };
-    return await this.msalApplication.acquireTokenSilent(silentRequest);
+    try {
+      return await this.msalApplication.acquireTokenSilent(silentRequest);
+    } catch (error) {
+      throw error;
+    }
   }
 
   public async getAuthResult(scopes: string[] = [], sessionId?: string): Promise<AuthenticationResult> {
