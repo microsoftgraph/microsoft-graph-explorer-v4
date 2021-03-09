@@ -1,6 +1,6 @@
 import { geLocale } from '../../../appLocale';
 import { IQuery } from '../../../types/query-runner';
-import { getSessionId } from '../../services/graph-client/msal-service';
+import { getSessionId } from '../../services/graph-client/auth/msal-service';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 
 /**

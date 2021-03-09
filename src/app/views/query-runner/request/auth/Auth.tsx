@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
-import { getToken } from '../../../../services/graph-client/msal-service';
+import { getToken } from '../../../../services/graph-client/auth/msal-service';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { genericCopy } from '../../../common/copy';

@@ -22,7 +22,7 @@ import { clearQueryStatus } from '../services/actions/query-status-action-creato
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { logIn } from '../services/graph-client/msal-service';
+import { logIn } from '../services/graph-client/auth/msal-service';
 import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';

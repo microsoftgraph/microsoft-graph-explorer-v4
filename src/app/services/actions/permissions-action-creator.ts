@@ -6,7 +6,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
-import { acquireNewAccessToken } from '../graph-client/msal-service';
+import { acquireNewAccessToken } from '../graph-client/auth/msal-service';
 import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../redux-constants';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './auth-action-creators';
 

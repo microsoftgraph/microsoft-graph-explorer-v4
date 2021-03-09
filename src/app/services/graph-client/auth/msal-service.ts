@@ -1,7 +1,7 @@
 import { AuthenticationResult } from '@azure/msal-browser';
 
-import { AuthenticationModule } from './auth/authentication-module';
-import { msalApplication } from './auth/msal-app';
+import { AuthenticationModule } from './authentication-module';
+import { msalApplication } from './msal-app';
 
 const authModule = AuthenticationModule.getInstance();
 

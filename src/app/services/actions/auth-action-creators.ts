@@ -1,6 +1,6 @@
 import { IAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
-import { logOut, logOutPopUp } from '../graph-client/msal-service';
+import { logOut, logOutPopUp } from '../graph-client/auth/msal-service';
 import { GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
 
 export function getAuthTokenSuccess(response: boolean): any {

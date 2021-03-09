@@ -6,6 +6,7 @@ import {
 
 import { geLocale } from '../../../../appLocale';
 import { AUTH_URL, DEFAULT_USER_SCOPES } from '../../graph-constants';
+import { getCurrentUri } from './loginUtils';
 import { msalApplication } from './msal-app';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
@@ -79,7 +80,7 @@ export class AuthenticationModule {
       scopes: userScopes,
       authority: this.getAuthority(),
       prompt: 'select_account',
-      redirectUri: this.getCurrentUri(),
+      redirectUri: getCurrentUri(),
       extraQueryParameters: { mkt: geLocale }
     };
 
@@ -98,15 +99,5 @@ export class AuthenticationModule {
   public async logOutPopUp() {
     const endSessionEndpoint = (await msalApplication.getDiscoveredAuthority()).endSessionEndpoint;
     (window as any).open(endSessionEndpoint, 'msal', 400, 600);
-  }
-
-  /**
-   * get current uri for redirect uri purpose
-   * ref - https://github.com/AzureAD/microsoft-authentication-library-for
-   * -js/blob/9274fac6d100a6300eb2faa4c94aa2431b1ca4b0/lib/msal-browser/src/utils/BrowserUtils.ts#L49
-   */
-  private getCurrentUri(): string {
-    const currentUrl = window.location.href.split('?')[0].split('#')[0];
-    return currentUrl.toLowerCase();
   }
 }
