@@ -12,15 +12,13 @@ export function getSessionId() {
 
 export async function getToken() {
   const authModule = new AuthenticationModule(msalApplication);
-  const authResult = await authModule.getToken();
-  return authResult;
+  return await authModule.getToken();
 }
 
 export async function logIn(sessionId = ''): Promise<AuthenticationResult> {
   try {
     const authModule = new AuthenticationModule(msalApplication);
-    const authResult = await authModule.getAuthResult([], sessionId);
-    return authResult;
+    return await authModule.getAuthResult([], sessionId);
   } catch (error) {
     throw error;
   }
@@ -30,11 +28,9 @@ export function logOut() {
   msalApplication.logout();
 }
 
-export function logOutPopUp() {
-  // @ts-ignore
-  msalApplication.clearCache();
-  // @ts-ignore
-  msalApplication.account = null;
+export async function logOutPopUp() {
+  const authModule = new AuthenticationModule(msalApplication);
+  return await authModule.logOutPopUp();
 }
 
 /**

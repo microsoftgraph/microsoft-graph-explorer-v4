@@ -28,29 +28,26 @@ export class AuthenticationModule {
   }
 
   public async getToken() {
-    const silentRequest = {
+    const silentRequest: SilentRequest = {
       scopes: defaultScopes,
       authority: this.getAuthority(),
       account: this.getAccount()
     };
-    const authResponse = await this.msalApplication.acquireTokenSilent(silentRequest);
-    return authResponse;
+    return await this.msalApplication.acquireTokenSilent(silentRequest);
   }
 
   public async getAuthResult(scopes: string[] = [], sessionId?: string): Promise<AuthenticationResult> {
-    const userScopes = (scopes.length > 0) ? scopes : defaultScopes;
     const silentRequest: SilentRequest = {
-      scopes: userScopes,
+      scopes: (scopes.length > 0) ? scopes : defaultScopes,
       authority: this.getAuthority(),
       account: this.getAccount()
     };
 
     try {
-      const authResponse: AuthenticationResult = await this.msalApplication.acquireTokenSilent(silentRequest);
-      return authResponse;
+      return await this.msalApplication.acquireTokenSilent(silentRequest);
     } catch (error) {
       if (error instanceof InteractionRequiredAuthError || this.getAccount() === undefined) {
-        return this.loginWithInteraction(userScopes, sessionId);
+        return this.loginWithInteraction(silentRequest.scopes, sessionId);
       } else {
         throw error;
       }
@@ -62,7 +59,7 @@ export class AuthenticationModule {
     const urlParams = new URLSearchParams(location.search);
     let tenant = urlParams.get('tenant');
 
-    if (tenant === null) {
+    if (!tenant) {
       tenant = 'common';
     }
 
@@ -80,14 +77,19 @@ export class AuthenticationModule {
 
     if (sessionId) {
       popUpRequest.sid = sessionId;
+      delete popUpRequest.prompt;
     }
 
     try {
-      const authResponse: AuthenticationResult = await this.msalApplication.loginPopup(popUpRequest);
-      return authResponse;
+      return await this.msalApplication.loginPopup(popUpRequest);
     } catch (error) {
       throw error;
     }
+  }
+
+  public async logOutPopUp() {
+    const endSessionEndpoint = (await this.msalApplication.getDiscoveredAuthority()).endSessionEndpoint;
+    (window as any).open(endSessionEndpoint, 'msal', 400, 600);
   }
 
   /**
