@@ -1,6 +1,6 @@
 import { Configuration, PublicClientApplication } from '@azure/msal-browser';
 
-import { CustomAuthenticationProvider } from './auth/custom-authentication-provider';
+import { CustomAuthenticationProvider } from './custom-authentication-provider';
 
 function getClientIdFromWindow() {
   return (window as any).ClientId;

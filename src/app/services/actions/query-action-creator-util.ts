@@ -6,7 +6,7 @@ import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
-import { authProvider } from '../graph-client/msal-agent';
+import { authProvider } from '../graph-client/auth/msal-agent';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';

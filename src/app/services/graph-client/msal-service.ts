@@ -1,7 +1,7 @@
 import { AuthenticationResult } from '@azure/msal-browser';
 
 import { AuthenticationModule } from './auth/authentication-module';
-import { msalApplication } from './msal-agent';
+import { msalApplication } from './auth/msal-agent';
 
 export function getSessionId() {
   const authModule = new AuthenticationModule(msalApplication);
