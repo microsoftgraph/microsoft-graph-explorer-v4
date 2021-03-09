@@ -18,7 +18,6 @@ import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
-import { msalApplication } from './app/services/graph-client/auth/msal-agent';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
 import { geLocale } from './appLocale';
@@ -70,8 +69,7 @@ const appState: any = store({
 });
 
 function refreshAccessToken() {
-  const authModule = new AuthenticationModule(msalApplication);
-  authModule.getToken().then((authResponse: any) => {
+  AuthenticationModule.getInstance().getToken().then((authResponse: any) => {
     if (authResponse && authResponse.accessToken) {
       appState.dispatch(getAuthTokenSuccess(true));
       appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));

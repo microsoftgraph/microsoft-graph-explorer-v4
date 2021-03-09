@@ -6,15 +6,24 @@ import {
 
 import { geLocale } from '../../../../appLocale';
 import { AUTH_URL, DEFAULT_USER_SCOPES } from '../../graph-constants';
+import { msalApplication } from './msal-app';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 
 export class AuthenticationModule {
 
-  private msalApplication: PublicClientApplication;
+  private readonly msalApplication: PublicClientApplication;
+  private static instance: AuthenticationModule;
 
-  constructor(msalApplication: PublicClientApplication) {
+  private constructor() {
     this.msalApplication = msalApplication;
+  }
+
+  public static getInstance(): AuthenticationModule {
+    if (!AuthenticationModule.instance) {
+      AuthenticationModule.instance = new AuthenticationModule()
+    }
+    return AuthenticationModule.instance
   }
 
   public getAccount(): AccountInfo | undefined {

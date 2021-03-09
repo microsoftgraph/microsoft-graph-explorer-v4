@@ -23,4 +23,4 @@ const configuration: Configuration = {
 };
 
 export const msalApplication = new PublicClientApplication(configuration);
-export const authProvider = new CustomAuthenticationProvider(msalApplication);
+export const authProvider = new CustomAuthenticationProvider();
