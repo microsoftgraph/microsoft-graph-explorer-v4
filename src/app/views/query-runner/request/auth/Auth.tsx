@@ -1,11 +1,10 @@
 import { IconButton, IIconProps, Label, styled } from 'office-ui-fabric-react';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
-import { getToken } from '../../../../services/graph-client/auth/msal-service';
+import { AuthenticationModule } from '../../../../services/graph-client/auth/authentication-module';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { genericCopy } from '../../../common/copy';
@@ -16,7 +15,8 @@ export function Auth(props: any) {
   const { authToken, dimensions: { request: { height } } } = useSelector((state: any) => state);
   const requestHeight = convertVhToPx(height, 60);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const authModule = AuthenticationModule.getInstance();
 
   const handleCopy = async () => {
     await genericCopy(accessToken!);
@@ -25,7 +25,7 @@ export function Auth(props: any) {
 
   useEffect(() => {
     setLoading(true);
-    getToken().then((response) => {
+    authModule.getToken().then((response) => {
       setAccessToken(response.accessToken);
       setLoading(false);
     }).catch(() => {

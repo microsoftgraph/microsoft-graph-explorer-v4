@@ -1,7 +1,9 @@
 import { IAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
-import { logOut, logOutPopUp } from '../graph-client/auth/msal-service';
+import { AuthenticationModule } from '../graph-client/auth/authentication-module';
 import { GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
+
+const authModule = AuthenticationModule.getInstance();
 
 export function getAuthTokenSuccess(response: boolean): any {
   return {
@@ -27,9 +29,9 @@ export function signOut() {
   return (dispatch: Function, getState: Function) => {
     const { graphExplorerMode } = getState();
     if (graphExplorerMode === Mode.Complete) {
-      logOut();
+      authModule.logOut();
     } else {
-      logOutPopUp();
+      authModule.logOutPopUp();
     }
     dispatch(signOutSuccess(false));
   };

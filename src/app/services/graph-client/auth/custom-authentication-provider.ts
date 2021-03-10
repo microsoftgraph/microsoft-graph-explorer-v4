@@ -8,7 +8,7 @@ export class CustomAuthenticationProvider implements AuthenticationProvider {
    */
   public async getAccessToken(): Promise<string> {
     try {
-      const authResult = await AuthenticationModule.getInstance().getAuthResult();
+      const authResult = await AuthenticationModule.getInstance().getToken();
       return authResult.accessToken;
     } catch (error) {
       throw error;

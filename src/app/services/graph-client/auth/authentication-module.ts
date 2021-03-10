@@ -22,7 +22,39 @@ export class AuthenticationModule {
     return AuthenticationModule.instance
   }
 
-  public getAccount(): AccountInfo | undefined {
+  public getSessionId() {
+    const account = this.getAccount();
+    const idTokenClaims: any = account?.idTokenClaims;
+    return idTokenClaims?.sid;
+  }
+
+  public async logIn(sessionId = ''): Promise<AuthenticationResult> {
+    try {
+      return await this.getAuthResult([], sessionId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public logOut() {
+    msalApplication.logout();
+  }
+
+  /**
+ * Generates a new access token from passed in scopes
+ * @param {string[]} scopes passed to generate token
+ *  @returns {Promise.<any>}
+ */
+  public async acquireNewAccessToken(scopes: string[] = []): Promise<any> {
+    try {
+      const authResult = await this.getAuthResult(scopes);
+      return authResult;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private getAccount(): AccountInfo | undefined {
     if (msalApplication) {
       const allAccounts = msalApplication.getAllAccounts();
       if (allAccounts && allAccounts.length > 0) {
@@ -45,7 +77,7 @@ export class AuthenticationModule {
     }
   }
 
-  public async getAuthResult(scopes: string[] = [], sessionId?: string): Promise<AuthenticationResult> {
+  private async getAuthResult(scopes: string[] = [], sessionId?: string): Promise<AuthenticationResult> {
     const silentRequest: SilentRequest = {
       scopes: (scopes.length > 0) ? scopes : defaultScopes,
       authority: this.getAuthority(),
