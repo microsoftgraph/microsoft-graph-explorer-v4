@@ -4,14 +4,15 @@ import {
   PopupRequest, SilentRequest
 } from '@azure/msal-browser';
 
-import { geLocale } from '../../appLocale';
 import { AUTH_URL, DEFAULT_USER_SCOPES } from '../../app/services/graph-constants';
+import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
+import IAuthenticationWrapper from './IAuthenticationWrapper';
 import { msalApplication } from './msal-app';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 
-export class AuthenticationWrapper {
+export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   private static instance: AuthenticationWrapper;
 
