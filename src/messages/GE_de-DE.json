@@ -343,10 +343,11 @@
   "Get started with adaptive cards on": "Erste Schritte mit angepassten Karten auf",
   "Adaptive Cards Templating SDK": "Adaptive Cards Templating SDK",
   "card": "Karte",
-  "JSON Schema": "JSON-Schema",
+  "JSON Schema": "JSON-Vorlage",
   "Report an Issue": "Melden eines Problems",
   "Maximize sidebar": "Maximieren der Randleiste",
+  "Getting your access token": "Ihr Zugriffstoken wird abgerufen",
   "This response contains an @odata.nextLink property.": "Dies Antwort beinhaltet eine Eigenschaft @odata.nextLink.",
-  "Click here to go to the next page": "Klicken Sie hier, um zur nächsten Seite zu wechseln.",
-  "Getting your access token": "Zugriffstoken wird abgerufen"
+  "Click here to go to the next page": "Klicken Sie hier, um zur nächsten Seite zu gehen",
+  "and experiment on": " und experimentieren mit"
 }
