@@ -1,12 +1,12 @@
 import { AuthenticationHandlerOptions, ResponseType } from '@microsoft/microsoft-graph-client';
 import { MSALAuthenticationProviderOptions } from
   '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
+import { authProvider } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { GraphClient } from '../graph-client';
-import { authProvider } from '../graph-client/auth/msal-app';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';

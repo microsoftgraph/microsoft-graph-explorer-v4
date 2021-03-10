@@ -1,6 +1,6 @@
 import { Client } from '@microsoft/microsoft-graph-client';
 import 'isomorphic-fetch';
-import { authProvider } from './auth/msal-app';
+import { authProvider } from '../../../modules/authentication';
 
 export class GraphClient {
   private static client: Client;

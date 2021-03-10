@@ -1,6 +1,6 @@
 import { geLocale } from '../../../appLocale';
+import { authenticationWrapper } from '../../../modules/authentication';
 import { IQuery } from '../../../types/query-runner';
-import { authenticationWrapper } from '../../services/graph-client/auth';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 
 /**

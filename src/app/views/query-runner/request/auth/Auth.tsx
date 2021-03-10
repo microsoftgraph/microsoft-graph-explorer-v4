@@ -2,9 +2,9 @@ import { IconButton, IIconProps, Label, styled } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
+import { authenticationWrapper } from '../../../../../modules/authentication';
 
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
-import { authenticationWrapper } from '../../../../services/graph-client/auth';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { genericCopy } from '../../../common/copy';
@@ -24,7 +24,7 @@ export function Auth(props: any) {
 
   useEffect(() => {
     setLoading(true);
-    authenticationWrapper.getToken().then((response) => {
+    authenticationWrapper.getToken().then((response: any) => {
       setAccessToken(response.accessToken);
       setLoading(false);
     }).catch(() => {

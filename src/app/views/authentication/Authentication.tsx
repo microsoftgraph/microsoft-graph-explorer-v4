@@ -5,13 +5,13 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { authenticationWrapper } from '../../../modules/authentication';
 
 import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAuthenticationProps } from '../../../types/authentication';
 import { Mode } from '../../../types/enums';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
-import { authenticationWrapper } from '../../services/graph-client/auth';
 import { translateMessage } from '../../utils/translate-messages';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';

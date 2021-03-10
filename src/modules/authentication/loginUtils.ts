@@ -1,4 +1,4 @@
-import { LoginType } from '../../../../types/enums';
+import { LoginType } from '../../types/enums';
 
 /**
  * Returns whether to load the POPUP/REDIRECT interaction

@@ -1,13 +1,13 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 
 import { geLocale } from '../../../appLocale';
+import { authenticationWrapper } from '../../../modules/authentication';
 import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
-import { authenticationWrapper } from '../graph-client/auth';
 import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../redux-constants';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './auth-action-creators';
 

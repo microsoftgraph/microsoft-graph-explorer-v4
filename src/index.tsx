@@ -18,11 +18,11 @@ import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
-import { authenticationWrapper } from './app/services/graph-client/auth';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
 import { geLocale } from './appLocale';
 import messages from './messages';
+import { authenticationWrapper } from './modules/authentication';
 import { store } from './store';
 import './styles/index.scss';
 import { telemetry } from './telemetry';
@@ -32,6 +32,7 @@ import { readTheme } from './themes/theme-utils';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
+
 
 
 // removes the loading spinner from GE html after the app is loaded

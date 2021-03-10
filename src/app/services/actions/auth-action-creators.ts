@@ -1,6 +1,6 @@
+import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
-import { authenticationWrapper } from '../graph-client/auth';
 import { GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
 
 export function getAuthTokenSuccess(response: boolean): any {
