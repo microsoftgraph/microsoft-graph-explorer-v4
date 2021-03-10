@@ -6,7 +6,7 @@ import {
 
 import { geLocale } from '../../appLocale';
 import { AUTH_URL, DEFAULT_USER_SCOPES } from '../../app/services/graph-constants';
-import { getCurrentUri } from './loginUtils';
+import { getCurrentUri } from './authUtils';
 import { msalApplication } from './msal-app';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');

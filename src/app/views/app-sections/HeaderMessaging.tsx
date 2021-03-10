@@ -2,7 +2,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { getLoginType } from '../../../modules/authentication/loginUtils';
+import { getLoginType } from '../../../modules/authentication/authUtils';
 import { LoginType } from '../../../types/enums';
 import { Authentication } from '../authentication';
 

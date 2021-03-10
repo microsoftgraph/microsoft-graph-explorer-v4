@@ -1,6 +1,6 @@
 import { AuthenticationProvider } from '@microsoft/microsoft-graph-client';
 
-import { authenticationWrapper } from './';
+import { authenticationWrapper } from '../../../modules/authentication';
 
 export class GraphAuthenticationProvider implements AuthenticationProvider {
   /**

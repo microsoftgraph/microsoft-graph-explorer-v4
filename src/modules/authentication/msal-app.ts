@@ -1,7 +1,5 @@
 import { Configuration, PublicClientApplication } from '@azure/msal-browser';
 
-import { GraphAuthenticationProvider } from './GraphAuthenticationProvider';
-
 function getClientIdFromWindow() {
   return (window as any).ClientId;
 }
@@ -23,4 +21,3 @@ const configuration: Configuration = {
 };
 
 export const msalApplication = new PublicClientApplication(configuration);
-export const authProvider = new GraphAuthenticationProvider();
