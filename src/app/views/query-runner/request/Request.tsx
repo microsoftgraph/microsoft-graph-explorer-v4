@@ -1,8 +1,10 @@
+import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import {
   getId,
   Icon,
   Pivot,
   PivotItem,
+  PrimaryButton,
   TooltipHost,
 } from 'office-ui-fabric-react';
 import { Resizable } from 're-resizable';
@@ -19,14 +21,30 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
-import Feedback from './feedback/Feedback';
+import { Feedback } from './feedback/Feedback';
+import { loadAndInitialize } from './feedback/FeedbackWrapper';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
 
 export class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {
-    super(props);
+    super(props)
+    this.state = {
+      officeBrowserFeedback: undefined,
+      enableShowSurvey: false
+    }
+    this.setOfficeBrowserFeedbackUtility = this.setOfficeBrowserFeedbackUtility.bind(this);
+  }
+
+  private setOfficeBrowserFeedbackUtility() {
+    const floodgateObject = makeFloodgate();
+    loadAndInitialize(floodgateObject).then(() => {
+      this.setState({
+        officeBrowserFeedback: floodgateObject,
+        enableShowSurvey: true,
+      })
+    });
   }
 
   private getPivotItems = (height: string) => {
@@ -102,9 +120,9 @@ export class Request extends Component<IRequestComponent, any> {
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Got feedback']}
           headerText={messages['Got feedback']}>
-
           <div style={containerStyle}>
-            <Feedback />
+            <PrimaryButton text="Floodgate with UI" onClick={this.setOfficeBrowserFeedbackUtility} />
+            <Feedback officeBrowserFeedback={this.state.officeBrowserFeedback} showSurvey={this.state.enableShowSurvey} />
           </div>
         </PivotItem>
       );
@@ -143,11 +161,6 @@ export class Request extends Component<IRequestComponent, any> {
     dimen.response.height = response + 'vh';
     this.props.actions!.setDimensions(dimen);
   };
-
-  // private renderFeedbackForm = () => {
-  //   this.props.officeBrowserFeedback.multiFeedback()
-  //     .catch((error: any) => { console.log("Multi feedback failed: " + error); })
-  // };
 
   public render() {
     const { dimensions } = this.props;
