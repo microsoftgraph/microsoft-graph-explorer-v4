@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
-import { AuthenticationModule } from '../../../../services/graph-client/auth/authentication-module';
+import { authenticationWrapper } from '../../../../services/graph-client/auth';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { genericCopy } from '../../../common/copy';
@@ -16,7 +16,6 @@ export function Auth(props: any) {
   const requestHeight = convertVhToPx(height, 60);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const authModule = AuthenticationModule.getInstance();
 
   const handleCopy = async () => {
     await genericCopy(accessToken!);
@@ -25,7 +24,7 @@ export function Auth(props: any) {
 
   useEffect(() => {
     setLoading(true);
-    authModule.getToken().then((response) => {
+    authenticationWrapper.getToken().then((response) => {
       setAccessToken(response.accessToken);
       setLoading(false);
     }).catch(() => {

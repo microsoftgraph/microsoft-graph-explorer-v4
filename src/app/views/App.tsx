@@ -22,7 +22,7 @@ import { clearQueryStatus } from '../services/actions/query-status-action-creato
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { AuthenticationModule } from '../services/graph-client/auth/authentication-module';
+import { authenticationWrapper } from '../services/graph-client/auth';
 import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
@@ -87,10 +87,9 @@ class App extends Component<IAppProps, IAppState> {
 
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('sid');
-    const authModule = AuthenticationModule.getInstance();
 
     if (sessionId) {
-      const authResp = await authModule.logIn(sessionId);
+      const authResp = await authenticationWrapper.logIn(sessionId);
       if (authResp) {
         // @ts-ignore
         this.props.actions!.signIn(authResp.accessToken);

@@ -7,7 +7,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
-import { AuthenticationModule } from '../graph-client/auth/authentication-module';
+import { authenticationWrapper } from '../graph-client/auth';
 import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../redux-constants';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './auth-action-creators';
 
@@ -87,7 +87,7 @@ export function fetchScopes(query?: IQuery): Function {
 
 export function consentToScopes(scopes: string[]): Function {
   return async (dispatch: Function) => {
-    const authResponse = await AuthenticationModule.getInstance().acquireNewAccessToken(scopes);
+    const authResponse = await authenticationWrapper.acquireNewAccessToken(scopes);
     if (authResponse && authResponse.accessToken) {
       dispatch(getAuthTokenSuccess(true));
       dispatch(getConsentedScopesSuccess(authResponse.scopes));

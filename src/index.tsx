@@ -3,6 +3,7 @@ import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { addLocaleData, IntlProvider } from 'react-intl';
+
 import de from 'react-intl/locale-data/de';
 import en from 'react-intl/locale-data/en';
 import es from 'react-intl/locale-data/es';
@@ -12,12 +13,12 @@ import pt from 'react-intl/locale-data/pt';
 import ru from 'react-intl/locale-data/ru';
 import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
-
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
+import { authenticationWrapper } from './app/services/graph-client/auth';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
 import { geLocale } from './appLocale';
@@ -28,10 +29,10 @@ import { telemetry } from './telemetry';
 import ITelemetry from './telemetry/ITelemetry';
 import { loadGETheme } from './themes';
 import { readTheme } from './themes/theme-utils';
+import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
-import { IDevxAPI } from './types/devx-api';
-import { AuthenticationModule } from './app/services/graph-client/auth/authentication-module';
+
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
@@ -69,7 +70,7 @@ const appState: any = store({
 });
 
 function refreshAccessToken() {
-  AuthenticationModule.getInstance().getToken().then((authResponse: any) => {
+  authenticationWrapper.getToken().then((authResponse: any) => {
     if (authResponse && authResponse.accessToken) {
       appState.dispatch(getAuthTokenSuccess(true));
       appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));

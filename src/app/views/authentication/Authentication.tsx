@@ -11,7 +11,7 @@ import { IAuthenticationProps } from '../../../types/authentication';
 import { Mode } from '../../../types/enums';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
-import { AuthenticationModule } from '../../services/graph-client/auth/authentication-module';
+import { authenticationWrapper } from '../../services/graph-client/auth';
 import { translateMessage } from '../../utils/translate-messages';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
@@ -30,7 +30,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
     this.setState({ loginInProgress: true });
 
     try {
-      const authResponse = await AuthenticationModule.getInstance().logIn();
+      const authResponse = await authenticationWrapper.logIn();
       if (authResponse) {
         this.setState({ loginInProgress: false });
 

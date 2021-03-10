@@ -11,15 +11,15 @@ import { msalApplication } from './msal-app';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 
-export class AuthenticationModule {
+export class AuthenticationWrapper {
 
-  private static instance: AuthenticationModule;
+  private static instance: AuthenticationWrapper;
 
-  public static getInstance(): AuthenticationModule {
-    if (!AuthenticationModule.instance) {
-      AuthenticationModule.instance = new AuthenticationModule()
+  public static getInstance(): AuthenticationWrapper {
+    if (!AuthenticationWrapper.instance) {
+      AuthenticationWrapper.instance = new AuthenticationWrapper()
     }
-    return AuthenticationModule.instance
+    return AuthenticationWrapper.instance
   }
 
   public getSessionId() {
@@ -38,6 +38,11 @@ export class AuthenticationModule {
 
   public logOut() {
     msalApplication.logout();
+  }
+
+  public async logOutPopUp() {
+    const endSessionEndpoint = (await msalApplication.getDiscoveredAuthority()).endSessionEndpoint;
+    (window as any).open(endSessionEndpoint, 'msal', 400, 600);
   }
 
   /**
@@ -126,10 +131,5 @@ export class AuthenticationModule {
     } catch (error) {
       throw error;
     }
-  }
-
-  public async logOutPopUp() {
-    const endSessionEndpoint = (await msalApplication.getDiscoveredAuthority()).endSessionEndpoint;
-    (window as any).open(endSessionEndpoint, 'msal', 400, 600);
   }
 }
