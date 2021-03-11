@@ -1,3 +1,4 @@
+import { AuthenticationResult } from '@azure/msal-browser';
 import { IconButton, IIconProps, Label, styled } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -24,7 +25,7 @@ export function Auth(props: any) {
 
   useEffect(() => {
     setLoading(true);
-    authenticationWrapper.getToken().then((response: any) => {
+    authenticationWrapper.getToken().then((response: AuthenticationResult) => {
       setAccessToken(response.accessToken);
       setLoading(false);
     }).catch(() => {

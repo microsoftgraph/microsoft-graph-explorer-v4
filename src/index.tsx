@@ -1,3 +1,4 @@
+import { AuthenticationResult } from '@azure/msal-browser';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import React from 'react';
@@ -32,8 +33,6 @@ import { readTheme } from './themes/theme-utils';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
-
-
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
@@ -71,7 +70,7 @@ const appState: any = store({
 });
 
 function refreshAccessToken() {
-  authenticationWrapper.getToken().then((authResponse: any) => {
+  authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
     if (authResponse && authResponse.accessToken) {
       appState.dispatch(getAuthTokenSuccess(true));
       appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));

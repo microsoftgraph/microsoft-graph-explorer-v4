@@ -11,6 +11,7 @@ import IAuthenticationWrapper from './IAuthenticationWrapper';
 import { msalApplication } from './msal-app';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
+const homeAccountKey = 'home';
 
 export class AuthenticationWrapper implements IAuthenticationWrapper {
 
@@ -49,9 +50,9 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   /**
  * Generates a new access token from passed in scopes
  * @param {string[]} scopes passed to generate token
- *  @returns {Promise.<any>}
+ *  @returns {Promise.<AuthenticationResult>}
  */
-  public async acquireNewAccessToken(scopes: string[] = []): Promise<any> {
+  public async acquireNewAccessToken(scopes: string[] = []): Promise<AuthenticationResult> {
     try {
       const authResult = await this.getAuthResult(scopes);
       return authResult;
@@ -64,6 +65,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     if (msalApplication) {
       const allAccounts = msalApplication.getAllAccounts();
       if (allAccounts && allAccounts.length > 0) {
+        if (allAccounts.length > 1) {
+          const homeAccountId = this.getHomeAccountId();
+          const account = (homeAccountId) ? msalApplication.getAccountByHomeId(homeAccountId) : allAccounts[0];
+          return account!;
+        }
         return allAccounts[0];
       }
     }
@@ -91,7 +97,9 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     };
 
     try {
-      return await msalApplication.acquireTokenSilent(silentRequest);
+      const result = await msalApplication.acquireTokenSilent(silentRequest);
+      this.storeHomeAccountId(result.account!);
+      return result;
     } catch (error) {
       if (error instanceof InteractionRequiredAuthError || this.getAccount() === undefined) {
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
@@ -128,9 +136,19 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
 
     try {
-      return await msalApplication.loginPopup(popUpRequest);
+      const result = await msalApplication.loginPopup(popUpRequest);
+      this.storeHomeAccountId(result.account!);
+      return result;
     } catch (error) {
       throw error;
     }
+  }
+
+  private storeHomeAccountId(account: AccountInfo): void {
+    localStorage.setItem(homeAccountKey, account.homeAccountId);
+  }
+
+  private getHomeAccountId() {
+    return localStorage.getItem(homeAccountKey);
   }
 }
