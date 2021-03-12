@@ -47,9 +47,10 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   public async logOutPopUp() {
-    this.deleteHomeAccountId();
     const endSessionEndpoint = (await msalApplication.getDiscoveredAuthority()).endSessionEndpoint;
     (window as any).open(endSessionEndpoint, 'msal', 400, 600);
+    this.deleteHomeAccountId();
+    this.clearCache();
   }
 
   /**
@@ -163,4 +164,20 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   private deleteHomeAccountId(): void {
     localStorage.removeItem(homeAccountKey);
   }
+
+  /**
+   * This is an own implementation of the  clearCache() function that is no longer available;
+   * to support logging out via Popup which is not currently native to the msal application.
+   *
+   * It assumes that all msal related keys follow the format:
+   * {homeAccountId}.{realm}-login.windows.net-{idtoken/accessToken/refreshtoken}-{realm}
+   * and uses 'login' to get localstorage keys that contain this identifier
+   */
+  private clearCache(): void {
+    const msalKeys = Object.keys(localStorage).filter(key => key.includes('login'));
+    msalKeys.forEach((item: string) => {
+      localStorage.removeItem(item);
+    });
+  }
+
 }
