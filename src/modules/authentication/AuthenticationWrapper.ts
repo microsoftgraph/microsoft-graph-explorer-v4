@@ -11,7 +11,7 @@ import IAuthenticationWrapper from './IAuthenticationWrapper';
 import { msalApplication } from './msal-app';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
-const homeAccountKey = 'home';
+const homeAccountKey = 'fbf1ecbe-27ab-42d7-96d4-3e6b03682ee4';
 
 export class AuthenticationWrapper implements IAuthenticationWrapper {
 
@@ -39,10 +39,12 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   public logOut() {
+    this.deleteHomeAccountId();
     msalApplication.logout();
   }
 
   public async logOutPopUp() {
+    this.deleteHomeAccountId();
     const endSessionEndpoint = (await msalApplication.getDiscoveredAuthority()).endSessionEndpoint;
     (window as any).open(endSessionEndpoint, 'msal', 400, 600);
   }
@@ -148,7 +150,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     localStorage.setItem(homeAccountKey, account.homeAccountId);
   }
 
-  private getHomeAccountId() {
+  private getHomeAccountId(): string | null {
     return localStorage.getItem(homeAccountKey);
+  }
+
+  private deleteHomeAccountId(): void {
+    localStorage.removeItem(homeAccountKey);
   }
 }
