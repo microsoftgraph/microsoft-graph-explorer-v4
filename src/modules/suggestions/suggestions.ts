@@ -1,5 +1,4 @@
 import { parseOpenApiResponse } from '../../app/utils/open-api-parser';
-import { componentNames, telemetry } from '../../telemetry';
 import { IOpenApiParseContent, IOpenApiResponse, IParsedOpenApiResponse } from '../../types/open-api';
 import { IRequestOptions } from '../../types/request';
 import { getSuggestionsFromCache, storeSuggestionsInCache } from './cache-provider';
