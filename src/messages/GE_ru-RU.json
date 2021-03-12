@@ -340,13 +340,14 @@
   "sign in to view a list of all permissions": "На этой вкладке отсутствуют разрешения для запроса. Войдите, чтобы использовать параметр \"Выберите разрешения\" на вкладке \"Параметры\" рядом с профилем, чтобы просмотреть полный список разрешений Microsoft Graph, а также выбрать нужные разрешения и дать свое согласие.",
   "open permissions panel": "Открыть панель \"Разрешения\"",
   "permissions list": " чтобы просмотреть полный список разрешений Microsoft Graph, выбрать нужные разрешения и дать свое согласие.",
-  "Get started with adaptive cards on": "Начните работу с адаптивными картами",
-  "Adaptive Cards Templating SDK": "Шаблоны адаптивных карт SDK",
-  "card": "Карта",
-  "JSON Schema": "Схема JSON",
+  "Get started with adaptive cards on": "Начните работу с адаптивными карточками",
+  "Adaptive Cards Templating SDK": "SDK шаблонов адаптивных карточек",
+  "card": "Карточка",
+  "JSON Schema": "Шаблон JSON",
   "Report an Issue": "Сообщить о проблеме",
   "Maximize sidebar": "Развернуть боковую панель",
   "Getting your access token": "Получение маркера доступа",
   "This response contains an @odata.nextLink property.": "Этот ответ содержит свойство @odata.nextLink.",
-  "Click here to go to the next page": "Щелкните здесь, чтобы перейти к следующей странице"
+  "Click here to go to the next page": "Щелкните здесь, чтобы перейти к следующей странице",
+  "and experiment on": " и поэкспериментируйте"
 }
