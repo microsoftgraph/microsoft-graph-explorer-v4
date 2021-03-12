@@ -7,7 +7,6 @@ const locale: string = "en";
 
 export async function loadAndInitialize(
     officeBrowserFeedback: any): Promise<void> {
-
     officeBrowserFeedback.setUiStrings({
         "FeedbackSubtitle": "Send Feedback to Microsoft",
         "_FeedbackSubtitle.comment": "Subtitle in the main feedback control",

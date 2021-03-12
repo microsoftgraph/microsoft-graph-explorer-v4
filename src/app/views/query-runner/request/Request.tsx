@@ -1,10 +1,10 @@
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import {
+  DefaultButton,
   getId,
   Icon,
   Pivot,
   PivotItem,
-  PrimaryButton,
   TooltipHost,
 } from 'office-ui-fabric-react';
 import { Resizable } from 're-resizable';
@@ -21,7 +21,6 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
-import { Feedback } from './feedback/Feedback';
 import { loadAndInitialize } from './feedback/FeedbackWrapper';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
@@ -35,6 +34,7 @@ export class Request extends Component<IRequestComponent, any> {
       enableShowSurvey: false
     }
     this.setOfficeBrowserFeedbackUtility = this.setOfficeBrowserFeedbackUtility.bind(this);
+    this.showCustomSurvey = this.showCustomSurvey.bind(this);
   }
 
   private setOfficeBrowserFeedbackUtility() {
@@ -45,6 +45,30 @@ export class Request extends Component<IRequestComponent, any> {
         enableShowSurvey: true,
       })
     });
+    if (this.state.enableShowSurvey) {
+      this.showCustomSurvey();
+    }
+  }
+
+  private showCustomSurvey() {
+    const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
+      campaignId: "10000000-0000-0000-0000-000000000000",
+      commentQuestion: "commentquestion",
+      isZeroBased: false,
+      promptQuestion: "prompt",
+      promptNoButtonText: "promptno",
+      promptYesButtonText: "promptyes",
+      ratingQuestion: "ratingquestion",
+      ratingValuesAscending: ["rating 1", "rating 2"],
+      showEmailRequest: false,
+      showPrompt: false,
+      surveyType: 1,
+      title: "title",
+    }
+
+    this.state.officeBrowserFeedback.floodgate.showCustomSurvey(customSurvey).catch(
+      (error: any) => { console.log("showCustomSurvey failed: " + error); }
+    );
   }
 
   private getPivotItems = (height: string) => {
@@ -113,18 +137,7 @@ export class Request extends Component<IRequestComponent, any> {
             <Auth />
           </div>
         </PivotItem>,
-        <PivotItem style={{ float: 'right' }}
-          key='feedback'
-          itemIcon='HeartFill'
-          itemKey='feedback'
-          onRenderItemLink={this.getTooltipDisplay}
-          title={messages['Got feedback']}
-          headerText={messages['Got feedback']}>
-          <div style={containerStyle}>
-            <PrimaryButton text="Floodgate with UI" onClick={this.setOfficeBrowserFeedbackUtility} />
-            <Feedback officeBrowserFeedback={this.state.officeBrowserFeedback} showSurvey={this.state.enableShowSurvey} />
-          </div>
-        </PivotItem>
+
       );
     }
 
@@ -196,6 +209,11 @@ export class Request extends Component<IRequestComponent, any> {
         >
           {requestPivotItems}
         </Pivot>
+        <DefaultButton style={{ float: 'right' }}
+          key='feedback'
+          text='Got Feedback'
+          onClick={this.setOfficeBrowserFeedbackUtility}>
+        </DefaultButton>
       </Resizable>
     );
   }
