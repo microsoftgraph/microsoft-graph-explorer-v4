@@ -26,8 +26,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   public getSessionId() {
     const account = this.getAccount();
-    const idTokenClaims: any = account?.idTokenClaims;
-    return idTokenClaims?.sid;
+    if (account) {
+      const idTokenClaims: any = account?.idTokenClaims;
+      return idTokenClaims?.sid;
+    }
+    return null;
   }
 
   public async logIn(sessionId = ''): Promise<AuthenticationResult> {
@@ -69,8 +72,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       if (allAccounts && allAccounts.length > 0) {
         if (allAccounts.length > 1) {
           const homeAccountId = this.getHomeAccountId();
-          const account = (homeAccountId) ? msalApplication.getAccountByHomeId(homeAccountId) : allAccounts[0];
-          return account!;
+          if (homeAccountId) {
+            return msalApplication.getAccountByHomeId(homeAccountId) || undefined;
+          } else {
+            this.loginWithInteraction(defaultScopes);
+          }
         }
         return allAccounts[0];
       }
@@ -103,7 +109,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       this.storeHomeAccountId(result.account!);
       return result;
     } catch (error) {
-      if (error instanceof InteractionRequiredAuthError || this.getAccount() === undefined) {
+      if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
       } else {
         throw error;
