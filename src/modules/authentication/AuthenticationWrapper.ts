@@ -21,7 +21,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     if (!AuthenticationWrapper.instance) {
       AuthenticationWrapper.instance = new AuthenticationWrapper()
     }
-    return AuthenticationWrapper.instance
+    return AuthenticationWrapper.instance;
   }
 
   public getSessionId() {
