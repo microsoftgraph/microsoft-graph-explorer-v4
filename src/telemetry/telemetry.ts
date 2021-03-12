@@ -4,8 +4,7 @@ import { ComponentType } from 'react';
 import { validateExternalLink } from '../app/utils/external-link-validation';
 import { sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
 import { IQuery } from '../types/query-runner';
-import { IRequestOptions } from '../types/request';
-import { EXTERNAL_API_CALL_EVENT, LINK_CLICK_EVENT, TAB_CLICK_EVENT } from './event-types';
+import { LINK_CLICK_EVENT, TAB_CLICK_EVENT } from './event-types';
 import ITelemetry from './ITelemetry';
 
 class Telemetry implements ITelemetry {
@@ -20,6 +19,7 @@ class Telemetry implements ITelemetry {
       instrumentationKey: this.getInstrumentationKey(),
       disableExceptionTracking: true,
       disableAjaxTracking: true,
+      disableFetchTracking: false,
       disableTelemetry: this.getInstrumentationKey() ? false : true,
       extensions: [this.reactPlugin]
     };
@@ -32,6 +32,7 @@ class Telemetry implements ITelemetry {
   public initialize() {
     this.appInsights.loadAppInsights();
     this.appInsights.addTelemetryInitializer(this.includeSpecifiedTelemetryTypes);
+    this.appInsights.addTelemetryInitializer(this.filterRemoteDependencyData);
     this.appInsights.addTelemetryInitializer(this.filterFunction);
     this.appInsights.trackPageView();
   }
@@ -66,27 +67,6 @@ class Telemetry implements ITelemetry {
     validateExternalLink(url, componentName);
   }
 
-  public async trackApiCallEvent(componentName: string, url: string,
-    options: IRequestOptions): Promise<Response> {
-    const properties: { [key: string]: string } = {
-      ComponentName: componentName,
-      IsRequestSuccessful: 'false',
-      Url: url
-    }
-    try {
-      this.appInsights.startTrackEvent(EXTERNAL_API_CALL_EVENT);
-      const response = await fetch(url, options);
-      properties.HttpStatusCode = `${response.status}`;
-      if (response.ok) {
-        properties.IsRequestSuccessful = 'true';
-      }
-      return response;
-    }
-    finally {
-      this.appInsights.stopTrackEvent(EXTERNAL_API_CALL_EVENT, properties);
-    }
-  }
-
   private filterFunction(envelope: ITelemetryItem) {
     const telemetryItem = envelope.baseData || {};
     telemetryItem.properties = telemetryItem.properties || {};
@@ -112,11 +92,34 @@ class Telemetry implements ITelemetry {
 
   private includeSpecifiedTelemetryTypes(envelope: ITelemetryItem) {
     const baseType = envelope.baseType || '';
-    const typesToInclude = ['EventData', 'MetricData', 'ExceptionData', 'PageviewData'];
-    if (typesToInclude.includes(baseType)) {
+    const telemetryTypesToInclude = [
+      'EventData',
+      'MetricData',
+      'PageviewData',
+      'ExceptionData',
+      'RemoteDependencyData'
+    ];
+    return telemetryTypesToInclude.includes(baseType);
+  }
+
+  private filterRemoteDependencyData(envelope: ITelemetryItem) {
+    const baseData = envelope.baseData || {};
+    if (envelope.baseType === 'RemoteDependencyData') {
+      const targetsToInclude = {
+        GRAPHAPI: 'graph.microsoft.com',
+        DEVXAPI: 'graphexplorerapi.azurewebsites.net'
+      };
+      const urlObject = new URL(baseData.target);
+      if(!Object.values(targetsToInclude).includes(urlObject.hostname)) {
+        return false;
+      }
+
+      // sanitize query URL
+      if (urlObject.hostname === targetsToInclude.GRAPHAPI) {
+        baseData.name = sanitizeQueryUrl(baseData.target);
+      }
       return true;
     }
-    return false;
   }
 
   private getInstrumentationKey() {

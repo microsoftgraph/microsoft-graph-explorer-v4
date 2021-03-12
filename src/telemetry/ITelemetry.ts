@@ -10,5 +10,4 @@ export default interface ITelemetry {
   trackTabClickEvent(tabKey: string, sampleQuery?: IQuery): void;
   trackLinkClickEvent(url: string, componentName: string): void;
   trackException(error: Error, severityLevel: SeverityLevel, properties: {}): void;
-  trackApiCallEvent(componentName: string, url: string, options: IRequestOptions): Promise<Response>;
 }

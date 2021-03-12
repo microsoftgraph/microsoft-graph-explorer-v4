@@ -63,8 +63,7 @@ export function fetchScopes(query?: IQuery): Function {
 
       dispatch(fetchScopesPending());
 
-      const response = await telemetry.trackApiCallEvent(
-        componentNames.FETCH_PERMISSIONS_ACTION, permissionsUrl, options);
+      const response = await fetch(permissionsUrl, options);
       if (response.ok) {
         const scopes = await response.json();
         return dispatch(fetchScopesSuccess({

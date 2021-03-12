@@ -51,8 +51,7 @@ export function getSnippet(language: string): Function {
       const options: IRequestOptions = { method, headers, body };
       const obj: any = {};
 
-      const response = await telemetry.trackApiCallEvent(
-        componentNames.GET_SNIPPET_ACTION, snippetsUrl, options);
+      const response = await fetch(snippetsUrl, options);
       if (response.ok) {
         const result = await response.text();
         obj[language] = result;

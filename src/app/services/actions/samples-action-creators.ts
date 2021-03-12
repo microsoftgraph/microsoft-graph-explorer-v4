@@ -42,8 +42,7 @@ export function fetchSamples(): Function {
     dispatch(fetchSamplesPending());
 
     try {
-      const response = await telemetry.trackApiCallEvent(
-        componentNames.FETCH_SAMPLES_ACTION, samplesUrl, options);
+      const response = await fetch(samplesUrl, options);
       if (!response.ok) {
         throw response;
       }

@@ -28,8 +28,7 @@ class Suggestions implements ISuggestions {
     const options: IRequestOptions = { headers };
 
     try {
-      const response = await telemetry.trackApiCallEvent(
-        componentNames.FETCH_QUERY_AUTOCOMPLETE_OPTIONS_ACTION, openApiUrl, options);
+      const response = await fetch(openApiUrl, options);
       if (response.ok) {
         const openApiResponse: IOpenApiResponse = await response.json();
         const content: IOpenApiParseContent = {
