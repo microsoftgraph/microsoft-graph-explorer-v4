@@ -49,8 +49,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   public async logOutPopUp() {
     const endSessionEndpoint = (await msalApplication.getDiscoveredAuthority()).endSessionEndpoint;
     (window as any).open(endSessionEndpoint, 'msal', 400, 600);
-    this.deleteHomeAccountId();
     this.clearCache();
+    this.deleteHomeAccountId();
   }
 
   /**
@@ -171,10 +171,12 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
    *
    * It assumes that all msal related keys follow the format:
    * {homeAccountId}.{realm}-login.windows.net-{idtoken/accessToken/refreshtoken}-{realm}
-   * and uses 'login' to get localstorage keys that contain this identifier
+   * and uses either the homeAccountId 'login' to get localstorage keys that contain this
+   * identifier
    */
   private clearCache(): void {
-    const msalKeys = Object.keys(localStorage).filter(key => key.includes('login'));
+    const keyFilter = this.getHomeAccountId() || 'login';
+    const msalKeys = Object.keys(localStorage).filter(key => key.includes(keyFilter));
     msalKeys.forEach((item: string) => {
       localStorage.removeItem(item);
     });
