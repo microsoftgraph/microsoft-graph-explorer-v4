@@ -61,7 +61,7 @@ export function addCommonTelemetryItemProperties(envelope: ITelemetryItem) {
   return true;
 }
 
-export function modifyTelemetryItemProperties(envelope: ITelemetryItem) {
+export function sanitizeTelemetryItemUriProperty(envelope: ITelemetryItem) {
   // Remove access token from URI
   const telemetryItem = envelope.baseData || {};
   const uri = telemetryItem.uri;
