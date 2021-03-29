@@ -205,13 +205,12 @@ function Settings(props: ISettingsProps) {
         content={messages['More actions']}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}>
-        <DefaultButton
+        <IconButton
           ariaLabel={messages['More actions']}
           role='button'
           styles={{
             label: { marginBottom: -20 },
-            icon: { marginBottom: -20 },
-            root: { minWidth: '10px', paddingRight: '5px', paddingLeft: '5px' }
+            menuIcon: { fontSize: 20 },
           }}
           menuIconProps={{ iconName: 'More' }}
           menuProps={menuProperties} />
