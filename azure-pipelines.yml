@@ -8,7 +8,7 @@
 
 name: $(date:yyyyMMdd)$(rev:.r)
 
-pool: MsGraphDevXAzureAgents
+pool: MsGraphBuildAgentsWindows
 
 pr:
   branches:
@@ -60,7 +60,7 @@ jobs:
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: '12.x'
+          versionSpec: '14.x'
         displayName: 'Install Node.js'
 
       - script: |
