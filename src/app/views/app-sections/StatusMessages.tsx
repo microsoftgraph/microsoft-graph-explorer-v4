@@ -4,31 +4,32 @@ import { FormattedMessage } from 'react-intl';
 
 import { IQuery } from '../../../types/query-runner';
 import { GRAPH_URL } from '../../services/graph-constants';
-import { convertArrayToObject, extractUrl, replaceLinks } from '../../utils/status-message';
+import {
+  convertArrayToObject, extractUrl, getMatchesAndParts,
+  matchIncludesLink, replaceLinks
+} from '../../utils/status-message';
 
 export function statusMessages(queryState: any, sampleQuery: IQuery, actions: any) {
   function displayStatusMessage(message: string, urls: any) {
-    const pattern = /([$0-9]+)/g;
-    message = message.toString();
-    const matches = message.match(pattern);
-    const parts = message.split(pattern);
+    const { matches, parts } = getMatchesAndParts(message);
 
     if (!parts || !matches || !urls || Object.keys(urls).length === 0) {
       return message;
     }
 
-
     return parts.map((part: string, index: number) => {
+      const includesLink = matchIncludesLink(matches, part);
       const displayLink = (): React.ReactNode => {
         const link = urls[part];
-        if (link.includes(GRAPH_URL)) {
-          return <Link onClick={() => setQuery(link)}>{link}</Link>;
+        if (link) {
+          if (link.includes(GRAPH_URL)) {
+            return <Link onClick={() => setQuery(link)}>{link}</Link>;
+          }
+          return <Link target="_blank" href={link}>{link}</Link>;
         }
-        return <Link target="_blank" href={link}>{link}</Link>;
       };
-
       return (
-        <Fragment key={part + index}>{matches.includes(part) ?
+        <Fragment key={part + index}>{includesLink ?
           displayLink() : part}
         </Fragment>
       );
