@@ -68,14 +68,6 @@ jobs:
         displayName: 'npm install'
 
       - script: |
-          npm install -g eslint
-        displayName: 'npm install eslint globally'
-
-      - script: |
-          npm run lint
-        displayName: 'Runs linting checks'
-
-      - script: |
           npm test
         displayName: 'Runs Unit tests'
 
