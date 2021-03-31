@@ -52,4 +52,4 @@ export const FETCH_SAMPLES_ACTION = 'Fetch samples action';
 export const AUTHENTICATION_ACTION = 'Authentication action';
 export const GET_ADAPTIVE_CARD_ACTION = 'Get adaptive card action';
 export const FETCH_PERMISSIONS_ACTION = 'Fetch permissions action';
-export const FETCH_QUERY_AUTOCOMPLETE_OPTIONS_ACTION = 'Fetch query autocomplete options action';
+export const MONACO_EDITOR = 'Monaco editor display';

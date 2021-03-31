@@ -1,6 +1,6 @@
 {
   "name": "graph-explorer-v2",
-  "version": "4.4.0",
+  "version": "4.4.2",
   "private": true,
   "dependencies": {
     "@babel/core": "7.12.13",
@@ -60,7 +60,7 @@
     "re-resizable": "6.9.0",
     "react": "16.8.2",
     "react-app-polyfill": "0.2.1",
-    "react-dev-utils": "7.0.3",
+    "react-dev-utils": "11.0.4",
     "react-dom": "16.8.2",
     "react-intl": "2.8.0",
     "react-monaco-editor": "0.24.1",
