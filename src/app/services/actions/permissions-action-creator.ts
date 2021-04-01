@@ -72,12 +72,14 @@ export function fetchScopes(query?: IQuery): Function {
       }
       throw (response);
     } catch (error) {
+      const errorMessage = error instanceof Response ?
+        `ApiError: ${error.status}` : `${error}`;
       telemetry.trackException(
         new Error(errorTypes.NETWORK_ERROR),
         SeverityLevel.Error,
         {
           ComponentName: componentNames.FETCH_PERMISSIONS_ACTION,
-          Message: `${error}`
+          Message: errorMessage
         });
       return dispatch(fetchScopesError(error));
     }
