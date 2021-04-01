@@ -16,7 +16,7 @@ export interface IRootState {
   adaptiveCard: IAdaptiveCardResponse;
   graphExplorerMode: Mode;
   profile: IUser | undefined | null;
-  queryRunnerStatus: IStatus;
+  queryRunnerStatus: IStatus | null;
   sampleQuery: IQuery;
   termsOfUse: boolean;
   sidebarProperties: ISidebarProps;
