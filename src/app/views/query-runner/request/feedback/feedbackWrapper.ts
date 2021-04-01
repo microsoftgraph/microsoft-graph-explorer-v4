@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-shadow
 export enum OfficeBrowserFeedbackUtility {
-    FloodgateWithUI,
+    FloodgateAndFeedback
 }
 
 const locale: string = "en";
@@ -147,15 +147,6 @@ export async function loadAndInitialize(
         onError: (error: string) => { console.log("SDK encountered an error: " + error); },
         primaryColour: "#008272", // Replace by a colour which goes with your website.
         secondaryColour: "#004B50",// Replace by a colour which goes with your website.
-        applicationGroup: {
-            appData: "{\"AppData1\":\"AppData1 Value\", \"AppData2\":\"AppData2 Value\"}"
-        },
-        telemetryGroup: {
-            audienceGroup: "TestAudienceGroup",
-        },
-        userVoice: {
-            url: "http://bing.com"
-        }
     };
 
     officeBrowserFeedback.floodgate.initOptions = {

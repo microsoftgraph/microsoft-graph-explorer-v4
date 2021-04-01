@@ -1,3 +1,4 @@
+import { makeFloodgateFeedback } from '@ms-ofb/officebrowserfeedbacknpm';
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import {
   DefaultButton,
@@ -21,7 +22,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
-import { loadAndInitialize } from './feedback/FeedbackWrapper';
+import { loadAndInitialize, OfficeBrowserFeedbackUtility } from './feedback/feedbackWrapper';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
@@ -31,44 +32,26 @@ export class Request extends Component<IRequestComponent, any> {
     super(props)
     this.state = {
       officeBrowserFeedback: undefined,
-      enableShowSurvey: false
+      enableFeedback: false,
     }
     this.setOfficeBrowserFeedbackUtility = this.setOfficeBrowserFeedbackUtility.bind(this);
-    this.showCustomSurvey = this.showCustomSurvey.bind(this);
   }
 
   private setOfficeBrowserFeedbackUtility() {
-    const floodgateObject = makeFloodgate();
+    const floodgateObject = makeFloodgateFeedback();
     loadAndInitialize(floodgateObject).then(() => {
       this.setState({
         officeBrowserFeedback: floodgateObject,
-        enableShowSurvey: true,
+        enableFeedback: true,
       })
     });
-    if (this.state.enableShowSurvey) {
-      this.showCustomSurvey();
+    if (this.state.enableFeedback) {
+      this.showFeedbackForm();
     }
   }
-
-  private showCustomSurvey() {
-    const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
-      campaignId: "10000000-0000-0000-0000-000000000000",
-      commentQuestion: "commentquestion",
-      isZeroBased: false,
-      promptQuestion: "prompt",
-      promptNoButtonText: "promptno",
-      promptYesButtonText: "promptyes",
-      ratingQuestion: "ratingquestion",
-      ratingValuesAscending: ["rating 1", "rating 2"],
-      showEmailRequest: false,
-      showPrompt: false,
-      surveyType: 1,
-      title: "title",
-    }
-
-    this.state.officeBrowserFeedback.floodgate.showCustomSurvey(customSurvey).catch(
-      (error: any) => { console.log("showCustomSurvey failed: " + error); }
-    );
+  showFeedbackForm() {
+    this.state.officeBrowserFeedback.multiFeedback()
+      .catch((error: any) => { console.log("Multi feedback failed: " + error); })
   }
 
   private getPivotItems = (height: string) => {
@@ -209,11 +192,9 @@ export class Request extends Component<IRequestComponent, any> {
         >
           {requestPivotItems}
         </Pivot>
-        <DefaultButton style={{ float: 'right' }}
-          key='feedback'
-          text='Got Feedback'
-          onClick={this.setOfficeBrowserFeedbackUtility}>
-        </DefaultButton>
+        <DefaultButton text="Floodgate with UI and Feedback"
+          onClick={this.setOfficeBrowserFeedbackUtility} />
+
       </Resizable>
     );
   }
