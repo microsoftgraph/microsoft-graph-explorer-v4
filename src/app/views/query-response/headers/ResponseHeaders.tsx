@@ -2,13 +2,14 @@
 import { IconButton } from 'office-ui-fabric-react';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { IRootState } from '../../../../types/root';
 
 import { Monaco } from '../../common';
 import { genericCopy } from '../../common/copy';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
 
 const ResponseHeaders = () => {
-  const { dimensions: { response }, graphResponse, responseAreaExpanded } = useSelector((state: any) => state);
+  const { dimensions: { response }, graphResponse, responseAreaExpanded } = useSelector((state: IRootState) => state);
   const { headers } = graphResponse;
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);

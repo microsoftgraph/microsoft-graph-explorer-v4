@@ -8,6 +8,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { IQuery } from '../../../../types/query-runner';
+import { IRootState } from '../../../../types/root';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -188,11 +189,11 @@ function trackJsonSchemaCopyEvent(query: IQuery | undefined) {
     });
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps({ adaptiveCard, sampleQuery, queryRunnerStatus }: IRootState) {
   return {
-    card: state.adaptiveCard,
-    sampleQuery: state.sampleQuery,
-    queryStatus: state.queryRunnerStatus,
+    card: adaptiveCard,
+    sampleQuery,
+    queryStatus: queryRunnerStatus,
   };
 }
 

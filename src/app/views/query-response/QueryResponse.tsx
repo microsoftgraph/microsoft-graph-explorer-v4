@@ -21,6 +21,7 @@ import { convertVhToPx } from '../common/dimensions-adjustment';
 import { createShareLink } from '../common/share';
 import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
+import { IRootState } from '../../../types/root';
 
 const QueryResponse = (props: IQueryResponseProps) => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [query, setQuery] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
 
-  const { dimensions, sampleQuery } = useSelector((state: any) => state);
+  const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
 
   const {
     intl: { messages },

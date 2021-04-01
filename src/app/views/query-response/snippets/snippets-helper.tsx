@@ -11,6 +11,7 @@ import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
+import { IRootState } from '../../../../types/root';
 
 interface ISnippetProps {
   language: string;
@@ -38,8 +39,8 @@ function Snippet(props: ISnippetProps) {
    */
   language = language.toLowerCase();
 
-  const sampleQuery = useSelector((state: any) => state.sampleQuery, shallowEqual);
-  const { dimensions: { response }, snippets, responseAreaExpanded } = useSelector((state: any) => state);
+  const sampleQuery = useSelector((state: IRootState) => state.sampleQuery, shallowEqual);
+  const { dimensions: { response }, snippets, responseAreaExpanded } = useSelector((state: IRootState) => state);
   const { data, pending: loadingState } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
 
