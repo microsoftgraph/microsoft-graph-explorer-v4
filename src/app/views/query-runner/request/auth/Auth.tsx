@@ -20,7 +20,7 @@ export function Auth(props: any) {
 
   const handleCopy = async () => {
     await genericCopy(accessToken!);
-    trackCopyEvent();
+    trackTokenCopyEvent();
   };
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export function Auth(props: any) {
   </div>);
 }
 
-function trackCopyEvent() {
+function trackTokenCopyEvent() {
   telemetry.trackEvent(
     eventTypes.BUTTON_CLICK_EVENT,
     {
