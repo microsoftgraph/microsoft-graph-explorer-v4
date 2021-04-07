@@ -22,7 +22,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
-import { loadAndInitialize, OfficeBrowserFeedbackUtility } from './feedback/feedbackWrapper';
+import { loadAndInitialize } from './feedback/feedbackWrapper';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
@@ -50,7 +50,7 @@ export class Request extends Component<IRequestComponent, any> {
     }
   }
   showFeedbackForm() {
-    this.state.officeBrowserFeedback.multiFeedback()
+    this.state.officeBrowserFeedback.singleFeedback("Smile")
       .catch((error: any) => { console.log("Multi feedback failed: " + error); })
   }
 
@@ -124,6 +124,17 @@ export class Request extends Component<IRequestComponent, any> {
       );
     }
 
+    pivotItems.push(
+      <PivotItem
+        key='feedback'
+        itemIcon='HeartFill'
+        itemKey='feedback'
+        onRenderItemLink={this.getTooltipDisplay}
+        title={messages.Feedback}
+        headerText={messages.Feedback}
+      >
+      </PivotItem>
+    )
     return pivotItems;
   }
 
@@ -138,6 +149,21 @@ export class Request extends Component<IRequestComponent, any> {
         {link.headerText}
       </TooltipHost>
     );
+  }
+
+  private handlePivotItemClick = (pivotItem?: PivotItem) => {
+    if (!pivotItem) {
+      return;
+    }
+    this.onPivotItemClick(pivotItem);
+    this.toggleFeedback(pivotItem);
+  }
+
+  private toggleFeedback = (event: any) => {
+    const { key } = event;
+    if (key && key.includes('feedback')) {
+      this.setOfficeBrowserFeedbackUtility();
+    }
   }
 
   private onPivotItemClick = (item?: PivotItem) => {
@@ -187,13 +213,13 @@ export class Request extends Component<IRequestComponent, any> {
         }}
       >
         <Pivot
-          onLinkClick={this.onPivotItemClick}
+          onLinkClick={this.handlePivotItemClick}
           styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
         >
           {requestPivotItems}
         </Pivot>
-        <DefaultButton text="Floodgate with UI and Feedback"
-          onClick={this.setOfficeBrowserFeedbackUtility} />
+        {/* <DefaultButton text="Got Feedback"
+          onClick={this.setOfficeBrowserFeedbackUtility} /> */}
 
       </Resizable>
     );
