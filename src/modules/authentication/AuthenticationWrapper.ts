@@ -4,14 +4,14 @@ import {
   PopupRequest, SilentRequest
 } from '@azure/msal-browser';
 
-import { AUTH_URL, DEFAULT_USER_SCOPES } from '../../app/services/graph-constants';
+import { AUTH_URL, DEFAULT_USER_SCOPES, HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './IAuthenticationWrapper';
 import { msalApplication } from './msal-app';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
-const homeAccountKey = 'fbf1ecbe-27ab-42d7-96d4-3e6b03682ee4';
+const homeAccountKey = HOME_ACCOUNT_KEY;
 
 export class AuthenticationWrapper implements IAuthenticationWrapper {
 

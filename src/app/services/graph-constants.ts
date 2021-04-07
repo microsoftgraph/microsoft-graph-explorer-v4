@@ -5,3 +5,4 @@ export const AUTH_URL = 'https://login.microsoftonline.com';
 export const DEFAULT_USER_SCOPES = 'openid profile User.Read';
 export const DEVX_API_URL = 'https://graphexplorerapi.azurewebsites.net';
 export const GRAPH_API_SANDBOX_URL = 'https://proxy.apisandbox.msdn.microsoft.com';
+export const HOME_ACCOUNT_KEY = 'fbf1ecbe-27ab-42d7-96d4-3e6b03682ee4';

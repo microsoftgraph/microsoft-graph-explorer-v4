@@ -3,6 +3,7 @@ import {
   DEVX_API_URL,
   GRAPH_API_SANDBOX_URL,
   GRAPH_URL,
+  HOME_ACCOUNT_KEY,
 } from '../app/services/graph-constants';
 import {
   sanitizeGraphAPISandboxUrl,
@@ -54,9 +55,9 @@ export function addCommonTelemetryItemProperties(envelope: ITelemetryItem) {
   telemetryItem.properties.ApplicationName = 'Graph Explorer v4';
 
   // Checks if user is authenticated
-  const accessTokenKey = 'msal.idtoken';
+  const accessTokenKey = HOME_ACCOUNT_KEY;
   const accessToken = localStorage.getItem(accessTokenKey);
-  telemetryItem.properties.IsAuthenticated = accessToken ? true : false;
+  telemetryItem.properties.IsAuthenticated = !!accessToken;
 
   return true;
 }
