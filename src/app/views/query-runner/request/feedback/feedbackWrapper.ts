@@ -140,14 +140,14 @@ export async function loadAndInitialize(
 
     officeBrowserFeedback.initOptions = {
         appId: 1234, // Replace by your own app id
-        stylesUrl: "styles/officebrowserfeedback.css", // Replace by where you have hosted the .css
+        stylesUrl: " ", // Replace by where you have hosted the .css
         intlUrl: "intl/", // Replace by where you have hosted the intl files.
         environment: 1, // 0 - Prod, 1 - Int
         locale,
         onError: (error: string) => { console.log("SDK encountered an error: " + error); },
         primaryColour: "#008272", // Replace by a colour which goes with your website.
         secondaryColour: "#004B50",// Replace by a colour which goes with your website.
-        customResourcesSetExternally: 3
+        // customResourcesSetExternally: 3
     };
 
     // loadYourCss();
