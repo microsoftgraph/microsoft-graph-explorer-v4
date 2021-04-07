@@ -1,10 +1,23 @@
-import React from 'react';
 import { shallow } from 'enzyme';
-import App from '../../app/views/App';
+import React from 'react';
+import { Provider } from 'react-redux';
 
-describe(`Component: App`, () => {
-  test(`App renders with default props`, () => {
-    const wrapper = shallow(<App />);
+import ResponseHeaders from '../../app/views/query-response/headers/ResponseHeaders';
+import { store } from '../../store/index';
+
+describe(`Components`, () => {
+
+  const Wrapper = () => {
+    const appState: any = store({});
+    return (
+      <Provider store={appState}>
+        <ResponseHeaders />
+      </Provider>
+    )
+  }
+
+  test(`ResponseHeaders renders with default props`, () => {
+    const wrapper = shallow(<Wrapper />);
     expect(wrapper).toMatchSnapshot();
   });
 });
