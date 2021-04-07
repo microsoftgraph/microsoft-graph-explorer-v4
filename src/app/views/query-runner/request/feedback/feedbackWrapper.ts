@@ -147,15 +147,10 @@ export async function loadAndInitialize(
         onError: (error: string) => { console.log("SDK encountered an error: " + error); },
         primaryColour: "#008272", // Replace by a colour which goes with your website.
         secondaryColour: "#004B50",// Replace by a colour which goes with your website.
+        customResourcesSetExternally: 3
     };
 
-    officeBrowserFeedback.floodgate.initOptions = {
-        autoDismiss: 2, // fourteen seconds
-        //campaignDefinitions: CampaignDefinitions,
-        onDismiss: (campaignId: string, submitted: string) => {
-            console.log("Floodgate survey dismissed. campaignId: " + campaignId + ", submitted: " + submitted);
-        },
-    }
+    // loadYourCss();
 
     officeBrowserFeedback.floodgate.initialize().then(
         function () {
@@ -166,3 +161,60 @@ export async function loadAndInitialize(
         function (err: string) { console.log('start failed with error: ' + err); });
 
 }
+
+// function loadStylesheet(url: string) {
+//     const link = document.createElement("link");
+//     link.rel = "stylesheet";
+//     link.type = "text/css";
+//     link.href = url;
+
+//     const entry = document.getElementsByTagName("script")[0];
+//     if (entry && entry.parentNode) {
+//         entry.parentNode.insertBefore(link, entry);
+//     }
+// }
+
+// function loadYourCss() {
+//     loadStylesheet("src/app/views/query-runner/request/feedback/OfficeBrowserFeedback.css");
+
+//     const Link = "obf-Link";
+//     const SpinnerCircle = "obf-SpinnerCircle";
+//     const SubmitButton = "obf-SubmitButton";
+//     const CancelButton = "obf-CancelButton";
+//     const ChoiceGroup = "obf-ChoiceGroup";
+//     const OverallAnchor = "obf-OverallAnchor";
+//     const OverallAnchorActive = "obf-OverallAnchorActive";
+//     const ThanksPanelTitle = "obf-ThanksPanelTitle";
+//     const TPromptTitle = "obf-TPromptTitle";
+//     const TFormTitle = "obf-TFormTitle";
+//     const ChoiceGroupIcon = "obf-ChoiceGroupIcon";
+
+//     const primaryColour = "#0167B0";
+//     const secondaryColour = "#194789";
+
+//     const sheet = document.createElement("style");
+
+//     sheet.textContent =
+//         '.' + OverallAnchor + ':focus { background-color: ' + primaryColour + ' } ' +
+//         '.' + OverallAnchor + ':hover { background-color: ' + secondaryColour + ' } ' +
+//         '.' + OverallAnchorActive + ' { background-color: ' + primaryColour + ' } ' +
+//         '.' + SpinnerCircle + ' { background-color: ' + primaryColour + ' } ' +
+//         // tslint:disable-next-line:max-line-length
+//         '.' + ChoiceGroup + ' input[type=radio]:checked+label>.' + ChoiceGroupIcon + ' { border-color: ' + primaryColour + ' } ' +
+//         // tslint:disable-next-line:max-line-length
+//         '.' + ChoiceGroup + ' input[type=radio]:hover+label>.' + ChoiceGroupIcon + ' { border-color: ' + secondaryColour + ' } ' +
+//         // tslint:disable-next-line:max-line-length
+//         '.' + ChoiceGroup + ' input[type=radio]:checked+label>.' + ChoiceGroupIcon + '>span { background-color: ' + primaryColour + ' } ' +
+//         '.' + SubmitButton + ' { background-color: ' + primaryColour + ' } ' +
+//         '.' + SubmitButton + ':hover { background-color: ' + secondaryColour + ' } ' +
+//         '.' + CancelButton + ' { background-color: ' + primaryColour + ' } ' +
+//         '.' + CancelButton + ':hover { background-color: ' + secondaryColour + ' } ' +
+//         '.' + Link + ' { color: ' + primaryColour + ' } ' +
+//         '.' + Link + ':hover { color: ' + secondaryColour + ' } ' +
+//         '.' + ThanksPanelTitle + ' { color: ' + primaryColour + ' } ' +
+//         '#' + TPromptTitle + ' { color: ' + primaryColour + ' } ' +
+//         '#' + TFormTitle + ' { color: ' + primaryColour + ' } ';
+
+//     document.body.appendChild(sheet);
+// }
+
