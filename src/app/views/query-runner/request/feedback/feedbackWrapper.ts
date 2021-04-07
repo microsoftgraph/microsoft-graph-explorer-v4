@@ -8,7 +8,7 @@ const locale: string = "en";
 export async function loadAndInitialize(
     officeBrowserFeedback: any): Promise<void> {
     officeBrowserFeedback.setUiStrings({
-        "FeedbackSubtitle": "Send Feedback to Microsoft",
+        "FeedbackSubtitle": "Send Feedback to Graph Explorer",
         "_FeedbackSubtitle.comment": "Subtitle in the main feedback control",
         "PrivacyStatement": "Privacy Statement",
         "_PrivacyStatement.comment": "Text for the privacy statement link",
@@ -80,60 +80,6 @@ export async function loadAndInitialize(
             "Close": "Close",
             "_Close.comment": "Button text to close the OCV panel"
         },
-        "Floodgate": {
-            "Nps": {
-                "Prompt": {
-                    "Title": "We'd love your feedback!",
-                    "_Title.comment": "Pop-up title bar text to display when asking for participation in an NPS survey",
-                    "Question": "We have just two questions for you.",
-                    "_Question.comment": "Pop-up dialog text when asking for participation in an NPS survey",
-                    "Yes": "Sure",
-                    "_Yes.comment": "Text for the Yes button label in the NPS Prompt dialog",
-                    "No": "Not now",
-                    "_No.comment": "Text for the No button label in the NPS Prompt dialog"
-                },
-                "Comment": {
-                    "Question": "Please tell us more. Why did you choose that answer?",
-                    "_Question.comment": "Follow-up NPS question, asking for a free-form text response"
-                },
-                "Rating": {
-                    "Question": "How likely are you to recommend this site to a friend or colleague?",
-                    "_Question.comment": "The main NPS question. Neutral phrasing here is very important - please select verbiage to convey the same neutral tone of asking the user the likelihood of them recommending this site to their friend or colleague. Expected response is a selection from a rating chooser.",
-                    "Points11Value0": "0 - Not at all likely",
-                    "_Points11Value0.comment": "Please leave arabic numerals unlocalized. The worst NPS rating, on a scale from 0-10",
-                    "Points11Value1": "1",
-                    "_Points11Value1.comment": "Please leave arabic numerals unlocalized.",
-                    "Points11Value2": "2",
-                    "_Points11Value2.comment": "Please leave arabic numerals unlocalized.",
-                    "Points11Value3": "3",
-                    "_Points11Value3.comment": "Please leave arabic numerals unlocalized.",
-                    "Points11Value4": "4",
-                    "_Points11Value4.comment": "Please leave arabic numerals unlocalized.",
-                    "Points11Value5": "5",
-                    "_Points11Value5.comment": "Please leave arabic numerals unlocalized.",
-                    "Points11Value6": "6",
-                    "_Points11Value6.comment": "Please leave arabic numerals unlocalized.",
-                    "Points11Value7": "7",
-                    "_Points11Value7.comment": "Please leave arabic numerals unlocalized.",
-                    "Points11Value8": "8",
-                    "_Points11Value8.comment": "Please leave arabic numerals unlocalized.",
-                    "Points11Value9": "9",
-                    "_Points11Value9.comment": "Please leave arabic numerals unlocalized.",
-                    "Points11Value10": "10 - Extremely likely",
-                    "_Points11Value10.comment": "Please leave arabic numerals unlocalized. The best NPS rating, on a scale from 0-10",
-                    "Points5Value1": "1 - Not at all likely",
-                    "_Points5Value1.comment": "Please leave arabic numerals unlocalized. The worst NPS rating, on a scale from 1-5",
-                    "Points5Value2": "2",
-                    "_Points5Value2.comment": "Please leave arabic numerals unlocalized.",
-                    "Points5Value3": "3",
-                    "_Points5Value3.comment": "Please leave arabic numerals unlocalized.",
-                    "Points5Value4": "4",
-                    "_Points5Value4.comment": "Please leave arabic numerals unlocalized.",
-                    "Points5Value5": "5 - Extremely likely",
-                    "_Points5Value5.comment": "Please leave arabic numerals unlocalized. The best NPS rating, on a scale from 1-5"
-                }
-            }
-        },
         "CloseLabel": "Close",
         "_CloseLabel.comment": "Label for a button to close the sdk"
     });
@@ -145,8 +91,8 @@ export async function loadAndInitialize(
         environment: 1, // 0 - Prod, 1 - Int
         locale,
         onError: (error: string) => { console.log("SDK encountered an error: " + error); },
-        primaryColour: "#008272", // Replace by a colour which goes with your website.
-        secondaryColour: "#004B50",// Replace by a colour which goes with your website.
+        primaryColour: "#0078d4", // Replace by a colour which goes with your website.
+        secondaryColour: "#2b88d8",// Replace by a colour which goes with your website.
         // customResourcesSetExternally: 3
     };
 
@@ -154,67 +100,9 @@ export async function loadAndInitialize(
 
     officeBrowserFeedback.floodgate.initialize().then(
         function () {
-            console.log('initialize suceeded');
-
             officeBrowserFeedback.floodgate.start();
         },
         function (err: string) { console.log('start failed with error: ' + err); });
 
 }
-
-// function loadStylesheet(url: string) {
-//     const link = document.createElement("link");
-//     link.rel = "stylesheet";
-//     link.type = "text/css";
-//     link.href = url;
-
-//     const entry = document.getElementsByTagName("script")[0];
-//     if (entry && entry.parentNode) {
-//         entry.parentNode.insertBefore(link, entry);
-//     }
-// }
-
-// function loadYourCss() {
-//     loadStylesheet("src/app/views/query-runner/request/feedback/OfficeBrowserFeedback.css");
-
-//     const Link = "obf-Link";
-//     const SpinnerCircle = "obf-SpinnerCircle";
-//     const SubmitButton = "obf-SubmitButton";
-//     const CancelButton = "obf-CancelButton";
-//     const ChoiceGroup = "obf-ChoiceGroup";
-//     const OverallAnchor = "obf-OverallAnchor";
-//     const OverallAnchorActive = "obf-OverallAnchorActive";
-//     const ThanksPanelTitle = "obf-ThanksPanelTitle";
-//     const TPromptTitle = "obf-TPromptTitle";
-//     const TFormTitle = "obf-TFormTitle";
-//     const ChoiceGroupIcon = "obf-ChoiceGroupIcon";
-
-//     const primaryColour = "#0167B0";
-//     const secondaryColour = "#194789";
-
-//     const sheet = document.createElement("style");
-
-//     sheet.textContent =
-//         '.' + OverallAnchor + ':focus { background-color: ' + primaryColour + ' } ' +
-//         '.' + OverallAnchor + ':hover { background-color: ' + secondaryColour + ' } ' +
-//         '.' + OverallAnchorActive + ' { background-color: ' + primaryColour + ' } ' +
-//         '.' + SpinnerCircle + ' { background-color: ' + primaryColour + ' } ' +
-//         // tslint:disable-next-line:max-line-length
-//         '.' + ChoiceGroup + ' input[type=radio]:checked+label>.' + ChoiceGroupIcon + ' { border-color: ' + primaryColour + ' } ' +
-//         // tslint:disable-next-line:max-line-length
-//         '.' + ChoiceGroup + ' input[type=radio]:hover+label>.' + ChoiceGroupIcon + ' { border-color: ' + secondaryColour + ' } ' +
-//         // tslint:disable-next-line:max-line-length
-//         '.' + ChoiceGroup + ' input[type=radio]:checked+label>.' + ChoiceGroupIcon + '>span { background-color: ' + primaryColour + ' } ' +
-//         '.' + SubmitButton + ' { background-color: ' + primaryColour + ' } ' +
-//         '.' + SubmitButton + ':hover { background-color: ' + secondaryColour + ' } ' +
-//         '.' + CancelButton + ' { background-color: ' + primaryColour + ' } ' +
-//         '.' + CancelButton + ':hover { background-color: ' + secondaryColour + ' } ' +
-//         '.' + Link + ' { color: ' + primaryColour + ' } ' +
-//         '.' + Link + ':hover { color: ' + secondaryColour + ' } ' +
-//         '.' + ThanksPanelTitle + ' { color: ' + primaryColour + ' } ' +
-//         '#' + TPromptTitle + ' { color: ' + primaryColour + ' } ' +
-//         '#' + TFormTitle + ' { color: ' + primaryColour + ' } ';
-
-//     document.body.appendChild(sheet);
-// }
 
