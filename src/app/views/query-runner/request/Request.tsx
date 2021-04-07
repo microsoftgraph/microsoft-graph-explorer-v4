@@ -1,5 +1,4 @@
 import { makeFloodgateFeedback } from '@ms-ofb/officebrowserfeedbacknpm';
-import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import {
   DefaultButton,
   getId,
@@ -35,9 +34,9 @@ export class Request extends Component<IRequestComponent, any> {
       enableFeedback: false,
     }
     this.setOfficeBrowserFeedbackUtility = this.setOfficeBrowserFeedbackUtility.bind(this);
+    this.initializeFeedback();
   }
-
-  private setOfficeBrowserFeedbackUtility() {
+  initializeFeedback() {
     const floodgateObject = makeFloodgateFeedback();
     loadAndInitialize(floodgateObject).then(() => {
       this.setState({
@@ -45,12 +44,10 @@ export class Request extends Component<IRequestComponent, any> {
         enableFeedback: true,
       })
     });
-    if (this.state.enableFeedback) {
-      this.showFeedbackForm();
-    }
   }
-  showFeedbackForm() {
-    this.state.officeBrowserFeedback.singleFeedback("Smile")
+
+  private setOfficeBrowserFeedbackUtility() {
+    this.state.officeBrowserFeedback.multiFeedback()
       .catch((error: any) => { console.log("Multi feedback failed: " + error); })
   }
 
@@ -127,7 +124,7 @@ export class Request extends Component<IRequestComponent, any> {
     pivotItems.push(
       <PivotItem
         key='feedback'
-        itemIcon='HeartFill'
+        itemIcon='Heart'
         itemKey='feedback'
         onRenderItemLink={this.getTooltipDisplay}
         title={messages.Feedback}
