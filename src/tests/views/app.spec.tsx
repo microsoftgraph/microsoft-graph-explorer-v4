@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import ResponseHeaders from '../../app/views/query-response/headers/ResponseHeaders';
@@ -16,8 +17,9 @@ describe(`Components`, () => {
     )
   }
 
-  test(`ResponseHeaders renders with default props`, () => {
-    const wrapper = shallow(<Wrapper />);
-    expect(wrapper).toMatchSnapshot();
-  });
+  it('ResponseHeaders renders without crashing', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(<Wrapper />, div);
+    ReactDOM.unmountComponentAtNode(div);
+  })
 });
