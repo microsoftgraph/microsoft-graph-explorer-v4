@@ -1,4 +1,4 @@
-import { makeFloodgateFeedback } from '@ms-ofb/officebrowserfeedbacknpm';
+import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import {
   DefaultButton,
   getId,
@@ -31,24 +31,41 @@ export class Request extends Component<IRequestComponent, any> {
     super(props)
     this.state = {
       officeBrowserFeedback: undefined,
-      enableFeedback: false,
+      enableShowSurvey: false,
     }
-    this.setOfficeBrowserFeedbackUtility = this.setOfficeBrowserFeedbackUtility.bind(this);
+    // this.setOfficeBrowserFeedbackUtility = this.setOfficeBrowserFeedbackUtility.bind(this);
+    this.showCustomSurvey = this.showCustomSurvey.bind(this);
     this.initializeFeedback();
   }
   initializeFeedback() {
-    const floodgateObject = makeFloodgateFeedback();
+    const floodgateObject = makeFloodgate();
     loadAndInitialize(floodgateObject).then(() => {
       this.setState({
         officeBrowserFeedback: floodgateObject,
-        enableFeedback: true,
+        enableShowSurvey: true,
       })
     });
   }
 
-  private setOfficeBrowserFeedbackUtility() {
-    this.state.officeBrowserFeedback.multiFeedback()
-      .catch((error: any) => { console.log("Multi feedback failed: " + error); })
+  private showCustomSurvey() {
+    const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
+      campaignId: "10000000-0000-0000-0000-000000000000",
+      commentQuestion: "Tell us more about your experience",
+      isZeroBased: false,
+      promptQuestion: "We'd love your Feedback",
+      promptNoButtonText: "No",
+      promptYesButtonText: "Yes",
+      ratingQuestion: "Overall, how easy was it to use Graph Explorer",
+      ratingValuesAscending: ["Extremely easy", "Slighlty Easy", "Neither easy nor difficult", "Slightly difficult", "Extremely difficult"],
+      showEmailRequest: true,
+      showPrompt: false,
+      surveyType: 1,
+      title: "Graph Explorer Feedback",
+    }
+
+    this.state.officeBrowserFeedback.floodgate.showCustomSurvey(customSurvey).catch(
+      (error: any) => { throw error; }
+    );
   }
 
   private getPivotItems = (height: string) => {
@@ -159,7 +176,7 @@ export class Request extends Component<IRequestComponent, any> {
   private toggleFeedback = (event: any) => {
     const { key } = event;
     if (key && key.includes('feedback')) {
-      this.setOfficeBrowserFeedbackUtility();
+      this.showCustomSurvey();
     }
   }
 
