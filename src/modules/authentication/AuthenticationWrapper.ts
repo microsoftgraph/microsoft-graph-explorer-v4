@@ -60,7 +60,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
  */
   public async acquireNewAccessToken(scopes: string[] = []): Promise<AuthenticationResult> {
     try {
-      const authResult = await this.getAuthResult(scopes);
+      const authResult = await this.loginWithInteraction(scopes);
       return authResult;
     } catch (error) {
       throw error;
