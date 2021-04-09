@@ -50,3 +50,10 @@
         }
     }
 }
+
+.query-request {
+
+    .pivot-request *[data-content='Got feedback? xx'] {
+        float: right !important;
+    }
+}
