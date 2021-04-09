@@ -1,8 +1,3 @@
-// eslint-disable-next-line no-shadow
-export enum OfficeBrowserFeedbackUtility {
-    FloodgateAndFeedback
-}
-
 const locale: string = "en";
 
 export async function loadAndInitialize(
@@ -85,24 +80,33 @@ export async function loadAndInitialize(
     });
 
     officeBrowserFeedback.initOptions = {
-        appId: 1234, // Replace by your own app id
+        appId: 2256, // Replace by your own app id
         stylesUrl: " ", // Replace by where you have hosted the .css
         intlUrl: "intl/", // Replace by where you have hosted the intl files.
         environment: 1, // 0 - Prod, 1 - Int
         locale,
-        onError: (error: string) => { console.log("SDK encountered an error: " + error); },
-        primaryColour: "#0078d4", // Replace by a colour which goes with your website.
-        secondaryColour: "#2b88d8",// Replace by a colour which goes with your website.
-        // customResourcesSetExternally: 3
+        onError: (error: string) => { throw error; },
+        primaryColour: "#0078d4",
+        secondaryColour: "#2b88d8",
+        telemetryGroup: {
+            audienceGroup: "TestAudienceGroup",
+        },
+        userEmail: "test@test.com",  // Replace by the user email
+        userEmailConsentDefault: false, // Should the email checkbox be checked
     };
 
-    // loadYourCss();
+    officeBrowserFeedback.floodgate.initOptions = {
+        onDismiss: (campaignId: string, submitted: string) => {
+            console.log("Floodgate survey dismissed. campaignId: " + campaignId + ", submitted: " + submitted);
+        },
+        surveyEnabled: true,
+    }
 
     officeBrowserFeedback.floodgate.initialize().then(
         function () {
             officeBrowserFeedback.floodgate.start();
         },
-        function (err: string) { console.log('start failed with error: ' + err); });
+        function (err: string) { throw err; });
 
 }
 
