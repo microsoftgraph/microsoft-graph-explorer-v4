@@ -1,6 +1,5 @@
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import {
-  DefaultButton,
   getId,
   Icon,
   Pivot,
@@ -33,7 +32,6 @@ export class Request extends Component<IRequestComponent, any> {
       officeBrowserFeedback: undefined,
       enableShowSurvey: false,
     }
-    // this.setOfficeBrowserFeedbackUtility = this.setOfficeBrowserFeedbackUtility.bind(this);
     this.showCustomSurvey = this.showCustomSurvey.bind(this);
     this.initializeFeedback();
   }
@@ -49,14 +47,14 @@ export class Request extends Component<IRequestComponent, any> {
 
   private showCustomSurvey() {
     const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
-      campaignId: "10000000-0000-0000-0000-000000000000",
+      campaignId: "6f37e1b1-e1cb-47bd-9675-5a539fcbe576",
       commentQuestion: "Tell us more about your experience",
       isZeroBased: false,
       promptQuestion: "We'd love your Feedback",
       promptNoButtonText: "No",
       promptYesButtonText: "Yes",
       ratingQuestion: "Overall, how easy was it to use Graph Explorer",
-      ratingValuesAscending: ["Extremely easy", "Slighlty Easy", "Neither easy nor difficult", "Slightly difficult", "Extremely difficult"],
+      ratingValuesAscending: ["Extremely difficult", "Slightly difficult", "Neither easy nor difficult", "Slightly easy", "Extremely easy "],
       showEmailRequest: true,
       showPrompt: false,
       surveyType: 1,
@@ -88,6 +86,7 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='Send'
         itemKey='request-body' // To be used to construct component name for telemetry data
         onRenderItemLink={this.getTooltipDisplay}
+        ariaLabel={messages['request body']}
         title={messages['request body']}
         headerText={messages['request body']}
       >
@@ -100,6 +99,7 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='FileComment'
         itemKey='request-headers'
         onRenderItemLink={this.getTooltipDisplay}
+        ariaLabel={messages['request header']}
         title={messages['request header']}
         headerText={messages['request header']}
       >
@@ -112,6 +112,7 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='AzureKeyVault'
         itemKey='modify-permissions'
         onRenderItemLink={this.getTooltipDisplay}
+        ariaLabel={translateMessage('permissions preview')}
         title={translateMessage('permissions preview')}
         headerText={messages['modify permissions']}
       >
@@ -128,8 +129,9 @@ export class Request extends Component<IRequestComponent, any> {
           itemIcon='AuthenticatorApp'
           itemKey='access-token'
           onRenderItemLink={this.getTooltipDisplay}
-          title={messages['Access Token']}
-          headerText={messages['Access Token']}>
+          ariaLabel={translateMessage('Access Token')}
+          title={translateMessage('Access Token')}
+          headerText={translateMessage('Access Token')}>
           <div style={containerStyle}>
             <Auth />
           </div>
@@ -137,18 +139,6 @@ export class Request extends Component<IRequestComponent, any> {
 
       );
     }
-
-    pivotItems.push(
-      <PivotItem
-        key='feedback'
-        itemIcon='Heart'
-        itemKey='feedback'
-        onRenderItemLink={this.getTooltipDisplay}
-        title={messages.Feedback}
-        headerText={messages.Feedback}
-      >
-      </PivotItem>
-    )
     return pivotItems;
   }
 
@@ -226,14 +216,25 @@ export class Request extends Component<IRequestComponent, any> {
           bottom: true,
         }}
       >
-        <Pivot
-          onLinkClick={this.handlePivotItemClick}
-          styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
-        >
-          {requestPivotItems}
-        </Pivot>
-        {/* <DefaultButton text="Got Feedback"
-          onClick={this.setOfficeBrowserFeedbackUtility} /> */}
+        <div className='query-request'>
+          <Pivot
+            onLinkClick={this.handlePivotItemClick}
+            // styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
+            className='pivot-request'
+          >
+            {requestPivotItems}
+            <PivotItem
+              key='feedback'
+              itemIcon='HeartFill'
+              itemKey='feedback'
+              onRenderItemLink={this.getTooltipDisplay}
+              ariaLabel={translateMessage('Feedback')}
+              title={translateMessage('Feedback')}
+              headerText={translateMessage('Feedback')}
+            >
+            </PivotItem>
+          </Pivot>
+        </div>
 
       </Resizable>
     );
