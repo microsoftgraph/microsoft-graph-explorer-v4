@@ -32,7 +32,6 @@ export class Request extends Component<IRequestComponent, any> {
       officeBrowserFeedback: undefined,
       enableShowSurvey: false,
     }
-    this.showCustomSurvey = this.showCustomSurvey.bind(this);
     this.initializeFeedback();
   }
   initializeFeedback() {
@@ -219,7 +218,6 @@ export class Request extends Component<IRequestComponent, any> {
         <div className='query-request'>
           <Pivot
             onLinkClick={this.handlePivotItemClick}
-            // styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
             className='pivot-request'
           >
             {requestPivotItems}
