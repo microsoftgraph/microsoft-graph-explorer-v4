@@ -1,11 +1,12 @@
 import '@ms-ofb/officebrowserfeedbacknpm/intl/en/officebrowserfeedbackstrings';
-import { getTheme } from 'office-ui-fabric-react';
+import { getTheme, ITheme } from 'office-ui-fabric-react';
 import { geLocale } from '../../../../../../src/appLocale';
 
 const currentTheme = getTheme();
 
 export async function loadAndInitialize(
-    officeBrowserFeedback: any): Promise<void> {
+    officeBrowserFeedback: any,
+    onSurveyActivated: (launcher: any, survey: any) => void): Promise<void> {
     officeBrowserFeedback.initOptions = {
         appId: 2256,
         stylesUrl: " ", // Mandatory field
@@ -27,6 +28,9 @@ export async function loadAndInitialize(
             console.log("Floodgate survey dismissed. campaignId: " + campaignId + ", submitted: " + submitted);
         },
         surveyEnabled: true,
+        onSurveyActivatedCallback: {  //callback implementation
+            onSurveyActivated
+        },
     }
 
     officeBrowserFeedback.floodgate.initialize().then(

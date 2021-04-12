@@ -31,12 +31,13 @@ export class Request extends Component<IRequestComponent, any> {
     this.state = {
       officeBrowserFeedback: undefined,
       enableShowSurvey: false,
+      survey: undefined
     }
     this.initializeFeedback();
   }
   initializeFeedback() {
     const floodgateObject = makeFloodgate();
-    loadAndInitialize(floodgateObject).then(() => {
+    loadAndInitialize(floodgateObject, this.onSurveyActivated).then(() => {
       this.setState({
         officeBrowserFeedback: floodgateObject,
         enableShowSurvey: true,
@@ -63,6 +64,10 @@ export class Request extends Component<IRequestComponent, any> {
     this.state.officeBrowserFeedback.floodgate.showCustomSurvey(customSurvey).catch(
       (error: any) => { throw error; }
     );
+  }
+
+  onSurveyActivated(launcher: any, survey: any) {
+    this.setState({ survey });
   }
 
   private getPivotItems = (height: string) => {
