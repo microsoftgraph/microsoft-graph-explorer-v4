@@ -13,6 +13,7 @@ import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
+import { IRootState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import * as authActionCreators from '../services/actions/auth-action-creators';
@@ -381,21 +382,23 @@ class App extends Component<IAppProps, IAppState> {
   }
 }
 
-const mapStateToProps = (state: any) => {
-  const mobileScreen = !!state.sidebarProperties.mobileScreen;
-  const showSidebar = !!state.sidebarProperties.showSidebar;
+const mapStateToProps = ({ sidebarProperties, theme,
+  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode
+}: IRootState) => {
+  const mobileScreen = !!sidebarProperties.mobileScreen;
+  const showSidebar = !!sidebarProperties.showSidebar;
 
   return {
-    appTheme: state.theme,
-    graphExplorerMode: state.graphExplorerMode,
-    profile: state.profile,
-    queryState: state.queryRunnerStatus,
-    receivedSampleQuery: state.sampleQuery,
-    sidebarProperties: state.sidebarProperties,
-    termsOfUse: state.termsOfUse,
+    appTheme: theme,
+    graphExplorerMode,
+    profile,
+    queryState: queryRunnerStatus,
+    receivedSampleQuery: sampleQuery,
+    sidebarProperties,
+    termsOfUse,
     minimised: !mobileScreen && !showSidebar,
-    sampleQuery: state.sampleQuery,
-    authenticated: !!state.authToken
+    sampleQuery,
+    authenticated: !!authToken
   };
 };
 
@@ -418,7 +421,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 const StyledApp = styled(App, appStyles as any);
 const IntlApp = injectIntl(StyledApp);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(IntlApp);
+//@ts-ignore
+export default connect(mapStateToProps, mapDispatchToProps)(IntlApp);

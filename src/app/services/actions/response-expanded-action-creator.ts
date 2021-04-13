@@ -1,4 +1,4 @@
-import { RESPONSE_EXPANDED } from "../redux-constants";
+import { RESPONSE_EXPANDED } from '../redux-constants';
 
 export function expandResponseArea(expanded: boolean): any {
   return {

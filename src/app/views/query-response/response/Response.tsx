@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { IQuery } from '../../../../types/query-runner';
+import { IRootState } from '../../../../types/root';
 import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
@@ -13,7 +14,7 @@ import ResponseDisplay from './ResponseDisplay';
 const Response = () => {
   const dispatch = useDispatch();
 
-  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } = useSelector((state: any) => state);
+  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } = useSelector((state: IRootState) => state);
   const { body, headers } = graphResponse;
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);

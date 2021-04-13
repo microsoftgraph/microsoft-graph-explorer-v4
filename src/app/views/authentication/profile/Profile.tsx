@@ -7,6 +7,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { geLocale } from '../../../../appLocale';
 import { Mode } from '../../../../types/enums';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
+import { IRootState } from '../../../../types/root';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
 import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
@@ -189,15 +190,15 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-function mapStateToProps(state: any) {
-  const mobileScreen = !!state.sidebarProperties.mobileScreen;
-  const showSidebar = !!state.sidebarProperties.showSidebar;
+function mapStateToProps({ sidebarProperties, theme, graphExplorerMode }: IRootState) {
+  const mobileScreen = !!sidebarProperties.mobileScreen;
+  const showSidebar = !!sidebarProperties.showSidebar;
 
   return {
-    mobileScreen: !!state.sidebarProperties.mobileScreen,
-    appTheme: state.theme,
+    mobileScreen: !!sidebarProperties.mobileScreen,
+    appTheme: theme,
     minimised: !mobileScreen && !showSidebar,
-    graphExplorerMode: state.graphExplorerMode
+    graphExplorerMode
   };
 }
 

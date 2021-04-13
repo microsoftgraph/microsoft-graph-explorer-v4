@@ -16,6 +16,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { componentNames, telemetry } from '../../../../../telemetry';
 import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
+import { IRootState } from '../../../../../types/root';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
@@ -277,13 +278,13 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dimensions }: IRootState) {
   return {
-    sample: state.sampleQuery,
-    scopes: state.scopes,
-    tokenPresent: state.authToken,
-    consentedScopes: state.consentedScopes,
-    dimensions: state.dimensions
+    sample: sampleQuery,
+    scopes,
+    tokenPresent: authToken,
+    consentedScopes,
+    dimensions
   };
 }
 
