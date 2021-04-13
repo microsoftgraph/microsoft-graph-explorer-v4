@@ -1,6 +1,9 @@
 /* eslint-disable no-useless-escape */
 import { GRAPH_URL } from '../services/graph-constants';
-import { isAllAlpha, sanitizeQueryParameter } from './query-parameter-sanitization';
+import {
+  isAllAlpha,
+  sanitizeQueryParameter,
+} from './query-parameter-sanitization';
 import { parseSampleUrl } from './sample-url-generation';
 
 // Matches strings with deprecation identifier
@@ -33,25 +36,48 @@ export function isFunctionCall(segment: string): boolean {
 }
 
 /**
- * @param url - query url to be sanitized e.g. https://graph.microsoft.com/v1.0/users/{user-id}
+ * Sanitize Graph API Sandbox URL used when a user is not signed in
+ * @param url - URL to be sanitized
+ */
+export function sanitizeGraphAPISandboxUrl(url: string): string {
+  const urlObject = new URL(url);
+  const queryParams = urlObject.searchParams;
+  // This query parameter holds Graph query URL
+  const queryUrl = queryParams.get('url');
+  if (queryUrl) {
+    queryParams.set('url', sanitizeQueryUrl(queryUrl));
+  }
+  return urlObject.toString();
+}
+
+/**
+ * @param url - query URL to be sanitized e.g. https://graph.microsoft.com/v1.0/users/{user-id}
  */
 export function sanitizeQueryUrl(url: string): string {
   url = decodeURIComponent(url);
 
   const { search, queryVersion, requestUrl } = parseSampleUrl(url);
-  const queryString: string = search ? `?${sanitizeQueryParameters(search)}` : '';
+  const queryString: string = search
+    ? `?${sanitizeQueryParameters(search)}`
+    : '';
 
   // Sanitize item path specified in query url
   let resourceUrl = requestUrl;
   if (resourceUrl) {
-    resourceUrl = requestUrl.replace(ITEM_PATH_REGEX, (match: string): string => {
-      return `${match.substring(0, match.indexOf(':'))}:<value>`;
-    });
+    resourceUrl = requestUrl.replace(
+      ITEM_PATH_REGEX,
+      (match: string): string => {
+        return `${match.substring(0, match.indexOf(':'))}:<value>`;
+      }
+    );
 
     // Split requestUrl into segments that can be sanitized individually
     const urlSegments = resourceUrl.split('/');
     urlSegments.forEach((segment, index) => {
-      const sanitizedSegment = sanitizePathSegment(urlSegments[index - 1], segment);
+      const sanitizedSegment = sanitizePathSegment(
+        urlSegments[index - 1],
+        segment
+      );
       resourceUrl = resourceUrl.replace(segment, sanitizedSegment);
     });
   }
@@ -69,23 +95,34 @@ export function sanitizeQueryUrl(url: string): string {
 function sanitizePathSegment(previousSegment: string, segment: string): string {
   const segmentsToIgnore = ['$value', '$count', '$ref'];
 
-  if (isAllAlpha(segment) || isDeprecation(segment) || SANITIZED_ITEM_PATH_REGEX.test(segment)
-    || segmentsToIgnore.includes(segment.toLowerCase()) || ENTITY_NAME_REGEX.test(segment)) {
+  if (
+    isAllAlpha(segment) ||
+    isDeprecation(segment) ||
+    SANITIZED_ITEM_PATH_REGEX.test(segment) ||
+    segmentsToIgnore.includes(segment.toLowerCase()) ||
+    ENTITY_NAME_REGEX.test(segment)
+  ) {
     return segment;
   }
 
   // Check if segment is in this form: users('<some-id>|<UPN>') and tranform to users(<value>)
   if (isFunctionCall(segment)) {
     const openingBracketIndex = segment.indexOf('(');
-    const textWithinBrackets = segment.substr(openingBracketIndex + 1, segment.length - 2);
-    const sanitizedText = textWithinBrackets.split(',').map(text => {
-      if (text.includes('=')) {
-        let key = text.split('=')[0];
-        key = !isAllAlpha(key) ? '<key>' : key;
-        return `${key}=<value>`;
-      }
-      return '<value>';
-    }).join(',');
+    const textWithinBrackets = segment.substr(
+      openingBracketIndex + 1,
+      segment.length - 2
+    );
+    const sanitizedText = textWithinBrackets
+      .split(',')
+      .map((text) => {
+        if (text.includes('=')) {
+          let key = text.split('=')[0];
+          key = !isAllAlpha(key) ? '<key>' : key;
+          return `${key}=<value>`;
+        }
+        return '<value>';
+      })
+      .join(',');
     return `${segment.substring(0, openingBracketIndex)}(${sanitizedText})`;
   }
 

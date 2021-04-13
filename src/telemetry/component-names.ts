@@ -4,6 +4,7 @@
 export const RUN_QUERY_BUTTON = 'Run query button';
 export const THEME_CHANGE_BUTTON = 'Theme change button';
 export const SELECT_THEME_BUTTON = 'Select theme button';
+export const JSON_SCHEMA_COPY_BUTTON = 'JSON schema copy button';
 export const RUN_HISTORY_ITEM_BUTTON = 'Run history item button';
 export const SHARE_QUERY_COPY_BUTTON = 'Share query copy button';
 export const ACCESS_TOKEN_COPY_BUTTON = 'Access token copy button';
@@ -16,11 +17,12 @@ export const DELETE_HISTORY_ITEM_BUTTON = 'Delete history item button';
 export const JSON_SCHEMA_COPY_BUTTON = 'JSON schema copy button';
 
 // List items
-export const SAMPLE_QUERY_LIST_ITEM = 'Sample query list item';
 export const HISTORY_LIST_ITEM = 'History list item';
+export const SAMPLE_QUERY_LIST_ITEM = 'Sample query list item';
 
 // Tabs
 export const HISTORY_TAB = 'History tab';
+export const JSON_SCHEMA_TAB = 'JSON schema tab';
 export const SHARE_QUERY_TAB = 'Share query tab';
 export const ACCESS_TOKEN_TAB = 'Access token tab';
 export const REQUEST_BODY_TAB = 'Request body tab';
@@ -40,8 +42,8 @@ export const QUERY_URL_AUTOCOMPLETE_DROPDOWN = 'Query URL autocomplete dropdown'
 
 // Links
 export const DOCUMENTATION_LINK = 'Documentation link';
-export const GRAPH_TOOLKIT_PLAYGROUND_LINK = 'Graph toolkit playground link';
 export const OFFICE_DEV_PROGRAM_LINK = 'Office dev program link';
+export const GRAPH_TOOLKIT_PLAYGROUND_LINK = 'Graph toolkit playground link';
 export const MICROSOFT_APIS_TERMS_OF_USE_LINK = 'Microsoft APIs terms of use link';
 export const MICROSOFT_PRIVACY_STATEMENT_LINK = 'Microsoft privacy statement link';
 export const MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK = 'Microsoft graph API reference docs link';

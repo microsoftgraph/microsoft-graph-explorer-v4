@@ -1,6 +1,6 @@
 {
   "name": "graph-explorer-v2",
-  "version": "4.4.2",
+  "version": "4.5.0",
   "private": true,
   "dependencies": {
     "@babel/core": "7.12.13",
