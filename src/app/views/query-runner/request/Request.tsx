@@ -47,18 +47,18 @@ export class Request extends Component<IRequestComponent, any> {
 
   private showCustomSurvey() {
     const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
-      campaignId: "6f37e1b1-e1cb-47bd-9675-5a539fcbe576",
-      commentQuestion: "Tell us more about your experience",
+      campaignId: '10000000-0000-0000-0000-000000000000',//'6f37e1b1-e1cb-47bd-9675-5a539fcbe576',
+      commentQuestion: translateMessage('commentQuestion'),
       isZeroBased: false,
-      promptQuestion: "We'd love your Feedback",
-      promptNoButtonText: "No",
-      promptYesButtonText: "Yes",
-      ratingQuestion: "Overall, how easy was it to use Graph Explorer",
+      promptQuestion: translateMessage('promptQuestion'),
+      promptNoButtonText: translateMessage('promptNoButtonText'),
+      promptYesButtonText: translateMessage('promptYesButtonText'),
+      ratingQuestion: translateMessage('ratingQuestion'),
       ratingValuesAscending: ["Extremely difficult", "Slightly difficult", "Neither easy nor difficult", "Slightly easy", "Extremely easy "],
       showEmailRequest: true,
       showPrompt: false,
       surveyType: 1,
-      title: "Graph Explorer Feedback",
+      title: translateMessage('title'),
     }
 
     this.state.officeBrowserFeedback.floodgate.showCustomSurvey(customSurvey).catch(

@@ -347,5 +347,11 @@
   "Report an Issue": "Report an Issue",
   "Maximize sidebar": "Maximize sidebar",
   "Getting your access token": "Getting your access token",
-  "Feedback": "Got feedback?"
+  "Feedback": "Got feedback?",
+  "commentQuestion": "Tell us more about your experience",
+  "promptQuestion": "We'd love your Feedback",
+  "promptNoButtonText": "No",
+  "promptYesButtonText": "Yes",
+  "ratingQuestion": "Overall, how easy was it to use Graph Explorer",
+  "title": "Graph Explorer Feedback"
 }

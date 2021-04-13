@@ -1,5 +1,5 @@
 import '@ms-ofb/officebrowserfeedbacknpm/intl/en/officebrowserfeedbackstrings';
-import { getTheme, ITheme } from 'office-ui-fabric-react';
+import { getTheme } from 'office-ui-fabric-react';
 import { geLocale } from '../../../../../../src/appLocale';
 
 const currentTheme = getTheme();
@@ -9,7 +9,7 @@ export async function loadAndInitialize(
     onSurveyActivated: (launcher: any, survey: any) => void): Promise<void> {
     officeBrowserFeedback.initOptions = {
         appId: 2256,
-        stylesUrl: " ", // Mandatory field
+        stylesUrl: ' ', // Mandatory field
         intlUrl: '', // Mandatory field
         environment: 1, // 0 - Prod, 1 - Int
         locale: geLocale,
