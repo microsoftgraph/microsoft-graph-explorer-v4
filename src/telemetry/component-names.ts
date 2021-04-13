@@ -14,7 +14,6 @@ export const CODE_SNIPPETS_COPY_BUTTON = 'Code snippets copy button';
 export const VIEW_ALL_PERMISSIONS_BUTTON = 'View all permissions button';
 export const EXPORT_HISTORY_ITEM_BUTTON = 'Export history item button';
 export const DELETE_HISTORY_ITEM_BUTTON = 'Delete history item button';
-export const JSON_SCHEMA_COPY_BUTTON = 'JSON schema copy button';
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
@@ -34,7 +33,6 @@ export const RESPONSE_PREVIEW_TAB = 'Response preview tab';
 export const RESPONSE_HEADERS_TAB = 'Response headers tab';
 export const TOOLKIT_COMPONENT_TAB = 'Toolkit component tab';
 export const MODIFY_PERMISSIONS_TAB = 'Modify permissions tab';
-export const JSON_SCHEMA_TAB = 'JSON schema tab';
 
 // Dropdowns
 export const VERSION_CHANGE_DROPDOWN = 'Version change dropdown';
