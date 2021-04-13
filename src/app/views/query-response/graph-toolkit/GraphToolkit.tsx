@@ -12,6 +12,7 @@ import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { classNames } from '../../classnames';
 import { queryResponseStyles } from '../queryResponse.styles';
+import { IRootState } from '../../../../types/root';
 
 class GraphToolkit extends Component<any> {
   constructor(props: any) {
@@ -59,9 +60,9 @@ class GraphToolkit extends Component<any> {
   }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps({ sampleQuery }: IRootState) {
   return {
-    sampleQuery: state.sampleQuery,
+    sampleQuery
   };
 }
 const styledGraphToolkit = styled(GraphToolkit, queryResponseStyles as any);

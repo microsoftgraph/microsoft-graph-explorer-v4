@@ -1,15 +1,12 @@
 import { adaptiveCard } from '../../../app/services/reducers/adaptive-cards-reducer';
-import {
-  FETCH_ADAPTIVE_CARD_ERROR,
-  FETCH_ADAPTIVE_CARD_PENDING,
-  FETCH_ADAPTIVE_CARD_SUCCESS
-} from '../../../app/services/redux-constants';
+import { IAdaptiveCardResponse } from '../../../types/adaptivecard';
 
 describe('Graph Explorer Adaptive Cards Reducer', () => {
   it('should return initial state', () => {
-    const initialState = {
+    const initialState: IAdaptiveCardResponse = {
       pending: false,
-      data: ''
+      error: undefined,
+      data: undefined
     };
 
     const dummyAction = { type: 'Dummy', response: { dummy: 'Dummy' } };
@@ -21,17 +18,19 @@ describe('Graph Explorer Adaptive Cards Reducer', () => {
   });
 
   it('should handle FETCH_ADAPTIVE_CARD_ERROR', () => {
-    const initialState = {
+    const initialState: IAdaptiveCardResponse = {
       pending: false,
-      data: ''
+      error: undefined,
+      data: undefined
     };
 
-    const errorAction = { type: 'FETCH_ADAPTIVE_CARD_ERROR' , response: {} };
+    const errorAction = { type: 'FETCH_ADAPTIVE_CARD_ERROR', response: {} };
     const newState = adaptiveCard(initialState, errorAction);
 
     const expectedState = {
       pending: false,
-      data: null
+      data: null,
+      error: {}
     };
 
     // expect null data as there is an error
@@ -40,12 +39,13 @@ describe('Graph Explorer Adaptive Cards Reducer', () => {
   });
 
   it('should handle FETCH_ADAPTIVE_CARD_PENDING', () => {
-    const initialState = {
+    const initialState: IAdaptiveCardResponse = {
       pending: false,
-      data: ''
+      error: undefined,
+      data: undefined
     };
 
-    const errorAction = { type: 'FETCH_ADAPTIVE_CARD_PENDING' , response: {} };
+    const errorAction = { type: 'FETCH_ADAPTIVE_CARD_PENDING', response: {} };
     const newState = adaptiveCard(initialState, errorAction);
 
     const expectedState = {
@@ -59,12 +59,13 @@ describe('Graph Explorer Adaptive Cards Reducer', () => {
   });
 
   it('should handle FETCH_ADAPTIVE_CARD_SUCCESS', () => {
-    const initialState = {
+    const initialState: IAdaptiveCardResponse = {
       pending: false,
-      data: ''
+      error: undefined,
+      data: undefined
     };
 
-    const errorAction = { type: 'FETCH_ADAPTIVE_CARD_SUCCESS' , response: 'Sample adaptive card data' };
+    const errorAction = { type: 'FETCH_ADAPTIVE_CARD_SUCCESS', response: 'Sample adaptive card data' };
     const newState = adaptiveCard(initialState, errorAction);
 
     const expectedState = {

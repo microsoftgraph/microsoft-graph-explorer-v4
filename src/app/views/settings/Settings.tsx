@@ -21,6 +21,7 @@ import { geLocale } from '../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
+import { IRootState } from '../../../types/root';
 import { ISettingsProps } from '../../../types/settings';
 import { signOut } from '../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../services/actions/permissions-action-creator';
@@ -31,7 +32,7 @@ import { Permission } from '../query-runner/request/permissions';
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
-  const { permissionsPanelOpen } = useSelector((state: any) => state);
+  const { permissionsPanelOpen } = useSelector((state: IRootState) => state);
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);

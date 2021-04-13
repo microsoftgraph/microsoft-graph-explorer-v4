@@ -6,16 +6,21 @@ export interface IQueryRunnerState {
   url: string;
 }
 
+export interface Header {
+  name: string;
+  value: string;
+}
+
 export interface IQuery {
   selectedVerb: string;
   selectedVersion: string;
   sampleUrl: string;
   sampleBody?: string;
-  sampleHeaders: Array<{ name: string; value: string }>;
+  sampleHeaders: Header[];
 }
 
 export interface IQueryRunnerProps {
-  headers: Array<{ name: string; value: string }>;
+  headers: Header[];
   onSelectVerb: Function;
   sampleQuery: IQuery;
   actions?: {
@@ -74,7 +79,7 @@ export interface ISampleQuery {
   humanName: string;
   tip?: string;
   postBody?: string;
-  headers?: Array<{ name: string; value: string }>;
+  headers?: Header[];
 }
 
 export interface ISampleQueriesProps {

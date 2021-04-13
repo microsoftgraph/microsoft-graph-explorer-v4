@@ -7,6 +7,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IAutoCompleteProps, IAutoCompleteState } from '../../../../../types/auto-complete';
 import { SortOrder } from '../../../../../types/enums';
+import { IRootState } from '../../../../../types/root';
 import * as autoCompleteActionCreators from '../../../../services/actions/autocomplete-action-creators';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
@@ -413,13 +414,13 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps({ sampleQuery, theme, autoComplete }: IRootState) {
   return {
-    sampleQuery: state.sampleQuery,
-    appTheme: state.theme,
-    autoCompleteOptions: state.autoComplete.data,
-    fetchingSuggestions: state.autoComplete.pending,
-    autoCompleteError: state.autoComplete.error
+    sampleQuery,
+    appTheme: theme,
+    autoCompleteOptions: autoComplete.data,
+    fetchingSuggestions: autoComplete.pending,
+    autoCompleteError: autoComplete.error
   };
 }
 
@@ -434,7 +435,5 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AutoComplete);
+// @ts-ignore
+export default connect(mapStateToProps, mapDispatchToProps)(AutoComplete);
