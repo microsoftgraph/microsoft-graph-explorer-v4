@@ -10,6 +10,7 @@ import { authenticationWrapper } from '../../../modules/authentication';
 import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAuthenticationProps } from '../../../types/authentication';
 import { Mode } from '../../../types/enums';
+import { IRootState } from '../../../types/root';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
@@ -101,15 +102,15 @@ function showLoginInProgressSpinner(classes: any, minimised: boolean): React.Rea
   </div>;
 }
 
-function mapStateToProps(state: any) {
-  const mobileScreen = !!state.sidebarProperties.mobileScreen;
-  const showSidebar = !!state.sidebarProperties.showSidebar;
+function mapStateToProps({ sidebarProperties, theme, authToken, graphExplorerMode }: IRootState) {
+  const mobileScreen = !!sidebarProperties.mobileScreen;
+  const showSidebar = !!sidebarProperties.showSidebar;
   return {
-    tokenPresent: !!state.authToken,
+    tokenPresent: !!authToken,
     mobileScreen,
-    appTheme: state.theme,
+    appTheme: theme,
     minimised: !mobileScreen && !showSidebar,
-    graphExplorerMode: state.graphExplorerMode
+    graphExplorerMode
   };
 }
 

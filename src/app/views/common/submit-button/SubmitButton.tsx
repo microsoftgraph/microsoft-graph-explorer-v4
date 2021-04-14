@@ -1,6 +1,5 @@
 import { PrimaryButton, Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import { ISubmitButtonControl } from '../../../../types/submit-button';
 
 const SubmitButtonControl = ({
@@ -15,14 +14,12 @@ const SubmitButtonControl = ({
 
   return (
     <div className={className}>
-      <PrimaryButton disabled={submitting || disabled }
+      <PrimaryButton disabled={submitting || disabled}
         onClick={() => handleOnClick()}
         ariaLabel={ariaLabel}
         role={role}
       >
-        <FormattedMessage
-          id={text}
-        />
+        {text}
         {submitting && <>&nbsp;
             <Spinner size={SpinnerSize.small} />
         </>}

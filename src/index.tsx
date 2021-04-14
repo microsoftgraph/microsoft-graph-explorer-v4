@@ -19,6 +19,7 @@ import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
+import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
 import { geLocale } from './appLocale';
@@ -107,7 +108,7 @@ if (theme) {
 
 const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
 
-if (devxApiUrl) {
+if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
   const org = new URLSearchParams(location.search).get('org');
   const branchName = new URLSearchParams(location.search).get('branchName');
 

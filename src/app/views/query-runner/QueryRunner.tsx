@@ -10,6 +10,7 @@ import {
   IQueryRunnerProps,
   IQueryRunnerState,
 } from '../../../types/query-runner';
+import { IRootState } from '../../../types/root';
 
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
@@ -24,7 +25,7 @@ import Request from './request/Request';
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
-  > {
+> {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
@@ -173,9 +174,9 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps({ sampleQuery }: IRootState) {
   return {
-    sampleQuery: state.sampleQuery,
+    sampleQuery,
   };
 }
 

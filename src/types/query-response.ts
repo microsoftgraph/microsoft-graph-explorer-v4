@@ -4,10 +4,7 @@ import { IQuery } from './query-runner';
 export interface IQueryResponseProps {
   mode: Mode;
   dispatch: Function;
-  graphResponse?: {
-    body: object;
-    headers: object;
-  };
+  graphResponse?: IGraphResponse;
   intl: {
     message: object;
   };
@@ -25,4 +22,9 @@ export interface IQueryResponseState {
   showShareQueryDialog: boolean;
   showModal: boolean;
   query: string;
+}
+
+export interface IGraphResponse {
+  body: any | undefined,
+  headers: any | undefined
 }

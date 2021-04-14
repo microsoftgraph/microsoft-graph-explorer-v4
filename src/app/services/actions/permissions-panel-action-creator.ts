@@ -1,4 +1,4 @@
-import { PERMISSIONS_PANEL_OPEN } from "../redux-constants";
+import { PERMISSIONS_PANEL_OPEN } from '../redux-constants';
 
 export function togglePermissionsPanel(open: boolean): any {
     return {

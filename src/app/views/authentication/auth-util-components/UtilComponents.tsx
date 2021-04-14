@@ -1,4 +1,4 @@
-import { IconButton, PrimaryButton, Stack } from 'office-ui-fabric-react';
+import { IconButton, PrimaryButton } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Profile from '../profile/Profile';
@@ -21,8 +21,8 @@ export function showSignInButtonOrProfile(
       iconProps={{ iconName: 'Contact' }}
       onClick={() => signIn()}
     >
-      {!mobileScreen && <FormattedMessage id='sign in' />}
-    </PrimaryButton>;
+    {!mobileScreen && <FormattedMessage id='sign in' />}
+  </PrimaryButton>;
 
   return (
     <div>

@@ -1,8 +1,11 @@
 import { IAction } from '../../../types/action';
-import { QUERY_GRAPH_RUNNING, SET_SAMPLE_QUERY_SUCCESS,
-  TOGGLE_SIDEBAR_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS } from '../redux-constants';
+import {
+  QUERY_GRAPH_RUNNING, SET_SAMPLE_QUERY_SUCCESS,
+  TOGGLE_SIDEBAR_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS
+} from '../redux-constants';
+import { ISidebarProps } from '../../../types/sidebar';
 
-const initialState = {
+const initialState: ISidebarProps = {
   showSidebar: false,
   mobileScreen: false,
 };

@@ -1,3 +1,5 @@
+import { IApiResponse } from './action';
+import { IParsedOpenApiResponse } from './open-api';
 import { IQuery } from './query-runner';
 
 export interface IAutoCompleteProps {
@@ -30,4 +32,8 @@ export interface ISuggestionsList {
   activeSuggestion: number;
   filteredSuggestions: string[];
   onClick: Function;
+}
+
+export interface IAutocompleteResponse extends IApiResponse {
+  data: IParsedOpenApiResponse | null
 }
