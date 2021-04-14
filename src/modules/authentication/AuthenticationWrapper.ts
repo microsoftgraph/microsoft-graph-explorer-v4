@@ -79,6 +79,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
           if (homeAccountId) {
             return msalApplication.getAccountByHomeId(homeAccountId) || undefined;
           } else {
+            this.isConsentFlow = false;
             this.loginWithInteraction(defaultScopes);
           }
         }
