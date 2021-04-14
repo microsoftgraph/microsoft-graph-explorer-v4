@@ -16,6 +16,7 @@ const homeAccountKey = HOME_ACCOUNT_KEY;
 export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   private static instance: AuthenticationWrapper;
+  private isConsentFlow: boolean = false;
 
   public static getInstance(): AuthenticationWrapper {
     if (!AuthenticationWrapper.instance) {
@@ -34,6 +35,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   public async logIn(sessionId = ''): Promise<AuthenticationResult> {
+    this.isConsentFlow = false;
     try {
       return await this.getAuthResult([], sessionId);
     } catch (error) {
@@ -59,6 +61,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
  *  @returns {Promise.<AuthenticationResult>}
  */
   public async acquireNewAccessToken(scopes: string[] = []): Promise<AuthenticationResult> {
+    this.isConsentFlow = true;
     try {
       const authResult = await this.loginWithInteraction(scopes);
       return authResult;
@@ -138,6 +141,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       redirectUri: getCurrentUri(),
       extraQueryParameters: { mkt: geLocale }
     };
+
+    if (this.isConsentFlow) {
+      delete popUpRequest.prompt;
+      popUpRequest.loginHint = this.getAccount()?.username;
+    }
 
     if (sessionId) {
       popUpRequest.sid = sessionId;
