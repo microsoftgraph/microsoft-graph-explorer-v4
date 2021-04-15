@@ -76,6 +76,10 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
 
     const allAccounts = msalApplication.getAllAccounts();
+    if (!allAccounts || allAccounts.length = 0) {
+      return undefined;
+    }
+
     if (allAccounts.length > 1) {
       const homeAccountId = this.getHomeAccountId();
       if (homeAccountId) {
@@ -85,7 +89,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
         this.loginWithInteraction(defaultScopes);
       }
     }
-
     return allAccounts[0];
   }
 
