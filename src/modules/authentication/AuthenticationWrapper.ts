@@ -71,22 +71,22 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   private getAccount(): AccountInfo | undefined {
-    if (msalApplication) {
-      const allAccounts = msalApplication.getAllAccounts();
-      if (allAccounts && allAccounts.length > 0) {
-        if (allAccounts.length > 1) {
-          const homeAccountId = this.getHomeAccountId();
-          if (homeAccountId) {
-            return msalApplication.getAccountByHomeId(homeAccountId) || undefined;
-          } else {
-            this.isConsentFlow = false;
-            this.loginWithInteraction(defaultScopes);
-          }
-        }
-        return allAccounts[0];
+    if (!msalApplication) {
+      return undefined;
+    }
+
+    const allAccounts = msalApplication.getAllAccounts();
+    if (allAccounts.length > 1) {
+      const homeAccountId = this.getHomeAccountId();
+      if (homeAccountId) {
+        return msalApplication.getAccountByHomeId(homeAccountId) || undefined;
+      } else {
+        this.isConsentFlow = false;
+        this.loginWithInteraction(defaultScopes);
       }
     }
-    return undefined;
+
+    return allAccounts[0];
   }
 
   public async getToken() {
