@@ -3,6 +3,7 @@ import { MessageBarType } from 'office-ui-fabric-react';
 import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
+import { IStatus } from '../../../types/status';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
 import {
   anonymousRequest, authenticatedRequest,
@@ -46,10 +47,12 @@ export function runQuery(query: IQuery): Function {
     const duration = (new Date()).getTime() - new Date(createdAt).getTime();
     createHistory(response, respHeaders, query, createdAt, dispatch, result, duration);
 
-    const status: any = {
+    const status: IStatus = {
       messageType: MessageBarType.error,
       ok: false,
       duration,
+      status: 400,
+      statusText: ''
     };
 
     if (response) {

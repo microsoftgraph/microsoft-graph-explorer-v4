@@ -198,7 +198,7 @@
   "update a Planner task": "actualizar una tarea de Planner",
   "update an open extension": "actualizar una extensión abierta",
   "user by email": "usuario por correo electrónico",
-  "explorer-error": "Se ha producido un problema al enviar esta solicitud a la API de Graph.  Para obtener ayuda, póngase en contacto con nosotros en StackOverflow con la etiqueta [microsoftgraph].",
+  "explorer-error": "Se ha producido un problema al enviar esta solicitud a la API de Graph. Para obtener ayuda, póngase en contacto con nosotros en StackOverflow con la etiqueta [microsoftgraph].",
   "search my OneDrive": "buscar en mi OneDrive",
   "User Activities": "Actividades de usuario",
   "get recent user activities": "obtener actividades de usuario recientes",
@@ -343,8 +343,11 @@
   "Get started with adaptive cards on": "Introducción a las tarjetas adaptables en",
   "Adaptive Cards Templating SDK": "SDK de plantillas de tarjetas adaptables",
   "card": "Tarjeta",
-  "JSON Schema": "Esquema JSON",
+  "JSON Schema": "Plantilla JSON",
   "Report an Issue": "Informar de un problema",
   "Maximize sidebar": "Maximizar la barra lateral",
-  "Getting your access token": "Obtener el token de acceso"
+  "Getting your access token": "Obtener el token de acceso",
+  "This response contains an @odata.nextLink property.": "Esta respuesta contiene una propiedad @odata.nextLink.",
+  "Click here to go to the next page": "Haga clic aquí para ir a la página siguiente",
+  "and experiment on": " y experimentar con"
 }

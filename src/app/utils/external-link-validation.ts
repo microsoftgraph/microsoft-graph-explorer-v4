@@ -4,7 +4,7 @@ import { IQuery } from '../../types/query-runner';
 import { sanitizeQueryUrl } from './query-url-sanitization';
 
 export async function validateExternalLink(url: string, componentName: string,
-  sampleId: string | null = null,  sampleQuery: IQuery | null = null): Promise<void> {
+  sampleId: string | null = null, sampleQuery: IQuery | null = null): Promise<void> {
   await fetch(url)
     .then(response => {
       if (!response.ok) {
@@ -26,4 +26,16 @@ export async function validateExternalLink(url: string, componentName: string,
       }
       telemetry.trackException(new Error(errorTypes.LINK_ERROR), SeverityLevel.Error, properties);
     });
+}
+
+export function isValidHttpsUrl(value: string) {
+  let url;
+
+  try {
+    url = new URL(value);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === 'https:';
 }

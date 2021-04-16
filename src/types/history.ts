@@ -1,19 +1,23 @@
 import { ITheme } from '@uifabric/styling';
+import { Header } from './query-runner';
 
-export interface IHistoryItem {
+export interface IHistoryItem extends History {
   index: number;
+  statusText: string;
+  responseHeaders: Header[];
+  result: object;
+}
+
+interface History {
   url: string;
   method: string;
-  headers: Array<{ name: string; value: string; }>;
-  category?: string;
-  body?: string;
+  headers: Header[];
   createdAt: string;
   status: number;
-  statusText: string;
   response?: Response;
-  responseHeaders: Array<{ name: string; value: string; }>;
   duration: number;
-  result: object;
+  body?: string;
+  category?: string;
 }
 
 export interface IHistoryProps {
@@ -27,15 +31,5 @@ export interface IHistoryProps {
   };
   theme?: ITheme;
   styles?: object;
-  history: Array<{
-    url: string;
-    method: string;
-    headers?: Array<{ name: string; value: string; }>;
-    category?: string;
-    body?: string;
-    createdAt: string;
-    status: number;
-    response: object;
-    duration: number;
-  }>;
+  history: History[];
 }

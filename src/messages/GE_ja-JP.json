@@ -198,7 +198,7 @@
   "update a Planner task": "プランナー タスクを更新する",
   "update an open extension": "オープン拡張機能を更新する",
   "user by email": "メールごとのユーザー",
-  "explorer-error": "この要求の Graph API への送信で問題が発生しました。 サポートが必要な場合は、StackOverflow で [microsoftgraph] タグを付けて質問を投稿してください。",
+  "explorer-error": "この要求の Graph API への送信で問題が発生しました。サポートが必要な場合は、StackOverflow で [microsoftgraph] タグを付けて質問を投稿してください。",
   "search my OneDrive": "自分の OneDrive を検索",
   "User Activities": "ユーザー アクティビティ",
   "get recent user activities": "最近のユーザー アクティビティを取得する",
@@ -343,8 +343,11 @@
   "Get started with adaptive cards on": "アダプティブ カードを使ってみる",
   "Adaptive Cards Templating SDK": "アダプティブ カード テンプレート SDK",
   "card": "カード",
-  "JSON Schema": "JSON スキーマ",
+  "JSON Schema": "JSON テンプレート",
   "Report an Issue": "問題の報告",
   "Maximize sidebar": "サイド バーを最大化する",
-  "Getting your access token": "アクセス トークンを取得する"
+  "Getting your access token": "アクセス トークンを取得する",
+  "This response contains an @odata.nextLink property.": "この応答には、@odata.nextLink プロパティが含まれています。",
+  "Click here to go to the next page": "次のページに移動して実験するには、",
+  "and experiment on": " ここをクリックしてください"
 }

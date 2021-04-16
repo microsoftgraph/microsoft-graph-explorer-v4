@@ -1,34 +1,61 @@
 
+import { Link, MessageBar, MessageBarType } from 'office-ui-fabric-react';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { ContentType } from '../../../../types/enums';
-import { isImageResponse } from '../../../services/actions/query-action-creator-util';
-import { Image, Monaco } from '../../common';
+import { IQuery } from '../../../../types/query-runner';
+import { IRootState } from '../../../../types/root';
+import { runQuery } from '../../../services/actions/query-action-creators';
+import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
-import { formatXml } from '../../common/monaco/util/format-xml';
+import ResponseDisplay from './ResponseDisplay';
 
 const Response = () => {
-  const language = 'json';
+  const dispatch = useDispatch();
 
-  const { dimensions: { response }, graphResponse, responseAreaExpanded } = useSelector((state: any) => state);
+  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } = useSelector((state: IRootState) => state);
   const { body, headers } = graphResponse;
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
+  const nextLink = getNextLinkFromBody(body);
+
+  const setQuery = () => {
+    const query: IQuery = { ...sampleQuery };
+    query.sampleUrl = nextLink!;
+    dispatch(setSampleQuery(query));
+    dispatch(runQuery(query));
+  }
 
   if (headers) {
     const contentType = getContentType(headers);
-    return (<div style={{ display: 'block' }}>
-      {displayComponent({
-        contentType,
-        body,
-        height,
-        language
-      })}
-    </div>);
+    return (
+      <div style={{ display: 'block' }}>
+        {nextLink &&
+          <MessageBar messageBarType={MessageBarType.info}>
+            <FormattedMessage id='This response contains an @odata.nextLink property.' />
+            <Link onClick={() => setQuery()}>
+              &nbsp;<FormattedMessage id='Click here to go to the next page' />
+            </Link>
+          </MessageBar>
+        }
+        <ResponseDisplay
+          contentType={contentType}
+          body={body}
+          height={height}
+        />
+      </div>
+    );
   }
   return <div />;
 };
+
+function getNextLinkFromBody(body: any) {
+  if (body && body['@odata.nextLink']) {
+    return decodeURIComponent(body['@odata.nextLink']);
+  }
+  return null;
+}
 
 function getContentType(headers: any) {
   let contentType = null;
@@ -44,28 +71,6 @@ function getContentType(headers: any) {
     }
   }
   return contentType;
-}
-
-function displayComponent(properties: any) {
-  const { contentType, body, height, language } = properties;
-
-  switch (contentType) {
-    case ContentType.XML:
-      return <Monaco body={formatXml(body)} language='xml' readOnly={true} height={height} />;
-
-    case ContentType.HTML:
-      return <Monaco body={body} language='html' readOnly={true} height={height} />;
-
-    default:
-      if (isImageResponse(contentType)) {
-        return <Image
-          styles={{ padding: '10px' }}
-          body={body}
-          alt='profile image'
-        />;
-      }
-      return <Monaco body={body} readOnly={true} language={language} height={height} />;
-  }
 }
 
 export default Response;

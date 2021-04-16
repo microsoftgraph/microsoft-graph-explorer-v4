@@ -1,10 +1,10 @@
 import { IconButton, IIconProps, Label, styled } from 'office-ui-fabric-react';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
+import { IRootState } from '../../../../../types/root';
 import { getToken } from '../../../../services/graph-client/msal-service';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
@@ -13,14 +13,14 @@ import { convertVhToPx } from '../../../common/dimensions-adjustment';
 import { authStyles } from './Auth.styles';
 
 export function Auth(props: any) {
-  const { authToken, dimensions: { request: { height } } } = useSelector((state: any) => state);
+  const { authToken, dimensions: { request: { height } } } = useSelector((state: IRootState) => state);
   const requestHeight = convertVhToPx(height, 60);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false)
 
   const handleCopy = async () => {
     await genericCopy(accessToken!);
-    trackCopyEvent();
+    trackTokenCopyEvent();
   };
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export function Auth(props: any) {
   </div>);
 }
 
-function trackCopyEvent() {
+function trackTokenCopyEvent() {
   telemetry.trackEvent(
     eventTypes.BUTTON_CLICK_EVENT,
     {

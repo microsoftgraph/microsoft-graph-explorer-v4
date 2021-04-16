@@ -68,7 +68,7 @@ interface IHarCookies {
   comment?: string;
 }
 
-interface IHarHeaders {
+export interface IHarHeaders {
   name: string;
   value: string;
   comment?: string;

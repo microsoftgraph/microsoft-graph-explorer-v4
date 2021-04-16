@@ -1,10 +1,10 @@
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
-import { IQuery } from './query-runner';
+import { Header, IQuery } from './query-runner';
 
 export interface IHeadersListControl {
     handleOnHeaderDelete: Function;
-    headers?: Array<{ name: string; value: string; }>;
+    headers?: Header[];
     messages: any;
 }
 
@@ -24,7 +24,7 @@ export interface IRequestComponent {
     mode: Mode;
     handleOnEditorChange: Function;
     dimensions: IDimensions;
-    headers?: Array<{ name: string; value: string; }>;
+    headers?: Header[];
     intl: {
         message: object;
     };
@@ -42,7 +42,7 @@ export interface IRequestOptions {
 }
 
 export interface IRequestState {
-    headers: Array<{ name: string; value: string; }>;
+    headers: Header[];
     headerName: string;
     headerValue: string;
 }

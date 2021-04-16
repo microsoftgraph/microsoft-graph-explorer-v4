@@ -6,3 +6,4 @@ export const ADMIN_AUTH_URL = 'https://signIn.microsoftonline.com/common/adminco
 export const TOKEN_URL = 'https://signIn.microsoftonline.com/common/oauth2/v2.0/token';
 export const DEFAULT_USER_SCOPES = 'openid profile User.Read';
 export const DEVX_API_URL = 'https://graphexplorerapi.azurewebsites.net';
+export const GRAPH_API_SANDBOX_URL = 'https://proxy.apisandbox.msdn.microsoft.com';
