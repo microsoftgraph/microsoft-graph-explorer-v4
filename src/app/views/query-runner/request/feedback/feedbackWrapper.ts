@@ -24,9 +24,6 @@ export async function loadAndInitialize(
     };
 
     officeBrowserFeedback.floodgate.initOptions = {
-        onDismiss: (campaignId: string, submitted: string) => {
-            console.log("Floodgate survey dismissed. campaignId: " + campaignId + ", submitted: " + submitted);
-        },
         surveyEnabled: true,
         onSurveyActivatedCallback: {  //callback implementation
             onSurveyActivated
