@@ -47,14 +47,19 @@ export class Request extends Component<IRequestComponent, any> {
 
   private showCustomSurvey() {
     const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
-      campaignId: '10000000-0000-0000-0000-000000000000',//'6f37e1b1-e1cb-47bd-9675-5a539fcbe576',
+      campaignId: 'e24778c9-85ae-499b-b424-1f3a194cd6c7',
       commentQuestion: translateMessage('commentQuestion'),
       isZeroBased: false,
       promptQuestion: translateMessage('promptQuestion'),
       promptNoButtonText: translateMessage('promptNoButtonText'),
       promptYesButtonText: translateMessage('promptYesButtonText'),
       ratingQuestion: translateMessage('ratingQuestion'),
-      ratingValuesAscending: ["Extremely difficult", "Slightly difficult", "Neither easy nor difficult", "Slightly easy", "Extremely easy "],
+      ratingValuesAscending: [
+        translateMessage("Extremely difficult"),
+        translateMessage("Slightly difficult"),
+        translateMessage("Neither easy nor difficult"),
+        translateMessage("Slightly easy"),
+        translateMessage("Extremely easy")],
       showEmailRequest: true,
       showPrompt: false,
       surveyType: 1,
@@ -66,7 +71,7 @@ export class Request extends Component<IRequestComponent, any> {
     );
   }
 
-  onSurveyActivated(launcher: any, survey: any) {
+  private onSurveyActivated = (launcher: any, survey: any) => {
     this.setState({ survey });
   }
 

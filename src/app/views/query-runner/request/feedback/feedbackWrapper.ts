@@ -10,16 +10,16 @@ export async function loadAndInitialize(
     officeBrowserFeedback.initOptions = {
         appId: 2256,
         stylesUrl: ' ', // Mandatory field
-        intlUrl: '', // Mandatory field
+        intlUrl: ' ', // Mandatory field
         environment: 1, // 0 - Prod, 1 - Int
         locale: geLocale,
         onError: (error: string) => { throw error; },
         primaryColour: currentTheme.palette.themePrimary,
         secondaryColour: currentTheme.palette.themeSecondary,
         telemetryGroup: {
-            audienceGroup: "TestAudienceGroup",
+            audienceGroup: 'TestAudienceGroup',
         },
-        userEmail: "test@test.com",  // Replace by the user email
+        userEmail: ' ',  // Replace by the user email
         userEmailConsentDefault: false, // Should the email checkbox be checked
     };
 
@@ -40,4 +40,3 @@ export async function loadAndInitialize(
         function (err: string) { throw err; });
 
 }
-
