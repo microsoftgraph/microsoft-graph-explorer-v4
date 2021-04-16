@@ -19,7 +19,7 @@ export async function loadAndInitialize(
         telemetryGroup: {
             audienceGroup: 'TestAudienceGroup',
         },
-        userEmail: ' ',  // Replace by the user email
+        userEmail: '',  // Replace by the user email
         userEmailConsentDefault: false, // Should the email checkbox be checked
     };
 
