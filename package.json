@@ -89,7 +89,8 @@
     "test-ci": "node scripts/test.js --no-watch -f \"src/tests/accessibility/accessibility.spec.ts\" -t \"Graph Explorer accessibility\"",
     "prebuild:prod": "standard-version",
     "build:prod": "npm run build",
-    "bump": "standard-version --skip.tag --skip.changelog"
+    "bump": "standard-version --skip.tag --skip.changelog",
+    "refreshVSToken": "vsts-npm-auth -config .npmrc"
   },
   "eslintConfig": {
     "extends": "react-app"
