@@ -60,7 +60,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
  * @param {string[]} scopes passed to generate token
  *  @returns {Promise.<AuthenticationResult>}
  */
-  public async acquireNewAccessToken(scopes: string[] = []): Promise<AuthenticationResult> {
+  public async consentToScopes(scopes: string[] = []): Promise<AuthenticationResult> {
     this.isConsentFlow = true;
     try {
       const authResult = await this.loginWithInteraction(scopes);
@@ -76,19 +76,15 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
 
     const allAccounts = msalApplication.getAllAccounts();
-    if (!allAccounts || allAccounts.length = 0) {
+    if (!allAccounts || allAccounts.length === 0) {
       return undefined;
     }
 
     if (allAccounts.length > 1) {
       const homeAccountId = this.getHomeAccountId();
-      if (homeAccountId) {
-        return msalApplication.getAccountByHomeId(homeAccountId) || undefined;
-      } else {
-        this.isConsentFlow = false;
-        this.loginWithInteraction(defaultScopes);
-      }
+      return (homeAccountId) ? msalApplication.getAccountByHomeId(homeAccountId) || undefined : undefined;
     }
+
     return allAccounts[0];
   }
 

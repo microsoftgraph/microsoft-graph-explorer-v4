@@ -5,5 +5,5 @@ export default interface IAuthenticationWrapper {
   logIn(sessionId?: string): Promise<AuthenticationResult>;
   logOut(): void;
   logOutPopUp(): void;
-  acquireNewAccessToken(scopes: string[]): Promise<AuthenticationResult>;
+  consentToScopes(scopes: string[]): Promise<AuthenticationResult>;
 }

@@ -93,7 +93,7 @@ export function fetchScopes(query?: IQuery): Function {
 export function consentToScopes(scopes: string[]): Function {
   return async (dispatch: Function) => {
     try {
-      const authResponse = await authenticationWrapper.acquireNewAccessToken(scopes);
+      const authResponse = await authenticationWrapper.consentToScopes(scopes);
       if (authResponse && authResponse.accessToken) {
         dispatch(getAuthTokenSuccess(true));
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
