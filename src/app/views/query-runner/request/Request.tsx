@@ -36,7 +36,8 @@ export class Request extends Component<IRequestComponent, any> {
     }
     this.initializeFeedback();
   }
-  initializeFeedback() {
+
+  private initializeFeedback() {
     const floodgateObject = makeFloodgate();
     loadAndInitialize(floodgateObject, this.onSurveyActivated).then(() => {
       this.setState({
@@ -63,7 +64,7 @@ export class Request extends Component<IRequestComponent, any> {
         translateMessage("Extremely easy")],
       showEmailRequest: true,
       showPrompt: false,
-      surveyType: 1,
+      surveyType: 2,
       title: translateMessage('title'),
     }
 
