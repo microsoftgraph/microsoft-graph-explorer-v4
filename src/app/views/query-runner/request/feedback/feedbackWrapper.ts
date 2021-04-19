@@ -43,6 +43,7 @@ export async function loadAndInitialize(
         },
         "CloseLabel": translateMessage("Close")
     });
+
     officeBrowserFeedback.floodgate.initialize().then(
         function () {
             officeBrowserFeedback.floodgate.start();
