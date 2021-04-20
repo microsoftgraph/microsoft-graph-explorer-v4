@@ -66,6 +66,7 @@ jobs:
       - task: Npm@1
         inputs:
           command: 'install'
+          customRegistry: 'useNpmrc'
 
       # - script: |
       #     npm install
@@ -107,6 +108,7 @@ jobs:
       - task: Npm@1
         inputs:
           command: 'install'
+          customRegistry: 'useNpmrc'
       # - script: |
       #     npm install
       #   displayName: 'npm install'
