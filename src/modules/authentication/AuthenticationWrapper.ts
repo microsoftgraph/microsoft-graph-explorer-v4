@@ -11,7 +11,6 @@ import IAuthenticationWrapper from './IAuthenticationWrapper';
 import { msalApplication } from './msal-app';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
-const homeAccountKey = HOME_ACCOUNT_KEY;
 
 export class AuthenticationWrapper implements IAuthenticationWrapper {
 
@@ -25,7 +24,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return AuthenticationWrapper.instance;
   }
 
-  public getSessionId() {
+  public getSessionId(): string | null {
     const account = this.getAccount();
     if (account) {
       const idTokenClaims: any = account?.idTokenClaims;
@@ -162,15 +161,15 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   private storeHomeAccountId(account: AccountInfo): void {
-    localStorage.setItem(homeAccountKey, account.homeAccountId);
+    localStorage.setItem(HOME_ACCOUNT_KEY, account.homeAccountId);
   }
 
   private getHomeAccountId(): string | null {
-    return localStorage.getItem(homeAccountKey);
+    return localStorage.getItem(HOME_ACCOUNT_KEY);
   }
 
   private deleteHomeAccountId(): void {
-    localStorage.removeItem(homeAccountKey);
+    localStorage.removeItem(HOME_ACCOUNT_KEY);
   }
 
   /**
