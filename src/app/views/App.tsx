@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../appLocale';
+import { authenticationWrapper } from '../../modules/authentication';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
@@ -23,7 +24,6 @@ import { clearQueryStatus } from '../services/actions/query-status-action-creato
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { logIn } from '../services/graph-client/msal-service';
 import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
@@ -90,7 +90,7 @@ class App extends Component<IAppProps, IAppState> {
     const sessionId = urlParams.get('sid');
 
     if (sessionId) {
-      const authResp = await logIn(sessionId);
+      const authResp = await authenticationWrapper.logIn(sessionId);
       if (authResp) {
         // @ts-ignore
         this.props.actions!.signIn(authResp.accessToken);
