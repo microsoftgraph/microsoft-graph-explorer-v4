@@ -69,6 +69,7 @@ jobs:
 
       - script: |
           npm install -g vsts-npm-auth
+          npm install -g eslint
           npm run refreshVSToken
           npm install
         displayName: 'npm install'
