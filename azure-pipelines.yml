@@ -74,9 +74,9 @@ jobs:
           npm install
         displayName: 'npm install'
 
-      - script: |
-          npm run lint
-        displayName: 'Runs linting checks'
+      # - script: |
+      #     npm run lint
+      #   displayName: 'Runs linting checks'
 
       - script: |
           npm test
