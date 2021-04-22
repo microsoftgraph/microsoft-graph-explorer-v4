@@ -63,7 +63,13 @@ jobs:
           versionSpec: '12.x'
         displayName: 'Install Node.js'
 
+      - task: npmAuthenticate@0
+        inputs:
+          workingFile: .npmrc
+
       - script: |
+          npm install -g vsts-npm-auth
+          npm run refreshVSToken
           npm install
         displayName: 'npm install'
 
