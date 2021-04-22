@@ -69,8 +69,13 @@ jobs:
 
       - script: |
           npm install -g vsts-npm-auth
-          npm install -g eslint-cli
+        displayName: 'Install Authentication package'
+
+      - script: |
           npm run refreshVSToken
+        displayName: 'Authenticate token'
+
+      - script: |
           npm install
         displayName: 'npm install'
 
