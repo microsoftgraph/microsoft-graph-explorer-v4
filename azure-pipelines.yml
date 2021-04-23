@@ -67,15 +67,10 @@ jobs:
         inputs:
           workingFile: .npmrc
 
-      # - script: |
-      #     npm install -g vsts-npm-auth
-      #   displayName: 'Install Authentication package'
-
-      # - script: |
-      #     npm run refreshVSToken
-      #   displayName: 'Authenticate token'
-
       - script: |
+          npm install -g vsts-npm-auth
+          npm install -g eslint
+          npm run refreshVSToken
           npm install
         displayName: 'npm install'
 
