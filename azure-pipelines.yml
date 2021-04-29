@@ -69,8 +69,12 @@ jobs:
         displayName: 'Install vsts'
 
       - script: |
-          type .npmrc
+          npm install @ms-ofb/officebrowserfeedbacknpm@1.6.4
+        displayName: 'Install Office Feedback package'
+
+      - script: |
           npm install
+          npm install -g eslint
         displayName: 'npm install'
 
       - script: |
