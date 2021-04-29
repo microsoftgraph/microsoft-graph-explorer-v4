@@ -69,8 +69,8 @@ jobs:
         displayName: 'Install Office Feedback package'
 
       - script: |
-          npm install
-        displayName: 'npm install --legacy-peer-deps'
+          npm install  --legacy-peer-deps
+        displayName: 'npm install'
 
       - script: |
           npm install -g eslint
