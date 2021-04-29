@@ -64,6 +64,7 @@ jobs:
         displayName: 'Install Node.js'
 
       - script: |
+          npm install -g vsts-npm-auth
           vsts-npm-auth -config .npmrc
           type .npmrc
           npm install
