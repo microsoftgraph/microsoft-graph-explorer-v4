@@ -69,11 +69,18 @@ jobs:
         displayName: 'Install Office Feedback package'
 
       - script: |
-          npm install -g eslint
           npm install
         displayName: 'npm install'
 
       - script: |
+          npm install -g eslint
+          npm install -g eslint-plugin-react
+          npm i -g eslint-config-react-app
+          npm i -g eslint-loader
+          npm i -g eslint-plugin-flowtype
+          npm i -g eslint-plugin-import
+          npm i -g eslint-plugin-jsx-a11y
+          npm i -g eslint-plugin-react
           npm run lint
         displayName: 'Runs linting checks'
 
