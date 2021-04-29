@@ -349,5 +349,6 @@
   "Getting your access token": "Obtener el token de acceso",
   "This response contains an @odata.nextLink property.": "Esta respuesta contiene una propiedad @odata.nextLink.",
   "Click here to go to the next page": "Haga clic aquí para ir a la página siguiente",
-  "and experiment on": " y experimentar con"
+  "and experiment on": " y experimentar con",
+  "Scope consent failed": "Error en el consentimiento del ámbito"
 }
