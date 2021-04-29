@@ -63,12 +63,12 @@ jobs:
           versionSpec: '12.x'
         displayName: 'Install Node.js'
 
-        - script: |
+      - script: |
           npm install -g vsts-npm-auth
           vsts-npm-auth -config .npmrc
         displayName: 'Install vsts'
 
-        - script: |
+      - script: |
           type .npmrc
           npm install
         displayName: 'npm install'
