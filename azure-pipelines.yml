@@ -60,7 +60,7 @@ jobs:
     steps:
       - task: CredScan@2
         inputs:
-          toolMajorVersion: 'V1'
+          toolMajorVersion: 'V2'
 
       - task: NodeTool@0
         inputs:
