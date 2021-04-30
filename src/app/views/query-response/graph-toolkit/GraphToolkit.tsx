@@ -36,7 +36,7 @@ class GraphToolkit extends Component<any> {
             </a>
             .
           </MessageBar>
-          <iframe width='100%' height='470px' src={toolkitUrl} />
+          <iframe width='100%' height='470px' title='graph toolkit frame' src={toolkitUrl} />
         </>
       );
     }
