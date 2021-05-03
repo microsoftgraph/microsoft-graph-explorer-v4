@@ -1,11 +1,5 @@
 import { geLocale } from '../../appLocale';
-
-export interface ICloud {
-  locale: string;
-  name: string;
-  baseUrl: string;
-  loginUrl: string;
-}
+import { ICloud } from '../../types/cloud';
 
 export const clouds: ICloud[] = [{
   locale: 'de-de',
@@ -26,6 +20,21 @@ export const clouds: ICloud[] = [{
 }];
 
 export function getCurrentCloud(): ICloud | undefined {
+  const cloudName = localStorage.getItem('cloud');
+  if (cloudName) {
+    return getCloudProperties(cloudName);
+  }
+  return undefined;
+}
+
+export function getEligibleCloud(): ICloud | undefined {
   const localeValue = geLocale.toLowerCase();
   return clouds.find(k => k.locale === localeValue);
+}
+
+export function getCloudProperties(cloudName: string): ICloud | undefined {
+  if (cloudName) {
+    return clouds.find(k => k.name === cloudName)
+  }
+  return undefined;
 }
