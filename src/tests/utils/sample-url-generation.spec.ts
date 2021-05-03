@@ -1,4 +1,4 @@
-import { parseSampleUrl } from '../../app/utils/sample-url-generation';
+import { parseSampleUrl, getGraphVersion } from '../../app/utils/sample-url-generation';
 
 describe('Sample Url Generation', () => {
 
@@ -74,5 +74,12 @@ describe('Sample Url Generation', () => {
     const parsedUrl = parseSampleUrl(url);
     expect(parsedUrl).toEqual(expectedUrl);
   });
+
+  it('returns appropriate version number', () => {
+    const url = `https://graph.microsoft.com/v1.0/users`;
+    const expectedVersion = 'v1.0';
+    const version = getGraphVersion(url);
+    expect(expectedVersion).toEqual(version);
+  })
 
 });

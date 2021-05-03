@@ -10,7 +10,7 @@ export function parseSampleUrl(url: string, version?: string) {
     try {
       const urlObject: URL = new URL(url);
       requestUrl = decodeURIComponent(urlObject.pathname.substr(6).replace(/\/$/, ''));
-      queryVersion = (version) ? version : urlObject.pathname.substring(1, 5);
+      queryVersion = (version) ? version : getGraphVersion(url);
       search = generateSearchParameters(urlObject, search);
       sampleUrl = `${GRAPH_URL}/${queryVersion}/${requestUrl + search}`;
     } catch (error) {
@@ -25,6 +25,12 @@ export function parseSampleUrl(url: string, version?: string) {
   return {
     queryVersion, requestUrl, sampleUrl, search
   };
+}
+
+export function getGraphVersion(url: string): string {
+  const urlObject: URL = new URL(url);
+  const parts = urlObject.pathname.substring(1).split('/');
+  return parts[0];
 }
 
 function generateSearchParameters(urlObject: URL, search: string) {
