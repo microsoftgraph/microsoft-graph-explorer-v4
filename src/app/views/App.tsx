@@ -1,6 +1,8 @@
 import {
   Announced,
-  IStackTokens, ITheme, styled
+  DefaultButton, Dialog, DialogFooter, DialogType,
+  IStackTokens, ITheme, PrimaryButton,
+  styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
@@ -25,6 +27,7 @@ import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { GRAPH_URL } from '../services/graph-constants';
+import { getCurrentCloud } from '../utils/cloud-resolver';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
@@ -68,6 +71,8 @@ interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
   hideDialog: boolean;
+  showCloudDialog: boolean;
+  cloud: string | undefined;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -78,6 +83,8 @@ class App extends Component<IAppProps, IAppState> {
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false,
+      showCloudDialog: false,
+      cloud: 'global service',
       hideDialog: true
     };
   }
@@ -118,7 +125,29 @@ class App extends Component<IAppProps, IAppState> {
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
     this.handleSharedQueries();
+    this.toggleConfirmCloud();
   };
+
+  public toggleConfirmCloud = () => {
+    if (this.state.showCloudDialog) {
+      this.setState({
+        showCloudDialog: false
+      })
+    } else {
+      const currentCloud = getCurrentCloud();;
+      if (currentCloud) {
+        this.setState({
+          showCloudDialog: true,
+          cloud: currentCloud.name
+        })
+      }
+    }
+  }
+
+  public setCloud = () => {
+    localStorage.setItem('cloud', this.state.cloud!);
+    this.toggleConfirmCloud();
+  }
 
   public handleSharedQueries() {
     const { actions } = this.props;
@@ -293,6 +322,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public render() {
+    const { showCloudDialog, cloud } = this.state;
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
@@ -328,6 +358,12 @@ class App extends Component<IAppProps, IAppState> {
 
     if (mobileScreen) {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
+    }
+
+    const dialogContentProps = {
+      type: DialogType.largeHeader,
+      title: 'You have access to sovereign clouds',
+      subText: `Hey there! Would you like to access your information available in the ${cloud} cloud? You will need to log in once you choose yes`
     }
 
     return (
@@ -377,6 +413,20 @@ class App extends Component<IAppProps, IAppState> {
             </div>
           </div>
         </div>
+        <Dialog
+          hidden={!showCloudDialog}
+          onDismiss={this.toggleConfirmCloud}
+          dialogContentProps={dialogContentProps}
+          modalProps={{
+            isBlocking: false,
+            styles: { main: { maxWidth: 450 } },
+          }}
+        >
+          <DialogFooter>
+            <PrimaryButton onClick={this.setCloud} text="Yes, I would" />
+            <DefaultButton onClick={this.toggleConfirmCloud} text="No" />
+          </DialogFooter>
+        </Dialog>
       </ThemeContext.Provider>
     );
   }
