@@ -1,10 +1,11 @@
 import { graphResponse } from '../../../app/services/reducers/query-runner-reducers';
 import { queryRunnerStatus } from '../../../app/services/reducers/query-runner-status-reducers';
 import { CLEAR_QUERY_STATUS, QUERY_GRAPH_STATUS, QUERY_GRAPH_SUCCESS } from '../../../app/services/redux-constants';
+import { IGraphResponse } from '../../../types/query-response';
 
 describe('Query Runner Reducer', () => {
   it('should return initial state', () => {
-    const initialState = {};
+    const initialState: IGraphResponse = { body: undefined, headers: undefined };
     const dummyAction = { type: 'Dummy', response: { displayName: 'Megan Bowen' } };
     const newState = graphResponse(initialState, dummyAction);
 
@@ -12,7 +13,7 @@ describe('Query Runner Reducer', () => {
   });
 
   it('should handle QUERY_GRAPH_SUCCESS', () => {
-    const initialState = {};
+    const initialState: IGraphResponse = { body: undefined, headers: undefined };
     const mockResponse = {
       body: {
         displayName: 'Megan Bowen',
@@ -28,7 +29,7 @@ describe('Query Runner Reducer', () => {
   });
 
   it('should handle QUERY_GRAPH_STATUS', () => {
-    const initialState = {};
+    const initialState: IGraphResponse = { body: undefined, headers: undefined };
     const mockResponse = {
       status: 400
     };
@@ -39,7 +40,7 @@ describe('Query Runner Reducer', () => {
   });
 
   it('should handle CLEAR_QUERY_STATUS', () => {
-    const initialState = {};
+    const initialState: IGraphResponse = { body: undefined, headers: undefined };
 
     const action = { type: CLEAR_QUERY_STATUS, response: '' };
     const newState = queryRunnerStatus(initialState, action);

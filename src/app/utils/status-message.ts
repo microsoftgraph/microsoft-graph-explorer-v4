@@ -37,4 +37,3 @@ export function getMatchesAndParts(message: string) {
   const parts: string[] = message.split(numberPattern);
   return { matches, parts };
 }
-

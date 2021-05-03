@@ -6,10 +6,10 @@ import { componentNames, telemetry } from '../../../../telemetry';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
+import { IRootState } from '../../../../types/root';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
-import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../utils/translate-messages';
 import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
@@ -21,7 +21,7 @@ import { Snippets } from '../snippets';
 
 export const getPivotItems = () => {
 
-  const { graphExplorerMode: mode, sampleQuery, graphResponse: { body } } = useSelector((state: any) => state);
+  const { graphExplorerMode: mode, sampleQuery, graphResponse: { body } } = useSelector((state: IRootState) => state);
 
   const currentTheme = getTheme();
   const dotStyle = queryResponseStyles(currentTheme).dot;

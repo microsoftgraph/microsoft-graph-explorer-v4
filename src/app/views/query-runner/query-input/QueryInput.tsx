@@ -4,6 +4,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { IQueryInputProps } from '../../../../types/query-runner';
+import { IRootState } from '../../../../types/root';
 
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import { getStyleFor } from '../../../utils/badge-color';
@@ -57,7 +58,7 @@ export class QueryInput extends Component<IQueryInputProps, any> {
     }
   }
 
-  public handleOnRunQuery = (event: any) => {
+  public handleOnRunQuery = () => {
     // allows the state to be populated with the new url before running it
     setTimeout(() => {
       this.props.handleOnRunQuery();
@@ -73,7 +74,6 @@ export class QueryInput extends Component<IQueryInputProps, any> {
       handleOnVersionChange,
       sampleQuery,
       submitting,
-      mode,
       authenticated,
     } = this.props;
 
@@ -130,13 +130,13 @@ export class QueryInput extends Component<IQueryInputProps, any> {
   }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps({ sampleQuery, isLoadingData, theme, graphExplorerMode, authToken }: IRootState) {
   return {
-    sampleQuery: state.sampleQuery,
-    submitting: state.isLoadingData,
-    theme: state.theme,
-    mode: state.graphExplorerMode,
-    authenticated: !!state.authToken,
+    sampleQuery,
+    submitting: isLoadingData,
+    theme,
+    mode: graphExplorerMode,
+    authenticated: !!authToken,
   };
 }
 
@@ -153,4 +153,5 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 
 // @ts-ignore
 const IntlQueryInput = injectIntl(QueryInput);
+// @ts-ignore
 export default connect(mapStateToProps, mapDispatchToProps)(IntlQueryInput);

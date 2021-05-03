@@ -1,20 +1,15 @@
 import { IAction } from '../../../types/action';
-import { IPermission } from '../../../types/permissions';
+import { IPermissionsResponse, IScopes } from '../../../types/permissions';
 import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../redux-constants';
 
-const initialState = {
+const initialState: IScopes = {
   pending: false,
   data: [],
   hasUrl: false,
   error: null
 };
 
-interface IPermissionsResponse {
-  hasUrl: boolean;
-  scopes: IPermission[];
-}
-
-export function scopes(state = initialState, action: IAction): any {
+export function scopes(state: IScopes = initialState, action: IAction): any {
   switch (action.type) {
     case FETCH_SCOPES_SUCCESS:
       const response: IPermissionsResponse = { ...action.response as IPermissionsResponse };
