@@ -255,6 +255,16 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         });
       }
     }
+
+    const origin = new URL(this.state.queryUrl).origin;
+    if (origin !== this.props.cloud.baseUrl) {
+      const queryUrl = this.state.queryUrl.replace(origin, this.props.cloud.baseUrl);
+      const userInput = this.state.userInput.replace(origin, this.props.cloud.baseUrl);
+      this.setState({
+        queryUrl,
+        userInput
+      });
+    }
   }
 
   private filterSuggestions(userInput: string, previousUserInput: string, compare: string, suggestions: string[]) {
@@ -414,13 +424,14 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 }
 
-function mapStateToProps({ sampleQuery, theme, autoComplete }: IRootState) {
+function mapStateToProps({ sampleQuery, theme, autoComplete, cloud }: IRootState) {
   return {
     sampleQuery,
     appTheme: theme,
     autoCompleteOptions: autoComplete.data,
     fetchingSuggestions: autoComplete.pending,
-    autoCompleteError: autoComplete.error
+    autoCompleteError: autoComplete.error,
+    cloud
   };
 }
 

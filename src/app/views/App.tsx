@@ -27,7 +27,7 @@ import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { GRAPH_URL } from '../services/graph-constants';
-import { getCurrentCloud } from '../utils/cloud-resolver';
+import { getCloudProperties, getCurrentCloud, getEligibleCloud } from '../utils/cloud-resolver';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
@@ -44,6 +44,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
+import { setActiveCloud } from '../services/actions/cloud-action-creator';
 
 interface IAppProps {
   theme?: ITheme;
@@ -64,6 +65,7 @@ interface IAppProps {
     toggleSidebar: Function;
     signIn: Function;
     storeScopes: Function;
+    setActiveCloud: Function;
   };
 }
 
@@ -134,11 +136,12 @@ class App extends Component<IAppProps, IAppState> {
         showCloudDialog: false
       })
     } else {
-      const currentCloud = getCurrentCloud();;
-      if (currentCloud) {
+      const currentCloud = getCurrentCloud() || null;
+      const eligibleCloud = getEligibleCloud() || null;
+      if (!currentCloud && eligibleCloud) {
         this.setState({
           showCloudDialog: true,
-          cloud: currentCloud.name
+          cloud: eligibleCloud.name
         })
       }
     }
@@ -146,6 +149,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public setCloud = () => {
     localStorage.setItem('cloud', this.state.cloud!);
+    this.props.actions!.setActiveCloud(getCloudProperties(this.state.cloud!))
     this.toggleConfirmCloud();
   }
 
@@ -459,6 +463,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       clearTermsOfUse,
       runQuery,
       setSampleQuery,
+      setActiveCloud,
       toggleSidebar,
       ...authActionCreators,
       changeTheme: (newTheme: string) => {

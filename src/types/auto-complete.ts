@@ -1,4 +1,5 @@
 import { IApiResponse } from './action';
+import { ICloud } from './cloud';
 import { IParsedOpenApiResponse } from './open-api';
 import { IQuery } from './query-runner';
 
@@ -13,6 +14,7 @@ export interface IAutoCompleteProps {
     url: string;
     parameters: any[];
   };
+  cloud: ICloud;
   actions?: {
     fetchAutoCompleteOptions: Function;
   };
