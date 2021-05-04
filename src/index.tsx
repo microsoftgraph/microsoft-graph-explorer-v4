@@ -15,10 +15,14 @@ import ru from 'react-intl/locale-data/ru';
 import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
+import { setActiveCloud } from './app/services/actions/cloud-action-creator';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
+import { setSampleQuery } from './app/services/actions/query-input-action-creators';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
+import { GRAPH_URL } from './app/services/graph-constants';
+import { getCloudProperties } from './app/utils/cloud-resolver';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
@@ -34,6 +38,7 @@ import { readTheme } from './themes/theme-utils';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
+import { IQuery } from './types/query-runner';
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
@@ -59,7 +64,7 @@ const appState: any = store({
   profile: null,
   queryRunnerStatus: null,
   sampleQuery: {
-    sampleUrl: 'https://graph.microsoft.com/v1.0/me',
+    sampleUrl: `${GRAPH_URL}/v1.0/me`,
     selectedVerb: 'GET',
     sampleBody: undefined,
     sampleHeaders: [],
@@ -67,7 +72,6 @@ const appState: any = store({
   },
   termsOfUse: true,
   theme: currentTheme,
-
 });
 
 function refreshAccessToken() {
@@ -130,6 +134,18 @@ readHistoryData().then((data: any) => {
     });
   }
 });
+
+const cloudName = localStorage.getItem('cloud');
+if (cloudName) {
+  const cloud = getCloudProperties(cloudName);
+  const { baseUrl } = cloud!;
+  appState.dispatch(setActiveCloud(cloud!));
+  const query: IQuery = appState.getState().sampleQuery;
+  const origin = new URL(query.sampleUrl).origin;
+  query.sampleUrl = query.sampleUrl.replace(origin, baseUrl);
+
+  appState.dispatch(setSampleQuery(query))
+}
 
 /**
  * Set's up Monaco Editor's Workers.
