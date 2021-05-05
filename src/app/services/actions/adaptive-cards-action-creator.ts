@@ -2,6 +2,7 @@ import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import * as AdaptiveCardsTemplateAPI from 'adaptivecards-templating';
 import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAction } from '../../../types/action';
+import { IAdaptiveCardContent } from '../../../types/adaptivecard';
 import { IQuery } from '../../../types/query-runner';
 import { lookupTemplate } from '../../utils/adaptive-cards-lookup';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
@@ -58,7 +59,8 @@ export function getAdaptiveCard(
       const response = await fetch(`https://templates.adaptivecards.io/graph.microsoft.com/${templateFileName}`);
       const templatePayload = await response.json();
       const card = createCardFromTemplate(templatePayload, payload);
-      return dispatch(getAdaptiveCardSuccess({ card, template: templatePayload }));
+      const adaptiveCardContent: IAdaptiveCardContent = { card, template: templatePayload };
+      return dispatch(getAdaptiveCardSuccess(adaptiveCardContent));
 
     } catch (error) {
       // something wrong happened
@@ -77,13 +79,13 @@ export function getAdaptiveCard(
   };
 }
 
-function createCardFromTemplate(templatePayload: any, payload: string) {
+function createCardFromTemplate(templatePayload: any, payload: string): AdaptiveCardsTemplateAPI.Template {
   const template = new AdaptiveCardsTemplateAPI.Template(templatePayload);
   const context: AdaptiveCardsTemplateAPI.IEvaluationContext = {
     $root: payload,
   };
   AdaptiveCardsTemplateAPI.GlobalSettings.getUndefinedFieldValueSubstitutionString = (
-    path: string
+    _path: string
   ) => ' ';
   return template.expand(context);
 }

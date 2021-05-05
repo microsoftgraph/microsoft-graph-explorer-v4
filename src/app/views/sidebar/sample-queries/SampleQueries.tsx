@@ -29,6 +29,7 @@ import {
   ISampleQueriesProps,
   ISampleQuery,
 } from '../../../../types/query-runner';
+import { IRootState } from '../../../../types/root';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
@@ -469,12 +470,12 @@ function displayTipMessage(actions: any, selectedQuery: ISampleQuery) {
   });
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps({ authToken, profile, samples, theme }: IRootState) {
   return {
-    tokenPresent: !!state.authToken,
-    profile: state.profile,
-    samples: state.samples,
-    appTheme: state.theme,
+    tokenPresent: !!authToken,
+    profile,
+    samples,
+    appTheme: theme
   };
 }
 
@@ -496,4 +497,5 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 const styledSampleQueries = styled(SampleQueries, sidebarStyles);
 // @ts-ignore
 const IntlSampleQueries = injectIntl(styledSampleQueries);
+// @ts-ignore
 export default connect(mapStateToProps, mapDispatchToProps)(IntlSampleQueries);

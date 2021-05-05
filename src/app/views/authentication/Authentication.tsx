@@ -5,13 +5,14 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { authenticationWrapper } from '../../../modules/authentication';
 
 import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAuthenticationProps } from '../../../types/authentication';
 import { Mode } from '../../../types/enums';
+import { IRootState } from '../../../types/root';
 import * as authActionCreators from '../../services/actions/auth-action-creators';
 import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
-import { logIn } from '../../services/graph-client/msal-service';
 import { translateMessage } from '../../utils/translate-messages';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
@@ -30,7 +31,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
     this.setState({ loginInProgress: true });
 
     try {
-      const authResponse = await logIn();
+      const authResponse = await authenticationWrapper.logIn();
       if (authResponse) {
         this.setState({ loginInProgress: false });
 
@@ -44,7 +45,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
         statusText: messages['Authentication failed'],
         status: errorCode === 'popup_window_error'
           ? translateMessage('popup blocked, allow pop-up windows in your browser')
-          : errorCode.replace('_', ' '),
+          : errorCode ? errorCode.replace('_', ' ') : '',
         messageType: MessageBarType.error
       });
       this.setState({ loginInProgress: false });
@@ -53,7 +54,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
         SeverityLevel.Error,
         {
           ComponentName: componentNames.AUTHENTICATION_ACTION,
-          Message: `Authentication failed: ${errorCode.replace('_', ' ')}`,
+          Message: `Authentication failed: ${errorCode ? errorCode.replace('_', ' ') : ''}`,
         });
     }
 
@@ -101,15 +102,15 @@ function showLoginInProgressSpinner(classes: any, minimised: boolean): React.Rea
   </div>;
 }
 
-function mapStateToProps(state: any) {
-  const mobileScreen = !!state.sidebarProperties.mobileScreen;
-  const showSidebar = !!state.sidebarProperties.showSidebar;
+function mapStateToProps({ sidebarProperties, theme, authToken, graphExplorerMode }: IRootState) {
+  const mobileScreen = !!sidebarProperties.mobileScreen;
+  const showSidebar = !!sidebarProperties.showSidebar;
   return {
-    tokenPresent: !!state.authToken,
+    tokenPresent: !!authToken,
     mobileScreen,
-    appTheme: state.theme,
+    appTheme: theme,
     minimised: !mobileScreen && !showSidebar,
-    graphExplorerMode: state.graphExplorerMode
+    graphExplorerMode
   };
 }
 

@@ -1,13 +1,14 @@
-import { IAction, IApiResponse } from '../../../types/action';
+import { IAction } from '../../../types/action';
+import { IAutocompleteResponse } from '../../../types/auto-complete';
 import { AUTOCOMPLETE_FETCH_ERROR, AUTOCOMPLETE_FETCH_PENDING, AUTOCOMPLETE_FETCH_SUCCESS } from '../redux-constants';
 
-const initialState: IApiResponse = {
+const initialState: IAutocompleteResponse = {
   pending: false,
-  data: [],
+  data: null,
   error: null
 };
 
-export function autoComplete(state = initialState, action: IAction): IApiResponse {
+export function autoComplete(state = initialState, action: IAction): IAutocompleteResponse {
   switch (action.type) {
     case AUTOCOMPLETE_FETCH_PENDING:
       return {

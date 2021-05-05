@@ -1,6 +1,6 @@
 import { geLocale } from '../../../appLocale';
+import { authenticationWrapper } from '../../../modules/authentication';
 import { IQuery } from '../../../types/query-runner';
-import { getSessionId } from '../../services/graph-client/msal-service';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 
 /**
@@ -36,7 +36,7 @@ export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): s
   }
 
   if (authenticated) {
-    const sessionId = getSessionId();
+    const sessionId = authenticationWrapper.getSessionId();
     if (sessionId) {
       shareLink = `${shareLink}&sid=${sessionId}`;
     }

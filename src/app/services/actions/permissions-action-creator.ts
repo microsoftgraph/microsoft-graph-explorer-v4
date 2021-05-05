@@ -1,14 +1,18 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
+import { MessageBarType } from 'office-ui-fabric-react';
+
 import { geLocale } from '../../../appLocale';
+import { authenticationWrapper } from '../../../modules/authentication';
 import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAction } from '../../../types/action';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
-import { acquireNewAccessToken } from '../graph-client/msal-service';
+import { translateMessage } from '../../utils/translate-messages';
 import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../redux-constants';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './auth-action-creators';
+import { setQueryResponseStatus } from './query-status-action-creator';
 
 export function fetchScopesSuccess(response: object): IAction {
   return {
@@ -88,10 +92,20 @@ export function fetchScopes(query?: IQuery): Function {
 
 export function consentToScopes(scopes: string[]): Function {
   return async (dispatch: Function) => {
-    const authResponse = await acquireNewAccessToken(scopes);
-    if (authResponse && authResponse.accessToken) {
-      dispatch(getAuthTokenSuccess(true));
-      dispatch(getConsentedScopesSuccess(authResponse.scopes));
+    try {
+      const authResponse = await authenticationWrapper.consentToScopes(scopes);
+      if (authResponse && authResponse.accessToken) {
+        dispatch(getAuthTokenSuccess(true));
+        dispatch(getConsentedScopesSuccess(authResponse.scopes));
+      }
+    } catch (error) {
+      const { errorCode } = error;
+      dispatch(setQueryResponseStatus({
+        statusText: translateMessage('Scope consent failed'),
+        status: errorCode,
+        ok: false,
+        messageType: MessageBarType.error
+      }))
     }
   };
 }
