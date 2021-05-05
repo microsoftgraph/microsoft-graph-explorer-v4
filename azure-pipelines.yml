@@ -89,7 +89,6 @@ jobs:
         displayName: 'Runs Unit tests'
 
       - script: |
-          npm install
           npm run ci
         displayName: 'Runs Accessibility tests'
 
