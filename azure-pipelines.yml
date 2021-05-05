@@ -69,7 +69,7 @@ jobs:
         displayName: 'Install Office Feedback package'
 
       - script: |
-          npm install --legacy-peer-deps
+          npm install
         displayName: 'npm install'
 
       - script: |
