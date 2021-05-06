@@ -1,5 +1,4 @@
 /* eslint-disable no-useless-escape */
-import { GRAPH_URL } from '../services/graph-constants';
 import {
   isAllAlpha,
   sanitizeQueryParameter,
@@ -55,6 +54,7 @@ export function sanitizeGraphAPISandboxUrl(url: string): string {
  */
 export function sanitizeQueryUrl(url: string): string {
   url = decodeURIComponent(url);
+  const { origin } = new URL(url);
 
   const { search, queryVersion, requestUrl } = parseSampleUrl(url);
   const queryString: string = search
@@ -82,7 +82,7 @@ export function sanitizeQueryUrl(url: string): string {
     });
   }
 
-  return `${GRAPH_URL}/${queryVersion}/${resourceUrl}${queryString}`;
+  return `${origin}/${queryVersion}/${resourceUrl}${queryString}`;
 }
 
 /**

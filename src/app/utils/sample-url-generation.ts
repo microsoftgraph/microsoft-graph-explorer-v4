@@ -1,4 +1,11 @@
-export function parseSampleUrl(url: string, version?: string) {
+interface IParsedSample {
+  queryVersion: string;
+  requestUrl: string;
+  sampleUrl: string;
+  search: string;
+}
+
+export function parseSampleUrl(url: string, version?: string): IParsedSample {
   let requestUrl = '';
   let queryVersion = '';
   let sampleUrl = '';
@@ -6,12 +13,10 @@ export function parseSampleUrl(url: string, version?: string) {
 
   if (url !== '') {
     try {
-      const urlObject: URL = new URL(url);
-      const { origin } = urlObject;
       queryVersion = (version) ? version : getGraphVersion(url);
       requestUrl = getRequestUrl(url, queryVersion);
-      search = generateSearchParameters(urlObject, search);
-      sampleUrl = `${origin}/${queryVersion}/${requestUrl + search}`;
+      search = generateSearchParameters(url, search);
+      sampleUrl = generateSampleUrl(url, queryVersion, requestUrl, search);
     } catch (error) {
       if (error.message === `Failed to construct 'URL': Invalid URL`) {
         return {
@@ -26,20 +31,21 @@ export function parseSampleUrl(url: string, version?: string) {
   };
 }
 
-export function getRequestUrl(url: string, version: string): string {
+function getRequestUrl(url: string, version: string): string {
   const { pathname } = new URL(url);
-  const requestContent = pathname.split(version + '/').pop();
+  const versionToReplace = (pathname.startsWith(`/${version}`)) ? version : getGraphVersion(url);
+  const requestContent = pathname.split(versionToReplace + '/').pop()!;
   return decodeURIComponent(requestContent!.replace(/\/$/, ''));
 }
 
-export function getGraphVersion(url: string): string {
-  const urlObject: URL = new URL(url);
-  const parts = urlObject.pathname.substring(1).split('/');
+function getGraphVersion(url: string): string {
+  const { pathname } = new URL(url);
+  const parts = pathname.substring(1).split('/');
   return parts[0];
 }
 
-function generateSearchParameters(urlObject: URL, search: string) {
-  const searchParameters = urlObject.search;
+function generateSearchParameters(url: string, search: string) {
+  const { search: searchParameters } = new URL(url);
   if (searchParameters) {
     try {
       search = decodeURI(searchParameters);
@@ -51,4 +57,9 @@ function generateSearchParameters(urlObject: URL, search: string) {
     }
   }
   return search;
+}
+
+function generateSampleUrl(url: string, queryVersion: string, requestUrl: string, search: string): string {
+  const { origin } = new URL(url);
+  return `${origin}/${queryVersion}/${requestUrl + search}`;
 }

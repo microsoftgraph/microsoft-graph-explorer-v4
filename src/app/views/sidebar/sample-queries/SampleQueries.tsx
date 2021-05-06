@@ -1,21 +1,7 @@
 import {
-  Announced,
-  DetailsList,
-  DetailsRow,
-  FontSizes,
-  FontWeights,
-  getId,
-  GroupHeader,
-  IColumn,
-  Icon,
-  MessageBar,
-  MessageBarType,
-  SearchBox,
-  SelectionMode,
-  Spinner,
-  SpinnerSize,
-  styled,
-  TooltipHost,
+  Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
+  GroupHeader, IColumn, Icon, MessageBar, MessageBarType, SearchBox,
+  SelectionMode, Spinner, SpinnerSize, styled, TooltipHost,
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -24,21 +10,17 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import {
-  IQuery,
-  ISampleQueriesProps,
-  ISampleQuery,
-} from '../../../../types/query-runner';
+import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
-import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
+import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -247,15 +229,16 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   private querySelected = (query: any) => {
-    const { actions, tokenPresent, profile } = this.props;
+    const { actions, cloud, tokenPresent, profile } = this.props;
     const selectedQuery = query;
     if (!selectedQuery) {
       return;
     }
 
-    const queryVersion = selectedQuery.requestUrl.substring(1, 5);
+    const sampleUrl = cloud.baseUrl + selectedQuery.requestUrl;
+    const { queryVersion } = parseSampleUrl(sampleUrl);
     const sampleQuery: IQuery = {
-      sampleUrl: GRAPH_URL + selectedQuery.requestUrl,
+      sampleUrl,
       selectedVerb: selectedQuery.method,
       sampleBody: selectedQuery.postBody,
       sampleHeaders: selectedQuery.headers || [],
@@ -295,7 +278,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   private trackSampleQueryClickEvent(selectedQuery: ISampleQuery) {
-    const sanitizedUrl = sanitizeQueryUrl(GRAPH_URL + selectedQuery.requestUrl);
+    const { cloud } = this.props;
+    const sanitizedUrl = sanitizeQueryUrl(cloud.baseUrl + selectedQuery.requestUrl);
     telemetry.trackEvent(
       eventTypes.LISTITEM_CLICK_EVENT,
       {
@@ -470,12 +454,13 @@ function displayTipMessage(actions: any, selectedQuery: ISampleQuery) {
   });
 }
 
-function mapStateToProps({ authToken, profile, samples, theme }: IRootState) {
+function mapStateToProps({ authToken, profile, samples, theme, cloud }: IRootState) {
   return {
     tokenPresent: !!authToken,
     profile,
     samples,
-    appTheme: theme
+    appTheme: theme,
+    cloud
   };
 }
 
