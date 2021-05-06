@@ -255,16 +255,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         });
       }
     }
-
-    const origin = new URL(this.state.queryUrl).origin;
-    if (origin !== this.props.cloud.baseUrl) {
-      const queryUrl = this.state.queryUrl.replace(origin, this.props.cloud.baseUrl);
-      const userInput = this.state.userInput.replace(origin, this.props.cloud.baseUrl);
-      this.setState({
-        queryUrl,
-        userInput
-      });
-    }
   }
 
   private filterSuggestions(userInput: string, previousUserInput: string, compare: string, suggestions: string[]) {

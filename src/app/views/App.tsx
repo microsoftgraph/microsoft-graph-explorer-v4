@@ -27,7 +27,7 @@ import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { GRAPH_URL } from '../services/graph-constants';
-import { getCloudProperties, getCurrentCloud, getEligibleCloud } from '../utils/cloud-resolver';
+import { getCloudProperties, getCurrentCloud, getEligibleCloud, replaceBaseUrl, storeCloudValue } from '../../modules/cloud-resolver';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
@@ -148,8 +148,18 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public setCloud = () => {
-    localStorage.setItem('cloud', this.state.cloud!);
-    this.props.actions!.setActiveCloud(getCloudProperties(this.state.cloud!))
+    const { cloud } = this.state;
+
+    if (!cloud) {
+      return;
+    }
+
+    storeCloudValue(cloud);
+    const cloudProperties = getCloudProperties(cloud);
+    this.props.actions!.setActiveCloud(cloudProperties);
+    const query = { ...this.props.sampleQuery };
+    query.sampleUrl = replaceBaseUrl(query.sampleUrl);
+    this.props.actions!.setSampleQuery(query);
     this.toggleConfirmCloud();
   }
 

@@ -1,14 +1,9 @@
+import { globalCloud } from '../../../modules/cloud-resolver';
 import { IAction } from '../../../types/action';
 import { ICloud } from '../../../types/cloud';
-import { AUTH_URL, GRAPH_URL } from '../graph-constants';
 import { SET_ACTIVE_CLOUD_SUCCESS } from '../redux-constants';
 
-const initialState: ICloud = {
-  baseUrl: GRAPH_URL,
-  locale: 'global',
-  loginUrl: AUTH_URL,
-  name: 'global'
-}
+const initialState: ICloud = globalCloud;
 
 export function cloud(state = initialState, action: IAction): ICloud {
   switch (action.type) {
