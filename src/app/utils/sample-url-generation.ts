@@ -1,5 +1,3 @@
-import { GRAPH_URL } from '../services/graph-constants';
-
 export function parseSampleUrl(url: string, version?: string) {
   let requestUrl = '';
   let queryVersion = '';
@@ -9,10 +7,11 @@ export function parseSampleUrl(url: string, version?: string) {
   if (url !== '') {
     try {
       const urlObject: URL = new URL(url);
-      requestUrl = decodeURIComponent(urlObject.pathname.substr(6).replace(/\/$/, ''));
+      const { origin } = urlObject;
       queryVersion = (version) ? version : getGraphVersion(url);
+      requestUrl = getRequestUrl(url, queryVersion);
       search = generateSearchParameters(urlObject, search);
-      sampleUrl = `${GRAPH_URL}/${queryVersion}/${requestUrl + search}`;
+      sampleUrl = `${origin}/${queryVersion}/${requestUrl + search}`;
     } catch (error) {
       if (error.message === `Failed to construct 'URL': Invalid URL`) {
         return {
@@ -25,6 +24,12 @@ export function parseSampleUrl(url: string, version?: string) {
   return {
     queryVersion, requestUrl, sampleUrl, search
   };
+}
+
+export function getRequestUrl(url: string, version: string): string {
+  const { pathname } = new URL(url);
+  const requestContent = pathname.split(version + '/').pop();
+  return decodeURIComponent(requestContent!.replace(/\/$/, ''));
 }
 
 export function getGraphVersion(url: string): string {
@@ -47,4 +52,3 @@ function generateSearchParameters(urlObject: URL, search: string) {
   }
   return search;
 }
-

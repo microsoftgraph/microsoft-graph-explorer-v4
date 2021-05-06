@@ -1,4 +1,4 @@
-import { parseSampleUrl, getGraphVersion } from '../../app/utils/sample-url-generation';
+import { parseSampleUrl, getGraphVersion, getRequestUrl } from '../../app/utils/sample-url-generation';
 
 describe('Sample Url Generation', () => {
 
@@ -80,6 +80,28 @@ describe('Sample Url Generation', () => {
     const expectedVersion = 'v1.0';
     const version = getGraphVersion(url);
     expect(expectedVersion).toEqual(version);
-  })
+  });
+
+  it('destructures sample url with long version number', () => {
+    const url = `https://graph.microsoft.com/longversionnumberv2/me/messages`;
+
+    const expectedUrl = {
+      requestUrl: 'me/messages',
+      queryVersion: 'longversionnumberv2',
+      sampleUrl: url,
+      search: ''
+    };
+
+    const parsedUrl = parseSampleUrl(url);
+    expect(parsedUrl).toEqual(expectedUrl);
+  });
+
+  it('returns appropriate request url for long version number', () => {
+    const version = 'longversionnumberv2';
+    const request = 'me/messages';
+    const url = `https://graph.microsoft.com/${version}/${request}`;
+    const requestUrl = getRequestUrl(url, version);
+    expect(requestUrl).toEqual(request);
+  });
 
 });
