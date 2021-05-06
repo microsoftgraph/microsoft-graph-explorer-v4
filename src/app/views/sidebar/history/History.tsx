@@ -19,7 +19,6 @@ import * as queryActionCreators from '../../../services/actions/query-action-cre
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as requestHistoryActionCreators from '../../../services/actions/request-history-action-creators';
-import { GRAPH_URL } from '../../../services/graph-constants';
 import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
@@ -143,6 +142,7 @@ export class History extends Component<IHistoryProps, any> {
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
+      const { requestUrl, search, queryVersion } = parseSampleUrl(queryContent);
       let color = currentTheme.palette.green;
       if (item.status > 300) {
         color = currentTheme.palette.red;
@@ -223,7 +223,7 @@ export class History extends Component<IHistoryProps, any> {
                   aria-describedby={hostId}
                   className={classes.queryContent}
                 >
-                  {queryContent.replace(GRAPH_URL, '')}
+                  {`/${queryVersion}/${requestUrl + search}`}
                 </span>
               </TooltipHost>
             </>

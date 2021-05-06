@@ -1,14 +1,10 @@
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
 import {
-  DEVX_API_URL,
-  GRAPH_API_SANDBOX_URL,
-  GRAPH_URL,
-  HOME_ACCOUNT_KEY,
+  DEVX_API_URL, GRAPH_API_SANDBOX_URL,
+  GRAPH_URL, HOME_ACCOUNT_KEY
 } from '../app/services/graph-constants';
-import {
-  sanitizeGraphAPISandboxUrl,
-  sanitizeQueryUrl,
-} from '../app/utils/query-url-sanitization';
+import { sanitizeGraphAPISandboxUrl, sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
+import { clouds } from '../modules/cloud-resolver';
 
 export function filterTelemetryTypes(envelope: ITelemetryItem) {
   const baseType = envelope.baseType || '';
@@ -28,14 +24,15 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
     return true;
   }
 
-  const targetsToInclude = [GRAPH_URL, DEVX_API_URL, GRAPH_API_SANDBOX_URL];
-  const urlObject = new URL(baseData.target || '');
-  if (!targetsToInclude.includes(urlObject.origin)) {
+  const targetsToInclude = getRemoteTargets();
+
+  const { origin } = new URL(baseData.target || '');
+  if (!targetsToInclude.includes(origin)) {
     return false;
   }
 
   const target = baseData.target || '';
-  switch (urlObject.origin) {
+  switch (origin) {
     case GRAPH_URL:
       baseData.name = sanitizeQueryUrl(target);
       break;
@@ -45,6 +42,18 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
       break;
   }
   return true;
+}
+
+function getRemoteTargets() {
+  let targetsToInclude = [GRAPH_URL, DEVX_API_URL, GRAPH_API_SANDBOX_URL];
+
+  const urls: string[] = [];
+  clouds.forEach(cloud => {
+    urls.push(cloud.baseUrl);
+  });
+
+  targetsToInclude = targetsToInclude.concat(urls);
+  return targetsToInclude;
 }
 
 export function addCommonTelemetryItemProperties(envelope: ITelemetryItem) {
