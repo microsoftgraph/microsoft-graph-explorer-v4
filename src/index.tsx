@@ -1,9 +1,11 @@
+import { AuthenticationResult } from '@azure/msal-browser';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { addLocaleData, IntlProvider } from 'react-intl';
+
 import de from 'react-intl/locale-data/de';
 import en from 'react-intl/locale-data/en';
 import es from 'react-intl/locale-data/es';
@@ -13,19 +15,17 @@ import pt from 'react-intl/locale-data/pt';
 import ru from 'react-intl/locale-data/ru';
 import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
-
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
-import { msalApplication } from './app/services/graph-client/msal-agent';
-import { DEFAULT_USER_SCOPES } from './app/services/graph-constants';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
 import { geLocale } from './appLocale';
 import messages from './messages';
+import { authenticationWrapper } from './modules/authentication';
 import { store } from './store';
 import './styles/index.scss';
 import { telemetry } from './telemetry';
@@ -72,7 +72,7 @@ const appState: any = store({
 });
 
 function refreshAccessToken() {
-  msalApplication.acquireTokenSilent({ scopes: DEFAULT_USER_SCOPES.split(' ') }).then((authResponse: any) => {
+  authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
     if (authResponse && authResponse.accessToken) {
       appState.dispatch(getAuthTokenSuccess(true));
       appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
