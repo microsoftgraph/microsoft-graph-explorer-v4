@@ -24,7 +24,7 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
     return true;
   }
 
-  const targetsToInclude = getRemoteTargets();
+  const targetsToInclude = [GRAPH_URL, DEVX_API_URL, GRAPH_API_SANDBOX_URL].concat(getCloudUrls());
 
   const { origin } = new URL(baseData.target || '');
   if (!targetsToInclude.includes(origin)) {
@@ -39,21 +39,20 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
     case GRAPH_API_SANDBOX_URL:
       baseData.name = sanitizeGraphAPISandboxUrl(target);
     default:
+      if (getCloudUrls().includes(origin)) {
+        baseData.name = sanitizeQueryUrl(target);
+      }
       break;
   }
   return true;
 }
 
-function getRemoteTargets() {
-  let targetsToInclude = [GRAPH_URL, DEVX_API_URL, GRAPH_API_SANDBOX_URL];
-
+function getCloudUrls() {
   const urls: string[] = [];
   clouds.forEach(cloud => {
     urls.push(cloud.baseUrl);
   });
-
-  targetsToInclude = targetsToInclude.concat(urls);
-  return targetsToInclude;
+  return urls;
 }
 
 export function addCommonTelemetryItemProperties(envelope: ITelemetryItem) {
