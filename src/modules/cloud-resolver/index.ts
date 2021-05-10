@@ -6,12 +6,6 @@ const storageKey = 'cloud';
 
 export const clouds: ICloud[] = [
   {
-    locale: 'de-de',
-    name: 'German',
-    baseUrl: 'https://graph.microsoft.de',
-    loginUrl: 'https://login.microsoftonline.de'
-  },
-  {
     locale: 'zh-cn',
     name: 'China',
     baseUrl: 'https://microsoftgraph.chinacloudapi.cn',
