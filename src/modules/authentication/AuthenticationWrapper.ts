@@ -4,7 +4,8 @@ import {
   PopupRequest, SilentRequest
 } from '@azure/msal-browser';
 
-import { AUTH_URL, DEFAULT_USER_SCOPES, HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
+import { DEFAULT_USER_SCOPES, HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
+import { getCurrentCloud, globalCloud } from '../cloud-resolver';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './IAuthenticationWrapper';
@@ -125,11 +126,14 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     const urlParams = new URLSearchParams(location.search);
     let tenant = urlParams.get('tenant');
 
+    const currentCloud = getCurrentCloud() || null;
+    const authUrl = (currentCloud) ? currentCloud.loginUrl : globalCloud.loginUrl;
+
     if (!tenant) {
       tenant = 'common';
     }
 
-    return `${AUTH_URL}/${tenant}/`;
+    return `${authUrl}/${tenant}/`;
   }
 
   private async loginWithInteraction(userScopes: string[], sessionId?: string) {
