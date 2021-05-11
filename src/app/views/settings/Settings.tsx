@@ -132,6 +132,7 @@ function Settings(props: ISettingsProps) {
   };
 
   const handleSignOut = () => {
+    setSelectedCloud('');
     dispatch(signOut());
   };
 
@@ -171,15 +172,19 @@ function Settings(props: ISettingsProps) {
       });
   };
 
-  const handleCloudSelection = (cloud: any) => {
+  const setSelectedCloud = (cloud: any) => {
     let activeCloud = getCloudProperties(cloud.key) || null;
     activeCloud = (activeCloud) ? activeCloud : globalCloud;
-    storeCloudValue(cloud.key);
+    storeCloudValue(activeCloud.name);
     dispatch(setActiveCloud(activeCloud));
 
     const query = { ...sampleQuery };
     query.sampleUrl = replaceBaseUrl(query.sampleUrl);
     dispatch(setSampleQuery(query));
+  }
+
+  const handleCloudSelection = (cloud: any) => {
+    setSelectedCloud(cloud);
 
     dispatch(setQueryResponseStatus({
       statusText: translateMessage('Cloud selected'),
@@ -360,8 +365,6 @@ function Settings(props: ISettingsProps) {
       </div>
     </div>
   );
-
-
 }
 
 export default injectIntl(Settings);
