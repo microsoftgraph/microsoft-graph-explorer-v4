@@ -350,5 +350,7 @@
   "This response contains an @odata.nextLink property.": "This response contains an @odata.nextLink property.",
   "Click here to go to the next page": "Click here to go to the next page",
   "and experiment on": " and experiment on",
-  "Scope consent failed": "Scope consent failed"
+  "Scope consent failed": "Scope consent failed",
+  "Select cloud": "Select cloud",
+  "Cloud selected": "Cloud selected"
 }

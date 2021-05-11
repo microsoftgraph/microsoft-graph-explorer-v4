@@ -154,8 +154,12 @@ class App extends Component<IAppProps, IAppState> {
       return;
     }
 
+    const cloudProperties = getCloudProperties(cloud) || null;
+    if (!cloudProperties) {
+      return;
+    }
+
     storeCloudValue(cloud);
-    const cloudProperties = getCloudProperties(cloud);
     this.props.actions!.setActiveCloud(cloudProperties);
     const query = { ...this.props.sampleQuery };
     query.sampleUrl = replaceBaseUrl(query.sampleUrl);
