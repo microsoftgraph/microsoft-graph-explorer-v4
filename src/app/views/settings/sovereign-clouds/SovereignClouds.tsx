@@ -1,10 +1,10 @@
 import {
   ChoiceGroup, DefaultButton, Dialog,
-  DialogFooter, DialogType, MessageBarType
+  DialogFooter, DialogType, IChoiceGroupOption,
+  MessageBarType
 } from 'office-ui-fabric-react';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import {
   getCloudProperties, getCurrentCloud, globalCloud,
   replaceBaseUrl, storeCloudValue
@@ -16,11 +16,12 @@ import { setQueryResponseStatus } from '../../../services/actions/query-status-a
 import { translateMessage } from '../../../utils/translate-messages';
 import { Sovereign } from './cloud-options';
 
-export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector }: any) => {
+
+export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt = false }: any) => {
   const dispatch = useDispatch();
   const { sampleQuery, profile } = useSelector((state: IRootState) => state);
 
-  const cloudOptions = new Sovereign(profile).getOptions();
+  const cloudOptions: IChoiceGroupOption[] = new Sovereign(profile).getOptions();
   const currentCloud = (getCurrentCloud() !== undefined) ? getCurrentCloud() : globalCloud;
 
   const handleCloudSelection = (cloud: any) => {
@@ -32,6 +33,12 @@ export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector }: any)
       ok: true,
       messageType: MessageBarType.success
     }));
+  }
+
+  const dialogContentProps = {
+    type: DialogType.largeHeader,
+    title: translateMessage('You have access to sovereign clouds'),
+    subText: (prompt) ? `Hey there! Would you like to access your information available in another cloud? You will need to log in once you choose a cloud` : ''
   }
 
   const setSelectedCloud = (cloud: any) => {
@@ -49,17 +56,17 @@ export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector }: any)
     <Dialog
       hidden={!cloudSelectorOpen}
       onDismiss={() => toggleCloudSelector()}
-      dialogContentProps={{
-        type: DialogType.largeHeader,
-        title: translateMessage('You have access to sovereign clouds'),
-        isMultiline: false,
+      dialogContentProps={dialogContentProps}
+      modalProps={{
+        isBlocking: false,
+        styles: { main: { maxWidth: 450 } },
       }}
     >
       <ChoiceGroup
         label='Pick the cloud'
         defaultSelectedKey={currentCloud?.name}
         options={cloudOptions}
-        onChange={(event, selectedTheme) => handleCloudSelection(selectedTheme)}
+        onChange={(event, selectedCloud) => handleCloudSelection(selectedCloud)}
       />
       <DialogFooter>
         <DefaultButton

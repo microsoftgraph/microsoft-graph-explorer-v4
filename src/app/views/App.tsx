@@ -1,8 +1,6 @@
 import {
-  Announced,
-  DefaultButton, Dialog, DialogFooter, DialogType,
-  IStackTokens, ITheme, PrimaryButton,
-  styled
+  Announced, IStackTokens,
+  ITheme, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
@@ -11,6 +9,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../appLocale';
 import { authenticationWrapper } from '../../modules/authentication';
+import { getCurrentCloud, getEligibleCloud } from '../../modules/cloud-resolver';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
@@ -27,7 +26,6 @@ import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { GRAPH_URL } from '../services/graph-constants';
-import { getCloudProperties, getCurrentCloud, getEligibleCloud, replaceBaseUrl, storeCloudValue } from '../../modules/cloud-resolver';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
@@ -43,8 +41,8 @@ import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
+import { SovereignClouds } from './settings/sovereign-clouds/SovereignClouds';
 import { Sidebar } from './sidebar/Sidebar';
-import { setActiveCloud } from '../services/actions/cloud-action-creator';
 
 interface IAppProps {
   theme?: ITheme;
@@ -65,7 +63,6 @@ interface IAppProps {
     toggleSidebar: Function;
     signIn: Function;
     storeScopes: Function;
-    setActiveCloud: Function;
   };
 }
 
@@ -74,7 +71,6 @@ interface IAppState {
   mobileScreen: boolean;
   hideDialog: boolean;
   showCloudDialog: boolean;
-  cloud: string | undefined;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -86,7 +82,6 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: 'GET',
       mobileScreen: false,
       showCloudDialog: false,
-      cloud: 'global service',
       hideDialog: true
     };
   }
@@ -141,30 +136,9 @@ class App extends Component<IAppProps, IAppState> {
       if (!currentCloud && eligibleCloud) {
         this.setState({
           showCloudDialog: true,
-          cloud: eligibleCloud.name
         })
       }
     }
-  }
-
-  public setCloud = () => {
-    const { cloud } = this.state;
-
-    if (!cloud) {
-      return;
-    }
-
-    const cloudProperties = getCloudProperties(cloud) || null;
-    if (!cloudProperties) {
-      return;
-    }
-
-    storeCloudValue(cloud);
-    this.props.actions!.setActiveCloud(cloudProperties);
-    const query = { ...this.props.sampleQuery };
-    query.sampleUrl = replaceBaseUrl(query.sampleUrl);
-    this.props.actions!.setSampleQuery(query);
-    this.toggleConfirmCloud();
   }
 
   public handleSharedQueries() {
@@ -340,7 +314,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public render() {
-    const { showCloudDialog, cloud } = this.state;
+    const { showCloudDialog } = this.state;
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
@@ -376,12 +350,6 @@ class App extends Component<IAppProps, IAppState> {
 
     if (mobileScreen) {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
-    }
-
-    const dialogContentProps = {
-      type: DialogType.largeHeader,
-      title: 'You have access to sovereign clouds',
-      subText: `Hey there! Would you like to access your information available in the ${cloud} cloud? You will need to log in once you choose yes`
     }
 
     return (
@@ -431,20 +399,11 @@ class App extends Component<IAppProps, IAppState> {
             </div>
           </div>
         </div>
-        <Dialog
-          hidden={!showCloudDialog}
-          onDismiss={this.toggleConfirmCloud}
-          dialogContentProps={dialogContentProps}
-          modalProps={{
-            isBlocking: false,
-            styles: { main: { maxWidth: 450 } },
-          }}
-        >
-          <DialogFooter>
-            <PrimaryButton onClick={this.setCloud} text="Yes, I would" />
-            <DefaultButton onClick={this.toggleConfirmCloud} text="No" />
-          </DialogFooter>
-        </Dialog>
+        <SovereignClouds
+          prompt={true}
+          cloudSelectorOpen={showCloudDialog}
+          toggleCloudSelector={this.toggleConfirmCloud}
+        />
       </ThemeContext.Provider>
     );
   }
@@ -477,7 +436,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       clearTermsOfUse,
       runQuery,
       setSampleQuery,
-      setActiveCloud,
       toggleSidebar,
       ...authActionCreators,
       changeTheme: (newTheme: string) => {

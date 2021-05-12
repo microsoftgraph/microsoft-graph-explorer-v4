@@ -1,3 +1,5 @@
+import { IChoiceGroupOption } from 'office-ui-fabric-react';
+
 import { geLocale } from '../../../../appLocale';
 import { clouds, globalCloud } from '../../../../modules/cloud-resolver';
 
@@ -7,8 +9,8 @@ export class Sovereign {
   constructor(profile: any) {
     this.profile = profile;
   }
-  public getOptions() {
-    let options: any[] = [];
+  public getOptions(): IChoiceGroupOption[] {
+    let options: IChoiceGroupOption[] = [];
 
     clouds.forEach(cloud => {
       options.push({
