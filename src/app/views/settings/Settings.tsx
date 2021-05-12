@@ -1,6 +1,6 @@
 import {
   ChoiceGroup, DefaultButton, Dialog, DialogFooter, DialogType, DropdownMenuItemType,
-  getId, IconButton, Label, MessageBarType, Panel,
+  getId, IconButton, Label, Panel,
   PanelType, PrimaryButton, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
@@ -8,32 +8,25 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
-import {
-  clouds, getCloudProperties, getCurrentCloud, globalCloud, replaceBaseUrl,
-  storeCloudValue
-} from '../../../modules/cloud-resolver';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
 import { IRootState } from '../../../types/root';
 import { ISettingsProps } from '../../../types/settings';
 import { signOut } from '../../services/actions/auth-action-creators';
-import { setActiveCloud } from '../../services/actions/cloud-action-creator';
 import { consentToScopes } from '../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
-import { setSampleQuery } from '../../services/actions/query-input-action-creators';
-import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
-import { translateMessage } from '../../utils/translate-messages';
 import { Permission } from '../query-runner/request/permissions';
+import { Sovereign } from './sovereign-clouds/cloud-options';
+import { SovereignClouds } from './sovereign-clouds/SovereignClouds';
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
-  const { permissionsPanelOpen, profile, sampleQuery } = useSelector((state: IRootState) => state);
+  const { permissionsPanelOpen, profile } = useSelector((state: IRootState) => state);
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState<any[]>([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
-  const [cloudSelectorOpen, setCloudSelectorOpen] = useState(false)
 
   const {
     intl: { messages }
@@ -41,9 +34,7 @@ function Settings(props: ISettingsProps) {
 
   const authenticated = useSelector((state: any) => (!!state.authToken));
   const appTheme = useSelector((state: any) => (state.theme));
-
-  const currentCloud = (getCurrentCloud() !== undefined) ? getCurrentCloud() : globalCloud;
-
+  const [cloudSelectorOpen, setCloudSelectorOpen] = useState(false);
 
   const toggleThemeChooserDialogState = () => {
     let hidden = themeChooserDialogHidden;
@@ -57,46 +48,10 @@ function Settings(props: ISettingsProps) {
   };
 
   const handleSignOut = () => {
-    setSelectedCloud('');
     dispatch(signOut());
   };
 
-  const getCloudOptions = () => {
-    let options: any[] = [];
-
-    clouds.forEach(cloud => {
-      options.push({
-        key: cloud.name,
-        text: cloud.name
-      });
-    });
-
-    options.unshift({
-      key: globalCloud.name,
-      text: globalCloud.name
-    });
-
-    if (!canAccessCanary()) {
-      options = options.filter(k => k.key !== 'Canary');
-    }
-
-    if (!canAccessChinaCloud()) {
-      options = options.filter(k => k.key !== 'China');
-    }
-    return options;
-  }
-
-  const canAccessChinaCloud = () => {
-    return geLocale === 'zh-CN';
-  }
-
-  const canAccessCanary = () => {
-    const userProfile: any = { ...profile };
-    const emailAddress = userProfile.mail || userProfile.userPrincipalName;
-    return (emailAddress && emailAddress.includes('@microsoft.com'));
-  }
-
-  const cloudOptions = getCloudOptions();
+  const cloudOptions = new Sovereign(profile).getOptions();
 
   useEffect(() => {
     let menuItems: any[] = [
@@ -131,6 +86,14 @@ function Settings(props: ISettingsProps) {
           iconName: 'Color',
         },
         onClick: () => toggleThemeChooserDialogState(),
+      },
+      {
+        key: 'select-cloud',
+        text: messages['Select cloud'],
+        iconProps: {
+          iconName: 'Cloud',
+        },
+        onClick: () => toggleCloudSelector(),
       }
     ];
 
@@ -143,14 +106,6 @@ function Settings(props: ISettingsProps) {
             iconName: 'AzureKeyVault',
           },
           onClick: () => changePanelState(),
-        },
-        {
-          key: 'select-cloud',
-          text: messages['Select cloud'],
-          iconProps: {
-            iconName: 'Cloud',
-          },
-          onClick: () => toggleCloudSelector(),
         },
         {
           key: 'sign-out',
@@ -168,7 +123,7 @@ function Settings(props: ISettingsProps) {
     }
 
     setItems(menuItems);
-  }, [authenticated]);
+  }, [authenticated, profile]);
 
   const handleChangeTheme = (selectedTheme: any) => {
     const newTheme: AppTheme = selectedTheme.key;
@@ -181,28 +136,6 @@ function Settings(props: ISettingsProps) {
         SelectedTheme: selectedTheme.text
       });
   };
-
-  const setSelectedCloud = (cloud: any) => {
-    let activeCloud = getCloudProperties(cloud.key) || null;
-    activeCloud = (activeCloud) ? activeCloud : globalCloud;
-    storeCloudValue(activeCloud.name);
-    dispatch(setActiveCloud(activeCloud));
-
-    const query = { ...sampleQuery };
-    query.sampleUrl = replaceBaseUrl(query.sampleUrl);
-    dispatch(setSampleQuery(query));
-  }
-
-  const handleCloudSelection = (cloud: any) => {
-    setSelectedCloud(cloud);
-
-    dispatch(setQueryResponseStatus({
-      statusText: translateMessage('Cloud selected'),
-      status: cloud.key,
-      ok: true,
-      messageType: MessageBarType.success
-    }));
-  }
 
   const changePanelState = () => {
     let open = !!permissionsPanelOpen;
@@ -350,28 +283,11 @@ function Settings(props: ISettingsProps) {
           <Permission panel={true} setPermissions={setPermissions} />
         </Panel>
 
-        <Dialog
-          hidden={!cloudSelectorOpen}
-          onDismiss={() => toggleCloudSelector()}
-          dialogContentProps={{
-            type: DialogType.normal,
-            title: messages['Select cloud'],
-            isMultiline: false,
-          }}
-        >
+        {cloudSelectorOpen && <SovereignClouds
+          cloudSelectorOpen={cloudSelectorOpen}
+          toggleCloudSelector={toggleCloudSelector}
+        />}
 
-          <ChoiceGroup
-            label='Pick the cloud'
-            defaultSelectedKey={currentCloud?.name}
-            options={cloudOptions}
-            onChange={(event, selectedTheme) => handleCloudSelection(selectedTheme)}
-          />
-          <DialogFooter>
-            <DefaultButton
-              text={messages.Close}
-              onClick={() => toggleCloudSelector()} />
-          </DialogFooter>
-        </Dialog>
       </div>
     </div>
   );
