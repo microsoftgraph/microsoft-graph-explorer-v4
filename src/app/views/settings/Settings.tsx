@@ -1,25 +1,17 @@
 import {
-  ChoiceGroup,
-  DefaultButton,
-  Dialog,
-  DialogFooter,
-  DialogType,
-  DropdownMenuItemType,
-  getId,
-  IconButton,
-  Label,
-  MessageBarType,
-  Panel,
-  PanelType,
-  PrimaryButton,
-  TooltipHost
+  ChoiceGroup, DefaultButton, Dialog, DialogFooter, DialogType, DropdownMenuItemType,
+  getId, IconButton, Label, MessageBarType, Panel,
+  PanelType, PrimaryButton, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
-import { clouds, getCloudProperties, getCurrentCloud, globalCloud, replaceBaseUrl, storeCloudValue } from '../../../modules/cloud-resolver';
+import {
+  clouds, getCloudProperties, getCurrentCloud, globalCloud, replaceBaseUrl,
+  storeCloudValue
+} from '../../../modules/cloud-resolver';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
@@ -39,7 +31,7 @@ function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
   const { permissionsPanelOpen, profile, sampleQuery } = useSelector((state: IRootState) => state);
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<any[]>([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [cloudSelectorOpen, setCloudSelectorOpen] = useState(false)
 
@@ -50,11 +42,64 @@ function Settings(props: ISettingsProps) {
   const authenticated = useSelector((state: any) => (!!state.authToken));
   const appTheme = useSelector((state: any) => (state.theme));
 
-  const cloudOptions = getCloudOptions();
   const currentCloud = (getCurrentCloud() !== undefined) ? getCurrentCloud() : globalCloud;
 
+
+  const toggleThemeChooserDialogState = () => {
+    let hidden = themeChooserDialogHidden;
+    hidden = !hidden;
+    hideThemeChooserDialog(hidden);
+    telemetry.trackEvent(
+      eventTypes.BUTTON_CLICK_EVENT,
+      {
+        ComponentName: componentNames.THEME_CHANGE_BUTTON
+      });
+  };
+
+  const handleSignOut = () => {
+    setSelectedCloud('');
+    dispatch(signOut());
+  };
+
+  const getCloudOptions = () => {
+    let options: any[] = [];
+
+    clouds.forEach(cloud => {
+      options.push({
+        key: cloud.name,
+        text: cloud.name
+      });
+    });
+
+    options.unshift({
+      key: globalCloud.name,
+      text: globalCloud.name
+    });
+
+    if (!canAccessCanary()) {
+      options = options.filter(k => k.key !== 'Canary');
+    }
+
+    if (!canAccessChinaCloud()) {
+      options = options.filter(k => k.key !== 'China');
+    }
+    return options;
+  }
+
+  const canAccessChinaCloud = () => {
+    return geLocale === 'zh-CN';
+  }
+
+  const canAccessCanary = () => {
+    const userProfile: any = { ...profile };
+    const emailAddress = userProfile.mail || userProfile.userPrincipalName;
+    return (emailAddress && emailAddress.includes('@microsoft.com'));
+  }
+
+  const cloudOptions = getCloudOptions();
+
   useEffect(() => {
-    const menuItems: any = [
+    let menuItems: any[] = [
       {
         key: 'office-dev-program',
         text: messages['Office Dev Program'],
@@ -117,48 +162,13 @@ function Settings(props: ISettingsProps) {
         },
       );
     }
+
+    if (cloudOptions.length === 1) {
+      menuItems = menuItems.filter(k => k.key !== 'select-cloud');
+    }
+
     setItems(menuItems);
   }, [authenticated]);
-
-  const toggleThemeChooserDialogState = () => {
-    let hidden = themeChooserDialogHidden;
-    hidden = !hidden;
-    hideThemeChooserDialog(hidden);
-    telemetry.trackEvent(
-      eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.THEME_CHANGE_BUTTON
-      });
-  };
-
-  const handleSignOut = () => {
-    setSelectedCloud('');
-    dispatch(signOut());
-  };
-
-  function getCloudOptions() {
-    const options: any[] = [];
-    const userProfile: any = { ...profile };
-    const emailAddress = userProfile.mail || userProfile.userPrincipalName;
-
-    clouds.forEach(cloud => {
-      options.push({
-        key: cloud.name,
-        text: cloud.name
-      });
-    });
-
-    options.unshift({
-      key: globalCloud.name,
-      text: globalCloud.name
-    });
-
-    if (!emailAddress || (emailAddress && !emailAddress.includes('@microsoft.com'))) {
-      const filteredOptions = options.filter(k => k.key !== 'Canary');
-      return filteredOptions;
-    }
-    return options;
-  }
 
   const handleChangeTheme = (selectedTheme: any) => {
     const newTheme: AppTheme = selectedTheme.key;
