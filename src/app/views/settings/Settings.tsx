@@ -1,5 +1,5 @@
 import {
-  ChoiceGroup, DefaultButton, Dialog, DialogFooter, DialogType, DropdownMenuItemType,
+  DefaultButton, DropdownMenuItemType,
   getId, IconButton, Label, Panel,
   PanelType, PrimaryButton, TooltipHost
 } from 'office-ui-fabric-react';
@@ -8,33 +8,32 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
+import { Sovereign } from '../../../modules/sovereign-clouds/cloud-options';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
-import { loadGETheme } from '../../../themes';
-import { AppTheme } from '../../../types/enums';
 import { IRootState } from '../../../types/root';
 import { ISettingsProps } from '../../../types/settings';
 import { signOut } from '../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
-import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
-import { Sovereign } from '../../../modules/sovereign-clouds/cloud-options';
 import { SovereignClouds } from './SovereignClouds';
+import { ThemeChooser } from './ThemeChooser';
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
-  const { permissionsPanelOpen, profile } = useSelector((state: IRootState) => state);
-  const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
+
+  const { permissionsPanelOpen, profile, authToken } = useSelector((state: IRootState) => state);
   const [items, setItems] = useState<any[]>([]);
+  const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
+  const [cloudSelectorOpen, setCloudSelectorOpen] = useState(false);
+  const authenticated = !!authToken;
+
+  const cloudOptions = new Sovereign(profile).getOptions();
 
   const {
     intl: { messages }
   }: any = props;
-
-  const authenticated = useSelector((state: any) => (!!state.authToken));
-  const appTheme = useSelector((state: any) => (state.theme));
-  const [cloudSelectorOpen, setCloudSelectorOpen] = useState(false);
 
   const toggleThemeChooserDialogState = () => {
     let hidden = themeChooserDialogHidden;
@@ -50,8 +49,6 @@ function Settings(props: ISettingsProps) {
   const handleSignOut = () => {
     dispatch(signOut());
   };
-
-  const cloudOptions = new Sovereign(profile).getOptions();
 
   useEffect(() => {
     let menuItems: any[] = [
@@ -124,18 +121,6 @@ function Settings(props: ISettingsProps) {
 
     setItems(menuItems);
   }, [authenticated, profile]);
-
-  const handleChangeTheme = (selectedTheme: any) => {
-    const newTheme: AppTheme = selectedTheme.key;
-    dispatch(changeTheme(newTheme));
-    loadGETheme(newTheme);
-    telemetry.trackEvent(
-      eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.SELECT_THEME_BUTTON,
-        SelectedTheme: selectedTheme.text
-      });
-  };
 
   const changePanelState = () => {
     let open = !!permissionsPanelOpen;
@@ -231,44 +216,11 @@ function Settings(props: ISettingsProps) {
 
       </TooltipHost>
       <div>
-        <Dialog
-          hidden={themeChooserDialogHidden}
-          onDismiss={() => toggleThemeChooserDialogState()}
-          dialogContentProps={{
-            type: DialogType.normal,
-            title: messages['Change theme'],
-            isMultiline: false,
-          }}
-        >
 
-          <ChoiceGroup
-            label='Pick one theme'
-            defaultSelectedKey={appTheme}
-            options={[
-              {
-                key: AppTheme.Light,
-                iconProps: { iconName: 'Light' },
-                text: messages.Light
-              },
-              {
-                key: AppTheme.Dark,
-                iconProps: { iconName: 'CircleFill' },
-                text: messages.Dark
-              },
-              {
-                key: AppTheme.HighContrast,
-                iconProps: { iconName: 'Contrast' },
-                text: messages['High Contrast'],
-              }
-            ]}
-            onChange={(event, selectedTheme) => handleChangeTheme(selectedTheme)}
-          />
-          <DialogFooter>
-            <DefaultButton
-              text={messages.Close}
-              onClick={() => toggleThemeChooserDialogState()} />
-          </DialogFooter>
-        </Dialog>
+        <ThemeChooser
+          dialogHidden={themeChooserDialogHidden}
+          toggleThemeChooserDialogState={toggleThemeChooserDialogState}
+        />
 
         <Panel
           isOpen={permissionsPanelOpen}
