@@ -1,7 +1,7 @@
 import { Link, MessageBar } from 'office-ui-fabric-react';
 import React, { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { replaceBaseUrl } from '../../../modules/cloud-resolver';
+import { replaceBaseUrl } from '../../../modules/sovereign-clouds';
 
 import { IQuery } from '../../../types/query-runner';
 import { GRAPH_URL } from '../../services/graph-constants';

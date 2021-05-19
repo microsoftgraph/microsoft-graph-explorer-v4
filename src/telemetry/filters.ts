@@ -4,7 +4,7 @@ import {
   GRAPH_URL, HOME_ACCOUNT_KEY
 } from '../app/services/graph-constants';
 import { sanitizeGraphAPISandboxUrl, sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
-import { clouds } from '../modules/cloud-resolver';
+import { clouds } from '../modules/sovereign-clouds';
 
 export function filterTelemetryTypes(envelope: ITelemetryItem) {
   const baseType = envelope.baseType || '';

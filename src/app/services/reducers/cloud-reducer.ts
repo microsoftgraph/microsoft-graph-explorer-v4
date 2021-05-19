@@ -1,4 +1,4 @@
-import { globalCloud } from '../../../modules/cloud-resolver';
+import { globalCloud } from '../../../modules/sovereign-clouds';
 import { IAction } from '../../../types/action';
 import { ICloud } from '../../../types/cloud';
 import { SET_ACTIVE_CLOUD_SUCCESS } from '../redux-constants';

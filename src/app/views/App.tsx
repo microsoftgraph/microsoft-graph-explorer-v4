@@ -9,7 +9,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../appLocale';
 import { authenticationWrapper } from '../../modules/authentication';
-import { getCurrentCloud, getEligibleCloud } from '../../modules/cloud-resolver';
+import { getCurrentCloud, getEligibleCloud } from '../../modules/sovereign-clouds';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
@@ -41,7 +41,7 @@ import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
-import { SovereignClouds } from './settings/sovereign-clouds/SovereignClouds';
+import { SovereignClouds } from './settings/SovereignClouds';
 import { Sidebar } from './sidebar/Sidebar';
 
 interface IAppProps {

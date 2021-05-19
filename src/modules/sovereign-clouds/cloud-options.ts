@@ -1,7 +1,6 @@
 import { IChoiceGroupOption } from 'office-ui-fabric-react';
-
-import { geLocale } from '../../../../appLocale';
-import { clouds, globalCloud } from '../../../../modules/cloud-resolver';
+import { clouds, globalCloud } from '.';
+import { geLocale } from '../../appLocale';
 
 export class Sovereign {
   protected profile = null;

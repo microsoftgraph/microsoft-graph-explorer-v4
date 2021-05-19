@@ -5,7 +5,7 @@ import {
 } from '@azure/msal-browser';
 
 import { DEFAULT_USER_SCOPES, HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
-import { getCurrentCloud, globalCloud } from '../cloud-resolver';
+import { getCurrentCloud, globalCloud } from '../sovereign-clouds';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './IAuthenticationWrapper';

@@ -18,8 +18,8 @@ import { consentToScopes } from '../../services/actions/permissions-action-creat
 import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
-import { Sovereign } from './sovereign-clouds/cloud-options';
-import { SovereignClouds } from './sovereign-clouds/SovereignClouds';
+import { Sovereign } from '../../../modules/sovereign-clouds/cloud-options';
+import { SovereignClouds } from './SovereignClouds';
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();

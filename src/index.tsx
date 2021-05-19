@@ -19,7 +19,7 @@ import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
-import { getCurrentCloud, globalCloud } from './modules/cloud-resolver';
+import { getCurrentCloud, globalCloud } from './modules/sovereign-clouds';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
