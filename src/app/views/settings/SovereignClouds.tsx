@@ -5,6 +5,7 @@ import {
 } from 'office-ui-fabric-react';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
   getCloudProperties, getCurrentCloud, globalCloud,
   replaceBaseUrl, storeCloudValue
@@ -16,15 +17,20 @@ import { setQueryResponseStatus } from '../../services/actions/query-status-acti
 import { translateMessage } from '../../utils/translate-messages';
 import { Sovereign } from '../../../modules/sovereign-clouds/cloud-options';
 
+interface ISovereignCloudsProps {
+  cloudSelectorOpen: boolean;
+  toggleCloudSelector: Function;
+  prompt?: boolean;
+}
 
-export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt = false }: any) => {
+export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt = false }: ISovereignCloudsProps) => {
   const dispatch = useDispatch();
   const { sampleQuery, profile } = useSelector((state: IRootState) => state);
 
   const cloudOptions: IChoiceGroupOption[] = new Sovereign(profile).getOptions();
   const currentCloud = (getCurrentCloud() !== undefined) ? getCurrentCloud() : globalCloud;
 
-  const handleCloudSelection = (cloud: any) => {
+  const handleCloudSelection = (cloud: IChoiceGroupOption) => {
     setSelectedCloud(cloud);
 
     dispatch(setQueryResponseStatus({
@@ -38,10 +44,11 @@ export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt
   const dialogContentProps = {
     type: DialogType.largeHeader,
     title: translateMessage('You have access to sovereign clouds'),
-    subText: (prompt) ? `Hey there! Would you like to access your information available in another cloud? You will need to log in once you choose a cloud` : ''
+    subText: (prompt) ? `Hey there! Would you like to access your information available in another cloud?
+    You will need to log in once you choose a cloud` : ''
   }
 
-  const setSelectedCloud = (cloud: any) => {
+  const setSelectedCloud = (cloud: IChoiceGroupOption) => {
     let activeCloud = getCloudProperties(cloud.key) || null;
     activeCloud = (activeCloud) ? activeCloud : globalCloud;
     storeCloudValue(activeCloud.name);
@@ -52,10 +59,18 @@ export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt
     dispatch(setSampleQuery(query));
   }
 
+  const dismissDialog = () => {
+    const current = getCurrentCloud() || null;
+    if (!current) {
+      setSelectedCloud({ key: globalCloud.name, text: globalCloud.name });
+    }
+    toggleCloudSelector();
+  }
+
   return (
     <Dialog
       hidden={!cloudSelectorOpen}
-      onDismiss={() => toggleCloudSelector()}
+      onDismiss={() => dismissDialog()}
       dialogContentProps={dialogContentProps}
       modalProps={{
         isBlocking: false,
@@ -66,12 +81,12 @@ export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt
         label='Pick the cloud'
         defaultSelectedKey={currentCloud?.name}
         options={cloudOptions}
-        onChange={(event, selectedCloud) => handleCloudSelection(selectedCloud)}
+        onChange={(event, selectedCloud) => handleCloudSelection(selectedCloud!)}
       />
       <DialogFooter>
         <DefaultButton
           text={translateMessage('Close')}
-          onClick={() => toggleCloudSelector()} />
+          onClick={() => dismissDialog()} />
       </DialogFooter>
     </Dialog>
   )

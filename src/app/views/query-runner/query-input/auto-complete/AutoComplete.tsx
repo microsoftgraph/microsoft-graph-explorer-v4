@@ -414,14 +414,13 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 }
 
-function mapStateToProps({ sampleQuery, theme, autoComplete, cloud }: IRootState) {
+function mapStateToProps({ sampleQuery, theme, autoComplete }: IRootState) {
   return {
     sampleQuery,
     appTheme: theme,
     autoCompleteOptions: autoComplete.data,
     fetchingSuggestions: autoComplete.pending,
-    autoCompleteError: autoComplete.error,
-    cloud
+    autoCompleteError: autoComplete.error
   };
 }
 

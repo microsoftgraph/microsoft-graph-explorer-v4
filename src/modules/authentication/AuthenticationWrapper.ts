@@ -127,13 +127,13 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     let tenant = urlParams.get('tenant');
 
     const currentCloud = getCurrentCloud() || null;
-    const authUrl = (currentCloud) ? currentCloud.loginUrl : globalCloud.loginUrl;
+    const { loginUrl } = (currentCloud) ? currentCloud : globalCloud;
 
     if (!tenant) {
       tenant = 'common';
     }
 
-    return `${authUrl}/${tenant}/`;
+    return `${loginUrl}/${tenant}/`;
   }
 
   private async loginWithInteraction(userScopes: string[], sessionId?: string) {

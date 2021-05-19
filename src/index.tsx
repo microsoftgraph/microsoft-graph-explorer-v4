@@ -35,7 +35,6 @@ import { readTheme } from './themes/theme-utils';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
-import { IQuery } from './types/query-runner';
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
@@ -55,6 +54,7 @@ const currentTheme = readTheme();
 loadGETheme(currentTheme);
 
 const currentCloud = getCurrentCloud() || null;
+const { baseUrl } = (currentCloud) ? currentCloud : globalCloud;
 
 const appState: any = store({
   authToken: '',
@@ -63,7 +63,7 @@ const appState: any = store({
   profile: null,
   queryRunnerStatus: null,
   sampleQuery: {
-    sampleUrl: `${(currentCloud) ? currentCloud.baseUrl : globalCloud.baseUrl}/v1.0/me`,
+    sampleUrl: `${baseUrl}/v1.0/me`,
     selectedVerb: 'GET',
     sampleBody: undefined,
     sampleHeaders: [],
