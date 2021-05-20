@@ -7,6 +7,9 @@ module.exports = {
     "**/__tests__/**/*.[jt]s?(x)",
     "**/?(*.)+(spec).[jt]s?(x)"
   ],
+  globals: {
+    crypto: require("crypto")
+  },
   testEnvironment: "jsdom",
   testURL: "http://localhost",
   transform: {

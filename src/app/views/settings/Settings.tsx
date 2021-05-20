@@ -211,10 +211,11 @@ function Settings(props: ISettingsProps) {
           role='button'
           styles={{
             label: { marginBottom: -20 },
-            icon: { marginBottom: -20 }
+            menuIcon: { fontSize: 20 }
           }}
-          menuIconProps={{ iconName: 'Settings' }}
+          menuIconProps={{ iconName: 'More' }}
           menuProps={menuProperties} />
+
       </TooltipHost>
       <div>
         <Dialog
