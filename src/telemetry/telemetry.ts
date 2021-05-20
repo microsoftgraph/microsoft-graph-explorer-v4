@@ -7,6 +7,8 @@ import {
   SeverityLevel,
 } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
+
+import '../app/utils/string-operations';
 import { validateExternalLink } from '../app/utils/external-link-validation';
 import { sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
 import { IQuery } from '../types/query-runner';
@@ -70,12 +72,9 @@ class Telemetry implements ITelemetry {
   }
 
   public trackTabClickEvent(tabKey: string, sampleQuery?: IQuery) {
-    let componentName = tabKey.replace('-', ' ');
-    componentName = `${componentName
-      .charAt(0)
-      .toUpperCase()}${componentName.slice(1)} tab`;
+    const componentName = tabKey.replace('-', ' ').toSentenceCase();
     const properties: { [key: string]: any } = {
-      ComponentName: componentName,
+      ComponentName: `${componentName} tab`,
     };
     if (sampleQuery) {
       const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);

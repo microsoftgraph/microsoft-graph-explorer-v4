@@ -17,6 +17,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
+import  '../../utils/string-operations';
 import { geLocale } from '../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { loadGETheme } from '../../../themes';
@@ -126,7 +127,7 @@ function Settings(props: ISettingsProps) {
       eventTypes.BUTTON_CLICK_EVENT,
       {
         ComponentName: componentNames.SELECT_THEME_BUTTON,
-        SelectedTheme: selectedTheme.text
+        SelectedTheme: selectedTheme.key.replace('-', ' ').toSentenceCase()
       });
   };
 
