@@ -1,10 +1,9 @@
 import {
-  DefaultButton, DropdownMenuItemType,
-  getId, IconButton, Label, Panel,
-  PanelType, PrimaryButton, TooltipHost
+  DropdownMenuItemType,
+  getId, IconButton, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
@@ -13,9 +12,8 @@ import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { IRootState } from '../../../types/root';
 import { ISettingsProps } from '../../../types/settings';
 import { signOut } from '../../services/actions/auth-action-creators';
-import { consentToScopes } from '../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
-import { Permission } from '../query-runner/request/permissions';
+import { PermissionsPanel } from './PermissionsPanel';
 import { SovereignClouds } from './SovereignClouds';
 import { ThemeChooser } from './ThemeChooser';
 
@@ -25,7 +23,6 @@ function Settings(props: ISettingsProps) {
   const { permissionsPanelOpen, profile, authToken } = useSelector((state: IRootState) => state);
   const [items, setItems] = useState<any[]>([]);
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
-  const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [cloudSelectorOpen, setCloudSelectorOpen] = useState(false);
   const authenticated = !!authToken;
 
@@ -126,7 +123,6 @@ function Settings(props: ISettingsProps) {
     let open = !!permissionsPanelOpen;
     open = !open;
     dispatch(togglePermissionsPanel(open));
-    setSelectedPermissions([]);
     trackSelectPermissionsButtonClickEvent();
   };
 
@@ -144,52 +140,12 @@ function Settings(props: ISettingsProps) {
       });
   }
 
-  const setPermissions = (permissions: []) => {
-    setSelectedPermissions(permissions);
-  };
-
-  const handleConsent = () => {
-    dispatch(consentToScopes(selectedPermissions));
-    setSelectedPermissions([]);
-  };
-
   const trackOfficeDevProgramLinkClickEvent = () => {
     telemetry.trackEvent(
       eventTypes.LINK_CLICK_EVENT,
       {
         ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
       });
-  };
-
-  const getSelectionDetails = () => {
-    const selectionCount = selectedPermissions.length;
-
-    switch (selectionCount) {
-      case 0:
-        return '';
-      case 1:
-        return `1 ${messages.selected}: ` + selectedPermissions[0];
-      default:
-        return `${selectionCount} ${messages.selected}`;
-    }
-  };
-
-  const onRenderFooterContent = () => {
-    return (
-      <div>
-        <Label>{getSelectionDetails()}</Label>
-        <PrimaryButton
-          disabled={selectedPermissions.length === 0}
-          onClick={() => handleConsent()}
-          style={{ marginRight: 10 }}
-        >
-          <FormattedMessage id='Consent' />
-        </PrimaryButton>
-        <DefaultButton onClick={() => changePanelState()}>
-          <FormattedMessage id='Cancel' />
-        </DefaultButton>
-      </div>
-    );
   };
 
   const menuProperties = {
@@ -222,18 +178,7 @@ function Settings(props: ISettingsProps) {
           toggleThemeChooserDialogState={toggleThemeChooserDialogState}
         />
 
-        <Panel
-          isOpen={permissionsPanelOpen}
-          onDismiss={() => changePanelState()}
-          type={PanelType.medium}
-          hasCloseButton={true}
-          headerText={messages.Permissions}
-          onRenderFooterContent={onRenderFooterContent}
-          isFooterAtBottom={true}
-          closeButtonAriaLabel='Close'
-        >
-          <Permission panel={true} setPermissions={setPermissions} />
-        </Panel>
+        <PermissionsPanel changePanelState={changePanelState} />
 
         {cloudSelectorOpen && <SovereignClouds
           cloudSelectorOpen={cloudSelectorOpen}
