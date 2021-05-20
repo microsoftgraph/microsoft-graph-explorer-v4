@@ -308,6 +308,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     telemetry.trackEvent(eventTypes.DROPDOWN_CHANGE_EVENT,
       {
         ComponentName: componentNames.QUERY_URL_AUTOCOMPLETE_DROPDOWN,
+        QuerySignature: sanitizeQueryUrl(this.state.queryUrl),
         SelectedSuggestion: suggestion
       });
   }
