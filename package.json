@@ -9,7 +9,6 @@
     "@microsoft/applicationinsights-react-js": "2.3.1",
     "@microsoft/applicationinsights-web": "2.3.1",
     "@microsoft/microsoft-graph-client": "2.1.0",
-    "@ms-ofb/officebrowserfeedbacknpm": "1.6.4",
     "@svgr/webpack": "4.1.0",
     "@uifabric/react-cards": "0.109.101",
     "@uifabric/styling": "7.13.1",
@@ -145,6 +144,7 @@
     "tslint": "5.12.1",
     "tslint-config-prettier": "1.18.0",
     "tslint-react": "4.0.0",
-    "yargs-parser": "13.1.2"
+    "yargs-parser": "13.1.2",
+    "@ms-ofb/officebrowserfeedbacknpm": "1.6.4"
   }
 }
