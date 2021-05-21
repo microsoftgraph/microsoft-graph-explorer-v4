@@ -43,27 +43,6 @@ jobs:
       - name: Install Office Feedback package
         run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
 
-      - uses: actions/setup-node@v1.4.4
-        with:
-          node-version: 'v12.x'
-          registry-url: 'https://registry.npmjs.org'
-        name: Set up Node again
-
-      - name: Npm install
-        run: npm install
-
-      - name: Runs linting checks
-        run: |
-          npm install -g eslint
-          npm install -g eslint-plugin-react
-          npm i -g eslint-config-react-app
-          npm i -g eslint-loader
-          npm i -g eslint-plugin-flowtype
-          npm i -g eslint-plugin-import
-          npm i -g eslint-plugin-jsx-a11y
-          npm i -g eslint-plugin-react
-          npm run lint
-
       - name: Build And Deploy
         env:
           REACT_APP_CLIENT_ID: ${{ secrets.REACT_APP_CLIENT_ID }}
