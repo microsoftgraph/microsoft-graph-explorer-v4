@@ -43,6 +43,9 @@ jobs:
       - name: Install Office Feedback package
         run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
 
+      - name: Display api_location
+        run: ll
+
       - name: Delete .npmrc file
         run: rm -i *.npmrc
 
