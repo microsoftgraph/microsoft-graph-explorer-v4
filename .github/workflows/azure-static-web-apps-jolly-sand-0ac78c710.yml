@@ -43,8 +43,11 @@ jobs:
       - name: Install Office Feedback package
         run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
 
-      - name: Set package registry
-        run: npm config set registry 'https://registry.npmjs.org'
+      - uses: actions/setup-node@v1.4.4
+        with:
+          node-version: 'v12.x'
+          registry-url: 'https://registry.npmjs.org'
+        name: Set up Node again
 
       - name: Npm install
         run: npm install
