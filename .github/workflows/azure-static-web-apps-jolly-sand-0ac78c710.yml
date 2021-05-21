@@ -29,6 +29,8 @@ jobs:
         name: Set up Node
 
       - name: Install Office Feedback package
+        with:
+          registry-url: https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/
         run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
 
       - name: Npm install
