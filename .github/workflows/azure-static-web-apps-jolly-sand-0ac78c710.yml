@@ -43,6 +43,9 @@ jobs:
       - name: Install Office Feedback package
         run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
 
+      - name: Set package registry
+        run: npm config set registry https://registry.npmjs.org
+
       - name: Build And Deploy
         env:
           REACT_APP_CLIENT_ID: ${{ secrets.REACT_APP_CLIENT_ID }}
