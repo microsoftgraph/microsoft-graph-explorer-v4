@@ -25,15 +25,17 @@ jobs:
       - uses: actions/setup-node@v1.4.4
         with:
           node-version: 'v12.x'
-          registry-url: 'https://registry.npmjs.org'
-        name: Set up Node
+          registry-url: 'https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/'
+        name: Set package registry
 
       - name: Install Office Feedback package
-        uses: actions/setup-node@v1.4.4
-        with:
-          always-auth: true
-          registry-url: https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/
         run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
+
+      - uses: actions/setup-node@v1.4.4
+        with:
+          node-version: 'v12.x'
+          registry-url: 'https://registry.npmjs.org'
+        name: Set up Node
 
       - name: Npm install
         run: npm install
