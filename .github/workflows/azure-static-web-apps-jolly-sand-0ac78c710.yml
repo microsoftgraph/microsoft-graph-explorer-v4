@@ -22,20 +22,23 @@ jobs:
           submodules: true
         name: Checkout
 
-      - uses: actions/setup-node@v1.4.4
-        with:
-          node-version: 'v12.x'
-          registry-url: 'https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/'
-        name: Set package registry
-
-      - name: Install Office Feedback package
-        run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
-
-      - uses: actions/setup-node@v1.4.4
+     - uses: actions/setup-node@v1.4.4
         with:
           node-version: 'v12.x'
           registry-url: 'https://registry.npmjs.org'
         name: Set up Node
+
+      - name: Set package registry
+        run: npm config set registry https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/
+
+      - name: Office Feedback package registry authentication
+        run: npm set //https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/:_password=NGh0NmRpY2M0N3B3N3dmM2hiM3plZXBveGRpcHNoeWEzejJjaGx1bGhtN2YyaWsyYnJ6YQ==
+
+      - name: Install Office Feedback package
+        run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
+
+      - name: Set package registry
+        run: npm config set registry 'https://registry.npmjs.org
 
       - name: Npm install
         run: npm install
