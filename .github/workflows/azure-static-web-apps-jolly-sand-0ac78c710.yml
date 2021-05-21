@@ -43,12 +43,11 @@ jobs:
       - name: Install Office Feedback package
         run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
 
-      - name: Display location
-        shell: bash
-        run: ll
-
-      - name: Delete .npmrc file
-        run: rm -i *.npmrc
+      - uses: actions/setup-node@v1.4.4
+        with:
+          node-version: 'v12.x'
+          registry-url: 'https://registry.npmjs.org'
+        name: Set up Node
 
       - name: Set package registry
         run: npm config set registry https://registry.npmjs.org
