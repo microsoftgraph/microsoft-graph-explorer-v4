@@ -46,8 +46,8 @@ jobs:
       - name: Set package registry
         run: npm config set registry https://registry.npmjs.org
 
-      - name: Npm install
-        run: npm install --legacy-peer-deps
+      - name: Config list
+        run: npm config list
 
       - name: Build And Deploy
         env:
