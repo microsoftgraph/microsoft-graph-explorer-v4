@@ -29,7 +29,7 @@ jobs:
         name: Set up Node
 
       - name: Set package registry
-        run: npm config set registry https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/
+        run: npm set registry https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/
 
       - name: Office Feedback package registry authentication
         run: |
@@ -50,7 +50,7 @@ jobs:
         name: Set up Node
 
       - name: Set package registry
-        run: npm config set registry https://registry.npmjs.org
+        run: npm set registry https://registry.npmjs.org
 
       - name: Config list
         run: npm config list
