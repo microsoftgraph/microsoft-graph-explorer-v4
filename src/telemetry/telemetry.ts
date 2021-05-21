@@ -17,6 +17,7 @@ import {
   addCommonTelemetryItemProperties,
   filterRemoteDependencyData,
   filterTelemetryTypes,
+  sanitizeStackTrace,
   sanitizeTelemetryItemUriProperty,
 } from './filters';
 import ITelemetry from './ITelemetry';
@@ -31,7 +32,7 @@ class Telemetry implements ITelemetry {
 
     this.config = {
       instrumentationKey: this.getInstrumentationKey(),
-      disableExceptionTracking: true,
+      disableExceptionTracking: false, // Enables autocollection of uncaught exceptions. Used with `sanitizeStackTrace` telemetry initializer to remove any data that might be PII.
       disableAjaxTracking: true,
       disableFetchTracking: false, // Enables capturing of telemetry data for outgoing requests. Used with `filterRemoteDependencyData` telemetry initializer to sanitize captured data to prevent inadvertent capture of PII.
       disableTelemetry: this.getInstrumentationKey() ? false : true,
@@ -48,6 +49,7 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackPageView();
     this.appInsights.addTelemetryInitializer(filterTelemetryTypes);
     this.appInsights.addTelemetryInitializer(filterRemoteDependencyData);
+    this.appInsights.addTelemetryInitializer(sanitizeStackTrace);
     this.appInsights.addTelemetryInitializer(sanitizeTelemetryItemUriProperty);
     this.appInsights.addTelemetryInitializer(addCommonTelemetryItemProperties);
   }
