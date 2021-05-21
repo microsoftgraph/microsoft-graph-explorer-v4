@@ -32,7 +32,13 @@ jobs:
         run: npm config set registry https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/
 
       - name: Office Feedback package registry authentication
-        run: npm set //https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/:_password=NGh0NmRpY2M0N3B3N3dmM2hiM3plZXBveGRpcHNoeWEzejJjaGx1bGhtN2YyaWsyYnJ6YQ==
+        run: |
+        npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/registry/:username=office
+        npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/registry/:_password=NGh0NmRpY2M0N3B3N3dmM2hiM3plZXBveGRpcHNoeWEzejJjaGx1bGhtN2YyaWsyYnJ6YQ==
+        npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/registry/:email=japethobalak@gmail.com
+        npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/:username=office
+        npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/:_password=NGh0NmRpY2M0N3B3N3dmM2hiM3plZXBveGRpcHNoeWEzejJjaGx1bGhtN2YyaWsyYnJ6YQ==
+        npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/:email=japethobalak@gmail.com
 
       - name: Install Office Feedback package
         run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
