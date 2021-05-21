@@ -29,9 +29,10 @@ jobs:
         name: Set up Node
 
       - name: Install Office Feedback package
-        run: |
-          npm install -g npm@6.14.11
-          npm install @ms-ofb/officebrowserfeedbacknpm@1.6.4
+        run: npm install -g npm@6.14.11
+
+      - name: Install Office Feedback package
+        run: npm install @ms-ofb/officebrowserfeedbacknpm@1.6.4
 
       - name: Npm install
         run: npm install
