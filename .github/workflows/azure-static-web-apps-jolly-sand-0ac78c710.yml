@@ -38,7 +38,7 @@ jobs:
           npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/:email=japethobalak@gmail.com
 
       - name: Install Office Feedback package
-        run: npm install @ms-ofb/officebrowserfeedbacknpm@1.6.4 --registry https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/
+        run: npm install @ms-ofb/officebrowserfeedbacknpm@1.6.4
 
       # - uses: actions/setup-node@v1.4.4
       #   with:
@@ -46,8 +46,8 @@ jobs:
       #     registry-url: 'https://registry.npmjs.org'
       #   name: Set up Node Again
 
-      # - name: Set package registry
-      #   run: npm set registry https://registry.npmjs.org
+      - name: Set package registry
+        run: npm set registry https://registry.npmjs.org/
 
       - name: Config list
         run: npm config list
