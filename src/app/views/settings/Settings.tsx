@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
+import '../../utils/string-operations';
 import { geLocale } from '../../../appLocale';
 import { Sovereign } from '../../../modules/sovereign-clouds/cloud-options';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';

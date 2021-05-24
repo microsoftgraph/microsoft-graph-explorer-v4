@@ -158,7 +158,7 @@ class App extends Component<IAppProps, IAppState> {
     const urlParams = new URLSearchParams(window.location.search);
 
     const request = urlParams.get('request');
-    const method = urlParams.get('method');
+    const method = this.validateHttpMethod(urlParams.get('method') || '');
     const version = urlParams.get('version');
     const graphUrl = urlParams.get('GraphUrl') || GRAPH_URL;
     const requestBody = urlParams.get('requestBody');
@@ -181,6 +181,15 @@ class App extends Component<IAppProps, IAppState> {
       sampleBody: requestBody ? this.hashDecode(requestBody) : null,
       sampleHeaders: (headers) ? JSON.parse(this.hashDecode(headers)) : [],
     };
+  }
+
+  private validateHttpMethod(method: string): string {
+    method = method.toUpperCase();
+    const validMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+    if (!validMethods.includes(method)) {
+      method = 'GET';
+    }
+    return method;
   }
 
   private hashDecode(requestBody: string): string {
