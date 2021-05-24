@@ -24,36 +24,34 @@ jobs:
 
       - uses: actions/setup-node@v1.4.4
         with:
+          always-auth: true
           node-version: 'v12.x'
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: 'https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/'
         name: Set up Node
 
-      - name: Set package registry
-        run: npm set registry https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry/
+      # - name: Office Feedback package registry authentication
+      #   run: |
+      #     npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/registry/:username=office
+      #     npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/registry/:_password=NGh0NmRpY2M0N3B3N3dmM2hiM3plZXBveGRpcHNoeWEzejJjaGx1bGhtN2YyaWsyYnJ6YQ==
+      #     npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/registry/:email=japethobalak@gmail.com
+      #     npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/:username=office
+      #     npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/:_password=NGh0NmRpY2M0N3B3N3dmM2hiM3plZXBveGRpcHNoeWEzejJjaGx1bGhtN2YyaWsyYnJ6YQ==
+      #     npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/:email=japethobalak@gmail.com
 
-      - name: Office Feedback package registry authentication
-        run: |
-          npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/registry/:username=office
-          npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/registry/:_password=NGh0NmRpY2M0N3B3N3dmM2hiM3plZXBveGRpcHNoeWEzejJjaGx1bGhtN2YyaWsyYnJ6YQ==
-          npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/registry/:email=japethobalak@gmail.com
-          npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/:username=office
-          npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/:_password=NGh0NmRpY2M0N3B3N3dmM2hiM3plZXBveGRpcHNoeWEzejJjaGx1bGhtN2YyaWsyYnJ6YQ==
-          npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/:email=japethobalak@gmail.com
+      # - name: Npm package Auth
+      #   run: npm install -g vsts-npm-auth
 
-      - name: Npm package Auth
-        run: npm install -g vsts-npm-auth
-
-      - name: Install Office Feedback package
-        run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
+      # - name: Install Office Feedback package
+      #   run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
 
       - uses: actions/setup-node@v1.4.4
         with:
           node-version: 'v12.x'
           registry-url: 'https://registry.npmjs.org'
-        name: Set up Node
+        name: Set up Node Again
 
-      - name: Set package registry
-        run: npm set registry https://registry.npmjs.org
+      # - name: Set package registry
+      #   run: npm set registry https://registry.npmjs.org
 
       - name: Config list
         run: npm config list
