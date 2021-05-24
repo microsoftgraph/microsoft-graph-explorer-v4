@@ -102,6 +102,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@augloop/types-core": "2.16.189",
     "@types/axe-webdriverjs": "2.1.0",
     "@types/chromedriver": "2.38.0",
     "@types/enzyme": "3.9.0",
