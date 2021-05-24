@@ -49,7 +49,9 @@ jobs:
       #   name: Set up Node Again
 
       - name: Set package registry
-        run: npm config set registry https://registry.npmjs.org/
+        run: |
+          npm config set always-auth=false
+          npm config set registry https://registry.npmjs.org/
 
       - name: Config list
         run: npm config list
