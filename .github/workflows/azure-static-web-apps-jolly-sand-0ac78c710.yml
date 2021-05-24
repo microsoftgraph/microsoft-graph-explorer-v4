@@ -40,11 +40,11 @@ jobs:
           npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/:_password=NGh0NmRpY2M0N3B3N3dmM2hiM3plZXBveGRpcHNoeWEzejJjaGx1bGhtN2YyaWsyYnJ6YQ==
           npm set //office.pkgs.visualstudio.com/_packaging/Office/npm/:email=japethobalak@gmail.com
 
-      - name: Install Office Feedback package
-        run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
-
       - name: Npm package Auth
         run: npm install -g vsts-npm-auth
+
+      - name: Install Office Feedback package
+        run: npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
 
       - uses: actions/setup-node@v1.4.4
         with:
