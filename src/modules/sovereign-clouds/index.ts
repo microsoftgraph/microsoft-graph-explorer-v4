@@ -6,7 +6,7 @@ const storageKey = 'cloud';
 
 export const clouds: ICloud[] = [
   {
-    locale: 'zh-cn',
+    locale: 'en-us',
     name: 'China',
     baseUrl: 'https://microsoftgraph.chinacloudapi.cn',
     loginUrl: 'https://portal.azure.cn'

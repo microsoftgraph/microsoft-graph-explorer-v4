@@ -21,6 +21,7 @@ jobs:
       - name: Build And Deploy
         env:
           REACT_APP_CLIENT_ID: ${{ secrets.REACT_APP_CLIENT_ID }}
+          REACT_APP_CLIENT_ID_CHINA: ${{ secrets.REACT_APP_CLIENT_ID_CHINA }}
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v0.0.1-preview
         with:

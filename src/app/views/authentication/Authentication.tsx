@@ -45,7 +45,7 @@ export class Authentication extends Component<IAuthenticationProps, { loginInPro
         statusText: messages['Authentication failed'],
         status: errorCode === 'popup_window_error'
           ? translateMessage('popup blocked, allow pop-up windows in your browser')
-          : errorCode ? errorCode.replace('_', ' ') : '',
+          : errorCode ? errorCode.replace(/_/g, ' ') : '',
         messageType: MessageBarType.error
       });
       this.setState({ loginInProgress: false });

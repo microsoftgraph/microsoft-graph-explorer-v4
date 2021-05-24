@@ -34,7 +34,7 @@ export class Sovereign {
   }
 
   private canAccessChinaCloud() {
-    return geLocale === 'zh-CN';
+    return geLocale === 'en-US';
   }
 
   private canAccessCanary() {

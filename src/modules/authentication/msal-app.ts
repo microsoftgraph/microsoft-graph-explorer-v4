@@ -1,10 +1,15 @@
 import { Configuration, PublicClientApplication } from '@azure/msal-browser';
+import { getCurrentCloud } from '../sovereign-clouds';
 
 function getClientIdFromWindow() {
   return (window as any).ClientId;
 }
 
 function getClientIdFromEnv() {
+  const cloud = getCurrentCloud() || null;
+  if (cloud?.name === 'China') {
+    return process.env.REACT_APP_CLIENT_ID_CHINA;
+  }
   return process.env.REACT_APP_CLIENT_ID;
 }
 
