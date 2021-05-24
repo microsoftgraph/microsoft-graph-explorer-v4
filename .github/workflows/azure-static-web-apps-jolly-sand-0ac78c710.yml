@@ -25,7 +25,7 @@ jobs:
       - uses: actions/setup-node@v1.4.4
         with:
           node-version: 'v12.x'
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: 'https://registry.npmjs.org/'
         name: Set up Node
 
       - name: Office Feedback package registry authentication
