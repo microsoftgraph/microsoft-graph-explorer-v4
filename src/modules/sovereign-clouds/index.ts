@@ -28,6 +28,9 @@ export const globalCloud: ICloud = {
 
 export function getCurrentCloud(): ICloud | undefined {
   const cloudName = localStorage.getItem(storageKey);
+  if (cloudName && cloudName === globalCloud.name) {
+    return globalCloud;
+  }
   return (cloudName) ? getCloudProperties(cloudName) : undefined;
 }
 
