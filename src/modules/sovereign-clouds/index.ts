@@ -9,7 +9,7 @@ export const clouds: ICloud[] = [
     locale: 'en-us',
     name: 'China',
     baseUrl: 'https://microsoftgraph.chinacloudapi.cn',
-    loginUrl: 'https://portal.azure.cn'
+    loginUrl: 'https://login.chinacloudapi.cn'
   },
   {
     locale: 'global',
