@@ -6,16 +6,17 @@ import {
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { authenticationWrapper } from '../../../modules/authentication';
 import {
   getCloudProperties, getCurrentCloud, globalCloud,
   replaceBaseUrl, storeCloudValue
 } from '../../../modules/sovereign-clouds';
+import { Sovereign } from '../../../modules/sovereign-clouds/cloud-options';
 import { IRootState } from '../../../types/root';
 import { setActiveCloud } from '../../services/actions/cloud-action-creator';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
-import { Sovereign } from '../../../modules/sovereign-clouds/cloud-options';
 
 interface ISovereignCloudsProps {
   cloudSelectorOpen: boolean;
@@ -65,6 +66,11 @@ export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt
       setSelectedCloud({ key: globalCloud.name, text: globalCloud.name });
     }
     toggleCloudSelector();
+
+    if (profile) {
+      authenticationWrapper.clearCache();
+      authenticationWrapper.logOut();
+    }
   }
 
   return (

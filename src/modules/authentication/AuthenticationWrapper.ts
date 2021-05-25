@@ -185,7 +185,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
    * and uses either the homeAccountId 'login' to get localstorage keys that contain this
    * identifier
    */
-  private clearCache(): void {
+  public clearCache(): void {
     const keyFilter = this.getHomeAccountId() || 'login';
     const msalKeys = Object.keys(localStorage).filter(key => key.includes(keyFilter));
     msalKeys.forEach((item: string) => {
