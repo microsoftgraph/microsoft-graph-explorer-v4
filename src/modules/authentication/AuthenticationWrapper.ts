@@ -126,7 +126,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     const urlParams = new URLSearchParams(location.search);
     let tenant = urlParams.get('tenant');
 
-    const currentCloud = getCurrentCloud() || null;
+    const currentCloud = getCurrentCloud();
     const { loginUrl } = (currentCloud) ? currentCloud : globalCloud;
 
     if (!tenant) {

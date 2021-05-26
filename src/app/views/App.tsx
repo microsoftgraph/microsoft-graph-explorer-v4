@@ -131,8 +131,8 @@ class App extends Component<IAppProps, IAppState> {
         showCloudDialog: false
       })
     } else {
-      const currentCloud = getCurrentCloud() || null;
-      const eligibleCloud = getEligibleCloud() || null;
+      const currentCloud = getCurrentCloud();
+      const eligibleCloud = getEligibleCloud();
       if (!currentCloud && eligibleCloud) {
         this.setState({
           showCloudDialog: true,

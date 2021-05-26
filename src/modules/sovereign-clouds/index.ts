@@ -26,21 +26,21 @@ export const globalCloud: ICloud = {
   name: 'Global'
 }
 
-export function getCurrentCloud(): ICloud | undefined {
+export function getCurrentCloud(): ICloud | null {
   const cloudName = localStorage.getItem(storageKey);
   if (cloudName && cloudName === globalCloud.name) {
     return globalCloud;
   }
-  return (cloudName) ? getCloudProperties(cloudName) : undefined;
+  return (cloudName) ? getCloudProperties(cloudName) : null;
 }
 
-export function getEligibleCloud(): ICloud | undefined {
+export function getEligibleCloud(): ICloud | null {
   const localeValue = geLocale.toLowerCase();
-  return clouds.find(k => k.locale === localeValue);
+  return clouds.find(cloud => cloud.locale === localeValue) || null;
 }
 
-export function getCloudProperties(cloudName: string): ICloud | undefined {
-  return clouds.find(k => k.name === cloudName) || undefined;
+export function getCloudProperties(cloudName: string): ICloud | null {
+  return clouds.find(cloud => cloud.name === cloudName) || null;
 }
 
 export function replaceBaseUrl(url: string): string {

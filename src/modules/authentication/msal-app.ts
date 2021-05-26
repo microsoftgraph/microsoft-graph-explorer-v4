@@ -5,12 +5,12 @@ function getClientIdFromWindow() {
   return (window as any).ClientId;
 }
 
-function getClientIdFromEnv() {
-  const cloud = getCurrentCloud() || null;
+function getClientIdFromEnv(): string {
+  const cloud = getCurrentCloud();
   if (cloud?.name === 'China') {
-    return process.env.REACT_APP_CLIENT_ID_CHINA;
+    return process.env.REACT_APP_CLIENT_ID_CHINA || '';
   }
-  return process.env.REACT_APP_CLIENT_ID;
+  return process.env.REACT_APP_CLIENT_ID || '';
 }
 
 const windowHasClientId = getClientIdFromWindow();
