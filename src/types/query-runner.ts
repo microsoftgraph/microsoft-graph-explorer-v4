@@ -61,7 +61,7 @@ export interface IInitMessage {
   /** The text within the Docs code block. */
   code: string;
   /** Data extracted from the permissions table. Will be null if Docs cannot locate the permissions table. */
-  permission: string[];
+  permission?: string[];
 }
 
 export interface IThemeChangedMessage {
