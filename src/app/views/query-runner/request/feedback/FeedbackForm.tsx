@@ -6,16 +6,16 @@ import { useDispatch } from 'react-redux';
 import { geLocale } from '../../../../../appLocale';
 import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
+import { getVersion } from '../../../../utils/version';
 
 export default function FeedbackForm({ activated }: any) {
     const dispatch = useDispatch();
     const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
-    const [survey, setSurvey] = useState<any>(undefined);
     const currentTheme = getTheme();
     const { NODE_ENV } = process.env;
 
-    const onSurveyActivated = (launcher: any, surveyItem: any) => {
-        setSurvey(surveyItem);
+    function onSurveyActivated(launcher: any, surveyItem: any) {
+        return surveyItem;
     }
 
     const initializeFeedback = () => {
@@ -29,7 +29,7 @@ export default function FeedbackForm({ activated }: any) {
 
     const showCustomSurvey = () => {
         const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
-            campaignId: process.env.REACT_APP_FEEDBACK_CAMPAIGN_ID || '',
+            campaignId: getCampaignId().toString(),
             commentQuestion: translateMessage('commentQuestion'),
             isZeroBased: false,
             promptQuestion: translateMessage('promptQuestion'),
@@ -66,6 +66,7 @@ export default function FeedbackForm({ activated }: any) {
             environment: (NODE_ENV === 'development') ? 1 : 0, // 0 - Prod, 1 - Int
             locale: geLocale,
             onError: (error: string) => { throw error; },
+            build: getVersion(),
             primaryColour: currentTheme.palette.themePrimary,
             secondaryColour: currentTheme.palette.themeSecondary,
             telemetryGroup: {
@@ -132,9 +133,13 @@ export default function FeedbackForm({ activated }: any) {
 
     }
 
-    return (
-        <div>
+    function getCampaignId(): string {
+        return process.env.REACT_APP_FEEDBACK_CAMPAIGN_ID || '';
+    }
 
-        </div>
+    return (
+        <div />
     );
 }
+
+
