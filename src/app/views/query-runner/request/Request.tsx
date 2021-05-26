@@ -21,6 +21,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
+import FeedbackForm from './feedback/FeedbackForm';
 import { loadAndInitialize } from './feedback/feedbackWrapper';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
@@ -30,51 +31,12 @@ export class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {
     super(props)
     this.state = {
-      officeBrowserFeedback: undefined,
       enableShowSurvey: false,
-      survey: undefined
     }
-    this.initializeFeedback();
-  }
-
-  private initializeFeedback() {
-    const floodgateObject = makeFloodgate();
-    loadAndInitialize(floodgateObject, this.onSurveyActivated).then(() => {
-      this.setState({
-        officeBrowserFeedback: floodgateObject,
-        enableShowSurvey: true,
-      })
-    });
   }
 
   private showCustomSurvey() {
-    const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
-      campaignId: 'e24778c9-85ae-499b-b424-1f3a194cd6c7',
-      commentQuestion: translateMessage('commentQuestion'),
-      isZeroBased: false,
-      promptQuestion: translateMessage('promptQuestion'),
-      promptNoButtonText: translateMessage('promptNoButtonText'),
-      promptYesButtonText: translateMessage('promptYesButtonText'),
-      ratingQuestion: translateMessage('ratingQuestion'),
-      ratingValuesAscending: [
-        translateMessage("Extremely difficult"),
-        translateMessage("Slightly difficult"),
-        translateMessage("Neither easy nor difficult"),
-        translateMessage("Slightly easy"),
-        translateMessage("Extremely easy")],
-      showEmailRequest: true,
-      showPrompt: false,
-      surveyType: 2,
-      title: translateMessage('title'),
-    }
-
-    this.state.officeBrowserFeedback.floodgate.showCustomSurvey(customSurvey).catch(
-      (error: any) => { throw error; }
-    );
-  }
-
-  private onSurveyActivated = (launcher: any, survey: any) => {
-    this.setState({ survey });
+    this.setState({ enableShowSurvey: true });
   }
 
   private getPivotItems = (height: string) => {
@@ -206,47 +168,50 @@ export class Request extends Component<IRequestComponent, any> {
     const maxHeight = 800;
 
     return (
-      <Resizable
-        style={{
-          border: 'solid 1px #ddd',
-          marginBottom: 10,
-        }}
-        onResize={(e: any, direction: any, ref: any) => {
-          if (ref && ref.style && ref.style.height) {
-            this.setRequestAndResponseHeights(ref.style.height);
-          }
-        }}
-        maxHeight={maxHeight}
-        minHeight={minHeight}
-        bounds={'window'}
-        size={{
-          height: this.props.dimensions.request.height,
-          width: '100%',
-        }}
-        enable={{
-          bottom: true,
-        }}
-      >
-        <div className='query-request'>
-          <Pivot
-            onLinkClick={this.handlePivotItemClick}
-            className='pivot-request'
-          >
-            {requestPivotItems}
-            <PivotItem
-              key='feedback'
-              itemIcon='HeartFill'
-              itemKey='feedback'
-              onRenderItemLink={this.getTooltipDisplay}
-              ariaLabel={translateMessage('Feedback')}
-              title={translateMessage('Feedback')}
-              headerText={translateMessage('Feedback')}
+      <>
+        <Resizable
+          style={{
+            border: 'solid 1px #ddd',
+            marginBottom: 10,
+          }}
+          onResize={(e: any, direction: any, ref: any) => {
+            if (ref && ref.style && ref.style.height) {
+              this.setRequestAndResponseHeights(ref.style.height);
+            }
+          }}
+          maxHeight={maxHeight}
+          minHeight={minHeight}
+          bounds={'window'}
+          size={{
+            height: this.props.dimensions.request.height,
+            width: '100%',
+          }}
+          enable={{
+            bottom: true,
+          }}
+        >
+          <div className='query-request'>
+            <Pivot
+              onLinkClick={this.handlePivotItemClick}
+              className='pivot-request'
             >
-            </PivotItem>
-          </Pivot>
-        </div>
+              {requestPivotItems}
+              <PivotItem
+                key='feedback'
+                itemIcon='HeartFill'
+                itemKey='feedback'
+                onRenderItemLink={this.getTooltipDisplay}
+                ariaLabel={translateMessage('Feedback')}
+                title={translateMessage('Feedback')}
+                headerText={translateMessage('Feedback')}
+              >
+              </PivotItem>
+            </Pivot>
+          </div>
 
-      </Resizable>
+        </Resizable>
+        <FeedbackForm activated={this.state.enableShowSurvey} />
+      </>
     );
   }
 }
