@@ -24,11 +24,11 @@ export class Sovereign {
     });
 
     if (!this.canAccessCanary()) {
-      options = options.filter(k => k.key !== 'Canary');
+      options = options.filter(option => option.key !== 'Canary');
     }
 
     if (!this.canAccessChinaCloud()) {
-      options = options.filter(k => k.key !== 'China');
+      options = options.filter(option => option.key !== 'China');
     }
     return options;
   }
