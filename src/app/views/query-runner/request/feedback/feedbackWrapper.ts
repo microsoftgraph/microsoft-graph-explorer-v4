@@ -1,9 +1,11 @@
 import '@ms-ofb/officebrowserfeedbacknpm/intl/en/officebrowserfeedbackstrings';
 import { getTheme } from 'office-ui-fabric-react';
+
 import { geLocale } from '../../../../../../src/appLocale';
 import { translateMessage } from '../../../../utils/translate-messages';
 
 const currentTheme = getTheme();
+const { NODE_ENV } = process.env;
 
 export async function loadAndInitialize(
     officeBrowserFeedback: any,
@@ -11,13 +13,13 @@ export async function loadAndInitialize(
     officeBrowserFeedback.initOptions = {
         appId: 2256,
         stylesUrl: ' ', // Mandatory field
-        environment: 1, // 0 - Prod, 1 - Int
+        environment: (NODE_ENV === 'development') ? 1 : 0, // 0 - Prod, 1 - Int
         locale: geLocale,
         onError: (error: string) => { throw error; },
         primaryColour: currentTheme.palette.themePrimary,
         secondaryColour: currentTheme.palette.themeSecondary,
         telemetryGroup: {
-            audienceGroup: 'TestAudienceGroup',
+            audienceGroup: 'Graph Explorer',
         },
         userEmail: '',  // Replaced by the user email
         userEmailConsentDefault: false, // Should the email checkbox be checked
@@ -28,6 +30,9 @@ export async function loadAndInitialize(
         surveyEnabled: true,
         onSurveyActivatedCallback: {  //callback implementation
             onSurveyActivated
+        },
+        onDismiss: (campaignId: string, submitted: string) => {
+            console.log("Floodgate survey dismissed. campaignId: " + campaignId + ", submitted: " + submitted);
         },
     }
 
@@ -49,5 +54,23 @@ export async function loadAndInitialize(
             officeBrowserFeedback.floodgate.start();
         },
         function (err: string) { throw err; });
+
+    window.onfocus = function () {
+        if (officeBrowserFeedback.floodgate) {
+            officeBrowserFeedback.floodgate.start();
+        }
+    }
+
+    window.onblur = function () {
+        if (officeBrowserFeedback.floodgate) {
+            officeBrowserFeedback.floodgate.stop();
+        }
+    }
+
+    window.onunload = function () {
+        if (officeBrowserFeedback.floodgate) {
+            officeBrowserFeedback.floodgate.stop();
+        }
+    }
 
 }
