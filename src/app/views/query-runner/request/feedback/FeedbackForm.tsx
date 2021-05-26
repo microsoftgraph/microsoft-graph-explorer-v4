@@ -1,12 +1,18 @@
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
+import { getTheme, MessageBarType } from 'office-ui-fabric-react';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { geLocale } from '../../../../../appLocale';
+import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { loadAndInitialize } from './feedbackWrapper';
 
 export default function FeedbackForm({ activated }: any) {
+    const dispatch = useDispatch();
     const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
-    const [enableShowSurvey, setEnableShowSurvey] = useState<boolean>(false);
     const [survey, setSurvey] = useState<any>(undefined);
+    const currentTheme = getTheme();
+    const { NODE_ENV } = process.env;
 
     const onSurveyActivated = (launcher: any, surveyItem: any) => {
         setSurvey(surveyItem);
@@ -16,7 +22,6 @@ export default function FeedbackForm({ activated }: any) {
         const floodgateObject = makeFloodgate();
         loadAndInitialize(floodgateObject, onSurveyActivated).then(() => {
             setOfficeBrowserFeedback(floodgateObject);
-            setEnableShowSurvey(true);
         });
     }
 
@@ -24,7 +29,7 @@ export default function FeedbackForm({ activated }: any) {
 
     const showCustomSurvey = () => {
         const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
-            campaignId: 'e24778c9-85ae-499b-b424-1f3a194cd6c7',
+            campaignId: process.env.REACT_APP_FEEDBACK_CAMPAIGN_ID || '',
             commentQuestion: translateMessage('commentQuestion'),
             isZeroBased: false,
             promptQuestion: translateMessage('promptQuestion'),
@@ -51,6 +56,82 @@ export default function FeedbackForm({ activated }: any) {
     if (activated) {
         showCustomSurvey();
     }
+
+    async function loadAndInitialize(
+        floodgateObject: any,
+        surveyActivated: (launcher: any, surveyItem: any) => void): Promise<void> {
+        floodgateObject.initOptions = {
+            appId: 2256,
+            stylesUrl: ' ', // Mandatory field
+            environment: (NODE_ENV === 'development') ? 1 : 0, // 0 - Prod, 1 - Int
+            locale: geLocale,
+            onError: (error: string) => { throw error; },
+            primaryColour: currentTheme.palette.themePrimary,
+            secondaryColour: currentTheme.palette.themeSecondary,
+            telemetryGroup: {
+                audienceGroup: 'Graph Explorer',
+            },
+            userEmail: '',  // Replaced by the user email
+            userEmailConsentDefault: false, // Should the email checkbox be checked
+            customResourcesSetExternally: 2 // None = 0, Css = 1, Strings = 2, CssAndStrings = 3
+        };
+
+        floodgateObject.floodgate.initOptions = {
+            surveyEnabled: true,
+            onSurveyActivatedCallback: {  //callback implementation
+                surveyActivated
+            },
+            onDismiss: (campaignId: string, submitted: string) => {
+                if (submitted) {
+                    dispatch(setQueryResponseStatus({
+                        status: translateMessage('Submitted Successfully'),
+                        statusText: translateMessage('Graph Explorer Feedback'),
+                        ok: true,
+                        messageType: MessageBarType.success
+                    }))
+                }
+            },
+        }
+
+        // Setting the UI strings here before initialization.
+        floodgateObject.setUiStrings({
+            "PrivacyStatement": translateMessage("Privacy Statement"),
+            "Form": {
+                "EmailPlaceholder": translateMessage("Email (optional)"),
+                "RatingLabel": translateMessage("Rating"),
+                "Submit": translateMessage("Submit"),
+                "Cancel": translateMessage("Cancel"),
+                "EmailCheckBoxLabel": translateMessage("You can contact me about this feedback"),
+            },
+            "CloseLabel": translateMessage("Close")
+        });
+
+        floodgateObject.floodgate.initialize().then(
+            function () {
+                floodgateObject.floodgate.start();
+            },
+            function (err: string) { throw err; });
+
+        window.onfocus = function () {
+            if (floodgateObject.floodgate) {
+                floodgateObject.floodgate.start();
+            }
+        }
+
+        window.onblur = function () {
+            if (floodgateObject.floodgate) {
+                floodgateObject.floodgate.stop();
+            }
+        }
+
+        window.onunload = function () {
+            if (floodgateObject.floodgate) {
+                floodgateObject.floodgate.stop();
+            }
+        }
+
+    }
+
     return (
         <div>
 

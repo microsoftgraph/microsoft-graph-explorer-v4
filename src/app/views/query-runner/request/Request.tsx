@@ -1,4 +1,3 @@
-import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import {
   getId,
   Icon,
@@ -22,7 +21,6 @@ import { convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
 import FeedbackForm from './feedback/FeedbackForm';
-import { loadAndInitialize } from './feedback/feedbackWrapper';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
