@@ -30,12 +30,12 @@ export default function FeedbackForm({ activated }: any) {
     const showCustomSurvey = () => {
         const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
             campaignId: getCampaignId().toString(),
-            commentQuestion: translateMessage('commentQuestion'),
+            commentQuestion: translateMessage('Comment question'),
             isZeroBased: false,
-            promptQuestion: translateMessage('promptQuestion'),
-            promptNoButtonText: translateMessage('promptNoButtonText'),
-            promptYesButtonText: translateMessage('promptYesButtonText'),
-            ratingQuestion: translateMessage('ratingQuestion'),
+            promptQuestion: translateMessage('Prompt question'),
+            promptNoButtonText: translateMessage('No'),
+            promptYesButtonText: translateMessage('Yes'),
+            ratingQuestion: translateMessage('Rating question'),
             ratingValuesAscending: [
                 translateMessage("Extremely difficult"),
                 translateMessage("Slightly difficult"),

@@ -352,11 +352,11 @@
   "and experiment on": " and experiment on",
   "Scope consent failed": "Scope consent failed",
   "Feedback": "Got feedback?",
-  "commentQuestion": "Tell us more about your experience",
-  "promptQuestion": "We'd love your Feedback",
-  "promptNoButtonText": "No",
-  "promptYesButtonText": "Yes",
-  "ratingQuestion": "Overall, how easy was it to use Graph Explorer?",
+  "Comment question": "Tell us more about your experience",
+  "Prompt question": "We'd love your Feedback",
+  "No": "No",
+  "Yes": "Yes",
+  "Rating question": "Overall, how easy was it to use Graph Explorer?",
   "title": "Graph Explorer Feedback",
   "Extremely difficult": "Extremely difficult",
   "Slightly difficult": "Slightly difficult",
@@ -366,5 +366,6 @@
   "Ratiing": "Rating",
   "Email (optional)": "Email (optional)",
   "You can contact me about this feedback": "You can contact me about this feedback",
-  "Privacy Statement": "Privacy Statement"
+  "Privacy Statement": "Privacy Statement",
+  "Submitted Successfully": "Submitted Successfully"
 }
