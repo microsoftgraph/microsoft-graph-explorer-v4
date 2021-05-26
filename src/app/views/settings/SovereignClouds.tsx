@@ -46,8 +46,7 @@ export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt
   const dialogContentProps = {
     type: DialogType.largeHeader,
     title: translateMessage('You have access to sovereign clouds'),
-    subText: (prompt) ? `Hey there! Would you like to access your information available in another cloud?
-    You will need to log in once you choose a cloud` : ''
+    subText: (prompt) ? translateMessage('sovereign access description') : ''
   }
 
   const setSelectedCloud = (cloud: IChoiceGroupOption) => {

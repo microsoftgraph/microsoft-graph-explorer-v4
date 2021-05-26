@@ -353,5 +353,6 @@
   "Scope consent failed": "Scope consent failed",
   "Select cloud": "Select cloud",
   "Cloud selected": "Cloud selected",
-  "You have access to sovereign clouds": "You have access to sovereign clouds"
+  "You have access to sovereign clouds": "You have access to sovereign clouds",
+  "sovereign access description": "Hey there! Would you like to access your information available in another cloud? You will need to log in once you choose a cloud"
 }
