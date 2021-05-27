@@ -3,8 +3,8 @@
   "version": "4.6.1",
   "private": true,
   "dependencies": {
-    "@azure/msal-browser": "2.12.0",
     "@augloop/types-core": "2.16.189",
+    "@azure/msal-browser": "2.12.0",
     "@babel/core": "7.12.13",
     "@babel/eslint-parser": "7.12.13",
     "@microsoft/applicationinsights-react-js": "2.3.1",
