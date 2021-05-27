@@ -368,5 +368,6 @@
   "You can contact me about this feedback": "You can contact me about this feedback",
   "Privacy Statement": "Privacy Statement",
   "Submitted Successfully": "Submitted Successfully",
-  "Privacy consent": "By pressing submit, your feedback will be used to improve Microsoft products and services. Your IT admin will be able to collect this data"
+  "Privacy consent": "By pressing submit, your feedback will be used to improve Microsoft products and services. Your IT admin will be able to collect this data",
+  "Missing url": "Please enter a valid url to run the query"
 }
