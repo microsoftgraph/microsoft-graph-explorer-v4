@@ -97,6 +97,7 @@ export default function FeedbackForm({ activated }: any) {
         // Setting the UI strings here before initialization.
         floodgateObject.setUiStrings({
             "PrivacyStatement": translateMessage("Privacy Statement"),
+            "_PrivacyStatement.comment": translateMessage("Privacy Consent"),
             "Form": {
                 "EmailPlaceholder": translateMessage("Email (optional)"),
                 "RatingLabel": translateMessage("Rating"),
