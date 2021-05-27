@@ -13,7 +13,7 @@ import {
 } from '../../../modules/sovereign-clouds';
 import { Sovereign } from '../../../modules/sovereign-clouds/cloud-options';
 import { IRootState } from '../../../types/root';
-import { signOutSuccess } from '../../services/actions/auth-action-creators';
+import { signOut } from '../../services/actions/auth-action-creators';
 import { setActiveCloud } from '../../services/actions/cloud-action-creator';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
@@ -69,7 +69,7 @@ export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt
 
     if (profile) {
       authenticationWrapper.clearCache();
-      dispatch(signOutSuccess(true));
+      dispatch(signOut());
     }
   }
 
