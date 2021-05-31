@@ -404,6 +404,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
+          errorMessage={!queryUrl ? translateMessage('Missing url') : ''}
         />
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
           <SuggestionsList
