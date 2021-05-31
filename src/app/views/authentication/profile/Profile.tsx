@@ -21,7 +21,8 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       user: {
         displayName: '',
         emailAddress: '',
-        profileImageUrl: ''
+        profileImageUrl: '',
+        id: ''
       }
     };
   }
@@ -61,7 +62,8 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         ...{},
         displayName: userInfo.displayName,
         emailAddress: userInfo.mail || userInfo.userPrincipalName,
-        profileImageUrl: imageUrl
+        profileImageUrl: imageUrl,
+        id: userInfo.id
       };
 
       this.setState({

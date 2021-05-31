@@ -1,10 +1,11 @@
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import { getTheme, MessageBarType } from 'office-ui-fabric-react';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../../../appLocale';
 import { authenticationWrapper } from '../../../../../modules/authentication';
+import { IRootState } from '../../../../../types/root';
 import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { getVersion } from '../../../../utils/version';
@@ -14,6 +15,7 @@ export default function FeedbackForm({ activated }: any) {
     const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
     const currentTheme = getTheme();
     const { NODE_ENV } = process.env;
+    const { profile } = useSelector((state: IRootState) => state);
 
     function onSurveyActivated(launcher: any, surveyItem: any) {
         return surveyItem;
@@ -72,8 +74,8 @@ export default function FeedbackForm({ activated }: any) {
             secondaryColour: currentTheme.palette.themeSecondary,
             telemetryGroup: {
                 audienceGroup: 'Graph Explorer',
+                loggableUserId: `a:${profile?.id}`,
                 tenantId: authenticationWrapper.getAccount()?.tenantId,
-
             },
             userEmail: '',  // Replaced by the user email
             userEmailConsentDefault: false, // Should the email checkbox be checked
