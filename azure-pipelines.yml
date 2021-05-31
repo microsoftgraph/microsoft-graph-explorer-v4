@@ -72,6 +72,10 @@ jobs:
           vsts-npm-auth -config .npmrc
         displayName: 'Authenticate to Azure Artifacts'
 
+      - task: npmAuthenticate@0
+        inputs:
+          workingFile: '.npmrc'
+
       - script: |
           npm i -g eslint
           npm i -g eslint-plugin-react
