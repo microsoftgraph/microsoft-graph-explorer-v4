@@ -22,7 +22,7 @@ export function queryResponse(response: object): IAction {
 export async function anonymousRequest(dispatch: Function, query: IQuery) {
   const authToken = '{token:https://graph.microsoft.com/}';
   const escapedUrl = encodeURIComponent(query.sampleUrl);
-  const graphUrl = `${GRAPH_API_SANDBOX_URL}/svc?url=${escapedUrl}`;
+  const graphUrl = `${GRAPH_API_SANDBOX_URL}?url=${escapedUrl}`;
   const sampleHeaders: any = {};
   if (query.sampleHeaders && query.sampleHeaders.length > 0) {
     query.sampleHeaders.forEach((header) => {
