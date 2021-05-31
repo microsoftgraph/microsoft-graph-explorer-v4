@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../../appLocale';
+import { authenticationWrapper } from '../../../../../modules/authentication';
 import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { getVersion } from '../../../../utils/version';
@@ -71,6 +72,8 @@ export default function FeedbackForm({ activated }: any) {
             secondaryColour: currentTheme.palette.themeSecondary,
             telemetryGroup: {
                 audienceGroup: 'Graph Explorer',
+                tenantId: authenticationWrapper.getAccount()?.tenantId,
+
             },
             userEmail: '',  // Replaced by the user email
             userEmailConsentDefault: false, // Should the email checkbox be checked
