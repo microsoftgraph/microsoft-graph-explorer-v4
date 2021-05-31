@@ -68,7 +68,6 @@ jobs:
         displayName: 'Install Node.js'
 
       - script: |
-          npm install -g npm@6.14.11
           npm install @ms-ofb/officebrowserfeedbacknpm@1.6.4
         displayName: 'Install Office Feedback package'
 
