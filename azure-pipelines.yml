@@ -70,10 +70,6 @@ jobs:
       - script: |
           npm install -g vsts-npm-auth
           vsts-npm-auth -config .npmrc
-          npm install @ms-ofb/officebrowserfeedbacknpm@1.6.4
-        displayName: 'Install Office Feedback package'
-
-      - script: |
           npm install
         displayName: 'npm install'
 

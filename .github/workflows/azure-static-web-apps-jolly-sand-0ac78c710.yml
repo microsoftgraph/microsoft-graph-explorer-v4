@@ -38,8 +38,6 @@ jobs:
       - name: Install Office Feedback package
         run: |
           npm config set registry https://office.pkgs.visualstudio.com/_packaging/Office/npm/registry
-          npm install -g vsts-npm-auth
-          vsts-npm-auth -config .npmrc
           npm install -g @ms-ofb/officebrowserfeedbacknpm@1.6.4
 
       - name: Set npm package registry
