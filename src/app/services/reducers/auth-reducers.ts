@@ -1,17 +1,17 @@
 import { IAction } from '../../../types/action';
-import { IAuthenticate } from '../../../types/authentication';
+import { IAuthenticateResult } from '../../../types/authentication';
 import {
     AUTHENTICATION_PENDING, GET_AUTH_TOKEN_SUCCESS,
     GET_CONSENTED_SCOPES_SUCCESS, LOGOUT_SUCCESS
 } from '../redux-constants';
 
 
-const initialState: IAuthenticate = {
+const initialState: IAuthenticateResult = {
     pending: false,
     token: false
 }
 
-export function authToken(state = initialState, action: IAction): IAuthenticate {
+export function authToken(state = initialState, action: IAction): IAuthenticateResult {
     switch (action.type) {
         case GET_AUTH_TOKEN_SUCCESS:
             return {

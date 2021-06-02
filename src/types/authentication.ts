@@ -19,7 +19,7 @@ export interface IAuthenticationProps {
   graphExplorerMode: Mode;
 }
 
-export interface IAuthenticate {
+export interface IAuthenticateResult {
   pending: boolean;
   token: boolean;
 }

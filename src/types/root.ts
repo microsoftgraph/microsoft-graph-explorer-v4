@@ -1,5 +1,5 @@
 import { IAdaptiveCardResponse } from './adaptivecard';
-import { IAuthenticate } from './authentication';
+import { IAuthenticateResult } from './authentication';
 import { IAutocompleteResponse } from './auto-complete';
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
@@ -21,7 +21,7 @@ export interface IRootState {
   sampleQuery: IQuery;
   termsOfUse: boolean;
   sidebarProperties: ISidebarProps;
-  authToken: IAuthenticate;
+  authToken: IAuthenticateResult;
   samples: ISampleQuery[];
   consentedScopes: string[];
   scopes: IScopes;
