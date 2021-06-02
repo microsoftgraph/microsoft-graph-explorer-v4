@@ -17,7 +17,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
-import  '../../utils/string-operations';
+import '../../utils/string-operations';
 import { geLocale } from '../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { loadGETheme } from '../../../themes';
@@ -33,7 +33,8 @@ import { Permission } from '../query-runner/request/permissions';
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
-  const { permissionsPanelOpen } = useSelector((state: IRootState) => state);
+  const { permissionsPanelOpen, authToken, theme: appTheme } = useSelector((state: IRootState) => state);
+  const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
@@ -41,9 +42,6 @@ function Settings(props: ISettingsProps) {
   const {
     intl: { messages }
   }: any = props;
-
-  const authenticated = useSelector((state: any) => (!!state.authToken));
-  const appTheme = useSelector((state: any) => (state.theme));
 
   useEffect(() => {
     const menuItems: any = [
