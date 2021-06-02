@@ -90,7 +90,8 @@
     "prebuild:prod": "standard-version",
     "build:prod": "npm run build",
     "bump": "standard-version --skip.tag --skip.changelog",
-    "refreshVSToken": "vsts-npm-auth -config .npmrc"
+    "refreshVSToken": "vsts-npm-auth -config .npmrc",
+    "preinstall": "npm install -g vsts-npm-auth && npm run refreshVSToken"
   },
   "eslintConfig": {
     "extends": "react-app"
