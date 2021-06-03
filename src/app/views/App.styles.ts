@@ -46,6 +46,12 @@ export const appStyles = (theme: ITheme) => {
       alignItems: 'center',
       justifyContent: 'space-between',
       width: 500
+    },
+    versionLabel: {
+      color: theme.palette.neutralSecondaryAlt,
+      fontSize: FontSizes.small,
+      paddingLeft: 3,
+      paddingTop: 5
     }
   };
 };

@@ -1,6 +1,7 @@
 import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { getVersion } from '../../utils/version';
 
 export function appTitleDisplayOnFullScreen(
   classes: any,
@@ -30,7 +31,8 @@ export function appTitleDisplayOnFullScreen(
         <>
           <Label className={classes.graphExplorerLabel}>
             Graph Explorer
-            </Label>
+            <Label className={classes.versionLabel}>{`V${getVersion()}`}</Label>
+          </Label>
         </>}
     </div>
   </div>;
@@ -53,7 +55,8 @@ export function appTitleDisplayOnMobileScreen(
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
         <Label className={classes.graphExplorerLabel}>
           Graph Explorer
-          </Label>
+          <Label className={classes.versionLabel}>{`V${getVersion()}`}</Label>
+        </Label>
       </div>
     </>
   </Stack>;
