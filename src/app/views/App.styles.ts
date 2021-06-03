@@ -48,7 +48,7 @@ export const appStyles = (theme: ITheme) => {
       width: 500
     },
     versionLabel: {
-      color: theme.palette.neutralSecondaryAlt,
+      color: theme.palette.neutralSecondary,
       fontSize: '10px',
       paddingLeft: 3,
       paddingTop: 5
