@@ -49,7 +49,7 @@ export const appStyles = (theme: ITheme) => {
     },
     versionLabel: {
       color: theme.palette.neutralSecondaryAlt,
-      fontSize: FontSizes.small,
+      fontSize: '10px',
       paddingLeft: 3,
       paddingTop: 5
     }
