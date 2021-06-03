@@ -407,7 +407,7 @@ const mapStateToProps = ({ sidebarProperties, theme,
     termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery,
-    authenticated: !!authToken
+    authenticated: !!authToken.token
   };
 };
 

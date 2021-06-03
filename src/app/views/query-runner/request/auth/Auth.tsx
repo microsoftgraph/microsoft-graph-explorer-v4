@@ -43,7 +43,7 @@ export function Auth(props: any) {
     iconName: 'code'
   };
 
-  if (!authToken) {
+  if (!authToken.token) {
     return <Label className={classes.emptyStateLabel}>
       <FormattedMessage id='Sign In to see your access token.' />
     </Label>;
