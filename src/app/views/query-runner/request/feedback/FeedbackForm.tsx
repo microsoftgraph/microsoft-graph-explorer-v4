@@ -10,7 +10,7 @@ import { setQueryResponseStatus } from '../../../../services/actions/query-statu
 import { translateMessage } from '../../../../utils/translate-messages';
 import { getVersion } from '../../../../utils/version';
 
-export default function FeedbackForm({ activated }: any) {
+export default function FeedbackForm({ activated, dismissSurvey }: any) {
     const dispatch = useDispatch();
     const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
     const currentTheme = getTheme();
@@ -40,11 +40,11 @@ export default function FeedbackForm({ activated }: any) {
             promptYesButtonText: translateMessage('Yes'),
             ratingQuestion: translateMessage('Rating question'),
             ratingValuesAscending: [
-                translateMessage("Extremely difficult"),
-                translateMessage("Slightly difficult"),
-                translateMessage("Neither easy nor difficult"),
-                translateMessage("Slightly easy"),
-                translateMessage("Extremely easy")],
+                translateMessage('Extremely difficult'),
+                translateMessage('Slightly difficult'),
+                translateMessage('Neither easy nor difficult'),
+                translateMessage('Slightly easy'),
+                translateMessage('Extremely easy')],
             showEmailRequest: true,
             showPrompt: false,
             surveyType: 2,
@@ -94,23 +94,25 @@ export default function FeedbackForm({ activated }: any) {
                         statusText: translateMessage('Graph Explorer Feedback'),
                         ok: true,
                         messageType: MessageBarType.success
-                    }))
+                    }));
+
                 }
+                dismissSurvey();
             },
         }
 
         // Setting the UI strings here before initialization.
         floodgateObject.setUiStrings({
-            "PrivacyStatement": translateMessage("Privacy Statement"),
-            "_PrivacyStatement.comment": translateMessage("Privacy Consent"),
+            "PrivacyStatement": translateMessage('Privacy Statement'),
+            "_PrivacyStatement.comment": translateMessage('Privacy Consent'),
             "Form": {
-                "EmailPlaceholder": translateMessage("Email (optional)"),
-                "RatingLabel": translateMessage("Rating"),
-                "Submit": translateMessage("Submit"),
-                "Cancel": translateMessage("Cancel"),
-                "EmailCheckBoxLabel": translateMessage("You can contact me about this feedback"),
+                "EmailPlaceholder": translateMessage('Email (optional)'),
+                "RatingLabel": translateMessage('Rating'),
+                "Submit": translateMessage('Submit'),
+                "Cancel": translateMessage('Cancel'),
+                "EmailCheckBoxLabel": translateMessage('You can contact me about this feedback'),
             },
-            "CloseLabel": translateMessage("Close")
+            "CloseLabel": translateMessage('Close')
         });
 
         floodgateObject.floodgate.initialize().then(

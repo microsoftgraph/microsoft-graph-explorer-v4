@@ -33,8 +33,8 @@ export class Request extends Component<IRequestComponent, any> {
     }
   }
 
-  private showCustomSurvey() {
-    this.setState({ enableShowSurvey: true });
+  private toggleCustomSurvey = (show: boolean = false) => {
+    this.setState({ enableShowSurvey: show });
   }
 
   private getPivotItems = (height: string) => {
@@ -137,7 +137,7 @@ export class Request extends Component<IRequestComponent, any> {
   private toggleFeedback = (event: any) => {
     const { key } = event;
     if (key && key.includes('feedback')) {
-      this.showCustomSurvey();
+      this.toggleCustomSurvey(true);
     }
   }
 
@@ -208,7 +208,7 @@ export class Request extends Component<IRequestComponent, any> {
           </div>
 
         </Resizable>
-        <FeedbackForm activated={this.state.enableShowSurvey} />
+        <FeedbackForm activated={this.state.enableShowSurvey} dismissSurvey={this.toggleCustomSurvey} />
       </>
     );
   }
