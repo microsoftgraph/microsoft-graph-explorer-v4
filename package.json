@@ -9,10 +9,11 @@
     "@microsoft/applicationinsights-react-js": "2.3.1",
     "@microsoft/applicationinsights-web": "2.3.1",
     "@microsoft/microsoft-graph-client": "2.1.0",
-    "@ms-ofb/officebrowserfeedbacknpm": "1.6.4",
+    "@ms-ofb/officebrowserfeedbacknpm": "file:/./packages/officebrowserfeedbacknpm-1.6.4.tgz",
     "@svgr/webpack": "4.1.0",
     "@uifabric/react-cards": "0.109.101",
     "@uifabric/styling": "7.13.1",
+    "@augloop/types-core": "file:/./packages/types-core-2.16.189.tgz",
     "adaptivecards": "^1.2.3",
     "adaptivecards-templating": "1.4.0",
     "babel-core": "7.0.0-bridge.0",
@@ -89,8 +90,7 @@
     "test-ci": "node scripts/test.js --no-watch -f \"src/tests/accessibility/accessibility.spec.ts\" -t \"Graph Explorer accessibility\"",
     "prebuild:prod": "standard-version",
     "build:prod": "npm run build",
-    "bump": "standard-version --skip.tag --skip.changelog",
-    "refreshVSToken": "vsts-npm-auth -config .npmrc"
+    "bump": "standard-version --skip.tag --skip.changelog"
   },
   "eslintConfig": {
     "extends": "react-app"
