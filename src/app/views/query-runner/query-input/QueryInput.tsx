@@ -36,7 +36,7 @@ const QueryInput = (props: IQueryInputProps) => {
 
   const { sampleQuery, authToken,
     isLoadingData: submitting } = useSelector((state: IRootState) => state);
-  const authenticated = !!authToken;
+  const authenticated = !!authToken.token;
 
   const showError = !authenticated && sampleQuery.selectedVerb !== 'GET';
   const verbSelector: any = queryRunnerStyles().verbSelector;

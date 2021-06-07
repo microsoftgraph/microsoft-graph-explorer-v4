@@ -351,5 +351,6 @@
   "Scope consent failed": "Scope consent failed",
   "Missing url": "Please enter a valid url to run the query",
   "This response contains an @odata property.": "This response contains an @odata property.",
-  "Click here to follow the link": "Click here to follow the link"
+  "Click here to follow the link": "Click here to follow the link",
+  "Signing you out...": "Signing you out..."
 }
