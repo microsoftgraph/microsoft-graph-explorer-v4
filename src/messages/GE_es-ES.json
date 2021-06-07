@@ -351,5 +351,6 @@
   "Click here to go to the next page": "Haga clic aquí para ir a la página siguiente",
   "and experiment on": " y experimentar con",
   "Scope consent failed": "Error en el consentimiento del ámbito",
-  "Missing url": "Escriba una dirección URL válida para ejecutar la consulta"
+  "Missing url": "Escriba una dirección URL válida para ejecutar la consulta",
+  "Signing you out...": "Cerrando sesión..."
 }

@@ -351,5 +351,6 @@
   "Click here to go to the next page": "Cliquez ici pour aller à la page suivante",
   "and experiment on": " et expérimenter sur",
   "Scope consent failed": "Échec du consentement pour l’étendue",
-  "Missing url": "Veuillez entrez une url valide pour exécuter la requête"
+  "Missing url": "Veuillez entrez une url valide pour exécuter la requête",
+  "Signing you out...": "Déconnexion en cours..."
 }
