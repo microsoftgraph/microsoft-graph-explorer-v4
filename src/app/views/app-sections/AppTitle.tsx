@@ -1,6 +1,7 @@
 import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { getVersion } from '../../utils/version';
 
 export function appTitleDisplayOnFullScreen(
   classes: any,
@@ -28,9 +29,7 @@ export function appTitleDisplayOnFullScreen(
     <div className={classes.graphExplorerLabelContainer} role={'heading'} aria-level={1}>
       {!minimised &&
         <>
-          <Label className={classes.graphExplorerLabel}>
-            Graph Explorer
-            </Label>
+          {displayGraphLabel(classes)}
         </>}
     </div>
   </div>;
@@ -51,10 +50,17 @@ export function appTitleDisplayOnMobileScreen(
         onClick={() => toggleSidebar()}
       />
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
-        <Label className={classes.graphExplorerLabel}>
-          Graph Explorer
-          </Label>
+        {displayGraphLabel(classes)}
       </div>
     </>
   </Stack>;
+}
+
+function displayGraphLabel(classes: any): React.ReactNode {
+  return (
+    <Label className={classes.graphExplorerLabel}>
+      Graph Explorer
+      <span className={classes.versionLabel}>{`v${getVersion()}`}</span>
+    </Label>
+  )
 }

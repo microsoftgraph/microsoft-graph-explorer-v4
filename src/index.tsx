@@ -54,7 +54,7 @@ const currentTheme = readTheme();
 loadGETheme(currentTheme);
 
 const appState: any = store({
-  authToken: '',
+  authToken: { token: false, pending: false },
   consentedScopes: [],
   isLoadingData: false,
   profile: null,
