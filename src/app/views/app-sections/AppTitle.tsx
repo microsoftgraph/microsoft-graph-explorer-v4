@@ -60,7 +60,7 @@ function displayGraphLabel(classes: any): React.ReactNode {
   return (
     <Label className={classes.graphExplorerLabel}>
       Graph Explorer
-      <Label className={classes.versionLabel}>{`v${getVersion()}`}</Label>
+      <span className={classes.versionLabel}>{`v${getVersion()}`}</span>
     </Label>
   )
 }
