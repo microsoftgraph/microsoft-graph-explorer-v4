@@ -351,5 +351,6 @@
   "Click here to go to the next page": "次のページに移動して実験するには、",
   "and experiment on": " ここをクリックしてください",
   "Scope consent failed": "スコープの同意に失敗しました",
-  "Missing url": "クエリを実行するには、有効な URL を入力してください"
+  "Missing url": "クエリを実行するには、有効な URL を入力してください",
+  "Signing you out...": "サインアウトしています..."
 }
