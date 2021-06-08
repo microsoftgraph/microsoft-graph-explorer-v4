@@ -31,6 +31,8 @@ export interface IRequestComponent {
     actions: {
         setDimensions: Function;
     };
+    officeBrowserFeedback: any;
+    enableShowSurvey: boolean;
 }
 
 export interface IRequestOptions {
