@@ -3,7 +3,6 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { IQueryInputProps } from '../../../../types/query-runner';
-import { IRootState } from '../../../../types/root';
 
 import { IRootState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
