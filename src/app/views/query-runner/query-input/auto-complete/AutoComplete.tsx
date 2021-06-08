@@ -308,6 +308,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     telemetry.trackEvent(eventTypes.DROPDOWN_CHANGE_EVENT,
       {
         ComponentName: componentNames.QUERY_URL_AUTOCOMPLETE_DROPDOWN,
+        QuerySignature: sanitizeQueryUrl(this.state.queryUrl),
         SelectedSuggestion: suggestion
       });
   }
@@ -403,6 +404,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
+          errorMessage={!queryUrl ? translateMessage('Missing url') : ''}
         />
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
           <SuggestionsList

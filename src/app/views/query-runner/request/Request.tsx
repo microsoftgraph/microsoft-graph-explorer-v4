@@ -20,13 +20,21 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
+import FeedbackForm from './feedback/FeedbackForm';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
 
 export class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {
-    super(props);
+    super(props)
+    this.state = {
+      enableShowSurvey: false,
+    }
+  }
+
+  private toggleCustomSurvey = (show: boolean = false) => {
+    this.setState({ enableShowSurvey: show });
   }
 
   private getPivotItems = (height: string) => {
@@ -49,6 +57,7 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='Send'
         itemKey='request-body' // To be used to construct component name for telemetry data
         onRenderItemLink={this.getTooltipDisplay}
+        ariaLabel={messages['request body']}
         title={messages['request body']}
         headerText={messages['request body']}
       >
@@ -61,6 +70,7 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='FileComment'
         itemKey='request-headers'
         onRenderItemLink={this.getTooltipDisplay}
+        ariaLabel={messages['request header']}
         title={messages['request header']}
         headerText={messages['request header']}
       >
@@ -73,6 +83,7 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='AzureKeyVault'
         itemKey='modify-permissions'
         onRenderItemLink={this.getTooltipDisplay}
+        ariaLabel={translateMessage('permissions preview')}
         title={translateMessage('permissions preview')}
         headerText={messages['modify permissions']}
       >
@@ -89,15 +100,16 @@ export class Request extends Component<IRequestComponent, any> {
           itemIcon='AuthenticatorApp'
           itemKey='access-token'
           onRenderItemLink={this.getTooltipDisplay}
-          title={messages['Access Token']}
-          headerText={messages['Access Token']}>
+          ariaLabel={translateMessage('Access Token')}
+          title={translateMessage('Access Token')}
+          headerText={translateMessage('Access Token')}>
           <div style={containerStyle}>
             <Auth />
           </div>
-        </PivotItem>
+        </PivotItem>,
+
       );
     }
-
     return pivotItems;
   }
 
@@ -112,6 +124,21 @@ export class Request extends Component<IRequestComponent, any> {
         {link.headerText}
       </TooltipHost>
     );
+  }
+
+  private handlePivotItemClick = (pivotItem?: PivotItem) => {
+    if (!pivotItem) {
+      return;
+    }
+    this.onPivotItemClick(pivotItem);
+    this.toggleFeedback(pivotItem);
+  }
+
+  private toggleFeedback = (event: any) => {
+    const { key } = event;
+    if (key && key.includes('feedback')) {
+      this.toggleCustomSurvey(true);
+    }
   }
 
   private onPivotItemClick = (item?: PivotItem) => {
@@ -139,34 +166,50 @@ export class Request extends Component<IRequestComponent, any> {
     const maxHeight = 800;
 
     return (
-      <Resizable
-        style={{
-          border: 'solid 1px #ddd',
-          marginBottom: 10,
-        }}
-        onResize={(e: any, direction: any, ref: any) => {
-          if (ref && ref.style && ref.style.height) {
-            this.setRequestAndResponseHeights(ref.style.height);
-          }
-        }}
-        maxHeight={maxHeight}
-        minHeight={minHeight}
-        bounds={'window'}
-        size={{
-          height: this.props.dimensions.request.height,
-          width: '100%',
-        }}
-        enable={{
-          bottom: true,
-        }}
-      >
-        <Pivot
-          onLinkClick={this.onPivotItemClick}
-          styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
+      <>
+        <Resizable
+          style={{
+            border: 'solid 1px #ddd',
+            marginBottom: 10,
+          }}
+          onResize={(e: any, direction: any, ref: any) => {
+            if (ref && ref.style && ref.style.height) {
+              this.setRequestAndResponseHeights(ref.style.height);
+            }
+          }}
+          maxHeight={maxHeight}
+          minHeight={minHeight}
+          bounds={'window'}
+          size={{
+            height: this.props.dimensions.request.height,
+            width: '100%',
+          }}
+          enable={{
+            bottom: true,
+          }}
         >
-          {requestPivotItems}
-        </Pivot>
-      </Resizable>
+          <div className='query-request'>
+            <Pivot
+              onLinkClick={this.handlePivotItemClick}
+              className='pivot-request'
+            >
+              {requestPivotItems}
+              <PivotItem
+                key='feedback'
+                itemIcon='HeartFill'
+                itemKey='feedback'
+                onRenderItemLink={this.getTooltipDisplay}
+                ariaLabel={translateMessage('Feedback')}
+                title={translateMessage('Feedback')}
+                headerText={translateMessage('Feedback')}
+              >
+              </PivotItem>
+            </Pivot>
+          </div>
+
+        </Resizable>
+        <FeedbackForm activated={this.state.enableShowSurvey} dismissSurvey={this.toggleCustomSurvey} />
+      </>
     );
   }
 }

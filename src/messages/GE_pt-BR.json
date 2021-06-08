@@ -350,5 +350,7 @@
   "This response contains an @odata.nextLink property.": "Essa resposta contém uma propriedade @odata.nextLink.",
   "Click here to go to the next page": "Clique aqui para ir à próxima página",
   "and experiment on": " e experimente",
-  "Scope consent failed": "O consentimento do escopo falhou"
+  "Scope consent failed": "O consentimento do escopo falhou",
+  "Missing url": "Inserir uma url válida para executar a consulta",
+  "Signing you out...": "Desconectando você..."
 }

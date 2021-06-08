@@ -58,6 +58,10 @@ jobs:
   - job: One
     displayName: 'Build and test validation'
     steps:
+      - task: CredScan@2
+        inputs:
+          toolMajorVersion: 'V2'
+
       - task: NodeTool@0
         inputs:
           versionSpec: '12.x'
@@ -109,6 +113,7 @@ jobs:
         env:
           REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
+          REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_STAGING_FEEDBACK_CAMPAIGN_ID)
         displayName: 'Build static assets for staging'
 
       - task: PowerShell@2
@@ -129,6 +134,7 @@ jobs:
         env:
           REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
+          REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_FEEDBACK_CAMPAIGN_ID)
         displayName: 'Build static assets for prod'
 
       - task: CopyFiles@1

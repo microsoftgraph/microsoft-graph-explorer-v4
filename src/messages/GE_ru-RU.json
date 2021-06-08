@@ -350,5 +350,7 @@
   "This response contains an @odata.nextLink property.": "Этот ответ содержит свойство @odata.nextLink.",
   "Click here to go to the next page": "Щелкните здесь, чтобы перейти к следующей странице",
   "and experiment on": " и поэкспериментируйте",
-  "Scope consent failed": "Сбой подтверждения области"
+  "Scope consent failed": "Сбой подтверждения области",
+  "Missing url": "Введите действительный URL-адрес для выполнения запроса",
+  "Signing you out...": "Выполняется выход…"
 }
