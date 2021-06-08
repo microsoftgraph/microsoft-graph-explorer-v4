@@ -113,6 +113,7 @@ jobs:
         env:
           REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
+          REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_STAGING_FEEDBACK_CAMPAIGN_ID)
         displayName: 'Build static assets for staging'
 
       - task: PowerShell@2
@@ -133,6 +134,7 @@ jobs:
         env:
           REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
+          REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_FEEDBACK_CAMPAIGN_ID)
         displayName: 'Build static assets for prod'
 
       - task: CopyFiles@1
