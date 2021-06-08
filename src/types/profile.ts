@@ -2,7 +2,7 @@ import { ITheme } from 'office-ui-fabric-react';
 
 export interface IProfileProps {
     intl: {
-      message: object;
+        message: object;
     };
     theme?: ITheme;
     styles?: object;
@@ -22,4 +22,5 @@ export interface IUser {
     displayName: string;
     emailAddress: string;
     profileImageUrl: string;
+    id: string;
 }
