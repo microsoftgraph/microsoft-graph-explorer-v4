@@ -6,8 +6,15 @@ import { IRequestOptions } from '../types/request';
 export default interface ITelemetry {
   initialize(): void;
   trackEvent(name: string, properties: {}): void;
-  trackReactComponent(Component: ComponentType, componentName?: string): ComponentType;
+  trackReactComponent(
+    Component: ComponentType,
+    componentName?: string
+  ): ComponentType;
   trackTabClickEvent(tabKey: string, sampleQuery?: IQuery): void;
   trackLinkClickEvent(url: string, componentName: string): void;
-  trackException(error: Error, severityLevel: SeverityLevel, properties: {}): void;
+  trackException(
+    error: Error,
+    severityLevel: SeverityLevel,
+    properties: {}
+  ): void;
 }

@@ -7,6 +7,9 @@ import {
   SeverityLevel,
 } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
+
+import '../app/utils/string-operations';
+import { version } from '../../package.json';
 import { validateExternalLink } from '../app/utils/external-link-validation';
 import { sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
 import { IQuery } from '../types/query-runner';
@@ -15,6 +18,7 @@ import {
   addCommonTelemetryItemProperties,
   filterRemoteDependencyData,
   filterTelemetryTypes,
+  sanitizeStackTrace,
   sanitizeTelemetryItemUriProperty,
 } from './filters';
 import ITelemetry from './ITelemetry';
@@ -29,7 +33,7 @@ class Telemetry implements ITelemetry {
 
     this.config = {
       instrumentationKey: this.getInstrumentationKey(),
-      disableExceptionTracking: true,
+      disableExceptionTracking: false, // Enables autocollection of uncaught exceptions. Used with `sanitizeStackTrace` telemetry initializer to remove any data that might be PII.
       disableAjaxTracking: true,
       disableFetchTracking: false, // Enables capturing of telemetry data for outgoing requests. Used with `filterRemoteDependencyData` telemetry initializer to sanitize captured data to prevent inadvertent capture of PII.
       disableTelemetry: this.getInstrumentationKey() ? false : true,
@@ -46,8 +50,10 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackPageView();
     this.appInsights.addTelemetryInitializer(filterTelemetryTypes);
     this.appInsights.addTelemetryInitializer(filterRemoteDependencyData);
+    this.appInsights.addTelemetryInitializer(sanitizeStackTrace);
     this.appInsights.addTelemetryInitializer(sanitizeTelemetryItemUriProperty);
     this.appInsights.addTelemetryInitializer(addCommonTelemetryItemProperties);
+    this.appInsights.context.application.ver = version;
   }
 
   public trackEvent(name: string, properties: {}) {
@@ -70,12 +76,9 @@ class Telemetry implements ITelemetry {
   }
 
   public trackTabClickEvent(tabKey: string, sampleQuery?: IQuery) {
-    let componentName = tabKey.replace('-', ' ');
-    componentName = `${componentName
-      .charAt(0)
-      .toUpperCase()}${componentName.slice(1)} tab`;
+    const componentName = tabKey.replace('-', ' ').toSentenceCase();
     const properties: { [key: string]: any } = {
-      ComponentName: componentName,
+      ComponentName: `${componentName} tab`,
     };
     if (sampleQuery) {
       const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);

@@ -1,18 +1,20 @@
 {
   "name": "graph-explorer-v2",
-  "version": "4.6.1",
+  "version": "4.7.0",
   "private": true,
   "dependencies": {
+    "@augloop/types-core": "file:packages/types-core-2.16.189.tgz",
     "@azure/msal-browser": "2.12.0",
     "@babel/core": "7.12.13",
     "@babel/eslint-parser": "7.12.13",
     "@microsoft/applicationinsights-react-js": "2.3.1",
     "@microsoft/applicationinsights-web": "2.3.1",
     "@microsoft/microsoft-graph-client": "2.1.0",
+    "@ms-ofb/officebrowserfeedbacknpm": "file:packages/officebrowserfeedbacknpm-1.6.4.tgz",
     "@svgr/webpack": "4.1.0",
     "@uifabric/react-cards": "0.109.101",
     "@uifabric/styling": "7.13.1",
-    "adaptivecards": "1.2.3",
+    "adaptivecards": "^1.2.3",
     "adaptivecards-templating": "1.4.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-loader": "8.2.2",
@@ -70,7 +72,7 @@
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.1",
-    "terser-webpack-plugin": "1.2.2",
+    "terser-webpack-plugin": "3.1.0",
     "typescript": "4.1.5",
     "url-loader": "1.1.2",
     "webpack": "4.28.3",
@@ -88,7 +90,8 @@
     "test-ci": "node scripts/test.js --no-watch -f \"src/tests/accessibility/accessibility.spec.ts\" -t \"Graph Explorer accessibility\"",
     "prebuild:prod": "standard-version",
     "build:prod": "npm run build",
-    "bump": "standard-version --skip.tag --skip.changelog"
+    "bump": "standard-version --skip.tag --skip.changelog",
+    "preinstall": "npm install ./packages/types-core-2.16.189.tgz"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -135,7 +138,7 @@
     "react-test-renderer": "16.8.3",
     "redux-logger": "3.0.6",
     "redux-mock-store": "1.5.3",
-    "selenium-webdriver": "4.0.0-alpha.7",
+    "selenium-webdriver": "4.0.0-beta.3",
     "serialize-javascript": "3.1.0",
     "standard-version": "8.0.2",
     "start-server-and-test": "1.11.7",

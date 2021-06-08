@@ -20,7 +20,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   const dispatch = useDispatch();
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
   const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
-  const tokenPresent = !!authToken;
+  const tokenPresent = !!authToken.token;
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 

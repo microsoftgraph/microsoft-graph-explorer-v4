@@ -1,5 +1,6 @@
 import { AuthenticationResult } from '@azure/msal-browser';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
+import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -53,7 +54,7 @@ const currentTheme = readTheme();
 loadGETheme(currentTheme);
 
 const appState: any = store({
-  authToken: '',
+  authToken: { token: false, pending: false },
   consentedScopes: [],
   isLoadingData: false,
   profile: null,

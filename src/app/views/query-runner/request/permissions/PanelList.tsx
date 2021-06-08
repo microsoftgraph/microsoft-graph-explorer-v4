@@ -34,7 +34,7 @@ const PanelList = ({ messages,
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
   const [permissions, setPermissions] = useState(scopes.data.sort(dynamicSort('value', SortOrder.ASC)));
   const permissionsList: any[] = [];
-  const tokenPresent = !!authToken;
+  const tokenPresent = !!authToken.token;
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
