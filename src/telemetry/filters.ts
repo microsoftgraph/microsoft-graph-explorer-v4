@@ -1,5 +1,4 @@
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
-import { exception } from 'console';
 import { errorTypes } from '.';
 import {
   DEVX_API_URL,

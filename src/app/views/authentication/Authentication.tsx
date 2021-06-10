@@ -4,8 +4,8 @@ import { Icon, Label, MessageBarType, Spinner, SpinnerSize, styled } from 'offic
 import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { authenticationWrapper } from '../../../modules/authentication';
 
+import { authenticationWrapper } from '../../../modules/authentication';
 import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { Mode } from '../../../types/enums';
 import { IRootState } from '../../../types/root';
