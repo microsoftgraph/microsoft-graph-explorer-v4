@@ -350,5 +350,7 @@
   "This response contains an @odata.nextLink property.": "此响应包含 @odata.nextLink 属性。",
   "Click here to go to the next page": "单击此处转到下一页",
   "and experiment on": " 和试验",
-  "Scope consent failed": "作用域许可失败"
+  "Scope consent failed": "作用域许可失败",
+  "Missing url": "请输入有效 URL 以运行查询",
+  "Signing you out...": "正在注销..."
 }

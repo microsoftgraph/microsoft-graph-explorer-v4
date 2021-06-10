@@ -282,7 +282,7 @@ function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dime
   return {
     sample: sampleQuery,
     scopes,
-    tokenPresent: authToken,
+    tokenPresent: authToken.token,
     consentedScopes,
     dimensions
   };
