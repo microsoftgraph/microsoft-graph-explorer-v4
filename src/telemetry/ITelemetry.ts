@@ -1,6 +1,7 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
 import { IQuery } from '../types/query-runner';
+import { IRequestOptions } from '../types/request';
 
 export default interface ITelemetry {
   initialize(): void;

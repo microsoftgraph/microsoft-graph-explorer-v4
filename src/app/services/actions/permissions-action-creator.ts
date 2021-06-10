@@ -60,9 +60,8 @@ export function fetchScopes(query?: IQuery): Function {
       }
 
       if (devxApi.parameters) {
-        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${
-          devxApi.parameters
-        }`;
+        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters
+          }`;
       }
 
       const headers = {
