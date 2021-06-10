@@ -13,7 +13,13 @@ export interface IAuthenticationProps {
     setQueryResponseStatus: Function;
   };
   tokenPresent: boolean;
+  inProgress: boolean;
   mobileScreen: boolean;
   minimised: boolean;
   graphExplorerMode: Mode;
+}
+
+export interface IAuthenticateResult {
+  pending: boolean;
+  token: boolean;
 }
