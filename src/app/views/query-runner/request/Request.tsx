@@ -20,7 +20,6 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
-import FeedbackForm from './feedback/FeedbackForm';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
@@ -28,13 +27,6 @@ import './request.scss';
 export class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {
     super(props)
-    this.state = {
-      enableShowSurvey: false,
-    }
-  }
-
-  private toggleCustomSurvey = (show: boolean = false) => {
-    this.setState({ enableShowSurvey: show });
   }
 
   private getPivotItems = (height: string) => {
@@ -131,14 +123,6 @@ export class Request extends Component<IRequestComponent, any> {
       return;
     }
     this.onPivotItemClick(pivotItem);
-    this.toggleFeedback(pivotItem);
-  }
-
-  private toggleFeedback = (event: any) => {
-    const { key } = event;
-    if (key && key.includes('feedback')) {
-      this.toggleCustomSurvey(true);
-    }
   }
 
   private onPivotItemClick = (item?: PivotItem) => {
@@ -194,21 +178,10 @@ export class Request extends Component<IRequestComponent, any> {
               className='pivot-request'
             >
               {requestPivotItems}
-              <PivotItem
-                key='feedback'
-                itemIcon='HeartFill'
-                itemKey='feedback'
-                onRenderItemLink={this.getTooltipDisplay}
-                ariaLabel={translateMessage('Feedback')}
-                title={translateMessage('Feedback')}
-                headerText={translateMessage('Feedback')}
-              >
-              </PivotItem>
             </Pivot>
           </div>
 
         </Resizable>
-        <FeedbackForm activated={this.state.enableShowSurvey} dismissSurvey={this.toggleCustomSurvey} />
       </>
     );
   }

@@ -3,14 +3,12 @@
   "version": "4.7.0",
   "private": true,
   "dependencies": {
-    "@augloop/types-core": "file:packages/types-core-2.16.189.tgz",
     "@azure/msal-browser": "2.12.0",
     "@babel/core": "7.12.13",
     "@babel/eslint-parser": "7.12.13",
     "@microsoft/applicationinsights-react-js": "2.3.1",
     "@microsoft/applicationinsights-web": "2.3.1",
     "@microsoft/microsoft-graph-client": "2.1.0",
-    "@ms-ofb/officebrowserfeedbacknpm": "file:packages/officebrowserfeedbacknpm-1.6.4.tgz",
     "@svgr/webpack": "4.1.0",
     "@uifabric/react-cards": "0.109.101",
     "@uifabric/styling": "7.13.1",
@@ -90,8 +88,7 @@
     "test-ci": "node scripts/test.js --no-watch -f \"src/tests/accessibility/accessibility.spec.ts\" -t \"Graph Explorer accessibility\"",
     "prebuild:prod": "standard-version",
     "build:prod": "npm run build",
-    "bump": "standard-version --skip.tag --skip.changelog",
-    "preinstall": "npm install ./packages/types-core-2.16.189.tgz"
+    "bump": "standard-version --skip.tag --skip.changelog"
   },
   "eslintConfig": {
     "extends": "react-app"
