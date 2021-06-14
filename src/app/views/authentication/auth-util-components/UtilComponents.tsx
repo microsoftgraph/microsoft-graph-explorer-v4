@@ -1,6 +1,7 @@
 import { IconButton, PrimaryButton } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { translateMessage } from '../../../utils/translate-messages';
 import Profile from '../profile/Profile';
 
 export function showSignInButtonOrProfile(
@@ -11,12 +12,12 @@ export function showSignInButtonOrProfile(
 ) {
 
   const signInButton = minimised ? <IconButton
-    ariaLabel='Sign-in button'
+    ariaLabel={translateMessage('sign in')}
     role='button'
     iconProps={{ iconName: 'Contact' }}
-    title='sign in'
+    title={translateMessage('sign in')}
     onClick={() => signIn()} /> : <PrimaryButton
-      ariaLabel='Sign-in button'
+      ariaLabel={translateMessage('sign in')}
       role='button'
       iconProps={{ iconName: 'Contact' }}
       onClick={() => signIn()}
