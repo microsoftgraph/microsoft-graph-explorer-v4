@@ -44,8 +44,7 @@ export function Auth(props: any) {
   };
 
   if (!authToken.token) {
-    return <MessageBar className={classes.emptyStateLabel}
-      messageBarType={MessageBarType.blocked}>
+    return <MessageBar messageBarType={MessageBarType.blocked}>
       <FormattedMessage id='Sign In to see your access token.' />
     </MessageBar>;
   }
