@@ -19,6 +19,7 @@ import { snippets } from './snippet-reducer';
 import { termsOfUse } from './terms-of-use-reducer';
 import { theme } from './theme-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
+import { proxyUrl } from './proxy-url-reducer';
 
 export default combineReducers({
   adaptiveCard,
@@ -31,6 +32,7 @@ export default combineReducers({
   history,
   isLoadingData,
   profile,
+  proxyUrl,
   queryRunnerStatus,
   responseAreaExpanded,
   sampleQuery,
