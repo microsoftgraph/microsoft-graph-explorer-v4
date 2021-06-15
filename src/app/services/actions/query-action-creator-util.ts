@@ -8,7 +8,7 @@ import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { authProvider, GraphClient } from '../graph-client';
-import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_URL } from '../graph-constants';
+import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
@@ -19,10 +19,10 @@ export function queryResponse(response: object): IAction {
   };
 }
 
-export async function anonymousRequest(dispatch: Function, query: IQuery) {
-  const authToken = '{token:https://graph.microsoft.com/}';
+export async function anonymousRequest(dispatch: Function, query: IQuery, getState: Function) {
   const escapedUrl = encodeURIComponent(query.sampleUrl);
-  const graphUrl = `${GRAPH_API_SANDBOX_URL}/svc?url=${escapedUrl}`;
+  const { proxyUrl } = getState();
+  const graphUrl = `${proxyUrl}?url=${escapedUrl}`;
   const sampleHeaders: any = {};
   if (query.sampleHeaders && query.sampleHeaders.length > 0) {
     query.sampleHeaders.forEach((header) => {
@@ -31,7 +31,7 @@ export async function anonymousRequest(dispatch: Function, query: IQuery) {
   }
 
   const headers = {
-    Authorization: `Bearer ${authToken}`,
+    'MS-M365DEVPORTALS-API-KEY': `41DFE773-8DDB-4CF0-8EF6-4761971B0300`,
     'Content-Type': 'application/json',
     SdkVersion: 'GraphExplorer/4.0',
     ...sampleHeaders,
