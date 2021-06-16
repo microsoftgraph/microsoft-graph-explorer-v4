@@ -1,6 +1,7 @@
 import { IAdaptiveCardResponse } from './adaptivecard';
 import { IAuthenticateResult } from './authentication';
 import { IAutocompleteResponse } from './auto-complete';
+import { IDevxAPI } from './devx-api';
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
 import { IHistoryItem } from './history';
@@ -33,6 +34,7 @@ export interface IRootState {
   responseAreaExpanded: boolean;
   dimensions: IDimensions;
   autoComplete: IAutocompleteResponse;
+  devxApi: IDevxAPI;
 }
 
 export interface IApiFetch {
