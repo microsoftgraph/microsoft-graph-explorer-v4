@@ -1,6 +1,6 @@
 {
   "name": "graph-explorer-v2",
-  "version": "4.6.1",
+  "version": "4.9.0",
   "private": true,
   "dependencies": {
     "@azure/msal-browser": "2.12.0",

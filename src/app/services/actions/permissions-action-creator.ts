@@ -1,4 +1,3 @@
-import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { MessageBarType } from 'office-ui-fabric-react';
 
 import { geLocale } from '../../../appLocale';
@@ -60,9 +59,8 @@ export function fetchScopes(query?: IQuery): Function {
       }
 
       if (devxApi.parameters) {
-        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${
-          devxApi.parameters
-        }`;
+        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters
+          }`;
       }
 
       const headers = {
