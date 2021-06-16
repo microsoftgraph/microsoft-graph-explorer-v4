@@ -8,7 +8,10 @@
 
 name: $(date:yyyyMMdd)$(rev:.r)
 
-pool: MsGraphBuildAgentsWindows
+pool:
+  vmImage: 'windows-latest'
+  steps:
+  - script: echo hello from Windows
 
 pr:
   branches:
