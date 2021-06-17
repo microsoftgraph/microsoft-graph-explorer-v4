@@ -18,6 +18,7 @@ import { IRootState } from '../../../../types/root';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
+import { AppPermission } from './app-permissions';
 import { Auth } from './auth';
 import { RequestBody } from './body';
 import { RequestHeaders } from './headers';
@@ -78,6 +79,18 @@ export class Request extends Component<IRequestComponent, any> {
       >
         <div style={containerStyle}>
           <Permission />
+        </div>
+      </PivotItem>,
+      <PivotItem
+        key='appPermissions'
+        itemIcon='AzureKeyVault'
+        itemKey='modify-app-permissions'
+        onRenderItemLink={this.getTooltipDisplay}
+        title={translateMessage('permissions preview')}
+        headerText={messages['modify application permissions']}
+      >
+        <div style={containerStyle}>
+          <AppPermission />
         </div>
       </PivotItem>,
     ];
