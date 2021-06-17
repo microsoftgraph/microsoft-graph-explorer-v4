@@ -14,7 +14,6 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
   function displayStatusMessage(message: string, urls: any) {
     const { matches, parts } = getMatchesAndParts(message);
 
-
     if (!parts || !matches || !urls || Object.keys(urls).length === 0) {
       return message;
     }
@@ -32,7 +31,6 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
       };
       return (
         <Fragment key={part + index}>{includesLink ?
-
           displayLink() : part}
         </Fragment>
       );

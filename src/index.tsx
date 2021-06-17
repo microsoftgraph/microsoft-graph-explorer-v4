@@ -57,7 +57,7 @@ const currentCloud = getCurrentCloud() || null;
 const { baseUrl } = (currentCloud) ? currentCloud : globalCloud;
 
 const appState: any = store({
-  authToken: '',
+  authToken: { token: false, pending: false },
   consentedScopes: [],
   isLoadingData: false,
   profile: null,

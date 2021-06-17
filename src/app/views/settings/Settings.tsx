@@ -23,9 +23,9 @@ function Settings(props: ISettingsProps) {
 
   const { permissionsPanelOpen, profile, authToken } = useSelector((state: IRootState) => state);
   const [items, setItems] = useState<any[]>([]);
+  const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [cloudSelectorOpen, setCloudSelectorOpen] = useState(false);
-  const authenticated = !!authToken;
 
   const cloudOptions = new Sovereign(profile).getOptions();
 

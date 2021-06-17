@@ -11,6 +11,11 @@ import { setSampleQuery } from '../../../services/actions/query-input-action-cre
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
 import ResponseDisplay from './ResponseDisplay';
 
+interface OdataLink {
+  link: string;
+  name: string;
+};
+
 const Response = () => {
   const dispatch = useDispatch();
 
@@ -18,11 +23,11 @@ const Response = () => {
   const { body, headers } = graphResponse;
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
-  const nextLink = getNextLinkFromBody(body);
+  const odataLink = getOdataLinkFromBody(body);
 
   const setQuery = () => {
     const query: IQuery = { ...sampleQuery };
-    query.sampleUrl = nextLink!;
+    query.sampleUrl = odataLink!.link;
     dispatch(setSampleQuery(query));
     dispatch(runQuery(query));
   }
@@ -31,11 +36,11 @@ const Response = () => {
     const contentType = getContentType(headers);
     return (
       <div style={{ display: 'block' }}>
-        {nextLink &&
+        {odataLink &&
           <MessageBar messageBarType={MessageBarType.info}>
-            <FormattedMessage id='This response contains an @odata.nextLink property.' />
+            <FormattedMessage id={`This response contains an @odata property`} />: @odata.{odataLink!.name}
             <Link onClick={() => setQuery()}>
-              &nbsp;<FormattedMessage id='Click here to go to the next page' />
+              &nbsp;<FormattedMessage id='Click here to follow the link' />
             </Link>
           </MessageBar>
         }
@@ -50,11 +55,20 @@ const Response = () => {
   return <div />;
 };
 
-function getNextLinkFromBody(body: any) {
-  if (body && body['@odata.nextLink']) {
-    return decodeURIComponent(body['@odata.nextLink']);
+function getOdataLinkFromBody(body: any): OdataLink | null {
+  const odataLinks = ['nextLink', 'deltaLink'];
+  let data = null;
+  if (body) {
+    odataLinks.forEach(link => {
+      if (body[`@odata.${link}`]) {
+        data = {
+          link: decodeURIComponent(body[`@odata.${link}`]),
+          name: link
+        };
+      }
+    });
   }
-  return null;
+  return data;
 }
 
 function getContentType(headers: any) {

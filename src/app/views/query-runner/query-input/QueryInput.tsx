@@ -1,12 +1,11 @@
 import { Dropdown } from 'office-ui-fabric-react';
-import React, { Component } from 'react';
+import React from 'react';
 import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IQueryInputProps } from '../../../../types/query-runner';
-import { IRootState } from '../../../../types/root';
 
-import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
+import { IRootState } from '../../../../types/root';
+import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { getStyleFor } from '../../../utils/badge-color';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -14,144 +13,111 @@ import SubmitButton from '../../../views/common/submit-button/SubmitButton';
 import { queryRunnerStyles } from '../QueryRunner.styles';
 import { AutoComplete } from './auto-complete';
 
-export class QueryInput extends Component<IQueryInputProps, any> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      httpMethods: [
-        { key: 'GET', text: 'GET' },
-        { key: 'POST', text: 'POST' },
-        { key: 'PUT', text: 'PUT' },
-        { key: 'PATCH', text: 'PATCH' },
-        { key: 'DELETE', text: 'DELETE' },
-      ],
-      urlVersions: [
-        { key: 'v1.0', text: 'v1.0' },
-        { key: 'beta', text: 'beta' },
-      ],
-      classes: {
-        textField: 'col-sm-12 col-lg-9',
-        gridElements: 'col-sm-12 col-lg-1',
-      },
-    };
-  }
+const QueryInput = (props: IQueryInputProps) => {
+  const {
+    handleOnRunQuery,
+    handleOnMethodChange,
+    handleOnVersionChange
+  } = props;
 
-  public contentChanged = (value: string) => {
-    const { sampleQuery } = this.props;
-    const query = { ...sampleQuery, ...{ sampleUrl: value } };
-    this.changeUrlVersion(value);
-    this.props.actions!.setSampleQuery(query);
+  const dispatch = useDispatch();
+  const httpMethods = [
+    { key: 'GET', text: 'GET' },
+    { key: 'POST', text: 'POST' },
+    { key: 'PUT', text: 'PUT' },
+    { key: 'PATCH', text: 'PATCH' },
+    { key: 'DELETE', text: 'DELETE' },
+  ];
+
+  const urlVersions = [
+    { key: 'v1.0', text: 'v1.0' },
+    { key: 'beta', text: 'beta' },
+  ];
+
+  const { sampleQuery, authToken,
+    isLoadingData: submitting } = useSelector((state: IRootState) => state);
+  const authenticated = !!authToken.token;
+
+  const showError = !authenticated && sampleQuery.selectedVerb !== 'GET';
+  const verbSelector: any = queryRunnerStyles().verbSelector;
+  verbSelector.title = {
+    ...verbSelector.title,
+    background: getStyleFor(sampleQuery.selectedVerb),
   };
 
-  private changeUrlVersion(newUrl: string) {
-    const query = { ...this.props.sampleQuery };
+  const contentChanged = (value: string) => {
+    const query = { ...sampleQuery, ...{ sampleUrl: value } };
+    changeUrlVersion(value);
+    dispatch(setSampleQuery(query));
+  };
+
+  const changeUrlVersion = (newUrl: string) => {
+    const query = { ...sampleQuery };
     const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);
     const { queryVersion: oldQueryVersion } = parseSampleUrl(query.sampleUrl);
 
     if (newQueryVersion !== oldQueryVersion) {
       if (newQueryVersion === 'v1.0' || newQueryVersion === 'beta') {
-        const sampleQuery = { ...query };
-        sampleQuery.selectedVersion = newQueryVersion;
-        sampleQuery.sampleUrl = newUrl;
-        this.props.actions!.setSampleQuery(sampleQuery);
+        const sampleQueryToSet = { ...query };
+        sampleQueryToSet.selectedVersion = newQueryVersion;
+        sampleQueryToSet.sampleUrl = newUrl;
+        dispatch(setSampleQuery(sampleQueryToSet));
       }
     }
   }
 
-  public handleOnRunQuery = () => {
+  const runQuery = () => {
+    if (!sampleQuery.sampleUrl) {
+      return;
+    }
     // allows the state to be populated with the new url before running it
     setTimeout(() => {
-      this.props.handleOnRunQuery();
+      handleOnRunQuery();
     }, 500);
   };
 
-  public render() {
-    const { httpMethods, urlVersions } = this.state;
-
-    const {
-      handleOnRunQuery,
-      handleOnMethodChange,
-      handleOnVersionChange,
-      sampleQuery,
-      submitting,
-      authenticated,
-    } = this.props;
-
-    const {
-      intl: { messages },
-    }: any = this.props;
-    const showError = !authenticated && sampleQuery.selectedVerb !== 'GET';
-    const verbSelector: any = queryRunnerStyles().verbSelector;
-    verbSelector.title = {
-      ...verbSelector.title,
-      background: getStyleFor(sampleQuery.selectedVerb),
-    };
-
-    return (
-      <div className='row'>
-        <div className='col-xs-12 col-lg-2'>
-          <Dropdown
-            ariaLabel={translateMessage('HTTP request method option')}
-            role='listbox'
-            selectedKey={sampleQuery.selectedVerb}
-            options={httpMethods}
-            styles={verbSelector}
-            errorMessage={showError ? translateMessage('Sign in to use this method') : undefined}
-            onChange={(event, method) => handleOnMethodChange(method)}
-          />
-        </div>
-        <div className='col-xs-12 col-lg-2'>
-          <Dropdown
-            ariaLabel={translateMessage('Microsoft Graph API Version option')}
-            role='listbox'
-            selectedKey={sampleQuery.selectedVersion || 'v1.0'}
-            options={urlVersions}
-            onChange={(event, method) => handleOnVersionChange(method)}
-          />
-        </div>
-        <div className='col-xs-12 col-lg-6'>
-          <AutoComplete
-            contentChanged={this.contentChanged}
-            runQuery={this.handleOnRunQuery}
-          />
-        </div>
-        <div className='col-xs-12 col-lg-2'>
-          <SubmitButton
-            className='run-query-button'
-            text={messages['Run Query']}
-            disabled={showError}
-            role='button'
-            handleOnClick={() => handleOnRunQuery()}
-            submitting={submitting}
-          />
-        </div>
+  return (
+    <div className='row'>
+      <div className='col-xs-12 col-lg-2'>
+        <Dropdown
+          ariaLabel={translateMessage('HTTP request method option')}
+          role='listbox'
+          selectedKey={sampleQuery.selectedVerb}
+          options={httpMethods}
+          styles={verbSelector}
+          errorMessage={showError ? translateMessage('Sign in to use this method') : undefined}
+          onChange={(event, method) => handleOnMethodChange(method)}
+        />
       </div>
-    );
-  }
-}
-
-function mapStateToProps({ sampleQuery, isLoadingData, theme, graphExplorerMode, authToken }: IRootState) {
-  return {
-    sampleQuery,
-    submitting: isLoadingData,
-    theme,
-    mode: graphExplorerMode,
-    authenticated: !!authToken,
-  };
-}
-
-function mapDispatchToProps(dispatch: Dispatch): object {
-  return {
-    actions: bindActionCreators(
-      {
-        ...queryInputActionCreators,
-      },
-      dispatch
-    ),
-  };
+      <div className='col-xs-12 col-lg-2'>
+        <Dropdown
+          ariaLabel={translateMessage('Microsoft Graph API Version option')}
+          role='listbox'
+          selectedKey={sampleQuery.selectedVersion || 'v1.0'}
+          options={urlVersions}
+          onChange={(event, method) => handleOnVersionChange(method)}
+        />
+      </div>
+      <div className='col-xs-12 col-lg-6'>
+        <AutoComplete
+          contentChanged={contentChanged}
+          runQuery={runQuery}
+        />
+      </div>
+      <div className='col-xs-12 col-lg-2'>
+        <SubmitButton
+          className='run-query-button'
+          text={translateMessage('Run Query')}
+          disabled={showError || !sampleQuery.sampleUrl}
+          role='button'
+          handleOnClick={() => runQuery()}
+          submitting={submitting}
+        />
+      </div>
+    </div>)
 }
 
 // @ts-ignore
 const IntlQueryInput = injectIntl(QueryInput);
 // @ts-ignore
-export default connect(mapStateToProps, mapDispatchToProps)(IntlQueryInput);
+export default IntlQueryInput;

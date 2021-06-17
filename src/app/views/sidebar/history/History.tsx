@@ -269,7 +269,11 @@ export class History extends Component<IHistoryProps, any> {
                   ? `${expandText} ${props.group!.name}`
                   : `${collapseText} ${props.group!.name}`
               }
-              ariaLabel='expand collapse group'
+              ariaLabel={
+                props.group!.isCollapsed
+                  ? `${expandText} ${props.group!.name}`
+                  : `${collapseText} ${props.group!.name}`
+              }
               onClick={() => this.onToggleCollapse(props)}
             />
             <div className={classes.groupTitle}>

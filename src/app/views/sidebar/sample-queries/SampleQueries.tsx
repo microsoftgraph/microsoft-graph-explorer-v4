@@ -456,7 +456,7 @@ function displayTipMessage(actions: any, selectedQuery: ISampleQuery) {
 
 function mapStateToProps({ authToken, profile, samples, theme, cloud }: IRootState) {
   return {
-    tokenPresent: !!authToken,
+    tokenPresent: !!authToken.token,
     profile,
     samples,
     appTheme: theme,

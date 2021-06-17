@@ -1,5 +1,6 @@
 import { ICloud } from './cloud';
 import { IAdaptiveCardResponse } from './adaptivecard';
+import { IAuthenticateResult } from './authentication';
 import { IAutocompleteResponse } from './auto-complete';
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
@@ -14,7 +15,7 @@ import { IStatus } from './status';
 
 export interface IRootState {
   adaptiveCard: IAdaptiveCardResponse;
-  authToken: string;
+  authToken: IAuthenticateResult;
   autoComplete: IAutocompleteResponse;
   cloud: ICloud;
   consentedScopes: string[];
