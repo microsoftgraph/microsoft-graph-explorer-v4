@@ -1,5 +1,5 @@
 # Microsoft Graph Explorer V4
-[![Build Status](https://dev.azure.com/japhethobalak/japhethobalak/_apis/build/status/microsoftgraph.microsoft-graph-explorer-v2?branchName=dev)](https://dev.azure.com/japhethobalak/japhethobalak/_build/latest?definitionId=4&branchName=dev)
+[![Build Status](https://dev.azure.com/microsoftgarage/Intern%20GitHub/_apis/build/status/GI21-GraphExplorer/LokiLabs.microsoft-graph-explorer-v4?branchName=task%2Fsetup-azure-pipeline)](https://dev.azure.com/microsoftgarage/Intern%20GitHub/_build/latest?definitionId=343&branchName=task%2Fsetup-azure-pipeline)
 
 The [Microsoft Graph Explorer V4](https://developer.microsoft.com/graph/graph-explorer) lets developers quickly navigate and test API endpoints.
 
@@ -15,7 +15,7 @@ The Graph Explorer is written in [TypeScript](https://www.typescriptlang.org/) a
 
 #### Enabling authentication with your own credentials
 * Sign in to your Microsoft account (or Create one) at the [Microsoft Azure Portal](https://ms.portal.azure.com/).
-* Find the Azure service named App registrations. If you haven't used this service before, you might need to search for it in the search bar. 
+* Find the Azure service named App registrations. If you haven't used this service before, you might need to search for it in the search bar.
 * In the App registrations page, click `+ New registration`. You will be redirected to a form in the Microsoft Azure portal where you Register an application. Fill out the form and set the Redirect URI to a `Single-page application (SPA)` with `http://localhost:3000`. You can also set it from authentication tab in the app you have just created.
 * Create a `.env` file at the root of the project/repo and add the following keys.
     - REACT_APP_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
