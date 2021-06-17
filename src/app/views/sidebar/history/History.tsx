@@ -285,20 +285,22 @@ export class History extends Component<IHistoryProps, any> {
           </div>
         </div>
         <div className={'col-md-4'} style={{ display: 'inline-block' }}>
-          <IconButton
-            className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
-            iconProps={{ iconName: 'Delete' }}
-            title={`${messages['Delete requests']} : ${props.group!.name}`}
-            ariaLabel='delete group'
-            onClick={() => this.showDialog(props.group!.name)}
-          />
-          <IconButton
-            className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
-            iconProps={{ iconName: 'Download' }}
-            title={`${messages.Export} : ${props.group!.name}`}
-            ariaLabel='export group'
-            onClick={() => this.exportHistoryByCategory(props.group!.name)}
-          />
+          <div className={`${classes.pullRight}`}>
+            <IconButton
+              className={`${classes.groupHeaderRowIcon}`}
+              iconProps={{ iconName: 'Download' }}
+              title={`${messages.Export} : ${props.group!.name}`}
+              ariaLabel='export group'
+              onClick={() => this.exportHistoryByCategory(props.group!.name)}
+            />
+            <IconButton
+              className={`${classes.groupHeaderRowIcon}`}
+              iconProps={{ iconName: 'Delete' }}
+              title={`${messages['Delete requests']} : ${props.group!.name}`}
+              ariaLabel='delete group'
+              onClick={() => this.showDialog(props.group!.name)}
+            />
+          </div>
         </div>
       </div>
     );
