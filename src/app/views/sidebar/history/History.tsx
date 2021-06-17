@@ -24,6 +24,7 @@ import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
+import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
@@ -289,15 +290,15 @@ export class History extends Component<IHistoryProps, any> {
             <IconButton
               className={`${classes.groupHeaderRowIcon}`}
               iconProps={{ iconName: 'Download' }}
-              title={`${messages.Export} : ${props.group!.name}`}
-              ariaLabel='export group'
+              title={`${translateMessage('Export')} ${props.group!.name}'s queries`}
+              ariaLabel={`${translateMessage('Export')} ${props.group!.name}'s queries`}
               onClick={() => this.exportHistoryByCategory(props.group!.name)}
             />
             <IconButton
               className={`${classes.groupHeaderRowIcon}`}
               iconProps={{ iconName: 'Delete' }}
-              title={`${messages['Delete requests']} : ${props.group!.name}`}
-              ariaLabel='delete group'
+              title={`${translateMessage('Delete')} ${props.group!.name}'s queries`}
+              ariaLabel={`${translateMessage('Delete')} ${props.group!.name}'s queries`}
               onClick={() => this.showDialog(props.group!.name)}
             />
           </div>
