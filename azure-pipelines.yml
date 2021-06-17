@@ -21,6 +21,7 @@ pr:
       - feature/*
       - task/*
       - fix/*
+      - interns/*
   paths:
     exclude:
       - .github/*
@@ -43,6 +44,7 @@ trigger:
       - feature/*
       - task/*
       - fix/*
+      - interns/*
   paths:
     exclude:
       - .github/*
