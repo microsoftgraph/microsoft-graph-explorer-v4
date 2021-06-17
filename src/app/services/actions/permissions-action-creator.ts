@@ -40,7 +40,7 @@ export function fetchScopesError(response: object): IAction {
   };
 }
 
-export function fetchScopes(query?: IQuery): Function {
+export function fetchScopes(query?: IQuery, hardCodedScope?: String): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
@@ -55,7 +55,7 @@ export function fetchScopes(query?: IQuery): Function {
           throw new Error('url is invalid');
         }
 
-        let userScope = "personal";
+        let userScope = hardCodedScope ? hardCodedScope : "personal";
         let scope = "DelegatedWork"
 
         switch (userScope) {
