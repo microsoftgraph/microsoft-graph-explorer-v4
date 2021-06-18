@@ -2,6 +2,7 @@ import { ICloud } from './cloud';
 import { IAdaptiveCardResponse } from './adaptivecard';
 import { IAuthenticateResult } from './authentication';
 import { IAutocompleteResponse } from './auto-complete';
+import { IDevxAPI } from './devx-api';
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
 import { IHistoryItem } from './history';
@@ -35,6 +36,7 @@ export interface IRootState {
   snippets: ISnippet;
   termsOfUse: boolean;
   theme: string;
+  devxApi: IDevxAPI;
 }
 
 export interface IApiFetch {
