@@ -365,7 +365,7 @@ class App extends Component<IAppProps, IAppState> {
                 <hr className={classes.separator} />
 
                 {showSidebar && <>
-                  <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
+                  <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} appHeaderText="Apps" />
                 </>}
               </div>
             )}

@@ -4,9 +4,9 @@ import React from 'react';
 import { telemetry } from '../../../telemetry';
 import History from './history/History';
 import SampleQueries from './sample-queries/SampleQueries';
+import Apps from './apps/Apps';
 
-
-export const Sidebar = ({ sampleHeaderText, historyHeaderText }: any) => {
+export const Sidebar = ({ sampleHeaderText, historyHeaderText, appHeaderText }: any) => {
   return (
     <div>
       <Pivot onLinkClick={onPivotItemClick}>
@@ -15,6 +15,9 @@ export const Sidebar = ({ sampleHeaderText, historyHeaderText }: any) => {
         </PivotItem>
         <PivotItem headerText={historyHeaderText} itemIcon='History' itemKey='history'>
           <History />
+        </PivotItem>
+        <PivotItem headerText={appHeaderText} itemIcon='App' itemKey='app'>
+          <Apps />
         </PivotItem>
       </Pivot>
     </div>
