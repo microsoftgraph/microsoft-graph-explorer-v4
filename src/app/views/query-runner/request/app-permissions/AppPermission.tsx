@@ -25,7 +25,7 @@ import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
 import TabList from './TabList';
 
-export class Permission extends Component<IPermissionProps, IPermissionState> {
+export class AppPermission extends Component<IPermissionProps, IPermissionState> {
 
   constructor(props: IPermissionProps) {
     super(props);
@@ -56,7 +56,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       this.props.actions!.fetchScopes();
     }
     else {
-      this.props.actions!.fetchScopes(sample, "work");
+      this.props.actions!.fetchScopes(sample, "application");
     }
   }
 
@@ -296,7 +296,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-const styledPermissions = styled(Permission, permissionStyles as any);
+const styledPermissions = styled(AppPermission, permissionStyles as any);
 // @ts-ignore
 const IntlPermission = injectIntl(styledPermissions);
 // @ts-ignore

@@ -40,7 +40,7 @@ export function fetchScopesError(response: object): IAction {
   };
 }
 
-export function fetchScopes(query?: IQuery): Function {
+export function fetchScopes(query?: IQuery, hardCodedScope?: String): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
@@ -55,14 +55,27 @@ export function fetchScopes(query?: IQuery): Function {
           throw new Error('url is invalid');
         }
 
-        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}`;
+        let userScope = hardCodedScope ? hardCodedScope : "personal";
+        let scope = "DelegatedWork"
+
+        switch (userScope) {
+          case "personal":
+            scope = "DelegatedPersonal";
+            break;
+          case "application":
+            scope = "Application";
+            break;
+          default:
+            scope = "DelegatedWork";
+        }
+
+        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scope}`;
         hasUrl = true;
       }
 
       if (devxApi.parameters) {
-        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${
-          devxApi.parameters
-        }`;
+        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters
+          }`;
       }
 
       const headers = {
