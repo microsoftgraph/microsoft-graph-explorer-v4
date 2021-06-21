@@ -10,7 +10,7 @@ import { IProfileProps, IProfileState } from '../../../../types/profile';
 import { IRootState } from '../../../../types/root';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
-import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
+import { USER_INFO_URL, USER_PICTURE_URL, USER_BETA_INFO_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 
@@ -29,6 +29,13 @@ export class Profile extends Component<IProfileProps, IProfileState> {
   public componentDidMount = async () => {
     const { actions } = this.props;
 
+    const jsonBetaUserInfo = actions
+      ? await actions.getProfileInfo({
+        selectedVerb: 'GET',
+        sampleUrl: USER_BETA_INFO_URL
+      })
+      : null;
+
     const jsonUserInfo = actions
       ? await actions.getProfileInfo({
         selectedVerb: 'GET',
@@ -36,7 +43,10 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       })
       : null;
 
+    const betaUserInfo = jsonBetaUserInfo.response;
+    console.log(betaUserInfo);
     const userInfo = jsonUserInfo.response;
+
     if (userInfo) {
       let imageUrl = '';
 
