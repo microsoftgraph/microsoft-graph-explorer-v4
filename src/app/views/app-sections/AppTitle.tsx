@@ -1,12 +1,15 @@
-import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from 'office-ui-fabric-react';
+import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost, ToggleBase } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Toggle } from "office-ui-fabric-react/lib/Toggle";
+
 
 export function appTitleDisplayOnFullScreen(
   classes: any,
   minimised: any,
   toggleSidebar: Function,
 ): React.ReactNode {
+
 
   return <div style={{ display: 'flex', width: '100%' }}>
     <TooltipHost
@@ -31,6 +34,15 @@ export function appTitleDisplayOnFullScreen(
           {displayGraphLabel(classes)}
         </>}
     </div>
+    <div style={{ marginTop: 15 }}>
+      <Toggle
+        onText="App"
+        offText="You"
+        defaultChecked={false}
+        inlineLabel
+      />
+    </div>
+
   </div>;
 }
 
