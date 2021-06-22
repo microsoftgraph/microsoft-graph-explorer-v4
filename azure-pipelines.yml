@@ -8,7 +8,10 @@
 
 name: $(date:yyyyMMdd)$(rev:.r)
 
-pool: MsGraphBuildAgentsWindows
+pool:
+  vmImage: 'windows-latest'
+  steps:
+  - script: echo hello from Windows
 
 pr:
   branches:
@@ -18,6 +21,7 @@ pr:
       - feature/*
       - task/*
       - fix/*
+      - interns/*
   paths:
     exclude:
       - .github/*
@@ -40,6 +44,7 @@ trigger:
       - feature/*
       - task/*
       - fix/*
+      - interns/*
   paths:
     exclude:
       - .github/*
