@@ -351,6 +351,8 @@ class App extends Component<IAppProps, IAppState> {
                 {mobileScreen && appTitleDisplayOnMobileScreen(
                   stackTokens,
                   classes,
+                  minimised,
+                  authenticated,
                   this.toggleSidebar)}
 
                 {!mobileScreen && appTitleDisplayOnFullScreen(

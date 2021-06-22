@@ -5,12 +5,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 
-import { Mode } from '../../../../types/enums';
-import { IToggleProps, IToggleState } from '../../../../types/toggle';
-import { IRootState } from '../../../../types/root';
-import * as authActionCreators from '../../../services/actions/auth-action-creators';
-import * as profileActionCreators from '../../../services/actions/profile-action-creators';
-import { authenticationStyles } from '../Authentication.styles';
+import { IToggleProps, IToggleState } from '../../../types/toggle';
+import { IRootState } from '../../../types/root';
+import * as authActionCreators from '../../services/actions/auth-action-creators';
+import * as profileActionCreators from '../../services/actions/profile-action-creators';
+import { authenticationStyles } from '../authentication/Authentication.styles';
 
 import { Toggle } from "office-ui-fabric-react/lib/Toggle";
 
