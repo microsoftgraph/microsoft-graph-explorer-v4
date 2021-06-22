@@ -1,15 +1,15 @@
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
-import { exception } from 'console';
 import { errorTypes } from '.';
 import {
   DEVX_API_URL,
+  GRAPH_API_SANDBOX_ENDPOINT_URL,
   GRAPH_API_SANDBOX_URL,
   GRAPH_URL,
-  HOME_ACCOUNT_KEY,
+  HOME_ACCOUNT_KEY
 } from '../app/services/graph-constants';
 import {
   sanitizeGraphAPISandboxUrl,
-  sanitizeQueryUrl,
+  sanitizeQueryUrl
 } from '../app/utils/query-url-sanitization';
 
 export function filterTelemetryTypes(envelope: ITelemetryItem) {
@@ -29,7 +29,7 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
     const baseData = envelope.baseData || {};
     const urlObject = new URL(baseData.target || '');
 
-    const targetsToInclude = [GRAPH_URL, DEVX_API_URL, GRAPH_API_SANDBOX_URL];
+    const targetsToInclude = [GRAPH_URL, DEVX_API_URL, GRAPH_API_SANDBOX_URL, GRAPH_API_SANDBOX_ENDPOINT_URL];
     if (!targetsToInclude.includes(urlObject.origin)) {
       return false;
     }

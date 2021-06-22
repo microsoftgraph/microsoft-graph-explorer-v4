@@ -1,12 +1,11 @@
-import { IAction } from "../../../types/action";
-import { GRAPH_API_SANDBOX_URL } from "../graph-constants";
-import { SET_GRAPH_PROXY_URL } from "../redux-constants";
+import { IAction } from '../../../types/action';
+import { GRAPH_API_SANDBOX_ENDPOINT_URL, GRAPH_API_SANDBOX_URL } from '../graph-constants';
+import { SET_GRAPH_PROXY_URL } from '../redux-constants';
 
 export function getGraphProxyUrl(): Function {
   return async (dispatch: Function) => {
-    const endpointUrl = `https://graph.office.net/en-us/graph/api/proxy/endpoint`;
     try {
-      const response = await fetch(endpointUrl);
+      const response = await fetch(GRAPH_API_SANDBOX_ENDPOINT_URL);
       if (!response.ok) {
         throw response;
       }
