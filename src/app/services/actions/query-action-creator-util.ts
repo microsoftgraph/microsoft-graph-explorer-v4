@@ -8,7 +8,7 @@ import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { authProvider, GraphClient } from '../graph-client';
-import { DEFAULT_USER_SCOPES } from '../graph-constants';
+import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_URL } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
@@ -31,11 +31,17 @@ export async function anonymousRequest(dispatch: Function, query: IQuery, getSta
   }
 
   const headers = {
-    'MS-M365DEVPORTALS-API-KEY': `41DFE773-8DDB-4CF0-8EF6-4761971B0300`,
     'Content-Type': 'application/json',
     SdkVersion: 'GraphExplorer/4.0',
     ...sampleHeaders,
   };
+
+  if (proxyUrl === GRAPH_API_SANDBOX_URL) {
+    const authToken = '{token:https://graph.microsoft.com/}';
+    headers.Authorization = `Bearer ${authToken}`;
+  } else {
+    headers['MS-M365DEVPORTALS-API-KEY'] = `41DFE773-8DDB-4CF0-8EF6-4761971B0300`;
+  }
 
   const options: IRequestOptions = { method: query.selectedVerb, headers };
 
