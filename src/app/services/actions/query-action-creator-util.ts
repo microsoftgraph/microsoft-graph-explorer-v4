@@ -1,6 +1,6 @@
 import {
   AuthenticationHandlerOptions,
-  ResponseType,
+  ResponseType
 } from '@microsoft/microsoft-graph-client';
 import { MSALAuthenticationProviderOptions } from '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
 import { IAction } from '../../../types/action';
@@ -8,7 +8,7 @@ import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { authProvider, GraphClient } from '../graph-client';
-import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_URL } from '../graph-constants';
+import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_KEY, GRAPH_API_SANDBOX_URL } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
@@ -40,7 +40,7 @@ export async function anonymousRequest(dispatch: Function, query: IQuery, getSta
     const authToken = '{token:https://graph.microsoft.com/}';
     headers.Authorization = `Bearer ${authToken}`;
   } else {
-    headers['MS-M365DEVPORTALS-API-KEY'] = `41DFE773-8DDB-4CF0-8EF6-4761971B0300`;
+    headers['MS-M365DEVPORTALS-API-KEY'] = GRAPH_API_SANDBOX_KEY;
   }
 
   const options: IRequestOptions = { method: query.selectedVerb, headers };
