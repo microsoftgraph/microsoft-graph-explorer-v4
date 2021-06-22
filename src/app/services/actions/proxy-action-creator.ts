@@ -4,7 +4,7 @@ import { SET_GRAPH_PROXY_URL } from "../redux-constants";
 
 export function getGraphProxyUrl(): Function {
   return async (dispatch: Function) => {
-    const endpointUrl = `https://developer.microsoft.com/en-us/graph/api/proxy/endpoint`;
+    const endpointUrl = `https://graph.office.net/en-us/graph/api/proxy/endpoint`;
     try {
       const response = await fetch(endpointUrl);
       if (!response.ok) {
