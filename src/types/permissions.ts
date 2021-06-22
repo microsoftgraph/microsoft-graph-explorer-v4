@@ -17,6 +17,7 @@ export interface IPermissionProps {
   panel: boolean;
   sample: IQuery[];
   tokenPresent: boolean;
+  permissionsPanelOpen: boolean;
   consentedScopes: string[];
   setPermissions: Function;
   actions?: {

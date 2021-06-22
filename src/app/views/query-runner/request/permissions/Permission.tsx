@@ -39,7 +39,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 
   public componentDidUpdate = (prevProps: IPermissionProps) => {
-    if (prevProps.sample !== this.props.sample) {
+    if ((prevProps.sample !== this.props.sample) || (prevProps.permissionsPanelOpen !== this.props.permissionsPanelOpen)) {
       this.getPermissions();
     }
     const permissions = this.props.scopes.data;
@@ -51,13 +51,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 
   private getPermissions() {
-    const { panel, sample } = this.props;
-    if (panel) {
-      this.props.actions!.fetchScopes();
-    }
-    else {
-      this.props.actions!.fetchScopes(sample);
-    }
+    this.props.actions!.fetchScopes();
   }
 
   public shouldComponentUpdate(nextProps: IPermissionProps, nextState: IPermissionState) {
@@ -65,6 +59,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       || nextProps.scopes !== this.props.scopes
       || nextProps.consentedScopes !== this.props.consentedScopes
       || nextProps.dimensions !== this.props.dimensions
+      || nextProps.permissionsPanelOpen !== this.props.permissionsPanelOpen
       || nextState.permissions !== this.state.permissions;
     return shouldUpdate;
   }
@@ -181,8 +176,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           name: messages.Description,
           fieldName: 'consentDescription',
           isResizable: true,
-          minWidth: (tokenPresent) ? 400 : 700,
-          maxWidth: (tokenPresent) ? 700 : 1000,
+          minWidth: (tokenPresent) ? 400 : 600,
+          maxWidth: (tokenPresent) ? 600 : 1000,
           isMultiline: true
         }
       );
@@ -194,7 +189,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         isResizable: true,
         name: messages['Admin consent required'],
         fieldName: 'isAdmin',
-        minWidth: (tokenPresent) ? 150 : 150,
+        minWidth: (tokenPresent) ? 150 : 200,
         maxWidth: (tokenPresent) ? 200 : 300,
         ariaLabel: translateMessage('Administrator permission')
       }
@@ -242,7 +237,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     if (loading) {
       return <Label>
         <FormattedMessage id={'Fetching permissions'} />...
-        </Label>;
+      </Label>;
     }
 
     const displayPermissionsPanel = () => {
@@ -278,13 +273,14 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 }
 
-function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dimensions }: IRootState) {
+function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dimensions, permissionsPanelOpen }: IRootState) {
   return {
     sample: sampleQuery,
     scopes,
     tokenPresent: authToken.token,
     consentedScopes,
-    dimensions
+    dimensions,
+    permissionsPanelOpen
   };
 }
 
