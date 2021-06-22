@@ -356,6 +356,7 @@ class App extends Component<IAppProps, IAppState> {
                 {!mobileScreen && appTitleDisplayOnFullScreen(
                   classes,
                   minimised,
+                  authenticated,
                   this.toggleSidebar
                 )}
 
