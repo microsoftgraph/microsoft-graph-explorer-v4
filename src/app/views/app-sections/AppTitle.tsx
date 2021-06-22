@@ -35,6 +35,14 @@ export function appTitleDisplayOnFullScreen(
           {displayGraphLabel(classes)}
         </>}
     </div>
+    <div style={{ marginTop: 15 }}>
+      {
+        !minimised && authenticated &&
+        <>
+          {displayToggle()}
+        </>
+      }
+    </div>
   </div>;
 }
 
@@ -67,3 +75,13 @@ function displayGraphLabel(classes: any): React.ReactNode {
   )
 }
 
+function displayToggle(): React.ReactNode {
+  return (
+    <Toggle
+      onText="App"
+      offText="You"
+      defaultChecked={false}
+      inlineLabel
+    />
+  )
+}
