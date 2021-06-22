@@ -7,6 +7,7 @@ import { Toggle } from "office-ui-fabric-react/lib/Toggle";
 export function appTitleDisplayOnFullScreen(
   classes: any,
   minimised: any,
+  authenticated: any,
   toggleSidebar: Function,
 ): React.ReactNode {
 
@@ -35,14 +36,13 @@ export function appTitleDisplayOnFullScreen(
         </>}
     </div>
     <div style={{ marginTop: 15 }}>
-      <Toggle
-        onText="App"
-        offText="You"
-        defaultChecked={false}
-        inlineLabel
-      />
+      {
+        !minimised && authenticated &&
+        <>
+          {displayToggle()}
+        </>
+      }
     </div>
-
   </div>;
 }
 
@@ -72,5 +72,16 @@ function displayGraphLabel(classes: any): React.ReactNode {
     <Label className={classes.graphExplorerLabel}>
       Graph Explorer
     </Label>
+  )
+}
+
+function displayToggle(): React.ReactNode {
+  return (
+    <Toggle
+      onText="App"
+      offText="You"
+      defaultChecked={false}
+      inlineLabel
+    />
   )
 }
