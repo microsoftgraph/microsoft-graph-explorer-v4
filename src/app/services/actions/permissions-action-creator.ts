@@ -15,6 +15,11 @@ import {
   FETCH_SCOPES_SUCCESS,
 } from '../redux-constants';
 import {
+  WORK,
+  PERSONAL,
+  APPLICATION
+} from '../graph-constants';
+import {
   getAuthTokenSuccess,
   getConsentedScopesSuccess,
 } from './auth-action-creators';
@@ -40,7 +45,7 @@ export function fetchScopesError(response: object): IAction {
   };
 }
 
-export function fetchScopes(query?: IQuery, hardCodedScope?: String): Function {
+export function fetchScopes(query?: IQuery, permissionsScope?: String): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
@@ -55,18 +60,18 @@ export function fetchScopes(query?: IQuery, hardCodedScope?: String): Function {
           throw new Error('url is invalid');
         }
 
-        let userScope = hardCodedScope ? hardCodedScope : "personal";
-        let scope = "DelegatedWork"
+        let userScope = permissionsScope ? permissionsScope : PERSONAL;
+        let scope = WORK;
 
         switch (userScope) {
           case "personal":
-            scope = "DelegatedPersonal";
+            scope = PERSONAL;
             break;
           case "application":
-            scope = "Application";
+            scope = APPLICATION;
             break;
           default:
-            scope = "DelegatedWork";
+            scope = WORK;
         }
 
         permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scope}`;
