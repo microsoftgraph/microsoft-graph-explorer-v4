@@ -116,9 +116,9 @@ jobs:
       - script: |
           npm run build
         env:
-          REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
-          REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
-        displayName: 'Build static assets for staging'
+          REACT_APP_CLIENT_ID: $(REACT_APP_DEVTEST_CLIENT_ID)
+          REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_DEVTEST_INSTRUMENTATION_KEY)
+        displayName: 'Build static assets for dev-test release'
 
       - task: PowerShell@2
         displayName: 'Set version-number'
@@ -134,11 +134,11 @@ jobs:
 
       - script: |
           npm run build
-        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
         env:
-          REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
-          REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
-        displayName: 'Build static assets for prod'
+          REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
+          REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
+        displayName: 'Build static assets for staging release'
 
       - task: CopyFiles@1
         displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
