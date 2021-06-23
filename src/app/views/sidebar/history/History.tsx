@@ -2,6 +2,7 @@ import {
   Announced,
   ContextualMenuItemType, DefaultButton, DetailsList, DetailsRow, Dialog,
   DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
+  ITooltipHostStyles,
   Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
@@ -235,14 +236,9 @@ export class History extends Component<IHistoryProps, any> {
 
   public renderGroupHeader = (props: any): any => {
     const classes = classNames(this.props);
-    const {
-      intl: { messages },
-    }: any = this.props;
-
-    // tslint:disable
-    const expandText = messages.Expand;
-    const collapseText = messages.Collapse;
-    // tslint:enable
+    const expandText = translateMessage('Expand');
+    const collapseText = translateMessage('Collapse');
+    const label = props.group!.isCollapsed ? `${expandText} ${props.group!.name}` : `${collapseText} ${props.group!.name}`;
 
     return (
       <div
@@ -258,25 +254,22 @@ export class History extends Component<IHistoryProps, any> {
             className={classes.groupHeaderRow}
             onClick={this.onToggleCollapse(props)}
           >
-            <IconButton
-              className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
-              iconProps={{
-                iconName: props.group!.isCollapsed
-                  ? 'ChevronRightSmall'
-                  : 'ChevronDownSmall',
-              }}
-              title={
-                props.group!.isCollapsed
-                  ? `${expandText} ${props.group!.name}`
-                  : `${collapseText} ${props.group!.name}`
-              }
-              ariaLabel={
-                props.group!.isCollapsed
-                  ? `${expandText} ${props.group!.name}`
-                  : `${collapseText} ${props.group!.name}`
-              }
-              onClick={() => this.onToggleCollapse(props)}
-            />
+            <TooltipHost
+              content={label}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+              styles={{ root: { display: 'inline-block' } }}>
+              <IconButton
+                className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
+                iconProps={{
+                  iconName: props.group!.isCollapsed
+                    ? 'ChevronRightSmall'
+                    : 'ChevronDownSmall',
+                }}
+                ariaLabel={label}
+                onClick={() => this.onToggleCollapse(props)}
+              />
+            </TooltipHost>
             <div className={classes.groupTitle}>
               <span>{props.group!.name}</span>
               <span className={classes.headerCount}>
@@ -287,20 +280,29 @@ export class History extends Component<IHistoryProps, any> {
         </div>
         <div className={'col-md-4'} style={{ display: 'inline-block' }}>
           <div className={`${classes.pullRight}`}>
-            <IconButton
-              className={`${classes.groupHeaderRowIcon}`}
-              iconProps={{ iconName: 'Download' }}
-              title={`${translateMessage('Export')} ${props.group!.name}'s queries`}
-              ariaLabel={`${translateMessage('Export')} ${props.group!.name}'s queries`}
-              onClick={() => this.exportHistoryByCategory(props.group!.name)}
-            />
-            <IconButton
-              className={`${classes.groupHeaderRowIcon}`}
-              iconProps={{ iconName: 'Delete' }}
-              title={`${translateMessage('Delete')} ${props.group!.name}'s queries`}
-              ariaLabel={`${translateMessage('Delete')} ${props.group!.name}'s queries`}
-              onClick={() => this.showDialog(props.group!.name)}
-            />
+            <TooltipHost
+              content={`${translateMessage('Export')} ${props.group!.name} queries`}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}>
+              <IconButton
+                className={`${classes.groupHeaderRowIcon}`}
+                iconProps={{ iconName: 'Download' }}
+                ariaLabel={`${translateMessage('Export')} ${props.group!.name} queries`}
+                onClick={() => this.exportHistoryByCategory(props.group!.name)}
+              />
+            </TooltipHost>
+            <TooltipHost
+              content={`${translateMessage('Delete')} ${props.group!.name} queries`}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }} >
+              <IconButton
+                className={`${classes.groupHeaderRowIcon}`}
+                iconProps={{ iconName: 'Delete' }}
+                ariaLabel={`${translateMessage('Delete')} ${props.group!.name} queries`}
+                onClick={() => this.showDialog(props.group!.name)}
+              />
+            </TooltipHost>
+
           </div>
         </div>
       </div>
