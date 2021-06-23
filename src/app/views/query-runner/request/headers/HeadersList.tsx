@@ -7,8 +7,7 @@ import { headerStyles } from './Headers.styles';
 
 const HeadersList = ({
   handleOnHeaderDelete,
-  headers,
-  messages
+  headers
 }: IHeadersListControl) => {
 
   const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
