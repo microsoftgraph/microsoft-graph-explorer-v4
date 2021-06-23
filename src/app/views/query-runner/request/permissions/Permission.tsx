@@ -56,7 +56,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       this.props.actions!.fetchScopes();
     }
     else {
-      this.props.actions!.fetchScopes(sample, "work");
+      this.props.actions!.fetchScopes(sample, this.props.permissionModeType);
     }
   }
 

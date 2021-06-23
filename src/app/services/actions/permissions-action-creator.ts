@@ -17,7 +17,9 @@ import {
 import {
   WORK,
   PERSONAL,
-  APPLICATION
+  APPLICATION,
+  DISPLAY_DELEGATED_PERMISSIONS,
+  DISPLAY_APPLICATION_PERMISSIONS
 } from '../graph-constants';
 import {
   getAuthTokenSuccess,
@@ -45,7 +47,7 @@ export function fetchScopesError(response: object): IAction {
   };
 }
 
-export function fetchScopes(query?: IQuery, permissionsScope?: String): Function {
+export function fetchScopes(query?: IQuery, permissionType?: boolean): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
@@ -60,18 +62,13 @@ export function fetchScopes(query?: IQuery, permissionsScope?: String): Function
           throw new Error('url is invalid');
         }
 
-        let userScope = permissionsScope ? permissionsScope : PERSONAL;
+
         let scope = WORK;
 
-        switch (userScope) {
-          case "personal":
-            scope = PERSONAL;
-            break;
-          case "application":
-            scope = APPLICATION;
-            break;
-          default:
-            scope = WORK;
+        if (permissionType == DISPLAY_APPLICATION_PERMISSIONS) {
+          scope = APPLICATION;
+        } else if (permissionType == DISPLAY_DELEGATED_PERMISSIONS) {
+          scope = WORK;
         }
 
         permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scope}`;

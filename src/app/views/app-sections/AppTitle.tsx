@@ -1,20 +1,19 @@
 import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Toggle } from "office-ui-fabric-react/lib/Toggle";
-
-
-import ToggleMode from "../app-sections/Toggle"
+import { Checkbox } from 'office-ui-fabric-react';
 
 export function appTitleDisplayOnFullScreen(
   classes: any,
   minimised: any,
   authenticated: any,
   toggleSidebar: Function,
+  permissionType: boolean,
+  changeMode: Function
 ): React.ReactNode {
 
-
   return <div style={{ display: 'flex', width: '100%' }}>
+
     <TooltipHost
       content={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
       id={getId()}
@@ -39,9 +38,10 @@ export function appTitleDisplayOnFullScreen(
     </div>
     <div style={{ marginTop: 15 }}>
       {
+
         !minimised && authenticated &&
         <>
-          {displayToggle()}
+          {permissionsModeButton(changeMode, permissionType)}
         </>
       }
     </div>
@@ -53,7 +53,9 @@ export function appTitleDisplayOnMobileScreen(
   classes: any,
   minimised: any,
   authenticated: any,
-  toggleSidebar: Function
+  toggleSidebar: Function,
+  permissionType: boolean,
+  changeMode: Function
 ): React.ReactNode {
   return <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
     <>
@@ -71,7 +73,7 @@ export function appTitleDisplayOnMobileScreen(
         {
           !minimised && authenticated &&
           <>
-            {displayToggle()}
+            {permissionsModeButton(changeMode, permissionType)}
           </>
         }
       </div>
@@ -88,13 +90,10 @@ function displayGraphLabel(classes: any): React.ReactNode {
   )
 }
 
-function displayToggle(): React.ReactNode {
+function permissionsModeButton(changeMode: Function, permissionType: boolean) {
   return (
-    <Toggle
-      onText="App"
-      offText="You"
-      defaultChecked={false}
-      inlineLabel
-    />
+    <IconButton
+      iconProps={{ iconName: 'Cat' }}
+      onClick={() => changeMode(!permissionType)} />
   )
 }

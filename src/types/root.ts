@@ -33,6 +33,7 @@ export interface IRootState {
   responseAreaExpanded: boolean;
   dimensions: IDimensions;
   autoComplete: IAutocompleteResponse;
+  permissionModeType: boolean;
 }
 
 export interface IApiFetch {

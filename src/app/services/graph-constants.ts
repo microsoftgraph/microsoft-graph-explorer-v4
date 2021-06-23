@@ -10,3 +10,5 @@ export const HOME_ACCOUNT_KEY = 'fbf1ecbe-27ab-42d7-96d4-3e6b03682ee4';
 export const APPLICATION = "Application";
 export const WORK = "DelegatedWork";
 export const PERSONAL = "DelegatedPersonal";
+export const DISPLAY_DELEGATED_PERMISSIONS = true;
+export const DISPLAY_APPLICATION_PERMISSIONS = false;

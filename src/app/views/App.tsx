@@ -4,7 +4,7 @@ import {
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../appLocale';
@@ -21,6 +21,7 @@ import * as authActionCreators from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
+import { changeMode } from '../services/actions/mode-action-creator';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
@@ -61,6 +62,7 @@ interface IAppProps {
     toggleSidebar: Function;
     signIn: Function;
     storeScopes: Function;
+    changeMode: Function;
   };
 }
 
@@ -270,6 +272,8 @@ class App extends Component<IAppProps, IAppState> {
       });
   }
 
+
+
   public displayToggleButton = (mediaQueryList: any) => {
     const mobileScreen = mediaQueryList.matches;
     let showSidebar = true;
@@ -304,7 +308,7 @@ class App extends Component<IAppProps, IAppState> {
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
-      actions, sidebarProperties, intl: { messages } }: any = this.props;
+      actions, sidebarProperties, permissionModeType, intl: { messages } }: any = this.props;
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
@@ -339,6 +343,8 @@ class App extends Component<IAppProps, IAppState> {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
 
+
+
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
@@ -346,6 +352,7 @@ class App extends Component<IAppProps, IAppState> {
           <Announced message={!showSidebar ?
             translateMessage('Sidebar minimized') : translateMessage('Sidebar maximized')} />
           <div className='row'>
+
             {graphExplorerMode === Mode.Complete && (
               <div className={sidebarWidth}>
                 {mobileScreen && appTitleDisplayOnMobileScreen(
@@ -353,14 +360,17 @@ class App extends Component<IAppProps, IAppState> {
                   classes,
                   minimised,
                   authenticated,
-                  this.toggleSidebar)}
+                  this.toggleSidebar,
+                  permissionModeType,
+                  this.props.actions!.changeMode)}
 
                 {!mobileScreen && appTitleDisplayOnFullScreen(
                   classes,
                   minimised,
                   authenticated,
-                  this.toggleSidebar
-                )}
+                  this.toggleSidebar,
+                  permissionModeType,
+                  this.props.actions!.changeMode)}
 
                 <hr className={classes.separator} />
 
@@ -395,7 +405,7 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme,
-  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode
+  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode, permissionModeType
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -410,7 +420,8 @@ const mapStateToProps = ({ sidebarProperties, theme,
     termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery,
-    authenticated: !!authToken.token
+    authenticated: !!authToken.token,
+    permissionModeType
   };
 };
 
@@ -422,6 +433,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       runQuery,
       setSampleQuery,
       toggleSidebar,
+      changeMode,
       ...authActionCreators,
       changeTheme: (newTheme: string) => {
         return (disp: Function) => disp(changeThemeSuccess(newTheme));
