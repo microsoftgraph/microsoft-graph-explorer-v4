@@ -1,4 +1,4 @@
-import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost, ToggleBase } from 'office-ui-fabric-react';
+import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Toggle } from "office-ui-fabric-react/lib/Toggle";
