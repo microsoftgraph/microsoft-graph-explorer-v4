@@ -14,6 +14,7 @@ export const CODE_SNIPPETS_COPY_BUTTON = 'Code snippets copy button';
 export const VIEW_ALL_PERMISSIONS_BUTTON = 'View all permissions button';
 export const EXPORT_HISTORY_ITEM_BUTTON = 'Export history item button';
 export const DELETE_HISTORY_ITEM_BUTTON = 'Delete history item button';
+export const RESPONSE_HEADERS_COPY_BUTTON = 'Response headers copy button';
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
