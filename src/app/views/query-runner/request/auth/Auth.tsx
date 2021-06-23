@@ -1,5 +1,5 @@
 import { AuthenticationResult } from '@azure/msal-browser';
-import { IconButton, IIconProps, Label, styled } from 'office-ui-fabric-react';
+import { IconButton, IIconProps, Label, MessageBar, MessageBarType, styled } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -43,10 +43,10 @@ export function Auth(props: any) {
     iconName: 'code'
   };
 
-  if (!authToken) {
-    return <Label className={classes.emptyStateLabel}>
+  if (!authToken.token) {
+    return <MessageBar messageBarType={MessageBarType.blocked}>
       <FormattedMessage id='Sign In to see your access token.' />
-    </Label>;
+    </MessageBar>;
   }
 
   return (<div className={classes.auth} style={{ height: requestHeight }}>

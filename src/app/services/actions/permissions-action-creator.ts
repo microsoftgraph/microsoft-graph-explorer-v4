@@ -1,11 +1,10 @@
-import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { MessageBarType } from 'office-ui-fabric-react';
 
 import { geLocale } from '../../../appLocale';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
-import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
+import { IRootState } from '../../../types/root';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
@@ -40,14 +39,14 @@ export function fetchScopesError(response: object): IAction {
   };
 }
 
-export function fetchScopes(query?: IQuery): Function {
+export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
-      const { devxApi } = getState();
+      const { devxApi, permissionsPanelOpen, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
 
-      if (query) {
+      if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);
         const { requestUrl, sampleUrl } = parseSampleUrl(signature);
 
@@ -60,9 +59,8 @@ export function fetchScopes(query?: IQuery): Function {
       }
 
       if (devxApi.parameters) {
-        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${
-          devxApi.parameters
-        }`;
+        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters
+          }`;
       }
 
       const headers = {

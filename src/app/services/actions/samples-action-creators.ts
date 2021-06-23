@@ -1,4 +1,3 @@
-import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { geLocale } from '../../../appLocale';
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
