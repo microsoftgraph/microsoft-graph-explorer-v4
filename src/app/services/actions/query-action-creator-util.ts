@@ -20,10 +20,17 @@ export function queryResponse(response: object): IAction {
 }
 
 export async function anonymousRequest(dispatch: Function, query: IQuery, getState: Function) {
-  const escapedUrl = encodeURIComponent(query.sampleUrl);
+  dispatch(queryRunningStatus(true));
   const { proxyUrl } = getState();
+  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl);
+  return fetch(graphUrl, options);
+}
+
+export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
+  const escapedUrl = encodeURIComponent(query.sampleUrl);
   const graphUrl = `${proxyUrl}?url=${escapedUrl}`;
   const sampleHeaders: any = {};
+
   if (query.sampleHeaders && query.sampleHeaders.length > 0) {
     query.sampleHeaders.forEach((header) => {
       sampleHeaders[header.name] = header.value;
@@ -44,10 +51,7 @@ export async function anonymousRequest(dispatch: Function, query: IQuery, getSta
   }
 
   const options: IRequestOptions = { method: query.selectedVerb, headers };
-
-  dispatch(queryRunningStatus(true));
-
-  return fetch(graphUrl, options);
+  return { graphUrl, options };
 }
 
 export function authenticatedRequest(
