@@ -13,6 +13,7 @@ import * as profileActionCreators from '../../../services/actions/profile-action
 import { USER_INFO_URL, USER_PICTURE_URL, USER_BETA_INFO_URL } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
+import { Toggle } from "office-ui-fabric-react/lib/Toggle";
 
 export class Profile extends Component<IProfileProps, IProfileState> {
   constructor(props: IProfileProps) {
@@ -167,7 +168,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     };
 
     return (
-      <div className={classes.profile}>
+      <div className={classes.profile} style={{ display: 'flex', width: '115%' }}>
         {this.showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
       </div>
     );

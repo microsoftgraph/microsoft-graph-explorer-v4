@@ -4,9 +4,12 @@ import { FormattedMessage } from 'react-intl';
 import { Toggle } from "office-ui-fabric-react/lib/Toggle";
 
 
+import ToggleMode from "../app-sections/Toggle"
+
 export function appTitleDisplayOnFullScreen(
   classes: any,
   minimised: any,
+  authenticated: any,
   toggleSidebar: Function,
 ): React.ReactNode {
 
@@ -35,20 +38,21 @@ export function appTitleDisplayOnFullScreen(
         </>}
     </div>
     <div style={{ marginTop: 15 }}>
-      <Toggle
-        onText="App"
-        offText="You"
-        defaultChecked={false}
-        inlineLabel
-      />
+      {
+        !minimised && authenticated &&
+        <>
+          {displayToggle()}
+        </>
+      }
     </div>
-
   </div>;
 }
 
 export function appTitleDisplayOnMobileScreen(
   stackTokens: IStackTokens,
   classes: any,
+  minimised: any,
+  authenticated: any,
   toggleSidebar: Function
 ): React.ReactNode {
   return <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
@@ -63,6 +67,15 @@ export function appTitleDisplayOnMobileScreen(
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
         {displayGraphLabel(classes)}
       </div>
+      <div style={{ marginTop: 15 }}>
+        {
+          !minimised && authenticated &&
+          <>
+            {displayToggle()}
+          </>
+        }
+      </div>
+
     </>
   </Stack>;
 }
@@ -72,5 +85,16 @@ function displayGraphLabel(classes: any): React.ReactNode {
     <Label className={classes.graphExplorerLabel}>
       Graph Explorer
     </Label>
+  )
+}
+
+function displayToggle(): React.ReactNode {
+  return (
+    <Toggle
+      onText="App"
+      offText="You"
+      defaultChecked={false}
+      inlineLabel
+    />
   )
 }
