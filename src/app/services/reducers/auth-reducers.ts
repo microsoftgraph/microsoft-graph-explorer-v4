@@ -14,7 +14,6 @@ const initialState: IAuthenticateResult = {
 export function authToken(state = initialState, action: IAction): IAuthenticateResult {
     switch (action.type) {
         case GET_AUTH_TOKEN_SUCCESS:
-            console.log(initialState.token);
             return {
                 token: true,
                 pending: false

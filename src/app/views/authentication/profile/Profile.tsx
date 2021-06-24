@@ -45,7 +45,6 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       : null;
 
     const betaUserInfo = jsonBetaUserInfo.response;
-    console.log(betaUserInfo);
     const userInfo = jsonUserInfo.response;
 
     if (userInfo) {
