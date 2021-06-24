@@ -23,7 +23,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   const tokenPresent = !!authToken.token;
 
   const isRSC = (permission: IPermission) => {
-    return RSC_PERMISSIONS_ENDINGS.some((ending) => permission.value.indexOf(ending) != -1)
+    return RSC_PERMISSIONS_ENDINGS.some((ending) => permission.value.indexOf(ending) !== -1)
   }
 
   const filterPermissionsForRSC = () => {
