@@ -357,5 +357,7 @@
   "Click here to follow the link": "Click here to follow the link",
   "Signing you out...": "Signing you out...",
   "As user": "(as user)",
-  "As Teams app": "(as Teams app)"
+  "As Teams app": "(as Teams app)",
+  "Use Explorer as sample Teams application": "Use Explorer as sample Teams application",
+  "Use Explorer as logged-in user": "Use Explorer as logged-in user"
 }
