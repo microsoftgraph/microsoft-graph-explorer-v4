@@ -271,8 +271,6 @@ class App extends Component<IAppProps, IAppState> {
       });
   }
 
-
-
   public displayToggleButton = (mediaQueryList: any) => {
     const mobileScreen = mediaQueryList.matches;
     let showSidebar = true;
@@ -342,8 +340,6 @@ class App extends Component<IAppProps, IAppState> {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
 
-
-
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
@@ -351,7 +347,6 @@ class App extends Component<IAppProps, IAppState> {
           <Announced message={!showSidebar ?
             translateMessage('Sidebar minimized') : translateMessage('Sidebar maximized')} />
           <div className='row'>
-
             {graphExplorerMode === Mode.Complete && (
               <div className={sidebarWidth}>
                 {mobileScreen && appTitleDisplayOnMobileScreen(

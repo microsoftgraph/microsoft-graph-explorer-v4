@@ -12,7 +12,6 @@ export function appTitleDisplayOnFullScreen(
 ): React.ReactNode {
 
   return <div style={{ display: 'flex', width: '100%' }}>
-
     <TooltipHost
       content={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
       id={getId()}
@@ -75,7 +74,6 @@ export function appTitleDisplayOnMobileScreen(
           </>
         }
       </div>
-
     </>
   </Stack>;
 }

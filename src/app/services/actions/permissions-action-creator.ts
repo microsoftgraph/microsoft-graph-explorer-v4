@@ -59,7 +59,6 @@ export function fetchScopes(): Function {
           throw new Error('url is invalid');
         }
 
-
         let scope = WORK;
 
         if (permissionModeType === DISPLAY_APPLICATION_PERMISSIONS) {
