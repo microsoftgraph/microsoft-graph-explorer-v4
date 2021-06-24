@@ -88,6 +88,7 @@ function permissionsModeButton(changeMode: Function, permissionType: boolean) {
   return (
     <IconButton
       iconProps={{ iconName: 'Cat' }}
-      onClick={() => changeMode(!permissionType)} />
+      onClick={() => changeMode(!permissionType)}
+      ariaLabel="button to switch between user and Teams app" />
   )
 }
