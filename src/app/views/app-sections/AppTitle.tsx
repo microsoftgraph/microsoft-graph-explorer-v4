@@ -33,7 +33,7 @@ export function appTitleDisplayOnFullScreen(
     <div className={classes.graphExplorerLabelContainer} role={'heading'} aria-level={1}>
       {!minimised &&
         <>
-          {displayGraphLabel(classes)}
+          {displayGraphLabel(classes, permissionType)}
         </>}
     </div>
     <div style={{ marginTop: 15 }}>
@@ -67,7 +67,7 @@ export function appTitleDisplayOnMobileScreen(
         onClick={() => toggleSidebar()}
       />
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
-        {displayGraphLabel(classes)}
+        {displayGraphLabel(classes, permissionType)}
       </div>
       <div style={{ marginTop: 15 }}>
         {
@@ -82,10 +82,10 @@ export function appTitleDisplayOnMobileScreen(
   </Stack>;
 }
 
-function displayGraphLabel(classes: any): React.ReactNode {
+function displayGraphLabel(classes: any, permissionType: boolean): React.ReactNode {
   return (
     <Label className={classes.graphExplorerLabel}>
-      Graph Explorer
+      Graph Explorer {permissionType ? "(as person)" : "(as app)"}
     </Label>
   )
 }
