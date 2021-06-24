@@ -387,7 +387,7 @@ class App extends Component<IAppProps, IAppState> {
 
               {displayContent && <>
                 <div style={{ marginBottom: 8 }}>
-                  <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                  <QueryRunner onSelectVerb={this.handleSelectVerb} permissionModeType={permissionModeType} />
                 </div>
                 {statusMessages(queryState, sampleQuery, actions)}
                 {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
