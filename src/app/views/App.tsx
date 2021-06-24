@@ -6,7 +6,6 @@ import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import { geLocale } from '../../appLocale';
 import { authenticationWrapper } from '../../modules/authentication';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
@@ -21,6 +20,7 @@ import * as authActionCreators from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
+import { changeMode } from '../services/actions/permission-mode-action-creator';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
@@ -61,6 +61,7 @@ interface IAppProps {
     toggleSidebar: Function;
     signIn: Function;
     storeScopes: Function;
+    changeMode: Function;
   };
 }
 
@@ -270,6 +271,8 @@ class App extends Component<IAppProps, IAppState> {
       });
   }
 
+
+
   public displayToggleButton = (mediaQueryList: any) => {
     const mobileScreen = mediaQueryList.matches;
     let showSidebar = true;
@@ -304,7 +307,7 @@ class App extends Component<IAppProps, IAppState> {
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
-      actions, sidebarProperties, intl: { messages } }: any = this.props;
+      actions, sidebarProperties, permissionModeType, intl: { messages } }: any = this.props;
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
@@ -339,6 +342,8 @@ class App extends Component<IAppProps, IAppState> {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
 
+
+
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
@@ -346,18 +351,25 @@ class App extends Component<IAppProps, IAppState> {
           <Announced message={!showSidebar ?
             translateMessage('Sidebar minimized') : translateMessage('Sidebar maximized')} />
           <div className='row'>
+
             {graphExplorerMode === Mode.Complete && (
               <div className={sidebarWidth}>
                 {mobileScreen && appTitleDisplayOnMobileScreen(
                   stackTokens,
                   classes,
-                  this.toggleSidebar)}
+                  minimised,
+                  authenticated,
+                  this.toggleSidebar,
+                  permissionModeType,
+                  this.props.actions!.changeMode)}
 
                 {!mobileScreen && appTitleDisplayOnFullScreen(
                   classes,
                   minimised,
-                  this.toggleSidebar
-                )}
+                  authenticated,
+                  this.toggleSidebar,
+                  permissionModeType,
+                  this.props.actions!.changeMode)}
 
                 <hr className={classes.separator} />
 
@@ -365,7 +377,7 @@ class App extends Component<IAppProps, IAppState> {
                 <hr className={classes.separator} />
 
                 {showSidebar && <>
-                  <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
+                  <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} appHeaderText="Apps" />
                 </>}
               </div>
             )}
@@ -374,7 +386,7 @@ class App extends Component<IAppProps, IAppState> {
 
               {displayContent && <>
                 <div style={{ marginBottom: 8 }}>
-                  <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                  <QueryRunner onSelectVerb={this.handleSelectVerb} permissionModeType={permissionModeType} />
                 </div>
                 {statusMessages(queryState, sampleQuery, actions)}
                 {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
@@ -392,7 +404,7 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme,
-  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode
+  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode, permissionModeType
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -407,7 +419,8 @@ const mapStateToProps = ({ sidebarProperties, theme,
     termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery,
-    authenticated: !!authToken.token
+    authenticated: !!authToken.token,
+    permissionModeType
   };
 };
 
@@ -419,6 +432,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       runQuery,
       setSampleQuery,
       toggleSidebar,
+      changeMode,
       ...authActionCreators,
       changeTheme: (newTheme: string) => {
         return (disp: Function) => disp(changeThemeSuccess(newTheme));

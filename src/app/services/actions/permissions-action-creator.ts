@@ -1,5 +1,4 @@
 import { MessageBarType } from 'office-ui-fabric-react';
-
 import { geLocale } from '../../../appLocale';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
@@ -13,6 +12,13 @@ import {
   FETCH_SCOPES_PENDING,
   FETCH_SCOPES_SUCCESS,
 } from '../redux-constants';
+import {
+  WORK,
+  PERSONAL,
+  APPLICATION,
+  DISPLAY_DELEGATED_PERMISSIONS,
+  DISPLAY_APPLICATION_PERMISSIONS
+} from '../graph-constants';
 import {
   getAuthTokenSuccess,
   getConsentedScopesSuccess,
@@ -43,7 +49,7 @@ export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
-      const { devxApi, permissionsPanelOpen, sampleQuery: query }: IRootState = getState();
+      const { devxApi, permissionsPanelOpen, permissionModeType, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
 
       if (!permissionsPanelOpen) {
@@ -54,7 +60,16 @@ export function fetchScopes(): Function {
           throw new Error('url is invalid');
         }
 
-        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}`;
+
+        let scope = WORK;
+
+        if (permissionModeType == DISPLAY_APPLICATION_PERMISSIONS) {
+          scope = APPLICATION;
+        } else if (permissionModeType == DISPLAY_DELEGATED_PERMISSIONS) {
+          scope = WORK;
+        }
+
+        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scope}`;
         hasUrl = true;
       }
 

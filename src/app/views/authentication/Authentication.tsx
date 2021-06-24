@@ -36,6 +36,7 @@ const Authentication = (props: any) => {
 
     try {
       const authResponse = await authenticationWrapper.logIn();
+
       if (authResponse) {
         setLoginInProgress(false);
         dispatch(getAuthTokenSuccess(!!authResponse.accessToken))

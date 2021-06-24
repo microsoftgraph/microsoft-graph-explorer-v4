@@ -152,6 +152,7 @@ export class QueryRunner extends Component<
               <Request
                 handleOnEditorChange={this.handleOnEditorChange}
                 sampleQuery={this.props.sampleQuery}
+                permissionModeType={this.props.permissionModeType}
               />
             }
           </div>

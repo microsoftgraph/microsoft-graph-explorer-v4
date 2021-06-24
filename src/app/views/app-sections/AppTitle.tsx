@@ -5,10 +5,14 @@ import { FormattedMessage } from 'react-intl';
 export function appTitleDisplayOnFullScreen(
   classes: any,
   minimised: any,
+  authenticated: any,
   toggleSidebar: Function,
+  permissionType: boolean,
+  changeMode: Function
 ): React.ReactNode {
 
   return <div style={{ display: 'flex', width: '100%' }}>
+
     <TooltipHost
       content={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
       id={getId()}
@@ -28,8 +32,16 @@ export function appTitleDisplayOnFullScreen(
     <div className={classes.graphExplorerLabelContainer} role={'heading'} aria-level={1}>
       {!minimised &&
         <>
-          {displayGraphLabel(classes)}
+          {displayGraphLabel(classes, permissionType)}
         </>}
+    </div>
+    <div style={{ marginTop: 15 }}>
+      {
+        !minimised && authenticated &&
+        <>
+          {permissionsModeButton(changeMode, permissionType)}
+        </>
+      }
     </div>
   </div>;
 }
@@ -37,7 +49,11 @@ export function appTitleDisplayOnFullScreen(
 export function appTitleDisplayOnMobileScreen(
   stackTokens: IStackTokens,
   classes: any,
-  toggleSidebar: Function
+  minimised: any,
+  authenticated: any,
+  toggleSidebar: Function,
+  permissionType: boolean,
+  changeMode: Function
 ): React.ReactNode {
   return <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
     <>
@@ -49,16 +65,33 @@ export function appTitleDisplayOnMobileScreen(
         onClick={() => toggleSidebar()}
       />
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
-        {displayGraphLabel(classes)}
+        {displayGraphLabel(classes, permissionType)}
       </div>
+      <div style={{ marginTop: 15 }}>
+        {
+          !minimised && authenticated &&
+          <>
+            {permissionsModeButton(changeMode, permissionType)}
+          </>
+        }
+      </div>
+
     </>
   </Stack>;
 }
 
-function displayGraphLabel(classes: any): React.ReactNode {
+function displayGraphLabel(classes: any, permissionType: boolean): React.ReactNode {
   return (
     <Label className={classes.graphExplorerLabel}>
-      Graph Explorer
+      Graph Explorer {permissionType ? "(as user)" : "(as Teams app)"}
     </Label>
+  )
+}
+
+function permissionsModeButton(changeMode: Function, permissionType: boolean) {
+  return (
+    <IconButton
+      iconProps={{ iconName: 'Cat' }}
+      onClick={() => changeMode(!permissionType)} />
   )
 }

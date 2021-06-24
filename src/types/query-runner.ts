@@ -29,6 +29,7 @@ export interface IQueryRunnerProps {
     setSampleQuery: Function;
     setQueryResponseStatus: Function;
   };
+  permissionModeType: boolean;
 }
 
 export interface IQueryInputProps {

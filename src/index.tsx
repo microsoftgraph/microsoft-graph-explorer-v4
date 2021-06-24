@@ -18,6 +18,7 @@ import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/a
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
+import { changeMode } from './app/services/actions/permission-mode-action-creator';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
@@ -66,8 +67,7 @@ const appState: any = store({
     selectedVersion: 'v1.0',
   },
   termsOfUse: true,
-  theme: currentTheme,
-
+  theme: currentTheme
 });
 
 function refreshAccessToken() {
@@ -105,6 +105,8 @@ if (theme) {
 if (theme) {
   appState.dispatch(setGraphExplorerMode(Mode.TryIt));
 }
+
+appState.dispatch(changeMode(true));
 
 const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
 

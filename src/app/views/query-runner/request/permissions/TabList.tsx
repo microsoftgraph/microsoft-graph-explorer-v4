@@ -18,7 +18,7 @@ interface ITabList {
 
 const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) => {
   const dispatch = useDispatch();
-  const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
+  const { consentedScopes, scopes, authToken, permissionModeType } = useSelector((state: IRootState) => state);
   const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
   const tokenPresent = !!authToken.token;
 
@@ -60,8 +60,8 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
         <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
       </Label>
       <Label className={classes.permissionText}>
-        {!tokenPresent && <FormattedMessage id='sign in to consent to permissions' />}
-        {tokenPresent && <FormattedMessage id='permissions required to run the query' />}
+        {!tokenPresent && <FormattedMessage id={permissionModeType ? 'sign in to consent to permissions' : 'sign in to consent to application permissions'} />}
+        {tokenPresent && <FormattedMessage id={permissionModeType ? 'permissions required to run the query' : 'application permissions required to run the query'} />}
       </Label>
       <DetailsList styles={{ root: { maxHeight } }}
         items={permissions}
