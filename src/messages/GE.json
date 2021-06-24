@@ -294,8 +294,8 @@
   "Status": "Status",
   "Admin consent required": "Admin consent required",
   "Consent": "Consent",
-  "permissions required to run the query": "One of the following permissions is required to run the query. Select a permission and click Consent.",
-  "application permissions required to run the query": "One of the following application permissions is required to run the query. Select a permission and click Consent.",
+  "permissions required to run the query": "One of the following delegated permissions is required to run the query. Select a permission and click Consent.",
+  "application permissions required to run the query": "One of the following resource specifc consent permissions is required to run the query. Select a permission and click Consent.",
   "tab": " tab",
   "View the": " View the",
   "viewing a cached set": "You are viewing a cached set of samples because of a network connection failure.",
@@ -330,6 +330,7 @@
   "Query Sample Input": "Query sample input",
   "popup blocked, allow pop-up windows in your browser": "popup blocked, allow pop-up windows in your browser",
   "sign in to consent to permissions": "One of the following permissions is required to run the query. Sign in with an account that can consent to the permission you will choose.",
+  "sign in to consent to application permissions": "One of the following application permissions is required to run the query. Sign in with an account that can consent to the permission you will choose.",
   "Sign in to use this method": "Sign in to use this method",
   "Request Header deleted": "Request Header deleted",
   "Request Header added": "Request Header added",
@@ -354,5 +355,7 @@
   "Missing url": "Please enter a valid url to run the query",
   "This response contains an @odata property.": "This response contains an @odata property.",
   "Click here to follow the link": "Click here to follow the link",
-  "Signing you out...": "Signing you out..."
+  "Signing you out...": "Signing you out...",
+  "As user": "(as user)",
+  "As Teams app": "(as Teams app)"
 }
