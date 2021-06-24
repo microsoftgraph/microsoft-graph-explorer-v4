@@ -14,7 +14,6 @@ import {
 } from '../redux-constants';
 import {
   WORK,
-  PERSONAL,
   APPLICATION,
   DISPLAY_DELEGATED_PERMISSIONS,
   DISPLAY_APPLICATION_PERMISSIONS
@@ -63,9 +62,9 @@ export function fetchScopes(): Function {
 
         let scope = WORK;
 
-        if (permissionModeType == DISPLAY_APPLICATION_PERMISSIONS) {
+        if (permissionModeType === DISPLAY_APPLICATION_PERMISSIONS) {
           scope = APPLICATION;
-        } else if (permissionModeType == DISPLAY_DELEGATED_PERMISSIONS) {
+        } else if (permissionModeType === DISPLAY_DELEGATED_PERMISSIONS) {
           scope = WORK;
         }
 

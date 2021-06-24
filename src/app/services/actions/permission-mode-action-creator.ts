@@ -1,5 +1,4 @@
 import { IAction } from '../../../types/action';
-import { Dispatch } from 'redux';
 import {
     CHANGE_PERMISSIONS_MODE_SUCCESS
 } from '../redux-constants';
