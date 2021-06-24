@@ -1,7 +1,6 @@
 import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Checkbox } from 'office-ui-fabric-react';
 
 export function appTitleDisplayOnFullScreen(
   classes: any,
@@ -38,8 +37,7 @@ export function appTitleDisplayOnFullScreen(
     </div>
     <div style={{ marginTop: 15 }}>
       {
-
-        !minimised &&
+        !minimised && authenticated &&
         <>
           {permissionsModeButton(changeMode, permissionType)}
         </>
@@ -85,7 +83,7 @@ export function appTitleDisplayOnMobileScreen(
 function displayGraphLabel(classes: any, permissionType: boolean): React.ReactNode {
   return (
     <Label className={classes.graphExplorerLabel}>
-      Graph Explorer {permissionType ? "(as person)" : "(as app)"}
+      Graph Explorer {permissionType ? "(as user)" : "(as Teams app)"}
     </Label>
   )
 }
