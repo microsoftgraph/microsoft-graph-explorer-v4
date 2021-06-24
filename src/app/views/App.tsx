@@ -353,7 +353,6 @@ class App extends Component<IAppProps, IAppState> {
                   stackTokens,
                   classes,
                   minimised,
-                  authenticated,
                   this.toggleSidebar,
                   permissionModeType,
                   this.props.actions!.changeMode)}
@@ -361,7 +360,6 @@ class App extends Component<IAppProps, IAppState> {
                 {!mobileScreen && appTitleDisplayOnFullScreen(
                   classes,
                   minimised,
-                  authenticated,
                   this.toggleSidebar,
                   permissionModeType,
                   this.props.actions!.changeMode)}

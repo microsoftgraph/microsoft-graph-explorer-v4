@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 export function appTitleDisplayOnFullScreen(
   classes: any,
   minimised: any,
-  authenticated: any,
   toggleSidebar: Function,
   permissionType: boolean,
   changeMode: Function
@@ -36,7 +35,7 @@ export function appTitleDisplayOnFullScreen(
     </div>
     <div style={{ marginTop: 15 }}>
       {
-        !minimised && authenticated &&
+        !minimised &&
         <>
           {permissionsModeButton(changeMode, permissionType)}
         </>
@@ -49,7 +48,6 @@ export function appTitleDisplayOnMobileScreen(
   stackTokens: IStackTokens,
   classes: any,
   minimised: any,
-  authenticated: any,
   toggleSidebar: Function,
   permissionType: boolean,
   changeMode: Function
@@ -68,7 +66,7 @@ export function appTitleDisplayOnMobileScreen(
       </div>
       <div style={{ marginTop: 15 }}>
         {
-          !minimised && authenticated &&
+          !minimised &&
           <>
             {permissionsModeButton(changeMode, permissionType)}
           </>
