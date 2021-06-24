@@ -4,9 +4,8 @@ import {
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import { geLocale } from '../../appLocale';
 import { authenticationWrapper } from '../../modules/authentication';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
@@ -21,7 +20,7 @@ import * as authActionCreators from '../services/actions/auth-action-creators';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
-import { changeMode } from '../services/actions/mode-action-creator';
+import { changeMode } from '../services/actions/permission-mode-action-creator';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';

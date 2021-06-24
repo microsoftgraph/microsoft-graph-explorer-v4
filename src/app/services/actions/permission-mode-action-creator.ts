@@ -12,11 +12,3 @@ export function changeMode(newPerm: boolean): IAction {
     };
 }
 
-
-export function switchModeSuccess(newPerm: boolean): IAction {
-    return {
-        type: CHANGE_PERMISSIONS_MODE_SUCCESS,
-        response: newPerm,
-    };
-}
-

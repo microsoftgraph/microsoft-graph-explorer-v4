@@ -1,6 +1,4 @@
-import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { MessageBarType } from 'office-ui-fabric-react';
-
 import { geLocale } from '../../../appLocale';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
