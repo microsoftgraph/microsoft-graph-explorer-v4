@@ -2,10 +2,10 @@ import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { IPermission } from '../../../../../types/permissions';
 import { IRootState } from '../../../../../types/root';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
+import { DISPLAY_APPLICATION_PERMISSIONS, DISPLAY_DELEGATED_PERMISSIONS, RSC_PERMISSIONS_ENDINGS } from '../../../../services/graph-constants';
 import { setConsentedStatus } from './util';
 
 interface ITabList {
@@ -22,7 +22,17 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
   const tokenPresent = !!authToken.token;
 
-  setConsentedStatus(tokenPresent, permissions, consentedScopes);
+  const isRSC = (permission: IPermission) => {
+    return RSC_PERMISSIONS_ENDINGS.some((ending) => permission.value.indexOf(ending) != -1)
+  }
+
+  const filterPermissionsForRSC = () => {
+    return permissionModeType === DISPLAY_APPLICATION_PERMISSIONS ? permissions.filter(isRSC) : permissions;
+  }
+
+  const filteredPermissions = filterPermissionsForRSC();
+
+  setConsentedStatus(tokenPresent, filteredPermissions, consentedScopes);
 
   const openPermissionsPanel = () => {
     dispatch(togglePermissionsPanel(true));
@@ -52,25 +62,27 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     return displayNotSignedInMessage();
   }
 
-
+  if (filteredPermissions.length === 0) {
+    return displayNoPermissionsFoundMessage();
+  }
 
   return (
     <>
       <Label className={classes.permissionLength}>
-        <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
+        <FormattedMessage id='Permissions' />&nbsp;({filteredPermissions.length})
       </Label>
       <Label className={classes.permissionText}>
         {!tokenPresent && <FormattedMessage id={permissionModeType ? 'sign in to consent to permissions' : 'sign in to consent to application permissions'} />}
         {tokenPresent && <FormattedMessage id={permissionModeType ? 'permissions required to run the query' : 'application permissions required to run the query'} />}
       </Label>
       <DetailsList styles={{ root: { maxHeight } }}
-        items={permissions}
+        items={filteredPermissions}
         columns={columns}
         onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}
         selectionMode={SelectionMode.none}
         layoutMode={DetailsListLayoutMode.justified}
         onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
-      {permissions && permissions.length === 0 &&
+      {filteredPermissions && filteredPermissions.length === 0 &&
         displayNoPermissionsFoundMessage()
       }
     </>

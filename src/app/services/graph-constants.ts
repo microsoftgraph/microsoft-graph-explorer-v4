@@ -12,3 +12,4 @@ export const WORK = "DelegatedWork";
 export const PERSONAL = "DelegatedPersonal";
 export const DISPLAY_DELEGATED_PERMISSIONS = true;
 export const DISPLAY_APPLICATION_PERMISSIONS = false;
+export const RSC_PERMISSIONS_ENDINGS = [".Group", ".Chat"];
