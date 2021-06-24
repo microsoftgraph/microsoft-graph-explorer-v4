@@ -39,7 +39,7 @@ export function appTitleDisplayOnFullScreen(
     <div style={{ marginTop: 15 }}>
       {
 
-        !minimised && authenticated &&
+        !minimised &&
         <>
           {permissionsModeButton(changeMode, permissionType)}
         </>
