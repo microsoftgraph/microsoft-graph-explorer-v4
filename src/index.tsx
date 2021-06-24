@@ -106,8 +106,6 @@ if (theme) {
   appState.dispatch(setGraphExplorerMode(Mode.TryIt));
 }
 
-appState.dispatch(changeMode(true));
-
 const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
 
 if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
