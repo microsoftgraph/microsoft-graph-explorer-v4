@@ -33,7 +33,7 @@ export function appTitleDisplayOnFullScreen(
           {displayGraphLabel(classes, permissionType)}
         </>}
     </div>
-    <div style={{ marginTop: 15 }}>
+    <div>
       {
         !minimised &&
         <>
@@ -64,7 +64,7 @@ export function appTitleDisplayOnMobileScreen(
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
         {displayGraphLabel(classes, permissionType)}
       </div>
-      <div style={{ marginTop: 15 }}>
+      <div>
         {
           !minimised &&
           <>

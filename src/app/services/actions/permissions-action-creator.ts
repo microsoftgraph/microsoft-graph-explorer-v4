@@ -13,8 +13,7 @@ import {
   FETCH_SCOPES_SUCCESS,
 } from '../redux-constants';
 import {
-  WORK,
-  APPLICATION,
+  PERMS_SCOPE,
   DISPLAY_DELEGATED_PERMISSIONS,
   DISPLAY_APPLICATION_PERMISSIONS
 } from '../graph-constants';
@@ -59,13 +58,7 @@ export function fetchScopes(): Function {
           throw new Error('url is invalid');
         }
 
-        let scope = WORK;
-
-        if (permissionModeType === DISPLAY_APPLICATION_PERMISSIONS) {
-          scope = APPLICATION;
-        } else if (permissionModeType === DISPLAY_DELEGATED_PERMISSIONS) {
-          scope = WORK;
-        }
+        const scope = permissionModeType === DISPLAY_DELEGATED_PERMISSIONS ? PERMS_SCOPE.WORK : PERMS_SCOPE.APPLICATION;
 
         permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scope}`;
         hasUrl = true;
