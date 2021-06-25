@@ -8,8 +8,9 @@ export const GRAPH_API_SANDBOX_URL = 'https://proxy.apisandbox.msdn.microsoft.co
 export const HOME_ACCOUNT_KEY = 'fbf1ecbe-27ab-42d7-96d4-3e6b03682ee4';
 export enum PERMS_SCOPE {
     WORK = "DelegatedWork",
-    APPLICATION = "Application"
-}
+    APPLICATION = "Application",
+    PERSONAL = "DelegatedPersonal"
+};
 export const DISPLAY_DELEGATED_PERMISSIONS = true;
 export const DISPLAY_APPLICATION_PERMISSIONS = false;
 export const RSC_PERMISSIONS_ENDINGS = [".Group", ".Chat"];

@@ -49,6 +49,7 @@ export function fetchScopes(): Function {
     try {
       const { devxApi, permissionsPanelOpen, permissionModeType, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
+      const scope = permissionModeType === DISPLAY_DELEGATED_PERMISSIONS ? PERMS_SCOPE.WORK : PERMS_SCOPE.APPLICATION;
 
       if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);
@@ -57,16 +58,12 @@ export function fetchScopes(): Function {
         if (!sampleUrl) {
           throw new Error('url is invalid');
         }
-
-        const scope = permissionModeType === DISPLAY_DELEGATED_PERMISSIONS ? PERMS_SCOPE.WORK : PERMS_SCOPE.APPLICATION;
-
         permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scope}`;
         hasUrl = true;
       }
 
       if (devxApi.parameters) {
-        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters
-          }`;
+        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters}`;
       }
 
       const headers = {
