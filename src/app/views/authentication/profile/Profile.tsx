@@ -157,7 +157,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     };
 
     return (
-      <div className={classes.profile} style={{ display: 'flex', width: '115%' }}>
+      <div className={classes.profile}>
         {this.showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
       </div>
     );
