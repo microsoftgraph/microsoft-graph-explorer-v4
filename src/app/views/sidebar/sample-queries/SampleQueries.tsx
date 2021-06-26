@@ -1,4 +1,5 @@
 import {
+  Pivot,
   Announced,
   DetailsList,
   DetailsRow,
@@ -16,6 +17,8 @@ import {
   SpinnerSize,
   styled,
   TooltipHost,
+  IDetailsListProps,
+  IDetailsRowStyles,
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -123,7 +126,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
                 tooltipProps={{
                   onRenderContent: () => (
                     <div style={{ paddingBottom: 3 }}>
-                      <FormattedMessage id={signInText} />
+                      <FormattedMessage id={"signInText"} />
                     </div>
                   ),
                 }}
@@ -197,6 +200,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         default:
           return (
             <TooltipHost
+
               tooltipProps={{
                 onRenderContent: () => (
                   <div style={{ paddingBottom: 3 }}>
@@ -220,15 +224,20 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const { tokenPresent } = this.props;
     const classes = classNames(this.props);
     let selectionDisabled = false;
+    const customStyles: Partial<IDetailsRowStyles> = {};
+    customStyles.root = { backgroundColor: '#C0C0C0' };
 
     if (props) {
       if (!tokenPresent && props.item.method !== 'GET') {
         selectionDisabled = true;
       }
       return (
+
         <div className={classes.groupHeader}>
           <DetailsRow
+
             {...props}
+            styles={customStyles}
             onClick={() => {
               if (!selectionDisabled) {
                 this.querySelected(props.item);
