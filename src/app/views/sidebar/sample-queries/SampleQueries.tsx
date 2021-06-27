@@ -52,6 +52,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     super(props);
     this.state = {
       sampleQueries: [],
+      selectedQuery: null,
     };
   }
 
@@ -225,7 +226,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const classes = classNames(this.props);
     let selectionDisabled = false;
     const customStyles: Partial<IDetailsRowStyles> = {};
-    customStyles.root = { backgroundColor: '#C0C0C0' };
+    if (this.state.selectedQuery === this.props.samples.queries.indexOf(props.item)) {
+      customStyles.root = { backgroundColor: '#C0C0C0' };
+    }
 
     if (props) {
       if (!tokenPresent && props.item.method !== 'GET') {
@@ -242,6 +245,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               if (!selectionDisabled) {
                 this.querySelected(props.item);
               }
+              this.setState({ selectedQuery: this.props.samples.queries.indexOf(props.item) })
             }}
             className={
               classes.queryRow +
