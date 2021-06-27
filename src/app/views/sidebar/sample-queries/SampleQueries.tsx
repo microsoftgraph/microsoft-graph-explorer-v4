@@ -48,8 +48,12 @@ import { sidebarStyles } from '../Sidebar.styles';
 import { isJsonString } from './sample-query-utils';
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
+  resetCollapse: boolean;
+  groups: any[];
   constructor(props: ISampleQueriesProps) {
     super(props);
+    this.resetCollapse = true;
+    this.groups = [];
     this.state = {
       sampleQueries: [],
       selectedQuery: null,
@@ -63,10 +67,14 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     } else {
       this.props.actions!.fetchSamples();
     }
+    const { sampleQueries } = this.state;
+    this.groups = generateGroupsFromList(sampleQueries, 'category');
   };
 
   public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
+    const { sampleQueries } = this.state;
     if (prevProps.samples.queries !== this.props.samples.queries) {
+      this.groups = generateGroupsFromList(sampleQueries, 'category');
       this.setState({ sampleQueries: this.props.samples.queries });
     }
   };
@@ -245,6 +253,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               if (!selectionDisabled) {
                 this.querySelected(props.item);
               }
+              this.resetCollapse = false;
               this.setState({ selectedQuery: props.item.id })
             }}
             className={
@@ -356,7 +365,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     const { sampleQueries } = this.state;
     const classes = classNames(this.props);
-    const groups = generateGroupsFromList(sampleQueries, 'category');
+    if (this.resetCollapse) {
+      this.groups = generateGroupsFromList(sampleQueries, 'category');
+    }
 
     if (pending) {
       return (
@@ -461,7 +472,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           items={sampleQueries}
           selectionMode={SelectionMode.none}
           columns={columns}
-          groups={groups}
+          groups={this.groups}
           groupProps={{
             showEmptyGroups: true,
             onRenderHeader: this.renderGroupHeader,
