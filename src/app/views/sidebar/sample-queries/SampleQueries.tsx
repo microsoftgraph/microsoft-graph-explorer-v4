@@ -226,7 +226,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const classes = classNames(this.props);
     let selectionDisabled = false;
     const customStyles: Partial<IDetailsRowStyles> = {};
-    if (this.state.selectedQuery === this.props.samples.queries.indexOf(props.item)) {
+    if (this.state.selectedQuery === props.item.id) {
       customStyles.root = { backgroundColor: '#C0C0C0' };
     }
 
@@ -245,7 +245,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               if (!selectionDisabled) {
                 this.querySelected(props.item);
               }
-              this.setState({ selectedQuery: this.props.samples.queries.indexOf(props.item) })
+              this.setState({ selectedQuery: props.item.id })
             }}
             className={
               classes.queryRow +
