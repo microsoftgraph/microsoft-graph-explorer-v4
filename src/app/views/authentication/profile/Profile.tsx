@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import { geLocale } from '../../../../appLocale';
 import { Mode } from '../../../../types/enums';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
@@ -37,6 +36,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       : null;
 
     const userInfo = jsonUserInfo.response;
+
     if (userInfo) {
       let imageUrl = '';
 

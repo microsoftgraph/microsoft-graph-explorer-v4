@@ -24,6 +24,7 @@ export interface IPermissionProps {
     fetchScopes: Function;
     consentToScopes: Function;
   };
+  permissionModeType: boolean;
 }
 
 export interface IPermissionState {

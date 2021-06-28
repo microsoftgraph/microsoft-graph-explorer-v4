@@ -39,9 +39,10 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 
   public componentDidUpdate = (prevProps: IPermissionProps) => {
-    if ((prevProps.sample !== this.props.sample) || (prevProps.permissionsPanelOpen !== this.props.permissionsPanelOpen)) {
+    if ((prevProps.sample !== this.props.sample) || (prevProps.permissionsPanelOpen !== this.props.permissionsPanelOpen) || (prevProps.permissionModeType !== this.props.permissionModeType)) {
       this.getPermissions();
     }
+
     const permissions = this.props.scopes.data;
     if (prevProps.scopes.data !== permissions) {
       this.setState({
@@ -49,6 +50,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       });
     }
   }
+
 
   private getPermissions() {
     this.props.actions!.fetchScopes();
@@ -60,7 +62,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       || nextProps.consentedScopes !== this.props.consentedScopes
       || nextProps.dimensions !== this.props.dimensions
       || nextProps.permissionsPanelOpen !== this.props.permissionsPanelOpen
-      || nextState.permissions !== this.state.permissions;
+      || nextState.permissions !== this.state.permissions
+      || nextProps.permissionModeType !== this.props.permissionModeType
     return shouldUpdate;
   }
 

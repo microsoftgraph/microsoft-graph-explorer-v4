@@ -31,6 +31,7 @@ export interface IRequestComponent {
     actions: {
         setDimensions: Function;
     };
+    permissionModeType: boolean;
 }
 
 export interface IRequestOptions {

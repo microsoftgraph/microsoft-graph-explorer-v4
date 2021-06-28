@@ -10,7 +10,6 @@ import React, { Component, CSSProperties } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
@@ -77,7 +76,7 @@ export class Request extends Component<IRequestComponent, any> {
         headerText={messages['modify permissions']}
       >
         <div style={containerStyle}>
-          <Permission />
+          <Permission permissionModeType={this.props.permissionModeType} />
         </div>
       </PivotItem>,
     ];

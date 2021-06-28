@@ -6,6 +6,8 @@ export function appTitleDisplayOnFullScreen(
   classes: any,
   minimised: any,
   toggleSidebar: Function,
+  permissionType: boolean,
+  changeMode: Function
 ): React.ReactNode {
 
   return <div style={{ display: 'flex', width: '100%' }}>
@@ -28,8 +30,16 @@ export function appTitleDisplayOnFullScreen(
     <div className={classes.graphExplorerLabelContainer} role={'heading'} aria-level={1}>
       {!minimised &&
         <>
-          {displayGraphLabel(classes)}
+          {displayGraphLabel(classes, permissionType)}
         </>}
+    </div>
+    <div>
+      {
+        !minimised &&
+        <>
+          {permissionsModeButton(changeMode, permissionType)}
+        </>
+      }
     </div>
   </div>;
 }
@@ -37,7 +47,10 @@ export function appTitleDisplayOnFullScreen(
 export function appTitleDisplayOnMobileScreen(
   stackTokens: IStackTokens,
   classes: any,
-  toggleSidebar: Function
+  minimised: any,
+  toggleSidebar: Function,
+  permissionType: boolean,
+  changeMode: Function
 ): React.ReactNode {
   return <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
     <>
@@ -49,16 +62,33 @@ export function appTitleDisplayOnMobileScreen(
         onClick={() => toggleSidebar()}
       />
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
-        {displayGraphLabel(classes)}
+        {displayGraphLabel(classes, permissionType)}
+      </div>
+      <div>
+        {
+          !minimised &&
+          <>
+            {permissionsModeButton(changeMode, permissionType)}
+          </>
+        }
       </div>
     </>
   </Stack>;
 }
 
-function displayGraphLabel(classes: any): React.ReactNode {
+function displayGraphLabel(classes: any, permissionType: boolean): React.ReactNode {
   return (
     <Label className={classes.graphExplorerLabel}>
-      Graph Explorer
+      Graph Explorer {permissionType ? "(as user)" : "(as Teams app)"}
     </Label>
+  )
+}
+
+function permissionsModeButton(changeMode: Function, permissionType: boolean) {
+  return (
+    <IconButton
+      iconProps={{ iconName: 'Cat' }}
+      onClick={() => changeMode(!permissionType)}
+      ariaLabel="button to switch between user and Teams app" />
   )
 }
