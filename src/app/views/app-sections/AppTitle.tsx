@@ -33,14 +33,6 @@ export function appTitleDisplayOnFullScreen(
           {displayGraphLabel(classes, permissionType)}
         </>}
     </div>
-    <div>
-      {
-        !minimised &&
-        <>
-          {permissionsModeButton(changeMode, permissionType)}
-        </>
-      }
-    </div>
   </div>;
 }
 
@@ -64,14 +56,6 @@ export function appTitleDisplayOnMobileScreen(
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
         {displayGraphLabel(classes, permissionType)}
       </div>
-      <div>
-        {
-          !minimised &&
-          <>
-            {permissionsModeButton(changeMode, permissionType)}
-          </>
-        }
-      </div>
     </>
   </Stack>;
 }
@@ -81,14 +65,5 @@ function displayGraphLabel(classes: any, permissionType: boolean): React.ReactNo
     <Label className={classes.graphExplorerLabel}>
       Graph Explorer {permissionType ? "(as user)" : "(as Teams app)"}
     </Label>
-  )
-}
-
-function permissionsModeButton(changeMode: Function, permissionType: boolean) {
-  return (
-    <IconButton
-      iconProps={{ iconName: 'Cat' }}
-      onClick={() => changeMode(!permissionType)}
-      ariaLabel="button to switch between user and Teams app" />
   )
 }
