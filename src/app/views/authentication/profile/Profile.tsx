@@ -106,7 +106,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const persona: IPersonaSharedProps = {
       imageUrl: user.profileImageUrl,
       imageInitials: this.getInitials(user.displayName),
-      text: user.displayName,
+      text: user.displayName + ' ' + (this.props.permissionModeType ? messages['As user'] : messages['As Teams app']),
       secondaryText: user.emailAddress,
     };
 
@@ -190,7 +190,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-function mapStateToProps({ sidebarProperties, theme, graphExplorerMode }: IRootState) {
+function mapStateToProps({ sidebarProperties, theme, graphExplorerMode, permissionModeType }: IRootState) {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
 
@@ -198,7 +198,8 @@ function mapStateToProps({ sidebarProperties, theme, graphExplorerMode }: IRootS
     mobileScreen: !!sidebarProperties.mobileScreen,
     appTheme: theme,
     minimised: !mobileScreen && !showSidebar,
-    graphExplorerMode
+    graphExplorerMode,
+    permissionModeType
   };
 }
 

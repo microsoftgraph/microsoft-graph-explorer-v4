@@ -2,7 +2,7 @@ import { ITheme } from 'office-ui-fabric-react';
 
 export interface IProfileProps {
     intl: {
-      message: object;
+        message: object;
     };
     theme?: ITheme;
     styles?: object;
@@ -11,6 +11,7 @@ export interface IProfileProps {
         getProfileInfo: Function;
         signOut: Function;
     };
+    permissionModeType: boolean;
 }
 
 export interface IProfileState {

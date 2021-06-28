@@ -6,8 +6,6 @@ export function appTitleDisplayOnFullScreen(
   classes: any,
   minimised: any,
   toggleSidebar: Function,
-  permissionType: boolean,
-  changeMode: Function
 ): React.ReactNode {
 
   return <div style={{ display: 'flex', width: '100%' }}>
@@ -30,7 +28,7 @@ export function appTitleDisplayOnFullScreen(
     <div className={classes.graphExplorerLabelContainer} role={'heading'} aria-level={1}>
       {!minimised &&
         <>
-          {displayGraphLabel(classes, permissionType)}
+          {displayGraphLabel(classes)}
         </>}
     </div>
   </div>;
@@ -41,8 +39,6 @@ export function appTitleDisplayOnMobileScreen(
   classes: any,
   minimised: any,
   toggleSidebar: Function,
-  permissionType: boolean,
-  changeMode: Function
 ): React.ReactNode {
   return <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
     <>
@@ -54,16 +50,16 @@ export function appTitleDisplayOnMobileScreen(
         onClick={() => toggleSidebar()}
       />
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
-        {displayGraphLabel(classes, permissionType)}
+        {displayGraphLabel(classes)}
       </div>
     </>
   </Stack>;
 }
 
-function displayGraphLabel(classes: any, permissionType: boolean): React.ReactNode {
+function displayGraphLabel(classes: any): React.ReactNode {
   return (
     <Label className={classes.graphExplorerLabel}>
-      Graph Explorer {permissionType ? "(as user)" : "(as Teams app)"}
+      Graph Explorer
     </Label>
   )
 }
