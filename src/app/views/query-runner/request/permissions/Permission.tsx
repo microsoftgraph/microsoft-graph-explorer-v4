@@ -188,29 +188,31 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       );
     }
 
-    columns.push(
-      {
-        key: 'isAdmin',
-        isResizable: true,
-        name: messages['Admin consent required'],
-        fieldName: 'isAdmin',
-        minWidth: (tokenPresent && permissionModeType === DISPLAY_DELEGATED_PERMISSIONS) ? 150 : 200,
-        maxWidth: (tokenPresent && permissionModeType === DISPLAY_DELEGATED_PERMISSIONS) ? 200 : 300,
-        ariaLabel: translateMessage('Administrator permission')
-      }
-    );
-
-    if (tokenPresent && permissionModeType === DISPLAY_DELEGATED_PERMISSIONS) {
+    if (permissionModeType === DISPLAY_DELEGATED_PERMISSIONS) {
       columns.push(
         {
-          key: 'consented',
-          name: messages.Status,
-          isResizable: false,
-          fieldName: 'consented',
-          minWidth: 100,
-          maxWidth: 100
+          key: 'isAdmin',
+          isResizable: true,
+          name: messages['Admin consent required'],
+          fieldName: 'isAdmin',
+          minWidth: (tokenPresent) ? 150 : 200,
+          maxWidth: (tokenPresent) ? 200 : 300,
+          ariaLabel: translateMessage('Administrator permission')
         }
       );
+
+      if (tokenPresent) {
+        columns.push(
+          {
+            key: 'consented',
+            name: messages.Status,
+            isResizable: false,
+            fieldName: 'consented',
+            minWidth: 100,
+            maxWidth: 100
+          }
+        );
+      }
     }
     return columns;
   }
