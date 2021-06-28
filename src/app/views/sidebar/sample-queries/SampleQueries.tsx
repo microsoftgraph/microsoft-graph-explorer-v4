@@ -1,5 +1,4 @@
 import {
-  Pivot,
   Announced,
   DetailsList,
   DetailsRow,
@@ -17,7 +16,6 @@ import {
   SpinnerSize,
   styled,
   TooltipHost,
-  IDetailsListProps,
   IDetailsRowStyles,
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
