@@ -18,7 +18,6 @@ import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/a
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
-import { changeMode } from './app/services/actions/permission-mode-action-creator';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';

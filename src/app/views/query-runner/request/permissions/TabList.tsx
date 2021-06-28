@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IPermission } from '../../../../../types/permissions';
 import { IRootState } from '../../../../../types/root';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
-import { DISPLAY_APPLICATION_PERMISSIONS, DISPLAY_DELEGATED_PERMISSIONS, RSC_PERMISSIONS_ENDINGS } from '../../../../services/graph-constants';
+import { DISPLAY_APPLICATION_PERMISSIONS, RSC_PERMISSIONS_ENDINGS } from '../../../../services/graph-constants';
 import { setConsentedStatus } from './util';
 
 interface ITabList {
