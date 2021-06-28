@@ -295,7 +295,7 @@
   "Admin consent required": "Admin consent required",
   "Consent": "Consent",
   "permissions required to run the query": "One of the following delegated permissions is required to run the query. Select a permission and click Consent.",
-  "application permissions required to run the query": "One of the following resource specific consent permissions is required to run the query. Select a permission and click Consent.",
+  "application permissions required to run the query": "One of the following resource specific consent permissions is required to run the query.",
   "tab": " tab",
   "View the": " View the",
   "viewing a cached set": "You are viewing a cached set of samples because of a network connection failure.",

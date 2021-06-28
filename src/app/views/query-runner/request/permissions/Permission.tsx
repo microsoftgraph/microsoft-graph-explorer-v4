@@ -18,6 +18,7 @@ import { componentNames, telemetry } from '../../../../../telemetry';
 import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
 import { IRootState } from '../../../../../types/root';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
+import { DISPLAY_DELEGATED_PERMISSIONS } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { convertVhToPx } from '../../../common/dimensions-adjustment';
@@ -159,6 +160,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       tokenPresent,
       panel,
       intl: { messages },
+      permissionModeType
     }: any = this.props;
 
     const columns: IColumn[] = [
@@ -179,8 +181,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           name: messages.Description,
           fieldName: 'consentDescription',
           isResizable: true,
-          minWidth: (tokenPresent) ? 400 : 600,
-          maxWidth: (tokenPresent) ? 600 : 1000,
+          minWidth: (tokenPresent && permissionModeType === DISPLAY_DELEGATED_PERMISSIONS) ? 400 : 600,
+          maxWidth: (tokenPresent && permissionModeType === DISPLAY_DELEGATED_PERMISSIONS) ? 600 : 1000,
           isMultiline: true
         }
       );
@@ -192,13 +194,13 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         isResizable: true,
         name: messages['Admin consent required'],
         fieldName: 'isAdmin',
-        minWidth: (tokenPresent) ? 150 : 200,
-        maxWidth: (tokenPresent) ? 200 : 300,
+        minWidth: (tokenPresent && permissionModeType === DISPLAY_DELEGATED_PERMISSIONS) ? 150 : 200,
+        maxWidth: (tokenPresent && permissionModeType === DISPLAY_DELEGATED_PERMISSIONS) ? 200 : 300,
         ariaLabel: translateMessage('Administrator permission')
       }
     );
 
-    if (tokenPresent) {
+    if (tokenPresent && permissionModeType === DISPLAY_DELEGATED_PERMISSIONS) {
       columns.push(
         {
           key: 'consented',
@@ -276,14 +278,15 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 }
 
-function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dimensions, permissionsPanelOpen }: IRootState) {
+function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dimensions, permissionsPanelOpen, permissionModeType }: IRootState) {
   return {
     sample: sampleQuery,
     scopes,
     tokenPresent: authToken.token,
     consentedScopes,
     dimensions,
-    permissionsPanelOpen
+    permissionsPanelOpen,
+    permissionModeType
   };
 }
 
