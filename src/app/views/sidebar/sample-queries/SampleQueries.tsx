@@ -207,7 +207,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         default:
           return (
             <TooltipHost
-
               tooltipProps={{
                 onRenderContent: () => (
                   <div style={{ paddingBottom: 3 }}>
@@ -241,10 +240,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         selectionDisabled = true;
       }
       return (
-
         <div className={classes.groupHeader}>
           <DetailsRow
-
             {...props}
             styles={customStyles}
             onClick={() => {
