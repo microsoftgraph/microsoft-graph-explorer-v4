@@ -133,7 +133,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
                 tooltipProps={{
                   onRenderContent: () => (
                     <div style={{ paddingBottom: 3 }}>
-                      <FormattedMessage id={"signInText"} />
+                      <FormattedMessage id={signInText} />
                     </div>
                   ),
                 }}
