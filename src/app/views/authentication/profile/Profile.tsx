@@ -3,14 +3,13 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import { geLocale } from '../../../../appLocale';
 import { Mode } from '../../../../types/enums';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import { IRootState } from '../../../../types/root';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
-import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
+import { USER_INFO_URL, USER_PICTURE_URL, BETA_USER_INFO_URL, ACCOUNT_TYPE } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 
@@ -21,7 +20,8 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       user: {
         displayName: '',
         emailAddress: '',
-        profileImageUrl: ''
+        profileImageUrl: '',
+        accountType: ACCOUNT_TYPE.AAD
       }
     };
   }
@@ -36,6 +36,14 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       })
       : null;
 
+    const betaJsonUserInfo = actions
+      ? await actions.getProfileInfo({
+        selectedVerb: 'GET',
+        sampleUrl: BETA_USER_INFO_URL
+      })
+      : null;
+
+    const betaUserInfo = betaJsonUserInfo.response;
     const userInfo = jsonUserInfo.response;
     if (userInfo) {
       let imageUrl = '';
@@ -57,11 +65,24 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         imageUrl = '';
       }
 
+      let accountType = ACCOUNT_TYPE.MSA;
+      try {
+        const stringAccountType = betaUserInfo.account[0].source.type[0];
+        if (stringAccountType === ACCOUNT_TYPE.AAD) {
+          accountType = ACCOUNT_TYPE.AAD;
+        } else if (stringAccountType === ACCOUNT_TYPE.AAD) {
+          accountType = ACCOUNT_TYPE.AAD;
+        }
+      } catch (error) {
+        console.log("Every account should have a type. Assigning to MSA, which has lowest permissions level.")
+      }
+
       const user = {
         ...{},
         displayName: userInfo.displayName,
         emailAddress: userInfo.mail || userInfo.userPrincipalName,
-        profileImageUrl: imageUrl
+        profileImageUrl: imageUrl,
+        accountType: accountType
       };
 
       this.setState({

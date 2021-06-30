@@ -1,8 +1,9 @@
 import { ITheme } from 'office-ui-fabric-react';
+import { ACCOUNT_TYPE } from '../app/services/graph-constants';
 
 export interface IProfileProps {
     intl: {
-      message: object;
+        message: object;
     };
     theme?: ITheme;
     styles?: object;
@@ -22,4 +23,5 @@ export interface IUser {
     displayName: string;
     emailAddress: string;
     profileImageUrl: string;
+    accountType: ACCOUNT_TYPE;
 }

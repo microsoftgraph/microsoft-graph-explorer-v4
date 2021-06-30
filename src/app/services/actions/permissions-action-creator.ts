@@ -43,8 +43,14 @@ export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
-      const { devxApi, permissionsPanelOpen, sampleQuery: query }: IRootState = getState();
+      const { devxApi, permissionsPanelOpen, profile, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
+
+      console.log("yeeet");
+      if (profile !== undefined) {
+        console.log(profile?.displayName)
+      }
+      console.log("yeeet");
 
       if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);
