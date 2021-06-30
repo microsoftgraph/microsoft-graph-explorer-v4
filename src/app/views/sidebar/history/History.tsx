@@ -237,11 +237,13 @@ export class History extends Component<IHistoryProps, any> {
     const classes = classNames(this.props);
     const expandText = translateMessage('Expand');
     const collapseText = translateMessage('Collapse');
-    const label = props.group!.isCollapsed ? `${expandText} ${props.group!.name}` : `${collapseText} ${props.group!.name}`;
+    const groupName: string = props.group!.name;
+    const groupCount: string = props.group!.count;
+    const collapseButtonLabel: string = props.group!.isCollapsed ? `${expandText} ${groupName}` : `${collapseText} ${groupName}`;
 
     return (
       <div
-        aria-label={props.group!.name}
+        aria-label={`${groupName} has ${groupCount} items`}
         style={{
           display: 'flex',
           justifyContent: 'center',
@@ -254,7 +256,7 @@ export class History extends Component<IHistoryProps, any> {
             onClick={this.onToggleCollapse(props)}
           >
             <TooltipHost
-              content={label}
+              content={collapseButtonLabel}
               id={getId()}
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}>
@@ -265,14 +267,14 @@ export class History extends Component<IHistoryProps, any> {
                     ? 'ChevronRightSmall'
                     : 'ChevronDownSmall',
                 }}
-                ariaLabel={label}
+                ariaLabel={collapseButtonLabel}
                 onClick={() => this.onToggleCollapse(props)}
               />
             </TooltipHost>
             <div className={classes.groupTitle}>
-              <span>{props.group!.name}</span>
+              <span>{groupName}</span>
               <span className={classes.headerCount}>
-                ({props.group!.count})
+                ({groupCount})
               </span>
             </div>
           </div>
@@ -280,25 +282,25 @@ export class History extends Component<IHistoryProps, any> {
         <div className={'col-md-4'} style={{ display: 'inline-block' }}>
           <div className={`${classes.pullRight}`}>
             <TooltipHost
-              content={`${translateMessage('Export')} ${props.group!.name} queries`}
+              content={`${translateMessage('Export')} ${groupName} queries`}
               id={getId()}
               calloutProps={{ gapSpace: 0 }}>
               <IconButton
                 className={`${classes.groupHeaderRowIcon}`}
                 iconProps={{ iconName: 'Download' }}
-                ariaLabel={`${translateMessage('Export')} ${props.group!.name} queries`}
-                onClick={() => this.exportHistoryByCategory(props.group!.name)}
+                ariaLabel={`${translateMessage('Export')} ${groupName} queries`}
+                onClick={() => this.exportHistoryByCategory(groupName)}
               />
             </TooltipHost>
             <TooltipHost
-              content={`${translateMessage('Delete')} ${props.group!.name} queries`}
+              content={`${translateMessage('Delete')} ${groupName} queries`}
               id={getId()}
               calloutProps={{ gapSpace: 0 }} >
               <IconButton
                 className={`${classes.groupHeaderRowIcon}`}
                 iconProps={{ iconName: 'Delete' }}
-                ariaLabel={`${translateMessage('Delete')} ${props.group!.name} queries`}
-                onClick={() => this.showDialog(props.group!.name)}
+                ariaLabel={`${translateMessage('Delete')} ${groupName} queries`}
+                onClick={() => this.showDialog(groupName)}
               />
             </TooltipHost>
 
