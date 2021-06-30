@@ -30,6 +30,7 @@ import { togglePermissionsPanel } from '../../services/actions/permissions-panel
 import { changeMode } from '../../services/actions/permission-mode-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
+import { DISPLAY_APPLICATION_PERMISSIONS } from '../../services/graph-constants';
 
 
 function Settings(props: ISettingsProps) {
@@ -124,6 +125,11 @@ function Settings(props: ISettingsProps) {
 
   const handleChangeMode = (permissionModeType: boolean) => {
     dispatch(changeMode(!permissionModeType));
+    telemetry.trackEvent(
+      eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.CHANGE_PERMISSIONS_MODE_BUTTON,
+      PermissionMode: !permissionModeType
+    });
   };
 
   const handleSignOut = () => {
