@@ -36,7 +36,7 @@ export interface IRootState {
   dimensions: IDimensions;
   autoComplete: IAutocompleteResponse;
   devxApi: IDevxAPI;
-  accountType: ACCOUNT_TYPE;
+  profileType: ACCOUNT_TYPE;
 }
 
 export interface IApiFetch {
