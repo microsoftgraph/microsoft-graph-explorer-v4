@@ -174,7 +174,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       }
     ];
 
-    const currentPermType = permissionModeType === DISPLAY_DELEGATED_PERMISSIONS;
+    const isCurrentPermTypeDelegated = permissionModeType === DISPLAY_DELEGATED_PERMISSIONS;
 
     if (!panel) {
       columns.push(
@@ -183,14 +183,14 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           name: messages.Description,
           fieldName: 'consentDescription',
           isResizable: true,
-          minWidth: (tokenPresent) ? ((currentPermType) ? 400 : 800) : 600,
-          maxWidth: (tokenPresent) ? ((currentPermType) ? 600 : 1300) : 1000,
+          minWidth: (tokenPresent) ? ((isCurrentPermTypeDelegated) ? 400 : 800) : 600,
+          maxWidth: (tokenPresent) ? ((isCurrentPermTypeDelegated) ? 600 : 1300) : 1000,
           isMultiline: true
         }
       );
     }
 
-    if (currentPermType) {
+    if (isCurrentPermTypeDelegated) {
       columns.push(
         {
           key: 'isAdmin',
