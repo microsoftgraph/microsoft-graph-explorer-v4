@@ -11,3 +11,8 @@ export enum ACCOUNT_TYPE {
     AAD = "AAD",
     MSA = "MSA"
 };
+export enum PERMS_SCOPE {
+    WORK = "DelegatedWork",
+    APPLICATION = "Application",
+    PERSONAL = "DelegatedPersonal"
+};

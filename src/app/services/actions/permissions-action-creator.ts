@@ -8,6 +8,7 @@ import { IRootState } from '../../../types/root';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
+import { ACCOUNT_TYPE } from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
   FETCH_SCOPES_PENDING,
@@ -45,8 +46,13 @@ export function fetchScopes(): Function {
     try {
       const { devxApi, permissionsPanelOpen, profileType, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
+      let scope = ACCOUNT_TYPE.AAD;
 
-      console.log(profileType);
+      if (profileType === ACCOUNT_TYPE.AAD) {
+        scope = ACCOUNT_TYPE.AAD;
+      } else if (profileType === ACCOUNT_TYPE.MSA) {
+        scope = ACCOUNT_TYPE.MSA;
+      }
 
       if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);
@@ -56,7 +62,7 @@ export function fetchScopes(): Function {
           throw new Error('url is invalid');
         }
 
-        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}`;
+        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scope}`;
         hasUrl = true;
       }
 
