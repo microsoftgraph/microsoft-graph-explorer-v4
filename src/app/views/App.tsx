@@ -41,7 +41,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
-
+import { RSC_URL } from '../services/graph-constants';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -351,7 +351,8 @@ class App extends Component<IAppProps, IAppState> {
       this.showDialog();
     }
     const teamsapp = <a href={"https://www.bing.com/?form=000010"}>Sample Explorer Teams app</a>;
-    const rsc = <a href={"https://docs.microsoft.com/en-us/microsoftteams/platform/graph-api/rsc/resource-specific-consent"}>resource specific consent</a>;
+    //TODO: put in the url when we have this set up
+    const rsc = <a href={RSC_URL}> resource specific consent</a>;
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
@@ -363,9 +364,8 @@ class App extends Component<IAppProps, IAppState> {
           }}
           onDismiss={this.closeDialog}
         >
-          {messages['Resource Specific Consent popup']} {teamsapp}. {"\n"}
-
-          Learn more about {rsc}{"\n"}
+          <p>{messages['Resource Specific Consent popup']} {teamsapp}. <br /> &nbsp;</p>
+          <p>{messages['Learn more about']} {rsc}.</p>
 
         </Dialog>}
         <div className={`container-fluid ${classes.app}`}>

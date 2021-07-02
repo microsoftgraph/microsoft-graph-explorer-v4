@@ -14,3 +14,4 @@ export enum PERMS_SCOPE {
 export const DISPLAY_DELEGATED_PERMISSIONS = true;
 export const DISPLAY_APPLICATION_PERMISSIONS = false;
 export const RSC_PERMISSIONS_ENDINGS = [".Group", ".Chat"];
+export const RSC_URL = "https://docs.microsoft.com/en-us/microsoftteams/platform/graph-api/rsc/resource-specific-consent";
