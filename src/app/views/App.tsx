@@ -1,6 +1,6 @@
 import {
   Announced,
-  IStackTokens, ITheme, styled, Dialog, PrimaryButton
+  IStackTokens, ITheme, styled, Dialog
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
