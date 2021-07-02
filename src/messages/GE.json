@@ -360,6 +360,7 @@
   "As Teams app": "(as Teams app)",
   "Use Explorer as sample Teams application": "Use Explorer as sample Teams application",
   "Use Explorer as logged-in user": "Use Explorer as logged-in user",
-  "Resource Specific Consent popup": "To use application permissions you must use resource specific consent by downloading the Graph Explorer Sample Teams app.​",
-  "Application Permissions": "Application Permissions in Graph Explorer"
+  "Resource Specific Consent popup": "To use application permissions you must use resource specific consent by downloading the ​",
+  "Application Permissions": "Application Permissions",
+  "Learn more about": "Learn more about"
 }

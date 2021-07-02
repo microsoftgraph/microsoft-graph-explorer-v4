@@ -16,3 +16,4 @@ export enum PERMISSION_MODE_TYPE {
     User
 }
 export const RSC_PERMISSIONS_ENDINGS = [".Group", ".Chat"];
+export const RSC_URL = "https://docs.microsoft.com/en-us/microsoftteams/platform/graph-api/rsc/resource-specific-consent";
