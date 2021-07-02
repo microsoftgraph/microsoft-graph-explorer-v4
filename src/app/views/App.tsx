@@ -1,6 +1,6 @@
 import {
   Announced,
-  IStackTokens, ITheme, styled
+  IStackTokens, ITheme, styled, Dialog, PrimaryButton
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
@@ -286,6 +286,14 @@ class App extends Component<IAppProps, IAppState> {
     this.props.actions!.toggleSidebar(properties);
   }
 
+  private closeDialog = (): void => {
+    this.setState({ hideDialog: true });
+  };
+
+  private showDialog = (): void => {
+    this.setState({ hideDialog: false });
+  };
+
   public displayAuthenticationSection = (minimised: boolean) => {
     return <div style={{
       display: minimised ? 'block' : 'flex',
@@ -339,10 +347,27 @@ class App extends Component<IAppProps, IAppState> {
     if (mobileScreen) {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
-
+    if (permissionModeType && this.state.hideDialog) {
+      this.showDialog();
+    }
+    const teamsapp = <a href={"https://www.bing.com/?form=000010"}>Sample Explorer Teams app</a>;
+    const rsc = <a href={"https://docs.microsoft.com/en-us/microsoftteams/platform/graph-api/rsc/resource-specific-consent"}>resource specific consent</a>;
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
+        {!permissionModeType && <Dialog
+          hidden={this.state.hideDialog}
+          dialogContentProps={{
+            title: `${messages['Application Permissions']}`,
+            showCloseButton: true,
+          }}
+          onDismiss={this.closeDialog}
+        >
+          {messages['Resource Specific Consent popup']} {teamsapp}. {"\n"}
+
+          Learn more about {rsc}{"\n"}
+
+        </Dialog>}
         <div className={`container-fluid ${classes.app}`}>
           <Announced message={!showSidebar ?
             translateMessage('Sidebar minimized') : translateMessage('Sidebar maximized')} />
@@ -387,7 +412,7 @@ class App extends Component<IAppProps, IAppState> {
             </div>
           </div>
         </div>
-      </ThemeContext.Provider>
+      </ThemeContext.Provider >
     );
   }
 }
