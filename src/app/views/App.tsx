@@ -353,16 +353,12 @@ class App extends Component<IAppProps, IAppState> {
                   stackTokens,
                   classes,
                   minimised,
-                  this.toggleSidebar,
-                  permissionModeType,
-                  this.props.actions!.changeMode)}
+                  this.toggleSidebar)}
 
                 {!mobileScreen && appTitleDisplayOnFullScreen(
                   classes,
                   minimised,
-                  this.toggleSidebar,
-                  permissionModeType,
-                  this.props.actions!.changeMode)}
+                  this.toggleSidebar)}
 
                 <hr className={classes.separator} />
 
@@ -370,7 +366,7 @@ class App extends Component<IAppProps, IAppState> {
                 <hr className={classes.separator} />
 
                 {showSidebar && <>
-                  <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} appHeaderText="Apps" />
+                  <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                 </>}
               </div>
             )}

@@ -27,13 +27,14 @@ import { ISettingsProps } from '../../../types/settings';
 import { signOut } from '../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
+import { changeMode } from '../../services/actions/permission-mode-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
-  const { permissionsPanelOpen, authToken, theme: appTheme } = useSelector((state: IRootState) => state);
+  const { permissionsPanelOpen, authToken, theme: appTheme, permissionModeType } = useSelector((state: IRootState) => state);
   const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
@@ -82,6 +83,14 @@ function Settings(props: ISettingsProps) {
     if (authenticated) {
       menuItems.push(
         {
+          key: 'switch-user-app-mode',
+          text: messages[permissionModeType ? "Use Explorer as sample Teams application" : "Use Explorer as logged-in user"],
+          iconProps: {
+            iconName: permissionModeType ? "TeamsLogo" : "Contact",
+          },
+          onClick: () => handleChangeMode(permissionModeType),
+        },
+        {
           key: 'view-all-permissions',
           text: messages['view all permissions'],
           iconProps: {
@@ -100,7 +109,7 @@ function Settings(props: ISettingsProps) {
       );
     }
     setItems(menuItems);
-  }, [authenticated]);
+  }, [authenticated, permissionModeType]);
 
   const toggleThemeChooserDialogState = () => {
     let hidden = themeChooserDialogHidden;
@@ -111,6 +120,10 @@ function Settings(props: ISettingsProps) {
       {
         ComponentName: componentNames.THEME_CHANGE_BUTTON
       });
+  };
+
+  const handleChangeMode = (permissionModeType: boolean) => {
+    dispatch(changeMode(!permissionModeType));
   };
 
   const handleSignOut = () => {
