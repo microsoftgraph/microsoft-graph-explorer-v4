@@ -361,6 +361,8 @@
   "Use Explorer as sample Teams application": "Use Explorer as sample Teams application",
   "Use Explorer as logged-in user": "Use Explorer as logged-in user",
   "Resource Specific Consent popup": "To use application permissions you must use resource specific consent by downloading the ​",
+  "Sample Explorer Teams app": "Sample Explorer Teams app",
   "Application Permissions": "Application Permissions",
-  "Learn more about": "Learn more about"
+  "Learn more about": "Learn more about",
+  "resource specific consent": "resource specific consent"
 }

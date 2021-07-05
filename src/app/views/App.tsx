@@ -350,22 +350,22 @@ class App extends Component<IAppProps, IAppState> {
     if (permissionModeType && this.state.hideDialog) {
       this.showDialog();
     }
-    const teamsapp = <a href={"https://www.bing.com/?form=000010"}>Sample Explorer Teams app</a>;
+    const teamsapp = <a href={"https://www.bing.com/?form=000010"}>{translateMessage('Sample Explorer Teams app')}</a>;
     //TODO: put in the url when we have this set up
-    const rsc = <a href={RSC_URL}> resource specific consent</a>;
+    const rsc = <a href={RSC_URL}>{translateMessage('resource specific consent')}</a>;
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         {!permissionModeType && <Dialog
           hidden={this.state.hideDialog}
           dialogContentProps={{
-            title: `${messages['Application Permissions']}`,
+            title: `${translateMessage('Application Permissions')}`,
             showCloseButton: true,
           }}
           onDismiss={this.closeDialog}
         >
-          <p>{messages['Resource Specific Consent popup']} {teamsapp}. <br /> &nbsp;</p>
-          <p>{messages['Learn more about']} {rsc}.</p>
+          <p>{translateMessage('Resource Specific Consent popup')} {teamsapp}. <br /> &nbsp;</p>
+          <p>{translateMessage('Learn more about')} {rsc}.</p>
 
         </Dialog>}
         <div className={`container-fluid ${classes.app}`}>
