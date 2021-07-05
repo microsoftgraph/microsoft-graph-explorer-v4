@@ -352,5 +352,6 @@
   "and experiment on": " and experiment on",
   "Scope consent failed": "Scope consent failed",
   "Missing url": "Please enter a valid url to run the query",
-  "Signing you out...": "Signing you out..."
+  "Signing you out...": "Signing you out...",
+  "Admin consent not required": "Admin consent is not required"
 }

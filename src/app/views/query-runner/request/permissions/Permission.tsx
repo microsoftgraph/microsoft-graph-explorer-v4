@@ -90,11 +90,13 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         case 'isAdmin':
           if (item.isAdmin) {
             return <div style={{ textAlign: 'center' }}>
-              <Icon iconName='checkmark' className={classes.checkIcon} />
+              <Icon iconName='checkmark' className={classes.checkIcon}
+                aria-label={translateMessage('Admin consent required')} />
             </div>;
           } else {
             return <div style={{ textAlign: 'center' }}>
-              <Icon iconName='StatusCircleErrorX' className={classes.checkIcon} />
+              <Icon iconName='StatusCircleErrorX' className={classes.checkIcon}
+                aria-label={translateMessage('Admin consent not required')} />
             </div>;
           }
 
@@ -170,7 +172,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         fieldName: 'value',
         minWidth: 200,
         maxWidth: 250,
-        isResizable: true
+        isResizable: true,
+        columnActionsMode: 0
       }
     ];
 
@@ -183,7 +186,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           isResizable: true,
           minWidth: (tokenPresent) ? 400 : 600,
           maxWidth: (tokenPresent) ? 600 : 1000,
-          isMultiline: true
+          isMultiline: true,
+          columnActionsMode: 0
         }
       );
     }
@@ -196,7 +200,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         fieldName: 'isAdmin',
         minWidth: (tokenPresent) ? 150 : 200,
         maxWidth: (tokenPresent) ? 200 : 300,
-        ariaLabel: translateMessage('Administrator permission')
+        ariaLabel: translateMessage('Administrator permission'),
+        columnActionsMode: 0
       }
     );
 
@@ -242,7 +247,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     if (loading) {
       return <Label>
         <FormattedMessage id={'Fetching permissions'} />...
-        </Label>;
+      </Label>;
     }
 
     const displayPermissionsPanel = () => {
