@@ -66,6 +66,10 @@ export function fetchScopes(): Function {
         permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters}`;
       }
 
+      if (permissionsPanelOpen) {
+        permissionsUrl = `${devxApi.baseUrl}/permissions?scopeType=${scope}`;
+      }
+
       const headers = {
         'Content-Type': 'application/json',
         'Accept-Language': geLocale,
