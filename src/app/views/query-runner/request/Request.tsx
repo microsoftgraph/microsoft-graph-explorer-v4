@@ -42,6 +42,7 @@ export class Request extends Component<IRequestComponent, any> {
       handleOnEditorChange,
       mode,
       intl: { messages },
+      tokenPresent
     }: any = this.props;
 
     const heightAdjustment = 55;
@@ -108,6 +109,21 @@ export class Request extends Component<IRequestComponent, any> {
           </div>
         </PivotItem>,
 
+      );
+    }
+
+    if (tokenPresent) {
+      pivotItems.push(
+        <PivotItem
+          key='feedback'
+          itemIcon='HeartFill'
+          itemKey='feedback'
+          onRenderItemLink={this.getTooltipDisplay}
+          ariaLabel={translateMessage('Feedback')}
+          title={translateMessage('Feedback')}
+          headerText={translateMessage('Feedback')}
+        >
+        </PivotItem>
       );
     }
     return pivotItems;
@@ -194,16 +210,6 @@ export class Request extends Component<IRequestComponent, any> {
               className='pivot-request'
             >
               {requestPivotItems}
-              <PivotItem
-                key='feedback'
-                itemIcon='HeartFill'
-                itemKey='feedback'
-                onRenderItemLink={this.getTooltipDisplay}
-                ariaLabel={translateMessage('Feedback')}
-                title={translateMessage('Feedback')}
-                headerText={translateMessage('Feedback')}
-              >
-              </PivotItem>
             </Pivot>
           </div>
 
@@ -214,13 +220,14 @@ export class Request extends Component<IRequestComponent, any> {
   }
 }
 
-function mapStateToProps({ graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions }: IRootState) {
+function mapStateToProps({ graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions, authToken }: IRootState) {
   return {
     mode: graphExplorerMode,
     sampleBody: sampleQuery.sampleBody,
     theme,
     mobileScreen: !!sidebarProperties.mobileScreen,
-    dimensions
+    dimensions,
+    tokenPresent: authToken.token
   };
 }
 
