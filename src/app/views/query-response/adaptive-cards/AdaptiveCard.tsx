@@ -146,6 +146,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                 </a>
               </MessageBar>
               <IconButton className={classes.copyIcon}
+                ariaLabel={translateMessage('Copy')}
                 iconProps={{
                   iconName: 'copy',
                 }}
