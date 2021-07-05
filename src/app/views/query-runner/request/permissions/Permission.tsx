@@ -39,7 +39,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 
   public componentDidUpdate = (prevProps: IPermissionProps) => {
-    if (prevProps.sample !== this.props.sample) {
+    if ((prevProps.sample !== this.props.sample) || (prevProps.permissionsPanelOpen !== this.props.permissionsPanelOpen)) {
       this.getPermissions();
     }
     const permissions = this.props.scopes.data;
@@ -51,13 +51,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 
   private getPermissions() {
-    const { panel, sample } = this.props;
-    if (panel) {
-      this.props.actions!.fetchScopes();
-    }
-    else {
-      this.props.actions!.fetchScopes(sample);
-    }
+    this.props.actions!.fetchScopes();
   }
 
   public shouldComponentUpdate(nextProps: IPermissionProps, nextState: IPermissionState) {
@@ -65,6 +59,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       || nextProps.scopes !== this.props.scopes
       || nextProps.consentedScopes !== this.props.consentedScopes
       || nextProps.dimensions !== this.props.dimensions
+      || nextProps.permissionsPanelOpen !== this.props.permissionsPanelOpen
       || nextState.permissions !== this.state.permissions;
     return shouldUpdate;
   }
@@ -283,13 +278,14 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 }
 
-function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dimensions }: IRootState) {
+function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dimensions, permissionsPanelOpen }: IRootState) {
   return {
     sample: sampleQuery,
     scopes,
     tokenPresent: authToken.token,
     consentedScopes,
-    dimensions
+    dimensions,
+    permissionsPanelOpen
   };
 }
 

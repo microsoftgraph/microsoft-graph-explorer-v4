@@ -27,6 +27,15 @@ export function getProfileInfo(query: IQuery): Function {
   return (dispatch: Function) => {
     const respHeaders: any = {};
 
+    if (!query.sampleHeaders) {
+      query.sampleHeaders = [];
+    }
+
+    query.sampleHeaders.push({
+      name: 'Cache-Control',
+      value: 'no-cache'
+    });
+
     return authenticatedRequest(dispatch, query).then(async (response: Response) => {
 
       if (response && response.ok) {
