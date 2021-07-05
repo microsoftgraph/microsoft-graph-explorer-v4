@@ -148,5 +148,5 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
 };
 
 function encodeHashCharacters(query: IQuery): string {
-  return query.sampleUrl.replace(/#/g, '%23');
+  return query.sampleUrl.replace(/#/g, '%2523');
 }
