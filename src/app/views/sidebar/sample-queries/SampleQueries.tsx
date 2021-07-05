@@ -46,12 +46,12 @@ import { sidebarStyles } from '../Sidebar.styles';
 import { isJsonString } from './sample-query-utils';
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
-  resetCollapse: boolean;
-  groups: any[];
+  private _resetCollapse: boolean;
+  private _groups: any[];
   constructor(props: ISampleQueriesProps) {
     super(props);
-    this.resetCollapse = true;
-    this.groups = [];
+    this._resetCollapse = true;
+    this._groups = [];
     this.state = {
       sampleQueries: [],
       selectedQuery: null,
@@ -66,13 +66,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       this.props.actions!.fetchSamples();
     }
     const { sampleQueries } = this.state;
-    this.groups = generateGroupsFromList(sampleQueries, 'category');
+    this._groups = generateGroupsFromList(sampleQueries, 'category');
   };
 
   public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
     const { sampleQueries } = this.state;
     if (prevProps.samples.queries !== this.props.samples.queries) {
-      this.groups = generateGroupsFromList(sampleQueries, 'category');
+      this._groups = generateGroupsFromList(sampleQueries, 'category');
       this.setState({ sampleQueries: this.props.samples.queries });
     }
   };
@@ -248,7 +248,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               if (!selectionDisabled) {
                 this.querySelected(props.item);
               }
-              this.resetCollapse = false;
+              this._resetCollapse = false;
               this.setState({ selectedQuery: props.item.id })
             }}
             className={
@@ -360,8 +360,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     const { sampleQueries } = this.state;
     const classes = classNames(this.props);
-    if (this.resetCollapse) {
-      this.groups = generateGroupsFromList(sampleQueries, 'category');
+    if (this._resetCollapse) {
+      this._groups = generateGroupsFromList(sampleQueries, 'category');
     }
 
     if (pending) {
@@ -467,7 +467,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           items={sampleQueries}
           selectionMode={SelectionMode.none}
           columns={columns}
-          groups={this.groups}
+          groups={this._groups}
           groupProps={{
             showEmptyGroups: true,
             onRenderHeader: this.renderGroupHeader,
