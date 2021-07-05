@@ -46,8 +46,6 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
   if (proxyUrl === GRAPH_API_SANDBOX_URL) {
     const authToken = '{token:https://graph.microsoft.com/}';
     headers.Authorization = `Bearer ${authToken}`;
-  } else {
-    headers['MS-M365DEVPORTALS-API-KEY'] = GRAPH_API_SANDBOX_KEY;
   }
 
   const options: IRequestOptions = { method: query.selectedVerb, headers };
