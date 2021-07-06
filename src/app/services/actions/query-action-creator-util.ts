@@ -21,7 +21,7 @@ export function queryResponse(response: object): IAction {
 
 export async function anonymousRequest(dispatch: Function, query: IQuery) {
   const authToken = '{token:https://graph.microsoft.com/}';
-  const escapedUrl = encodeURIComponent(query.sampleUrl);
+  const escapedUrl = encodeURIComponent(encodeHashCharacters(query));
   const graphUrl = `${GRAPH_API_SANDBOX_URL}?url=${escapedUrl}`;
 
   const sampleHeaders: any = {};
