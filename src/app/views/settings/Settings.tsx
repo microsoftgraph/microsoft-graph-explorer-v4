@@ -32,6 +32,7 @@ import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 import { translateMessage } from '../../utils/translate-messages';
 import { PERMISSION_MODE_TYPE } from '../../services/graph-constants';
+import { AssertionError } from 'assert';
 
 
 function Settings(props: ISettingsProps) {
@@ -127,7 +128,14 @@ function Settings(props: ISettingsProps) {
   };
 
   const handleChangeMode = (permissionModeType: PERMISSION_MODE_TYPE) => {
-    dispatch(changeMode(!permissionModeType));
+    switch (permissionModeType) {
+      case PERMISSION_MODE_TYPE.User:
+        dispatch(changeMode(PERMISSION_MODE_TYPE.TeamsApp));
+        break;
+      case PERMISSION_MODE_TYPE.TeamsApp:
+        dispatch(changeMode(PERMISSION_MODE_TYPE.User));
+        break;
+    }
   };
 
   const handleSignOut = () => {
