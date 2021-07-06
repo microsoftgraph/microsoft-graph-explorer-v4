@@ -287,7 +287,14 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 }
 
-function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dimensions, permissionsPanelOpen, permissionModeType }: IRootState) {
+function mapStateToProps({ 
+    sampleQuery, 
+    scopes, 
+    authToken, 
+    consentedScopes, 
+    dimensions, 
+    permissionsPanelOpen, 
+    permissionModeType }: IRootState) {
   return {
     sample: sampleQuery,
     scopes,
