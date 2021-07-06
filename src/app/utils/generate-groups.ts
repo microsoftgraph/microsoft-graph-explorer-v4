@@ -1,6 +1,8 @@
+import { IGroup } from "office-ui-fabric-react";
+
 export function generateGroupsFromList(list: any[], property: string) {
     const map = new Map();
-    const groups: any[] = [];
+    const groups: IGroup[] = [];
 
     let isCollapsed = false;
     let previousCount = 0;
@@ -23,6 +25,7 @@ export function generateGroupsFromList(list: any[], property: string) {
                 startIndex: previousCount,
                 isCollapsed,
                 count,
+                ariaLabel: listItem[property] + ' has ' + count + ' results'
             });
             previousCount += count;
         }
