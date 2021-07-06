@@ -1,13 +1,13 @@
 import { DetailsList, DetailsRow, IColumn, IconButton, SelectionMode } from 'office-ui-fabric-react';
 import * as React from 'react';
 import { IHeadersListControl } from '../../../../../types/request';
+import { translateMessage } from '../../../../utils/translate-messages';
 import { headerStyles } from './Headers.styles';
 
 
 const HeadersList = ({
   handleOnHeaderDelete,
-  headers,
-  messages
+  headers
 }: IHeadersListControl) => {
 
   const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
@@ -42,9 +42,9 @@ const HeadersList = ({
   };
 
   const columns = [
-    { key: 'key', name: messages.Key, fieldName: 'name', minWidth: 300, maxWidth: 400 },
-    { key: 'value', name: messages.Value, fieldName: 'value', minWidth: 300, maxWidth: 400 },
-    { key: 'button', name: '', fieldName: 'button', minWidth: 200, maxWidth: 300 }
+    { key: 'key', name: translateMessage('Key'), fieldName: 'name', minWidth: 300, maxWidth: 400, ariaLabel: translateMessage('Key') },
+    { key: 'value', name: translateMessage('Value'), fieldName: 'value', minWidth: 300, maxWidth: 400, ariaLabel: translateMessage('Value') },
+    { key: 'button', name: translateMessage('actions'), fieldName: 'button', minWidth: 200, maxWidth: 300, ariaLabel: translateMessage('actions') }
   ];
 
   const headerItems = (headers) ? headers.filter((header) => {
@@ -52,13 +52,13 @@ const HeadersList = ({
   }) : [];
 
   return (
-      <DetailsList
-        items={headerItems}
-        columns={columns}
-        onRenderItemColumn={renderItemColumn}
-        onRenderRow={renderRow}
-        selectionMode={SelectionMode.none}
-      />
+    <DetailsList
+      items={headerItems}
+      columns={columns}
+      onRenderItemColumn={renderItemColumn}
+      onRenderRow={renderRow}
+      selectionMode={SelectionMode.none}
+    />
   );
 };
 
