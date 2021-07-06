@@ -1,3 +1,4 @@
+import { PERMISSION_MODE_TYPE } from '../app/services/graph-constants';
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
 import { Header, IQuery } from './query-runner';
@@ -31,7 +32,7 @@ export interface IRequestComponent {
     actions: {
         setDimensions: Function;
     };
-    permissionModeType: boolean;
+    permissionModeType: PERMISSION_MODE_TYPE
 }
 
 export interface IRequestOptions {

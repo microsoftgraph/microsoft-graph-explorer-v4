@@ -1,4 +1,5 @@
 import { ITheme } from 'office-ui-fabric-react';
+import { PERMISSION_MODE_TYPE } from '../app/services/graph-constants';
 
 export interface IProfileProps {
     intl: {
@@ -11,7 +12,7 @@ export interface IProfileProps {
         getProfileInfo: Function;
         signOut: Function;
     };
-    permissionModeType: boolean;
+    permissionModeType: PERMISSION_MODE_TYPE;
 }
 
 export interface IProfileState {

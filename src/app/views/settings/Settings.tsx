@@ -31,6 +31,7 @@ import { changeMode } from '../../services/actions/permission-mode-action-creato
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 import { translateMessage } from '../../utils/translate-messages';
+import { PERMISSION_MODE_TYPE } from '../../services/graph-constants';
 
 
 function Settings(props: ISettingsProps) {
@@ -125,7 +126,7 @@ function Settings(props: ISettingsProps) {
       });
   };
 
-  const handleChangeMode = (permissionModeType: boolean) => {
+  const handleChangeMode = (permissionModeType: PERMISSION_MODE_TYPE) => {
     dispatch(changeMode(!permissionModeType));
   };
 

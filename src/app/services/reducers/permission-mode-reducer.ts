@@ -4,10 +4,10 @@ import {
 } from '../redux-constants';
 
 import {
-    DISPLAY_DELEGATED_PERMISSIONS
+    PERMISSION_MODE_TYPE
 } from '../graph-constants';
 
-export function permissionModeType(state: boolean = DISPLAY_DELEGATED_PERMISSIONS, action: IAction): any {
+export function permissionModeType(state: PERMISSION_MODE_TYPE = PERMISSION_MODE_TYPE.User, action: IAction): any {
     switch (action.type) {
         case CHANGE_PERMISSIONS_MODE_SUCCESS:
             return action.response;

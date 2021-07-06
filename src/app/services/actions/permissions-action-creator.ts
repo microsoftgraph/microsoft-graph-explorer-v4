@@ -14,8 +14,7 @@ import {
 } from '../redux-constants';
 import {
   PERMS_SCOPE,
-  DISPLAY_DELEGATED_PERMISSIONS,
-  DISPLAY_APPLICATION_PERMISSIONS
+  PERMISSION_MODE_TYPE
 } from '../graph-constants';
 import {
   getAuthTokenSuccess,
@@ -49,7 +48,7 @@ export function fetchScopes(): Function {
     try {
       const { devxApi, permissionsPanelOpen, permissionModeType, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
-      const scope = (permissionModeType === DISPLAY_DELEGATED_PERMISSIONS)
+      const scope = (permissionModeType === PERMISSION_MODE_TYPE.User)
         ? PERMS_SCOPE.WORK
         : PERMS_SCOPE.APPLICATION;
 
