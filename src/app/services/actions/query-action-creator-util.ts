@@ -1,12 +1,14 @@
 import {
   AuthenticationHandlerOptions,
-  ResponseType,
+  ResponseType
 } from '@microsoft/microsoft-graph-client';
 import { MSALAuthenticationProviderOptions } from '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
+
 import { IAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
+import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { authProvider, GraphClient } from '../graph-client';
 import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_URL } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
@@ -147,7 +149,3 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
     return Promise.resolve(response);
   };
 };
-
-function encodeHashCharacters(query: IQuery): string {
-  return query.sampleUrl.replace(/#/g, '%2523');
-}
