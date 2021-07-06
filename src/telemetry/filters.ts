@@ -1,11 +1,11 @@
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
-import { exception } from 'console';
 import { errorTypes } from '.';
 import {
   DEVX_API_URL,
   GRAPH_API_SANDBOX_URL,
   GRAPH_URL,
   HOME_ACCOUNT_KEY,
+  ADAPTIVE_CARD_URL,
 } from '../app/services/graph-constants';
 import {
   sanitizeGraphAPISandboxUrl,
@@ -29,7 +29,12 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
     const baseData = envelope.baseData || {};
     const urlObject = new URL(baseData.target || '');
 
-    const targetsToInclude = [GRAPH_URL, DEVX_API_URL, GRAPH_API_SANDBOX_URL];
+    const targetsToInclude = [
+      GRAPH_URL,
+      DEVX_API_URL,
+      new URL(GRAPH_API_SANDBOX_URL).origin,
+      new URL(ADAPTIVE_CARD_URL).origin,
+    ];
     if (!targetsToInclude.includes(urlObject.origin)) {
       return false;
     }
