@@ -9,7 +9,7 @@ import { componentNames, eventTypes, telemetry } from '../../../../../telemetry'
 import { IRootState } from '../../../../../types/root';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
-import { genericCopy } from '../../../common/copy';
+import { trackedGenericCopy } from '../../../common/copy';
 import { convertVhToPx } from '../../../common/dimensions-adjustment';
 import { authStyles } from './Auth.styles';
 
@@ -20,8 +20,7 @@ export function Auth(props: any) {
   const [loading, setLoading] = useState(false);
 
   const handleCopy = async () => {
-    await genericCopy(accessToken!);
-    trackTokenCopyEvent();
+    trackedGenericCopy(accessToken || '', componentNames.ACCESS_TOKEN_COPY_BUTTON);
   };
 
   useEffect(() => {
@@ -69,14 +68,6 @@ export function Auth(props: any) {
       </Label>
     }
   </div>);
-}
-
-function trackTokenCopyEvent() {
-  telemetry.trackEvent(
-    eventTypes.BUTTON_CLICK_EVENT,
-    {
-      ComponentName: componentNames.ACCESS_TOKEN_COPY_BUTTON
-    });
 }
 
 const trackedComponent = telemetry.trackReactComponent(Auth, componentNames.ACCESS_TOKEN_TAB);

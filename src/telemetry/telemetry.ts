@@ -13,7 +13,11 @@ import { version } from '../../package.json';
 import { validateExternalLink } from '../app/utils/external-link-validation';
 import { sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
 import { IQuery } from '../types/query-runner';
-import { LINK_CLICK_EVENT, TAB_CLICK_EVENT } from './event-types';
+import {
+  BUTTON_CLICK_EVENT,
+  LINK_CLICK_EVENT,
+  TAB_CLICK_EVENT,
+} from './event-types';
 import {
   addCommonTelemetryItemProperties,
   filterRemoteDependencyData,
@@ -90,6 +94,20 @@ class Telemetry implements ITelemetry {
   public trackLinkClickEvent(url: string, componentName: string) {
     telemetry.trackEvent(LINK_CLICK_EVENT, { ComponentName: componentName });
     validateExternalLink(url, componentName);
+  }
+
+  public trackCopyButtonClickEvent(
+    componentName: string,
+    sampleQuery?: IQuery,
+    properties?: { [key: string]: string }
+  ) {
+    properties = properties || {};
+    properties.ComponentName = componentName;
+    if (sampleQuery) {
+      const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+      properties.QuerySignature = `${sampleQuery.selectedVerb} ${sanitizedUrl}`;
+    }
+    telemetry.trackEvent(BUTTON_CLICK_EVENT, properties);
   }
 
   private getInstrumentationKey() {
