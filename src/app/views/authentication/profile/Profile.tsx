@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { geLocale } from '../../../../appLocale';
 import { Mode } from '../../../../types/enums';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
@@ -10,6 +11,7 @@ import { IRootState } from '../../../../types/root';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
 import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
+import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 
@@ -36,7 +38,6 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       : null;
 
     const userInfo = jsonUserInfo.response;
-
     if (userInfo) {
       let imageUrl = '';
 
@@ -106,7 +107,10 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const persona: IPersonaSharedProps = {
       imageUrl: user.profileImageUrl,
       imageInitials: this.getInitials(user.displayName),
-      text: user.displayName + ' ' + (this.props.permissionModeType ? messages['As user'] : messages['As Teams app']),
+      text: user.displayName + ' '
+        + (this.props.permissionModeType
+          ? translateMessage('As user')
+          : translateMessage('As Teams app')),
       secondaryText: user.emailAddress,
     };
 

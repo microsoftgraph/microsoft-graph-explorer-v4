@@ -40,7 +40,9 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 
   public componentDidUpdate = (prevProps: IPermissionProps) => {
-    if ((prevProps.sample !== this.props.sample) || (prevProps.permissionsPanelOpen !== this.props.permissionsPanelOpen) || (prevProps.permissionModeType !== this.props.permissionModeType)) {
+    if (prevProps.sample !== this.props.sample
+        || prevProps.permissionsPanelOpen !== this.props.permissionsPanelOpen
+        || prevProps.permissionModeType !== this.props.permissionModeType) {
       this.getPermissions();
     }
 
@@ -51,7 +53,6 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       });
     }
   }
-
 
   private getPermissions() {
     this.props.actions!.fetchScopes();
@@ -64,7 +65,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       || nextProps.dimensions !== this.props.dimensions
       || nextProps.permissionsPanelOpen !== this.props.permissionsPanelOpen
       || nextState.permissions !== this.state.permissions
-      || nextProps.permissionModeType !== this.props.permissionModeType
+      || nextProps.permissionModeType !== this.props.permissionModeType;
     return shouldUpdate;
   }
 
@@ -174,7 +175,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       }
     ];
 
-    const isCurrentPermTypeDelegated = permissionModeType === DISPLAY_DELEGATED_PERMISSIONS;
+    const delegatedPermissions = permissionModeType === DISPLAY_DELEGATED_PERMISSIONS;
 
     if (!panel) {
       columns.push(
@@ -183,19 +184,23 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           name: messages.Description,
           fieldName: 'consentDescription',
           isResizable: true,
-          minWidth: (tokenPresent) ? ((isCurrentPermTypeDelegated) ? 400 : 800) : 600,
-          maxWidth: (tokenPresent) ? ((isCurrentPermTypeDelegated) ? 600 : 1300) : 1000,
+          minWidth: (tokenPresent)
+            ? (delegatedPermissions ? 400 : 800)
+            : 600,
+          maxWidth: (tokenPresent)
+            ? (delegatedPermissions ? 600 : 1300)
+            : 1000,
           isMultiline: true
         }
       );
     }
 
-    if (isCurrentPermTypeDelegated) {
+    if (delegatedPermissions) {
       columns.push(
         {
           key: 'isAdmin',
           isResizable: true,
-          name: messages['Admin consent required'],
+          name: translateMessage('Admin consent required'),
           fieldName: 'isAdmin',
           minWidth: (tokenPresent) ? 150 : 200,
           maxWidth: (tokenPresent) ? 200 : 300,

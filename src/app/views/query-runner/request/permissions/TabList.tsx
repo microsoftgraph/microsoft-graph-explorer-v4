@@ -72,8 +72,14 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
         <FormattedMessage id='Permissions' />&nbsp;({filteredPermissions.length})
       </Label>
       <Label className={classes.permissionText}>
-        {!tokenPresent && <FormattedMessage id={permissionModeType ? 'sign in to consent to permissions' : 'sign in to consent to application permissions'} />}
-        {tokenPresent && <FormattedMessage id={permissionModeType ? 'permissions required to run the query' : 'application permissions required to run the query'} />}
+        {!tokenPresent
+          && <FormattedMessage id={permissionModeType
+            ? 'sign in to consent to permissions'
+            : 'sign in to consent to application permissions'} />}
+        {tokenPresent
+          && <FormattedMessage id={permissionModeType
+            ? 'permissions required to run the query'
+            : 'application permissions required to run the query'} />}
       </Label>
       <DetailsList styles={{ root: { maxHeight } }}
         items={filteredPermissions}
@@ -82,15 +88,12 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
         selectionMode={SelectionMode.none}
         layoutMode={DetailsListLayoutMode.justified}
         onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
-      {filteredPermissions && filteredPermissions.length === 0 &&
-        displayNoPermissionsFoundMessage()
+      {filteredPermissions
+        && filteredPermissions.length === 0
+        && displayNoPermissionsFoundMessage()
       }
     </>
   );
 };
 
 export default TabList;
-
-
-
-

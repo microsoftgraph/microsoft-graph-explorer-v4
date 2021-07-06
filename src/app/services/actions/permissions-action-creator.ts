@@ -49,7 +49,9 @@ export function fetchScopes(): Function {
     try {
       const { devxApi, permissionsPanelOpen, permissionModeType, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
-      const scope = permissionModeType === DISPLAY_DELEGATED_PERMISSIONS ? PERMS_SCOPE.WORK : PERMS_SCOPE.APPLICATION;
+      const scope = (permissionModeType === DISPLAY_DELEGATED_PERMISSIONS)
+        ? PERMS_SCOPE.WORK
+        : PERMS_SCOPE.APPLICATION;
 
       if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);

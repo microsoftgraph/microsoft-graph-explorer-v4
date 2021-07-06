@@ -5,6 +5,7 @@ import { telemetry } from '../../../telemetry';
 import History from './history/History';
 import SampleQueries from './sample-queries/SampleQueries';
 
+
 export const Sidebar = ({ sampleHeaderText, historyHeaderText }: any) => {
   return (
     <div>
