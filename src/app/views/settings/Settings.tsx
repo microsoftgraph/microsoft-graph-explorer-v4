@@ -30,6 +30,7 @@ import { togglePermissionsPanel } from '../../services/actions/permissions-panel
 import { changeMode } from '../../services/actions/permission-mode-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
+import { translateMessage } from '../../utils/translate-messages';
 
 
 function Settings(props: ISettingsProps) {
@@ -84,7 +85,9 @@ function Settings(props: ISettingsProps) {
       menuItems.push(
         {
           key: 'switch-user-app-mode',
-          text: messages[permissionModeType ? "Use Explorer as sample Teams application" : "Use Explorer as logged-in user"],
+          text: translateMessage(permissionModeType 
+            ? "Use Explorer as sample Teams application" 
+            : "Use Explorer as logged-in user"),
           iconProps: {
             iconName: permissionModeType ? "TeamsLogo" : "Contact",
           },
