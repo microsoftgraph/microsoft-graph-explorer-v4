@@ -12,7 +12,7 @@ export enum PERMS_SCOPE {
     PERSONAL = "DelegatedPersonal"
 };
 export enum PERMISSION_MODE_TYPE {
-    User,
-    TeamsApp
+    TeamsApp,
+    User
 }
 export const RSC_PERMISSIONS_ENDINGS = [".Group", ".Chat"];
