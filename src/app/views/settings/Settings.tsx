@@ -32,7 +32,6 @@ import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 import { translateMessage } from '../../utils/translate-messages';
 import { PERMISSION_MODE_TYPE } from '../../services/graph-constants';
-import { AssertionError } from 'assert';
 
 
 function Settings(props: ISettingsProps) {
