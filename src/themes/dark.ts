@@ -23,6 +23,11 @@ export const dark = {
     neutralDark: '#fefefe',
     black: '#ffffff',
     white: '#070707',
-    blueMid: '#266ea6',
+    blueMid: '#6CB8F6',
+  },
+  semanticColors: {
+    messageText: '#F3F2F1',
+    infoBackground: '#1B1A19',
+    infoIcon: '#C8C6C4',
   },
 };
