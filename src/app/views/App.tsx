@@ -350,9 +350,9 @@ class App extends Component<IAppProps, IAppState> {
     if (permissionModeType && this.state.hideDialog) {
       this.showDialog();
     }
-    const teamsapp = <a href={"https://www.bing.com/?form=000010"}>{translateMessage('Sample Explorer Teams app')}</a>;
-    //TODO: put in the url when we have this set up
-    const rsc = <a href={RSC_URL}>{translateMessage('resource specific consent')}</a>;
+    const teamsapp = <a href={"https://www.bing.com/?form=000010"} target="_blank">{translateMessage('Sample Explorer Teams app')}</a>;
+    //TODO: put in the url when we have this set up ADO #38728
+    const rsc = <a href={RSC_URL} target="_blank">{translateMessage('resource specific consent')}</a>;
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
