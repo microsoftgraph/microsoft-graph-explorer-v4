@@ -29,6 +29,7 @@ import { consentToScopes } from '../../services/actions/permissions-action-creat
 import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
+import { translateMessage } from '../../utils/translate-messages';
 
 
 function Settings(props: ISettingsProps) {
@@ -56,6 +57,16 @@ function Settings(props: ISettingsProps) {
         onClick: () => trackOfficeDevProgramLinkClickEvent(),
       },
       {
+        key: 'graph-explorer-documentation',
+        text: translateMessage('Graph Explorer Documentation'),
+        href: 'https://docs.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview',
+        target: '_blank',
+        iconProps: {
+          iconName: 'TextDocument'
+        },
+        onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GRAPH_EXPLORER_DOCUMENTATION_LINK)
+      },
+      {
         key: 'report-issue',
         text: messages['Report an Issue'],
         href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
@@ -65,6 +76,7 @@ function Settings(props: ISettingsProps) {
         },
         onClick: () => trackReportAnIssueLinkClickEvent(),
       },
+
       {
         key: 'divider',
         text: '-',
