@@ -350,15 +350,10 @@ class App extends Component<IAppProps, IAppState> {
     if (permissionModeType && this.state.hideDialog) {
       this.showDialog();
     }
-<<<<<<< HEAD
     // eslint-disable-next-line react/jsx-no-target-blank
     const teamsapp = <a href={"https://www.bing.com/?form=000010"} target="_blank">{translateMessage('Sample Explorer Teams app')}</a>;
     //TODO: put in the url when we have this set up ADO #38728
     // eslint-disable-next-line react/jsx-no-target-blank
-=======
-    const teamsapp = <a href={"https://www.bing.com/?form=000010"} target="_blank">{translateMessage('Sample Explorer Teams app')}</a>;
-    //TODO: put in the url when we have this set up ADO #38728
->>>>>>> 4fc227788663221f1f5218f3faf39a92095fef83
     const rsc = <a href={RSC_URL} target="_blank">{translateMessage('resource specific consent')}</a>;
     return (
       // @ts-ignore
