@@ -48,9 +48,11 @@ export function fetchScopes(): Function {
     try {
       const { devxApi, permissionsPanelOpen, permissionModeType, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
-      const scope = (permissionModeType === PERMISSION_MODE_TYPE.User)
-        ? PERMS_SCOPE.WORK
-        : PERMS_SCOPE.APPLICATION;
+      const permsScopeLookup = {
+        [PERMISSION_MODE_TYPE.User]: PERMS_SCOPE.WORK,
+        [PERMISSION_MODE_TYPE.TeamsApp]: PERMS_SCOPE.APPLICATION,
+      }
+      const scope = permsScopeLookup[permissionModeType];
 
       if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);

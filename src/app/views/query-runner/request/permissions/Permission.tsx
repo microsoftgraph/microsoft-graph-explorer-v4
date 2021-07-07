@@ -175,6 +175,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       }
     ];
 
+    const permissionModeTypeIsUser = permissionModeType === PERMISSION_MODE_TYPE.User;
+
     if (!panel) {
       columns.push(
         {
@@ -183,17 +185,17 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           fieldName: 'consentDescription',
           isResizable: true,
           minWidth: (tokenPresent)
-            ? (permissionModeType === PERMISSION_MODE_TYPE.User ? 400 : 800)
+            ? (permissionModeTypeIsUser ? 400 : 800)
             : 600,
           maxWidth: (tokenPresent)
-            ? (permissionModeType === PERMISSION_MODE_TYPE.User ? 600 : 1300)
+            ? (permissionModeTypeIsUser ? 600 : 1300)
             : 1000,
           isMultiline: true
         }
       );
     }
 
-    if (permissionModeType === PERMISSION_MODE_TYPE.User) {
+    if (permissionModeTypeIsUser) {
       columns.push(
         {
           key: 'isAdmin',
@@ -285,13 +287,13 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 }
 
-function mapStateToProps({ 
-    sampleQuery, 
-    scopes, 
-    authToken, 
-    consentedScopes, 
-    dimensions, 
-    permissionsPanelOpen, 
+function mapStateToProps({
+    sampleQuery,
+    scopes,
+    authToken,
+    consentedScopes,
+    dimensions,
+    permissionsPanelOpen,
     permissionModeType }: IRootState) {
   return {
     sample: sampleQuery,
