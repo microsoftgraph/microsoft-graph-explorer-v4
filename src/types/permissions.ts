@@ -1,4 +1,5 @@
 import { ITheme } from '@uifabric/styling';
+import { PERMISSION_MODE_TYPE } from '../app/services/graph-constants';
 import { IDimensions } from './dimensions';
 import { IQuery } from './query-runner';
 
@@ -24,7 +25,7 @@ export interface IPermissionProps {
     fetchScopes: Function;
     consentToScopes: Function;
   };
-  permissionModeType: boolean;
+  permissionModeType: PERMISSION_MODE_TYPE;
 }
 
 export interface IPermissionState {
