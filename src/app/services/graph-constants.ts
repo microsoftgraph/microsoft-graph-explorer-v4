@@ -11,6 +11,8 @@ export enum PERMS_SCOPE {
     APPLICATION = "Application",
     PERSONAL = "DelegatedPersonal"
 };
-export const DISPLAY_DELEGATED_PERMISSIONS = true;
-export const DISPLAY_APPLICATION_PERMISSIONS = false;
+export enum PERMISSION_MODE_TYPE {
+    TeamsApp,
+    User
+}
 export const RSC_PERMISSIONS_ENDINGS = [".Group", ".Chat"];

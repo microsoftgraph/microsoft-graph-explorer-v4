@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IPermission } from '../../../../../types/permissions';
 import { IRootState } from '../../../../../types/root';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
-import { DISPLAY_APPLICATION_PERMISSIONS, RSC_PERMISSIONS_ENDINGS } from '../../../../services/graph-constants';
+import { PERMISSION_MODE_TYPE, RSC_PERMISSIONS_ENDINGS } from '../../../../services/graph-constants';
 import { setConsentedStatus } from './util';
 
 interface ITabList {
@@ -27,7 +27,9 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   }
 
   const filterPermissionsForRSC = () => {
-    return permissionModeType === DISPLAY_APPLICATION_PERMISSIONS ? permissions.filter(isRSC) : permissions;
+    return (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp) 
+      ? permissions.filter(isRSC) 
+      : permissions;
   }
 
   const filteredPermissions = filterPermissionsForRSC();

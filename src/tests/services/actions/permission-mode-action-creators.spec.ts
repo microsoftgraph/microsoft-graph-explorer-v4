@@ -1,5 +1,5 @@
 import { changeMode } from '../../../app/services/actions/permission-mode-action-creator';
-import { DISPLAY_APPLICATION_PERMISSIONS, DISPLAY_DELEGATED_PERMISSIONS } from '../../../app/services/graph-constants';
+import { PERMISSION_MODE_TYPE } from '../../../app/services/graph-constants';
 import { CHANGE_PERMISSIONS_MODE_SUCCESS } from '../../../app/services/redux-constants';
 
 
@@ -9,12 +9,12 @@ describe('Graph Explorer Permission mode creator\'', () => {
         fetchMock.resetMocks();
     });
 
-    it('creates CHANGE_PERMISSIONS_MODE_SUCCESS when changeMode is called with DISPLAY_APPLICATION_PERMISSIONS', () => {
+    it('creates CHANGE_PERMISSIONS_MODE_SUCCESS when changeMode is called with PERMISSION_MODE_TYPE.TeamsApp', () => {
 
-        const perm = DISPLAY_APPLICATION_PERMISSIONS;
+        const perm = PERMISSION_MODE_TYPE.TeamsApp;
         const expectedAction = {
             type: CHANGE_PERMISSIONS_MODE_SUCCESS,
-            response: DISPLAY_APPLICATION_PERMISSIONS,
+            response: PERMISSION_MODE_TYPE.TeamsApp,
         };
 
         const action = changeMode(perm);
@@ -22,12 +22,12 @@ describe('Graph Explorer Permission mode creator\'', () => {
 
     });
 
-    it('creates CHANGE_PERMISSIONS_MODE_SUCCESS when changeMode is called with DISPLAY_DELEGATED_PERMISSIONS', () => {
+    it('creates CHANGE_PERMISSIONS_MODE_SUCCESS when changeMode is called with PERMISSION_MODE_TYPE.User', () => {
 
-        const perm = DISPLAY_DELEGATED_PERMISSIONS;
+        const perm = PERMISSION_MODE_TYPE.User;
         const expectedAction = {
             type: CHANGE_PERMISSIONS_MODE_SUCCESS,
-            response: DISPLAY_DELEGATED_PERMISSIONS,
+            response: PERMISSION_MODE_TYPE.User,
         };
 
         const action = changeMode(perm);

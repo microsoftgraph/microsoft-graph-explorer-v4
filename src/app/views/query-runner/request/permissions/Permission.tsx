@@ -18,7 +18,7 @@ import { componentNames, telemetry } from '../../../../../telemetry';
 import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
 import { IRootState } from '../../../../../types/root';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
-import { DISPLAY_DELEGATED_PERMISSIONS } from '../../../../services/graph-constants';
+import { PERMISSION_MODE_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { convertVhToPx } from '../../../common/dimensions-adjustment';
@@ -175,7 +175,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       }
     ];
 
-    const delegatedPermissions = permissionModeType === DISPLAY_DELEGATED_PERMISSIONS;
+    const permissionModeTypeIsUser = permissionModeType === PERMISSION_MODE_TYPE.User;
 
     if (!panel) {
       columns.push(
@@ -185,17 +185,17 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           fieldName: 'consentDescription',
           isResizable: true,
           minWidth: (tokenPresent)
-            ? (delegatedPermissions ? 400 : 800)
+            ? (permissionModeTypeIsUser ? 400 : 800)
             : 600,
           maxWidth: (tokenPresent)
-            ? (delegatedPermissions ? 600 : 1300)
+            ? (permissionModeTypeIsUser ? 600 : 1300)
             : 1000,
           isMultiline: true
         }
       );
     }
 
-    if (delegatedPermissions) {
+    if (permissionModeTypeIsUser) {
       columns.push(
         {
           key: 'isAdmin',
@@ -287,7 +287,14 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 }
 
-function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dimensions, permissionsPanelOpen, permissionModeType }: IRootState) {
+function mapStateToProps({
+    sampleQuery,
+    scopes,
+    authToken,
+    consentedScopes,
+    dimensions,
+    permissionsPanelOpen,
+    permissionModeType }: IRootState) {
   return {
     sample: sampleQuery,
     scopes,
