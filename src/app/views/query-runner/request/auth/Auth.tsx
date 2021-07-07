@@ -12,9 +12,10 @@ import { classNames } from '../../../classnames';
 import { genericCopy } from '../../../common/copy';
 import { convertVhToPx } from '../../../common/dimensions-adjustment';
 import { authStyles } from './Auth.styles';
+import { PERMISSION_MODE_TYPE } from '../../../../../app/services/graph-constants';
 
 export function Auth(props: any) {
-  const { authToken, dimensions: { request: { height } } } = useSelector((state: IRootState) => state);
+  const { authToken, dimensions: { request: { height } }, permissionModeType } = useSelector((state: IRootState) => state);
   const requestHeight = convertVhToPx(height, 60);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -61,7 +62,7 @@ export function Auth(props: any) {
             href={`https://jwt.ms#access_token=${accessToken}`}
             target='_blank' />
         </div>
-        <Label className={classes.accessToken} >{accessToken}</Label>
+        <Label className={classes.accessToken} >{permissionModeType === PERMISSION_MODE_TYPE.User ? accessToken : "Access token is unviewable in application mode for security reasons."}</Label>
       </div>
       :
       <Label className={classes.emptyStateLabel}>
