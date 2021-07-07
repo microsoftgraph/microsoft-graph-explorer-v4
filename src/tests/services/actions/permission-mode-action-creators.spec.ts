@@ -9,7 +9,7 @@ describe('Graph Explorer Permission mode creator\'', () => {
         fetchMock.resetMocks();
     });
 
-    it('creates CHANGE_PERMISSIONS_MODE_SUCCESS when changeMode is called with DISPLAY_APPLICATION_PERMISSIONS', () => {
+    it('creates CHANGE_PERMISSIONS_MODE_SUCCESS when changeMode is called with PERMISSION_MODE_TYPE.TeamsApp', () => {
 
         const perm = PERMISSION_MODE_TYPE.TeamsApp;
         const expectedAction = {
@@ -22,7 +22,7 @@ describe('Graph Explorer Permission mode creator\'', () => {
 
     });
 
-    it('creates CHANGE_PERMISSIONS_MODE_SUCCESS when changeMode is called with DISPLAY_DELEGATED_PERMISSIONS', () => {
+    it('creates CHANGE_PERMISSIONS_MODE_SUCCESS when changeMode is called with PERMISSION_MODE_TYPE.User', () => {
 
         const perm = PERMISSION_MODE_TYPE.User;
         const expectedAction = {
