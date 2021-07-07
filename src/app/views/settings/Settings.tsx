@@ -48,7 +48,7 @@ function Settings(props: ISettingsProps) {
     const menuItems: any = [
       {
         key: 'office-dev-program',
-        text: messages['Office Dev Program'],
+        text: translateMessage('Office Dev Program'),
         href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
         target: '_blank',
         iconProps: {
@@ -68,7 +68,7 @@ function Settings(props: ISettingsProps) {
       },
       {
         key: 'report-issue',
-        text: messages['Report an Issue'],
+        text: translateMessage('Report an Issue'),
         href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
         target: '_blank',
         iconProps: {
@@ -84,7 +84,7 @@ function Settings(props: ISettingsProps) {
       },
       {
         key: 'change-theme',
-        text: messages['Change theme'],
+        text: translateMessage('Change theme'),
         iconProps: {
           iconName: 'Color',
         },
@@ -96,7 +96,7 @@ function Settings(props: ISettingsProps) {
       menuItems.push(
         {
           key: 'view-all-permissions',
-          text: messages['view all permissions'],
+          text: translateMessage('view all permissions'),
           iconProps: {
             iconName: 'AzureKeyVault',
           },
@@ -104,7 +104,7 @@ function Settings(props: ISettingsProps) {
         },
         {
           key: 'sign-out',
-          text: messages['sign out'],
+          text: translateMessage('sign out'),
           iconProps: {
             iconName: 'SignOut',
           },
