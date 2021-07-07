@@ -50,6 +50,16 @@ export function Auth(props: any) {
     </MessageBar>;
   }
 
+  let accessTokenComponent;
+  if (permissionModeType === PERMISSION_MODE_TYPE.User) {
+    accessTokenComponent = <Label className={classes.accessToken}>{accessToken}</Label>;
+  } else {
+    accessTokenComponent =
+      <Label className={classes.appModeAccessTokenError}>
+        <FormattedMessage id="App mode access token error" />
+      </Label>
+  }
+
   return (<div className={classes.auth} style={{ height: requestHeight }}>
     {!loading ?
       <div>
@@ -62,7 +72,7 @@ export function Auth(props: any) {
             href={`https://jwt.ms#access_token=${accessToken}`}
             target='_blank' />
         </div>
-        <Label className={classes.accessToken} >{permissionModeType === PERMISSION_MODE_TYPE.User ? accessToken : "Access token is unviewable in application mode for security reasons."}</Label>
+        {accessTokenComponent}
       </div>
       :
       <Label className={classes.emptyStateLabel}>
