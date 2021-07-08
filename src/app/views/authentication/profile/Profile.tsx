@@ -44,7 +44,8 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       : null;
 
     const userInfo = jsonUserInfo.response;
-    if (userInfo) {
+    const betaUserInfo = betaJsonUserInfo.response;
+    if (userInfo || betaUserInfo) {
       let imageUrl = '';
 
       try {
@@ -66,8 +67,8 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
       const user = {
         ...{},
-        displayName: userInfo.displayName,
-        emailAddress: userInfo.mail || userInfo.userPrincipalName,
+        displayName: userInfo.displayName || betaUserInfo.names?.[0]?.displayName,
+        emailAddress: userInfo.mail || userInfo.userPrincipalName || betaUserInfo.account?.[0]?.userPrincipalName,
         profileImageUrl: imageUrl
       };
 

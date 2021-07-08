@@ -1,6 +1,6 @@
 import { IQuery } from '../../../types/query-runner';
 import { PROFILE_IMAGE_REQUEST_SUCCESS, PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS, PROFILE_TYPE_SUCCESS } from '../redux-constants';
-import { authenticatedRequest, isImageResponse, parseResponse } from './query-action-creator-util';
+import { authenticatedRequest, isBetaURLResponse, isImageResponse, parseResponse } from './query-action-creator-util';
 
 export function profileRequestSuccess(response: object): any {
   return {
@@ -49,16 +49,15 @@ export function getProfileInfo(query: IQuery): Function {
         const json = await parseResponse(response, respHeaders);
         const contentType = respHeaders['content-type'];
         const isImageResult = isImageResponse(contentType);
-
-        try {
-          dispatch(profileTypeSuccess(json.account[0].source.type[0]))
-        } catch (error) {
-          console.log(error);
-        }
+        const betaUserInfo = isBetaURLResponse(json);
 
         if (isImageResult) {
           return dispatch(
             profileImageRequestSuccess(json),
+          );
+        } else if (betaUserInfo) {
+          dispatch(
+            profileTypeSuccess(betaUserInfo)
           );
         } else {
           return dispatch(
