@@ -62,7 +62,7 @@ export function isImageResponse(contentType: string | undefined) {
 }
 
 export function isBetaURLResponse(json: any) {
-  return json?.account?.[0]?.source?.type?.[0];
+  return json?.account?.[0]?.source?.type?.[0] !== undefined;
 }
 
 export function getContentType(headers: Headers) {

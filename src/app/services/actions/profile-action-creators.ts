@@ -49,15 +49,15 @@ export function getProfileInfo(query: IQuery): Function {
         const json = await parseResponse(response, respHeaders);
         const contentType = respHeaders['content-type'];
         const isImageResult = isImageResponse(contentType);
-        const betaUserInfo = isBetaURLResponse(json);
+        const isBetaUserResult = isBetaURLResponse(json);
 
         if (isImageResult) {
           return dispatch(
             profileImageRequestSuccess(json),
           );
-        } else if (betaUserInfo) {
-          dispatch(
-            profileTypeSuccess(betaUserInfo)
+        } else if (isBetaUserResult) {
+          return dispatch(
+            profileTypeSuccess(json?.account?.[0]?.source?.type?.[0])
           );
         } else {
           return dispatch(

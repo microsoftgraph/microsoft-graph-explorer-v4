@@ -36,7 +36,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       })
       : null;
 
-    const betaJsonUserInfo = actions
+    const profileType = actions
       ? await actions.getProfileInfo({
         selectedVerb: 'GET',
         sampleUrl: BETA_USER_INFO_URL
@@ -44,8 +44,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       : null;
 
     const userInfo = jsonUserInfo.response;
-    const betaUserInfo = betaJsonUserInfo.response;
-    if (userInfo || betaUserInfo) {
+    if (userInfo) {
       let imageUrl = '';
 
       try {
@@ -67,8 +66,8 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
       const user = {
         ...{},
-        displayName: userInfo.displayName || betaUserInfo.names?.[0]?.displayName,
-        emailAddress: userInfo.mail || userInfo.userPrincipalName || betaUserInfo.account?.[0]?.userPrincipalName,
+        displayName: userInfo.displayName,
+        emailAddress: userInfo.mail || userInfo.userPrincipalName,
         profileImageUrl: imageUrl
       };
 
