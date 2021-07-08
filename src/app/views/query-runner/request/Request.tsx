@@ -77,7 +77,7 @@ export class Request extends Component<IRequestComponent, any> {
         headerText={messages['modify permissions']}
       >
         <div style={containerStyle}>
-          <Permission permissionModeType={this.props.permissionModeType} />
+          <Permission />
         </div>
       </PivotItem>,
     ];

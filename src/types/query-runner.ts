@@ -1,5 +1,4 @@
 import { ITheme } from '@uifabric/styling';
-import { PERMISSION_MODE_TYPE } from '../app/services/graph-constants';
 import { Mode } from './enums';
 
 export interface IQueryRunnerState {
@@ -30,7 +29,6 @@ export interface IQueryRunnerProps {
     setSampleQuery: Function;
     setQueryResponseStatus: Function;
   };
-  permissionModeType: PERMISSION_MODE_TYPE;
 }
 
 export interface IQueryInputProps {
