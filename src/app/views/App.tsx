@@ -23,7 +23,7 @@ import { clearQueryStatus } from '../services/actions/query-status-action-creato
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { GRAPH_URL } from '../services/graph-constants';
+import { GRAPH_URL, PERMISSION_MODE_TYPE } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
@@ -310,7 +310,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
+    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery, permissionModeType,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
@@ -345,7 +345,7 @@ class App extends Component<IAppProps, IAppState> {
     if (mobileScreen) {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
-    if (permissionModeType && this.state.hideDialog) {
+    if (permissionModeType !== PERMISSION_MODE_TYPE.TeamsApp && this.state.hideDialog) {
       this.showDialog();
     }
     // eslint-disable-next-line react/jsx-no-target-blank
@@ -356,7 +356,7 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        {!permissionModeType && <Dialog
+        {permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && < Dialog
           hidden={this.state.hideDialog}
           dialogContentProps={{
             title: `${translateMessage('Application Permissions')}`,
@@ -418,7 +418,7 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme,
-  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode
+  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode, permissionModeType
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -433,7 +433,8 @@ const mapStateToProps = ({ sidebarProperties, theme,
     termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery,
-    authenticated: !!authToken.token
+    authenticated: !!authToken.token,
+    permissionModeType
   };
 };
 
