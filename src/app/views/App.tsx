@@ -1,6 +1,6 @@
 import {
   Announced,
-  IStackTokens, ITheme, styled
+  IStackTokens, ITheme, styled, Dialog
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
@@ -23,7 +23,7 @@ import { clearQueryStatus } from '../services/actions/query-status-action-creato
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { GRAPH_URL } from '../services/graph-constants';
+import { GRAPH_URL, PERMISSION_MODE_TYPE } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
@@ -40,7 +40,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
-
+import { RSC_URL } from '../services/graph-constants';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -284,6 +284,14 @@ class App extends Component<IAppProps, IAppState> {
     this.props.actions!.toggleSidebar(properties);
   }
 
+  private closeDialog = (): void => {
+    this.setState({ hideDialog: true });
+  };
+
+  private showDialog = (): void => {
+    this.setState({ hideDialog: false });
+  };
+
   public displayAuthenticationSection = (minimised: boolean) => {
     return <div style={{
       display: minimised ? 'block' : 'flex',
@@ -302,7 +310,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
+    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery, permissionModeType,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
@@ -337,10 +345,29 @@ class App extends Component<IAppProps, IAppState> {
     if (mobileScreen) {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
-
+    if (permissionModeType !== PERMISSION_MODE_TYPE.TeamsApp && this.state.hideDialog) {
+      this.showDialog();
+    }
+    // eslint-disable-next-line react/jsx-no-target-blank
+    const teamsapp = <a href={"https://www.bing.com/?form=000010"} target="_blank">{translateMessage('Sample Explorer Teams app')}</a>;
+    //TODO: put in the url when we have this set up ADO #38728
+    // eslint-disable-next-line react/jsx-no-target-blank
+    const rsc = <a href={RSC_URL} target="_blank">{translateMessage('resource specific consent')}</a>;
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
+        {permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && < Dialog
+          hidden={this.state.hideDialog}
+          dialogContentProps={{
+            title: `${translateMessage('Application Permissions')}`,
+            showCloseButton: true,
+          }}
+          onDismiss={this.closeDialog}
+        >
+          <p>{translateMessage('Resource Specific Consent popup')} {teamsapp}. <br /> &nbsp;</p>
+          <p>{translateMessage('Learn more about')} {rsc}.</p>
+
+        </Dialog>}
         <div className={`container-fluid ${classes.app}`}>
           <Announced message={!showSidebar ?
             translateMessage('Sidebar minimized') : translateMessage('Sidebar maximized')} />
@@ -385,13 +412,13 @@ class App extends Component<IAppProps, IAppState> {
             </div>
           </div>
         </div>
-      </ThemeContext.Provider>
+      </ThemeContext.Provider >
     );
   }
 }
 
 const mapStateToProps = ({ sidebarProperties, theme,
-  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode
+  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode, permissionModeType
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -406,7 +433,8 @@ const mapStateToProps = ({ sidebarProperties, theme,
     termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery,
-    authenticated: !!authToken.token
+    authenticated: !!authToken.token,
+    permissionModeType
   };
 };
 
