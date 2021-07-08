@@ -27,8 +27,8 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   }
 
   const filterPermissionsForRSC = () => {
-    return (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp) 
-      ? permissions.filter(isRSC) 
+    return (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp)
+      ? permissions.filter(isRSC)
       : permissions;
   }
 
@@ -68,6 +68,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     return displayNoPermissionsFoundMessage();
   }
 
+  const isDelegatedPermissions = permissionModeType === PERMISSION_MODE_TYPE.User;
   return (
     <>
       <Label className={classes.permissionLength}>
@@ -75,11 +76,11 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
       </Label>
       <Label className={classes.permissionText}>
         {!tokenPresent
-          && <FormattedMessage id={permissionModeType
+          && <FormattedMessage id={isDelegatedPermissions
             ? 'sign in to consent to permissions'
             : 'sign in to consent to application permissions'} />}
         {tokenPresent
-          && <FormattedMessage id={permissionModeType
+          && <FormattedMessage id={isDelegatedPermissions
             ? 'permissions required to run the query'
             : 'application permissions required to run the query'} />}
       </Label>

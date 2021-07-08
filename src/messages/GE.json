@@ -365,4 +365,5 @@
   "Application Permissions": "Application Permissions",
   "Learn more about": "Learn more about",
   "resource specific consent": "resource specific consent"
-}
+  "Graph Explorer Sample App": "Graph Explorer Sample App",
+  "App mode access token error": "Access token is unviewable in application mode for security reasons."
