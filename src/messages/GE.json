@@ -360,5 +360,6 @@
   "As Teams app": "(as Teams app)",
   "Use Explorer as sample Teams application": "Use Explorer as sample Teams application",
   "Use Explorer as logged-in user": "Use Explorer as logged-in user",
+  "Graph Explorer Sample App": "Graph Explorer Sample App",
   "App mode access token error": "Access token is unviewable in application mode for security reasons."
 }

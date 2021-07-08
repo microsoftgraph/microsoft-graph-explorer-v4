@@ -16,3 +16,4 @@ export enum PERMISSION_MODE_TYPE {
     User
 }
 export const RSC_PERMISSIONS_ENDINGS = [".Group", ".Chat"];
+export const APP_IMAGE = "https://docs.microsoft.com/en-us/microsoftteams/platform/assets/icons/graph-icon-1.png";
