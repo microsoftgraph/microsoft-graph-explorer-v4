@@ -1,5 +1,4 @@
 import { MessageBarType } from 'office-ui-fabric-react';
-
 import { geLocale } from '../../../appLocale';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
@@ -13,6 +12,10 @@ import {
   FETCH_SCOPES_PENDING,
   FETCH_SCOPES_SUCCESS,
 } from '../redux-constants';
+import {
+  PERMS_SCOPE,
+  PERMISSION_MODE_TYPE
+} from '../graph-constants';
 import {
   getAuthTokenSuccess,
   getConsentedScopesSuccess,
@@ -43,8 +46,13 @@ export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
-      const { devxApi, permissionsPanelOpen, sampleQuery: query }: IRootState = getState();
+      const { devxApi, permissionsPanelOpen, permissionModeType, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
+      const permsScopeLookup = {
+        [PERMISSION_MODE_TYPE.User]: PERMS_SCOPE.WORK,
+        [PERMISSION_MODE_TYPE.TeamsApp]: PERMS_SCOPE.APPLICATION,
+      }
+      const scope = permsScopeLookup[permissionModeType];
 
       if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);
@@ -53,14 +61,16 @@ export function fetchScopes(): Function {
         if (!sampleUrl) {
           throw new Error('url is invalid');
         }
-
-        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}`;
+        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scope}`;
         hasUrl = true;
       }
 
       if (devxApi.parameters) {
-        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters
-          }`;
+        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters}`;
+      }
+
+      if (permissionsPanelOpen) {
+        permissionsUrl = `${devxApi.baseUrl}/permissions?scopeType=${scope}`;
       }
 
       const headers = {

@@ -2,10 +2,10 @@ import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { IPermission } from '../../../../../types/permissions';
 import { IRootState } from '../../../../../types/root';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
+import { PERMISSION_MODE_TYPE, RSC_PERMISSIONS_ENDINGS } from '../../../../services/graph-constants';
 import { setConsentedStatus } from './util';
 
 interface ITabList {
@@ -18,11 +18,23 @@ interface ITabList {
 
 const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) => {
   const dispatch = useDispatch();
-  const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
+  const { consentedScopes, scopes, authToken, permissionModeType } = useSelector((state: IRootState) => state);
   const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
   const tokenPresent = !!authToken.token;
 
-  setConsentedStatus(tokenPresent, permissions, consentedScopes);
+  const isRSC = (permission: IPermission) => {
+    return RSC_PERMISSIONS_ENDINGS.some((ending) => permission.value.indexOf(ending) !== -1)
+  }
+
+  const filterPermissionsForRSC = () => {
+    return (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp)
+      ? permissions.filter(isRSC)
+      : permissions;
+  }
+
+  const filteredPermissions = filterPermissionsForRSC();
+
+  setConsentedStatus(tokenPresent, filteredPermissions, consentedScopes);
 
   const openPermissionsPanel = () => {
     dispatch(togglePermissionsPanel(true));
@@ -52,33 +64,39 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     return displayNotSignedInMessage();
   }
 
+  if (filteredPermissions.length === 0) {
+    return displayNoPermissionsFoundMessage();
+  }
 
-
+  const isDelegatedPermissions = permissionModeType === PERMISSION_MODE_TYPE.User;
   return (
     <>
       <Label className={classes.permissionLength}>
-        <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
+        <FormattedMessage id='Permissions' />&nbsp;({filteredPermissions.length})
       </Label>
       <Label className={classes.permissionText}>
-        {!tokenPresent && <FormattedMessage id='sign in to consent to permissions' />}
-        {tokenPresent && <FormattedMessage id='permissions required to run the query' />}
+        {!tokenPresent
+          && <FormattedMessage id={isDelegatedPermissions
+            ? 'sign in to consent to permissions'
+            : 'sign in to consent to application permissions'} />}
+        {tokenPresent
+          && <FormattedMessage id={isDelegatedPermissions
+            ? 'permissions required to run the query'
+            : 'application permissions required to run the query'} />}
       </Label>
       <DetailsList styles={{ root: { maxHeight } }}
-        items={permissions}
+        items={filteredPermissions}
         columns={columns}
         onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}
         selectionMode={SelectionMode.none}
         layoutMode={DetailsListLayoutMode.justified}
         onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
-      {permissions && permissions.length === 0 &&
-        displayNoPermissionsFoundMessage()
+      {filteredPermissions
+        && filteredPermissions.length === 0
+        && displayNoPermissionsFoundMessage()
       }
     </>
   );
 };
 
 export default TabList;
-
-
-
-

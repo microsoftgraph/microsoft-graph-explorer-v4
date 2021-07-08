@@ -66,8 +66,7 @@ const appState: any = store({
     selectedVersion: 'v1.0',
   },
   termsOfUse: true,
-  theme: currentTheme,
-
+  theme: currentTheme
 });
 
 function refreshAccessToken() {

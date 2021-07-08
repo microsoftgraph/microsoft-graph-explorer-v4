@@ -10,7 +10,8 @@ import { IProfileProps, IProfileState } from '../../../../types/profile';
 import { IRootState } from '../../../../types/root';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
-import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
+import { APP_IMAGE, PERMISSION_MODE_TYPE, USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
+import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 
@@ -103,11 +104,16 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       graphExplorerMode,
     }: any = this.props;
 
+    const permissionModeTypeInfo = {
+      [PERMISSION_MODE_TYPE.User]: [user.displayName + ' ' + translateMessage('As user'), user.profileImageUrl, user.emailAddress],
+      [PERMISSION_MODE_TYPE.TeamsApp]: ['Graph Explorer Sample App', APP_IMAGE, ""],
+    }
+
     const persona: IPersonaSharedProps = {
-      imageUrl: user.profileImageUrl,
+      imageUrl: permissionModeTypeInfo[this.props.permissionModeType][1],
       imageInitials: this.getInitials(user.displayName),
-      text: user.displayName,
-      secondaryText: user.emailAddress,
+      text: permissionModeTypeInfo[this.props.permissionModeType][0],
+      secondaryText: permissionModeTypeInfo[this.props.permissionModeType][2],
     };
 
     const classes = classNames(this.props);
@@ -190,7 +196,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-function mapStateToProps({ sidebarProperties, theme, graphExplorerMode }: IRootState) {
+function mapStateToProps({ sidebarProperties, theme, graphExplorerMode, permissionModeType }: IRootState) {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
 
@@ -198,7 +204,8 @@ function mapStateToProps({ sidebarProperties, theme, graphExplorerMode }: IRootS
     mobileScreen: !!sidebarProperties.mobileScreen,
     appTheme: theme,
     minimised: !mobileScreen && !showSidebar,
-    graphExplorerMode
+    graphExplorerMode,
+    permissionModeType
   };
 }
 

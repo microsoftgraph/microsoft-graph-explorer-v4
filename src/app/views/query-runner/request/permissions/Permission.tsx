@@ -18,6 +18,7 @@ import { componentNames, telemetry } from '../../../../../telemetry';
 import { IPermission, IPermissionProps, IPermissionState } from '../../../../../types/permissions';
 import { IRootState } from '../../../../../types/root';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
+import { PERMISSION_MODE_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { convertVhToPx } from '../../../common/dimensions-adjustment';
@@ -39,9 +40,12 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 
   public componentDidUpdate = (prevProps: IPermissionProps) => {
-    if ((prevProps.sample !== this.props.sample) || (prevProps.permissionsPanelOpen !== this.props.permissionsPanelOpen)) {
+    if (prevProps.sample !== this.props.sample
+      || prevProps.permissionsPanelOpen !== this.props.permissionsPanelOpen
+      || prevProps.permissionModeType !== this.props.permissionModeType) {
       this.getPermissions();
     }
+
     const permissions = this.props.scopes.data;
     if (prevProps.scopes.data !== permissions) {
       this.setState({
@@ -60,7 +64,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       || nextProps.consentedScopes !== this.props.consentedScopes
       || nextProps.dimensions !== this.props.dimensions
       || nextProps.permissionsPanelOpen !== this.props.permissionsPanelOpen
-      || nextState.permissions !== this.state.permissions;
+      || nextState.permissions !== this.state.permissions
+      || nextProps.permissionModeType !== this.props.permissionModeType;
     return shouldUpdate;
   }
 
@@ -156,6 +161,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       tokenPresent,
       panel,
       intl: { messages },
+      permissionModeType
     }: any = this.props;
 
     const columns: IColumn[] = [
@@ -169,6 +175,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
       }
     ];
 
+    const permissionModeTypeIsUser = permissionModeType === PERMISSION_MODE_TYPE.User;
+
     if (!panel) {
       columns.push(
         {
@@ -176,36 +184,42 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           name: messages.Description,
           fieldName: 'consentDescription',
           isResizable: true,
-          minWidth: (tokenPresent) ? 400 : 600,
-          maxWidth: (tokenPresent) ? 600 : 1000,
+          minWidth: (tokenPresent)
+            ? (permissionModeTypeIsUser ? 400 : 800)
+            : 600,
+          maxWidth: (tokenPresent)
+            ? (permissionModeTypeIsUser ? 600 : 1300)
+            : 1000,
           isMultiline: true
         }
       );
     }
 
-    columns.push(
-      {
-        key: 'isAdmin',
-        isResizable: true,
-        name: messages['Admin consent required'],
-        fieldName: 'isAdmin',
-        minWidth: (tokenPresent) ? 150 : 200,
-        maxWidth: (tokenPresent) ? 200 : 300,
-        ariaLabel: translateMessage('Administrator permission')
-      }
-    );
-
-    if (tokenPresent) {
+    if (permissionModeTypeIsUser) {
       columns.push(
         {
-          key: 'consented',
-          name: messages.Status,
-          isResizable: false,
-          fieldName: 'consented',
-          minWidth: 100,
-          maxWidth: 100
+          key: 'isAdmin',
+          isResizable: true,
+          name: translateMessage('Admin consent required'),
+          fieldName: 'isAdmin',
+          minWidth: (tokenPresent) ? 150 : 200,
+          maxWidth: (tokenPresent) ? 200 : 300,
+          ariaLabel: translateMessage('Administrator permission')
         }
       );
+
+      if (tokenPresent) {
+        columns.push(
+          {
+            key: 'consented',
+            name: messages.Status,
+            isResizable: false,
+            fieldName: 'consented',
+            minWidth: 100,
+            maxWidth: 100
+          }
+        );
+      }
     }
     return columns;
   }
@@ -273,14 +287,22 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 }
 
-function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dimensions, permissionsPanelOpen }: IRootState) {
+function mapStateToProps({
+  sampleQuery,
+  scopes,
+  authToken,
+  consentedScopes,
+  dimensions,
+  permissionsPanelOpen,
+  permissionModeType }: IRootState) {
   return {
     sample: sampleQuery,
     scopes,
     tokenPresent: authToken.token,
     consentedScopes,
     dimensions,
-    permissionsPanelOpen
+    permissionsPanelOpen,
+    permissionModeType
   };
 }
 

@@ -6,7 +6,6 @@ import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import { geLocale } from '../../appLocale';
 import { authenticationWrapper } from '../../modules/authentication';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
@@ -351,13 +350,13 @@ class App extends Component<IAppProps, IAppState> {
                 {mobileScreen && appTitleDisplayOnMobileScreen(
                   stackTokens,
                   classes,
+                  minimised,
                   this.toggleSidebar)}
 
                 {!mobileScreen && appTitleDisplayOnFullScreen(
                   classes,
                   minimised,
-                  this.toggleSidebar
-                )}
+                  this.toggleSidebar)}
 
                 <hr className={classes.separator} />
 

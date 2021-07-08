@@ -37,7 +37,8 @@ export function appTitleDisplayOnFullScreen(
 export function appTitleDisplayOnMobileScreen(
   stackTokens: IStackTokens,
   classes: any,
-  toggleSidebar: Function
+  minimised: any,
+  toggleSidebar: Function,
 ): React.ReactNode {
   return <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
     <>
