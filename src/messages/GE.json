@@ -17,7 +17,7 @@
   " with your work or school account from Microsoft.": " with your work or school account from Microsoft.",
   "Submit": "Submit",
   "Using demo tenant": "You are currently using a sample account.",
-  "To access your own data:": "To access your own data:",
+  "To access your own data:": "Sign in to access your own data.",
   "sign out": "Sign out",
   "History": "History",
   "Method": "Method",
@@ -352,5 +352,6 @@
   "Missing url": "Please enter a valid url to run the query",
   "This response contains an @odata property.": "This response contains an @odata property.",
   "Click here to follow the link": "Click here to follow the link",
-  "Signing you out...": "Signing you out..."
+  "Signing you out...": "Signing you out...",
+  "Admin consent not required": "Admin consent is not required"
 }

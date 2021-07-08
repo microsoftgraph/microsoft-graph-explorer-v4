@@ -5,13 +5,11 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { getSnippet } from '../../../services/actions/snippet-action-creator';
 import { Monaco } from '../../common';
-import { genericCopy } from '../../common/copy';
+import { trackedGenericCopy } from '../../common/copy';
 
-import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { IQuery } from '../../../../types/query-runner';
-import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
 import { IRootState } from '../../../../types/root';
+import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 
 interface ISnippetProps {
   language: string;
@@ -69,10 +67,12 @@ function Snippet(props: ISnippetProps) {
           <IconButton
             style={{ float: 'right', zIndex: 1 }}
             iconProps={copyIcon}
-            onClick={async () => {
-              genericCopy(snippet);
-              trackSnippetCopyEvent(sampleQuery, language);
-            }}
+            onClick={async () =>
+              trackedGenericCopy(
+                snippet,
+                CODE_SNIPPETS_COPY_BUTTON,
+                sampleQuery,
+                { Language: language })}
           />
           <Monaco
             body={snippet}
@@ -89,14 +89,4 @@ function Snippet(props: ISnippetProps) {
       }
     </div>
   );
-}
-
-function trackSnippetCopyEvent(query: IQuery, language: string) {
-  const sanitizedUrl = sanitizeQueryUrl(query.sampleUrl);
-  telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
-    {
-      ComponentName: componentNames.CODE_SNIPPETS_COPY_BUTTON,
-      SelectedLanguage: language,
-      QuerySignature: `${query.selectedVerb} ${sanitizedUrl}`
-    });
 }

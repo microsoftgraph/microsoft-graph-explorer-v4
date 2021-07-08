@@ -4,6 +4,7 @@ import { IAction } from '../../types/action';
 import { IQuery } from '../../types/query-runner';
 import { IRootState } from '../../types/root';
 import {
+  FETCH_ADAPTIVE_CARD_ERROR,
   FETCH_SCOPES_ERROR,
   GET_SNIPPET_ERROR,
   SAMPLES_FETCH_ERROR,
@@ -39,6 +40,15 @@ const telemetryMiddleware =
       case SAMPLES_FETCH_ERROR: {
         trackException(
           componentNames.FETCH_SAMPLES_ACTION,
+          state.sampleQuery,
+          action.response,
+          {}
+        );
+        break;
+      }
+      case FETCH_ADAPTIVE_CARD_ERROR: {
+        trackException(
+          componentNames.GET_ADAPTIVE_CARD_ACTION,
           state.sampleQuery,
           action.response,
           {}

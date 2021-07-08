@@ -24,6 +24,7 @@ import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
+import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
@@ -234,18 +235,15 @@ export class History extends Component<IHistoryProps, any> {
 
   public renderGroupHeader = (props: any): any => {
     const classes = classNames(this.props);
-    const {
-      intl: { messages },
-    }: any = this.props;
-
-    // tslint:disable
-    const expandText = messages.Expand;
-    const collapseText = messages.Collapse;
-    // tslint:enable
+    const expandText = translateMessage('Expand');
+    const collapseText = translateMessage('Collapse');
+    const groupName: string = props.group!.name;
+    const groupCount: string = props.group!.count;
+    const collapseButtonLabel: string = props.group!.isCollapsed ? `${expandText} ${groupName}` : `${collapseText} ${groupName}`;
 
     return (
       <div
-        aria-label={props.group!.name}
+        aria-label={`${groupName} has ${groupCount} items`}
         style={{
           display: 'flex',
           justifyContent: 'center',
@@ -257,48 +255,56 @@ export class History extends Component<IHistoryProps, any> {
             className={classes.groupHeaderRow}
             onClick={this.onToggleCollapse(props)}
           >
-            <IconButton
-              className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
-              iconProps={{
-                iconName: props.group!.isCollapsed
-                  ? 'ChevronRightSmall'
-                  : 'ChevronDownSmall',
-              }}
-              title={
-                props.group!.isCollapsed
-                  ? `${expandText} ${props.group!.name}`
-                  : `${collapseText} ${props.group!.name}`
-              }
-              ariaLabel={
-                props.group!.isCollapsed
-                  ? `${expandText} ${props.group!.name}`
-                  : `${collapseText} ${props.group!.name}`
-              }
-              onClick={() => this.onToggleCollapse(props)}
-            />
+            <TooltipHost
+              content={collapseButtonLabel}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+              styles={{ root: { display: 'inline-block' } }}>
+              <IconButton
+                className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
+                iconProps={{
+                  iconName: props.group!.isCollapsed
+                    ? 'ChevronRightSmall'
+                    : 'ChevronDownSmall',
+                }}
+                ariaLabel={collapseButtonLabel}
+                onClick={() => this.onToggleCollapse(props)}
+              />
+            </TooltipHost>
             <div className={classes.groupTitle}>
-              <span>{props.group!.name}</span>
+              <span>{groupName}</span>
               <span className={classes.headerCount}>
-                ({props.group!.count})
+                ({groupCount})
               </span>
             </div>
           </div>
         </div>
         <div className={'col-md-4'} style={{ display: 'inline-block' }}>
-          <IconButton
-            className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
-            iconProps={{ iconName: 'Delete' }}
-            title={`${messages['Delete requests']} : ${props.group!.name}`}
-            ariaLabel='delete group'
-            onClick={() => this.showDialog(props.group!.name)}
-          />
-          <IconButton
-            className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
-            iconProps={{ iconName: 'Download' }}
-            title={`${messages.Export} : ${props.group!.name}`}
-            ariaLabel='export group'
-            onClick={() => this.exportHistoryByCategory(props.group!.name)}
-          />
+          <div className={`${classes.pullRight}`}>
+            <TooltipHost
+              content={`${translateMessage('Export')} ${groupName} queries`}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}>
+              <IconButton
+                className={`${classes.groupHeaderRowIcon}`}
+                iconProps={{ iconName: 'Download' }}
+                ariaLabel={`${translateMessage('Export')} ${groupName} queries`}
+                onClick={() => this.exportHistoryByCategory(groupName)}
+              />
+            </TooltipHost>
+            <TooltipHost
+              content={`${translateMessage('Delete')} ${groupName} queries`}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }} >
+              <IconButton
+                className={`${classes.groupHeaderRowIcon}`}
+                iconProps={{ iconName: 'Delete' }}
+                ariaLabel={`${translateMessage('Delete')} ${groupName} queries`}
+                onClick={() => this.showDialog(groupName)}
+              />
+            </TooltipHost>
+
+          </div>
         </div>
       </div>
     );
