@@ -1,3 +1,6 @@
+import { telemetry } from '../../../telemetry';
+import { IQuery } from '../../../types/query-runner';
+
 export function genericCopy(text: string) {
   const element = document.createElement('textarea');
   element.value = text;
@@ -6,7 +9,7 @@ export function genericCopy(text: string) {
 
   document.execCommand('copy');
   document.body.removeChild(element);
-  
+
   return Promise.resolve('copied');
 }
 
@@ -21,4 +24,14 @@ export function copy(id: string) {
   textArea.blur();
 
   return Promise.resolve('copied');
+}
+
+export function trackedGenericCopy(
+  text: string,
+  componentName: string,
+  sampleQuery?: IQuery,
+  properties?: { [key: string]: string }
+) {
+  genericCopy(text);
+  telemetry.trackCopyButtonClickEvent(componentName, sampleQuery, properties);
 }
