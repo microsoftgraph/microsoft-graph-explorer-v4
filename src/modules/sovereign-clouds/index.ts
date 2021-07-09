@@ -51,5 +51,6 @@ export function replaceBaseUrl(url: string): string {
 }
 
 export function storeCloudValue(value: string): void {
+  localStorage.removeItem(storageKey);
   localStorage.setItem(storageKey, value);
 }

@@ -13,10 +13,10 @@ import {
 } from '../../../modules/sovereign-clouds';
 import { Sovereign } from '../../../modules/sovereign-clouds/cloud-options';
 import { IRootState } from '../../../types/root';
-import { signOut } from '../../services/actions/auth-action-creators';
 import { setActiveCloud } from '../../services/actions/cloud-action-creator';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
+import { usePrevious } from '../../services/hooks/usePrevious';
 import { translateMessage } from '../../utils/translate-messages';
 
 interface ISovereignCloudsProps {
@@ -43,6 +43,9 @@ export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt
     }));
   }
 
+  // Store the previous cloud value
+  const previousCloud: any = usePrevious(currentCloud);
+
   const dialogContentProps = {
     type: DialogType.largeHeader,
     title: translateMessage('You have access to sovereign clouds'),
@@ -67,9 +70,14 @@ export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt
     }
     toggleCloudSelector();
 
-    if (profile) {
-      authenticationWrapper.clearCache();
-      dispatch(signOut());
+    const isCloudChanged = previousCloud?.name !== current?.name;
+    const shouldLogUserOut = previousCloud?.loginUrl !== current?.loginUrl;
+
+    if (previousCloud && isCloudChanged) {
+      if (profile && shouldLogUserOut) {
+        authenticationWrapper.clearCache();
+      }
+      window.location.reload();
     }
   }
 
