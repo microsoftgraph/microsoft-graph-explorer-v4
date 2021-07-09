@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
+import { replaceBaseUrl } from '../../../../modules/sovereign-clouds';
 import { Mode } from '../../../../types/enums';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import { IRootState } from '../../../../types/root';
@@ -32,7 +33,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     const jsonUserInfo = actions
       ? await actions.getProfileInfo({
         selectedVerb: 'GET',
-        sampleUrl: USER_INFO_URL
+        sampleUrl: replaceBaseUrl(USER_INFO_URL)
       })
       : null;
 
@@ -44,7 +45,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         const userPicture = actions
           ? await actions.getProfileInfo({
             selectedVerb: 'GET',
-            sampleUrl: USER_PICTURE_URL
+            sampleUrl: replaceBaseUrl(USER_PICTURE_URL)
           })
           : null;
 
