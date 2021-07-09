@@ -45,7 +45,9 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   public logOut() {
     this.deleteHomeAccountId();
-    msalApplication.logout();
+    msalApplication.logout({
+      authority: this.getAuthority()
+    });
   }
 
   public async logOutPopUp() {
