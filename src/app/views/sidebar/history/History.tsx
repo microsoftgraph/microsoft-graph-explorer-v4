@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { replaceBaseUrl } from '../../../../modules/sovereign-clouds';
 
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { SortOrder } from '../../../../types/enums';
@@ -356,7 +357,8 @@ export class History extends Component<IHistoryProps, any> {
 
   private onRunQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
-    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
+    const queryUrl = replaceBaseUrl(query.url);
+    const { sampleUrl, queryVersion } = parseSampleUrl(queryUrl);
     const sampleQuery: IQuery = {
       sampleUrl,
       selectedVerb: query.method,
@@ -422,7 +424,8 @@ export class History extends Component<IHistoryProps, any> {
 
   private onViewQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
-    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
+    const queryUrl = replaceBaseUrl(query.url);
+    const { sampleUrl, queryVersion } = parseSampleUrl(queryUrl);
     const sampleQuery: IQuery = {
       sampleUrl,
       selectedVerb: query.method,

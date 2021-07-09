@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
+import { replaceBaseUrl } from '../../../../modules/sovereign-clouds';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
@@ -16,6 +17,7 @@ import * as queryActionCreators from '../../../services/actions/query-action-cre
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
+import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
@@ -229,13 +231,14 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   private querySelected = (query: any) => {
-    const { actions, cloud, tokenPresent, profile } = this.props;
+    const { actions, tokenPresent, profile } = this.props;
     const selectedQuery = query;
     if (!selectedQuery) {
       return;
     }
 
-    const sampleUrl = cloud.baseUrl + selectedQuery.requestUrl;
+    let sampleUrl = GRAPH_URL + selectedQuery.requestUrl;
+    sampleUrl = replaceBaseUrl(sampleUrl);
     const { queryVersion } = parseSampleUrl(sampleUrl);
     const sampleQuery: IQuery = {
       sampleUrl,
@@ -278,8 +281,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   private trackSampleQueryClickEvent(selectedQuery: ISampleQuery) {
-    const { cloud } = this.props;
-    const sanitizedUrl = sanitizeQueryUrl(cloud.baseUrl + selectedQuery.requestUrl);
+    let sampleUrl = GRAPH_URL + selectedQuery.requestUrl;
+    sampleUrl = replaceBaseUrl(sampleUrl);
+    const sanitizedUrl = sanitizeQueryUrl(sampleUrl);
     telemetry.trackEvent(
       eventTypes.LISTITEM_CLICK_EVENT,
       {
@@ -454,13 +458,12 @@ function displayTipMessage(actions: any, selectedQuery: ISampleQuery) {
   });
 }
 
-function mapStateToProps({ authToken, profile, samples, theme, cloud }: IRootState) {
+function mapStateToProps({ authToken, profile, samples, theme }: IRootState) {
   return {
     tokenPresent: !!authToken.token,
     profile,
     samples,
-    appTheme: theme,
-    cloud
+    appTheme: theme
   };
 }
 
