@@ -23,6 +23,7 @@ import { clearQueryStatus } from '../services/actions/query-status-action-creato
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
+import { setPopUp } from '../services/actions/permission-mode-action-creator';
 import { GRAPH_URL, PERMISSION_MODE_TYPE } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
@@ -66,7 +67,6 @@ interface IAppProps {
 interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
-  hideDialog: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -74,10 +74,10 @@ class App extends Component<IAppProps, IAppState> {
 
   constructor(props: IAppProps) {
     super(props);
+    console.log(this.props);
     this.state = {
       selectedVerb: 'GET',
-      mobileScreen: false,
-      hideDialog: true
+      mobileScreen: false
     };
   }
 
@@ -285,11 +285,15 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private closeDialog = (): void => {
-    this.setState({ hideDialog: true });
+    console.log(this.props)
+    console.log("HIIII")
+    const { actions }: any = this.props;
+    actions.setPopUp(true);
   };
 
   private showDialog = (): void => {
-    this.setState({ hideDialog: false });
+    const { actions }: any = this.props;
+    actions.setPopUp(false);
   };
 
   public displayAuthenticationSection = (minimised: boolean) => {
@@ -310,7 +314,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery, permissionModeType,
+    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery, permissionModeType, hideDialog,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
@@ -345,7 +349,17 @@ class App extends Component<IAppProps, IAppState> {
     if (mobileScreen) {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
-    if (permissionModeType !== PERMISSION_MODE_TYPE.TeamsApp && this.state.hideDialog) {
+    if (permissionModeType !== PERMISSION_MODE_TYPE.TeamsApp && hideDialog) {
+      const query2: IQuery = {
+        sampleUrl: "https://graph.microsoft.com/v1.0/teams/b126aba2-a1fb-4e03-acc3-410b5d5af2dc/installedApps?$expand=teamsAppDefinition",
+        selectedVerb: "GET",
+        selectedVersion: "v1.0",
+        sampleHeaders: []
+      }
+
+      //actions.runQuery(query2);
+      console.log("DID THE API LOG WORK")
+
       this.showDialog();
     }
     // eslint-disable-next-line react/jsx-no-target-blank
@@ -357,7 +371,7 @@ class App extends Component<IAppProps, IAppState> {
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         {permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && < Dialog
-          hidden={this.state.hideDialog}
+          hidden={hideDialog || !!hideDialog}
           dialogContentProps={{
             title: `${translateMessage('Application Permissions')}`,
             showCloseButton: true,
@@ -418,12 +432,13 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme,
-  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode, permissionModeType
+  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode, permissionModeType, hideDialog
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
 
   return {
+    hideDialog,
     appTheme: theme,
     graphExplorerMode,
     profile,
@@ -442,6 +457,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     actions: bindActionCreators({
       clearQueryStatus,
+      setPopUp,
       clearTermsOfUse,
       runQuery,
       setSampleQuery,

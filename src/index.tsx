@@ -66,6 +66,7 @@ const appState: any = store({
     selectedVersion: 'v1.0',
   },
   termsOfUse: true,
+  hideDialog: true,
   theme: currentTheme
 });
 
