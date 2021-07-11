@@ -1,8 +1,9 @@
 import { IAction } from '../../../types/action';
 import { PERMISSION_MODE_TYPE } from '../graph-constants';
 import {
-    APP_POP_UP_SUCCESS,
-    CHANGE_PERMISSIONS_MODE_SUCCESS
+    CLOSE_POP_UP_SUCCESS,
+    CHANGE_PERMISSIONS_MODE_SUCCESS,
+    OPEN_POP_UP_SUCCESS
 } from '../redux-constants';
 
 export function changeMode(newPerm: PERMISSION_MODE_TYPE): IAction {
@@ -12,9 +13,16 @@ export function changeMode(newPerm: PERMISSION_MODE_TYPE): IAction {
     };
 }
 
-export function setPopUp(response: boolean): IAction {
+export function closePopUp(response: boolean): IAction {
     return {
-        type: APP_POP_UP_SUCCESS,
+        type: CLOSE_POP_UP_SUCCESS,
+        response,
+    };
+}
+
+export function openPopUp(response: boolean): IAction {
+    return {
+        type: OPEN_POP_UP_SUCCESS,
         response,
     };
 }

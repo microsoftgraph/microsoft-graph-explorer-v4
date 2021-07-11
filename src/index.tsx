@@ -56,6 +56,7 @@ const appState: any = store({
   authToken: { token: false, pending: false },
   consentedScopes: [],
   isLoadingData: false,
+  hideDialog: true,
   profile: null,
   queryRunnerStatus: null,
   sampleQuery: {
@@ -66,7 +67,6 @@ const appState: any = store({
     selectedVersion: 'v1.0',
   },
   termsOfUse: true,
-  hideDialog: true,
   theme: currentTheme
 });
 

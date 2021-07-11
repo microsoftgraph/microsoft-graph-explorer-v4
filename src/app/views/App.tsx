@@ -23,7 +23,7 @@ import { clearQueryStatus } from '../services/actions/query-status-action-creato
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { setPopUp } from '../services/actions/permission-mode-action-creator';
+import { closePopUp, openPopUp } from '../services/actions/permission-mode-action-creator';
 import { GRAPH_URL, PERMISSION_MODE_TYPE } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
@@ -46,17 +46,20 @@ interface IAppProps {
   theme?: ITheme;
   styles?: object;
   intl: InjectedIntl;
+  hideDialog: boolean;
+  sidebarProperties: ISidebarProps;
   profile: object;
   queryState: object | null;
   termsOfUse: boolean;
   graphExplorerMode: Mode;
-  sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
   authenticated: boolean;
   actions: {
     clearQueryStatus: Function;
     clearTermsOfUse: Function;
     setSampleQuery: Function;
+    closePopUp: Function;
+    openPopUp: Function;
     runQuery: Function;
     toggleSidebar: Function;
     signIn: Function;
@@ -74,7 +77,6 @@ class App extends Component<IAppProps, IAppState> {
 
   constructor(props: IAppProps) {
     super(props);
-    console.log(this.props);
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false
@@ -283,17 +285,17 @@ class App extends Component<IAppProps, IAppState> {
 
     this.props.actions!.toggleSidebar(properties);
   }
-
   private closeDialog = (): void => {
+    let { hideDialog } = this.props;
+    hideDialog = true;
+    this.props.actions!.closePopUp(hideDialog);
+
     console.log(this.props)
-    console.log("HIIII")
-    const { actions }: any = this.props;
-    actions.setPopUp(true);
   };
 
   private showDialog = (): void => {
-    const { actions }: any = this.props;
-    actions.setPopUp(false);
+    console.log("THIS SHOULD BE OEPN")
+    this.props.actions!.openPopUp(false);
   };
 
   public displayAuthenticationSection = (minimised: boolean) => {
@@ -457,7 +459,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     actions: bindActionCreators({
       clearQueryStatus,
-      setPopUp,
+      closePopUp,
+      openPopUp,
       clearTermsOfUse,
       runQuery,
       setSampleQuery,
