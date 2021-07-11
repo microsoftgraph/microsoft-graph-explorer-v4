@@ -17,7 +17,7 @@ import { IRootState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import * as authActionCreators from '../services/actions/auth-action-creators';
-import { runQuery } from '../services/actions/query-action-creators';
+import { runQuery, internalQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
@@ -42,6 +42,7 @@ import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
 import { RSC_URL } from '../services/graph-constants';
+import { responseAreaExpanded } from '../services/reducers/response-expanded-reducer';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -290,11 +291,9 @@ class App extends Component<IAppProps, IAppState> {
     hideDialog = true;
     this.props.actions!.closePopUp(hideDialog);
 
-    console.log(this.props)
   };
 
   private showDialog = (): void => {
-    console.log("THIS SHOULD BE OEPN")
     this.props.actions!.openPopUp(false);
   };
 
@@ -316,7 +315,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery, permissionModeType, hideDialog,
+    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery, permissionModeType, hideDialog, profile,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
@@ -351,18 +350,16 @@ class App extends Component<IAppProps, IAppState> {
     if (mobileScreen) {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
-    if (permissionModeType !== PERMISSION_MODE_TYPE.TeamsApp && hideDialog) {
+    if (permissionModeType !== PERMISSION_MODE_TYPE.TeamsApp && hideDialog && !!profile) {
       const query2: IQuery = {
-        sampleUrl: "https://graph.microsoft.com/v1.0/teams/b126aba2-a1fb-4e03-acc3-410b5d5af2dc/installedApps?$expand=teamsAppDefinition",
+        sampleUrl: "https://graph.microsoft.com/v1.0/users/" + profile.id + "/teamwork/installedApps",
         selectedVerb: "GET",
         selectedVersion: "v1.0",
         sampleHeaders: []
       }
 
-      //actions.runQuery(query2);
-      console.log("DID THE API LOG WORK")
-
-      this.showDialog();
+      console.log("WILL IT RETURN THE RIGHT THING");
+      actions.internalQuery(query2);
     }
     // eslint-disable-next-line react/jsx-no-target-blank
     const teamsapp = <a href={"https://www.bing.com/?form=000010"} target="_blank">{translateMessage('Sample Explorer Teams app')}</a>;
@@ -463,6 +460,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       openPopUp,
       clearTermsOfUse,
       runQuery,
+      internalQuery,
       setSampleQuery,
       toggleSidebar,
       ...authActionCreators,
