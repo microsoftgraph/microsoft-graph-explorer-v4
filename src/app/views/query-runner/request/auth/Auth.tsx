@@ -65,12 +65,16 @@ export function Auth(props: any) {
       <div>
         <div className={classes.accessTokenContainer}>
           <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
-          <IconButton onClick={handleCopy} iconProps={copyIcon} title='Copy' ariaLabel='Copy' />
-          <IconButton iconProps={tokenDetailsIcon}
-            title={translateMessage('Get token details (Powered by jwt.ms)')}
-            ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
-            href={`https://jwt.ms#access_token=${accessToken}`}
-            target='_blank' />
+          {(permissionModeType === PERMISSION_MODE_TYPE.User) &&
+            <IconButton onClick={handleCopy} iconProps={copyIcon} title='Copy' ariaLabel='Copy' />
+          }
+          {(permissionModeType === PERMISSION_MODE_TYPE.User) &&
+            <IconButton iconProps={tokenDetailsIcon}
+              title={translateMessage('Get token details (Powered by jwt.ms)')}
+              ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
+              href={`https://jwt.ms#access_token=${accessToken}`}
+              target='_blank' />
+          }
         </div>
         {accessTokenComponent}
       </div>
