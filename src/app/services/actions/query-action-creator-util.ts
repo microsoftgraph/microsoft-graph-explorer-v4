@@ -43,10 +43,8 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
     ...sampleHeaders,
   };
 
-  if (proxyUrl === GRAPH_API_SANDBOX_URL) {
-    const authToken = '{token:https://graph.microsoft.com/}';
-    headers.Authorization = `Bearer ${authToken}`;
-  }
+  const authToken = '{token:https://graph.microsoft.com/}';
+  headers.Authorization = `Bearer ${authToken}`;
 
   const options: IRequestOptions = { method: query.selectedVerb, headers };
   return { graphUrl, options };
