@@ -7,7 +7,7 @@ import { dimensions } from './dimensions-reducers';
 import { permissionsPanelOpen } from './permissions-panel-reducer';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
 import { scopes } from './permissions-reducer';
-import { profile } from './profile-reducer';
+import { profile, profileType } from './profile-reducer';
 import { sampleQuery } from './query-input-reducers';
 import { isLoadingData } from './query-loading-reducers';
 import { graphResponse } from './query-runner-reducers';
@@ -41,5 +41,6 @@ export default combineReducers({
   termsOfUse,
   theme,
   dimensions,
-  permissionsPanelOpen
+  permissionsPanelOpen,
+  profileType
 });

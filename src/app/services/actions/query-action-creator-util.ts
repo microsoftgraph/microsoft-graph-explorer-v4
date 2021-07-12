@@ -64,6 +64,10 @@ export function isImageResponse(contentType: string | undefined) {
   );
 }
 
+export function isBetaURLResponse(json: any) {
+  return !!json?.account?.[0]?.source?.type?.[0];
+}
+
 export function getContentType(headers: Headers) {
   const contentType = headers.get('content-type');
   if (contentType) {
