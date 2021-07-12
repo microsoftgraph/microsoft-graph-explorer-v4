@@ -1,13 +1,15 @@
 import { IAction } from '../../../types/action';
+import { IAdaptiveCardResponse } from '../../../types/adaptivecard';
 import {
   FETCH_ADAPTIVE_CARD_ERROR,
   FETCH_ADAPTIVE_CARD_PENDING,
   FETCH_ADAPTIVE_CARD_SUCCESS
 } from '../redux-constants';
 
-const initialState = {
+const initialState: IAdaptiveCardResponse = {
   pending: false,
-  data: ''
+  data: undefined,
+  error: ''
 };
 
 export function adaptiveCard(state = initialState, action: IAction): any {
@@ -25,7 +27,8 @@ export function adaptiveCard(state = initialState, action: IAction): any {
     case FETCH_ADAPTIVE_CARD_ERROR:
       return {
         pending: false,
-        data: null
+        data: null,
+        error: action.response
       };
     default:
       return state;

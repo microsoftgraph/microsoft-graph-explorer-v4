@@ -8,11 +8,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../appLocale';
+import { authenticationWrapper } from '../../modules/authentication';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
+import { IRootState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import * as authActionCreators from '../services/actions/auth-action-creators';
@@ -22,7 +24,6 @@ import { clearQueryStatus } from '../services/actions/query-status-action-creato
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { logIn } from '../services/graph-client/msal-service';
 import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
@@ -89,7 +90,7 @@ class App extends Component<IAppProps, IAppState> {
     const sessionId = urlParams.get('sid');
 
     if (sessionId) {
-      const authResp = await logIn(sessionId);
+      const authResp = await authenticationWrapper.logIn(sessionId);
       if (authResp) {
         // @ts-ignore
         this.props.actions!.signIn(authResp.accessToken);
@@ -136,7 +137,7 @@ class App extends Component<IAppProps, IAppState> {
     const urlParams = new URLSearchParams(window.location.search);
 
     const request = urlParams.get('request');
-    const method = urlParams.get('method');
+    const method = this.validateHttpMethod(urlParams.get('method') || '');
     const version = urlParams.get('version');
     const graphUrl = urlParams.get('GraphUrl') || GRAPH_URL;
     const requestBody = urlParams.get('requestBody');
@@ -159,6 +160,15 @@ class App extends Component<IAppProps, IAppState> {
       sampleBody: requestBody ? this.hashDecode(requestBody) : null,
       sampleHeaders: (headers) ? JSON.parse(this.hashDecode(headers)) : [],
     };
+  }
+
+  private validateHttpMethod(method: string): string {
+    method = method.toUpperCase();
+    const validMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+    if (!validMethods.includes(method)) {
+      method = 'GET';
+    }
+    return method;
   }
 
   private hashDecode(requestBody: string): string {
@@ -366,7 +376,7 @@ class App extends Component<IAppProps, IAppState> {
                 <div style={{ marginBottom: 8 }}>
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
-                {statusMessages(queryState, actions)}
+                {statusMessages(queryState, sampleQuery, actions)}
                 {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
                 {
                   // @ts-ignore
@@ -381,21 +391,23 @@ class App extends Component<IAppProps, IAppState> {
   }
 }
 
-const mapStateToProps = (state: any) => {
-  const mobileScreen = !!state.sidebarProperties.mobileScreen;
-  const showSidebar = !!state.sidebarProperties.showSidebar;
+const mapStateToProps = ({ sidebarProperties, theme,
+  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode
+}: IRootState) => {
+  const mobileScreen = !!sidebarProperties.mobileScreen;
+  const showSidebar = !!sidebarProperties.showSidebar;
 
   return {
-    appTheme: state.theme,
-    graphExplorerMode: state.graphExplorerMode,
-    profile: state.profile,
-    queryState: state.queryRunnerStatus,
-    receivedSampleQuery: state.sampleQuery,
-    sidebarProperties: state.sidebarProperties,
-    termsOfUse: state.termsOfUse,
+    appTheme: theme,
+    graphExplorerMode,
+    profile,
+    queryState: queryRunnerStatus,
+    receivedSampleQuery: sampleQuery,
+    sidebarProperties,
+    termsOfUse,
     minimised: !mobileScreen && !showSidebar,
-    sampleQuery: state.sampleQuery,
-    authenticated: !!state.authToken
+    sampleQuery,
+    authenticated: !!authToken.token
   };
 };
 
@@ -418,7 +430,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 const StyledApp = styled(App, appStyles as any);
 const IntlApp = injectIntl(StyledApp);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(IntlApp);
+//@ts-ignore
+export default connect(mapStateToProps, mapDispatchToProps)(IntlApp);

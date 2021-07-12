@@ -8,7 +8,7 @@
 
 name: $(date:yyyyMMdd)$(rev:.r)
 
-pool: MsGraphDevXAzureAgents
+pool: MsGraphBuildAgentsWindows
 
 pr:
   branches:
@@ -58,6 +58,10 @@ jobs:
   - job: One
     displayName: 'Build and test validation'
     steps:
+      - task: CredScan@2
+        inputs:
+          toolMajorVersion: 'V2'
+
       - task: NodeTool@0
         inputs:
           versionSpec: '12.x'
@@ -95,6 +99,11 @@ jobs:
     dependsOn: One
     condition: succeeded()
     steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '12.x'
+        displayName: 'Install Node.js'
+
       - script: |
           npm install
         displayName: 'npm install'

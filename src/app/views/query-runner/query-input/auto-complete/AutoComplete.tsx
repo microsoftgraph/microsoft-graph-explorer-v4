@@ -7,20 +7,19 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IAutoCompleteProps, IAutoCompleteState } from '../../../../../types/auto-complete';
 import { SortOrder } from '../../../../../types/enums';
+import { IRootState } from '../../../../../types/root';
 import * as autoCompleteActionCreators from '../../../../services/actions/autocomplete-action-creators';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
-
-
 import {
   cleanUpSelectedSuggestion, getLastCharacterOf,
+  getLastSymbolInUrl,
   getParametersWithVerb
 } from './auto-complete.util';
 import SuggestionsList from './SuggestionsList';
-
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
@@ -53,7 +52,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }, 10);
   }
 
-  public onBlur = (e: any) => {
+  public updateUrlContent = (e: any) => {
     const userInput = e.target.value;
     this.props.contentChanged(userInput);
   };
@@ -73,7 +72,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     this.initialiseAutoComplete(userInput);
   };
 
-  public onClick = (e: any) => {
+  public selectSuggestion = (e: any) => {
     const selected = e.currentTarget.innerText;
     this.appendSuggestionToUrl(selected);
   };
@@ -169,7 +168,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     const controlPeriod = event.ctrlKey && event.keyCode === KeyCodes.period;
     if (controlSpace || controlPeriod) {
       const userInput = event.target.value;
-      const lastSymbol = this.getLastSymbolInUrl(userInput);
+      const lastSymbol = getLastSymbolInUrl(userInput);
       const previousUserInput = userInput.substring(0, lastSymbol.value + 1);
       if (lastSymbol.key === '/' || lastSymbol.key === '?') {
         const compare = userInput.replace(previousUserInput, '');
@@ -305,6 +304,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     telemetry.trackEvent(eventTypes.DROPDOWN_CHANGE_EVENT,
       {
         ComponentName: componentNames.QUERY_URL_AUTOCOMPLETE_DROPDOWN,
+        QuerySignature: sanitizeQueryUrl(this.state.queryUrl),
         SelectedSuggestion: suggestion
       });
   }
@@ -363,41 +363,14 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     return null;
   }
 
-  private getLastSymbolInUrl(url: string) {
-    const availableSymbols = [
-      {
-        key: '/',
-        value: 0
-      },
-      {
-        key: ',',
-        value: 0
-      },
-      {
-        key: '$',
-        value: 0
-      },
-      {
-        key: '=',
-        value: 0
-      },
-      {
-        key: '&',
-        value: 0
-      },
-      {
-        key: '?',
-        value: 0
-      }
-    ];
-
-    availableSymbols.forEach(element => {
-      element.value = url.lastIndexOf(element.key);
-    });
-    const max = availableSymbols.reduce((prev, current) => (prev.value > current.value) ? prev : current);
-    return max;
+  closeSuggestionDialog = (event: any) => {
+    const { currentTarget, relatedTarget } = event;
+    if (!currentTarget.contains(relatedTarget as Node) && this.state.showSuggestions) {
+      this.setState({
+        showSuggestions: false
+      })
+    }
   }
-
 
   public render() {
     const {
@@ -414,37 +387,38 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }: any = queryInputStyles(currentTheme).autoComplete;
 
     return (
-      <>
+      <div onBlur={this.closeSuggestionDialog}>
         <TextField
           className={autoInput}
           type='text'
           autoComplete='off'
           onChange={this.onChange}
-          onBlur={this.onBlur}
+          onBlur={this.updateUrlContent}
           onKeyDown={this.onKeyDown}
           value={queryUrl}
           componentRef={this.autoCompleteRef}
           onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
+          errorMessage={!queryUrl ? translateMessage('Missing url') : ''}
         />
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
           <SuggestionsList
             filteredSuggestions={filteredSuggestions}
             activeSuggestion={activeSuggestion}
-            onClick={(e: any) => this.onClick(e)} />}
-      </>
+            onClick={(e: any) => this.selectSuggestion(e)} />}
+      </div>
     );
   }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps({ sampleQuery, theme, autoComplete }: IRootState) {
   return {
-    sampleQuery: state.sampleQuery,
-    appTheme: state.theme,
-    autoCompleteOptions: state.autoComplete.data,
-    fetchingSuggestions: state.autoComplete.pending,
-    autoCompleteError: state.autoComplete.error
+    sampleQuery,
+    appTheme: theme,
+    autoCompleteOptions: autoComplete.data,
+    fetchingSuggestions: autoComplete.pending,
+    autoCompleteError: autoComplete.error
   };
 }
 
@@ -459,7 +433,5 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AutoComplete);
+// @ts-ignore
+export default connect(mapStateToProps, mapDispatchToProps)(AutoComplete);

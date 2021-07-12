@@ -7,12 +7,13 @@ import {
   SearchBox,
   SelectionMode
 } from 'office-ui-fabric-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
+import { IRootState } from '../../../../../types/root';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';
 import { setConsentedStatus } from './util';
@@ -30,10 +31,10 @@ const PanelList = ({ messages,
   columns, classes, selection,
   renderItemColumn, renderDetailsHeader }: IPanelList) => {
 
-  const { consentedScopes, scopes, authToken } = useSelector((state: any) => state);
+  const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
   const [permissions, setPermissions] = useState(scopes.data.sort(dynamicSort('value', SortOrder.ASC)));
   const permissionsList: any[] = [];
-  const tokenPresent = !!authToken;
+  const tokenPresent = !!authToken.token;
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 

@@ -1,10 +1,11 @@
 import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode } from 'office-ui-fabric-react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { IPermission } from '../../../../../types/permissions';
-import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 
+import { IPermission } from '../../../../../types/permissions';
+import { IRootState } from '../../../../../types/root';
+import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 import { setConsentedStatus } from './util';
 
 interface ITabList {
@@ -17,9 +18,9 @@ interface ITabList {
 
 const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) => {
   const dispatch = useDispatch();
-  const { consentedScopes, scopes, authToken } = useSelector((state: any) => state);
+  const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
   const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
-  const tokenPresent = !!authToken;
+  const tokenPresent = !!authToken.token;
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 

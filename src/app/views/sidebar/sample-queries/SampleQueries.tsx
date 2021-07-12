@@ -29,6 +29,7 @@ import {
   ISampleQueriesProps,
   ISampleQuery,
 } from '../../../../types/query-runner';
+import { IRootState } from '../../../../types/root';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
@@ -356,6 +357,17 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       );
     }
 
+    let maxWidthOfHumanName = 180;
+    if (window.innerWidth > 1280) {
+      maxWidthOfHumanName = 200;
+    }
+
+    window.onresize = () => {
+      if (window.innerWidth > 1280) {
+        maxWidthOfHumanName = 200;
+      }
+    };
+
     const columns = [
       {
         key: 'authRequiredIcon',
@@ -376,14 +388,14 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         name: '',
         fieldName: 'humanName',
         minWidth: 100,
-        maxWidth: 180,
+        maxWidth: maxWidthOfHumanName,
       },
       {
         key: 'button',
         name: '',
         fieldName: 'button',
-        minWidth: 20,
-        maxWidth: 20,
+        minWidth: 15,
+        maxWidth: 25,
       },
     ];
 
@@ -425,26 +437,28 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         <Announced
           message={`${sampleQueries.length} search results available.`}
         />
-        <DetailsList
-          className={classes.queryList}
-          cellStyleProps={{
-            cellRightPadding: 0,
-            cellExtraRightPadding: 0,
-            cellLeftPadding: 0,
-          }}
-          onRenderItemColumn={this.renderItemColumn}
-          items={sampleQueries}
-          selectionMode={SelectionMode.none}
-          columns={columns}
-          groups={groups}
-          groupProps={{
-            showEmptyGroups: true,
-            onRenderHeader: this.renderGroupHeader,
-          }}
-          onRenderRow={this.renderRow}
-          onRenderDetailsHeader={this.renderDetailsHeader}
-          onItemInvoked={this.querySelected}
-        />
+        <div role='navigation'>
+          <DetailsList
+            className={classes.queryList}
+            cellStyleProps={{
+              cellRightPadding: 0,
+              cellExtraRightPadding: 0,
+              cellLeftPadding: 0,
+            }}
+            onRenderItemColumn={this.renderItemColumn}
+            items={sampleQueries}
+            selectionMode={SelectionMode.none}
+            columns={columns}
+            groups={groups}
+            groupProps={{
+              showEmptyGroups: true,
+              onRenderHeader: this.renderGroupHeader,
+            }}
+            onRenderRow={this.renderRow}
+            onRenderDetailsHeader={this.renderDetailsHeader}
+            onItemInvoked={this.querySelected}
+          />
+        </div>
       </div>
     );
   }
@@ -458,12 +472,12 @@ function displayTipMessage(actions: any, selectedQuery: ISampleQuery) {
   });
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps({ authToken, profile, samples, theme }: IRootState) {
   return {
-    tokenPresent: !!state.authToken,
-    profile: state.profile,
-    samples: state.samples,
-    appTheme: state.theme,
+    tokenPresent: !!authToken.token,
+    profile,
+    samples,
+    appTheme: theme
   };
 }
 
@@ -485,4 +499,5 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 const styledSampleQueries = styled(SampleQueries, sidebarStyles);
 // @ts-ignore
 const IntlSampleQueries = injectIntl(styledSampleQueries);
+// @ts-ignore
 export default connect(mapStateToProps, mapDispatchToProps)(IntlSampleQueries);

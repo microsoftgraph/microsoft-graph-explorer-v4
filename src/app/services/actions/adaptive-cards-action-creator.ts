@@ -1,17 +1,16 @@
-import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import * as AdaptiveCardsTemplateAPI from 'adaptivecards-templating';
-import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAction } from '../../../types/action';
+import { IAdaptiveCardContent } from '../../../types/adaptivecard';
 import { IQuery } from '../../../types/query-runner';
 import { lookupTemplate } from '../../utils/adaptive-cards-lookup';
-import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
+import { ADAPTIVE_CARD_URL } from '../graph-constants';
 import {
   FETCH_ADAPTIVE_CARD_ERROR,
   FETCH_ADAPTIVE_CARD_PENDING,
   FETCH_ADAPTIVE_CARD_SUCCESS,
 } from '../redux-constants';
 
-export function getAdaptiveCardSuccess(result: string = ''): IAction {
+export function getAdaptiveCardSuccess(result: object): IAction {
   return {
     type: FETCH_ADAPTIVE_CARD_SUCCESS,
     response: result,
@@ -39,7 +38,7 @@ export function getAdaptiveCard(
   return async (dispatch: Function) => {
     if (!payload) {
       // no payload so return empty result
-      return dispatch(getAdaptiveCardSuccess());
+      return dispatch(getAdaptiveCardSuccess({}));
     }
 
     if (Object.keys(payload).length === 0) {
@@ -54,38 +53,31 @@ export function getAdaptiveCard(
     }
 
     dispatch(getAdaptiveCardPending());
-
-    return fetch(`https://templates.adaptivecards.io/graph.microsoft.com/${templateFileName}`)
-      .then((resp) => resp.json())
-      .then((fetchResult) => {
-        if (fetchResult.error) {
-          throw fetchResult.error;
-        }
-        // create a card from the template
-        const template = new AdaptiveCardsTemplateAPI.Template(fetchResult);
-        const context: AdaptiveCardsTemplateAPI.IEvaluationContext = {
-          $root: payload,
-        };
-        AdaptiveCardsTemplateAPI.GlobalSettings.getUndefinedFieldValueSubstitutionString = (
-          path: string
-        ) => ' ';
-        const card = template.expand(context);
-        // give back the result of the card
-        return dispatch(getAdaptiveCardSuccess(card));
-      })
-      .catch((error) => {
-        // something wrong happened
-        const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
-        telemetry.trackException(
-          new Error(errorTypes.NETWORK_ERROR),
-          SeverityLevel.Error,
-          {
-            ComponentName: componentNames.GET_ADAPTIVE_CARD_ACTION,
-            QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
-            Message: `${error}`
-          }
-        );
-        return dispatch(getAdaptiveCardError(error));
-      });
+    try {
+      const response = await fetch(`${ADAPTIVE_CARD_URL}/${templateFileName}`);
+      const templatePayload = await response.json();
+      const card = createCardFromTemplate(templatePayload, payload);
+      const adaptiveCardContent: IAdaptiveCardContent = {
+        card,
+        template: templatePayload,
+      };
+      return dispatch(getAdaptiveCardSuccess(adaptiveCardContent));
+    } catch (error) {
+      // something wrong happened
+      return dispatch(getAdaptiveCardError(error));
+    }
   };
+}
+
+function createCardFromTemplate(
+  templatePayload: any,
+  payload: string
+): AdaptiveCardsTemplateAPI.Template {
+  const template = new AdaptiveCardsTemplateAPI.Template(templatePayload);
+  const context: AdaptiveCardsTemplateAPI.IEvaluationContext = {
+    $root: payload,
+  };
+  AdaptiveCardsTemplateAPI.GlobalSettings.getUndefinedFieldValueSubstitutionString =
+    (_path: string) => ' ';
+  return template.expand(context);
 }

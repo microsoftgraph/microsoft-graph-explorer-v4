@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogFooter,
   DialogType,
+  DropdownMenuItemType,
   getId,
   IconButton,
   Label,
@@ -16,10 +17,12 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
+import '../../utils/string-operations';
 import { geLocale } from '../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
+import { IRootState } from '../../../types/root';
 import { ISettingsProps } from '../../../types/settings';
 import { signOut } from '../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../services/actions/permissions-action-creator';
@@ -30,7 +33,8 @@ import { Permission } from '../query-runner/request/permissions';
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
-  const { permissionsPanelOpen } = useSelector((state: any) => state);
+  const { permissionsPanelOpen, authToken, theme: appTheme } = useSelector((state: IRootState) => state);
+  const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
@@ -38,9 +42,6 @@ function Settings(props: ISettingsProps) {
   const {
     intl: { messages }
   }: any = props;
-
-  const authenticated = useSelector((state: any) => (!!state.authToken));
-  const appTheme = useSelector((state: any) => (state.theme));
 
   useEffect(() => {
     const menuItems: any = [
@@ -53,6 +54,21 @@ function Settings(props: ISettingsProps) {
           iconName: 'CommandPrompt',
         },
         onClick: () => trackOfficeDevProgramLinkClickEvent(),
+      },
+      {
+        key: 'report-issue',
+        text: messages['Report an Issue'],
+        href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
+        target: '_blank',
+        iconProps: {
+          iconName: 'ReportWarning',
+        },
+        onClick: () => trackReportAnIssueLinkClickEvent(),
+      },
+      {
+        key: 'divider',
+        text: '-',
+        itemType: DropdownMenuItemType.Divider
       },
       {
         key: 'change-theme',
@@ -81,7 +97,7 @@ function Settings(props: ISettingsProps) {
             iconName: 'SignOut',
           },
           onClick: () => handleSignOut(),
-        }
+        },
       );
     }
     setItems(menuItems);
@@ -110,7 +126,7 @@ function Settings(props: ISettingsProps) {
       eventTypes.BUTTON_CLICK_EVENT,
       {
         ComponentName: componentNames.SELECT_THEME_BUTTON,
-        SelectedTheme: selectedTheme.text
+        SelectedTheme: selectedTheme.key.replace('-', ' ').toSentenceCase()
       });
   };
 
@@ -129,6 +145,15 @@ function Settings(props: ISettingsProps) {
         ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
       });
   }
+
+  const trackReportAnIssueLinkClickEvent = () => {
+    telemetry.trackEvent(
+      eventTypes.LINK_CLICK_EVENT,
+      {
+        ComponentName: componentNames.REPORT_AN_ISSUE_LINK
+      });
+  }
+
 
   const setPermissions = (permissions: []) => {
     setSelectedPermissions(permissions);
@@ -195,10 +220,11 @@ function Settings(props: ISettingsProps) {
           role='button'
           styles={{
             label: { marginBottom: -20 },
-            icon: { marginBottom: -20 }
+            menuIcon: { fontSize: 20 }
           }}
-          menuIconProps={{ iconName: 'Settings' }}
+          menuIconProps={{ iconName: 'More' }}
           menuProps={menuProperties} />
+
       </TooltipHost>
       <div>
         <Dialog
@@ -258,3 +284,4 @@ function Settings(props: ISettingsProps) {
 }
 
 export default injectIntl(Settings);
+

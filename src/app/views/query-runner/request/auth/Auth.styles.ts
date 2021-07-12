@@ -1,6 +1,6 @@
-import { FontSizes, ITheme } from '@uifabric/styling';
+import { FontSizes } from '@uifabric/styling';
 
-export const authStyles = (theme: ITheme) => {
+export const authStyles = () => {
   return {
     auth: {
       padding: 5,

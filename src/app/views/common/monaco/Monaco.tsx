@@ -4,6 +4,7 @@ import MonacoEditor, { ChangeHandler } from 'react-monaco-editor';
 
 import { ThemeContext } from '../../../../themes/theme-context';
 import './monaco.scss';
+import { formatJsonStringForAllBrowsers } from './util/format-json';
 
 interface IMonaco {
   body: object | string | undefined;
@@ -44,6 +45,7 @@ export function Monaco(props: IMonaco) {
                 horizontal: 'visible',
                 horizontalScrollbarSize: 17,
               },
+              wordWrap: 'on'
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
@@ -52,15 +54,4 @@ export function Monaco(props: IMonaco) {
       </div>
     </FocusZone>
   );
-}
-
-function formatJsonStringForAllBrowsers(body: string | object | undefined) {
-  /**
-   * 1. Remove whitespace, tabs or raw string (Safari related issue)
-   * 2. Convert back to javascript object
-   * 3. format the string (works for all browsers)
-   */
-  body = JSON.stringify(body).replace(/(?:\\[rnt]|[\r\n\t]+)+/g, '');
-  body = JSON.parse(body);
-  return JSON.stringify(body, null, 4);
 }

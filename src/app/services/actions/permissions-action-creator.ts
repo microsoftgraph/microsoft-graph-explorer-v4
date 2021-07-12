@@ -1,14 +1,23 @@
-import { SeverityLevel } from '@microsoft/applicationinsights-web';
+import { MessageBarType } from 'office-ui-fabric-react';
+
 import { geLocale } from '../../../appLocale';
-import { componentNames, errorTypes, telemetry } from '../../../telemetry';
+import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
-import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
+import { IRootState } from '../../../types/root';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
-import { acquireNewAccessToken } from '../graph-client/msal-service';
-import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../redux-constants';
-import { getAuthTokenSuccess, getConsentedScopesSuccess } from './auth-action-creators';
+import { translateMessage } from '../../utils/translate-messages';
+import {
+  FETCH_SCOPES_ERROR,
+  FETCH_SCOPES_PENDING,
+  FETCH_SCOPES_SUCCESS,
+} from '../redux-constants';
+import {
+  getAuthTokenSuccess,
+  getConsentedScopesSuccess,
+} from './auth-action-creators';
+import { setQueryResponseStatus } from './query-status-action-creator';
 
 export function fetchScopesSuccess(response: object): IAction {
   return {
@@ -30,14 +39,14 @@ export function fetchScopesError(response: object): IAction {
   };
 }
 
-export function fetchScopes(query?: IQuery): Function {
+export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
+    let hasUrl = false; // whether permissions are for a specific url
     try {
-      const { devxApi } = getState();
-      let permissionsUrl = `${devxApi}/permissions`;
-      let hasUrl = false; // whether permissions are for a specific url
+      const { devxApi, permissionsPanelOpen, sampleQuery: query }: IRootState = getState();
+      let permissionsUrl = `${devxApi.baseUrl}/permissions`;
 
-      if (query) {
+      if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);
         const { requestUrl, sampleUrl } = parseSampleUrl(signature);
 
@@ -49,9 +58,14 @@ export function fetchScopes(query?: IQuery): Function {
         hasUrl = true;
       }
 
+      if (devxApi.parameters) {
+        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters
+          }`;
+      }
+
       const headers = {
         'Content-Type': 'application/json',
-        'Accept-Language': geLocale
+        'Accept-Language': geLocale,
       };
 
       const options: IRequestOptions = { headers };
@@ -61,30 +75,43 @@ export function fetchScopes(query?: IQuery): Function {
       const response = await fetch(permissionsUrl, options);
       if (response.ok) {
         const scopes = await response.json();
-        return dispatch(fetchScopesSuccess({
-          hasUrl, scopes
-        }));
+        return dispatch(
+          fetchScopesSuccess({
+            hasUrl,
+            scopes,
+          })
+        );
       }
-      throw (response);
+      throw response;
     } catch (error) {
-      telemetry.trackException(
-        new Error(errorTypes.NETWORK_ERROR),
-        SeverityLevel.Error,
-        {
-          ComponentName: componentNames.FETCH_PERMISSIONS_ACTION,
-          Message: `${error}`
-        });
-      return dispatch(fetchScopesError(error));
+      return dispatch(
+        fetchScopesError({
+          hasUrl,
+          error,
+        })
+      );
     }
   };
 }
 
 export function consentToScopes(scopes: string[]): Function {
   return async (dispatch: Function) => {
-    const authResponse = await acquireNewAccessToken(scopes);
-    if (authResponse && authResponse.accessToken) {
-      dispatch(getAuthTokenSuccess(authResponse.accessToken));
-      dispatch(getConsentedScopesSuccess(authResponse.scopes));
+    try {
+      const authResponse = await authenticationWrapper.consentToScopes(scopes);
+      if (authResponse && authResponse.accessToken) {
+        dispatch(getAuthTokenSuccess(true));
+        dispatch(getConsentedScopesSuccess(authResponse.scopes));
+      }
+    } catch (error) {
+      const { errorCode } = error;
+      dispatch(
+        setQueryResponseStatus({
+          statusText: translateMessage('Scope consent failed'),
+          status: errorCode,
+          ok: false,
+          messageType: MessageBarType.error,
+        })
+      );
     }
   };
 }

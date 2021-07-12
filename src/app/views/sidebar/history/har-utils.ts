@@ -1,10 +1,21 @@
-import { IHarFormat, IHarPayload } from '../../../../types/har';
+import { IHarFormat, IHarHeaders, IHarPayload } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
 
-export function createHarPayload(query: IHistoryItem) {
+export function createHarPayload(query: IHistoryItem): IHarPayload {
   const queryResult = JSON.stringify(query.result);
 
-  let harPayload = {
+  const headers: IHarHeaders[] = [];
+  if (query.headers) {
+    query.headers.forEach(header => {
+      const { name, value } = header;
+      const head: IHarHeaders = {
+        name, value
+      }
+      headers.push(head)
+    });
+  }
+
+  let harPayload: IHarPayload = {
     startedDateTime: query.createdAt.toString(),
     time: query.duration,
     method: query.method,
@@ -19,7 +30,7 @@ export function createHarPayload(query: IHistoryItem) {
       mimeType: 'application/json',
     },
     request: {
-      headers: query.headers,
+      headers,
     },
     response:
     {

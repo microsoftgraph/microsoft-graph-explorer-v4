@@ -5,16 +5,19 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
+import { ContentType } from '../../../types/enums';
 import {
   IQueryRunnerProps,
   IQueryRunnerState,
 } from '../../../types/query-runner';
+import { IRootState } from '../../../types/root';
 
 import * as queryActionCreators from '../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
+import { translateMessage } from '../../utils/translate-messages';
 import { QueryInput } from './query-input';
 import './query-runner.scss';
 import Request from './request/Request';
@@ -22,7 +25,7 @@ import Request from './request/Request';
 export class QueryRunner extends Component<
   IQueryRunnerProps,
   IQueryRunnerState
-  > {
+> {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
@@ -68,21 +71,24 @@ export class QueryRunner extends Component<
   private handleOnRunQuery = () => {
     const { sampleBody } = this.state;
     const { actions, sampleQuery } = this.props;
-    const {
-      intl: { messages },
-    }: any = this.props;
 
     if (sampleBody) {
-      try {
-        sampleQuery.sampleBody = JSON.parse(sampleBody);
-      } catch (error) {
-        actions!.setQueryResponseStatus({
-          ok: false,
-          statusText: messages['Malformed JSON body'],
-          status: `${messages['Review the request body']} ${error}`,
-          messageType: MessageBarType.error,
-        });
-        return;
+      const headers = sampleQuery.sampleHeaders;
+      const contentType = headers.find(k => k.name.toLowerCase() === 'content-type');
+      if (!contentType || (contentType.value === ContentType.Json)) {
+        try {
+          sampleQuery.sampleBody = JSON.parse(sampleBody);
+        } catch (error) {
+          actions!.setQueryResponseStatus({
+            ok: false,
+            statusText: translateMessage('Malformed JSON body'),
+            status: `${translateMessage('Review the request body')} ${error}`,
+            messageType: MessageBarType.error,
+          });
+          return;
+        }
+      } else {
+        sampleQuery.sampleBody = sampleBody;
       }
     }
 
@@ -168,9 +174,9 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps({ sampleQuery }: IRootState) {
   return {
-    sampleQuery: state.sampleQuery,
+    sampleQuery,
   };
 }
 

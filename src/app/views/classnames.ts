@@ -1,6 +1,7 @@
 import { classNamesFunction, ITheme } from 'office-ui-fabric-react';
 
 interface IClassNames {
+  [prop: string]: unknown;
   theme?: ITheme;
   styles?: object;
 }

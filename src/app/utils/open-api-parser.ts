@@ -1,10 +1,19 @@
 import {
-  IOpenApiParseContent, IParameters, IParameterValue,
-  IParsedOpenApiResponse, IPathValue, IQueryParameter
+  IOpenApiParseContent,
+  IParameters,
+  IParameterValue,
+  IParsedOpenApiResponse,
+  IPathValue,
+  IQueryParameter,
 } from '../../types/open-api';
 
-export function parseOpenApiResponse(params: IOpenApiParseContent): IParsedOpenApiResponse {
-  const { response: { paths }, url } = params;
+export function parseOpenApiResponse(
+  params: IOpenApiParseContent
+): IParsedOpenApiResponse {
+  const {
+    response: { paths },
+    url,
+  } = params;
 
   try {
     const parameters: IParameters[] = [];
@@ -16,7 +25,7 @@ export function parseOpenApiResponse(params: IOpenApiParseContent): IParsedOpenA
       parameters.push({
         verb,
         values: getVerbParameterValues(pathValues[`${verb}`]),
-        links: getLinkValues(pathValues[`${verb}`])
+        links: getLinkValues(pathValues[`${verb}`]),
       });
     });
 
@@ -35,7 +44,10 @@ function getVerbParameterValues(values: IPathValue): IParameterValue[] {
       if (parameter.name && parameter.in === 'query') {
         parameterValues.push({
           name: parameter.name,
-          items: (parameter.schema && parameter.schema.items) ? parameter.schema.items.enum : []
+          items:
+            parameter.schema && parameter.schema.items
+              ? parameter.schema.items.enum
+              : [],
         });
       }
     });

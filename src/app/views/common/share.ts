@@ -1,6 +1,7 @@
 import { geLocale } from '../../../appLocale';
+import { authenticationWrapper } from '../../../modules/authentication';
 import { IQuery } from '../../../types/query-runner';
-import { getSessionId } from '../../services/graph-client/msal-service';
+import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 
 /**
@@ -10,7 +11,8 @@ import { parseSampleUrl } from '../../utils/sample-url-generation';
  */
 export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): string => {
   const { sampleBody, selectedVerb, sampleHeaders } = sampleQuery;
-  const { queryVersion, requestUrl, sampleUrl, search } = parseSampleUrl(sampleQuery.sampleUrl);
+  const { queryVersion, requestUrl, sampleUrl, search } =
+    parseSampleUrl(encodeHashCharacters(sampleQuery));
 
   if (!sampleUrl) {
     return '';
@@ -36,7 +38,7 @@ export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): s
   }
 
   if (authenticated) {
-    const sessionId = getSessionId();
+    const sessionId = authenticationWrapper.getSessionId();
     if (sessionId) {
       shareLink = `${shareLink}&sid=${sessionId}`;
     }

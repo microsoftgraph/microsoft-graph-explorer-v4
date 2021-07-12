@@ -1,14 +1,15 @@
+import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
-import { logOut, logOutPopUp } from '../graph-client/msal-service';
-import { GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
+import { AUTHENTICATION_PENDING, GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
 
-export function getAuthTokenSuccess(response: string): IAction {
+export function getAuthTokenSuccess(response: boolean): any {
   return {
     type: GET_AUTH_TOKEN_SUCCESS,
     response,
   };
 }
+
 export function getConsentedScopesSuccess(response: string[]): IAction {
   return {
     type: GET_CONSENTED_SCOPES_SUCCESS,
@@ -16,9 +17,16 @@ export function getConsentedScopesSuccess(response: string[]): IAction {
   };
 }
 
-export function signOutSuccess(response: string): IAction {
+export function signOutSuccess(response: boolean): any {
   return {
     type: LOGOUT_SUCCESS,
+    response,
+  };
+}
+
+export function setAuthenticationPending(response: boolean): any {
+  return {
+    type: AUTHENTICATION_PENDING,
     response,
   };
 }
@@ -26,17 +34,18 @@ export function signOutSuccess(response: string): IAction {
 export function signOut() {
   return (dispatch: Function, getState: Function) => {
     const { graphExplorerMode } = getState();
+    dispatch(setAuthenticationPending(true));
     if (graphExplorerMode === Mode.Complete) {
-      logOut();
+      authenticationWrapper.logOut();
     } else {
-      logOutPopUp();
+      authenticationWrapper.logOutPopUp();
+      dispatch(signOutSuccess(false));
     }
-    dispatch(signOutSuccess(''));
   };
 }
 
-export function signIn(token: string) {
-  return (dispatch: Function) => dispatch(getAuthTokenSuccess(token));
+export function signIn() {
+  return (dispatch: Function) => dispatch(getAuthTokenSuccess(true));
 }
 
 export function storeScopes(consentedScopes: string[]) {
