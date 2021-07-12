@@ -101,23 +101,6 @@ class App extends Component<IAppProps, IAppState> {
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('sid');
 
-    const currentSystemTheme = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    );
-    let currentTheme: IThemeChangedMessage['theme'] = 'light'; //default theme
-
-    if (currentSystemTheme.matches === true) {
-      // dark theme
-      currentTheme = 'dark';
-    } else if (currentSystemTheme.matches === false) {
-      // light theme
-    } else {
-      //high contrast theme
-      currentTheme = 'high-contrast';
-    }
-
-    changeTheme(currentTheme);
-
     if (sessionId) {
       const authResp = await authenticationWrapper.logIn(sessionId);
       if (authResp) {
@@ -147,6 +130,23 @@ class App extends Component<IAppProps, IAppState> {
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
     this.handleSharedQueries();
+
+    const currentSystemTheme = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    );
+    let currentTheme: IThemeChangedMessage['theme'] = 'light'; //default theme
+
+    if (currentSystemTheme.matches === true) {
+      // dark theme
+      currentTheme = 'dark';
+    } else if (currentSystemTheme.matches === false) {
+      // light theme
+    } else {
+      //high contrast theme
+      currentTheme = 'high-contrast';
+    }
+
+    changeTheme(currentTheme);
   };
 
   public handleSharedQueries() {
