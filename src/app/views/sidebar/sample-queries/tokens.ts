@@ -19,6 +19,10 @@ export function getTokens(user?: any) {
 
   const tokens: IToken[] = [
     {
+      placeholder: 'chat-id',
+      demoTenantValue: '19:2a395c1dfe36431fb6e4cd5b225c17ee@thread.v2',
+    },
+    {
       placeholder: 'group-id',
       demoTenantValue: '02bd9fd6-8f93-4758-87c3-1fb73740a315',
     },
@@ -101,6 +105,10 @@ export function getTokens(user?: any) {
     {
       placeholder: 'user-id',
       demoTenantValue: 'd4957c9d-869e-4364-830c-d0c95be72738',
+    },
+    {
+      placeholder: 'membership-id',
+      demoTenantValue: 'MCMjMCMjZGNkMjE5ZGQtYmM2OC00YjliLWJmMGItNGEzM2E3OTZiZTM1IyMxOToyYTM5NWMxZGZlMzY0MzFmYjZlNGNkNWIyMjVjMTdlZUB0aHJlYWQudjIjIzQ4ZDMxODg3LTVmYWQtNGQ3My1hOWY1LTNjMzU2ZTY4YTAzOA==',
     },
     {
       placeholder: 'today',
