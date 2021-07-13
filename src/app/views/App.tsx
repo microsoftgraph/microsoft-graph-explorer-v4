@@ -132,26 +132,48 @@ class App extends Component<IAppProps, IAppState> {
     this.handleSharedQueries();
 
     //Apply current system theme
-    this.applyCurrentSystemTheme();
+    this.getCurrentSystemTheme();
   };
 
-  private applyCurrentSystemTheme(): void {
+  private getCurrentSystemTheme(): void {
+    let currentTheme: IThemeChangedMessage['theme'] = 'light'; //default theme
+
     const currentSystemTheme = window.matchMedia(
       '(prefers-color-scheme: dark)'
     );
-    let currentTheme: IThemeChangedMessage['theme'] = 'light'; //default theme
 
     if (currentSystemTheme.matches === true) {
-      // dark theme
       currentTheme = 'dark';
+      this.applyCurrentSystemTheme(currentTheme);
     } else if (currentSystemTheme.matches === false) {
-      // light theme
+      currentTheme = 'light';
+      this.applyCurrentSystemTheme(currentTheme);
     } else {
-      //high contrast theme
       currentTheme = 'high-contrast';
+      this.applyCurrentSystemTheme(currentTheme);
     }
+  }
 
+  private applyCurrentSystemTheme(
+    currentTheme: IThemeChangedMessage['theme']
+  ): void {
     changeTheme(currentTheme);
+
+    //register an event listener to watch for system theme changes
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', function (newSystemTheme) {
+        if (newSystemTheme.matches === true) {
+          currentTheme = 'dark';
+          changeTheme(currentTheme);
+        } else if (newSystemTheme.matches === false) {
+          currentTheme = 'light';
+          changeTheme(currentTheme);
+        } else {
+          currentTheme = 'high-contrast';
+          changeTheme(currentTheme);
+        }
+      });
   }
 
   public handleSharedQueries() {
