@@ -6,7 +6,7 @@ import {
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../appLocale';
@@ -131,6 +131,11 @@ class App extends Component<IAppProps, IAppState> {
     window.addEventListener('message', this.receiveMessage, false);
     this.handleSharedQueries();
 
+    //Apply current system theme
+    this.applyCurrentSystemTheme();
+  };
+
+  private applyCurrentSystemTheme(): void {
     const currentSystemTheme = window.matchMedia(
       '(prefers-color-scheme: dark)'
     );
@@ -147,7 +152,7 @@ class App extends Component<IAppProps, IAppState> {
     }
 
     changeTheme(currentTheme);
-  };
+  }
 
   public handleSharedQueries() {
     const { actions } = this.props;
