@@ -17,7 +17,7 @@ import { IRootState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import * as authActionCreators from '../services/actions/auth-action-creators';
-import { runQuery, internalQuery } from '../services/actions/query-action-creators';
+import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
@@ -293,10 +293,6 @@ class App extends Component<IAppProps, IAppState> {
 
   };
 
-  private showDialog = (): void => {
-    this.props.actions!.openPopUp(false);
-  };
-
   public displayAuthenticationSection = (minimised: boolean) => {
     return <div style={{
       display: minimised ? 'block' : 'flex',
@@ -349,17 +345,6 @@ class App extends Component<IAppProps, IAppState> {
 
     if (mobileScreen) {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
-    }
-    if (permissionModeType !== PERMISSION_MODE_TYPE.TeamsApp && hideDialog && !!profile) {
-      const query2: IQuery = {
-        sampleUrl: "https://graph.microsoft.com/v1.0/users/" + profile.id + "/teamwork/installedApps",
-        selectedVerb: "GET",
-        selectedVersion: "v1.0",
-        sampleHeaders: []
-      }
-
-      console.log("WILL IT RETURN THE RIGHT THING");
-      actions.internalQuery(query2);
     }
     // eslint-disable-next-line react/jsx-no-target-blank
     const teamsapp = <a href={"https://www.bing.com/?form=000010"} target="_blank">{translateMessage('Sample Explorer Teams app')}</a>;
@@ -460,7 +445,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       openPopUp,
       clearTermsOfUse,
       runQuery,
-      internalQuery,
       setSampleQuery,
       toggleSidebar,
       ...authActionCreators,
