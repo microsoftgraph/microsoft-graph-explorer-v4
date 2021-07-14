@@ -65,8 +65,8 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
         {tokenPresent && <FormattedMessage id='permissions required to run the query' />}
       </Label>
       <div
-        onMouseEnter={() => { setIsHoverOverPermissionsList(true) }}
-        onMouseLeave={() => { setIsHoverOverPermissionsList(false) }}>
+        onMouseEnter={() => setIsHoverOverPermissionsList(true)}
+        onMouseLeave={() => setIsHoverOverPermissionsList(false)}>
         <DetailsList
           styles={isHoverOverPermissionsList ? { root: { maxHeight } } : { root: { maxHeight, overflow: "hidden" } }}
           items={permissions}

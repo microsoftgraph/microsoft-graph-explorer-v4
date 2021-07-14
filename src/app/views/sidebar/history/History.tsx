@@ -520,8 +520,8 @@ export class History extends Component<IHistoryProps, any> {
           />
           {items.length > 0 &&
             <div
-              onMouseEnter={() => { this.setState({ isHoverOverHistoryList: true }); }}
-              onMouseLeave={() => { this.setState({ isHoverOverHistoryList: false }); }}>
+              onMouseEnter={() => this.setState({ isHoverOverHistoryList: true })}
+              onMouseLeave={() => this.setState({ isHoverOverHistoryList: false })}>
               <DetailsList
                 styles={this.state.isHoverOverHistoryList ? { root: { overflow: 'scroll' } } : { root: { overflow: 'hidden' } }}
                 className={classes.queryList}

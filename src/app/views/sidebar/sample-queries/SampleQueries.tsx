@@ -438,8 +438,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           message={`${sampleQueries.length} search results available.`}
         />
         <div role='navigation'
-          onMouseEnter={() => { this.setState({ isHoverOverSampleQueriesList: true }) }}
-          onMouseLeave={() => { this.setState({ isHoverOverSampleQueriesList: false }) }}>
+          onMouseEnter={() => this.setState({ isHoverOverSampleQueriesList: true })}
+          onMouseLeave={() => this.setState({ isHoverOverSampleQueriesList: false })}>
           <DetailsList
             styles={this.state.isHoverOverSampleQueriesList ? { root: { overflow: 'scroll' } } : { root: { overflow: 'hidden' } }}
             className={classes.queryList}

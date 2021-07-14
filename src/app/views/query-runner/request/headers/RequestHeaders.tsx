@@ -78,8 +78,8 @@ const RequestHeaders = (props: any) => {
 
   return (
     <div
-      onMouseEnter={() => { setIsHoverOverHeadersList(true); console.log('enter') }}
-      onMouseLeave={() => { setIsHoverOverHeadersList(false) }}
+      onMouseEnter={() => setIsHoverOverHeadersList(true)}
+      onMouseLeave={() => setIsHoverOverHeadersList(false)}
       className={classes.container}
       style={isHoverOverHeadersList ? { height: convertVhToPx(height, 60) } : { height: convertVhToPx(height, 60), overflow: "hidden" }}>
       <Announced message={announcedMessage} />
