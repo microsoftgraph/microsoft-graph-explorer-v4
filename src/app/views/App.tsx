@@ -352,7 +352,7 @@ class App extends Component<IAppProps, IAppState> {
     const teamsapp = <a href={"https://www.bing.com/?form=000010"} target="_blank">{translateMessage('Sample Explorer Teams app')}</a>;
     //TODO: put in the url when we have this set up ADO #38728
     // eslint-disable-next-line react/jsx-no-target-blank
-    const rsc = <a href={RSC_URL} target="_blank">{translateMessage('resource specific consent')}</a>;
+    const rsc = <a href={RSC_URL} target="_blank">{translateMessage('resource-specific consent')}</a>;
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
@@ -364,7 +364,7 @@ class App extends Component<IAppProps, IAppState> {
           }}
           onDismiss={this.closeDialog}
         >
-          <p>{translateMessage('Resource Specific Consent popup')} {teamsapp}. <br /> &nbsp;</p>
+          <p>{translateMessage('Resource-specific Consent popup')} {teamsapp}. <br /> &nbsp;</p>
           <p>{translateMessage('Learn more about')} {rsc}.</p>
 
         </Dialog>}
