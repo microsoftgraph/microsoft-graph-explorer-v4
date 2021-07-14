@@ -14,6 +14,7 @@ import { authenticationWrapper } from '../../modules/authentication';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
+import { readTheme, saveTheme } from '../../themes/theme-utils';
 import { Mode } from '../../types/enums';
 import {
   IInitMessage,
@@ -28,10 +29,7 @@ import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
-import {
-  changeTheme,
-  changeThemeSuccess,
-} from '../services/actions/theme-action-creator';
+import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
@@ -73,6 +71,7 @@ interface IAppProps {
     toggleSidebar: Function;
     signIn: Function;
     storeScopes: Function;
+    changeTheme: Function;
   };
 }
 
@@ -131,49 +130,49 @@ class App extends Component<IAppProps, IAppState> {
     window.addEventListener('message', this.receiveMessage, false);
     this.handleSharedQueries();
 
-    //Apply current system theme
-    this.getCurrentSystemTheme();
+    this.setCurrentSystemTheme();
   };
 
-  private getCurrentSystemTheme(): void {
-    let currentTheme: IThemeChangedMessage['theme'] = 'light'; //default theme
+  private setCurrentSystemTheme(): void {
+    const themeFromLocalStorage = readTheme();
+    let currentTheme: string = 'light';
 
-    const currentSystemTheme = window.matchMedia(
+    if (themeFromLocalStorage) {
+      currentTheme = themeFromLocalStorage;
+    } else {
+      currentTheme = this.checkTheme();
+    }
+
+    this.applyCurrentSystemTheme(currentTheme);
+  }
+
+  private checkTheme(): string {
+    let currentTheme: string = 'light';
+    const currentSystemThemeDark = window.matchMedia(
       '(prefers-color-scheme: dark)'
     );
 
-    if (currentSystemTheme.matches === true) {
+    const currentSystemThemeLight = window.matchMedia(
+      '(prefers-color-scheme: light)'
+    );
+
+    if (currentSystemThemeDark.matches === true) {
       currentTheme = 'dark';
-      this.applyCurrentSystemTheme(currentTheme);
-    } else if (currentSystemTheme.matches === false) {
+    } else if (currentSystemThemeLight.matches === true) {
       currentTheme = 'light';
-      this.applyCurrentSystemTheme(currentTheme);
     } else {
       currentTheme = 'high-contrast';
-      this.applyCurrentSystemTheme(currentTheme);
     }
+
+    return currentTheme;
   }
 
-  private applyCurrentSystemTheme(
-    currentTheme: IThemeChangedMessage['theme']
-  ): void {
-    changeTheme(currentTheme);
+  private applyCurrentSystemTheme(currentTheme: string): void {
+    loadGETheme(currentTheme);
 
-    //register an event listener to watch for system theme changes
-    window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', function (newSystemTheme) {
-        if (newSystemTheme.matches === true) {
-          currentTheme = 'dark';
-          changeTheme(currentTheme);
-        } else if (newSystemTheme.matches === false) {
-          currentTheme = 'light';
-          changeTheme(currentTheme);
-        } else {
-          currentTheme = 'high-contrast';
-          changeTheme(currentTheme);
-        }
-      });
+    // @ts-ignore
+    this.props.actions!.changeTheme(currentTheme);
+    saveTheme(currentTheme);
   }
 
   public handleSharedQueries() {
