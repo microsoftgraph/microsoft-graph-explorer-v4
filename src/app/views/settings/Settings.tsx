@@ -86,8 +86,8 @@ function Settings(props: ISettingsProps) {
       menuItems.push(
         {
           key: 'switch-user-app-mode',
-          text: translateMessage(permissionModeType 
-            ? "Use Explorer as sample Teams application" 
+          text: translateMessage(permissionModeType
+            ? "Use Explorer as sample Teams application"
             : "Use Explorer as logged-in user"),
           iconProps: {
             iconName: permissionModeType ? "TeamsLogo" : "Contact",
@@ -127,14 +127,22 @@ function Settings(props: ISettingsProps) {
   };
 
   const handleChangeMode = (permissionModeType: PERMISSION_MODE_TYPE) => {
+    let newPermissionModeType;
     switch (permissionModeType) {
       case PERMISSION_MODE_TYPE.User:
+        newPermissionModeType = PERMISSION_MODE_TYPE.TeamsApp;
         dispatch(changeMode(PERMISSION_MODE_TYPE.TeamsApp));
         break;
       case PERMISSION_MODE_TYPE.TeamsApp:
+        newPermissionModeType = PERMISSION_MODE_TYPE.User;
         dispatch(changeMode(PERMISSION_MODE_TYPE.User));
         break;
     }
+    telemetry.trackEvent(
+      eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.CHANGE_PERMISSIONS_MODE_BUTTON,
+      PermissionMode: newPermissionModeType
+    });
   };
 
   const handleSignOut = () => {
