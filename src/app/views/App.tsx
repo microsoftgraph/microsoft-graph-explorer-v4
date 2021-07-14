@@ -14,7 +14,7 @@ import { authenticationWrapper } from '../../modules/authentication';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
-import { readTheme, saveTheme } from '../../themes/theme-utils';
+import { readTheme } from '../../themes/theme-utils';
 import { Mode } from '../../types/enums';
 import {
   IInitMessage,
@@ -29,7 +29,7 @@ import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
-import { changeThemeSuccess } from '../services/actions/theme-action-creator';
+import { changeTheme } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
@@ -172,7 +172,6 @@ class App extends Component<IAppProps, IAppState> {
 
     // @ts-ignore
     this.props.actions!.changeTheme(currentTheme);
-    saveTheme(currentTheme);
   }
 
   public handleSharedQueries() {
@@ -510,9 +509,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         setSampleQuery,
         toggleSidebar,
         ...authActionCreators,
-        changeTheme: (newTheme: string) => {
-          return (disp: Function) => disp(changeThemeSuccess(newTheme));
-        },
+        changeTheme,
       },
       dispatch
     ),
