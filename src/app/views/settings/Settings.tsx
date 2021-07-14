@@ -98,8 +98,8 @@ function Settings(props: ISettingsProps) {
         {
           key: 'switch-user-app-mode',
           text: translateMessage(permissionModeType
-            ? "Use Explorer as sample Teams application"
-            : "Use Explorer as logged-in user"),
+            ? "Use Graph Explorer as a sample Teams application"
+            : "Use Graph Explorer as a signed in user"),
           iconProps: {
             iconName: permissionModeType ? "TeamsLogo" : "Contact",
           },

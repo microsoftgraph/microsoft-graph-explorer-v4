@@ -359,7 +359,7 @@ class App extends Component<IAppProps, IAppState> {
         {permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && < Dialog
           hidden={this.state.hideDialog}
           dialogContentProps={{
-            title: `${translateMessage('Application Permissions')}`,
+            title: `${translateMessage('Install sample app')}`,
             showCloseButton: true,
           }}
           onDismiss={this.closeDialog}
