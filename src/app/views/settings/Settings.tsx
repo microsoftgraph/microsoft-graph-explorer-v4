@@ -82,6 +82,17 @@ function Settings(props: ISettingsProps) {
       }
     ];
 
+    if (permissionModeType === PERMISSION_MODE_TYPE.User) {
+      menuItems.push({
+        key: 'view-all-permissions',
+        text: translateMessage('view all permissions'),
+        iconProps: {
+          iconName: 'AzureKeyVault',
+        },
+        onClick: () => changePanelState(),
+      });
+    }
+
     if (authenticated) {
       menuItems.push(
         {
@@ -93,14 +104,6 @@ function Settings(props: ISettingsProps) {
             iconName: permissionModeType ? "TeamsLogo" : "Contact",
           },
           onClick: () => handleChangeMode(permissionModeType),
-        },
-        {
-          key: 'view-all-permissions',
-          text: translateMessage('view all permissions'),
-          iconProps: {
-            iconName: 'AzureKeyVault',
-          },
-          onClick: () => changePanelState(),
         },
         {
           key: 'sign-out',
