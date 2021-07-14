@@ -37,14 +37,14 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
     });
   }
 
+  const authToken = '{token:https://graph.microsoft.com/}';
+
   const headers = {
+    Authorization: `Bearer ${authToken}`,
     'Content-Type': 'application/json',
     SdkVersion: 'GraphExplorer/4.0',
     ...sampleHeaders,
   };
-
-  const authToken = '{token:https://graph.microsoft.com/}';
-  headers.Authorization = `Bearer ${authToken}`;
 
   const options: IRequestOptions = { method: query.selectedVerb, headers };
   return { graphUrl, options };
