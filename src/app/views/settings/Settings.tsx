@@ -144,7 +144,7 @@ function Settings(props: ISettingsProps) {
       selectedVersion: "v1.0",
       sampleHeaders: []
     }
-
+    let newPermissionModeType;
     switch (permissionModeType) {
       case PERMISSION_MODE_TYPE.User:
         dispatch(internalQuery(query));
@@ -157,14 +157,20 @@ function Settings(props: ISettingsProps) {
         break;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Rebased
     telemetry.trackEvent(
       eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.CHANGE_PERMISSIONS_MODE_BUTTON,
       PermissionMode: newPermissionModeType
     });
+<<<<<<< HEAD
 =======
 
 >>>>>>> Flag works
+=======
+>>>>>>> Rebased
   };
 
   const handleSignOut = () => {
