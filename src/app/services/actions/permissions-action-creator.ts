@@ -1,14 +1,14 @@
-import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { MessageBarType } from 'office-ui-fabric-react';
 
 import { geLocale } from '../../../appLocale';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
-import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
+import { IRootState } from '../../../types/root';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
+import { ACCOUNT_TYPE, PERMS_SCOPE } from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
   FETCH_SCOPES_PENDING,
@@ -40,14 +40,21 @@ export function fetchScopesError(response: object): IAction {
   };
 }
 
-export function fetchScopes(query?: IQuery): Function {
+export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
-      const { devxApi } = getState();
+      const { devxApi, permissionsPanelOpen, profileType, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
+      let scope = PERMS_SCOPE.WORK;
 
-      if (query) {
+      if (profileType === ACCOUNT_TYPE.AAD) {
+        scope = PERMS_SCOPE.WORK;
+      } else if (profileType === ACCOUNT_TYPE.MSA) {
+        scope = PERMS_SCOPE.PERSONAL;
+      }
+
+      if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);
         const { requestUrl, sampleUrl } = parseSampleUrl(signature);
 
@@ -55,14 +62,13 @@ export function fetchScopes(query?: IQuery): Function {
           throw new Error('url is invalid');
         }
 
-        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}`;
+        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scope}`;
         hasUrl = true;
       }
 
       if (devxApi.parameters) {
-        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${
-          devxApi.parameters
-        }`;
+        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters
+          }`;
       }
 
       const headers = {

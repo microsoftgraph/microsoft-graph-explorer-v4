@@ -3,10 +3,12 @@ import {
   ResponseType
 } from '@microsoft/microsoft-graph-client';
 import { MSALAuthenticationProviderOptions } from '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
+
 import { IAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
+import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { authProvider, GraphClient } from '../graph-client';
 import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_KEY, GRAPH_API_SANDBOX_URL } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
@@ -38,7 +40,6 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
   }
 
   const authToken = '{token:https://graph.microsoft.com/}';
-
   const headers = {
     Authorization: `Bearer ${authToken}`,
     'Content-Type': 'application/json',
@@ -65,6 +66,10 @@ export function isImageResponse(contentType: string | undefined) {
   return (
     contentType === 'application/octet-stream' || contentType.includes('image/')
   );
+}
+
+export function isBetaURLResponse(json: any) {
+  return !!json?.account?.[0]?.source?.type?.[0];
 }
 
 export function getContentType(headers: Headers) {
@@ -118,8 +123,9 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
       authProvider,
       msalAuthOptions
     );
+
     const client = GraphClient.getInstance()
-      .api(query.sampleUrl)
+      .api(encodeHashCharacters(query))
       .middlewareOptions([middlewareOptions])
       .headers(sampleHeaders)
       .responseType(ResponseType.RAW);
