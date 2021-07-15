@@ -23,7 +23,7 @@ import { clearQueryStatus } from '../services/actions/query-status-action-creato
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
-import { closePopUp, openPopUp } from '../services/actions/permission-mode-action-creator';
+import { changePopUp } from '../services/actions/permission-mode-action-creator';
 import { GRAPH_URL, PERMISSION_MODE_TYPE } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
@@ -59,8 +59,7 @@ interface IAppProps {
     clearQueryStatus: Function;
     clearTermsOfUse: Function;
     setSampleQuery: Function;
-    closePopUp: Function;
-    openPopUp: Function;
+    changePopUp: Function;
     runQuery: Function;
     toggleSidebar: Function;
     signIn: Function;
@@ -286,10 +285,9 @@ class App extends Component<IAppProps, IAppState> {
 
     this.props.actions!.toggleSidebar(properties);
   }
-  private closeDialog = (): void => {
-    let { hideDialog } = this.props;
-    hideDialog = true;
-    this.props.actions!.closePopUp(hideDialog);
+  private toggleDialog = (): void => {
+    const { hideDialog }: any = this.props;
+    this.props.actions!.changePopUp(!hideDialog);
 
   };
 
@@ -311,7 +309,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery, permissionModeType, hideDialog, profile,
+    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery, permissionModeType, hideDialog,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
@@ -360,7 +358,7 @@ class App extends Component<IAppProps, IAppState> {
             title: `${translateMessage('Application Permissions')}`,
             showCloseButton: true,
           }}
-          onDismiss={this.closeDialog}
+          onDismiss={this.toggleDialog}
         >
           <p>{translateMessage('Resource Specific Consent popup')} {teamsapp}. <br /> &nbsp;</p>
           <p>{translateMessage('Learn more about')} {rsc}.</p>
@@ -441,8 +439,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     actions: bindActionCreators({
       clearQueryStatus,
-      closePopUp,
-      openPopUp,
+      changePopUp,
       clearTermsOfUse,
       runQuery,
       setSampleQuery,

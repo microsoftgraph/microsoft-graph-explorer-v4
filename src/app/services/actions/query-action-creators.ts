@@ -5,7 +5,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
 import { TEAMS_APP_ID } from '../graph-constants';
-import { openPopUp, closePopUp } from './permission-mode-action-creator';
+import { changePopUp } from './permission-mode-action-creator';
 import {
   anonymousRequest, authenticatedRequest,
   isImageResponse, parseResponse, queryResponse
@@ -130,12 +130,12 @@ export function internalQuery(query: IQuery): Function {
         for (const i of result.value) {
           if (i.teamsApp.id === TEAMS_APP_ID) {
             if (!getState().hideDialog) {
-              dispatch(closePopUp(true));
+              dispatch(changePopUp(true));
             }
             return
           }
         }
-        dispatch(openPopUp(false));
+        dispatch(changePopUp(false));
       });
     }
   };
