@@ -123,7 +123,6 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
       authProvider,
       msalAuthOptions
     );
-
     const client = GraphClient.getInstance()
       .api(encodeHashCharacters(query))
       .middlewareOptions([middlewareOptions])

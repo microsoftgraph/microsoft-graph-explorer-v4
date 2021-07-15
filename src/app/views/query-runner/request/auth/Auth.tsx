@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { authenticationWrapper } from '../../../../../modules/authentication';
 
-import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
+import { componentNames, telemetry } from '../../../../../telemetry';
 import { IRootState } from '../../../../../types/root';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
