@@ -10,7 +10,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { authProvider, GraphClient } from '../graph-client';
-import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_KEY, GRAPH_API_SANDBOX_URL } from '../graph-constants';
+import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
