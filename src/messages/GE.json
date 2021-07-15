@@ -330,7 +330,7 @@
   "Query Sample Input": "Query sample input",
   "popup blocked, allow pop-up windows in your browser": "popup blocked, allow pop-up windows in your browser",
   "sign in to consent to permissions": "One of the following delegated permissions is required to run the query. Sign in with an account that can consent to the permission you will choose.",
-  "sign in to consent to application permissions": "One of the following resource specific consent permissions is required to run the query. Sign in with an account that can consent to the permission you will choose.",
+  "sign in to consent to application permissions": "One of the following resource-specific consent permissions is required to run the query. Sign in with an account that can consent to the permission you will choose.",
   "Sign in to use this method": "Sign in to use this method",
   "Request Header deleted": "Request Header deleted",
   "Request Header added": "Request Header added",
@@ -363,6 +363,6 @@
   "Sample Teams app for Graph Explorer": "Sample Teams app for Graph Explorer",
   "Install sample app": "Install sample app",
   "Learn more about": "Learn more about",
-  "resource-specific consent": "resource specific consent",
+  "resource-specific consent": "resource-specific consent",
   "App mode access token error": "Access token is hidden in application mode for security purposes."
 }
