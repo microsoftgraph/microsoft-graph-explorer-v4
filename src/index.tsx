@@ -20,8 +20,10 @@ import {
 } from './app/services/actions/auth-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
+import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
+import { GRAPH_API_SANDBOX_URL } from './app/services/graph-constants';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
@@ -71,6 +73,8 @@ const appState: any = store({
   termsOfUse: true,
   theme: currentTheme,
 });
+
+appState.dispatch(getGraphProxyUrl());
 
 function refreshAccessToken() {
   authenticationWrapper
