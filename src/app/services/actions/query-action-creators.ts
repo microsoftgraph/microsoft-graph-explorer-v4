@@ -119,7 +119,7 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
   return result;
 }
 
-export function internalQuery(query: IQuery): Function {
+export function checkTeamsAppInstallation(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = !!getState()?.authToken?.token;
     const respHeaders: any = {};
@@ -127,15 +127,19 @@ export function internalQuery(query: IQuery): Function {
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query).then(async (response: Response) => {
         const result = await parseResponse(response, respHeaders);
-        for (const i of result.value) {
-          if (i.teamsApp.id === TEAMS_APP_ID) {
-            if (!getState().hideDialog) {
-              dispatch(changePopUp(true));
+        try {
+          for (const i of result.value) {
+            if (i.teamsApp.id === TEAMS_APP_ID) {
+              if (!getState().hideDialog) {
+                dispatch(changePopUp(true));
+              }
+              return
             }
-            return
+            dispatch(changePopUp(false));
           }
+        } catch {
+          dispatch(changePopUp(false));
         }
-        dispatch(changePopUp(false));
       });
     }
   };
