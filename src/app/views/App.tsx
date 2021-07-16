@@ -14,7 +14,6 @@ import { authenticationWrapper } from '../../modules/authentication';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
-import { readTheme } from '../../themes/theme-utils';
 import { Mode } from '../../types/enums';
 import {
   IInitMessage,
@@ -129,50 +128,7 @@ class App extends Component<IAppProps, IAppState> {
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
     this.handleSharedQueries();
-
-    this.setCurrentSystemTheme();
   };
-
-  private setCurrentSystemTheme(): void {
-    const themeFromLocalStorage = readTheme();
-    let currentTheme: string = 'light';
-
-    if (themeFromLocalStorage) {
-      currentTheme = themeFromLocalStorage;
-    } else {
-      currentTheme = this.checkTheme();
-    }
-
-    this.applyCurrentSystemTheme(currentTheme);
-  }
-
-  private checkTheme(): string {
-    let currentTheme: string = 'light';
-    const currentSystemThemeDark = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    );
-
-    const currentSystemThemeLight = window.matchMedia(
-      '(prefers-color-scheme: light)'
-    );
-
-    if (currentSystemThemeDark.matches === true) {
-      currentTheme = 'dark';
-    } else if (currentSystemThemeLight.matches === true) {
-      currentTheme = 'light';
-    } else {
-      currentTheme = 'high-contrast';
-    }
-
-    return currentTheme;
-  }
-
-  private applyCurrentSystemTheme(currentTheme: string): void {
-    loadGETheme(currentTheme);
-
-    // @ts-ignore
-    this.props.actions!.changeTheme(currentTheme);
-  }
 
   public handleSharedQueries() {
     const { actions } = this.props;

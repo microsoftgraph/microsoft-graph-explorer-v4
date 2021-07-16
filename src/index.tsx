@@ -23,7 +23,6 @@ import { setGraphExplorerMode } from './app/services/actions/explorer-mode-actio
 import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
-import { GRAPH_API_SANDBOX_URL } from './app/services/graph-constants';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
@@ -39,6 +38,7 @@ import { readTheme } from './themes/theme-utils';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
+import { changeTheme } from './app/services/actions/theme-action-creator';
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
@@ -54,8 +54,45 @@ if (apiExplorer) {
 
 initializeIcons();
 
-const currentTheme = readTheme() || 'light';
-loadGETheme(currentTheme);
+let currentTheme = readTheme() || 'light';
+function setCurrentSystemTheme(): void {
+  const themeFromLocalStorage = readTheme();
+
+  if (themeFromLocalStorage) {
+    currentTheme = themeFromLocalStorage;
+  } else {
+    currentTheme = checkTheme();
+  }
+
+  applyCurrentSystemTheme(currentTheme);
+}
+function checkTheme(): string {
+  let currentSystemTheme: string = 'light';
+  const currentSystemThemeDark = window.matchMedia(
+    '(prefers-color-scheme: dark)'
+  );
+
+  const currentSystemThemeLight = window.matchMedia(
+    '(prefers-color-scheme: light)'
+  );
+
+  if (currentSystemThemeDark.matches === true) {
+    currentSystemTheme = 'dark';
+  } else if (currentSystemThemeLight.matches === true) {
+    currentSystemTheme = 'light';
+  } else {
+    currentSystemTheme = 'high-contrast';
+  }
+
+  return currentSystemTheme;
+}
+
+function applyCurrentSystemTheme(themeToApply: string): void {
+  loadGETheme(themeToApply);
+
+  // @ts-ignore
+  appState.dispatch(changeTheme(themeToApply));
+}
 
 const appState: any = store({
   authToken: { token: false, pending: false },
@@ -74,6 +111,7 @@ const appState: any = store({
   theme: currentTheme,
 });
 
+setCurrentSystemTheme();
 appState.dispatch(getGraphProxyUrl());
 
 function refreshAccessToken() {
