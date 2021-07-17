@@ -140,7 +140,7 @@ export function checkTeamsAppInstallation(query: IQuery): Function {
         } catch {
           dispatch(changePopUp(false));
         }
-      });
+      }).catch(dispatch(changePopUp(false)));
     }
   };
 }
