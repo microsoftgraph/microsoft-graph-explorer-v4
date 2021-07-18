@@ -51,7 +51,7 @@ export function fetchSamples(): Function {
         throw response;
       }
       const res = await response.json();
-      return dispatch(fetchSamplesSuccess(res.sampleQueries));
+      return dispatch(fetchSamplesSuccess(res));
     } catch (error) {
       return dispatch(fetchSamplesError({ error }));
     }

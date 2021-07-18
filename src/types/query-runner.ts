@@ -1,5 +1,6 @@
 import { ITheme } from '@uifabric/styling';
 import { Mode } from './enums';
+import { PERMISSION_MODE_TYPE } from '../app/services/graph-constants';
 
 export interface IQueryRunnerState {
   sampleBody?: string;
@@ -82,14 +83,20 @@ export interface ISampleQuery {
   headers?: Header[];
 }
 
+export interface ISampleQueries {
+  sampleQueries: ISampleQuery[];
+  teamsAppSampleQueries?: ISampleQuery[];
+}
+
 export interface ISampleQueriesProps {
   theme?: ITheme;
   styles?: object;
   tokenPresent: boolean;
+  permissionModeType: PERMISSION_MODE_TYPE;
   profile: object;
   samples: {
     pending: boolean;
-    queries: ISampleQuery[];
+    queries: ISampleQueries;
     error: {
       message: string;
     };
