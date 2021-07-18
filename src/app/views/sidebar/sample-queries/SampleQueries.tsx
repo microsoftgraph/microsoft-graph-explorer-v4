@@ -63,8 +63,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   public componentDidMount = () => {
     const { samples, permissionModeType } = this.props;
     const queries = samples.queries;
-    console.log('samples', samples);
-    console.log('perm', permissionModeType);
+
     if ((queries.sampleQueries && queries.sampleQueries.length > 0) || (queries.teamsAppSampleQueries && queries.teamsAppSampleQueries.length > 0)) {
       this.setStateQueries(permissionModeType, queries);
     } else {
@@ -77,16 +76,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
     const { samples: { queries }, permissionModeType } = this.props;
     const { sampleQueries } = this.state;
-    console.log('queries in update', queries);
-    console.log('prev props in update', prevProps.samples);
-    if (prevProps.permissionModeType != permissionModeType || prevProps.samples.queries.sampleQueries !== queries.sampleQueries || prevProps.samples.queries.teamsAppSampleQueries !== queries.teamsAppSampleQueries) {
+    if (prevProps.permissionModeType !== permissionModeType || prevProps.samples.queries.sampleQueries !== queries.sampleQueries || prevProps.samples.queries.teamsAppSampleQueries !== queries.teamsAppSampleQueries) {
       this._groups = generateGroupsFromList(sampleQueries, 'category');
       this.setStateQueries(permissionModeType, queries);
     }
   };
 
   public searchValueChanged = (event: any, value?: string): void => {
-    // const { queries } = this.props.samples;
     const { samples: { queries }, permissionModeType } = this.props;
 
     let sampleQueries;
