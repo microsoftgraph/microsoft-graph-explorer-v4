@@ -348,7 +348,7 @@ class App extends Component<IAppProps, IAppState> {
     const teamsapp = <a href={"https://www.bing.com/?form=000010"} target="_blank">{translateMessage('Sample Explorer Teams app')}</a>;
     //TODO: put in the url when we have this set up ADO #38728
     // eslint-disable-next-line react/jsx-no-target-blank
-    const rsc = <a href={RSC_URL} target="_blank">{translateMessage('resource specific consent')}</a>;
+    const rsc = <a href={RSC_URL} target="_blank">{translateMessage('resource-specific consent')}</a>;
     // eslint-disable-next-line react/jsx-no-target-blank
     const installedApp = <a href={INSTALLED_APP_URL} target="_blank">{translateMessage("Installed Apps")}</a>;
     return (
@@ -357,12 +357,12 @@ class App extends Component<IAppProps, IAppState> {
         {permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && < Dialog
           hidden={hideDialog}
           dialogContentProps={{
-            title: `${translateMessage('Application Permissions')}`,
+            title: `${translateMessage('Install sample app')}`,
             showCloseButton: true,
           }}
           onDismiss={this.toggleDialog}
         >
-          <p>{translateMessage('Resource Specific Consent popup')} {teamsapp}. <br /> &nbsp;</p>
+          <p>{translateMessage('Resource-specific Consent popup')} {teamsapp}. <br /> &nbsp;</p>
           <p>{translateMessage('Learn more about')} {rsc}. <br /> &nbsp;</p>
           <p>{translateMessage('Confirm')} {installedApp}.</p>
 

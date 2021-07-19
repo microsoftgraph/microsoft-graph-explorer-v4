@@ -106,7 +106,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
 
     const permissionModeTypeInfo = {
       [PERMISSION_MODE_TYPE.User]: [user.displayName + ' ' + translateMessage('As user'), user.profileImageUrl, user.emailAddress],
-      [PERMISSION_MODE_TYPE.TeamsApp]: ['Graph Explorer Sample App', APP_IMAGE, ""],
+      [PERMISSION_MODE_TYPE.TeamsApp]: ['Sample Teams app for Graph Explorer', APP_IMAGE, ""],
     }
 
     const persona: IPersonaSharedProps = {
