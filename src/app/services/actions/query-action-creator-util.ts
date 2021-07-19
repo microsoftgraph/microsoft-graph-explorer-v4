@@ -1,6 +1,6 @@
 import {
   AuthenticationHandlerOptions,
-  ResponseType
+  ResponseType,
 } from '@microsoft/microsoft-graph-client';
 import { MSALAuthenticationProviderOptions } from '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
 
@@ -40,7 +40,11 @@ export async function anonymousRequest(dispatch: Function, query: IQuery) {
     ...sampleHeaders,
   };
 
-  const options: IRequestOptions = { method: query.selectedVerb, headers };
+  const options: IRequestOptions = {
+    method: query.selectedVerb,
+    headers,
+    redirect: 'manual',
+  };
 
   dispatch(queryRunningStatus(true));
 
@@ -124,6 +128,7 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
       .api(encodeHashCharacters(query))
       .middlewareOptions([middlewareOptions])
       .headers(sampleHeaders)
+      .option('redirect', 'manual')
       .responseType(ResponseType.RAW);
 
     let response;
