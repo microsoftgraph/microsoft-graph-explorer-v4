@@ -123,12 +123,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   }
 
   private setStateQueries = (permissionModeType: PERMISSION_MODE_TYPE, queries: ISampleQueries) => {
-    console.log('i enter setState queries');
     if (permissionModeType === PERMISSION_MODE_TYPE.User) {
-      console.log('I come here');
       this.setState({ sampleQueries: queries.sampleQueries });
     } else if (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp) {
-      console.log('I am a teams app');
       this.setState({ sampleQueries: queries.teamsAppSampleQueries });
     }
   }
@@ -382,7 +379,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     }: any = this.props;
 
     const { sampleQueries } = this.state;
-    console.log('render state', sampleQueries);
+
     const classes = classNames(this.props);
     if (this._resetCollapse) {
       this._groups = generateGroupsFromList(sampleQueries, 'category');
