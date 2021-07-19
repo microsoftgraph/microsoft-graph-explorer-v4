@@ -10,7 +10,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { authProvider, GraphClient } from '../graph-client';
-import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_URL } from '../graph-constants';
+import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
@@ -21,18 +21,29 @@ export function queryResponse(response: object): IAction {
   };
 }
 
-export async function anonymousRequest(dispatch: Function, query: IQuery) {
-  const authToken = '{token:https://graph.microsoft.com/}';
-  const escapedUrl = encodeURIComponent(encodeHashCharacters(query));
-  const graphUrl = `${GRAPH_API_SANDBOX_URL}?url=${escapedUrl}`;
+export async function anonymousRequest(
+  dispatch: Function,
+  query: IQuery,
+  getState: Function
+) {
+  dispatch(queryRunningStatus(true));
+  const { proxyUrl } = getState();
+  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl);
+  return fetch(graphUrl, options);
+}
 
+export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
+  const escapedUrl = encodeURIComponent(query.sampleUrl);
+  const graphUrl = `${proxyUrl}?url=${escapedUrl}`;
   const sampleHeaders: any = {};
+
   if (query.sampleHeaders && query.sampleHeaders.length > 0) {
     query.sampleHeaders.forEach((header) => {
       sampleHeaders[header.name] = header.value;
     });
   }
 
+  const authToken = '{token:https://graph.microsoft.com/}';
   const headers = {
     Authorization: `Bearer ${authToken}`,
     'Content-Type': 'application/json',
@@ -45,10 +56,7 @@ export async function anonymousRequest(dispatch: Function, query: IQuery) {
     headers,
     redirect: 'manual',
   };
-
-  dispatch(queryRunningStatus(true));
-
-  return fetch(graphUrl, options);
+  return { graphUrl, options };
 }
 
 export function authenticatedRequest(
@@ -123,7 +131,6 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
       authProvider,
       msalAuthOptions
     );
-
     const client = GraphClient.getInstance()
       .api(encodeHashCharacters(query))
       .middlewareOptions([middlewareOptions])
