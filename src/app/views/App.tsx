@@ -41,7 +41,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
-import { RSC_URL } from '../services/graph-constants';
+import { RSC_URL, INSTALLED_APP_URL } from '../services/graph-constants';
 import { responseAreaExpanded } from '../services/reducers/response-expanded-reducer';
 interface IAppProps {
   theme?: ITheme;
@@ -349,11 +349,13 @@ class App extends Component<IAppProps, IAppState> {
     //TODO: put in the url when we have this set up ADO #38728
     // eslint-disable-next-line react/jsx-no-target-blank
     const rsc = <a href={RSC_URL} target="_blank">{translateMessage('resource specific consent')}</a>;
+    // eslint-disable-next-line react/jsx-no-target-blank
+    const installedApp = <a href={INSTALLED_APP_URL} target="_blank">{translateMessage("Installed Apps")}</a>;
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         {permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && < Dialog
-          hidden={hideDialog || !!hideDialog}
+          hidden={hideDialog}
           dialogContentProps={{
             title: `${translateMessage('Application Permissions')}`,
             showCloseButton: true,
@@ -361,7 +363,8 @@ class App extends Component<IAppProps, IAppState> {
           onDismiss={this.toggleDialog}
         >
           <p>{translateMessage('Resource Specific Consent popup')} {teamsapp}. <br /> &nbsp;</p>
-          <p>{translateMessage('Learn more about')} {rsc}.</p>
+          <p>{translateMessage('Learn more about')} {rsc}. <br /> &nbsp;</p>
+          <p>{translateMessage('Confirm')} {installedApp}.</p>
 
         </Dialog>}
         <div className={`container-fluid ${classes.app}`}>

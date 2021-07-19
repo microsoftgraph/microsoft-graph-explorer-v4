@@ -127,20 +127,19 @@ export function checkTeamsAppInstallation(query: IQuery): Function {
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query).then(async (response: Response) => {
         const result = await parseResponse(response, respHeaders);
-        try {
-          for (const i of result.value) {
-            if (i.teamsApp.id === TEAMS_APP_ID) {
-              if (!getState().hideDialog) {
-                dispatch(changePopUp(true));
-              }
-              return
+        for (const i of result.value) {
+          if (i.teamsApp.externalId === TEAMS_APP_ID) {
+            if (!getState().hideDialog) {
+              dispatch(changePopUp(true));
             }
-            dispatch(changePopUp(false));
+            return
           }
-        } catch {
-          dispatch(changePopUp(false));
         }
-      }).catch(dispatch(changePopUp(false)));
+        dispatch(changePopUp(false));
+      }).catch(async () => {
+        dispatch(changePopUp(false));
+      }
+      )
     }
   };
 }
