@@ -1,10 +1,11 @@
 import { MessageBarType } from 'office-ui-fabric-react';
-
 import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
+import { TEAMS_APP_ID } from '../graph-constants';
+import { changePopUp } from './permission-mode-action-creator';
 import {
   anonymousRequest, authenticatedRequest,
   isImageResponse, parseResponse, queryResponse
@@ -118,3 +119,27 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
   return result;
 }
 
+export function checkTeamsAppInstallation(query: IQuery): Function {
+  return (dispatch: Function, getState: Function) => {
+    const tokenPresent = !!getState()?.authToken?.token;
+    const respHeaders: any = {};
+
+    if (tokenPresent) {
+      return authenticatedRequest(dispatch, query).then(async (response: Response) => {
+        const result = await parseResponse(response, respHeaders);
+        for (const i of result.value) {
+          if (i.teamsApp.externalId === TEAMS_APP_ID) {
+            if (!getState().hideDialog) {
+              dispatch(changePopUp(true));
+            }
+            return
+          }
+        }
+        dispatch(changePopUp(false));
+      }).catch(async () => {
+        dispatch(changePopUp(false));
+      }
+      )
+    }
+  };
+}

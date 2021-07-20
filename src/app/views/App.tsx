@@ -23,6 +23,7 @@ import { clearQueryStatus } from '../services/actions/query-status-action-creato
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
+import { changePopUp } from '../services/actions/permission-mode-action-creator';
 import { GRAPH_URL, PERMISSION_MODE_TYPE } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
@@ -40,22 +41,25 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
-import { RSC_URL } from '../services/graph-constants';
+import { RSC_URL, INSTALLED_APP_URL } from '../services/graph-constants';
+import { responseAreaExpanded } from '../services/reducers/response-expanded-reducer';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
   intl: InjectedIntl;
+  hideDialog: boolean;
+  sidebarProperties: ISidebarProps;
   profile: object;
   queryState: object | null;
   termsOfUse: boolean;
   graphExplorerMode: Mode;
-  sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
   authenticated: boolean;
   actions: {
     clearQueryStatus: Function;
     clearTermsOfUse: Function;
     setSampleQuery: Function;
+    changePopUp: Function;
     runQuery: Function;
     toggleSidebar: Function;
     signIn: Function;
@@ -66,7 +70,6 @@ interface IAppProps {
 interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
-  hideDialog: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -76,8 +79,7 @@ class App extends Component<IAppProps, IAppState> {
     super(props);
     this.state = {
       selectedVerb: 'GET',
-      mobileScreen: false,
-      hideDialog: true
+      mobileScreen: false
     };
   }
 
@@ -283,13 +285,10 @@ class App extends Component<IAppProps, IAppState> {
 
     this.props.actions!.toggleSidebar(properties);
   }
+  private toggleDialog = (): void => {
+    const { hideDialog }: any = this.props;
+    this.props.actions!.changePopUp(!hideDialog);
 
-  private closeDialog = (): void => {
-    this.setState({ hideDialog: true });
-  };
-
-  private showDialog = (): void => {
-    this.setState({ hideDialog: false });
   };
 
   public displayAuthenticationSection = (minimised: boolean) => {
@@ -310,7 +309,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery, permissionModeType,
+    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery, permissionModeType, hideDialog,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
@@ -345,27 +344,27 @@ class App extends Component<IAppProps, IAppState> {
     if (mobileScreen) {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
-    if (permissionModeType !== PERMISSION_MODE_TYPE.TeamsApp && this.state.hideDialog) {
-      this.showDialog();
-    }
     // eslint-disable-next-line react/jsx-no-target-blank
     const teamsapp = <a href={"https://www.bing.com/?form=000010"} target="_blank">{translateMessage('Sample Explorer Teams app')}</a>;
     //TODO: put in the url when we have this set up ADO #38728
     // eslint-disable-next-line react/jsx-no-target-blank
     const rsc = <a href={RSC_URL} target="_blank">{translateMessage('resource-specific consent')}</a>;
+    // eslint-disable-next-line react/jsx-no-target-blank
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         {permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && < Dialog
-          hidden={this.state.hideDialog}
+          hidden={hideDialog}
           dialogContentProps={{
             title: `${translateMessage('Install sample app')}`,
             showCloseButton: true,
           }}
-          onDismiss={this.closeDialog}
+          onDismiss={this.toggleDialog}
         >
-          <p>{translateMessage('Resource-specific Consent popup')} {teamsapp}. <br /> &nbsp;</p>
-          <p>{translateMessage('Learn more about')} {rsc}.</p>
+          <div className={classes.docLink}>
+            <p> {translateMessage('Resource-specific Consent popup')} {teamsapp}. <br /> &nbsp;</p>
+            <p> {translateMessage('Learn more about')} {rsc}. <br /> &nbsp;</p>
+          </div>
 
         </Dialog>}
         <div className={`container-fluid ${classes.app}`}>
@@ -418,12 +417,13 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme,
-  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode, permissionModeType
+  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode, permissionModeType, hideDialog
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
 
   return {
+    hideDialog,
     appTheme: theme,
     graphExplorerMode,
     profile,
@@ -442,6 +442,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     actions: bindActionCreators({
       clearQueryStatus,
+      changePopUp,
       clearTermsOfUse,
       runQuery,
       setSampleQuery,

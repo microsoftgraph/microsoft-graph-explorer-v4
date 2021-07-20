@@ -19,7 +19,7 @@ import { snippets } from './snippet-reducer';
 import { termsOfUse } from './terms-of-use-reducer';
 import { theme } from './theme-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
-import { permissionModeType } from './permission-mode-reducer';
+import { permissionModeType, hideDialog } from './permission-mode-reducer';
 
 export default combineReducers({
   adaptiveCard,
@@ -43,5 +43,6 @@ export default combineReducers({
   theme,
   dimensions,
   permissionsPanelOpen,
-  permissionModeType
+  permissionModeType,
+  hideDialog
 });

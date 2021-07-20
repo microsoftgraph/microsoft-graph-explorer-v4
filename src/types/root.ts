@@ -22,6 +22,7 @@ export interface IRootState {
   queryRunnerStatus: IStatus | null;
   sampleQuery: IQuery;
   termsOfUse: boolean;
+  hideDialog: boolean;
   sidebarProperties: ISidebarProps;
   authToken: IAuthenticateResult;
   samples: ISampleQuery[];

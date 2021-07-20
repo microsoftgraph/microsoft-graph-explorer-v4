@@ -32,6 +32,8 @@ import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 import { translateMessage } from '../../utils/translate-messages';
 import { PERMISSION_MODE_TYPE } from '../../services/graph-constants';
+import { checkTeamsAppInstallation } from '../../services/actions/query-action-creators'
+import { IQuery } from '../../../types/query-runner';
 
 
 function Settings(props: ISettingsProps) {
@@ -130,10 +132,16 @@ function Settings(props: ISettingsProps) {
   };
 
   const handleChangeMode = (permissionModeType: PERMISSION_MODE_TYPE) => {
+    const query: IQuery = {
+      sampleUrl: "https://graph.microsoft.com/v1.0/me/teamwork/installedApps?$expand=teamsApp",
+      selectedVerb: "GET",
+      selectedVersion: "v1.0",
+      sampleHeaders: []
+    }
     let newPermissionModeType;
     switch (permissionModeType) {
       case PERMISSION_MODE_TYPE.User:
-        newPermissionModeType = PERMISSION_MODE_TYPE.TeamsApp;
+        dispatch(checkTeamsAppInstallation(query));
         dispatch(changeMode(PERMISSION_MODE_TYPE.TeamsApp));
         break;
       case PERMISSION_MODE_TYPE.TeamsApp:
