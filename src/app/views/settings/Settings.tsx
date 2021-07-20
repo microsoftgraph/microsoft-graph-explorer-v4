@@ -32,7 +32,7 @@ import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 import { translateMessage } from '../../utils/translate-messages';
 import { PERMISSION_MODE_TYPE } from '../../services/graph-constants';
-import { checkTeamsAppInstallation } from '../../services/actions/query-action-creators'
+import { toggleRSCPopup } from '../../services/actions/query-action-creators'
 import { IQuery } from '../../../types/query-runner';
 
 
@@ -141,7 +141,7 @@ function Settings(props: ISettingsProps) {
     let newPermissionModeType;
     switch (permissionModeType) {
       case PERMISSION_MODE_TYPE.User:
-        dispatch(checkTeamsAppInstallation(query));
+        dispatch(toggleRSCPopup(query));
         dispatch(changeMode(PERMISSION_MODE_TYPE.TeamsApp));
         break;
       case PERMISSION_MODE_TYPE.TeamsApp:

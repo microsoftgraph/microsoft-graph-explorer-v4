@@ -4,7 +4,7 @@ import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
-import { TEAMS_APP_ID } from '../graph-constants';
+import { TEAMS_APP_ID, RSC_HIDE_POPUP_LOCAL_STORAGE } from '../graph-constants';
 import { changePopUp } from './permission-mode-action-creator';
 import {
   anonymousRequest, authenticatedRequest,
@@ -119,15 +119,16 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
   return result;
 }
 
-export function checkTeamsAppInstallation(query: IQuery): Function {
+export function toggleRSCPopup(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = !!getState()?.authToken?.token;
     const respHeaders: any = {};
 
-    if (tokenPresent) {
+    if (tokenPresent && localStorage.getItem(RSC_HIDE_POPUP_LOCAL_STORAGE) !== "true") {
       return authenticatedRequest(dispatch, query).then(async (response: Response) => {
         const result = await parseResponse(response, respHeaders);
         for (const i of result.value) {
+          // check if Sample Teams App is installed
           if (i.teamsApp.externalId === TEAMS_APP_ID) {
             if (!getState().hideDialog) {
               dispatch(changePopUp(true));
