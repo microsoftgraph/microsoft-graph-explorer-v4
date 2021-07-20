@@ -361,6 +361,7 @@
   "Use Graph Explorer as a signed in user": "Use Graph Explorer as a signed in user",
   "Resource-specific Consent popup": "To use resource-specific consent permissions, download the Sample Teams app for Graph Explorer. ​",
   "Install": "Install",
+  "Install sample app": "Install sample app",
   "Learn more": "Learn more",
   "App mode access token error": "Access token is hidden in application mode for security purposes."
 }
