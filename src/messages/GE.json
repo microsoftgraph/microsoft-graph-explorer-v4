@@ -365,7 +365,5 @@
   "Learn more about": "Learn more about",
   "resource-specific consent": "resource-specific consent",
   "Graph Explorer Sample App": "Graph Explorer Sample App",
-  "App mode access token error": "Access token is hidden in application mode for security purposes.",
-  "Installed Apps": "installed app",
-  "Confirm": "Consent to one of these permissions to confirm that it's an "
+  "App mode access token error": "Access token is hidden in application mode for security purposes."
 }
