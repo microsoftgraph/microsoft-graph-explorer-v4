@@ -1,6 +1,6 @@
 import {
   Announced,
-  IStackTokens, ITheme, styled, Dialog
+  IStackTokens, ITheme, styled, Dialog, DialogFooter, PrimaryButton, DefaultButton
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
@@ -24,7 +24,7 @@ import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { changePopUp } from '../services/actions/permission-mode-action-creator';
-import { GRAPH_URL, PERMISSION_MODE_TYPE } from '../services/graph-constants';
+import { GRAPH_URL, PERMISSION_MODE_TYPE, RSC_URL, TEAMS_APP_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
@@ -41,8 +41,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
-import { RSC_URL, INSTALLED_APP_URL } from '../services/graph-constants';
-import { responseAreaExpanded } from '../services/reducers/response-expanded-reducer';
+
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -344,28 +343,22 @@ class App extends Component<IAppProps, IAppState> {
     if (mobileScreen) {
       sidebarWidth = layout = 'col-xs-12 col-sm-12';
     }
-    // eslint-disable-next-line react/jsx-no-target-blank
-    const teamsapp = <a href={"https://www.bing.com/?form=000010"} target="_blank">{translateMessage('Sample Explorer Teams app')}</a>;
-    //TODO: put in the url when we have this set up ADO #38728
-    // eslint-disable-next-line react/jsx-no-target-blank
-    const rsc = <a href={RSC_URL} target="_blank">{translateMessage('resource-specific consent')}</a>;
-    // eslint-disable-next-line react/jsx-no-target-blank
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        {permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && < Dialog
+        {permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && <Dialog
           hidden={hideDialog}
           dialogContentProps={{
-            title: `${translateMessage('Install sample app')}`,
+            title: translateMessage('Install sample app'),
             showCloseButton: true,
+            subText: translateMessage('Resource-specific Consent popup'),
           }}
           onDismiss={this.toggleDialog}
         >
-          <div className={classes.docLink}>
-            <p> {translateMessage('Resource-specific Consent popup')} {teamsapp}. <br /> &nbsp;</p>
-            <p> {translateMessage('Learn more about')} {rsc}. <br /> &nbsp;</p>
-          </div>
-
+          <DialogFooter>
+            <PrimaryButton onClick={() => window.open(TEAMS_APP_URL, '_blank')} text={translateMessage('Install')} />
+            <DefaultButton onClick={() => window.open(RSC_URL, '_blank')} text={translateMessage('Learn more')} />
+          </DialogFooter>
         </Dialog>}
         <div className={`container-fluid ${classes.app}`}>
           <Announced message={!showSidebar ?
