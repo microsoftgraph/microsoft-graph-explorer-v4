@@ -1,6 +1,6 @@
 import {
   Announced,
-  IStackTokens, ITheme, styled, Dialog, DialogFooter, PrimaryButton, DefaultButton
+  IStackTokens, ITheme, styled, Dialog, DialogFooter, PrimaryButton, DefaultButton, Checkbox
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
@@ -24,7 +24,7 @@ import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { changePopUp } from '../services/actions/permission-mode-action-creator';
-import { GRAPH_URL, PERMISSION_MODE_TYPE, RSC_URL, TEAMS_APP_URL } from '../services/graph-constants';
+import { GRAPH_URL, PERMISSION_MODE_TYPE, RSC_URL, TEAMS_APP_URL, RSC_HIDE_POPUP } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
@@ -69,6 +69,7 @@ interface IAppProps {
 interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
+  hideRSCPopupValue: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -78,7 +79,8 @@ class App extends Component<IAppProps, IAppState> {
     super(props);
     this.state = {
       selectedVerb: 'GET',
-      mobileScreen: false
+      mobileScreen: false,
+      hideRSCPopupValue: false,
     };
   }
 
@@ -287,8 +289,17 @@ class App extends Component<IAppProps, IAppState> {
   private toggleDialog = (): void => {
     const { hideDialog }: any = this.props;
     this.props.actions!.changePopUp(!hideDialog);
-
   };
+
+  private toggleHideRSCPopupValue = () => {
+    this.setState({
+      hideRSCPopupValue: !this.state.hideRSCPopupValue
+    });
+  };
+
+  private setRSCPopupDontShowAgain = () => {
+    localStorage.setItem(RSC_HIDE_POPUP, "true")
+  }
 
   public displayAuthenticationSection = (minimised: boolean) => {
     return <div style={{
@@ -328,6 +339,14 @@ class App extends Component<IAppProps, IAppState> {
       padding: 10
     };
 
+    const handleInstallTeamsAppButton = () => {
+      if (this.state.hideRSCPopupValue) {
+        this.setRSCPopupDontShowAgain();
+      }
+      this.toggleDialog();
+      window.open(TEAMS_APP_URL, '_blank')
+    }
+
     let sidebarWidth = `col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`;
 
     let layout =
@@ -355,8 +374,9 @@ class App extends Component<IAppProps, IAppState> {
           }}
           onDismiss={this.toggleDialog}
         >
+          <Checkbox label={translateMessage('Do not show again')} checked={this.state.hideRSCPopupValue} onChange={() => this.toggleHideRSCPopupValue()} />
           <DialogFooter>
-            <PrimaryButton onClick={() => window.open(TEAMS_APP_URL, '_blank')} text={translateMessage('Install')} />
+            <PrimaryButton onClick={handleInstallTeamsAppButton} text={translateMessage('Install')} />
             <DefaultButton onClick={() => window.open(RSC_URL, '_blank')} text={translateMessage('Learn more')} />
           </DialogFooter>
         </Dialog>}
