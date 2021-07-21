@@ -353,5 +353,6 @@
   "This response contains an @odata property.": "This response contains an @odata property.",
   "Click here to follow the link": "Click here to follow the link",
   "Signing you out...": "Signing you out...",
-  "Admin consent not required": "Admin consent is not required"
+  "Admin consent not required": "Admin consent is not required",
+  "Navigation help": "Navigate with right arrow key to access"
 }
