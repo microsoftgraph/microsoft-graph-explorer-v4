@@ -4,7 +4,7 @@ import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
-import { TEAMS_APP_ID, RSC_HIDE_POPUP_LOCAL_STORAGE } from '../graph-constants';
+import { TEAMS_APP_ID, RSC_HIDE_POPUP } from '../graph-constants';
 import { changePopUp } from './permission-mode-action-creator';
 import {
   anonymousRequest, authenticatedRequest,
@@ -124,7 +124,7 @@ export function toggleRSCPopup(query: IQuery): Function {
     const tokenPresent = !!getState()?.authToken?.token;
     const respHeaders: any = {};
 
-    if (tokenPresent && localStorage.getItem(RSC_HIDE_POPUP_LOCAL_STORAGE) !== "true") {
+    if (tokenPresent && localStorage.getItem(RSC_HIDE_POPUP) !== "true") {
       return authenticatedRequest(dispatch, query).then(async (response: Response) => {
         const result = await parseResponse(response, respHeaders);
         for (const i of result.value) {

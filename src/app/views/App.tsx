@@ -24,7 +24,7 @@ import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator
 import { changeThemeSuccess } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { changePopUp } from '../services/actions/permission-mode-action-creator';
-import { GRAPH_URL, PERMISSION_MODE_TYPE, RSC_URL, TEAMS_APP_URL, RSC_HIDE_POPUP_LOCAL_STORAGE } from '../services/graph-constants';
+import { GRAPH_URL, PERMISSION_MODE_TYPE, RSC_URL, TEAMS_APP_URL, RSC_HIDE_POPUP } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
@@ -298,7 +298,7 @@ class App extends Component<IAppProps, IAppState> {
   };
 
   private setRSCPopupDontShowAgain = () => {
-    localStorage.setItem(RSC_HIDE_POPUP_LOCAL_STORAGE, "true")
+    localStorage.setItem(RSC_HIDE_POPUP, "true")
   }
 
   public displayAuthenticationSection = (minimised: boolean) => {

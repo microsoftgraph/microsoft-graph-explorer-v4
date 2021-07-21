@@ -17,7 +17,7 @@ export enum PERMISSION_MODE_TYPE {
 }
 export const RSC_PERMISSIONS_ENDINGS = [".Group", ".Chat"];
 export const RSC_URL = "https://docs.microsoft.com/en-us/microsoftteams/platform/graph-api/rsc/resource-specific-consent";
-export const RSC_HIDE_POPUP_LOCAL_STORAGE = "do not show RSC popup again"
+export const RSC_HIDE_POPUP = "do not show RSC popup again"
 export const APP_IMAGE = "https://docs.microsoft.com/en-us/microsoftteams/platform/assets/icons/graph-icon-1.png";
 export const TEAMS_APP_ID = "46c88300-12bd-44cb-b3ba-734ed25fe1de";
 export const TEAMS_APP_URL = "https://www.bing.com/?form=000010";
