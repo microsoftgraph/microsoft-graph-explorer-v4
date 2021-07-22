@@ -81,7 +81,7 @@ const QueryInput = (props: IQueryInputProps) => {
     <div className='row'>
       <div className='col-xs-12 col-lg-2'>
         <Dropdown
-          aria-labelledby={translateMessage('HTTP request method option')}
+          ariaLabel={translateMessage('HTTP request method option')}
           role='listbox'
           selectedKey={sampleQuery.selectedVerb}
           options={httpMethods}
