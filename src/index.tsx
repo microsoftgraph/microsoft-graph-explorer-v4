@@ -61,12 +61,12 @@ function setCurrentSystemTheme(): void {
   if (themeFromLocalStorage) {
     currentTheme = themeFromLocalStorage;
   } else {
-    currentTheme = checkTheme();
+    currentTheme = getOSTheme();
   }
 
   applyCurrentSystemTheme(currentTheme);
 }
-function checkTheme(): string {
+function getOSTheme(): string {
   let currentSystemTheme: string = 'light';
   const currentSystemThemeDark = window.matchMedia(
     '(prefers-color-scheme: dark)'
