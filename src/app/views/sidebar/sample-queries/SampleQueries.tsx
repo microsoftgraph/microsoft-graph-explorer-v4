@@ -125,8 +125,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   private setStateQueries = (permissionModeType: PERMISSION_MODE_TYPE, queries: ISampleQueries) => {
     if (permissionModeType === PERMISSION_MODE_TYPE.User) {
       this.setState({ sampleQueries: queries.sampleQueries });
+      this._groups = generateGroupsFromList(queries.sampleQueries, 'category');
     } else if (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp) {
       this.setState({ sampleQueries: queries.teamsAppSampleQueries });
+      this._groups = generateGroupsFromList(queries.teamsAppSampleQueries as any, 'category');
     }
   }
 
