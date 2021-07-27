@@ -14,7 +14,8 @@ import {
 } from '../redux-constants';
 import {
   PERMS_SCOPE,
-  PERMISSION_MODE_TYPE
+  PERMISSION_MODE_TYPE,
+  ACCOUNT_TYPE
 } from '../graph-constants';
 import {
   getAuthTokenSuccess,
@@ -46,13 +47,21 @@ export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
-      const { devxApi, permissionsPanelOpen, permissionModeType, sampleQuery: query }: IRootState = getState();
+      const { devxApi, permissionsPanelOpen, profileType, permissionModeType, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
       const permsScopeLookup = {
         [PERMISSION_MODE_TYPE.User]: PERMS_SCOPE.WORK,
         [PERMISSION_MODE_TYPE.TeamsApp]: PERMS_SCOPE.APPLICATION,
       }
-      const scope = permsScopeLookup[permissionModeType];
+      let scope = permsScopeLookup[permissionModeType];
+
+      if (scope !== PERMS_SCOPE.APPLICATION) {
+        if (profileType === ACCOUNT_TYPE.AAD) {
+          scope = PERMS_SCOPE.WORK;
+        } else if (profileType === ACCOUNT_TYPE.MSA) {
+          scope = PERMS_SCOPE.PERSONAL;
+        }
+      }
 
       if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);

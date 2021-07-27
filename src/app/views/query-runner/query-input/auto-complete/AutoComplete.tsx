@@ -104,6 +104,10 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   private initialiseAutoComplete = (url: string) => {
+    const isSlashPreceed = url.substring(url.length - 1, url.length - 2);
+    if (isSlashPreceed === '/') {
+      return;
+    }
     switch (getLastCharacterOf(url)) {
       case '/':
       case '?':
@@ -207,20 +211,12 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   public displayLinkOptions = () => {
-    const { compare } = this.state;
     const parametersWithVerb = getParametersWithVerb(this.props);
     if (!parametersWithVerb) {
       return;
     }
 
-    let filteredSuggestions = parametersWithVerb.links;
-    if (compare) {
-      filteredSuggestions = filteredSuggestions.filter((suggestion: string) => {
-        return suggestion.toLowerCase().indexOf(compare.toLowerCase()) > -1;
-      });
-    }
-
-    this.setSuggestions(filteredSuggestions);
+    this.setSuggestions(parametersWithVerb.links);
   }
 
   public getQueryParameters = () => {

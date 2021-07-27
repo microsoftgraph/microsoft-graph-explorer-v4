@@ -87,6 +87,10 @@ export function getTokens(user?: any) {
       demoTenantValue: '19:d0bba23c2fc8413991125a43a54cc30e@thread.skype',
     },
     {
+      placeholder: 'chat-id',
+      demoTenantValue: '19:2a395c1dfe36431fb6e4cd5b225c17ee@thread.v2',
+    },
+    {
       placeholder: 'message-id',
       demoTenantValue: '1501527481624',
     },

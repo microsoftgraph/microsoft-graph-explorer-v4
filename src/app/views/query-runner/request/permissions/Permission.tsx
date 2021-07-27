@@ -90,11 +90,13 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         case 'isAdmin':
           if (item.isAdmin) {
             return <div style={{ textAlign: 'center' }}>
-              <Icon iconName='checkmark' className={classes.checkIcon} />
+              <Icon iconName='checkmark' className={classes.checkIcon}
+                aria-label={translateMessage('Admin consent required')} />
             </div>;
           } else {
             return <div style={{ textAlign: 'center' }}>
-              <Icon iconName='StatusCircleErrorX' className={classes.checkIcon} />
+              <Icon iconName='StatusCircleErrorX' className={classes.checkIcon}
+                aria-label={translateMessage('Admin consent not required')} />
             </div>;
           }
 
@@ -171,7 +173,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         fieldName: 'value',
         minWidth: 200,
         maxWidth: 250,
-        isResizable: true
+        isResizable: true,
+        columnActionsMode: 0
       }
     ];
 
@@ -190,12 +193,13 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           maxWidth: (tokenPresent)
             ? (permissionModeTypeIsUser ? 600 : 1300)
             : 1000,
-          isMultiline: true
+          isMultiline: true,
+          columnActionsMode: 0
         }
       );
     }
 
-    if (permissionModeTypeIsUser) {
+    if (tokenPresent && permissionModeTypeIsUser) {
       columns.push(
         {
           key: 'isAdmin',
