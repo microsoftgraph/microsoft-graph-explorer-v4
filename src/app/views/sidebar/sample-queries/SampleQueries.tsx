@@ -64,7 +64,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const { samples, permissionModeType } = this.props;
     const queries = samples.queries;
 
-    if ((queries.sampleQueries && queries.sampleQueries.length > 0) || (queries.teamsAppSampleQueries && queries.teamsAppSampleQueries.length > 0)) {
+    if ((queries.sampleQueries && queries.sampleQueries.length > 0)
+      || (queries.teamsAppSampleQueries && queries.teamsAppSampleQueries.length > 0)) {
       this.setStateQueries(permissionModeType, queries);
     } else {
       this.props.actions!.fetchSamples();
@@ -76,7 +77,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
     const { samples: { queries }, permissionModeType } = this.props;
     const { sampleQueries } = this.state;
-    if (prevProps.permissionModeType !== permissionModeType || prevProps.samples.queries.sampleQueries !== queries.sampleQueries || prevProps.samples.queries.teamsAppSampleQueries !== queries.teamsAppSampleQueries) {
+    if (prevProps.permissionModeType !== permissionModeType
+      || prevProps.samples.queries.sampleQueries !== queries.sampleQueries
+      || prevProps.samples.queries.teamsAppSampleQueries !== queries.teamsAppSampleQueries) {
       this._groups = generateGroupsFromList(sampleQueries, 'category');
       this.setStateQueries(permissionModeType, queries);
     }
