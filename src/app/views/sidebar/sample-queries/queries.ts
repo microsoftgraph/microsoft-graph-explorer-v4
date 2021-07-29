@@ -1452,16 +1452,6 @@ export const queries: ISampleQueries = {
             "tip": "This query requires a team id.  To find the team id of teams you belong to, you can switch to user (delegated permissions) mode and run: GET https://graph.microsoft.com/v1.0/me/joinedTeams."
         },
         {
-            "id": "fece537d-55e0-42d2-bcfd-e71674322967",
-            "category": "Microsoft Teams (beta)",
-            "method": "GET",
-            "humanName": "app installations within a chat",
-            "requestUrl": "/beta/chats/{chat-id}/installedApps",
-            "docLink": "https://docs.microsoft.com/en-us/graph/api/chat-list-installedapps?view=graph-rest-beta&tabs=http",
-            "tip": "This query requires a chat id. To find the chat ids, you can switch to user (delegated permissions) mode and run: GET https://graph.microsoft.com/beta/me/chats/",
-            "skipTest": false
-        },
-        {
             "id": "da59a1e1-4979-485e-a128-44f28d6d67ac",
             "category": "Microsoft Teams",
             "method": "GET",
