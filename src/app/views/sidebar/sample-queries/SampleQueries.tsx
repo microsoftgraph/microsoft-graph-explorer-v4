@@ -27,6 +27,7 @@ import { geLocale } from '../../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import {
   IQuery,
+  ISampleQueries,
   ISampleQueriesProps,
   ISampleQuery,
 } from '../../../../types/query-runner';
@@ -35,7 +36,8 @@ import * as queryActionCreators from '../../../services/actions/query-action-cre
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
-import { GRAPH_URL } from '../../../services/graph-constants';
+import * as permissionModeActionCreators from '../../../services/actions/permission-mode-action-creator';
+import { GRAPH_URL, PERMISSION_MODE_TYPE } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/badge-color';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
@@ -59,9 +61,12 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   }
 
   public componentDidMount = () => {
-    const { queries } = this.props.samples;
-    if (queries && queries.length > 0) {
-      this.setState({ sampleQueries: queries });
+    const { samples, permissionModeType } = this.props;
+    const queries = samples.queries;
+
+    if ((queries.sampleQueries && queries.sampleQueries.length > 0)
+      || (queries.teamsAppSampleQueries && queries.teamsAppSampleQueries.length > 0)) {
+      this.setStateQueries(permissionModeType, queries);
     } else {
       this.props.actions!.fetchSamples();
     }
@@ -70,19 +75,29 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
+    const { samples: { queries }, permissionModeType } = this.props;
     const { sampleQueries } = this.state;
-    if (prevProps.samples.queries !== this.props.samples.queries) {
+    if (prevProps.permissionModeType !== permissionModeType
+      || prevProps.samples.queries.sampleQueries !== queries.sampleQueries
+      || prevProps.samples.queries.teamsAppSampleQueries !== queries.teamsAppSampleQueries) {
       this._groups = generateGroupsFromList(sampleQueries, 'category');
-      this.setState({ sampleQueries: this.props.samples.queries });
+      this.setStateQueries(permissionModeType, queries);
     }
   };
 
   public searchValueChanged = (event: any, value?: string): void => {
-    const { queries } = this.props.samples;
-    let sampleQueries = queries;
+    const { samples: { queries }, permissionModeType } = this.props;
+
+    let sampleQueries;
+    if (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp) {
+      sampleQueries = queries.teamsAppSampleQueries;
+    } else {
+      sampleQueries = queries.sampleQueries;
+    }
+
     if (value) {
       const keyword = value.toLowerCase();
-      sampleQueries = queries.filter((sample: any) => {
+      sampleQueries = (sampleQueries as ISampleQuery[]).filter((sample: any) => {
         const name = sample.humanName.toLowerCase();
         const category = sample.category.toLowerCase();
         return name.includes(keyword) || category.includes(keyword);
@@ -108,6 +123,16 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     // Check if link throws error
     validateExternalLink(item.docLink || '', componentNames.DOCUMENTATION_LINK, item.id);
+  }
+
+  private setStateQueries = (permissionModeType: PERMISSION_MODE_TYPE, queries: ISampleQueries) => {
+    if (permissionModeType === PERMISSION_MODE_TYPE.User) {
+      this.setState({ sampleQueries: queries.sampleQueries });
+      this._groups = generateGroupsFromList(queries.sampleQueries, 'category');
+    } else if (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp) {
+      this.setState({ sampleQueries: queries.teamsAppSampleQueries });
+      this._groups = generateGroupsFromList(queries.teamsAppSampleQueries as any, 'category');
+    }
   }
 
   public renderItemColumn = (
@@ -359,6 +384,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     }: any = this.props;
 
     const { sampleQueries } = this.state;
+
     const classes = classNames(this.props);
     if (this._resetCollapse) {
       this._groups = generateGroupsFromList(sampleQueries, 'category');
@@ -489,12 +515,13 @@ function displayTipMessage(actions: any, selectedQuery: ISampleQuery) {
   });
 }
 
-function mapStateToProps({ authToken, profile, samples, theme }: IRootState) {
+function mapStateToProps({ authToken, profile, samples, theme, permissionModeType }: IRootState) {
   return {
     tokenPresent: !!authToken.token,
     profile,
     samples,
-    appTheme: theme
+    appTheme: theme,
+    permissionModeType,
   };
 }
 
@@ -506,6 +533,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
         ...queryInputActionCreators,
         ...samplesActionCreators,
         ...queryStatusActionCreators,
+        ...permissionModeActionCreators,
       },
       dispatch
     ),
