@@ -67,7 +67,7 @@ export function Auth(props: any) {
           <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
           {(permissionModeType === PERMISSION_MODE_TYPE.User) &&
             <div>
-              <IconButton onClick={handleCopy} iconProps={copyIcon} title='Copy' ariaLabel='Copy' />
+              <IconButton onClick={handleCopy} iconProps={copyIcon} title={translateMessage('Copy')} ariaLabel={translateMessage('Copy')} />
               <IconButton iconProps={tokenDetailsIcon}
                 title={translateMessage('Get token details (Powered by jwt.ms)')}
                 ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
