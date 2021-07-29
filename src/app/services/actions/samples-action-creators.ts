@@ -32,9 +32,9 @@ export function fetchSamples(): Function {
     const { devxApi } = getState();
     let samplesUrl = `${devxApi.baseUrl}/samples`;
 
-    samplesUrl = devxApi.parameters
-      ? `${samplesUrl}?${devxApi.parameters}`
-      : `${samplesUrl}`;
+    // This is a temporary hard code till devtest devxapi is fully functional with an Azure blob
+    samplesUrl = 'https://gi21devxapi-devtest.azurewebsites.net/samples?org=LokiLabs&branchName=interns/feature/app-mode-sample-queries';
+
 
     const headers = {
       'Content-Type': 'application/json',
