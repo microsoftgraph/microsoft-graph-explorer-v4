@@ -1,4 +1,4 @@
-import { GRAPH_API_SANDBOX_ENDPOINT_URL, GRAPH_API_SANDBOX_URL } from "../../app/services/graph-constants";
+import { GRAPH_API_SANDBOX_ENDPOINT_URL } from "../../app/services/graph-constants";
 import fetch from "isomorphic-fetch";
 import { isValidHttpsUrl } from "../../app/utils/external-link-validation";
 import { createAnonymousRequest } from "../../app/services/actions/query-action-creator-util";
