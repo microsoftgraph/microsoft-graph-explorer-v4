@@ -141,7 +141,7 @@ function Settings(props: ISettingsProps) {
     let newPermissionModeType;
     switch (permissionModeType) {
       case PERMISSION_MODE_TYPE.User:
-        dispatch(toggleRSCPopup(query));
+        // dispatch(toggleRSCPopup(query));
         dispatch(changeMode(PERMISSION_MODE_TYPE.TeamsApp));
         break;
       case PERMISSION_MODE_TYPE.TeamsApp:
