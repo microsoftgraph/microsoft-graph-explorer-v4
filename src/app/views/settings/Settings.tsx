@@ -138,15 +138,15 @@ function Settings(props: ISettingsProps) {
       selectedVersion: "v1.0",
       sampleHeaders: []
     }
-    let newPermissionModeType;
+    let newPermissionModeType = PERMISSION_MODE_TYPE.TeamsApp;
     switch (permissionModeType) {
       case PERMISSION_MODE_TYPE.User:
         // dispatch(toggleRSCPopup(query));
-        dispatch(changeMode(PERMISSION_MODE_TYPE.TeamsApp));
+        dispatch(changeMode(newPermissionModeType));
         break;
       case PERMISSION_MODE_TYPE.TeamsApp:
         newPermissionModeType = PERMISSION_MODE_TYPE.User;
-        dispatch(changeMode(PERMISSION_MODE_TYPE.User));
+        dispatch(changeMode(newPermissionModeType));
         break;
     }
     telemetry.trackEvent(
