@@ -21,7 +21,7 @@ export const sidebarStyles = (theme: ITheme) => {
       cursor: 'pointer',
       maxHeight: pageHeightInVh,
       minHeight: pageHeightInVh,
-      overflowY: 'scroll',
+      overflowY: 'auto',
       overflowX: 'auto',
       fontSize: FontSizes.medium,
       background: 'inherit'
