@@ -200,13 +200,13 @@ export class History extends Component<IHistoryProps, any> {
 
           return (
             <TooltipHost
-              content={'Actions'}
+              content={translateMessage('Actions')}
               id={getId()}
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}>
               <IconButton
                 className={classes.docLink}
-                ariaLabel=' Actions menu'
+                ariaLabel={translateMessage('Actions menu')}
                 menuIconProps={{ iconName: 'More' }}
                 menuProps={{
                   shouldFocusOnMount: true,
