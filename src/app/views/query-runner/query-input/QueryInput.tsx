@@ -88,7 +88,6 @@ const QueryInput = (props: IQueryInputProps) => {
           styles={verbSelector}
           errorMessage={showError ? translateMessage('Sign in to use this method') : undefined}
           onChange={(event, method) => handleOnMethodChange(method)}
-
         />
       </div>
       <div className='col-xs-12 col-lg-2'>
