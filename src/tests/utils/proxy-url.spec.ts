@@ -29,20 +29,20 @@ describe('Sandbox api fetch should', () => {
     expect(response.ok).toBe(true);
   });
 
-  test('use old endpoint to make call to proxy', async () => {
-    const proxyUrl = GRAPH_API_SANDBOX_URL;
+  // test('use old endpoint to make call to proxy', async () => {
+  //   const proxyUrl = GRAPH_API_SANDBOX_URL;
 
-    const query: IQuery = {
-      sampleUrl: 'https://graph.microsoft.com/v1.0/me',
-      sampleHeaders: [],
-      selectedVerb: 'GET',
-      selectedVersion: 'v1.0',
-      sampleBody: ''
-    }
+  //   const query: IQuery = {
+  //     sampleUrl: 'https://graph.microsoft.com/v1.0/me',
+  //     sampleHeaders: [],
+  //     selectedVerb: 'GET',
+  //     selectedVersion: 'v1.0',
+  //     sampleBody: ''
+  //   }
 
-    const { graphUrl, options } = createAnonymousRequest(query, proxyUrl);
-    const response = await fetch(graphUrl, options);
-    expect(response.ok).toBe(true);
-  });
+  //   const { graphUrl, options } = createAnonymousRequest(query, proxyUrl);
+  //   const response = await fetch(graphUrl, options);
+  //   expect(response.ok).toBe(true);
+  // });
 
 });
