@@ -45,6 +45,7 @@ export function Monaco(props: IMonaco) {
                 horizontal: 'visible',
                 horizontalScrollbarSize: 17,
               },
+              wordWrap: 'on'
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}

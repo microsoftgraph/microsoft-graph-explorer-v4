@@ -41,7 +41,7 @@ export function runQuery(query: IQuery): Function {
       });
     }
 
-    return anonymousRequest(dispatch, query).then(async (response: Response) => {
+    return anonymousRequest(dispatch, query, getState).then(async (response: Response) => {
       await processResponse(response, respHeaders, dispatch, createdAt);
     });
   };

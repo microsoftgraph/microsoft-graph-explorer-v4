@@ -11,7 +11,7 @@ import {
   Panel,
   PanelType,
   PrimaryButton,
-  TooltipHost
+  TooltipHost,
 } from 'office-ui-fabric-react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -35,17 +35,21 @@ import { PERMISSION_MODE_TYPE } from '../../services/graph-constants';
 import { toggleRSCPopup } from '../../services/actions/query-action-creators'
 import { IQuery } from '../../../types/query-runner';
 
-
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
-  const { permissionsPanelOpen, authToken, theme: appTheme, permissionModeType } = useSelector((state: IRootState) => state);
+  const {
+    permissionsPanelOpen,
+    authToken,
+    theme: appTheme,
+    permissionModeType
+  } = useSelector((state: IRootState) => state);
   const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
 
   const {
-    intl: { messages }
+    intl: { messages },
   }: any = props;
 
   useEffect(() => {
@@ -68,11 +72,12 @@ function Settings(props: ISettingsProps) {
         iconProps: {
           iconName: 'ReportWarning',
         },
+        onClick: () => trackReportAnIssueLinkClickEvent(),
       },
       {
         key: 'divider',
         text: '-',
-        itemType: DropdownMenuItemType.Divider
+        itemType: DropdownMenuItemType.Divider,
       },
       {
         key: 'change-theme',
@@ -81,7 +86,7 @@ function Settings(props: ISettingsProps) {
           iconName: 'Color',
         },
         onClick: () => toggleThemeChooserDialogState(),
-      }
+      },
     ];
 
     if (permissionModeType === PERMISSION_MODE_TYPE.User) {
@@ -114,7 +119,7 @@ function Settings(props: ISettingsProps) {
             iconName: 'SignOut',
           },
           onClick: () => handleSignOut(),
-        },
+        }
       );
     }
     setItems(menuItems);
@@ -124,11 +129,9 @@ function Settings(props: ISettingsProps) {
     let hidden = themeChooserDialogHidden;
     hidden = !hidden;
     hideThemeChooserDialog(hidden);
-    telemetry.trackEvent(
-      eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.THEME_CHANGE_BUTTON
-      });
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.THEME_CHANGE_BUTTON,
+    });
   };
 
   const handleChangeMode = (permissionModeType: PERMISSION_MODE_TYPE) => {
@@ -161,15 +164,13 @@ function Settings(props: ISettingsProps) {
   };
 
   const handleChangeTheme = (selectedTheme: any) => {
-    const newTheme: AppTheme = selectedTheme.key;
+    const newTheme: string = selectedTheme.key;
     dispatch(changeTheme(newTheme));
     loadGETheme(newTheme);
-    telemetry.trackEvent(
-      eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.SELECT_THEME_BUTTON,
-        SelectedTheme: selectedTheme.key.replace('-', ' ').toSentenceCase()
-      });
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.SELECT_THEME_BUTTON,
+      SelectedTheme: selectedTheme.key.replace('-', ' ').toSentenceCase(),
+    });
   };
 
   const changePanelState = () => {
@@ -181,12 +182,16 @@ function Settings(props: ISettingsProps) {
   };
 
   const trackSelectPermissionsButtonClickEvent = () => {
-    telemetry.trackEvent(
-      eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
-      });
-  }
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON,
+    });
+  };
+
+  const trackReportAnIssueLinkClickEvent = () => {
+    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
+      ComponentName: componentNames.REPORT_AN_ISSUE_LINK,
+    });
+  };
 
   const setPermissions = (permissions: []) => {
     setSelectedPermissions(permissions);
@@ -198,11 +203,9 @@ function Settings(props: ISettingsProps) {
   };
 
   const trackOfficeDevProgramLinkClickEvent = () => {
-    telemetry.trackEvent(
-      eventTypes.LINK_CLICK_EVENT,
-      {
-        ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
-      });
+    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
+      ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK,
+    });
   };
 
   const getSelectionDetails = () => {
@@ -239,7 +242,7 @@ function Settings(props: ISettingsProps) {
   const menuProperties = {
     shouldFocusOnMount: true,
     alignTargetEdge: true,
-    items
+    items,
   };
 
   return (
@@ -247,17 +250,18 @@ function Settings(props: ISettingsProps) {
       <TooltipHost
         content={translateMessage('More actions')}
         id={getId()}
-        calloutProps={{ gapSpace: 0 }}>
+        calloutProps={{ gapSpace: 0 }}
+      >
         <IconButton
           ariaLabel={translateMessage('More actions')}
           role='button'
           styles={{
             label: { marginBottom: -20 },
-            menuIcon: { fontSize: 20 }
+            menuIcon: { fontSize: 20 },
           }}
           menuIconProps={{ iconName: 'More' }}
-          menuProps={menuProperties} />
-
+          menuProps={menuProperties}
+        />
       </TooltipHost>
       <div>
         <Dialog
@@ -269,7 +273,6 @@ function Settings(props: ISettingsProps) {
             isMultiline: false,
           }}
         >
-
           <ChoiceGroup
             label='Pick one theme'
             defaultSelectedKey={appTheme}
@@ -277,12 +280,12 @@ function Settings(props: ISettingsProps) {
               {
                 key: AppTheme.Light,
                 iconProps: { iconName: 'Light' },
-                text: messages.Light
+                text: messages.Light,
               },
               {
                 key: AppTheme.Dark,
                 iconProps: { iconName: 'CircleFill' },
-                text: messages.Dark
+                text: messages.Dark,
               },
               {
                 key: AppTheme.HighContrast,
@@ -290,12 +293,15 @@ function Settings(props: ISettingsProps) {
                 text: translateMessage('High Contrast'),
               }
             ]}
-            onChange={(event, selectedTheme) => handleChangeTheme(selectedTheme)}
+            onChange={(event, selectedTheme) =>
+              handleChangeTheme(selectedTheme)
+            }
           />
           <DialogFooter>
             <DefaultButton
               text={messages.Close}
-              onClick={() => toggleThemeChooserDialogState()} />
+              onClick={() => toggleThemeChooserDialogState()}
+            />
           </DialogFooter>
         </Dialog>
 

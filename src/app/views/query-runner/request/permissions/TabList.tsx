@@ -1,5 +1,5 @@
 import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode } from 'office-ui-fabric-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { IPermission } from '../../../../../types/permissions';
@@ -21,6 +21,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   const { consentedScopes, scopes, authToken, permissionModeType } = useSelector((state: IRootState) => state);
   const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
   const tokenPresent = !!authToken.token;
+  const [isHoverOverPermissionsList, setIsHoverOverPermissionsList] = useState(false);
 
   const isRSC = (permission: IPermission) => {
     return RSC_PERMISSIONS_ENDINGS.some((ending) => permission.value.indexOf(ending) !== -1)
@@ -84,13 +85,18 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
             ? 'permissions required to run the query'
             : 'application permissions required to run the query'} />}
       </Label>
-      <DetailsList styles={{ root: { maxHeight } }}
-        items={filteredPermissions}
-        columns={columns}
-        onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}
-        selectionMode={SelectionMode.none}
-        layoutMode={DetailsListLayoutMode.justified}
-        onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
+      <div
+        onMouseEnter={() => setIsHoverOverPermissionsList(true)}
+        onMouseLeave={() => setIsHoverOverPermissionsList(false)}>
+        <DetailsList
+          styles={isHoverOverPermissionsList ? { root: { maxHeight } } : { root: { maxHeight, overflow: "hidden" } }}
+          items={filteredPermissions}
+          columns={columns}
+          onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}
+          selectionMode={SelectionMode.none}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
+      </div>
       {filteredPermissions
         && filteredPermissions.length === 0
         && displayNoPermissionsFoundMessage()

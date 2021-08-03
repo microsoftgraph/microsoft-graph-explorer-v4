@@ -1,6 +1,6 @@
 
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
-import { Icon, Label, MessageBarType, Spinner, SpinnerSize, styled } from 'office-ui-fabric-react';
+import { Icon, Label, MessageBar, MessageBarType, Spinner, SpinnerSize, styled } from 'office-ui-fabric-react';
 import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -79,9 +79,9 @@ const Authentication = (props: any) => {
       </Label>
 
       <br />
-      <Label>
+      <MessageBar messageBarType={MessageBarType.warning} isMultiline={true}>
         <FormattedMessage id='Using demo tenant' /> <FormattedMessage id='To access your own data:' />
-      </Label>
+      </MessageBar>
     </>;
   }
 
