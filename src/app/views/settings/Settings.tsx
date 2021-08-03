@@ -149,15 +149,6 @@ function Settings(props: ISettingsProps) {
     });
   };
 
-  const trackReportAnIssueLinkClickEvent = () => {
-    telemetry.trackEvent(
-      eventTypes.LINK_CLICK_EVENT,
-      {
-        ComponentName: componentNames.REPORT_AN_ISSUE_LINK
-      });
-  }
-
-
   const setPermissions = (permissions: []) => {
     setSelectedPermissions(permissions);
   };
