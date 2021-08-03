@@ -131,14 +131,13 @@ export function toggleRSCPopup(query: IQuery): Function {
           // check if Sample Teams App is installed
           if (i.teamsApp.externalId === TEAMS_APP_ID) {
             if (!getState().hideDialog) {
-              dispatch(changePopUp(true));
+              return dispatch(changePopUp(true));
             }
-            return
           }
         }
-        dispatch(changePopUp(false));
+        return dispatch(changePopUp(false));
       }).catch(async () => {
-        dispatch(changePopUp(false));
+        return dispatch(changePopUp(false));
       }
       )
     }
