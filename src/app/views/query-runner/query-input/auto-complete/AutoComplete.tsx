@@ -68,7 +68,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     function getTextWidth(text: string) {
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
-    
+
       if (context === null) {
         return 0;
       }
@@ -350,6 +350,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       userInput: selectedSuggestion,
       compare: '',
       queryUrl: selectedSuggestion,
+      multiline: this.isOverflowing(selectedSuggestion)
     });
     this.props.contentChanged(selectedSuggestion);
     this.setFocus();
@@ -417,11 +418,11 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     return (
       <div onBlur={this.closeSuggestionDialog}>
-        <div ref={(el) => {this.element = el}}>
-          <TextField 
+        <div ref={(el) => { this.element = el }}>
+          <TextField
             className={autoInput}
             multiline={multiline}
-            autoAdjustHeight 
+            autoAdjustHeight
             resizable={false}
             type='text'
             autoComplete='off'

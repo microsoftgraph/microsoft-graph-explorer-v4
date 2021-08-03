@@ -199,19 +199,25 @@ export class History extends Component<IHistoryProps, any> {
           ];
 
           return (
-            <IconButton
-              className={classes.docLink}
-              title='Actions'
-              ariaLabel='Actions'
-              menuIconProps={{ iconName: 'More' }}
-              menuProps={{
-                shouldFocusOnMount: true,
-                items: buttonActions,
-              }}
-            />
+            <TooltipHost
+              content={translateMessage('Actions')}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+              styles={{ root: { display: 'inline-block' } }}>
+              <IconButton
+                className={classes.docLink}
+                ariaLabel={translateMessage('Actions menu')}
+                menuIconProps={{ iconName: 'More' }}
+                menuProps={{
+                  shouldFocusOnMount: true,
+                  items: buttonActions,
+                }}
+              />
+            </TooltipHost>
           );
 
         default:
+          const shortQueryContent = queryContent.replace(GRAPH_URL, '');
           return (
             <>
               <TooltipHost
@@ -221,10 +227,10 @@ export class History extends Component<IHistoryProps, any> {
                 styles={{ root: { display: 'inline-block' } }}
               >
                 <span
-                  aria-describedby={hostId}
+                  aria-label={`${shortQueryContent}. ${translateMessage('Navigation help')}`}
                   className={classes.queryContent}
                 >
-                  {queryContent.replace(GRAPH_URL, '')}
+                  {shortQueryContent}
                 </span>
               </TooltipHost>
             </>

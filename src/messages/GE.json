@@ -365,5 +365,7 @@
   "Learn more": "Learn more",
   "Do not show again": "Don't show again",
   "App mode access token error": "Access token is hidden in application mode for security purposes.",
-  "Admin consent not required": "Admin consent is not required"
+  "Admin consent not required": "Admin consent is not required",
+  "Navigation help": "Navigate with right arrow key to access",
+  "Actions menu": " Actions menu"
 }

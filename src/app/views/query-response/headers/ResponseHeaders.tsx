@@ -4,6 +4,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RESPONSE_HEADERS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { IRootState } from '../../../../types/root';
+import { translateMessage } from '../../../utils/translate-messages';
 
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
@@ -20,6 +21,7 @@ const ResponseHeaders = () => {
       <div>
         <IconButton
           style={{ float: 'right', zIndex: 1 }}
+          ariaLabel={translateMessage('Copy')}
           iconProps={{ iconName: 'copy' }}
           onClick={
             async () =>
