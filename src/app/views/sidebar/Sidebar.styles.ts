@@ -21,10 +21,14 @@ export const sidebarStyles = (theme: ITheme) => {
       cursor: 'pointer',
       maxHeight: pageHeightInVh,
       minHeight: pageHeightInVh,
-      overflowY: 'scroll',
-      overflowX: 'auto',
+      overflow: 'hidden',
       fontSize: FontSizes.medium,
-      background: 'inherit'
+      background: 'inherit',
+      selectors: {
+        ':hover': {
+          overflow: 'scroll',
+        },
+      },
     },
     pullLeft: {
       float: 'left'
