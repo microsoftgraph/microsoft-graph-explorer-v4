@@ -59,7 +59,7 @@ function Settings(props: ISettingsProps) {
       {
         key: 'graph-explorer-documentation',
         text: translateMessage('Graph Explorer Documentation'),
-        href: 'https://docs.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview',
+        href: `https://docs.microsoft.com/${geLocale}/graph/graph-explorer/graph-explorer-overview`,
         target: '_blank',
         iconProps: {
           iconName: 'TextDocument'
