@@ -69,15 +69,14 @@ export function getAdaptiveCard(
   };
 }
 
-function createCardFromTemplate(
-  templatePayload: any,
-  payload: string
-): AdaptiveCardsTemplateAPI.Template {
+function createCardFromTemplate(templatePayload: any, payload: string): AdaptiveCardsTemplateAPI.Template {
   const template = new AdaptiveCardsTemplateAPI.Template(templatePayload);
   const context: AdaptiveCardsTemplateAPI.IEvaluationContext = {
     $root: payload,
   };
-  AdaptiveCardsTemplateAPI.GlobalSettings.getUndefinedFieldValueSubstitutionString =
-    (_path: string) => ' ';
+  AdaptiveCardsTemplateAPI.GlobalSettings.getUndefinedFieldValueSubstitutionString = (
+    _path: string
+  ) => ' ';
   return template.expand(context);
 }
+

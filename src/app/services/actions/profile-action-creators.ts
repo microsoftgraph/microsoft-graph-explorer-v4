@@ -1,6 +1,6 @@
 import { IQuery } from '../../../types/query-runner';
-import { PROFILE_IMAGE_REQUEST_SUCCESS, PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS } from '../redux-constants';
-import { authenticatedRequest, isImageResponse, parseResponse } from './query-action-creator-util';
+import { PROFILE_IMAGE_REQUEST_SUCCESS, PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS, PROFILE_TYPE_SUCCESS } from '../redux-constants';
+import { authenticatedRequest, isBetaURLResponse, isImageResponse, parseResponse } from './query-action-creator-util';
 
 export function profileRequestSuccess(response: object): any {
   return {
@@ -23,6 +23,13 @@ export function profileRequestError(response: object): any {
   };
 }
 
+export function profileTypeSuccess(response: any): any {
+  return {
+    type: PROFILE_TYPE_SUCCESS,
+    response,
+  }
+}
+
 export function getProfileInfo(query: IQuery): Function {
   return (dispatch: Function) => {
     const respHeaders: any = {};
@@ -42,10 +49,15 @@ export function getProfileInfo(query: IQuery): Function {
         const json = await parseResponse(response, respHeaders);
         const contentType = respHeaders['content-type'];
         const isImageResult = isImageResponse(contentType);
+        const isBetaUserResult = isBetaURLResponse(json);
 
         if (isImageResult) {
           return dispatch(
             profileImageRequestSuccess(json),
+          );
+        } else if (isBetaUserResult) {
+          return dispatch(
+            profileTypeSuccess(json?.account?.[0]?.source?.type?.[0])
           );
         } else {
           return dispatch(
