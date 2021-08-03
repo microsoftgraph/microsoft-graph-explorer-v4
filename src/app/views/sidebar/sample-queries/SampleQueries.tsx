@@ -131,7 +131,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       this._groups = generateGroupsFromList(queries.sampleQueries, 'category');
     } else if (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp) {
       this.setState({ sampleQueries: queries.teamsAppSampleQueries });
-      this._groups = generateGroupsFromList(queries.teamsAppSampleQueries as any, 'category');
+      this._groups = generateGroupsFromList(queries.teamsAppSampleQueries || [], 'category');
     }
   }
 
