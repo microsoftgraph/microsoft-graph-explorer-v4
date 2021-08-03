@@ -1,7 +1,6 @@
-import { getId, getTheme, Icon, ITextField, KeyCodes, Spinner, TooltipHost } from 'office-ui-fabric-react';
+import { getId, getTheme, Icon, ITextField, KeyCodes, Spinner, TooltipHost, TextField } from 'office-ui-fabric-react';
 import { ITooltipHostStyles } from 'office-ui-fabric-react/lib/components/Tooltip/TooltipHost.types';
 import React, { Component } from 'react';
-import { TextField } from '@fluentui/react/lib/TextField';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -72,7 +71,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
       context.font = getComputedStyle(document.body).font;
       return context.measureText(text).width + 5;
-      
+
     }
 
     return !!this.element
@@ -348,6 +347,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       userInput: selectedSuggestion,
       compare: '',
       queryUrl: selectedSuggestion,
+      multiline: this.isOverflowing(selectedSuggestion)
     });
     this.props.contentChanged(selectedSuggestion);
     this.setFocus();
@@ -414,11 +414,11 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     return (
       <div onBlur={this.closeSuggestionDialog}>
-        <div ref={(el) => {this.element = el}}>
-          <TextField 
+        <div ref={(el) => { this.element = el }}>
+          <TextField
             className={autoInput}
             multiline={multiline}
-            autoAdjustHeight 
+            autoAdjustHeight
             resizable={false}
             type='text'
             autoComplete='off'
