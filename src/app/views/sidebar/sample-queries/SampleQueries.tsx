@@ -1,21 +1,7 @@
 import {
-  Announced,
-  DetailsList,
-  DetailsRow,
-  FontSizes,
-  FontWeights,
-  getId,
-  GroupHeader,
-  IColumn,
-  Icon,
-  MessageBar,
-  MessageBarType,
-  SearchBox,
-  SelectionMode,
-  Spinner,
-  SpinnerSize,
-  styled,
-  TooltipHost,
+  Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
+  GroupHeader, IColumn, Icon, MessageBar, MessageBarType, SearchBox,
+  SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -48,7 +34,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   constructor(props: ISampleQueriesProps) {
     super(props);
     this.state = {
-      sampleQueries: [],
+      sampleQueries: []
     };
   }
 
@@ -437,31 +423,26 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         <Announced
           message={`${sampleQueries.length} search results available.`}
         />
-        <div role='navigation'
-          onMouseEnter={() => this.setState({ isHoverOverSampleQueriesList: true })}
-          onMouseLeave={() => this.setState({ isHoverOverSampleQueriesList: false })}>
-          <DetailsList
-            styles={this.state.isHoverOverSampleQueriesList ? { root: { overflow: 'scroll' } } : { root: { overflow: 'hidden' } }}
-            className={classes.queryList}
-            cellStyleProps={{
-              cellRightPadding: 0,
-              cellExtraRightPadding: 0,
-              cellLeftPadding: 0,
-            }}
-            onRenderItemColumn={this.renderItemColumn}
-            items={sampleQueries}
-            selectionMode={SelectionMode.none}
-            columns={columns}
-            groups={groups}
-            groupProps={{
-              showEmptyGroups: true,
-              onRenderHeader: this.renderGroupHeader,
-            }}
-            onRenderRow={this.renderRow}
-            onRenderDetailsHeader={this.renderDetailsHeader}
-            onItemInvoked={this.querySelected}
-          />
-        </div>
+        <DetailsList
+          className={classes.queryList}
+          cellStyleProps={{
+            cellRightPadding: 0,
+            cellExtraRightPadding: 0,
+            cellLeftPadding: 0,
+          }}
+          onRenderItemColumn={this.renderItemColumn}
+          items={sampleQueries}
+          selectionMode={SelectionMode.none}
+          columns={columns}
+          groups={groups}
+          groupProps={{
+            showEmptyGroups: true,
+            onRenderHeader: this.renderGroupHeader,
+          }}
+          onRenderRow={this.renderRow}
+          onRenderDetailsHeader={this.renderDetailsHeader}
+          onItemInvoked={this.querySelected}
+        />
       </div>
     );
   }
