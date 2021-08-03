@@ -1,4 +1,4 @@
-import { Announced, PrimaryButton, styled, TextField } from 'office-ui-fabric-react';
+import { Announced, ITextField, PrimaryButton, styled, TextField } from 'office-ui-fabric-react';
 import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,6 +29,9 @@ const RequestHeaders = (props: any) => {
   const dispatch = useDispatch();
   const classes = classNames(props);
 
+  const textfieldRef = React.createRef<ITextField>();
+  const onSetFocus = () => textfieldRef.current!.focus();
+
   const handleOnHeaderNameChange = (name?: string) => {
     if (name) {
       setHeaderName(name);
@@ -50,6 +53,7 @@ const RequestHeaders = (props: any) => {
 
     dispatch(queryInputActionCreators.setSampleQuery(query));
     setAnnouncedMessage(translateMessage('Request Header deleted'));
+    onSetFocus(); //set focus to textfield after an item is deleted
   };
 
   const handleOnHeaderAdd = () => {
@@ -89,6 +93,7 @@ const RequestHeaders = (props: any) => {
             placeholder={messages.Key}
             value={headerName}
             onChange={(event, name) => handleOnHeaderNameChange(name)}
+            componentRef={textfieldRef}
           />
         </div>
         <div className='col-sm-5'>
