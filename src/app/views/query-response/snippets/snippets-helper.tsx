@@ -10,6 +10,7 @@ import { trackedGenericCopy } from '../../common/copy';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
 import { IRootState } from '../../../../types/root';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
+import { translateMessage } from '../../../utils/translate-messages';
 
 interface ISnippetProps {
   language: string;
@@ -66,6 +67,7 @@ function Snippet(props: ISnippetProps) {
         <>
           <IconButton
             style={{ float: 'right', zIndex: 1 }}
+            ariaLabel={translateMessage('Copy')}
             iconProps={copyIcon}
             onClick={async () =>
               trackedGenericCopy(
