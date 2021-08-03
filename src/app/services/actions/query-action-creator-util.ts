@@ -10,7 +10,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { authProvider, GraphClient } from '../graph-client';
-import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_URL } from '../graph-constants';
+import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_URL, GRAPH_URL, PERMISSION_MODE_TYPE } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
@@ -54,9 +54,15 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
 export function authenticatedRequest(
   dispatch: Function,
   query: IQuery,
+  devxApiUrl?: string,
+  permissionModeType?: PERMISSION_MODE_TYPE,
   scopes: string[] = DEFAULT_USER_SCOPES.split(' ')
 ) {
-  return makeRequest(query.selectedVerb, scopes)(dispatch, query);
+  if (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp) {
+    return makeAppRequest(query.selectedVerb, devxApiUrl as string)(dispatch, query);
+  } else {
+    return makeDelegatedRequest(query.selectedVerb, scopes)(dispatch, query);
+  }
 }
 
 export function isImageResponse(contentType: string | undefined) {
@@ -107,16 +113,53 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
   return response;
 }
 
-const makeRequest = (httpVerb: string, scopes: string[]): Function => {
-  return async (dispatch: Function, query: IQuery) => {
-    const sampleHeaders: any = {};
-    sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
+function getSampleHeaders(query: IQuery): any {
+  const sampleHeaders: any = {};
+  sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
 
-    if (query.sampleHeaders && query.sampleHeaders.length > 0) {
-      query.sampleHeaders.forEach((header) => {
-        sampleHeaders[header.name] = header.value;
-      });
+  if (query.sampleHeaders && query.sampleHeaders.length > 0) {
+    query.sampleHeaders.forEach((header) => {
+      sampleHeaders[header.name] = header.value;
+    });
+  }
+
+  return sampleHeaders;
+}
+
+const makeAppRequest = (httpVerb: string, devxapiUrl: string): Function => {
+  return async (dispatch: Function, query: IQuery) => {
+    const headers: any = getSampleHeaders(query);
+
+    // Adding user delegated token to request header
+    const token = await authProvider.getAccessToken();
+    headers.Authorization = `Bearer ${token}`;
+
+    const options: IRequestOptions = {
+      method: httpVerb,
+      headers
     }
+
+    if (httpVerb !== 'GET' && !!query.sampleBody) {
+      options.body = JSON.stringify(query.sampleBody);
+    }
+
+    dispatch(queryRunningStatus(true));
+
+    const graphEndpoint = query.sampleUrl.replace(GRAPH_URL, '');
+    const requestUrl = `${devxapiUrl}/graphproxy${graphEndpoint}`;
+
+    const response = await fetch(requestUrl, options);
+    if (!response.ok) {
+      throw response;
+    }
+
+    return Promise.resolve(response);
+  }
+}
+
+const makeDelegatedRequest = (httpVerb: string, scopes: string[]): Function => {
+  return async (dispatch: Function, query: IQuery) => {
+    const sampleHeaders: any = getSampleHeaders(query);
 
     const msalAuthOptions = new MSALAuthenticationProviderOptions(scopes);
     const middlewareOptions = new AuthenticationHandlerOptions(
@@ -152,7 +195,6 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
       default:
         return;
     }
-
     return Promise.resolve(response);
   };
 };
