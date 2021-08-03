@@ -5,16 +5,15 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
+import { componentNames, telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { IQuery } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
-import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { Monaco } from '../../common';
-import { genericCopy } from '../../common/copy';
+import { trackedGenericCopy } from '../../common/copy';
 import { queryResponseStyles } from './../queryResponse.styles';
 
 class AdaptiveCard extends Component<IAdaptiveCardProps> {
@@ -146,13 +145,15 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                 </a>
               </MessageBar>
               <IconButton className={classes.copyIcon}
+                ariaLabel={translateMessage('Copy')}
                 iconProps={{
                   iconName: 'copy',
                 }}
-                onClick={async () => {
-                  genericCopy(JSON.stringify(data.template, null, 4));
-                  trackJsonSchemaCopyEvent(sampleQuery)
-                }}
+                onClick={async () =>
+                  trackedGenericCopy(
+                    JSON.stringify(data.template, null, 4),
+                    componentNames.JSON_SCHEMA_COPY_BUTTON,
+                    sampleQuery)}
               />
               <Monaco
                 language='json'
@@ -175,18 +176,6 @@ function onPivotItemClick(query: IQuery | undefined, item?: PivotItem) {
   if (key) {
     telemetry.trackTabClickEvent(key, query);
   }
-}
-
-function trackJsonSchemaCopyEvent(query: IQuery | undefined) {
-  if (!query) {
-    return;
-  }
-  const sanitizedUrl = sanitizeQueryUrl(query.sampleUrl);
-  telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
-    {
-      ComponentName: componentNames.JSON_SCHEMA_COPY_BUTTON,
-      QuerySignature: `${query.selectedVerb} ${sanitizedUrl}`
-    });
 }
 
 function mapStateToProps({ adaptiveCard, sampleQuery, queryRunnerStatus }: IRootState) {

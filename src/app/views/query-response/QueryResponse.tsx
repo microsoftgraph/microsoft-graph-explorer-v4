@@ -194,6 +194,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           id='share-query-text'
           className='share-query-params'
           defaultValue={query}
+          aria-label={translateMessage('Share Query')}
         />
         <DialogFooter>
           <PrimaryButton text={messages.Copy} onClick={handleCopy} />
