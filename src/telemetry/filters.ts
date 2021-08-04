@@ -36,7 +36,6 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
       new URL(GRAPH_API_SANDBOX_URL).origin,
       new URL(ADAPTIVE_CARD_URL).origin,
     ];
-
     if (!targetsToInclude.includes(urlObject.origin)) {
       return false;
     }
