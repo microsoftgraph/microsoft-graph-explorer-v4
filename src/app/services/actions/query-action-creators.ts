@@ -128,8 +128,8 @@ export function toggleRSCPopup(query: IQuery): Function {
     if (tokenPresent && localStorage.getItem(RSC_HIDE_POPUP) !== "true") {
       return authenticatedRequest(dispatch, query).then(async (response: Response) => {
         const result = await parseResponse(response, respHeaders);
-        for (const i of result.value) {
-          if (i.teamsApp.externalId === TEAMS_APP_ID) {
+        for (const appInfo of result.value) {
+          if (appInfo.teamsApp.externalId === TEAMS_APP_ID) {
             dispatch(queryRunningStatus(false));
             return dispatch(changePopUp(true));
           }
