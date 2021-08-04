@@ -31,7 +31,7 @@ import { changeMode } from '../../services/actions/permission-mode-action-creato
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 import { translateMessage } from '../../utils/translate-messages';
-import { PERMISSION_MODE_TYPE } from '../../services/graph-constants';
+import { PERMISSION_MODE_TYPE, TEAMS_APP_INSTALLATION_URL } from '../../services/graph-constants';
 import { toggleRSCPopup } from '../../services/actions/query-action-creators'
 import { IQuery } from '../../../types/query-runner';
 
@@ -136,20 +136,20 @@ function Settings(props: ISettingsProps) {
 
   const handleChangeMode = (permissionModeType: PERMISSION_MODE_TYPE) => {
     const query: IQuery = {
-      sampleUrl: "https://graph.microsoft.com/v1.0/me/teamwork/installedApps?$expand=teamsApp",
+      sampleUrl: TEAMS_APP_INSTALLATION_URL,
       selectedVerb: "GET",
       selectedVersion: "v1.0",
       sampleHeaders: []
     }
-    let newPermissionModeType;
+    let newPermissionModeType = PERMISSION_MODE_TYPE.TeamsApp;
     switch (permissionModeType) {
       case PERMISSION_MODE_TYPE.User:
+        dispatch(changeMode(newPermissionModeType));
         dispatch(toggleRSCPopup(query));
-        dispatch(changeMode(PERMISSION_MODE_TYPE.TeamsApp));
         break;
       case PERMISSION_MODE_TYPE.TeamsApp:
         newPermissionModeType = PERMISSION_MODE_TYPE.User;
-        dispatch(changeMode(PERMISSION_MODE_TYPE.User));
+        dispatch(changeMode(newPermissionModeType));
         break;
     }
     telemetry.trackEvent(

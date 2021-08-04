@@ -8,6 +8,7 @@ export const DEVX_API_URL = 'https://graphexplorerapi.azurewebsites.net';
 export const GRAPH_API_SANDBOX_URL = 'https://proxy.apisandbox.msdn.microsoft.com/svc';
 export const GRAPH_API_SANDBOX_ENDPOINT_URL = 'https://cdn.graph.office.net/en-us/graph/api/proxy/endpoint';
 export const HOME_ACCOUNT_KEY = 'fbf1ecbe-27ab-42d7-96d4-3e6b03682ee4';
+export const TEAMS_APP_INSTALLATION_URL = "https://graph.microsoft.com/v1.0/me/teamwork/installedApps?$expand=teamsApp";
 export enum ACCOUNT_TYPE {
     AAD = "AAD",
     MSA = "MSA"
