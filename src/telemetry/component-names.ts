@@ -15,6 +15,7 @@ export const VIEW_ALL_PERMISSIONS_BUTTON = 'View all permissions button';
 export const EXPORT_HISTORY_ITEM_BUTTON = 'Export history item button';
 export const DELETE_HISTORY_ITEM_BUTTON = 'Delete history item button';
 export const CHANGE_PERMISSIONS_MODE_BUTTON = 'Change to permissions mode button';
+export const RESPONSE_HEADERS_COPY_BUTTON = 'Response headers copy button';
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
@@ -46,6 +47,7 @@ export const GRAPH_TOOLKIT_PLAYGROUND_LINK = 'Graph toolkit playground link';
 export const MICROSOFT_APIS_TERMS_OF_USE_LINK = 'Microsoft APIs terms of use link';
 export const MICROSOFT_PRIVACY_STATEMENT_LINK = 'Microsoft privacy statement link';
 export const MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK = 'Microsoft graph API reference docs link';
+export const REPORT_AN_ISSUE_LINK = 'Report an issue link';
 
 // Actions
 export const GET_SNIPPET_ACTION = 'Get snippet action';

@@ -7,7 +7,7 @@ import { dimensions } from './dimensions-reducers';
 import { permissionsPanelOpen } from './permissions-panel-reducer';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
 import { scopes } from './permissions-reducer';
-import { profile } from './profile-reducer';
+import { profile, profileType } from './profile-reducer';
 import { sampleQuery } from './query-input-reducers';
 import { isLoadingData } from './query-loading-reducers';
 import { graphResponse } from './query-runner-reducers';
@@ -20,6 +20,7 @@ import { termsOfUse } from './terms-of-use-reducer';
 import { theme } from './theme-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
 import { permissionModeType, hideDialog } from './permission-mode-reducer';
+import { proxyUrl } from './proxy-url-reducer';
 
 export default combineReducers({
   adaptiveCard,
@@ -32,6 +33,7 @@ export default combineReducers({
   history,
   isLoadingData,
   profile,
+  proxyUrl,
   queryRunnerStatus,
   responseAreaExpanded,
   sampleQuery,
@@ -44,5 +46,6 @@ export default combineReducers({
   dimensions,
   permissionsPanelOpen,
   permissionModeType,
-  hideDialog
+  hideDialog,
+  profileType
 });

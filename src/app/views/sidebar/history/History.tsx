@@ -24,6 +24,7 @@ import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
+import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
@@ -198,19 +199,25 @@ export class History extends Component<IHistoryProps, any> {
           ];
 
           return (
-            <IconButton
-              className={classes.docLink}
-              title='Actions'
-              ariaLabel='Actions'
-              menuIconProps={{ iconName: 'More' }}
-              menuProps={{
-                shouldFocusOnMount: true,
-                items: buttonActions,
-              }}
-            />
+            <TooltipHost
+              content={translateMessage('Actions')}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+              styles={{ root: { display: 'inline-block' } }}>
+              <IconButton
+                className={classes.docLink}
+                ariaLabel={translateMessage('Actions menu')}
+                menuIconProps={{ iconName: 'More' }}
+                menuProps={{
+                  shouldFocusOnMount: true,
+                  items: buttonActions,
+                }}
+              />
+            </TooltipHost>
           );
 
         default:
+          const shortQueryContent = queryContent.replace(GRAPH_URL, '');
           return (
             <>
               <TooltipHost
@@ -220,10 +227,10 @@ export class History extends Component<IHistoryProps, any> {
                 styles={{ root: { display: 'inline-block' } }}
               >
                 <span
-                  aria-describedby={hostId}
+                  aria-label={`${shortQueryContent}. ${translateMessage('Navigation help')}`}
                   className={classes.queryContent}
                 >
-                  {queryContent.replace(GRAPH_URL, '')}
+                  {shortQueryContent}
                 </span>
               </TooltipHost>
             </>
@@ -234,18 +241,15 @@ export class History extends Component<IHistoryProps, any> {
 
   public renderGroupHeader = (props: any): any => {
     const classes = classNames(this.props);
-    const {
-      intl: { messages },
-    }: any = this.props;
-
-    // tslint:disable
-    const expandText = messages.Expand;
-    const collapseText = messages.Collapse;
-    // tslint:enable
+    const expandText = translateMessage('Expand');
+    const collapseText = translateMessage('Collapse');
+    const groupName: string = props.group!.name;
+    const groupCount: string = props.group!.count;
+    const collapseButtonLabel: string = props.group!.isCollapsed ? `${expandText} ${groupName}` : `${collapseText} ${groupName}`;
 
     return (
       <div
-        aria-label={props.group!.name}
+        aria-label={`${groupName} has ${groupCount} items`}
         style={{
           display: 'flex',
           justifyContent: 'center',
@@ -257,48 +261,56 @@ export class History extends Component<IHistoryProps, any> {
             className={classes.groupHeaderRow}
             onClick={this.onToggleCollapse(props)}
           >
-            <IconButton
-              className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
-              iconProps={{
-                iconName: props.group!.isCollapsed
-                  ? 'ChevronRightSmall'
-                  : 'ChevronDownSmall',
-              }}
-              title={
-                props.group!.isCollapsed
-                  ? `${expandText} ${props.group!.name}`
-                  : `${collapseText} ${props.group!.name}`
-              }
-              ariaLabel={
-                props.group!.isCollapsed
-                  ? `${expandText} ${props.group!.name}`
-                  : `${collapseText} ${props.group!.name}`
-              }
-              onClick={() => this.onToggleCollapse(props)}
-            />
+            <TooltipHost
+              content={collapseButtonLabel}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+              styles={{ root: { display: 'inline-block' } }}>
+              <IconButton
+                className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
+                iconProps={{
+                  iconName: props.group!.isCollapsed
+                    ? 'ChevronRightSmall'
+                    : 'ChevronDownSmall',
+                }}
+                ariaLabel={collapseButtonLabel}
+                onClick={() => this.onToggleCollapse(props)}
+              />
+            </TooltipHost>
             <div className={classes.groupTitle}>
-              <span>{props.group!.name}</span>
+              <span>{groupName}</span>
               <span className={classes.headerCount}>
-                ({props.group!.count})
+                ({groupCount})
               </span>
             </div>
           </div>
         </div>
         <div className={'col-md-4'} style={{ display: 'inline-block' }}>
-          <IconButton
-            className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
-            iconProps={{ iconName: 'Delete' }}
-            title={`${messages['Delete requests']} : ${props.group!.name}`}
-            ariaLabel='delete group'
-            onClick={() => this.showDialog(props.group!.name)}
-          />
-          <IconButton
-            className={`${classes.pullRight} ${classes.groupHeaderRowIcon}`}
-            iconProps={{ iconName: 'Download' }}
-            title={`${messages.Export} : ${props.group!.name}`}
-            ariaLabel='export group'
-            onClick={() => this.exportHistoryByCategory(props.group!.name)}
-          />
+          <div className={`${classes.pullRight}`}>
+            <TooltipHost
+              content={`${translateMessage('Export')} ${groupName} queries`}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}>
+              <IconButton
+                className={`${classes.groupHeaderRowIcon}`}
+                iconProps={{ iconName: 'Download' }}
+                ariaLabel={`${translateMessage('Export')} ${groupName} queries`}
+                onClick={() => this.exportHistoryByCategory(groupName)}
+              />
+            </TooltipHost>
+            <TooltipHost
+              content={`${translateMessage('Delete')} ${groupName} queries`}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }} >
+              <IconButton
+                className={`${classes.groupHeaderRowIcon}`}
+                iconProps={{ iconName: 'Delete' }}
+                ariaLabel={`${translateMessage('Delete')} ${groupName} queries`}
+                onClick={() => this.showDialog(groupName)}
+              />
+            </TooltipHost>
+
+          </div>
         </div>
       </div>
     );
@@ -512,20 +524,26 @@ export class History extends Component<IHistoryProps, any> {
           <Announced
             message={`${items.length} search results available.`}
           />
-          {items.length > 0 && <DetailsList
-            className={classes.queryList}
-            onRenderItemColumn={this.renderItemColumn}
-            items={items}
-            columns={columns}
-            selectionMode={SelectionMode.none}
-            groups={groups}
-            groupProps={{
-              showEmptyGroups: true,
-              onRenderHeader: this.renderGroupHeader,
-            }}
-            onRenderRow={this.renderRow}
-            onRenderDetailsHeader={this.renderDetailsHeader}
-          />}
+          {items.length > 0 &&
+            <div
+              onMouseEnter={() => this.setState({ isHoverOverHistoryList: true })}
+              onMouseLeave={() => this.setState({ isHoverOverHistoryList: false })}>
+              <DetailsList
+                styles={this.state.isHoverOverHistoryList ? { root: { overflow: 'scroll' } } : { root: { overflow: 'hidden' } }}
+                className={classes.queryList}
+                onRenderItemColumn={this.renderItemColumn}
+                items={items}
+                columns={columns}
+                selectionMode={SelectionMode.none}
+                groups={groups}
+                groupProps={{
+                  showEmptyGroups: true,
+                  onRenderHeader: this.renderGroupHeader,
+                }}
+                onRenderRow={this.renderRow}
+                onRenderDetailsHeader={this.renderDetailsHeader}
+              />
+            </div>}
         </div>
         <Dialog
           hidden={hideDialog}

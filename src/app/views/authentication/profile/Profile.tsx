@@ -10,7 +10,7 @@ import { IProfileProps, IProfileState } from '../../../../types/profile';
 import { IRootState } from '../../../../types/root';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
-import { APP_IMAGE, PERMISSION_MODE_TYPE, USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
+import { APP_IMAGE, PERMISSION_MODE_TYPE, USER_INFO_URL, USER_PICTURE_URL, BETA_USER_INFO_URL, ACCOUNT_TYPE } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
@@ -34,6 +34,13 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       ? await actions.getProfileInfo({
         selectedVerb: 'GET',
         sampleUrl: USER_INFO_URL
+      })
+      : null;
+
+    const profileType = actions
+      ? await actions.getProfileInfo({
+        selectedVerb: 'GET',
+        sampleUrl: BETA_USER_INFO_URL
       })
       : null;
 

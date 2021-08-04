@@ -131,7 +131,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       this._groups = generateGroupsFromList(queries.sampleQueries, 'category');
     } else if (permissionModeType === PERMISSION_MODE_TYPE.TeamsApp) {
       this.setState({ sampleQueries: queries.teamsAppSampleQueries });
-      this._groups = generateGroupsFromList(queries.teamsAppSampleQueries as any, 'category');
+      this._groups = generateGroupsFromList(queries.teamsAppSampleQueries || [], 'category');
     }
   }
 
@@ -482,26 +482,28 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         <Announced
           message={`${sampleQueries.length} search results available.`}
         />
-        <DetailsList
-          className={classes.queryList}
-          cellStyleProps={{
-            cellRightPadding: 0,
-            cellExtraRightPadding: 0,
-            cellLeftPadding: 0,
-          }}
-          onRenderItemColumn={this.renderItemColumn}
-          items={sampleQueries}
-          selectionMode={SelectionMode.none}
-          columns={columns}
-          groups={this._groups}
-          groupProps={{
-            showEmptyGroups: true,
-            onRenderHeader: this.renderGroupHeader,
-          }}
-          onRenderRow={this.renderRow}
-          onRenderDetailsHeader={this.renderDetailsHeader}
-          onItemInvoked={this.querySelected}
-        />
+        <div role="navigation">
+          <DetailsList
+            className={classes.queryList}
+            cellStyleProps={{
+              cellRightPadding: 0,
+              cellExtraRightPadding: 0,
+              cellLeftPadding: 0,
+            }}
+            onRenderItemColumn={this.renderItemColumn}
+            items={sampleQueries}
+            selectionMode={SelectionMode.none}
+            columns={columns}
+            groups={this._groups}
+            groupProps={{
+              showEmptyGroups: true,
+              onRenderHeader: this.renderGroupHeader,
+            }}
+            onRenderRow={this.renderRow}
+            onRenderDetailsHeader={this.renderDetailsHeader}
+            onItemInvoked={this.querySelected}
+          />
+        </div>
       </div>
     );
   }

@@ -17,7 +17,7 @@
   " with your work or school account from Microsoft.": " with your work or school account from Microsoft.",
   "Submit": "Submit",
   "Using demo tenant": "You are currently using a sample account.",
-  "To access your own data:": "To access your own data:",
+  "To access your own data:": "Sign in to access your own data.",
   "sign out": "Sign out",
   "History": "History",
   "Method": "Method",
@@ -364,5 +364,8 @@
   "Install sample app": "Install sample app",
   "Learn more": "Learn more",
   "Do not show again": "Don't show again",
-  "App mode access token error": "Access token is hidden in application mode for security purposes."
+  "App mode access token error": "Access token is hidden in application mode for security purposes.",
+  "Admin consent not required": "Admin consent is not required",
+  "Navigation help": "Navigate with right arrow key to access",
+  "Actions menu": " Actions menu"
 }
