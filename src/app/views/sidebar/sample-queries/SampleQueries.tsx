@@ -1,6 +1,6 @@
 import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
-  GroupHeader, IColumn, Icon, MessageBar, MessageBarType, SearchBox,
+  GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
@@ -31,10 +31,15 @@ import { sidebarStyles } from '../Sidebar.styles';
 import { isJsonString } from './sample-query-utils';
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
+  resetCollapse: boolean;
+  groups: any[];
   constructor(props: ISampleQueriesProps) {
     super(props);
+    this.resetCollapse = true;
+    this.groups = [];
     this.state = {
-      sampleQueries: []
+      sampleQueries: [],
+      selectedQuery: null,
     };
   }
 
@@ -48,7 +53,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
+    const { sampleQueries } = this.state;
     if (prevProps.samples.queries !== this.props.samples.queries) {
+      this.groups = generateGroupsFromList(sampleQueries, 'category');
       this.setState({ sampleQueries: this.props.samples.queries });
     }
   };
@@ -206,6 +213,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const { tokenPresent } = this.props;
     const classes = classNames(this.props);
     let selectionDisabled = false;
+    const customStyles: Partial<IDetailsRowStyles> = {};
+    if (this.state.selectedQuery === props.item.id) {
+      customStyles.root = { backgroundColor: '#eaeaea' };
+    }
 
     if (props) {
       if (!tokenPresent && props.item.method !== 'GET') {
@@ -215,10 +226,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         <div className={classes.groupHeader}>
           <DetailsRow
             {...props}
+            styles={customStyles}
             onClick={() => {
               if (!selectionDisabled) {
                 this.querySelected(props.item);
               }
+              this.resetCollapse = false;
+              this.setState({ selectedQuery: props.item.id })
             }}
             className={
               classes.queryRow +
@@ -329,7 +343,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     const { sampleQueries } = this.state;
     const classes = classNames(this.props);
-    const groups = generateGroupsFromList(sampleQueries, 'category');
+    if (this.resetCollapse) {
+      this.groups = generateGroupsFromList(sampleQueries, 'category');
+    }
 
     if (pending) {
       return (
@@ -435,7 +451,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             items={sampleQueries}
             selectionMode={SelectionMode.none}
             columns={columns}
-            groups={groups}
+            groups={this.groups}
             groupProps={{
               showEmptyGroups: true,
               onRenderHeader: this.renderGroupHeader,
