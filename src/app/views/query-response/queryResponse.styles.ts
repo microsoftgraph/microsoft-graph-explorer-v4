@@ -27,6 +27,18 @@ export const queryResponseStyles = (theme: ITheme) => {
     copyIcon: {
       float: 'right',
       zIndex: 1
+    },
+    container: {
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      wdith: '100%'
+    },
+    column: {
+      display: 'flex',
+      flexDirection: 'column',
+      flexBasis: '100%',
+      flex: 1
     }
   };
 };
