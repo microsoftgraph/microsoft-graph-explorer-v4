@@ -17,11 +17,16 @@ import { addHistoryItem } from './request-history-action-creators';
 export function runQuery(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = !!getState()?.authToken?.token;
+    const permissionModeType = getState().permissionModeType;
+    // Currently our devxApi link is not fully functional to grab permissions from an azure blob, so a hard coded link is in here to make testing easier
+    // The hard coded link will be removed and the next line will be uncommented when our devxApi is fully functional
+    // const devxApiUrl = getState().devxApi.baseUrl;
+    const devxApiUrl = 'https://gi21devxapi-devtest.azurewebsites.net';
     const respHeaders: any = {};
     const createdAt = new Date().toISOString();
 
     if (tokenPresent) {
-      return authenticatedRequest(dispatch, query).then(async (response: Response) => {
+      return authenticatedRequest(dispatch, query, devxApiUrl, permissionModeType).then(async (response: Response) => {
         await processResponse(response, respHeaders, dispatch, createdAt);
       }).catch(async (error: any) => {
         dispatch(queryResponse({
