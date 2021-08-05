@@ -16,6 +16,7 @@ import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { IRootState } from '../../../../types/root';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
+import { PERMISSION_MODE_TYPE } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
@@ -34,6 +35,7 @@ export class Request extends Component<IRequestComponent, any> {
       handleOnEditorChange,
       mode,
       intl: { messages },
+      permissionModeType,
     }: any = this.props;
 
     const heightAdjustment = 55;
@@ -74,7 +76,7 @@ export class Request extends Component<IRequestComponent, any> {
         itemKey='modify-permissions'
         onRenderItemLink={this.getTooltipDisplay}
         title={translateMessage('permissions preview')}
-        headerText={messages['modify permissions']}
+        headerText={permissionModeType === PERMISSION_MODE_TYPE.User ? messages['modify permissions'] : messages['required permissions']}
       >
         <div style={containerStyle}>
           <Permission />
@@ -82,7 +84,7 @@ export class Request extends Component<IRequestComponent, any> {
       </PivotItem>,
     ];
 
-    if (mode === Mode.Complete) {
+    if ((mode === Mode.Complete) && (permissionModeType === PERMISSION_MODE_TYPE.User)) {
       pivotItems.push(
         <PivotItem
           key='auth'
@@ -171,13 +173,14 @@ export class Request extends Component<IRequestComponent, any> {
   }
 }
 
-function mapStateToProps({ graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions }: IRootState) {
+function mapStateToProps({ graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions, permissionModeType }: IRootState) {
   return {
     mode: graphExplorerMode,
     sampleBody: sampleQuery.sampleBody,
     theme,
     mobileScreen: !!sidebarProperties.mobileScreen,
-    dimensions
+    dimensions,
+    permissionModeType
   };
 }
 
