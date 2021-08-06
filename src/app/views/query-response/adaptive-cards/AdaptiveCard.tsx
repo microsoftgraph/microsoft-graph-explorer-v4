@@ -1,5 +1,5 @@
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { IconButton, Label, MessageBar, MessageBarType, Pivot, PivotItem, styled } from 'office-ui-fabric-react';
+import { IconButton, Label, MessageBar, MessageBarType, styled } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -7,7 +7,6 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
-import { IQuery } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -100,14 +99,46 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
         this.adaptiveCard!.parse(data.card);
         const renderedCard = this.adaptiveCard!.render();
         return (
-          <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
-            <PivotItem
-              itemKey='card'
-              ariaLabel={translateMessage('card')}
-              headerText={translateMessage('card')}
-              className={classes.card}
-            >
-              <div
+          <div>
+            <div className={classes.container}>
+              <div className={classes.column}>
+                <MessageBar messageBarType={MessageBarType.info}>
+                  <FormattedMessage id='Get started with adaptive cards on' />
+                  <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    tabIndex={0}
+                    className={classes.link}
+                  >
+                    <FormattedMessage id='Adaptive Cards Templating SDK' />
+                  </a>
+                  <FormattedMessage id='and experiment on' />
+                  <a href={'https://adaptivecards.io/designer/'}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    tabIndex={0}
+                    className={classes.link}
+                  >
+                    <FormattedMessage id='Adaptive Cards designer' />
+                  </a>
+                </MessageBar>
+              </div>
+              <div className={classes.columnicon} >
+                <IconButton className={classes.copyIcon}
+                  ariaLabel={translateMessage('Copy')}
+                  iconProps={{
+                    iconName: 'copy',
+                  }}
+                  onClick={async () =>
+                    trackedGenericCopy(
+                      JSON.stringify(data.template, null, 4),
+                      componentNames.JSON_SCHEMA_COPY_BUTTON,
+                      sampleQuery)}
+                />
+              </div>
+            </div>
+            <div className={classes.container}>
+              <div className={classes.column}
                 ref={(n) => {
                   if (n && !n.firstChild) {
                     n.appendChild(renderedCard);
@@ -118,63 +149,20 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                   }
                 }}
               />
-            </PivotItem>
-            <PivotItem
-              itemKey='JSON-schema'
-              ariaLabel={translateMessage('JSON Schema')}
-              headerText={translateMessage('JSON Schema')}
-            >
-              <MessageBar messageBarType={MessageBarType.info}>
-                <FormattedMessage id='Get started with adaptive cards on' />
-                <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  tabIndex={0}
-                  className={classes.link}
-                >
-                  <FormattedMessage id='Adaptive Cards Templating SDK' />
-                </a>
-                <FormattedMessage id='and experiment on' />
-                <a href={'https://adaptivecards.io/designer/'}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  tabIndex={0}
-                  className={classes.link}
-                >
-                  <FormattedMessage id='Adaptive Cards designer' />
-                </a>
-              </MessageBar>
-              <IconButton className={classes.copyIcon}
-                ariaLabel={translateMessage('Copy')}
-                iconProps={{
-                  iconName: 'copy',
-                }}
-                onClick={async () =>
-                  trackedGenericCopy(
-                    JSON.stringify(data.template, null, 4),
-                    componentNames.JSON_SCHEMA_COPY_BUTTON,
-                    sampleQuery)}
-              />
-              <Monaco
-                language='json'
-                body={data.template}
-                height={'800px'}
-              />
-            </PivotItem>
-          </Pivot>
+              <div className={classes.monacoColumn}>
+                <Monaco
+                  language='json'
+                  body={data.template}
+                  height={'800px'}
+                />
+              </div>
+            </div>
+          </div>
         );
       } catch (err) {
         return <div style={{ color: 'red' }}>{err.message}</div>;
       }
     }
-  }
-}
-
-function onPivotItemClick(query: IQuery | undefined, item?: PivotItem) {
-  if (!item) { return; }
-  const key = item.props.itemKey;
-  if (key) {
-    telemetry.trackTabClickEvent(key, query);
   }
 }
 

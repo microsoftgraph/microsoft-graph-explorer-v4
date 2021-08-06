@@ -25,8 +25,34 @@ export const queryResponseStyles = (theme: ITheme) => {
       overflowY: 'auto'
     },
     copyIcon: {
-      float: 'right',
-      zIndex: 1
+      float: 'right'
+    },
+    container: {
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      wdith: '100%'
+    },
+    column: {
+      display: 'flex',
+      flexDirection: 'column',
+      flexBasis: '50%',
+      flex: 1
+    },
+    columnicon: {
+      display: 'flex',
+      flexDirection: 'column',
+      flexBasis: '50%',
+      flex: 1,
+      maxWidth: 'fit-content'
+    },
+    monacoColumn: {
+      display: 'flex',
+      flexDirection: 'column',
+      flexBasis: '50%',
+      flex: 1,
+      maxWidth: '65vw',
+      minWidth: '40vw'
     }
   };
 };
