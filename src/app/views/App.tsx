@@ -346,6 +346,7 @@ class App extends Component<IAppProps, IAppState> {
       termsOfUse,
       sampleQuery,
       permissionModeType,
+      graphResponse,
       hideDialog,
       actions,
       sidebarProperties,
@@ -460,7 +461,7 @@ class App extends Component<IAppProps, IAppState> {
                   <div style={{ marginBottom: 8 }}>
                     <QueryRunner onSelectVerb={this.handleSelectVerb} />
                   </div>
-                  {statusMessages(queryState, sampleQuery, actions)}
+                  {statusMessages(queryState, sampleQuery, actions, permissionModeType, graphResponse)}
                   {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
                   {
                     // @ts-ignore
@@ -486,7 +487,8 @@ const mapStateToProps = ({
   authToken,
   graphExplorerMode,
   permissionModeType,
-  hideDialog
+  hideDialog,
+  graphResponse
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -503,7 +505,8 @@ const mapStateToProps = ({
     minimised: !mobileScreen && !showSidebar,
     sampleQuery,
     authenticated: !!authToken.token,
-    permissionModeType
+    permissionModeType,
+    graphResponse
   };
 };
 

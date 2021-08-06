@@ -368,5 +368,11 @@
   "App mode access token error": "Access token is hidden in application mode for security purposes.",
   "Admin consent not required": "Admin consent is not required",
   "Navigation help": "Navigate with right arrow key to access",
-  "Actions menu": " Actions menu"
+  "Actions menu": " Actions menu",
+  "This is a delegated API call": " This is a delegated API call. Switch to ",
+  "delegated user mode": "delegated user mode",
+  "to try it out": " to try it out.",
+  "Please check that you have the": " Please check that you have the ",
+  "app installed": "Graph Explorer Teams app installed",
+  "the correct ID(s)": " and the correct ID(s)."
 }

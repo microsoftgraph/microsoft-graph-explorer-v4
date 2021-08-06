@@ -3,13 +3,13 @@ import React, { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { IQuery } from '../../../types/query-runner';
-import { GRAPH_URL } from '../../services/graph-constants';
+import { GRAPH_URL, PERMISSION_MODE_TYPE } from '../../services/graph-constants';
 import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
 
-export function statusMessages(queryState: any, sampleQuery: IQuery, actions: any) {
+export function statusMessages(queryState: any, sampleQuery: IQuery, actions: any, permissionModeType: PERMISSION_MODE_TYPE, graphResponse: any) {
   function displayStatusMessage(message: string, urls: any) {
     const { matches, parts } = getMatchesAndParts(message);
 
@@ -34,6 +34,25 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
         </Fragment>
       );
     })
+  }
+
+  function determineErrorMessage() {
+    if (graphResponse?.body?.message?.includes("Missing role permissions on the request")) {
+      return <>.
+        <FormattedMessage id='Please check that you have the' />
+        <span style={{ fontWeight: 600 }}>
+          <FormattedMessage id='app installed' />
+        </span>
+        <FormattedMessage id='the correct ID(s)' />
+      </>;
+    }
+    return <>.
+      <FormattedMessage id='This is a delegated API call' />
+      <span style={{ fontWeight: 600 }}>
+        <FormattedMessage id='delegated user mode' />
+      </span>
+      <FormattedMessage id='to try it out' />
+    </>;
   }
 
   function setQuery(link: string) {
@@ -64,13 +83,15 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
           {` - ${duration}`}<FormattedMessage id='milliseconds' />
         </>}
 
-        {status === 403 && <>.
+        {status === 403 && permissionModeType === PERMISSION_MODE_TYPE.User && <>.
           <FormattedMessage id='consent to scopes' />
           <span style={{ fontWeight: 600 }}>
             <FormattedMessage id='modify permissions' />
           </span>
           <FormattedMessage id='tab' />
         </>}
+
+        {status > 400 && permissionModeType === PERMISSION_MODE_TYPE.TeamsApp && determineErrorMessage()}
 
       </MessageBar>);
   }
