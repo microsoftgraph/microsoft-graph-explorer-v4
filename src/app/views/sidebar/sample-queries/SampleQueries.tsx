@@ -31,12 +31,8 @@ import { sidebarStyles } from '../Sidebar.styles';
 import { isJsonString } from './sample-query-utils';
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
-  resetCollapse: boolean;
-  groups: any[];
   constructor(props: ISampleQueriesProps) {
     super(props);
-    this.resetCollapse = true;
-    this.groups = [];
     this.state = {
       sampleQueries: [],
       selectedQuery: null,
@@ -53,9 +49,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
-    const { sampleQueries } = this.state;
     if (prevProps.samples.queries !== this.props.samples.queries) {
-      this.groups = generateGroupsFromList(sampleQueries, 'category');
       this.setState({ sampleQueries: this.props.samples.queries });
     }
   };
@@ -214,7 +208,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const classes = classNames(this.props);
     let selectionDisabled = false;
     const customStyles: Partial<IDetailsRowStyles> = {};
-    if (this.state.selectedQuery === props.item.id) {
+    if (this.state.selectedQuery?.id === props.item.id) {
       customStyles.root = { backgroundColor: '#eaeaea' };
     }
 
@@ -231,8 +225,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               if (!selectionDisabled) {
                 this.querySelected(props.item);
               }
-              this.resetCollapse = false;
-              this.setState({ selectedQuery: props.item})
+              this.setState({ selectedQuery: props.item })
             }}
             className={
               classes.queryRow +
