@@ -232,7 +232,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
                 this.querySelected(props.item);
               }
               this.resetCollapse = false;
-              this.setState({ selectedQuery: props.item.id })
+              this.setState({ selectedQuery: props.item})
             }}
             className={
               classes.queryRow +
