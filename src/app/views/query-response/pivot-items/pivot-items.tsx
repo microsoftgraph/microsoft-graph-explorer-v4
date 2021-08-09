@@ -62,7 +62,7 @@ export const getPivotItems = () => {
   const pivotItems = [
     <PivotItem
       key='response-preview'
-      ariaLabel='Response Preview'
+      ariaLabel={translateMessage('Response Preview')}
       itemIcon='Reply'
       itemKey='response-preview' // To be used to construct component name for telemetry data
       headerText={translateMessage('Response Preview')}
@@ -73,7 +73,7 @@ export const getPivotItems = () => {
     </PivotItem>,
     <PivotItem
       key='response-headers'
-      ariaLabel='Response Headers'
+      ariaLabel={translateMessage('Response Headers')}
       headerText={translateMessage('Response Headers')}
       itemIcon='FileComment'
       itemKey='response-headers'
@@ -88,7 +88,7 @@ export const getPivotItems = () => {
     pivotItems.push(
       <PivotItem
         key='code-snippets'
-        ariaLabel='Code Snippets'
+        ariaLabel={translateMessage('Snippets')}
         title={translateMessage('Snippets')}
         headerText={translateMessage('Snippets')}
         itemIcon='PasteAsCode'
@@ -99,7 +99,7 @@ export const getPivotItems = () => {
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'
-        ariaLabel='Graph Toolkit'
+        ariaLabel={translateMessage('Graph toolkit')}
         itemIcon='CustomizeToolbar'
         itemKey='toolkit-component'
         headerText={translateMessage('Graph toolkit')}
@@ -110,7 +110,7 @@ export const getPivotItems = () => {
       </PivotItem>,
       <PivotItem
         key='adaptive-cards'
-        ariaLabel='Adaptive Cards'
+        ariaLabel={translateMessage('Adaptive Cards')}
         headerText={translateMessage('Adaptive Cards')}
         title={translateMessage('Adaptive Cards')}
         itemIcon='ContactCard'

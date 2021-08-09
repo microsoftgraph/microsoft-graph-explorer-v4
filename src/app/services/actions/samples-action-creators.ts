@@ -1,9 +1,11 @@
-import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { geLocale } from '../../../appLocale';
-import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
-import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_PENDING, SAMPLES_FETCH_SUCCESS } from '../redux-constants';
+import {
+  SAMPLES_FETCH_ERROR,
+  SAMPLES_FETCH_PENDING,
+  SAMPLES_FETCH_SUCCESS,
+} from '../redux-constants';
 
 export function fetchSamplesSuccess(response: object): IAction {
   return {
@@ -21,7 +23,7 @@ export function fetchSamplesError(response: object): IAction {
 
 export function fetchSamplesPending(): any {
   return {
-    type: SAMPLES_FETCH_PENDING
+    type: SAMPLES_FETCH_PENDING,
   };
 }
 
@@ -30,11 +32,13 @@ export function fetchSamples(): Function {
     const { devxApi } = getState();
     let samplesUrl = `${devxApi.baseUrl}/samples`;
 
-    samplesUrl = (devxApi.parameters) ? `${samplesUrl}?${devxApi.parameters}` : `${samplesUrl}`;
+    samplesUrl = devxApi.parameters
+      ? `${samplesUrl}?${devxApi.parameters}`
+      : `${samplesUrl}`;
 
     const headers = {
       'Content-Type': 'application/json',
-      'Accept-Language': geLocale
+      'Accept-Language': geLocale,
     };
 
     const options: IRequestOptions = { headers };
@@ -49,15 +53,6 @@ export function fetchSamples(): Function {
       const res = await response.json();
       return dispatch(fetchSamplesSuccess(res.sampleQueries));
     } catch (error) {
-      const errorMessage = error instanceof Response ?
-        `ApiError: ${error.status}` : `${error}`;
-      telemetry.trackException(
-        new Error(errorTypes.NETWORK_ERROR),
-        SeverityLevel.Error,
-        {
-          ComponentName: componentNames.FETCH_SAMPLES_ACTION,
-          Message: errorMessage
-        });
       return dispatch(fetchSamplesError({ error }));
     }
   };

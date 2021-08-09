@@ -20,8 +20,7 @@ export function convertArrayToObject(array: any[]): object {
 };
 
 export function extractUrl(value: string): string[] | null {
-  value += '';
-  return value.match(/\bhttps?:\/\/\S+/gi);
+  return value.toString().match(/\bhttps?:\/\/\S+(?<!\.)/gi);
 }
 
 export function matchIncludesLink(matches: RegExpMatchArray, part: string) {

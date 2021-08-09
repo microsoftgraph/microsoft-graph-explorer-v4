@@ -21,10 +21,14 @@ export const sidebarStyles = (theme: ITheme) => {
       cursor: 'pointer',
       maxHeight: pageHeightInVh,
       minHeight: pageHeightInVh,
-      overflowY: 'auto',
-      overflowX: 'auto',
+      overflow: 'hidden',
       fontSize: FontSizes.medium,
-      background: 'inherit'
+      background: 'inherit',
+      selectors: {
+        ':hover': {
+          overflow: 'scroll',
+        },
+      },
     },
     pullLeft: {
       float: 'left'
@@ -49,8 +53,9 @@ export const sidebarStyles = (theme: ITheme) => {
       paddingLeft: '4px',
     },
     groupHeaderRowIcon: {
+      height: '24px',
       marginTop: '2%',
-      fontSize: FontSizes.small,
+      fontSize: FontSizes.xSmall,
       fontWeight: FontWeights.light
     },
     groupTitle: {
@@ -60,6 +65,7 @@ export const sidebarStyles = (theme: ITheme) => {
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
       outline: '0px',
+      display: 'inline-block'
     },
     headerCount: {
       paddingTop: '0px',

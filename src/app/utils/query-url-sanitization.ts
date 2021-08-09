@@ -1,4 +1,5 @@
 /* eslint-disable no-useless-escape */
+import { IQuery } from '../../types/query-runner';
 import { GRAPH_URL } from '../services/graph-constants';
 import {
   isAllAlpha,
@@ -93,7 +94,7 @@ export function sanitizeQueryUrl(url: string): string {
  * @param segment
  */
 function sanitizePathSegment(previousSegment: string, segment: string): string {
-  const segmentsToIgnore = ['$value', '$count', '$ref'];
+  const segmentsToIgnore = ['$value', '$count', '$ref', '$batch'];
 
   if (
     isAllAlpha(segment) ||
@@ -141,4 +142,8 @@ function sanitizeQueryParameters(queryString: string): string {
   // remove leading ? from query string
   queryString = queryString.substring(1);
   return queryString.split('&').map(sanitizeQueryParameter).join('&');
+}
+
+export function encodeHashCharacters(query: IQuery): string {
+  return query.sampleUrl.replace(/#/g, '%2523');
 }

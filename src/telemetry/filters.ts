@@ -1,13 +1,16 @@
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
+import { errorTypes } from '.';
 import {
+  ADAPTIVE_CARD_URL,
   DEVX_API_URL,
+  GRAPH_API_SANDBOX_ENDPOINT_URL,
   GRAPH_API_SANDBOX_URL,
   GRAPH_URL,
-  HOME_ACCOUNT_KEY,
+  HOME_ACCOUNT_KEY
 } from '../app/services/graph-constants';
 import {
   sanitizeGraphAPISandboxUrl,
-  sanitizeQueryUrl,
+  sanitizeQueryUrl
 } from '../app/utils/query-url-sanitization';
 
 export function filterTelemetryTypes(envelope: ITelemetryItem) {
@@ -23,26 +26,30 @@ export function filterTelemetryTypes(envelope: ITelemetryItem) {
 }
 
 export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
-  const baseData = envelope.baseData || {};
-  if (envelope.baseType !== 'RemoteDependencyData') {
-    return true;
-  }
+  if (envelope.baseType === 'RemoteDependencyData') {
+    const baseData = envelope.baseData || {};
+    const urlObject = new URL(baseData.target || '');
 
-  const targetsToInclude = [GRAPH_URL, DEVX_API_URL, GRAPH_API_SANDBOX_URL];
-  const urlObject = new URL(baseData.target || '');
-  if (!targetsToInclude.includes(urlObject.origin)) {
-    return false;
-  }
+    const targetsToInclude = [
+      GRAPH_URL, DEVX_API_URL, GRAPH_API_SANDBOX_URL, GRAPH_API_SANDBOX_ENDPOINT_URL,
+      DEVX_API_URL,
+      new URL(GRAPH_API_SANDBOX_URL).origin,
+      new URL(ADAPTIVE_CARD_URL).origin,
+    ];
+    if (!targetsToInclude.includes(urlObject.origin)) {
+      return false;
+    }
 
-  const target = baseData.target || '';
-  switch (urlObject.origin) {
-    case GRAPH_URL:
-      baseData.name = sanitizeQueryUrl(target);
-      break;
-    case GRAPH_API_SANDBOX_URL:
-      baseData.name = sanitizeGraphAPISandboxUrl(target);
-    default:
-      break;
+    const target = baseData.target || '';
+    switch (urlObject.origin) {
+      case GRAPH_URL:
+        baseData.name = sanitizeQueryUrl(target);
+        break;
+      case GRAPH_API_SANDBOX_URL:
+        baseData.name = sanitizeGraphAPISandboxUrl(target);
+      default:
+        break;
+    }
   }
   return true;
 }
@@ -70,6 +77,36 @@ export function sanitizeTelemetryItemUriProperty(envelope: ITelemetryItem) {
     const startOfFragment = uri.indexOf('#');
     const sanitisedUri = uri.substring(0, startOfFragment);
     telemetryItem.uri = sanitisedUri;
+  }
+  return true;
+}
+
+export function sanitizeStackTrace(envelope: ITelemetryItem) {
+  if (envelope.baseType === 'ExceptionData') {
+    const telemetryItem = envelope.baseData || {};
+    telemetryItem.properties = telemetryItem.properties || {};
+
+    if (telemetryItem.exceptions && telemetryItem.exceptions.length > 0) {
+      const exception = telemetryItem.exceptions[0];
+      const parsedStack = exception.parsedStack[0];
+
+      // Only capture errors coming from our source code and not dependencies, to reduce noise
+      if (!parsedStack.fileName.startsWith('webpack-internal')) {
+        return false;
+      }
+
+      // Add properties for unhandled exceptions only
+      if (!telemetryItem.properties.ComponentName) {
+        telemetryItem.properties.ComponentName = parsedStack.assembly;
+        telemetryItem.properties.Message = exception.stack.split('\n')[0]; // Read first line only
+        exception.message = errorTypes.UNHANDLED_ERROR;
+      }
+
+      exception.hasFullStack = false;
+      exception.stack = null;
+      exception.parsedStack = [parsedStack];
+      telemetryItem.exceptions = [exception];
+    }
   }
   return true;
 }

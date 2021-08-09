@@ -17,7 +17,7 @@
   " with your work or school account from Microsoft.": " mit Ihrem Geschäfts-, Schul- oder Unikonto von Microsoft.",
   "Submit": "Senden",
   "Using demo tenant": "Sie verwenden derzeit ein Beispielkonto.",
-  "To access your own data:": "So greifen Sie auf Ihre eigenen Daten zu:",
+  "To access your own data:": "Melden Sie sich an, um auf Ihre eigenen Daten zuzugreifen.",
   "sign out": "Abmelden",
   "History": "Verlauf",
   "Method": "Methode",
@@ -346,9 +346,12 @@
   "JSON Schema": "JSON-Vorlage",
   "Report an Issue": "Melden eines Problems",
   "Maximize sidebar": "Maximieren der Randleiste",
-  "Getting your access token": "Ihr Zugriffstoken wird abgerufen",
-  "This response contains an @odata.nextLink property.": "Dies Antwort beinhaltet eine Eigenschaft @odata.nextLink.",
-  "Click here to go to the next page": "Klicken Sie hier, um zur nächsten Seite zu gehen",
+  "Getting your access token": "Ihr Zugriffstoken wird abgerufen.",
   "and experiment on": " und experimentieren mit",
-  "Scope consent failed": "Umfangsgenehmigung fehlgeschlagen"
+  "Scope consent failed": "Umfangsgenehmigung fehlgeschlagen",
+  "Missing url": "Geben Sie eine gültige URL ein, um die Abfrage auszuführen.",
+  "This response contains an @odata property.": "Dies Antwort beinhaltet eine @odata Eigenschaft.",
+  "Click here to follow the link": "Klicken Sie hier, um dem Link zu folgen.",
+  "Signing you out...": "Sie werden abgemeldet...",
+  "Admin consent not required": "Administratorzustimmung nicht erforderlich"
 }

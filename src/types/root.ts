@@ -1,5 +1,8 @@
+import { ACCOUNT_TYPE } from '../app/services/graph-constants';
 import { IAdaptiveCardResponse } from './adaptivecard';
+import { IAuthenticateResult } from './authentication';
 import { IAutocompleteResponse } from './auto-complete';
+import { IDevxAPI } from './devx-api';
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
 import { IHistoryItem } from './history';
@@ -20,7 +23,7 @@ export interface IRootState {
   sampleQuery: IQuery;
   termsOfUse: boolean;
   sidebarProperties: ISidebarProps;
-  authToken: string;
+  authToken: IAuthenticateResult;
   samples: ISampleQuery[];
   consentedScopes: string[];
   scopes: IScopes;
@@ -32,6 +35,8 @@ export interface IRootState {
   responseAreaExpanded: boolean;
   dimensions: IDimensions;
   autoComplete: IAutocompleteResponse;
+  devxApi: IDevxAPI;
+  profileType: ACCOUNT_TYPE;
 }
 
 export interface IApiFetch {

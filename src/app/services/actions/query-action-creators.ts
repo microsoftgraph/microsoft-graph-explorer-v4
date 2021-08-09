@@ -14,7 +14,7 @@ import { addHistoryItem } from './request-history-action-creators';
 
 export function runQuery(query: IQuery): Function {
   return (dispatch: Function, getState: Function) => {
-    const tokenPresent = getState().authToken;
+    const tokenPresent = !!getState()?.authToken?.token;
     const respHeaders: any = {};
     const createdAt = new Date().toISOString();
 
@@ -35,7 +35,7 @@ export function runQuery(query: IQuery): Function {
       });
     }
 
-    return anonymousRequest(dispatch, query).then(async (response: Response) => {
+    return anonymousRequest(dispatch, query, getState).then(async (response: Response) => {
       await processResponse(response, respHeaders, dispatch, createdAt);
     });
   };
