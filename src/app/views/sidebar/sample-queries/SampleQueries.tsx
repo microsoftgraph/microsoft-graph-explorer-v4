@@ -343,8 +343,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     const { sampleQueries } = this.state;
     const classes = classNames(this.props);
-    if (this.resetCollapse) {
-      this.groups = generateGroupsFromList(sampleQueries, 'category');
+    const groups = generateGroupsFromList(sampleQueries, 'category');
+    if (this.state.selectedQuery) {
+      const index = groups.findIndex(k => k.key === this.state.selectedQuery.category);
+      groups[index].isCollapsed = false;
     }
 
     if (pending) {
