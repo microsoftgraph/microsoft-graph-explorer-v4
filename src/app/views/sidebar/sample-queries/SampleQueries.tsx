@@ -453,7 +453,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             items={sampleQueries}
             selectionMode={SelectionMode.none}
             columns={columns}
-            groups={this.groups}
+            groups={groups}
             groupProps={{
               showEmptyGroups: true,
               onRenderHeader: this.renderGroupHeader,
