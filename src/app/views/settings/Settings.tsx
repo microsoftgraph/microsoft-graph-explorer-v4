@@ -100,7 +100,7 @@ function Settings(props: ISettingsProps) {
             iconName: 'SignOut',
           },
           onClick: () => handleSignOut(),
-        }
+        },
       );
     }
     setItems(menuItems);
@@ -279,3 +279,4 @@ function Settings(props: ISettingsProps) {
 }
 
 export default injectIntl(Settings);
+
