@@ -62,8 +62,6 @@ export class QueryRunner extends Component<
   };
 
   private handleOnEditorChange = (body?: string) => {
-    console.log("BODY");
-    console.log(body);
     this.setState({ sampleBody: body });
     const query = { ...this.props.sampleQuery };
     query.sampleBody = body;
@@ -71,7 +69,6 @@ export class QueryRunner extends Component<
   };
 
   private handleOnRunQuery = () => {
-    console.log("RUN QUERY");
     const { sampleBody } = this.state;
     const { actions, sampleQuery } = this.props;
 
