@@ -62,6 +62,8 @@ export class QueryRunner extends Component<
   };
 
   private handleOnEditorChange = (body?: string) => {
+    console.log("BODY");
+    console.log(body);
     this.setState({ sampleBody: body });
     const query = { ...this.props.sampleQuery };
     query.sampleBody = body;
@@ -69,6 +71,7 @@ export class QueryRunner extends Component<
   };
 
   private handleOnRunQuery = () => {
+    console.log("RUN QUERY");
     const { sampleBody } = this.state;
     const { actions, sampleQuery } = this.props;
 
@@ -85,6 +88,7 @@ export class QueryRunner extends Component<
             status: `${translateMessage('Review the request body')} ${error}`,
             messageType: MessageBarType.error,
           });
+          this.setState({ sampleBody: '' });
           return;
         }
       } else {
@@ -102,6 +106,7 @@ export class QueryRunner extends Component<
           QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
         });
     }
+    this.setState({ sampleBody: '' });
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
