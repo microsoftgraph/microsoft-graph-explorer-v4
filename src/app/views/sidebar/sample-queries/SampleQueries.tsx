@@ -1,5 +1,6 @@
 import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
+  getTheme,
   GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
@@ -204,12 +205,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   public renderRow = (props: any): any => {
+    const currentTheme = getTheme();
     const { tokenPresent } = this.props;
     const classes = classNames(this.props);
     let selectionDisabled = false;
     const customStyles: Partial<IDetailsRowStyles> = {};
     if (this.state.selectedQuery?.id === props.item.id) {
-      customStyles.root = { backgroundColor: '#eaeaea' };
+      customStyles.root = { backgroundColor: currentTheme.palette.neutralLight };
     }
 
     if (props) {
