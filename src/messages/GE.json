@@ -355,5 +355,16 @@
   "Signing you out...": "Signing you out...",
   "Admin consent not required": "Admin consent is not required",
   "Navigation help": "Navigate with right arrow key to access",
-  "Actions menu": " Actions menu"
+  "Actions menu": " Actions menu",
+  "user_cancelled": "Allow the pop-up to complete the authentication process",
+  "popup_window_error": "Allow popups in your browser",
+  "invalid_client": "Recheck the app credentials (application client ID) on Azure app registrations",
+  "null_or_empty_id_token": "Retry signing in",
+  "authorization_code_missing_from_server_response": "Retry signing in",
+  "temporarily unavailable": "Response is delayed due to a temporary delay. Try signing in later",
+  "server-error": "Response is delayed due to a temporary delay. Try signing in later",
+  "no_tokens_found": "Retry signing in",
+  "invalid_request": "Retry signing in",
+  "user_login_error": "Retry signing in",
+  "nonce_mismatch_error": "Retry signing in"
 }
