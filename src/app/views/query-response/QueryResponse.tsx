@@ -2,7 +2,7 @@ import {
   Announced,
   DefaultButton, FontSizes, getId, Icon, IconButton,
   Modal, Pivot, PivotItem, PrimaryButton, TooltipHost
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';

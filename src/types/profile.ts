@@ -1,8 +1,8 @@
-import { ITheme } from 'office-ui-fabric-react';
+import { ITheme } from '@fluentui/react';
 
 export interface IProfileProps {
     intl: {
-      message: object;
+        message: object;
     };
     theme?: ITheme;
     styles?: object;

@@ -2,7 +2,7 @@ import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
   GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
