@@ -3,7 +3,7 @@ import {
   IStackTokens,
   ITheme,
   styled,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';

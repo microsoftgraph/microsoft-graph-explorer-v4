@@ -1,4 +1,4 @@
-import { ITheme } from '@uifabric/styling';
+import { ITheme } from '@fluentui/react';
 import { Header } from './query-runner';
 
 export interface IHistoryItem extends History {

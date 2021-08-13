@@ -1,4 +1,4 @@
-import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from 'office-ui-fabric-react';
+import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 

@@ -1,4 +1,4 @@
-import { getId, getTheme, Icon, PivotItem, TooltipHost } from 'office-ui-fabric-react';
+import { getId, getTheme, Icon, ITheme, PivotItem, TooltipHost } from '@fluentui/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -23,7 +23,7 @@ export const getPivotItems = () => {
 
   const { graphExplorerMode: mode, sampleQuery, graphResponse: { body } } = useSelector((state: IRootState) => state);
 
-  const currentTheme = getTheme();
+  const currentTheme: ITheme = getTheme();
   const dotStyle = queryResponseStyles(currentTheme).dot;
 
   function showDotIfAdaptiveCardPresent() {
