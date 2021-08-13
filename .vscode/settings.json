@@ -1,21 +1,18 @@
 {
-    "search.exclude": {
-        "**/node_modules": true,
-        "**/all.min.js": true
-    },
-    "files.exclude": {
-        "**/node_modules": true,
-        "**/.github": true,
-    },
-    "files.trimTrailingWhitespace": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.tslint": true
-    },
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "typescript.updateImportsOnFileMove.enabled": "always",
-    "eslint.validate": [
-        "typescript",
-        "typescriptreact"
-    ],
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/all.min.js": true
+  },
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.github": true
+  },
+  "files.trimTrailingWhitespace": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.tslint": true
+  },
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "eslint.validate": ["typescript", "typescriptreact"]
 }

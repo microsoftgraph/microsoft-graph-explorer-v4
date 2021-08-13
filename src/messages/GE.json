@@ -356,7 +356,7 @@
   "Admin consent not required": "Admin consent is not required",
   "Navigation help": "Navigate with right arrow key to access",
   "Actions menu": " Actions menu",
-  "user_cancelled": "Allow the pop-up to complete the authentication process",
+  "user_cancelled":  "Your consent to these permissions has been blocked by your tenant administrator. Ask your admin to grant access to these permissions or sign in to GE and consent on behalf of the organisation",
   "popup_window_error": "Allow popups in your browser",
   "invalid_client": "Recheck the app credentials (application client ID) on Azure app registrations",
   "null_or_empty_id_token": "Retry signing in",
@@ -366,5 +366,11 @@
   "no_tokens_found": "Retry signing in",
   "invalid_request": "Retry signing in",
   "user_login_error": "Retry signing in",
-  "nonce_mismatch_error": "Retry signing in"
+  "nonce_mismatch_error": "Retry signing in",
+  "login_in_progress": "Retry signing in",
+  "interaction_in_progress": "Retry signing in",
+  "interaction_required": "Retry signing in",
+  "invalid_grant": "Retry signing in",
+  "consent_required": "Please sign in again and consent to the scopes requested to get the full graph experience or sign in with a different account",
+  "access_denied": "Your consent to these permissions has been blocked by your tenant administrator. Ask your admin to grant access to these permissions or sign in to GE and consent on behalf of the organisation"
 }

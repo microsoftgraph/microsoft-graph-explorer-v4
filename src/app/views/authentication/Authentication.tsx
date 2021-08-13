@@ -21,10 +21,12 @@ import {
   getConsentedScopesSuccess,
 } from '../../services/actions/auth-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
+import { HOME_ACCOUNT_KEY } from '../../services/graph-constants';
 import { translateMessage } from '../../utils/translate-messages';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
+import { AuthErrorList } from './AuthenticationErrorList';
 
 const Authentication = (props: any) => {
   const dispatch = useDispatch();
@@ -48,6 +50,9 @@ const Authentication = (props: any) => {
 
     try {
       const authResponse = await authenticationWrapper.logIn();
+      authResponse.account = null;
+      // eslint-disable-next-line no-debugger
+      debugger;
       if (authResponse) {
         setLoginInProgress(false);
         dispatch(getAuthTokenSuccess(!!authResponse.accessToken));
@@ -59,7 +64,7 @@ const Authentication = (props: any) => {
         setQueryResponseStatus({
           ok: false,
           statusText: messages['Authentication failed'],
-          status: checkErrorHint(errorCode),
+          status: getErrorAndHint(errorCode),
           messageType: MessageBarType.error,
         })
       );
@@ -77,10 +82,22 @@ const Authentication = (props: any) => {
     }
   };
 
-  const checkErrorHint = (errorCode: string): string => {
-    const errorMessage = translateMessage(errorCode);
-    return errorCode.replace('_', ' ') + '    Hint: ' + errorMessage;
+  const getErrorAndHint = (errorCode: string): string => {
+    const errorMessageHint : string = translateMessage(errorCode);
+    if(AuthErrorList.filter(error => error === errorCode)) {
+      deleteHomeAccountId();
+    }
+    return errorCode.replace('_', ' ') + '      Tip: ' + errorMessageHint;
   };
+
+  const deleteHomeAccountId = () : void => {
+    // eslint-disable-next-line no-console
+    console.log('Deleting home account ID');
+    // eslint-disable-next-line no-console
+    console.log('Home account id', localStorage.getItem(HOME_ACCOUNT_KEY));
+    localStorage.removeItem(HOME_ACCOUNT_KEY);
+  }
+
 
   const showProgressSpinner = (): React.ReactNode => {
     return (
