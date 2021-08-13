@@ -353,5 +353,7 @@
   "This response contains an @odata property.": "Dies Antwort beinhaltet eine @odata Eigenschaft.",
   "Click here to follow the link": "Klicken Sie hier, um dem Link zu folgen.",
   "Signing you out...": "Sie werden abgemeldet...",
-  "Admin consent not required": "Administratorzustimmung nicht erforderlich"
+  "Admin consent not required": "Administratorzustimmung nicht erforderlich",
+  "Navigation help": "Navigieren mit der NACH-RECHTS-TASTE für den Zugriff",
+  "Actions menu": " Menü \"Aktionen\""
 }

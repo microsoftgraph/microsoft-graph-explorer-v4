@@ -353,5 +353,7 @@
   "This response contains an @odata property.": "此响应包含 @odata 属性。",
   "Click here to follow the link": "单击此处访问链接",
   "Signing you out...": "正在注销...",
-  "Admin consent not required": "不需经过管理员同意"
+  "Admin consent not required": "不需经过管理员同意",
+  "Navigation help": "使用向右键导航以访问",
+  "Actions menu": " “操作”菜单"
 }
