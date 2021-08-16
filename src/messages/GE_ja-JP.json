@@ -353,5 +353,7 @@
   "This response contains an @odata property.": "この応答には、@odata プロパティが含まれています。",
   "Click here to follow the link": "ここをクリックしてリンクをフォローします",
   "Signing you out...": "サインアウトしています...",
-  "Admin consent not required": "管理者の同意は必要ありません"
+  "Admin consent not required": "管理者の同意は必要ありません",
+  "Navigation help": "右方向キーを使用して移動し、アクセスする",
+  "Actions menu": " [操作] メニュー"
 }

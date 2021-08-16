@@ -353,5 +353,7 @@
   "This response contains an @odata property.": "Этот отклик содержит свойство @odata.",
   "Click here to follow the link": "Щелкните здесь, чтобы перейти по ссылке",
   "Signing you out...": "Выполняется выход…",
-  "Admin consent not required": "Согласие администратора не требуется"
+  "Admin consent not required": "Согласие администратора не требуется",
+  "Navigation help": "Переход с помощью клавиши СТРЕЛКА ВПРАВО для доступа",
+  "Actions menu": " Меню действий"
 }
