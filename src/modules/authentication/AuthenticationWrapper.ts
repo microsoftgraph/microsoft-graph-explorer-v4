@@ -11,6 +11,7 @@ import {
   DEFAULT_USER_SCOPES,
   HOME_ACCOUNT_KEY,
 } from '../../app/services/graph-constants';
+import { AuthErrorList } from '../../app/views/authentication/AuthenticationErrorList';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './IAuthenticationWrapper';
@@ -99,17 +100,14 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   public async getToken() {
-    const silentRequest: SilentRequest = {
-      scopes: defaultScopes,
-      authority: this.getAuthority(),
-      account: this.getAccount(),
-    };
+    const silentRequest: SilentRequest = {scopes: defaultScopes,authority: this.getAuthority(),
+    account: this.getAccount(),redirectUri: getCurrentUri()};
     try {
       const response: AuthenticationResult =
       await msalApplication.acquireTokenSilent(silentRequest);
       return response;
-      // return await msalApplication.acquireTokenSilent(silentRequest);
     } catch (error) {
+
       throw error;
     }
   }
@@ -122,6 +120,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       scopes: scopes.length > 0 ? scopes : defaultScopes,
       authority: this.getAuthority(),
       account: this.getAccount(),
+      redirectUri: getCurrentUri()
     };
 
     try {
@@ -129,18 +128,30 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       this.storeHomeAccountId(result.account!);
       return result;
     } catch (error) {
-      alert('Did not find account');
       if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
-        const result = this.loginWithInteraction(
-          silentRequest.scopes,
-          sessionId
-        );
-        return result;
-        // return this.loginWithInteraction(silentRequest.scopes, sessionId);
-      } else {
+
+        return this.loginWithInteraction(silentRequest.scopes, sessionId);
+
+      } else if(this.checkIfAuthResultError(error)) {
+        this.deleteHomeAccountId();
+        return this.loginWithInteraction(silentRequest.scopes, sessionId);
+      }
+      else{
         throw error;
       }
     }
+  }
+
+  private checkIfAuthResultError(error: any): boolean {
+
+    const { errorCode } = error;
+
+    for(const errorItem of AuthErrorList){
+      if( errorItem.trim() === errorCode.trim() ){
+        return true;
+      }
+    }
+    return false;
   }
 
   private getAuthority(): string {
@@ -156,7 +167,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   private async loginWithInteraction(userScopes: string[], sessionId?: string) {
-    alert('Using popup window');
     const popUpRequest: PopupRequest = {
       scopes: userScopes,
       authority: this.getAuthority(),
@@ -180,7 +190,18 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       this.storeHomeAccountId(result.account!);
       return result;
     } catch (error) {
-      throw error;
+        if(this.checkIfAuthResultError(error) === true){
+        this.clearCache();
+        this.deleteHomeAccountId();
+        window.sessionStorage.clear();
+        const result = await msalApplication.loginPopup(popUpRequest);
+        this.storeHomeAccountId(result.account!);
+        return result;
+      }
+      else{
+        throw error;
+      }
+
     }
   }
 
@@ -205,7 +226,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
    * and uses either the homeAccountId 'login' to get localstorage keys that contain this
    * identifier
    */
-  private clearCache(): void {
+  public clearCache(): void {
     const keyFilter = this.getHomeAccountId() || 'login';
     const msalKeys = Object.keys(localStorage).filter((key) =>
       key.includes(keyFilter)

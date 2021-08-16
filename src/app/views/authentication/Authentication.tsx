@@ -50,9 +50,6 @@ const Authentication = (props: any) => {
 
     try {
       const authResponse = await authenticationWrapper.logIn();
-      authResponse.account = null;
-      // eslint-disable-next-line no-debugger
-      debugger;
       if (authResponse) {
         setLoginInProgress(false);
         dispatch(getAuthTokenSuccess(!!authResponse.accessToken));
@@ -84,17 +81,18 @@ const Authentication = (props: any) => {
 
   const getErrorAndHint = (errorCode: string): string => {
     const errorMessageHint : string = translateMessage(errorCode);
-    if(AuthErrorList.filter(error => error === errorCode)) {
-      deleteHomeAccountId();
+
+    for(const errorItem of AuthErrorList){
+      if(errorItem === errorCode){
+        authenticationWrapper.clearCache();
+        deleteHomeAccountId();
+        window.sessionStorage.clear();
+      }
     }
-    return errorCode.replace('_', ' ') + '      Tip: ' + errorMessageHint;
+    return errorCode.replace('_', ' ') + '      ' + translateMessage('Tip') + ':  ' + errorMessageHint;
   };
 
   const deleteHomeAccountId = () : void => {
-    // eslint-disable-next-line no-console
-    console.log('Deleting home account ID');
-    // eslint-disable-next-line no-console
-    console.log('Home account id', localStorage.getItem(HOME_ACCOUNT_KEY));
     localStorage.removeItem(HOME_ACCOUNT_KEY);
   }
 
