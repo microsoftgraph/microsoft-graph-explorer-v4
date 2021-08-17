@@ -1,13 +1,5 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
-import {
-  Icon,
-  Label,
-  MessageBar,
-  MessageBarType,
-  Spinner,
-  SpinnerSize,
-  styled,
-} from 'office-ui-fabric-react';
+import { Icon, Label, MessageBar, MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
