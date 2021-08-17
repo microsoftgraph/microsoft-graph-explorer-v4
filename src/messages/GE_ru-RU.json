@@ -17,7 +17,7 @@
   " with your work or school account from Microsoft.": " с помощью рабочей или учебной учетной записи от корпорации Майкрософт.",
   "Submit": "Отправить",
   "Using demo tenant": "Вы используете тестовую учетную запись.",
-  "To access your own data:": "Для доступа к собственным данным:",
+  "To access your own data:": "Войте, чтобы получить доступ к собственным данным.",
   "sign out": "Выйти",
   "History": "Журнал",
   "Method": "Метод",
@@ -347,10 +347,13 @@
   "Report an Issue": "Сообщить о проблеме",
   "Maximize sidebar": "Развернуть боковую панель",
   "Getting your access token": "Получение маркера доступа",
-  "This response contains an @odata.nextLink property.": "Этот ответ содержит свойство @odata.nextLink.",
-  "Click here to go to the next page": "Щелкните здесь, чтобы перейти к следующей странице",
   "and experiment on": " и поэкспериментируйте",
   "Scope consent failed": "Сбой подтверждения области",
   "Missing url": "Введите действительный URL-адрес для выполнения запроса",
-  "Signing you out...": "Выполняется выход…"
+  "This response contains an @odata property.": "Этот отклик содержит свойство @odata.",
+  "Click here to follow the link": "Щелкните здесь, чтобы перейти по ссылке",
+  "Signing you out...": "Выполняется выход…",
+  "Admin consent not required": "Согласие администратора не требуется",
+  "Navigation help": "Переход с помощью клавиши СТРЕЛКА ВПРАВО для доступа",
+  "Actions menu": " Меню действий"
 }

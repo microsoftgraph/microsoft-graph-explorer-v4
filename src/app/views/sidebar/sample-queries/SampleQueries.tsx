@@ -1,22 +1,9 @@
 import {
-  Announced,
-  DetailsList,
-  DetailsRow,
-  FontSizes,
-  FontWeights,
-  getId,
-  GroupHeader,
-  IColumn,
-  Icon,
-  MessageBar,
-  MessageBarType,
-  SearchBox,
-  SelectionMode,
-  Spinner,
-  SpinnerSize,
-  styled,
-  TooltipHost,
-} from 'office-ui-fabric-react';
+  Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
+  getTheme,
+  GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
+  SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
+} from '@fluentui/react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -49,6 +36,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     super(props);
     this.state = {
       sampleQueries: [],
+      selectedQuery: null,
     };
   }
 
@@ -217,9 +205,14 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   public renderRow = (props: any): any => {
+    const currentTheme = getTheme();
     const { tokenPresent } = this.props;
     const classes = classNames(this.props);
     let selectionDisabled = false;
+    const customStyles: Partial<IDetailsRowStyles> = {};
+    if (this.state.selectedQuery?.id === props.item.id) {
+      customStyles.root = { backgroundColor: currentTheme.palette.neutralLight };
+    }
 
     if (props) {
       if (!tokenPresent && props.item.method !== 'GET') {
@@ -229,10 +222,12 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         <div className={classes.groupHeader}>
           <DetailsRow
             {...props}
+            styles={customStyles}
             onClick={() => {
               if (!selectionDisabled) {
                 this.querySelected(props.item);
               }
+              this.setState({ selectedQuery: props.item })
             }}
             className={
               classes.queryRow +
@@ -344,6 +339,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const { sampleQueries } = this.state;
     const classes = classNames(this.props);
     const groups = generateGroupsFromList(sampleQueries, 'category');
+    if (this.state.selectedQuery) {
+      const index = groups.findIndex(k => k.key === this.state.selectedQuery.category);
+      groups[index].isCollapsed = false;
+    }
 
     if (pending) {
       return (
@@ -437,26 +436,28 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         <Announced
           message={`${sampleQueries.length} search results available.`}
         />
-        <DetailsList
-          className={classes.queryList}
-          cellStyleProps={{
-            cellRightPadding: 0,
-            cellExtraRightPadding: 0,
-            cellLeftPadding: 0,
-          }}
-          onRenderItemColumn={this.renderItemColumn}
-          items={sampleQueries}
-          selectionMode={SelectionMode.none}
-          columns={columns}
-          groups={groups}
-          groupProps={{
-            showEmptyGroups: true,
-            onRenderHeader: this.renderGroupHeader,
-          }}
-          onRenderRow={this.renderRow}
-          onRenderDetailsHeader={this.renderDetailsHeader}
-          onItemInvoked={this.querySelected}
-        />
+        <div role="navigation">
+          <DetailsList
+            className={classes.queryList}
+            cellStyleProps={{
+              cellRightPadding: 0,
+              cellExtraRightPadding: 0,
+              cellLeftPadding: 0,
+            }}
+            onRenderItemColumn={this.renderItemColumn}
+            items={sampleQueries}
+            selectionMode={SelectionMode.none}
+            columns={columns}
+            groups={groups}
+            groupProps={{
+              showEmptyGroups: true,
+              onRenderHeader: this.renderGroupHeader,
+            }}
+            onRenderRow={this.renderRow}
+            onRenderDetailsHeader={this.renderDetailsHeader}
+            onItemInvoked={this.querySelected}
+          />
+        </div>
       </div>
     );
   }

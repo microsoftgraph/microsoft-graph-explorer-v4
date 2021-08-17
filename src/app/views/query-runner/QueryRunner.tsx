@@ -1,4 +1,4 @@
-import { IDropdownOption, MessageBarType } from 'office-ui-fabric-react';
+import { IDropdownOption, MessageBarType } from '@fluentui/react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';

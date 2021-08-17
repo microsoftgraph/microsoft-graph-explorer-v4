@@ -17,7 +17,7 @@
   " with your work or school account from Microsoft.": " com a sua conta corporativa ou de estudante da Microsoft.",
   "Submit": "Enviar",
   "Using demo tenant": "No momento, você está usando uma conta de amostra.",
-  "To access your own data:": "Para acessar seus dados:",
+  "To access your own data:": "Entrar para acessar seus próprios dados.",
   "sign out": "Sair",
   "History": "Histórico",
   "Method": "Método",
@@ -347,10 +347,13 @@
   "Report an Issue": "Relatar um Problema",
   "Maximize sidebar": "Maximizar a barra lateral",
   "Getting your access token": "Obtendo seu token de acesso",
-  "This response contains an @odata.nextLink property.": "Essa resposta contém uma propriedade @odata.nextLink.",
-  "Click here to go to the next page": "Clique aqui para ir à próxima página",
   "and experiment on": " e experimente",
   "Scope consent failed": "O consentimento do escopo falhou",
-  "Missing url": "Inserir uma url válida para executar a consulta",
-  "Signing you out...": "Desconectando você..."
+  "Missing url": "Inserir um URL válido para executar a consulta",
+  "This response contains an @odata property.": "Esta resposta contém uma propriedade @odata.",
+  "Click here to follow the link": "Clique aqui para seguir o link",
+  "Signing you out...": "Saindo...",
+  "Admin consent not required": "O consentimento do administrador não é necessário",
+  "Navigation help": "Navegar com a tecla de seta para a direita para acessar",
+  "Actions menu": " Menu Ações"
 }

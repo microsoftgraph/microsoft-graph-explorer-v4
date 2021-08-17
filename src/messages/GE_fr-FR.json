@@ -17,7 +17,7 @@
   " with your work or school account from Microsoft.": " avec votre compte Microsoft scolaire ou professionnel.",
   "Submit": "Submit",
   "Using demo tenant": "Vous utilisez actuellement un compte factice.",
-  "To access your own data:": "Pour accéder à vos données :",
+  "To access your own data:": "Connectez-vous pour accéder à vos données.",
   "sign out": "Se déconnecter",
   "History": "Historique",
   "Method": "Méthode",
@@ -346,11 +346,14 @@
   "JSON Schema": "Modèle JSON",
   "Report an Issue": "Signaler un problème",
   "Maximize sidebar": "Agrandir la barre latérale",
-  "Getting your access token": "Obtenir le jeton d'accès",
-  "This response contains an @odata.nextLink property.": "Cette réponse contient une propriété @odata.nextLink.",
-  "Click here to go to the next page": "Cliquez ici pour aller à la page suivante",
+  "Getting your access token": "Obtenir votre jeton d'accès",
   "and experiment on": " et expérimenter sur",
   "Scope consent failed": "Échec du consentement pour l’étendue",
-  "Missing url": "Veuillez entrez une url valide pour exécuter la requête",
-  "Signing you out...": "Déconnexion en cours..."
+  "Missing url": "Veuillez entrez une URL valide pour exécuter la requête",
+  "This response contains an @odata property.": "Cette réponse contient une propriété @odata.",
+  "Click here to follow the link": "Cliquez ici pour suivre le lien",
+  "Signing you out...": "Déconnexion en cours...",
+  "Admin consent not required": "L’autorisation de l’administrateur n’est pas requise.",
+  "Navigation help": "Naviguez avec la touche fléchée droite pour accéder à",
+  "Actions menu": " Menu Actions"
 }

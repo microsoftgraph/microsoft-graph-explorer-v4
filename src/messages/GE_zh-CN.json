@@ -17,7 +17,7 @@
   " with your work or school account from Microsoft.": " 登录 Graph 浏览器。",
   "Submit": "提交",
   "Using demo tenant": "当前使用的是示例帐户。",
-  "To access your own data:": "若要访问你自己的数据:",
+  "To access your own data:": "登录以访问你自己的数据。",
   "sign out": "注销",
   "History": "历史记录",
   "Method": "方法",
@@ -347,10 +347,13 @@
   "Report an Issue": "报告问题",
   "Maximize sidebar": "最大化边栏",
   "Getting your access token": "正在获取访问令牌",
-  "This response contains an @odata.nextLink property.": "此响应包含 @odata.nextLink 属性。",
-  "Click here to go to the next page": "单击此处转到下一页",
   "and experiment on": " 和试验",
   "Scope consent failed": "作用域许可失败",
   "Missing url": "请输入有效 URL 以运行查询",
-  "Signing you out...": "正在注销..."
+  "This response contains an @odata property.": "此响应包含 @odata 属性。",
+  "Click here to follow the link": "单击此处访问链接",
+  "Signing you out...": "正在注销...",
+  "Admin consent not required": "不需经过管理员同意",
+  "Navigation help": "使用向右键导航以访问",
+  "Actions menu": " “操作”菜单"
 }

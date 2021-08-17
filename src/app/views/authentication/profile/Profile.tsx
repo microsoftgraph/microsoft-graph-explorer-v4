@@ -1,4 +1,4 @@
-import { ActionButton, IPersonaSharedProps, Persona, PersonaSize, styled } from 'office-ui-fabric-react';
+import { ActionButton, IPersonaSharedProps, Persona, PersonaSize, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -10,7 +10,7 @@ import { IProfileProps, IProfileState } from '../../../../types/profile';
 import { IRootState } from '../../../../types/root';
 import * as authActionCreators from '../../../services/actions/auth-action-creators';
 import * as profileActionCreators from '../../../services/actions/profile-action-creators';
-import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
+import { USER_INFO_URL, USER_PICTURE_URL, BETA_USER_INFO_URL, ACCOUNT_TYPE } from '../../../services/graph-constants';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 
@@ -34,6 +34,13 @@ export class Profile extends Component<IProfileProps, IProfileState> {
       ? await actions.getProfileInfo({
         selectedVerb: 'GET',
         sampleUrl: USER_INFO_URL
+      })
+      : null;
+
+    const profileType = actions
+      ? await actions.getProfileInfo({
+        selectedVerb: 'GET',
+        sampleUrl: BETA_USER_INFO_URL
       })
       : null;
 

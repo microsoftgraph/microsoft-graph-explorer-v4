@@ -1,4 +1,4 @@
-import { FocusZone } from 'office-ui-fabric-react';
+import { FocusZone } from '@fluentui/react';
 import React from 'react';
 import MonacoEditor, { ChangeHandler } from 'react-monaco-editor';
 
@@ -45,6 +45,7 @@ export function Monaco(props: IMonaco) {
                 horizontal: 'visible',
                 horizontalScrollbarSize: 17,
               },
+              wordWrap: 'on'
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}

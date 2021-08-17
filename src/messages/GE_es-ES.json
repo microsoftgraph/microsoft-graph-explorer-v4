@@ -16,8 +16,8 @@
   "sign in": "Inicie sesión en el Probador de Graph",
   " with your work or school account from Microsoft.": " con su cuenta profesional o educativa de Microsoft.",
   "Submit": "Enviar",
-  "Using demo tenant": "Actualmente está utilizando una cuenta de muestra.",
-  "To access your own data:": "Para tener acceso a sus propios datos:",
+  "Using demo tenant": "Actualmente utiliza una cuenta de muestra.",
+  "To access your own data:": "Inicie sesión para tener acceso a sus propios datos:",
   "sign out": "Cerrar sesión",
   "History": "Historial",
   "Method": "Método",
@@ -347,10 +347,13 @@
   "Report an Issue": "Informar de un problema",
   "Maximize sidebar": "Maximizar la barra lateral",
   "Getting your access token": "Obtener el token de acceso",
-  "This response contains an @odata.nextLink property.": "Esta respuesta contiene una propiedad @odata.nextLink.",
-  "Click here to go to the next page": "Haga clic aquí para ir a la página siguiente",
   "and experiment on": " y experimentar con",
   "Scope consent failed": "Error en el consentimiento del ámbito",
   "Missing url": "Escriba una dirección URL válida para ejecutar la consulta",
-  "Signing you out...": "Cerrando sesión..."
+  "This response contains an @odata property.": "Esta respuesta contiene una propiedad @odata.",
+  "Click here to follow the link": "Haga clic aquí para seguir el vínculo",
+  "Signing you out...": "Cerrando sesión...",
+  "Admin consent not required": "No se requiere el consentimiento del administrador",
+  "Navigation help": "Navegar con la tecla de flecha derecha para acceder",
+  "Actions menu": " Menú Acciones"
 }

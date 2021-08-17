@@ -1,15 +1,15 @@
 import { AuthenticationResult } from '@azure/msal-browser';
-import { IconButton, IIconProps, Label, styled } from 'office-ui-fabric-react';
+import { IconButton, IIconProps, Label, MessageBar, MessageBarType, styled } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { authenticationWrapper } from '../../../../../modules/authentication';
 
-import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
+import { componentNames, telemetry } from '../../../../../telemetry';
 import { IRootState } from '../../../../../types/root';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
-import { genericCopy } from '../../../common/copy';
+import { trackedGenericCopy } from '../../../common/copy';
 import { convertVhToPx } from '../../../common/dimensions-adjustment';
 import { authStyles } from './Auth.styles';
 
@@ -20,8 +20,7 @@ export function Auth(props: any) {
   const [loading, setLoading] = useState(false);
 
   const handleCopy = async () => {
-    await genericCopy(accessToken!);
-    trackTokenCopyEvent();
+    trackedGenericCopy(accessToken || '', componentNames.ACCESS_TOKEN_COPY_BUTTON);
   };
 
   useEffect(() => {
@@ -44,9 +43,9 @@ export function Auth(props: any) {
   };
 
   if (!authToken.token) {
-    return <Label className={classes.emptyStateLabel}>
+    return <MessageBar messageBarType={MessageBarType.blocked}>
       <FormattedMessage id='Sign In to see your access token.' />
-    </Label>;
+    </MessageBar>;
   }
 
   return (<div className={classes.auth} style={{ height: requestHeight }}>
@@ -54,7 +53,7 @@ export function Auth(props: any) {
       <div>
         <div className={classes.accessTokenContainer}>
           <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
-          <IconButton onClick={handleCopy} iconProps={copyIcon} title='Copy' ariaLabel='Copy' />
+          <IconButton onClick={handleCopy} iconProps={copyIcon} title={translateMessage('Copy')} ariaLabel={translateMessage('Copy')} />
           <IconButton iconProps={tokenDetailsIcon}
             title={translateMessage('Get token details (Powered by jwt.ms)')}
             ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
@@ -69,14 +68,6 @@ export function Auth(props: any) {
       </Label>
     }
   </div>);
-}
-
-function trackTokenCopyEvent() {
-  telemetry.trackEvent(
-    eventTypes.BUTTON_CLICK_EVENT,
-    {
-      ComponentName: componentNames.ACCESS_TOKEN_COPY_BUTTON
-    });
 }
 
 const trackedComponent = telemetry.trackReactComponent(Auth, componentNames.ACCESS_TOKEN_TAB);

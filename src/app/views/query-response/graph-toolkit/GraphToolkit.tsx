@@ -7,12 +7,13 @@ import {
   MessageBar,
   MessageBarType,
   styled,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { classNames } from '../../classnames';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { IRootState } from '../../../../types/root';
+import { translateMessage } from '../../../utils/translate-messages';
 
 class GraphToolkit extends Component<any> {
   constructor(props: any) {
@@ -36,7 +37,7 @@ class GraphToolkit extends Component<any> {
             </a>
             .
           </MessageBar>
-          <iframe width='100%' height='470px' title='graph toolkit frame' src={toolkitUrl} />
+          <iframe width='100%' height='470px' src={toolkitUrl} title={translateMessage('Graph toolkit')} />
         </>
       );
     }

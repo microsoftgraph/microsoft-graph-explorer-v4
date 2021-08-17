@@ -1,4 +1,4 @@
-import { Link, MessageBar } from 'office-ui-fabric-react';
+import { Link, MessageBar } from '@fluentui/react';
 import React, { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -12,7 +12,6 @@ import {
 export function statusMessages(queryState: any, sampleQuery: IQuery, actions: any) {
   function displayStatusMessage(message: string, urls: any) {
     const { matches, parts } = getMatchesAndParts(message);
-
 
     if (!parts || !matches || !urls || Object.keys(urls).length === 0) {
       return message;
@@ -31,7 +30,6 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
       };
       return (
         <Fragment key={part + index}>{includesLink ?
-
           displayLink() : part}
         </Fragment>
       );

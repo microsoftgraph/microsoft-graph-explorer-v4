@@ -1,4 +1,4 @@
-import { classNamesFunction, ITheme } from 'office-ui-fabric-react';
+import { classNamesFunction, ITheme } from '@fluentui/react';
 
 interface IClassNames {
   [prop: string]: unknown;
