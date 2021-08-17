@@ -220,7 +220,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   }
 
-  private createCookie(name : string,value:string,days:number) {
+  private createCookie(name : string,value:string,days:number) : void {
     let expires = ''
     const date = new Date();
     date.setTime(date.getTime()+(days*24*60*60*1000));
