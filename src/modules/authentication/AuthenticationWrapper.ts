@@ -142,10 +142,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
   }
 
-  private checkIfAuthResultError(error: any): boolean {
-
-    const { errorCode } = error;
-
+  private checkIfAuthResultError(errorCode: string): boolean {
     for(const errorItem of AuthErrorList){
       if( errorItem.trim() === errorCode.trim() ){
         return true;
@@ -189,11 +186,13 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const result = await msalApplication.loginPopup(popUpRequest);
       this.storeHomeAccountId(result.account!);
       return result;
-    } catch (error) {
-        if(this.checkIfAuthResultError(error) === true){
+    }catch (error) {
+        const { errorCode } = error;
+        if(this.checkIfAuthResultError(errorCode) && !this.consentingToNewScopes){
         this.clearCache();
         this.deleteHomeAccountId();
         window.sessionStorage.clear();
+        this.eraseInteractionInProgressCookie();
         const result = await msalApplication.loginPopup(popUpRequest);
         this.storeHomeAccountId(result.account!);
         return result;
@@ -203,6 +202,30 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       }
 
     }
+  }
+
+  private eraseInteractionInProgressCookie(): void{
+    const keyValuePairs = document.cookie.split(';');
+    let cookieValue = '';
+    let cookieKey = '';
+
+    for( const pair of keyValuePairs){
+      cookieValue = pair.substring(pair.indexOf('=')+1);
+      if(cookieValue === 'interaction_in_progress'){
+        cookieKey = pair.substring(1, pair.indexOf('='));
+        break;
+      }
+    }
+    this.createCookie(cookieKey,"",-100);
+
+  }
+
+  private createCookie(name : string,value:string,days:number) {
+    let expires = ''
+    const date = new Date();
+    date.setTime(date.getTime()+(days*24*60*60*1000));
+    expires = "; expires="+date.toUTCString();
+    document.cookie = name+"="+value+expires+"; path=/";
   }
 
   private storeHomeAccountId(account: AccountInfo): void {
