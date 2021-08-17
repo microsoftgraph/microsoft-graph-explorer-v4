@@ -1,4 +1,4 @@
-import { Link, MessageBar } from 'office-ui-fabric-react';
+import { Link, MessageBar } from '@fluentui/react';
 import React, { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 

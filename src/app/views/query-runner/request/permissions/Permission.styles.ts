@@ -1,4 +1,4 @@
-import { FontSizes, ITheme } from '@uifabric/styling';
+import { FontSizes, ITheme } from '@fluentui/react';
 
 export const permissionStyles = (theme: ITheme) => {
   return {

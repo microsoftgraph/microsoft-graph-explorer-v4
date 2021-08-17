@@ -1,4 +1,4 @@
-import { Announced, ITextField, PrimaryButton, styled, TextField } from 'office-ui-fabric-react';
+import { Announced, ITextField, PrimaryButton, styled, TextField } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';

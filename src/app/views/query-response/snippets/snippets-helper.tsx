@@ -1,4 +1,4 @@
-import { IconButton, Label, PivotItem } from 'office-ui-fabric-react';
+import { IconButton, Label, PivotItem } from '@fluentui/react';
 import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
