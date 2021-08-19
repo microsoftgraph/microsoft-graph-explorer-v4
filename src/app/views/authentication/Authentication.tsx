@@ -4,21 +4,15 @@ import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { authenticationWrapper } from '../../../modules/authentication';
-
 import { componentNames, errorTypes, telemetry } from '../../../telemetry';
 import { Mode } from '../../../types/enums';
 import { IRootState } from '../../../types/root';
-import {
-  getAuthTokenSuccess,
-  getConsentedScopesSuccess,
-} from '../../services/actions/auth-action-creators';
+import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../services/actions/auth-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
-import { HOME_ACCOUNT_KEY } from '../../services/graph-constants';
-import { translateMessage } from '../../utils/translate-messages';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
-import { AuthErrorList } from './AuthenticationErrorList';
+import { getSignInAuthError } from './AuthenticationErrors';
 
 const Authentication = (props: any) => {
   const dispatch = useDispatch();
@@ -53,7 +47,7 @@ const Authentication = (props: any) => {
         setQueryResponseStatus({
           ok: false,
           statusText: messages['Authentication failed'],
-          status: getErrorAndHint(errorCode),
+          status: getSignInAuthError(errorCode),
           messageType: MessageBarType.error,
         })
       );
@@ -64,30 +58,12 @@ const Authentication = (props: any) => {
         {
           ComponentName: componentNames.AUTHENTICATION_ACTION,
           Message: `Authentication failed: ${
-            errorCode ? errorCode.replace('_', ' ') : ''
+            errorCode ? errorCode.replace(/_/g, ' '): ''
           }`,
         }
       );
     }
   };
-
-  const getErrorAndHint = (errorCode: string): string => {
-    const errorMessageHint : string = translateMessage(errorCode);
-
-    for(const errorItem of AuthErrorList){
-      if(errorItem === errorCode){
-        authenticationWrapper.clearCache();
-        deleteHomeAccountId();
-        window.sessionStorage.clear();
-      }
-    }
-    return errorCode.replace('_', ' ') + '      ' + translateMessage('Tip') + ':  ' + errorMessageHint;
-  };
-
-  const deleteHomeAccountId = () : void => {
-    localStorage.removeItem(HOME_ACCOUNT_KEY);
-  }
-
 
   const showProgressSpinner = (): React.ReactNode => {
     return (

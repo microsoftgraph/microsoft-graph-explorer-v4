@@ -11,7 +11,7 @@ import {
   DEFAULT_USER_SCOPES,
   HOME_ACCOUNT_KEY,
 } from '../../app/services/graph-constants';
-import { AuthErrorList } from '../../app/views/authentication/AuthenticationErrorList';
+import { checkIfSignInAuthError } from '../../app/views/authentication/AuthenticationErrors';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './IAuthenticationWrapper';
@@ -66,9 +66,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
    * @param {string[]} scopes passed to generate token
    *  @returns {Promise.<AuthenticationResult>}
    */
-  public async consentToScopes(
-    scopes: string[] = []
-  ): Promise<AuthenticationResult> {
+  public async consentToScopes(scopes: string[] = []): Promise<AuthenticationResult> {
     this.consentingToNewScopes = true;
     try {
       const authResult = await this.loginWithInteraction(scopes);
@@ -112,10 +110,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
   }
 
-  private async getAuthResult(
-    scopes: string[] = [],
-    sessionId?: string
-  ): Promise<AuthenticationResult> {
+  private async getAuthResult(scopes: string[] = [], sessionId?: string): Promise<AuthenticationResult> {
     const silentRequest: SilentRequest = {
       scopes: scopes.length > 0 ? scopes : defaultScopes,
       authority: this.getAuthority(),
@@ -132,23 +127,14 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
 
-      } else if(this.checkIfAuthResultError(error)) {
+      } else if(checkIfSignInAuthError(error)) {
         this.deleteHomeAccountId();
-        return this.loginWithInteraction(silentRequest.scopes, sessionId);
+        throw error;
       }
       else{
         throw error;
       }
     }
-  }
-
-  private checkIfAuthResultError(errorCode: string): boolean {
-    for(const errorItem of AuthErrorList){
-      if( errorItem.trim() === errorCode.trim() ){
-        return true;
-      }
-    }
-    return false;
   }
 
   private getAuthority(): string {
@@ -187,15 +173,16 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       this.storeHomeAccountId(result.account!);
       return result;
     }catch (error) {
-        const { errorCode } = error;
-        if(this.checkIfAuthResultError(errorCode) && !this.consentingToNewScopes){
+      const { errorCode } = error;
+      if( checkIfSignInAuthError(errorCode) && !this.consentingToNewScopes ) {
         this.clearCache();
         this.deleteHomeAccountId();
         window.sessionStorage.clear();
-        this.eraseInteractionInProgressCookie();
-        const result = await msalApplication.loginPopup(popUpRequest);
-        this.storeHomeAccountId(result.account!);
-        return result;
+
+        if(errorCode === 'interaction_in_progress'){
+          this.eraseInteractionInProgressCookie();
+        }
+        throw error;
       }
       else{
         throw error;
@@ -217,7 +204,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       }
     }
     this.createCookie(cookieKey,"",-100);
-
   }
 
   private createCookie(name : string,value:string,days:number) : void {
@@ -236,7 +222,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return localStorage.getItem(HOME_ACCOUNT_KEY);
   }
 
-  private deleteHomeAccountId(): void {
+  public deleteHomeAccountId(): void {
     localStorage.removeItem(HOME_ACCOUNT_KEY);
   }
 

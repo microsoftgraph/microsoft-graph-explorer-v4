@@ -20,6 +20,6 @@ export function getLoginType(): LoginType {
  * -js/blob/9274fac6d100a6300eb2faa4c94aa2431b1ca4b0/lib/msal-browser/src/utils/BrowserUtils.ts#L49
 */
 export function getCurrentUri(): string {
-  const currentUrl = window.location.href.split('?')[0].split('#')[0] + 'blank.html';
+  const currentUrl = window.location.href.split('?')[0].split('#')[0];
   return currentUrl.toLowerCase() ;
 }

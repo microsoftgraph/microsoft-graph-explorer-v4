@@ -8,6 +8,7 @@ import { IRootState } from '../../../types/root';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
+import { getConsentAuthError } from '../../views/authentication/AuthenticationErrors';
 import { ACCOUNT_TYPE, PERMS_SCOPE } from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
@@ -115,7 +116,7 @@ export function consentToScopes(scopes: string[]): Function {
       dispatch(
         setQueryResponseStatus({
           statusText: translateMessage('Scope consent failed'),
-          status: errorCode + ' ' + translateMessage('Tip') + ': ' + translateMessage('Access to permission denied'),
+          status:getConsentAuthError(errorCode),
           ok: false,
           messageType: MessageBarType.error,
         })
