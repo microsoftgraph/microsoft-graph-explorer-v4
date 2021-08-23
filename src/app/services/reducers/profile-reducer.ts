@@ -16,7 +16,9 @@ export function profile(state = null, action: IAction): any {
 export function profileType(state = ACCOUNT_TYPE.AAD, action: IAction): any {
   switch (action.type) {
     case PROFILE_TYPE_SUCCESS:
-      return action.response
+      return action.response;
+    case LOGOUT_SUCCESS:
+      return null;
     default:
       return state;
   }
