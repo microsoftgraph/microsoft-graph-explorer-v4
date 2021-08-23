@@ -11,7 +11,7 @@ import {
   DEFAULT_USER_SCOPES,
   HOME_ACCOUNT_KEY,
 } from '../../app/services/graph-constants';
-import { checkIfSignInAuthError } from '../../app/views/authentication/AuthenticationErrors';
+import { signInAuthError } from '../../app/views/authentication/AuthenticationErrorsHints';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './IAuthenticationWrapper';
@@ -127,7 +127,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
 
-      } else if(checkIfSignInAuthError(error)) {
+      } else if(signInAuthError(error)) {
         this.deleteHomeAccountId();
         throw error;
       }
@@ -174,10 +174,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       return result;
     }catch (error) {
       const { errorCode } = error;
-      if( checkIfSignInAuthError(errorCode) && !this.consentingToNewScopes ) {
-        this.clearCache();
-        this.deleteHomeAccountId();
-        window.sessionStorage.clear();
+      if( signInAuthError(errorCode) && !this.consentingToNewScopes ) {
+        this.clearSession();
 
         if(errorCode === 'interaction_in_progress'){
           this.eraseInteractionInProgressCookie();
@@ -189,29 +187,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       }
 
     }
-  }
-
-  private eraseInteractionInProgressCookie(): void{
-    const keyValuePairs = document.cookie.split(';');
-    let cookieValue = '';
-    let cookieKey = '';
-
-    for( const pair of keyValuePairs){
-      cookieValue = pair.substring(pair.indexOf('=')+1);
-      if(cookieValue === 'interaction_in_progress'){
-        cookieKey = pair.substring(1, pair.indexOf('='));
-        break;
-      }
-    }
-    this.createCookie(cookieKey,"",-100);
-  }
-
-  private createCookie(name : string,value:string,days:number) : void {
-    let expires = ''
-    const date = new Date();
-    date.setTime(date.getTime()+(days*24*60*60*1000));
-    expires = "; expires="+date.toUTCString();
-    document.cookie = name+"="+value+expires+"; path=/";
   }
 
   private storeHomeAccountId(account: AccountInfo): void {
@@ -243,5 +218,34 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     msalKeys.forEach((item: string) => {
       localStorage.removeItem(item);
     });
+  }
+
+  private eraseInteractionInProgressCookie(): void{
+    const keyValuePairs = document.cookie.split(';');
+    let cookieValue = '';
+    let cookieKey = '';
+
+    for( const pair of keyValuePairs){
+      cookieValue = pair.substring(pair.indexOf('=')+1);
+      if(cookieValue === 'interaction_in_progress'){
+        cookieKey = pair.substring(1, pair.indexOf('='));
+        break;
+      }
+    }
+    this.createCookie(cookieKey,"",-100);
+  }
+
+  private createCookie(name : string,value:string,days:number) : void {
+    let expires = ''
+    const date = new Date();
+    date.setTime(date.getTime()+(days*24*60*60*1000));
+    expires = "; expires="+date.toUTCString();
+    document.cookie = name+"="+value+expires+"; path=/";
+  }
+
+  public clearSession(): void{
+    this.clearCache();
+    this.deleteHomeAccountId();
+    window.sessionStorage.clear();
   }
 }

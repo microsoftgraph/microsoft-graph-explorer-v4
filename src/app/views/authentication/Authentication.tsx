@@ -12,7 +12,7 @@ import { setQueryResponseStatus } from '../../services/actions/query-status-acti
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
-import { getSignInAuthError } from './AuthenticationErrors';
+import { getSignInAuthErrorHint, signInAuthError } from './AuthenticationErrorsHints';
 
 const Authentication = (props: any) => {
   const dispatch = useDispatch();
@@ -43,12 +43,16 @@ const Authentication = (props: any) => {
       }
     } catch (error) {
       const { errorCode } = error;
+      if(signInAuthError(errorCode)) {
+        authenticationWrapper.clearSession();
+      }
       dispatch(
         setQueryResponseStatus({
           ok: false,
           statusText: messages['Authentication failed'],
-          status: getSignInAuthError(errorCode),
+          status: removeUnderScore(errorCode),
           messageType: MessageBarType.error,
+          hint: getSignInAuthErrorHint(errorCode)
         })
       );
       setLoginInProgress(false);
@@ -58,12 +62,21 @@ const Authentication = (props: any) => {
         {
           ComponentName: componentNames.AUTHENTICATION_ACTION,
           Message: `Authentication failed: ${
-            errorCode ? errorCode.replace(/_/g, ' '): ''
+            errorCode ? removeUnderScore(errorCode) : ''
           }`,
         }
       );
     }
   };
+
+  const removeUnderScore = (statusString: string): string => {
+    if(statusString === '' ){
+      return statusString;
+    }
+    else{
+      return statusString.replace(/_/g, ' ');
+    }
+  }
 
   const showProgressSpinner = (): React.ReactNode => {
     return (
