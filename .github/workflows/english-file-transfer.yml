@@ -3,7 +3,7 @@ name: English File transfer
 on:
   push:
     branches:
-      - master
+      - task/automate-english-file-transfer
     paths:
       - 'src/messages/GE.json'
 
