@@ -255,7 +255,6 @@
   "actions": "Actions",
   "view": "View",
   "remove": "Remove",
-  "back to classic": "Preview",
   "More actions": "More actions",
   "Permissions": "Permissions",
   "Sign In to see your access token.": "To view your access token, sign in to Graph Explorer.",
