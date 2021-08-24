@@ -1,6 +1,9 @@
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
-import { BETA_USER_INFO_URL, DEFAULT_USER_SCOPES, USER_INFO_URL, USER_PICTURE_URL } from '../graph-constants';
+import {
+  ACCOUNT_TYPE, BETA_USER_INFO_URL, DEFAULT_USER_SCOPES,
+  USER_INFO_URL, USER_PICTURE_URL
+} from '../graph-constants';
 import { PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS } from '../redux-constants';
 import { makeRequest, parseResponse } from './query-action-creator-util';
 import { queryRunningStatus } from './query-loading-action-creators';
@@ -40,47 +43,56 @@ export function getProfileInfo(): Function {
 
     try {
       const profile: IUser = await getProfileInformation(query, scopes, respHeaders);
-      profile.profileImageUrl = await getProfileImage(query, scopes, respHeaders);
       profile.profileType = await getProfileType(query, scopes, respHeaders);
+      profile.profileImageUrl = await getProfileImage(query, scopes, respHeaders);
       dispatch(profileRequestSuccess(profile));
-      return profile;
     } catch (error) {
       dispatch(profileRequestError({ error }));
-      return null;
     }
   };
 }
-async function getProfileType(query: IQuery, scopes: string[], respHeaders: any) {
-  query.sampleUrl = BETA_USER_INFO_URL;
-  const response = await makeRequest(query.selectedVerb, scopes)(query);
-  const userInfo = await parseResponse(response, respHeaders);
-  return userInfo?.account?.[0]?.source?.type?.[0];
+async function getProfileType(query: IQuery, scopes: string[], respHeaders: any): Promise<ACCOUNT_TYPE> {
+  try {
+    query.sampleUrl = BETA_USER_INFO_URL;
+    const response = await makeRequest(query.selectedVerb, scopes)(query);
+    const userInfo = await parseResponse(response, respHeaders);
+    return userInfo?.account?.[0]?.source?.type?.[0];
+  } catch (error) {
+    return ACCOUNT_TYPE.MSA;
+  }
 }
 
-async function getProfileImage(query: IQuery, scopes: string[], respHeaders: any) {
-  query.sampleUrl = USER_PICTURE_URL;
+async function getProfileImage(query: IQuery, scopes: string[], respHeaders: any): Promise<string> {
   let profileImageUrl = '';
-  const response = await makeRequest(query.selectedVerb, scopes)(query);
-  const userPicture = await parseResponse(response, respHeaders);
-  if (userPicture) {
-    const buffer = await response.arrayBuffer();
-    const blob = new Blob([buffer], { type: 'image/jpeg' });
-    profileImageUrl = URL.createObjectURL(blob);
+  try {
+    query.sampleUrl = USER_PICTURE_URL;
+    const response = await makeRequest(query.selectedVerb, scopes)(query);
+    const userPicture = await parseResponse(response, respHeaders);
+    if (userPicture) {
+      const buffer = await response.arrayBuffer();
+      const blob = new Blob([buffer], { type: 'image/jpeg' });
+      profileImageUrl = URL.createObjectURL(blob);
+    }
+  } catch (error) {
+    return profileImageUrl;
   }
   return profileImageUrl;
 }
 
-async function getProfileInformation(query: IQuery, scopes: string[], respHeaders: any) {
-  query.sampleUrl = USER_INFO_URL;
+async function getProfileInformation(query: IQuery, scopes: string[], respHeaders: any): Promise<IUser> {
   const profile: IUser = {
     displayName: '',
     emailAddress: '',
     profileImageUrl: '',
-    profileType: undefined
   };
-  const response = await makeRequest(query.selectedVerb, scopes)(query);
-  const userInfo = await parseResponse(response, respHeaders);
-  profile.displayName = userInfo.displayName;
-  profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;
+  try {
+    query.sampleUrl = USER_INFO_URL;
+    const response = await makeRequest(query.selectedVerb, scopes)(query);
+    const userInfo = await parseResponse(response, respHeaders);
+    profile.displayName = userInfo.displayName;
+    profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;
+  } catch (error) {
+    throw error;
+  }
   return profile;
 }
