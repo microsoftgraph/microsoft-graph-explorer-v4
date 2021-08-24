@@ -25,7 +25,7 @@ jobs:
         source_file: 'src/messages/GE.json'
         destination_repo: 'microsoftgraph/microsoft-graph-devx-content'
         destination_folder: 'messages'
-        destination_branch: 'master'
+        destination_branch: 'task/automate-update-loc-files'
         user_email: ${{ secrets.ACTION_EMAIL }}
         user_name: ${{ secrets.ACTION_USERNAME }}
         commit_message: ${{ env.today }} English file transfer
