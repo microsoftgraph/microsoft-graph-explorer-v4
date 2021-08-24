@@ -1,7 +1,7 @@
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
 import { BETA_USER_INFO_URL, DEFAULT_USER_SCOPES, USER_INFO_URL, USER_PICTURE_URL } from '../graph-constants';
-import { PROFILE_IMAGE_REQUEST_SUCCESS, PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS, PROFILE_TYPE_SUCCESS } from '../redux-constants';
+import { PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS } from '../redux-constants';
 import { makeRequest, parseResponse } from './query-action-creator-util';
 import { queryRunningStatus } from './query-loading-action-creators';
 
@@ -12,25 +12,11 @@ export function profileRequestSuccess(response: object): any {
   };
 }
 
-export function profileImageRequestSuccess(response: object): any {
-  return {
-    type: PROFILE_IMAGE_REQUEST_SUCCESS,
-    response,
-  };
-}
-
 export function profileRequestError(response: object): any {
   return {
     type: PROFILE_REQUEST_ERROR,
     response,
   };
-}
-
-export function profileTypeSuccess(response: any): any {
-  return {
-    type: PROFILE_TYPE_SUCCESS,
-    response,
-  }
 }
 
 export function getProfileInfo(): Function {
