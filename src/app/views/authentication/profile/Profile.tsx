@@ -29,52 +29,12 @@ export class Profile extends Component<IProfileProps, IProfileState> {
   public componentDidMount = async () => {
     const { actions } = this.props;
 
-    const jsonUserInfo = actions
-      ? await actions.getProfileInfo({
-        selectedVerb: 'GET',
-        sampleUrl: USER_INFO_URL
-      })
+    const user = actions
+      ? await actions.getProfileInfo()
       : null;
-
-    const profileType = actions
-      ? await actions.getProfileInfo({
-        selectedVerb: 'GET',
-        sampleUrl: BETA_USER_INFO_URL
-      })
-      : null;
-
-    const userInfo = jsonUserInfo.response;
-    if (userInfo) {
-      let imageUrl = '';
-
-      try {
-        const userPicture = actions
-          ? await actions.getProfileInfo({
-            selectedVerb: 'GET',
-            sampleUrl: USER_PICTURE_URL
-          })
-          : null;
-
-        if (userPicture) {
-          const buffer = await userPicture.response.arrayBuffer();
-          const blob = new Blob([buffer], { type: 'image/jpeg' });
-          imageUrl = URL.createObjectURL(blob);
-        }
-      } catch (error) {
-        imageUrl = '';
-      }
-
-      const user = {
-        ...{},
-        displayName: userInfo.displayName,
-        emailAddress: userInfo.mail || userInfo.userPrincipalName,
-        profileImageUrl: imageUrl
-      };
-
-      this.setState({
-        user
-      });
-    }
+    this.setState({
+      user
+    });
 
   };
 

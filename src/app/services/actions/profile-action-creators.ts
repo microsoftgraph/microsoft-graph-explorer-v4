@@ -1,6 +1,9 @@
+import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
+import { BETA_USER_INFO_URL, DEFAULT_USER_SCOPES, USER_INFO_URL, USER_PICTURE_URL } from '../graph-constants';
 import { PROFILE_IMAGE_REQUEST_SUCCESS, PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS, PROFILE_TYPE_SUCCESS } from '../redux-constants';
-import { authenticatedRequest, isBetaURLResponse, isImageResponse, parseResponse } from './query-action-creator-util';
+import { makeRequest, parseResponse } from './query-action-creator-util';
+import { queryRunningStatus } from './query-loading-action-creators';
 
 export function profileRequestSuccess(response: object): any {
   return {
@@ -30,12 +33,14 @@ export function profileTypeSuccess(response: any): any {
   }
 }
 
-export function getProfileInfo(query: IQuery): Function {
-  return (dispatch: Function) => {
+export function getProfileInfo(): Function {
+  return async (dispatch: Function) => {
     const respHeaders: any = {};
-
-    if (!query.sampleHeaders) {
-      query.sampleHeaders = [];
+    const query: IQuery = {
+      selectedVerb: 'GET',
+      sampleHeaders: [],
+      selectedVersion: '',
+      sampleUrl: ''
     }
 
     query.sampleHeaders.push({
@@ -43,30 +48,53 @@ export function getProfileInfo(query: IQuery): Function {
       value: 'no-cache'
     });
 
-    return authenticatedRequest(dispatch, query).then(async (response: Response) => {
+    const scopes = DEFAULT_USER_SCOPES.split(' ');
 
-      if (response && response.ok) {
-        const json = await parseResponse(response, respHeaders);
-        const contentType = respHeaders['content-type'];
-        const isImageResult = isImageResponse(contentType);
-        const isBetaUserResult = isBetaURLResponse(json);
+    dispatch(queryRunningStatus(true));
 
-        if (isImageResult) {
-          return dispatch(
-            profileImageRequestSuccess(json),
-          );
-        } else if (isBetaUserResult) {
-          return dispatch(
-            profileTypeSuccess(json?.account?.[0]?.source?.type?.[0])
-          );
-        } else {
-          return dispatch(
-            profileRequestSuccess(json),
-          );
-        }
-      }
-      return dispatch(profileRequestError({ response }));
-    });
-
+    try {
+      const profile: IUser = await getProfileInformation(query, scopes, respHeaders);
+      profile.profileImageUrl = await getProfileImage(query, scopes, respHeaders);
+      profile.profileType = await getProfileType(query, scopes, respHeaders);
+      dispatch(profileRequestSuccess(profile));
+      return profile;
+    } catch (error) {
+      dispatch(profileRequestError({ error }));
+      return null;
+    }
   };
+}
+async function getProfileType(query: IQuery, scopes: string[], respHeaders: any) {
+  query.sampleUrl = BETA_USER_INFO_URL;
+  const response = await makeRequest(query.selectedVerb, scopes)(query);
+  const userInfo = await parseResponse(response, respHeaders);
+  return userInfo?.account?.[0]?.source?.type?.[0];
+}
+
+async function getProfileImage(query: IQuery, scopes: string[], respHeaders: any) {
+  query.sampleUrl = USER_PICTURE_URL;
+  let profileImageUrl = '';
+  const response = await makeRequest(query.selectedVerb, scopes)(query);
+  const userPicture = await parseResponse(response, respHeaders);
+  if (userPicture) {
+    const buffer = await response.arrayBuffer();
+    const blob = new Blob([buffer], { type: 'image/jpeg' });
+    profileImageUrl = URL.createObjectURL(blob);
+  }
+  return profileImageUrl;
+}
+
+async function getProfileInformation(query: IQuery, scopes: string[], respHeaders: any) {
+  query.sampleUrl = USER_INFO_URL;
+  const profile: IUser = {
+    displayName: '',
+    emailAddress: '',
+    profileImageUrl: '',
+    profileType: undefined
+  };
+  const response = await makeRequest(query.selectedVerb, scopes)(query);
+  const userInfo = await parseResponse(response, respHeaders);
+  profile.displayName = userInfo.displayName;
+  profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;
+  return profile;
 }
