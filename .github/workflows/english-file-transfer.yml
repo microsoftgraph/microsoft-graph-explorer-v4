@@ -1,0 +1,31 @@
+name: English File transfer
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/messages/GE.json'
+
+jobs:
+  copy-file:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set current date as env variable
+      run: echo "today=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+
+    - name: Pushes English file
+      uses: dmnemec/copy_file_to_another_repo_action@main
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+      with:
+        source_file: 'src/messages/GE.json'
+        destination_repo: 'microsoftgraph/microsoft-graph-devx-content'
+        destination_folder: 'messages'
+        destination_branch: 'master'
+        user_email: ${{ secrets.ACTION_EMAIL }}
+        user_name: ${{ secrets.ACTION_USERNAME }}
+        commit_message: ${{ env.today }} English file transfer
