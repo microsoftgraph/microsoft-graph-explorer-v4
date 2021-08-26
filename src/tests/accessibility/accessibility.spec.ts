@@ -36,7 +36,7 @@ describe('Graph Explorer accessibility', () => {
   // scan the page and return an analysis
   it('checks for accessibility violations', async () => {
     const accessibilityScanResults = await new AxeBuilder(driver)
-      .disableRules(['landmark-one-main', 'region']) // disabled as main landmark already exists on live site
+      .disableRules(['landmark-one-main', 'region', 'aria-required-children']) // disabled as main landmark already exists on live site
       .analyze();
     expect(accessibilityScanResults.violations).toStrictEqual([]);
   });
