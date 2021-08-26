@@ -28,5 +28,5 @@ export function scopeAuthError(error: string): boolean {
 }
 
 function getHint(errorHintAvailable: boolean, error: string): string {
-    return ((errorHintAvailable === true) ? ( translateMessage('Tip') + ' -  ' + translateMessage(error) ) : translateMessage(error));
+    return ((errorHintAvailable === true) ? ( translateMessage('Tip') + ' -  ' + translateMessage(error) ) : '');
 }
