@@ -1,4 +1,4 @@
-import { IPartialTheme, loadTheme } from '@uifabric/styling';
+import { IPartialTheme, loadTheme } from '@fluentui/react';
 
 import { dark } from './dark';
 import { highContrast } from './high-contrast';

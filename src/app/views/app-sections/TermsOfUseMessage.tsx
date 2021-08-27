@@ -1,4 +1,4 @@
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import { MessageBar, MessageBarType } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { componentNames, telemetry } from '../../../telemetry';

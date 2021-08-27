@@ -1,5 +1,5 @@
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { IconButton, Label, MessageBar, MessageBarType, Pivot, PivotItem, styled } from 'office-ui-fabric-react';
+import { IconButton, Label, MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
