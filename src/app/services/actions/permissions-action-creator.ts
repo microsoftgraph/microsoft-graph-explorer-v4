@@ -3,6 +3,7 @@ import { MessageBarType } from '@fluentui/react';
 import { geLocale } from '../../../appLocale';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
+import { IUser } from '../../../types/profile';
 import { IRequestOptions } from '../../../types/request';
 import { IRootState } from '../../../types/root';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
@@ -44,15 +45,10 @@ export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
-      const { devxApi, permissionsPanelOpen, profileType, sampleQuery: query }: IRootState = getState();
+      const { devxApi, permissionsPanelOpen, profile, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
-      let scope = PERMS_SCOPE.WORK;
 
-      if (profileType === ACCOUNT_TYPE.AAD) {
-        scope = PERMS_SCOPE.WORK;
-      } else if (profileType === ACCOUNT_TYPE.MSA) {
-        scope = PERMS_SCOPE.PERSONAL;
-      }
+      const scopeType = getPermissionsScopeType(profile);
 
       if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);
@@ -62,7 +58,7 @@ export function fetchScopes(): Function {
           throw new Error('url is invalid');
         }
 
-        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scope}`;
+        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scopeType}`;
         hasUrl = true;
       }
 
@@ -100,6 +96,13 @@ export function fetchScopes(): Function {
       );
     }
   };
+}
+
+function getPermissionsScopeType(profile: IUser | null | undefined) {
+  if (profile?.profileType === ACCOUNT_TYPE.MSA) {
+    return PERMS_SCOPE.PERSONAL;
+  }
+  return PERMS_SCOPE.WORK;
 }
 
 export function consentToScopes(scopes: string[]): Function {
