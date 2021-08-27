@@ -6,4 +6,5 @@ export interface IStatus {
   status: number;
   statusText: string;
   duration?: number;
+  hint?: string;
 }
