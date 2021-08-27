@@ -113,6 +113,7 @@ export const sidebarStyles = (theme: ITheme) => {
       fontSize: FontSizes.icon,
       textAlign: 'left',
       verticalAlign: 'center',
+      cursor: 'pointer'
     },
     links: {
       color: `${theme.palette.blueMid} !important`,
