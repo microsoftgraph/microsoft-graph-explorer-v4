@@ -9,6 +9,7 @@ import { IRootState } from '../../../types/root';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
+import { getConsentAuthErrorHint } from '../../views/authentication/AuthenticationErrorsHints';
 import { ACCOUNT_TYPE, PERMS_SCOPE } from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
@@ -118,9 +119,10 @@ export function consentToScopes(scopes: string[]): Function {
       dispatch(
         setQueryResponseStatus({
           statusText: translateMessage('Scope consent failed'),
-          status: errorCode,
+          status:errorCode,
           ok: false,
           messageType: MessageBarType.error,
+          hint: getConsentAuthErrorHint(errorCode)
         })
       );
     }

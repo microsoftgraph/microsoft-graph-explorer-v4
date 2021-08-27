@@ -14,10 +14,7 @@ import pt from 'react-intl/locale-data/pt';
 import ru from 'react-intl/locale-data/ru';
 import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
-import {
-  getAuthTokenSuccess,
-  getConsentedScopesSuccess,
-} from './app/services/actions/auth-action-creators';
+import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
@@ -115,9 +112,7 @@ setCurrentSystemTheme();
 appState.dispatch(getGraphProxyUrl());
 
 function refreshAccessToken() {
-  authenticationWrapper
-    .getToken()
-    .then((authResponse: AuthenticationResult) => {
+  authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
       if (authResponse && authResponse.accessToken) {
         appState.dispatch(getAuthTokenSuccess(true));
         appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
@@ -188,11 +183,11 @@ enum Workers {
 
 function getWorkerFor(worker: string): string {
   // tslint:disable-next-line:max-line-length
-  const WORKER_PATH =
-    'https://graphstagingblobstorage.blob.core.windows.net/staging/vendor/bower_components/explorer-v2/build';
+  const WORKER_PATH = 'https://graphstagingblobstorage.blob.core.windows.net/staging/vendor/bower_components/explorer-v2/build';
 
   return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
-	    importScripts('${WORKER_PATH}/${worker}.worker.js');`)}`;
+	    importScripts('${WORKER_PATH}/${worker}.worker.js');`
+  )}`;
 }
 
 const telemetryProvider: ITelemetry = telemetry;
@@ -201,10 +196,7 @@ telemetryProvider.initialize();
 const Root = () => {
   return (
     <Provider store={appState}>
-      <IntlProvider
-        locale={geLocale}
-        messages={(messages as { [key: string]: object })[geLocale]}
-      >
+      <IntlProvider locale={geLocale} messages={(messages as { [key: string]: object })[geLocale]}>
         <App />
       </IntlProvider>
     </Provider>
