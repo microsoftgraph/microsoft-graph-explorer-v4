@@ -86,36 +86,19 @@ function getOSTheme(): string {
 
 function applyCurrentSystemTheme(themeToApply: string): void {
   loadGETheme(themeToApply);
-
-  // @ts-ignore
-  appState.dispatch(changeTheme(themeToApply));
+  appStore.dispatch(changeTheme(themeToApply));
 }
 
-const appState: any = store({
-  authToken: { token: false, pending: false },
-  consentedScopes: [],
-  isLoadingData: false,
-  profile: null,
-  queryRunnerStatus: null,
-  sampleQuery: {
-    sampleUrl: 'https://graph.microsoft.com/v1.0/me',
-    selectedVerb: 'GET',
-    sampleBody: undefined,
-    sampleHeaders: [],
-    selectedVersion: 'v1.0',
-  },
-  termsOfUse: true,
-  theme: currentTheme,
-});
+const appStore: any = store;
 
 setCurrentSystemTheme();
-appState.dispatch(getGraphProxyUrl());
+appStore.dispatch(getGraphProxyUrl());
 
 function refreshAccessToken() {
   authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
       if (authResponse && authResponse.accessToken) {
-        appState.dispatch(getAuthTokenSuccess(true));
-        appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
+        appStore.dispatch(getAuthTokenSuccess(true));
+        appStore.dispatch(getConsentedScopesSuccess(authResponse.scopes));
       }
     })
     .catch(() => {
@@ -132,11 +115,8 @@ const theme = new URLSearchParams(location.search).get('theme');
 
 if (theme) {
   loadGETheme(theme);
-  appState.dispatch(changeThemeSuccess(theme));
-}
-
-if (theme) {
-  appState.dispatch(setGraphExplorerMode(Mode.TryIt));
+  appStore.dispatch(changeThemeSuccess(theme));
+  appStore.dispatch(setGraphExplorerMode(Mode.TryIt));
 }
 
 const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
@@ -153,13 +133,13 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
   if (org && branchName) {
     devxApi.parameters = `org=${org}&branchName=${branchName}`;
   }
-  appState.dispatch(setDevxApiUrl(devxApi));
+  appStore.dispatch(setDevxApiUrl(devxApi));
 }
 
 readHistoryData().then((data: any) => {
   if (data.length > 0) {
     data.forEach((element: IHistoryItem) => {
-      appState.dispatch(addHistoryItem(element));
+      appStore.dispatch(addHistoryItem(element));
     });
   }
 });
@@ -195,7 +175,7 @@ telemetryProvider.initialize();
 
 const Root = () => {
   return (
-    <Provider store={appState}>
+    <Provider store={appStore}>
       <IntlProvider locale={geLocale} messages={(messages as { [key: string]: object })[geLocale]}>
         <App />
       </IntlProvider>
