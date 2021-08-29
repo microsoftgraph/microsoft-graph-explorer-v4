@@ -1,4 +1,4 @@
-import { ITheme } from '@uifabric/styling';
+import { ITheme } from '@fluentui/react';
 
 export const autoCompleteStyles = (theme: ITheme) => {
   const controlWidth = '95.5%';

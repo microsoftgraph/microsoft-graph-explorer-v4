@@ -1,4 +1,4 @@
-import { Link, MessageBar } from 'office-ui-fabric-react';
+import { Link, MessageBar } from '@fluentui/react';
 import React, { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -43,7 +43,7 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
   };
 
   if (queryState) {
-    const { messageType, statusText, status, duration } = queryState;
+    const { messageType, statusText, status, duration, hint } = queryState;
     let urls: any = {};
     let message = status;
     const extractedUrls = extractUrl(status);
@@ -71,6 +71,8 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
           </span>
           <FormattedMessage id='tab' />
         </>}
+
+        {hint && <div>{hint}</div>}
 
       </MessageBar>);
   }

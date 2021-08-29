@@ -2,7 +2,6 @@ import { IAction } from '../../../types/action';
 import {
   FETCH_SCOPES_ERROR,
   GET_CONSENT_ERROR,
-  PROFILE_IMAGE_REQUEST_SUCCESS,
   PROFILE_REQUEST_ERROR,
   PROFILE_REQUEST_SUCCESS,
   QUERY_GRAPH_RUNNING,
@@ -27,8 +26,6 @@ export function isLoadingData(state = {}, action: IAction): any {
     case PROFILE_REQUEST_ERROR:
       return false;
     case PROFILE_REQUEST_SUCCESS:
-      return false;
-    case PROFILE_IMAGE_REQUEST_SUCCESS:
       return false;
     default:
       return state;

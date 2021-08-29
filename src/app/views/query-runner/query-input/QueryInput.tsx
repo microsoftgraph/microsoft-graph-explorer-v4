@@ -1,5 +1,5 @@
-import { IDropdownOption } from 'office-ui-fabric-react';
-import { Dropdown } from 'office-ui-fabric-react';
+import { IDropdownOption } from '@fluentui/react';
+import { Dropdown } from '@fluentui/react';
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';

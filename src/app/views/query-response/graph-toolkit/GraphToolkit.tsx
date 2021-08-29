@@ -7,7 +7,7 @@ import {
   MessageBar,
   MessageBarType,
   styled,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { classNames } from '../../classnames';

@@ -1,9 +1,4 @@
-import {
-  Announced,
-  IStackTokens,
-  ITheme,
-  styled,
-} from 'office-ui-fabric-react';
+import { Announced, IStackTokens, ITheme, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -15,11 +10,7 @@ import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
-import {
-  IInitMessage,
-  IQuery,
-  IThemeChangedMessage,
-} from '../../types/query-runner';
+import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { IRootState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
@@ -34,10 +25,7 @@ import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
-import {
-  appTitleDisplayOnFullScreen,
-  appTitleDisplayOnMobileScreen,
-} from './app-sections/AppTitle';
+import { appTitleDisplayOnFullScreen, appTitleDisplayOnMobileScreen } from './app-sections/AppTitle';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { statusMessages } from './app-sections/StatusMessages';
 import { termsOfUseMessage } from './app-sections/TermsOfUseMessage';
@@ -157,8 +145,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private generateQueryObjectFrom(queryParams: any) {
-    const { request, method, version, graphUrl, requestBody, headers } =
-      queryParams;
+    const { request, method, version, graphUrl, requestBody, headers } = queryParams;
 
     if (!request) {
       return null;
@@ -273,9 +260,11 @@ class App extends Component<IAppProps, IAppState> {
     const properties = { ...sidebarProperties };
     properties.showSidebar = !properties.showSidebar;
     this.props.actions!.toggleSidebar(properties);
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.SIDEBAR_HAMBURGER_BUTTON,
-    });
+    telemetry.trackEvent(
+      eventTypes.BUTTON_CLICK_EVENT,
+      {
+        ComponentName: componentNames.SIDEBAR_HAMBURGER_BUTTON,
+      });
   };
 
   public displayToggleButton = (mediaQueryList: any) => {
@@ -301,8 +290,8 @@ class App extends Component<IAppProps, IAppState> {
           justifyContent: minimised ? '' : 'center',
           alignItems: minimised ? '' : 'center',
           marginLeft: minimised ? '' : '-0.9em',
-        }}
-      >
+
+        }}>
         <div className={minimised ? '' : 'col-10'}>
           <Authentication />
         </div>
@@ -315,17 +304,9 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const {
-      authenticated,
-      graphExplorerMode,
-      queryState,
-      minimised,
-      termsOfUse,
-      sampleQuery,
-      actions,
-      sidebarProperties,
-      intl: { messages },
-    }: any = this.props;
+    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
+      actions, sidebarProperties, intl: { messages }, }: any = this.props;
+
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
@@ -364,25 +345,18 @@ class App extends Component<IAppProps, IAppState> {
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`container-fluid ${classes.app}`}>
-          <Announced
-            message={
-              !showSidebar
-                ? translateMessage('Sidebar minimized')
-                : translateMessage('Sidebar maximized')
-            }
-          />
+          <Announced message={!showSidebar ?
+            translateMessage('Sidebar minimized') : translateMessage('Sidebar maximized')} />
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={sidebarWidth}>
-                {mobileScreen &&
-                  appTitleDisplayOnMobileScreen(
+                {mobileScreen && appTitleDisplayOnMobileScreen(
                     stackTokens,
                     classes,
                     this.toggleSidebar
                   )}
 
-                {!mobileScreen &&
-                  appTitleDisplayOnFullScreen(
+                {!mobileScreen && appTitleDisplayOnFullScreen(
                     classes,
                     minimised,
                     this.toggleSidebar
@@ -395,10 +369,7 @@ class App extends Component<IAppProps, IAppState> {
 
                 {showSidebar && (
                   <>
-                    <Sidebar
-                      sampleHeaderText={sampleHeaderText}
-                      historyHeaderText={historyHeaderText}
-                    />
+                    <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
                   </>
                 )}
               </div>
@@ -428,15 +399,8 @@ class App extends Component<IAppProps, IAppState> {
   }
 }
 
-const mapStateToProps = ({
-  sidebarProperties,
-  theme,
-  queryRunnerStatus,
-  profile,
-  sampleQuery,
-  termsOfUse,
-  authToken,
-  graphExplorerMode,
+const mapStateToProps = ({ sidebarProperties, theme,
+  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode,
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;

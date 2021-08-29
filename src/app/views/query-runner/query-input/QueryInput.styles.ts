@@ -1,4 +1,4 @@
-import { ITheme } from '@uifabric/styling';
+import { ITheme } from '@fluentui/react';
 
 export const queryInputStyles = (theme: ITheme) => {
   const controlWidth = '96.5%';

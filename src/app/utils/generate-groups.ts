@@ -1,4 +1,4 @@
-import { IGroup } from "office-ui-fabric-react";
+import { IGroup } from '@fluentui/react';
 
 export function generateGroupsFromList(list: any[], property: string) {
     const map = new Map();

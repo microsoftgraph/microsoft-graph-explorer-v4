@@ -12,7 +12,7 @@ import {
   PanelType,
   PrimaryButton,
   TooltipHost,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -100,7 +100,7 @@ function Settings(props: ISettingsProps) {
             iconName: 'SignOut',
           },
           onClick: () => handleSignOut(),
-        }
+        },
       );
     }
     setItems(menuItems);
@@ -279,3 +279,4 @@ function Settings(props: ISettingsProps) {
 }
 
 export default injectIntl(Settings);
+

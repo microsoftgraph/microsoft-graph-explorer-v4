@@ -59,12 +59,10 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
   return { graphUrl, options };
 }
 
-export function authenticatedRequest(
-  dispatch: Function,
-  query: IQuery,
-  scopes: string[] = DEFAULT_USER_SCOPES.split(' ')
-) {
-  return makeRequest(query.selectedVerb, scopes)(dispatch, query);
+export function authenticatedRequest(dispatch: Function, query: IQuery,
+  scopes: string[] = DEFAULT_USER_SCOPES.split(' ')) {
+  dispatch(queryRunningStatus(true));
+  return makeRequest(query.selectedVerb, scopes)(query);
 }
 
 export function isImageResponse(contentType: string | undefined) {
@@ -115,8 +113,8 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
   return response;
 }
 
-const makeRequest = (httpVerb: string, scopes: string[]): Function => {
-  return async (dispatch: Function, query: IQuery) => {
+export function makeRequest(httpVerb: string, scopes: string[]): Function {
+  return async (query: IQuery) => {
     const sampleHeaders: any = {};
     sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
 
@@ -139,8 +137,6 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
       .responseType(ResponseType.RAW);
 
     let response;
-
-    dispatch(queryRunningStatus(true));
 
     switch (httpVerb) {
       case 'GET':

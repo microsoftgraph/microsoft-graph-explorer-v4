@@ -1,4 +1,4 @@
-import { FontSizes } from '@uifabric/styling';
+import { FontSizes } from '@fluentui/react';
 
 export const headerStyles = () => {
   return {
