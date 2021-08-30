@@ -85,6 +85,7 @@ export class QueryRunner extends Component<
             status: `${translateMessage('Review the request body')} ${error}`,
             messageType: MessageBarType.error,
           });
+          this.setState({ sampleBody: '' });
           return;
         }
       } else {
@@ -102,6 +103,7 @@ export class QueryRunner extends Component<
           QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
         });
     }
+    this.setState({ sampleBody: '' });
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
