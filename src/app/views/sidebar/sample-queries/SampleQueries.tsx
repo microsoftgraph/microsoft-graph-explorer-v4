@@ -152,6 +152,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
                 className={classes.docLink}
                 style={{
                   marginRight: '45%',
+                  width: 10
                 }}
               />
             </TooltipHost>
