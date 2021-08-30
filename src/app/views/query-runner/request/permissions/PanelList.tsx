@@ -1,8 +1,8 @@
 import {
   Announced,
-  Checkbox,
   DetailsList,
   DetailsListLayoutMode,
+  GroupHeader,
   IColumn,
   Label,
   SearchBox,
@@ -48,15 +48,6 @@ const PanelList = ({ messages,
     permissionsList.push(permission);
   });
 
-  const onRenderCustomHeader = (props: any) => {
-    return(
-      <>
-      <div style={{pointerEvents: 'none'}} >
-        {props.groupName}
-      </div>
-      </>
-    )
-  }
   const searchValueChanged = (event: any, value?: string): void => {
     let filteredPermissions = scopes.data;
     if (value) {
@@ -71,6 +62,16 @@ const PanelList = ({ messages,
   };
 
   const groups = generateGroupsFromList(permissionsList, 'groupName');
+
+
+  const _onRenderGroupHeader = (props: any): any => {
+    if (props) {
+      return(
+        <GroupHeader  {...props} onRenderGroupHeaderCheckbox={renderCustomCheckbox}/>
+      )
+    }
+    return null;
+  };
 
   return (
     <>
@@ -92,14 +93,14 @@ const PanelList = ({ messages,
         items={permissions}
         columns={columns}
         groups={groups}
-        // onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}
+        onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}
         selectionMode={SelectionMode.multiple}
         layoutMode={DetailsListLayoutMode.justified}
         selection={selection}
         compact={true}
         groupProps={{
           showEmptyGroups: false,
-          onRenderHeader: onRenderCustomHeader
+          onRenderHeader: _onRenderGroupHeader
         }}
         ariaLabelForSelectionColumn={messages['Toggle selection'] || 'Toggle selection'}
         ariaLabelForSelectAllCheckbox={messages['Toggle selection for all items'] || 'Toggle selection for all items'}
@@ -122,4 +123,3 @@ const PanelList = ({ messages,
   );
 };
 export default PanelList;
-
