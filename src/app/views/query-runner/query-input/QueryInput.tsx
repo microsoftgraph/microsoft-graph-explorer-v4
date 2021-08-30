@@ -1,4 +1,5 @@
-import { Dropdown } from 'office-ui-fabric-react';
+import { IDropdownOption } from '@fluentui/react';
+import { Dropdown } from '@fluentui/react';
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +22,7 @@ const QueryInput = (props: IQueryInputProps) => {
   } = props;
 
   const dispatch = useDispatch();
-  const httpMethods = [
+  const httpMethods: IDropdownOption[] = [
     { key: 'GET', text: 'GET' },
     { key: 'POST', text: 'POST' },
     { key: 'PUT', text: 'PUT' },
@@ -29,7 +30,7 @@ const QueryInput = (props: IQueryInputProps) => {
     { key: 'DELETE', text: 'DELETE' },
   ];
 
-  const urlVersions = [
+  const urlVersions: IDropdownOption[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' },
   ];

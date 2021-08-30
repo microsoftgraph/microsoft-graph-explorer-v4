@@ -6,7 +6,7 @@ import {
   Label,
   SearchBox,
   SelectionMode
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';

@@ -1,4 +1,4 @@
-import { ITheme } from 'office-ui-fabric-react';
+import { ITheme } from '@fluentui/react';
 import { Mode } from './enums';
 
 export interface IAuthenticationProps {

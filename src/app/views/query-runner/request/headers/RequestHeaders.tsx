@@ -1,4 +1,4 @@
-import { Announced, PrimaryButton, styled, TextField } from 'office-ui-fabric-react';
+import { Announced, ITextField, PrimaryButton, styled, TextField } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,12 +21,16 @@ const RequestHeaders = (props: any) => {
   const [headerName, setHeaderName] = useState('');
   const [headerValue, setHeaderValue] = useState('');
   const [announcedMessage, setAnnouncedMessage] = useState('');
+  const [isHoverOverHeadersList, setIsHoverOverHeadersList] = useState(false);
 
   const { intl: { messages } } = props;
   const sampleQueryHeaders = sampleQuery.sampleHeaders;
 
   const dispatch = useDispatch();
   const classes = classNames(props);
+
+  const textfieldRef = React.createRef<ITextField>();
+  const onSetFocus = () => textfieldRef.current!.focus();
 
   const handleOnHeaderNameChange = (name?: string) => {
     if (name) {
@@ -49,6 +53,7 @@ const RequestHeaders = (props: any) => {
 
     dispatch(queryInputActionCreators.setSampleQuery(query));
     setAnnouncedMessage(translateMessage('Request Header deleted'));
+    onSetFocus(); //set focus to textfield after an item is deleted
   };
 
   const handleOnHeaderAdd = () => {
@@ -76,7 +81,11 @@ const RequestHeaders = (props: any) => {
   };
 
   return (
-    <div className={classes.container} style={{ height: convertVhToPx(height, 60) }}>
+    <div
+      onMouseEnter={() => setIsHoverOverHeadersList(true)}
+      onMouseLeave={() => setIsHoverOverHeadersList(false)}
+      className={classes.container}
+      style={isHoverOverHeadersList ? { height: convertVhToPx(height, 60) } : { height: convertVhToPx(height, 60), overflow: "hidden" }}>
       <Announced message={announcedMessage} />
       <div className='row'>
         <div className='col-sm-5'>
@@ -84,6 +93,7 @@ const RequestHeaders = (props: any) => {
             placeholder={messages.Key}
             value={headerName}
             onChange={(event, name) => handleOnHeaderNameChange(name)}
+            componentRef={textfieldRef}
           />
         </div>
         <div className='col-sm-5'>

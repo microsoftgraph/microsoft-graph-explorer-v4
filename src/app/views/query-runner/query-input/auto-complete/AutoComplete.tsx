@@ -1,5 +1,4 @@
-import { getId, getTheme, Icon, ITextField, KeyCodes, Spinner, TextField, TooltipHost } from 'office-ui-fabric-react';
-import { ITooltipHostStyles } from 'office-ui-fabric-react/lib/components/Tooltip/TooltipHost.types';
+import { getId, getTheme, Icon, ITextField, ITooltipHostStyles, KeyCodes, Spinner, TextField, TooltipHost } from '@fluentui/react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -23,6 +22,7 @@ import SuggestionsList from './SuggestionsList';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
+  private element: HTMLDivElement | null | undefined;
 
   constructor(props: IAutoCompleteProps) {
     super(props);
@@ -36,7 +36,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       showSuggestions: false,
       userInput: this.props.sampleQuery.sampleUrl,
       queryUrl: this.props.sampleQuery.sampleUrl,
-      compare: ''
+      compare: '',
+      multiline: false
     };
   }
 
@@ -57,13 +58,34 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     this.props.contentChanged(userInput);
   };
 
+  public isOverflowing = (input: string) => {
+
+    function getTextWidth(text: string) {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+
+      if (context === null) {
+        return 0;
+      }
+
+      context.font = getComputedStyle(document.body).font;
+      return context.measureText(text).width + 5;
+
+    }
+
+    return !!this.element
+      && getTextWidth(input) > this.element.scrollWidth;
+
+  }
+
   public onChange = (e: any) => {
     const { suggestions, showSuggestions, userInput: previousUserInput, compare } = this.state;
     const userInput = e.target.value;
 
     this.setState({
       userInput,
-      queryUrl: userInput
+      queryUrl: userInput,
+      multiline: this.isOverflowing(userInput)
     });
 
     if (showSuggestions && suggestions.length) {
@@ -78,6 +100,10 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   private initialiseAutoComplete = (url: string) => {
+    const isSlashPreceed = url.substring(url.length - 1, url.length - 2);
+    if (isSlashPreceed === '/') {
+      return;
+    }
     switch (getLastCharacterOf(url)) {
       case '/':
       case '?':
@@ -181,20 +207,12 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   public displayLinkOptions = () => {
-    const { compare } = this.state;
     const parametersWithVerb = getParametersWithVerb(this.props);
     if (!parametersWithVerb) {
       return;
     }
 
-    let filteredSuggestions = parametersWithVerb.links;
-    if (compare) {
-      filteredSuggestions = filteredSuggestions.filter((suggestion: string) => {
-        return suggestion.toLowerCase().indexOf(compare.toLowerCase()) > -1;
-      });
-    }
-
-    this.setSuggestions(filteredSuggestions);
+    this.setSuggestions(parametersWithVerb.links);
   }
 
   public getQueryParameters = () => {
@@ -251,7 +269,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       if (newUrl !== this.state.queryUrl) {
         this.setState({
           queryUrl: newUrl,
-          userInput: newUrl
+          userInput: newUrl,
+          multiline: this.isOverflowing(newUrl)
         });
       }
     }
@@ -327,6 +346,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       userInput: selectedSuggestion,
       compare: '',
       queryUrl: selectedSuggestion,
+      multiline: this.isOverflowing(selectedSuggestion)
     });
     this.props.contentChanged(selectedSuggestion);
     this.setFocus();
@@ -382,7 +402,8 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       filteredSuggestions,
       showSuggestions,
       userInput,
-      queryUrl
+      queryUrl,
+      multiline
     } = this.state;
 
     const currentTheme = getTheme();
@@ -392,20 +413,25 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     return (
       <div onBlur={this.closeSuggestionDialog}>
-        <TextField
-          className={autoInput}
-          type='text'
-          autoComplete='off'
-          onChange={this.onChange}
-          onBlur={this.updateUrlContent}
-          onKeyDown={this.onKeyDown}
-          value={queryUrl}
-          componentRef={this.autoCompleteRef}
-          onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
-          ariaLabel={translateMessage('Query Sample Input')}
-          role='textbox'
-          errorMessage={!queryUrl ? translateMessage('Missing url') : ''}
-        />
+        <div ref={(el) => { this.element = el }}>
+          <TextField
+            className={autoInput}
+            multiline={multiline}
+            autoAdjustHeight
+            resizable={false}
+            type='text'
+            autoComplete='off'
+            onChange={this.onChange}
+            onBlur={this.updateUrlContent}
+            onKeyDown={this.onKeyDown}
+            value={queryUrl}
+            componentRef={this.autoCompleteRef}
+            onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
+            ariaLabel={translateMessage('Query Sample Input')}
+            role='textbox'
+            errorMessage={!queryUrl ? translateMessage('Missing url') : ''}
+          />
+        </div>
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
           <SuggestionsList
             filteredSuggestions={filteredSuggestions}

@@ -1,4 +1,5 @@
-import { ITheme } from '@uifabric/styling';
+import { ITheme } from '@fluentui/react';
+
 import { ICloud } from './cloud';
 import { Mode } from './enums';
 

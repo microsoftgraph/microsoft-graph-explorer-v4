@@ -1,6 +1,6 @@
 import { AuthenticationResult } from '@azure/msal-browser';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import { initializeIcons } from '@fluentui/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { addLocaleData, IntlProvider } from 'react-intl';
@@ -17,6 +17,7 @@ import { Provider } from 'react-redux';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
+import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
 import { getCurrentCloud, globalCloud } from './modules/sovereign-clouds';
@@ -35,6 +36,7 @@ import { readTheme } from './themes/theme-utils';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
+import { changeTheme } from './app/services/actions/theme-action-creator';
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
@@ -50,8 +52,45 @@ if (apiExplorer) {
 
 initializeIcons();
 
-const currentTheme = readTheme();
-loadGETheme(currentTheme);
+let currentTheme = readTheme() || 'light';
+function setCurrentSystemTheme(): void {
+  const themeFromLocalStorage = readTheme();
+
+  if (themeFromLocalStorage) {
+    currentTheme = themeFromLocalStorage;
+  } else {
+    currentTheme = getOSTheme();
+  }
+
+  applyCurrentSystemTheme(currentTheme);
+}
+function getOSTheme(): string {
+  let currentSystemTheme: string = 'light';
+  const currentSystemThemeDark = window.matchMedia(
+    '(prefers-color-scheme: dark)'
+  );
+
+  const currentSystemThemeLight = window.matchMedia(
+    '(prefers-color-scheme: light)'
+  );
+
+  if (currentSystemThemeDark.matches === true) {
+    currentSystemTheme = 'dark';
+  } else if (currentSystemThemeLight.matches === true) {
+    currentSystemTheme = 'light';
+  } else {
+    currentSystemTheme = 'high-contrast';
+  }
+
+  return currentSystemTheme;
+}
+
+function applyCurrentSystemTheme(themeToApply: string): void {
+  loadGETheme(themeToApply);
+
+  // @ts-ignore
+  appState.dispatch(changeTheme(themeToApply));
+}
 
 const currentCloud = getCurrentCloud() || null;
 const { baseUrl } = (currentCloud) ? currentCloud : globalCloud;
@@ -73,30 +112,25 @@ const appState: any = store({
   theme: currentTheme,
 });
 
+setCurrentSystemTheme();
+appState.dispatch(getGraphProxyUrl());
+
 function refreshAccessToken() {
   authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
-    if (authResponse && authResponse.accessToken) {
-      appState.dispatch(getAuthTokenSuccess(true));
-      appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
-    }
-  }).catch(() => {
-    // ignore the error as it means that a User login is required
-  });
+      if (authResponse && authResponse.accessToken) {
+        appState.dispatch(getAuthTokenSuccess(true));
+        appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
+      }
+    })
+    .catch(() => {
+      // ignore the error as it means that a User login is required
+    });
 }
 refreshAccessToken();
 
 setInterval(refreshAccessToken, 1000 * 60 * 10); // refresh access token every 10 minutes
 
-addLocaleData([
-  ...pt,
-  ...de,
-  ...en,
-  ...fr,
-  ...jp,
-  ...ru,
-  ...zh,
-  ...es,
-]);
+addLocaleData([...pt, ...de, ...en, ...fr, ...jp, ...ru, ...zh, ...es]);
 
 const theme = new URLSearchParams(location.search).get('theme');
 
@@ -117,7 +151,7 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
 
   const devxApi: IDevxAPI = {
     baseUrl: devxApiUrl,
-    parameters: ''
+    parameters: '',
   };
 
   if (org && branchName) {
@@ -139,7 +173,7 @@ readHistoryData().then((data: any) => {
  */
 enum Workers {
   Json = 'json',
-  Editor = 'editor'
+  Editor = 'editor',
 }
 
 (window as any).MonacoEnvironment = {
@@ -148,7 +182,7 @@ enum Workers {
       return getWorkerFor(Workers.Json);
     }
     return getWorkerFor(Workers.Editor);
-  }
+  },
 };
 
 function getWorkerFor(worker: string): string {

@@ -1,78 +1,36 @@
-import { ActionButton, IPersonaSharedProps, Persona, PersonaSize, styled } from 'office-ui-fabric-react';
-import React, { Component } from 'react';
-import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { ActionButton, IPersonaSharedProps, Persona, PersonaSize, Spinner, SpinnerSize, styled } from '@fluentui/react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
 import { globalCloud, replaceBaseUrl } from '../../../../modules/sovereign-clouds';
 import { Mode } from '../../../../types/enums';
-import { IProfileProps, IProfileState } from '../../../../types/profile';
 import { IRootState } from '../../../../types/root';
-import * as authActionCreators from '../../../services/actions/auth-action-creators';
-import * as profileActionCreators from '../../../services/actions/profile-action-creators';
-import { USER_INFO_URL, USER_PICTURE_URL } from '../../../services/graph-constants';
+import { getProfileInfo } from '../../../services/actions/profile-action-creators';
+import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 
-export class Profile extends Component<IProfileProps, IProfileState> {
-  constructor(props: IProfileProps) {
-    super(props);
-    this.state = {
-      user: {
-        displayName: '',
-        emailAddress: '',
-        profileImageUrl: ''
-      }
-    };
+const Profile = (props: any) => {
+  const dispatch = useDispatch();
+  const { sidebarProperties, profile, authToken, graphExplorerMode } = useSelector((state: IRootState) => state);
+  const mobileScreen = !!sidebarProperties.mobileScreen;
+  const showSidebar = !!sidebarProperties.showSidebar;
+  const minimised = !mobileScreen && !showSidebar;
+  const authenticated = authToken.token;
+
+  useEffect(() => {
+    if (authenticated && !profile) {
+      dispatch(getProfileInfo());
+    }
+  }, [authenticated]);
+
+
+  if (!profile) {
+    return (<Spinner size={SpinnerSize.medium} />);
   }
 
-  public componentDidMount = async () => {
-    const { actions, cloud } = this.props;
-    const shouldReplaceBaseUrl = cloud.loginUrl !== globalCloud.loginUrl;
-    const jsonUserInfo = actions
-      ? await actions.getProfileInfo({
-        selectedVerb: 'GET',
-        sampleUrl: shouldReplaceBaseUrl ? replaceBaseUrl(USER_INFO_URL) : USER_INFO_URL
-      })
-      : null;
-
-    const userInfo = jsonUserInfo.response;
-    if (userInfo) {
-      let imageUrl = '';
-
-      try {
-        const userPicture = actions
-          ? await actions.getProfileInfo({
-            selectedVerb: 'GET',
-            sampleUrl: shouldReplaceBaseUrl ? replaceBaseUrl(USER_PICTURE_URL) : USER_PICTURE_URL
-          })
-          : null;
-
-        if (userPicture) {
-          const buffer = await userPicture.response.arrayBuffer();
-          const blob = new Blob([buffer], { type: 'image/jpeg' });
-          imageUrl = URL.createObjectURL(blob);
-        }
-      } catch (error) {
-        imageUrl = '';
-      }
-
-      const user = {
-        ...{},
-        displayName: userInfo.displayName,
-        emailAddress: userInfo.mail || userInfo.userPrincipalName,
-        profileImageUrl: imageUrl
-      };
-
-      this.setState({
-        user
-      });
-    }
-
-  };
-
-  public getInitials = (name: string) => {
+  const getInitials = (name: string) => {
     let initials = '';
     if (name && name !== '') {
       const n = name.indexOf('(');
@@ -88,128 +46,90 @@ export class Profile extends Component<IProfileProps, IProfileState> {
     return initials;
   };
 
-  public handleSignOut = () => {
-    const { actions } = this.props;
+  const handleSignOut = () => {
+    const { actions } = props;
 
     if (actions) {
       actions.signOut();
     }
   }
+  const persona: IPersonaSharedProps = {
+    imageUrl: profile.profileImageUrl,
+    imageInitials: getInitials(profile.displayName),
+    text: profile.displayName,
+    secondaryText: profile.emailAddress,
+  };
 
-  public render() {
-    const { user } = this.state;
-    const {
-      intl: { messages },
-      minimised,
-      graphExplorerMode,
-    }: any = this.props;
+  const classes = classNames(props);
 
-    const persona: IPersonaSharedProps = {
-      imageUrl: user.profileImageUrl,
-      imageInitials: this.getInitials(user.displayName),
-      text: user.displayName,
-      secondaryText: user.emailAddress,
-    };
-
-    const classes = classNames(this.props);
-
-    const menuProperties = {
-      shouldFocusOnMount: true,
-      alignTargetEdge: true,
-      items: [
-        {
-          key: 'office-dev-program',
-          text: messages['Office Dev Program'],
-          href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
-          target: '_blank',
-          iconProps: {
-            iconName: 'CommandPrompt',
-          },
-        },
-        {
-          key: 'sign-out',
-          text: messages['sign out'],
-          onClick: () => this.handleSignOut(),
-          iconProps: {
-            iconName: 'SignOut',
-          },
-        },
-      ]
-    };
-
-    const personaStyleToken: any = {
-      primaryText: {
-        paddingBottom: 5,
-      },
-      secondaryText:
+  const menuProperties = {
+    shouldFocusOnMount: true,
+    alignTargetEdge: true,
+    items: [
       {
-        paddingBottom: 10,
-        textTransform: 'lowercase'
+        key: 'office-dev-program',
+        text: translateMessage('Office Dev Program'),
+        href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
+        target: '_blank',
+        iconProps: {
+          iconName: 'CommandPrompt',
+        },
       },
-    };
+      {
+        key: 'sign-out',
+        text: translateMessage('sign out'),
+        onClick: () => handleSignOut(),
+        iconProps: {
+          iconName: 'SignOut',
+        },
+      },
+    ]
+  };
 
-    const defaultSize = minimised ? PersonaSize.size32 : PersonaSize.size48;
+  const personaStyleToken: any = {
+    primaryText: {
+      paddingBottom: 5,
+    },
+    secondaryText:
+    {
+      paddingBottom: 10,
+      textTransform: 'lowercase'
+    },
+  };
 
-    const profileProperties = {
-      persona,
-      styles: personaStyleToken,
-      hidePersonaDetails: minimised,
-      size: graphExplorerMode === Mode.TryIt ? PersonaSize.size40 : defaultSize
-    };
+  const defaultSize = minimised ? PersonaSize.size32 : PersonaSize.size48;
 
-    return (
-      <div className={classes.profile}>
-        {this.showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
-      </div>
-    );
+  const profileProperties = {
+    persona,
+    styles: personaStyleToken,
+    hidePersonaDetails: minimised,
+    size: graphExplorerMode === Mode.TryIt ? PersonaSize.size40 : defaultSize
+  };
+
+  return (
+    <div className={classes.profile}>
+      {showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
+    </div>
+  );
+}
+
+function showProfileComponent(profileProperties: any, graphExplorerMode: Mode, menuProperties: any): React.ReactNode {
+  const persona = <Persona
+    {...profileProperties.persona}
+    size={profileProperties.size}
+    styles={profileProperties.styles}
+    hidePersonaDetails={profileProperties.hidePersonaDetails} />;
+
+  if (graphExplorerMode === Mode.TryIt) {
+    return <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+      {persona}
+    </ActionButton>;
   }
 
-  private showProfileComponent(profileProperties: any, graphExplorerMode: Mode, menuProperties: any): React.ReactNode {
-
-    const persona = <Persona
-      {...profileProperties.persona}
-      size={profileProperties.size}
-      styles={profileProperties.styles}
-      hidePersonaDetails={profileProperties.hidePersonaDetails} />;
-
-    if (graphExplorerMode === Mode.TryIt) {
-      return <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-        {persona}
-      </ActionButton>;
-    }
-
-    return persona;
-  }
+  return persona;
 }
-
-function mapDispatchToProps(dispatch: Dispatch): object {
-  return {
-    actions: bindActionCreators({
-      ...profileActionCreators,
-      ...authActionCreators
-    }, dispatch)
-  };
-}
-
-function mapStateToProps({ sidebarProperties, theme, graphExplorerMode, cloud }: IRootState) {
-  const mobileScreen = !!sidebarProperties.mobileScreen;
-  const showSidebar = !!sidebarProperties.showSidebar;
-
-  return {
-    mobileScreen: !!sidebarProperties.mobileScreen,
-    appTheme: theme,
-    minimised: !mobileScreen && !showSidebar,
-    graphExplorerMode,
-    cloud
-  };
-}
-
 
 // @ts-ignore
 const styledProfile = styled(Profile, authenticationStyles);
 // @ts-ignore
-const IntlProfile = injectIntl(styledProfile);
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(IntlProfile);
+export default styledProfile;

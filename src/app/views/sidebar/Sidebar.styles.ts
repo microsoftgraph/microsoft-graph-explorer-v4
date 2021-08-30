@@ -1,7 +1,7 @@
 import {
   FontSizes, FontWeights,
   ITheme,
-} from '@uifabric/styling';
+} from '@fluentui/react';
 
 export const sidebarStyles = (theme: ITheme) => {
   const pageHeightInVh = '60vh';
@@ -21,10 +21,14 @@ export const sidebarStyles = (theme: ITheme) => {
       cursor: 'pointer',
       maxHeight: pageHeightInVh,
       minHeight: pageHeightInVh,
-      overflowY: 'auto',
-      overflowX: 'auto',
+      overflow: 'hidden',
       fontSize: FontSizes.medium,
-      background: 'inherit'
+      background: 'inherit',
+      selectors: {
+        ':hover': {
+          overflow: 'scroll',
+        },
+      },
     },
     pullLeft: {
       float: 'left'
@@ -109,6 +113,7 @@ export const sidebarStyles = (theme: ITheme) => {
       fontSize: FontSizes.icon,
       textAlign: 'left',
       verticalAlign: 'center',
+      cursor: 'pointer'
     },
     links: {
       color: `${theme.palette.blueMid} !important`,

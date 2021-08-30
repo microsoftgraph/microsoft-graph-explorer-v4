@@ -3,7 +3,7 @@ import {
   ContextualMenuItemType, DefaultButton, DetailsList, DetailsRow, Dialog,
   DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
   Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -200,19 +200,25 @@ export class History extends Component<IHistoryProps, any> {
           ];
 
           return (
-            <IconButton
-              className={classes.docLink}
-              title='Actions'
-              ariaLabel='Actions'
-              menuIconProps={{ iconName: 'More' }}
-              menuProps={{
-                shouldFocusOnMount: true,
-                items: buttonActions,
-              }}
-            />
+            <TooltipHost
+              content={translateMessage('Actions')}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+              styles={{ root: { display: 'inline-block' } }}>
+              <IconButton
+                className={classes.docLink}
+                ariaLabel={translateMessage('Actions menu')}
+                menuIconProps={{ iconName: 'More' }}
+                menuProps={{
+                  shouldFocusOnMount: true,
+                  items: buttonActions,
+                }}
+              />
+            </TooltipHost>
           );
 
         default:
+          const shortQueryContent = `/${queryVersion}/${requestUrl + search}`;
           return (
             <>
               <TooltipHost
@@ -222,10 +228,10 @@ export class History extends Component<IHistoryProps, any> {
                 styles={{ root: { display: 'inline-block' } }}
               >
                 <span
-                  aria-describedby={hostId}
+                  aria-label={`${shortQueryContent}. ${translateMessage('Navigation help')}`}
                   className={classes.queryContent}
                 >
-                  {`/${queryVersion}/${requestUrl + search}`}
+                  {shortQueryContent}
                 </span>
               </TooltipHost>
             </>
@@ -521,20 +527,26 @@ export class History extends Component<IHistoryProps, any> {
           <Announced
             message={`${items.length} search results available.`}
           />
-          {items.length > 0 && <DetailsList
-            className={classes.queryList}
-            onRenderItemColumn={this.renderItemColumn}
-            items={items}
-            columns={columns}
-            selectionMode={SelectionMode.none}
-            groups={groups}
-            groupProps={{
-              showEmptyGroups: true,
-              onRenderHeader: this.renderGroupHeader,
-            }}
-            onRenderRow={this.renderRow}
-            onRenderDetailsHeader={this.renderDetailsHeader}
-          />}
+          {items.length > 0 &&
+            <div
+              onMouseEnter={() => this.setState({ isHoverOverHistoryList: true })}
+              onMouseLeave={() => this.setState({ isHoverOverHistoryList: false })}>
+              <DetailsList
+                styles={this.state.isHoverOverHistoryList ? { root: { overflow: 'scroll' } } : { root: { overflow: 'hidden' } }}
+                className={classes.queryList}
+                onRenderItemColumn={this.renderItemColumn}
+                items={items}
+                columns={columns}
+                selectionMode={SelectionMode.none}
+                groups={groups}
+                groupProps={{
+                  showEmptyGroups: true,
+                  onRenderHeader: this.renderGroupHeader,
+                }}
+                onRenderRow={this.renderRow}
+                onRenderDetailsHeader={this.renderDetailsHeader}
+              />
+            </div>}
         </div>
         <Dialog
           hidden={hideDialog}

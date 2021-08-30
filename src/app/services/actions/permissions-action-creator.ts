@@ -1,8 +1,9 @@
-import { MessageBarType } from 'office-ui-fabric-react';
+import { MessageBarType } from '@fluentui/react';
 
 import { geLocale } from '../../../appLocale';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
+import { IUser } from '../../../types/profile';
 import { IRequestOptions } from '../../../types/request';
 import { IRootState } from '../../../types/root';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
@@ -10,6 +11,8 @@ import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
 import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../redux-constants';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './auth-action-creators';
+import { getConsentAuthErrorHint } from '../../views/authentication/AuthenticationErrorsHints';
+import { ACCOUNT_TYPE, PERMS_SCOPE } from '../graph-constants';
 import { setQueryResponseStatus } from './query-status-action-creator';
 
 export function fetchScopesSuccess(response: object): IAction {
@@ -36,8 +39,10 @@ export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
-      const { devxApi, permissionsPanelOpen, sampleQuery: query }: IRootState = getState();
+      const { devxApi, permissionsPanelOpen, profile, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
+
+      const scopeType = getPermissionsScopeType(profile);
 
       if (!permissionsPanelOpen) {
         const signature = sanitizeQueryUrl(query.sampleUrl);
@@ -47,7 +52,7 @@ export function fetchScopes(): Function {
           throw new Error('url is invalid');
         }
 
-        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}`;
+        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scopeType}`;
         hasUrl = true;
       }
 
@@ -87,6 +92,13 @@ export function fetchScopes(): Function {
   };
 }
 
+function getPermissionsScopeType(profile: IUser | null | undefined) {
+  if (profile?.profileType === ACCOUNT_TYPE.MSA) {
+    return PERMS_SCOPE.PERSONAL;
+  }
+  return PERMS_SCOPE.WORK;
+}
+
 export function consentToScopes(scopes: string[]): Function {
   return async (dispatch: Function) => {
     try {
@@ -103,6 +115,7 @@ export function consentToScopes(scopes: string[]): Function {
           status: errorCode,
           ok: false,
           messageType: MessageBarType.error,
+          hint: getConsentAuthErrorHint(errorCode)
         })
       );
     }

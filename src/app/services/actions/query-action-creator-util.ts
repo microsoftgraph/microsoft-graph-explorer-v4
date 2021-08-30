@@ -10,7 +10,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { authProvider, GraphClient } from '../graph-client';
-import { DEFAULT_USER_SCOPES, GRAPH_API_SANDBOX_URL } from '../graph-constants';
+import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
@@ -21,18 +21,25 @@ export function queryResponse(response: object): IAction {
   };
 }
 
-export async function anonymousRequest(dispatch: Function, query: IQuery) {
-  const authToken = '{token:https://graph.microsoft.com/}';
-  const escapedUrl = encodeURIComponent(encodeHashCharacters(query));
-  const graphUrl = `${GRAPH_API_SANDBOX_URL}?url=${escapedUrl}`;
+export async function anonymousRequest(dispatch: Function, query: IQuery, getState: Function) {
+  dispatch(queryRunningStatus(true));
+  const { proxyUrl } = getState();
+  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl);
+  return fetch(graphUrl, options);
+}
 
+export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
+  const escapedUrl = encodeURIComponent(query.sampleUrl);
+  const graphUrl = `${proxyUrl}?url=${escapedUrl}`;
   const sampleHeaders: any = {};
+
   if (query.sampleHeaders && query.sampleHeaders.length > 0) {
     query.sampleHeaders.forEach((header) => {
       sampleHeaders[header.name] = header.value;
     });
   }
 
+  const authToken = '{token:https://graph.microsoft.com/}';
   const headers = {
     Authorization: `Bearer ${authToken}`,
     'Content-Type': 'application/json',
@@ -41,18 +48,13 @@ export async function anonymousRequest(dispatch: Function, query: IQuery) {
   };
 
   const options: IRequestOptions = { method: query.selectedVerb, headers };
-
-  dispatch(queryRunningStatus(true));
-
-  return fetch(graphUrl, options);
+  return { graphUrl, options };
 }
 
-export function authenticatedRequest(
-  dispatch: Function,
-  query: IQuery,
-  scopes: string[] = DEFAULT_USER_SCOPES.split(' ')
-) {
-  return makeRequest(query.selectedVerb, scopes)(dispatch, query);
+export function authenticatedRequest(dispatch: Function, query: IQuery,
+  scopes: string[] = DEFAULT_USER_SCOPES.split(' ')) {
+  dispatch(queryRunningStatus(true));
+  return makeRequest(query.selectedVerb, scopes)(query);
 }
 
 export function isImageResponse(contentType: string | undefined) {
@@ -62,6 +64,10 @@ export function isImageResponse(contentType: string | undefined) {
   return (
     contentType === 'application/octet-stream' || contentType.includes('image/')
   );
+}
+
+export function isBetaURLResponse(json: any) {
+  return !!json?.account?.[0]?.source?.type?.[0];
 }
 
 export function getContentType(headers: Headers) {
@@ -99,8 +105,8 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
   return response;
 }
 
-const makeRequest = (httpVerb: string, scopes: string[]): Function => {
-  return async (dispatch: Function, query: IQuery) => {
+export function makeRequest(httpVerb: string, scopes: string[]): Function {
+  return async (query: IQuery) => {
     const sampleHeaders: any = {};
     sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
 
@@ -115,7 +121,6 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
       authProvider,
       msalAuthOptions
     );
-
     const client = GraphClient.getInstance()
       .api(encodeHashCharacters(query))
       .middlewareOptions([middlewareOptions])
@@ -123,8 +128,6 @@ const makeRequest = (httpVerb: string, scopes: string[]): Function => {
       .responseType(ResponseType.RAW);
 
     let response;
-
-    dispatch(queryRunningStatus(true));
 
     switch (httpVerb) {
       case 'GET':

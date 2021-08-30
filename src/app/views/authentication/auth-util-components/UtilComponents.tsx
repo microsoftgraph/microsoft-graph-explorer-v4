@@ -1,4 +1,4 @@
-import { IconButton, PrimaryButton } from 'office-ui-fabric-react';
+import { IconButton, PrimaryButton } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { translateMessage } from '../../../utils/translate-messages';

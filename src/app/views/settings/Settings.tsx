@@ -1,7 +1,4 @@
-import {
-  DropdownMenuItemType,
-  getId, IconButton, TooltipHost
-} from 'office-ui-fabric-react';
+import { DropdownMenuItemType, getId, IconButton, TooltipHost } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,7 +27,7 @@ function Settings(props: ISettingsProps) {
   const cloudOptions = new Sovereign(profile).getOptions();
 
   const {
-    intl: { messages }
+    intl: { messages },
   }: any = props;
 
   const toggleThemeChooserDialogState = () => {
@@ -73,7 +70,7 @@ function Settings(props: ISettingsProps) {
       {
         key: 'divider',
         text: '-',
-        itemType: DropdownMenuItemType.Divider
+        itemType: DropdownMenuItemType.Divider,
       },
       {
         key: 'change-theme',
@@ -135,33 +132,27 @@ function Settings(props: ISettingsProps) {
   }
 
   const trackSelectPermissionsButtonClickEvent = () => {
-    telemetry.trackEvent(
-      eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
-      });
-  }
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON,
+    });
+  };
 
   const trackReportAnIssueLinkClickEvent = () => {
-    telemetry.trackEvent(
-      eventTypes.LINK_CLICK_EVENT,
-      {
-        ComponentName: componentNames.REPORT_AN_ISSUE_LINK
-      });
-  }
+    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
+      ComponentName: componentNames.REPORT_AN_ISSUE_LINK,
+    });
+  };
 
   const trackOfficeDevProgramLinkClickEvent = () => {
-    telemetry.trackEvent(
-      eventTypes.LINK_CLICK_EVENT,
-      {
-        ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
-      });
+    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
+      ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK,
+    });
   };
 
   const menuProperties = {
     shouldFocusOnMount: true,
     alignTargetEdge: true,
-    items
+    items,
   };
 
   return (
@@ -169,32 +160,29 @@ function Settings(props: ISettingsProps) {
       <TooltipHost
         content={messages['More actions']}
         id={getId()}
-        calloutProps={{ gapSpace: 0 }}>
+        calloutProps={{ gapSpace: 0 }}
+      >
         <IconButton
           ariaLabel={messages['More actions']}
           role='button'
           styles={{
             label: { marginBottom: -20 },
-            menuIcon: { fontSize: 20 }
+            menuIcon: { fontSize: 20 },
           }}
           menuIconProps={{ iconName: 'More' }}
-          menuProps={menuProperties} />
-
+          menuProps={menuProperties}
+        />
       </TooltipHost>
       <div>
-
         <ThemeChooser
           dialogHidden={themeChooserDialogHidden}
           toggleThemeChooserDialogState={toggleThemeChooserDialogState}
         />
-
         <PermissionsPanel changePanelState={changePanelState} />
-
         {cloudSelectorOpen && <SovereignClouds
           cloudSelectorOpen={cloudSelectorOpen}
           toggleCloudSelector={toggleCloudSelector}
         />}
-
       </div>
     </div>
   );

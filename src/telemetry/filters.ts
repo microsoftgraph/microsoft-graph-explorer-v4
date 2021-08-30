@@ -1,11 +1,12 @@
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
 import { errorTypes } from '.';
 import {
+  ADAPTIVE_CARD_URL,
   DEVX_API_URL,
+  GRAPH_API_SANDBOX_ENDPOINT_URL,
   GRAPH_API_SANDBOX_URL,
   GRAPH_URL,
-  HOME_ACCOUNT_KEY,
-  ADAPTIVE_CARD_URL,
+  HOME_ACCOUNT_KEY
 } from '../app/services/graph-constants';
 import { sanitizeGraphAPISandboxUrl, sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
 import { clouds } from '../modules/sovereign-clouds';
@@ -26,7 +27,7 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
   if (envelope.baseType === 'RemoteDependencyData') {
     const baseData = envelope.baseData || {};
     const targetsToInclude = [
-      GRAPH_URL,
+      GRAPH_URL, DEVX_API_URL, GRAPH_API_SANDBOX_URL, GRAPH_API_SANDBOX_ENDPOINT_URL,
       DEVX_API_URL,
       new URL(GRAPH_API_SANDBOX_URL).origin,
       new URL(ADAPTIVE_CARD_URL).origin,
