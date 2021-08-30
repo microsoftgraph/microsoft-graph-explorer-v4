@@ -1,4 +1,4 @@
-import { DefaultButton, Label, Panel, PanelType, PrimaryButton } from 'office-ui-fabric-react';
+import { DefaultButton, Label, Panel, PanelType, PrimaryButton } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';

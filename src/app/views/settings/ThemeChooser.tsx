@@ -1,7 +1,7 @@
 import {
   Dialog, DialogType, ChoiceGroup,
   DialogFooter, DefaultButton
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 

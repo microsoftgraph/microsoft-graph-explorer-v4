@@ -2,7 +2,7 @@ import {
   ChoiceGroup, DefaultButton, Dialog,
   DialogFooter, DialogType, IChoiceGroupOption,
   MessageBarType
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 

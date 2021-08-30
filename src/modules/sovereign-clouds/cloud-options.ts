@@ -1,4 +1,4 @@
-import { IChoiceGroupOption } from 'office-ui-fabric-react';
+import { IChoiceGroupOption } from '@fluentui/react';
 import { clouds, globalCloud } from '.';
 import { geLocale } from '../../appLocale';
 
