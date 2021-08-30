@@ -150,8 +150,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         return (
           <TooltipHost {...tooltipHostProps} />
         );
-      },
-
+      }
     });
   }
 
