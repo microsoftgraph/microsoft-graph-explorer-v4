@@ -151,7 +151,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
                 onClick={() => this.onDocumentationLinkClicked(item)}
                 className={classes.docLink}
                 style={{
-                  marginRight: '20%',
+                  marginRight: '45%',
+                  width: 10
                 }}
               />
             </TooltipHost>
