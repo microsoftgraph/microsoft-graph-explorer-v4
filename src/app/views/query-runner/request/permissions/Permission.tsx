@@ -1,4 +1,5 @@
 import {
+  Checkbox,
   FontSizes,
   getId,
   IColumn,
@@ -149,8 +150,17 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
         return (
           <TooltipHost {...tooltipHostProps} />
         );
-      }
+      },
+
     });
+  }
+
+  private renderCustomCheckbox(props: any): any {
+    return(
+      <div style={{pointerEvents: 'none',}} >
+        <Checkbox checked={props ? props.checked : undefined} />
+      </div>
+    )
   }
 
   private getColumns = () => {
@@ -255,6 +265,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
             this.renderItemColumn(item, index, column)}
           renderDetailsHeader={this.renderDetailsHeader}
+          renderCustomCheckbox={this.renderCustomCheckbox}
         />
       </div>
     };
