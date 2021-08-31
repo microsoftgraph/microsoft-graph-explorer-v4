@@ -3,7 +3,7 @@ name: English File transfer
 on:
   push:
     branches:
-      - task/automate-english-file-transfer
+      - dev
     paths:
       - 'src/messages/GE.json'
 
@@ -25,7 +25,7 @@ jobs:
         source_file: 'src/messages/GE.json'
         destination_repo: 'microsoftgraph/microsoft-graph-devx-content'
         destination_folder: 'messages'
-        destination_branch: 'task/automate-update-loc-files'
+        destination_branch: 'dev'
         user_email: ${{ secrets.ACTION_EMAIL }}
         user_name: ${{ secrets.ACTION_USERNAME }}
         commit_message: ${{ env.today }} English file transfer
