@@ -123,21 +123,28 @@ export class Request extends Component<IRequestComponent, any> {
     }
   };
 
-  private setRequestAndResponseHeights = (requestHeight: string) => {
+  private setRequestAndResponseHeights = (requestHeight_: string) => {
+    const height = requestHeight_.replace('vh', '').trim();
+    const requestHeight = this.convertPxToVh(parseFloat(height)).toString();
     const maxDeviceVerticalHeight = 90;
     const dimen = { ...this.props.dimensions };
-    dimen.request.height = requestHeight;
+    dimen.request.height = requestHeight + 'vh';
     const response = maxDeviceVerticalHeight - parseFloat(requestHeight.replace('vh', ''));
     dimen.response.height = response + 'vh';
     this.props.actions!.setDimensions(dimen);
   };
+
+  private convertPxToVh(px: number){
+    const innerHeight = screen.availHeight;
+    const convertedHeight = (100*px)/innerHeight;
+    return convertedHeight;
+  }
 
   public render() {
     const { dimensions } = this.props;
     const requestPivotItems = this.getPivotItems(dimensions.request.height);
     const minHeight = 60;
     const maxHeight = 800;
-
     return (
       <Resizable
         style={{
@@ -153,7 +160,7 @@ export class Request extends Component<IRequestComponent, any> {
         minHeight={minHeight}
         bounds={'window'}
         size={{
-          height: this.props.dimensions.request.height,
+          height: 'inherit',
           width: '100%',
         }}
         enable={{

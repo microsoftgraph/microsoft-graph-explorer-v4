@@ -122,7 +122,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           minHeight: responseHeight,
           height: responseHeight
         }}>
-          <Pivot onLinkClick={handlePivotItemClick} className='pivot-response'>
+          <Pivot onLinkClick={handlePivotItemClick} className='pivot-response' styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}>
             {getPivotItems()}
             <PivotItem
               headerText='Share'

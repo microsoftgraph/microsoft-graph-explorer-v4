@@ -1,0 +1,9 @@
+@import "../../styles/variables";
+.status-area{
+    margin-top: -7px
+}
+@media screen and (min-width : 200px) and (max-width : 710px){
+    .status-area{
+        margin-top: -2px
+    }
+}

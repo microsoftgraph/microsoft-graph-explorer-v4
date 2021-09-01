@@ -38,6 +38,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
+import './app.scss';
 
 interface IAppProps {
   theme?: ITheme;
