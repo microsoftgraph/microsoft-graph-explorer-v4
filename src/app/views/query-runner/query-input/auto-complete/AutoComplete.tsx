@@ -1,5 +1,4 @@
-import { getId, getTheme, Icon, ITextField, KeyCodes, Spinner, TextField, TooltipHost } from 'office-ui-fabric-react';
-import { ITooltipHostStyles } from 'office-ui-fabric-react/lib/components/Tooltip/TooltipHost.types';
+import { getId, getTheme, Icon, ITextField, ITooltipHostStyles, KeyCodes, Spinner, TextField, TooltipHost } from '@fluentui/react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';

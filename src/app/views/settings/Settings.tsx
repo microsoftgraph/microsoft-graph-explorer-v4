@@ -12,7 +12,7 @@ import {
   PanelType,
   PrimaryButton,
   TooltipHost,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';

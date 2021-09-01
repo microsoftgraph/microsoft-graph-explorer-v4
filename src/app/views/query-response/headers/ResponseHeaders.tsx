@@ -1,5 +1,5 @@
 
-import { IconButton } from 'office-ui-fabric-react';
+import { IconButton } from '@fluentui/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RESPONSE_HEADERS_COPY_BUTTON } from '../../../../telemetry/component-names';

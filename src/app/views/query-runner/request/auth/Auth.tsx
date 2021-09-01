@@ -1,5 +1,5 @@
 import { AuthenticationResult } from '@azure/msal-browser';
-import { IconButton, IIconProps, Label, MessageBar, MessageBarType, styled } from 'office-ui-fabric-react';
+import { IconButton, IIconProps, Label, MessageBar, MessageBarType, styled } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';

@@ -1,4 +1,4 @@
-import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode } from 'office-ui-fabric-react';
+import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';

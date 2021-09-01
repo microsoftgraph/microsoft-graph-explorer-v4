@@ -2,11 +2,12 @@ import {
   Announced,
   DetailsList,
   DetailsListLayoutMode,
+  GroupHeader,
   IColumn,
   Label,
   SearchBox,
   SelectionMode
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -25,11 +26,12 @@ interface IPanelList {
   selection: any;
   renderItemColumn: any;
   renderDetailsHeader: Function;
+  renderCustomCheckbox: Function;
 }
 
 const PanelList = ({ messages,
   columns, classes, selection,
-  renderItemColumn, renderDetailsHeader }: IPanelList) => {
+  renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) => {
 
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
   const [permissions, setPermissions] = useState(scopes.data.sort(dynamicSort('value', SortOrder.ASC)));
@@ -61,6 +63,16 @@ const PanelList = ({ messages,
 
   const groups = generateGroupsFromList(permissionsList, 'groupName');
 
+
+  const _onRenderGroupHeader = (props: any): any => {
+    if (props) {
+      return (
+        <GroupHeader  {...props} onRenderGroupHeaderCheckbox={renderCustomCheckbox} />
+      )
+    }
+    return null;
+  };
+
   return (
     <>
       <Label className={classes.permissionText}>
@@ -88,11 +100,13 @@ const PanelList = ({ messages,
         compact={true}
         groupProps={{
           showEmptyGroups: false,
+          onRenderHeader: _onRenderGroupHeader
         }}
         ariaLabelForSelectionColumn={messages['Toggle selection'] || 'Toggle selection'}
         ariaLabelForSelectAllCheckbox={messages['Toggle selection for all items'] || 'Toggle selection for all items'}
         checkButtonAriaLabel={messages['Row checkbox'] || 'Row checkbox'}
         onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)}
+        onRenderCheckbox={(props: any) => renderCustomCheckbox(props)}
       />
       {permissions && permissions.length === 0 &&
         <Label style={{

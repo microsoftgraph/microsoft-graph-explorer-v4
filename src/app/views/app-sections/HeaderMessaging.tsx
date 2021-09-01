@@ -1,4 +1,4 @@
-import { MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import { MessageBar, MessageBarType } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -15,13 +15,13 @@ export function headerMessaging(classes: any, query: string): React.ReactNode {
         <MessageBar messageBarType={MessageBarType.info} isMultiline={true}>
           <p>
             <FormattedMessage id='To try the full features' />,
-          <a className={classes.links} tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
+            <a className={classes.links} tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
               <FormattedMessage id='full Graph Explorer' />.
-          </a>
+            </a>
           </p>
           <p>
             <FormattedMessage id='running the query' />.
-        </p>
+          </p>
         </MessageBar>
 
         <Authentication />
@@ -30,9 +30,9 @@ export function headerMessaging(classes: any, query: string): React.ReactNode {
         <p>
           <FormattedMessage id='To try operations other than GET' />,
 
-        <a className={classes.links} tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
+          <a className={classes.links} tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
             <FormattedMessage id='sign in' />.
-        </a>
+          </a>
         </p>
       </MessageBar>}
     </div>);

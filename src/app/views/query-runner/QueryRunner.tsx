@@ -1,4 +1,4 @@
-import { IDropdownOption, MessageBarType } from 'office-ui-fabric-react';
+import { IDropdownOption, MessageBarType } from '@fluentui/react';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -85,6 +85,7 @@ export class QueryRunner extends Component<
             status: `${translateMessage('Review the request body')} ${error}`,
             messageType: MessageBarType.error,
           });
+          this.setState({ sampleBody: '' });
           return;
         }
       } else {
@@ -102,6 +103,7 @@ export class QueryRunner extends Component<
           QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
         });
     }
+    this.setState({ sampleBody: '' });
   };
 
   private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
