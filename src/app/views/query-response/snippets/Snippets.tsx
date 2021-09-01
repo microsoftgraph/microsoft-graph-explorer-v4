@@ -1,4 +1,4 @@
-import { Pivot } from 'office-ui-fabric-react';
+import { Pivot } from '@fluentui/react';
 import React from 'react';
 
 import { componentNames, telemetry } from '../../../../telemetry';

@@ -1,4 +1,4 @@
-import { MessageBarType } from 'office-ui-fabric-react';
+import { MessageBarType } from '@fluentui/react';
 
 export interface IStatus {
   messageType: MessageBarType;
@@ -6,4 +6,5 @@ export interface IStatus {
   status: number;
   statusText: string;
   duration?: number;
+  hint?: string;
 }

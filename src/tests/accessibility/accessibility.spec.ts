@@ -1,6 +1,6 @@
-import AxeBuilder from 'axe-webdriverjs';
+import AxeBuilder from '@axe-core/webdriverjs';
 import webdriver, { ThenableWebDriver } from 'selenium-webdriver';
-import chrome, { Options } from 'selenium-webdriver/chrome';
+import chrome from 'selenium-webdriver/chrome';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 300000; // in milliseconds = 5min
 const TEST_TIMEOUT_MS = 300000; // in milliseconds = 5min
@@ -10,12 +10,12 @@ describe('Graph Explorer accessibility', () => {
 
   // set browser environment to use headless Chrome
   beforeAll(async () => {
-    chrome.setDefaultService(new chrome.ServiceBuilder(process.env.REACT_APP_CHROMEDRIVER_PATH)
-      .build());
+    const service = new chrome.ServiceBuilder(process.env.REACT_APP_CHROMEDRIVER_PATH).build();
+    chrome.setDefaultService(service);
 
     driver = new webdriver.Builder()
       .forBrowser('chrome')
-      .setChromeOptions(new Options().headless())
+      .setChromeOptions(new chrome.Options().headless())
       .withCapabilities(webdriver.Capabilities.chrome())
       .build();
   }, TEST_TIMEOUT_MS);
@@ -35,9 +35,8 @@ describe('Graph Explorer accessibility', () => {
 
   // scan the page and return an analysis
   it('checks for accessibility violations', async () => {
-    // @ts-ignore
-    const accessibilityScanResults = await AxeBuilder(driver)
-      .disableRules(['landmark-one-main', 'region']) // disabled as main landmark already exists on live site
+    const accessibilityScanResults = await new AxeBuilder(driver)
+      .disableRules(['landmark-one-main', 'region', 'aria-required-children']) // disabled as main landmark already exists on live site
       .analyze();
     expect(accessibilityScanResults.violations).toStrictEqual([]);
   });

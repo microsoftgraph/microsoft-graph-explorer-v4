@@ -1,4 +1,4 @@
-import { Label, styled } from 'office-ui-fabric-react';
+import { Label, styled } from '@fluentui/react';
 import React, { useEffect } from 'react';
 
 import { ISuggestionsList } from '../../../../../types/auto-complete';

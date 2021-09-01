@@ -1,5 +1,5 @@
 
-import { Link, MessageBar, MessageBarType } from 'office-ui-fabric-react';
+import { Link, MessageBar, MessageBarType } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';

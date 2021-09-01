@@ -12,12 +12,3 @@ export function profile(state = null, action: IAction): any {
       return state;
   }
 }
-
-export function profileType(state = ACCOUNT_TYPE.AAD, action: IAction): any {
-  switch (action.type) {
-    case PROFILE_TYPE_SUCCESS:
-      return action.response
-    default:
-      return state;
-  }
-}

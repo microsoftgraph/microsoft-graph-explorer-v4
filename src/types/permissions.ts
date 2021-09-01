@@ -1,4 +1,4 @@
-import { ITheme } from '@uifabric/styling';
+import { ITheme } from '@fluentui/react';
 import { IDimensions } from './dimensions';
 import { IQuery } from './query-runner';
 

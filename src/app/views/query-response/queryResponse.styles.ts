@@ -1,4 +1,4 @@
-import { ITheme } from '@uifabric/styling';
+import { ITheme } from '@fluentui/react';
 
 export const queryResponseStyles = (theme: ITheme) => {
   return {

@@ -4,7 +4,7 @@ import {
   Pivot,
   PivotItem,
   TooltipHost,
-} from 'office-ui-fabric-react';
+} from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { Component, CSSProperties } from 'react';
 import { injectIntl } from 'react-intl';

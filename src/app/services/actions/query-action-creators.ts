@@ -1,4 +1,4 @@
-import { MessageBarType } from 'office-ui-fabric-react';
+import { MessageBarType } from '@fluentui/react';
 
 import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';

@@ -1,6 +1,6 @@
-import { getTheme } from 'office-ui-fabric-react';
+import { getTheme } from '@fluentui/react';
 
-export function getStyleFor (method: string) {
+export function getStyleFor(method: string) {
   const currentTheme = getTheme();
   method = method.toUpperCase();
 

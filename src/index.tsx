@@ -1,6 +1,6 @@
 import { AuthenticationResult } from '@azure/msal-browser';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
-import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+import { initializeIcons } from '@fluentui/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { addLocaleData, IntlProvider } from 'react-intl';
@@ -14,10 +14,7 @@ import pt from 'react-intl/locale-data/pt';
 import ru from 'react-intl/locale-data/ru';
 import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
-import {
-  getAuthTokenSuccess,
-  getConsentedScopesSuccess,
-} from './app/services/actions/auth-action-creators';
+import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
@@ -115,14 +112,12 @@ setCurrentSystemTheme();
 appState.dispatch(getGraphProxyUrl());
 
 function refreshAccessToken() {
-  authenticationWrapper
-    .getToken()
-    .then((authResponse: AuthenticationResult) => {
-      if (authResponse && authResponse.accessToken) {
-        appState.dispatch(getAuthTokenSuccess(true));
-        appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
-      }
-    })
+  authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
+    if (authResponse && authResponse.accessToken) {
+      appState.dispatch(getAuthTokenSuccess(true));
+      appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
+    }
+  })
     .catch(() => {
       // ignore the error as it means that a User login is required
     });
