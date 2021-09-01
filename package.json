@@ -1,6 +1,6 @@
 {
     "name": "graph-explorer-v2",
-    "version": "4.12.0",
+    "version": "4.13.0",
     "private": true,
     "dependencies": {
         "@axe-core/webdriverjs": "4.2.2",
