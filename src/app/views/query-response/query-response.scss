@@ -13,12 +13,20 @@
   }
 
   .pivot-response *[data-content='Expand xx'] {
-    float: right !important;
+    position: absolute;
+    right:0px;
+    @media screen and (max-width:1300px) {
+        position: static;
     }
+  }
 
   .pivot-response *[data-content='Share xx'] {
-    float: right !important;
+    position: absolute;
+    right: 100px;
+    @media screen and (max-width:1300px) {
+      position: static;
     }
+  }
 
   .default-text {
     display: flex;
@@ -44,4 +52,3 @@
   overflow-x: auto;
   overflow-y: hidden;
 }
-
