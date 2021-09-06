@@ -1,4 +1,5 @@
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
+import { OfficeBrowserFeedback } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window';
 import { getTheme, MessageBarType } from 'office-ui-fabric-react';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +10,7 @@ import { IRootState } from '../../../../../types/root';
 import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { getVersion } from '../../../../utils/version';
+import CampaignDefinitions from './campaignDefinitions';
 
 export default function FeedbackForm({ activated, dismissSurvey }: any) {
     const dispatch = useDispatch();
@@ -17,13 +19,13 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
     const { NODE_ENV } = process.env;
     const { profile } = useSelector((state: IRootState) => state);
 
-    function onSurveyActivated(launcher: any, surveyItem: any) {
+    function surveyActivated(launcher: any, surveyItem: any) {
         return surveyItem;
     }
 
     const initializeFeedback = () => {
-        const floodgateObject = makeFloodgate();
-        loadAndInitialize(floodgateObject, onSurveyActivated).then(() => {
+        const floodgateObject: OfficeBrowserFeedback = makeFloodgate();
+        loadAndInitialize(floodgateObject, surveyActivated).then(() => {
             setOfficeBrowserFeedback(floodgateObject);
         });
     }
@@ -61,15 +63,15 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
     }
 
     async function loadAndInitialize(
-        floodgateObject: any,
-        surveyActivated: (launcher: any, surveyItem: any) => void): Promise<void> {
+        floodgateObject: OfficeBrowserFeedback,
+        onSurveyActivated: (launcher: any, surveyItem: any) => void): Promise<void> {
         floodgateObject.initOptions = {
             appId: 2256,
             stylesUrl: ' ', // Mandatory field
             environment: (NODE_ENV === 'development') ? 1 : 0, // 0 - Prod, 1 - Int
             locale: geLocale,
             onError: (error: string) => { throw error; },
-            build: getVersion(),
+            build: getVersion().toString(),
             primaryColour: currentTheme.palette.themePrimary,
             secondaryColour: currentTheme.palette.themeSecondary,
             telemetryGroup: {
@@ -83,11 +85,13 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
         };
 
         floodgateObject.floodgate.initOptions = {
+            autoDismiss: 2,
+            campaignDefinitions: CampaignDefinitions,
             surveyEnabled: true,
             onSurveyActivatedCallback: {  //callback implementation
-                surveyActivated
+                onSurveyActivated
             },
-            onDismiss: (campaignId: string, submitted: string) => {
+            onDismiss: (campaignId: string, submitted: boolean) => {
                 if (submitted) {
                     dispatch(setQueryResponseStatus({
                         status: translateMessage('Submitted Successfully'),
@@ -118,26 +122,34 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
         floodgateObject.floodgate.initialize().then(
             function () {
                 floodgateObject.floodgate.start();
+                setEvents();
             },
             function (err: string) { throw err; });
 
-        window.onfocus = function () {
-            if (floodgateObject.floodgate) {
-                floodgateObject.floodgate.start();
+        function setEvents() {
+            window.onfocus = function () {
+                if (floodgateObject.floodgate) {
+                    floodgateObject.floodgate.start();
+                    floodgateObject.floodgate.getEngine().getActivityListener().logActivityStartTime("AppUsageTime");
+                    floodgateObject.floodgate.getEngine().getActivityListener().logActivity("AppResume");
+                }
+            }
+
+            window.onblur = function () {
+                if (floodgateObject.floodgate) {
+                    floodgateObject.floodgate.getEngine().getActivityListener().logActivityStopTime("AppUsageTime");
+                    floodgateObject.floodgate.stop();
+                }
+            }
+
+            window.onunload = function () {
+                if (floodgateObject.floodgate) {
+                    floodgateObject.floodgate.getEngine().getActivityListener().logActivityStopTime("AppUsageTime");
+                    floodgateObject.floodgate.stop();
+                }
             }
         }
 
-        window.onblur = function () {
-            if (floodgateObject.floodgate) {
-                floodgateObject.floodgate.stop();
-            }
-        }
-
-        window.onunload = function () {
-            if (floodgateObject.floodgate) {
-                floodgateObject.floodgate.stop();
-            }
-        }
 
     }
 
