@@ -97,6 +97,31 @@ export function getContentType(headers: any) {
   return contentType;
 }
 
+export function isDownloadableResponse(headers: any) {
+  const contentDisposition = headers['content-disposition'];
+  if (contentDisposition) {
+    const directives = contentDisposition.split(';');
+    if (directives.contains('attachment')) {
+      return true;
+    }
+  }
+
+  // use content type, if file that's not an image, then tag as downloadable
+  const contentType = getContentType(headers);
+  alert(contentType);
+  if (contentType) {
+    return (
+      contentType === 'application/octet-stream' ||
+      contentType === 'application/pdf' ||
+      contentType.includes('application/vnd.') ||
+      contentType.includes('video/') ||
+      contentType.includes('audio/')
+    );
+  }
+
+  return false;
+}
+
 export function parseResponse(response: any, respHeaders: any): Promise<any> {
   if (response && response.headers) {
     response.headers.forEach((val: any, key: any) => {
