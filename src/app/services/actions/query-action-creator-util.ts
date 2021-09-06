@@ -59,8 +59,11 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
   return { graphUrl, options };
 }
 
-export function authenticatedRequest(dispatch: Function, query: IQuery,
-  scopes: string[] = DEFAULT_USER_SCOPES.split(' ')) {
+export function authenticatedRequest(
+  dispatch: Function,
+  query: IQuery,
+  scopes: string[] = DEFAULT_USER_SCOPES.split(' ')
+) {
   dispatch(queryRunningStatus(true));
   return makeRequest(query.selectedVerb, scopes)(query);
 }
@@ -78,16 +81,20 @@ export function isBetaURLResponse(json: any) {
   return !!json?.account?.[0]?.source?.type?.[0];
 }
 
-export function getContentType(headers: Headers) {
-  const contentType = headers.get('content-type');
-  if (contentType) {
-    const delimiterPos = contentType.indexOf(';');
-    if (delimiterPos !== -1) {
-      return contentType.substr(0, delimiterPos);
-    } else {
-      return contentType;
+export function getContentType(headers: any) {
+  let contentType = null;
+
+  const contentTypes = headers['content-type'];
+  if (contentTypes) {
+    /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
+     * Take the first option after splitting since it is the only value useful in the description of the content
+     */
+    const splitContentTypes = contentTypes.split(';');
+    if (splitContentTypes.length > 0) {
+      contentType = splitContentTypes[0].toLowerCase();
     }
   }
+  return contentType;
 }
 
 export function parseResponse(response: any, respHeaders: any): Promise<any> {
@@ -160,4 +167,4 @@ export function makeRequest(httpVerb: string, scopes: string[]): Function {
 
     return Promise.resolve(response);
   };
-};
+}
