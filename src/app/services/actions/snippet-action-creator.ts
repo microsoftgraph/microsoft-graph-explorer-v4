@@ -31,7 +31,7 @@ export function getSnippet(language: string): Function {
   return async (dispatch: Function, getState: Function) => {
     const { devxApi, sampleQuery } = getState();
     try {
-      let snippetsUrl = `${devxApi.baseUrl}/api/graphexplorersnippets`;
+      let snippetsUrl = `${devxApi.baseUrl}/api/snippets`;
 
       const { requestUrl, sampleUrl, queryVersion, search } = parseSampleUrl(
         sampleQuery.sampleUrl
