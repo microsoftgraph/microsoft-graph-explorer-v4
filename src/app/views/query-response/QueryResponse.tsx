@@ -1,7 +1,7 @@
 import {
   Announced, Dialog, DialogFooter, DialogType,
   DefaultButton, FontSizes, getId, Icon, IconButton,
-  Modal, Pivot, PivotItem, PrimaryButton, TooltipHost
+  Modal, Pivot, PivotItem, PrimaryButton, TooltipHost, ITheme, getTheme
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';
@@ -21,6 +21,7 @@ import { createShareLink } from '../common/share';
 import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 import { IRootState } from '../../../types/root';
+import { queryResponseStyles } from './queryResponse.styles';
 
 const QueryResponse = (props: IQueryResponseProps) => {
   const dispatch = useDispatch();
@@ -29,8 +30,17 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [showModal, setShowModal] = useState(false);
   const [query, setQuery] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
+
+  const currentTheme: ITheme = getTheme();
+  const pivotResponseStyle = queryResponseStyles(currentTheme).pivotResponse;
+  const pivotResponseTabStyle = queryResponseStyles(currentTheme).pivotResponseTabletSize;
+
+  const isTabletSize : boolean = (windowWidth <= 1320) ? true : false;
+
+
 
   const {
     intl: { messages },
@@ -38,7 +48,12 @@ const QueryResponse = (props: IQueryResponseProps) => {
 
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
+    window.addEventListener("resize", handleWindowResize, false);
   }, [dimensions]);
+
+  const handleWindowResize = () => {
+    setWindowWidth(window.innerWidth);
+  }
 
   const toggleShareQueryDialogState = () => {
     setShareQuaryDialogStatus(!showShareQueryDialog);
@@ -122,7 +137,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           minHeight: responseHeight,
           height: responseHeight
         }}>
-          <Pivot onLinkClick={handlePivotItemClick} className='pivot-response' styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}>
+          <Pivot onLinkClick={handlePivotItemClick} className='pivot-response' styles={{ root: isTabletSize ? pivotResponseTabStyle : pivotResponseStyle }}>
             {getPivotItems()}
             <PivotItem
               headerText='Share'

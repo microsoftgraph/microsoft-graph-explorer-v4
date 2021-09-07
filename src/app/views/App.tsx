@@ -1,4 +1,4 @@
-import { Announced, IStackTokens, ITheme, styled } from '@fluentui/react';
+import { Announced, getTheme, IStackTokens, ITheme, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -70,6 +70,9 @@ interface IAppState {
 
 class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
+  private currentTheme: ITheme = getTheme();
+  private statusAreaMobileStyle = appStyles(this.currentTheme).statusAreaMobileScreen;
+  private statusAreaLaptopStyle = appStyles(this.currentTheme).statusAreaLaptopScreen;
 
   constructor(props: IAppProps) {
     super(props);
@@ -383,8 +386,10 @@ class App extends Component<IAppProps, IAppState> {
                   <div style={{ marginBottom: 8 }}>
                     <QueryRunner onSelectVerb={this.handleSelectVerb} />
                   </div>
-                  {statusMessages(queryState, sampleQuery, actions)}
-                  {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
+                  <div style={ mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
+                    {statusMessages(queryState, sampleQuery, actions)}
+                    {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
+                  </div>
                   {
                     // @ts-ignore
                     <QueryResponse verb={this.state.selectedVerb} />

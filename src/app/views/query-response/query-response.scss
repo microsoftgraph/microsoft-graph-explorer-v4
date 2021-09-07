@@ -13,19 +13,11 @@
   }
 
   .pivot-response *[data-content='Expand xx'] {
-    position: absolute;
-    right:0px;
-    @media screen and (max-width:1300px) {
-        position: static;
-    }
+    float: right !important;
   }
 
   .pivot-response *[data-content='Share xx'] {
-    position: absolute;
-    right: 100px;
-    @media screen and (max-width:1300px) {
-      position: static;
-    }
+    float: right !important;
   }
 
   .default-text {

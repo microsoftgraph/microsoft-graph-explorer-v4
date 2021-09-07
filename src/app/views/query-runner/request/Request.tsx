@@ -17,7 +17,7 @@ import { IRequestComponent } from '../../../../types/request';
 import { IRootState } from '../../../../types/root';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
-import { convertVhToPx } from '../../common/dimensions-adjustment';
+import { convertPxToVh, convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
 import { RequestHeaders } from './headers';
@@ -123,22 +123,17 @@ export class Request extends Component<IRequestComponent, any> {
     }
   };
 
-  private setRequestAndResponseHeights = (requestHeight_: string) => {
-    const height = requestHeight_.replace('vh', '').trim();
-    const requestHeight = this.convertPxToVh(parseFloat(height)).toString();
+  private setRequestAndResponseHeights = (requestHeight: string) => {
+    const heightInPx = requestHeight.replace('px', '').trim();
+    const requestHeightInVh = convertPxToVh(parseFloat(heightInPx)).toString();
     const maxDeviceVerticalHeight = 90;
     const dimen = { ...this.props.dimensions };
-    dimen.request.height = requestHeight + 'vh';
-    const response = maxDeviceVerticalHeight - parseFloat(requestHeight.replace('vh', ''));
+    dimen.request.height = requestHeightInVh;
+    const response = maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''));
     dimen.response.height = response + 'vh';
     this.props.actions!.setDimensions(dimen);
   };
 
-  private convertPxToVh(px: number){
-    const innerHeight = screen.availHeight;
-    const convertedHeight = (100*px)/innerHeight;
-    return convertedHeight;
-  }
 
   public render() {
     const { dimensions } = this.props;

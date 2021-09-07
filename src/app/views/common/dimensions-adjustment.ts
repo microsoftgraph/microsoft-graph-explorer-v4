@@ -4,6 +4,12 @@ export function convertVhToPx(height: string, adjustment: number) {
     return Math.floor(newHeight - adjustment) + 'px';
 }
 
+export function convertPxToVh(px: number){
+    const innerHeight = window.innerHeight;
+    const convertedHeight = (100*px)/innerHeight;
+    return convertedHeight+ 'vh';
+  }
+
 export function getResponseHeight(height: any, responseAreaExpanded: any) {
     let responseHeight = height;
     if (responseAreaExpanded) {
