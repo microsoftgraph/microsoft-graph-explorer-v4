@@ -105,13 +105,13 @@ const SuffixRenderer = () => {
             className={styles.callout}
             ariaLabelledBy={labelId}
             ariaDescribedBy={descriptionId}
-            role="alertdialog"
+            role='alertdialog'
             gapSpace={0}
             target={`#${buttonId}`}
             onDismiss={toggleCallout}
             setInitialFocus
           >
-            <Text block variant="xLarge" className={styles.title} id={labelId}>
+            <Text block variant='xLarge' className={styles.title} id={labelId}>
               /{requestUrl}
             </Text>
             <HintList hints={hints} />

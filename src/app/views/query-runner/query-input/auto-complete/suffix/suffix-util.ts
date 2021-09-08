@@ -1,4 +1,5 @@
 import { FontWeights, mergeStyleSets } from '@fluentui/react';
+
 import { IQuery, ISampleQuery } from '../../../../../../types/query-runner';
 import { GRAPH_URL } from '../../../../../services/graph-constants';
 import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
@@ -38,12 +39,14 @@ export const styles = mergeStyleSets({
   },
 });
 
-export const getMatchingSamples = ({ queries, sampleQuery, sampleUrl, queryRunnerStatus }: ISampleFilter): ISampleQuery[] => {
+export const getMatchingSamples = (filterParams: ISampleFilter): ISampleQuery[] => {
+  const { queries, sampleQuery, sampleUrl, queryRunnerStatus } = filterParams;
   const querySamples: ISampleQuery[] = [];
   queries
     .filter((sample: ISampleQuery) => sample.method === sampleQuery.selectedVerb)
     .forEach((sample: ISampleQuery) => {
-      const { requestUrl: baseUrl, queryVersion: version } = parseSampleUrl(sanitizeQueryUrl(GRAPH_URL + sample.requestUrl));
+      const { requestUrl: baseUrl, queryVersion: version } =
+        parseSampleUrl(sanitizeQueryUrl(GRAPH_URL + sample.requestUrl));
       const baseUrlMatches = `/${version}/${baseUrl}` === sampleUrl;
       if (baseUrlMatches) {
         querySamples.push(sample);
@@ -60,7 +63,7 @@ export const getMatchingSamples = ({ queries, sampleQuery, sampleUrl, queryRunne
 };
 
 function filterQueriesUsingTip(querySamples: ISampleQuery[], queryRunnerStatus: any) {
-  if (queryRunnerStatus && queryRunnerStatus.statusText === "Tip") {
+  if (queryRunnerStatus && queryRunnerStatus.statusText === 'Tip') {
     const exact = querySamples.filter(k => k.tip === queryRunnerStatus.status);
     if (exact.length === 1) {
       return exact;
@@ -71,22 +74,27 @@ function filterQueriesUsingTip(querySamples: ISampleQuery[], queryRunnerStatus: 
 
 function filterQueriesUsingQueryParameters(querySamples: ISampleQuery[], sampleQuery: IQuery) {
   const { search } = parseSampleUrl(sampleQuery.sampleUrl);
-  const parameters: string[] = [];
   if (search) {
+    const parameters: string[] = [];
     const splitSearch = search.split('&');
-    splitSearch.forEach(element => {
-      const parameter = element.substring(element.indexOf("$") + 1, element.lastIndexOf("="));
-      parameters.push(parameter);
-    });
+    if (splitSearch.length > 0) {
+      splitSearch.forEach(element => {
+        const parameter = element.substring(element.indexOf('$') + 1, element.lastIndexOf('='));
+        parameters.push(parameter);
+      });
 
-    const list: any[] = [];
-    parameters.forEach(param => {
-      const fit = querySamples.find(k => k.requestUrl.includes(param));
-      if (fit) {
-        list.push(fit);
+      const list: ISampleQuery[] = [];
+      parameters.forEach(param => {
+        const fit = querySamples.find(k => k.requestUrl.includes(param));
+        if (fit) {
+          list.push(fit);
+        }
+      });
+
+      if (list.length > 0) {
+        return list.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
       }
-    });
-    return list.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+    }
   }
   return querySamples;
 }
