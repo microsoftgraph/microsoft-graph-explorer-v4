@@ -1,33 +1,57 @@
 import {
   Callout, FontWeights, getId, Icon, IconButton, IIconProps, ITooltipHostStyles, Link,
-  mergeStyleSets, Spinner, Text, TooltipHost
+  mergeStyleSets, Separator, Spinner, Text, TooltipHost
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+
+import { IQuery, ISampleQuery } from '../../../../../types/query-runner';
 import { IRootState } from '../../../../../types/root';
+import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 
+interface IHint {
+  link: {
+    url: string;
+    name: string;
+  };
+  title: string;
+  description: string;
+}
+
 const SuffixRenderer = () => {
-  const { autoComplete } = useSelector(
+  const { autoComplete, sampleQuery, samples } = useSelector(
     (state: IRootState) => state
   );
   const fetchingSuggestions = autoComplete.pending;
   const autoCompleteError = autoComplete.error;
-  const hintsAvailable = false;
+  const { requestUrl, queryVersion } = parseSampleUrl(sampleQuery.sampleUrl);
 
-  const [isCalloutVisible, toggleIsCalloutVisible] = useState(false);
+  const getHints = () => {
+    const availableHints: any[] = [];
+    const documentationLink = getDocumentationLink(samples, sampleQuery, queryVersion, requestUrl);
+    if (documentationLink) {
+      availableHints.push(documentationLink);
+    }
+    return availableHints;
+  }
+  const hints = getHints();
+  const hintsAvailable = hints.length > 0;
+
+  const [isCalloutVisible, setCalloutVisibility] = useState(false);
   const buttonId = getId('callout-button');
   const labelId = getId('callout-label');
   const descriptionId = getId('callout-description');
 
-  const toggle = () => {
+  const toggleCallout = () => {
     let visible = isCalloutVisible;
     visible = !visible;
-    toggleIsCalloutVisible(visible);
+    setCalloutVisibility(visible);
   }
 
   const calloutProps = { gapSpace: 0 };
   const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
+  const infoIcon: IIconProps = { iconName: 'Info' };
 
   if (fetchingSuggestions) {
     return (<TooltipHost
@@ -53,12 +77,12 @@ const SuffixRenderer = () => {
       </TooltipHost>);
   }
 
-  const infoIcon: IIconProps = { iconName: 'Info' };
-
   if (hintsAvailable) {
     return (
       <>
-        <IconButton iconProps={infoIcon} onClick={toggle}
+        <IconButton
+          iconProps={infoIcon}
+          onClick={toggleCallout}
           id={buttonId}
         />
         {isCalloutVisible && (
@@ -69,24 +93,17 @@ const SuffixRenderer = () => {
             role="alertdialog"
             gapSpace={0}
             target={`#${buttonId}`}
-            onDismiss={toggle}
+            onDismiss={toggleCallout}
             setInitialFocus
           >
             <Text block variant="xLarge" className={styles.title} id={labelId}>
-              Callout title here
+              {translateMessage('Discover')}: <em>/{requestUrl}</em>
             </Text>
-            <Text block variant="small" id={descriptionId}>
-              Message body is optional. If help documentation is available, consider adding a link to learn more at the
-              bottom.
-            </Text>
-            <Link href="http://microsoft.com" target="_blank" className={styles.link}>
-              Sample link
-            </Link>
+            <HintList hints={hints} />
           </Callout>
         )}
       </>);
   }
-
   return null;
 }
 
@@ -109,3 +126,43 @@ const styles = mergeStyleSets({
 });
 
 export default SuffixRenderer;
+
+const HintList = ({ hints }: any) => {
+  const listItems = hints.map((hint: IHint, index: any) =>
+    <div key={index}>
+      {hint.description && <Text block variant="small" id={'description' + index}>
+        {hint.description}
+      </Text>}
+      {hint.link && <Link href={hint.link.url} target="_blank" className={styles.link}>
+        {hint.link.name}
+      </Link>}
+      <Separator />
+    </div>
+  );
+  return listItems;
+}
+
+const getDocumentationLink = (samples: any, sampleQuery: IQuery, queryVersion: string, requestUrl: string) => {
+  const { queries } = samples;
+  const sampleUrl = `/${queryVersion}/${requestUrl}`;
+  if (queries) {
+    const querySamples = queries
+      .filter((sample: ISampleQuery) =>
+        sample.method === sampleQuery.selectedVerb &&
+        sample.requestUrl === sampleUrl
+      );
+    const hasDocumentationLink = (querySamples.length > 0);
+    if (hasDocumentationLink) {
+      return {
+        link: {
+          url: querySamples[0].docLink,
+          name: translateMessage('View documentation')
+        },
+        description: '',
+        title: ''
+      };
+    }
+  }
+  return null;
+}
+
