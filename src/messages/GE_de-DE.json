@@ -355,7 +355,7 @@
   "Signing you out...": "Sie werden abgemeldet...",
   "Admin consent not required": "Administratorzustimmung nicht erforderlich",
   "Navigation help": "Navigieren mit der NACH-RECHTS-TASTE für den Zugriff",
-  "Actions menu": " Menü \„Aktionen\“",
+  "Actions menu": " Menü Aktionen",
   "user_cancelled": "Bitte warten Sie, bis der Authentifizierungsprozess abgeschlossen ist.",
   "popup_window_error": "Bitte überprüfen Sie, ob Popups aktiviert sind, und versuchen Sie es erneut.",
   "invalid_client": "Bitten Sie Ihren App-Administrator, die App-Anmeldeinformationen (Anwendungsclient-ID) bei Azure-App-Registrierungen zu überprüfen.",

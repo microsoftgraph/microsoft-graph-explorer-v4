@@ -22,6 +22,24 @@ if (NODE_ENV === 'development') {
   middlewares.push(loggerMiddleware);
 }
 
-export const store = (initialState: object): Store => {
-  return createStore(reducers, initialState, applyMiddleware(...middlewares));
+const initialState: any = {
+  authToken: { token: false, pending: false },
+  consentedScopes: [],
+  isLoadingData: false,
+  profile: null,
+  queryRunnerStatus: null,
+  sampleQuery: {
+    sampleUrl: 'https://graph.microsoft.com/v1.0/me',
+    selectedVerb: 'GET',
+    sampleBody: undefined,
+    sampleHeaders: [],
+    selectedVersion: 'v1.0',
+  },
+  termsOfUse: true,
 };
+
+export const store = createStore(
+  reducers,
+  initialState,
+  applyMiddleware(...middlewares)
+);
