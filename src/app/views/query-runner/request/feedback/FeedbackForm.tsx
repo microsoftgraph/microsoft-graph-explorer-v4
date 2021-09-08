@@ -63,7 +63,7 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
     }
 
     async function loadAndInitialize(
-        floodgateObject: OfficeBrowserFeedback,
+        floodgateObject: any,
         onSurveyActivated: (launcher: any, surveyItem: any) => void): Promise<void> {
         floodgateObject.initOptions = {
             appId: 2256,
@@ -79,7 +79,7 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
                 loggableUserId: `a:${profile?.id}`,
                 tenantId: authenticationWrapper.getAccount()?.tenantId,
             },
-            userEmail: '',  // Replaced by the user email
+            userEmail: ' ',  // Replaced by the user email
             userEmailConsentDefault: false, // Should the email checkbox be checked
             customResourcesSetExternally: 2 // None = 0, Css = 1, Strings = 2, CssAndStrings = 3
         };
@@ -88,9 +88,9 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
             autoDismiss: 2,
             campaignDefinitions: CampaignDefinitions,
             surveyEnabled: true,
-            onSurveyActivatedCallback: {  //callback implementation
-                onSurveyActivated
-            },
+            // onSurveyActivatedCallback: {  //callback implementation
+            //     onSurveyActivated
+            // },
             onDismiss: (campaignId: string, submitted: boolean) => {
                 if (submitted) {
                     dispatch(setQueryResponseStatus({
@@ -103,7 +103,8 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
                 }
                 dismissSurvey();
             },
-        }
+            uIStringGetter: (str: string) => { return uiStringMap[str]; }
+        };
 
         // Setting the UI strings here before initialization.
         floodgateObject.setUiStrings({
@@ -127,30 +128,54 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
             function (err: string) { throw err; });
 
         function setEvents() {
+            window.onload = function () {
+                if (floodgateObject.floodgate) {
+                    floodgateObject.floodgate.start();
+                    floodgateObject.floodgate.getEngine().getActivityListener().logActivity('OnPageLoad');
+                    floodgateObject.floodgate.getEngine().getActivityListener().logActivityStartTime('AppUsageTime');
+
+                }
+            }
             window.onfocus = function () {
                 if (floodgateObject.floodgate) {
                     floodgateObject.floodgate.start();
-                    floodgateObject.floodgate.getEngine().getActivityListener().logActivityStartTime("AppUsageTime");
-                    floodgateObject.floodgate.getEngine().getActivityListener().logActivity("AppResume");
+                    floodgateObject.floodgate.getEngine().getActivityListener().logActivityStartTime('AppUsageTime');
+                    floodgateObject.floodgate.getEngine().getActivityListener().logActivity('AppResume');
                 }
             }
 
             window.onblur = function () {
                 if (floodgateObject.floodgate) {
-                    floodgateObject.floodgate.getEngine().getActivityListener().logActivityStopTime("AppUsageTime");
+                    floodgateObject.floodgate.getEngine().getActivityListener().logActivityStopTime('AppUsageTime');
                     floodgateObject.floodgate.stop();
                 }
             }
-
             window.onunload = function () {
-                if (floodgateObject.floodgate) {
-                    floodgateObject.floodgate.getEngine().getActivityListener().logActivityStopTime("AppUsageTime");
-                    floodgateObject.floodgate.stop();
+                if (officeBrowserFeedback.floodgate) {
+                    officeBrowserFeedback.floodgate.getEngine().getActivityListener().logActivityStopTime('AppUsageTime');
+                    officeBrowserFeedback.floodgate.stop();
                 }
             }
         }
+    }
 
-
+    const uiStringMap: any = {
+        Prompt_Title: "We'd love your feedback!",
+        Prompt_Question: "We have just two questions.",
+        Prompt_YesLabel: "Sure",
+        Prompt_NoLabel: "Not Now",
+        Graph_Explorer_Rating_Question: "How likely are you to recommend Microsoft Graph for development to another developer?",
+        Rating_Values_1: "1 - Not at all likely",
+        Rating_Values_2: "2",
+        Rating_Values_3: "3",
+        Rating_Values_4: "4",
+        Rating_Values_5: "5",
+        Rating_Values_6: "6",
+        Rating_Values_7: "7",
+        Rating_Values_8: "8",
+        Rating_Values_9: "9",
+        Rating_Values_10: "10 - Extremely likely",
+        Question_Question: "Please tell us more. Why did you choose that answer?"
     }
 
     function getCampaignId(): string {
