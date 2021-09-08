@@ -1,5 +1,5 @@
 import {
-  Callout, FontWeights, getId, Icon, IconButton, IIconProps, ITooltipHostStyles, Link,
+  Callout, FontWeights, getId, Icon, ITooltipHostStyles, Link,
   mergeStyleSets, Separator, Spinner, Text, TooltipHost
 } from '@fluentui/react';
 import React, { useState } from 'react';
@@ -51,7 +51,6 @@ const SuffixRenderer = () => {
 
   const calloutProps = { gapSpace: 0 };
   const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
-  const infoIcon: IIconProps = { iconName: 'Info' };
 
   if (fetchingSuggestions) {
     return (<TooltipHost
@@ -80,8 +79,9 @@ const SuffixRenderer = () => {
   if (hintsAvailable) {
     return (
       <>
-        <IconButton
-          iconProps={infoIcon}
+        <Icon
+          iconName='Info'
+          className={styles.iconButton}
           onClick={toggleCallout}
           id={buttonId}
         />
@@ -108,8 +108,8 @@ const SuffixRenderer = () => {
 }
 
 const styles = mergeStyleSets({
-  button: {
-    width: 130,
+  iconButton: {
+    cursor: 'pointer'
   },
   callout: {
     width: 320,
