@@ -90,7 +90,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     });
 
     if (showSuggestions && suggestions.length) {
-      this.filterSuggestions(userInput, previousUserInput, compare, suggestions);
+      this.getFilteredSuggestions(userInput, previousUserInput, compare, suggestions);
     }
     this.initialiseAutoComplete(userInput);
   };
@@ -201,7 +201,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         });
         this.requestForAutocompleteOptions(previousUserInput);
       } else {
-        const filtered = this.filterSuggestions(userInput, previousUserInput, '', suggestions);
+        const filtered = this.getFilteredSuggestions(userInput, previousUserInput, '', suggestions);
         this.setSuggestions(filtered, userInput.replace(previousUserInput, ''));
       }
     }
@@ -277,7 +277,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }
   }
 
-  private filterSuggestions(userInput: string, previousUserInput: string, compare: string, suggestions: string[]) {
+  private getFilteredSuggestions(userInput: string, previousUserInput: string, compare: string, suggestions: string[]) {
     let compareString = userInput.replace(previousUserInput, '');
     if (compare) {
       compareString = compare + compareString;
