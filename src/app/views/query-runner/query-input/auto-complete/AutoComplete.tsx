@@ -18,7 +18,7 @@ import {
   getLastSymbolInUrl,
   getParametersWithVerb
 } from './auto-complete.util';
-import SuffixRenderer from './SuffixRenderer';
+import SuffixRenderer from './suffix/SuffixRenderer';
 import SuggestionsList from './SuggestionsList';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
