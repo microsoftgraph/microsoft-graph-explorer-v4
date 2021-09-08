@@ -43,7 +43,7 @@ const Authentication = (props: any) => {
       }
     } catch (error) {
       const { errorCode } = error;
-      if(signInAuthError(errorCode)) {
+      if (signInAuthError(errorCode)) {
         authenticationWrapper.clearSession();
       }
       dispatch(
@@ -61,19 +61,18 @@ const Authentication = (props: any) => {
         SeverityLevel.Error,
         {
           ComponentName: componentNames.AUTHENTICATION_ACTION,
-          Message: `Authentication failed: ${
-            errorCode ? removeUnderScore(errorCode) : ''
-          }`,
+          Message: `Authentication failed: ${errorCode ? removeUnderScore(errorCode) : ''
+            }`,
         }
       );
     }
   };
 
   const removeUnderScore = (statusString: string): string => {
-    if(statusString === '' ){
+    if (statusString === '') {
       return statusString;
     }
-    else{
+    else {
       return statusString.replace(/_/g, ' ');
     }
   }

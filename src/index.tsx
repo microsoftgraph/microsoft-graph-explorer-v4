@@ -113,11 +113,11 @@ appState.dispatch(getGraphProxyUrl());
 
 function refreshAccessToken() {
   authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
-      if (authResponse && authResponse.accessToken) {
-        appState.dispatch(getAuthTokenSuccess(true));
-        appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
-      }
-    })
+    if (authResponse && authResponse.accessToken) {
+      appState.dispatch(getAuthTokenSuccess(true));
+      appState.dispatch(getConsentedScopesSuccess(authResponse.scopes));
+    }
+  })
     .catch(() => {
       // ignore the error as it means that a User login is required
     });
@@ -183,11 +183,11 @@ enum Workers {
 
 function getWorkerFor(worker: string): string {
   // tslint:disable-next-line:max-line-length
-  const WORKER_PATH = 'https://graphstagingblobstorage.blob.core.windows.net/staging/vendor/bower_components/explorer-v2/build';
+  const WORKER_PATH =
+    'https://graphstagingblobstorage.blob.core.windows.net/staging/vendor/bower_components/explorer-v2/build';
 
   return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
-	    importScripts('${WORKER_PATH}/${worker}.worker.js');`
-  )}`;
+	    importScripts('${WORKER_PATH}/${worker}.worker.js');`)}`;
 }
 
 const telemetryProvider: ITelemetry = telemetry;
@@ -196,7 +196,10 @@ telemetryProvider.initialize();
 const Root = () => {
   return (
     <Provider store={appState}>
-      <IntlProvider locale={geLocale} messages={(messages as { [key: string]: object })[geLocale]}>
+      <IntlProvider
+        locale={geLocale}
+        messages={(messages as { [key: string]: object })[geLocale]}
+      >
         <App />
       </IntlProvider>
     </Provider>
