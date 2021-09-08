@@ -1,5 +1,6 @@
 import {
   AuthenticationHandlerOptions,
+  GraphRequest,
   ResponseType,
 } from '@microsoft/microsoft-graph-client';
 import { MSALAuthenticationProviderOptions } from '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
@@ -54,7 +55,6 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
   const options: IRequestOptions = {
     method: query.selectedVerb,
     headers,
-    redirect: 'manual',
   };
   return { graphUrl, options };
 }
@@ -65,7 +65,63 @@ export function authenticatedRequest(
   scopes: string[] = DEFAULT_USER_SCOPES.split(' ')
 ) {
   dispatch(queryRunningStatus(true));
-  return makeRequest(query.selectedVerb, scopes)(query);
+  return makeGraphRequest(scopes)(query);
+}
+
+function createAuthenticatedRequest(
+  scopes: string[],
+  query: IQuery
+): GraphRequest {
+  const sampleHeaders: any = {};
+  sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
+
+  if (query.sampleHeaders && query.sampleHeaders.length > 0) {
+    query.sampleHeaders.forEach((header) => {
+      sampleHeaders[header.name] = header.value;
+    });
+  }
+
+  const msalAuthOptions = new MSALAuthenticationProviderOptions(scopes);
+  const middlewareOptions = new AuthenticationHandlerOptions(
+    authProvider,
+    msalAuthOptions
+  );
+  const client = GraphClient.getInstance()
+    .api(encodeHashCharacters(query))
+    .middlewareOptions([middlewareOptions])
+    .headers(sampleHeaders)
+    .responseType(ResponseType.RAW);
+
+  return client;
+}
+
+export function makeGraphRequest(scopes: string[]): Function {
+  return async (query: IQuery) => {
+    let response;
+
+    const client = createAuthenticatedRequest(scopes, query);
+
+    switch (query.selectedVerb) {
+      case 'GET':
+        response = await client.get();
+        break;
+      case 'POST':
+        response = await client.post(query.sampleBody);
+        break;
+      case 'PUT':
+        response = await client.put(query.sampleBody);
+        break;
+      case 'PATCH':
+        response = await client.patch(query.sampleBody);
+        break;
+      case 'DELETE':
+        response = await client.delete();
+        break;
+      default:
+        return;
+    }
+    return Promise.resolve(response);
+  };
 }
 
 export function isImageResponse(contentType: string | undefined) {
@@ -108,7 +164,6 @@ export function isDownloadableResponse(headers: any) {
 
   // use content type, if file that's not an image, then tag as downloadable
   const contentType = getContentType(headers);
-  alert(contentType);
   if (contentType) {
     return (
       contentType === 'application/octet-stream' ||
@@ -143,53 +198,4 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
     }
   }
   return response;
-}
-
-export function makeRequest(httpVerb: string, scopes: string[]): Function {
-  return async (query: IQuery) => {
-    const sampleHeaders: any = {};
-    sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
-
-    if (query.sampleHeaders && query.sampleHeaders.length > 0) {
-      query.sampleHeaders.forEach((header) => {
-        sampleHeaders[header.name] = header.value;
-      });
-    }
-
-    const msalAuthOptions = new MSALAuthenticationProviderOptions(scopes);
-    const middlewareOptions = new AuthenticationHandlerOptions(
-      authProvider,
-      msalAuthOptions
-    );
-    const client = GraphClient.getInstance()
-      .api(encodeHashCharacters(query))
-      .middlewareOptions([middlewareOptions])
-      .headers(sampleHeaders)
-      .option('redirect', 'manual')
-      .responseType(ResponseType.RAW);
-
-    let response;
-
-    switch (httpVerb) {
-      case 'GET':
-        response = await client.get();
-        break;
-      case 'POST':
-        response = await client.post(query.sampleBody);
-        break;
-      case 'PUT':
-        response = await client.put(query.sampleBody);
-        break;
-      case 'PATCH':
-        response = await client.patch(query.sampleBody);
-        break;
-      case 'DELETE':
-        response = await client.delete();
-        break;
-      default:
-        return;
-    }
-
-    return Promise.resolve(response);
-  };
 }
