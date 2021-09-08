@@ -66,8 +66,8 @@ const PanelList = ({ messages,
 
   const _onRenderGroupHeader = (props: any): any => {
     if (props) {
-      return(
-        <GroupHeader  {...props} onRenderGroupHeaderCheckbox={renderCustomCheckbox}/>
+      return (
+        <GroupHeader  {...props} onRenderGroupHeaderCheckbox={renderCustomCheckbox} />
       )
     }
     return null;

@@ -3,15 +3,15 @@ import { errorTypes } from '.';
 import {
   ADAPTIVE_CARD_URL,
   DEVX_API_URL,
-  GRAPH_API_SANDBOX_ENDPOINT_URL,
   GRAPH_API_SANDBOX_URL,
   GRAPH_URL,
-  HOME_ACCOUNT_KEY
+  HOME_ACCOUNT_KEY,
 } from '../app/services/graph-constants';
 import {
   sanitizeGraphAPISandboxUrl,
-  sanitizeQueryUrl
+  sanitizeQueryUrl,
 } from '../app/utils/query-url-sanitization';
+import { store } from '../store';
 
 export function filterTelemetryTypes(envelope: ITelemetryItem) {
   const baseType = envelope.baseType || '';
@@ -28,12 +28,16 @@ export function filterTelemetryTypes(envelope: ITelemetryItem) {
 export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
   if (envelope.baseType === 'RemoteDependencyData') {
     const baseData = envelope.baseData || {};
+
     const urlObject = new URL(baseData.target || '');
 
+    const graphProxyUrl = store.getState()?.proxyUrl;
+
     const targetsToInclude = [
-      GRAPH_URL, DEVX_API_URL, GRAPH_API_SANDBOX_URL, GRAPH_API_SANDBOX_ENDPOINT_URL,
+      GRAPH_URL,
       DEVX_API_URL,
-      new URL(GRAPH_API_SANDBOX_URL).origin,
+      GRAPH_API_SANDBOX_URL,
+      new URL(graphProxyUrl).origin,
       new URL(ADAPTIVE_CARD_URL).origin,
     ];
     if (!targetsToInclude.includes(urlObject.origin)) {
