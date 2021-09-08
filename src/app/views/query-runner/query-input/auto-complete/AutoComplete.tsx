@@ -1,4 +1,4 @@
-import { getId, getTheme, Icon, ITextField, ITooltipHostStyles, KeyCodes, Spinner, TextField, TooltipHost } from '@fluentui/react';
+import { getTheme, ITextField, KeyCodes, TextField } from '@fluentui/react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -18,6 +18,7 @@ import {
   getLastSymbolInUrl,
   getParametersWithVerb
 } from './auto-complete.util';
+import SuffixRenderer from './SuffixRenderer';
 import SuggestionsList from './SuggestionsList';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
@@ -355,36 +356,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private renderSuffix = () => {
-    const { fetchingSuggestions, autoCompleteError } = this.props;
-
-    const calloutProps = { gapSpace: 0 };
-    const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
-
-    if (fetchingSuggestions) {
-      return (<TooltipHost
-        content={translateMessage('Fetching suggestions')}
-        id={getId()}
-        calloutProps={calloutProps}
-        styles={hostStyles}
-      >
-        <Spinner />
-      </TooltipHost>
-      );
-    }
-
-    if (autoCompleteError) {
-      return (
-        <TooltipHost
-          content={translateMessage('No auto-complete suggestions available')}
-          id={getId()}
-          calloutProps={calloutProps}
-          styles={hostStyles}
-        >
-          <Icon iconName='MuteChat' />
-        </TooltipHost>);
-    }
-
-    return null;
+    return <SuffixRenderer />;
   }
 
   closeSuggestionDialog = (event: any) => {
