@@ -119,7 +119,7 @@ export function consentToScopes(scopes: string[]): Function {
       dispatch(
         setQueryResponseStatus({
           statusText: translateMessage('Scope consent failed'),
-          status:errorCode,
+          status: errorCode,
           ok: false,
           messageType: MessageBarType.error,
           hint: getConsentAuthErrorHint(errorCode)
