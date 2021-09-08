@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 
 import { IQuery, ISampleQuery } from '../../../../../types/query-runner';
 import { IRootState } from '../../../../../types/root';
+import { GRAPH_URL } from '../../../../services/graph-constants';
+import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 
@@ -19,17 +21,46 @@ interface IHint {
   description: string;
 }
 
+interface ISampleFilter {
+  queries: ISampleQuery[];
+  sampleQuery: IQuery;
+  sampleUrl: string;
+  queryRunnerStatus: any
+}
+
 const SuffixRenderer = () => {
-  const { autoComplete, sampleQuery, samples } = useSelector(
+  const { autoComplete, sampleQuery, samples, queryRunnerStatus } = useSelector(
     (state: IRootState) => state
   );
   const fetchingSuggestions = autoComplete.pending;
   const autoCompleteError = autoComplete.error;
-  const { requestUrl, queryVersion } = parseSampleUrl(sampleQuery.sampleUrl);
+  const { requestUrl, queryVersion } =
+    parseSampleUrl(sanitizeQueryUrl(sampleQuery.sampleUrl));
+
+  const getDocumentationLink = () => {
+    const { queries } = samples;
+    const sampleUrl = `/${queryVersion}/${requestUrl}`;
+    if (queries) {
+      const querySamples: ISampleQuery[] = getMatchingSamples({ queries, sampleQuery, sampleUrl, queryRunnerStatus });
+
+      const hasDocumentationLink = (querySamples.length > 0);
+      if (hasDocumentationLink) {
+        return {
+          link: {
+            url: querySamples[0].docLink,
+            name: translateMessage('View documentation')
+          },
+          description: '',
+          title: ''
+        };
+      }
+    }
+    return null;
+  }
 
   const getHints = () => {
     const availableHints: any[] = [];
-    const documentationLink = getDocumentationLink(samples, sampleQuery, queryVersion, requestUrl);
+    const documentationLink = getDocumentationLink();
     if (documentationLink) {
       availableHints.push(documentationLink);
     }
@@ -97,7 +128,7 @@ const SuffixRenderer = () => {
             setInitialFocus
           >
             <Text block variant="xLarge" className={styles.title} id={labelId}>
-              {translateMessage('Discover')}: <em>/{requestUrl}</em>
+              /{requestUrl}
             </Text>
             <HintList hints={hints} />
           </Callout>
@@ -142,27 +173,59 @@ const HintList = ({ hints }: any) => {
   return listItems;
 }
 
-const getDocumentationLink = (samples: any, sampleQuery: IQuery, queryVersion: string, requestUrl: string) => {
-  const { queries } = samples;
-  const sampleUrl = `/${queryVersion}/${requestUrl}`;
-  if (queries) {
-    const querySamples = queries
-      .filter((sample: ISampleQuery) =>
-        sample.method === sampleQuery.selectedVerb &&
-        sample.requestUrl === sampleUrl
-      );
-    const hasDocumentationLink = (querySamples.length > 0);
-    if (hasDocumentationLink) {
-      return {
-        link: {
-          url: querySamples[0].docLink,
-          name: translateMessage('View documentation')
-        },
-        description: '',
-        title: ''
-      };
+const getMatchingSamples = ({ queries, sampleQuery, sampleUrl, queryRunnerStatus }: ISampleFilter): ISampleQuery[] => {
+  const querySamples: ISampleQuery[] = [];
+  queries
+    .filter((sample: ISampleQuery) => sample.method === sampleQuery.selectedVerb)
+    .forEach((sample: ISampleQuery) => {
+      const { requestUrl: baseUrl, queryVersion: version } = parseSampleUrl(sanitizeQueryUrl(GRAPH_URL + sample.requestUrl));
+      const baseUrlMatches = `/${version}/${baseUrl}` === sampleUrl;
+      if (baseUrlMatches) {
+        querySamples.push(sample);
+      }
+    });
+  if (querySamples.length > 1) {
+    const tipFilter = filterQueriesUsingTip(querySamples, queryRunnerStatus);
+    if (tipFilter.length > 1) {
+      return filterQueriesUsingQueryParameters(querySamples, sampleQuery);
+    }
+    return tipFilter;
+  }
+  return querySamples;
+}
+
+const filterQueriesUsingTip = (querySamples: ISampleQuery[], queryRunnerStatus: any) => {
+  if (queryRunnerStatus && queryRunnerStatus.statusText === "Tip") {
+    const exact = querySamples.filter(k => k.tip === queryRunnerStatus.status);
+    if (exact.length === 1) {
+      return exact;
     }
   }
-  return null;
+  return querySamples;
+}
+
+function filterQueriesUsingQueryParameters(querySamples: ISampleQuery[], sampleQuery: IQuery) {
+  const { search } = parseSampleUrl(sampleQuery.sampleUrl);
+  const parameters: string[] = [];
+  if (search) {
+    const splitSearch = search.split('&');
+    splitSearch.forEach(element => {
+      const parameter = element.substring(
+        element.indexOf("$") + 1,
+        element.lastIndexOf("=")
+      );
+      parameters.push(parameter);
+    });
+    const list: any[] = [];
+    parameters.forEach(param => {
+      const fit = querySamples.find(k => k.requestUrl.includes(param));
+      if (fit) {
+        list.push(fit);
+      }
+    });
+    const unique = list.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+    return unique;
+  }
+  return querySamples;
 }
 
