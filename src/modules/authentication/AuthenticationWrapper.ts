@@ -70,7 +70,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     this.consentingToNewScopes = true;
     try {
       const authResult = await this.loginWithInteraction(scopes);
-
       return authResult;
     } catch (error) {
       throw error;
@@ -98,11 +97,13 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   public async getToken() {
-    const silentRequest: SilentRequest = {scopes: defaultScopes,authority: this.getAuthority(),
-    account: this.getAccount(),redirectUri: getCurrentUri()};
+    const silentRequest: SilentRequest = {
+      scopes: defaultScopes, authority: this.getAuthority(),
+      account: this.getAccount(), redirectUri: getCurrentUri()
+    };
     try {
       const response: AuthenticationResult =
-      await msalApplication.acquireTokenSilent(silentRequest);
+        await msalApplication.acquireTokenSilent(silentRequest);
       return response;
     } catch (error) {
 
@@ -127,11 +128,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
 
-      } else if(signInAuthError(error)) {
+      } else if (signInAuthError(error)) {
         this.deleteHomeAccountId();
         throw error;
       }
-      else{
+      else {
         throw error;
       }
     }
@@ -172,17 +173,17 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const result = await msalApplication.loginPopup(popUpRequest);
       this.storeHomeAccountId(result.account!);
       return result;
-    }catch (error) {
+    } catch (error) {
       const { errorCode } = error;
-      if( signInAuthError(errorCode) && !this.consentingToNewScopes ) {
+      if (signInAuthError(errorCode) && !this.consentingToNewScopes) {
         this.clearSession();
 
-        if(errorCode === 'interaction_in_progress'){
+        if (errorCode === 'interaction_in_progress') {
           this.eraseInteractionInProgressCookie();
         }
         throw error;
       }
-      else{
+      else {
         throw error;
       }
 
@@ -220,30 +221,30 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     });
   }
 
-  private eraseInteractionInProgressCookie(): void{
+  private eraseInteractionInProgressCookie(): void {
     const keyValuePairs = document.cookie.split(';');
     let cookieValue = '';
     let cookieKey = '';
 
-    for( const pair of keyValuePairs){
-      cookieValue = pair.substring(pair.indexOf('=')+1);
-      if(cookieValue === 'interaction_in_progress'){
+    for (const pair of keyValuePairs) {
+      cookieValue = pair.substring(pair.indexOf('=') + 1);
+      if (cookieValue === 'interaction_in_progress') {
         cookieKey = pair.substring(1, pair.indexOf('='));
         break;
       }
     }
-    this.createCookie(cookieKey,"",-100);
+    this.createCookie(cookieKey, "", -100);
   }
 
-  private createCookie(name : string,value:string,days:number) : void {
+  private createCookie(name: string, value: string, days: number): void {
     let expires = ''
     const date = new Date();
-    date.setTime(date.getTime()+(days*24*60*60*1000));
-    expires = "; expires="+date.toUTCString();
-    document.cookie = name+"="+value+expires+"; path=/";
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
+    document.cookie = name + "=" + value + expires + "; path=/";
   }
 
-  public clearSession(): void{
+  public clearSession(): void {
     this.clearCache();
     this.deleteHomeAccountId();
     window.sessionStorage.clear();

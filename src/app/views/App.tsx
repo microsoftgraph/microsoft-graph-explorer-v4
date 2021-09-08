@@ -25,7 +25,10 @@ import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
-import { appTitleDisplayOnFullScreen, appTitleDisplayOnMobileScreen } from './app-sections/AppTitle';
+import {
+  appTitleDisplayOnFullScreen,
+  appTitleDisplayOnMobileScreen,
+} from './app-sections/AppTitle';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { statusMessages } from './app-sections/StatusMessages';
 import { termsOfUseMessage } from './app-sections/TermsOfUseMessage';
@@ -145,7 +148,8 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private generateQueryObjectFrom(queryParams: any) {
-    const { request, method, version, graphUrl, requestBody, headers } = queryParams;
+    const { request, method, version, graphUrl, requestBody, headers } =
+      queryParams;
 
     if (!request) {
       return null;
@@ -345,22 +349,27 @@ class App extends Component<IAppProps, IAppState> {
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`container-fluid ${classes.app}`}>
-          <Announced message={!showSidebar ?
-            translateMessage('Sidebar minimized') : translateMessage('Sidebar maximized')} />
+          <Announced
+            message={
+              !showSidebar
+                ? translateMessage('Sidebar minimized')
+                : translateMessage('Sidebar maximized')
+            }
+          />
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={sidebarWidth}>
                 {mobileScreen && appTitleDisplayOnMobileScreen(
-                    stackTokens,
-                    classes,
-                    this.toggleSidebar
-                  )}
+                  stackTokens,
+                  classes,
+                  this.toggleSidebar
+                )}
 
                 {!mobileScreen && appTitleDisplayOnFullScreen(
-                    classes,
-                    minimised,
-                    this.toggleSidebar
-                  )}
+                  classes,
+                  minimised,
+                  this.toggleSidebar
+                )}
 
                 <hr className={classes.separator} />
 
