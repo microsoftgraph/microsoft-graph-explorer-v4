@@ -6,12 +6,11 @@ import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 
 export interface IHint {
-  link: {
+  link?: {
     url: string;
     name: string;
   };
-  title: string;
-  description: string;
+  description?: string;
 }
 
 export interface ISampleFilter {

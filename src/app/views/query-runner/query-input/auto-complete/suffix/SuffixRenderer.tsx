@@ -10,7 +10,7 @@ import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../../utils/translate-messages';
 import { HintList } from './HintList';
-import { getMatchingSamples, styles } from './suffix-util';
+import { getMatchingSamples, IHint, styles } from './suffix-util';
 
 const SuffixRenderer = () => {
   const { autoComplete, sampleQuery, samples, queryRunnerStatus } = useSelector(
@@ -21,7 +21,7 @@ const SuffixRenderer = () => {
   const { requestUrl, queryVersion } =
     parseSampleUrl(sanitizeQueryUrl(sampleQuery.sampleUrl));
 
-  const getDocumentationLink = () => {
+  const getDocumentationLink = (): IHint | null => {
     const { queries } = samples;
     const sampleUrl = `/${queryVersion}/${requestUrl}`;
     if (queries) {
@@ -31,27 +31,15 @@ const SuffixRenderer = () => {
       if (hasDocumentationLink) {
         return {
           link: {
-            url: querySamples[0].docLink,
+            url: querySamples[0].docLink || '',
             name: translateMessage('View documentation')
           },
-          description: '',
-          title: ''
+          description: ''
         };
       }
     }
     return null;
   }
-
-  const getHints = () => {
-    const availableHints: any[] = [];
-    const documentationLink = getDocumentationLink();
-    if (documentationLink) {
-      availableHints.push(documentationLink);
-    }
-    return availableHints;
-  }
-  const hints = getHints();
-  const hintsAvailable = hints.length > 0;
 
   const [isCalloutVisible, setCalloutVisibility] = useState(false);
   const buttonId = getId('callout-button');
@@ -79,17 +67,21 @@ const SuffixRenderer = () => {
     );
   }
 
-  if (autoCompleteError) {
-    return (
-      <TooltipHost
-        content={translateMessage('No auto-complete suggestions available')}
-        id={getId()}
-        calloutProps={calloutProps}
-        styles={hostStyles}
-      >
-        <Icon iconName='MuteChat' />
-      </TooltipHost>);
+  const getHints = (): IHint[] => {
+    const availableHints: IHint[] = [];
+    if (autoCompleteError) {
+      availableHints.push({
+        description: translateMessage('No auto-complete suggestions available')
+      })
+    }
+    const documentationLink = getDocumentationLink();
+    if (documentationLink) {
+      availableHints.push(documentationLink);
+    }
+    return availableHints;
   }
+  const hints = getHints();
+  const hintsAvailable = hints.length > 0;
 
   if (hintsAvailable) {
     return (
