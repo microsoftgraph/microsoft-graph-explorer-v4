@@ -1,17 +1,16 @@
+import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
-import { PROFILE_IMAGE_REQUEST_SUCCESS, PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS, PROFILE_TYPE_SUCCESS } from '../redux-constants';
-import { authenticatedRequest, isBetaURLResponse, isImageResponse, parseResponse } from './query-action-creator-util';
+import {
+  ACCOUNT_TYPE, BETA_USER_INFO_URL, DEFAULT_USER_SCOPES,
+  USER_INFO_URL, USER_PICTURE_URL
+} from '../graph-constants';
+import { PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS } from '../redux-constants';
+import { makeRequest, parseResponse } from './query-action-creator-util';
+import { queryRunningStatus } from './query-loading-action-creators';
 
 export function profileRequestSuccess(response: object): any {
   return {
     type: PROFILE_REQUEST_SUCCESS,
-    response,
-  };
-}
-
-export function profileImageRequestSuccess(response: object): any {
-  return {
-    type: PROFILE_IMAGE_REQUEST_SUCCESS,
     response,
   };
 }
@@ -23,50 +22,81 @@ export function profileRequestError(response: object): any {
   };
 }
 
-export function profileTypeSuccess(response: any): any {
-  return {
-    type: PROFILE_TYPE_SUCCESS,
-    response,
+const query: IQuery = {
+  selectedVerb: 'GET',
+  sampleHeaders: [{
+    name: 'Cache-Control',
+    value: 'no-cache'
+  }],
+  selectedVersion: '',
+  sampleUrl: ''
+}
+
+export function getProfileInfo(): Function {
+  return async (dispatch: Function) => {
+    dispatch(queryRunningStatus(true));
+    try {
+      const profile: IUser = await getProfileInformation();
+      profile.profileType = await getProfileType();
+      profile.profileImageUrl = await getProfileImage();
+      dispatch(profileRequestSuccess(profile));
+    } catch (error) {
+      dispatch(profileRequestError({ error }));
+    }
+  };
+}
+
+async function getProfileInformation(): Promise<IUser> {
+  const profile: IUser = {
+    displayName: '',
+    emailAddress: '',
+    profileImageUrl: '',
+  };
+  try {
+    query.sampleUrl = USER_INFO_URL;
+    const { userInfo } = await getProfileResponse();
+    profile.displayName = userInfo.displayName;
+    profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;
+    return profile;
+  } catch (error) {
+    throw error;
   }
 }
 
-export function getProfileInfo(query: IQuery): Function {
-  return (dispatch: Function) => {
-    const respHeaders: any = {};
+async function getProfileType(): Promise<ACCOUNT_TYPE> {
+  try {
+    query.sampleUrl = BETA_USER_INFO_URL;
+    const { userInfo } = await getProfileResponse();
+    return userInfo?.account?.[0]?.source?.type?.[0];
+  } catch (error) {
+    return ACCOUNT_TYPE.MSA;
+  }
+}
 
-    if (!query.sampleHeaders) {
-      query.sampleHeaders = [];
+async function getProfileImage(): Promise<string> {
+  let profileImageUrl = '';
+  try {
+    query.sampleUrl = USER_PICTURE_URL;
+    const { response, userInfo: userPicture } = await getProfileResponse();
+    if (userPicture) {
+      const buffer = await response.arrayBuffer();
+      const blob = new Blob([buffer], { type: 'image/jpeg' });
+      profileImageUrl = URL.createObjectURL(blob);
     }
+  } catch (error) {
+    return profileImageUrl;
+  }
+  return profileImageUrl;
+}
 
-    query.sampleHeaders.push({
-      name: 'Cache-Control',
-      value: 'no-cache'
-    });
+async function getProfileResponse() {
+  const scopes = DEFAULT_USER_SCOPES.split(' ');
+  const respHeaders: any = {};
 
-    return authenticatedRequest(dispatch, query).then(async (response: Response) => {
-
-      if (response && response.ok) {
-        const json = await parseResponse(response, respHeaders);
-        const contentType = respHeaders['content-type'];
-        const isImageResult = isImageResponse(contentType);
-        const isBetaUserResult = isBetaURLResponse(json);
-
-        if (isImageResult) {
-          return dispatch(
-            profileImageRequestSuccess(json),
-          );
-        } else if (isBetaUserResult) {
-          return dispatch(
-            profileTypeSuccess(json?.account?.[0]?.source?.type?.[0])
-          );
-        } else {
-          return dispatch(
-            profileRequestSuccess(json),
-          );
-        }
-      }
-      return dispatch(profileRequestError({ response }));
-    });
-
+  const response = await makeRequest(query.selectedVerb, scopes)(query);
+  const userInfo = await parseResponse(response, respHeaders);
+  return {
+    userInfo,
+    response
   };
 }

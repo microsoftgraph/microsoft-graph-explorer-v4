@@ -1,4 +1,5 @@
 import { ITheme } from '@fluentui/react';
+import { ACCOUNT_TYPE } from '../app/services/graph-constants';
 
 export interface IProfileProps {
     intl: {
@@ -22,5 +23,5 @@ export interface IUser {
     displayName: string;
     emailAddress: string;
     profileImageUrl: string;
-    id: string;
+    profileType?: ACCOUNT_TYPE;
 }
