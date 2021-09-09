@@ -24,4 +24,5 @@ export interface IUser {
     emailAddress: string;
     profileImageUrl: string;
     profileType?: ACCOUNT_TYPE;
+    ageGroup: string;
 }

@@ -51,12 +51,14 @@ async function getProfileInformation(): Promise<IUser> {
     displayName: '',
     emailAddress: '',
     profileImageUrl: '',
+    ageGroup: 'Undefined'
   };
   try {
     query.sampleUrl = USER_INFO_URL;
     const { userInfo } = await getProfileResponse();
     profile.displayName = userInfo.displayName;
     profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;
+    profile.ageGroup = await getAgeGroup();
     return profile;
   } catch (error) {
     throw error;
@@ -99,4 +101,19 @@ async function getProfileResponse() {
     userInfo,
     response
   };
+}
+
+async function getAgeGroup(): Promise<string> {
+  const profileType = await getProfileType();
+  if (profileType === ACCOUNT_TYPE.MSA) {
+    try {
+      const { userInfo } = await getProfileResponse();
+      return userInfo?.account?.[0]?.ageGroup;
+    } catch (error) {
+      return 'Undefined';
+    }
+  } else {
+    return 'Undefined';
+  }
+
 }
