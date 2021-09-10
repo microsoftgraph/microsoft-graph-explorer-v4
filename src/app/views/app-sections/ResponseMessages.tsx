@@ -61,9 +61,10 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
         <FormattedMessage id={`This response contains unviewable content`}/>&nbsp;
         <Link href={contentDownloadUrl} download>
             <FormattedMessage id={`Click here to download`}/>
-        </Link>&nbsp;
-        {isOriginalFormat && <FormattedMessage id={`File response is available in original format only`}/>}&nbsp;
-        {isWorkaround && <FormattedMessage id={`Response is result of workaround`}/>}
+        </Link>&nbsp;<br/>
+        {isWorkaround == true && <FormattedMessage id={`Response is result of workaround`}/>}<br/>
+
+        {isOriginalFormat == false && <FormattedMessage id={`File response is available in original format only`}/>}&nbsp;
       </MessageBar>
     );
   }

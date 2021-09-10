@@ -171,8 +171,7 @@ export function isFileResponse(headers: any) {
       contentType === 'application/pdf' ||
       contentType.includes('application/vnd.') ||
       contentType.includes('video/') ||
-      contentType.includes('audio/') ||
-      contentType.includes('image/')
+      contentType.includes('audio/')
     );
   }
   return false;
