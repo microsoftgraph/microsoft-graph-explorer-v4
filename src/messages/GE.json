@@ -378,5 +378,10 @@
   "consent_required_consent": "Please consent to the permission to access this feature.",
   "interaction_required_consent": "Please wait for the consent process to finish and verify that pop-ups are enabled.",
   "user_cancelled_consent": "Please wait for the consent process to finish.",
-  "access_denied_consent": "Your consent to this permission has been blocked by your tenant admin. Ask your admin to grant you access and then try again."
+  "access_denied_consent": "Your consent to this permission has been blocked by your tenant admin. Ask your admin to grant you access and then try again.",
+  "This response contains unviewable content": "This response contains content that cannot be viewed on this editor.",
+  "Click here to download": "Click here to download.",
+  "File response is available in original format only": "The file response is only available in the original format due to limitations of the Javascipt SDK.",
+  "Response is result of workaround": "A workaround has been used to fetch the download URL. Steps: 1. Fetch download URL using query, await client.api('/drive/items/{item-id}').get().select('@microsoft.graph.downloadUrl') 2: Use returned URL to download file contents.",
+  "Missing response headers for query workaround": "Some headers, typically returned for this request, may be missing due limitations of the Javascript SDK."
 }

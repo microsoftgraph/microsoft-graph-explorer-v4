@@ -153,7 +153,7 @@ export function getContentType(headers: any) {
   return contentType;
 }
 
-export function isDownloadableResponse(headers: any) {
+export function isFileResponse(headers: any) {
   const contentDisposition = headers['content-disposition'];
   if (contentDisposition) {
     const directives = contentDisposition.split(';');
@@ -162,22 +162,44 @@ export function isDownloadableResponse(headers: any) {
     }
   }
 
-  // use content type, if file that's not an image, then tag as downloadable
+  // use content type to determine if response is file
   const contentType = getContentType(headers);
   if (contentType) {
     return (
       contentType === 'application/octet-stream' ||
+      contentType === 'application/onenote' ||
       contentType === 'application/pdf' ||
       contentType.includes('application/vnd.') ||
       contentType.includes('video/') ||
-      contentType.includes('audio/')
+      contentType.includes('audio/') ||
+      contentType.includes('image/')
     );
   }
-
   return false;
 }
 
-export function parseResponse(response: any, respHeaders: any): Promise<any> {
+export async function generateResponseDownloadUrl(
+  response: Response,
+  respHeaders: any
+) {
+  try {
+    const fileContents = await parseResponse(response, respHeaders);
+    const contentType = getContentType(respHeaders);
+    if (fileContents) {
+      const buffer = await response.arrayBuffer();
+      const blob = new Blob([buffer], { type: contentType });
+      const downloadUrl = URL.createObjectURL(blob);
+      return downloadUrl;
+    }
+  } catch (error) {
+    return null;
+  }
+}
+
+export function parseResponse(
+  response: any,
+  respHeaders: any = {}
+): Promise<any> {
   if (response && response.headers) {
     response.headers.forEach((val: any, key: any) => {
       respHeaders[key] = val;
@@ -198,4 +220,9 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
     }
   }
   return response;
+}
+
+export function queryResultsInCorsError(sampleQuery: IQuery) {
+  const requestUrl = new URL(sampleQuery.sampleUrl);
+  return requestUrl.pathname.match(/\/content(\/)*$/i) != null;
 }

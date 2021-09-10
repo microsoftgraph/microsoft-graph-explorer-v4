@@ -6,8 +6,14 @@ import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
 import {
-  anonymousRequest, authenticatedRequest,
-  isImageResponse, parseResponse, queryResponse
+  anonymousRequest,
+  authenticatedRequest,
+  generateResponseDownloadUrl,
+  isFileResponse,
+  isImageResponse,
+  parseResponse,
+  queryResponse,
+  queryResultsInCorsError,
 } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
@@ -19,40 +25,72 @@ export function runQuery(query: IQuery): Function {
     const createdAt = new Date().toISOString();
 
     if (tokenPresent) {
-      return authenticatedRequest(dispatch, query).then(async (response: Response) => {
-        await processResponse(response, respHeaders, dispatch, createdAt);
-      }).catch(async (error: any) => {
-        dispatch(queryResponse({
-          body: error,
-          headers: null
-        }));
-        return dispatch(setQueryResponseStatus({
-          messageType: MessageBarType.error,
-          ok: false,
-          status: 400,
-          statusText: 'Bad Request'
-        }));
-      });
+      return authenticatedRequest(dispatch, query)
+        .then(async (response: Response) => {
+          await processResponse(
+            response,
+            respHeaders,
+            dispatch,
+            createdAt,
+            tokenPresent
+          );
+        })
+        .catch(async (error: any) => {
+          dispatch(
+            queryResponse({
+              body: error,
+              headers: null,
+            })
+          );
+          return dispatch(
+            setQueryResponseStatus({
+              messageType: MessageBarType.error,
+              ok: false,
+              status: 400,
+              statusText: 'Bad Request',
+            })
+          );
+        });
     }
 
-    return anonymousRequest(dispatch, query, getState).then(async (response: Response) => {
-      await processResponse(response, respHeaders, dispatch, createdAt);
-    });
+    return anonymousRequest(dispatch, query, getState).then(
+      async (response: Response) => {
+        await processResponse(
+          response,
+          respHeaders,
+          dispatch,
+          createdAt,
+          tokenPresent
+        );
+      }
+    );
   };
 
-  async function processResponse(response: Response, respHeaders: any, dispatch: Function,
-    createdAt: any) {
-
-    const result = await parseResponse(response, respHeaders);
-    const duration = (new Date()).getTime() - new Date(createdAt).getTime();
-    createHistory(response, respHeaders, query, createdAt, dispatch, result, duration);
+  async function processResponse(
+    response: Response,
+    respHeaders: any,
+    dispatch: Function,
+    createdAt: any,
+    tokenPresent: boolean
+  ) {
+    let result = await parseResponse(response, respHeaders);
+    const duration = new Date().getTime() - new Date(createdAt).getTime();
+    createHistory(
+      response,
+      respHeaders,
+      query,
+      createdAt,
+      dispatch,
+      result,
+      duration
+    );
 
     const status: IStatus = {
       messageType: MessageBarType.error,
       ok: false,
       duration,
       status: 400,
-      statusText: ''
+      statusText: '',
     };
 
     if (response) {
@@ -61,30 +99,125 @@ export function runQuery(query: IQuery): Function {
     }
 
     if (response && response.ok) {
-
       status.ok = true;
       status.messageType = MessageBarType.success;
 
       dispatch(setQueryResponseStatus(status));
 
-      return dispatch(queryResponse({
-        body: result,
-        headers: respHeaders
-      }));
-    }
-    else {
-      dispatch(queryResponse({
-        body: result,
-        headers: respHeaders
-      }));
-      return dispatch(setQueryResponseStatus(status));
-    }
+      if (isFileResponse(respHeaders)) {
+        const contentDownloadUrl = await generateResponseDownloadUrl(
+          response,
+          respHeaders
+        );
+        if (contentDownloadUrl) {
+          result = {
+            contentDownloadUrl: contentDownloadUrl,
+          };
+        }
+      }
 
+      return dispatch(
+        queryResponse({
+          body: result,
+          headers: respHeaders,
+        })
+      );
+    } else {
+      if (
+        response.status === 0 &&
+        tokenPresent &&
+        queryResultsInCorsError(query)
+      ) {
+        fetchContentDownloadUrl(query, dispatch);
+      } else {
+        dispatch(
+          queryResponse({
+            body: result,
+            headers: respHeaders,
+          })
+        );
+        return dispatch(setQueryResponseStatus(status));
+      }
+    }
   }
 }
 
-async function createHistory(response: Response, respHeaders: any, query: IQuery,
-  createdAt: any, dispatch: Function, result: any, duration: number) {
+async function fetchContentDownloadUrl(
+  sampleQuery: IQuery,
+  dispatch: Function
+) {
+  const requestUrl = new URL(sampleQuery.sampleUrl);
+  const isOriginalFormat = !requestUrl.searchParams.has('format');
+
+  // drop any search params from query URL
+  requestUrl.search = '';
+
+  // remove /content from path
+  requestUrl.pathname = requestUrl.pathname.replace(/\/content(\/)*$/i, '');
+
+  // set new sampleUrl for fetching download URL
+  const query: IQuery = { ...sampleQuery };
+  query.sampleUrl = requestUrl.toString();
+
+  const status: IStatus = {
+    messageType: MessageBarType.error,
+    ok: false,
+    status: 400,
+    statusText: '',
+  };
+
+  authenticatedRequest(dispatch, query)
+    .then(async (response: Response) => {
+      if (response) {
+        status.status = response.status;
+        status.statusText = response.statusText;
+        status.ok = response.ok;
+
+        if (response.ok) {
+          status.messageType = MessageBarType.success;
+
+          const result = await parseResponse(response);
+          const downloadUrl = result['@microsoft.graph.downloadUrl'];
+
+          dispatch({
+            body: {
+              contentDownloadUrl: downloadUrl,
+              isOriginalFormat: isOriginalFormat,
+              isWorkaround: true,
+            },
+            headers: null,
+          });
+        }
+      } else {
+        dispatch(
+          queryResponse({
+            body: null,
+            headers: null,
+          })
+        );
+      }
+      return dispatch(setQueryResponseStatus(status));
+    })
+    .catch(async (error: any) => {
+      dispatch(
+        queryResponse({
+          body: error,
+          headers: null,
+        })
+      );
+      return dispatch(setQueryResponseStatus(status));
+    });
+}
+
+async function createHistory(
+  response: Response,
+  respHeaders: any,
+  query: IQuery,
+  createdAt: any,
+  dispatch: Function,
+  result: any,
+  duration: number
+) {
   const status = response.status;
   const statusText = response.statusText;
   const responseHeaders = { ...respHeaders };
@@ -92,11 +225,16 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
 
   if (isImageResponse(contentType)) {
     result = {
-      message: 'Run the query to view the image'
+      message: 'Run the query to view the image',
     };
     responseHeaders['content-type'] = ContentType.Json;
   }
 
+  if (isFileResponse(respHeaders)) {
+    result = {
+      message: 'Run the query to generate file download URL',
+    };
+  }
 
   const historyItem: IHistoryItem = {
     index: -1,
@@ -117,4 +255,3 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
   dispatch(addHistoryItem(historyItem));
   return result;
 }
-

@@ -17,12 +17,13 @@ const Response = () => {
 
   if (headers) {
     const contentType = getContentType(headers);
+    const responseIsDownloadUrl = body['contentDownloadUrl'];
     return (
       <div style={{ display: 'block' }}>
         {responseMessages(graphResponse, sampleQuery, dispatch)}
         <ResponseDisplay
           contentType={contentType}
-          body={body}
+          body={!responseIsDownloadUrl && body}
           height={height}
         />
       </div>
