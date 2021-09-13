@@ -41,6 +41,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
+import GETour from '../views/tour/Tour';
 
 interface IAppProps {
   theme?: ITheme;
@@ -348,6 +349,7 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
+        <GETour/>
         <div className={`container-fluid ${classes.app}`}>
           <Announced
             message={
@@ -392,8 +394,10 @@ class App extends Component<IAppProps, IAppState> {
                   <div style={{ marginBottom: 8 }}>
                     <QueryRunner onSelectVerb={this.handleSelectVerb} />
                   </div>
+                  <div className="status-area">
                   {statusMessages(queryState, sampleQuery, actions)}
                   {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
+                  </div>
                   {
                     // @ts-ignore
                     <QueryResponse verb={this.state.selectedVerb} />
