@@ -6,6 +6,6 @@ export interface IResource {
 
 export interface IResources {
   pending: boolean;
-  data: IResource[];
+  data: IResource;
   error: any | null;
 }

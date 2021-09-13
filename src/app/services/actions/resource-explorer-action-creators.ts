@@ -28,10 +28,7 @@ export function fetchResources(): Function {
     try {
       const clouds = ['Prod'];
       const filteredPayload = filterResourcesByLabel(content, clouds);
-      if (filteredPayload) {
-        return dispatch(fetchResourcesSuccess(filteredPayload));
-      }
-      throw new Error("");
+      return dispatch(fetchResourcesSuccess(filteredPayload));
     } catch (error) {
       return dispatch(fetchResourcesError({ error }));
     }

@@ -4,6 +4,7 @@ import React from 'react';
 import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';
 import History from './history/History';
+import { ResourceExplorer } from './resource-explorer';
 import SampleQueries from './sample-queries/SampleQueries';
 
 
@@ -18,7 +19,7 @@ export const Sidebar = () => {
           <History />
         </PivotItem>
         <PivotItem headerText={translateMessage('Resources')} itemIcon='ExploreData' itemKey='resources'>
-          <History />
+          <ResourceExplorer />
         </PivotItem>
       </Pivot>
     </div>

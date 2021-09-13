@@ -4,7 +4,11 @@ import { FETCH_RESOURCES_ERROR, FETCH_RESOURCES_PENDING, FETCH_RESOURCES_SUCCESS
 
 const initialState: IResources = {
   pending: false,
-  data: [],
+  data: {
+    children: [],
+    label: [],
+    segment: ''
+  },
   error: null
 };
 
