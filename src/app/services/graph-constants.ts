@@ -18,3 +18,4 @@ export enum PERMS_SCOPE {
     PERSONAL = "DelegatedPersonal"
 };
 export const ADAPTIVE_CARD_URL = 'https://templates.adaptivecards.io/graph.microsoft.com';
+export const URI_SPACE_URL = 'https://agora-demo-api.azurewebsites.net/urispacedata';
