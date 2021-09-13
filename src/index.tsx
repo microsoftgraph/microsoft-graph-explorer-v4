@@ -36,6 +36,7 @@ import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
 import { changeTheme } from './app/services/actions/theme-action-creator';
+import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
@@ -96,11 +97,11 @@ appStore.dispatch(getGraphProxyUrl());
 
 function refreshAccessToken() {
   authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
-      if (authResponse && authResponse.accessToken) {
-        appStore.dispatch(getAuthTokenSuccess(true));
-        appStore.dispatch(getConsentedScopesSuccess(authResponse.scopes));
-      }
-    })
+    if (authResponse && authResponse.accessToken) {
+      appStore.dispatch(getAuthTokenSuccess(true));
+      appStore.dispatch(getConsentedScopesSuccess(authResponse.scopes));
+    }
+  })
     .catch(() => {
       // ignore the error as it means that a User login is required
     });
@@ -143,6 +144,11 @@ readHistoryData().then((data: any) => {
     });
   }
 });
+
+function loadResources() {
+  appStore.dispatch(fetchResources());
+}
+loadResources();
 
 /**
  * Set's up Monaco Editor's Workers.
