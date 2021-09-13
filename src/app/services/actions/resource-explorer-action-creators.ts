@@ -1,6 +1,6 @@
 import { IAction } from '../../../types/action';
 import { FETCH_RESOURCES_SUCCESS, FETCH_RESOURCES_PENDING, FETCH_RESOURCES_ERROR } from '../redux-constants';
-import { filterResourcePayloadByCloud } from '../../utils/resources/resource-payload-filter';
+import { filterResourcesByLabel } from '../../utils/resources/resource-payload-filter';
 import content from '../../utils/resources/resources.json';
 
 export function fetchResourcesSuccess(response: object): IAction {
@@ -26,9 +26,8 @@ export function fetchResourcesError(response: object): IAction {
 export function fetchResources(): Function {
   return async (dispatch: Function) => {
     try {
-      const clouds = ['v1.0-Prod', 'beta-Prod'];
-
-      const filteredPayload = filterResourcePayloadByCloud(content, clouds);
+      const clouds = ['Prod'];
+      const filteredPayload = filterResourcesByLabel(content, clouds);
       if (filteredPayload) {
         return dispatch(fetchResourcesSuccess(filteredPayload));
       }
@@ -46,7 +45,7 @@ export function fetchResources(): Function {
     //   const response = await fetch(URI_SPACE_URL, options);
     //   if (response.ok) {
     //     const result = await response.json();
-    //     const resources = filterResourcePayloadByCloud(result)
+    //     const resources = filterResourcesByLabel(result)
     //     return dispatch(fetchResourcesSuccess(resources!));
     //   }
     //   throw response;

@@ -1,18 +1,18 @@
 import { IResource } from '../../../types/resources';
 
-export function filterResourcePayloadByCloud(content: any, clouds?: string[]): IResource {
+export function filterResourcesByLabel(content: any, filters: string[]): IResource {
   const resources: IResource = { ...content };
   const children: IResource[] = [];
-  if (clouds) {
-    resources.children.forEach((child: IResource) => {
-      const cloudSupported = clouds.some(cloud => {
-        return child.label.includes(cloud);
+  resources.children.forEach((child: IResource) => {
+    const labelExists = filters.some(cloud => {
+      return child.label.some(label => {
+        return label.includes(cloud);
       });
-      if (cloudSupported) {
-        children.push(child);
-      }
     });
-    resources.children = children;
-  }
+    if (labelExists) {
+      children.push(child);
+    }
+  });
+  resources.children = children;
   return resources;
 }
