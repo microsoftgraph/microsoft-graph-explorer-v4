@@ -1,7 +1,7 @@
 import {
   Announced, Dialog, DialogFooter, DialogType,
   DefaultButton, FontSizes, getId, Icon, IconButton,
-  Modal, Pivot, PivotItem, PrimaryButton, TooltipHost, ITheme, getTheme
+  Modal, Pivot, PivotItem, PrimaryButton, TooltipHost, ITheme, getTheme, ChoiceGroup
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';
@@ -31,28 +31,40 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [query, setQuery] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
   const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
+  const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(false);
+
+
 
   const currentTheme: ITheme = getTheme();
   const pivotResponseStyle = queryResponseStyles(currentTheme).pivotResponse;
   const pivotResponseTabStyle = queryResponseStyles(currentTheme).pivotResponseTabletSize;
-
-  const isTabletSize : boolean = (windowWidth <= 1320) ? true : false;
-
-
+  let isTabletSize : boolean = (windowWidth <= 1320) ? true : false;
 
   const {
     intl: { messages },
   }: any = props;
 
+
+
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
     window.addEventListener("resize", handleWindowResize, false);
+
+    return () => window.removeEventListener('resize', handleWindowResize);
   }, [dimensions]);
 
+
   const handleWindowResize = () => {
-    setWindowWidth(window.innerWidth);
+    const currentWindowWidth = window.innerWidth;
+    if(currentWindowWidth <= 1320){
+      isTabletSize = true;
+    }
+    else{
+      isTabletSize = false;
+    }
+    console.log( 'Current window width is: ', currentWindowWidth, isTabletSize );
+    setWindowWidth(currentWindowWidth);
   }
 
   const toggleShareQueryDialogState = () => {
@@ -102,6 +114,46 @@ const QueryResponse = (props: IQueryResponseProps) => {
     }
   };
 
+  const renderPivotItems = () => {
+    const pivotItems = getPivotItems();
+    const pivotItemsToHide : any = [];
+    const pivotItemsLen = pivotItems.length;
+    console.log('We have this number of items ', pivotItemsLen)
+    //if width is less than 1300, don't render all items
+    //Render the others only when they are clicked from the pivot itemsToExport
+    const pivotItemsToReturn : any = pivotItems;
+
+    if(windowWidth < 1320){
+      pivotItemsToHide.push(pivotItems[4]);
+      pivotItemsToReturn.pop(pivotItems[4]);
+      console.log(pivotItems[4]);
+    }
+
+    if(windowWidth < 1160 ){
+      pivotItemsToHide.push(pivotItems[3]);
+      pivotItemsToReturn.pop(pivotItems[3]);
+    }
+
+    if(windowWidth < 700){
+      pivotItemsToHide.push(pivotItems[2]);
+      pivotItemsToReturn.pop(pivotItems[2]);
+    }
+
+    if(windowWidth < 580){
+      pivotItemsToHide.push(pivotItems[1]);
+      pivotItemsToReturn.pop(pivotItems[1]);
+    }
+
+    return pivotItemsToReturn;
+  }
+
+  const getOptions = () : [] => {
+    //pushes available options to an array of options
+
+    return [];
+  }
+
+
   const renderItemLink = (link: any) => {
     return (
       <TooltipHost
@@ -113,6 +165,53 @@ const QueryResponse = (props: IQueryResponseProps) => {
         {link.headerText}
       </TooltipHost>
     );
+  };
+
+  const options = [
+    {
+      key: 'Response Headers',
+      text: 'Response Headers',
+      iconProps: {iconName: 'FileComment' }
+    },
+    {
+      key: 'Code Snippets',
+      text: 'Code Snippets',
+      iconProps: {iconName: 'PasteAsCode'}
+    },
+    {
+      key: 'Toolkit Components',
+      text: 'Toolkit Components',
+      iconProps: {iconName: 'CustomizeToolbar'}
+    },
+    {
+      key: 'Adaptive Cards',
+      text: 'Adaptive Cards',
+      iconProps: {iconName: 'ContactCard'}
+    }
+  ]
+
+  const modelProps = {
+    isBlocking: false,
+    styles: {main: { maxWidth: 450}}
+  }
+
+  const dialogContentProps = {
+    type: DialogType.normal,
+    title: 'Choose Item To Render',
+    subText: 'Select an item'
+  }
+
+  const handleOnChange = (selectedItem : any) => {
+    console.log('Item selected is ', selectedItem);
+    // hideThemeChooserDialog(false);
+
+  }
+
+  const toggleThemeChooserDialogState = () => {
+    let hidden = themeChooserDialogHidden;
+    hidden = !hidden;
+    hideThemeChooserDialog(true);
+    hideThemeChooserDialog(false);
   };
 
   return (
@@ -137,8 +236,31 @@ const QueryResponse = (props: IQueryResponseProps) => {
           minHeight: responseHeight,
           height: responseHeight
         }}>
-          <Pivot onLinkClick={handlePivotItemClick} className='pivot-response' styles={{ root: isTabletSize ? pivotResponseTabStyle : pivotResponseStyle }}>
-            {getPivotItems()}
+          <Pivot onLinkClick={handlePivotItemClick} className='pivot-response' >
+            {renderPivotItems()}
+            {isTabletSize &&
+            <PivotItem
+              itemIcon='More'
+              itemKey='expand-more'
+            >
+              <div>
+                <p>Rendering this now. State of dialog is {themeChooserDialogHidden}</p>
+                <Dialog
+                  hidden={themeChooserDialogHidden}
+                  onDismiss={() => hideThemeChooserDialog(true)}
+                  dialogContentProps={dialogContentProps}
+                  modalProps={modelProps}
+                >
+                  <ChoiceGroup options={options} onChange={(event, selectedItem) => handleOnChange(selectedItem)} />
+                  <DialogFooter>
+                    <DefaultButton
+                      text={messages.Close}
+                      onClick={() => hideThemeChooserDialog(false)}
+                    />
+                  </DialogFooter>
+                </Dialog>
+              </div>
+            </PivotItem> }
             <PivotItem
               headerText='Share'
               key='share'
@@ -147,7 +269,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
               ariaLabel={translateMessage('Share Query Message')}
               title={translateMessage('Share Query Message')}
               onRenderItemLink={renderItemLink}
-            />
+            ></PivotItem>
             <PivotItem
               headerText='Expand'
               key='expand'
@@ -156,7 +278,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
               ariaLabel={translateMessage('Expand response')}
               title={translateMessage('Expand response')}
               onRenderItemLink={renderItemLink}
-            />
+            ></PivotItem>
           </Pivot>
         </div>
       </Resizable>
