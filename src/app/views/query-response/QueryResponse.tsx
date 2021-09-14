@@ -22,6 +22,7 @@ import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 import { IRootState } from '../../../types/root';
 import { queryResponseStyles } from './queryResponse.styles';
+import { availableOptions } from './queryResponseUtils/overFlowUtils'
 
 const QueryResponse = (props: IQueryResponseProps) => {
   const dispatch = useDispatch();
@@ -32,7 +33,42 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [responseHeight, setResponseHeight] = useState('610px');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
-  const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(false);
+  const [itemChooserDialogState, hideResponseItemsDialog] = useState(false);
+
+
+
+
+  const setPivotItems = () => {
+    const pivotItems_ = getPivotItems();
+    const pivotItemsToHide : any = [];
+
+    if(windowWidth < 1320){
+      pivotItemsToHide.push(pivotItems_[4]);
+      pivotItems_.pop();
+    }
+
+    if(windowWidth < 1160 ){
+      pivotItemsToHide.push(pivotItems_[3]);
+      pivotItems_.pop();
+    }
+
+    if(windowWidth < 700){
+      pivotItemsToHide.push(pivotItems_[2]);
+      pivotItems_.pop();
+    }
+
+    if(windowWidth < 580){
+      pivotItemsToHide.push(pivotItems_[1]);
+      pivotItems_.pop();
+    }
+    return [ pivotItems_, pivotItemsToHide ];
+  }
+  const [pivotItems , abstractedPivotItems] = setPivotItems();
+
+  const [ pivotItemsToRender, setPivotItemsToRender ] = useState(pivotItems);
+  const [ pivotItemsToAbstract, setpivotItemsToAbstract ] = useState(abstractedPivotItems);
+
+
 
 
 
@@ -47,12 +83,39 @@ const QueryResponse = (props: IQueryResponseProps) => {
 
 
 
+  const setOverFlowOptions = () : any => {
+    // eslint-disable-next-line no-shadow
+    const optionItemsToSet: any = [];
+
+    if(pivotItemsToAbstract.length > 0){
+
+      for(const pivotItem of pivotItemsToAbstract){
+        const { key} = pivotItem;
+
+        for(const availableOption of availableOptions ){
+          if(availableOption.key_ === key){
+            optionItemsToSet.push(availableOption);
+            continue;
+          }
+        }
+
+      }
+
+    }
+    return optionItemsToSet;
+  }
+
+  const optionItemsToSet = setOverFlowOptions();
+  const [options, setOptions] = useState(optionItemsToSet);
+
+
+
+
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
     window.addEventListener("resize", handleWindowResize, false);
-
     return () => window.removeEventListener('resize', handleWindowResize);
-  }, [dimensions]);
+  }, [dimensions, windowWidth]);
 
 
   const handleWindowResize = () => {
@@ -63,8 +126,9 @@ const QueryResponse = (props: IQueryResponseProps) => {
     else{
       isTabletSize = false;
     }
-    console.log( 'Current window width is: ', currentWindowWidth, isTabletSize );
     setWindowWidth(currentWindowWidth);
+    setPivotItemsToRender(pivotItems);
+    setpivotItemsToAbstract(abstractedPivotItems);
   }
 
   const toggleShareQueryDialogState = () => {
@@ -114,44 +178,101 @@ const QueryResponse = (props: IQueryResponseProps) => {
     }
   };
 
-  const renderPivotItems = () => {
-    const pivotItems = getPivotItems();
-    const pivotItemsToHide : any = [];
-    const pivotItemsLen = pivotItems.length;
-    console.log('We have this number of items ', pivotItemsLen)
-    //if width is less than 1300, don't render all items
-    //Render the others only when they are clicked from the pivot itemsToExport
-    const pivotItemsToReturn : any = pivotItems;
-
-    if(windowWidth < 1320){
-      pivotItemsToHide.push(pivotItems[4]);
-      pivotItemsToReturn.pop(pivotItems[4]);
-      console.log(pivotItems[4]);
-    }
-
-    if(windowWidth < 1160 ){
-      pivotItemsToHide.push(pivotItems[3]);
-      pivotItemsToReturn.pop(pivotItems[3]);
-    }
-
-    if(windowWidth < 700){
-      pivotItemsToHide.push(pivotItems[2]);
-      pivotItemsToReturn.pop(pivotItems[2]);
-    }
-
-    if(windowWidth < 580){
-      pivotItemsToHide.push(pivotItems[1]);
-      pivotItemsToReturn.pop(pivotItems[1]);
-    }
-
-    return pivotItemsToReturn;
+  const modelProps = {
+    isBlocking: false,
+    styles: {main: { maxWidth: 450}}
   }
 
-  const getOptions = () : [] => {
-    //pushes available options to an array of options
-
-    return [];
+  const dialogContentProps = {
+    type: DialogType.normal,
+    title: 'Choose Item To Render',
+    ariaLabel:'More items'
   }
+
+  const renderOverflowIcon = () => {
+    //show the dialog items
+    return(
+      <PivotItem
+        itemIcon='More'
+        itemKey='expand-more'
+        onRenderItemLink={renderItemLink}
+      >
+
+          <Dialog
+            hidden={itemChooserDialogState}
+            onDismiss={() => toggleItemChooserDialogState()}
+            dialogContentProps={dialogContentProps}
+            modalProps={modelProps}
+          >
+            <ChoiceGroup options={options} onChange={(event, selectedItem) => handleOnChange(selectedItem)} />
+            <DialogFooter>
+              <DefaultButton
+                text={messages.Close}
+                onClick={() =>  toggleItemChooserDialogState()}
+              />
+            </DialogFooter>
+          </Dialog>
+
+      </PivotItem>
+    )
+  }
+
+
+  const handleOnChange = (selectedItem : any) => {
+    const { key_ } = selectedItem;  //selected item key
+    const currentRenderedPivots = new Array(); //current rendered pivots
+    currentRenderedPivots.push(...pivotItemsToRender);
+    const poppedItem = currentRenderedPivots.pop();
+    // add the item whose key resembles the selectedItem key to the pivotITemsToRender
+    const newPivotToRender = getPivotItemToRender(key_, poppedItem);
+    currentRenderedPivots.push(newPivotToRender);
+    setPivotItemsToRender(currentRenderedPivots);
+
+    const { key } = poppedItem;  //get key of popped item so we can look for it in options
+    const currentOverflowOptions = new Array();
+    currentOverflowOptions.push(...options);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const poppedOption = currentOverflowOptions.pop();
+    const newOverflowItem = getNewOverflowItem(key);
+    currentOverflowOptions.push(newOverflowItem);
+    setOptions(currentOverflowOptions);
+  }
+
+  const getNewOverflowItem = (key: string) => {
+
+    for(const availableOption of availableOptions) {
+      if(availableOption.key === key){
+        return availableOption;
+      }
+    }
+  }
+
+  const getPivotItemToRender = (itemKey : string, thePoppedItem: any) => {
+    const currentOverflowOptions = [];
+    currentOverflowOptions.push(...pivotItemsToAbstract);
+
+    if(currentOverflowOptions.length > 0) {
+      for(const abstractedPivotItem of currentOverflowOptions) {
+        const { key } = abstractedPivotItem;
+
+        if(key === itemKey) {
+          //also remove it from pivotItemsToAbstract,
+          const newAbstractedItems = currentOverflowOptions.filter( item =>{ return ( item !== abstractedPivotItem) }  );
+          newAbstractedItems.push(thePoppedItem);
+          setpivotItemsToAbstract(newAbstractedItems);
+
+          return abstractedPivotItem;
+        }
+      }
+    }
+
+  }
+
+  const toggleItemChooserDialogState = () => {
+    let hidden = itemChooserDialogState;
+    hidden = !hidden;
+    hideResponseItemsDialog(hidden);
+  };
 
 
   const renderItemLink = (link: any) => {
@@ -167,52 +288,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
     );
   };
 
-  const options = [
-    {
-      key: 'Response Headers',
-      text: 'Response Headers',
-      iconProps: {iconName: 'FileComment' }
-    },
-    {
-      key: 'Code Snippets',
-      text: 'Code Snippets',
-      iconProps: {iconName: 'PasteAsCode'}
-    },
-    {
-      key: 'Toolkit Components',
-      text: 'Toolkit Components',
-      iconProps: {iconName: 'CustomizeToolbar'}
-    },
-    {
-      key: 'Adaptive Cards',
-      text: 'Adaptive Cards',
-      iconProps: {iconName: 'ContactCard'}
-    }
-  ]
-
-  const modelProps = {
-    isBlocking: false,
-    styles: {main: { maxWidth: 450}}
-  }
-
-  const dialogContentProps = {
-    type: DialogType.normal,
-    title: 'Choose Item To Render',
-    subText: 'Select an item'
-  }
-
-  const handleOnChange = (selectedItem : any) => {
-    console.log('Item selected is ', selectedItem);
-    // hideThemeChooserDialog(false);
-
-  }
-
-  const toggleThemeChooserDialogState = () => {
-    let hidden = themeChooserDialogHidden;
-    hidden = !hidden;
-    hideThemeChooserDialog(true);
-    hideThemeChooserDialog(false);
-  };
 
   return (
     <>
@@ -236,31 +311,9 @@ const QueryResponse = (props: IQueryResponseProps) => {
           minHeight: responseHeight,
           height: responseHeight
         }}>
-          <Pivot onLinkClick={handlePivotItemClick} className='pivot-response' >
-            {renderPivotItems()}
-            {isTabletSize &&
-            <PivotItem
-              itemIcon='More'
-              itemKey='expand-more'
-            >
-              <div>
-                <p>Rendering this now. State of dialog is {themeChooserDialogHidden}</p>
-                <Dialog
-                  hidden={themeChooserDialogHidden}
-                  onDismiss={() => hideThemeChooserDialog(true)}
-                  dialogContentProps={dialogContentProps}
-                  modalProps={modelProps}
-                >
-                  <ChoiceGroup options={options} onChange={(event, selectedItem) => handleOnChange(selectedItem)} />
-                  <DialogFooter>
-                    <DefaultButton
-                      text={messages.Close}
-                      onClick={() => hideThemeChooserDialog(false)}
-                    />
-                  </DialogFooter>
-                </Dialog>
-              </div>
-            </PivotItem> }
+          <Pivot onLinkClick={handlePivotItemClick} className='pivot-response' styles={{root: isTabletSize ? pivotResponseTabStyle : pivotResponseStyle}} >
+            {pivotItemsToRender}
+            {isTabletSize && renderOverflowIcon()}
             <PivotItem
               headerText='Share'
               key='share'
