@@ -1,4 +1,4 @@
-import { Nav, SearchBox, styled } from '@fluentui/react';
+import { INavLinkGroup, Nav, SearchBox, styled } from '@fluentui/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -33,22 +33,47 @@ const ResourceExplorer = (props: any) => {
   }
 
   const createList = (source: IResource[]) => {
+    function getIcon({ segment, children }: IResource) {
+      const graphFunction = segment.includes('microsoft.graph');
+      let icon = null;
+      if (graphFunction) {
+        icon = 'LightningBolt';
+      }
+      if (!graphFunction && !children) {
+        icon = 'PlugDisconnected';
+      }
+      return icon;
+    }
 
-    function convert(data: IResource): any {
+    function createNavLink(info: IResource): any {
+      const { segment, children } = info;
+      const name = `${segment} ${(children) ? `(${children.length})` : ''}`;
       return {
-        key: data.segment,
-        name: `${data.segment} ${(data.children) ? `(${data.children.length})` : ''}`,
-        url: `#${data.segment}`,
+        key: segment,
+        name,
         isExpanded: false,
-        target: '_blank',
-        links: (data.children) ? data.children.map(convert) : []
+        icon: getIcon(info),
+        links: (children) ? children.map(createNavLink) : []
       };
     }
-    const converted = convert(resources.data);
-    return converted.links;
+
+    const converted = createNavLink({
+      segment: '/',
+      label: [],
+      children: source
+    });
+
+    return [
+      {
+        isExpanded: false,
+        links: converted.links
+      }
+    ];
+
+
   }
 
-  const items: any = createList(resourceItems);
+  const items: INavLinkGroup[] = createList(resourceItems);
 
   return (
     <section>
@@ -58,7 +83,7 @@ const ResourceExplorer = (props: any) => {
         styles={{ field: { paddingLeft: 10 } }}
       />
       <hr />
-      <Nav groups={items} />
+      <Nav groups={items} className={classes.queryList} />
     </section>
   )
 }
