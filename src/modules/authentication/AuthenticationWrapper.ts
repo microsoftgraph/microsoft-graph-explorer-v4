@@ -129,11 +129,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
 
-<<<<<<< HEAD
-      } else if (signInAuthError(error)) {
-=======
       } else if(signInAuthError(errorCode)) {
->>>>>>> response-area
         this.deleteHomeAccountId();
         throw error;
       }
