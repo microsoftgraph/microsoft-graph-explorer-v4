@@ -1,9 +1,10 @@
-import { DetailsRow, GroupedList, IGroup, SearchBox, SelectionMode, styled } from '@fluentui/react';
+import { Nav, SearchBox, styled } from '@fluentui/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { IResource } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
+import { filterResourcesByLabel } from '../../../utils/resources/resource-payload-filter';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -16,7 +17,9 @@ const ResourceExplorer = (props: any) => {
   const classes = classNames(props);
 
   const { data } = resources;
-  const [resourceItems, setResourceItems] = useState<IResource[]>(data.children);
+  const filteredPayload = filterResourcesByLabel(filterResourcesByLabel(data, ['Prod']), ['v1.0']);
+
+  const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
   const searchValueChanged = (event: any, value?: string) => {
     let filtered: any[] = [...resourceItems];
     if (value) {
@@ -29,43 +32,23 @@ const ResourceExplorer = (props: any) => {
     setResourceItems(filtered);
   }
 
-  const createListItems = (source: IResource[]) => {
-    return source;
+  const createList = (source: IResource[]) => {
+
+    function convert(data: IResource): any {
+      return {
+        key: data.segment,
+        name: `${data.segment} ${(data.children) ? `(${data.children.length})` : ''}`,
+        url: `#${data.segment}`,
+        isExpanded: false,
+        target: '_blank',
+        links: (data.children) ? data.children.map(convert) : []
+      };
+    }
+    const converted = convert(resources.data);
+    return converted.links;
   }
 
-  const items = createListItems(resourceItems);
-  const columns = [
-    {
-      key: 'segment',
-      name: 'segment',
-      fieldName: 'segment',
-      minWidth: 300,
-    },
-    {
-      key: 'children',
-      name: 'children',
-      fieldName: 'children',
-      minWidth: 300,
-    }
-  ]
-
-  const onRenderCell = (nestingDepth?: number, item?: any, itemIndex?: number, group?: IGroup): JSX.Element => {
-    const content = {
-      segment: item.segment,
-      children: (item.children) ? item.children.length : 0,
-      label: (item.label) ? item.label.length : 0
-    }
-    return (
-      <DetailsRow
-        columns={columns}
-        className={classes.queryRow}
-        groupNestingDepth={nestingDepth}
-        item={content}
-        itemIndex={itemIndex!}
-        group={group}
-      />
-    );
-  };
+  const items: any = createList(resourceItems);
 
   return (
     <section>
@@ -75,12 +58,7 @@ const ResourceExplorer = (props: any) => {
         styles={{ field: { paddingLeft: 10 } }}
       />
       <hr />
-      <GroupedList
-        items={items}
-        className={classes.queryList}
-        onRenderCell={onRenderCell}
-        selectionMode={SelectionMode.multiple}
-      />
+      <Nav groups={items} />
     </section>
   )
 }

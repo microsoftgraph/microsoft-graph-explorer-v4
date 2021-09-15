@@ -1,6 +1,6 @@
 import { IResource } from '../../../types/resources';
 
-export function filterResourcesByLabel(content: any, filters: string[]): IResource {
+export function filterResourcesByLabel(content: IResource, filters: string[]): IResource {
   const resources: IResource = { ...content };
   const children: IResource[] = [];
   resources.children.forEach((child: IResource) => {
