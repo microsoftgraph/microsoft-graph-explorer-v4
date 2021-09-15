@@ -52,6 +52,12 @@ export const appStyles = (theme: ITheme) => {
       fontSize: '10px',
       paddingLeft: 3,
       paddingTop: 5
+    },
+    statusAreaMobileScreen: {
+      marginTop: 5,
+    },
+    statusAreaLaptopScreen: {
+      marginTop: 0,
     }
   };
 };

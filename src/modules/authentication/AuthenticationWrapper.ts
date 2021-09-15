@@ -124,11 +124,16 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       this.storeHomeAccountId(result.account!);
       return result;
     } catch (error) {
+      const { errorCode } = error;
       if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
 
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
 
+<<<<<<< HEAD
       } else if (signInAuthError(error)) {
+=======
+      } else if(signInAuthError(errorCode)) {
+>>>>>>> response-area
         this.deleteHomeAccountId();
         throw error;
       }
