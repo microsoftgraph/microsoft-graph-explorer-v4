@@ -70,6 +70,10 @@ export function addCommonTelemetryItemProperties(envelope: ITelemetryItem) {
   const accessToken = localStorage.getItem(accessTokenKey);
   telemetryItem.properties.IsAuthenticated = !!accessToken;
 
+  // Capture GE Mode for all telemetry items
+  const geMode = store.getState()?.graphExplorerMode;
+  telemetryItem.properties.GraphExplorerMode = geMode;
+
   return true;
 }
 
