@@ -28,16 +28,5 @@ export const queryResponseStyles = (theme: ITheme) => {
       float: 'right',
       zIndex: 1
     },
-    pivotResponse: {
-      root : {
-        display: 'flex',
-        flexWrap: 'wrap'
-      }
-    },
-    pivotResponseTabletSize: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'normal'
-    }
   };
 };
