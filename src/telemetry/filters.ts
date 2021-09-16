@@ -114,8 +114,6 @@ export function sanitizeStackTrace(envelope: ITelemetryItem) {
 
       exception.hasFullStack = false;
       exception.stack = null;
-      exception.parsedStack = [parsedStack];
-      telemetryItem.exceptions = [exception];
     }
   }
   return true;
