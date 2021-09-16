@@ -35,7 +35,7 @@ const Response = () => {
   if (headers) {
     const contentType = getContentType(headers);
     return (
-      <div style={{ display: 'block' }}>
+      <div style={{ display: 'block' }} className="response-preview-area">
         {odataLink &&
           <MessageBar messageBarType={MessageBarType.info}>
             <FormattedMessage id={`This response contains an @odata property`} />: @odata.{odataLink!.name}
@@ -52,7 +52,7 @@ const Response = () => {
       </div>
     );
   }
-  return <div />;
+  return <div className="response-preview-area" />;
 };
 
 function getOdataLinkFromBody(body: any): OdataLink | null {

@@ -114,7 +114,7 @@ const Authentication = (props: any) => {
   }
 
   return (
-    <>
+    <div className="sign-in-section">
       {loginInProgress ? (
         showProgressSpinner()
       ) : mobileScreen ? (
@@ -135,7 +135,7 @@ const Authentication = (props: any) => {
           <br />
         </>
       )}
-    </>
+    </div>
   );
 };
 

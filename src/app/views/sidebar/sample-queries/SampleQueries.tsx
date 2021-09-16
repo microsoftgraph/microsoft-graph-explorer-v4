@@ -437,7 +437,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         <Announced
           message={`${sampleQueries.length} search results available.`}
         />
-        <div role="navigation">
+        <div role="navigation" className="sample-queries-navigation">
           <DetailsList
             className={classes.queryList}
             cellStyleProps={{
