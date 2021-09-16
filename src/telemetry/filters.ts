@@ -70,6 +70,10 @@ export function addCommonTelemetryItemProperties(envelope: ITelemetryItem) {
   const accessToken = localStorage.getItem(accessTokenKey);
   telemetryItem.properties.IsAuthenticated = !!accessToken;
 
+  // Capture GE Mode for all telemetry items
+  const geMode = store.getState()?.graphExplorerMode;
+  telemetryItem.properties.GraphExplorerMode = geMode;
+
   return true;
 }
 
@@ -108,8 +112,6 @@ export function sanitizeStackTrace(envelope: ITelemetryItem) {
 
       exception.hasFullStack = false;
       exception.stack = null;
-      exception.parsedStack = [parsedStack];
-      telemetryItem.exceptions = [exception];
     }
   }
   return true;
