@@ -52,15 +52,17 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
   }
 
   if (body?.contentDownloadUrl) {
+    const workaroundQueries = {
+      oneDrive: `await client.api('/drive/items/{item-id}').get().select('content.downloadUrl')`
+    };
     return (
       <MessageBar messageBarType={MessageBarType.warning}>
         <FormattedMessage id={`This response contains unviewable content`}/>&nbsp;
         <Link href={body?.contentDownloadUrl} download>
             <FormattedMessage id={`Click here to download`}/>
-        </Link>&nbsp;<br/>
-        {body?.isWorkaround == true && <FormattedMessage id={`Response is result of workaround`}/>}<br/>
-
-        {body?.isOriginalFormat == false && <FormattedMessage id={`File response is available in original format only`}/>}&nbsp;
+        </Link>&nbsp;
+        {body?.isWorkaround == true && <div><FormattedMessage id={`Response is result of workaround`}/> {workaroundQueries.oneDrive} </div>}
+        {body?.isOriginalFormat == false && <div><FormattedMessage id={`File response is available in original format only`}/></div>}&nbsp;
       </MessageBar>
     );
   }
