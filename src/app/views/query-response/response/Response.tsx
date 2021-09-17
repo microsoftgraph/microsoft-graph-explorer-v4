@@ -15,21 +15,19 @@ const Response = () => {
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
 
-  if (headers) {
-    const contentType = getContentType(headers);
-    const responseIsDownloadUrl = body['contentDownloadUrl'];
-    return (
-      <div style={{ display: 'block' }}>
-        {responseMessages(graphResponse, sampleQuery, dispatch)}
-        <ResponseDisplay
-          contentType={contentType}
-          body={!responseIsDownloadUrl && body}
-          height={height}
-        />
-      </div>
-    );
-  }
-  return <div />;
+  const contentDownloadUrl = body?.contentDownloadUrl;
+  const contentType = getContentType(headers);
+  return (
+    <div style={{ display: 'block' }}>
+      {responseMessages(graphResponse, sampleQuery, dispatch)}
+      {headers && <ResponseDisplay
+        contentType={contentType}
+        body={!contentDownloadUrl && body}
+        height={height}
+      />}
+    </div>
+  );
+
 };
 
 export default Response;

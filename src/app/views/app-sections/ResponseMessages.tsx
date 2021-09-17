@@ -51,20 +51,16 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
     );
   }
 
-  const contentDownloadUrl = body['contentDownloadUrl'];
-  if (contentDownloadUrl) {
-    const isOriginalFormat = body['isOriginalFormat'];
-    const isWorkaround = body['isWorkaround'];
-
+  if (body?.contentDownloadUrl) {
     return (
       <MessageBar messageBarType={MessageBarType.warning}>
         <FormattedMessage id={`This response contains unviewable content`}/>&nbsp;
-        <Link href={contentDownloadUrl} download>
+        <Link href={body?.contentDownloadUrl} download>
             <FormattedMessage id={`Click here to download`}/>
         </Link>&nbsp;<br/>
-        {isWorkaround == true && <FormattedMessage id={`Response is result of workaround`}/>}<br/>
+        {body?.isWorkaround == true && <FormattedMessage id={`Response is result of workaround`}/>}<br/>
 
-        {isOriginalFormat == false && <FormattedMessage id={`File response is available in original format only`}/>}&nbsp;
+        {body?.isOriginalFormat == false && <FormattedMessage id={`File response is available in original format only`}/>}&nbsp;
       </MessageBar>
     );
   }

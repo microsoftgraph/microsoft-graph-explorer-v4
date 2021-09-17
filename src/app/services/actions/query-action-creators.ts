@@ -179,14 +179,16 @@ async function fetchContentDownloadUrl(
           const result = await parseResponse(response);
           const downloadUrl = result['@microsoft.graph.downloadUrl'];
 
-          dispatch({
-            body: {
-              contentDownloadUrl: downloadUrl,
-              isOriginalFormat: isOriginalFormat,
-              isWorkaround: true,
-            },
-            headers: null,
-          });
+          dispatch(
+            queryResponse({
+              body: {
+                contentDownloadUrl: downloadUrl,
+                isOriginalFormat: isOriginalFormat,
+                isWorkaround: true,
+              },
+              headers: null,
+            })
+          );
         }
       } else {
         dispatch(
