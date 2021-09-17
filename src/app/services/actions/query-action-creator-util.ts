@@ -86,36 +86,36 @@ function createAuthenticatedRequest(
     authProvider,
     msalAuthOptions
   );
-  const client = GraphClient.getInstance()
+  const graphRequest = GraphClient.getInstance()
     .api(encodeHashCharacters(query))
     .middlewareOptions([middlewareOptions])
     .headers(sampleHeaders)
     .responseType(ResponseType.RAW);
 
-  return client;
+  return graphRequest;
 }
 
 export function makeGraphRequest(scopes: string[]): Function {
   return async (query: IQuery) => {
     let response;
 
-    const client = createAuthenticatedRequest(scopes, query);
+    const graphRequest = createAuthenticatedRequest(scopes, query);
 
     switch (query.selectedVerb) {
       case 'GET':
-        response = await client.get();
+        response = await graphRequest.get();
         break;
       case 'POST':
-        response = await client.post(query.sampleBody);
+        response = await graphRequest.post(query.sampleBody);
         break;
       case 'PUT':
-        response = await client.put(query.sampleBody);
+        response = await graphRequest.put(query.sampleBody);
         break;
       case 'PATCH':
-        response = await client.patch(query.sampleBody);
+        response = await graphRequest.patch(query.sampleBody);
         break;
       case 'DELETE':
-        response = await client.delete();
+        response = await graphRequest.delete();
         break;
       default:
         return;
