@@ -1,4 +1,7 @@
-import { ChoiceGroup, IChoiceGroupOption, INavLink, INavLinkGroup, Label, Nav, SearchBox, styled } from '@fluentui/react';
+import {
+  ChoiceGroup, ContextualMenuItemType, IChoiceGroupOption, Icon, INavLink, INavLinkGroup,
+  Label, Nav, SearchBox, styled
+} from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
@@ -9,6 +12,7 @@ import { filterResourcesByLabel } from '../../../utils/resources/resource-payloa
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
+import LinkItem from './LinkItem';
 
 const ResourceExplorer = (props: any) => {
   const { resources } = useSelector(
@@ -117,6 +121,35 @@ const ResourceExplorer = (props: any) => {
       }
     ]
   });
+  const onItemClick = (e: any, item: { text: any; }, link: { name: any; }) => {
+    alert(`you are clicking '${item.text}' on '${link.name}'`);
+  };
+  const onRenderLink = (properties: any) => {
+    const menuItems = [
+      {
+        key: 'actions',
+        itemType: ContextualMenuItemType.Header,
+        text: properties.key,
+      },
+      { key: 'edit', text: 'Edit' },
+      { key: 'open', text: 'Open' }
+    ];
+
+    return <LinkItem
+      style={{
+        flexGrow: 1,
+        textAlign: 'left',
+        boxSizing: 'border-box'
+      }}
+      key={properties.key}
+      items={menuItems}
+      onItemClick={(e: any, item: any) => onItemClick(e, item, properties)}>
+      <span style={{ display: 'flex' }}>
+        {!!properties.iconProperties && <Icon style={{ margin: '0 4px' }} {...properties.iconProperties} />}
+        {properties.name}
+      </span>
+    </LinkItem>;
+  }
 
   return (
     <section>
@@ -139,6 +172,7 @@ const ResourceExplorer = (props: any) => {
         groups={items}
         onLinkClick={clickLink}
         styles={navStyles}
+        onRenderLink={onRenderLink}
         className={classes.queryList} />
     </section>
   )
