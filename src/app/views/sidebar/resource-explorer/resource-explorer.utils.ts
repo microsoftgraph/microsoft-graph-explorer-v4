@@ -40,3 +40,19 @@ export function createList(source: IResource[]) {
     }
   ];
 }
+
+export function getCurrentTree(paths: any, level: any, resourceItems: IResource[]) {
+  let currentTree = createList(resourceItems)[0];
+  const filters = paths.slice(1, level + 1);
+  filters.forEach((key: string) => {
+    const linkedKey = findLinkByKey(currentTree, key);
+    if (linkedKey) {
+      currentTree = linkedKey;
+    }
+  });
+  return currentTree;
+}
+
+function findLinkByKey(list: any, filter: string): any {
+  return list.links.find((k: any) => k.key === filter);
+}

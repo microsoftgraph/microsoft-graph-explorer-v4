@@ -14,7 +14,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import LinkItem from './LinkItem';
-import { createList } from './resource-explorer.utils';
+import { createList, getCurrentTree } from './resource-explorer.utils';
 
 const ResourceExplorer = (props: any) => {
   const { resources } = useSelector(
@@ -39,7 +39,7 @@ const ResourceExplorer = (props: any) => {
   const [items, setItems] = useState(createList(resourceItems));
   const [isolated, setIsolated] = useState<any>(null);
 
-  const performSearch = (needle: string, haystack: any[]) => {
+  const performSearch = (needle: string, haystack: IResource[]) => {
     const keyword = needle.toLowerCase();
     return haystack.filter((sample: IResource) => {
       const name = sample.segment.toLowerCase();
@@ -48,15 +48,20 @@ const ResourceExplorer = (props: any) => {
   }
 
   const generateBreadCrumbs = () => {
-    if (!!isolated) {
-      const breadcrumbItems: IBreadcrumbItem[] = [];
-      isolated.paths.forEach((path: string, index: number) => {
-        breadcrumbItems.push({ text: path, key: path + index });
-      });
-      const { name } = isolated;
+    function removeCounter(title: string) {
+      return title.split(' (')[0].trim();
+    }
 
+    if (!!isolated && isolated.paths.length > 0) {
+      const breadcrumbItems: IBreadcrumbItem[] = [];
+      isolated.paths.forEach((path: string) => {
+        path = removeCounter(path);
+        breadcrumbItems.push({ text: path, key: path, onClick: navigateToBreadCrumb });
+      });
+      let { name } = isolated;
+      name = removeCounter(name);
       breadcrumbItems.push({ text: name, key: name });
-      return breadcrumbItems
+      return breadcrumbItems;
     }
     return [];
   }
@@ -93,6 +98,21 @@ const ResourceExplorer = (props: any) => {
     setItems(createList(dataSet));
   }
 
+  const navigateToBreadCrumb = (ev?: any, item?: IBreadcrumbItem): void => {
+    const iterator = item!.key;
+    if (iterator === '/') {
+      disableIsolation();
+      return;
+    }
+
+    if (isolated) {
+      const { paths } = isolated;
+      const level = paths.findIndex((k: string) => k === iterator);
+      const currentTree = getCurrentTree(paths, level, resourceItems);
+      isolateTree(currentTree);
+    }
+  }
+
   const navStyles: any = (properties: any) => ({
     chevronIcon: [
       properties.isExpanded && {
@@ -116,8 +136,8 @@ const ResourceExplorer = (props: any) => {
   }
 
   const disableIsolation = (): void => {
-    setItems(createList(resourceItems));
     setIsolated(null);
+    setItems(createList(resourceItems));
   }
 
   const selectContextItem = (e: any, item: any, link: INavLink) => {
@@ -131,6 +151,7 @@ const ResourceExplorer = (props: any) => {
         break;
     }
   };
+
   const renderCustomLink = (properties: any) => {
     const menuItems = [
       {
