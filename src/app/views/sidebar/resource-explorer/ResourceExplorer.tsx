@@ -1,6 +1,6 @@
 import {
-  ChoiceGroup, ContextualMenuItemType, IChoiceGroupOption, Icon, INavLink, INavLinkGroup,
-  Label, Nav, SearchBox, styled
+  ChoiceGroup, ContextualMenuItemType, IChoiceGroupOption,
+  Icon, INavLink, Label, Nav, SearchBox, styled
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -13,6 +13,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import LinkItem from './LinkItem';
+import { createList } from './resource-explorer.utils';
 
 const ResourceExplorer = (props: any) => {
   const { resources } = useSelector(
@@ -34,46 +35,8 @@ const ResourceExplorer = (props: any) => {
 
   const filteredPayload = filterDataByVersion(data, version);
   const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
-
-  const createList = (source: IResource[]) => {
-    function getIcon({ segment, children }: IResource) {
-      const graphFunction = segment.includes('microsoft.graph');
-      let icon = null;
-      if (graphFunction) {
-        icon = 'LightningBolt';
-      }
-      if (!graphFunction && !children) {
-        icon = 'PlugDisconnected';
-      }
-      return icon;
-    }
-
-    function createNavLink(info: IResource): any {
-      const { segment, children } = info;
-      const name = `${segment} ${(children) ? `(${children.length})` : ''}`;
-      const navLink = {
-        key: segment,
-        name,
-        isExpanded: false,
-        icon: getIcon(info),
-        links: (children) ? children.map(createNavLink) : []
-      };
-      return navLink;
-    }
-
-    const converted = createNavLink({
-      segment: '/',
-      label: [],
-      children: source
-    });
-
-    return [
-      {
-        isExpanded: false,
-        links: converted.links
-      }
-    ];
-  }
+  const [items, setItems] = useState(createList(resourceItems));
+  const [isolated, setIsolated] = useState(false);
 
   const performSearch = (needle: string, haystack: any[]) => {
     const keyword = needle.toLowerCase();
@@ -95,7 +58,9 @@ const ResourceExplorer = (props: any) => {
     const selectedVersion = option!.key;
     setVersion(selectedVersion);
     const list = filterDataByVersion(data, selectedVersion);
-    setResourceItems((searchText) ? performSearch(searchText, list.children) : list.children);
+    const dataSet = (searchText) ? performSearch(searchText, list.children) : list.children;
+    setResourceItems(dataSet);
+    setItems(createList(dataSet));
   }
 
   const changeSearchValue = (event: any, value?: string) => {
@@ -104,14 +69,15 @@ const ResourceExplorer = (props: any) => {
     if (value) {
       filtered = performSearch(value, filtered);
     }
-    setResourceItems(filterDataByVersion({
+    const dataSet = filterDataByVersion({
       children: filtered,
       label: data.label,
       segment: data.segment
-    }, version).children);
+    }, version).children;
+    setResourceItems(dataSet);
+    setItems(createList(dataSet));
   }
 
-  const items: INavLinkGroup[] = createList(resourceItems);
   const navStyles: any = (properties: any) => ({
     chevronIcon: [
       properties.isExpanded && {
@@ -122,8 +88,15 @@ const ResourceExplorer = (props: any) => {
       }
     ]
   });
-  const isolateTree = (link: any): void => {
-    alert(`you have isolated '${link.name}'`);
+
+  const isolateTree = (navLink: any): void => {
+    setItems([
+      {
+        isExpanded: false,
+        links: navLink.links
+      }
+    ]);
+    setIsolated(true);
   }
 
   const selectContextItem = (e: any, item: any, link: INavLink) => {
@@ -176,15 +149,19 @@ const ResourceExplorer = (props: any) => {
       <SearchBox
         placeholder={translateMessage('Search resources')}
         onChange={changeSearchValue}
+        disabled={isolated}
         styles={{ field: { paddingLeft: 10 } }}
       />
       <hr />
-      <ChoiceGroup
-        label={translateMessage('Select version')}
-        defaultSelectedKey={version}
-        options={versions}
-        onChange={changeVersion}
-      />;
+      {!isolated && <>
+        <ChoiceGroup
+          label={translateMessage('Select version')}
+          defaultSelectedKey={version}
+          options={versions}
+          onChange={changeVersion}
+        />;
+      </>
+      }
       <Label>
         <FormattedMessage id='Resources available' />
       </Label>
@@ -195,7 +172,7 @@ const ResourceExplorer = (props: any) => {
         onRenderLink={renderCustomLink}
         className={classes.queryList} />
     </section>
-  )
+  );
 }
 
 // @ts-ignore
