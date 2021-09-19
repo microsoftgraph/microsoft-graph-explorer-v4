@@ -1,6 +1,7 @@
 import {
-  ChoiceGroup, ContextualMenuItemType, IChoiceGroupOption,
-  Icon, INavLink, Label, Nav, SearchBox, styled
+  Breadcrumb, ChoiceGroup, ContextualMenuItemType, DefaultButton,
+  IBreadcrumbItem, IChoiceGroupOption, Icon, INavLink,
+  Label, Nav, SearchBox, styled
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -36,7 +37,7 @@ const ResourceExplorer = (props: any) => {
   const filteredPayload = filterDataByVersion(data, version);
   const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
   const [items, setItems] = useState(createList(resourceItems));
-  const [isolated, setIsolated] = useState(false);
+  const [isolated, setIsolated] = useState<any>(null);
 
   const performSearch = (needle: string, haystack: any[]) => {
     const keyword = needle.toLowerCase();
@@ -44,6 +45,20 @@ const ResourceExplorer = (props: any) => {
       const name = sample.segment.toLowerCase();
       return name.toLowerCase().includes(keyword);
     });
+  }
+
+  const generateBreadCrumbs = () => {
+    if (!!isolated) {
+      const breadcrumbItems: IBreadcrumbItem[] = [];
+      isolated.paths.forEach((path: string, index: number) => {
+        breadcrumbItems.push({ text: path, key: path + index });
+      });
+      const { name } = isolated;
+
+      breadcrumbItems.push({ text: name, key: name });
+      return breadcrumbItems
+    }
+    return [];
   }
 
   const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
@@ -90,13 +105,19 @@ const ResourceExplorer = (props: any) => {
   });
 
   const isolateTree = (navLink: any): void => {
-    setItems([
+    const tree = [
       {
         isExpanded: false,
-        links: navLink.links
+        links: navLink.links,
       }
-    ]);
-    setIsolated(true);
+    ];
+    setItems(tree);
+    setIsolated(navLink);
+  }
+
+  const disableIsolation = (): void => {
+    setItems(createList(resourceItems));
+    setIsolated(null);
   }
 
   const selectContextItem = (e: any, item: any, link: INavLink) => {
@@ -144,24 +165,42 @@ const ResourceExplorer = (props: any) => {
     </LinkItem>;
   }
 
+  const breadCrumbs = (!!isolated) ? generateBreadCrumbs() : [];
+
   return (
     <section>
-      <SearchBox
-        placeholder={translateMessage('Search resources')}
-        onChange={changeSearchValue}
-        disabled={isolated}
-        styles={{ field: { paddingLeft: 10 } }}
-      />
-      <hr />
       {!isolated && <>
+        <SearchBox
+          placeholder={translateMessage('Search resources')}
+          onChange={changeSearchValue}
+          disabled={!!isolated}
+          styles={{ field: { paddingLeft: 10 } }}
+        />
+        <hr />
         <ChoiceGroup
           label={translateMessage('Select version')}
           defaultSelectedKey={version}
           options={versions}
           onChange={changeVersion}
         />;
-      </>
-      }
+      </>}
+
+      {isolated && breadCrumbs.length > 0 &&
+        <>
+          <DefaultButton
+            text={translateMessage('Close isolation')}
+            iconProps={{ iconName: 'Back' }}
+            onClick={disableIsolation}
+          />
+          <hr />
+          <Breadcrumb
+            items={breadCrumbs}
+            maxDisplayedItems={3}
+            ariaLabel={translateMessage('Path display')}
+            overflowAriaLabel={translateMessage('More path links')}
+          />
+        </>}
+
       <Label>
         <FormattedMessage id='Resources available' />
       </Label>

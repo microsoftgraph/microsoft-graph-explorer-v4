@@ -13,7 +13,7 @@ export function createList(source: IResource[]) {
     return icon;
   }
 
-  function createNavLink(info: IResource, parent: string | null = null, path: string[] = []): any {
+  function createNavLink(info: IResource, parent: string | null = null, paths: string[] = []): any {
     const { segment, children } = info;
     const name = `${segment} ${(children) ? `(${children.length})` : ''}`;
     return {
@@ -21,9 +21,9 @@ export function createList(source: IResource[]) {
       name,
       isExpanded: false,
       parent,
-      path,
+      paths,
       icon: getIcon(info),
-      links: (children) ? children.map(child => createNavLink(child, segment, [...path, segment])) : []
+      links: (children) ? children.map(child => createNavLink(child, segment, [...paths, segment])) : []
     };
   }
 
