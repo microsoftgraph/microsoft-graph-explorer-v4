@@ -51,13 +51,14 @@ const ResourceExplorer = (props: any) => {
     function createNavLink(info: IResource): any {
       const { segment, children } = info;
       const name = `${segment} ${(children) ? `(${children.length})` : ''}`;
-      return {
+      const navLink = {
         key: segment,
         name,
         isExpanded: false,
         icon: getIcon(info),
         links: (children) ? children.map(createNavLink) : []
       };
+      return navLink;
     }
 
     const converted = createNavLink({
@@ -121,19 +122,38 @@ const ResourceExplorer = (props: any) => {
       }
     ]
   });
-  const onItemClick = (e: any, item: { text: any; }, link: { name: any; }) => {
-    alert(`you are clicking '${item.text}' on '${link.name}'`);
+  const isolateTree = (link: any): void => {
+    alert(`you have isolated '${link.name}'`);
+  }
+
+  const selectContextItem = (e: any, item: any, link: INavLink) => {
+    switch (item.key) {
+      case 'isolate':
+        isolateTree(link);
+        break;
+
+      default:
+        alert(`you are clicking '${item.text}' on '${link.name}'`);
+        break;
+    }
   };
-  const onRenderLink = (properties: any) => {
+  const renderCustomLink = (properties: any) => {
     const menuItems = [
       {
         key: 'actions',
         itemType: ContextualMenuItemType.Header,
         text: properties.key,
-      },
-      { key: 'edit', text: 'Edit' },
-      { key: 'open', text: 'Open' }
+      }
     ];
+
+    if (properties!.links!.length > 0) {
+      menuItems.push(
+        {
+          key: 'isolate',
+          text: translateMessage('Isolate'),
+          itemType: ContextualMenuItemType.Normal
+        });
+    }
 
     return <LinkItem
       style={{
@@ -143,7 +163,7 @@ const ResourceExplorer = (props: any) => {
       }}
       key={properties.key}
       items={menuItems}
-      onItemClick={(e: any, item: any) => onItemClick(e, item, properties)}>
+      onItemClick={(e: any, item: any) => selectContextItem(e, item, properties)}>
       <span style={{ display: 'flex' }}>
         {!!properties.iconProperties && <Icon style={{ margin: '0 4px' }} {...properties.iconProperties} />}
         {properties.name}
@@ -172,7 +192,7 @@ const ResourceExplorer = (props: any) => {
         groups={items}
         onLinkClick={clickLink}
         styles={navStyles}
-        onRenderLink={onRenderLink}
+        onRenderLink={renderCustomLink}
         className={classes.queryList} />
     </section>
   )
