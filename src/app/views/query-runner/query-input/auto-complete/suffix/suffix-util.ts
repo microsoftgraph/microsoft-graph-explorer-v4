@@ -36,6 +36,11 @@ export const styles = mergeStyleSets({
     display: 'block',
     marginTop: 20,
   },
+  buttons: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginTop: 20,
+  },
 });
 
 export const getMatchingSamples = (filterParams: ISampleFilter): ISampleQuery[] => {
