@@ -23,6 +23,6 @@ export interface IUser {
     displayName: string;
     emailAddress: string;
     profileImageUrl: string;
-    profileType?: ACCOUNT_TYPE;
-    ageGroup: string;
+    profileType: ACCOUNT_TYPE;
+    ageGroup: number;
 }

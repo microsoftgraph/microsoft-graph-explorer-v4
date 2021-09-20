@@ -10,7 +10,8 @@ export const GRAPH_API_SANDBOX_ENDPOINT_URL = 'https://cdn.graph.office.net/en-u
 export const HOME_ACCOUNT_KEY = 'fbf1ecbe-27ab-42d7-96d4-3e6b03682ee4';
 export enum ACCOUNT_TYPE {
     AAD = "AAD",
-    MSA = "MSA"
+    MSA = "MSA",
+    UNDEFINED = "UNDEFINED"
 };
 export enum PERMS_SCOPE {
     WORK = "DelegatedWork",
