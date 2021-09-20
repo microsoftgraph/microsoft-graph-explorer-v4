@@ -1,5 +1,6 @@
 import templates from '../../graph-toolkit-examples';
 import { IQuery } from '../../types/query-runner';
+import { GRAPH_TOOOLKIT_EXAMPLE_URL } from '../services/graph-constants';
 import { parseSampleUrl } from './sample-url-generation';
 
 export function lookupToolkitUrl(sampleQuery: IQuery) {
@@ -14,13 +15,12 @@ export function lookupToolkitUrl(sampleQuery: IQuery) {
           let { search: componentUrl } = parseSampleUrl(url);
           componentUrl = componentUrl.replace('?id=', '');
           return {
-            exampleUrl: `https://mgt.dev/?path=/story/${componentUrl}`,
-            toolkitUrl: url
+            exampleUrl: `${GRAPH_TOOOLKIT_EXAMPLE_URL}/${componentUrl}`,
+            toolkitUrl: url,
           };
         }
       }
     }
-
   }
   return { toolkitUrl: null, exampleUrl: null };
 }
