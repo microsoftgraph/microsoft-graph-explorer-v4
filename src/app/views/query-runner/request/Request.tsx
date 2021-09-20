@@ -42,6 +42,7 @@ export class Request extends Component<IRequestComponent, any> {
       handleOnEditorChange,
       mode,
       intl: { messages },
+      tokenPresent
     }: any = this.props;
 
     const heightAdjustment = 55;
@@ -91,16 +92,6 @@ export class Request extends Component<IRequestComponent, any> {
           <Permission />
         </div>
       </PivotItem>,
-      <PivotItem
-        key='feedback'
-        itemIcon='HeartFill'
-        itemKey='feedback'
-        onRenderItemLink={this.getTooltipDisplay}
-        ariaLabel={translateMessage('Feedback')}
-        title={translateMessage('Feedback')}
-        headerText={translateMessage('Feedback')}
-      >
-      </PivotItem>
     ];
 
     if (mode === Mode.Complete) {
@@ -117,8 +108,22 @@ export class Request extends Component<IRequestComponent, any> {
             <Auth />
           </div>
         </PivotItem>,
-
       );
+    }
+
+    if (!tokenPresent) {
+      pivotItems.push(
+        <PivotItem
+          key='feedback'
+          itemIcon='HeartFill'
+          itemKey='feedback'
+          onRenderItemLink={this.getTooltipDisplay}
+          ariaLabel={translateMessage('Feedback')}
+          title={translateMessage('Feedback')}
+          headerText={translateMessage('Feedback')}
+        >
+        </PivotItem>
+      )
     }
 
     return pivotItems;

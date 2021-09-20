@@ -19,7 +19,7 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
     const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
     const currentTheme = getTheme();
     const { NODE_ENV } = process.env;
-    const { profile } = useSelector((state: IRootState) => state);
+    const { profile, authToken } = useSelector((state: IRootState) => state);
 
     function surveyActivated(launcher: any, surveyItem: any) {
         return surveyItem;
@@ -31,8 +31,9 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
             setOfficeBrowserFeedback(floodgateObject);
         });
     }
-
-    initializeFeedback();
+    if (!authToken.token) {
+        initializeFeedback();
+    }
 
     const showCustomSurvey = () => {
         const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
