@@ -34,23 +34,5 @@ export function fetchResources(): Function {
     } catch (error) {
       return dispatch(fetchResourcesError({ error }));
     }
-
-    // try {
-    //   const headers = {
-    //     'Content-Type': 'application/json',
-    //   };
-    //   const options: IRequestOptions = { headers, method: 'POST' };
-    //   dispatch(fetchResourcesPending());
-    //   const response = await fetch(URI_SPACE_URL, options);
-    //   if (response.ok) {
-    //     const result = await response.json();
-    //     const resources = filterResourcesByLabel(result)
-    //     return dispatch(fetchResourcesSuccess(resources!));
-    //   }
-    //   throw response;
-    // } catch (error) {
-    //   return dispatch(fetchResourcesError({ error }));
-
-    // }
   };
 }
