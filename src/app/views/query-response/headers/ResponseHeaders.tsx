@@ -17,7 +17,7 @@ const ResponseHeaders = () => {
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
 
-  const responseIsDownloadUrl = body['contentDownloadUrl'];
+  const responseIsDownloadUrl = body?.contentDownloadUrl;
   if (!headers && responseIsDownloadUrl) {
     return (
       <MessageBar messageBarType={MessageBarType.warning}>

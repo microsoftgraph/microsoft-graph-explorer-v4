@@ -20,7 +20,8 @@ const Response = () => {
   return (
     <div style={{ display: 'block' }}>
       {responseMessages(graphResponse, sampleQuery, dispatch)}
-      {headers && <ResponseDisplay
+      {headers &&
+      <ResponseDisplay
         contentType={contentType}
         body={!contentDownloadUrl && body}
         height={height}

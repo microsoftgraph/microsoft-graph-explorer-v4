@@ -6,6 +6,7 @@ import { IGraphResponse } from '../../../types/query-response';
 import { IQuery } from '../../../types/query-runner';
 import { runQuery } from '../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
+import { ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK } from '../../services/graph-constants';
 
 interface ODataLink {
   link: string;
@@ -40,6 +41,7 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
     dispatch(runQuery(query));
   }
 
+  // Display link to step to next result
   if (odataLink) {
     return (
       <MessageBar messageBarType={MessageBarType.info}>
@@ -51,19 +53,33 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
     );
   }
 
+  // Display link to downlod file response
   if (body?.contentDownloadUrl) {
-    const workaroundQueries = {
-      oneDrive: `await client.api('/drive/items/{item-id}').get().select('content.downloadUrl')`
-    };
     return (
-      <MessageBar messageBarType={MessageBarType.warning}>
-        <FormattedMessage id={`This response contains unviewable content`}/>&nbsp;
-        <Link href={body?.contentDownloadUrl} download>
-            <FormattedMessage id={`Click here to download`}/>
-        </Link>&nbsp;
-        {body?.isWorkaround == true && <div><FormattedMessage id={`Response is result of workaround`}/> {workaroundQueries.oneDrive} </div>}
-        {body?.isOriginalFormat == false && <div><FormattedMessage id={`File response is available in original format only`}/></div>}&nbsp;
-      </MessageBar>
-    );
+      <div>
+        <MessageBar messageBarType={MessageBarType.info}>
+          <FormattedMessage id={`This response contains unviewable content`}/>
+          <Link href={body?.contentDownloadUrl} download>
+              <FormattedMessage id={`Click to download file`}/>
+          </Link>&nbsp;
+        </MessageBar>
+        {body?.isWorkaround == true &&
+          <MessageBar messageBarType={MessageBarType.warning}>
+            <FormattedMessage id={`Response is result of workaround`}/>
+            {body?.isOriginalFormat == false &&
+              <span>
+                &nbsp;
+                <FormattedMessage id={`File response is available in original format only`}/>
+              </span>
+            }
+            &nbsp;
+            <FormattedMessage id={`For more information`}/>
+            <Link href={ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK} target='_blank'>
+              <FormattedMessage id={`documentation`}/>.
+            </Link>
+          </MessageBar>
+        }
+      </div>
+      );
   }
 }
