@@ -1,4 +1,5 @@
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
+import { AuthenticationType } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 import { OfficeBrowserFeedback } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window';
 import { getTheme, MessageBarType } from 'office-ui-fabric-react';
 import React, { useState } from 'react';
@@ -8,6 +9,7 @@ import { geLocale } from '../../../../../appLocale';
 import { authenticationWrapper } from '../../../../../modules/authentication';
 import { IRootState } from '../../../../../types/root';
 import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
+import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { getVersion } from '../../../../utils/version';
 import CampaignDefinitions from './campaignDefinitions';
@@ -64,11 +66,14 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
 
     async function loadAndInitialize(
         floodgateObject: any,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         onSurveyActivated: (launcher: any, surveyItem: any) => void): Promise<void> {
         floodgateObject.initOptions = {
             appId: 2256,
             stylesUrl: ' ', // Mandatory field
             environment: (NODE_ENV === 'development') ? 1 : 0, // 0 - Prod, 1 - Int
+            ageGroup: profile?.ageGroup,
+            authenticationType: getAuthType(profile?.profileType!),
             locale: geLocale,
             onError: (error: string) => { throw error; },
             build: getVersion().toString(),
@@ -76,7 +81,7 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
             secondaryColour: currentTheme.palette.themeSecondary,
             telemetryGroup: {
                 audienceGroup: 'Graph Explorer',
-                loggableUserId: `a:${profile?.id}`,
+                // loggableUserId: `a:${profile?.id}`,
                 tenantId: authenticationWrapper.getAccount()?.tenantId,
             },
             userEmail: ' ',  // Replaced by the user email
@@ -105,6 +110,7 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
             },
             uIStringGetter: (str: string) => { return uiStringMap[str]; }
         };
+
 
         // Setting the UI strings here before initialization.
         floodgateObject.setUiStrings({
@@ -185,6 +191,13 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
     return (
         <div />
     );
+
+    function getAuthType(profileType: ACCOUNT_TYPE) {
+        return AuthenticationType[ACCOUNT_TYPE[profileType] as keyof typeof AuthenticationType];
+
+    }
+
 }
+
 
 

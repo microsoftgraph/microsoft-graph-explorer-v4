@@ -1,3 +1,4 @@
+import { AgeGroup } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
 import {
@@ -51,7 +52,8 @@ async function getProfileInformation(): Promise<IUser> {
     displayName: '',
     emailAddress: '',
     profileImageUrl: '',
-    ageGroup: 'Undefined'
+    profileType: ACCOUNT_TYPE.UNDEFINED,
+    ageGroup: 0
   };
   try {
     query.sampleUrl = USER_INFO_URL;
@@ -69,7 +71,11 @@ async function getProfileType(): Promise<ACCOUNT_TYPE> {
   try {
     query.sampleUrl = BETA_USER_INFO_URL;
     const { userInfo } = await getProfileResponse();
-    return userInfo?.account?.[0]?.source?.type?.[0];
+    const profileType: ACCOUNT_TYPE = userInfo?.account?.[0]?.source?.type?.[0]
+    if (profileType === undefined) {
+      return ACCOUNT_TYPE.UNDEFINED
+    }
+    return profileType;
   } catch (error) {
     return ACCOUNT_TYPE.MSA;
   }
@@ -103,17 +109,20 @@ async function getProfileResponse() {
   };
 }
 
-async function getAgeGroup(): Promise<string> {
+async function getAgeGroup(): Promise<AgeGroup> {
   const profileType = await getProfileType();
   if (profileType === ACCOUNT_TYPE.MSA) {
     try {
       const { userInfo } = await getProfileResponse();
-      return userInfo?.account?.[0]?.ageGroup;
+      const ageGroup = userInfo?.accopunt?.[0]?.ageGroup;
+      if (ageGroup === undefined || ageGroup === '') {
+        return 0;
+      }
+      return ageGroup;
     } catch (error) {
-      return 'Undefined';
+      return 0;
     }
   } else {
-    return 'Undefined';
+    return 0;
   }
-
 }
