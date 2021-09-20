@@ -14,7 +14,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import LinkItem from './LinkItem';
-import { createList, getCurrentTree } from './resource-explorer.utils';
+import { createList, getCurrentTree, removeCounter } from './resource-explorer.utils';
 
 const ResourceExplorer = (props: any) => {
   const { resources } = useSelector(
@@ -48,10 +48,6 @@ const ResourceExplorer = (props: any) => {
   }
 
   const generateBreadCrumbs = () => {
-    function removeCounter(title: string) {
-      return title.split(' (')[0].trim();
-    }
-
     if (!!isolated && isolated.paths.length > 0) {
       const breadcrumbItems: IBreadcrumbItem[] = [];
       isolated.paths.forEach((path: string) => {
@@ -137,7 +133,8 @@ const ResourceExplorer = (props: any) => {
 
   const disableIsolation = (): void => {
     setIsolated(null);
-    setItems(createList(resourceItems));
+    setSearchText('');
+    setItems(createList(filterDataByVersion(data, version).children));
   }
 
   const selectContextItem = (e: any, item: any, link: INavLink) => {
