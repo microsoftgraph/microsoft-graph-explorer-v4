@@ -27,6 +27,6 @@ export const queryResponseStyles = (theme: ITheme) => {
     copyIcon: {
       float: 'right',
       zIndex: 1
-    }
+    },
   };
 };
