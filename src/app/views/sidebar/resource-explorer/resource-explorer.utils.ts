@@ -31,7 +31,7 @@ export function createList(source: IResource[]) {
 
   const navLink = createNavLink({
     segment: '/',
-    label: [],
+    labels: [],
     children: source
   })
 

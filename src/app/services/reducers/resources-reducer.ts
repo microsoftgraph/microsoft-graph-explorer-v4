@@ -6,7 +6,7 @@ const initialState: IResources = {
   pending: false,
   data: {
     children: [],
-    label: [],
+    labels: [],
     segment: ''
   },
   error: null

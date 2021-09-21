@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 import { IResource } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
-import { filterResourcesByLabel } from '../../../utils/resources/resource-payload-filter';
+import { getResourcesSupportedByVersion } from '../../../utils/resources/resource-payload-filter';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -31,7 +31,7 @@ const ResourceExplorer = (props: any) => {
   const [searchText, setSearchText] = useState<string>('');
 
   const filterDataByVersion = (info: IResource, selectedVersion: string) => {
-    return filterResourcesByLabel(filterResourcesByLabel(info, ['Prod']), [selectedVersion]);
+    return getResourcesSupportedByVersion(info, [selectedVersion]);
   }
 
   const filteredPayload = filterDataByVersion(data, version);
@@ -87,7 +87,7 @@ const ResourceExplorer = (props: any) => {
     }
     const dataSet = filterDataByVersion({
       children: filtered,
-      label: data.label,
+      labels: data.labels,
       segment: data.segment
     }, version).children;
     setResourceItems(dataSet);

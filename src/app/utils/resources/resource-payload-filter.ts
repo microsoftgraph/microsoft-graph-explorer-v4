@@ -1,18 +1,18 @@
 import { IResource } from '../../../types/resources';
 
-export function filterResourcesByLabel(content: IResource, filters: string[]): IResource {
+export function getResourcesSupportedByVersion(content: IResource, filters: string[]): IResource {
   const resources: IResource = { ...content };
   const children: IResource[] = [];
   resources.children.forEach((child: IResource) => {
-    const labelExists = filters.some(cloud => {
-      return child.label.some(label => {
-        return label.includes(cloud);
-      });
-    });
-    if (labelExists) {
-      children.push(child);
-    }
+    if (labelExists(filters, child)) { children.push(child); }
   });
   resources.children = children;
   return resources;
+}
+
+function labelExists(filters: string[], child: IResource) {
+  return filters.some(filter => {
+    const labelFilter = child.labels.find(k => k.name === filter);
+    return labelFilter;
+  });
 }

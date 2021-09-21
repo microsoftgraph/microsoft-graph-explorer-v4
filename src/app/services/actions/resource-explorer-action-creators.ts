@@ -1,6 +1,5 @@
 import { IAction } from '../../../types/action';
 import { FETCH_RESOURCES_SUCCESS, FETCH_RESOURCES_PENDING, FETCH_RESOURCES_ERROR } from '../redux-constants';
-import { filterResourcesByLabel } from '../../utils/resources/resource-payload-filter';
 import content from '../../utils/resources/resources.json';
 import { IResource } from '../../../types/resources';
 
@@ -27,10 +26,8 @@ export function fetchResourcesError(response: object): IAction {
 export function fetchResources(): Function {
   return async (dispatch: Function) => {
     try {
-      const clouds = ['Prod'];
       const resources = JSON.parse(JSON.stringify(content)) as IResource;
-      const filteredPayload = filterResourcesByLabel(resources, clouds);
-      return dispatch(fetchResourcesSuccess(filteredPayload));
+      return dispatch(fetchResourcesSuccess(resources));
     } catch (error) {
       return dispatch(fetchResourcesError({ error }));
     }
