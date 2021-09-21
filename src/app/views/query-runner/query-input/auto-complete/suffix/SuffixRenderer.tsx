@@ -11,7 +11,9 @@ import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../../utils/translate-messages';
 import { HintList } from './HintList';
-import { getMatchingSamples, IHint, styles } from './suffix-util';
+import { getMatchingSamples, IHint } from './suffix-util';
+import { styles } from './suffix.styles';
+
 
 const SuffixRenderer = () => {
   const { autoComplete, sampleQuery, samples, queryRunnerStatus } = useSelector(

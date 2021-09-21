@@ -1,4 +1,3 @@
-import { FontWeights, mergeStyleSets } from '@fluentui/react';
 
 import { IQuery, ISampleQuery } from '../../../../../../types/query-runner';
 import { GRAPH_URL } from '../../../../../services/graph-constants';
@@ -19,29 +18,6 @@ export interface ISampleFilter {
   sampleUrl: string;
   queryRunnerStatus: any
 }
-
-export const styles = mergeStyleSets({
-  iconButton: {
-    cursor: 'pointer'
-  },
-  callout: {
-    width: 320,
-    padding: '20px 24px',
-  },
-  title: {
-    marginBottom: 12,
-    fontWeight: FontWeights.semilight,
-  },
-  link: {
-    display: 'block',
-    marginTop: 20,
-  },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    marginTop: 20,
-  },
-});
 
 export const getMatchingSamples = (filterParams: ISampleFilter): ISampleQuery[] => {
   const { queries, sampleQuery, sampleUrl, queryRunnerStatus } = filterParams;
@@ -96,9 +72,15 @@ function filterQueriesUsingQueryParameters(querySamples: ISampleQuery[], sampleQ
       });
 
       if (list.length > 0) {
-        return list.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+        return getUniqueSample(list);
       }
     }
   }
   return querySamples;
+
+  function getUniqueSample(list: ISampleQuery[]) {
+    return list.filter((sample, index, filteredList) =>
+      filteredList.findIndex(query =>
+        (query.id === sample.id)) === index);
+  }
 }
