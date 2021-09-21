@@ -9,12 +9,11 @@ import { useSelector } from 'react-redux';
 
 import { IResource } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
-import { getResourcesSupportedByVersion } from '../../../utils/resources/resource-payload-filter';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import LinkItem from './LinkItem';
-import { createList, getCurrentTree, removeCounter } from './resource-explorer.utils';
+import { createList, getCurrentTree, getResourcesSupportedByVersion, removeCounter } from './resource-explorer.utils';
 
 const ResourceExplorer = (props: any) => {
   const { resources } = useSelector(
@@ -30,13 +29,9 @@ const ResourceExplorer = (props: any) => {
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');
 
-  const filterDataByVersion = (info: IResource, selectedVersion: string) => {
-    return getResourcesSupportedByVersion(info, [selectedVersion]);
-  }
-
-  const filteredPayload = filterDataByVersion(data, version);
+  const filteredPayload = getResourcesSupportedByVersion(data, version);
   const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
-  const [items, setItems] = useState(createList(resourceItems));
+  const [items, setItems] = useState(createList(resourceItems, version));
   const [isolated, setIsolated] = useState<any>(null);
 
   const performSearch = (needle: string, haystack: IResource[]) => {
@@ -73,10 +68,10 @@ const ResourceExplorer = (props: any) => {
     option: IChoiceGroupOption | undefined): void => {
     const selectedVersion = option!.key;
     setVersion(selectedVersion);
-    const list = filterDataByVersion(data, selectedVersion);
+    const list = getResourcesSupportedByVersion(data, selectedVersion);
     const dataSet = (searchText) ? performSearch(searchText, list.children) : list.children;
     setResourceItems(dataSet);
-    setItems(createList(dataSet));
+    setItems(createList(dataSet, selectedVersion));
   }
 
   const changeSearchValue = (event: any, value?: string) => {
@@ -85,13 +80,13 @@ const ResourceExplorer = (props: any) => {
     if (value) {
       filtered = performSearch(value, filtered);
     }
-    const dataSet = filterDataByVersion({
+    const dataSet = getResourcesSupportedByVersion({
       children: filtered,
       labels: data.labels,
       segment: data.segment
     }, version).children;
     setResourceItems(dataSet);
-    setItems(createList(dataSet));
+    setItems(createList(dataSet, version));
   }
 
   const navigateToBreadCrumb = (ev?: any, item?: IBreadcrumbItem): void => {
@@ -104,7 +99,7 @@ const ResourceExplorer = (props: any) => {
     if (isolated) {
       const { paths } = isolated;
       const level = paths.findIndex((k: string) => k === iterator);
-      const currentTree = getCurrentTree(paths, level, resourceItems);
+      const currentTree = getCurrentTree({ paths, level, resourceItems, version });
       isolateTree(currentTree);
     }
   }
@@ -134,7 +129,8 @@ const ResourceExplorer = (props: any) => {
   const disableIsolation = (): void => {
     setIsolated(null);
     setSearchText('');
-    setItems(createList(filterDataByVersion(data, version).children));
+    const filtered = getResourcesSupportedByVersion(data, version);
+    setItems(createList(filtered.children, version));
   }
 
   const selectContextItem = (e: any, item: any, link: INavLink) => {
@@ -154,7 +150,7 @@ const ResourceExplorer = (props: any) => {
       {
         key: 'actions',
         itemType: ContextualMenuItemType.Header,
-        text: properties.key,
+        text: properties.name,
       }
     ];
 

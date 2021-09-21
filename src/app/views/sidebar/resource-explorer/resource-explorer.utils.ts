@@ -1,6 +1,13 @@
 import { IResource } from '../../../../types/resources';
 
-export function createList(source: IResource[]) {
+interface ITreeFilter {
+  paths: string[];
+  level: number;
+  resourceItems: IResource[];
+  version: string;
+}
+
+export function createList(source: IResource[], version: string): any {
   function getIcon({ segment, children }: IResource) {
     const graphFunction = segment.includes('microsoft.graph');
     let icon = null;
@@ -14,18 +21,19 @@ export function createList(source: IResource[]) {
   }
 
   function createNavLink(info: IResource, parent: string | null = null, paths: string[] = []): any {
-    const { segment, children } = info;
-    const name = `${segment} ${(children) ? `(${children.length})` : ''}`;
+    const { segment, children, labels } = info;
     const level = paths.length;
+    const versionedChildren = (children) ? children.filter(child => versionExists(child, version)) : [];
     return {
       key: `${level}-${parent}-${segment}`,
-      name,
+      name: `${segment} ${(versionedChildren && versionedChildren.length > 0) ? `(${versionedChildren.length})` : ''}`,
+      labels,
       isExpanded: false,
       parent,
       level,
       paths,
       icon: getIcon(info),
-      links: (children) ? children.map(child => createNavLink(child, segment, [...paths, segment])) : []
+      links: (children) ? versionedChildren.map(child => createNavLink(child, segment, [...paths, segment])) : []
     };
   }
 
@@ -43,8 +51,8 @@ export function createList(source: IResource[]) {
   ];
 }
 
-export function getCurrentTree(paths: any, level: any, resourceItems: IResource[]) {
-  let currentTree = createList(resourceItems)[0];
+export function getCurrentTree({ paths, level, resourceItems, version }: ITreeFilter) {
+  let currentTree = createList(resourceItems, version)[0];
   const filters = paths.slice(1, level + 1);
   filters.forEach((key: string) => {
     const linkedKey = findLinkByName(currentTree, key);
@@ -61,4 +69,18 @@ function findLinkByName(list: any, filter: string): any {
 
 export function removeCounter(title: string) {
   return title.split(' (')[0].trim();
+}
+
+export function getResourcesSupportedByVersion(content: IResource, version: string): IResource {
+  const resources: IResource = { ...content };
+  const children: IResource[] = [];
+  resources.children.forEach((child: IResource) => {
+    if (versionExists(child, version)) { children.push(child); }
+  });
+  resources.children = children;
+  return resources;
+}
+
+export function versionExists(child: IResource, version: string) {
+  return !!child.labels.find(k => k.name === version);
 }
