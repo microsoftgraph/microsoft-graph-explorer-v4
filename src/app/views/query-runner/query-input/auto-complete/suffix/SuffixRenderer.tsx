@@ -111,7 +111,7 @@ const SuffixRenderer = () => {
             </Text>
             <HintList hints={hints} />
             <FocusZone>
-              <Stack className={styles.buttons} gap={8} horizontal>
+              <Stack className={styles.buttons} tokens={{ childrenGap: 8 }} horizontal>
                 <DefaultButton onClick={toggleCallout}><FormattedMessage id='Close' /></DefaultButton>
               </Stack>
             </FocusZone>
