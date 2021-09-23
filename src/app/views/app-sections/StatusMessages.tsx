@@ -40,7 +40,7 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
     const query: IQuery = { ...sampleQuery };
     query.sampleUrl = link;
     actions.setSampleQuery(query);
-  };
+  }
 
   if (queryState) {
     const { messageType, statusText, status, duration, hint } = queryState;

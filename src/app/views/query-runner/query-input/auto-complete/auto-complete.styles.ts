@@ -27,8 +27,8 @@ export const autoCompleteStyles = (theme: ITheme) => {
       display: 'block',
       selectors: {
         ':hover': {
-          background: theme.palette.neutralLight,
-        },
+          background: theme.palette.neutralLight
+        }
       },
       cursor: 'pointer',
       backgroundColor: theme.palette.white,
@@ -61,7 +61,7 @@ export const autoCompleteStyles = (theme: ITheme) => {
       borderWidth: '1px',
       borderStyle: 'solid',
       overflow: 'hidden',
-      wordWrap: "normal",
+      wordWrap: 'normal',
       backgroundColor: theme.palette.neutralLight
     },
     suggestionTitle: {

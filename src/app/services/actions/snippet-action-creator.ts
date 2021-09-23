@@ -4,26 +4,26 @@ import { parseSampleUrl } from '../../utils/sample-url-generation';
 import {
   GET_SNIPPET_ERROR,
   GET_SNIPPET_PENDING,
-  GET_SNIPPET_SUCCESS,
+  GET_SNIPPET_SUCCESS
 } from '../redux-constants';
 
 export function getSnippetSuccess(response: string): IAction {
   return {
     type: GET_SNIPPET_SUCCESS,
-    response,
+    response
   };
 }
 
 export function getSnippetError(response: object): IAction {
   return {
     type: GET_SNIPPET_ERROR,
-    response,
+    response
   };
 }
 
 export function getSnippetPending(): any {
   return {
-    type: GET_SNIPPET_PENDING,
+    type: GET_SNIPPET_PENDING
   };
 }
 
@@ -47,13 +47,10 @@ export function getSnippet(language: string): Function {
 
       const method = 'POST';
       const headers = {
-        'Content-Type': 'application/http',
+        'Content-Type': 'application/http'
       };
-      // tslint:disable-next-line: max-line-length
-      const body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search
-        } HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(
-          sampleQuery.sampleBody
-        )}`;
+      // eslint-disable-next-line max-len
+      const body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search} HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(sampleQuery.sampleBody)}`;
       const options: IRequestOptions = { method, headers, body };
       const obj: any = {};
 

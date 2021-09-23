@@ -11,7 +11,7 @@ export const queryInputStyles = (theme: ITheme) => {
       noSuggestions: {
         color: theme.palette.black,
         padding: 10
-      },
+      }
     }
   };
 };

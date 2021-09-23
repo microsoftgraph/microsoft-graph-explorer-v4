@@ -25,5 +25,5 @@ export const light = {
     black: '#1d1d1d',
     white: '#ffffff',
     blueMid: '#00188F'
-  },
+  }
 };

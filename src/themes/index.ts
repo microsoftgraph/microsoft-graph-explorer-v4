@@ -7,7 +7,7 @@ import { light } from './light';
 const themes: any = {
   dark,
   light,
-  'high-contrast': highContrast,
+  'high-contrast': highContrast
 };
 
 export function loadGETheme(theme: string): void {

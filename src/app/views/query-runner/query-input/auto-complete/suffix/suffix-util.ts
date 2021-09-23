@@ -50,7 +50,7 @@ function filterQueriesUsingTip(querySamples: ISampleQuery[], queryRunnerStatus: 
     }
   }
   return querySamples;
-};
+}
 
 function filterQueriesUsingQueryParameters(querySamples: ISampleQuery[], sampleQuery: IQuery) {
   const { search } = parseSampleUrl(sampleQuery.sampleUrl);
