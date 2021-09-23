@@ -114,7 +114,7 @@ async function getAgeGroup(): Promise<AgeGroup> {
   if (profileType === ACCOUNT_TYPE.MSA) {
     try {
       const { userInfo } = await getProfileResponse();
-      const ageGroup = userInfo?.accopunt?.[0]?.ageGroup;
+      const ageGroup = userInfo?.account?.[0]?.ageGroup;
       if (ageGroup === undefined || ageGroup === '') {
         return 0;
       }
