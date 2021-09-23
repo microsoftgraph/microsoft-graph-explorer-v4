@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
-import Joyride, { ACTIONS, CallBackProps, EVENTS, STATUS } from 'react-joyride';
+import Joyride, { ACTIONS, BeaconRenderProps, CallBackProps, EVENTS, STATUS } from 'react-joyride';
 import { ITourSteps } from './tourUtils/types'
 import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton} from '@fluentui/react';
 import { IRootState } from '../../../types/root';
@@ -173,6 +173,7 @@ const GETour = (props? : any) => {
                 tooltipComponent={tooltip}
                 debug={true}
                 floaterProps={{hideArrow : true}}
+                //beaconComponent={(props_ : BeaconRenderProps) =>beaconComponent(props_)}
             />
             {tourComplete === true &&
                 <Dialog dialogContentProps={dialogContentProps} hidden={hideDialog}  >
