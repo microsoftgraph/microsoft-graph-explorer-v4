@@ -379,5 +379,13 @@
   "interaction_required_consent": "Please wait for the consent process to finish and verify that pop-ups are enabled.",
   "user_cancelled_consent": "Please wait for the consent process to finish.",
   "access_denied_consent": "Your consent to this permission has been blocked by your tenant admin. Ask your admin to grant you access and then try again.",
-  "Learn more": "Learn more"
+  "Learn more": "Learn more",
+  "loading resources": "loading resources",
+  "Isolate": "Isolate",
+  "Search resources": "Search resources",
+  "Select version": "Select version",
+  "Close isolation": "Close isolation",
+  "Path display": "Path display",
+  "More path links": "More path links",
+  "Resources available": "Resources available"
 }

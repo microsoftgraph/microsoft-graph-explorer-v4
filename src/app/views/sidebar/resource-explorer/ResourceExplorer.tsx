@@ -1,7 +1,7 @@
 import {
   Breadcrumb, ChoiceGroup, ContextualMenuItemType, DefaultButton,
   IBreadcrumbItem, IChoiceGroupOption, Icon, INavLink,
-  Label, Nav, SearchBox, styled
+  Label, Nav, SearchBox, Spinner, SpinnerSize, styled
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -20,7 +20,7 @@ const ResourceExplorer = (props: any) => {
     (state: IRootState) => state
   );
   const classes = classNames(props);
-  const { data } = resources;
+  const { data, pending } = resources;
   const versions: IChoiceGroupOption[] = [
     { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
     { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
@@ -33,6 +33,18 @@ const ResourceExplorer = (props: any) => {
   const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
   const [items, setItems] = useState(createList(resourceItems, version));
   const [isolated, setIsolated] = useState<any>(null);
+
+  if (pending) {
+    return (
+      <Spinner
+        className={classes.spinner}
+        size={SpinnerSize.large}
+        label={`${translateMessage('loading resources')} ...`}
+        ariaLive='assertive'
+        labelPosition='top'
+      />
+    );
+  }
 
   const performSearch = (needle: string, haystack: IResource[]) => {
     const keyword = needle.toLowerCase();

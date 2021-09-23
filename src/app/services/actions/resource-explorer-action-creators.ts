@@ -1,7 +1,8 @@
 import { IAction } from '../../../types/action';
 import { FETCH_RESOURCES_SUCCESS, FETCH_RESOURCES_PENDING, FETCH_RESOURCES_ERROR } from '../redux-constants';
-import content from '../../utils/resources/resources.json';
 import { IResource } from '../../../types/resources';
+import { IRootState } from '../../../types/root';
+import { IRequestOptions } from '../../../types/request';
 
 export function fetchResourcesSuccess(response: object): IAction {
   return {
@@ -24,10 +25,25 @@ export function fetchResourcesError(response: object): IAction {
 }
 
 export function fetchResources(): Function {
-  return async (dispatch: Function) => {
+  return async (dispatch: Function, getState: Function) => {
     try {
-      const resources = JSON.parse(JSON.stringify(content)) as IResource;
-      return dispatch(fetchResourcesSuccess(resources));
+      const { devxApi }: IRootState = getState();
+      const resourcesUrl = `${devxApi.baseUrl}/openapi/tree`;
+
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      const options: IRequestOptions = { headers };
+
+      dispatch(fetchResourcesPending());
+
+      const response = await fetch(resourcesUrl, options);
+      if (response.ok) {
+        const resources = await response.json() as IResource;
+        return dispatch(fetchResourcesSuccess(resources));
+      }
+      throw response;
     } catch (error) {
       return dispatch(fetchResourcesError({ error }));
     }
