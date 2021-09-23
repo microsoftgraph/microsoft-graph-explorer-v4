@@ -33,7 +33,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
 
-  let isTabletSize : boolean = (windowWidth <= 1320) ? true : false;
+  let isTabletSize: boolean = (windowWidth <= 1320) ? true : false;
 
   const {
     intl: { messages },
@@ -47,8 +47,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
 
   const handleWindowResize = () => {
     const currentWindowWidth = window.innerWidth;
-let isTabletSize = false;
-    if(currentWindowWidth <= 1320){
+    isTabletSize = false;
+    if (currentWindowWidth <= 1320) {
       isTabletSize = true;
     }
     setWindowWidth(currentWindowWidth);
