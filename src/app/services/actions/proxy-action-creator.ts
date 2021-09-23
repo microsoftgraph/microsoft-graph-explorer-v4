@@ -20,6 +20,6 @@ export function getGraphProxyUrl(): Function {
 export function setGraphProxyUrl(response: string): IAction {
   return {
     type: SET_GRAPH_PROXY_URL,
-    response,
+    response
   };
 }

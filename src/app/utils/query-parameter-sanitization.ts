@@ -19,7 +19,7 @@ const PROPERTY_NAME_REGEX = /^((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const QUOTED_TEXT_REGEX = /^["']([^"]*)['"]$/;
 // Matches segments of $filter query option values e.g. isRead eq false will match isRead, eq, false
-// tslint:disable-next-line: max-line-length
+// eslint-disable-next-line max-len
 const FILTER_SEGMENT_REGEX = /(((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)\(.*?\))|("[^\"]+")|('[^\']+')|\(.*?\)|[^\s]+/gi;
 // Matches segments of $search query option e.g.
 // "description:One" AND ("displayName:Video" OR "displayName:Drive") will match
@@ -243,7 +243,7 @@ function sanitizeSearchQueryOptionValue(queryOptionValue: string): string {
     // Sanitize segment in the form of "pizza" and "body:excitement"
     if (QUOTED_TEXT_REGEX.test(segment)) {
       if (!segment.includes(':')) {
-        sanitizedQueryString += ` <value>`;
+        sanitizedQueryString += ' <value>';
       }
       else {
         // Extract property name

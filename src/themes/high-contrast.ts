@@ -22,7 +22,7 @@ export const highContrast = {
     neutralDark: '#f4f4f4',
     black: '#f8f8f8',
     white: '#000000',
-    blueMid: '#6cb8f6',
+    blueMid: '#6cb8f6'
   },
   semanticColors: {
     messageText: '#f4f4f4',
@@ -37,6 +37,6 @@ export const highContrast = {
     successBackground: '#393d1b',
     successIcon: '#92c353',
     warningBackground: '#433519',
-    warningIcon: '#c8c6c4',
-  },
+    warningIcon: '#c8c6c4'
+  }
 };

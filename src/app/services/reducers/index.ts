@@ -46,5 +46,5 @@ export default combineReducers({
   sidebarProperties,
   snippets,
   termsOfUse,
-  theme,
+  theme
 });

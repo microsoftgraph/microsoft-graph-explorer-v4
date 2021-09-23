@@ -11,7 +11,7 @@ import {
 export function addHistoryItem(historyItem: IHistoryItem): any {
   return {
     type: ADD_HISTORY_ITEM_SUCCESS,
-    response: historyItem,
+    response: historyItem
   };
 }
 
@@ -23,7 +23,7 @@ export function removeHistoryItem(historyItem: IHistoryItem): Function {
       .then(() => {
         dispatch({
           type: REMOVE_HISTORY_ITEM_SUCCESS,
-          response: historyItem,
+          response: historyItem
         });
       });
   };
@@ -41,7 +41,7 @@ export function bulkRemoveHistoryItems(historyItems: IHistoryItem[]): Function {
       .then(() => {
         dispatch({
           type: REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
-          response: listOfKeys,
+          response: listOfKeys
         });
       });
   };
@@ -50,6 +50,6 @@ export function bulkRemoveHistoryItems(historyItems: IHistoryItem[]): Function {
 export function viewHistoryItem(historyItem: IHistoryItem): any {
   return {
     type: VIEW_HISTORY_ITEM_SUCCESS,
-    response: historyItem,
+    response: historyItem
   };
 }

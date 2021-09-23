@@ -3,7 +3,7 @@ import {
   Icon,
   Pivot,
   PivotItem,
-  TooltipHost,
+  TooltipHost
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { Component, CSSProperties } from 'react';
@@ -33,7 +33,7 @@ export class Request extends Component<IRequestComponent, any> {
     const {
       handleOnEditorChange,
       mode,
-      intl: { messages },
+      intl: { messages }
     }: any = this.props;
 
     const heightAdjustment = 55;
@@ -79,7 +79,7 @@ export class Request extends Component<IRequestComponent, any> {
         <div style={containerStyle}>
           <Permission />
         </div>
-      </PivotItem>,
+      </PivotItem>
     ];
 
     if (mode === Mode.Complete) {
@@ -144,7 +144,7 @@ export class Request extends Component<IRequestComponent, any> {
       <Resizable
         style={{
           border: 'solid 1px #ddd',
-          marginBottom: 10,
+          marginBottom: 10
         }}
         onResize={(e: any, direction: any, ref: any) => {
           if (ref && ref.style && ref.style.height) {
@@ -156,10 +156,10 @@ export class Request extends Component<IRequestComponent, any> {
         bounds={'window'}
         size={{
           height: 'inherit',
-          width: '100%',
+          width: '100%'
         }}
         enable={{
-          bottom: true,
+          bottom: true
         }}
       >
         <Pivot
@@ -186,7 +186,7 @@ function mapStateToProps({ graphExplorerMode, sampleQuery, theme, sidebarPropert
 function mapDispatchToProps(dispatch: Dispatch) {
   return {
     actions: bindActionCreators({
-      setDimensions,
+      setDimensions
     }, dispatch)
   };
 }

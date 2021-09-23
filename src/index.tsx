@@ -128,7 +128,7 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
 
   const devxApi: IDevxAPI = {
     baseUrl: devxApiUrl,
-    parameters: '',
+    parameters: ''
   };
 
   if (org && branchName) {
@@ -164,7 +164,7 @@ enum Workers {
       return getWorkerFor(Workers.Json);
     }
     return getWorkerFor(Workers.Editor);
-  },
+  }
 };
 
 function getWorkerFor(worker: string): string {

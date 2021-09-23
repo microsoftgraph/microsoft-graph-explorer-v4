@@ -6,19 +6,19 @@ export const styles = mergeStyleSets({
   },
   callout: {
     width: 320,
-    padding: '20px 24px',
+    padding: '20px 24px'
   },
   title: {
     marginBottom: 12,
-    fontWeight: FontWeights.semilight,
+    fontWeight: FontWeights.semilight
   },
   link: {
     display: 'block',
-    marginTop: 20,
+    marginTop: 20
   },
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end',
-    marginTop: 20,
-  },
+    marginTop: 20
+  }
 });

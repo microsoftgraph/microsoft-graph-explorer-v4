@@ -33,22 +33,22 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
 
-  let isTabletSize : boolean = (windowWidth <= 1320) ? true : false;
+  let isTabletSize: boolean = (windowWidth <= 1320) ? true : false;
 
   const {
-    intl: { messages },
+    intl: { messages }
   }: any = props;
 
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
-    window.addEventListener("resize", handleWindowResize, false);
+    window.addEventListener('resize', handleWindowResize, false);
     return () => window.removeEventListener('resize', handleWindowResize);
   }, [dimensions, windowWidth]);
 
   const handleWindowResize = () => {
     const currentWindowWidth = window.innerWidth;
-let isTabletSize = false;
-    if(currentWindowWidth <= 1320){
+    isTabletSize = false;
+    if (currentWindowWidth <= 1320) {
       isTabletSize = true;
     }
     setWindowWidth(currentWindowWidth);
@@ -126,10 +126,10 @@ let isTabletSize = false;
         bounds={'window'}
         size={{
           height: responseHeight,
-          width: '100%',
+          width: '100%'
         }}
         enable={{
-          bottom: false,
+          bottom: false
         }}
       >
         <div className='query-response' style={{
@@ -137,7 +137,8 @@ let isTabletSize = false;
           height: responseHeight
         }}>
 
-          <Pivot overflowBehavior="menu" onLinkClick={handlePivotItemClick} className={isTabletSize ? '' : 'pivot-response'} >
+          <Pivot overflowBehavior="menu" onLinkClick={handlePivotItemClick}
+            className={isTabletSize ? '' : 'pivot-response'} >
             {getPivotItems()}
             <PivotItem
               headerText='Share'
@@ -172,8 +173,8 @@ let isTabletSize = false;
             styles={{
               root: {
                 float: 'right',
-                zIndex: 1,
-              },
+                zIndex: 1
+              }
             }}
             iconProps={{ iconName: 'Cancel' }}
             ariaLabel={translateMessage('Close expanded response area')}
@@ -191,7 +192,7 @@ let isTabletSize = false;
           type: DialogType.normal,
           title: 'Share Query',
           isMultiline: true,
-          subText: messages['Share Query Message'],
+          subText: messages['Share Query Message']
         }}
       >
         <textarea
