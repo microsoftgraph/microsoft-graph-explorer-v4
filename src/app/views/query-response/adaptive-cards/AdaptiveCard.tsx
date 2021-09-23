@@ -147,7 +147,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               <IconButton className={classes.copyIcon}
                 ariaLabel={translateMessage('Copy')}
                 iconProps={{
-                  iconName: 'copy',
+                  iconName: 'copy'
                 }}
                 onClick={async () =>
                   trackedGenericCopy(
@@ -182,7 +182,7 @@ function mapStateToProps({ adaptiveCard, sampleQuery, queryRunnerStatus }: IRoot
   return {
     card: adaptiveCard,
     sampleQuery,
-    queryStatus: queryRunnerStatus,
+    queryStatus: queryRunnerStatus
   };
 }
 
@@ -190,10 +190,10 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators(
       {
-        getAdaptiveCard,
+        getAdaptiveCard
       },
       dispatch
-    ),
+    )
   };
 }
 // @ts-ignore

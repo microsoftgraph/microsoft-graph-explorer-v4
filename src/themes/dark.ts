@@ -23,7 +23,7 @@ export const dark = {
     neutralDark: '#fefefe',
     black: '#ffffff',
     white: '#070707',
-    blueMid: '#6cb8f6',
+    blueMid: '#6cb8f6'
   },
   semanticColors: {
     messageText: '#f3f2f1',
@@ -38,6 +38,6 @@ export const dark = {
     successBackground: '#393d1b',
     successIcon: '#92c353',
     warningBackground: '#433519',
-    warningIcon: '#c8c6c4',
-  },
+    warningIcon: '#c8c6c4'
+  }
 };

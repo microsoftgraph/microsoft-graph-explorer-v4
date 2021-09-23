@@ -36,12 +36,12 @@ const QueryResponse = (props: IQueryResponseProps) => {
   let isTabletSize: boolean = (windowWidth <= 1320) ? true : false;
 
   const {
-    intl: { messages },
+    intl: { messages }
   }: any = props;
 
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
-    window.addEventListener("resize", handleWindowResize, false);
+    window.addEventListener('resize', handleWindowResize, false);
     return () => window.removeEventListener('resize', handleWindowResize);
   }, [dimensions, windowWidth]);
 
@@ -126,10 +126,10 @@ const QueryResponse = (props: IQueryResponseProps) => {
         bounds={'window'}
         size={{
           height: responseHeight,
-          width: '100%',
+          width: '100%'
         }}
         enable={{
-          bottom: false,
+          bottom: false
         }}
       >
         <div className='query-response' style={{
@@ -137,7 +137,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
           height: responseHeight
         }}>
 
-          <Pivot overflowBehavior="menu" onLinkClick={handlePivotItemClick} className={isTabletSize ? '' : 'pivot-response'} >
+          <Pivot overflowBehavior="menu" onLinkClick={handlePivotItemClick}
+            className={isTabletSize ? '' : 'pivot-response'} >
             {getPivotItems()}
             <PivotItem
               headerText='Share'
@@ -172,8 +173,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
             styles={{
               root: {
                 float: 'right',
-                zIndex: 1,
-              },
+                zIndex: 1
+              }
             }}
             iconProps={{ iconName: 'Cancel' }}
             ariaLabel={translateMessage('Close expanded response area')}
@@ -191,7 +192,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           type: DialogType.normal,
           title: 'Share Query',
           isMultiline: true,
-          subText: messages['Share Query Message'],
+          subText: messages['Share Query Message']
         }}
       >
         <textarea

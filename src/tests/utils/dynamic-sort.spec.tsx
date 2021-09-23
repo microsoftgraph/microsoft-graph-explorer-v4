@@ -7,13 +7,13 @@ describe('Dynamic Sort', () => {
     const arrayToSort = [
       { name: 'Ann', age: 14 },
       { name: 'Lucy', age: 18 },
-      { name: 'Diana', age: 11 },
+      { name: 'Diana', age: 11 }
     ];
 
     const expected = [
       { name: 'Ann', age: 14 },
       { name: 'Diana', age: 11 },
-      { name: 'Lucy', age: 18 },
+      { name: 'Lucy', age: 18 }
     ];
 
     const sortedArray = arrayToSort.sort(dynamicSort('name', SortOrder.ASC));
@@ -24,13 +24,13 @@ describe('Dynamic Sort', () => {
     const arrayToSort = [
       { name: 'Ann', age: 14 },
       { name: 'Lucy', age: 18 },
-      { name: 'Diana', age: 11 },
+      { name: 'Diana', age: 11 }
     ];
 
     const expected = [
       { name: 'Lucy', age: 18 },
       { name: 'Diana', age: 11 },
-      { name: 'Ann', age: 14 },
+      { name: 'Ann', age: 14 }
     ];
 
     const sortedArray = arrayToSort.sort(dynamicSort('name', SortOrder.DESC));
@@ -41,7 +41,7 @@ describe('Dynamic Sort', () => {
     const arrayToSort = [
       { name: 'Ann', age: 14 },
       { name: 'Lucy', age: 18 },
-      { name: 'Diana', age: 11 },
+      { name: 'Diana', age: 11 }
     ];
 
     const sortedArray = arrayToSort.sort(dynamicSort('gender', SortOrder.DESC));
@@ -52,7 +52,7 @@ describe('Dynamic Sort', () => {
     const arrayToSort = [
       { name: 'Ann', age: 14 },
       { name: 'Lucy', age: 18 },
-      { name: 'Diana', age: 11 },
+      { name: 'Diana', age: 11 }
     ];
 
     const sortedArray = arrayToSort.sort(dynamicSort('', SortOrder.DESC));

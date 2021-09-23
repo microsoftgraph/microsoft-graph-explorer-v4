@@ -16,7 +16,7 @@ export function lookupToolkitUrl(sampleQuery: IQuery) {
           componentUrl = componentUrl.replace('?id=', '');
           return {
             exampleUrl: `${GRAPH_TOOOLKIT_EXAMPLE_URL}/${componentUrl}`,
-            toolkitUrl: url,
+            toolkitUrl: url
           };
         }
       }

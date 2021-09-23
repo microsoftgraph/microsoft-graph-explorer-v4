@@ -14,12 +14,13 @@ import ResponseDisplay from './ResponseDisplay';
 interface OdataLink {
   link: string;
   name: string;
-};
+}
 
 const Response = () => {
   const dispatch = useDispatch();
 
-  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } = useSelector((state: IRootState) => state);
+  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } =
+    useSelector((state: IRootState) => state);
   const { body, headers } = graphResponse;
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
@@ -38,7 +39,7 @@ const Response = () => {
       <div style={{ display: 'block' }}>
         {odataLink &&
           <MessageBar messageBarType={MessageBarType.info}>
-            <FormattedMessage id={`This response contains an @odata property`} />: @odata.{odataLink!.name}
+            <FormattedMessage id={'This response contains an @odata property'} />: @odata.{odataLink!.name}
             <Link onClick={() => setQuery()}>
               &nbsp;<FormattedMessage id='Click here to follow the link' />
             </Link>

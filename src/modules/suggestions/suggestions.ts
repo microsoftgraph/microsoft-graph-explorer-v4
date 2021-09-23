@@ -19,9 +19,9 @@ class Suggestions implements ISuggestions {
   }
 
   private async fetchSuggestionsFromNetwork(url: string, api: string, version: string):
-    Promise<IParsedOpenApiResponse | null> {
+  Promise<IParsedOpenApiResponse | null> {
     const headers = {
-      'Accept': 'application/json',
+      'Accept': 'application/json'
     };
     const openApiUrl = `${api}/openapi?url=/${url}&style=geautocomplete&graphVersion=${version}`;
     const options: IRequestOptions = { headers };

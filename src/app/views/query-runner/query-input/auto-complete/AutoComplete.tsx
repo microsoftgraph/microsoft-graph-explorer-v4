@@ -369,7 +369,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     const currentTheme = getTheme();
     const {
-      input: autoInput,
+      input: autoInput
     }: any = queryInputStyles(currentTheme).autoComplete;
 
     return (
@@ -417,7 +417,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators(
       {
-        ...autoCompleteActionCreators,
+        ...autoCompleteActionCreators
       },
       dispatch
     )

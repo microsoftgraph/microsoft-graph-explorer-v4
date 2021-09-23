@@ -7,27 +7,27 @@ import { ADAPTIVE_CARD_URL } from '../graph-constants';
 import {
   FETCH_ADAPTIVE_CARD_ERROR,
   FETCH_ADAPTIVE_CARD_PENDING,
-  FETCH_ADAPTIVE_CARD_SUCCESS,
+  FETCH_ADAPTIVE_CARD_SUCCESS
 } from '../redux-constants';
 
 export function getAdaptiveCardSuccess(result: object): IAction {
   return {
     type: FETCH_ADAPTIVE_CARD_SUCCESS,
-    response: result,
+    response: result
   };
 }
 
 export function getAdaptiveCardError(error: string): IAction {
   return {
     type: FETCH_ADAPTIVE_CARD_ERROR,
-    response: error,
+    response: error
   };
 }
 
 export function getAdaptiveCardPending(): IAction {
   return {
     type: FETCH_ADAPTIVE_CARD_PENDING,
-    response: '',
+    response: ''
   };
 }
 
@@ -59,7 +59,7 @@ export function getAdaptiveCard(
       const card = createCardFromTemplate(templatePayload, payload);
       const adaptiveCardContent: IAdaptiveCardContent = {
         card,
-        template: templatePayload,
+        template: templatePayload
       };
       return dispatch(getAdaptiveCardSuccess(adaptiveCardContent));
     } catch (error) {
@@ -72,7 +72,7 @@ export function getAdaptiveCard(
 function createCardFromTemplate(templatePayload: any, payload: string): AdaptiveCardsTemplateAPI.Template {
   const template = new AdaptiveCardsTemplateAPI.Template(templatePayload);
   const context: AdaptiveCardsTemplateAPI.IEvaluationContext = {
-    $root: payload,
+    $root: payload
   };
   AdaptiveCardsTemplateAPI.GlobalSettings.getUndefinedFieldValueSubstitutionString = (
     _path: string

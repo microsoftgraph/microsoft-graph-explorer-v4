@@ -43,5 +43,5 @@ export default combineReducers({
   termsOfUse,
   theme,
   dimensions,
-  permissionsPanelOpen,
+  permissionsPanelOpen
 });
