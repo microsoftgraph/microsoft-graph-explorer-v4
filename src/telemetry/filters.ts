@@ -4,6 +4,7 @@ import {
   ADAPTIVE_CARD_URL,
   DEVX_API_URL,
   GRAPH_API_SANDBOX_URL,
+  GRAPH_TOOOLKIT_EXAMPLE_URL,
   GRAPH_URL,
   HOME_ACCOUNT_KEY,
 } from '../app/services/graph-constants';
@@ -39,6 +40,7 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
       GRAPH_API_SANDBOX_URL,
       new URL(graphProxyUrl).origin,
       new URL(ADAPTIVE_CARD_URL).origin,
+      new URL(GRAPH_TOOOLKIT_EXAMPLE_URL).origin,
     ];
     if (!targetsToInclude.includes(urlObject.origin)) {
       return false;
@@ -112,8 +114,6 @@ export function sanitizeStackTrace(envelope: ITelemetryItem) {
 
       exception.hasFullStack = false;
       exception.stack = null;
-      exception.parsedStack = [parsedStack];
-      telemetryItem.exceptions = [exception];
     }
   }
   return true;
