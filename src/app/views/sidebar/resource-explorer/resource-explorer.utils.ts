@@ -1,3 +1,4 @@
+import { INavLink, INavLinkGroup } from '@fluentui/react';
 import { IResource } from '../../../../types/resources';
 
 interface ITreeFilter {
@@ -7,32 +8,35 @@ interface ITreeFilter {
   version: string;
 }
 
-export function createList(source: IResource[], version: string): any {
-  function getIcon({ segment, children }: IResource) {
+export function createList(source: IResource[], version: string): INavLinkGroup[] {
+  function getIcon({ segment, links }: any): string | undefined {
     const graphFunction = segment.includes('microsoft.graph');
-    let icon = null;
+    let icon;
+    const hasChidlren = links && links.length > 0;
+    if (!hasChidlren) {
+      icon = 'PlugDisconnected';
+    }
     if (graphFunction) {
       icon = 'LightningBolt';
-    }
-    if (!graphFunction && !children) {
-      icon = 'PlugDisconnected';
     }
     return icon;
   }
 
-  function createNavLink(info: IResource, parent: string | null = null, paths: string[] = []): any {
+  function createNavLink(info: IResource, parent: string | null = null, paths: string[] = []): INavLink {
     const { segment, children, labels } = info;
     const level = paths.length;
     const versionedChildren = (children) ? children.filter(child => versionExists(child, version)) : [];
+    const key = `${level}-${(parent === '/' ? 'root' : parent)}-${segment}`;
     return {
-      key: `${level}-${parent}-${segment}`,
-      name: `${segment} ${(versionedChildren && versionedChildren.length > 0) ? `(${versionedChildren.length})` : ''}`,
+      key,
+      url: key,
+      name: `${segment}${(versionedChildren && versionedChildren.length > 0) ? ` (${versionedChildren.length})` : ''}`,
       labels,
       isExpanded: false,
       parent,
       level,
       paths,
-      icon: getIcon(info),
+      icon: getIcon({ ...info, links: versionedChildren }),
       links: (children) ? versionedChildren.map(child => createNavLink(child, segment, [...paths, segment])) : []
     };
   }
@@ -41,17 +45,16 @@ export function createList(source: IResource[], version: string): any {
     segment: '/',
     labels: [],
     children: source
-  })
+  });
 
   return [
     {
-      isExpanded: false,
-      links: navLink.links
+      links: navLink.links!
     }
   ];
 }
 
-export function getCurrentTree({ paths, level, resourceItems, version }: ITreeFilter) {
+export function getCurrentTree({ paths, level, resourceItems, version }: ITreeFilter): INavLinkGroup {
   let currentTree = createList(resourceItems, version)[0];
   const filters = paths.slice(1, level + 1);
   filters.forEach((key: string) => {
@@ -63,11 +66,11 @@ export function getCurrentTree({ paths, level, resourceItems, version }: ITreeFi
   return currentTree;
 }
 
-function findLinkByName(list: any, filter: string): any {
+function findLinkByName(list: any, filter: string): INavLinkGroup {
   return list.links.find((k: any) => removeCounter(k.name) === filter);
 }
 
-export function removeCounter(title: string) {
+export function removeCounter(title: string): string {
   return title.split(' (')[0].trim();
 }
 
@@ -81,6 +84,6 @@ export function getResourcesSupportedByVersion(content: IResource, version: stri
   return resources;
 }
 
-export function versionExists(child: IResource, version: string) {
+export function versionExists(child: IResource, version: string): boolean {
   return !!child.labels.find(k => k.name === version);
 }
