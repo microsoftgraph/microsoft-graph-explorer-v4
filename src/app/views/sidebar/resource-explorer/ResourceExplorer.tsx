@@ -107,10 +107,10 @@ const ResourceExplorer = (props: any) => {
   const navStyles: any = (properties: any) => ({
     chevronIcon: [
       properties.isExpanded && {
-        transform: `rotate(0deg)`
+        transform: 'rotate(0deg)'
       },
       !properties.isExpanded && {
-        transform: `rotate(-90deg)`
+        transform: 'rotate(-90deg)'
       }
     ]
   });
@@ -119,7 +119,7 @@ const ResourceExplorer = (props: any) => {
     const tree = [
       {
         isExpanded: false,
-        links: navLink.links,
+        links: navLink.links
       }
     ];
     setItems(tree);
@@ -150,7 +150,7 @@ const ResourceExplorer = (props: any) => {
       {
         key: 'actions',
         itemType: ContextualMenuItemType.Header,
-        text: properties.name,
+        text: properties.name
       }
     ];
 

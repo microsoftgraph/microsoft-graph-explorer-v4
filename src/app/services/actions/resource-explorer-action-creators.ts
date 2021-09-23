@@ -6,20 +6,20 @@ import { IResource } from '../../../types/resources';
 export function fetchResourcesSuccess(response: object): IAction {
   return {
     type: FETCH_RESOURCES_SUCCESS,
-    response,
+    response
   };
 }
 
 export function fetchResourcesPending(): any {
   return {
-    type: FETCH_RESOURCES_PENDING,
+    type: FETCH_RESOURCES_PENDING
   };
 }
 
 export function fetchResourcesError(response: object): IAction {
   return {
     type: FETCH_RESOURCES_ERROR,
-    response,
+    response
   };
 }
 

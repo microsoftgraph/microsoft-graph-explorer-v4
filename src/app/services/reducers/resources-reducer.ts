@@ -30,7 +30,7 @@ export function resources(state: IResources = initialState, action: IAction): an
       return {
         pending: true,
         data: [],
-        error: null,
+        error: null
       };
     default:
       return state;
