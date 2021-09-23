@@ -165,7 +165,6 @@ export class Request extends Component<IRequestComponent, any> {
         <Pivot
           overflowBehavior='menu'
           onLinkClick={this.onPivotItemClick}
-          styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
           className="request-pivot-tab"
         >
           {requestPivotItems}
