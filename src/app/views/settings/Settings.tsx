@@ -12,7 +12,7 @@ import {
   Panel,
   PanelType,
   PrimaryButton,
-  TooltipHost,
+  TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -37,7 +37,7 @@ function Settings(props: ISettingsProps) {
   const {
     permissionsPanelOpen,
     authToken,
-    theme: appTheme,
+    theme: appTheme
   } = useSelector((state: IRootState) => state);
   const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
@@ -46,7 +46,7 @@ function Settings(props: ISettingsProps) {
   const [tourChooserDialogHidden, hideTourChooserDialog] = useState(true);
 
   const {
-    intl: { messages },
+    intl: { messages }
   }: any = props;
 
   useEffect(() => {
@@ -57,9 +57,9 @@ function Settings(props: ISettingsProps) {
         href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
         target: '_blank',
         iconProps: {
-          iconName: 'CommandPrompt',
+          iconName: 'CommandPrompt'
         },
-        onClick: () => trackOfficeDevProgramLinkClickEvent(),
+        onClick: () => trackOfficeDevProgramLinkClickEvent()
       },
       {
         key: 'report-issue',
@@ -67,22 +67,22 @@ function Settings(props: ISettingsProps) {
         href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
         target: '_blank',
         iconProps: {
-          iconName: 'ReportWarning',
+          iconName: 'ReportWarning'
         },
-        onClick: () => trackReportAnIssueLinkClickEvent(),
+        onClick: () => trackReportAnIssueLinkClickEvent()
       },
       {
         key: 'divider',
         text: '-',
-        itemType: DropdownMenuItemType.Divider,
+        itemType: DropdownMenuItemType.Divider
       },
       {
         key: 'change-theme',
         text: messages['Change theme'],
         iconProps: {
-          iconName: 'Color',
+          iconName: 'Color'
         },
-        onClick: () => toggleThemeChooserDialogState(),
+        onClick: () => toggleThemeChooserDialogState()
       },
       {
         key: 'GE Tour',
@@ -100,17 +100,17 @@ function Settings(props: ISettingsProps) {
           key: 'view-all-permissions',
           text: messages['view all permissions'],
           iconProps: {
-            iconName: 'AzureKeyVault',
+            iconName: 'AzureKeyVault'
           },
-          onClick: () => changePanelState(),
+          onClick: () => changePanelState()
         },
         {
           key: 'sign-out',
           text: messages['sign out'],
           iconProps: {
-            iconName: 'SignOut',
+            iconName: 'SignOut'
           },
-          onClick: () => handleSignOut(),
+          onClick: () => handleSignOut()
         },
       );
     }
@@ -131,7 +131,7 @@ function Settings(props: ISettingsProps) {
   }
 
   const handleSetTour = (selectedTour: any) => {
-    console.log("Here is the selected tour ", selectedTour);
+    console.log('Here is the selected tour ', selectedTour);
     //dispatch the tour with the expected steps
     hideTourChooserDialog(true);
   }
@@ -141,7 +141,7 @@ function Settings(props: ISettingsProps) {
     hidden = !hidden;
     hideThemeChooserDialog(hidden);
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.THEME_CHANGE_BUTTON,
+      ComponentName: componentNames.THEME_CHANGE_BUTTON
     });
   };
 
@@ -155,7 +155,7 @@ function Settings(props: ISettingsProps) {
     loadGETheme(newTheme);
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.SELECT_THEME_BUTTON,
-      SelectedTheme: selectedTheme.key.replace('-', ' ').toSentenceCase(),
+      SelectedTheme: selectedTheme.key.replace('-', ' ').toSentenceCase()
     });
   };
 
@@ -169,13 +169,13 @@ function Settings(props: ISettingsProps) {
 
   const trackSelectPermissionsButtonClickEvent = () => {
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON,
+      ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
     });
   };
 
   const trackReportAnIssueLinkClickEvent = () => {
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.REPORT_AN_ISSUE_LINK,
+      ComponentName: componentNames.REPORT_AN_ISSUE_LINK
     });
   };
 
@@ -190,7 +190,7 @@ function Settings(props: ISettingsProps) {
 
   const trackOfficeDevProgramLinkClickEvent = () => {
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK,
+      ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
     });
   };
 
@@ -228,7 +228,7 @@ function Settings(props: ISettingsProps) {
   const menuProperties = {
     shouldFocusOnMount: true,
     alignTargetEdge: true,
-    items,
+    items
   };
 
   return (
@@ -243,7 +243,7 @@ function Settings(props: ISettingsProps) {
           role='button'
           styles={{
             label: { marginBottom: -20 },
-            menuIcon: { fontSize: 20 },
+            menuIcon: { fontSize: 20 }
           }}
           menuIconProps={{ iconName: 'More' }}
           menuProps={menuProperties}
@@ -256,7 +256,7 @@ function Settings(props: ISettingsProps) {
           dialogContentProps={{
             type: DialogType.normal,
             title: messages['Change theme'],
-            isMultiline: false,
+            isMultiline: false
           }}
         >
           <ChoiceGroup
@@ -266,18 +266,18 @@ function Settings(props: ISettingsProps) {
               {
                 key: AppTheme.Light,
                 iconProps: { iconName: 'Light' },
-                text: messages.Light,
+                text: messages.Light
               },
               {
                 key: AppTheme.Dark,
                 iconProps: { iconName: 'CircleFill' },
-                text: messages.Dark,
+                text: messages.Dark
               },
               {
                 key: AppTheme.HighContrast,
                 iconProps: { iconName: 'Contrast' },
-                text: messages['High Contrast'],
-              },
+                text: messages['High Contrast']
+              }
             ]}
             onChange={(event, selectedTheme) =>
               handleChangeTheme(selectedTheme)
@@ -295,33 +295,33 @@ function Settings(props: ISettingsProps) {
           hidden={tourChooserDialogHidden}
           onDismiss={() => toggleTourDialogState()}
           dialogContentProps={{
-                type: DialogType.normal,
-                title: 'Tour',
-                isMultiline: false
-              }}
+            type: DialogType.normal,
+            title: 'Tour',
+            isMultiline: false
+          }}
         >
           <ChoiceGroup
-              label="Pick one tour type"
-              options={[
-                {
-                  key: 'Advanced Tour',
-                  text: messages['Advanced Tour'],
-                  iconProps: { iconName: 'Train'}
-                },
-                {
-                  key: 'Beginner Tour',
-                  text: messages['Beginner Tour'],
-                  iconProps: { iconName: 'ShoppingCart' }
-                }
-              ]}
-              onChange ={(event, selectedKey) => handleSetTour(selectedKey)}
-            />
-            <div>
-              <h1>The Advanced Tour will take you through the following features</h1>
-              <List />
-              <h1>The Beginner Tour will take you through:</h1>
-              <List />
-            </div>
+            label="Pick one tour type"
+            options={[
+              {
+                key: 'Advanced Tour',
+                text: messages['Advanced Tour'],
+                iconProps: { iconName: 'Train'}
+              },
+              {
+                key: 'Beginner Tour',
+                text: messages['Beginner Tour'],
+                iconProps: { iconName: 'ShoppingCart' }
+              }
+            ]}
+            onChange ={(event, selectedKey) => toggleCurrentTourState()}
+          />
+          <div>
+            <h1>The Advanced Tour will take you through the following features</h1>
+            <List />
+            <h1>The Beginner Tour will take you through:</h1>
+            <List />
+          </div>
           <DialogFooter>
             <DefaultButton text={messages.Close} onClick={toggleTourDialogState} />
           </DialogFooter>

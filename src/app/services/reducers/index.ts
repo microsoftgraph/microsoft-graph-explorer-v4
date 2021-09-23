@@ -45,5 +45,5 @@ export default combineReducers({
   theme,
   dimensions,
   permissionsPanelOpen,
-  tourState,
+  tourState
 });

@@ -1,4 +1,4 @@
-import { Announced, IStackTokens, ITheme, styled } from '@fluentui/react';
+import { Announced, getTheme, IStackTokens, ITheme, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -27,7 +27,7 @@ import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
 import {
   appTitleDisplayOnFullScreen,
-  appTitleDisplayOnMobileScreen,
+  appTitleDisplayOnMobileScreen
 } from './app-sections/AppTitle';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { statusMessages } from './app-sections/StatusMessages';
@@ -75,13 +75,16 @@ interface IAppState {
 
 class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
+  private currentTheme: ITheme = getTheme();
+  private statusAreaMobileStyle = appStyles(this.currentTheme).statusAreaMobileScreen;
+  private statusAreaLaptopStyle = appStyles(this.currentTheme).statusAreaLaptopScreen;
 
   constructor(props: IAppProps) {
     super(props);
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false,
-      hideDialog: true,
+      hideDialog: true
     };
   }
 
@@ -106,7 +109,7 @@ class App extends Component<IAppProps, IAppState> {
       'https://docs.microsoft.com',
       'https://review.docs.microsoft.com',
       'https://ppe.docs.microsoft.com',
-      'https://docs.azure.cn',
+      'https://docs.azure.cn'
     ];
 
     // Notify host document that GE is ready to receive messages
@@ -162,7 +165,7 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: method,
       selectedVersion: version,
       sampleBody: requestBody ? this.hashDecode(requestBody) : null,
-      sampleHeaders: headers ? JSON.parse(this.hashDecode(headers)) : [],
+      sampleHeaders: headers ? JSON.parse(this.hashDecode(headers)) : []
     };
   }
 
@@ -218,7 +221,7 @@ class App extends Component<IAppProps, IAppState> {
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
-        selectedVerb: verb,
+        selectedVerb: verb
       });
     }
 
@@ -236,7 +239,7 @@ class App extends Component<IAppProps, IAppState> {
         const requestHeaders = headers.map((header: any) => {
           return {
             name: Object.keys(header)[0],
-            value: Object.values(header)[0],
+            value: Object.values(header)[0]
           };
         });
 
@@ -245,7 +248,7 @@ class App extends Component<IAppProps, IAppState> {
           selectedVerb: verb,
           sampleBody: body,
           selectedVersion: queryVersion,
-          sampleHeaders: requestHeaders,
+          sampleHeaders: requestHeaders
         };
 
         substituteTokens(query, profile);
@@ -257,7 +260,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public handleSelectVerb = (verb: string) => {
     this.setState({
-      selectedVerb: verb,
+      selectedVerb: verb
     });
   };
 
@@ -269,7 +272,7 @@ class App extends Component<IAppProps, IAppState> {
     telemetry.trackEvent(
       eventTypes.BUTTON_CLICK_EVENT,
       {
-        ComponentName: componentNames.SIDEBAR_HAMBURGER_BUTTON,
+        ComponentName: componentNames.SIDEBAR_HAMBURGER_BUTTON
       });
   };
 
@@ -282,7 +285,7 @@ class App extends Component<IAppProps, IAppState> {
 
     const properties = {
       mobileScreen,
-      showSidebar,
+      showSidebar
     };
 
     this.props.actions!.toggleSidebar(properties);
@@ -295,7 +298,7 @@ class App extends Component<IAppProps, IAppState> {
           display: minimised ? 'block' : 'flex',
           justifyContent: minimised ? '' : 'center',
           alignItems: minimised ? '' : 'center',
-          marginLeft: minimised ? '' : '-0.9em',
+          marginLeft: minimised ? '' : '-0.9em'
 
         }}>
         <div className={minimised ? '' : 'col-10'}>
@@ -328,7 +331,7 @@ class App extends Component<IAppProps, IAppState> {
 
     const stackTokens: IStackTokens = {
       childrenGap: 10,
-      padding: 10,
+      padding: 10
     };
 
     let sidebarWidth = `col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`;
@@ -395,9 +398,9 @@ class App extends Component<IAppProps, IAppState> {
                   <div style={{ marginBottom: 8 }}>
                     <QueryRunner onSelectVerb={this.handleSelectVerb} />
                   </div>
-                  <div className="status-area">
-                  {statusMessages(queryState, sampleQuery, actions)}
-                  {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
+                  <div style={ mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
+                    {statusMessages(queryState, sampleQuery, actions)}
+                    {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
                   </div>
                   {
                     // @ts-ignore
@@ -444,10 +447,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         setSampleQuery,
         toggleSidebar,
         ...authActionCreators,
-        changeTheme,
+        changeTheme
       },
       dispatch
-    ),
+    )
   };
 };
 

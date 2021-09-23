@@ -3,7 +3,7 @@ import {
   Icon,
   Pivot,
   PivotItem,
-  TooltipHost,
+  TooltipHost
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { Component, CSSProperties } from 'react';
@@ -17,7 +17,7 @@ import { IRequestComponent } from '../../../../types/request';
 import { IRootState } from '../../../../types/root';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
-import { convertVhToPx } from '../../common/dimensions-adjustment';
+import { convertPxToVh, convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
 import { RequestHeaders } from './headers';
@@ -33,7 +33,7 @@ export class Request extends Component<IRequestComponent, any> {
     const {
       handleOnEditorChange,
       mode,
-      intl: { messages },
+      intl: { messages }
     }: any = this.props;
 
     const heightAdjustment = 55;
@@ -79,7 +79,7 @@ export class Request extends Component<IRequestComponent, any> {
         <div style={containerStyle} className="request-permissions-body">
           <Permission />
         </div>
-      </PivotItem>,
+      </PivotItem>
     ];
 
     if (mode === Mode.Complete) {
@@ -124,25 +124,27 @@ export class Request extends Component<IRequestComponent, any> {
   };
 
   private setRequestAndResponseHeights = (requestHeight: string) => {
+    const heightInPx = requestHeight.replace('px', '').trim();
+    const requestHeightInVh = convertPxToVh(parseFloat(heightInPx)).toString();
     const maxDeviceVerticalHeight = 90;
     const dimen = { ...this.props.dimensions };
-    dimen.request.height = requestHeight;
-    const response = maxDeviceVerticalHeight - parseFloat(requestHeight.replace('vh', ''));
+    dimen.request.height = requestHeightInVh;
+    const response = maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''));
     dimen.response.height = response + 'vh';
     this.props.actions!.setDimensions(dimen);
   };
+
 
   public render() {
     const { dimensions } = this.props;
     const requestPivotItems = this.getPivotItems(dimensions.request.height);
     const minHeight = 60;
     const maxHeight = 800;
-
     return (
       <Resizable
         style={{
           border: 'solid 1px #ddd',
-          marginBottom: 10,
+          marginBottom: 10
         }}
         onResize={(e: any, direction: any, ref: any) => {
           if (ref && ref.style && ref.style.height) {
@@ -153,14 +155,15 @@ export class Request extends Component<IRequestComponent, any> {
         minHeight={minHeight}
         bounds={'window'}
         size={{
-          height: this.props.dimensions.request.height,
-          width: '100%',
+          height: 'inherit',
+          width: '100%'
         }}
         enable={{
-          bottom: true,
+          bottom: true
         }}
       >
         <Pivot
+          overflowBehavior='menu'
           onLinkClick={this.onPivotItemClick}
           styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
           className="request-pivot-tab"
@@ -185,7 +188,7 @@ function mapStateToProps({ graphExplorerMode, sampleQuery, theme, sidebarPropert
 function mapDispatchToProps(dispatch: Dispatch) {
   return {
     actions: bindActionCreators({
-      setDimensions,
+      setDimensions
     }, dispatch)
   };
 }

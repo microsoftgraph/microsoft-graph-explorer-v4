@@ -4,7 +4,7 @@ export const authStyles = () => {
   return {
     auth: {
       padding: 5,
-      overflowY: 'auto',
+      overflowY: 'auto'
     },
     accessTokenContainer: {
       width: 160,
@@ -34,6 +34,6 @@ export const authStyles = () => {
       justifyContent: 'center',
       alignItems: 'center'
 
-    },
+    }
   };
 };

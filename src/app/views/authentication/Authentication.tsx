@@ -29,7 +29,7 @@ const Authentication = (props: any) => {
   const classes = classNames(props);
 
   const {
-    intl: { messages },
+    intl: { messages }
   }: any = props;
   const signIn = async (): Promise<void> => {
     setLoginInProgress(true);
@@ -62,7 +62,7 @@ const Authentication = (props: any) => {
         {
           ComponentName: componentNames.AUTHENTICATION_ACTION,
           Message: `Authentication failed: ${errorCode ? removeUnderScore(errorCode) : ''
-            }`,
+          }`
         }
       );
     }

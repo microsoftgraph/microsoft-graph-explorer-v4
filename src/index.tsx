@@ -96,11 +96,11 @@ appStore.dispatch(getGraphProxyUrl());
 
 function refreshAccessToken() {
   authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
-      if (authResponse && authResponse.accessToken) {
-        appStore.dispatch(getAuthTokenSuccess(true));
-        appStore.dispatch(getConsentedScopesSuccess(authResponse.scopes));
-      }
-    })
+    if (authResponse && authResponse.accessToken) {
+      appStore.dispatch(getAuthTokenSuccess(true));
+      appStore.dispatch(getConsentedScopesSuccess(authResponse.scopes));
+    }
+  })
     .catch(() => {
       // ignore the error as it means that a User login is required
     });
@@ -127,7 +127,7 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
 
   const devxApi: IDevxAPI = {
     baseUrl: devxApiUrl,
-    parameters: '',
+    parameters: ''
   };
 
   if (org && branchName) {
@@ -158,7 +158,7 @@ enum Workers {
       return getWorkerFor(Workers.Json);
     }
     return getWorkerFor(Workers.Editor);
-  },
+  }
 };
 
 function getWorkerFor(worker: string): string {

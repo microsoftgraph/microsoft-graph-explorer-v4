@@ -11,7 +11,8 @@ import { trackedGenericCopy } from '../../common/copy';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
 
 const ResponseHeaders = () => {
-  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } = useSelector((state: IRootState) => state);
+  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } =
+    useSelector((state: IRootState) => state);
   const { headers } = graphResponse;
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);

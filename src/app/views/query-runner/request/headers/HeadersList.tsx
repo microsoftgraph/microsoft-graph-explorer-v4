@@ -42,9 +42,18 @@ const HeadersList = ({
   };
 
   const columns = [
-    { key: 'key', name: translateMessage('Key'), fieldName: 'name', minWidth: 300, maxWidth: 400, ariaLabel: translateMessage('Key') },
-    { key: 'value', name: translateMessage('Value'), fieldName: 'value', minWidth: 300, maxWidth: 400, ariaLabel: translateMessage('Value') },
-    { key: 'button', name: translateMessage('actions'), fieldName: 'button', minWidth: 200, maxWidth: 300, ariaLabel: translateMessage('actions') }
+    {
+      key: 'key', name: translateMessage('Key'), fieldName: 'name', minWidth: 300,
+      maxWidth: 400, ariaLabel: translateMessage('Key')
+    },
+    {
+      key: 'value', name: translateMessage('Value'), fieldName: 'value', minWidth: 300,
+      maxWidth: 400, ariaLabel: translateMessage('Value')
+    },
+    {
+      key: 'button', name: translateMessage('actions'), fieldName: 'button', minWidth: 200,
+      maxWidth: 300, ariaLabel: translateMessage('actions')
+    }
   ];
 
   const headerItems = (headers) ? headers.filter((header) => {

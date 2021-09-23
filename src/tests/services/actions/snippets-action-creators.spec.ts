@@ -14,7 +14,7 @@ describe('snippet actions', () => {
     const expectedAction = [{
       type: GET_SNIPPET_SUCCESS,
       response: {
-        csharp: snippet,
+        csharp: snippet
       }
     }];
 
@@ -22,7 +22,7 @@ describe('snippet actions', () => {
 
     // @ts-ignore
     store.dispatch(getSnippetSuccess({
-      csharp: snippet,
+      csharp: snippet
     }));
 
     expect(store.getActions()).toEqual(expectedAction);

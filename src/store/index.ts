@@ -7,7 +7,7 @@ import reducers from '../app/services/reducers';
 
 const loggerMiddleware = createLogger({
   level: 'error',
-  collapsed: true,
+  collapsed: true
 });
 
 const { NODE_ENV } = process.env;
@@ -15,7 +15,7 @@ const { NODE_ENV } = process.env;
 const middlewares = [
   thunkMiddleware,
   localStorageMiddleware,
-  telemetryMiddleware,
+  telemetryMiddleware
 ];
 
 if (NODE_ENV === 'development') {
@@ -33,10 +33,10 @@ const initialState: any = {
     selectedVerb: 'GET',
     sampleBody: undefined,
     sampleHeaders: [],
-    selectedVersion: 'v1.0',
+    selectedVersion: 'v1.0'
   },
   termsOfUse: true,
-  tourState: false,
+  tourState: false
 };
 
 export const store = createStore(
