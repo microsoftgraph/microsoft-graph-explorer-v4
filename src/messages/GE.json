@@ -378,5 +378,7 @@
   "consent_required_consent": "Please consent to the permission to access this feature.",
   "interaction_required_consent": "Please wait for the consent process to finish and verify that pop-ups are enabled.",
   "user_cancelled_consent": "Please wait for the consent process to finish.",
-  "access_denied_consent": "Your consent to this permission has been blocked by your tenant admin. Ask your admin to grant you access and then try again."
+  "access_denied_consent": "Your consent to this permission has been blocked by your tenant admin. Ask your admin to grant you access and then try again.",
+  "Advanced Tour": "Advanced Tour",
+  "Beginner Tour": "Beginner Tour"
 }

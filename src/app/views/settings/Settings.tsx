@@ -8,6 +8,7 @@ import {
   getId,
   IconButton,
   Label,
+  List,
   Panel,
   PanelType,
   PrimaryButton,
@@ -42,6 +43,7 @@ function Settings(props: ISettingsProps) {
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
+  const [tourChooserDialogHidden, hideTourChooserDialog] = useState(true);
 
   const {
     intl: { messages },
@@ -88,7 +90,7 @@ function Settings(props: ISettingsProps) {
         iconProps: {
           iconName: 'Vacation'
         },
-        onClick: () => toggleCurrentTourState()
+        onClick: () => toggleTourDialogState()
       }
     ];
 
@@ -120,6 +122,18 @@ function Settings(props: ISettingsProps) {
     //meaning the tour state should be global and make app.tsx rerender
     //add a small dialog to let a user choose the kind of tour to do.
     dispatch(toggleTourState(true));
+  }
+
+  const toggleTourDialogState = () => {
+    let hidden = tourChooserDialogHidden;
+    hidden = !hidden;
+    hideTourChooserDialog(hidden);
+  }
+
+  const handleSetTour = (selectedTour: any) => {
+    console.log("Here is the selected tour ", selectedTour);
+    //dispatch the tour with the expected steps
+    hideTourChooserDialog(true);
   }
 
   const toggleThemeChooserDialogState = () => {
@@ -274,6 +288,42 @@ function Settings(props: ISettingsProps) {
               text={messages.Close}
               onClick={() => toggleThemeChooserDialogState()}
             />
+          </DialogFooter>
+        </Dialog>
+
+        <Dialog
+          hidden={tourChooserDialogHidden}
+          onDismiss={() => toggleTourDialogState()}
+          dialogContentProps={{
+                type: DialogType.normal,
+                title: 'Tour',
+                isMultiline: false
+              }}
+        >
+          <ChoiceGroup
+              label="Pick one tour type"
+              options={[
+                {
+                  key: 'Advanced Tour',
+                  text: messages['Advanced Tour'],
+                  iconProps: { iconName: 'Train'}
+                },
+                {
+                  key: 'Beginner Tour',
+                  text: messages['Beginner Tour'],
+                  iconProps: { iconName: 'ShoppingCart' }
+                }
+              ]}
+              onChange ={(event, selectedKey) => handleSetTour(selectedKey)}
+            />
+            <div>
+              <h1>The Advanced Tour will take you through the following features</h1>
+              <List />
+              <h1>The Beginner Tour will take you through:</h1>
+              <List />
+            </div>
+          <DialogFooter>
+            <DefaultButton text={messages.Close} onClick={toggleTourDialogState} />
           </DialogFooter>
         </Dialog>
 

@@ -14,5 +14,6 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "eslint.validate": ["typescript", "typescriptreact"]
+  "eslint.validate": ["typescript", "typescriptreact"],
+  "eslint.format.enable": true,
 }

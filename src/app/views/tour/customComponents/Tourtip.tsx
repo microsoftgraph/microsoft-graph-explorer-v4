@@ -2,9 +2,9 @@ import { Coachmark, DefaultButton, IButtonProps, PrimaryButton, TeachingBubble }
 import { title } from 'process';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { ITourTooltipRenderProps } from '../tourUtils/types'
+import { ITourTooltipRenderProps } from '../utils/types'
 
-export const tooltip = ( { tooltipProps, continuous, index, step, backProps, closeProps, primaryProps, skipProps } : ITourTooltipRenderProps ) => (
+export const TourTip = ( { tooltipProps, continuous, index, step, backProps, closeProps, primaryProps, skipProps } : ITourTooltipRenderProps ) => (
     <div {...tooltipProps} >
         <TeachingBubble
             styles={{headline:{textAlign: 'center !important', color:'white'}, footer:{justifyContent: 'right'}}}
