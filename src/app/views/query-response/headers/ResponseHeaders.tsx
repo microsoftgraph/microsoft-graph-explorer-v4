@@ -18,7 +18,7 @@ const ResponseHeaders = () => {
 
   if (headers) {
     return (
-      <div>
+      <div className='response-headers-body'>
         <IconButton
           style={{ float: 'right', zIndex: 1 }}
           ariaLabel={translateMessage('Copy')}

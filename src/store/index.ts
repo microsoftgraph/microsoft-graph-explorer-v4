@@ -36,6 +36,7 @@ const initialState: any = {
     selectedVersion: 'v1.0',
   },
   termsOfUse: true,
+  tourState: false,
 };
 
 export const store = createStore(

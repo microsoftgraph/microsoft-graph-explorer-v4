@@ -27,7 +27,7 @@ class GraphToolkit extends Component<any> {
 
     if (toolkitUrl && exampleUrl) {
       return (
-        <>
+        <div className="toolkit-component-area">
           <MessageBar messageBarType={MessageBarType.info}>
             <FormattedMessage id='Open this example in' />
             <a onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK)}
@@ -38,7 +38,7 @@ class GraphToolkit extends Component<any> {
             .
           </MessageBar>
           <iframe width='100%' height='470px' src={toolkitUrl} title={translateMessage('Graph toolkit')} />
-        </>
+        </div>
       );
     }
 

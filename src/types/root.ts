@@ -35,6 +35,7 @@ export interface IRootState {
   dimensions: IDimensions;
   autoComplete: IAutocompleteResponse;
   devxApi: IDevxAPI;
+  tourState: boolean;
 }
 
 export interface IApiFetch {

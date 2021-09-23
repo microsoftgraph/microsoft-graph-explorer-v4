@@ -8,7 +8,7 @@ function GetSnippets() {
   const supportedLanguages = ['CSharp', 'JavaScript', 'Java', 'Objective-C'];
 
   return (
-    <Pivot>
+    <Pivot className="code-snippet-body">
       {renderSnippets(supportedLanguages)}
     </Pivot>
   );

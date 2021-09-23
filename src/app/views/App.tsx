@@ -54,6 +54,7 @@ interface IAppProps {
   sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
   authenticated: boolean;
+  tourState: boolean;
   actions: {
     clearQueryStatus: Function;
     clearTermsOfUse: Function;
@@ -310,7 +311,7 @@ class App extends Component<IAppProps, IAppState> {
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
-      actions, sidebarProperties, intl: { messages }, }: any = this.props;
+      actions, sidebarProperties, intl: { messages }, tourState }: any = this.props;
 
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
@@ -349,7 +350,7 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        <GETour/>
+        {tourState && <GETour/>}
         <div className={`container-fluid ${classes.app}`}>
           <Announced
             message={
@@ -413,7 +414,7 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme,
-  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode,
+  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode, tourState
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -429,6 +430,7 @@ const mapStateToProps = ({ sidebarProperties, theme,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery,
     authenticated: !!authToken.token,
+    tourState
   };
 };
 

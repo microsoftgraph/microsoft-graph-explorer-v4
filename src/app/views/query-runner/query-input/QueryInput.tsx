@@ -80,6 +80,7 @@ const QueryInput = (props: IQueryInputProps) => {
   return (
     <div className='row'>
       <div className='col-xs-12 col-lg-2'>
+        <div className="request-option">
         <Dropdown
           ariaLabel={translateMessage('HTTP request method option')}
           role='listbox'
@@ -89,6 +90,7 @@ const QueryInput = (props: IQueryInputProps) => {
           errorMessage={showError ? translateMessage('Sign in to use this method') : undefined}
           onChange={(event, method) => handleOnMethodChange(method)}
         />
+        </div>
       </div>
       <div className='col-xs-12 col-lg-2'>
         <Dropdown
@@ -100,12 +102,15 @@ const QueryInput = (props: IQueryInputProps) => {
         />
       </div>
       <div className='col-xs-12 col-lg-6'>
+        <div className="query-box">
         <AutoComplete
           contentChanged={contentChanged}
           runQuery={runQuery}
         />
+        </div>
       </div>
       <div className='col-xs-12 col-lg-2'>
+        <div className="query-run-button">
         <SubmitButton
           className='run-query-button'
           text={translateMessage('Run Query')}
@@ -114,6 +119,7 @@ const QueryInput = (props: IQueryInputProps) => {
           handleOnClick={() => runQuery()}
           submitting={submitting}
         />
+        </div>
       </div>
     </div>)
 }

@@ -74,7 +74,7 @@ const PanelList = ({ messages,
   };
 
   return (
-    <>
+    <div className="permissions-panel-area">
       <Label className={classes.permissionText}>
         <FormattedMessage id='Select different permissions' />
       </Label>
@@ -119,7 +119,7 @@ const PanelList = ({ messages,
           <FormattedMessage id='permissions not found' />
         </Label>
       }
-    </>
+    </div>
   );
 };
 export default PanelList;

@@ -52,7 +52,7 @@ export class Request extends Component<IRequestComponent, any> {
         title={messages['request body']}
         headerText={messages['request body']}
       >
-        <div style={containerStyle}>
+        <div style={containerStyle} className='request-body-area'>
           <RequestBody handleOnEditorChange={handleOnEditorChange} />
         </div>
       </PivotItem>,
@@ -64,7 +64,7 @@ export class Request extends Component<IRequestComponent, any> {
         title={messages['request header']}
         headerText={messages['request header']}
       >
-        <div style={containerStyle}>
+        <div style={containerStyle} className='request-headers-body'>
           <RequestHeaders />
         </div>
       </PivotItem>,
@@ -76,7 +76,7 @@ export class Request extends Component<IRequestComponent, any> {
         title={translateMessage('permissions preview')}
         headerText={messages['modify permissions']}
       >
-        <div style={containerStyle}>
+        <div style={containerStyle} className="request-permissions-body">
           <Permission />
         </div>
       </PivotItem>,
@@ -91,7 +91,7 @@ export class Request extends Component<IRequestComponent, any> {
           onRenderItemLink={this.getTooltipDisplay}
           title={messages['Access Token']}
           headerText={messages['Access Token']}>
-          <div style={containerStyle}>
+          <div style={containerStyle} className="access-token-body">
             <Auth />
           </div>
         </PivotItem>
@@ -163,6 +163,7 @@ export class Request extends Component<IRequestComponent, any> {
         <Pivot
           onLinkClick={this.onPivotItemClick}
           styles={{ root: { display: 'flex', flexWrap: 'wrap' } }}
+          className="request-pivot-tab"
         >
           {requestPivotItems}
         </Pivot>

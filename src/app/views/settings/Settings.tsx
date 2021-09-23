@@ -29,6 +29,7 @@ import { consentToScopes } from '../../services/actions/permissions-action-creat
 import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
+import { toggleTourState } from '../../services/actions/tour-action-creator';
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
@@ -81,6 +82,14 @@ function Settings(props: ISettingsProps) {
         },
         onClick: () => toggleThemeChooserDialogState(),
       },
+      {
+        key: 'GE Tour',
+        text: 'Graph Explorer Tour',
+        iconProps: {
+          iconName: 'Vacation'
+        },
+        onClick: () => toggleCurrentTourState()
+      }
     ];
 
     if (authenticated) {
@@ -105,6 +114,13 @@ function Settings(props: ISettingsProps) {
     }
     setItems(menuItems);
   }, [authenticated]);
+
+  const toggleCurrentTourState = () => {
+    //starting the tour here
+    //meaning the tour state should be global and make app.tsx rerender
+    //add a small dialog to let a user choose the kind of tour to do.
+    dispatch(toggleTourState(true));
+  }
 
   const toggleThemeChooserDialogState = () => {
     let hidden = themeChooserDialogHidden;
@@ -202,7 +218,7 @@ function Settings(props: ISettingsProps) {
   };
 
   return (
-    <div>
+    <div className='settings-menu-button'>
       <TooltipHost
         content={messages['More actions']}
         id={getId()}
@@ -270,9 +286,11 @@ function Settings(props: ISettingsProps) {
           onRenderFooterContent={onRenderFooterContent}
           isFooterAtBottom={true}
           closeButtonAriaLabel='Close'
+          className='permissions-panel-body'
         >
           <Permission panel={true} setPermissions={setPermissions} />
         </Panel>
+
       </div>
     </div>
   );
