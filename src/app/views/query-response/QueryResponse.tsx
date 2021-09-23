@@ -47,7 +47,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
 
   const handleWindowResize = () => {
     const currentWindowWidth = window.innerWidth;
-let isTabletSize = false;
+      isTabletSize = false;
     if(currentWindowWidth <= 1320){
       isTabletSize = true;
     }
