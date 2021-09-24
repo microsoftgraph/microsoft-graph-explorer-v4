@@ -100,7 +100,8 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
         this.adaptiveCard!.parse(data.card);
         const renderedCard = this.adaptiveCard!.render();
         return (
-          <Pivot className='adaptive-cards-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
+          <Pivot className='adaptive-cards-response'
+            onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
             <PivotItem
               itemKey='card'
               ariaLabel={translateMessage('card')}

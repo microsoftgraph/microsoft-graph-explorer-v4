@@ -1,10 +1,10 @@
-import { ITheme } from "@fluentui/react"
+import { ITheme } from '@fluentui/react'
 
 export const tourStyles = () => {
-    return {
-        bodyColor : {
-            color: 'white',
-            textAlign : 'center'
-        }
+  return {
+    bodyColor : {
+      color: 'white',
+      textAlign : 'center'
     }
+  }
 }

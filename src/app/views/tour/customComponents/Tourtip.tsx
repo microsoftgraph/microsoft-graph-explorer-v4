@@ -4,43 +4,50 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ITourTooltipRenderProps } from '../utils/types'
 
-export const TourTip = ( { tooltipProps, continuous, index, step, backProps, closeProps, primaryProps, skipProps } : ITourTooltipRenderProps ) => (
-    <div {...tooltipProps} >
-        <TeachingBubble
-            styles={{headline:{textAlign: 'center !important', color:'white'}, footer:{justifyContent: 'right'}}}
-            target={step.target}
-            headline={step.title as string}
-            calloutProps={{directionalHint: step.directionalHint }}
-            hasCloseButton={true}
-            footerContent={
-                <div style={{display:'contents', width: '100%', background:'yellow'}}>
-                    <div style={{}}>
-                        {continuous &&
-                        <DefaultButton {...skipProps} styles={{root: { float:'left !important', borderColor:'black', justifyContent:'left' }}}>
-                            {index}
-                        </DefaultButton>}
+export const TourTip = (
+  { tooltipProps, continuous, index, step, backProps, closeProps, primaryProps, skipProps }
+  : ITourTooltipRenderProps ) => (
+  <div {...tooltipProps} >
+    <TeachingBubble
+      styles={{headline:{textAlign: 'center !important', color:'white'}, footer:{justifyContent: 'right'}}}
+      target={step.target}
+      headline={step.title as string}
+      calloutProps={{directionalHint: step.directionalHint }}
+      hasCloseButton={true}
+      footerContent={
+        <div style={{display:'contents', width: '100%', background:'yellow'}}>
+          <div style={{}}>
+            {continuous &&
+              <DefaultButton {...skipProps}
+                styles={{root: { float:'left !important', borderColor:'black', justifyContent:'left' }}}>
+                {index}
+              </DefaultButton>}
 
-                        {continuous &&
-                        <PrimaryButton {...primaryProps} styles={{root: { float:'right !important', borderColor:'white', textColor:'blue !important' }}} >
-                            <FormattedMessage id="Next" aria-label="Next" />
+            {continuous &&
+                        <PrimaryButton {...primaryProps}
+                          styles={{
+                            root: { float:'right !important', borderColor:'white', textColor:'blue !important' }}} >
+                          <FormattedMessage id="Next" aria-label="Next" />
                         </PrimaryButton>}
 
-                        {index > 0 &&
-                        <DefaultButton {...backProps} styles={{root: { float: 'right !important', borderColor:'white' }}} >
-                            <FormattedMessage id="Back" aria-label="Back"/>
+            {index > 0 &&
+                        <DefaultButton {...backProps}
+                          styles={{root: { float: 'right !important', borderColor:'white' }}} >
+                          <FormattedMessage id="Back" aria-label="Back"/>
                         </DefaultButton>}
 
-                        {!continuous &&
-                        <PrimaryButton {...closeProps} styles={{ root: { color: 'white' } }}>
-                            <FormattedMessage id="Close Tour" aria-label="Close" />
+            {!continuous &&
+                        <PrimaryButton {...closeProps}
+                          styles={{ root: { color: 'white' } }}>
+                          <FormattedMessage id="Close Tour" aria-label="Close" />
                         </PrimaryButton>}
-                    </div>
-                </div>
-            }
-        >
-            {step.content}
+          </div>
+        </div>
+      }
+    >
+      {step.content}
 
-        </TeachingBubble>
+    </TeachingBubble>
 
-    </div>
+  </div>
 );
