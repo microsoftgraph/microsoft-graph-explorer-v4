@@ -8,7 +8,7 @@ export class GraphClient {
   private static createClient(): Client {
 
     const clientOptions = {
-      authProvider,
+      authProvider
     };
 
     return Client.initWithMiddleware(clientOptions);

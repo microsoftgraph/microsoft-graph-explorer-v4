@@ -385,5 +385,6 @@
   "Response is result of workaround": "An alternative query has been used to fetch the download URL since the redirected URL from the original request is not CORS-compliant.",
   "For more information": "For more information, see",
   "documentation": "documentation",
-  "Missing response headers for query workaround": "Some headers, typically returned for this request, may be missing due to the limitations of the workaround."
+  "Missing response headers for query workaround": "Some headers, typically returned for this request, may be missing due to the limitations of the workaround.",
+  "Learn more": "Learn more"
 }

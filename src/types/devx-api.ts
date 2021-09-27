@@ -1,4 +1,4 @@
 export interface IDevxAPI {
-    baseUrl: string;
-    parameters: string;
+  baseUrl: string;
+  parameters: string;
 }

@@ -14,9 +14,9 @@ describe('Toggle Sidebar Action Creators', () => {
         type: TOGGLE_SIDEBAR_SUCCESS,
         response: {
           mobileScreen: true,
-          showSidebar: false,
+          showSidebar: false
         }
-      },
+      }
     ];
 
     const store = mockStore({ sidebarProperties: {} });
@@ -24,7 +24,7 @@ describe('Toggle Sidebar Action Creators', () => {
     // @ts-ignore
     store.dispatch(toggleSidebar({
       mobileScreen: true,
-      showSidebar: false,
+      showSidebar: false
     }));
     expect(store.getActions()).toEqual(expectedActions);
   });

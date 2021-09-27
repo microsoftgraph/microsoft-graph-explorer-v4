@@ -17,14 +17,14 @@ import { queryRunningStatus } from './query-loading-action-creators';
 export function profileRequestSuccess(response: object): any {
   return {
     type: PROFILE_REQUEST_SUCCESS,
-    response,
+    response
   };
 }
 
 export function profileRequestError(response: object): any {
   return {
     type: PROFILE_REQUEST_ERROR,
-    response,
+    response
   };
 }
 
@@ -58,7 +58,7 @@ async function getProfileInformation(): Promise<IUser> {
   const profile: IUser = {
     displayName: '',
     emailAddress: '',
-    profileImageUrl: '',
+    profileImageUrl: ''
   };
   try {
     query.sampleUrl = USER_INFO_URL;

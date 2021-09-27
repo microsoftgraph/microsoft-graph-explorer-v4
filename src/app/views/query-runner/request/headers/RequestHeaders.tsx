@@ -85,7 +85,8 @@ const RequestHeaders = (props: any) => {
       onMouseEnter={() => setIsHoverOverHeadersList(true)}
       onMouseLeave={() => setIsHoverOverHeadersList(false)}
       className={classes.container}
-      style={isHoverOverHeadersList ? { height: convertVhToPx(height, 60) } : { height: convertVhToPx(height, 60), overflow: "hidden" }}>
+      style={isHoverOverHeadersList ? { height: convertVhToPx(height, 60) } :
+        { height: convertVhToPx(height, 60), overflow: 'hidden' }}>
       <Announced message={announcedMessage} />
       <div className='row'>
         <div className='col-sm-5'>

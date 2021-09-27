@@ -37,7 +37,6 @@ export interface IRequestOptions {
   headers?: {};
   method?: string;
   body?: string | undefined;
-  redirect?: RequestRedirect | undefined;
 }
 
 export interface IRequestState {

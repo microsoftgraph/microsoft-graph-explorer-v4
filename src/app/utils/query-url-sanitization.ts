@@ -3,7 +3,7 @@ import { IQuery } from '../../types/query-runner';
 import { GRAPH_URL } from '../services/graph-constants';
 import {
   isAllAlpha,
-  sanitizeQueryParameter,
+  sanitizeQueryParameter
 } from './query-parameter-sanitization';
 import { parseSampleUrl } from './sample-url-generation';
 

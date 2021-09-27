@@ -43,7 +43,7 @@ export function Monaco(props: IMonaco) {
               scrollbar: {
                 horizontalHasArrows: true,
                 horizontal: 'visible',
-                horizontalScrollbarSize: 17,
+                horizontalScrollbarSize: 17
               },
               wordWrap: 'on'
             }}

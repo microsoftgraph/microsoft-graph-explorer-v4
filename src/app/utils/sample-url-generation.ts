@@ -14,7 +14,7 @@ export function parseSampleUrl(url: string, version?: string) {
       search = generateSearchParameters(urlObject, search);
       sampleUrl = `${GRAPH_URL}/${queryVersion}/${requestUrl + search}`;
     } catch (error) {
-      if (error.message === `Failed to construct 'URL': Invalid URL`) {
+      if (error.message === 'Failed to construct \'URL\': Invalid URL') {
         return {
           queryVersion, requestUrl, sampleUrl, search
         };

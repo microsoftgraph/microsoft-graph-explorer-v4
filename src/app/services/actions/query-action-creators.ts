@@ -249,7 +249,7 @@ async function createHistory(
     status,
     statusText,
     duration,
-    result,
+    result
   };
 
   writeHistoryData(historyItem);

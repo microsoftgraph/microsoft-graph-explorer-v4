@@ -27,10 +27,10 @@ export function createHarPayload(query: IHistoryItem): IHarPayload {
     content: {
       text: queryResult,
       size: queryResult.length,
-      mimeType: 'application/json',
+      mimeType: 'application/json'
     },
     request: {
-      headers,
+      headers
     },
     response:
     {
@@ -39,15 +39,15 @@ export function createHarPayload(query: IHistoryItem): IHarPayload {
     sendTime: 0,
     waitTime: 0,
     receiveTime: 0,
-    httpVersion: 'HTTP/1.1',
+    httpVersion: 'HTTP/1.1'
   };
 
   if (query.body) {
     harPayload = Object.assign(harPayload, { //tslint:disable-line
       postData: {
         mimeType: 'application/json',
-        text: query.body,
-      },
+        text: query.body
+      }
     });
   }
   return harPayload;
@@ -60,10 +60,10 @@ export function generateHar(payloads: IHarPayload[]): IHarFormat {
       version: '4.0',
       creator: {
         name: 'Graph Explorer',
-        version: '4.0',
+        version: '4.0'
       },
-      entries,
-    },
+      entries
+    }
   };
 }
 
@@ -82,7 +82,7 @@ function createEntries(payloads: IHarPayload[]) {
         queryString: payload.queryString,
         postData: payload.postData,
         headersSize: -1,
-        bodySize: -1,
+        bodySize: -1
       },
       response: {
         status: payload.status,
@@ -93,15 +93,15 @@ function createEntries(payloads: IHarPayload[]) {
         content: payload.content,
         redirectURL: '',
         headersSize: -1,
-        bodySize: -1,
+        bodySize: -1
       },
       cache: {},
       timings: {
         send: payload.sendTime,
         wait: payload.waitTime,
-        receive: payload.receiveTime,
+        receive: payload.receiveTime
       },
-      connection: '',
+      connection: ''
     });
   });
   return entries;

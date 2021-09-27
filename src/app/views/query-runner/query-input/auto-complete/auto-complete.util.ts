@@ -63,3 +63,10 @@ export function getLastSymbolInUrl(url: string) {
   const max = availableSymbols.reduce((prev, current) => (prev.value > current.value) ? prev : current);
   return max;
 }
+
+// Filter out suggestions that don't contain the user's input
+export function getFilteredSuggestions(compareString: string, suggestions: string[]) {
+  return suggestions.filter((suggestion: string) => {
+    return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
+  });
+}

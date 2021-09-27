@@ -9,11 +9,11 @@ export const headerStyles = () => {
       overflowX: 'hidden'
     },
     itemContent: {
-      marginTop: '2.5%',
+      marginTop: '2.5%'
     },
     rowContainer: {
       fontSize: FontSizes.medium,
-      position: 'relative',
+      position: 'relative'
     },
     detailsRow: {
       display: 'flex',
