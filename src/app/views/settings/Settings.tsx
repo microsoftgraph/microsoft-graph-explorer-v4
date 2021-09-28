@@ -6,6 +6,7 @@ import {
   DialogType,
   DropdownMenuItemType,
   getId,
+  IChoiceGroupOption,
   IconButton,
   Label,
   List,
@@ -86,7 +87,7 @@ function Settings(props: ISettingsProps) {
       },
       {
         key: 'GE Tour',
-        text: 'Graph Explorer Tour',
+        text: messages['GE Tour'],
         iconProps: {
           iconName: 'Vacation'
         },
@@ -117,23 +118,20 @@ function Settings(props: ISettingsProps) {
     setItems(menuItems);
   }, [authenticated]);
 
-  const toggleCurrentTourState = () => {
-    //starting the tour here
-    //meaning the tour state should be global and make app.tsx rerender
-    //add a small dialog to let a user choose the kind of tour to do.
-    dispatch(toggleTourState(true));
+  const toggleCurrentTourState = (selectedTour : any) => {
+    if(selectedTour !== null && selectedTour.key === 'Advanced Tour'){
+      dispatch(toggleTourState({runState: true, beginnerTour: false}));
+    }
+    else{
+      dispatch(toggleTourState({runState: true, beginnerTour: true}));
+    }
+    toggleTourDialogState();
   }
 
   const toggleTourDialogState = () => {
     let hidden = tourChooserDialogHidden;
     hidden = !hidden;
     hideTourChooserDialog(hidden);
-  }
-
-  const handleSetTour = (selectedTour: any) => {
-    console.log('Here is the selected tour ', selectedTour);
-    //dispatch the tour with the expected steps
-    hideTourChooserDialog(true);
   }
 
   const toggleThemeChooserDialogState = () => {
@@ -296,30 +294,30 @@ function Settings(props: ISettingsProps) {
           onDismiss={() => toggleTourDialogState()}
           dialogContentProps={{
             type: DialogType.normal,
-            title: 'Tour',
+            title: messages['Tour Chooser'],
             isMultiline: false
           }}
         >
           <ChoiceGroup
-            label="Pick one tour type"
+            label="Pick tour type"
             options={[
-              {
-                key: 'Advanced Tour',
-                text: messages['Advanced Tour'],
-                iconProps: { iconName: 'Train'}
-              },
               {
                 key: 'Beginner Tour',
                 text: messages['Beginner Tour'],
                 iconProps: { iconName: 'ShoppingCart' }
+              },
+              {
+                key: 'Advanced Tour',
+                text: messages['Advanced Tour'],
+                iconProps: { iconName: 'Train'}
               }
             ]}
-            onChange ={(event, selectedKey) => toggleCurrentTourState()}
+            onChange ={(event, selectedKey) => toggleCurrentTourState(selectedKey)}
           />
           <div>
-            <h1>The Advanced Tour will take you through the following features</h1>
+            <FormattedMessage id='Beginner Tour Message'/>
             <List />
-            <h1>The Beginner Tour will take you through:</h1>
+            <FormattedMessage id='Advanced Tour Message' />
             <List />
           </div>
           <DialogFooter>

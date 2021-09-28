@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Joyride, { ACTIONS, BeaconRenderProps, CallBackProps, EVENTS, STATUS } from 'react-joyride';
+import Joyride, { ACTIONS, CallBackProps, EVENTS, STATUS } from 'react-joyride';
 import { ITourSteps } from './utils/types'
-import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton } from '@fluentui/react';
+import { getTheme, ITheme } from '@fluentui/react';
 import { IRootState } from '../../../types/root';
 
 import { toggleTourState } from '../../services/actions/tour-action-creator';
@@ -22,24 +22,27 @@ interface ITourState {
   hideDialog: boolean;
 }
 
-const GETour = (props?: any) => {
+const GETour = () => {
 
+  const { tourState } = useSelector((state: IRootState) => state);
   const dispatch = useDispatch();
   const [run, setRun] = useState(false);
-  const [steps, setSteps] = useState(BEGINNER_TOUR);
+  const [steps, setSteps] = useState(tourState.beginnerTour === true ? BEGINNER_TOUR : ADVANCED_TOUR);
   const [stepIndex, setStepIndex] = useState(0);
-  const [hideDialog, setHideDialog] = useState(true);
-  const [tourComplete, setTourComplete] = useState(false);
-
-
-  useEffect(() => {
-    console.log('It changed again to ', tourComplete, ' and dialog is ', hideDialog);
-  }, [tourComplete, hideDialog]);
-
+  const currentTheme: ITheme = getTheme();
 
   useEffect(() => {
     setRun(true);
   }, [])
+
+  const nextHandler = (): boolean => {
+    const nextStep = steps[stepIndex+1];
+    if (nextStep.target instanceof HTMLElement) {
+      return true;
+    }
+    const selector = nextStep.target;
+    return document.querySelector(selector) != null;
+  }
 
   const handleJoyrideCallback = (data: CallBackProps) => {
 
@@ -47,23 +50,21 @@ const GETour = (props?: any) => {
     const step: ITourSteps = data.step
     console.log('Here is the type ', type);
 
+    if(nextHandler() && step.autoNext === true){
+      step.autoNext = false;
+    }
+
     if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
       console.log('TOur is finished. Cleaning up');
       setRun(false)
       setStepIndex(0);
-
-      if (steps !== ADVANCED_TOUR) {
-        setTourComplete(true);
-        setHideDialog(false);
-      } else {
-        dispatch(toggleTourState(false));
-      }
+      dispatch(toggleTourState({runState: false, beginnerTour: false}));
 
     }
     else if (action === 'update' && step.autoNext) {
       const nextStep: ITourSteps = steps[index + 1];  //gets the next step
 
-      const nextHandler = (): boolean => {
+      const nextHandler_ = (): boolean => {
         if (nextStep.target instanceof HTMLElement) {
           return true;
         }
@@ -74,7 +75,7 @@ const GETour = (props?: any) => {
       let mutationObserver: MutationObserver;
 
       const mutationHandler = () => {
-        if (nextHandler()) {
+        if (nextHandler_()) {
           mutationObserver.disconnect();
 
           const stepIndex_ = stepIndex + 1;
@@ -112,37 +113,7 @@ const GETour = (props?: any) => {
 
     }
   }
-  const dialogContentProps = {
-    type: DialogType.normal,
-    title: 'Tour Type',
-    closeButtonAriaLabel: 'Close',
-    subText: 'Do you want to view a more advanced tour?'
-  };
-  const dialogStyles = { main: { maxWidth: 450 } };
 
-  const setYes = () => {
-
-    if (steps === ADVANCED_TOUR) {
-      setTourComplete(false);
-      setHideDialog(true);
-      dispatch(toggleTourState(false));
-    }
-    else {
-      console.log('Setting new touur');
-      setStepIndex(0);
-      setTourComplete(false);
-      setSteps(ADVANCED_TOUR);
-      setHideDialog(true);
-      setRun(true);
-    }
-
-  }
-
-  const setNo = () => {
-    setTourComplete(false);
-    setHideDialog(true);
-    dispatch(toggleTourState(false));
-  }
 
   return (
         <>
@@ -157,11 +128,8 @@ const GETour = (props?: any) => {
                 tooltipContainer: {
                   textAlign: 'left'
                 },
-                buttonNext: {
-                  backgroundColor: 'blue'
-                },
-                buttonBack: {
-                  marginRight: 10
+                options:{
+                  primaryColor:currentTheme.palette.blueMid
                 }
               }}
               locale={{
@@ -171,18 +139,8 @@ const GETour = (props?: any) => {
               stepIndex={stepIndex}
               tooltipComponent={TourTip}
               debug={true}
-              floaterProps={{ hideArrow: true }}
-            //beaconComponent={(props_ : BeaconRenderProps) =>beaconComponent(props_)}
+              floaterProps={{ }}
             />
-            {tourComplete === true &&
-                <Dialog dialogContentProps={dialogContentProps} hidden={hideDialog}  >
-                  <DialogFooter>
-                    <DefaultButton text="No" onClick={setNo} />
-                    <PrimaryButton text="Yes" onClick={setYes} />
-                  </DialogFooter>
-                </Dialog>
-            }
-
         </>
   )
 }

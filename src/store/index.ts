@@ -36,7 +36,7 @@ const initialState: any = {
     selectedVersion: 'v1.0'
   },
   termsOfUse: true,
-  tourState: false
+  tourState: { runState: false, beginnerTour: true }
 };
 
 export const store = createStore(

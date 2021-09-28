@@ -12,6 +12,7 @@ import { IQuery, ISampleQuery } from './query-runner';
 import { ISidebarProps } from './sidebar';
 import { ISnippet } from './snippets';
 import { IStatus } from './status';
+import { ITour } from './tour';
 
 export interface IRootState {
   theme: string;
@@ -39,7 +40,7 @@ export interface IRootState {
   dimensions: IDimensions;
   autoComplete: IAutocompleteResponse;
   devxApi: IDevxAPI;
-  tourState: boolean;
+  tourState: ITour;
 }
 
 export interface IApiFetch {

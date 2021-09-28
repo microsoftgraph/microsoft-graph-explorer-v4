@@ -42,6 +42,7 @@ import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
 import GETour from '../views/tour/Tour';
+import { ITour } from '../../types/tour';
 
 interface IAppProps {
   theme?: ITheme;
@@ -54,7 +55,7 @@ interface IAppProps {
   sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
   authenticated: boolean;
-  tourState: boolean;
+  tourState: ITour;
   actions: {
     clearQueryStatus: Function;
     clearTermsOfUse: Function;
@@ -353,7 +354,7 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        {tourState && <GETour/>}
+        {tourState.runState && <GETour/>}
         <div className={`container-fluid ${classes.app}`}>
           <Announced
             message={

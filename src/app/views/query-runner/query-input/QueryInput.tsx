@@ -80,7 +80,7 @@ const QueryInput = (props: IQueryInputProps) => {
   return (
     <div className='row'>
       <div className='col-xs-12 col-lg-2'>
-        <div className="request-option">
+        <div className='request-option'>
           <Dropdown
             ariaLabel={translateMessage('HTTP request method option')}
             role='listbox'
@@ -93,16 +93,18 @@ const QueryInput = (props: IQueryInputProps) => {
         </div>
       </div>
       <div className='col-xs-12 col-lg-2'>
-        <Dropdown
-          ariaLabel={translateMessage('Microsoft Graph API Version option')}
-          role='listbox'
-          selectedKey={sampleQuery.selectedVersion || 'v1.0'}
-          options={urlVersions}
-          onChange={(event, method) => handleOnVersionChange(method)}
-        />
+        <div className='query-version'>
+          <Dropdown
+            ariaLabel={translateMessage('Microsoft Graph API Version option')}
+            role='listbox'
+            selectedKey={sampleQuery.selectedVersion || 'v1.0'}
+            options={urlVersions}
+            onChange={(event, method) => handleOnVersionChange(method)}
+          />
+        </div>
       </div>
       <div className='col-xs-12 col-lg-6'>
-        <div className="query-box">
+        <div className='query-box'>
           <AutoComplete
             contentChanged={contentChanged}
             runQuery={runQuery}
@@ -110,7 +112,7 @@ const QueryInput = (props: IQueryInputProps) => {
         </div>
       </div>
       <div className='col-xs-12 col-lg-2'>
-        <div className="query-run-button">
+        <div className='query-run-button'>
           <SubmitButton
             className='run-query-button'
             text={translateMessage('Run Query')}
