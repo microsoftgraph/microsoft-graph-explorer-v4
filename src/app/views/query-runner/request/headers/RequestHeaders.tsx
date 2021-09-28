@@ -32,11 +32,13 @@ const RequestHeaders = (props: any) => {
   const textfieldRef = React.createRef<ITextField>();
   const onSetFocus = () => textfieldRef.current!.focus();
 
-  const handleOnHeaderNameChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, name?: string) => {
-    setHeaderName(name || '');
-  };
+  const handleOnHeaderNameChange =
+   (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, name?: string) => {
+     setHeaderName(name || '');
+   };
 
-  const handleOnHeaderValueChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, value?: string) => {
+  const handleOnHeaderValueChange =
+  (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, value?: string) => {
     setHeaderValue(value || '');
   };
 
