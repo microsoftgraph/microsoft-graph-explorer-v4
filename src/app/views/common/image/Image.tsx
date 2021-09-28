@@ -5,7 +5,7 @@ export class Image extends Component<IImageComponentProps, IImageComponentState>
   constructor(props: any) {
     super(props);
     this.state = {
-      imageUrl: '',
+      imageUrl: ''
     };
   }
 

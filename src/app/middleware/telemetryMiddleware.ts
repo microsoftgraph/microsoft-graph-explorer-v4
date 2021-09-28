@@ -7,7 +7,7 @@ import {
   FETCH_ADAPTIVE_CARD_ERROR,
   FETCH_SCOPES_ERROR,
   GET_SNIPPET_ERROR,
-  SAMPLES_FETCH_ERROR,
+  SAMPLES_FETCH_ERROR
 } from '../services/redux-constants';
 import { sanitizeQueryUrl } from '../utils/query-url-sanitization';
 
@@ -21,7 +21,7 @@ const telemetryMiddleware =
           state.sampleQuery,
           action.response.error,
           {
-            Language: action.response.language,
+            Language: action.response.language
           }
         );
         break;
@@ -32,7 +32,7 @@ const telemetryMiddleware =
           state.sampleQuery,
           action.response.error,
           {
-            HasRequestUrl: action.response.hasUrl,
+            HasRequestUrl: action.response.hasUrl
           }
         );
         break;

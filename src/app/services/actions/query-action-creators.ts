@@ -109,7 +109,7 @@ async function createHistory(response: Response, respHeaders: any, query: IQuery
     status,
     statusText,
     duration,
-    result,
+    result
   };
 
   writeHistoryData(historyItem);

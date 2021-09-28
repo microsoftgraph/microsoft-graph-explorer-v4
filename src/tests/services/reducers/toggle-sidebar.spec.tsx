@@ -5,12 +5,12 @@ describe('Toggle Sidebar Reducer', () => {
   it('should toggle the sidebar', () => {
     const initialState = {
       mobileScreen: false,
-      showSidebar: false,
+      showSidebar: false
     };
 
     const properties = {
       mobileScreen: true,
-      showSidebar: true,
+      showSidebar: true
     };
 
     const dummyAction = {
