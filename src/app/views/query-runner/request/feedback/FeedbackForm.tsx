@@ -19,7 +19,7 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
     const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
     const currentTheme = getTheme();
     const { NODE_ENV } = process.env;
-    const { profile, authToken } = useSelector((state: IRootState) => state);
+    const { profile, authToken, policies } = useSelector((state: IRootState) => state);
 
     function surveyActivated(launcher: any, surveyItem: any) {
         return surveyItem;
@@ -87,6 +87,8 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
             },
             userEmail: ' ',  // Replaced by the user email
             userEmailConsentDefault: false, // Should the email checkbox be checked
+            emailPolicyValue: policies.data.email,
+            screenshotPolicyValue: policies.data.screenshot,
             customResourcesSetExternally: 2 // None = 0, Css = 1, Strings = 2, CssAndStrings = 3
         };
 

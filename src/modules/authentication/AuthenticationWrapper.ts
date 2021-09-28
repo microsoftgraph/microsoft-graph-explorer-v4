@@ -97,14 +97,15 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   public async getToken() {
+    const resourceId = 'https://clients.config.office.net/'
     const silentRequest: SilentRequest = {
       scopes: defaultScopes, authority: this.getAuthority(),
       account: this.getAccount(), redirectUri: getCurrentUri()
     };
     try {
-      const response: AuthenticationResult =
-        await msalApplication.acquireTokenSilent(silentRequest);
-      return response;
+      const graphToken: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
+      // const ocpsToken: AuthenticationResult = await msalApplication.acquireTokenSilent({ scopes: [resourceId + '/user_impersonation'], account: this.getAccount() });
+      return graphToken;
     } catch (error) {
 
       throw error;
