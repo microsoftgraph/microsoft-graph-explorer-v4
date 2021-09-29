@@ -117,7 +117,7 @@
         "@typescript-eslint/parser": "4.15.0",
         "axe-core": "4.3.3",
         "axe-sarif-converter": "2.3.0",
-        "axios": "^0.21.4",
+        "axios": "0.21.4",
         "babel-jest": "26.6.3",
         "braces": "2.3.1",
         "chromedriver": "^88.0.0",
