@@ -32,16 +32,14 @@ const RequestHeaders = (props: any) => {
   const textfieldRef = React.createRef<ITextField>();
   const onSetFocus = () => textfieldRef.current!.focus();
 
-  const handleOnHeaderNameChange = (name?: string) => {
-    if (name) {
-      setHeaderName(name);
-    }
-  };
+  const handleOnHeaderNameChange =
+   (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, name?: string) => {
+     setHeaderName(name || '');
+   };
 
-  const handleOnHeaderValueChange = (value?: string) => {
-    if (value) {
-      setHeaderValue(value);
-    }
+  const handleOnHeaderValueChange =
+  (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, value?: string) => {
+    setHeaderValue(value || '');
   };
 
   const handleOnHeaderDelete = (header: IHeader) => {
@@ -93,7 +91,7 @@ const RequestHeaders = (props: any) => {
           <TextField className='header-input'
             placeholder={messages.Key}
             value={headerName}
-            onChange={(event, name) => handleOnHeaderNameChange(name)}
+            onChange={handleOnHeaderNameChange}
             componentRef={textfieldRef}
           />
         </div>
@@ -102,7 +100,7 @@ const RequestHeaders = (props: any) => {
             className='header-input'
             placeholder={messages.Value}
             value={headerValue}
-            onChange={(event, value) => handleOnHeaderValueChange(value)}
+            onChange={handleOnHeaderValueChange}
           />
         </div>
         <div className='col-sm-2 col-md-2'>
