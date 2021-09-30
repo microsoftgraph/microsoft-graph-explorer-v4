@@ -5,10 +5,11 @@ export interface ITourSteps extends Step {
   illustrationImage?: IImageProps;
   directionalHint?: DirectionalHint;
   autoNext?: boolean;
+  advancedStep?: boolean;
 
 }
 
-export interface ITourTooltipRenderProps extends TooltipRenderProps{
+export interface ITourTooltipRenderProps extends TooltipRenderProps {
   directionalHint: DirectionalHint;
   step: ITourSteps;
 

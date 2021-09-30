@@ -4,10 +4,17 @@ import {
   Dialog,
   DialogFooter,
   DialogType,
+  DocumentCard,
+  DocumentCardActivity,
+  DocumentCardDetails,
+  DocumentCardTitle,
   DropdownMenuItemType,
   getId,
-  IChoiceGroupOption,
+  getTheme,
+  Icon,
   IconButton,
+  IDocumentCardStyles,
+  ITheme,
   Label,
   List,
   Panel,
@@ -32,6 +39,7 @@ import { togglePermissionsPanel } from '../../services/actions/permissions-panel
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 import { toggleTourState } from '../../services/actions/tour-action-creator';
+import { advancedFeaturesList, beginnerFeaturesList } from '../tour/utils/itemsFeatured'
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
@@ -45,7 +53,9 @@ function Settings(props: ISettingsProps) {
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [tourChooserDialogHidden, hideTourChooserDialog] = useState(true);
+  const [tourChooserCard, hideTourChooserCard] = useState(true);
 
+  const currentTheme: ITheme = getTheme();
   const {
     intl: { messages }
   }: any = props;
@@ -91,7 +101,7 @@ function Settings(props: ISettingsProps) {
         iconProps: {
           iconName: 'Vacation'
         },
-        onClick: () => toggleTourDialogState()
+        onClick: () => toggleTourCardState()
       }
     ];
 
@@ -119,19 +129,13 @@ function Settings(props: ISettingsProps) {
   }, [authenticated]);
 
   const toggleCurrentTourState = (selectedTour : any) => {
-    if(selectedTour !== null && selectedTour.key === 'Advanced Tour'){
+    if(selectedTour !== '' && selectedTour === 'Advanced Tour'){
       dispatch(toggleTourState({runState: true, beginnerTour: false}));
     }
     else{
       dispatch(toggleTourState({runState: true, beginnerTour: true}));
     }
-    toggleTourDialogState();
-  }
-
-  const toggleTourDialogState = () => {
-    let hidden = tourChooserDialogHidden;
-    hidden = !hidden;
-    hideTourChooserDialog(hidden);
+    toggleTourCardState();
   }
 
   const toggleThemeChooserDialogState = () => {
@@ -142,6 +146,12 @@ function Settings(props: ISettingsProps) {
       ComponentName: componentNames.THEME_CHANGE_BUTTON
     });
   };
+
+  const toggleTourCardState = () => {
+    let tourCardHidden = tourChooserCard;
+    tourCardHidden = !tourCardHidden;
+    hideTourChooserCard(tourCardHidden);
+  }
 
   const handleSignOut = () => {
     dispatch(signOut());
@@ -223,10 +233,25 @@ function Settings(props: ISettingsProps) {
     );
   };
 
+  const onRenderCell = (item: any, index: any) => {
+    return(
+      <div>
+        <ListIcon/> {' '} {item.name}
+
+      </div>
+    )
+  }
+
+  const ListIcon = () => <Icon iconName="LocationDot"/>
+
   const menuProperties = {
     shouldFocusOnMount: true,
     alignTargetEdge: true,
     items
+  };
+
+  const cardStyles: IDocumentCardStyles = {
+    root: { display: 'inline-block', marginRight: 20, marginBottom: 20, width: 320}
   };
 
   return (
@@ -290,39 +315,47 @@ function Settings(props: ISettingsProps) {
         </Dialog>
 
         <Dialog
-          hidden={tourChooserDialogHidden}
-          onDismiss={() => toggleTourDialogState()}
+          hidden={tourChooserCard}
+          onDismiss={() => toggleTourCardState()}
           dialogContentProps={{
-            type: DialogType.normal,
             title: messages['Tour Chooser'],
-            isMultiline: false
+            styles: {title:{textAlign: 'center'}}
           }}
+          minWidth={200}
+          maxWidth={530}
+
         >
-          <ChoiceGroup
-            label="Pick tour type"
-            options={[
-              {
-                key: 'Beginner Tour',
-                text: messages['Beginner Tour'],
-                iconProps: { iconName: 'ShoppingCart' }
-              },
-              {
-                key: 'Advanced Tour',
-                text: messages['Advanced Tour'],
-                iconProps: { iconName: 'Train'}
-              }
-            ]}
-            onChange ={(event, selectedKey) => toggleCurrentTourState(selectedKey)}
-          />
-          <div>
-            <FormattedMessage id='Beginner Tour Message'/>
-            <List />
-            <FormattedMessage id='Advanced Tour Message' />
-            <List />
+          <div style={{display: 'flex', textAlign: 'left'}} >
+            <DocumentCard
+              onClick = {() => toggleCurrentTourState('Beginner Tour')}
+              styles={cardStyles}
+              key='Beginner Tour'
+            >
+              <DocumentCardDetails>
+                <DocumentCardTitle title={messages['Beginner Tour']} shouldTruncate />
+                <span style={{padding:'1px', margin:'15px', lineHeight:''}}>
+                  <FormattedMessage id="Beginner Tour Message" />
+                </span>
+                <List items={beginnerFeaturesList} style={{padding:'1px', margin:'15px', lineHeight:'1.5'}}
+                  onRenderCell={onRenderCell} />
+              </DocumentCardDetails>
+            </DocumentCard>
+
+            <DocumentCard
+              styles={cardStyles}
+              key = 'Advanced Tour'
+              onClick = {() => toggleCurrentTourState('Advanced Tour')}
+            >
+              <DocumentCardDetails>
+                <DocumentCardTitle title={messages['Advanced Tour']} />
+                <span style={{padding:'1px', margin:'15px', lineHeight:''}}>
+                  <FormattedMessage id="Advanced Tour Message" />
+                </span>
+                <List items={advancedFeaturesList} style={{padding:'1px', margin:'15px', lineHeight:'1.5'}}
+                  onRenderCell={onRenderCell} />
+              </DocumentCardDetails>
+            </DocumentCard>
           </div>
-          <DialogFooter>
-            <DefaultButton text={messages.Close} onClick={toggleTourDialogState} />
-          </DialogFooter>
         </Dialog>
 
         <Panel

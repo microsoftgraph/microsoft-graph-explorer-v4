@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Joyride, { ACTIONS, CallBackProps, EVENTS, STATUS } from 'react-joyride';
-import { ITourSteps } from './utils/types'
+import { ITourSteps, ITourTooltipRenderProps } from './utils/types'
 import { getTheme, ITheme } from '@fluentui/react';
 import { IRootState } from '../../../types/root';
 
@@ -30,14 +30,17 @@ const GETour = () => {
   const [steps, setSteps] = useState(tourState.beginnerTour === true ? BEGINNER_TOUR : ADVANCED_TOUR);
   const [stepIndex, setStepIndex] = useState(0);
   const currentTheme: ITheme = getTheme();
+  const stepLength = steps.length-1;
 
   useEffect(() => {
     setRun(true);
   }, [])
-
   const nextHandler = (): boolean => {
+    if(stepIndex + 1 >= steps.length){
+      return false;
+    }
     const nextStep = steps[stepIndex+1];
-    if (nextStep.target instanceof HTMLElement) {
+    if(nextStep.target instanceof HTMLElement){
       return true;
     }
     const selector = nextStep.target;
@@ -48,6 +51,8 @@ const GETour = () => {
 
     const { action, index, type, status } = data;
     const step: ITourSteps = data.step
+    const targetToUse = step.target;
+
     console.log('Here is the type ', type);
 
     if(nextHandler() && step.autoNext === true){
@@ -62,20 +67,11 @@ const GETour = () => {
 
     }
     else if (action === 'update' && step.autoNext) {
-      const nextStep: ITourSteps = steps[index + 1];  //gets the next step
-
-      const nextHandler_ = (): boolean => {
-        if (nextStep.target instanceof HTMLElement) {
-          return true;
-        }
-        const selector = nextStep.target;
-        return document.querySelector(selector) != null;
-      }
       // eslint-disable-next-line prefer-const
-      let mutationObserver: MutationObserver;
+      let mutationObserver : MutationObserver ;
 
       const mutationHandler = () => {
-        if (nextHandler_()) {
+        if(nextHandler()){
           mutationObserver.disconnect();
 
           const stepIndex_ = stepIndex + 1;
@@ -112,8 +108,8 @@ const GETour = () => {
       //do manothing
 
     }
-  }
 
+  }
 
   return (
         <>
@@ -124,14 +120,6 @@ const GETour = () => {
               showSkipButton={true}
               showProgress={true}
               callback={(data) => handleJoyrideCallback(data)}
-              styles={{
-                tooltipContainer: {
-                  textAlign: 'left'
-                },
-                options:{
-                  primaryColor:currentTheme.palette.blueMid
-                }
-              }}
               locale={{
                 last: 'End Tour',
                 skip: 'Close Tour'
@@ -139,7 +127,13 @@ const GETour = () => {
               stepIndex={stepIndex}
               tooltipComponent={TourTip}
               debug={true}
-              floaterProps={{ }}
+              floaterProps={{hideArrow: true}}
+              styles={{
+                options:{
+                  primaryColor:currentTheme.palette.blue
+                }
+              }}
+
             />
         </>
   )
@@ -147,4 +141,3 @@ const GETour = () => {
 
 
 export default GETour;
-
