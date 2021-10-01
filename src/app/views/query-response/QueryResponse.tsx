@@ -204,7 +204,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
             height: 63,
             overflowY: 'scroll',
             border: 'none',
-            resize: 'none'
+            resize: 'none',
+            color: 'black'
           }}
           id='share-query-text'
           className='share-query-params'
