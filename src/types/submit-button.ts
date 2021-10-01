@@ -6,4 +6,5 @@ export interface ISubmitButtonControl {
   ariaLabel?: string;
   role?: string;
   disabled?: boolean;
+  allowDisabledFocus?: boolean;
 }
