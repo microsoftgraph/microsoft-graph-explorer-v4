@@ -107,7 +107,6 @@ class Request extends Component<IRequestComponent, any> {
 
   private selectContextItem = (link: any) => {
     //
-    console.log('Stuf');
   }
 
   private getTooltipDisplay(link: any) {
