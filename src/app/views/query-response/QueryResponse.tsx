@@ -1,7 +1,7 @@
 import {
   Announced, Dialog, DialogFooter, DialogType,
   DefaultButton, FontSizes, getId, Icon, IconButton,
-  Modal, Pivot, PivotItem, PrimaryButton, TooltipHost
+  Modal, Pivot, PivotItem, PrimaryButton, TooltipHost, ContextualMenuItemType
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';
@@ -21,6 +21,9 @@ import { createShareLink } from '../common/share';
 import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 import { IRootState } from '../../../types/root';
+import LinkItem from '../tour/utils/LinkItem';
+import { toggleTourState } from '../../services/actions/tour-action-creator';
+import { contextMenuItems, findTarget, getTargetStepIndex } from '../tour/utils/contextHelpers';
 
 
 const QueryResponse = (props: IQueryResponseProps) => {
@@ -101,16 +104,48 @@ const QueryResponse = (props: IQueryResponseProps) => {
     }
   };
 
+  const selectContextItem = (e: any, item: any, link: any) => {
+    if(link.itemKey !== null){
+      const { itemKey } = link;
+      const itemKeyString: string = itemKey.toString();
+      const target = findTarget(itemKeyString);
+      const targetStepIndex = getTargetStepIndex(target, item.key)
+
+      if(targetStepIndex >= 0){
+        dispatch(toggleTourState(
+          {
+            runState: true,
+            beginnerTour: false,
+            continuous: item.key.toString() === 'info'? false : true,
+            startIndex: targetStepIndex
+          }
+        ))
+      }
+
+    }
+
+  }
   const renderItemLink = (link: any) => {
     return (
-      <TooltipHost
-        content={link.title}
-        id={getId()}
-        calloutProps={{ gapSpace: 0 }}
+      <LinkItem
+        style={{
+          flexGrow: 1,
+          textAlign: 'left',
+          boxSizing: 'border-box'
+        }}
+        key={link.title}
+        items={contextMenuItems}
+        onItemClick={(e: any, item: any) => selectContextItem(e, item, link)}
       >
-        <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
-        {link.headerText}
-      </TooltipHost>
+        <TooltipHost
+          content={link.title}
+          id={getId()}
+          calloutProps={{ gapSpace: 0 }}
+        >
+          <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
+          {link.headerText}
+        </TooltipHost>
+      </LinkItem>
     );
   };
 

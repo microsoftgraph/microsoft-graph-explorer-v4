@@ -23,10 +23,14 @@ import { RequestBody } from './body';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
+import LinkItem from '../../tour/utils/LinkItem';
+import { contextMenuItems, findTarget, getTargetStepIndex } from '../../tour/utils/contextHelpers';
+import { toggleTourState } from '../../../services/actions/tour-action-creator';
 
-export class Request extends Component<IRequestComponent, any> {
+class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {
     super(props);
+    this.selectContextItem = this.selectContextItem.bind(this);
   }
 
   private getPivotItems = (height: string) => {
@@ -101,16 +105,32 @@ export class Request extends Component<IRequestComponent, any> {
     return pivotItems;
   }
 
+  private selectContextItem = (link: any) => {
+    //
+    console.log('Stuf');
+  }
+
   private getTooltipDisplay(link: any) {
     return (
-      <TooltipHost
-        content={link.title}
-        id={getId()}
-        calloutProps={{ gapSpace: 0 }}
+      <LinkItem
+        style={{
+          flexGrow: 1,
+          textAlign: 'left',
+          boxSizing: 'border-box'
+        }}
+        key={link.title}
+        items={contextMenuItems}
+        onItemClick={() => this.selectContextItem(link)}
       >
-        <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
-        {link.headerText}
-      </TooltipHost>
+        <TooltipHost
+          content={link.title}
+          id={getId()}
+          calloutProps={{ gapSpace: 0 }}
+        >
+          <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
+          {link.headerText}
+        </TooltipHost>
+      </LinkItem>
     );
   }
 
@@ -187,7 +207,7 @@ function mapStateToProps({ graphExplorerMode, sampleQuery, theme, sidebarPropert
 function mapDispatchToProps(dispatch: Dispatch) {
   return {
     actions: bindActionCreators({
-      setDimensions
+      setDimensions, toggleTourState
     }, dispatch)
   };
 }

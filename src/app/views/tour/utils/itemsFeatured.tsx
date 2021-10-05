@@ -3,13 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 export const advancedFeaturesList: any = [
   {
-    name: <FormattedMessage id='Query runner' />
-  },
-  {
     name: <FormattedMessage id='Graph version' />
-  },
-  {
-    name: <FormattedMessage id='Query response' />
   },
   {
     name: <FormattedMessage id='Graph toolkit' />
@@ -37,8 +31,5 @@ export const beginnerFeaturesList: any = [
   },
   {
     name: <FormattedMessage id='Sample Queries'/>
-  },
-  {
-    name: <FormattedMessage id='Snippets' />
   }
 ]

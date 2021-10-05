@@ -103,7 +103,8 @@ const QueryInput = (props: IQueryInputProps) => {
           />
         </div>
       </div>
-      <div className='col-xs-12 col-lg-6'>
+
+      <div className='col-xs-12 col-lg-6' >
         <div className='query-box'>
           <AutoComplete
             contentChanged={contentChanged}
@@ -112,7 +113,7 @@ const QueryInput = (props: IQueryInputProps) => {
         </div>
       </div>
       <div className='col-xs-12 col-lg-2'>
-        <div className='query-run-button'>
+        <div className='query-box'>
           <SubmitButton
             className='run-query-button'
             text={translateMessage('Run Query')}
@@ -123,6 +124,7 @@ const QueryInput = (props: IQueryInputProps) => {
           />
         </div>
       </div>
+
     </div>)
 }
 

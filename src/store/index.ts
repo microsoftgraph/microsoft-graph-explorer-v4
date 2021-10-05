@@ -36,7 +36,12 @@ const initialState: any = {
     selectedVersion: 'v1.0'
   },
   termsOfUse: true,
-  tourState: { runState: false, beginnerTour: true }
+  tourState: {
+    runState: false,
+    beginnerTour: true,
+    stepIndex: 0,
+    continuous: true
+  }
 };
 
 export const store = createStore(

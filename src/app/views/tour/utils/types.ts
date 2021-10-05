@@ -6,6 +6,7 @@ export interface ITourSteps extends Step {
   directionalHint?: DirectionalHint;
   autoNext?: boolean;
   advancedStep?: boolean;
+  infoStep?: boolean
 
 }
 

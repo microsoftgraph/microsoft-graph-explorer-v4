@@ -30,6 +30,7 @@ export interface IRequestComponent {
   };
   actions: {
     setDimensions: Function;
+    toggleTourState: Function
   };
 }
 

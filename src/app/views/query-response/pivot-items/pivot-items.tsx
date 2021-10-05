@@ -1,16 +1,19 @@
-import { getId, getTheme, Icon, ITheme, PivotItem, TooltipHost } from '@fluentui/react';
+import { ContextualMenuItemType, getId, getTheme, Icon, ITheme, PivotItem, TooltipHost } from '@fluentui/react';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { componentNames, telemetry } from '../../../../telemetry';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
+import { toggleTourState } from '../../../services/actions/tour-action-creator';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
+import { contextMenuItems, findTarget, getTargetStepIndex } from '../../tour/utils/contextHelpers';
+import LinkItem from '../../tour/utils/LinkItem';
 import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import GraphToolkit from '../graph-toolkit/GraphToolkit';
@@ -20,6 +23,7 @@ import { Response } from '../response';
 import { Snippets } from '../snippets';
 
 export const getPivotItems = () => {
+  const dispatch = useDispatch();
 
   const { graphExplorerMode: mode, sampleQuery, graphResponse: { body } } = useSelector((state: IRootState) => state);
 
@@ -46,16 +50,44 @@ export const getPivotItems = () => {
     }
     return null;
   }
+  const selectContextItem = (e: any, item: any, link: any) => {
+    if(link.itemKey !== null){
+      const { itemKey } = link;
+      const itemKeyString: string = itemKey.toString();
+      const target = findTarget(itemKeyString);
+      const targetStepIndex = getTargetStepIndex(target, item.key)
+      if(targetStepIndex >= 0){
+        dispatch(toggleTourState({
+          runState: true,
+          beginnerTour: false,
+          continuous: item.key.toString() === 'info'? false : true,
+          startIndex: targetStepIndex
+        }))
+      }
+
+    }
+  }
 
   function renderItemLink(link: any) {
     return (
-      <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}>
-        <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
-        {link.headerText}
+      <LinkItem
+        style={{
+          flexGrow: 1,
+          textAlign: 'left',
+          boxSizing: 'border-box'
+        }}
+        key={link.title}
+        items={contextMenuItems}
+        onItemClick={(e: any, item: any) => selectContextItem(e, item, link)}
+      >
+        <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}>
+          <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
+          {link.headerText}
 
-        {link.ariaLabel === 'Adaptive Cards' && showDotIfAdaptiveCardPresent()}
-        {link.ariaLabel === 'Graph Toolkit' && showDotIfGraphToolkitPresent()}
-      </TooltipHost>
+          {link.ariaLabel === 'Adaptive Cards' && showDotIfAdaptiveCardPresent()}
+          {link.ariaLabel === 'Graph Toolkit' && showDotIfGraphToolkitPresent()}
+        </TooltipHost>
+      </LinkItem>
     );
   }
 
