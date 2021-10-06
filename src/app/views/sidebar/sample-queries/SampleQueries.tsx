@@ -370,6 +370,13 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     const columns = [
       {
+        key: 'button',
+        name: '',
+        fieldName: 'button',
+        minWidth: 15,
+        maxWidth: 25
+      },
+      {
         key: 'authRequiredIcon',
         name: '',
         fieldName: 'authRequiredIcon',
@@ -389,13 +396,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         fieldName: 'humanName',
         minWidth: 100,
         maxWidth: maxWidthOfHumanName
-      },
-      {
-        key: 'button',
-        name: '',
-        fieldName: 'button',
-        minWidth: 15,
-        maxWidth: 25
       }
     ];
 
