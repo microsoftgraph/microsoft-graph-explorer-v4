@@ -416,5 +416,5 @@
   "Share query message": "Click here to share the current query with your friends",
   "Settings": "Settings",
   "History button message": "When you run queries, the queries are saved here. You can re-run the same queries by simply clicking on them",
-  "History message": "Here are queries that you have been running. Click any item to re-run it"
+  "History message": "Here are queries that you have been running. Click any item to re-run it. Click here to view your history items"
 }

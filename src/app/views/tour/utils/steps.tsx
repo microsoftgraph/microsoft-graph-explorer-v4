@@ -3,16 +3,8 @@ import { ITourSteps } from './types';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { FETCH_ADAPTIVE_CARD_SUCCESS, GET_SNIPPET_SUCCESS,
-  PROFILE_REQUEST_SUCCESS, QUERY_GRAPH_SUCCESS, SET_SAMPLE_QUERY_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS } from '../../../services/redux-constants';
-
-export const SAMPLE_TOUR: ITourSteps[] = [
-  {
-    target: '.query-response *[data-content="Share xx"]',
-    content: (
-      <FormattedMessage id='Query response'/>
-    )
-  }
-]
+  PROFILE_REQUEST_SUCCESS, QUERY_GRAPH_SUCCESS, SET_SAMPLE_QUERY_SUCCESS,
+  VIEW_HISTORY_ITEM_SUCCESS } from '../../../services/redux-constants';
 
 export const BEGINNER_TOUR : ITourSteps[] = [
   {
@@ -24,7 +16,6 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     spotlightClicks: true,
     hideCloseButton:true,
     title:<FormattedMessage id='Query'/>,
-    advancedStep: false,
     autoNext: false,
     disableBeacon: true,
     expectedActionType: QUERY_GRAPH_SUCCESS
@@ -38,7 +29,6 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     spotlightClicks: true,
     title:<FormattedMessage id='Response Headers'/>,
     autoNext: true,
-    advancedStep: true,
     disableBeacon: true
   },
   {
@@ -49,7 +39,6 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='Response'/>,
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    advancedStep: false,
     disableBeacon: true
 
   },
@@ -61,7 +50,6 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     spotlightClicks: true,
     title:<FormattedMessage id='Sample Queries'/>,
     directionalHint: DirectionalHint.rightTopEdge,
-    advancedStep: false,
     disableBeacon: true,
     expectedActionType: QUERY_GRAPH_SUCCESS
   },
@@ -74,7 +62,6 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     spotlightClicks: true,
     title:<FormattedMessage id='Response Headers'/>,
     autoNext: true,
-    advancedStep: true,
     disableBeacon: true
   },
   {
@@ -85,7 +72,6 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='Response'/>,
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    advancedStep: false,
     disableBeacon: true
 
   }
@@ -102,7 +88,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     placement:'right-end',
     title: <FormattedMessage id='Sign in'/>,
     directionalHint: DirectionalHint.rightTopEdge,
-    advancedStep: true,
     expectedActionType: PROFILE_REQUEST_SUCCESS
   },
   {
@@ -113,7 +98,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='More actions'/>,
     spotlightClicks: true,
     directionalHint: DirectionalHint.leftCenter,
-    advancedStep: true,
     disableBeacon: true
   },
   {
@@ -123,7 +107,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     ),
     directionalHint: DirectionalHint.bottomCenter,
     spotlightClicks: true,
-    advancedStep: true,
     title: <FormattedMessage id='HTTP request method option' />,
     disableBeacon: true,
     expectedActionType: SET_SAMPLE_QUERY_SUCCESS
@@ -135,7 +118,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     ),
     directionalHint: DirectionalHint.bottomCenter,
     spotlightClicks: true,
-    advancedStep: true,
     title: <FormattedMessage id='Microsoft Graph API Version option' />,
     disableBeacon: true,
     expectedActionType: SET_SAMPLE_QUERY_SUCCESS
@@ -149,7 +131,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     directionalHint: DirectionalHint.leftBottomEdge,
     spotlightClicks: true,
     title:<FormattedMessage id='Query'/>,
-    advancedStep: true,
     autoNext: false,
     disableBeacon: true,
     expectedActionType: QUERY_GRAPH_SUCCESS
@@ -163,7 +144,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     spotlightClicks: true,
     title:<FormattedMessage id='Response Headers'/>,
     autoNext:true,
-    advancedStep: true,
     disableBeacon: true
   },
   {
@@ -174,7 +154,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='Response Preview'/>,
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    advancedStep: true,
     disableBeacon: true
 
   },
@@ -187,7 +166,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     spotlightClicks: true,
     title:<FormattedMessage id='Response Headers'/>,
     autoNext:true,
-    advancedStep: true,
     disableBeacon: true
   },
   {
@@ -198,7 +176,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='Response headers viewer' />,
     spotlightClicks: true,
     directionalHint: DirectionalHint.topLeftEdge,
-    advancedStep: true,
     disableBeacon: true
   },
   {
@@ -210,7 +187,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     autoNext: true,
-    advancedStep: true,
     disableBeacon: true
   },
   {
@@ -221,7 +197,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='Graph toolkit' />,
     spotlightClicks: true,
     directionalHint: DirectionalHint.topCenter,
-    advancedStep: true,
     disableBeacon: true
   },
   {
@@ -233,7 +208,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     autoNext:true,
-    advancedStep: true,
     disableBeacon: true,
     expectedActionType: FETCH_ADAPTIVE_CARD_SUCCESS
   },
@@ -245,7 +219,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='Adaptive Cards' />,
     spotlightClicks: true,
     directionalHint: DirectionalHint.topCenter,
-    advancedStep: true,
     disableBeacon: true
 
   },
@@ -258,7 +231,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='Snippets' />,
     spotlightClicks: true,
     autoNext: false,
-    advancedStep: true,
     disableBeacon: true,
     expectedActionType: GET_SNIPPET_SUCCESS
   },
@@ -270,7 +242,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='Snippets' />,
     spotlightClicks: true,
     directionalHint: DirectionalHint.topLeftEdge,
-    advancedStep: true,
     disableBeacon: true
   },
   {
@@ -281,7 +252,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='History'/>,
     spotlightClicks: true,
     directionalHint: DirectionalHint.rightCenter,
-    advancedStep: true,
     disableBeacon: true,
     autoNext: true
   },
@@ -293,7 +263,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='History'/>,
     spotlightClicks: true,
     directionalHint: DirectionalHint.rightCenter,
-    advancedStep: true,
     disableBeacon: true,
     expectedActionType: VIEW_HISTORY_ITEM_SUCCESS
   },
@@ -306,7 +275,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     spotlightClicks: true,
     title:<FormattedMessage id='Response Headers'/>,
     autoNext:true,
-    advancedStep: true,
     disableBeacon: true
   },
   {
@@ -317,7 +285,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='Response Preview'/>,
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    advancedStep: true,
     disableBeacon: true
 
   },
@@ -328,7 +295,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     ),
     title: <FormattedMessage id='Share Query'/>,
     spotlightClicks: true,
-    advancedStep: true,
     disableBeacon: true
   }
 ]
@@ -343,7 +309,6 @@ export const COMPONENT_INFO : ITourSteps[] = [
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     autoNext: false,
-    advancedStep: true,
     infoStep: true,
     disableBeacon: true
   },
@@ -356,7 +321,6 @@ export const COMPONENT_INFO : ITourSteps[] = [
     spotlightClicks: true,
     title:<FormattedMessage id='Response Headers'/>,
     autoNext:false,
-    advancedStep: true,
     infoStep: true,
     disableBeacon: true
   },
@@ -369,7 +333,6 @@ export const COMPONENT_INFO : ITourSteps[] = [
     spotlightClicks: true,
     title:<FormattedMessage id='Response Headers'/>,
     autoNext:false,
-    advancedStep: true,
     infoStep: true,
     disableBeacon: true
   },
@@ -382,7 +345,6 @@ export const COMPONENT_INFO : ITourSteps[] = [
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     autoNext:false,
-    advancedStep: true,
     infoStep: true,
     disableBeacon: true
   },
@@ -395,7 +357,6 @@ export const COMPONENT_INFO : ITourSteps[] = [
     title:<FormattedMessage id='Snippets' />,
     spotlightClicks: true,
     autoNext: true,
-    advancedStep: true,
     infoStep: true,
     disableBeacon: true
   },
@@ -406,12 +367,7 @@ export const COMPONENT_INFO : ITourSteps[] = [
     ),
     title: <FormattedMessage id='Share Query'/>,
     spotlightClicks: true,
-    advancedStep: true,
     infoStep: true,
     disableBeacon: true
   }
 ]
-
-export const ADVANCED_TOUR_LENGTH = ADVANCED_TOUR.length
-export const BEGINNER_TOUR_LENGTH = BEGINNER_TOUR.length
-export const COMPONENT_INFO_LENGTH = COMPONENT_INFO.length
