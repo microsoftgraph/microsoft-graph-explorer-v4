@@ -3,7 +3,10 @@ import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import localStorageMiddleware from '../app/middleware/localStorageMiddleware';
 import telemetryMiddleware from '../app/middleware/telemetryMiddleware';
+import tourMiddleware from '../app/middleware/tourMiddleware';
+
 import reducers from '../app/services/reducers';
+import { saveActionTypes } from '../app/services/reducers/save-action-types-reducer';
 
 const loggerMiddleware = createLogger({
   level: 'error',
@@ -15,7 +18,8 @@ const { NODE_ENV } = process.env;
 const middlewares = [
   thunkMiddleware,
   localStorageMiddleware,
-  telemetryMiddleware
+  telemetryMiddleware,
+  tourMiddleware
 ];
 
 if (NODE_ENV === 'development') {
@@ -41,7 +45,8 @@ const initialState: any = {
     beginnerTour: true,
     stepIndex: 0,
     continuous: true
-  }
+  },
+  saveActionTypes: ''
 };
 
 export const store = createStore(

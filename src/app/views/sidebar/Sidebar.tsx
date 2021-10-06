@@ -8,8 +8,8 @@ import SampleQueries from './sample-queries/SampleQueries';
 
 export const Sidebar = ({ sampleHeaderText, historyHeaderText }: any) => {
   return (
-    <div>
-      <Pivot onLinkClick={onPivotItemClick}>
+    <div className="side-bar">
+      <Pivot onLinkClick={onPivotItemClick} className="side-bar-pivot" overflowBehavior="menu">
         <PivotItem headerText={sampleHeaderText} itemIcon='Rocket' itemKey='sample-queries'>
           <SampleQueries />
         </PivotItem>

@@ -26,11 +26,6 @@ export const findTarget = (itemKeyString: string): string => {
 
 export const contextMenuItems = [
   {
-    key: 'info',
-    itemType: ContextualMenuItemType.Normal,
-    text: 'view info'
-  },
-  {
     key: 'tour',
     itemType: ContextualMenuItemType.Normal,
     text: 'start tour here'

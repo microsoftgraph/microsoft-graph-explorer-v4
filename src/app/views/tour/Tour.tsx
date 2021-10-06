@@ -4,30 +4,35 @@ import { ITourSteps } from './utils/types'
 import { getTheme, ITheme } from '@fluentui/react';
 import { IRootState } from '../../../types/root';
 
-import { toggleTourState } from '../../services/actions/tour-action-creator';
+import { toggleTourState, setActionTypes as setStepAction } from '../../services/actions/tour-action-creator';
 import { TourTip } from './customComponents/Tourtip';
-import { BEGINNER_TOUR, ADVANCED_TOUR, COMPONENT_INFO } from './utils/steps'
+import { BEGINNER_TOUR, ADVANCED_TOUR } from './utils/steps'
 import { useDispatch, useSelector } from 'react-redux';
-import { ITour } from '../../../types/tour';
 
 const GETour = () => {
 
-  const { tourState } = useSelector((state: IRootState) => state);
-  const {startIndex, continuous, beginnerTour} = tourState;
+  const { tourState, saveActionTypes } = useSelector((state: IRootState) => state);
+  const {startIndex, beginnerTour} = tourState;
   const dispatch = useDispatch();
   const [run, setRun] = useState(false);
-  const [steps, setSteps] = useState(beginnerTour === true ? BEGINNER_TOUR :
-    (continuous === true ? ADVANCED_TOUR : COMPONENT_INFO));
+  const [steps, setSteps] = useState(beginnerTour === true ? BEGINNER_TOUR : ADVANCED_TOUR);
   const [stepIndex, setStepIndex] = useState(startIndex);
-  const [continuousTour, setContinuousTour] = useState(continuous);
+  const [changedIndexes, setChangedIndexes] = useState([]);
   const currentTheme: ITheme = getTheme();
 
+  const stepIndexChanged : any= []
   useEffect(() => {
-    if(continuousTour === false){console.log('The tour has only one step')}
     setRun(true);
   }, [])
 
-  const nextHandler = (): boolean => {
+  useEffect(() => {
+    if(steps[stepIndex].expectedActionType !== null && steps[stepIndex].expectedActionType === saveActionTypes){
+      setStepIndex(stepIndex + 1);
+      dispatch(setStepAction(stepIndex));
+    }
+  }, [saveActionTypes])
+
+  const peekNextTarget = (): boolean => {
     if(stepIndex + 1 >= steps.length){
       return false;
     }
@@ -43,9 +48,19 @@ const GETour = () => {
 
     const { action, index, type, status } = data;
     const step: ITourSteps = data.step
+    if(changedIndexes.length > 0 ){
+      const changedIndexesClone = changedIndexes.slice();
+      for (const changedIndex of changedIndexes){
+        if(changedIndex !== stepIndex){
+          steps[changedIndex].autoNext = !steps[changedIndex].autoNext;
 
-    if(nextHandler() && step.autoNext === true){
-      step.autoNext = false;
+          const indexToRemove = changedIndexesClone.indexOf(changedIndex);
+          if(indexToRemove > -1){
+            changedIndexesClone.splice(indexToRemove,1)
+          }
+        }
+      }
+      setChangedIndexes(changedIndexesClone);
     }
 
     if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
@@ -54,22 +69,19 @@ const GETour = () => {
       dispatch(toggleTourState({runState: false, beginnerTour: false, continuous: true, startIndex: 0}));
 
     }
-    else if (action === 'update' && step.autoNext) {
+    else if (action === 'update' && step.autoNext ) {
       // eslint-disable-next-line prefer-const
       let mutationObserver : MutationObserver ;
 
       const mutationHandler = () => {
-        if(nextHandler()){
+        if(peekNextTarget()){
           mutationObserver.disconnect();
-
           const stepIndex_ = stepIndex + 1;
-
           setTimeout(() => {
             setStepIndex(stepIndex_);
           }, 500);
         }
       };
-
       mutationObserver = new MutationObserver(mutationHandler);
       mutationObserver.observe(
         document.body,
@@ -79,17 +91,23 @@ const GETour = () => {
           subtree: true
         }
       )
-
-      mutationHandler();
-    }
-    else if (([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND] as string[]).includes(type)) {
-      const newStepIndex = index + (action === ACTIONS.PREV ? -1 : 1);
-      setStepIndex(newStepIndex);
+      // mutationHandler();
     }
     else {
-      //
-    }
+      if (([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND] as string[]).includes(type)) {
+        const newStepIndex = index + (action === ACTIONS.PREV ? -1 : 1);
 
+        if(action === ACTIONS.PREV){
+          if(steps[stepIndex-1].autoNext === true){
+            steps[stepIndex-1].autoNext = false;
+            stepIndexChanged.push(stepIndex-1);
+            setChangedIndexes(stepIndexChanged);
+          }
+
+        }
+        setStepIndex(newStepIndex);
+      }
+    }
   }
 
   return (
@@ -115,7 +133,6 @@ const GETour = () => {
       }}
       disableOverlayClose={true}
       disableScrollParentFix={true}
-
     />
 
   )

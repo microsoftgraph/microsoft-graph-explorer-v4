@@ -2,6 +2,8 @@ import { DirectionalHint } from '@fluentui/react';
 import { ITourSteps } from './types';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { FETCH_ADAPTIVE_CARD_SUCCESS, GET_SNIPPET_SUCCESS,
+  PROFILE_REQUEST_SUCCESS, QUERY_GRAPH_SUCCESS, SET_SAMPLE_QUERY_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS } from '../../../services/redux-constants';
 
 export const SAMPLE_TOUR: ITourSteps[] = [
   {
@@ -23,7 +25,20 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     hideCloseButton:true,
     title:<FormattedMessage id='Query'/>,
     advancedStep: false,
+    autoNext: false,
+    disableBeacon: true,
+    expectedActionType: QUERY_GRAPH_SUCCESS
+  },
+  {
+    target: '.pivot-response *[data-content="Response preview xx"]',
+    content:(
+      <FormattedMessage id='Response headers button message' />
+    ),
+    directionalHint: DirectionalHint.topCenter,
+    spotlightClicks: true,
+    title:<FormattedMessage id='Response Headers'/>,
     autoNext: true,
+    advancedStep: true,
     disableBeacon: true
   },
   {
@@ -47,7 +62,32 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='Sample Queries'/>,
     directionalHint: DirectionalHint.rightTopEdge,
     advancedStep: false,
+    disableBeacon: true,
+    expectedActionType: QUERY_GRAPH_SUCCESS
+  },
+  {
+    target: '.pivot-response *[data-content="Response preview xx"]',
+    content:(
+      <FormattedMessage id='Response headers button message' />
+    ),
+    directionalHint: DirectionalHint.topCenter,
+    spotlightClicks: true,
+    title:<FormattedMessage id='Response Headers'/>,
+    autoNext: true,
+    advancedStep: true,
     disableBeacon: true
+  },
+  {
+    target:'.response-preview-body',
+    content:(
+      <FormattedMessage id='Response body message'/>
+    ),
+    title:<FormattedMessage id='Response'/>,
+    directionalHint: DirectionalHint.topCenter,
+    spotlightClicks: true,
+    advancedStep: false,
+    disableBeacon: true
+
   }
 ]
 
@@ -62,7 +102,8 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     placement:'right-end',
     title: <FormattedMessage id='Sign in'/>,
     directionalHint: DirectionalHint.rightTopEdge,
-    advancedStep: true
+    advancedStep: true,
+    expectedActionType: PROFILE_REQUEST_SUCCESS
   },
   {
     target: '.settings-menu-button',
@@ -84,7 +125,8 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     spotlightClicks: true,
     advancedStep: true,
     title: <FormattedMessage id='HTTP request method option' />,
-    disableBeacon: true
+    disableBeacon: true,
+    expectedActionType: SET_SAMPLE_QUERY_SUCCESS
   },
   {
     target: '.query-version',
@@ -95,7 +137,8 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     spotlightClicks: true,
     advancedStep: true,
     title: <FormattedMessage id='Microsoft Graph API Version option' />,
-    disableBeacon: true
+    disableBeacon: true,
+    expectedActionType: SET_SAMPLE_QUERY_SUCCESS
 
   },
   {
@@ -107,7 +150,20 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     spotlightClicks: true,
     title:<FormattedMessage id='Query'/>,
     advancedStep: true,
-    autoNext: true,
+    autoNext: false,
+    disableBeacon: true,
+    expectedActionType: QUERY_GRAPH_SUCCESS
+  },
+  {
+    target: '.pivot-response *[data-content="Response preview xx"]',
+    content:(
+      <FormattedMessage id='Response headers button message' />
+    ),
+    directionalHint: DirectionalHint.topCenter,
+    spotlightClicks: true,
+    title:<FormattedMessage id='Response Headers'/>,
+    autoNext:true,
+    advancedStep: true,
     disableBeacon: true
   },
   {
@@ -178,7 +234,8 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     spotlightClicks: true,
     autoNext:true,
     advancedStep: true,
-    disableBeacon: true
+    disableBeacon: true,
+    expectedActionType: FETCH_ADAPTIVE_CARD_SUCCESS
   },
   {
     target: '.adaptive-cards-response',
@@ -200,9 +257,10 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     directionalHint: DirectionalHint.topCenter,
     title:<FormattedMessage id='Snippets' />,
     spotlightClicks: true,
-    autoNext: true,
+    autoNext: false,
     advancedStep: true,
-    disableBeacon: true
+    disableBeacon: true,
+    expectedActionType: GET_SNIPPET_SUCCESS
   },
   {
     target: '.code-snippet-body',
@@ -216,23 +274,60 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     disableBeacon: true
   },
   {
+    target: '.side-bar-pivot *[data-content="History xx"]',
+    content:(
+      <FormattedMessage id='History button message' />
+    ),
+    title:<FormattedMessage id='History'/>,
+    spotlightClicks: true,
+    directionalHint: DirectionalHint.rightCenter,
+    advancedStep: true,
+    disableBeacon: true,
+    autoNext: true
+  },
+  {
+    target: '.history-items',
+    content:(
+      <FormattedMessage id='History message' />
+    ),
+    title:<FormattedMessage id='History'/>,
+    spotlightClicks: true,
+    directionalHint: DirectionalHint.rightCenter,
+    advancedStep: true,
+    disableBeacon: true,
+    expectedActionType: VIEW_HISTORY_ITEM_SUCCESS
+  },
+  {
+    target: '.pivot-response *[data-content="Response preview xx"]',
+    content:(
+      <FormattedMessage id='Response headers button message' />
+    ),
+    directionalHint: DirectionalHint.topCenter,
+    spotlightClicks: true,
+    title:<FormattedMessage id='Response Headers'/>,
+    autoNext:true,
+    advancedStep: true,
+    disableBeacon: true
+  },
+  {
+    target:'.response-preview-body',
+    content:(
+      <FormattedMessage id='Response body message' />
+    ),
+    title:<FormattedMessage id='Response Preview'/>,
+    directionalHint: DirectionalHint.topCenter,
+    spotlightClicks: true,
+    advancedStep: true,
+    disableBeacon: true
+
+  },
+  {
     target: '.query-response *[data-content="Share xx"]',
     content: (
       <FormattedMessage id='Share query message'/>
     ),
     title: <FormattedMessage id='Share Query'/>,
     spotlightClicks: true,
-    advancedStep: true,
-    disableBeacon: true
-  },
-  {
-    target: '.settings-menu-button',
-    content:(
-      <FormattedMessage id='Settings button message' />
-    ),
-    title:<FormattedMessage id='More actions'/>,
-    spotlightClicks: true,
-    directionalHint: DirectionalHint.leftCenter,
     advancedStep: true,
     disableBeacon: true
   }
@@ -314,108 +409,7 @@ export const COMPONENT_INFO : ITourSteps[] = [
     advancedStep: true,
     infoStep: true,
     disableBeacon: true
-  },
-  {
-    target: '.request-pivot-tab *[data-content="Request body xx"]',
-    content: (<div>
-           Click here to modify request body
-    </div>),
-    spotlightClicks: true,
-    title:'Request Body',
-    directionalHint: DirectionalHint.leftTopEdge,
-    autoNext: true,
-    infoStep: true,
-    disableBeacon: true
-  },
-  {
-    target: '.request-body-area',
-    content: (
-      <div>
-                Modify the request body here
-      </div>
-    ),
-    title:'Modify Body',
-    directionalHint: DirectionalHint.topCenter,
-    spotlightClicks: true,
-    infoStep: true,
-    disableBeacon: true
-  },
-  {
-    target: '.request-pivot-tab *[data-content="Request headers xx"]',
-    content: (<div>
-            Click here to modify request headers
-    </div>),
-    spotlightClicks: true,
-    title:'Request Headers',
-    directionalHint: DirectionalHint.topAutoEdge,
-    autoNext:true,
-    infoStep: true,
-    disableBeacon: true
-  },
-  {
-    target: '.request-headers-body',
-    content: (
-      <div>
-                Modify request headers here
-      </div>
-    ),
-    title:'Modify Headers',
-    directionalHint: DirectionalHint.bottomCenter,
-    spotlightClicks: true,
-    infoStep: true,
-    disableBeacon: true
-  },
-  {
-    target: '.request-pivot-tab *[data-content="Modify permissions (Preview) xx"]',
-    content: (<div>
-            Click here to view some permissions for the query you want to run
-    </div>),
-    title:'Permissions Tab',
-    spotlightClicks: true,
-    directionalHint: DirectionalHint.topAutoEdge,
-    autoNext: true,
-    infoStep: true,
-    disableBeacon: true
-  },
-  {
-    target: '.request-permissions-body',
-    content: (
-      <div>
-                Consent to any permission you want
-      </div>
-    ),
-    title:'Permissions',
-    directionalHint: DirectionalHint.bottomCenter,
-    spotlightClicks: true,
-    infoStep: true,
-    disableBeacon: true
-  },
-  {
-    target: '.request-pivot-tab *[data-content="Access token xx"]',
-    content: (<div>
-            Click here to view your access token. It will not be available if you are not signed in
-    </div>),
-    title:'Access Token',
-    spotlightClicks: true,
-    directionalHint: DirectionalHint.leftTopEdge,
-    autoNext: true,
-    infoStep: true,
-    disableBeacon: true
-  },
-  {
-    target: '.access-token-body',
-    content: (
-      <div>
-                Here is your access token
-      </div>
-    ),
-    title:'Access Token',
-    directionalHint: DirectionalHint.bottomCenter,
-    spotlightClicks: true,
-    infoStep: true,
-    disableBeacon: true
   }
-
 ]
 
 export const ADVANCED_TOUR_LENGTH = ADVANCED_TOUR.length

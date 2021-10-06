@@ -7,7 +7,7 @@ export interface ITourSteps extends Step {
   autoNext?: boolean;
   advancedStep?: boolean;
   infoStep?: boolean
-
+  expectedActionType?: string;
 }
 
 export interface ITourTooltipRenderProps extends TooltipRenderProps {

@@ -23,14 +23,11 @@ import { RequestBody } from './body';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
-import LinkItem from '../../tour/utils/LinkItem';
-import { contextMenuItems, findTarget, getTargetStepIndex } from '../../tour/utils/contextHelpers';
 import { toggleTourState } from '../../../services/actions/tour-action-creator';
 
 class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {
     super(props);
-    this.selectContextItem = this.selectContextItem.bind(this);
   }
 
   private getPivotItems = (height: string) => {
@@ -105,31 +102,16 @@ class Request extends Component<IRequestComponent, any> {
     return pivotItems;
   }
 
-  private selectContextItem = (link: any) => {
-    //
-  }
-
   private getTooltipDisplay(link: any) {
     return (
-      <LinkItem
-        style={{
-          flexGrow: 1,
-          textAlign: 'left',
-          boxSizing: 'border-box'
-        }}
-        key={link.title}
-        items={contextMenuItems}
-        onItemClick={() => this.selectContextItem(link)}
+      <TooltipHost
+        content={link.title}
+        id={getId()}
+        calloutProps={{ gapSpace: 0 }}
       >
-        <TooltipHost
-          content={link.title}
-          id={getId()}
-          calloutProps={{ gapSpace: 0 }}
-        >
-          <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
-          {link.headerText}
-        </TooltipHost>
-      </LinkItem>
+        <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
+        {link.headerText}
+      </TooltipHost>
     );
   }
 

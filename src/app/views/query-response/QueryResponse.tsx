@@ -116,7 +116,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           {
             runState: true,
             beginnerTour: false,
-            continuous: item.key.toString() === 'info'? false : true,
+            continuous: true,
             startIndex: targetStepIndex
           }
         ))

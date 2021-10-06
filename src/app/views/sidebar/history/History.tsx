@@ -503,7 +503,7 @@ export class History extends Component<IHistoryProps, any> {
 
     return (
       <>
-        <div>
+        <div className='history-items'>
           <SearchBox
             placeholder={messages['Search history items']}
             className={classes.searchBox}

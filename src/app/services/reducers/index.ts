@@ -21,6 +21,8 @@ import { theme } from './theme-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
 import { proxyUrl } from './proxy-url-reducer';
 import { tourState } from './tour-reducer';
+import { saveActionTypes } from './save-action-types-reducer';
+import { setNextTourStep } from './tour-step-reducer';
 
 export default combineReducers({
   adaptiveCard,
@@ -45,5 +47,7 @@ export default combineReducers({
   theme,
   dimensions,
   permissionsPanelOpen,
-  tourState
+  tourState,
+  saveActionTypes,
+  setNextTourStep
 });

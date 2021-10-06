@@ -5,7 +5,7 @@ export const componentToTargetMap = [
   },
   {
     target: '.pivot-response *[data-content="Response preview xx"]',
-    componentName: 'response-headers'
+    componentName: 'response-preview'
   },
   {
     target: '.pivot-response *[data-content="Toolkit component xx"]',
