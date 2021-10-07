@@ -5,16 +5,13 @@ import {
   DialogFooter,
   DialogType,
   DocumentCard,
-  DocumentCardActivity,
   DocumentCardDetails,
   DocumentCardTitle,
   DropdownMenuItemType,
   getId,
-  getTheme,
   Icon,
   IconButton,
   IDocumentCardStyles,
-  ITheme,
   Label,
   List,
   Panel,
@@ -52,10 +49,8 @@ function Settings(props: ISettingsProps) {
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
-  const [tourChooserDialogHidden, hideTourChooserDialog] = useState(true);
   const [tourChooserCard, hideTourChooserCard] = useState(true);
 
-  const currentTheme: ITheme = getTheme();
   const {
     intl: { messages }
   }: any = props;
@@ -233,7 +228,7 @@ function Settings(props: ISettingsProps) {
     );
   };
 
-  const onRenderCell = (item: any, index: any) => {
+  const onRenderCell = (item: any) => {
     return(
       <div>
         <ListIcon/> {' '} {item.name}
