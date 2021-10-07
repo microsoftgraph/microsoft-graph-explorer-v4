@@ -79,7 +79,7 @@ const GETour = () => {
           const stepIndex_ = stepIndex + 1;
           setTimeout(() => {
             setStepIndex(stepIndex_);
-          }, 500);
+          }, 1000);
         }
       };
       mutationObserver = new MutationObserver(mutationHandler);
