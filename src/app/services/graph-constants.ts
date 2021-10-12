@@ -22,3 +22,6 @@ export enum PERMS_SCOPE {
 export const ADAPTIVE_CARD_URL =
   'https://templates.adaptivecards.io/graph.microsoft.com';
 export const GRAPH_TOOOLKIT_EXAMPLE_URL = 'https://mgt.dev/?path=/story';
+export const ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK =
+  'https://docs.microsoft.com/en-us/onedrive/developer/rest-api/concepts/working-with-cors' +
+  '#downloading-onedrive-files-in-javascript-apps';
