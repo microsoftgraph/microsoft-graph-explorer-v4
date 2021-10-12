@@ -92,7 +92,6 @@ const GETour = () => {
           subtree: true
         }
       )
-      // mutationHandler();
     }
     else {
       if (([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND] as string[]).includes(type)) {
