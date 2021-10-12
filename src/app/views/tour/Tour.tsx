@@ -4,7 +4,8 @@ import { ITourSteps } from './utils/types'
 import { getTheme, ITheme } from '@fluentui/react';
 import { IRootState } from '../../../types/root';
 
-import { toggleTourState, setActionTypes as setStepAction } from '../../services/actions/tour-action-creator';
+import { toggleTourState, setActionTypes as setStepAction,
+  setNextTourStep } from '../../services/actions/tour-action-creator';
 import { TourTip } from './customComponents/Tourtip';
 import { BEGINNER_TOUR, ADVANCED_TOUR } from './utils/steps'
 import { useDispatch, useSelector } from 'react-redux';
@@ -103,6 +104,7 @@ const GETour = () => {
             stepIndexChanged.push(stepIndex-1);
             setChangedIndexes(stepIndexChanged);
           }
+          dispatch(setNextTourStep(stepIndex));
 
         }
         setStepIndex(newStepIndex);
