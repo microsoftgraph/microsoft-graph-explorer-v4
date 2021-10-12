@@ -13,7 +13,7 @@ import {
   isImageResponse,
   parseResponse,
   queryResponse,
-  queryResultsInCorsError,
+  queryResultsInCorsError
 } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
@@ -39,7 +39,7 @@ export function runQuery(query: IQuery): Function {
           dispatch(
             queryResponse({
               body: error,
-              headers: null,
+              headers: null
             })
           );
           return dispatch(
@@ -47,7 +47,7 @@ export function runQuery(query: IQuery): Function {
               messageType: MessageBarType.error,
               ok: false,
               status: 400,
-              statusText: 'Bad Request',
+              statusText: 'Bad Request'
             })
           );
         });
@@ -90,7 +90,7 @@ export function runQuery(query: IQuery): Function {
       ok: false,
       duration,
       status: 400,
-      statusText: '',
+      statusText: ''
     };
 
     if (response) {
@@ -111,7 +111,7 @@ export function runQuery(query: IQuery): Function {
         );
         if (contentDownloadUrl) {
           result = {
-            contentDownloadUrl: contentDownloadUrl,
+            contentDownloadUrl
           };
         }
       }
@@ -119,7 +119,7 @@ export function runQuery(query: IQuery): Function {
       return dispatch(
         queryResponse({
           body: result,
-          headers: respHeaders,
+          headers: respHeaders
         })
       );
     } else {
@@ -133,7 +133,7 @@ export function runQuery(query: IQuery): Function {
         dispatch(
           queryResponse({
             body: result,
-            headers: respHeaders,
+            headers: respHeaders
           })
         );
         return dispatch(setQueryResponseStatus(status));
@@ -163,7 +163,7 @@ async function fetchContentDownloadUrl(
     messageType: MessageBarType.error,
     ok: false,
     status: 400,
-    statusText: '',
+    statusText: ''
   };
 
   authenticatedRequest(dispatch, query)
@@ -183,10 +183,10 @@ async function fetchContentDownloadUrl(
             queryResponse({
               body: {
                 contentDownloadUrl: downloadUrl,
-                isOriginalFormat: isOriginalFormat,
-                isWorkaround: true,
+                isOriginalFormat,
+                isWorkaround: true
               },
-              headers: null,
+              headers: null
             })
           );
         }
@@ -194,7 +194,7 @@ async function fetchContentDownloadUrl(
         dispatch(
           queryResponse({
             body: null,
-            headers: null,
+            headers: null
           })
         );
       }
@@ -204,7 +204,7 @@ async function fetchContentDownloadUrl(
       dispatch(
         queryResponse({
           body: error,
-          headers: null,
+          headers: null
         })
       );
       return dispatch(setQueryResponseStatus(status));
@@ -227,14 +227,14 @@ async function createHistory(
 
   if (isImageResponse(contentType)) {
     result = {
-      message: 'Run the query to view the image',
+      message: 'Run the query to view the image'
     };
     responseHeaders['content-type'] = ContentType.Json;
   }
 
   if (isFileResponse(respHeaders)) {
     result = {
-      message: 'Run the query to generate file download URL',
+      message: 'Run the query to generate file download URL'
     };
   }
 

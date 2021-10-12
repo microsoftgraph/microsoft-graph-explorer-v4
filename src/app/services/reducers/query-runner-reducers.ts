@@ -4,12 +4,12 @@ import {
   CLEAR_RESPONSE,
   QUERY_GRAPH_RUNNING,
   QUERY_GRAPH_SUCCESS,
-  VIEW_HISTORY_ITEM_SUCCESS,
+  VIEW_HISTORY_ITEM_SUCCESS
 } from '../redux-constants';
 
 const initialState: IGraphResponse = {
   body: undefined,
-  headers: undefined,
+  headers: undefined
 };
 
 export function graphResponse(

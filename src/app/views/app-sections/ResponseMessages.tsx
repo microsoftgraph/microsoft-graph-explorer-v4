@@ -11,7 +11,7 @@ import { ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK } from '../../services/gr
 interface ODataLink {
   link: string;
   name: string;
-};
+}
 
 export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQuery, dispatch: Function) {
 
@@ -45,7 +45,7 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
   if (odataLink) {
     return (
       <MessageBar messageBarType={MessageBarType.info}>
-        <FormattedMessage id={`This response contains an @odata property`} />: @odata.{odataLink!.name}
+        <FormattedMessage id={'This response contains an @odata property'} />: @odata.{odataLink!.name}
         <Link onClick={() => setQuery()}>
           &nbsp;<FormattedMessage id='Click here to follow the link' />
         </Link>
@@ -58,28 +58,28 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
     return (
       <div>
         <MessageBar messageBarType={MessageBarType.info}>
-          <FormattedMessage id={`This response contains unviewable content`}/>
+          <FormattedMessage id={'This response contains unviewable content'}/>
           <Link href={body?.contentDownloadUrl} download>
-              <FormattedMessage id={`Click to download file`}/>
+            <FormattedMessage id={'Click to download file'}/>
           </Link>&nbsp;
         </MessageBar>
-        {body?.isWorkaround == true &&
+        {body?.isWorkaround &&
           <MessageBar messageBarType={MessageBarType.warning}>
-            <FormattedMessage id={`Response is result of workaround`}/>
-            {body?.isOriginalFormat == false &&
+            <FormattedMessage id={'Response is result of workaround'}/>
+            {!body?.isOriginalFormat &&
               <span>
                 &nbsp;
-                <FormattedMessage id={`File response is available in original format only`}/>
+                <FormattedMessage id={'File response is available in original format only'}/>
               </span>
             }
             &nbsp;
-            <FormattedMessage id={`For more information`}/>
+            <FormattedMessage id={'For more information'}/>
             <Link href={ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK} target='_blank'>
-              <FormattedMessage id={`documentation`}/>.
+              <FormattedMessage id={'documentation'}/>.
             </Link>
           </MessageBar>
         }
       </div>
-      );
+    );
   }
 }

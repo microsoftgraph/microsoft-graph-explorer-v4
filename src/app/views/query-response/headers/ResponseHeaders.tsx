@@ -12,7 +12,8 @@ import { trackedGenericCopy } from '../../common/copy';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
 
 const ResponseHeaders = () => {
-  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } = useSelector((state: IRootState) => state);
+  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } =
+    useSelector((state: IRootState) => state);
   const { body, headers } = graphResponse;
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
@@ -21,7 +22,7 @@ const ResponseHeaders = () => {
   if (!headers && responseIsDownloadUrl) {
     return (
       <MessageBar messageBarType={MessageBarType.warning}>
-        <FormattedMessage id={`Missing response headers for query workaround`}/>
+        <FormattedMessage id={'Missing response headers for query workaround'} />
       </MessageBar>
     )
   }

@@ -1,9 +1,10 @@
 import {
   AuthenticationHandlerOptions,
   GraphRequest,
-  ResponseType,
+  ResponseType
 } from '@microsoft/microsoft-graph-client';
-import { MSALAuthenticationProviderOptions } from '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
+import { MSALAuthenticationProviderOptions } from
+  '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
 
 import { IAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
@@ -18,7 +19,7 @@ import { queryRunningStatus } from './query-loading-action-creators';
 export function queryResponse(response: object): IAction {
   return {
     type: QUERY_GRAPH_SUCCESS,
-    response,
+    response
   };
 }
 
@@ -49,12 +50,12 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
     Authorization: `Bearer ${authToken}`,
     'Content-Type': 'application/json',
     SdkVersion: 'GraphExplorer/4.0',
-    ...sampleHeaders,
+    ...sampleHeaders
   };
 
   const options: IRequestOptions = {
     method: query.selectedVerb,
-    headers,
+    headers
   };
   return { graphUrl, options };
 }

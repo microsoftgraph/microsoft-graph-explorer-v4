@@ -9,7 +9,8 @@ import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjust
 import ResponseDisplay from './ResponseDisplay';
 
 const Response = () => {
-  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } = useSelector((state: IRootState) => state);
+  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } =
+    useSelector((state: IRootState) => state);
   const { body, headers } = graphResponse;
   const dispatch = useDispatch();
 
@@ -21,11 +22,11 @@ const Response = () => {
     <div style={{ display: 'block' }}>
       {responseMessages(graphResponse, sampleQuery, dispatch)}
       {headers &&
-      <ResponseDisplay
-        contentType={contentType}
-        body={!contentDownloadUrl && body}
-        height={height}
-      />}
+        <ResponseDisplay
+          contentType={contentType}
+          body={!contentDownloadUrl && body}
+          height={height}
+        />}
     </div>
   );
 

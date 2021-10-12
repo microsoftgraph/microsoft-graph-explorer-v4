@@ -5,11 +5,11 @@ import {
   BETA_USER_INFO_URL,
   DEFAULT_USER_SCOPES,
   USER_INFO_URL,
-  USER_PICTURE_URL,
+  USER_PICTURE_URL
 } from '../graph-constants';
 import {
   PROFILE_REQUEST_ERROR,
-  PROFILE_REQUEST_SUCCESS,
+  PROFILE_REQUEST_SUCCESS
 } from '../redux-constants';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 import { queryRunningStatus } from './query-loading-action-creators';
@@ -33,11 +33,11 @@ const query: IQuery = {
   sampleHeaders: [
     {
       name: 'Cache-Control',
-      value: 'no-cache',
-    },
+      value: 'no-cache'
+    }
   ],
   selectedVersion: '',
-  sampleUrl: '',
+  sampleUrl: ''
 };
 
 export function getProfileInfo(): Function {
@@ -105,6 +105,6 @@ async function getProfileResponse() {
   const userInfo = await parseResponse(response, respHeaders);
   return {
     userInfo,
-    response,
+    response
   };
 }
