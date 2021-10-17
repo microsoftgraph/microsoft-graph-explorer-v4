@@ -1,37 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import Joyride, { ACTIONS, CallBackProps, EVENTS, STATUS } from 'react-joyride';
 import { ITourSteps } from './utils/types'
-import { getTheme, ITheme } from '@fluentui/react';
+import { Dialog, DialogFooter, DialogType, getId, getTheme, ITheme, Link, PrimaryButton } from '@fluentui/react';
 import { IRootState } from '../../../types/root';
 
 import { toggleTourState, setActionTypes as setStepAction,
   setNextTourStep } from '../../services/actions/tour-action-creator';
-import { TourTip } from './customComponents/Tourtip';
+import { TourTip } from './custom-components/Tourtip';
 import { BEGINNER_TOUR, ADVANCED_TOUR } from './utils/steps'
 import { useDispatch, useSelector } from 'react-redux';
+import { translateMessage } from '../../utils/translate-messages';
+import messages from '../../../messages';
+import { FormattedMessage } from 'react-intl';
 
 const GETour = () => {
 
-  const { tourState, saveActionTypes } = useSelector((state: IRootState) => state);
-  const {startIndex, beginnerTour} = tourState;
+  const { tour } = useSelector((state: IRootState) => state);
+  const {step, beginner, isRunning} = tour;
   const dispatch = useDispatch();
-  const [run, setRun] = useState(false);
-  const [steps, setSteps] = useState(beginnerTour === true ? BEGINNER_TOUR : ADVANCED_TOUR);
-  const [stepIndex, setStepIndex] = useState(startIndex);
+  const [run, setRun] = useState(isRunning);
+  const [steps] = useState(beginner === true ? BEGINNER_TOUR : ADVANCED_TOUR);
+  const [stepIndex, setStepIndex] = useState(step);
   const [changedIndexes, setChangedIndexes] = useState([]);
+  const [hidden, hideInfoDialog] = useState(true);
   const currentTheme: ITheme = getTheme();
 
   const stepIndexChanged : any= []
   useEffect(() => {
-    setRun(true);
+    setRun(isRunning);
   }, [])
 
   useEffect(() => {
-    if(steps[stepIndex].expectedActionType !== null && steps[stepIndex].expectedActionType === saveActionTypes){
+    if(steps[stepIndex].expectedActionType && steps[stepIndex].expectedActionType === tour.actionType){
       setStepIndex(stepIndex + 1);
       dispatch(setStepAction(stepIndex));
     }
-  }, [saveActionTypes])
+  }, [tour.actionType])
 
   const peekNextTarget = (): boolean => {
     if(stepIndex + 1 >= steps.length){
@@ -48,7 +52,7 @@ const GETour = () => {
   const handleJoyrideCallback = (data: CallBackProps) => {
 
     const { action, index, type, status } = data;
-    const step: ITourSteps = data.step
+    const tourStep: ITourSteps = data.step
     if(changedIndexes.length > 0 ){
       const changedIndexesClone = changedIndexes.slice();
       for (const changedIndex of changedIndexes){
@@ -67,10 +71,16 @@ const GETour = () => {
     if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
       setRun(false)
       setStepIndex(0);
-      dispatch(toggleTourState({runState: false, beginnerTour: false, continuous: true, startIndex: 0}));
+
+      if(beginner === true){
+        hideInfoDialog(false);
+      }
+      else{
+        dispatch(toggleTourState({isRunning: false, beginner: false, continuous: true, step: 0}));
+      }
 
     }
-    else if (action === 'update' && step.autoNext ) {
+    else if (action === 'update' && tourStep.autoNext ) {
       // eslint-disable-next-line prefer-const
       let mutationObserver : MutationObserver ;
 
@@ -111,30 +121,64 @@ const GETour = () => {
     }
   }
 
+  const dialogContentProps = {
+    type: DialogType.normal,
+    title: translateMessage('All set'),
+    closeButtonAriaLabel: translateMessage('Close'),
+    subText: translateMessage('Closing message'),
+    showCloseButton: true
+  }
+
+  const handleCloseDialog = () => {
+    hideInfoDialog(true);
+    dispatch(toggleTourState({isRunning: false, beginner: false, continuous: true, step: 0}));
+  }
+
   return (
-    <Joyride
-      steps={steps}
-      run={run}
-      continuous={true}
-      showSkipButton={true}
-      showProgress={true}
-      callback={(data) => handleJoyrideCallback(data)}
-      locale={{
-        last: 'End Tour',
-        skip: 'Close Tour'
-      }}
-      stepIndex={stepIndex}
-      tooltipComponent={TourTip}
-      debug={true}
-      floaterProps={{hideArrow: true}}
-      styles={{
-        options:{
-          primaryColor:currentTheme.palette.blue
-        }
-      }}
-      disableOverlayClose={true}
-      disableScrollParentFix={true}
-    />
+    <>
+      <Joyride
+        steps={steps}
+        run={run}
+        continuous={true}
+        showSkipButton={true}
+        showProgress={true}
+        callback={(data) => handleJoyrideCallback(data)}
+        locale={{
+          last: 'End Tour',
+          skip: 'Close Tour'
+        }}
+        stepIndex={stepIndex}
+        tooltipComponent={TourTip}
+        debug={true}
+        floaterProps={{hideArrow: true}}
+        styles={{
+          options:{
+            primaryColor:currentTheme.palette.blue
+          }
+        }}
+        disableOverlayClose={true}
+        disableScrollParentFix={true}
+      />
+      <Dialog
+        hidden={hidden}
+        dialogContentProps={dialogContentProps}
+        modalProps={{
+          titleAriaId: getId(),
+          subtitleAriaId: getId(),
+          isBlocking: false,
+          styles: { main: { maxWidth: 450, textAlign: 'center', font:'bold', lineHeight:'1.8'} }
+        }}
+        onDismiss={handleCloseDialog}
+      >
+        <Link
+          // eslint-disable-next-line max-len
+          href='https://docs.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview?context=graph%2Fapi%2F1.0&view=graph-rest-1.0'
+          target='_blank' underline
+        >
+          <FormattedMessage id='Graph explorer docs'/>
+        </Link>
+      </Dialog>
+    </>
 
   )
 }

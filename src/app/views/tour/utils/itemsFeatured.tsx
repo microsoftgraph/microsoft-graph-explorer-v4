@@ -18,7 +18,7 @@ export const advancedFeaturesList: any = [
     name: <FormattedMessage id='Autocomplete' />
   },
   {
-    name: <FormattedMessage id='Share Query' />
+    name: <FormattedMessage id='Share query item' />
   }
 ]
 
@@ -30,6 +30,9 @@ export const beginnerFeaturesList: any = [
     name: <FormattedMessage id='Query response'/>
   },
   {
-    name: <FormattedMessage id='Sample Queries'/>
+    name: <FormattedMessage id='Sample queries text'/>
+  },
+  {
+    name: <FormattedMessage id='History items'/>
   }
 ]

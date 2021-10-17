@@ -1,10 +1,22 @@
 import { IAction } from '../../../types/action';
-import { SET_TOURSTATE_SUCCESS } from '../redux-constants';
+import { ITour } from '../../../types/tour';
+import { SET_ACTION_TYPES_SUCCESS, SET_NEXT_TOUR_STEP_SUCCESS, SET_TOURSTATE_SUCCESS } from '../redux-constants';
 
-export function tourState(state = { runState: false, beginnerTour: true }, action: IAction): any {
+const initialState: ITour = {
+  isRunning: false,
+  beginner: true,
+  continuous: true,
+  actionType: '',
+  step: 0
+}
+export function tour(state: ITour = initialState, action: IAction): any {
   switch (action.type) {
     case SET_TOURSTATE_SUCCESS:
       return action.response
+    case SET_NEXT_TOUR_STEP_SUCCESS:
+      return { ...state, step: action.response }
+    case SET_ACTION_TYPES_SUCCESS:
+      return { ...state, actionType: action.response }
     default:
       return state
   }

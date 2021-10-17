@@ -9,14 +9,17 @@ import {
   DocumentCardTitle,
   DropdownMenuItemType,
   getId,
+  getTheme,
   Icon,
   IconButton,
   IDocumentCardStyles,
+  IStackTokens,
   Label,
   List,
   Panel,
   PanelType,
   PrimaryButton,
+  Stack,
   TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
@@ -37,6 +40,7 @@ import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 import { toggleTourState } from '../../services/actions/tour-action-creator';
 import { advancedFeaturesList, beginnerFeaturesList } from '../tour/utils/itemsFeatured'
+import { translateMessage } from '../../utils/translate-messages';
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
@@ -50,6 +54,8 @@ function Settings(props: ISettingsProps) {
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [tourChooserCard, hideTourChooserCard] = useState(true);
+  const [tourType, setTourType] = useState('Beginner Tour')
+  const currentTheme = getTheme();
 
   const {
     intl: { messages }
@@ -123,12 +129,12 @@ function Settings(props: ISettingsProps) {
     setItems(menuItems);
   }, [authenticated]);
 
-  const toggleCurrentTourState = (selectedTour : any) => {
-    if(selectedTour !== '' && selectedTour === 'Advanced Tour'){
-      dispatch(toggleTourState({runState: true, beginnerTour: false, continuous: true, startIndex: 0}));
+  const toggleCurrentTourState = () => {
+    if(tourType !== '' && tourType === 'Advanced Tour'){
+      dispatch(toggleTourState({isRunning: true, beginner: false, continuous: true, step: 0}));
     }
     else{
-      dispatch(toggleTourState({runState: true, beginnerTour: true, continuous: true, startIndex: 0}));
+      dispatch(toggleTourState({isRunning: true, beginner: true, continuous: true, step: 0}));
     }
     toggleTourCardState();
   }
@@ -230,14 +236,19 @@ function Settings(props: ISettingsProps) {
 
   const onRenderCell = (item: any) => {
     return(
-      <div>
-        <ListIcon/> {' '} {item.name}
+      <div style={{display: 'flex'}}>
+        <div style={{padding: '5px'}}>
+          <ListIcon/>
+        </div>
+        <div style={{padding: '5px'}}>
+          {item.name}
+        </div>
 
       </div>
     )
   }
 
-  const ListIcon = () => <Icon iconName="LocationDot"/>
+  const ListIcon = () => <Icon iconName="CompletedSolid"/>
 
   const menuProperties = {
     shouldFocusOnMount: true,
@@ -245,9 +256,12 @@ function Settings(props: ISettingsProps) {
     items
   };
 
+  const sectionStackTokens: IStackTokens = { childrenGap: 10 };
+
   const cardStyles: IDocumentCardStyles = {
     root: { display: 'inline-block', marginRight: 20, marginBottom: 20, width: 320}
   };
+
 
   return (
     <div className='settings-menu-button'>
@@ -314,43 +328,53 @@ function Settings(props: ISettingsProps) {
           onDismiss={() => toggleTourCardState()}
           dialogContentProps={{
             title: messages['Tour Chooser'],
-            styles: {title:{textAlign: 'center'}}
+            styles: {title:{textAlign: 'center', backgroundColor: currentTheme.palette.blue, color:'white'},
+              button:{textDecorationColor: 'white'}},
+            showCloseButton:true,
+            closeButtonAriaLabel: translateMessage('Close')
           }}
           minWidth={200}
           maxWidth={530}
 
         >
-          <div style={{display: 'flex', textAlign: 'left'}} >
-            <DocumentCard
-              onClick = {() => toggleCurrentTourState('Beginner Tour')}
-              styles={cardStyles}
-              key='Beginner Tour'
-            >
-              <DocumentCardDetails>
-                <DocumentCardTitle title={messages['Beginner Tour']} shouldTruncate />
-                <span style={{padding:'1px', margin:'15px', lineHeight:''}}>
-                  <FormattedMessage id="Beginner Tour Message" />
-                </span>
-                <List items={beginnerFeaturesList} style={{padding:'1px', margin:'15px', lineHeight:'1.5'}}
-                  onRenderCell={onRenderCell} />
-              </DocumentCardDetails>
-            </DocumentCard>
+          <>
+            <div style={{textAlign: 'center', padding: '15px'}}>
+              <FormattedMessage id='Tour dialog paragraph' />
+            </div>
+            <Stack horizontal tokens={sectionStackTokens}>
+              <DocumentCard
+                onClick = {() => setTourType('Beginner Tour')}
+                styles={cardStyles}
+                key='Beginner Tour'
+              >
+                <DocumentCardDetails>
+                  <DocumentCardTitle title={messages['Beginner Tour']} shouldTruncate
+                    styles={{root:{textAlign: 'center'}}} />
+                  <List items={beginnerFeaturesList} style={{padding:'1px', margin:'10px', lineHeight:'1.8'}}
+                    onRenderCell={onRenderCell} />
+                </DocumentCardDetails>
+              </DocumentCard>
 
-            <DocumentCard
-              styles={cardStyles}
-              key = 'Advanced Tour'
-              onClick = {() => toggleCurrentTourState('Advanced Tour')}
-            >
-              <DocumentCardDetails>
-                <DocumentCardTitle title={messages['Advanced Tour']} />
-                <span style={{padding:'1px', margin:'15px', lineHeight:''}}>
-                  <FormattedMessage id="Advanced Tour Message" />
-                </span>
-                <List items={advancedFeaturesList} style={{padding:'1px', margin:'15px', lineHeight:'1.5'}}
-                  onRenderCell={onRenderCell} />
-              </DocumentCardDetails>
-            </DocumentCard>
-          </div>
+              <DocumentCard
+                styles={cardStyles}
+                key = 'Advanced Tour'
+                onClick = {() => setTourType('Advanced Tour')}
+              >
+                <DocumentCardDetails>
+                  <DocumentCardTitle title={messages['Advanced Tour']} styles={{root:{textAlign: 'center'}}}  />
+                  <List items={advancedFeaturesList} style={{padding:'1px', margin:'10px', lineHeight:'1.8'}}
+                    onRenderCell={onRenderCell} />
+                </DocumentCardDetails>
+              </DocumentCard>
+            </Stack>
+            <div style={{textAlign: 'center', padding: '6px'}}>
+              <PrimaryButton text={translateMessage('Start the tour')} onClick={toggleCurrentTourState} />
+            </div>
+            <div style={{textAlign: 'center', padding: '6px'}}>
+              <FormattedMessage id='Context menu message'/>
+            </div>
+          </>
+
         </Dialog>
 
         <Panel

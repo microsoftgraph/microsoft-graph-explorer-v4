@@ -47,8 +47,9 @@ export const TourTip = ( { tooltipProps, index, step, backProps, primaryProps, s
         primaryButtonProps={tipPrimaryButton}
         secondaryButtonProps={ index > 0 ? tipSecondaryButton : closeTour}
         footerContent={ step.infoStep ? ' ' : <span >{currentIndex} of {size} </span> }
+        styles={{root: {borderRadius:500}}}
       >
-        <div style={{textAlign: 'left', lineHeight:'1.5'}}>
+        <div style={{textAlign: 'left', lineHeight:'1.8'}}>
           {step.content}
         </div>
 

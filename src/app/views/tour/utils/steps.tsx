@@ -1,4 +1,4 @@
-import { DirectionalHint } from '@fluentui/react';
+import { DirectionalHint, Link } from '@fluentui/react';
 import { ITourSteps } from './types';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -23,11 +23,11 @@ export const BEGINNER_TOUR : ITourSteps[] = [
   {
     target: '.pivot-response *[data-content="Response preview xx"]',
     content:(
-      <FormattedMessage id='Response headers button message' />
+      <FormattedMessage id='Response preview message' />
     ),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    title:<FormattedMessage id='Response Headers'/>,
+    title:<FormattedMessage id='Response Preview'/>,
     autoNext: true,
     disableBeacon: true
   },
@@ -56,11 +56,11 @@ export const BEGINNER_TOUR : ITourSteps[] = [
   {
     target: '.pivot-response *[data-content="Response preview xx"]',
     content:(
-      <FormattedMessage id='Response headers button message' />
+      <FormattedMessage id='Response preview message' />
     ),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    title:<FormattedMessage id='Response Headers'/>,
+    title:<FormattedMessage id='Response Preview'/>,
     autoNext: true,
     disableBeacon: true
   },
@@ -70,6 +70,50 @@ export const BEGINNER_TOUR : ITourSteps[] = [
       <FormattedMessage id='Response body message'/>
     ),
     title:<FormattedMessage id='Response'/>,
+    directionalHint: DirectionalHint.topCenter,
+    spotlightClicks: true,
+    disableBeacon: true
+
+  },
+  {
+    target: '.side-bar-pivot *[data-content="History xx"]',
+    content:(
+      <FormattedMessage id='History button message' />
+    ),
+    title:<FormattedMessage id='History'/>,
+    spotlightClicks: true,
+    directionalHint: DirectionalHint.rightCenter,
+    disableBeacon: true,
+    autoNext: true
+  },
+  {
+    target: '.history-items',
+    content:(
+      <FormattedMessage id='History message' />
+    ),
+    title:<FormattedMessage id='History'/>,
+    spotlightClicks: true,
+    directionalHint: DirectionalHint.rightCenter,
+    disableBeacon: true,
+    expectedActionType: VIEW_HISTORY_ITEM_SUCCESS
+  },
+  {
+    target: '.pivot-response *[data-content="Response preview xx"]',
+    content:(
+      <FormattedMessage id='Response preview message' />
+    ),
+    directionalHint: DirectionalHint.topCenter,
+    spotlightClicks: true,
+    title:<FormattedMessage id='Response Preview'/>,
+    autoNext:true,
+    disableBeacon: true
+  },
+  {
+    target:'.response-preview-body',
+    content:(
+      <FormattedMessage id='Response body message' />
+    ),
+    title:<FormattedMessage id='Response Preview'/>,
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     disableBeacon: true
@@ -105,7 +149,7 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     content:(
       <FormattedMessage id='Request option message'/>
     ),
-    directionalHint: DirectionalHint.bottomCenter,
+    directionalHint: DirectionalHint.leftBottomEdge,
     spotlightClicks: true,
     title: <FormattedMessage id='HTTP request method option' />,
     disableBeacon: true,
@@ -138,11 +182,11 @@ export const ADVANCED_TOUR : ITourSteps[] = [
   {
     target: '.pivot-response *[data-content="Response preview xx"]',
     content:(
-      <FormattedMessage id='Response headers button message' />
+      <FormattedMessage id='Response preview message' />
     ),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    title:<FormattedMessage id='Response Headers'/>,
+    title:<FormattedMessage id='Response Preview'/>,
     autoNext:true,
     disableBeacon: true
   },
@@ -181,7 +225,13 @@ export const ADVANCED_TOUR : ITourSteps[] = [
   {
     target: '.pivot-response *[data-content="Toolkit component xx"]',
     content:(
-      <FormattedMessage id='Toolkit component button message' />
+      <>
+        <FormattedMessage id='Toolkit component button message' />
+        <Link href='https://docs.microsoft.com/en-us/graph/toolkit/overview' underline
+          target='_blank' styles={{root: {color: 'white'}}}>
+          <FormattedMessage id='Toolkit component docs' />
+        </Link>
+      </>
     ),
     title:<FormattedMessage id='Graph toolkit' />,
     directionalHint: DirectionalHint.topCenter,
@@ -202,9 +252,15 @@ export const ADVANCED_TOUR : ITourSteps[] = [
   {
     target: '.pivot-response *[data-content="Adaptive cards xx"]',
     content:(
-      <FormattedMessage id='Adaptive cards button message'/>
+      <>
+        <FormattedMessage id='Adaptive cards button message' />
+        <Link href='https://docs.microsoft.com/en-us/adaptive-cards/' underline
+          target='_blank' styles={{root: {color: 'white'}}}>
+          <FormattedMessage id='Adaptive cards docs'/>
+        </Link>
+      </>
     ),
-    title:<FormattedMessage id='Adaptive Cards' />,
+    title:( <FormattedMessage id='Adaptive Cards'/> ),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     autoNext:true,
@@ -245,50 +301,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     disableBeacon: true
   },
   {
-    target: '.side-bar-pivot *[data-content="History xx"]',
-    content:(
-      <FormattedMessage id='History button message' />
-    ),
-    title:<FormattedMessage id='History'/>,
-    spotlightClicks: true,
-    directionalHint: DirectionalHint.rightCenter,
-    disableBeacon: true,
-    autoNext: true
-  },
-  {
-    target: '.history-items',
-    content:(
-      <FormattedMessage id='History message' />
-    ),
-    title:<FormattedMessage id='History'/>,
-    spotlightClicks: true,
-    directionalHint: DirectionalHint.rightCenter,
-    disableBeacon: true,
-    expectedActionType: VIEW_HISTORY_ITEM_SUCCESS
-  },
-  {
-    target: '.pivot-response *[data-content="Response preview xx"]',
-    content:(
-      <FormattedMessage id='Response headers button message' />
-    ),
-    directionalHint: DirectionalHint.topCenter,
-    spotlightClicks: true,
-    title:<FormattedMessage id='Response Headers'/>,
-    autoNext:true,
-    disableBeacon: true
-  },
-  {
-    target:'.response-preview-body',
-    content:(
-      <FormattedMessage id='Response body message' />
-    ),
-    title:<FormattedMessage id='Response Preview'/>,
-    directionalHint: DirectionalHint.topCenter,
-    spotlightClicks: true,
-    disableBeacon: true
-
-  },
-  {
     target: '.query-response *[data-content="Share xx"]',
     content: (
       <FormattedMessage id='Share query message'/>
@@ -315,11 +327,11 @@ export const COMPONENT_INFO : ITourSteps[] = [
   {
     target: '.pivot-response *[data-content="Response preview xx"]',
     content:(
-      <FormattedMessage id='Response headers button message' />
+      <FormattedMessage id='Response preview message' />
     ),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    title:<FormattedMessage id='Response Headers'/>,
+    title:<FormattedMessage id='Response Preview'/>,
     autoNext:false,
     infoStep: true,
     disableBeacon: true

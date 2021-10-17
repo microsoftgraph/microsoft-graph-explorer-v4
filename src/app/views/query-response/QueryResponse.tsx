@@ -114,10 +114,10 @@ const QueryResponse = (props: IQueryResponseProps) => {
       if(targetStepIndex >= 0){
         dispatch(toggleTourState(
           {
-            runState: true,
-            beginnerTour: false,
+            isRunning: true,
+            beginner: false,
             continuous: true,
-            startIndex: targetStepIndex
+            step: targetStepIndex
           }
         ))
       }

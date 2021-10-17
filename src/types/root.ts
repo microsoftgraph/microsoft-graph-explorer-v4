@@ -40,9 +40,7 @@ export interface IRootState {
   dimensions: IDimensions;
   autoComplete: IAutocompleteResponse;
   devxApi: IDevxAPI;
-  tourState: ITour;
-  saveActionTypes: string,
-  setNextTourStep: string
+  tour: ITour;
 }
 
 export interface IApiFetch {

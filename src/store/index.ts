@@ -6,7 +6,6 @@ import telemetryMiddleware from '../app/middleware/telemetryMiddleware';
 import tourMiddleware from '../app/middleware/tourMiddleware';
 
 import reducers from '../app/services/reducers';
-import { saveActionTypes } from '../app/services/reducers/save-action-types-reducer';
 
 const loggerMiddleware = createLogger({
   level: 'error',
@@ -40,13 +39,12 @@ const initialState: any = {
     selectedVersion: 'v1.0'
   },
   termsOfUse: true,
-  tourState: {
-    runState: false,
-    beginnerTour: true,
+  tour: {
+    isRunning: false,
+    beginner: true,
     stepIndex: 0,
     continuous: true
-  },
-  saveActionTypes: ''
+  }
 };
 
 export const store = createStore(

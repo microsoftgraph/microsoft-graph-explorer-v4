@@ -58,10 +58,10 @@ export const getPivotItems = () => {
       const targetStepIndex = getTargetStepIndex(target, item.key)
       if(targetStepIndex >= 0){
         dispatch(toggleTourState({
-          runState: true,
-          beginnerTour: false,
+          isRunning: true,
+          beginner: false,
           continuous: item.key.toString() === 'info'? false : true,
-          startIndex: targetStepIndex
+          step: targetStepIndex
         }))
       }
 

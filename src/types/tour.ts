@@ -1,6 +1,7 @@
 export interface ITour {
-  runState: boolean;
-  beginnerTour: boolean;
-  startIndex: number;
+  isRunning: boolean;
+  beginner: boolean;
+  step: number;
   continuous: boolean;
+  actionType: string;
 }

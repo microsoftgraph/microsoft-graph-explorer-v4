@@ -1,5 +1,6 @@
 import { DirectionalHint, IImageProps } from '@fluentui/react';
 import { Step, TooltipRenderProps } from 'react-joyride';
+import { IQuery } from '../../../../types/query-runner';
 
 export interface ITourSteps extends Step {
   illustrationImage?: IImageProps;
@@ -8,6 +9,7 @@ export interface ITourSteps extends Step {
   advancedStep?: boolean;
   infoStep?: boolean
   expectedActionType?: string;
+  query?: IQuery
 }
 
 export interface ITourTooltipRenderProps extends TooltipRenderProps {
