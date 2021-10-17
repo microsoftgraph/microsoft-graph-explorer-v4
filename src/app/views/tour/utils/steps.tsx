@@ -18,7 +18,13 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='Query'/>,
     autoNext: false,
     disableBeacon: true,
-    expectedActionType: QUERY_GRAPH_SUCCESS
+    expectedActionType: QUERY_GRAPH_SUCCESS,
+    query:{
+      selectedVerb: 'GET',
+      selectedVersion: 'v1.0',
+      sampleUrl: 'https://graph.microsoft.com/beta/me/',
+      sampleHeaders:[]
+    }
   },
   {
     target: '.pivot-response *[data-content="Response preview xx"]',
@@ -165,7 +171,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title: <FormattedMessage id='Microsoft Graph API Version option' />,
     disableBeacon: true,
     expectedActionType: SET_SAMPLE_QUERY_SUCCESS
-
   },
   {
     target:'.query-box',
@@ -177,7 +182,13 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title:<FormattedMessage id='Query'/>,
     autoNext: false,
     disableBeacon: true,
-    expectedActionType: QUERY_GRAPH_SUCCESS
+    expectedActionType: QUERY_GRAPH_SUCCESS,
+    query:{
+      selectedVerb: 'GET',
+      selectedVersion: 'v1.0',
+      sampleUrl: 'https://graph.microsoft.com/v1.0',
+      sampleHeaders:[]
+    }
   },
   {
     target: '.pivot-response *[data-content="Response preview xx"]',

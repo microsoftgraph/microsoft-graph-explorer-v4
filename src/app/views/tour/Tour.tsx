@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Joyride, { ACTIONS, CallBackProps, EVENTS, STATUS } from 'react-joyride';
 import { ITourSteps } from './utils/types'
-import { Dialog, DialogFooter, DialogType, getId, getTheme, ITheme, Link, PrimaryButton } from '@fluentui/react';
+import { Dialog, DialogType, getId, getTheme, ITheme, Link } from '@fluentui/react';
 import { IRootState } from '../../../types/root';
 
 import { toggleTourState, setActionTypes as setStepAction,
@@ -10,8 +10,8 @@ import { TourTip } from './custom-components/Tourtip';
 import { BEGINNER_TOUR, ADVANCED_TOUR } from './utils/steps'
 import { useDispatch, useSelector } from 'react-redux';
 import { translateMessage } from '../../utils/translate-messages';
-import messages from '../../../messages';
 import { FormattedMessage } from 'react-intl';
+import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 
 const GETour = () => {
 
@@ -34,6 +34,10 @@ const GETour = () => {
     if(steps[stepIndex].expectedActionType && steps[stepIndex].expectedActionType === tour.actionType){
       setStepIndex(stepIndex + 1);
       dispatch(setStepAction(stepIndex));
+    }
+    if(steps[stepIndex].query){
+      const query = steps[stepIndex].query;
+      dispatch(setSampleQuery(query!));
     }
   }, [tour.actionType])
 
