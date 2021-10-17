@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { translateMessage } from '../../utils/translate-messages';
 import { FormattedMessage } from 'react-intl';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 
 const GETour = () => {
 
@@ -82,6 +83,12 @@ const GETour = () => {
       else{
         dispatch(toggleTourState({isRunning: false, beginner: false, continuous: true, step: 0}));
       }
+      telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+        ComponentName: componentNames.START_TOUR_BUTTON,
+        tourIndex: index,
+        totalSteps: steps.length,
+        tourType: beginner === true ? 'BEGINNER_TOUR' : 'ADVANCED_TOUR'
+      });
 
     }
     else if (action === 'update' && tourStep.autoNext ) {
