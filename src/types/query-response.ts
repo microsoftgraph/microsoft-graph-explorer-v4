@@ -25,6 +25,6 @@ export interface IQueryResponseState {
 }
 
 export interface IGraphResponse {
-  body: any | undefined,
-  headers: any | undefined
+  body: any | undefined;
+  headers: any | undefined;
 }

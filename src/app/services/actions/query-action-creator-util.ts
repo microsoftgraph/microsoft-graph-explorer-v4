@@ -1,5 +1,6 @@
 import {
   AuthenticationHandlerOptions,
+  GraphRequest,
   ResponseType
 } from '@microsoft/microsoft-graph-client';
 import { MSALAuthenticationProviderOptions } from
@@ -22,7 +23,11 @@ export function queryResponse(response: object): IAction {
   };
 }
 
-export async function anonymousRequest(dispatch: Function, query: IQuery, getState: Function) {
+export async function anonymousRequest(
+  dispatch: Function,
+  query: IQuery,
+  getState: Function
+) {
   dispatch(queryRunningStatus(true));
   const { proxyUrl } = getState();
   const { graphUrl, options } = createAnonymousRequest(query, proxyUrl);
@@ -48,14 +53,76 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
     ...sampleHeaders
   };
 
-  const options: IRequestOptions = { method: query.selectedVerb, headers };
+  const options: IRequestOptions = {
+    method: query.selectedVerb,
+    headers
+  };
   return { graphUrl, options };
 }
 
-export function authenticatedRequest(dispatch: Function, query: IQuery,
-  scopes: string[] = DEFAULT_USER_SCOPES.split(' ')) {
+export function authenticatedRequest(
+  dispatch: Function,
+  query: IQuery,
+  scopes: string[] = DEFAULT_USER_SCOPES.split(' ')
+) {
   dispatch(queryRunningStatus(true));
-  return makeRequest(query.selectedVerb, scopes)(query);
+  return makeGraphRequest(scopes)(query);
+}
+
+function createAuthenticatedRequest(
+  scopes: string[],
+  query: IQuery
+): GraphRequest {
+  const sampleHeaders: any = {};
+  sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
+
+  if (query.sampleHeaders && query.sampleHeaders.length > 0) {
+    query.sampleHeaders.forEach((header) => {
+      sampleHeaders[header.name] = header.value;
+    });
+  }
+
+  const msalAuthOptions = new MSALAuthenticationProviderOptions(scopes);
+  const middlewareOptions = new AuthenticationHandlerOptions(
+    authProvider,
+    msalAuthOptions
+  );
+  const graphRequest = GraphClient.getInstance()
+    .api(encodeHashCharacters(query))
+    .middlewareOptions([middlewareOptions])
+    .headers(sampleHeaders)
+    .responseType(ResponseType.RAW);
+
+  return graphRequest;
+}
+
+export function makeGraphRequest(scopes: string[]): Function {
+  return async (query: IQuery) => {
+    let response;
+
+    const graphRequest = createAuthenticatedRequest(scopes, query);
+
+    switch (query.selectedVerb) {
+      case 'GET':
+        response = await graphRequest.get();
+        break;
+      case 'POST':
+        response = await graphRequest.post(query.sampleBody);
+        break;
+      case 'PUT':
+        response = await graphRequest.put(query.sampleBody);
+        break;
+      case 'PATCH':
+        response = await graphRequest.patch(query.sampleBody);
+        break;
+      case 'DELETE':
+        response = await graphRequest.delete();
+        break;
+      default:
+        return;
+    }
+    return Promise.resolve(response);
+  };
 }
 
 export function isImageResponse(contentType: string | undefined) {
@@ -71,19 +138,73 @@ export function isBetaURLResponse(json: any) {
   return !!json?.account?.[0]?.source?.type?.[0];
 }
 
-export function getContentType(headers: Headers) {
-  const contentType = headers.get('content-type');
-  if (contentType) {
-    const delimiterPos = contentType.indexOf(';');
-    if (delimiterPos !== -1) {
-      return contentType.substr(0, delimiterPos);
-    } else {
-      return contentType;
+export function getContentType(headers: any) {
+  let contentType = null;
+
+  if (headers) {
+    let contentTypes = headers['content-type'];
+    if (headers instanceof Headers) {
+      contentTypes = headers.get('content-type');
     }
+    if (contentTypes) {
+      /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
+       * Take the first option after splitting since it is the only value useful in the description of the content
+       */
+      const splitContentTypes = contentTypes.split(';');
+      if (splitContentTypes.length > 0) {
+        contentType = splitContentTypes[0].toLowerCase();
+      }
+    }
+  }
+  return contentType;
+}
+
+export function isFileResponse(headers: any) {
+  const contentDisposition = headers['content-disposition'];
+  if (contentDisposition) {
+    const directives = contentDisposition.split(';');
+    if (directives.contains('attachment')) {
+      return true;
+    }
+  }
+
+  // use content type to determine if response is file
+  const contentType = getContentType(headers);
+  if (contentType) {
+    return (
+      contentType === 'application/octet-stream' ||
+      contentType === 'application/onenote' ||
+      contentType === 'application/pdf' ||
+      contentType.includes('application/vnd.') ||
+      contentType.includes('video/') ||
+      contentType.includes('audio/')
+    );
+  }
+  return false;
+}
+
+export async function generateResponseDownloadUrl(
+  response: Response,
+  respHeaders: any
+) {
+  try {
+    const fileContents = await parseResponse(response, respHeaders);
+    const contentType = getContentType(respHeaders);
+    if (fileContents) {
+      const buffer = await response.arrayBuffer();
+      const blob = new Blob([buffer], { type: contentType });
+      const downloadUrl = URL.createObjectURL(blob);
+      return downloadUrl;
+    }
+  } catch (error) {
+    return null;
   }
 }
 
-export function parseResponse(response: any, respHeaders: any): Promise<any> {
+export function parseResponse(
+  response: any,
+  respHeaders: any = {}
+): Promise<any> {
   if (response && response.headers) {
     response.headers.forEach((val: any, key: any) => {
       respHeaders[key] = val;
@@ -106,50 +227,7 @@ export function parseResponse(response: any, respHeaders: any): Promise<any> {
   return response;
 }
 
-export function makeRequest(httpVerb: string, scopes: string[]): Function {
-  return async (query: IQuery) => {
-    const sampleHeaders: any = {};
-    sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
-
-    if (query.sampleHeaders && query.sampleHeaders.length > 0) {
-      query.sampleHeaders.forEach((header) => {
-        sampleHeaders[header.name] = header.value;
-      });
-    }
-
-    const msalAuthOptions = new MSALAuthenticationProviderOptions(scopes);
-    const middlewareOptions = new AuthenticationHandlerOptions(
-      authProvider,
-      msalAuthOptions
-    );
-    const client = GraphClient.getInstance()
-      .api(encodeHashCharacters(query))
-      .middlewareOptions([middlewareOptions])
-      .headers(sampleHeaders)
-      .responseType(ResponseType.RAW);
-
-    let response;
-
-    switch (httpVerb) {
-      case 'GET':
-        response = await client.get();
-        break;
-      case 'POST':
-        response = await client.post(query.sampleBody);
-        break;
-      case 'PUT':
-        response = await client.put(query.sampleBody);
-        break;
-      case 'PATCH':
-        response = await client.patch(query.sampleBody);
-        break;
-      case 'DELETE':
-        response = await client.delete();
-        break;
-      default:
-        return;
-    }
-
-    return Promise.resolve(response);
-  };
+export function queryResultsInCorsError(sampleQuery: IQuery) {
+  const requestUrl = new URL(sampleQuery.sampleUrl);
+  return requestUrl.pathname.match(/\/content(\/)*$/i) != null;
 }
