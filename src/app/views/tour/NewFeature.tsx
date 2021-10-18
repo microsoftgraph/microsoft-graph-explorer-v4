@@ -44,14 +44,14 @@ const NewFeature = () => {
 
   const startButton: IButtonProps = React.useMemo(
     () => ({
-      children: translateMessage('Yes do it'),
+      children: translateMessage('Yes show me around'),
       onClick: () => beginTour()
     }),[]
   )
 
   const dismissButton: IButtonProps = React.useMemo(
     () => ({
-      children: translateMessage('No Thanks'),
+      children: translateMessage('No thanks'),
       onClick: () =>{closeFeaturePopup()}
     }),[]
   )

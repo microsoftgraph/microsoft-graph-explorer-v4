@@ -199,7 +199,13 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     spotlightClicks: true,
     title:<FormattedMessage id='Response Preview'/>,
     autoNext:true,
-    disableBeacon: true
+    disableBeacon: true,
+    query:{
+      selectedVerb: 'GET',
+      selectedVersion: 'v1.0',
+      sampleUrl: 'https://graph.microsoft.com/v1.0/me',
+      sampleHeaders:[]
+    }
   },
   {
     target:'.response-preview-body',
@@ -210,7 +216,6 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     disableBeacon: true
-
   },
   {
     target: '.pivot-response *[data-content="Response headers xx"]',

@@ -132,17 +132,9 @@ function Settings(props: ISettingsProps) {
   const toggleCurrentTourState = () => {
     if(tourType !== '' && tourType === 'Advanced Tour'){
       dispatch(toggleTourState({isRunning: true, beginner: false, continuous: true, step: 0}));
-      telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-        ComponentName: componentNames.START_TOUR_BUTTON,
-        tourType: 'ADVANCED_TOUR'
-      });
     }
     else{
       dispatch(toggleTourState({isRunning: true, beginner: true, continuous: true, step: 0}));
-      telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-        ComponentName: componentNames.START_TOUR_BUTTON,
-        tourType: 'ADVANCED_TOUR'
-      });
     }
     toggleTourCardState();
   }

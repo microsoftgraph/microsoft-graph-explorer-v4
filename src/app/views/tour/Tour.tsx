@@ -76,13 +76,9 @@ const GETour = () => {
     if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
       setRun(false)
       setStepIndex(0);
+      hideInfoDialog(false);
+      //dispatch(toggleTourState({isRunning: false, beginner: false, continuous: true, step: 0}));
 
-      if(beginner === true){
-        hideInfoDialog(false);
-      }
-      else{
-        dispatch(toggleTourState({isRunning: false, beginner: false, continuous: true, step: 0}));
-      }
       telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
         ComponentName: componentNames.START_TOUR_BUTTON,
         tourIndex: index,
@@ -136,7 +132,8 @@ const GETour = () => {
     type: DialogType.normal,
     title: translateMessage('All set'),
     closeButtonAriaLabel: translateMessage('Close'),
-    subText: translateMessage('Closing message'),
+    subText: beginner === true ? translateMessage('Beginner closing message'):
+      translateMessage('Advanced closing message'),
     showCloseButton: true
   }
 
