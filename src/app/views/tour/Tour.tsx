@@ -156,7 +156,7 @@ const GETour = () => {
         }}
         stepIndex={stepIndex}
         tooltipComponent={TourTip}
-        debug={true}
+        debug={false}
         floaterProps={{hideArrow: true}}
         styles={{
           options:{
