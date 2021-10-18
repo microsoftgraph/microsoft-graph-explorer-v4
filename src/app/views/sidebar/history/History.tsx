@@ -212,6 +212,7 @@ export class History extends Component<IHistoryProps, any> {
                   shouldFocusOnMount: true,
                   items: buttonActions
                 }}
+                styles={{root: {paddingBottom: 10, marginLeft: -1.2}}}
               />
             </TooltipHost>
           );
@@ -479,6 +480,7 @@ export class History extends Component<IHistoryProps, any> {
     }: any = this.props;
     const classes = classNames(this.props);
     const columns = [
+      { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20 },
       {
         key: 'status',
         name: '',
@@ -486,8 +488,7 @@ export class History extends Component<IHistoryProps, any> {
         minWidth: 20,
         maxWidth: 50
       },
-      { key: 'url', name: '', fieldName: 'url', minWidth: 100, maxWidth: 200 },
-      { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20 }
+      { key: 'url', name: '', fieldName: 'url', minWidth: 100, maxWidth: 200 }
     ];
 
     if (!historyItems) {
