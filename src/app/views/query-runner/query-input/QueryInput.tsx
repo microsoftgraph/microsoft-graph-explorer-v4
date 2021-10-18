@@ -113,6 +113,7 @@ const QueryInput = (props: IQueryInputProps) => {
           role='button'
           handleOnClick={() => runQuery()}
           submitting={submitting}
+          allowDisabledFocus={true}
         />
       </div>
     </div>)

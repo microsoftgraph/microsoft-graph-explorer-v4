@@ -9,7 +9,8 @@ const SubmitButtonControl = ({
   text,
   ariaLabel,
   role,
-  disabled
+  disabled,
+  allowDisabledFocus
 }: ISubmitButtonControl) => {
 
   return (
@@ -18,6 +19,7 @@ const SubmitButtonControl = ({
         onClick={() => handleOnClick()}
         ariaLabel={ariaLabel}
         role={role}
+        allowDisabledFocus={allowDisabledFocus}
       >
         {text}
         {submitting && <>&nbsp;
