@@ -126,7 +126,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
                     fontSize: 15,
                     height: 10,
                     width: 10,
-                    verticalAlign: 'center'
+                    verticalAlign: 'center',
+                    paddingTop: 2,
+                    paddingRight: 1
                   }}
                 />
               </TooltipHost>
