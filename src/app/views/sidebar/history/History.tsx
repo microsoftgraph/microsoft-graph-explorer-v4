@@ -212,6 +212,7 @@ export class History extends Component<IHistoryProps, any> {
                   shouldFocusOnMount: true,
                   items: buttonActions
                 }}
+                styles={{root: {paddingBottom: 10, marginLeft: -1.2}}}
               />
             </TooltipHost>
           );
