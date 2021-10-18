@@ -77,7 +77,6 @@ const GETour = () => {
       setRun(false)
       setStepIndex(0);
       hideInfoDialog(false);
-      //dispatch(toggleTourState({isRunning: false, beginner: false, continuous: true, step: 0}));
 
       telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
         ComponentName: componentNames.START_TOUR_BUTTON,
