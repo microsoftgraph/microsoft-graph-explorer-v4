@@ -113,16 +113,15 @@ const QueryInput = (props: IQueryInputProps) => {
         </div>
       </div>
       <div className='col-xs-12 col-lg-2'>
-        <div className='query-box'>
-          <SubmitButton
-            className='run-query-button'
-            text={translateMessage('Run Query')}
-            disabled={showError || !sampleQuery.sampleUrl}
-            role='button'
-            handleOnClick={() => runQuery()}
-            submitting={submitting}
-          />
-        </div>
+        <SubmitButton
+          className='run-query-button'
+          text={translateMessage('Run Query')}
+          disabled={showError || !sampleQuery.sampleUrl}
+          role='button'
+          handleOnClick={() => runQuery()}
+          submitting={submitting}
+          allowDisabledFocus={true}
+        />
       </div>
 
     </div>)
