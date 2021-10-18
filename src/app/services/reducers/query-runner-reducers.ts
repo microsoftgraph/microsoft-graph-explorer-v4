@@ -1,8 +1,10 @@
 import { IAction } from '../../../types/action';
 import { IGraphResponse } from '../../../types/query-response';
 import {
-  CLEAR_RESPONSE, QUERY_GRAPH_RUNNING,
-  QUERY_GRAPH_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS
+  CLEAR_RESPONSE,
+  QUERY_GRAPH_RUNNING,
+  QUERY_GRAPH_SUCCESS,
+  VIEW_HISTORY_ITEM_SUCCESS
 } from '../redux-constants';
 
 const initialState: IGraphResponse = {
@@ -10,7 +12,10 @@ const initialState: IGraphResponse = {
   headers: undefined
 };
 
-export function graphResponse(state: IGraphResponse = initialState, action: IAction): any {
+export function graphResponse(
+  state: IGraphResponse = initialState,
+  action: IAction
+): any {
   switch (action.type) {
     case QUERY_GRAPH_SUCCESS:
       return action.response;
