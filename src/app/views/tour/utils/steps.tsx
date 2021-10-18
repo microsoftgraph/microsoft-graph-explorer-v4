@@ -15,7 +15,7 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     directionalHint: DirectionalHint.leftBottomEdge,
     spotlightClicks: true,
     hideCloseButton:true,
-    title:<FormattedMessage id='Query'/>,
+    title:<FormattedMessage id='Query title'/>,
     autoNext: false,
     disableBeacon: true,
     expectedActionType: QUERY_GRAPH_SUCCESS,
@@ -40,9 +40,9 @@ export const BEGINNER_TOUR : ITourSteps[] = [
   {
     target:'.response-preview-body',
     content:(
-      <FormattedMessage id='Response body message'/>
+      <FormattedMessage id='Response body profile message'/>
     ),
-    title:<FormattedMessage id='Response'/>,
+    title:<FormattedMessage id='API Response'/>,
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     disableBeacon: true
@@ -75,7 +75,7 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     content:(
       <FormattedMessage id='Response body message'/>
     ),
-    title:<FormattedMessage id='Response'/>,
+    title:<FormattedMessage id='API Response'/>,
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     disableBeacon: true
@@ -86,7 +86,7 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     content:(
       <FormattedMessage id='History button message' />
     ),
-    title:<FormattedMessage id='History'/>,
+    title:<FormattedMessage id='History items'/>,
     spotlightClicks: true,
     directionalHint: DirectionalHint.rightCenter,
     disableBeacon: true,
@@ -97,7 +97,7 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     content:(
       <FormattedMessage id='History message' />
     ),
-    title:<FormattedMessage id='History'/>,
+    title:<FormattedMessage id='History items'/>,
     spotlightClicks: true,
     directionalHint: DirectionalHint.rightCenter,
     disableBeacon: true,
@@ -117,7 +117,7 @@ export const BEGINNER_TOUR : ITourSteps[] = [
   {
     target:'.response-preview-body',
     content:(
-      <FormattedMessage id='Response body message' />
+      <FormattedMessage id='History item API response' />
     ),
     title:<FormattedMessage id='Response Preview'/>,
     directionalHint: DirectionalHint.topCenter,
@@ -179,7 +179,7 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     ),
     directionalHint: DirectionalHint.leftBottomEdge,
     spotlightClicks: true,
-    title:<FormattedMessage id='Query'/>,
+    title:<FormattedMessage id='Query title'/>,
     autoNext: false,
     disableBeacon: true,
     expectedActionType: QUERY_GRAPH_SUCCESS,

@@ -24,6 +24,14 @@ const GETour = () => {
   const [stepIndex, setStepIndex] = useState(step);
   const [changedIndexes, setChangedIndexes] = useState([]);
   const [hidden, hideInfoDialog] = useState(true);
+  const [dialogContentProps, setDialogContentProps] = useState({
+    type: DialogType.normal,
+    title: translateMessage('All set'),
+    closeButtonAriaLabel: translateMessage('Close'),
+    subText: beginner === true ? translateMessage('Beginner closing message'):
+      translateMessage('Advanced closing message'),
+    showCloseButton: true
+  })
   const currentTheme: ITheme = getTheme();
 
   const stepIndexChanged : any= []
@@ -76,6 +84,17 @@ const GETour = () => {
     if (([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)) {
       setRun(false)
       setStepIndex(0);
+
+      if(index < steps.length-1){
+        setDialogContentProps({
+          type: DialogType.normal,
+          title: translateMessage('Sad to see you go'),
+          closeButtonAriaLabel: translateMessage('Close'),
+          subText: translateMessage('Ending the tour midway'),
+          showCloseButton: true
+        })
+      }
+
       hideInfoDialog(false);
 
       telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
@@ -125,15 +144,6 @@ const GETour = () => {
         setStepIndex(newStepIndex);
       }
     }
-  }
-
-  const dialogContentProps = {
-    type: DialogType.normal,
-    title: translateMessage('All set'),
-    closeButtonAriaLabel: translateMessage('Close'),
-    subText: beginner === true ? translateMessage('Beginner closing message'):
-      translateMessage('Advanced closing message'),
-    showCloseButton: true
   }
 
   const handleCloseDialog = () => {
