@@ -8,23 +8,15 @@ export const TourTip = ( { tooltipProps, index, step, backProps, primaryProps, s
   const currentIndex = index + 1;
   const tipPrimaryButton : IButtonProps = React.useMemo(
     () => ({
-      children: <FormattedMessage id={currentIndex === size ? 'Close Tour' : 'Next'} />,
+      children: <FormattedMessage id={currentIndex === size ? 'Got it' : 'Next'} />,
       onClick: primaryProps.onClick
     }),[]
   )
 
   const tipSecondaryButton : IButtonProps = React.useMemo(
     () => ({
-      children: <FormattedMessage id={currentIndex > 0 ? 'Previous' : '' } /> ,
+      children: <FormattedMessage id='Previous'/> ,
       onClick: backProps.onClick,
-      style: {color: 'white'}
-    }),[]
-  )
-
-  const closeTour : IButtonProps = React.useMemo(
-    () => ({
-      children: <FormattedMessage id='Close Tour' />,
-      onClick: skipProps.onClick,
       style: {color: 'white'}
     }),[]
   )
@@ -45,7 +37,7 @@ export const TourTip = ( { tooltipProps, index, step, backProps, primaryProps, s
         onDismiss={skipProps.onClick}
         isWide={true}
         primaryButtonProps={tipPrimaryButton}
-        secondaryButtonProps={ index > 0 ? tipSecondaryButton : closeTour}
+        secondaryButtonProps={ index > 0 ? tipSecondaryButton : undefined}
         footerContent={ step.infoStep ? ' ' : <span >{currentIndex} of {size} </span> }
         styles={{root: {borderRadius:500}}}
       >

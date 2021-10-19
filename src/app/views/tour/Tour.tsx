@@ -32,6 +32,7 @@ const GETour = () => {
       translateMessage('Advanced closing message'),
     showCloseButton: true
   })
+  const [temporarilyDisableOverlay, setDisableOverlay] = useState(false);
   const currentTheme: ITheme = getTheme();
 
   const stepIndexChanged : any= []
@@ -44,9 +45,12 @@ const GETour = () => {
       setStepIndex(stepIndex + 1);
       dispatch(setStepAction(stepIndex));
     }
-    if(steps[stepIndex].query){
+    if(!!steps[stepIndex].query){
       const query = steps[stepIndex].query;
       dispatch(setSampleQuery(query!));
+    }
+    if(tour.actionType === 'AUTOCOMPLETE_FETCH_SUCCESS' ){
+      setDisableOverlay(true);
     }
   }, [tour.actionType])
 
@@ -63,6 +67,11 @@ const GETour = () => {
   }
 
   const handleJoyrideCallback = (data: CallBackProps) => {
+
+    if(stepIndex < steps.length-1 && !!steps[stepIndex].query){
+      const query = steps[stepIndex].query;
+      dispatch(setSampleQuery(query!));
+    }
 
     const { action, index, type, status } = data;
     const tourStep: ITourSteps = data.step
@@ -141,6 +150,7 @@ const GETour = () => {
           dispatch(setNextTourStep(stepIndex));
 
         }
+        setDisableOverlay(false);
         setStepIndex(newStepIndex);
       }
     }
@@ -175,6 +185,7 @@ const GETour = () => {
         }}
         disableOverlayClose={true}
         disableScrollParentFix={true}
+        disableOverlay={temporarilyDisableOverlay}
       />
       <Dialog
         hidden={hidden}

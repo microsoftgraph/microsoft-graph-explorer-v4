@@ -164,7 +164,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             </PivotItem>
           </Pivot>
         );
-      } catch (err) {
+      } catch (err : any) {
         return <div style={{ color: 'red' }}>{err.message}</div>;
       }
     }
