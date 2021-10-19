@@ -338,7 +338,7 @@ function Settings(props: ISettingsProps) {
 
         >
           <>
-            <div style={{textAlign: 'center', padding: '15px'}}>
+            <div style={{textAlign: 'center', padding: '15px', fontSize:'small'}}>
               <FormattedMessage id='Tour dialog paragraph' />
             </div>
             <Stack horizontal tokens={sectionStackTokens}>
@@ -370,7 +370,7 @@ function Settings(props: ISettingsProps) {
             <div style={{textAlign: 'center', padding: '6px'}}>
               <PrimaryButton text={translateMessage('Start the tour')} onClick={toggleCurrentTourState} />
             </div>
-            <div style={{textAlign: 'center', padding: '6px'}}>
+            <div style={{textAlign: 'center', padding: '6px', fontSize:'small', lineHeight:'1.4'}}>
               <FormattedMessage id='Context menu message'/>
             </div>
           </>
