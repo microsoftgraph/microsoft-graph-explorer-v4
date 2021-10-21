@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { FETCH_ADAPTIVE_CARD_SUCCESS, GET_SNIPPET_SUCCESS,
   PROFILE_REQUEST_SUCCESS, QUERY_GRAPH_SUCCESS, SET_SAMPLE_QUERY_SUCCESS,
   VIEW_HISTORY_ITEM_SUCCESS } from '../../../services/redux-constants';
+import { geLocale } from '../../../../appLocale';
 
 export const BEGINNER_TOUR : ITourSteps[] = [
   {
@@ -127,6 +128,10 @@ export const BEGINNER_TOUR : ITourSteps[] = [
   }
 ]
 
+const devLink = `https://developer.microsoft.com/${geLocale}/office/dev-program`
+const toolkitComponentDocsLink = `https://docs.microsoft.com/${geLocale}/graph/toolkit/overview`
+const adaptiveCardsDocsLink=`https://docs.microsoft.com/${geLocale}/adaptive-cards/`
+
 export const ADVANCED_TOUR : ITourSteps[] = [
   {
     target: '.sign-in-section',
@@ -143,7 +148,13 @@ export const ADVANCED_TOUR : ITourSteps[] = [
   {
     target: '.settings-menu-button',
     content:(
-      <FormattedMessage id='Sandbox message' />
+      <>
+        <FormattedMessage id='Sandbox message' />
+        <Link href= {devLink} underline
+          target='_blank' styles={{root: {color: 'white'}}}>
+          <FormattedMessage id='Toolkit component docs' />
+        </Link>
+      </>
     ),
     title:<FormattedMessage id='More actions'/>,
     spotlightClicks: true,
@@ -243,7 +254,7 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     content:(
       <>
         <FormattedMessage id='Toolkit component button message' />
-        <Link href='https://docs.microsoft.com/en-us/graph/toolkit/overview' underline
+        <Link href={toolkitComponentDocsLink} underline
           target='_blank' styles={{root: {color: 'white'}}}>
           <FormattedMessage id='Toolkit component docs' />
         </Link>
@@ -270,7 +281,7 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     content:(
       <>
         <FormattedMessage id='Adaptive cards button message' />
-        <Link href='https://docs.microsoft.com/en-us/adaptive-cards/' underline
+        <Link href={adaptiveCardsDocsLink} underline
           target='_blank' styles={{root: {color: 'white'}}}>
           <FormattedMessage id='Adaptive cards docs'/>
         </Link>

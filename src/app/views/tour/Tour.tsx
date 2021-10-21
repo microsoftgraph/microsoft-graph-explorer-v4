@@ -13,6 +13,7 @@ import { translateMessage } from '../../utils/translate-messages';
 import { FormattedMessage } from 'react-intl';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
+import { geLocale } from '../../../appLocale';
 
 const GETour = () => {
 
@@ -34,6 +35,9 @@ const GETour = () => {
   })
   const [temporarilyDisableOverlay, setDisableOverlay] = useState(false);
   const currentTheme: ITheme = getTheme();
+
+  // eslint-disable-next-line max-len
+  const geDocsLink = `https://docs.microsoft.com/${geLocale}/graph/graph-explorer/graph-explorer-overview?context=graph%2Fapi%2F1.0&view=graph-rest-1.0`
 
   const stepIndexChanged : any= []
   useEffect(() => {
@@ -199,9 +203,7 @@ const GETour = () => {
         onDismiss={handleCloseDialog}
       >
         <Link
-          // eslint-disable-next-line max-len
-          href='https://docs.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview?context=graph%2Fapi%2F1.0&view=graph-rest-1.0'
-          target='_blank' underline
+          href={geDocsLink} target='_blank' underline
         >
           <FormattedMessage id='Graph explorer docs'/>
         </Link>
