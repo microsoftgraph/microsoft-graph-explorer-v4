@@ -402,7 +402,7 @@
   "Code snippets button message": "This sections contains code snippets that you can use to make the same API call as the query you just ran, in your own application. Click here view them",
   "Code snippets message": "You can check out different code snippets in different languages. Click Next to continue",
   "Settings button message": "There are more permissions for other queries you might want to run. Click here and choose 'Select permissions' to view them",
-  "Sandbox message": "If you don't have a sample AAD account, you can create a free one by clicking 'Get a sandbox with sample data'. You will be able to run all queries against the sample account",
+  "Sandbox message": "An AAD sandbox gives you access to sample data that you can use to test all queries. ",
   "Next": "Next",
   "Previous": "Previous",
   "Close Tour": "Close Tour",
@@ -439,5 +439,6 @@
   "Response body profile message": "The query you just ran retrieves profile information from Graph. Here is the query response. Click Next to continue",
   "API Response": "API Response",
   "History item API response": "Here is the API response to the history item you just ran. Click Next to continue",
-  "Got it": "Got it"
+  "Got it": "Got it",
+  "Sandbox url mesage": "click here to create a free sandbox with sample data"
 }

@@ -152,7 +152,7 @@ export const ADVANCED_TOUR : ITourSteps[] = [
         <FormattedMessage id='Sandbox message' />
         <Link href= {devLink} underline
           target='_blank' styles={{root: {color: 'white'}}}>
-          <FormattedMessage id='Toolkit component docs' />
+          <FormattedMessage id='Sandbox url mesage' />
         </Link>
       </>
     ),
