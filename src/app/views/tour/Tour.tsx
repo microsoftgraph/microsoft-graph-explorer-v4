@@ -176,7 +176,7 @@ const GETour = () => {
         callback={(data) => handleJoyrideCallback(data)}
         locale={{
           last: 'End Tour',
-          skip: 'Close Tour'
+          skip: 'Got it'
         }}
         stepIndex={stepIndex}
         tooltipComponent={TourTip}

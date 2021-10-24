@@ -256,7 +256,7 @@ export const ADVANCED_TOUR : ITourSteps[] = [
         <FormattedMessage id='Toolkit component button message' />
         <Link href={toolkitComponentDocsLink} underline
           target='_blank' styles={{root: {color: 'white'}}}>
-          <FormattedMessage id='Toolkit component docs' />
+          <FormattedMessage id='Click here to learn more' />
         </Link>
       </>
     ),
@@ -283,7 +283,7 @@ export const ADVANCED_TOUR : ITourSteps[] = [
         <FormattedMessage id='Adaptive cards button message' />
         <Link href={adaptiveCardsDocsLink} underline
           target='_blank' styles={{root: {color: 'white'}}}>
-          <FormattedMessage id='Adaptive cards docs'/>
+          <FormattedMessage id='Click here to learn more'/>
         </Link>
       </>
     ),

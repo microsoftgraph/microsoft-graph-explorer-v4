@@ -327,7 +327,7 @@ function Settings(props: ISettingsProps) {
           hidden={tourChooserCard}
           onDismiss={() => toggleTourCardState()}
           dialogContentProps={{
-            title: messages['Tour Chooser'],
+            title: messages['Tour title'],
             styles: {title:{textAlign: 'center', backgroundColor: currentTheme.palette.blue, color:'white'},
               button:{textDecorationColor: 'white'}},
             showCloseButton:true,
