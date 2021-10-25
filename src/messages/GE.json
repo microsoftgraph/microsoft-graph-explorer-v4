@@ -435,7 +435,7 @@
   "Query title": "Want to run a Graph API Query?",
   "Response body profile message": "The query you just ran retrieves profile information from Graph. Here is the query response. Click Next to continue",
   "API Response": "API Response",
-  "History item API response": "Here is the API response to the history item you just ran. Click Next to continue",
+  "History item API response": "Here is the API response to the history item you just ran",
   "Got it": "Got it",
   "Sandbox url mesage": "Click here to create a free sandbox with sample data",
   "Click here to learn more": "Click here to learn more"
