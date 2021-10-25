@@ -130,12 +130,11 @@ function Settings(props: ISettingsProps) {
   }, [authenticated]);
 
   const toggleCurrentTourState = () => {
-    if(tourType !== '' && tourType === 'Advanced Tour'){
-      dispatch(toggleTourState({isRunning: true, beginner: false, continuous: true, step: 0}));
+    const tourState = { isRunning: true, beginner: true, continuous: true, step: 0 };
+    if (tourType !== '' && tourType === 'Advanced Tour') {
+      tourState.beginner = false;
     }
-    else{
-      dispatch(toggleTourState({isRunning: true, beginner: true, continuous: true, step: 0}));
-    }
+    dispatch(toggleTourState(tourState));
     toggleTourCardState();
   }
 
