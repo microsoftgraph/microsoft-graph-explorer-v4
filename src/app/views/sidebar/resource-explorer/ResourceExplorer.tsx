@@ -1,5 +1,5 @@
 import {
-  Breadcrumb, ChoiceGroup, ContextualMenuItemType, DefaultButton,
+  Breadcrumb, Checkbox, ChoiceGroup, ContextualMenuItemType, DefaultButton,
   IBreadcrumbItem, IChoiceGroupOption, Icon, INavLink,
   Label, Nav, SearchBox, Spinner, SpinnerSize, styled
 } from '@fluentui/react';
@@ -12,6 +12,7 @@ import { IRootState } from '../../../../types/root';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
+import CommandOptions from './CommandOptions';
 import LinkItem from './LinkItem';
 import { createList, getCurrentTree, getResourcesSupportedByVersion, removeCounter } from './resource-explorer.utils';
 
@@ -33,6 +34,7 @@ const ResourceExplorer = (props: any) => {
   const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
   const [items, setItems] = useState(createList(resourceItems, version));
   const [isolated, setIsolated] = useState<any>(null);
+  const [selectedLinks, setSelectedLinks] = useState<INavLink[]>([]);
 
   if (pending) {
     return (
@@ -72,7 +74,9 @@ const ResourceExplorer = (props: any) => {
   const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
     ev!.preventDefault();
     if (item && item.name) {
-      alert(item.name + ' link clicked');
+      const itemsToSelect: INavLink[] = [...selectedLinks];
+      itemsToSelect.push(item);
+      setSelectedLinks(itemsToSelect);
     }
   }
 
@@ -175,12 +179,15 @@ const ResourceExplorer = (props: any) => {
         });
     }
 
+    const existsInSelectedItems = properties.key!.includes('drive');
+
     return <LinkItem
       style={{
         flexGrow: 1,
         textAlign: 'left',
         boxSizing: 'border-box'
       }}
+      className={(existsInSelectedItems) ? 'is-selected' : ''}
       key={properties.key}
       items={menuItems}
       onItemClick={(e: any, item: any) => selectContextItem(e, item, properties)}>
@@ -208,7 +215,13 @@ const ResourceExplorer = (props: any) => {
           defaultSelectedKey={version}
           options={versions}
           onChange={changeVersion}
-        />;
+        />
+      </>}
+
+      {selectedLinks.length > 0 && <>
+        <Label><FormattedMessage id="Selected Resources" /> ({selectedLinks.length})</Label>
+        <CommandOptions list={selectedLinks} />
+        <br />
       </>}
 
       {isolated && breadCrumbs.length > 0 &&
@@ -232,7 +245,6 @@ const ResourceExplorer = (props: any) => {
       </Label>
       <Nav
         groups={items}
-        onLinkClick={clickLink}
         styles={navStyles}
         onRenderLink={renderCustomLink}
         className={classes.queryList} />
