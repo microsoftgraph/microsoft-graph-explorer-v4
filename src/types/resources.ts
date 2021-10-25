@@ -1,10 +1,10 @@
 export interface IResource {
   segment: string;
-  labels: Label[];
+  labels: IResourceLabel[];
   children: IResource[];
 }
 
-export interface Label {
+export interface IResourceLabel {
   name: string;
   methods: string[];
 }

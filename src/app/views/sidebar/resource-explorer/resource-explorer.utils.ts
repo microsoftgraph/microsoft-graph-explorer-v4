@@ -1,5 +1,5 @@
 import { INavLink, INavLinkGroup } from '@fluentui/react';
-import { IResource } from '../../../../types/resources';
+import { IResource, IResourceLabel } from '../../../../types/resources';
 
 interface ITreeFilter {
   paths: string[];
@@ -86,4 +86,9 @@ export function getResourcesSupportedByVersion(content: IResource, version: stri
 
 export function versionExists(child: IResource, version: string): boolean {
   return !!child.labels.find(k => k.name === version);
+}
+
+export function getAvailableMethods(labels: IResourceLabel[], version: string): string[] {
+  const current = labels.find((label: IResourceLabel) => label.name === version);
+  return (current) ? current.methods : [];
 }

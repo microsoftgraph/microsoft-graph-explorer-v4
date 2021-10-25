@@ -13,7 +13,11 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import LinkItem from './LinkItem';
-import { createList, getCurrentTree, getResourcesSupportedByVersion, removeCounter } from './resource-explorer.utils';
+import MethodIndicator from './MethodIndicator';
+import {
+  createList, getAvailableMethods, getCurrentTree,
+  getResourcesSupportedByVersion, removeCounter
+} from './resource-explorer.utils';
 
 const ResourceExplorer = (props: any) => {
   const { resources } = useSelector(
@@ -21,18 +25,6 @@ const ResourceExplorer = (props: any) => {
   );
   const classes = classNames(props);
   const { data, pending } = resources;
-  const versions: IChoiceGroupOption[] = [
-    { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
-    { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
-  ];
-
-  const [version, setVersion] = useState(versions[0].key);
-  const [searchText, setSearchText] = useState<string>('');
-
-  const filteredPayload = getResourcesSupportedByVersion(data, version);
-  const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
-  const [items, setItems] = useState(createList(resourceItems, version));
-  const [isolated, setIsolated] = useState<any>(null);
 
   if (pending) {
     return (
@@ -45,6 +37,19 @@ const ResourceExplorer = (props: any) => {
       />
     );
   }
+
+  const versions: IChoiceGroupOption[] = [
+    { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
+    { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
+  ];
+
+  const [version, setVersion] = useState(versions[0].key);
+  const [searchText, setSearchText] = useState<string>('');
+
+  const filteredPayload = getResourcesSupportedByVersion(data, version);
+  const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
+  const [items, setItems] = useState(createList(resourceItems, version));
+  const [isolated, setIsolated] = useState<any>(null);
 
   const performSearch = (needle: string, haystack: IResource[]) => {
     const keyword = needle.toLowerCase();
@@ -175,6 +180,8 @@ const ResourceExplorer = (props: any) => {
         });
     }
 
+    const methods = getAvailableMethods(properties.labels, version);
+
     return <LinkItem
       style={{
         flexGrow: 1,
@@ -187,6 +194,7 @@ const ResourceExplorer = (props: any) => {
       <span style={{ display: 'flex' }}>
         {!!properties.iconProperties && <Icon style={{ margin: '0 4px' }} {...properties.iconProperties} />}
         {properties.name}
+        {methods.length > 0 && <MethodIndicator methods={methods} key={properties.key} />}
       </span>
     </LinkItem>;
   }
@@ -208,7 +216,7 @@ const ResourceExplorer = (props: any) => {
           defaultSelectedKey={version}
           options={versions}
           onChange={changeVersion}
-        />;
+        />
       </>}
 
       {isolated && breadCrumbs.length > 0 &&
