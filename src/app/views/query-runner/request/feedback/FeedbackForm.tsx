@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { geLocale } from '../../../../../appLocale';
 import { authenticationWrapper } from '../../../../../modules/authentication';
 import { IRootState } from '../../../../../types/root';
+import { getPolicies } from '../../../../services/actions/ocps-action-creators';
 import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
 import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -31,7 +32,7 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
             setOfficeBrowserFeedback(floodgateObject);
         });
     }
-    if (!authToken.token) {
+    if (authToken.token) {
         initializeFeedback();
     }
 
@@ -87,8 +88,8 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
             },
             userEmail: ' ',  // Replaced by the user email
             userEmailConsentDefault: false, // Should the email checkbox be checked
-            emailPolicyValue: policies.data.email,
-            screenshotPolicyValue: policies.data.screenshot,
+            emailPolicyValue: policies?.data?.email,
+            screenshotPolicyValue: policies?.data?.screenshot,
             customResourcesSetExternally: 2 // None = 0, Css = 1, Strings = 2, CssAndStrings = 3
         };
 
@@ -96,9 +97,6 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
             autoDismiss: 2,
             campaignDefinitions: CampaignDefinitions,
             surveyEnabled: true,
-            // onSurveyActivatedCallback: {  //callback implementation
-            //     onSurveyActivated
-            // },
             onDismiss: (campaignId: string, submitted: boolean) => {
                 if (submitted) {
                     dispatch(setQueryResponseStatus({

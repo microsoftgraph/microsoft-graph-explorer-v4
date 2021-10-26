@@ -111,7 +111,7 @@ export class Request extends Component<IRequestComponent, any> {
       );
     }
 
-    if (!tokenPresent) {
+    if (tokenPresent) {
       pivotItems.push(
         <PivotItem
           key='feedback'
