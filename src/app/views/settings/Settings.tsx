@@ -39,7 +39,7 @@ import { togglePermissionsPanel } from '../../services/actions/permissions-panel
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
 import { toggleTourState } from '../../services/actions/tour-action-creator';
-import { advancedFeaturesList, beginnerFeaturesList } from '../tour/utils/itemsFeatured'
+import { featuresList } from '../tour/utils/featuresList'
 import { translateMessage } from '../../utils/translate-messages';
 
 function Settings(props: ISettingsProps) {
@@ -349,7 +349,8 @@ function Settings(props: ISettingsProps) {
                 <DocumentCardDetails>
                   <DocumentCardTitle title={messages['Beginner Tour']} shouldTruncate
                     styles={{root:{textAlign: 'center'}}} />
-                  <List items={beginnerFeaturesList} style={{padding:'1px', margin:'10px', lineHeight:'1.8'}}
+                  <List items={featuresList.filter((listItem:any) => listItem.advanced === false)}
+                    style={{padding:'1px', margin:'10px', lineHeight:'1.8'}}
                     onRenderCell={onRenderCell} />
                 </DocumentCardDetails>
               </DocumentCard>
@@ -361,7 +362,8 @@ function Settings(props: ISettingsProps) {
               >
                 <DocumentCardDetails>
                   <DocumentCardTitle title={messages['Advanced Tour']} styles={{root:{textAlign: 'center'}}}  />
-                  <List items={advancedFeaturesList} style={{padding:'1px', margin:'10px', lineHeight:'1.8'}}
+                  <List items={featuresList.filter( (listItem:any ) => listItem.advanced === true)}
+                    style={{padding:'1px', margin:'10px', lineHeight:'1.8'}}
                     onRenderCell={onRenderCell} />
                 </DocumentCardDetails>
               </DocumentCard>

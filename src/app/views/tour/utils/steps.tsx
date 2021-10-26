@@ -6,17 +6,16 @@ import { FETCH_ADAPTIVE_CARD_SUCCESS, GET_SNIPPET_SUCCESS,
   PROFILE_REQUEST_SUCCESS, QUERY_GRAPH_SUCCESS, SET_SAMPLE_QUERY_SUCCESS,
   VIEW_HISTORY_ITEM_SUCCESS } from '../../../services/redux-constants';
 import { geLocale } from '../../../../appLocale';
+import { translateMessage } from '../../../utils/translate-messages';
 
 export const BEGINNER_TOUR : ITourSteps[] = [
   {
     target:'.query-box',
-    content:(
-      <FormattedMessage id='Query box message beginner'/>
-    ),
+    content: translateMessage('Query box message beginner'),
     directionalHint: DirectionalHint.leftBottomEdge,
     spotlightClicks: true,
     hideCloseButton:true,
-    title:<FormattedMessage id='Query title'/>,
+    title: translateMessage('Query title'),
     autoNext: false,
     disableBeacon: true,
     expectedActionType: QUERY_GRAPH_SUCCESS,
@@ -29,21 +28,17 @@ export const BEGINNER_TOUR : ITourSteps[] = [
   },
   {
     target: '.pivot-response *[data-content="Response preview xx"]',
-    content:(
-      <FormattedMessage id='Response preview message' />
-    ),
+    content: translateMessage('Response preview message'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    title:<FormattedMessage id='Response Preview'/>,
+    title: translateMessage('Response Preview'),
     autoNext: true,
     disableBeacon: true
   },
   {
     target:'.response-preview-body',
-    content:(
-      <FormattedMessage id='Response body profile message'/>
-    ),
-    title:<FormattedMessage id='API Response'/>,
+    content:translateMessage('Response body profile message'),
+    title:translateMessage('API Response'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     disableBeacon: true
@@ -51,32 +46,26 @@ export const BEGINNER_TOUR : ITourSteps[] = [
   },
   {
     target: '.sample-queries-navigation',
-    content: (
-      <FormattedMessage id='Sample queries message'/>),
-    placement:'right-start',
+    content: translateMessage('Sample queries message'),
     spotlightClicks: true,
-    title:<FormattedMessage id='Sample Queries'/>,
+    title: translateMessage('Sample Queries'),
     directionalHint: DirectionalHint.rightTopEdge,
     disableBeacon: true,
     expectedActionType: QUERY_GRAPH_SUCCESS
   },
   {
     target: '.pivot-response *[data-content="Response preview xx"]',
-    content:(
-      <FormattedMessage id='Response preview message' />
-    ),
+    content: translateMessage('Response preview message'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    title:<FormattedMessage id='Response Preview'/>,
+    title: translateMessage('Response Preview'),
     autoNext: true,
     disableBeacon: true
   },
   {
     target:'.response-preview-body',
-    content:(
-      <FormattedMessage id='Response body message'/>
-    ),
-    title:<FormattedMessage id='API Response'/>,
+    content: translateMessage('Response body message'),
+    title: translateMessage('API Response'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     disableBeacon: true
@@ -84,10 +73,8 @@ export const BEGINNER_TOUR : ITourSteps[] = [
   },
   {
     target: '.side-bar-pivot *[data-content="History xx"]',
-    content:(
-      <FormattedMessage id='History button message' />
-    ),
-    title:<FormattedMessage id='History items'/>,
+    content: translateMessage('History button message'),
+    title: translateMessage('History items'),
     spotlightClicks: true,
     directionalHint: DirectionalHint.rightCenter,
     disableBeacon: true,
@@ -95,10 +82,8 @@ export const BEGINNER_TOUR : ITourSteps[] = [
   },
   {
     target: '.history-items',
-    content:(
-      <FormattedMessage id='History message' />
-    ),
-    title:<FormattedMessage id='History items'/>,
+    content: translateMessage('History message'),
+    title: translateMessage('History items'),
     spotlightClicks: true,
     directionalHint: DirectionalHint.rightCenter,
     disableBeacon: true,
@@ -106,21 +91,17 @@ export const BEGINNER_TOUR : ITourSteps[] = [
   },
   {
     target: '.pivot-response *[data-content="Response preview xx"]',
-    content:(
-      <FormattedMessage id='Response preview message' />
-    ),
+    content: translateMessage('Response preview message'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    title:<FormattedMessage id='Response Preview'/>,
+    title: translateMessage('Response Preview'),
     autoNext:true,
     disableBeacon: true
   },
   {
     target:'.response-preview-body',
-    content:(
-      <FormattedMessage id='History item API response' />
-    ),
-    title:<FormattedMessage id='Response Preview'/>,
+    content: translateMessage('History item API response'),
+    title: translateMessage('Response Preview'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     disableBeacon: true
@@ -135,13 +116,10 @@ const adaptiveCardsDocsLink=`https://docs.microsoft.com/${geLocale}/adaptive-car
 export const ADVANCED_TOUR : ITourSteps[] = [
   {
     target: '.sign-in-section',
-    content: (
-      <FormattedMessage id='Sign in message'/>
-    ),
+    content: translateMessage('Sign in message'),
     disableBeacon: true,
     spotlightClicks: true,
-    placement:'right-end',
-    title: <FormattedMessage id='Sign in'/>,
+    title: translateMessage('Sign in'),
     directionalHint: DirectionalHint.rightTopEdge,
     expectedActionType: PROFILE_REQUEST_SUCCESS
   },
@@ -156,41 +134,35 @@ export const ADVANCED_TOUR : ITourSteps[] = [
         </Link>
       </>
     ),
-    title:<FormattedMessage id='More actions'/>,
+    title: translateMessage('More actions'),
     spotlightClicks: true,
     directionalHint: DirectionalHint.leftCenter,
     disableBeacon: true
   },
   {
     target:'.request-option',
-    content:(
-      <FormattedMessage id='Request option message'/>
-    ),
+    content: translateMessage('Request option message'),
     directionalHint: DirectionalHint.leftBottomEdge,
     spotlightClicks: true,
-    title: <FormattedMessage id='HTTP request method option' />,
+    title: translateMessage('HTTP request method option'),
     disableBeacon: true,
     expectedActionType: SET_SAMPLE_QUERY_SUCCESS
   },
   {
     target: '.query-version',
-    content: (
-      <FormattedMessage id='Query version message'/>
-    ),
+    content: translateMessage('Query version message'),
     directionalHint: DirectionalHint.bottomCenter,
     spotlightClicks: true,
-    title: <FormattedMessage id='Microsoft Graph API Version option' />,
+    title: translateMessage('Microsoft Graph API Version option'),
     disableBeacon: true,
     expectedActionType: SET_SAMPLE_QUERY_SUCCESS
   },
   {
     target:'.query-box',
-    content:(
-      <FormattedMessage id='Query box message advanced' />
-    ),
+    content: translateMessage('Query box message advanced'),
     directionalHint: DirectionalHint.leftBottomEdge,
     spotlightClicks: true,
-    title:<FormattedMessage id='Query title'/>,
+    title: translateMessage('Query title'),
     autoNext: false,
     disableBeacon: true,
     expectedActionType: QUERY_GRAPH_SUCCESS,
@@ -203,12 +175,10 @@ export const ADVANCED_TOUR : ITourSteps[] = [
   },
   {
     target: '.pivot-response *[data-content="Response preview xx"]',
-    content:(
-      <FormattedMessage id='Response preview message' />
-    ),
+    content: translateMessage('Response preview message'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    title:<FormattedMessage id='Response Preview'/>,
+    title: translateMessage('Response Preview'),
     autoNext:true,
     disableBeacon: true,
     query:{
@@ -220,31 +190,25 @@ export const ADVANCED_TOUR : ITourSteps[] = [
   },
   {
     target:'.response-preview-body',
-    content:(
-      <FormattedMessage id='Response body message' />
-    ),
-    title:<FormattedMessage id='Response Preview'/>,
+    content: translateMessage('Response body message'),
+    title: translateMessage('Response Preview'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     disableBeacon: true
   },
   {
     target: '.pivot-response *[data-content="Response headers xx"]',
-    content:(
-      <FormattedMessage id='Response headers button message' />
-    ),
+    content: translateMessage('Response headers button message'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    title:<FormattedMessage id='Response Headers'/>,
+    title: translateMessage('Response Headers'),
     autoNext:true,
     disableBeacon: true
   },
   {
     target: '.response-headers-body',
-    content:(
-      <FormattedMessage id='Response headers message'/>
-    ),
-    title:<FormattedMessage id='Response headers viewer' />,
+    content: translateMessage('Response headers message'),
+    title: translateMessage('Response headers viewer'),
     spotlightClicks: true,
     directionalHint: DirectionalHint.topLeftEdge,
     disableBeacon: true
@@ -260,7 +224,7 @@ export const ADVANCED_TOUR : ITourSteps[] = [
         </Link>
       </>
     ),
-    title:<FormattedMessage id='Graph toolkit' />,
+    title: translateMessage('Graph toolkit'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     autoNext: true,
@@ -268,10 +232,8 @@ export const ADVANCED_TOUR : ITourSteps[] = [
   },
   {
     target: '.toolkit-component-area',
-    content:(
-      <FormattedMessage id='Toolkit component message' />
-    ),
-    title:<FormattedMessage id='Graph toolkit' />,
+    content: translateMessage('Toolkit component message'),
+    title: translateMessage('Graph toolkit'),
     spotlightClicks: true,
     directionalHint: DirectionalHint.topCenter,
     disableBeacon: true
@@ -287,7 +249,7 @@ export const ADVANCED_TOUR : ITourSteps[] = [
         </Link>
       </>
     ),
-    title:( <FormattedMessage id='Adaptive Cards'/> ),
+    title: translateMessage('Adaptive Cards'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     autoNext:true,
@@ -296,10 +258,8 @@ export const ADVANCED_TOUR : ITourSteps[] = [
   },
   {
     target: '.adaptive-cards-response',
-    content: (
-      <FormattedMessage id='Adaptive cards message'/>
-    ),
-    title:<FormattedMessage id='Adaptive Cards' />,
+    content: translateMessage('Adaptive cards message'),
+    title: translateMessage('Adaptive Cards'),
     spotlightClicks: true,
     directionalHint: DirectionalHint.topCenter,
     disableBeacon: true
@@ -307,11 +267,9 @@ export const ADVANCED_TOUR : ITourSteps[] = [
   },
   {
     target: '.pivot-response *[data-content="Code snippets xx"]',
-    content:(
-      <FormattedMessage id='Code snippets button message'/>
-    ),
+    content: translateMessage('Code snippets button message'),
     directionalHint: DirectionalHint.topCenter,
-    title:<FormattedMessage id='Snippets' />,
+    title: translateMessage('Snippets'),
     spotlightClicks: true,
     autoNext: false,
     disableBeacon: true,
@@ -319,20 +277,16 @@ export const ADVANCED_TOUR : ITourSteps[] = [
   },
   {
     target: '.code-snippet-body',
-    content: (
-      <FormattedMessage id='Code snippets message'/>
-    ),
-    title:<FormattedMessage id='Snippets' />,
+    content: translateMessage('Code snippets message'),
+    title: translateMessage('Snippets'),
     spotlightClicks: true,
     directionalHint: DirectionalHint.topLeftEdge,
     disableBeacon: true
   },
   {
     target: '.query-response *[data-content="Share xx"]',
-    content: (
-      <FormattedMessage id='Share query message'/>
-    ),
-    title: <FormattedMessage id='Share Query'/>,
+    content: translateMessage('Share query message'),
+    title: translateMessage('Share Query'),
     spotlightClicks: true,
     disableBeacon: true
   }
@@ -341,10 +295,8 @@ export const ADVANCED_TOUR : ITourSteps[] = [
 export const COMPONENT_INFO : ITourSteps[] = [
   {
     target: '.pivot-response *[data-content="Toolkit component xx"]',
-    content:(
-      <FormattedMessage id='Toolkit component button message' />
-    ),
-    title:<FormattedMessage id='Graph toolkit' />,
+    content: translateMessage('Toolkit component button message'),
+    title: translateMessage('Graph toolkit'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     autoNext: false,
@@ -353,34 +305,28 @@ export const COMPONENT_INFO : ITourSteps[] = [
   },
   {
     target: '.pivot-response *[data-content="Response preview xx"]',
-    content:(
-      <FormattedMessage id='Response preview message' />
-    ),
+    content: translateMessage('Response preview message'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    title:<FormattedMessage id='Response Preview'/>,
+    title: translateMessage('Response Preview'),
     autoNext:false,
     infoStep: true,
     disableBeacon: true
   },
   {
     target: '.pivot-response *[data-content="Response headers xx"]',
-    content:(
-      <FormattedMessage id='Response headers button message' />
-    ),
+    content: translateMessage('Response headers button message'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    title:<FormattedMessage id='Response Headers'/>,
+    title: translateMessage('Response Headers'),
     autoNext:false,
     infoStep: true,
     disableBeacon: true
   },
   {
     target: '.pivot-response *[data-content="Adaptive cards xx"]',
-    content:(
-      <FormattedMessage id='Adaptive cards button message'/>
-    ),
-    title:<FormattedMessage id='Adaptive Cards' />,
+    content: translateMessage('Adaptive cards button message'),
+    title: translateMessage('Adaptive Cards'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
     autoNext:false,
@@ -389,11 +335,9 @@ export const COMPONENT_INFO : ITourSteps[] = [
   },
   {
     target: '.pivot-response *[data-content="Code snippets xx"]',
-    content:(
-      <FormattedMessage id='Code snippets button message'/>
-    ),
+    content: translateMessage('Code snippets button message'),
     directionalHint: DirectionalHint.topCenter,
-    title:<FormattedMessage id='Snippets' />,
+    title: translateMessage('Snippets'),
     spotlightClicks: true,
     autoNext: true,
     infoStep: true,
@@ -401,10 +345,8 @@ export const COMPONENT_INFO : ITourSteps[] = [
   },
   {
     target: '.query-response *[data-content="Share xx"]',
-    content: (
-      <FormattedMessage id='Share query message'/>
-    ),
-    title: <FormattedMessage id='Share Query'/>,
+    content: translateMessage('Share query message'),
+    title: translateMessage('Share Query'),
     spotlightClicks: true,
     infoStep: true,
     disableBeacon: true
