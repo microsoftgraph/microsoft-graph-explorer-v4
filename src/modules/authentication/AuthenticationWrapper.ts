@@ -97,17 +97,35 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   public async getToken() {
-    const resourceId = 'https://clients.config.office.net/'
     const silentRequest: SilentRequest = {
       scopes: defaultScopes, authority: this.getAuthority(),
       account: this.getAccount(), redirectUri: getCurrentUri()
     };
     try {
-      const graphToken: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
-      // const ocpsToken: AuthenticationResult = await msalApplication.acquireTokenSilent({ scopes: [resourceId + '/user_impersonation'], account: this.getAccount() });
-      return graphToken;
+      const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
+      return response;
     } catch (error) {
 
+      throw error;
+    }
+  }
+
+  public async getOcpsToken() {
+    const resourceId = 'https://clients.config.office.net/';
+    const ocpsAccessTokenRequest = {
+      scopes: [resourceId + '/.default'],
+      account: this.getAccount()
+    }
+    try {
+      const ocpsToken: string = (await msalApplication.acquireTokenSilent(ocpsAccessTokenRequest)).accessToken;
+      return ocpsToken;
+    } catch (error) {
+      if (error instanceof InteractionRequiredAuthError) {
+        msalApplication.acquireTokenPopup(ocpsAccessTokenRequest).then(function (ocpsAccessTokenRequest) {
+          const ocpsToken = ocpsAccessTokenRequest.accessToken;
+          return ocpsToken;
+        })
+      }
       throw error;
     }
   }
