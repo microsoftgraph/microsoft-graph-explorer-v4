@@ -214,7 +214,7 @@ const ResourceExplorer = (props: any) => {
         />
         <hr />
         <div className='row'>
-          <div className='col-xs-12 col-lg-6 col-md-6'>
+          <div className='col-xs-12 col-lg-7 col-md-7'>
             <ChoiceGroup
               label={translateMessage('Select version')}
               defaultSelectedKey={version}
@@ -222,7 +222,7 @@ const ResourceExplorer = (props: any) => {
               onChange={changeVersion}
             />
           </div>
-          <div className='col-xs-12 col-lg-6 col-md-6'>
+          <div className='col-xs-12 col-lg-5 col-md-5'>
             <Label><FormattedMessage id='Methods available' /></Label>
             <Stack tokens={{ childrenGap: 3 }}>
               {httpMethods.map((method: IDropdownOption, index: number) => {
@@ -231,8 +231,7 @@ const ResourceExplorer = (props: any) => {
                   const chkStyles: ICheckboxStyles = {
                     checkbox: [
                       { background },
-                      properties.checked && { background },
-                      properties.disabled && { background }
+                      properties.checked && { background }
                     ]
                   };
                   return chkStyles;
@@ -243,7 +242,7 @@ const ResourceExplorer = (props: any) => {
                     styles={checkBoxStyles}
                     key={index}
                     label={method.text}
-                    disabled
+                    defaultChecked
                   />
                 );
               })}
