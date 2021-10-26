@@ -13,14 +13,14 @@ export function policies(state = initialState, action: IAction): any {
         case GET_POLICY_SUCCESS:
             return {
                 pending: false,
-                data: action.response as object,
+                data: action.response,
                 error: null
             };
         case GET_POLICY_ERROR:
             return {
                 pending: false,
                 data: null,
-                error: action.response as object
+                error: action.response
             };
         case GET_POLICY_PENDING:
             return {
