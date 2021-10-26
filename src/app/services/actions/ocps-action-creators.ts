@@ -1,3 +1,4 @@
+import { authenticationWrapper } from "../../../modules/authentication";
 import { IAction } from "../../../types/action";
 import { IRequestOptions } from '../../../types/request';
 import {
@@ -35,14 +36,15 @@ export function getPoliciesPending(): any {
 // TODO: Test this function
 export function getPolicies(): Function {
     return async (dispatch: Function) => {
-        const policyUrl = 'https://clients.config.office.net/user/v1.0/web/policies';
+        const policyUrl = 'https://sip.clients.config.office.net/user/v1.0/web/policies';
+        const token = authenticationWrapper.getOcpsToken();
 
         const headers = {
             'Content-Type': 'application/json',
-            'Authorization': '', //TODO: Add token
-            'x-Cid': '' //TODO: Add a random GUID
+            'Authorization': 'Bearer ' + token, //TODO: Add token
+
         };
-        const options: IRequestOptions = { headers };
+        const options: IRequestOptions = { headers, method: 'GET' };
         dispatch(getPoliciesPending());
 
         try {
@@ -52,7 +54,7 @@ export function getPolicies(): Function {
             }
             const res = await response.json();
             const policy = getPolicy(res);
-            return dispatch(getPoliciesSuccess(policy)); // TODO: confirm if value is the correct field needed
+            return dispatch(getPoliciesSuccess(policy));
         } catch (error) {
             return dispatch(getPoliciesError({ error }));
         }
@@ -78,3 +80,5 @@ export function getPolicy(response: any): IPolicyValues {
     }
     return values;
 }
+
+
