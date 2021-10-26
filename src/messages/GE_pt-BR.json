@@ -351,7 +351,7 @@
   "Scope consent failed": "O consentimento do escopo falhou",
   "Missing url": "Inserir um URL válido para executar a consulta",
   "This response contains an @odata property.": "Esta resposta contém uma propriedade @odata.",
-  "Click here to follow the link": "Clique aqui para seguir o link",
+  "Click here to follow the link": "Clique aqui para seguir o link.",
   "Signing you out...": "Saindo...",
   "Admin consent not required": "O consentimento do administrador não é necessário",
   "Navigation help": "Navegar com a tecla de seta para a direita para acessar",
@@ -378,5 +378,13 @@
   "consent_required_consent": "Concorde com a permissão para acessar esse recurso.",
   "interaction_required_consent": "Aguarde a conclusão do processo de consentimento e verifique se os pop-ups estão habilitados.",
   "user_cancelled_consent": "Aguarde o término do processo de consentimento.",
-  "access_denied_consent": "Seu consentimento com essa permissão foi bloqueado pelo administrador de locatários. Peça a seu administrador que lhe conceda acesso e depois tente novamente."
+  "access_denied_consent": "Seu consentimento com essa permissão foi bloqueado pelo administrador de locatários. Peça a seu administrador que lhe conceda acesso e depois tente novamente.",
+  "This response contains unviewable content": "Esta resposta contém conteúdo que pode não ser visível neste editor.",
+  "Click to download file": "Clique para baixar o arquivo.",
+  "File response is available in original format only": "Devido às limitações da solução alternativa, o arquivo só está disponível para download em seu formato original.",
+  "Response is result of workaround": "Uma consulta alternativa foi usada para buscar a URL de download, pois a URL redirecionada da solicitação original não está em conformidade com CORS.",
+  "For more information": "Para obter mais informações, consulte:",
+  "documentation": "documentação",
+  "Missing response headers for query workaround": "Alguns cabeçalhos, normalmente retornados para essa solicitação, podem estar ausentes devido às limitações da solução alternativa.",
+  "Learn more": "Saiba mais"
 }
