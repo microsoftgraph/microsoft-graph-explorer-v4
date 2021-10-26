@@ -37,7 +37,7 @@ export function getPoliciesPending(): any {
 export function getPolicies(): Function {
     return async (dispatch: Function) => {
         const policyUrl = 'https://sip.clients.config.office.net/user/v1.0/web/policies';
-        const token = authenticationWrapper.getOcpsToken();
+        const token = await authenticationWrapper.getOcpsToken();
 
         const headers = {
             'Content-Type': 'application/json',
