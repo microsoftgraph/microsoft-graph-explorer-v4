@@ -1,14 +1,16 @@
 import {
-  Breadcrumb, ChoiceGroup, ContextualMenuItemType, DefaultButton,
-  IBreadcrumbItem, IChoiceGroupOption, Icon, INavLink,
-  Label, Nav, SearchBox, Spinner, SpinnerSize, styled
+  Breadcrumb, Checkbox, ChoiceGroup, ContextualMenuItemType, DefaultButton,
+  IBreadcrumbItem, ICheckboxStyleProps, ICheckboxStyles, IChoiceGroupOption, Icon, IDropdownOption, INavLink,
+  Label, Nav, SearchBox, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
+import { httpMethods } from '../../../../types/query-runner';
 import { IResource } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
+import { getStyleFor } from '../../../utils/badge-color';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -211,12 +213,44 @@ const ResourceExplorer = (props: any) => {
           styles={{ field: { paddingLeft: 10 } }}
         />
         <hr />
-        <ChoiceGroup
-          label={translateMessage('Select version')}
-          defaultSelectedKey={version}
-          options={versions}
-          onChange={changeVersion}
-        />
+        <div className='row'>
+          <div className='col-xs-12 col-lg-6 col-md-6'>
+            <ChoiceGroup
+              label={translateMessage('Select version')}
+              defaultSelectedKey={version}
+              options={versions}
+              onChange={changeVersion}
+            />
+          </div>
+          <div className='col-xs-12 col-lg-6 col-md-6'>
+            <Label><FormattedMessage id='Methods available' /></Label>
+            <Stack tokens={{ childrenGap: 3 }}>
+              {httpMethods.map((method: IDropdownOption, index: number) => {
+                const checkBoxStyles = (properties: ICheckboxStyleProps): ICheckboxStyles => {
+                  const background = getStyleFor(method.text);
+                  const chkStyles: ICheckboxStyles = {
+                    checkbox: [
+                      { background },
+                      properties.checked && { background },
+                      properties.disabled && { background }
+                    ]
+                  };
+                  return chkStyles;
+                };
+
+                return (
+                  <Checkbox
+                    styles={checkBoxStyles}
+                    key={index}
+                    label={method.text}
+                    disabled
+                  />
+                );
+              })}
+            </Stack>
+          </div>
+        </div>
+        <br />
       </>}
 
       {isolated && breadCrumbs.length > 0 &&
