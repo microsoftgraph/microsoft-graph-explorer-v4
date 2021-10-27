@@ -1,21 +1,20 @@
 import {
-  Breadcrumb, Checkbox, ChoiceGroup, ContextualMenuItemType, DefaultButton,
-  IBreadcrumbItem, ICheckboxStyleProps, ICheckboxStyles, IChoiceGroupOption, Icon, IDropdownOption, INavLink,
-  Label, Nav, SearchBox, Spinner, SpinnerSize, Stack, styled
+  Breadcrumb, ChoiceGroup, ContextualMenuItemType, DefaultButton,
+  IBreadcrumbItem, IChoiceGroupOption, Icon, INavLink,
+  Label, Nav, SearchBox, Spinner, SpinnerSize, styled
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
-import { httpMethods } from '../../../../types/query-runner';
 import { IResource } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
-import { getStyleFor } from '../../../utils/badge-color';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import LinkItem from './LinkItem';
 import MethodIndicator from './MethodIndicator';
+import AvailableMethods from './methods/AvailableMethods';
 import {
   createList, getAvailableMethods, getCurrentTree,
   getResourcesSupportedByVersion, removeCounter
@@ -164,6 +163,11 @@ const ResourceExplorer = (props: any) => {
     }
   };
 
+  const filterContent = (selection: string[]) => {
+    const filtered = getResourcesSupportedByVersion(data, version, selection);
+    setItems(createList(filtered.children, version));
+  }
+
   const renderCustomLink = (properties: any) => {
     const menuItems = [
       {
@@ -182,7 +186,7 @@ const ResourceExplorer = (props: any) => {
         });
     }
 
-    const methods = getAvailableMethods(properties.labels, version);
+    const availableMethods = getAvailableMethods(properties.labels, version);
 
     return <LinkItem
       style={{
@@ -196,13 +200,12 @@ const ResourceExplorer = (props: any) => {
       <span style={{ display: 'flex' }}>
         {!!properties.iconProperties && <Icon style={{ margin: '0 4px' }} {...properties.iconProperties} />}
         {properties.name}
-        {methods.length > 0 && <MethodIndicator methods={methods} key={properties.key} />}
+        {availableMethods.length > 0 && <MethodIndicator methods={availableMethods} key={properties.key} />}
       </span>
     </LinkItem>;
   }
 
   const breadCrumbs = (!!isolated) ? generateBreadCrumbs() : [];
-
   return (
     <section>
       {!isolated && <>
@@ -224,29 +227,7 @@ const ResourceExplorer = (props: any) => {
           </div>
           <div className='col-xs-12 col-lg-5 col-md-5'>
             <Label><FormattedMessage id='Methods available' /></Label>
-            <Stack tokens={{ childrenGap: 3 }}>
-              {httpMethods.map((method: IDropdownOption, index: number) => {
-                const checkBoxStyles = (properties: ICheckboxStyleProps): ICheckboxStyles => {
-                  const background = getStyleFor(method.text);
-                  const chkStyles: ICheckboxStyles = {
-                    checkbox: [
-                      { background },
-                      properties.checked && { background }
-                    ]
-                  };
-                  return chkStyles;
-                };
-
-                return (
-                  <Checkbox
-                    styles={checkBoxStyles}
-                    key={index}
-                    label={method.text}
-                    defaultChecked
-                  />
-                );
-              })}
-            </Stack>
+            <AvailableMethods changeAvailableMethods={filterContent} />
           </div>
         </div>
         <br />

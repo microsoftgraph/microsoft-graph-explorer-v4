@@ -74,18 +74,44 @@ export function removeCounter(title: string): string {
   return title.split(' (')[0].trim();
 }
 
-export function getResourcesSupportedByVersion(content: IResource, version: string): IResource {
+export function getResourcesSupportedByVersion(content: IResource, version: string, methods?: string[]): IResource {
   const resources: IResource = { ...content };
   const children: IResource[] = [];
+
   resources.children.forEach((child: IResource) => {
-    if (versionExists(child, version)) { children.push(child); }
+    if (versionExists(child, version)) {
+      if (methods) {
+        const listOfMethods: string[] = [];
+        methods.forEach(method => {
+          listOfMethods.push(toTitleCase(method));
+        });
+        if (methodsExist(child, listOfMethods, version)) {
+          children.push(child);
+        }
+      } else {
+        children.push(child);
+      }
+    }
   });
   resources.children = children;
+
   return resources;
+}
+
+
+function toTitleCase(word: string) {
+  function capitalizeFirstLetter(text: string) {
+    return text[0].toUpperCase() + text.slice(1).toLowerCase();
+  }
+  return word.split(' ').map((letter: string) => capitalizeFirstLetter(letter)).join(' ');
 }
 
 export function versionExists(child: IResource, version: string): boolean {
   return !!child.labels.find(k => k.name === version);
+}
+export function methodsExist(child: IResource, methods: string[], version: string): boolean {
+  const methodsAtVersion = child.labels.filter(m => m.name === version)[0].methods;
+  return methods.every(r => methodsAtVersion.includes(r));
 }
 
 export function getAvailableMethods(labels: IResourceLabel[], version: string): string[] {
