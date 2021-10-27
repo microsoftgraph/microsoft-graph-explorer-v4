@@ -75,13 +75,6 @@ const ResourceExplorer = (props: any) => {
     return [];
   }
 
-  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
-    ev!.preventDefault();
-    if (item && item.name) {
-      alert(item.name + ' link clicked');
-    }
-  }
-
   const changeVersion = (ev: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
     option: IChoiceGroupOption | undefined): void => {
     const selectedVersion = option!.key;
@@ -254,7 +247,6 @@ const ResourceExplorer = (props: any) => {
       </Label>
       <Nav
         groups={items}
-        onLinkClick={clickLink}
         styles={navStyles}
         onRenderLink={renderCustomLink}
         className={classes.queryList} />
