@@ -5,7 +5,7 @@ import { CLEAR_QUERY_STATUS, CLEAR_RESPONSE, QUERY_GRAPH_STATUS } from '../redux
 export function setQueryResponseStatus(response: object): IAction {
   return {
     type: QUERY_GRAPH_STATUS,
-    response,
+    response
   };
 }
 

@@ -1,4 +1,4 @@
-name: Azure Static Web Apps CI/CD
+name: Static preview site creation
 
 on:
   push:

@@ -3,20 +3,20 @@ import { Mode } from './enums';
 import { Header, IQuery } from './query-runner';
 
 export interface IHeadersListControl {
-    handleOnHeaderDelete: Function;
-    headers?: Header[];
-    messages: any;
+  handleOnHeaderDelete: Function;
+  headers?: Header[];
+  messages: any;
 }
 
 export interface IRequestHeadersProps {
-    sampleQuery: IQuery;
-    height: string;
-    actions?: {
-        setSampleQuery: Function;
-    };
-    intl: {
-        message: object;
-    };
+  sampleQuery: IQuery;
+  height: string;
+  actions?: {
+    setSampleQuery: Function;
+  };
+  intl: {
+    message: object;
+  };
 }
 
 export interface IRequestComponent {
@@ -36,13 +36,13 @@ export interface IRequestComponent {
 }
 
 export interface IRequestOptions {
-    headers?: {};
-    method?: string;
-    body?: string | undefined;
+  headers?: {};
+  method?: string;
+  body?: string | undefined;
 }
 
 export interface IRequestState {
-    headers: Header[];
-    headerName: string;
-    headerValue: string;
+  headers: Header[];
+  headerName: string;
+  headerValue: string;
 }

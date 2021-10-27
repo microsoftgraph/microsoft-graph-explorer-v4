@@ -8,18 +8,18 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('Terms of Use Action Creators', () => {
-    it('Sets terms of use flag to false', () => {
-      const expectedAction = [
-        {
-          type: CLEAR_TERMS_OF_USE,
-        },
-      ];
+  it('Sets terms of use flag to false', () => {
+    const expectedAction = [
+      {
+        type: CLEAR_TERMS_OF_USE
+      }
+    ];
 
-      const store = mockStore({ termsOfUse: {} });
+    const store = mockStore({ termsOfUse: {} });
 
     // @ts-ignore
     store.dispatch(clearTermsOfUse({
-        termsOfUse: false
+      termsOfUse: false
     }));
     expect(store.getActions()).toEqual(expectedAction);
   });

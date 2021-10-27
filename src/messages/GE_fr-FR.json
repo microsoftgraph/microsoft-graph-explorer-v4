@@ -351,7 +351,7 @@
   "Scope consent failed": "Échec du consentement pour l’étendue",
   "Missing url": "Veuillez entrez une URL valide pour exécuter la requête",
   "This response contains an @odata property.": "Cette réponse contient une propriété @odata.",
-  "Click here to follow the link": "Cliquez ici pour suivre le lien",
+  "Click here to follow the link": "Cliquez ici pour suivre le lien.",
   "Signing you out...": "Déconnexion en cours...",
   "Admin consent not required": "L’autorisation de l’administrateur n’est pas requise.",
   "Navigation help": "Naviguez avec la touche fléchée droite pour accéder à",
@@ -378,5 +378,13 @@
   "consent_required_consent": "Veuillez accepter l’autorisation d’accéder à cette fonctionnalité.",
   "interaction_required_consent": "Veuillez patienter jusqu’à la fin du processus de consentement et vérifiez que les fenêtres contextuelles sont activées.",
   "user_cancelled_consent": "Veuillez patienter jusqu’à la fin du processus de consentement.",
-  "access_denied_consent": "Votre consentement à cette autorisation a été bloqué par votre administrateur client. Demandez à votre administrateur de vous accorder l’accès puis veuillez réessayer."
+  "access_denied_consent": "Votre consentement à cette autorisation a été bloqué par votre administrateur client. Demandez à votre administrateur de vous accorder l’accès puis veuillez réessayer.",
+  "This response contains unviewable content": "Cette réponse contient du contenu qui peut ne pas être visualisable sur cet éditeur.",
+  "Click to download file": "Cliquez pour télécharger le fichier.",
+  "File response is available in original format only": "En raison des limites de la solution de contournement, le fichier ne peut être téléchargé que dans son format original.",
+  "Response is result of workaround": "Une requête alternative a été utilisée pour récupérer l'URL de téléchargement car l'URL redirigée à partir de la requête originale n'est pas conforme à CORS.",
+  "For more information": "Pour plus d'informations, voir",
+  "documentation": "documentation",
+  "Missing response headers for query workaround": "Certains en-têtes, généralement renvoyés pour cette requête, peuvent être manquants en raison des limitations de la solution de contournement.",
+  "Learn more": "En savoir plus"
 }

@@ -2,36 +2,44 @@ import { AgeGroup } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configura
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
 import {
-  ACCOUNT_TYPE, BETA_USER_INFO_URL, DEFAULT_USER_SCOPES,
-  USER_INFO_URL, USER_PICTURE_URL
+  ACCOUNT_TYPE,
+  BETA_USER_INFO_URL,
+  DEFAULT_USER_SCOPES,
+  USER_INFO_URL,
+  USER_PICTURE_URL
 } from '../graph-constants';
-import { PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS } from '../redux-constants';
-import { makeRequest, parseResponse } from './query-action-creator-util';
+import {
+  PROFILE_REQUEST_ERROR,
+  PROFILE_REQUEST_SUCCESS
+} from '../redux-constants';
+import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 import { queryRunningStatus } from './query-loading-action-creators';
 
 export function profileRequestSuccess(response: object): any {
   return {
     type: PROFILE_REQUEST_SUCCESS,
-    response,
+    response
   };
 }
 
 export function profileRequestError(response: object): any {
   return {
     type: PROFILE_REQUEST_ERROR,
-    response,
+    response
   };
 }
 
 const query: IQuery = {
   selectedVerb: 'GET',
-  sampleHeaders: [{
-    name: 'Cache-Control',
-    value: 'no-cache'
-  }],
+  sampleHeaders: [
+    {
+      name: 'Cache-Control',
+      value: 'no-cache'
+    }
+  ],
   selectedVersion: '',
   sampleUrl: ''
-}
+};
 
 export function getProfileInfo(): Function {
   return async (dispatch: Function) => {
@@ -101,7 +109,7 @@ async function getProfileResponse() {
   const scopes = DEFAULT_USER_SCOPES.split(' ');
   const respHeaders: any = {};
 
-  const response = await makeRequest(query.selectedVerb, scopes)(query);
+  const response = await makeGraphRequest(scopes)(query);
   const userInfo = await parseResponse(response, respHeaders);
   return {
     userInfo,

@@ -351,7 +351,7 @@
   "Scope consent failed": "スコープの同意に失敗しました",
   "Missing url": "クエリを実行するには、有効な URL を入力してください",
   "This response contains an @odata property.": "この応答には、@odata プロパティが含まれています。",
-  "Click here to follow the link": "ここをクリックしてリンクをフォローします",
+  "Click here to follow the link": "ここをクリックしてリンクをフォローします。",
   "Signing you out...": "サインアウトしています...",
   "Admin consent not required": "管理者の同意は必要ありません",
   "Navigation help": "右方向キーを使用して移動し、アクセスする",
@@ -378,5 +378,13 @@
   "consent_required_consent": "この機能にアクセスするためのアクセス許可に同意してください。",
   "interaction_required_consent": "同意プロセスが完了するのを待ち、ポップアップが有効になっていることを確認してください。",
   "user_cancelled_consent": "同意プロセスが完了するまでお待ちください。",
-  "access_denied_consent": "このアクセス許可に対する同意は、テナント管理者によってブロックされています。管理者にアクセス権の付与を依頼してから、もう一度お試しください。"
+  "access_denied_consent": "このアクセス許可に対する同意は、テナント管理者によってブロックされています。管理者にアクセス権の付与を依頼してから、もう一度お試しください。",
+  "This response contains unviewable content": "この応答には、このエディターで表示できない可能性があるコンテンツが含まれています。",
+  "Click to download file": "クリックしてファイルをダウンロードします。",
+  "File response is available in original format only": "回避策の制限により、ファイルは元の形式でのみダウンロードできます。",
+  "Response is result of workaround": "元の要求からリダイレクトされた URL が CORS に準拠していないため、代替のクエリを使用してダウンロード URL を取得しました。",
+  "For more information": "詳細については、次を参照してください",
+  "documentation": "ドキュメント",
+  "Missing response headers for query workaround": "この要求に対して通常返される一部のヘッダーは、回避策の制限により欠落している可能性があります。",
+  "Learn more": "詳細情報"
 }

@@ -22,6 +22,7 @@ import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 import { IRootState } from '../../../types/root';
 
+
 const QueryResponse = (props: IQueryResponseProps) => {
   const dispatch = useDispatch();
 
@@ -29,16 +30,29 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [showModal, setShowModal] = useState(false);
   const [query, setQuery] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
-
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
 
+  let isTabletSize: boolean = (windowWidth <= 1320) ? true : false;
+
   const {
-    intl: { messages },
+    intl: { messages }
   }: any = props;
 
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
-  }, [dimensions]);
+    window.addEventListener('resize', handleWindowResize, false);
+    return () => window.removeEventListener('resize', handleWindowResize);
+  }, [dimensions, windowWidth]);
+
+  const handleWindowResize = () => {
+    const currentWindowWidth = window.innerWidth;
+    isTabletSize = false;
+    if (currentWindowWidth <= 1320) {
+      isTabletSize = true;
+    }
+    setWindowWidth(currentWindowWidth);
+  }
 
   const toggleShareQueryDialogState = () => {
     setShareQuaryDialogStatus(!showShareQueryDialog);
@@ -112,17 +126,19 @@ const QueryResponse = (props: IQueryResponseProps) => {
         bounds={'window'}
         size={{
           height: responseHeight,
-          width: '100%',
+          width: '100%'
         }}
         enable={{
-          bottom: false,
+          bottom: false
         }}
       >
         <div className='query-response' style={{
           minHeight: responseHeight,
           height: responseHeight
         }}>
-          <Pivot onLinkClick={handlePivotItemClick} className='pivot-response'>
+
+          <Pivot overflowBehavior="menu" onLinkClick={handlePivotItemClick}
+            className={isTabletSize ? '' : 'pivot-response'} >
             {getPivotItems()}
             <PivotItem
               headerText='Share'
@@ -157,8 +173,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
             styles={{
               root: {
                 float: 'right',
-                zIndex: 1,
-              },
+                zIndex: 1
+              }
             }}
             iconProps={{ iconName: 'Cancel' }}
             ariaLabel={translateMessage('Close expanded response area')}
@@ -176,7 +192,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           type: DialogType.normal,
           title: 'Share Query',
           isMultiline: true,
-          subText: messages['Share Query Message'],
+          subText: messages['Share Query Message']
         }}
       >
         <textarea
@@ -188,7 +204,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
             height: 63,
             overflowY: 'scroll',
             border: 'none',
-            resize: 'none'
+            resize: 'none',
+            color: 'black'
           }}
           id='share-query-text'
           className='share-query-params'

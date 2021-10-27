@@ -355,7 +355,7 @@
   "Signing you out...": "Sie werden abgemeldet...",
   "Admin consent not required": "Administratorzustimmung nicht erforderlich",
   "Navigation help": "Navigieren mit der NACH-RECHTS-TASTE für den Zugriff",
-  "Actions menu": " Menü Aktionen",
+  "Actions menu": " Menü „Aktionen“",
   "user_cancelled": "Bitte warten Sie, bis der Authentifizierungsprozess abgeschlossen ist.",
   "popup_window_error": "Bitte überprüfen Sie, ob Popups aktiviert sind, und versuchen Sie es erneut.",
   "invalid_client": "Bitten Sie Ihren App-Administrator, die App-Anmeldeinformationen (Anwendungsclient-ID) bei Azure-App-Registrierungen zu überprüfen.",
@@ -378,5 +378,13 @@
   "consent_required_consent": "Bitte stimmen Sie der Berechtigung für den Zugriff auf dieses Feature zu.",
   "interaction_required_consent": "Bitte warten Sie, bis der Zustimmungsprozess abgeschlossen ist, und überprüfen Sie, ob Popups aktiviert sind.",
   "user_cancelled_consent": "Bitte warten Sie, bis der Zustimmungsprozess abgeschlossen ist.",
-  "access_denied_consent": "Ihre Zustimmung zu dieser Berechtigung wurde von Ihrem Mandantenadministrator blockiert. Bitten Sie Ihren Administrator, Ihnen Zugriff zu gewähren, und versuchen Sie es dann erneut."
+  "access_denied_consent": "Ihre Zustimmung zu dieser Berechtigung wurde von Ihrem Mandantenadministrator blockiert. Bitten Sie Ihren Administrator, Ihnen Zugriff zu gewähren, und versuchen Sie es dann erneut.",
+  "This response contains unviewable content": "Diese Antwort enthält Inhalte, die in diesem Editor möglicherweise nicht angezeigt werden können.",
+  "Click to download file": "Zum Herunterladen der Datei klicken.",
+  "File response is available in original format only": "Aufgrund der Einschränkungen der Problemumgehung steht die Datei nur im ursprünglichen Format zum Download zur Verfügung.",
+  "Response is result of workaround": "Zum Abrufen der Download-URL wurde eine alternative Abfrage verwendet, da die umgeleitete URL aus der ursprünglichen Anforderung nicht CORS-kompatibel ist.",
+  "For more information": "Weitere Informationen finden Sie unter",
+  "documentation": "Dokumentation",
+  "Missing response headers for query workaround": "Einige Header, die normalerweise für diese Anforderung zurückgegeben werden, fehlen möglicherweise aufgrund der Einschränkungen der Problemumgehung.",
+  "Learn more": "Weitere Informationen"
 }

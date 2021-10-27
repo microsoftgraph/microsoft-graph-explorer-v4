@@ -58,7 +58,7 @@ const Profile = (props: any) => {
     imageUrl: profile.profileImageUrl,
     imageInitials: getInitials(profile.displayName),
     text: profile.displayName,
-    secondaryText: profile.emailAddress,
+    secondaryText: profile.emailAddress
   };
 
   const classes = classNames(props);
@@ -73,29 +73,29 @@ const Profile = (props: any) => {
         href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
         target: '_blank',
         iconProps: {
-          iconName: 'CommandPrompt',
-        },
+          iconName: 'CommandPrompt'
+        }
       },
       {
         key: 'sign-out',
         text: translateMessage('sign out'),
         onClick: () => handleSignOut(),
         iconProps: {
-          iconName: 'SignOut',
-        },
-      },
+          iconName: 'SignOut'
+        }
+      }
     ]
   };
 
   const personaStyleToken: any = {
     primaryText: {
-      paddingBottom: 5,
+      paddingBottom: 5
     },
     secondaryText:
     {
       paddingBottom: 10,
       textTransform: 'lowercase'
-    },
+    }
   };
 
   const defaultSize = minimised ? PersonaSize.size32 : PersonaSize.size48;

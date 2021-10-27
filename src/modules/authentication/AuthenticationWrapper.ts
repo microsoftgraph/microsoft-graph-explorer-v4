@@ -3,13 +3,13 @@ import {
   AuthenticationResult,
   InteractionRequiredAuthError,
   PopupRequest,
-  SilentRequest,
+  SilentRequest
 } from '@azure/msal-browser';
 
 import {
   AUTH_URL,
   DEFAULT_USER_SCOPES,
-  HOME_ACCOUNT_KEY,
+  HOME_ACCOUNT_KEY
 } from '../../app/services/graph-constants';
 import { signInAuthError } from '../../app/views/authentication/AuthenticationErrorsHints';
 import { geLocale } from '../../appLocale';
@@ -142,12 +142,13 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const result = await msalApplication.acquireTokenSilent(silentRequest);
       this.storeHomeAccountId(result.account!);
       return result;
-    } catch (error) {
+    } catch (error: any) {
+      const { errorCode } = error;
       if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
 
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
 
-      } else if (signInAuthError(error)) {
+      } else if (signInAuthError(errorCode)) {
         this.deleteHomeAccountId();
         throw error;
       }
@@ -175,7 +176,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       authority: this.getAuthority(),
       prompt: 'select_account',
       redirectUri: getCurrentUri(),
-      extraQueryParameters: { mkt: geLocale },
+      extraQueryParameters: { mkt: geLocale }
     };
 
     if (this.consentingToNewScopes) {
@@ -192,7 +193,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const result = await msalApplication.loginPopup(popUpRequest);
       this.storeHomeAccountId(result.account!);
       return result;
-    } catch (error) {
+    } catch (error: any) {
       const { errorCode } = error;
       if (signInAuthError(errorCode) && !this.consentingToNewScopes) {
         this.clearSession();
@@ -252,15 +253,15 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
         break;
       }
     }
-    this.createCookie(cookieKey, "", -100);
+    this.createCookie(cookieKey, '', -100);
   }
 
   private createCookie(name: string, value: string, days: number): void {
     let expires = ''
     const date = new Date();
     date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    expires = "; expires=" + date.toUTCString();
-    document.cookie = name + "=" + value + expires + "; path=/";
+    expires = '; expires=' + date.toUTCString();
+    document.cookie = name + '=' + value + expires + '; path=/';
   }
 
   public clearSession(): void {
