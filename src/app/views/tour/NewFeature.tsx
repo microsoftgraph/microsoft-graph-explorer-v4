@@ -69,11 +69,16 @@ const NewFeature = () => {
     hideDialog(dialogHidden);
   }
 
-  const SmileyFace = () => <Icon iconName='Emoji2' />
+  const SmileyFace = () => <Icon iconName='Emoji2'/>
   return(
     <div>
       {!newFeaturePopup && (
-        <Coachmark target={NEW_FEATURE[0].target}>
+        <Coachmark target={NEW_FEATURE[0].target}
+          ariaAlertText={translateMessage('Coachmark')}
+          ariaDescribedBy={translateMessage('Coachmark description')}
+          ariaLabelledBy={getId('coachmark-label')}
+          ariaDescribedByText={translateMessage('Open coachmark')}
+          ariaLabelledByText={translateMessage('Open coachmark')}>
           <TeachingBubbleContent
             headline={NEW_FEATURE[0].title as string}
             hasCloseButton
@@ -82,7 +87,7 @@ const NewFeature = () => {
             secondaryButtonProps={dismissButton}
             isWide={true}
           >
-            <div style={{textAlign: 'center', lineHeight:'1.5' }}>
+            <div style={{textAlign: 'center', lineHeight:'1.5' }} >
               <div><SmileyFace/></div>
               {NEW_FEATURE[0].content}
             </div>

@@ -141,7 +141,12 @@ export const ADVANCED_TOUR : ITourSteps[] = [
   },
   {
     target:'.request-option',
-    content: translateMessage('Request option message'),
+    content: (
+      <>
+        <FormattedMessage id='Request option message' />
+        <span style={{fontWeight: 'bold'}}><FormattedMessage id='GET'/></span>
+      </>
+    ),
     directionalHint: DirectionalHint.leftBottomEdge,
     spotlightClicks: true,
     title: translateMessage('HTTP request method option'),
