@@ -351,7 +351,7 @@
   "Scope consent failed": "Error en el consentimiento del ámbito",
   "Missing url": "Escriba una dirección URL válida para ejecutar la consulta",
   "This response contains an @odata property.": "Esta respuesta contiene una propiedad @odata.",
-  "Click here to follow the link": "Haga clic aquí para seguir el vínculo",
+  "Click here to follow the link": "Haga clic aquí para seguir el vínculo.",
   "Signing you out...": "Cerrando sesión...",
   "Admin consent not required": "No se requiere el consentimiento del administrador",
   "Navigation help": "Navegar con la tecla de flecha derecha para acceder",
@@ -378,5 +378,13 @@
   "consent_required_consent": "Dé su consentimiento para acceder a esta característica.",
   "interaction_required_consent": "Espere a que finalice el proceso de consentimiento y compruebe que los elementos emergentes estén habilitados.",
   "user_cancelled_consent": "Espere a que finalice el proceso de consentimiento.",
-  "access_denied_consent": "El administrador del espacio empresarial ha bloqueado su consentimiento para este permiso. Pida al administrador que le conceda acceso e inténtelo de nuevo."
+  "access_denied_consent": "El administrador del espacio empresarial ha bloqueado su consentimiento para este permiso. Pida al administrador que le conceda acceso e inténtelo de nuevo.",
+  "This response contains unviewable content": "Esta respuesta contiene contenido que puede que no se pueda ver en este editor.",
+  "Click to download file": "Haga clic para descargar el archivo.",
+  "File response is available in original format only": "Debido a las limitaciones de la solución alternativa, el archivo solo está disponible para su descarga en su formato original.",
+  "Response is result of workaround": "Se ha usado una consulta alternativa para capturar la dirección URL de descarga, ya que la dirección URL redirigida de la solicitud original no es compatible con CORS.",
+  "For more information": "Para más información, consulte",
+  "documentation": "documentación",
+  "Missing response headers for query workaround": "Es posible que falten algunos encabezados, que normalmente se devuelven para esta solicitud, debido a las limitaciones de la solución alternativa.",
+  "Learn more": "Más información"
 }
