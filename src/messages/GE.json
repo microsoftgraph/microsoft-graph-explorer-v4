@@ -386,7 +386,7 @@
   "For more information": "For more information, see",
   "documentation": "documentation",
   "Missing response headers for query workaround": "Some headers, typically returned for this request, may be missing due to the limitations of the workaround.",
-  "Learn more": "Learn more"
+  "Learn more": "Learn more",
   "Feedback": "Got feedback?",
   "Comment question": "Tell us more about your experience",
   "Prompt question": "We'd love your Feedback",
@@ -404,5 +404,6 @@
   "You can contact me about this feedback": "You can contact me about this feedback",
   "Privacy Statement": "Privacy Statement",
   "Submitted Successfully": "Submitted Successfully",
-  "Privacy consent": "By pressing submit, your feedback will be used to improve Microsoft products and services. Your IT admin will be able to collect this data"
+  "Privacy consent": "By pressing submit, your feedback will be used to improve Microsoft products and services. Your IT admin will be able to collect this data",
+  "Graph Rating Question": "How likely are you to recommend Microsoft Graph for development to another developer?"
 }

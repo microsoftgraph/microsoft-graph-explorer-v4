@@ -126,7 +126,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
           return ocpsToken;
         })
       }
-      throw error;
     }
   }
 
@@ -143,12 +142,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       this.storeHomeAccountId(result.account!);
       return result;
     } catch (error: any) {
-      const { errorCode } = error;
       if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
 
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
 
-      } else if (signInAuthError(errorCode)) {
+      } else if (signInAuthError(error)) {
         this.deleteHomeAccountId();
         throw error;
       }

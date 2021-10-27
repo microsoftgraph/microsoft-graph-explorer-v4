@@ -29,7 +29,7 @@ export class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {
     super(props)
     this.state = {
-      enableShowSurvey: false,
+      enableShowSurvey: false
     }
   }
 
@@ -177,6 +177,7 @@ export class Request extends Component<IRequestComponent, any> {
     const minHeight = 60;
     const maxHeight = 800;
     return (
+    <>
       <Resizable
         style={{
           border: 'solid 1px #ddd',
@@ -198,27 +199,24 @@ export class Request extends Component<IRequestComponent, any> {
           bottom: true
         }}
       >
-        <Pivot
-          overflowBehavior='menu'
-          onLinkClick={this.onPivotItemClick}
-        >
-          <div className='query-request'>
-            <Pivot
-              onLinkClick={this.handlePivotItemClick}
-              className='pivot-request'
-            >
-              {requestPivotItems}
-            </Pivot>
-          </div>
-
-        </Resizable>
+        <div className='query-request'>
+          <Pivot
+            overflowBehavior = 'menu'
+            onLinkClick={this.handlePivotItemClick}
+            className='pivot-request'
+          >
+            {requestPivotItems}
+          </Pivot>
+        </div>
+      </Resizable>
         <FeedbackForm activated={this.state.enableShowSurvey} dismissSurvey={this.toggleCustomSurvey} />
       </>
     );
   }
 }
 
-function mapStateToProps({ graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions, authToken }: IRootState) {
+function mapStateToProps(
+  { graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions, authToken }: IRootState) {
   return {
     mode: graphExplorerMode,
     sampleBody: sampleQuery.sampleBody,
