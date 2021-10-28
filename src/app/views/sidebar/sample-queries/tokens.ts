@@ -153,7 +153,10 @@ export function getTokens(user?: any) {
         return 'contoso.com';
       },
       authenticatedUserValueFn: () => {
-        return emailAddress.split('@')[1];
+        if (emailAddress) {
+          return emailAddress.split('@')[1];
+        }
+        return '';
       }
     },
     {
