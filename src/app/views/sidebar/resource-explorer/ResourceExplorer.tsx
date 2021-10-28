@@ -16,8 +16,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import LinkItem from './LinkItem';
-import MethodIndicator from './MethodIndicator';
-import AvailableMethods from './methods/AvailableMethods';
+import { MethodIndicator, AvailableMethods } from './methods';
 import {
   createList, getAvailableMethods, getCurrentTree,
   getResourcesSupportedByVersion, removeCounter
@@ -183,11 +182,6 @@ const ResourceExplorer = (props: any) => {
     dispatch(setSampleQuery(query));
   }
 
-  const filterContent = (selection: string[]) => {
-    const filtered = getResourcesSupportedByVersion(data, version, selection);
-    setItems(createList(filtered.children, version));
-  }
-
   const renderCustomLink = (properties: any) => {
     const menuItems = [
       {
@@ -207,11 +201,12 @@ const ResourceExplorer = (props: any) => {
     }
 
     if (properties.type === 'path') {
-      menuItems.push({
-        key: 'run-query',
-        text: translateMessage('Run Query'),
-        itemType: ContextualMenuItemType.Normal
-      })
+      menuItems.push(
+        {
+          key: 'run-query',
+          text: translateMessage('Run Query'),
+          itemType: ContextualMenuItemType.Normal
+        });
     }
 
     const availableMethods = getAvailableMethods(properties.labels, version);
@@ -234,6 +229,7 @@ const ResourceExplorer = (props: any) => {
   }
 
   const breadCrumbs = (!!isolated) ? generateBreadCrumbs() : [];
+
   return (
     <section>
       {!isolated && <>
@@ -255,7 +251,7 @@ const ResourceExplorer = (props: any) => {
           </div>
           <div className='col-xs-12 col-lg-5 col-md-5'>
             <Label><FormattedMessage id='Methods available' /></Label>
-            <AvailableMethods changeAvailableMethods={filterContent} />
+            <AvailableMethods />
           </div>
         </div>
         <br />

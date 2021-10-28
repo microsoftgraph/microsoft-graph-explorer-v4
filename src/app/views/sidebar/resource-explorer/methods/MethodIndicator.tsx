@@ -1,7 +1,7 @@
 import { Icon, TooltipHost } from '@fluentui/react';
 import React from 'react';
 
-import { getStyleFor } from '../../../utils/badge-color';
+import { getStyleFor } from '../../../../utils/badge-color';
 
 const MethodIndicator = (props: any) => {
   const { methods } = props;
