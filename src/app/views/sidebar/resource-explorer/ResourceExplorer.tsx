@@ -5,10 +5,13 @@ import {
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { IQuery } from '../../../../types/query-runner';
 import { IResource } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
+import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -38,7 +41,7 @@ const ResourceExplorer = (props: any) => {
       />
     );
   }
-
+  const dispatch = useDispatch();
   const versions: IChoiceGroupOption[] = [
     { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
     { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
@@ -149,12 +152,36 @@ const ResourceExplorer = (props: any) => {
       case 'isolate':
         isolateTree(link);
         break;
-
       default:
-        alert(`you are clicking '${item.text}' on '${link.name}'`);
+        setQuery(link);
         break;
     }
   };
+
+  const setQuery = (link: INavLink) => {
+    const sampleUrl = `${GRAPH_URL}/${version}${getUrlFromLink()}`;
+
+    function getUrlFromLink() {
+      const { paths } = link;
+      let url = '/';
+      if (paths.length > 1) {
+        paths.slice(1).forEach((path: string) => {
+          url += path + '/';
+        });
+      }
+      url += removeCounter(link.name);
+      return url;
+    }
+
+    const query: IQuery = {
+      selectedVerb: 'GET',
+      selectedVersion: version,
+      sampleUrl,
+      sampleHeaders: [],
+      sampleBody: undefined
+    };
+    dispatch(setSampleQuery(query));
+  }
 
   const filterContent = (selection: string[]) => {
     const filtered = getResourcesSupportedByVersion(data, version, selection);
@@ -177,6 +204,14 @@ const ResourceExplorer = (props: any) => {
           text: translateMessage('Isolate'),
           itemType: ContextualMenuItemType.Normal
         });
+    }
+
+    if (properties.type === 'path') {
+      menuItems.push({
+        key: 'run-query',
+        text: translateMessage('Run Query'),
+        itemType: ContextualMenuItemType.Normal
+      })
     }
 
     const availableMethods = getAvailableMethods(properties.labels, version);

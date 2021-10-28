@@ -27,6 +27,7 @@ export function createList(source: IResource[], version: string): INavLinkGroup[
     const level = paths.length;
     const versionedChildren = (children) ? children.filter(child => versionExists(child, version)) : [];
     const key = `${level}-${(parent === '/' ? 'root' : parent)}-${segment}`;
+    const icon = getIcon({ ...info, links: versionedChildren });
     return {
       key,
       url: key,
@@ -36,7 +37,8 @@ export function createList(source: IResource[], version: string): INavLinkGroup[
       parent,
       level,
       paths,
-      icon: getIcon({ ...info, links: versionedChildren }),
+      icon,
+      type: (icon === 'LightningBolt') ? 'function' : 'path',
       links: (children) ? versionedChildren.map(child => createNavLink(child, segment, [...paths, segment])) : []
     };
   }
