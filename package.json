@@ -88,8 +88,7 @@
         "test-ci": "node scripts/test.js --no-watch -f \"src/tests/accessibility/accessibility.spec.ts\" -t \"Graph Explorer accessibility\"",
         "prebuild:prod": "standard-version",
         "build:prod": "npm run build",
-        "bump": "standard-version --skip.tag --skip.changelog",
-        "preinstall": "npm install ./packages/types-core-2.16.189.tgz"
+        "bump": "standard-version --skip.tag --skip.changelog"
     },
     "eslintConfig": {
         "extends": "react-app"
