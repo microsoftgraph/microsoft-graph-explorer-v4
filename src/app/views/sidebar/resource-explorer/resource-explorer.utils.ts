@@ -120,3 +120,15 @@ export function getAvailableMethods(labels: IResourceLabel[], version: string): 
   const current = labels.find((label: IResourceLabel) => label.name === version);
   return (current) ? current.methods : [];
 }
+
+export function getUrlFromLink(link: INavLink) {
+  const { paths } = link;
+  let url = '/';
+  if (paths.length > 1) {
+    paths.slice(1).forEach((path: string) => {
+      url += path + '/';
+    });
+  }
+  url += removeCounter(link.name);
+  return url;
+}

@@ -1,25 +1,27 @@
 import {
   Breadcrumb, ChoiceGroup, DefaultButton,
-  IBreadcrumbItem, IChoiceGroupOption, Label, Nav, SearchBox, Spinner, SpinnerSize, styled
+  IBreadcrumbItem, IChoiceGroupOption, Label, Nav, Panel, PanelType, SearchBox, Spinner, SpinnerSize, styled
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { IResource } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
+import { fetchAutoCompleteOptions } from '../../../services/actions/autocomplete-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { AvailableMethods } from './methods';
+import QueryParameters from './QueryParameters';
 import {
   createList, getCurrentTree,
-  getResourcesSupportedByVersion, removeCounter
+  getResourcesSupportedByVersion, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 
 const ResourceExplorer = (props: any) => {
-  const { resources } = useSelector(
+  const { autoComplete, resources } = useSelector(
     (state: IRootState) => state
   );
   const classes = classNames(props);
@@ -36,11 +38,12 @@ const ResourceExplorer = (props: any) => {
       />
     );
   }
+
   const versions: IChoiceGroupOption[] = [
     { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
     { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
   ];
-
+  const dispatch = useDispatch();
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');
 
@@ -48,6 +51,9 @@ const ResourceExplorer = (props: any) => {
   const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
   const [items, setItems] = useState(createList(resourceItems, version));
   const [isolated, setIsolated] = useState<any>(null);
+  const [panelIsOpen, setPanelIsOpen] = useState<boolean>(false);
+  const [panelContext, setPanelContext] = useState<any>(null);
+  const [panelHeaderText, setPanelHeaderText] = useState('');
 
   const performSearch = (needle: string, haystack: IResource[]) => {
     const keyword = needle.toLowerCase();
@@ -141,6 +147,25 @@ const ResourceExplorer = (props: any) => {
     setItems(createList(filtered.children, version));
   }
 
+  const dismissPanel = () => {
+    let open = panelIsOpen;
+    open = !open;
+    setPanelIsOpen(open);
+    setPanelContext(null);
+  }
+
+  const openPanel = (activity: string, context: any) => {
+    switch (activity) {
+      default:
+        const requestUrl = getUrlFromLink(context);
+        setPanelIsOpen(true);
+        setPanelContext(activity);
+        setPanelHeaderText(`${requestUrl}`);
+        dispatch(fetchAutoCompleteOptions(requestUrl, version))
+        break;
+    }
+  }
+
   const breadCrumbs = (!!isolated) ? generateBreadCrumbs() : [];
 
   return (
@@ -192,8 +217,25 @@ const ResourceExplorer = (props: any) => {
       <Nav
         groups={items}
         styles={navStyles}
-        onRenderLink={(link) => { return <ResourceLink link={link} isolateTree={isolateTree} version={version} /> }}
+        onRenderLink={(link) => {
+          return <ResourceLink
+            link={link}
+            isolateTree={isolateTree}
+            version={version}
+            openPanel={(activity: string, context: any) => openPanel(activity, context)}
+          />
+        }}
         className={classes.queryList} />
+
+      <Panel
+        isOpen={panelIsOpen}
+        onDismiss={dismissPanel}
+        closeButtonAriaLabel="Close"
+        headerText={panelHeaderText}
+        type={PanelType.medium}
+      >
+        {panelContext === 'show-query-parameters' && <QueryParameters autoComplete={autoComplete} />}
+      </Panel>
     </section>
   );
 }

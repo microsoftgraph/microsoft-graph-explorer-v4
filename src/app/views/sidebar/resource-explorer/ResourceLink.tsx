@@ -8,12 +8,13 @@ import { setSampleQuery } from '../../../services/actions/query-input-action-cre
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { MethodIndicator } from './methods';
-import { getAvailableMethods, removeCounter } from './resource-explorer.utils';
+import { getAvailableMethods, getUrlFromLink } from './resource-explorer.utils';
 import ContextMenu from '../../common/ContextMenu';
 
 interface IResourceLink {
   link: any;
   isolateTree: Function;
+  openPanel: Function;
   version: string;
 }
 
@@ -26,6 +27,9 @@ const ResourceLink = (props: IResourceLink) => {
       case 'isolate':
         props.isolateTree(link);
         break;
+      case 'show-query-parameters':
+        props.openPanel('show-query-parameters', link);
+        break;
       default:
         setQuery(link);
         break;
@@ -33,20 +37,7 @@ const ResourceLink = (props: IResourceLink) => {
   };
 
   const setQuery = (link: INavLink) => {
-    const sampleUrl = `${GRAPH_URL}/${version}${getUrlFromLink()}`;
-
-    function getUrlFromLink() {
-      const { paths } = link;
-      let url = '/';
-      if (paths.length > 1) {
-        paths.slice(1).forEach((path: string) => {
-          url += path + '/';
-        });
-      }
-      url += removeCounter(link.name);
-      return url;
-    }
-
+    const sampleUrl = `${GRAPH_URL}/${version}${getUrlFromLink(link)}`;
     const query: IQuery = {
       selectedVerb: 'GET',
       selectedVersion: version,
@@ -82,6 +73,11 @@ const ResourceLink = (props: IResourceLink) => {
       {
         key: 'run-query',
         text: translateMessage('Run Query'),
+        itemType: ContextualMenuItemType.Normal
+      },
+      {
+        key: 'show-query-parameters',
+        text: translateMessage('Query parameters'),
         itemType: ContextualMenuItemType.Normal
       });
   }
