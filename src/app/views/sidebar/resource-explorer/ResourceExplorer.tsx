@@ -1,27 +1,22 @@
 import {
-  Breadcrumb, ChoiceGroup, ContextualMenuItemType, DefaultButton,
-  IBreadcrumbItem, IChoiceGroupOption, Icon, INavLink,
-  Label, Nav, SearchBox, Spinner, SpinnerSize, styled
+  Breadcrumb, ChoiceGroup, DefaultButton,
+  IBreadcrumbItem, IChoiceGroupOption, Label, Nav, SearchBox, Spinner, SpinnerSize, styled
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { IQuery } from '../../../../types/query-runner';
 import { IResource } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
-import { runQuery } from '../../../services/actions/query-action-creators';
-import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import LinkItem from './LinkItem';
-import { MethodIndicator, AvailableMethods } from './methods';
+import { AvailableMethods } from './methods';
 import {
-  createList, getAvailableMethods, getCurrentTree,
+  createList, getCurrentTree,
   getResourcesSupportedByVersion, removeCounter
 } from './resource-explorer.utils';
+import ResourceLink from './ResourceLink';
 
 const ResourceExplorer = (props: any) => {
   const { resources } = useSelector(
@@ -41,7 +36,6 @@ const ResourceExplorer = (props: any) => {
       />
     );
   }
-  const dispatch = useDispatch();
   const versions: IChoiceGroupOption[] = [
     { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
     { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
@@ -147,91 +141,6 @@ const ResourceExplorer = (props: any) => {
     setItems(createList(filtered.children, version));
   }
 
-  const selectContextItem = (e: any, item: any, link: INavLink) => {
-    switch (item.key) {
-      case 'isolate':
-        isolateTree(link);
-        break;
-      default:
-        setQuery(link);
-        break;
-    }
-  };
-
-  const setQuery = (link: INavLink) => {
-    const sampleUrl = `${GRAPH_URL}/${version}${getUrlFromLink()}`;
-
-    function getUrlFromLink() {
-      const { paths } = link;
-      let url = '/';
-      if (paths.length > 1) {
-        paths.slice(1).forEach((path: string) => {
-          url += path + '/';
-        });
-      }
-      url += removeCounter(link.name);
-      return url;
-    }
-
-    const query: IQuery = {
-      selectedVerb: 'GET',
-      selectedVersion: version,
-      sampleUrl,
-      sampleHeaders: [],
-      sampleBody: undefined
-    };
-    dispatch(setSampleQuery(query));
-    if (!sampleUrl.includes('{')) {
-      dispatch(runQuery(query));
-    }
-  }
-
-  const renderCustomLink = (properties: any) => {
-    const menuItems = [
-      {
-        key: 'actions',
-        itemType: ContextualMenuItemType.Header,
-        text: properties.name
-      }
-    ];
-
-    if (properties!.links!.length > 0) {
-      menuItems.push(
-        {
-          key: 'isolate',
-          text: translateMessage('Isolate'),
-          itemType: ContextualMenuItemType.Normal
-        });
-    }
-
-    if (properties.type === 'path') {
-      menuItems.push(
-        {
-          key: 'run-query',
-          text: translateMessage('Run Query'),
-          itemType: ContextualMenuItemType.Normal
-        });
-    }
-
-    const availableMethods = getAvailableMethods(properties.labels, version);
-
-    return <LinkItem
-      style={{
-        flexGrow: 1,
-        textAlign: 'left',
-        boxSizing: 'border-box'
-      }}
-      key={properties.key}
-      items={menuItems}
-      onItemClick={(e: any, item: any) => selectContextItem(e, item, properties)}>
-      <span style={{ display: 'flex' }}>
-        {!!properties.iconProperties && <Icon style={{ margin: '0 4px' }} {...properties.iconProperties} />}
-        {properties.name}
-        {availableMethods.length > 0 && <MethodIndicator methods={availableMethods} key={properties.key} />}
-      </span>
-    </LinkItem>;
-  }
-
   const breadCrumbs = (!!isolated) ? generateBreadCrumbs() : [];
 
   return (
@@ -283,7 +192,7 @@ const ResourceExplorer = (props: any) => {
       <Nav
         groups={items}
         styles={navStyles}
-        onRenderLink={renderCustomLink}
+        onRenderLink={(link) => { return <ResourceLink link={link} isolateTree={isolateTree} version={version} /> }}
         className={classes.queryList} />
     </section>
   );
