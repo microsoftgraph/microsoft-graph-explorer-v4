@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IQuery } from '../../../../types/query-runner';
 import { IResource } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
+import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -180,6 +181,9 @@ const ResourceExplorer = (props: any) => {
       sampleBody: undefined
     };
     dispatch(setSampleQuery(query));
+    if (!sampleUrl.includes('{')) {
+      dispatch(runQuery(query));
+    }
   }
 
   const renderCustomLink = (properties: any) => {
