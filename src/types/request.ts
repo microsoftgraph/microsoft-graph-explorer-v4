@@ -20,19 +20,19 @@ export interface IRequestHeadersProps {
 }
 
 export interface IRequestComponent {
-    sampleQuery: IQuery;
-    mode: Mode;
-    handleOnEditorChange: Function;
-    dimensions: IDimensions;
-    headers?: Header[];
-    intl: {
-        message: object;
-    };
-    actions: {
-        setDimensions: Function;
-    };
-    officeBrowserFeedback: any;
-    enableShowSurvey: boolean;
+  sampleQuery: IQuery;
+  mode: Mode;
+  handleOnEditorChange: Function;
+  dimensions: IDimensions;
+  headers?: Header[];
+  intl: {
+    message: object;
+  };
+  actions: {
+    setDimensions: Function;
+  };
+  officeBrowserFeedback: any;
+  enableShowSurvey: boolean;
 }
 
 export interface IRequestOptions {

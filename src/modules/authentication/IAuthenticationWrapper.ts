@@ -1,4 +1,4 @@
-import { AccountInfo, AuthenticationResult } from "@azure/msal-browser";
+import { AccountInfo, AuthenticationResult } from '@azure/msal-browser';
 
 export default interface IAuthenticationWrapper {
   getSessionId(): string | null;
