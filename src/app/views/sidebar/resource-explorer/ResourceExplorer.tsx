@@ -148,9 +148,7 @@ const ResourceExplorer = (props: any) => {
   }
 
   const dismissPanel = () => {
-    let open = panelIsOpen;
-    open = !open;
-    setPanelIsOpen(open);
+    setPanelIsOpen(!panelIsOpen);
     setPanelContext(null);
   }
 
@@ -225,6 +223,7 @@ const ResourceExplorer = (props: any) => {
             openPanel={(activity: string, context: any) => openPanel(activity, context)}
           />
         }}
+        onLinkClick={(event: any) => { event.preventDefault() }}
         className={classes.queryList} />
 
       <Panel

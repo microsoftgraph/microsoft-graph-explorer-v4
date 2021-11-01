@@ -22,7 +22,7 @@ const QueryParameters = (props: any) => {
     />
   }
 
-  const { parameters } = autoComplete.data;
+  const { data: { parameters } } = autoComplete;
 
   const items: any[] = [];
   const list: IGroup[] = [];

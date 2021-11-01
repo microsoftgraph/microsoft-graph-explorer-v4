@@ -12,5 +12,5 @@ export interface IResourceLabel {
 export interface IResources {
   pending: boolean;
   data: IResource;
-  error: any | null;
+  error: Error | null;
 }
