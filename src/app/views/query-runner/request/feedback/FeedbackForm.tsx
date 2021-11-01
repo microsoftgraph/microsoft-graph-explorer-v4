@@ -1,7 +1,7 @@
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import { AuthenticationType } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 import { OfficeBrowserFeedback } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window';
-import { getTheme, MessageBarType } from 'office-ui-fabric-react';
+import { getTheme, MessageBarType } from '@fluentui/react';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
