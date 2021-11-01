@@ -3,6 +3,7 @@
     "version": "4.13.0",
     "private": true,
     "dependencies": {
+        "@augloop/types-core": "file:packages/types-core-2.16.189.tgz",
         "@axe-core/webdriverjs": "4.2.2",
         "@azure/msal-browser": "2.12.0",
         "@babel/core": "7.12.13",
@@ -11,7 +12,7 @@
         "@microsoft/applicationinsights-react-js": "2.3.1",
         "@microsoft/applicationinsights-web": "2.3.1",
         "@microsoft/microsoft-graph-client": "2.1.0",
-        "@ms-ofb/officebrowserfeedbacknpm": "1.6.6",
+        "@ms-ofb/officebrowserfeedbacknpm": "file:packages/types-core-2.16.189.tgz",
         "@svgr/webpack": "4.1.0",
         "adaptivecards": "1.2.3",
         "adaptivecards-templating": "1.4.0",
