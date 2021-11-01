@@ -1,6 +1,7 @@
 import { ContextualMenuItemType } from '@fluentui/react';
 import { componentToTargetMap } from './mapToComponent';
 import { ADVANCED_TOUR, COMPONENT_INFO } from './steps';
+import { ITourContextMenu } from './types';
 
 export const getTargetStepIndex = (target: string, menuType: string): number => {
   const tourStep = menuType === 'info' ? COMPONENT_INFO : ADVANCED_TOUR;
@@ -24,7 +25,7 @@ export const findTarget = (itemKeyString: string): string => {
   return '';
 }
 
-export const contextMenuItems = [
+export const contextMenuItems: ITourContextMenu[] = [
   {
     key: 'tour',
     itemType: ContextualMenuItemType.Normal,

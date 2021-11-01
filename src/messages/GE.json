@@ -391,7 +391,7 @@
   "Sign in message": "When you're signed in, you can run all queries with all request options. We recommend that you sign in with a sample Azure AD account where you are the tenant admin",
   "Request option message": "You can perform GET, POST, PUT, PATCH and DELETE requests on Microsoft Graph. We will perform a GET request to Microsoft Graph for profile information. Click the drop down menu and select ",
   "Query version message": "Microsoft Graph beta endpoint has APIs that are in preview. v1.0 endpoint has APIs that are generally available. Choose v1.0 from the dropdown menu",
-  "Query box message advanced": "You can type your Graph queries here. It has an autocomplete feature as well as links to the docs for some queries. Add a '/m' at the end then scroll and choose 'me' from the autocomplete suggestions. Click 'Run query' to run this query",
+  "Query box message advanced": "The query text box has an autocomplete feature as well as links to the docs for some queries. Type '/m' at the end of the query then choose 'me' from the autocomplete suggestions. Click 'Run query' to run this query",
   "Response preview message": "This is the response preview button. Click here to view the response to the query you just ran",
   "Response headers button message": "This is the response headers button. Clicking this button will show you the response headers for the query you just ran",
   "Response headers message": "These are the response headers for the query you just ran",
@@ -442,5 +442,6 @@
   "Open coachmark": "Press enter or alt + C to open the coachmark notification",
   "Coachmark": "A coachmark has appeared",
   "Coachmark description": "This coachmark contains Graph Explorer tour information",
-  "GET": "GET"
+  "GET": "GET",
+  "Sample queries button": "This tab contains sample Microsoft Graph API endpoints. Click this button to view them"
 }

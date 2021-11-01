@@ -4,8 +4,7 @@ import { ITourSteps } from './utils/types'
 import { Dialog, DialogType, getId, getTheme, ITheme, Link } from '@fluentui/react';
 import { IRootState } from '../../../types/root';
 
-import { toggleTourState, setActionTypes as setStepAction,
-  setNextTourStep } from '../../services/actions/tour-action-creator';
+import { toggleTourState, setNextTourStep } from '../../services/actions/tour-action-creator';
 import { TourTip } from './custom-components/Tourtip';
 import { BEGINNER_TOUR, ADVANCED_TOUR } from './utils/steps'
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,7 +33,9 @@ const GETour = () => {
     showCloseButton: true
   })
   const [temporarilyDisableOverlay, setDisableOverlay] = useState(false);
+  const [pauseTourOnResponse, setPauseTour] = useState(false);
   const currentTheme: ITheme = getTheme();
+  let responseTimeout: NodeJS.Timeout;
 
   // eslint-disable-next-line max-len
   const geDocsLink = `https://docs.microsoft.com/${geLocale}/graph/graph-explorer/graph-explorer-overview?context=graph%2Fapi%2F1.0&view=graph-rest-1.0`
@@ -45,14 +46,11 @@ const GETour = () => {
   }, [])
 
   useEffect(() => {
-    if(steps[stepIndex].expectedActionType && steps[stepIndex].expectedActionType === tour.actionType){
-      setStepIndex(stepIndex + 1);
-      dispatch(setStepAction(stepIndex));
+    if(!!steps[stepIndex].expectedActionType && steps[stepIndex].expectedActionType === tour.actionType){
+      pauseOnResponse(stepIndex + 1);
+      dispatch(setNextTourStep(stepIndex));
     }
-    if(!!steps[stepIndex].query){
-      const query = steps[stepIndex].query;
-      dispatch(setSampleQuery(query!));
-    }
+
     if(tour.actionType === 'AUTOCOMPLETE_FETCH_SUCCESS' ){
       setDisableOverlay(true);
     }
@@ -75,6 +73,7 @@ const GETour = () => {
     if(stepIndex < steps.length-1 && !!steps[stepIndex].query){
       const query = steps[stepIndex].query;
       dispatch(setSampleQuery(query!));
+      dispatch(setNextTourStep(stepIndex));
     }
 
     const { action, index, type, status } = data;
@@ -126,9 +125,7 @@ const GETour = () => {
         if(peekNextTarget()){
           mutationObserver.disconnect();
           const stepIndex_ = stepIndex + 1;
-          setTimeout(() => {
-            setStepIndex(stepIndex_);
-          }, 1000);
+          pauseOnResponse(stepIndex_);
         }
       };
       mutationObserver = new MutationObserver(mutationHandler);
@@ -144,6 +141,10 @@ const GETour = () => {
     else {
       if (([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND] as string[]).includes(type)) {
         const newStepIndex = index + (action === ACTIONS.PREV ? -1 : 1);
+
+        if(action === ACTIONS.NEXT || ACTIONS.PREV && pauseTourOnResponse === true){
+          clearTimeout(responseTimeout);
+        }
 
         if(action === ACTIONS.PREV){
           if(steps[stepIndex-1].autoNext === true){
@@ -163,6 +164,19 @@ const GETour = () => {
   const handleCloseDialog = () => {
     hideInfoDialog(true);
     dispatch(toggleTourState({isRunning: false, beginner: false, continuous: true, step: 0}));
+  }
+
+  const pauseOnResponse = (nextIndex: number) => {
+    if(steps[stepIndex].target === '.pivot-response *[data-content="Response preview xx"]' && !pauseTourOnResponse){
+      setPauseTour(true);
+      responseTimeout = setTimeout( () => {
+        setStepIndex(nextIndex);
+      }, 5000 );
+    }
+    else{
+      setStepIndex(nextIndex);
+      clearTimeout(responseTimeout);
+    }
   }
 
   return (

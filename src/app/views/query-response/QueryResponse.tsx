@@ -1,8 +1,7 @@
 import {
   Announced, Dialog, DialogFooter, DialogType,
   DefaultButton, FontSizes, getId, Icon, IconButton,
-  Modal, Pivot, PivotItem, PrimaryButton, TooltipHost, ContextualMenuItemType
-} from '@fluentui/react';
+  Modal, Pivot, PivotItem, PrimaryButton, TooltipHost, IPivotItemProps } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
@@ -24,6 +23,7 @@ import { IRootState } from '../../../types/root';
 import LinkItem from '../tour/utils/LinkItem';
 import { toggleTourState } from '../../services/actions/tour-action-creator';
 import { contextMenuItems, findTarget, getTargetStepIndex } from '../tour/utils/contextHelpers';
+import { ITourContextMenu } from '../tour/utils/types';
 
 
 const QueryResponse = (props: IQueryResponseProps) => {
@@ -104,10 +104,10 @@ const QueryResponse = (props: IQueryResponseProps) => {
     }
   };
 
-  const selectContextItem = (e: any, item: any, link: any) => {
+  const selectContextItem = (e: object, item: ITourContextMenu, link: IPivotItemProps) => {
     if(link.itemKey !== null){
       const { itemKey } = link;
-      const itemKeyString: string = itemKey.toString();
+      const itemKeyString: string = !itemKey ? '' : itemKey.toString();
       const target = findTarget(itemKeyString);
       const targetStepIndex = getTargetStepIndex(target, item.key)
 
@@ -125,7 +125,10 @@ const QueryResponse = (props: IQueryResponseProps) => {
     }
 
   }
-  const renderItemLink = (link: any) => {
+  const renderItemLink = (link?: IPivotItemProps) : JSX.Element | null => {
+    if(!link){
+      return null
+    }
     return (
       <LinkItem
         style={{
@@ -135,7 +138,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
         }}
         key={link.title}
         items={contextMenuItems}
-        onItemClick={(e: any, item: any) => selectContextItem(e, item, link)}
+        onItemClick={(e: object, item: ITourContextMenu) => selectContextItem(e, item, link)}
       >
         <TooltipHost
           content={link.title}

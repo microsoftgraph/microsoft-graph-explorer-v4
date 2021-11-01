@@ -1,4 +1,4 @@
-import { DirectionalHint, IImageProps } from '@fluentui/react';
+import { ContextualMenuItemType, DirectionalHint, IImageProps } from '@fluentui/react';
 import { Step, TooltipRenderProps } from 'react-joyride';
 import { IQuery } from '../../../../types/query-runner';
 
@@ -16,4 +16,10 @@ export interface ITourTooltipRenderProps extends TooltipRenderProps {
   directionalHint: DirectionalHint;
   step: ITourSteps;
 
+}
+
+export interface ITourContextMenu {
+  key: string;
+  itemType: ContextualMenuItemType;
+  text: string;
 }

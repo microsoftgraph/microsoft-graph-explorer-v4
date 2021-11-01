@@ -2,8 +2,7 @@ import { DirectionalHint, Link } from '@fluentui/react';
 import { ITourSteps } from './types';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { FETCH_ADAPTIVE_CARD_SUCCESS, GET_SNIPPET_SUCCESS,
-  PROFILE_REQUEST_SUCCESS, QUERY_GRAPH_SUCCESS, SET_SAMPLE_QUERY_SUCCESS,
+import { GET_SNIPPET_SUCCESS, PROFILE_REQUEST_SUCCESS, QUERY_GRAPH_SUCCESS, SET_SAMPLE_QUERY_SUCCESS,
   VIEW_HISTORY_ITEM_SUCCESS } from '../../../services/redux-constants';
 import { geLocale } from '../../../../appLocale';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -39,10 +38,19 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     target:'.response-preview-body',
     content:translateMessage('Response body profile message'),
     title:translateMessage('API Response'),
-    directionalHint: DirectionalHint.topCenter,
+    directionalHint: DirectionalHint.topLeftEdge,
     spotlightClicks: true,
     disableBeacon: true
 
+  },
+  {
+    target: '.side-bar-pivot *[data-content="Sample queries xx"]',
+    content: translateMessage('Sample queries button'),
+    title: 'Sample Queries',
+    autoNext: true,
+    spotlightClicks: true,
+    directionalHint: DirectionalHint.rightCenter,
+    disableBeacon: true
   },
   {
     target: '.sample-queries-navigation',
@@ -66,7 +74,7 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     target:'.response-preview-body',
     content: translateMessage('Response body message'),
     title: translateMessage('API Response'),
-    directionalHint: DirectionalHint.topCenter,
+    directionalHint: DirectionalHint.topLeftEdge,
     spotlightClicks: true,
     disableBeacon: true
 
@@ -85,7 +93,7 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     content: translateMessage('History message'),
     title: translateMessage('History items'),
     spotlightClicks: true,
-    directionalHint: DirectionalHint.rightCenter,
+    directionalHint: DirectionalHint.rightTopEdge,
     disableBeacon: true,
     expectedActionType: VIEW_HISTORY_ITEM_SUCCESS
   },
@@ -102,7 +110,7 @@ export const BEGINNER_TOUR : ITourSteps[] = [
     target:'.response-preview-body',
     content: translateMessage('History item API response'),
     title: translateMessage('Response Preview'),
-    directionalHint: DirectionalHint.topCenter,
+    directionalHint: DirectionalHint.topLeftEdge,
     spotlightClicks: true,
     disableBeacon: true
 
@@ -197,7 +205,7 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     target:'.response-preview-body',
     content: translateMessage('Response body message'),
     title: translateMessage('Response Preview'),
-    directionalHint: DirectionalHint.topCenter,
+    directionalHint: DirectionalHint.topLeftEdge,
     spotlightClicks: true,
     disableBeacon: true
   },
@@ -257,9 +265,8 @@ export const ADVANCED_TOUR : ITourSteps[] = [
     title: translateMessage('Adaptive Cards'),
     directionalHint: DirectionalHint.topCenter,
     spotlightClicks: true,
-    autoNext:true,
-    disableBeacon: true,
-    expectedActionType: FETCH_ADAPTIVE_CARD_SUCCESS
+    autoNext: true,
+    disableBeacon: true
   },
   {
     target: '.adaptive-cards-response',
