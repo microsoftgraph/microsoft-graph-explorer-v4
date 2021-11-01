@@ -76,7 +76,7 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
       ageGroup: profile?.ageGroup,
       authenticationType: getAuthType(profile?.profileType!),
       locale: geLocale,
-      onError: (error: string) => { throw error; },
+      onError: (error: string): string => { throw error; },
       build: getVersion().toString(),
       primaryColour: currentTheme.palette.themePrimary,
       secondaryColour: currentTheme.palette.themeSecondary,
@@ -108,7 +108,7 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
         }
         dismissSurvey();
       },
-      uIStringGetter: (str: string) => { return uiStringMap[str]; }
+      uIStringGetter: (str: string): any => { return uiStringMap[str]; }
     };
 
 
