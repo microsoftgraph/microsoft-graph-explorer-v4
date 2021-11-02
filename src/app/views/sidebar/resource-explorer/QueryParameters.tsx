@@ -1,16 +1,32 @@
 import { DetailsRow, GroupedList, IGroup, Label, Spinner, SpinnerSize } from '@fluentui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { generateGroupsFromList } from '../../../utils/generate-groups';
+import { IRootState } from '../../../../types/root';
+import { fetchAutoCompleteOptions } from '../../../services/actions/autocomplete-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
+import { getUrlFromLink } from './resource-explorer.utils';
 
 const QueryParameters = (props: any) => {
-  const { autoComplete } = props;
-  const { pending } = autoComplete;
+
+  const { autoComplete } = useSelector(
+    (state: IRootState) => state
+  );
+  const { pending, data } = autoComplete;
+  const { context, version } = props;
+
+  const dispatch = useDispatch();
 
   const classes = classNames(props);
+  const requestUrl = getUrlFromLink(context);
+
+  useEffect(() => {
+    if (!data && !pending || (data?.url !== requestUrl)) {
+      dispatch(fetchAutoCompleteOptions(requestUrl, version))
+    }
+  }, [requestUrl]);
 
   if (pending) {
     return <Spinner
@@ -22,11 +38,14 @@ const QueryParameters = (props: any) => {
     />
   }
 
-  const { data: { parameters } } = autoComplete;
+  if (!data) {
+    return (<div />);
+  }
+
+  const { parameters } = data!;
+  const odataParameters = parameters.find(k => k.verb.toLowerCase() === 'get');
 
   const items: any[] = [];
-  const list: IGroup[] = [];
-  const groups: any[] = [];
   const columns = [{
     key: 'name',
     name: 'name',
@@ -34,71 +53,42 @@ const QueryParameters = (props: any) => {
     minWidth: 300
   }];
 
+  const flattenList = (parameter: any, name: any, parent: string) => {
+    parameter.items.forEach((item: string) => {
+      items.push({
+        category: name,
+        key: `${parent}-${name}-${item}`,
+        name: item,
+        parent
+      });
+    });
+  }
+
   const generateChildren = (values: any[], parent: string) => {
     const listItems: IGroup[] = [];
     values.forEach((parameter: any, index: number) => {
-      parameter.items.forEach((item: string) => {
-        items.push({
-          category: parameter.name,
-          key: `${parent}-${parameter.name}-${item}`,
-          name: item,
-          parent
-        })
-      });
+      const { name } = parameter;
       listItems.push({
-        key: parameter.name,
-        name: parameter.name,
+        key: name,
+        name,
         startIndex: index,
         count: parameter.items.length,
-        level: 1
+        isCollapsed: true,
+        level: 0
       });
+      flattenList(parameter, name, parent);
     });
     return listItems;
   }
 
-  parameters.forEach((parameter: any, index: number) => {
-    const children = generateChildren(parameter.values, parameter.verb);
-    const totalCount = children.reduce((n, { count }) => n + count, 0);
-    list.push({
-      key: parameter.verb,
-      name: parameter.verb,
-      startIndex: (index === 0) ? index : list[index - 1].count,
-      count: totalCount,
-      level: 0,
-      children
-    });
-  });
-
-  const generatedGroups = generateGroupsFromList(items, 'category');
-  generatedGroups.forEach(group => {
-    group.level = 1
-  });
-
-  parameters.forEach((parameter: any, index: number) => {
-    const { verb } = parameter;
-
-    groups.push({
-      key: verb,
-      name: verb,
-      startIndex: (index === 0) ? index : list[index - 1].count,
-      count: items.filter(k => k.parent === verb).length,
-      level: 0,
-      children: generatedGroups.filter((k: any) => k.parent === verb)
-    })
-  });
-
-  const onRenderCell = (
-    nestingDepth?: number,
-    item?: any,
-    itemIndex?: number,
-    group?: IGroup,
-  ): React.ReactNode => {
-    return item && typeof itemIndex === 'number' && itemIndex > -1 ? (
+  const groups = generateChildren(odataParameters!.values, odataParameters!.verb);
+  const onRenderCell = (depth?: number, item?: any, index?: number, group?: IGroup): React.ReactNode => {
+    return item && typeof index === 'number' && index > -1 ? (
       <DetailsRow
         columns={columns}
-        groupNestingDepth={nestingDepth}
+        groupNestingDepth={depth}
         item={item}
-        itemIndex={itemIndex}
+        itemIndex={index}
         group={group}
       />
     ) : null;

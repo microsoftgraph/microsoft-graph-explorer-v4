@@ -1,15 +1,15 @@
 import {
   Breadcrumb, DefaultButton,
   Dropdown,
-  IBreadcrumbItem, IDropdownOption, Label, Nav, Panel, PanelType, SearchBox, Spinner, SpinnerSize, Stack, styled
+  IBreadcrumbItem, IDropdownOption, Label, Nav, Panel, PanelType, SearchBox,
+  Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { IResource } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
-import { fetchAutoCompleteOptions } from '../../../services/actions/autocomplete-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -22,7 +22,7 @@ import {
 import ResourceLink from './ResourceLink';
 
 const ResourceExplorer = (props: any) => {
-  const { autoComplete, resources } = useSelector(
+  const { resources } = useSelector(
     (state: IRootState) => state
   );
   const classes = classNames(props);
@@ -40,11 +40,14 @@ const ResourceExplorer = (props: any) => {
     );
   }
 
+  if (!data && !pending) {
+    return (<div />);
+  }
+
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
     { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
   ];
-  const dispatch = useDispatch();
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');
 
@@ -157,9 +160,11 @@ const ResourceExplorer = (props: any) => {
       default:
         const requestUrl = getUrlFromLink(context);
         setPanelIsOpen(true);
-        setPanelContext(activity);
+        setPanelContext({
+          activity,
+          context
+        });
         setPanelHeaderText(`${requestUrl}`);
-        dispatch(fetchAutoCompleteOptions(requestUrl, version))
         break;
     }
   }
@@ -235,7 +240,10 @@ const ResourceExplorer = (props: any) => {
         headerText={panelHeaderText}
         type={PanelType.medium}
       >
-        {panelContext === 'show-query-parameters' && <QueryParameters autoComplete={autoComplete} />}
+        {panelContext && panelContext.activity === 'show-query-parameters' && <QueryParameters
+          context={panelContext.context}
+          version={version}
+        />}
       </Panel>
     </section>
   );
