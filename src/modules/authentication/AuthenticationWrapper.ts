@@ -105,7 +105,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
       return response;
     } catch (error) {
-
       throw error;
     }
   }
@@ -121,7 +120,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       return ocpsToken;
     } catch (error) {
       if (error instanceof InteractionRequiredAuthError) {
-        msalApplication.acquireTokenPopup(ocpsAccessTokenRequest).then(function (ocpsAccessTokenRequest) {
+        msalApplication.acquireTokenPopup(ocpsAccessTokenRequest).then((ocpsAccessTokenRequest) => {
           const ocpsToken = ocpsAccessTokenRequest.accessToken;
           return ocpsToken;
         })

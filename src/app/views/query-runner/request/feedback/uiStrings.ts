@@ -1,10 +1,10 @@
 import { translateMessage } from '../../../../utils/translate-messages';
 
 export const uiStringMap: any = {
-  Prompt_Title: 'We\'d love your feedback!',
-  Prompt_Question: 'We have just two questions.',
-  Prompt_YesLabel: 'Sure',
-  Prompt_NoLabel: 'Not Now',
+  Prompt_Title: translateMessage('love your feedback'),
+  Prompt_Question: translateMessage('We have just two questions.'),
+  Prompt_YesLabel: translateMessage('Sure'),
+  Prompt_NoLabel: translateMessage('Sure'),
   Graph_Explorer_Rating_Question: translateMessage('Graph Rating Question'),
   Rating_Values_1: '1 - Not at all likely',
   Rating_Values_2: '2',
@@ -16,5 +16,5 @@ export const uiStringMap: any = {
   Rating_Values_8: '8',
   Rating_Values_9: '9',
   Rating_Values_10: '10 - Extremely likely',
-  Question_Question: 'Please tell us more. Why did you choose that answer?'
+  Question_Question: translateMessage('Please tell us more. Why did you choose that answer')
 }

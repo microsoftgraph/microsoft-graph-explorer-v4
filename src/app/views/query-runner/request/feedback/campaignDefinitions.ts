@@ -2,7 +2,7 @@ const CampaignDefinitions: object[] = [{
   'CampaignId': '6f37e1b1-e1cb-47bd-9675-5a539fcbe576', //TODO: save as env variable
   'StartTimeUtc': '2017-01-01T00:00:00Z',
   'EndTimeUtc': null,
-  'GovernedChannelType': 0, //TODO: change to 0, 1 is for testing purposes only
+  'GovernedChannelType': 0,
   'AdditionalDataRequested': ['EmailAddress'],
   'Scope':
     {
