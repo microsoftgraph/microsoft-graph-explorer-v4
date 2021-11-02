@@ -71,10 +71,10 @@ export function getPolicy(response: any): IPolicyValues {
   if (policies) {
     for (const policiesPayload of policies) {
       if (policiesPayload.settingId.includes('L_EmailCollection')) {
-        values.email = policiesPayload.value;
+        values.email = parseInt(policiesPayload.value, 10);
       }
       if (policiesPayload.settingId.includes('L_Screenshot')) {
-        values.screenshot = policiesPayload.value;
+        values.screenshot = parseInt(policiesPayload.value, 10);
       }
     }
   }
