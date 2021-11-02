@@ -1,5 +1,5 @@
 import {
-  Icon, IDropdownOption, Label
+  Icon, IDropdownOption, Label, Stack
 } from '@fluentui/react';
 import React from 'react';
 
@@ -12,10 +12,12 @@ const AvailableMethods = () => {
   });
 
   return (
-    <>
+    <Stack horizontal wrap tokens={{
+      childrenGap: 10
+    }}>
       {httpMethods.map((method: IDropdownOption, index: number) => {
         return (
-          <Label key={index}>
+          <Label key={index} style={{ marginRight: 5 }}>
             <Icon
               style={{ color: getStyleFor(method.text), marginRight: 3, alignItems: 'center' }}
               iconName="CheckboxFill" />
@@ -23,7 +25,7 @@ const AvailableMethods = () => {
           </Label>
         );
       })}
-    </>
+    </Stack>
   )
 }
 

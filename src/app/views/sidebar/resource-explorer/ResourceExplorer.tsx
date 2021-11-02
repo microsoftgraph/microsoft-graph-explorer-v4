@@ -1,6 +1,7 @@
 import {
-  Breadcrumb, ChoiceGroup, DefaultButton,
-  IBreadcrumbItem, IChoiceGroupOption, Label, Nav, Panel, PanelType, SearchBox, Spinner, SpinnerSize, styled
+  Breadcrumb, DefaultButton,
+  Dropdown,
+  IBreadcrumbItem, IDropdownOption, Label, Nav, Panel, PanelType, SearchBox, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -39,7 +40,7 @@ const ResourceExplorer = (props: any) => {
     );
   }
 
-  const versions: IChoiceGroupOption[] = [
+  const versions: any[] = [
     { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
     { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
   ];
@@ -78,9 +79,8 @@ const ResourceExplorer = (props: any) => {
     return [];
   }
 
-  const changeVersion = (ev: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
-    option: IChoiceGroupOption | undefined): void => {
-    const selectedVersion = option!.key;
+  const changeVersion = (option: IDropdownOption<any> | undefined): void => {
+    const selectedVersion = option!.key.toString();
     setVersion(selectedVersion);
     const list = getResourcesSupportedByVersion(data, selectedVersion);
     const dataSet = (searchText) ? performSearch(searchText, list.children) : list.children;
@@ -177,18 +177,20 @@ const ResourceExplorer = (props: any) => {
         />
         <hr />
         <div className='row'>
-          <div className='col-xs-12 col-lg-7 col-md-7'>
-            <ChoiceGroup
-              label={translateMessage('Select version')}
-              defaultSelectedKey={version}
+          <Stack horizontal wrap tokens={{ childrenGap: 10, padding: 10 }}>
+            <Dropdown
+              ariaLabel={translateMessage('Microsoft Graph API Version option')}
+              role='listbox'
+              selectedKey={version}
               options={versions}
-              onChange={changeVersion}
+              label={translateMessage('Select version')}
+              onChange={(event, selected) => changeVersion(selected)}
             />
-          </div>
-          <div className='col-xs-12 col-lg-5 col-md-5'>
-            <Label><FormattedMessage id='Methods available' /></Label>
-            <AvailableMethods />
-          </div>
+            <div>
+              <Label><FormattedMessage id='Methods available' /></Label>
+              <AvailableMethods />
+            </div>
+          </Stack>
         </div>
         <br />
       </>}
