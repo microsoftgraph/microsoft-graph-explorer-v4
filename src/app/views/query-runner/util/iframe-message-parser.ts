@@ -122,7 +122,8 @@ function extractUrl(payload: string): object[] {
   // and the URL at index 1
   const urlParts = sampleUrl.split(' ');
   const verb = urlParts[0];
-  let url = sampleUrl.replace(`${verb} `, '');
+  let url = (urlParts.length > 2) ?
+    sampleUrl.replace(`${verb} `, '') : urlParts[1];
 
   let sampleDomain = '';
   domains.forEach(domain => {

@@ -4,10 +4,10 @@ import { parse } from './iframe-message-parser';
 describe('Iframe Message Parser', () => {
   it('parses http request snippet correctly', () => {
     const message = `POST https://graph.microsoft.com/beta/me/calendars
-  Content-type: application/json
-  Prefer: A-timezone
+Content-type: application/json
+Prefer: A-timezone
 
-  { "name": "Volunteer" }`;
+{ "name": "Volunteer" }`;
 
     const parsed = parse(message);
     expect(parsed).toEqual({
@@ -23,10 +23,10 @@ describe('Iframe Message Parser', () => {
 
   it('parses http request snippet without a domain correctly', () => {
     const message = `POST /me/calendars
-  Content-type: application/json
-  Prefer: A-timezone
+Content-type: application/json
+Prefer: A-timezone
 
-  { "name": "Volunteer" }`;
+{ "name": "Volunteer" }`;
 
     const parsed = parse(message);
     expect(parsed).toEqual({
