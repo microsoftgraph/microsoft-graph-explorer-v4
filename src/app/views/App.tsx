@@ -215,9 +215,7 @@ class App extends Component<IAppProps, IAppState> {
 
   private handleInitMsg = (msg: IInitMessage) => {
     const { actions, profile } = this.props;
-    console.log({ actions, profile, code: msg.code });
     const { verb, headers, url, body }: any = parse(msg.code);
-    console.log({ verb, headers, url, body });
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,

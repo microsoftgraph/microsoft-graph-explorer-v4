@@ -118,13 +118,11 @@ function extractUrl(payload: string): object[] {
   // of the resulting array
   const sampleUrl = payload.split('\n')[1];
 
-
   // The sampleUrl has the format VERB URL, after splitting it on the space character the VERB will be at index 0
   // and the URL at index 1
   const urlParts = sampleUrl.split(' ');
   const verb = urlParts[0];
-  let url = urlParts[1];
-
+  let url = sampleUrl.replace(`${verb} `, '');
 
   let sampleDomain = '';
   domains.forEach(domain => {
