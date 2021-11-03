@@ -215,7 +215,9 @@ class App extends Component<IAppProps, IAppState> {
 
   private handleInitMsg = (msg: IInitMessage) => {
     const { actions, profile } = this.props;
+    console.log({ actions, profile, code: msg.code });
     const { verb, headers, url, body }: any = parse(msg.code);
+    console.log({ verb, headers, url, body });
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
@@ -395,7 +397,7 @@ class App extends Component<IAppProps, IAppState> {
                   <div style={{ marginBottom: 8 }}>
                     <QueryRunner onSelectVerb={this.handleSelectVerb} />
                   </div>
-                  <div style={ mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
                     {statusMessages(queryState, sampleQuery, actions)}
                     {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
                   </div>
