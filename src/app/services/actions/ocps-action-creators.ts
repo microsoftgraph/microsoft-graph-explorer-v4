@@ -9,7 +9,8 @@ import {
 
 interface IPolicyValues {
   email: number,
-  screenshot: number
+  screenshot: number,
+  feedback: number
 }
 
 export function getPoliciesSuccess(response: object): IAction {
@@ -65,7 +66,8 @@ export function getPolicies(): Function {
 export function getPolicy(response: any): IPolicyValues {
   const values: IPolicyValues = {
     email: 0,
-    screenshot: 0
+    screenshot: 0,
+    feedback: 0
   };
   const policies = response.value[0]?.policiesPayload;
   if (policies) {
@@ -75,6 +77,9 @@ export function getPolicy(response: any): IPolicyValues {
       }
       if (policiesPayload.settingId.includes('L_Screenshot')) {
         values.screenshot = parseInt(policiesPayload.value, 10);
+      }
+      if (policiesPayload.settingId.includes('L_SendFeedback')) {
+        values.feedback = parseInt(policiesPayload.value, 10);
       }
     }
   }
