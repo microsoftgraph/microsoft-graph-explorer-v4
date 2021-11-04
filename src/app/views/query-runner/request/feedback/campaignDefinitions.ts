@@ -1,5 +1,5 @@
 const CampaignDefinitions: object[] = [{
-  'CampaignId': '6f37e1b1-e1cb-47bd-9675-5a539fcbe576', //TODO: save as env variable
+  'CampaignId': getCampaignId().toString(),
   'StartTimeUtc': '2017-01-01T00:00:00Z',
   'EndTimeUtc': null,
   'GovernedChannelType': 0,
@@ -76,3 +76,7 @@ const CampaignDefinitions: object[] = [{
 }];
 
 export default CampaignDefinitions;
+
+function getCampaignId(): string {
+  return process.env.REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID || '';
+}
