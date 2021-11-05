@@ -9,7 +9,9 @@ export interface ITourSteps extends Step {
   advancedStep?: boolean;
   infoStep?: boolean
   expectedActionType?: string;
-  query?: IQuery
+  query?: IQuery,
+  docsLink?: string;
+  advanced?: boolean;
 }
 
 export interface ITourTooltipRenderProps extends TooltipRenderProps {

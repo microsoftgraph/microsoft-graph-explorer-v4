@@ -4,4 +4,6 @@ export interface ITour {
   step: number;
   continuous: boolean;
   actionType: string;
+  tourSteps?: object;
+  pending?: boolean;
 }

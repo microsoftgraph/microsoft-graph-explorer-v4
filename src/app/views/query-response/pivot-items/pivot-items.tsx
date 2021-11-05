@@ -25,7 +25,8 @@ import { Snippets } from '../snippets';
 export const getPivotItems = () => {
   const dispatch = useDispatch();
 
-  const { graphExplorerMode: mode, sampleQuery, graphResponse: { body } } = useSelector((state: IRootState) => state);
+  const { graphExplorerMode: mode, sampleQuery, graphResponse: { body },
+    tour } = useSelector((state: IRootState) => state);
 
   const currentTheme: ITheme = getTheme();
   const dotStyle = queryResponseStyles(currentTheme).dot;
@@ -55,13 +56,14 @@ export const getPivotItems = () => {
       const { itemKey } = link;
       const itemKeyString: string = itemKey.toString();
       const target = findTarget(itemKeyString);
-      const targetStepIndex = getTargetStepIndex(target, item.key)
+      const targetStepIndex = getTargetStepIndex(target, item.key, tour.tourSteps, tour.beginner)
       if(targetStepIndex >= 0){
         dispatch(toggleTourState({
           isRunning: true,
           beginner: false,
           continuous: item.key.toString() === 'info'? false : true,
-          step: targetStepIndex
+          step: targetStepIndex,
+          pending: false
         }))
       }
 

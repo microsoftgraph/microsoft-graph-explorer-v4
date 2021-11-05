@@ -34,7 +34,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [query, setQuery] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
+  const { dimensions, sampleQuery, tour } = useSelector((state: IRootState) => state);
 
   let isTabletSize: boolean = (windowWidth <= 1320) ? true : false;
 
@@ -109,7 +109,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
       const { itemKey } = link;
       const itemKeyString: string = itemKey.toString();
       const target = findTarget(itemKeyString);
-      const targetStepIndex = getTargetStepIndex(target, item.key)
+      const targetStepIndex = getTargetStepIndex(target, item.key, tour.tourSteps, false);
 
       if(targetStepIndex >= 0){
         dispatch(toggleTourState(
@@ -117,7 +117,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
             isRunning: true,
             beginner: false,
             continuous: true,
-            step: targetStepIndex
+            step: targetStepIndex,
+            pending: false
           }
         ))
       }

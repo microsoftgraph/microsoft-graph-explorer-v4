@@ -38,7 +38,7 @@ const NewFeature = () => {
   }
 
   const beginTour = () => {
-    dispatch(toggleTourState({isRunning: true, beginner: true, continuous: true, step: 0}));
+    dispatch(toggleTourState({isRunning: true, beginner: true, continuous: true, step: 0, pending: false}));
     hideNewFeaturePopup(true);
   }
 

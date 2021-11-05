@@ -43,7 +43,8 @@ const initialState: any = {
     isRunning: false,
     beginner: true,
     stepIndex: 0,
-    continuous: true
+    continuous: true,
+    tourSteps: []
   }
 };
 

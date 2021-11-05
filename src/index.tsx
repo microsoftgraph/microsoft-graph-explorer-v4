@@ -36,6 +36,7 @@ import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
 import { changeTheme } from './app/services/actions/theme-action-creator';
+import { fetchTourSteps } from './app/services/actions/tour-action-creator'
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
@@ -135,6 +136,11 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
   }
   appStore.dispatch(setDevxApiUrl(devxApi));
 }
+
+function loadSteps(){
+  appStore.dispatch(fetchTourSteps());
+}
+loadSteps();
 
 readHistoryData().then((data: any) => {
   if (data.length > 0) {

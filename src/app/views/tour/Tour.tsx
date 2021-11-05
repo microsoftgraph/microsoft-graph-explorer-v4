@@ -7,21 +7,23 @@ import { IRootState } from '../../../types/root';
 import { toggleTourState, setActionTypes as setStepAction,
   setNextTourStep } from '../../services/actions/tour-action-creator';
 import { TourTip } from './custom-components/Tourtip';
-import { BEGINNER_TOUR, ADVANCED_TOUR } from './utils/steps'
+import { BEGINNER_TOUR } from './utils/steps'
 import { useDispatch, useSelector } from 'react-redux';
 import { translateMessage } from '../../utils/translate-messages';
 import { FormattedMessage } from 'react-intl';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { geLocale } from '../../../appLocale';
+import { getTourSteps } from './utils/blob-steps/getSteps';
+import { setTimeout } from 'timers';
 
 const GETour = () => {
 
   const { tour } = useSelector((state: IRootState) => state);
-  const {step, beginner, isRunning} = tour;
+  const { step, beginner, isRunning, tourSteps, pending } = tour;
   const dispatch = useDispatch();
   const [run, setRun] = useState(isRunning);
-  const [steps] = useState(beginner === true ? BEGINNER_TOUR : ADVANCED_TOUR);
+  const [steps, setSteps] = useState(BEGINNER_TOUR);
   const [stepIndex, setStepIndex] = useState(step);
   const [changedIndexes, setChangedIndexes] = useState([]);
   const [hidden, hideInfoDialog] = useState(true);
@@ -40,16 +42,19 @@ const GETour = () => {
   const geDocsLink = `https://docs.microsoft.com/${geLocale}/graph/graph-explorer/graph-explorer-overview?context=graph%2Fapi%2F1.0&view=graph-rest-1.0`
 
   const stepIndexChanged : any= []
-  useEffect(() => {
-    setRun(isRunning);
-  }, [])
 
   useEffect(() => {
-    if(steps[stepIndex].expectedActionType && steps[stepIndex].expectedActionType === tour.actionType){
+    const stepsToSet: ITourSteps[] = getTourSteps(tourSteps, beginner);
+    setSteps(stepsToSet)
+  }, [tourSteps]);
+
+  useEffect(() => {
+    if(steps.length > 0 && steps[stepIndex].expectedActionType &&
+      steps[stepIndex].expectedActionType === tour.actionType){
       setStepIndex(stepIndex + 1);
       dispatch(setStepAction(stepIndex));
     }
-    if(!!steps[stepIndex].query){
+    if(steps.length > 0 && !!steps[stepIndex].query){
       const query = steps[stepIndex].query;
       dispatch(setSampleQuery(query!));
     }
@@ -71,6 +76,9 @@ const GETour = () => {
   }
 
   const handleJoyrideCallback = (data: CallBackProps) => {
+    if(steps.length === 0){
+      return;
+    }
 
     if(stepIndex < steps.length-1 && !!steps[stepIndex].query){
       const query = steps[stepIndex].query;
@@ -162,54 +170,59 @@ const GETour = () => {
 
   const handleCloseDialog = () => {
     hideInfoDialog(true);
-    dispatch(toggleTourState({isRunning: false, beginner: false, continuous: true, step: 0}));
+    dispatch(toggleTourState({isRunning: false, beginner: false, continuous: true, step: 0, pending:false}));
   }
 
   return (
-    <>
-      <Joyride
-        steps={steps}
-        run={run}
-        continuous={true}
-        showSkipButton={true}
-        showProgress={true}
-        callback={(data) => handleJoyrideCallback(data)}
-        locale={{
-          last: 'End Tour',
-          skip: 'Got it'
-        }}
-        stepIndex={stepIndex}
-        tooltipComponent={TourTip}
-        debug={false}
-        floaterProps={{hideArrow: true}}
-        styles={{
-          options:{
-            primaryColor:currentTheme.palette.blue
-          }
-        }}
-        disableOverlayClose={true}
-        disableScrollParentFix={true}
-        disableOverlay={temporarilyDisableOverlay}
-      />
-      <Dialog
-        hidden={hidden}
-        dialogContentProps={dialogContentProps}
-        modalProps={{
-          titleAriaId: getId(),
-          subtitleAriaId: getId(),
-          isBlocking: false,
-          styles: { main: { maxWidth: 450, textAlign: 'center', font:'bold', lineHeight:'1.8'} }
-        }}
-        onDismiss={handleCloseDialog}
-      >
-        <Link
-          href={geDocsLink} target='_blank' underline
-        >
-          <FormattedMessage id='Graph explorer docs'/>
-        </Link>
-      </Dialog>
-    </>
+    <div>
+      {pending || steps.length === 0 ?
+        <div /> :
+        <div>
+          <Joyride
+            steps={steps}
+            run={run}
+            continuous={true}
+            showSkipButton={true}
+            showProgress={true}
+            callback={(data) => handleJoyrideCallback(data)}
+            locale={{
+              last: 'End Tour',
+              skip: 'Got it'
+            }}
+            stepIndex={stepIndex}
+            tooltipComponent={TourTip}
+            debug={false}
+            floaterProps={{hideArrow: true}}
+            styles={{
+              options:{
+                primaryColor:currentTheme.palette.blue
+              }
+            }}
+            disableOverlayClose={true}
+            disableScrollParentFix={true}
+            disableOverlay={temporarilyDisableOverlay}
+          />
+          <Dialog
+            hidden={hidden}
+            dialogContentProps={dialogContentProps}
+            modalProps={{
+              titleAriaId: getId(),
+              subtitleAriaId: getId(),
+              isBlocking: false,
+              styles: { main: { maxWidth: 450, textAlign: 'center', font:'bold', lineHeight:'1.8'} }
+            }}
+            onDismiss={handleCloseDialog}
+          >
+            <Link
+              href={geDocsLink} target='_blank' underline
+            >
+              <FormattedMessage id='Graph explorer docs'/>
+            </Link>
+          </Dialog>
+        </div>
+      }
 
+    </div>
   )
 }
 

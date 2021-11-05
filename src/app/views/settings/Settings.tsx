@@ -47,7 +47,8 @@ function Settings(props: ISettingsProps) {
   const {
     permissionsPanelOpen,
     authToken,
-    theme: appTheme
+    theme: appTheme,
+    tour
   } = useSelector((state: IRootState) => state);
   const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
@@ -130,7 +131,8 @@ function Settings(props: ISettingsProps) {
   }, [authenticated]);
 
   const toggleCurrentTourState = () => {
-    const tourState = { isRunning: true, beginner: true, continuous: true, step: 0 };
+    const tourState = { isRunning: true, beginner: true, continuous: true, step: 0,
+      pending: false};
     if (tourType !== '' && tourType === 'Advanced Tour') {
       tourState.beginner = false;
     }
