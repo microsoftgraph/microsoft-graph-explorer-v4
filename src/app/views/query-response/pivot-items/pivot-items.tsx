@@ -53,7 +53,7 @@ export const getPivotItems = () => {
     return null;
   }
   const selectContextItem = (e: object, item: ITourContextMenu, link: IPivotItemProps): void => {
-    if(!!link && link.itemKey !== null){
+    if(link && link.itemKey !== null){
       const { itemKey } = link;
       const itemKeyString: string = !itemKey ? '' : itemKey.toString();
       const target = findTarget(itemKeyString);
