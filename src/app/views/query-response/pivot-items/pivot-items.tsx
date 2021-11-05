@@ -1,4 +1,4 @@
-import { getId, getTheme, Icon, ITheme, PivotItem, TooltipHost } from '@fluentui/react';
+import { getId, getTheme, Icon, IPivotItemProps, ITheme, PivotItem, TooltipHost } from '@fluentui/react';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -14,6 +14,7 @@ import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
 import { contextMenuItems, findTarget, getTargetStepIndex } from '../../tour/utils/contextHelpers';
 import LinkItem from '../../tour/utils/LinkItem';
+import { ITourContextMenu } from '../../tour/utils/types';
 import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import GraphToolkit from '../graph-toolkit/GraphToolkit';
@@ -51,10 +52,10 @@ export const getPivotItems = () => {
     }
     return null;
   }
-  const selectContextItem = (e: any, item: any, link: any) => {
-    if(link.itemKey !== null){
+  const selectContextItem = (e: object, item: ITourContextMenu, link: IPivotItemProps): void => {
+    if(!!link && link.itemKey !== null){
       const { itemKey } = link;
-      const itemKeyString: string = itemKey.toString();
+      const itemKeyString: string = !itemKey ? '' : itemKey.toString();
       const target = findTarget(itemKeyString);
       const targetStepIndex = getTargetStepIndex(target, item.key, tour.tourSteps, tour.beginner)
       if(targetStepIndex >= 0){
@@ -66,11 +67,14 @@ export const getPivotItems = () => {
           pending: false
         }))
       }
-
     }
   }
 
-  function renderItemLink(link: any) {
+  function renderItemLink(link?: IPivotItemProps): JSX.Element | null {
+    if (!link ) {
+      return null;
+    }
+
     return (
       <LinkItem
         style={{
@@ -80,7 +84,7 @@ export const getPivotItems = () => {
         }}
         key={link.title}
         items={contextMenuItems}
-        onItemClick={(e: any, item: any) => selectContextItem(e, item, link)}
+        onItemClick={(e: object, item: ITourContextMenu) => selectContextItem(e, item, link)}
       >
         <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}>
           <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />

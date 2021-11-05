@@ -2,9 +2,8 @@ import { DirectionalHint, Link } from '@fluentui/react';
 import { ITourSteps } from './types';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { FETCH_ADAPTIVE_CARD_SUCCESS, GET_SNIPPET_SUCCESS,
-  PROFILE_REQUEST_SUCCESS, QUERY_GRAPH_SUCCESS, SET_SAMPLE_QUERY_SUCCESS,
-  VIEW_HISTORY_ITEM_SUCCESS } from '../../../services/redux-constants';
+import { FETCH_ADAPTIVE_CARD_SUCCESS, GET_SNIPPET_SUCCESS, PROFILE_REQUEST_SUCCESS, QUERY_GRAPH_SUCCESS,
+  SET_SAMPLE_QUERY_SUCCESS,  VIEW_HISTORY_ITEM_SUCCESS } from '../../../services/redux-constants';
 import { geLocale } from '../../../../appLocale';
 import { translateMessage } from '../../../utils/translate-messages';
 

@@ -11,14 +11,14 @@ export function toggleTourState(response: object): any {
   }
 }
 
-export function setActionTypes(response: any): any {
+export function setActionTypes(response: string): any {
   return {
     type: SET_ACTION_TYPES_SUCCESS,
     response
   }
 }
 
-export function setNextTourStep(response: any): any {
+export function setNextTourStep(response: number): any {
   return {
     type: SET_NEXT_TOUR_STEP_SUCCESS,
     response
