@@ -58,14 +58,6 @@ export function fetchTourSteps(): Function {
 
       const options: IRequestOptions = { headers };
 
-      // // eslint-disable-next-line max-len
-      // let url = 'https://raw.githubusercontent.com/Onokaev/microsoft-graph-devx-content/dev/ge-tour/steps.json';
-      // const locale = geLocale
-      // if (locale !== 'en-US') {
-      //   // eslint-disable-next-line max-len
-      //   url = 'https://raw.githubusercontent.com/Onokaev/microsoft-graph-devx-content/dev/ge-tour/steps.json'
-      // }
-
       dispatch(fetchTourStepsPending());
 
       const response = await fetch(tourStepsUrl, options);
