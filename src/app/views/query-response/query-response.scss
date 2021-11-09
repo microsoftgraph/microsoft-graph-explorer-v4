@@ -12,13 +12,19 @@
     width: 100%;
   }
 
-  .pivot-response *[data-content='Expand xx'] {
-    float: right !important;
-    }
 
-  .pivot-response *[data-content='Share xx'] {
-    float: right !important;
+   @media screen and (min-width: 1320px){
+     .pivot-response *[data-content='Expand xx'] {
+       float: right !important;
+      }
+  }
+
+
+  @media screen and (min-width: 1320px){
+    .pivot-response *[data-content='Share xx'] {
+      float: right !important;
     }
+  }
 
   .default-text {
     display: flex;
