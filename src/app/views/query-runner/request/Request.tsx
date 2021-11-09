@@ -144,7 +144,6 @@ export class Request extends Component<IRequestComponent, any> {
   }
 
   private toggleFeedback = (event: any) => {
-    event.preventDefault();
     const { key } = event;
     if (key && key.includes('feedback')) {
       this.toggleCustomSurvey(true);
