@@ -174,7 +174,7 @@ export class Request extends Component<IRequestComponent, any> {
   public render() {
     const { dimensions } = this.props;
     const requestPivotItems = this.getPivotItems(dimensions.request.height);
-    const minHeight = 60;
+    const minHeight = 260;
     const maxHeight = 800;
     return (
     <>
