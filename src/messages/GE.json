@@ -386,5 +386,6 @@
   "For more information": "For more information, see",
   "documentation": "documentation",
   "Missing response headers for query workaround": "Some headers, typically returned for this request, may be missing due to the limitations of the workaround.",
-  "Learn more": "Learn more"
+  "Learn more": "Learn more",
+  "A documentation link for this URL exists. Click learn more to access it": "A documentation link for this URL exists. Click learn more to access it"
 }

@@ -36,7 +36,7 @@ const SuffixRenderer = () => {
             url: querySamples[0].docLink || '',
             name: translateMessage('Learn more')
           },
-          description: translateMessage('A documentation link for this URL exists. Click learn more to access it.')
+          description: translateMessage('A documentation link for this URL exists. Click learn more to access it')
         };
       }
     }
