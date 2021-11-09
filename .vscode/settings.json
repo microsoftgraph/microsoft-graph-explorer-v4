@@ -5,7 +5,7 @@
   },
   "files.exclude": {
     "**/node_modules": true,
-    "**/.github": true
+    "**/.github": false
   },
   "files.trimTrailingWhitespace": true,
   "editor.codeActionsOnSave": {
@@ -15,5 +15,8 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "eslint.validate": ["typescript", "typescriptreact"],
+  "eslint.validate": [
+    "typescript",
+    "typescriptreact"
+  ],
 }

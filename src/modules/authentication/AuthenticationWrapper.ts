@@ -125,6 +125,9 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
           return ocpsToken;
         })
       }
+      else {
+        throw error;
+      }
     }
   }
 

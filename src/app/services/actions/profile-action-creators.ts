@@ -15,6 +15,16 @@ import {
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 import { queryRunningStatus } from './query-loading-action-creators';
 
+interface IBetaProfile {
+  ageGroup: number;
+  profileType: ACCOUNT_TYPE;
+}
+
+interface IProfileResponse {
+  userInfo: any;
+  response: any;
+}
+
 export function profileRequestSuccess(response: object): any {
   return {
     type: PROFILE_REQUEST_SUCCESS,
@@ -46,7 +56,9 @@ export function getProfileInfo(): Function {
     dispatch(queryRunningStatus(true));
     try {
       const profile: IUser = await getProfileInformation();
-      profile.profileType = await getProfileType();
+      const {profileType, ageGroup} = await getBetaProfile();
+      profile.profileType = profileType;
+      profile.ageGroup = ageGroup;
       profile.profileImageUrl = await getProfileImage();
       dispatch(profileRequestSuccess(profile));
     } catch (error) {
@@ -68,25 +80,42 @@ async function getProfileInformation(): Promise<IUser> {
     const { userInfo } = await getProfileResponse();
     profile.displayName = userInfo.displayName;
     profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;
-    profile.ageGroup = await getAgeGroup();
     return profile;
   } catch (error) {
     throw error;
   }
 }
 
-async function getProfileType(): Promise<ACCOUNT_TYPE> {
+async function getBetaProfile(): Promise<IBetaProfile> {
   try {
     query.sampleUrl = BETA_USER_INFO_URL;
     const { userInfo } = await getProfileResponse();
-    const profileType: ACCOUNT_TYPE = userInfo?.account?.[0]?.source?.type?.[0]
-    if (profileType === undefined) {
-      return ACCOUNT_TYPE.UNDEFINED
-    }
-    return profileType;
+    const ageGroup =  getAgeGroup(userInfo);
+    const profileType = getProfileType(userInfo);
+    return {ageGroup, profileType};
   } catch (error) {
-    return ACCOUNT_TYPE.MSA;
+    return {ageGroup: 0, profileType: ACCOUNT_TYPE.MSA};
   }
+}
+
+function getAgeGroup(userInfo: any): AgeGroup {
+  const profileType = getProfileType(userInfo);
+  if (profileType === ACCOUNT_TYPE.MSA) {
+    const ageGroup = userInfo?.account?.[0]?.ageGroup;
+    if (ageGroup === undefined || ageGroup === '') {
+      return 0;
+    }
+    return ageGroup;
+  } else {
+    return 0;
+  }
+}
+function getProfileType(userInfo: any): ACCOUNT_TYPE {
+  const profileType: ACCOUNT_TYPE = userInfo?.account?.[0]?.source?.type?.[0];
+  if (profileType === undefined) {
+    return ACCOUNT_TYPE.UNDEFINED;
+  }
+  return profileType;
 }
 
 async function getProfileImage(): Promise<string> {
@@ -105,7 +134,7 @@ async function getProfileImage(): Promise<string> {
   return profileImageUrl;
 }
 
-async function getProfileResponse() {
+async function getProfileResponse(): Promise<IProfileResponse> {
   const scopes = DEFAULT_USER_SCOPES.split(' ');
   const respHeaders: any = {};
 
@@ -117,20 +146,3 @@ async function getProfileResponse() {
   };
 }
 
-async function getAgeGroup(): Promise<AgeGroup> {
-  const profileType = await getProfileType();
-  if (profileType === ACCOUNT_TYPE.MSA) {
-    try {
-      const { userInfo } = await getProfileResponse();
-      const ageGroup = userInfo?.account?.[0]?.ageGroup;
-      if (ageGroup === undefined || ageGroup === '') {
-        return 0;
-      }
-      return ageGroup;
-    } catch (error) {
-      return 0;
-    }
-  } else {
-    return 0;
-  }
-}

@@ -37,18 +37,19 @@ export function getPoliciesPending(): any {
 // TODO: Test this function
 export function getPolicies(): Function {
   return async (dispatch: Function) => {
-    const policyUrl = 'https://sip.clients.config.office.net/user/v1.0/web/policies';
-    const token = await authenticationWrapper.getOcpsToken();
-
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token //TODO: Add token
-
-    };
-    const options: IRequestOptions = { headers, method: 'GET' };
-    dispatch(getPoliciesPending());
-
     try {
+      const policyUrl = process.env.REACT_APP_OCPS_POLICY_URL!.toString();
+      const token = await authenticationWrapper.getOcpsToken();
+
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+
+      };
+      const options: IRequestOptions = { headers, method: 'GET' };
+      dispatch(getPoliciesPending());
+
+
       const response = await fetch(policyUrl, options);
       if (!response.ok) {
         throw response;
@@ -85,5 +86,3 @@ export function getPolicy(response: any): IPolicyValues {
   }
   return values;
 }
-
-

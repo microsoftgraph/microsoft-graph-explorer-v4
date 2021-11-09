@@ -27,7 +27,7 @@ import './request.scss';
 
 export class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {
-    super(props)
+    super(props);
     this.state = {
       enableShowSurvey: false
     }
@@ -216,14 +216,13 @@ export class Request extends Component<IRequestComponent, any> {
 }
 
 function mapStateToProps(
-  { graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions, authToken }: IRootState) {
+  { graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions }: IRootState) {
   return {
     mode: graphExplorerMode,
     sampleBody: sampleQuery.sampleBody,
     theme,
     mobileScreen: !!sidebarProperties.mobileScreen,
-    dimensions,
-    tokenPresent: authToken.token
+    dimensions
   };
 }
 

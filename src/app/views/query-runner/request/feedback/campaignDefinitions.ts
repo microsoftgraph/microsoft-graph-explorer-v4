@@ -1,3 +1,5 @@
+const { NODE_ENV } = process.env;
+
 const CampaignDefinitions: object[] = [{
   'CampaignId': getCampaignId().toString(),
   'StartTimeUtc': '2017-01-01T00:00:00Z',
@@ -16,13 +18,13 @@ const CampaignDefinitions: object[] = [{
       'NominationPeriod':
         {
           'Type': 0,
-          'IntervalSeconds': 120
-        }, //2592000
+          'IntervalSeconds':(NODE_ENV === 'development') ? 120 : process.env.REACT_APP_NOMINATION_PERIOD
+        },
       'CooldownPeriod':
         {
           'Type': 0,
-          'IntervalSeconds': 240
-        }, //7776000
+          'IntervalSeconds': (NODE_ENV === 'development') ? 240 : process.env.REACT_APP_COOLDOWN_PERIOD
+        },
       'FallbackSurveyDurationSeconds': 120
     },
   'SurveyTemplate':
@@ -35,7 +37,7 @@ const CampaignDefinitions: object[] = [{
                 [{
                   'Type': 0,
                   'Activity': 'AppUsageTime',
-                  'Count': 60, // @todo: undo to 120
+                  'Count': 60,
                   'IsAggregate': true
                 },
                 {

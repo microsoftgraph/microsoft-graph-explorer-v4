@@ -95,8 +95,8 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
     floodgateObject.floodgate.initOptions = {
       autoDismiss: 2,
       campaignDefinitions: CampaignDefinitions,
-      showEmailAddress: (policies?.data?.email === 2) ? false : true,
-      surveyEnabled: (policies?.data?.feedback === 2) ? false : true,
+      showEmailAddress: (policies?.data?.email !== 2),
+      surveyEnabled: (policies?.data?.feedback !== 2),
       onDismiss: (campaignId: string, submitted: boolean) => {
         if (submitted) {
           dispatch(setQueryResponseStatus({
