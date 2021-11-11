@@ -30,7 +30,7 @@ export class Request extends Component<IRequestComponent, any> {
     super(props);
     this.state = {
       enableShowSurvey: false,
-      selectedPivotKey: 'request-body'
+      selectedPivot: 'request-body'
     }
   }
 
@@ -80,7 +80,7 @@ export class Request extends Component<IRequestComponent, any> {
         </div>
       </PivotItem>,
       <PivotItem
-        key='permissions'
+        key='modify-permissions'
         itemIcon='AzureKeyVault'
         itemKey='modify-permissions'
         onRenderItemLink={this.getTooltipDisplay}
@@ -107,7 +107,7 @@ export class Request extends Component<IRequestComponent, any> {
     if (mode === Mode.Complete) {
       pivotItems.push(
         <PivotItem
-          key='auth'
+          key='access-token'
           itemIcon='AuthenticatorApp'
           itemKey='access-token'
           onRenderItemLink={this.getTooltipDisplay}
@@ -148,8 +148,10 @@ export class Request extends Component<IRequestComponent, any> {
     const { key } = event;
     if (key && key.includes('feedback')) {
       this.toggleCustomSurvey(true);
+      this.setState({ selectedPivot: 'request-body' })
+    } else {
+      this.setState({ selectedPivot: key })
     }
-    this.setState ({selectedPivotKey: 'request-body'})
   }
 
   private onPivotItemClick = (item?: PivotItem) => {
@@ -176,43 +178,45 @@ export class Request extends Component<IRequestComponent, any> {
   public render() {
     const { dimensions } = this.props;
     const requestPivotItems = this.getPivotItems(dimensions.request.height);
+    const { selectedPivot } = this.state;
+    const pivot = selectedPivot.replace('.$', '');
+    console.log({ pivot });
     const minHeight = 260;
     const maxHeight = 800;
-    const {selectedPivotKey} = this.state;
     return (
-    <>
-      <Resizable
-        style={{
-          border: 'solid 1px #ddd',
-          marginBottom: 10
-        }}
-        onResize={(e: any, direction: any, ref: any) => {
-          if (ref && ref.style && ref.style.height) {
-            this.setRequestAndResponseHeights(ref.style.height);
-          }
-        }}
-        maxHeight={maxHeight}
-        minHeight={minHeight}
-        bounds={'window'}
-        size={{
-          height: 'inherit',
-          width: '100%'
-        }}
-        enable={{
-          bottom: true
-        }}
-      >
-        <div className='query-request'>
-          <Pivot
-            overflowBehavior = 'menu'
-            onLinkClick={this.handlePivotItemClick}
-            className='pivot-request'
-            selectedKey={String(selectedPivotKey)}
-          >
-            {requestPivotItems}
-          </Pivot>
-        </div>
-      </Resizable>
+      <>
+        <Resizable
+          style={{
+            border: 'solid 1px #ddd',
+            marginBottom: 10
+          }}
+          onResize={(e: any, direction: any, ref: any) => {
+            if (ref && ref.style && ref.style.height) {
+              this.setRequestAndResponseHeights(ref.style.height);
+            }
+          }}
+          maxHeight={maxHeight}
+          minHeight={minHeight}
+          bounds={'window'}
+          size={{
+            height: 'inherit',
+            width: '100%'
+          }}
+          enable={{
+            bottom: true
+          }}
+        >
+          <div className='query-request'>
+            <Pivot
+              overflowBehavior='menu'
+              onLinkClick={this.handlePivotItemClick}
+              className='pivot-request'
+              selectedKey={pivot}
+            >
+              {requestPivotItems}
+            </Pivot>
+          </div>
+        </Resizable>
         <FeedbackForm activated={this.state.enableShowSurvey} dismissSurvey={this.toggleCustomSurvey} />
       </>
     );
