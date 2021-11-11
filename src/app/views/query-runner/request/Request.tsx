@@ -29,7 +29,8 @@ export class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {
     super(props);
     this.state = {
-      enableShowSurvey: false
+      enableShowSurvey: false,
+      selectedPivotKey: 'request-body'
     }
   }
 
@@ -148,6 +149,7 @@ export class Request extends Component<IRequestComponent, any> {
     if (key && key.includes('feedback')) {
       this.toggleCustomSurvey(true);
     }
+    this.setState ({selectedPivotKey: 'request-body'})
   }
 
   private onPivotItemClick = (item?: PivotItem) => {
@@ -176,6 +178,7 @@ export class Request extends Component<IRequestComponent, any> {
     const requestPivotItems = this.getPivotItems(dimensions.request.height);
     const minHeight = 260;
     const maxHeight = 800;
+    const {selectedPivotKey} = this.state;
     return (
     <>
       <Resizable
@@ -204,6 +207,7 @@ export class Request extends Component<IRequestComponent, any> {
             overflowBehavior = 'menu'
             onLinkClick={this.handlePivotItemClick}
             className='pivot-request'
+            selectedKey={String(selectedPivotKey)}
           >
             {requestPivotItems}
           </Pivot>
