@@ -6,7 +6,7 @@ import { styles } from './suffix.styles';
 
 export const HintList = ({ hints }: any) => {
   const listItems = hints.map((hint: IHint, index: any) => <div key={index}>
-    {hint.description && <Text block variant='small' id={'description' + index}>
+    {hint.description && <Text block variant='medium' id={'description' + index}>
       {hint.description}
     </Text>}
     {hint.link &&
