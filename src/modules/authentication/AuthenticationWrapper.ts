@@ -76,7 +76,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
   }
 
-  private getAccount(): AccountInfo | undefined {
+  public getAccount(): AccountInfo | undefined {
     if (!msalApplication) {
       return undefined;
     }
@@ -102,12 +102,32 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       account: this.getAccount(), redirectUri: getCurrentUri()
     };
     try {
-      const response: AuthenticationResult =
-        await msalApplication.acquireTokenSilent(silentRequest);
+      const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
       return response;
     } catch (error) {
-
       throw error;
+    }
+  }
+
+  public async getOcpsToken() {
+    const resourceId = 'https://clients.config.office.net/';
+    const ocpsAccessTokenRequest = {
+      scopes: [resourceId + '/.default'],
+      account: this.getAccount()
+    }
+    try {
+      const ocpsToken: string = (await msalApplication.acquireTokenSilent(ocpsAccessTokenRequest)).accessToken;
+      return ocpsToken;
+    } catch (error) {
+      if (error instanceof InteractionRequiredAuthError) {
+        msalApplication.acquireTokenPopup(ocpsAccessTokenRequest).then((ocpsAccessTokenRequest) => {
+          const ocpsToken = ocpsAccessTokenRequest.accessToken;
+          return ocpsToken;
+        })
+      }
+      else {
+        throw error;
+      }
     }
   }
 
@@ -124,12 +144,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       this.storeHomeAccountId(result.account!);
       return result;
     } catch (error: any) {
-      const { errorCode } = error;
       if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
 
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
 
-      } else if (signInAuthError(errorCode)) {
+      } else if (signInAuthError(error)) {
         this.deleteHomeAccountId();
         throw error;
       }

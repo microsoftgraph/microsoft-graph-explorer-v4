@@ -21,6 +21,7 @@ import { theme } from './theme-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
 import { proxyUrl } from './proxy-url-reducer';
 import { tour } from './tour-reducer';
+import { policies } from './ocps-reducers';
 
 export default combineReducers({
   adaptiveCard,
@@ -45,5 +46,6 @@ export default combineReducers({
   theme,
   dimensions,
   permissionsPanelOpen,
-  tour
+  tour,
+  policies
 });

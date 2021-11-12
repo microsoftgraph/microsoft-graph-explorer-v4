@@ -33,10 +33,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [showModal, setShowModal] = useState(false);
   const [query, setQuery] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
 
-  let isTabletSize: boolean = (windowWidth <= 1320) ? true : false;
 
   const {
     intl: { messages }
@@ -44,18 +42,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
 
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
-    window.addEventListener('resize', handleWindowResize, false);
-    return () => window.removeEventListener('resize', handleWindowResize);
-  }, [dimensions, windowWidth]);
-
-  const handleWindowResize = () => {
-    const currentWindowWidth = window.innerWidth;
-    isTabletSize = false;
-    if (currentWindowWidth <= 1320) {
-      isTabletSize = true;
-    }
-    setWindowWidth(currentWindowWidth);
-  }
+  }, [dimensions]);
 
   const toggleShareQueryDialogState = () => {
     setShareQuaryDialogStatus(!showShareQueryDialog);
@@ -171,12 +158,12 @@ const QueryResponse = (props: IQueryResponseProps) => {
         }}
       >
         <div className='query-response' style={{
-          minHeight: responseHeight,
+          minHeight: 350,
           height: responseHeight
         }}>
 
           <Pivot overflowBehavior="menu" onLinkClick={handlePivotItemClick}
-            className={isTabletSize ? '' : 'pivot-response'} >
+            className={'pivot-response'} >
             {getPivotItems()}
             <PivotItem
               headerText='Share'

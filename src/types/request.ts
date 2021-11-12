@@ -32,6 +32,8 @@ export interface IRequestComponent {
     setDimensions: Function;
     toggleTourState: Function
   };
+  officeBrowserFeedback: any;
+  enableShowSurvey: boolean;
 }
 
 export interface IRequestOptions {
