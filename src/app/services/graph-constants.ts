@@ -13,6 +13,7 @@ export const HOME_ACCOUNT_KEY = 'fbf1ecbe-27ab-42d7-96d4-3e6b03682ee4';
 export enum ACCOUNT_TYPE {
   AAD = 'AAD',
   MSA = 'MSA',
+  UNDEFINED = 'UNDEFINED'
 }
 export enum PERMS_SCOPE {
   WORK = 'DelegatedWork',
