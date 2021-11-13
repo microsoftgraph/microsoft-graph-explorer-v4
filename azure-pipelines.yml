@@ -56,70 +56,74 @@ trigger:
 
 jobs:
   - job: One
-    displayName: 'Build and test validation'
+    displayName: "Build and test validation"
     steps:
       - task: CredScan@2
         inputs:
-          toolMajorVersion: 'V2'
+          toolMajorVersion: "V2"
 
       - task: NodeTool@0
         inputs:
-          versionSpec: '12.x'
-        displayName: 'Install Node.js'
+          versionSpec: "12.x"
+        displayName: "Install Node.js"
 
       - script: |
           npm install
-        displayName: 'npm install'
+        displayName: "npm install"
 
       - script: |
           npm run lint
-        displayName: 'Runs linting checks'
+        displayName: "Runs linting checks"
 
       - script: |
           npm test
-        displayName: 'Runs Unit tests'
+        displayName: "Runs Unit tests"
 
       - script: |
           npm run ci
-        displayName: 'Runs Accessibility tests'
+        displayName: "Runs Accessibility tests"
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
         inputs:
-          testResultsFormat: 'JUnit'
-          testResultsFiles: 'test-report.xml'
-        displayName: 'Publish Test Results'
+          testResultsFormat: "JUnit"
+          testResultsFiles: "test-report.xml"
+        displayName: "Publish Test Results"
 
       - script: |
           npm run build
-        displayName: 'Run build'
+        displayName: "Run build"
 
   - job: Two
-    displayName: 'Publish artifacts'
+    displayName: "Publish artifacts"
     dependsOn: One
     condition: succeeded()
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: '12.x'
-        displayName: 'Install Node.js'
+          versionSpec: "12.x"
+        displayName: "Install Node.js"
 
       - script: |
           npm install
-        displayName: 'npm install'
+        displayName: "npm install"
 
       - script: |
           npm run build
         env:
           REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
-        displayName: 'Build static assets for staging'
+          REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_STAGING_FEEDBACK_CAMPAIGN_ID)
+          REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID)
+          REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
+          REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
+        displayName: "Build static assets for staging"
 
       - task: PowerShell@2
-        displayName: 'Set version-number'
+        displayName: "Set version-number"
         condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
         inputs:
-          targetType: 'inline'
+          targetType: "inline"
           script: |
             $lernaPath = "$Env:BUILD_SOURCESDIRECTORY\package.json"
             $json = Get-Content "$lernaPath" | Out-String | ConvertFrom-Json
@@ -133,23 +137,27 @@ jobs:
         env:
           REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
-        displayName: 'Build static assets for prod'
+          REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_FEEDBACK_CAMPAIGN_ID)
+          REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID)
+          REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
+          REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
+        displayName: "Build static assets for prod"
 
       - task: CopyFiles@1
-        displayName: 'Copy files to: $(Build.ArtifactStagingDirectory)'
+        displayName: "Copy files to: $(Build.ArtifactStagingDirectory)"
         inputs:
-          SourceFolder: '$(System.DefaultWorkingDirectory)/build'
-          TargetFolder: '$(Build.ArtifactStagingDirectory)'
+          SourceFolder: "$(System.DefaultWorkingDirectory)/build"
+          TargetFolder: "$(Build.ArtifactStagingDirectory)"
 
       - task: PublishBuildArtifacts@1
-        displayName: 'Publish Artifact: drop'
+        displayName: "Publish Artifact: drop"
         inputs:
-          PathtoPublish: '$(build.ArtifactStagingDirectory)'
+          PathtoPublish: "$(build.ArtifactStagingDirectory)"
 
       - task: DeleteFiles@1
         inputs:
           contents: node_modules
-        displayName: 'Delete node_modules'
+        displayName: "Delete node_modules"
 
       # - task: YodLabs.O365PostMessage.O365PostMessageBuild.O365PostMessageBuild@0
       #   displayName: 'Graph Client Tooling pipeline fail notification'
