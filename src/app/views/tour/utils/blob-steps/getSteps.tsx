@@ -10,8 +10,7 @@ export const getTourSteps = (steps: any, beginnerTour: boolean): ITourSteps[] =>
   const { TourSteps } = steps;
 
   for (const step of TourSteps) {
-    const { target, content, directionalHint, spotlightClicks, hideCloseButton,
-      autoNext, disableBeacon, title, expectedActionType, advanced, docsLink, query } = step;
+    const {content, advanced, docsLink } = step;
     let tourContent = <div>{content}</div>;
     if(!!docsLink){
       tourContent = <div>{content} {' '}
@@ -21,29 +20,14 @@ export const getTourSteps = (steps: any, beginnerTour: boolean): ITourSteps[] =>
       </div>
     }
 
-    const actualStep: ITourSteps = {
-      target,
-      content: tourContent,
-      disableBeacon,
-      directionalHint,
-      autoNext,
-      title,
-      hideCloseButton,
-      expectedActionType,
-      spotlightClicks,
-      query
+    let actualStep: ITourSteps = {
+      ...step,
+      content: tourContent
     }
 
+    actualStep = deleteEmptyQueryObject(actualStep);
 
-    if(!!query){
-      const objectCount = Object.keys(query).length;
-      if(objectCount === 0) {
-        delete actualStep.query
-      }
-
-    }
-
-    if (advanced === true) {
+    if (advanced) {
       advancedSteps.push(actualStep);
     }
     else {
@@ -51,5 +35,16 @@ export const getTourSteps = (steps: any, beginnerTour: boolean): ITourSteps[] =>
     }
   }
 
-  return (beginnerTour === true ? beginnerSteps : advancedSteps);
+  return (beginnerTour ? beginnerSteps : advancedSteps);
+}
+
+const deleteEmptyQueryObject = (tourSteps: ITourSteps) : ITourSteps => {
+  const { query } = tourSteps;
+  if(!!query){
+    const objectCount = Object.keys(query).length;
+    if(objectCount === 0) {
+      delete tourSteps.query;
+    }
+  }
+  return tourSteps;
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { TeachingBubbleContent, Coachmark, IButtonProps, Dialog, DialogType, getId,
-  DialogFooter, PrimaryButton, Icon } from '@fluentui/react'
+import { IButtonProps, Dialog, DialogType, getId,
+  DialogFooter, PrimaryButton, Icon, TeachingBubble } from '@fluentui/react'
 import { ITourSteps } from './utils/types';
 import { useDispatch } from 'react-redux';
 import { toggleTourState } from '../../services/actions/tour-action-creator';
@@ -20,8 +20,8 @@ const NewFeature = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const hasPopupBeenLoaded = localStorage.getItem('tour');
-    if(hasPopupBeenLoaded !== 'done'){
+    const hasPopupBeenDisplayed = localStorage.getItem('tour');
+    if(hasPopupBeenDisplayed !== 'displayedContent'){
       hideNewFeaturePopup(false);
       writeToLocalStorage();
     }
@@ -34,7 +34,7 @@ const NewFeature = () => {
   }
 
   const writeToLocalStorage = () => {
-    localStorage.setItem('tour', 'done')
+    localStorage.setItem('tour', 'displayedContent')
   }
 
   const beginTour = () => {
@@ -73,26 +73,22 @@ const NewFeature = () => {
   return(
     <div>
       {!newFeaturePopup && (
-        <Coachmark target={NEW_FEATURE[0].target}
-          ariaAlertText={translateMessage('Coachmark')}
-          ariaDescribedBy={translateMessage('Coachmark description')}
-          ariaLabelledBy={getId('coachmark-label')}
-          ariaDescribedByText={translateMessage('Open coachmark')}
-          ariaLabelledByText={translateMessage('Open coachmark')}>
-          <TeachingBubbleContent
-            headline={NEW_FEATURE[0].title as string}
-            hasCloseButton
-            onDismiss={closeFeaturePopup}
-            primaryButtonProps={startButton}
-            secondaryButtonProps={dismissButton}
-            isWide={true}
-          >
-            <div style={{textAlign: 'center', lineHeight:'1.5' }} >
-              <div><SmileyFace/></div>
-              {NEW_FEATURE[0].content}
-            </div>
-          </TeachingBubbleContent>
-        </Coachmark>)}
+
+        <TeachingBubble
+          headline={NEW_FEATURE[0].title as string}
+          hasCloseButton
+          onDismiss={closeFeaturePopup}
+          primaryButtonProps={startButton}
+          secondaryButtonProps={dismissButton}
+          isWide={false}
+          target={NEW_FEATURE[0].target}
+        >
+          <div style={{textAlign: 'center', lineHeight:'1.5' }} >
+            <div><SmileyFace/></div>
+            {NEW_FEATURE[0].content}
+          </div>
+        </TeachingBubble>
+      )}
 
       <Dialog
         hidden={hidden}

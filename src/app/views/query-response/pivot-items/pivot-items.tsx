@@ -57,7 +57,7 @@ export const getPivotItems = () => {
       const { itemKey } = link;
       const itemKeyString: string = !itemKey ? '' : itemKey.toString();
       const target = findTarget(itemKeyString);
-      const targetStepIndex = getTargetStepIndex(target, item.key, tour.tourSteps, tour.beginner)
+      const targetStepIndex = getTargetStepIndex(target, tour);
       if(targetStepIndex >= 0){
         dispatch(toggleTourState({
           isRunning: true,

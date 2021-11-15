@@ -1,19 +1,19 @@
 import { ContextualMenuItemType } from '@fluentui/react';
+import { ITour } from '../../../../types/tour';
 import { getTourSteps } from './blob-steps/getSteps';
 import { componentToTargetMap } from './mapToComponent';
-import { COMPONENT_INFO } from './steps';
 import { ITourContextMenu } from './types'
 
 
-export const getTargetStepIndex = (target: string, menuType: string, tourSteps: any, beginner: boolean): number => {
-  const ADVANCED_TOUR = getTourSteps(tourSteps, beginner)
+export const getTargetStepIndex = (target: string, tour: ITour): number => {
+  const { tourSteps, beginner } = tour;
+  const advancedTour = getTourSteps(tourSteps, beginner)
 
-  const tourStep = menuType === 'info' ? COMPONENT_INFO : ADVANCED_TOUR;
-  if (target === '') {
+  if (!target) {
     return -1;
   }
-  for (let i = 0; i < tourStep.length; i++) {
-    if (tourStep[i].target.toString() === target) {
+  for (let i = 0; i < advancedTour.length; i++) {
+    if (advancedTour[i].target.toString() === target) {
       return i;
     }
   }

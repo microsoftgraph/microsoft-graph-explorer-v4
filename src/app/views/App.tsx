@@ -81,7 +81,11 @@ class App extends Component<IAppProps, IAppState> {
   private currentTheme: ITheme = getTheme();
   private statusAreaMobileStyle = appStyles(this.currentTheme).statusAreaMobileScreen;
   private statusAreaLaptopStyle = appStyles(this.currentTheme).statusAreaLaptopScreen;
-  private displayNewFeatureCoachmark = localStorage.getItem('tour');
+
+  private shouldDisplayBubble = () => {
+    return localStorage.getItem('tour') === 'displayedContent';
+  }
+  private displayNewFeatureCoachmark = this.shouldDisplayBubble();
 
   constructor(props: IAppProps) {
     super(props);
@@ -357,7 +361,7 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        {this.displayNewFeatureCoachmark !== 'done' && <NewFeature />}
+        {!this.displayNewFeatureCoachmark && <NewFeature />}
         {tour.isRunning && <GETour/>}
         <div className={`container-fluid ${classes.app}`}>
           <Announced

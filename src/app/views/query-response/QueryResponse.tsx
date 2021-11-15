@@ -24,6 +24,7 @@ import LinkItem from '../tour/utils/LinkItem';
 import { toggleTourState } from '../../services/actions/tour-action-creator';
 import { contextMenuItems, findTarget, getTargetStepIndex } from '../tour/utils/contextHelpers';
 import { ITourContextMenu } from '../tour/utils/types';
+import { ITour } from '../../../types/tour';
 
 
 const QueryResponse = (props: IQueryResponseProps) => {
@@ -96,7 +97,9 @@ const QueryResponse = (props: IQueryResponseProps) => {
       const { itemKey } = link;
       const itemKeyString: string = !itemKey ? '' : itemKey.toString();
       const target = findTarget(itemKeyString);
-      const targetStepIndex = getTargetStepIndex(target, item.key, tour.tourSteps, false);
+      const tourCopy: ITour = {...tour};
+      tourCopy.beginner = false;
+      const targetStepIndex = getTargetStepIndex(target, tour);
 
       if(targetStepIndex >= 0){
         dispatch(toggleTourState(
