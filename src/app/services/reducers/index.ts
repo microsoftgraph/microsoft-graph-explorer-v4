@@ -6,6 +6,7 @@ import { autoComplete } from './autocomplete-reducer';
 import { devxApi } from './devxApi-reducers';
 import { dimensions } from './dimensions-reducers';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
+import { policies } from './ocps-reducers';
 import { permissionsPanelOpen } from './permissions-panel-reducer';
 import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
@@ -22,8 +23,6 @@ import { snippets } from './snippet-reducer';
 import { termsOfUse } from './terms-of-use-reducer';
 import { theme } from './theme-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
-import { proxyUrl } from './proxy-url-reducer';
-import { policies } from './ocps-reducers';
 
 export default combineReducers({
   adaptiveCard,
