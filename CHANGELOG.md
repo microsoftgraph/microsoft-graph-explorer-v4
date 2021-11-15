@@ -2,6 +2,54 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.7.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v4.2.0...v4.7.0) (2021-05-31)
+
+
+### Bug Fixes
+
+* Adaptive cards changes ([#873](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/873)) ([f225fe4](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/f225fe4abd874f27cc742badc5f39c50578c3e22))
+* adaptive cards destroy ([#848](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/848)) ([933e9bb](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/933e9bb0fb655b83f8042b6e32ac0cdd09a09077))
+* Adaptive cards instrumentation ([#849](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/849)) ([4022373](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/40223730ce84fb41aac1bf72c94bc2c22bfd8d33))
+* Add 'Maximize sidebar' aria-label ([#842](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/842)) ([4e14352](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/4e143524dd0b706cfe55d5582f36ed5aa63ec6d3))
+* add fallback texts to placeholder text ([#690](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/690)) ([4419110](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/441911079035b2cbbe137f168c8fb3baa0887dec))
+* add onItemInvoked action ([#806](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/806)) ([0498d39](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/0498d394bad29d2c6dfd5cc083c9e9b9ce679b9d))
+* adjust column width ([#850](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/850)) ([d054f35](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/d054f350915ffd1fd7fc2f8290648658844e0948))
+* all permissions show as required ([#797](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/797)) ([ed6815a](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/ed6815a6286c57efa64ce6fbd2f20cdf7a7fc8f1))
+* autocomplete options not displaying ([#847](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/847)) ([100ddf1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/100ddf1e0f5ff3c0cb91d5623e9cc754159f7196))
+* autocomplete-onfocusout ([#855](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/855)) ([e80af0b](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/e80af0b353e4deae3629a7b002291ccdd845a2ba))
+* breaking change with the adaptive cards templating library ([#735](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/735)) ([059acb3](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/059acb39126a0d2e476d09944c720892674e94a6))
+* Concept try-it button ([#966](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/966)) ([b80bdcf](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/b80bdcfde701c0da82263b798f48d03f87221efc))
+* copy paste query address bar ([#658](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/658)) ([f47d237](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/f47d23733a73b9e4dc33b5c328e2e87feed318a1))
+* create onenote page ([#708](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/708)) ([e3a6474](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/e3a6474bcf5ed37af237a1a4bae9695553d7d6f3))
+* duplicate aria labels ([#752](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/752)) ([1a70245](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/1a70245632e387f6bc50428dae65b6ea08652d62))
+* Enable screen reader confirmation feedback ([#802](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/802)) ([5bf4550](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/5bf4550ba415dcfba31fc8e2032e0f05f3275fd8))
+* expand maxWidth allow more humanName chars ([#764](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/764)) ([74d0401](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/74d0401b3de9e8941e7887ef95288e1f5c3298ac))
+* focus order ([#763](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/763)) ([938d1ac](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/938d1ac436282d09400c6405071afc6984b53dc3))
+* Graph Explorer link colors ([#846](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/846)) ([ededbe1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/ededbe1bef80f7bd46bb8e26fcccd88faa216844))
+* intermittent create page error ([#837](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/837)) ([9b102b5](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/9b102b5a8110d36f98f179d9bb90a23f3fafd93c))
+* javascript injection ([#925](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/925)) ([94bf808](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/94bf80828e2925531159d10ad912deac9a2b6477))
+* Message bar truncation ([#679](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/679)) ([569bf53](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/569bf53eef99179bfe811de5a09835fb86656bea))
+* metadata syntax highlighting ([#864](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/864)) ([9d705d6](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/9d705d66fac75d10ac1d07f6e98c66c4a4793c2c))
+* modify permissions tab UI ([#790](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/790)) ([dcefa4b](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/dcefa4b573e6eb609fccc6fa079541ff0fade99b))
+* permissions consent ([#807](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/807)) ([743a0df](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/743a0df1492ad1d7a4b08921eaf6be2b546d0ec6))
+* permissions tab UI ([#815](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/815)) ([a2098b9](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/a2098b9c5c3c793d712d51583a68bdc8875dc825))
+* prevent resize when view expanded ([#816](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/816)) ([6f1234f](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/6f1234f7fabb16f75ac1c0a1d8aaba4c1b2c0a3e))
+* prevent running empty requests ([#965](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/965)) ([c4d6826](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/c4d6826e775918590f0884c25eb3918be39032fd))
+* prevent running empty requests ([#972](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/972)) ([37a7372](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/37a7372ab765b36caab4dbd18cb64478b8368ca8))
+* Remove main tag ([#680](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/680)) ([5e634dd](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/5e634ddbbcc20bdd5662b11e94fc3307e5c6e84f))
+* remove unnecessary code snippets tab ([#695](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/695)) ([7aca4fc](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/7aca4fca87f0e09fea706f254ce3ae4799740a9b))
+* remove wrongly placed working ([#795](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/795)) ([07db101](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/07db101fb9d07a48afcc4926e6f2b5df92e5964c))
+* rename component name ([#859](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/859)) ([e31cc2c](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/e31cc2cd1df394ac75880160c3936b24989c716d))
+* sample query sample body ([#775](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/775)) ([b64a110](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/b64a1101190a57953a807b2a02d879bcf3e92761))
+* sanitize url when fetching permissions ([#794](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/794)) ([acfbba9](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/acfbba9be4ee46111089996ad5c7aa9004f792d3))
+* shrink request section ([#822](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/822)) ([13074a4](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/13074a46ccec78b786e479d4b3e7b8ba820143d0))
+* snippets not available ([#877](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/877)) ([b5c99a8](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/b5c99a834557951bba1ee4716bba6fa1073c4f16))
+* sovereign clouds metadata ([#676](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/676)) ([d0de298](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/d0de298e0d4068defaa9b135e99820c28a366d6f))
+* stop display of options when fetching suggestions ([#778](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/778)) ([4aad40d](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/4aad40d968b884e10f33db3d1a03140f14568946))
+* support different content types ([#814](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/814)) ([ccd8702](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/ccd8702a4948ae523cf647838e35bf4775c0e5fe))
+* Undo 'react-dev-utils' package update ([#920](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/920)) ([fe5c842](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/fe5c842acf377a6dd33da86fed5b08556d8e45b3))
+* Update GitHub workflow ([#962](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/962)) ([66dc22b](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/66dc22b52b25ca8d4ea942343495353cc2870efd))
+
 ### [4.1.9](https://github.com/microsoftgraph/microsoft-graph-explorer-v2/compare/v4.1.7...v4.1.9) (2020-09-24)
 
 * disabled query related telemetry in SampleQueries.tsx

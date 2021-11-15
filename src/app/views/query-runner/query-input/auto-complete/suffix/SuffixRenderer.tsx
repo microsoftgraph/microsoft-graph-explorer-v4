@@ -1,8 +1,8 @@
 import {
-  DefaultButton, FocusTrapCallout, FocusZone, getId, Icon, ITooltipHostStyles, Spinner, Stack, Text, TooltipHost
+  Callout, getId, Icon, ITooltipHostStyles,
+  Spinner, Text, TooltipHost
 } from '@fluentui/react';
 import React, { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
 import { ISampleQuery } from '../../../../../../types/query-runner';
@@ -13,7 +13,6 @@ import { translateMessage } from '../../../../../utils/translate-messages';
 import { HintList } from './HintList';
 import { getMatchingSamples, IHint } from './suffix-util';
 import { styles } from './suffix.styles';
-
 
 const SuffixRenderer = () => {
   const { autoComplete, sampleQuery, samples, queryRunnerStatus } = useSelector(
@@ -37,7 +36,7 @@ const SuffixRenderer = () => {
             url: querySamples[0].docLink || '',
             name: translateMessage('Learn more')
           },
-          description: ''
+          description: translateMessage('A documentation link for this URL exists. Click learn more to access it')
         };
       }
     }
@@ -96,7 +95,7 @@ const SuffixRenderer = () => {
           id={buttonId}
         />
         {isCalloutVisible && (
-          <FocusTrapCallout
+          <Callout
             className={styles.callout}
             ariaLabelledBy={labelId}
             ariaDescribedBy={descriptionId}
@@ -110,12 +109,7 @@ const SuffixRenderer = () => {
               /{requestUrl}
             </Text>
             <HintList hints={hints} />
-            <FocusZone>
-              <Stack className={styles.buttons} tokens={{ childrenGap: 8 }} horizontal>
-                <DefaultButton onClick={toggleCallout}><FormattedMessage id='Close' /></DefaultButton>
-              </Stack>
-            </FocusZone>
-          </FocusTrapCallout>
+          </Callout>
         )}
       </>);
   }
