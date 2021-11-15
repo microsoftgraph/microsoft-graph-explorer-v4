@@ -1,4 +1,4 @@
-import { ITheme } from '@fluentui/react';
+import { ContextualMenuItemType, ITheme } from '@fluentui/react';
 import { Header } from './query-runner';
 
 export interface IHistoryItem extends History {
@@ -32,4 +32,10 @@ export interface IHistoryProps {
   theme?: ITheme;
   styles?: object;
   history: History[];
+}
+
+export interface IHistoryItemContext {
+  key: string;
+  itemType: ContextualMenuItemType;
+  text: string;
 }

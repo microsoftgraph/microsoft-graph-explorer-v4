@@ -12,7 +12,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { SortOrder } from '../../../../types/enums';
 import { IHarPayload } from '../../../../types/har';
-import { IHistoryItem, IHistoryProps } from '../../../../types/history';
+import { IHistoryItem, IHistoryItemContext, IHistoryProps } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
@@ -28,6 +28,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
+import ContextMenu  from '../../../views/common/ContextMenu';
 
 export class History extends Component<IHistoryProps, any> {
   constructor(props: any) {
@@ -109,16 +110,66 @@ export class History extends Component<IHistoryProps, any> {
     return items;
   }
 
+  contextMenuItems: IHistoryItemContext[] = [
+    {
+      key: 'view',
+      itemType: ContextualMenuItemType.Normal,
+      text: translateMessage('view')
+    },
+    {
+      key: 'runQuery',
+      itemType: ContextualMenuItemType.Normal,
+      text: translateMessage('Run Query')
+    },
+    {
+      key: 'exportQuery',
+      itemType: ContextualMenuItemType.Normal,
+      text: translateMessage('Export')
+    },
+    {
+      key: 'remove',
+      itemType: ContextualMenuItemType.Normal,
+      text: translateMessage('Delete')
+    }
+  ]
+
+  private selectContextMenuItem = (event: any, item: IHistoryItemContext, historyItem: any) => {
+    switch(item.key){
+      case 'view':
+        this.onViewQueryButton(historyItem);
+        break;
+      case 'runQuery':
+        this.onRunQuery(historyItem);
+        break;
+      case 'exportQuery':
+        this.onExportQuery(historyItem);
+        break;
+      case 'remove':
+        this.deleteQuery(historyItem);
+        break;
+    }
+  }
+
   public renderRow = (props: any): any => {
     const classes = classNames(this.props);
     return (
-      <div className={classes.groupHeader}>
-        <DetailsRow
-          {...props}
-          className={classes.queryRow}
-          onClick={() => this.onViewQueryListItem(props.item)}
-        />
-      </div>
+      <ContextMenu
+        style={{
+          flexGrow: 1,
+          textAlign: 'left',
+          boxSizing: 'border-box'
+        }}
+        items={this.contextMenuItems}
+        onItemClick={(e: any, item: IHistoryItemContext) => this.selectContextMenuItem(e, item, props.item)}
+      >
+        <div className={classes.groupHeader}>
+          <DetailsRow
+            {...props}
+            className={classes.queryRow}
+            onClick={() => this.onViewQueryListItem(props.item)}
+          />
+        </div>
+      </ContextMenu>
     );
   };
 
