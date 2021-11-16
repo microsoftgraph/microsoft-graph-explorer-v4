@@ -17,6 +17,7 @@ import {
   ISampleQuery
 } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
+import { IStatus } from '../../../../types/status';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
@@ -27,6 +28,7 @@ import { validateExternalLink } from '../../../utils/external-link-validation';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { substituteTokens } from '../../../utils/token-helpers';
+import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { isJsonString } from './sample-query-utils';
@@ -181,7 +183,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               >
                 {item.method}
               </span>
-              ;
             </TooltipHost>
           );
 
@@ -230,6 +231,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               if (!selectionDisabled) {
                 this.querySelected(props.item);
               }
+              else{
+                this.lockedSampleClicked();
+              }
               this.setState({ selectedQuery: props.item })
             }}
             className={
@@ -243,6 +247,19 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       );
     }
   };
+
+  private lockedSampleClicked = () => {
+    const { actions } = this.props;
+    const queryStatus: IStatus = {
+      messageType: MessageBarType.blocked,
+      ok: false,
+      status: 0,
+      statusText: translateMessage('Sign in to use this method')
+    }
+    if(actions){
+      actions.setQueryResponseStatus(queryStatus);
+    }
+  }
 
   private querySelected = (query: any) => {
     const { actions, tokenPresent, profile } = this.props;
@@ -442,7 +459,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         <Announced
           message={`${sampleQueries.length} search results available.`}
         />
-        <div role="navigation">
+        <div role="navigation" className="sample-queries-navigation">
           <DetailsList
             className={classes.queryList}
             cellStyleProps={{
