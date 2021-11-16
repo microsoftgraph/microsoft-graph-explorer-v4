@@ -12,9 +12,7 @@ const AvailableMethods = () => {
   });
 
   return (
-    <Stack horizontal wrap tokens={{
-      childrenGap: 10
-    }}>
+    <Stack wrap>
       {httpMethods.map((method: IDropdownOption, index: number) => {
         return (
           <Label key={index} style={{ marginRight: 5 }}>
