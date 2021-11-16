@@ -254,7 +254,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       messageType: MessageBarType.blocked,
       ok: false,
       status: 0,
-      statusText: translateMessage('Sign in to use this method')
+      statusText: translateMessage('Sign In to try this sample')
     }
     if(actions){
       actions.setQueryResponseStatus(queryStatus);
