@@ -153,7 +153,7 @@
         "tslint-config-prettier": "1.18.0",
         "tslint-react": "4.0.0",
         "url-parse": "1.5.3",
-        "ws": "8.0.0",
+        "ws": "8.2.3",
         "yargs-parser": "13.1.2"
     }
 }
