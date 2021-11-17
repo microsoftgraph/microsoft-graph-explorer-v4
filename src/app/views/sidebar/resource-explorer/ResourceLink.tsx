@@ -94,7 +94,7 @@ const ResourceLink = (props: IResourceLink) => {
     if (availableMethods.length > 0) {
       const subMenuItems: IContextualMenuItem[] = [];
       availableMethods.forEach(element => {
-        subMenuItems.push({ key: element, text: element, disabled: true })
+        subMenuItems.push({ key: element, text: element.toUpperCase(), disabled: true })
       });
       menuItems.unshift({
         key: 'supported-methods',
