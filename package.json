@@ -101,7 +101,7 @@
     ],
     "devDependencies": {
         "@types/chromedriver": "2.38.0",
-        "@types/enzyme": "3.9.0",
+        "@types/enzyme": "3.10.10",
         "@types/enzyme-adapter-react-16": "1.0.5",
         "@types/isomorphic-fetch": "0.0.35",
         "@types/jest": "24.0.6",
