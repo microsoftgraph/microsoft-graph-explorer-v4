@@ -1,8 +1,7 @@
 import {
-  Breadcrumb, DefaultButton,
-  Dropdown,
-  IBreadcrumbItem, IDropdownOption, Label, Nav, Panel, PanelType, SearchBox,
-  Spinner, SpinnerSize, Stack, styled
+  Breadcrumb, ChoiceGroup, DefaultButton,
+  IBreadcrumbItem, IChoiceGroupOption, Label, Nav, Panel,
+  PanelType, SearchBox, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -13,7 +12,6 @@ import { IRootState } from '../../../../types/root';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import { AvailableMethods } from './methods';
 import QueryParameters from './QueryParameters';
 import {
   createList, getCurrentTree,
@@ -82,8 +80,9 @@ const ResourceExplorer = (props: any) => {
     return [];
   }
 
-  const changeVersion = (option: IDropdownOption<any> | undefined): void => {
-    const selectedVersion = option!.key.toString();
+  const changeVersion = (ev: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
+    option: IChoiceGroupOption | undefined): void => {
+    const selectedVersion = option!.key;
     setVersion(selectedVersion);
     const list = getResourcesSupportedByVersion(data, selectedVersion);
     const dataSet = (searchText) ? performSearch(searchText, list.children) : list.children;
@@ -183,18 +182,12 @@ const ResourceExplorer = (props: any) => {
         <hr />
         <div className='row'>
           <Stack horizontal wrap tokens={{ childrenGap: 10, padding: 10 }}>
-            <Dropdown
-              ariaLabel={translateMessage('Microsoft Graph API Version option')}
-              role='listbox'
-              selectedKey={version}
-              options={versions}
+            <ChoiceGroup
               label={translateMessage('Select version')}
-              onChange={(event, selected) => changeVersion(selected)}
+              defaultSelectedKey={version}
+              options={versions}
+              onChange={changeVersion}
             />
-            <div>
-              <Label><FormattedMessage id='Methods available' /></Label>
-              <AvailableMethods />
-            </div>
           </Stack>
         </div>
         <br />

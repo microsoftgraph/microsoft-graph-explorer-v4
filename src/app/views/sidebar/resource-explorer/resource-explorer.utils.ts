@@ -79,14 +79,17 @@ export function removeCounter(title: string): string {
 export function getResourcesSupportedByVersion(content: IResource, version: string, methods?: string[]): IResource {
   const resources: IResource = { ...content };
   const children: IResource[] = [];
+  const listOfMethods: string[] = [];
+
+  if (methods) {
+    methods.forEach(method => {
+      listOfMethods.push(toTitleCase(method));
+    });
+  }
 
   resources.children.forEach((child: IResource) => {
     if (versionExists(child, version)) {
-      if (methods) {
-        const listOfMethods: string[] = [];
-        methods.forEach(method => {
-          listOfMethods.push(toTitleCase(method));
-        });
+      if (listOfMethods.length > 0) {
         if (methodsExist(child, listOfMethods, version)) {
           children.push(child);
         }
@@ -96,7 +99,6 @@ export function getResourcesSupportedByVersion(content: IResource, version: stri
     }
   });
   resources.children = children;
-
   return resources;
 }
 
