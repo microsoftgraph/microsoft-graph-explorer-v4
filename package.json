@@ -107,7 +107,7 @@
         "@types/jest": "24.0.6",
         "@types/jwt-decode": "2.2.1",
         "@types/node": "11.9.4",
-        "@types/react": "16.8.3",
+        "@types/react": "17.0.35",
         "@types/react-dom": "16.8.2",
         "@types/react-intl": "2.3.17",
         "@types/react-redux": "7.1.0",
