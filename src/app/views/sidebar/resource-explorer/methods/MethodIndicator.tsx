@@ -1,18 +1,18 @@
 import { Icon, TooltipHost } from '@fluentui/react';
 import React from 'react';
 
-import { getStyleFor } from '../../../../utils/badge-color';
+import { getStyleFor, getMethodIcon } from '../../../../utils/http-methods.utils';
 
 const MethodIndicator = (props: any) => {
   const { methods } = props;
   return (
-    <span style={{ float: 'right', position: 'absolute', right: 0 }}>
+    <span style={{ float: 'right', position: 'absolute', right: 1 }}>
       {methods.map((method: string, index: number) => {
         return (
           <TooltipHost key={`tool-tip-${index}`} content={`${method}`}>
             <Icon
               style={{ color: getStyleFor(method), textAlign: 'right' }}
-              iconName='CheckboxFill' />
+              iconName={getMethodIcon(method)} />
           </TooltipHost>
         );
       })}

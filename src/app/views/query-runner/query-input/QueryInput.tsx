@@ -7,7 +7,7 @@ import { httpMethods, IQueryInputProps } from '../../../../types/query-runner';
 
 import { IRootState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { getStyleFor } from '../../../utils/badge-color';
+import { getStyleFor } from '../../../utils/http-methods.utils';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
 import SubmitButton from '../../../views/common/submit-button/SubmitButton';
