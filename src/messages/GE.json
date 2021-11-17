@@ -396,7 +396,7 @@
   "More path links": "More path links",
   "Resources available": "Resources available",
   "Methods available": "Methods available",
-  "Query parameters": "Query parameters",
+  "Access query parameters": "Access query parameters",
   "A documentation link for this URL exists. Click learn more to access it": "A documentation link for this URL exists. Click learn more to access it",
   "Feedback": "Got feedback?",
   "Comment question": "Tell us more about your experience",
@@ -423,5 +423,6 @@
   "Not now": "Not now",
   "Please tell us more. Why did you choose that answer": "Please tell us more. Why did you choose that answer?",
   "Not at all likely": "Not at all likely",
-  "Extremely likely": "Extremely likely"
+  "Extremely likely": "Extremely likely",
+  "Show methods": "Show methods"
 }
