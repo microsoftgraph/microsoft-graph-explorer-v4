@@ -59,7 +59,7 @@
         "postcss-preset-env": "6.5.0",
         "postcss-safe-parser": "4.0.1",
         "re-resizable": "6.9.1",
-        "react": "16.8.2",
+        "react": "16.14.0",
         "react-app-polyfill": "0.2.1",
         "react-dom": "16.8.2",
         "react-intl": "2.8.0",
