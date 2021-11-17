@@ -191,17 +191,6 @@ const ResourceExplorer = (props: any) => {
           styles={{ field: { paddingLeft: 10 } }}
         />
         <hr />
-        <ChoiceGroup
-          label={translateMessage('Select version')}
-          defaultSelectedKey={version}
-          options={versions}
-          onChange={changeVersion}
-        />
-      </>}
-
-      {selectedLinks.length > 0 && <>
-        <Label><FormattedMessage id="Selected Resources" /> ({selectedLinks.length})</Label>
-        <CommandOptions list={selectedLinks} />
         <div className='row'>
           <Stack horizontal wrap tokens={{ childrenGap: 10, padding: 10 }}>
             <ChoiceGroup
@@ -212,7 +201,11 @@ const ResourceExplorer = (props: any) => {
             />
           </Stack>
         </div>
-        <br />
+      </>}
+
+      {selectedLinks.length > 0 && <>
+        <Label><FormattedMessage id="Selected Resources" /> ({selectedLinks.length})</Label>
+        <CommandOptions list={selectedLinks} />
       </>
       }
 
@@ -248,7 +241,7 @@ const ResourceExplorer = (props: any) => {
             openPanel={(activity: string, context: any) => openPanel(activity, context)}
           />
         }}
-        onLinkClick={(event: any) => { event.preventDefault() }}
+        onLinkClick={clickLink}
         className={classes.queryList} />
 
       <Panel
