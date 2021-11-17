@@ -1,7 +1,7 @@
 import {
-  Breadcrumb, Checkbox, ChoiceGroup, ContextualMenuItemType, DefaultButton,
-  IBreadcrumbItem, IChoiceGroupOption, Icon, INavLink,
-  Label, Nav, SearchBox, Spinner, SpinnerSize, styled
+  Breadcrumb, ChoiceGroup, DefaultButton,
+  IBreadcrumbItem, IChoiceGroupOption, INavLink, Label, Nav, Panel,
+  PanelType, SearchBox, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -13,8 +13,12 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import CommandOptions from './CommandOptions';
-import LinkItem from './LinkItem';
-import { createList, getCurrentTree, getResourcesSupportedByVersion, removeCounter } from './resource-explorer.utils';
+import QueryParameters from './QueryParameters';
+import {
+  createList, getCurrentTree,
+  getResourcesSupportedByVersion, getUrlFromLink, removeCounter
+} from './resource-explorer.utils';
+import ResourceLink from './ResourceLink';
 
 const ResourceExplorer = (props: any) => {
   const { resources } = useSelector(
@@ -22,18 +26,6 @@ const ResourceExplorer = (props: any) => {
   );
   const classes = classNames(props);
   const { data, pending } = resources;
-  const versions: IChoiceGroupOption[] = [
-    { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
-    { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
-  ];
-
-  const [version, setVersion] = useState(versions[0].key);
-  const [searchText, setSearchText] = useState<string>('');
-
-  const filteredPayload = getResourcesSupportedByVersion(data, version);
-  const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
-  const [items, setItems] = useState(createList(resourceItems, version));
-  const [isolated, setIsolated] = useState<any>(null);
   const [selectedLinks, setSelectedLinks] = useState<INavLink[]>([]);
 
   if (pending) {
@@ -47,6 +39,25 @@ const ResourceExplorer = (props: any) => {
       />
     );
   }
+
+  if (!data && !pending) {
+    return (<div />);
+  }
+
+  const versions: any[] = [
+    { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
+    { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
+  ];
+  const [version, setVersion] = useState(versions[0].key);
+  const [searchText, setSearchText] = useState<string>('');
+
+  const filteredPayload = getResourcesSupportedByVersion(data, version);
+  const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
+  const [items, setItems] = useState(createList(resourceItems, version));
+  const [isolated, setIsolated] = useState<any>(null);
+  const [panelIsOpen, setPanelIsOpen] = useState<boolean>(false);
+  const [panelContext, setPanelContext] = useState<any>(null);
+  const [panelHeaderText, setPanelHeaderText] = useState('');
 
   const performSearch = (needle: string, haystack: IResource[]) => {
     const keyword = needle.toLowerCase();
@@ -149,53 +160,23 @@ const ResourceExplorer = (props: any) => {
     setItems(createList(filtered.children, version));
   }
 
-  const selectContextItem = (e: any, item: any, link: INavLink) => {
-    switch (item.key) {
-      case 'isolate':
-        isolateTree(link);
-        break;
+  const dismissPanel = () => {
+    setPanelIsOpen(!panelIsOpen);
+    setPanelContext(null);
+  }
 
+  const openPanel = (activity: string, context: any) => {
+    switch (activity) {
       default:
-        alert(`you are clicking '${item.text}' on '${link.name}'`);
+        const requestUrl = getUrlFromLink(context);
+        setPanelIsOpen(true);
+        setPanelContext({
+          activity,
+          context
+        });
+        setPanelHeaderText(`${requestUrl}`);
         break;
     }
-  };
-
-  const renderCustomLink = (properties: any) => {
-    const menuItems = [
-      {
-        key: 'actions',
-        itemType: ContextualMenuItemType.Header,
-        text: properties.name
-      }
-    ];
-
-    if (properties!.links!.length > 0) {
-      menuItems.push(
-        {
-          key: 'isolate',
-          text: translateMessage('Isolate'),
-          itemType: ContextualMenuItemType.Normal
-        });
-    }
-
-    const existsInSelectedItems = properties.key!.includes('drive');
-
-    return <LinkItem
-      style={{
-        flexGrow: 1,
-        textAlign: 'left',
-        boxSizing: 'border-box'
-      }}
-      className={(existsInSelectedItems) ? 'is-selected' : ''}
-      key={properties.key}
-      items={menuItems}
-      onItemClick={(e: any, item: any) => selectContextItem(e, item, properties)}>
-      <span style={{ display: 'flex' }}>
-        {!!properties.iconProperties && <Icon style={{ margin: '0 4px' }} {...properties.iconProperties} />}
-        {properties.name}
-      </span>
-    </LinkItem>;
   }
 
   const breadCrumbs = (!!isolated) ? generateBreadCrumbs() : [];
@@ -221,10 +202,22 @@ const ResourceExplorer = (props: any) => {
       {selectedLinks.length > 0 && <>
         <Label><FormattedMessage id="Selected Resources" /> ({selectedLinks.length})</Label>
         <CommandOptions list={selectedLinks} />
+        <div className='row'>
+          <Stack horizontal wrap tokens={{ childrenGap: 10, padding: 10 }}>
+            <ChoiceGroup
+              label={translateMessage('Select version')}
+              defaultSelectedKey={version}
+              options={versions}
+              onChange={changeVersion}
+            />
+          </Stack>
+        </div>
         <br />
-      </>}
+      </>
+      }
 
-      {isolated && breadCrumbs.length > 0 &&
+      {
+        isolated && breadCrumbs.length > 0 &&
         <>
           <DefaultButton
             text={translateMessage('Close isolation')}
@@ -238,7 +231,8 @@ const ResourceExplorer = (props: any) => {
             ariaLabel={translateMessage('Path display')}
             overflowAriaLabel={translateMessage('More path links')}
           />
-        </>}
+        </>
+      }
 
       <Label>
         <FormattedMessage id='Resources available' />
@@ -246,9 +240,30 @@ const ResourceExplorer = (props: any) => {
       <Nav
         groups={items}
         styles={navStyles}
-        onRenderLink={renderCustomLink}
+        onRenderLink={(link) => {
+          return <ResourceLink
+            link={link}
+            isolateTree={isolateTree}
+            version={version}
+            openPanel={(activity: string, context: any) => openPanel(activity, context)}
+          />
+        }}
+        onLinkClick={(event: any) => { event.preventDefault() }}
         className={classes.queryList} />
-    </section>
+
+      <Panel
+        isOpen={panelIsOpen}
+        onDismiss={dismissPanel}
+        closeButtonAriaLabel="Close"
+        headerText={panelHeaderText}
+        type={PanelType.medium}
+      >
+        {panelContext && panelContext.activity === 'show-query-parameters' && <QueryParameters
+          context={panelContext.context}
+          version={version}
+        />}
+      </Panel>
+    </section >
   );
 }
 

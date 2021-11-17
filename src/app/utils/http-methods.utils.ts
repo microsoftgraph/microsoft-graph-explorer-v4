@@ -24,3 +24,26 @@ export function getStyleFor(method: string) {
       return currentTheme.palette.orangeLight;
   }
 }
+
+export function getMethodIcon(method: string) {
+  if (!method) {
+    return 'CheckboxFill';
+  }
+  method = method.toUpperCase();
+  switch (method) {
+    case 'GET':
+      return 'DrillDown'
+
+    case 'POST':
+      return 'Sync';
+
+    case 'PATCH':
+      return 'WindowEdit';
+
+    case 'PUT':
+      return 'SortLines';
+
+    default:
+      return 'DependencyRemove';
+  }
+}

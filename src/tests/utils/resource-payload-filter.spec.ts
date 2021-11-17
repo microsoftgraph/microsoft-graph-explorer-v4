@@ -6,6 +6,7 @@ import { IResource } from '../../types/resources';
 const resource = JSON.parse(JSON.stringify(content)) as IResource;
 
 describe('Resource payload should', () => {
+
   it('have children', async () => {
     const resources: any = { ...content };
     expect(resources.children.length).toBeGreaterThan(0);
@@ -19,6 +20,11 @@ describe('Resource payload should', () => {
   it('return links with version v1.0', async () => {
     const filtered = createList(resource.children, 'v1.0')[0];
     expect(filtered.links.length).toBe(64);
+  });
+
+  it('return children with version v1.0 and GET,POST', async () => {
+    const resources = getResourcesSupportedByVersion(resource, 'v1.0', ['GET', 'POST']);
+    expect(resources.children.length).toBe(39);
   });
 
 });

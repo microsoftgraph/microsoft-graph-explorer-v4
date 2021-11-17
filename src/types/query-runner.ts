@@ -1,4 +1,4 @@
-import { ITheme } from '@fluentui/react';
+import { IDropdownOption, ITheme } from '@fluentui/react';
 import { Mode } from './enums';
 
 export interface IQueryRunnerState {
@@ -20,7 +20,7 @@ export interface IQuery {
 }
 
 export interface IQueryRunnerProps {
-  headers: Header[];
+  headers?: Header[];
   onSelectVerb: Function;
   sampleQuery: IQuery;
   actions?: {
@@ -104,3 +104,11 @@ export interface ISampleQueriesProps {
     message: object;
   };
 }
+
+export const httpMethods: IDropdownOption[] = [
+  { key: 'GET', text: 'GET' },
+  { key: 'POST', text: 'POST' },
+  { key: 'PUT', text: 'PUT' },
+  { key: 'PATCH', text: 'PATCH' },
+  { key: 'DELETE', text: 'DELETE' }
+];

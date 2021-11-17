@@ -1,10 +1,10 @@
 export interface IResource {
   segment: string;
-  labels: Label[];
+  labels: IResourceLabel[];
   children: IResource[];
 }
 
-export interface Label {
+export interface IResourceLabel {
   name: string;
   methods: string[];
 }
@@ -12,5 +12,5 @@ export interface Label {
 export interface IResources {
   pending: boolean;
   data: IResource;
-  error: any | null;
+  error: Error | null;
 }

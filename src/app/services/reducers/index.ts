@@ -6,6 +6,7 @@ import { autoComplete } from './autocomplete-reducer';
 import { devxApi } from './devxApi-reducers';
 import { dimensions } from './dimensions-reducers';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
+import { policies } from './ocps-reducers';
 import { permissionsPanelOpen } from './permissions-panel-reducer';
 import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
@@ -37,6 +38,7 @@ export default combineReducers({
   permissionsPanelOpen,
   profile,
   proxyUrl,
+  policies,
   queryRunnerStatus,
   resources,
   responseAreaExpanded,

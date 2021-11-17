@@ -22,7 +22,7 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
       odataLinks.forEach(link => {
         if (body[`@odata.${link}`]) {
           data = {
-            link: decodeURIComponent(body[`@odata.${link}`]),
+            link: body[`@odata.${link}`],
             name: link
           };
         }
@@ -58,24 +58,24 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
     return (
       <div>
         <MessageBar messageBarType={MessageBarType.info}>
-          <FormattedMessage id={'This response contains unviewable content'}/>
+          <FormattedMessage id={'This response contains unviewable content'} />
           <Link href={body?.contentDownloadUrl} download>
-            <FormattedMessage id={'Click to download file'}/>
+            <FormattedMessage id={'Click to download file'} />
           </Link>&nbsp;
         </MessageBar>
         {body?.isWorkaround &&
           <MessageBar messageBarType={MessageBarType.warning}>
-            <FormattedMessage id={'Response is result of workaround'}/>
+            <FormattedMessage id={'Response is result of workaround'} />
             {!body?.isOriginalFormat &&
               <span>
                 &nbsp;
-                <FormattedMessage id={'File response is available in original format only'}/>
+                <FormattedMessage id={'File response is available in original format only'} />
               </span>
             }
             &nbsp;
-            <FormattedMessage id={'For more information'}/>
+            <FormattedMessage id={'For more information'} />
             <Link href={ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK} target='_blank'>
-              <FormattedMessage id={'documentation'}/>.
+              <FormattedMessage id={'documentation'} />.
             </Link>
           </MessageBar>
         }

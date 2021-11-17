@@ -527,12 +527,7 @@ export class History extends Component<IHistoryProps, any> {
             message={`${items.length} search results available.`}
           />
           {items.length > 0 &&
-            <div
-              onMouseEnter={() => this.setState({ isHoverOverHistoryList: true })}
-              onMouseLeave={() => this.setState({ isHoverOverHistoryList: false })}>
               <DetailsList
-                styles={this.state.isHoverOverHistoryList ?
-                  { root: { overflow: 'scroll' } } : { root: { overflow: 'hidden' } }}
                 className={classes.queryList}
                 onRenderItemColumn={this.renderItemColumn}
                 items={items}
@@ -546,7 +541,7 @@ export class History extends Component<IHistoryProps, any> {
                 onRenderRow={this.renderRow}
                 onRenderDetailsHeader={this.renderDetailsHeader}
               />
-            </div>}
+          }
         </div>
         <Dialog
           hidden={hideDialog}

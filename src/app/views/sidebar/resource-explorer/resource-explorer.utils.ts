@@ -1,5 +1,5 @@
 import { INavLink, INavLinkGroup } from '@fluentui/react';
-import { IResource } from '../../../../types/resources';
+import { IResource, IResourceLabel } from '../../../../types/resources';
 
 interface ITreeFilter {
   paths: string[];
@@ -27,6 +27,7 @@ export function createList(source: IResource[], version: string): INavLinkGroup[
     const level = paths.length;
     const versionedChildren = (children) ? children.filter(child => versionExists(child, version)) : [];
     const key = `${level}-${(parent === '/' ? 'root' : parent)}-${segment}`;
+    const icon = getIcon({ ...info, links: versionedChildren });
     return {
       key,
       url: key,
@@ -36,7 +37,8 @@ export function createList(source: IResource[], version: string): INavLinkGroup[
       parent,
       level,
       paths,
-      icon: getIcon({ ...info, links: versionedChildren }),
+      icon,
+      type: (icon === 'LightningBolt') ? 'function' : 'path',
       links: (children) ? versionedChildren.map(child => createNavLink(child, segment, [...paths, segment])) : []
     };
   }
@@ -74,16 +76,61 @@ export function removeCounter(title: string): string {
   return title.split(' (')[0].trim();
 }
 
-export function getResourcesSupportedByVersion(content: IResource, version: string): IResource {
+export function getResourcesSupportedByVersion(content: IResource, version: string, methods?: string[]): IResource {
   const resources: IResource = { ...content };
   const children: IResource[] = [];
+  const listOfMethods: string[] = [];
+
+  if (methods) {
+    methods.forEach(method => {
+      listOfMethods.push(toTitleCase(method));
+    });
+  }
+
   resources.children.forEach((child: IResource) => {
-    if (versionExists(child, version)) { children.push(child); }
+    if (versionExists(child, version)) {
+      if (listOfMethods.length > 0) {
+        if (methodsExist(child, listOfMethods, version)) {
+          children.push(child);
+        }
+      } else {
+        children.push(child);
+      }
+    }
   });
   resources.children = children;
   return resources;
 }
 
+
+function toTitleCase(word: string) {
+  function capitalizeFirstLetter(text: string) {
+    return text[0].toUpperCase() + text.slice(1).toLowerCase();
+  }
+  return word.split(' ').map((letter: string) => capitalizeFirstLetter(letter)).join(' ');
+}
+
 export function versionExists(child: IResource, version: string): boolean {
   return !!child.labels.find(k => k.name === version);
+}
+export function methodsExist(child: IResource, methods: string[], version: string): boolean {
+  const methodsAtVersion = child.labels.filter(m => m.name === version)[0].methods;
+  return methods.every(r => methodsAtVersion.includes(r));
+}
+
+export function getAvailableMethods(labels: IResourceLabel[], version: string): string[] {
+  const current = labels.find((label: IResourceLabel) => label.name === version);
+  return (current) ? current.methods : [];
+}
+
+export function getUrlFromLink(link: INavLink) {
+  const { paths } = link;
+  let url = '/';
+  if (paths.length > 1) {
+    paths.slice(1).forEach((path: string) => {
+      url += path + '/';
+    });
+  }
+  url += removeCounter(link.name);
+  return url;
 }
