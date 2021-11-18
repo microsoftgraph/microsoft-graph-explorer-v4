@@ -3,13 +3,13 @@ import {
   AuthenticationResult,
   InteractionRequiredAuthError,
   PopupRequest,
-  SilentRequest,
+  SilentRequest
 } from '@azure/msal-browser';
 
 import {
   AUTH_URL,
   DEFAULT_USER_SCOPES,
-  HOME_ACCOUNT_KEY,
+  HOME_ACCOUNT_KEY
 } from '../../app/services/graph-constants';
 import { signInAuthError } from '../../app/views/authentication/AuthenticationErrorsHints';
 import { geLocale } from '../../appLocale';
@@ -76,7 +76,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
   }
 
-  private getAccount(): AccountInfo | undefined {
+  public getAccount(): AccountInfo | undefined {
     if (!msalApplication) {
       return undefined;
     }
@@ -102,12 +102,32 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       account: this.getAccount(), redirectUri: getCurrentUri()
     };
     try {
-      const response: AuthenticationResult =
-        await msalApplication.acquireTokenSilent(silentRequest);
+      const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
       return response;
     } catch (error) {
-
       throw error;
+    }
+  }
+
+  public async getOcpsToken() {
+    const resourceId = 'https://clients.config.office.net/';
+    const ocpsAccessTokenRequest = {
+      scopes: [resourceId + '/.default'],
+      account: this.getAccount()
+    }
+    try {
+      const ocpsToken: string = (await msalApplication.acquireTokenSilent(ocpsAccessTokenRequest)).accessToken;
+      return ocpsToken;
+    } catch (error) {
+      if (error instanceof InteractionRequiredAuthError) {
+        msalApplication.acquireTokenPopup(ocpsAccessTokenRequest).then((ocpsAccessTokenRequest) => {
+          const ocpsToken = ocpsAccessTokenRequest.accessToken;
+          return ocpsToken;
+        })
+      }
+      else {
+        throw error;
+      }
     }
   }
 
@@ -123,7 +143,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const result = await msalApplication.acquireTokenSilent(silentRequest);
       this.storeHomeAccountId(result.account!);
       return result;
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
 
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
@@ -156,7 +176,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       authority: this.getAuthority(),
       prompt: 'select_account',
       redirectUri: getCurrentUri(),
-      extraQueryParameters: { mkt: geLocale },
+      extraQueryParameters: { mkt: geLocale }
     };
 
     if (this.consentingToNewScopes) {
@@ -173,7 +193,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const result = await msalApplication.loginPopup(popUpRequest);
       this.storeHomeAccountId(result.account!);
       return result;
-    } catch (error) {
+    } catch (error: any) {
       const { errorCode } = error;
       if (signInAuthError(errorCode) && !this.consentingToNewScopes) {
         this.clearSession();
@@ -233,15 +253,15 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
         break;
       }
     }
-    this.createCookie(cookieKey, "", -100);
+    this.createCookie(cookieKey, '', -100);
   }
 
   private createCookie(name: string, value: string, days: number): void {
     let expires = ''
     const date = new Date();
     date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    expires = "; expires=" + date.toUTCString();
-    document.cookie = name + "=" + value + expires + "; path=/";
+    expires = '; expires=' + date.toUTCString();
+    document.cookie = name + '=' + value + expires + '; path=/';
   }
 
   public clearSession(): void {

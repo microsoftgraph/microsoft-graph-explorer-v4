@@ -1,5 +1,5 @@
 import QueryResponse from './QueryResponse';
 
 export {
-  QueryResponse,
+  QueryResponse
 };

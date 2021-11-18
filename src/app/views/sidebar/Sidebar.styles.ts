@@ -1,13 +1,13 @@
 import {
   FontSizes, FontWeights,
-  ITheme,
+  ITheme
 } from '@fluentui/react';
 
 export const sidebarStyles = (theme: ITheme) => {
   const pageHeightInVh = '60vh';
   return {
     searchBox: {
-      marginTop: theme.spacing.s1,
+      marginTop: theme.spacing.s1
     },
     spinner: {
       display: 'flex',
@@ -26,9 +26,9 @@ export const sidebarStyles = (theme: ITheme) => {
       background: 'inherit',
       selectors: {
         ':hover': {
-          overflow: 'scroll',
-        },
-      },
+          overflow: 'scroll'
+        }
+      }
     },
     pullLeft: {
       float: 'left'
@@ -41,7 +41,7 @@ export const sidebarStyles = (theme: ITheme) => {
 
     groupHeader: {
       fontSize: FontSizes.medium,
-      position: 'relative',
+      position: 'relative'
     },
     groupHeaderRow: {
       lineHeight: '50px',
@@ -50,7 +50,7 @@ export const sidebarStyles = (theme: ITheme) => {
       paddingTop: '0px',
       paddingRight: '4px',
       paddingBottom: '0px',
-      paddingLeft: '4px',
+      paddingLeft: '4px'
     },
     groupHeaderRowIcon: {
       height: '24px',
@@ -71,7 +71,7 @@ export const sidebarStyles = (theme: ITheme) => {
       paddingTop: '0px',
       paddingRight: '4px',
       paddingBottom: '0px',
-      paddingLeft: '4px',
+      paddingLeft: '4px'
     },
 
     /* Row */
@@ -84,17 +84,17 @@ export const sidebarStyles = (theme: ITheme) => {
       color: theme.palette.black,
       selectors: {
         ':hover': {
-          background: theme.palette.neutralLight,
-        },
-      },
+          background: theme.palette.neutralLight
+        }
+      }
     },
     queryContent: {
       textAlign: 'left',
       textOverflow: 'ellipsis',
-      marginLeft: theme.spacing.s1,
+      marginLeft: theme.spacing.s1
     },
     rowDisabled: {
-      cursor: 'not-allowed',
+      cursor: 'not-allowed'
     },
     badge: {
       fontWeight: FontWeights.bold,
@@ -116,7 +116,7 @@ export const sidebarStyles = (theme: ITheme) => {
       cursor: 'pointer'
     },
     links: {
-      color: `${theme.palette.blueMid} !important`,
-    },
+      color: `${theme.palette.blueMid} !important`
+    }
   };
 };

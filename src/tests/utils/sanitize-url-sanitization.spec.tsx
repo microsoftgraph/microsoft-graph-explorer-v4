@@ -43,16 +43,16 @@ describe('Sanitize Query Url should', () => {
     {
       check: 'without task id',
       url: 'https://graph.microsoft.com/v1.0/planner/tasks/oIx3zN98jEmVOM-4mUJzSGUANeje',
-      sanitized: 'https://graph.microsoft.com/v1.0/planner/tasks/{tasks-id}',
+      sanitized: 'https://graph.microsoft.com/v1.0/planner/tasks/{tasks-id}'
     },
     {
       check: 'without email',
       url: 'https://graph.microsoft.com/v1.0/users/MiriamG@M365x214355.onmicrosoft.com',
-      sanitized: 'https://graph.microsoft.com/v1.0/users/{users-id}',
+      sanitized: 'https://graph.microsoft.com/v1.0/users/{users-id}'
     },
     {
       check: 'without message id',
-      // tslint:disable-next-line: max-line-length
+      // eslint-disable-next-line max-len
       url: 'https://graph.microsoft.com/v1.0/me/messages/AAMkAGVmMDEzMTM4LTZmYWUtNDdkNC1hMDZiLTU1OGY5OTZhYmY4OABGAAAAAAAiQ8W967B7TKBjgx9rVEURBwAiIsqMbYjsT5e-T7KzowPTAAAAAAEMAAAiIsqMbYjsT5e-T7KzowPTAAMCzwJpAAA=',
       sanitized: 'https://graph.microsoft.com/v1.0/me/messages/{messages-id}'
     },
@@ -73,7 +73,7 @@ describe('Sanitize Query Url should', () => {
     },
     {
       check: 'with all parameters replaced',
-      // tslint:disable-next-line: max-line-length
+      // eslint-disable-next-line max-len
       url: 'https://graph.microsoft.com/v1.0/teams/02bd9fd6-8f93-4758-87c3-1fb73740a315/channels/19:09fc54a3141a45d0bc769cf506d2e079@thread.skype',
       sanitized: 'https://graph.microsoft.com/v1.0/teams/{teams-id}/channels/{channels-id}'
     },
@@ -109,9 +109,9 @@ describe('Sanitize Query Url should', () => {
     },
     {
       check: 'with multiple key-value parameters within path segment',
-      // tslint:disable-next-line: max-line-length
+      // eslint-disable-next-line max-len
       url: 'https://graph.microsoft.com/beta/items/getActivitiesByInterval(startDateTime=\'2017-01-01\',endDateTime=\'2017- 01-03\',interval=\'day\')',
-      // tslint:disable-next-line: max-line-length
+      // eslint-disable-next-line max-len
       sanitized: 'https://graph.microsoft.com/beta/items/getActivitiesByInterval(startDateTime=<value>,endDateTime=<value>,interval=<value>)'
     },
     {

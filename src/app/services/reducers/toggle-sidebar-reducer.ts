@@ -7,7 +7,7 @@ import { ISidebarProps } from '../../../types/sidebar';
 
 const initialState: ISidebarProps = {
   showSidebar: false,
-  mobileScreen: false,
+  mobileScreen: false
 };
 
 export function sidebarProperties(state = initialState, action: IAction): any {
@@ -18,21 +18,21 @@ export function sidebarProperties(state = initialState, action: IAction): any {
       if (state.mobileScreen) {
         return {
           ...state,
-          showSidebar: false,
+          showSidebar: false
         };
       }
     case SET_SAMPLE_QUERY_SUCCESS:
       if (state.mobileScreen) {
         return {
           ...state,
-          showSidebar: false,
+          showSidebar: false
         };
       }
     case VIEW_HISTORY_ITEM_SUCCESS:
       if (state.mobileScreen) {
         return {
           ...state,
-          showSidebar: false,
+          showSidebar: false
         };
       }
     default:

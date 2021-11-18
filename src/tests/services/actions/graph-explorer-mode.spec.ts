@@ -14,7 +14,7 @@ describe('Graph Explorer Mode Action Creators', () => {
       {
         type: SET_GRAPH_EXPLORER_MODE_SUCCESS,
         response: Mode.TryIt
-      },
+      }
     ];
 
     const store = mockStore({ graphExplorerMode: '' });

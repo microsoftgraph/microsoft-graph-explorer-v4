@@ -20,7 +20,7 @@ describe('actions', () => {
           selectedVerb: 'GET',
           sampleUrl: 'https://graph.microsoft.com/v1.0/me/'
         }
-      },
+      }
     ];
 
     const store = mockStore({ sampleQuery: '' });

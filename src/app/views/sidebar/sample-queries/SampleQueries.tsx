@@ -14,7 +14,7 @@ import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import {
   IQuery,
   ISampleQueriesProps,
-  ISampleQuery,
+  ISampleQuery
 } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
@@ -36,7 +36,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     super(props);
     this.state = {
       sampleQueries: [],
-      selectedQuery: null,
+      selectedQuery: null
     };
   }
 
@@ -96,7 +96,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const classes = classNames(this.props);
     const {
       tokenPresent,
-      intl: { messages },
+      intl: { messages }
     }: any = this.props;
 
     if (column) {
@@ -113,7 +113,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
                     <div style={{ paddingBottom: 3 }}>
                       <FormattedMessage id={signInText} />
                     </div>
-                  ),
+                  )
                 }}
                 id={getId()}
                 calloutProps={{ gapSpace: 0 }}
@@ -127,6 +127,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
                     height: 10,
                     width: 10,
                     verticalAlign: 'center',
+                    paddingTop: 2,
+                    paddingRight: 1
                   }}
                 />
               </TooltipHost>
@@ -141,7 +143,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               tooltipProps={{
                 onRenderContent: () => (
                   <div style={{ paddingBottom: 3 }}>{item.docLink}</div>
-                ),
+                )
               }}
               id={getId()}
               calloutProps={{ gapSpace: 0 }}
@@ -164,7 +166,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               tooltipProps={{
                 onRenderContent: () => (
                   <div style={{ paddingBottom: 3 }}>{queryContent}</div>
-                ),
+                )
               }}
               id={getId()}
               calloutProps={{ gapSpace: 0 }}
@@ -174,7 +176,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
                 className={classes.badge}
                 style={{
                   background: getStyleFor(item.method),
-                  textAlign: 'center',
+                  textAlign: 'center'
                 }}
               >
                 {item.method}
@@ -191,7 +193,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
                   <div style={{ paddingBottom: 3 }}>
                     {item.method} {queryContent}{' '}
                   </div>
-                ),
+                )
               }}
               id={getId()}
               calloutProps={{ gapSpace: 0 }}
@@ -255,7 +257,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       selectedVerb: selectedQuery.method,
       sampleBody: selectedQuery.postBody,
       sampleHeaders: selectedQuery.headers || [],
-      selectedVersion: queryVersion,
+      selectedVersion: queryVersion
     };
 
     substituteTokens(sampleQuery, profile);
@@ -315,11 +317,11 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           check: { display: 'none' },
           title: {
             fontSize: FontSizes.medium,
-            fontWeight: FontWeights.semibold,
+            fontWeight: FontWeights.semibold
           },
           expand: {
-            fontSize: FontSizes.small,
-          },
+            fontSize: FontSizes.small
+          }
         }}
         {...props}
         onToggleSelectGroup={onToggleSelectGroup}
@@ -334,7 +336,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   public render() {
     const { error, pending } = this.props.samples;
     const {
-      intl: { messages },
+      intl: { messages }
     }: any = this.props;
 
     const { sampleQueries } = this.state;
@@ -342,7 +344,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const groups = generateGroupsFromList(sampleQueries, 'category');
     if (this.state.selectedQuery) {
       const index = groups.findIndex(k => k.key === this.state.selectedQuery.category);
-      groups[index].isCollapsed = false;
+      if(index !== -1) {
+        groups[index].isCollapsed = false;
+      }
     }
 
     if (pending) {
@@ -370,33 +374,33 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     const columns = [
       {
+        key: 'button',
+        name: '',
+        fieldName: 'button',
+        minWidth: 15,
+        maxWidth: 25
+      },
+      {
         key: 'authRequiredIcon',
         name: '',
         fieldName: 'authRequiredIcon',
         minWidth: 20,
-        maxWidth: 20,
+        maxWidth: 20
       },
       {
         key: 'method',
         name: '',
         fieldName: 'method',
         minWidth: 20,
-        maxWidth: 50,
+        maxWidth: 50
       },
       {
         key: 'humanName',
         name: '',
         fieldName: 'humanName',
         minWidth: 100,
-        maxWidth: maxWidthOfHumanName,
-      },
-      {
-        key: 'button',
-        name: '',
-        fieldName: 'button',
-        minWidth: 15,
-        maxWidth: 25,
-      },
+        maxWidth: maxWidthOfHumanName
+      }
     ];
 
     return (
@@ -428,7 +432,8 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             target='_blank'
             rel="noopener noreferrer"
             className={classes.links}
-            onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
+            onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href,
+              componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
             href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
           >
             <FormattedMessage id='Microsoft Graph API Reference docs' />
@@ -443,7 +448,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             cellStyleProps={{
               cellRightPadding: 0,
               cellExtraRightPadding: 0,
-              cellLeftPadding: 0,
+              cellLeftPadding: 0
             }}
             onRenderItemColumn={this.renderItemColumn}
             items={sampleQueries}
@@ -452,7 +457,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             groups={groups}
             groupProps={{
               showEmptyGroups: true,
-              onRenderHeader: this.renderGroupHeader,
+              onRenderHeader: this.renderGroupHeader
             }}
             onRenderRow={this.renderRow}
             onRenderDetailsHeader={this.renderDetailsHeader}
@@ -468,7 +473,7 @@ function displayTipMessage(actions: any, selectedQuery: ISampleQuery) {
   actions.setQueryResponseStatus({
     messageType: MessageBarType.warning,
     statusText: 'Tip',
-    status: selectedQuery.tip,
+    status: selectedQuery.tip
   });
 }
 
@@ -488,10 +493,10 @@ function mapDispatchToProps(dispatch: Dispatch): object {
         ...queryActionCreators,
         ...queryInputActionCreators,
         ...samplesActionCreators,
-        ...queryStatusActionCreators,
+        ...queryStatusActionCreators
       },
       dispatch
-    ),
+    )
   };
 }
 

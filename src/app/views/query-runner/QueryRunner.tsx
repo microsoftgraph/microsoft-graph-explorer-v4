@@ -8,7 +8,7 @@ import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { ContentType } from '../../../types/enums';
 import {
   IQueryRunnerProps,
-  IQueryRunnerState,
+  IQueryRunnerState
 } from '../../../types/query-runner';
 import { IRootState } from '../../../types/root';
 
@@ -23,14 +23,14 @@ import './query-runner.scss';
 import Request from './request/Request';
 
 export class QueryRunner extends Component<
-  IQueryRunnerProps,
-  IQueryRunnerState
+IQueryRunnerProps,
+IQueryRunnerState
 > {
   constructor(props: IQueryRunnerProps) {
     super(props);
     this.state = {
       url: '',
-      sampleBody: '',
+      sampleBody: ''
     };
   }
 
@@ -83,7 +83,7 @@ export class QueryRunner extends Component<
             ok: false,
             statusText: translateMessage('Malformed JSON body'),
             status: `${translateMessage('Review the request body')} ${error}`,
-            messageType: MessageBarType.error,
+            messageType: MessageBarType.error
           });
           this.setState({ sampleBody: '' });
           return;
@@ -119,13 +119,13 @@ export class QueryRunner extends Component<
       this.props.actions!.setSampleQuery({
         ...sampleQuery,
         sampleUrl,
-        selectedVersion: newQueryVersion,
+        selectedVersion: newQueryVersion
       });
       if (oldQueryVersion !== newQueryVersion) {
         telemetry.trackEvent(eventTypes.DROPDOWN_CHANGE_EVENT, {
           ComponentName: componentNames.VERSION_CHANGE_DROPDOWN,
           NewVersion: newQueryVersion,
-          OldVersion: oldQueryVersion,
+          OldVersion: oldQueryVersion
         });
       }
     }
@@ -169,16 +169,16 @@ function mapDispatchToProps(dispatch: Dispatch): object {
       {
         ...queryActionCreators,
         ...queryInputActionCreators,
-        ...queryStatusActionCreators,
+        ...queryStatusActionCreators
       },
       dispatch
-    ),
+    )
   };
 }
 
 function mapStateToProps({ sampleQuery }: IRootState) {
   return {
-    sampleQuery,
+    sampleQuery
   };
 }
 

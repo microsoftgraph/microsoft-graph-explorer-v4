@@ -1,9 +1,9 @@
 export interface IDimensionProperies {
-    width: string;
-    height: string;
+  width: string;
+  height: string;
 }
 
 export interface IDimensions {
-    request: IDimensionProperies;
-    response: IDimensionProperies;
+  request: IDimensionProperies;
+  response: IDimensionProperies;
 }

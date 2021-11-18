@@ -49,7 +49,7 @@ function Snippet(props: ISnippetProps) {
   const dispatch = useDispatch();
 
   const copyIcon = {
-    iconName: 'copy',
+    iconName: 'copy'
   };
 
   useEffect(() => {

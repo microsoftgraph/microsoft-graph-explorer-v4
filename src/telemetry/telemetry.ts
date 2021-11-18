@@ -1,10 +1,11 @@
+/* eslint-disable max-len */
 import {
   ReactPlugin,
-  withAITracking,
+  withAITracking
 } from '@microsoft/applicationinsights-react-js';
 import {
   ApplicationInsights,
-  SeverityLevel,
+  SeverityLevel
 } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
 
@@ -16,14 +17,14 @@ import { IQuery } from '../types/query-runner';
 import {
   BUTTON_CLICK_EVENT,
   LINK_CLICK_EVENT,
-  TAB_CLICK_EVENT,
+  TAB_CLICK_EVENT
 } from './event-types';
 import {
   addCommonTelemetryItemProperties,
   filterRemoteDependencyData,
   filterTelemetryTypes,
   sanitizeStackTrace,
-  sanitizeTelemetryItemUriProperty,
+  sanitizeTelemetryItemUriProperty
 } from './filters';
 import ITelemetry from './ITelemetry';
 
@@ -41,11 +42,11 @@ class Telemetry implements ITelemetry {
       disableAjaxTracking: true,
       disableFetchTracking: false, // Enables capturing of telemetry data for outgoing requests. Used with `filterRemoteDependencyData` telemetry initializer to sanitize captured data to prevent inadvertent capture of PII.
       disableTelemetry: this.getInstrumentationKey() ? false : true,
-      extensions: [this.reactPlugin],
+      extensions: [this.reactPlugin]
     };
 
     this.appInsights = new ApplicationInsights({
-      config: this.config,
+      config: this.config
     });
   }
 
@@ -82,7 +83,7 @@ class Telemetry implements ITelemetry {
   public trackTabClickEvent(tabKey: string, sampleQuery?: IQuery) {
     const componentName = tabKey.replace('-', ' ').toSentenceCase();
     const properties: { [key: string]: any } = {
-      ComponentName: `${componentName} tab`,
+      ComponentName: `${componentName} tab`
     };
     if (sampleQuery) {
       const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);

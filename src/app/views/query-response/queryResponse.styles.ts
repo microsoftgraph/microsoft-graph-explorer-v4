@@ -8,17 +8,17 @@ export const queryResponseStyles = (theme: ITheme) => {
       marginLeft: 8,
       backgroundColor: theme.palette.blue,
       borderRadius: '50%',
-      display: 'inline-block',
+      display: 'inline-block'
     },
     emptyStateLabel: {
       display: 'flex',
       width: '100%',
       minHeight: '470px',
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     link: {
-      color: `${theme.palette.blueMid} !important`,
+      color: `${theme.palette.blueMid} !important`
     },
     card: {
       height: '450px',

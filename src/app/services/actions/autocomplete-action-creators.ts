@@ -3,26 +3,26 @@ import { IAction } from '../../../types/action';
 import {
   AUTOCOMPLETE_FETCH_ERROR,
   AUTOCOMPLETE_FETCH_PENDING,
-  AUTOCOMPLETE_FETCH_SUCCESS,
+  AUTOCOMPLETE_FETCH_SUCCESS
 } from '../redux-constants';
 
 export function fetchAutocompleteSuccess(response: object): IAction {
   return {
     type: AUTOCOMPLETE_FETCH_SUCCESS,
-    response,
+    response
   };
 }
 
 export function fetchAutocompleteError(response: object): IAction {
   return {
     type: AUTOCOMPLETE_FETCH_ERROR,
-    response,
+    response
   };
 }
 
 export function fetchAutocompletePending(): any {
   return {
-    type: AUTOCOMPLETE_FETCH_PENDING,
+    type: AUTOCOMPLETE_FETCH_PENDING
   };
 }
 

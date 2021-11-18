@@ -14,13 +14,13 @@ export function convertArrayToObject(array: any[]): object {
   return array.reduce((obj, item, index) => {
     return {
       ...obj,
-      [`$${index}`]: item,
+      [`$${index}`]: item
     };
   }, initialValue);
-};
+}
 
 export function extractUrl(value: string): string[] | null {
-  return value.toString().match(/\bhttps?:\/\/\S+(?<!\.)/gi);
+  return value.toString().match(/\bhttps?:\/\/\S+/gi);
 }
 
 export function matchIncludesLink(matches: RegExpMatchArray, part: string) {
