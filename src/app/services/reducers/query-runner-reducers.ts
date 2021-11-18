@@ -1,6 +1,8 @@
 import { IAction } from '../../../types/action';
 import { IGraphResponse } from '../../../types/query-response';
 import {
+  ANONYMOUS_QUERY_COUNTER,
+  CLEAR_ANONYMOUS_QUERY_COUNTER,
   CLEAR_RESPONSE,
   QUERY_GRAPH_RUNNING,
   QUERY_GRAPH_SUCCESS,
@@ -27,5 +29,16 @@ export function graphResponse(
       return initialState;
     default:
       return state;
+  }
+}
+
+export function anonymousRequestsCounter(state = 0, action: IAction) {
+  switch (action.type) {
+    case ANONYMOUS_QUERY_COUNTER:
+      return state + 1;
+    case CLEAR_ANONYMOUS_QUERY_COUNTER:
+      return 0;
+    default:
+      return state
   }
 }

@@ -10,7 +10,7 @@ import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
 import { sampleQuery } from './query-input-reducers';
 import { isLoadingData } from './query-loading-reducers';
-import { graphResponse } from './query-runner-reducers';
+import { anonymousRequestsCounter, graphResponse } from './query-runner-reducers';
 import { queryRunnerStatus } from './query-runner-status-reducers';
 import { history } from './request-history-reducers';
 import { responseAreaExpanded } from './response-expanded-reducer';
@@ -45,5 +45,6 @@ export default combineReducers({
   theme,
   dimensions,
   permissionsPanelOpen,
-  policies
+  policies,
+  anonymousRequestsCounter
 });

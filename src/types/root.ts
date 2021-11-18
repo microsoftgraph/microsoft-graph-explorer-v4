@@ -41,6 +41,7 @@ export interface IRootState {
   autoComplete: IAutocompleteResponse;
   devxApi: IDevxAPI;
   policies: IPolicies;
+  anonymousRequestsCounter: number;
 }
 
 export interface IApiFetch {

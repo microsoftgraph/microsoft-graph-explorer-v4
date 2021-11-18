@@ -13,7 +13,7 @@ import { IRequestOptions } from '../../../types/request';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { authProvider, GraphClient } from '../graph-client';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
-import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
+import { QUERY_GRAPH_SUCCESS, CLEAR_ANONYMOUS_QUERY_COUNTER, ANONYMOUS_QUERY_COUNTER } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
 export function queryResponse(response: object): IAction {
@@ -23,12 +23,25 @@ export function queryResponse(response: object): IAction {
   };
 }
 
+export function countAnonymousRequests() {
+  return {
+    type: ANONYMOUS_QUERY_COUNTER
+  }
+}
+
+export function clearAnonymousRequestsCounter() {
+  return {
+    type: CLEAR_ANONYMOUS_QUERY_COUNTER
+  }
+}
+
 export async function anonymousRequest(
   dispatch: Function,
   query: IQuery,
   getState: Function
 ) {
   dispatch(queryRunningStatus(true));
+  dispatch(countAnonymousRequests());
   const { proxyUrl } = getState();
   const { graphUrl, options } = createAnonymousRequest(query, proxyUrl);
   return fetch(graphUrl, options);

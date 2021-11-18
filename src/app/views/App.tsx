@@ -15,6 +15,7 @@ import { IRootState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import * as authActionCreators from '../services/actions/auth-action-creators';
+import { clearAnonymousRequestsCounter } from '../services/actions/query-action-creator-util';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
@@ -53,6 +54,7 @@ interface IAppProps {
   sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
   authenticated: boolean;
+  anonymousRequestsCounter: number;
   actions: {
     clearQueryStatus: Function;
     clearTermsOfUse: Function;
@@ -312,7 +314,7 @@ class App extends Component<IAppProps, IAppState> {
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
-      actions, sidebarProperties, intl: { messages } }: any = this.props;
+      actions, sidebarProperties, intl: { messages }, anonymousRequestsCounter }: any = this.props;
 
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
@@ -396,7 +398,7 @@ class App extends Component<IAppProps, IAppState> {
                     <QueryRunner onSelectVerb={this.handleSelectVerb} />
                   </div>
                   <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
-                    {statusMessages(queryState, sampleQuery, actions)}
+                    {statusMessages(queryState, sampleQuery, actions, anonymousRequestsCounter)}
                     {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
                   </div>
                   {
@@ -414,7 +416,7 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme,
-  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode
+  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode, anonymousRequestsCounter
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -429,7 +431,8 @@ const mapStateToProps = ({ sidebarProperties, theme,
     termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery,
-    authenticated: !!authToken.token
+    authenticated: !!authToken.token,
+    anonymousRequestsCounter
   };
 };
 
@@ -443,7 +446,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         setSampleQuery,
         toggleSidebar,
         ...authActionCreators,
-        changeTheme
+        changeTheme,
+        clearAnonymousRequestsCounter
       },
       dispatch
     )
