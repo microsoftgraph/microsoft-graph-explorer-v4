@@ -12,6 +12,7 @@ import { IRootState } from '../../../../types/root';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
+import { AvailableMethods } from './methods';
 import QueryParameters from './QueryParameters';
 import {
   createList, getCurrentTree,
@@ -181,13 +182,17 @@ const ResourceExplorer = (props: any) => {
         />
         <hr />
         <div className='row'>
-          <Stack horizontal wrap tokens={{ childrenGap: 10, padding: 10 }}>
+          <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
             <ChoiceGroup
               label={translateMessage('Select version')}
               defaultSelectedKey={version}
               options={versions}
               onChange={changeVersion}
             />
+            <div>
+              <Label><FormattedMessage id='Methods available' /></Label>
+              <AvailableMethods />
+            </div>
           </Stack>
         </div>
         <br />

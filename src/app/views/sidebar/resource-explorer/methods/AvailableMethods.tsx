@@ -1,14 +1,14 @@
 import {
   Checkbox,
-  Icon, Label, Stack
+  Icon, Stack
 } from '@fluentui/react';
 import React from 'react';
 
 import { httpMethods } from '../../../../../types/query-runner';
 import { getMethodIcon, getStyleFor } from '../../../../utils/http-methods.utils';
+import { classes } from './methods.styles';
 
 const AvailableMethods = () => {
-
 
   httpMethods.forEach((element: any) => {
     element.selected = true;
@@ -16,16 +16,26 @@ const AvailableMethods = () => {
   });
 
   return (
-    <Stack>
+    <Stack horizontal wrap>
       {httpMethods.map((method: any, index: number) => {
         return (
-          <Label key={index} style={{ marginRight: 5, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Checkbox checked={true} />
-            <Icon
-              style={{ color: getStyleFor(method.text), marginRight: 3, alignItems: 'center' }}
-              iconName={method.icon} />
-            {method.text}
-          </Label>
+          <Checkbox key={index} className={classes.checkbox} checked={true} label={method.text}
+            onRenderLabel={() => {
+              return (
+                <span style={{ marginTop: 5 }}>
+                  <Icon
+                    style={{ color: getStyleFor(method.text) }}
+                    className={classes.icon}
+                    iconName={method.icon} />
+                  {method.text}
+                </span>
+              )
+            }}
+            styles={{
+              label: {
+                display: 'block'
+              }
+            }} />
         );
       })}
     </Stack>
