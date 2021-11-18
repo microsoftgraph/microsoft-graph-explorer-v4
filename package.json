@@ -126,7 +126,7 @@
         "color-string": "1.6.0",
         "crypto": "1.0.1",
         "enzyme": "3.9.0",
-        "enzyme-adapter-react-16": "1.9.1",
+        "enzyme-adapter-react-16": "1.15.6",
         "eslint": "5.16.0",
         "glob-parent": "6.0.1",
         "immer": "9.0.6",
