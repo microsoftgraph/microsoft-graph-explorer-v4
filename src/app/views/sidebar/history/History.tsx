@@ -35,7 +35,7 @@ export class History extends Component<IHistoryProps, any> {
     this.state = {
       historyItems: [],
       hideDialog: true,
-      category: '',
+      category: ''
     };
   }
 
@@ -74,7 +74,7 @@ export class History extends Component<IHistoryProps, any> {
 
   public getItems(history: any[]) {
     const {
-      intl: { messages },
+      intl: { messages }
     }: any = this.props;
 
     const items: any[] = [];
@@ -132,7 +132,7 @@ export class History extends Component<IHistoryProps, any> {
     const currentTheme = getTheme();
 
     const {
-      intl: { messages },
+      intl: { messages }
     }: any = this.props;
     // tslint:disable
     const actionsText = messages.actions;
@@ -162,40 +162,40 @@ export class History extends Component<IHistoryProps, any> {
             {
               key: 'actions',
               itemType: ContextualMenuItemType.Header,
-              text: actionsText,
+              text: actionsText
             },
             {
               key: 'view',
               text: viewText,
               iconProps: {
-                iconName: 'View',
+                iconName: 'View'
               },
-              onClick: () => this.onViewQueryButton(item),
+              onClick: () => this.onViewQueryButton(item)
             },
             {
               key: 'runQuery',
               text: runQueryText,
               iconProps: {
-                iconName: 'Refresh',
+                iconName: 'Refresh'
               },
-              onClick: () => this.onRunQuery(item),
+              onClick: () => this.onRunQuery(item)
             },
             {
               key: 'exportQuery',
               text: exportQueryText,
               iconProps: {
-                iconName: 'Download',
+                iconName: 'Download'
               },
-              onClick: () => this.onExportQuery(item),
+              onClick: () => this.onExportQuery(item)
             },
             {
               key: 'remove',
               text: removeText,
               iconProps: {
-                iconName: 'Delete',
+                iconName: 'Delete'
               },
-              onClick: () => this.deleteQuery(item),
-            },
+              onClick: () => this.deleteQuery(item)
+            }
           ];
 
           return (
@@ -210,8 +210,9 @@ export class History extends Component<IHistoryProps, any> {
                 menuIconProps={{ iconName: 'More' }}
                 menuProps={{
                   shouldFocusOnMount: true,
-                  items: buttonActions,
+                  items: buttonActions
                 }}
+                styles={{root: {paddingBottom: 10, marginLeft: -1.2}}}
               />
             </TooltipHost>
           );
@@ -245,7 +246,8 @@ export class History extends Component<IHistoryProps, any> {
     const collapseText = translateMessage('Collapse');
     const groupName: string = props.group!.name;
     const groupCount: string = props.group!.count;
-    const collapseButtonLabel: string = props.group!.isCollapsed ? `${expandText} ${groupName}` : `${collapseText} ${groupName}`;
+    const collapseButtonLabel: string = props.group!.isCollapsed ? `${expandText} ${groupName}`
+      : `${collapseText} ${groupName}`;
 
     return (
       <div
@@ -253,7 +255,7 @@ export class History extends Component<IHistoryProps, any> {
         style={{
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
+          alignItems: 'center'
         }}
       >
         <div className={'col-md-8'}>
@@ -271,7 +273,7 @@ export class History extends Component<IHistoryProps, any> {
                 iconProps={{
                   iconName: props.group!.isCollapsed
                     ? 'ChevronRightSmall'
-                    : 'ChevronDownSmall',
+                    : 'ChevronDownSmall'
                 }}
                 ariaLabel={collapseButtonLabel}
                 onClick={() => this.onToggleCollapse(props)}
@@ -374,7 +376,7 @@ export class History extends Component<IHistoryProps, any> {
       selectedVerb: query.method,
       sampleBody: query.body,
       sampleHeaders: query.headers,
-      selectedVersion: queryVersion,
+      selectedVersion: queryVersion
     };
 
     if (actions) {
@@ -440,14 +442,14 @@ export class History extends Component<IHistoryProps, any> {
       selectedVerb: query.method,
       sampleBody: query.body,
       sampleHeaders: query.headers,
-      selectedVersion: queryVersion,
+      selectedVersion: queryVersion
     };
     const { duration, status, statusText } = query;
     if (actions) {
       actions.setSampleQuery(sampleQuery);
       actions.viewHistoryItem({
         body: query.result,
-        headers: query.responseHeaders,
+        headers: query.responseHeaders
       });
       actions.setQueryResponseStatus({
         duration,
@@ -455,7 +457,7 @@ export class History extends Component<IHistoryProps, any> {
           status < 300 ? MessageBarType.success : MessageBarType.error,
         ok: status < 300,
         status,
-        statusText,
+        statusText
       });
     }
   };
@@ -474,19 +476,19 @@ export class History extends Component<IHistoryProps, any> {
   public render() {
     const { hideDialog, category, historyItems } = this.state;
     const {
-      intl: { messages },
+      intl: { messages }
     }: any = this.props;
     const classes = classNames(this.props);
     const columns = [
+      { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20 },
       {
         key: 'status',
         name: '',
         fieldName: 'status',
         minWidth: 20,
-        maxWidth: 50,
+        maxWidth: 50
       },
-      { key: 'url', name: '', fieldName: 'url', minWidth: 100, maxWidth: 200 },
-      { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20 },
+      { key: 'url', name: '', fieldName: 'url', minWidth: 100, maxWidth: 200 }
     ];
 
     if (!historyItems) {
@@ -525,11 +527,7 @@ export class History extends Component<IHistoryProps, any> {
             message={`${items.length} search results available.`}
           />
           {items.length > 0 &&
-            <div
-              onMouseEnter={() => this.setState({ isHoverOverHistoryList: true })}
-              onMouseLeave={() => this.setState({ isHoverOverHistoryList: false })}>
               <DetailsList
-                styles={this.state.isHoverOverHistoryList ? { root: { overflow: 'scroll' } } : { root: { overflow: 'hidden' } }}
                 className={classes.queryList}
                 onRenderItemColumn={this.renderItemColumn}
                 items={items}
@@ -538,12 +536,12 @@ export class History extends Component<IHistoryProps, any> {
                 groups={groups}
                 groupProps={{
                   showEmptyGroups: true,
-                  onRenderHeader: this.renderGroupHeader,
+                  onRenderHeader: this.renderGroupHeader
                 }}
                 onRenderRow={this.renderRow}
                 onRenderDetailsHeader={this.renderDetailsHeader}
               />
-            </div>}
+          }
         </div>
         <Dialog
           hidden={hideDialog}
@@ -552,13 +550,13 @@ export class History extends Component<IHistoryProps, any> {
             type: DialogType.normal,
             title: `${messages['Delete requests']} : ${category}`,
             closeButtonAriaLabel: 'Close',
-            subText: `${messages['Are you sure you want to delete these requests?']}`,
+            subText: `${messages['Are you sure you want to delete these requests?']}`
           }}
           modalProps={{
             titleAriaId: getId(),
             subtitleAriaId: getId(),
             isBlocking: false,
-            styles: { main: { maxWidth: 450 } },
+            styles: { main: { maxWidth: 450 } }
           }}
         >
           <DialogFooter>
@@ -588,10 +586,10 @@ function mapDispatchToProps(dispatch: Dispatch): object {
         ...queryActionCreators,
         ...queryInputActionCreators,
         ...requestHistoryActionCreators,
-        ...queryStatusActionCreators,
+        ...queryStatusActionCreators
       },
       dispatch
-    ),
+    )
   };
 }
 

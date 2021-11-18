@@ -6,7 +6,7 @@ import {
   Label,
   MessageBar,
   MessageBarType,
-  styled,
+  styled
 } from '@fluentui/react';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { componentNames, telemetry } from '../../../../telemetry';
@@ -30,7 +30,9 @@ class GraphToolkit extends Component<any> {
         <>
           <MessageBar messageBarType={MessageBarType.info}>
             <FormattedMessage id='Open this example in' />
-            <a onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK)}
+            <a
+              onClick={(e) =>
+                telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK)}
               tabIndex={0} href={exampleUrl} target='_blank' rel='noopener noreferrer'
               className={classes.link}>
               <FormattedMessage id='graph toolkit playground' />

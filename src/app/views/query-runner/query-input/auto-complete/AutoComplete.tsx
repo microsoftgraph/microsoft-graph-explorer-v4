@@ -1,4 +1,4 @@
-import { getId, getTheme, Icon, ITextField, ITooltipHostStyles, KeyCodes, Spinner, TextField, TooltipHost } from '@fluentui/react';
+import { getTheme, ITextField, KeyCodes, TextField } from '@fluentui/react';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -14,10 +14,11 @@ import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
 import {
-  cleanUpSelectedSuggestion, getLastCharacterOf,
+  cleanUpSelectedSuggestion, getFilteredSuggestions, getLastCharacterOf,
   getLastSymbolInUrl,
   getParametersWithVerb
 } from './auto-complete.util';
+import SuffixRenderer from './suffix/SuffixRenderer';
 import SuggestionsList from './SuggestionsList';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
@@ -89,7 +90,12 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     });
 
     if (showSuggestions && suggestions.length) {
-      this.filterSuggestions(userInput, previousUserInput, compare, suggestions);
+      let compareString = userInput.replace(previousUserInput, '');
+      compareString = (compare) ? compare + compareString : compareString;
+      this.setState({
+        filteredSuggestions: getFilteredSuggestions(compareString, suggestions),
+        compare: compareString
+      });
     }
     this.initialiseAutoComplete(userInput);
   };
@@ -200,7 +206,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         });
         this.requestForAutocompleteOptions(previousUserInput);
       } else {
-        const filtered = this.filterSuggestions(userInput, previousUserInput, '', suggestions);
+        const filtered = getFilteredSuggestions('', suggestions);
         this.setSuggestions(filtered, userInput.replace(previousUserInput, ''));
       }
     }
@@ -224,9 +230,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     let filteredSuggestions = parametersWithVerb.values.map((value: { name: any; }) => value.name);
     if (compare) {
-      filteredSuggestions = filteredSuggestions.filter((suggestion: string) => {
-        return suggestion.toLowerCase().indexOf(compare.toLowerCase()) > -1;
-      });
+      filteredSuggestions = getFilteredSuggestions(compare, filteredSuggestions);
     }
 
     this.setSuggestions(filteredSuggestions);
@@ -276,21 +280,6 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }
   }
 
-  private filterSuggestions(userInput: string, previousUserInput: string, compare: string, suggestions: string[]) {
-    let compareString = userInput.replace(previousUserInput, '');
-    if (compare) {
-      compareString = compare + compareString;
-    }
-    // Filter our suggestions that don't contain the user's input
-    const filteredSuggestions = suggestions.filter((suggestion: string) => {
-      return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
-    });
-    this.setState({
-      filteredSuggestions,
-      compare: compareString
-    });
-    return filteredSuggestions;
-  }
 
   private requestForAutocompleteOptions(url: string) {
     const signature = sanitizeQueryUrl(url);
@@ -355,36 +344,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private renderSuffix = () => {
-    const { fetchingSuggestions, autoCompleteError } = this.props;
-
-    const calloutProps = { gapSpace: 0 };
-    const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
-
-    if (fetchingSuggestions) {
-      return (<TooltipHost
-        content={translateMessage('Fetching suggestions')}
-        id={getId()}
-        calloutProps={calloutProps}
-        styles={hostStyles}
-      >
-        <Spinner />
-      </TooltipHost>
-      );
-    }
-
-    if (autoCompleteError) {
-      return (
-        <TooltipHost
-          content={translateMessage('No auto-complete suggestions available')}
-          id={getId()}
-          calloutProps={calloutProps}
-          styles={hostStyles}
-        >
-          <Icon iconName='MuteChat' />
-        </TooltipHost>);
-    }
-
-    return null;
+    return <SuffixRenderer />;
   }
 
   closeSuggestionDialog = (event: any) => {
@@ -408,7 +368,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
     const currentTheme = getTheme();
     const {
-      input: autoInput,
+      input: autoInput
     }: any = queryInputStyles(currentTheme).autoComplete;
 
     return (
@@ -456,7 +416,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators(
       {
-        ...autoCompleteActionCreators,
+        ...autoCompleteActionCreators
       },
       dispatch
     )

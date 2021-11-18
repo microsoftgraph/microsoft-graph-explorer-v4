@@ -12,7 +12,7 @@ export const appStyles = (theme: ITheme) => {
       marginBottom: theme.spacing.s1
     },
     sidebar: {
-      background: theme.palette.neutralLighter,
+      background: theme.palette.neutralLighter
     },
     sidebarMini: {
       background: theme.palette.neutralLighter,
@@ -22,24 +22,24 @@ export const appStyles = (theme: ITheme) => {
     },
     layoutExtra: {
       minWidth: '95%',
-      maxWidth: '96%',
+      maxWidth: '96%'
     },
     separator: {
-      borderBottom: '1px solid ' + theme.palette.neutralLight,
+      borderBottom: '1px solid ' + theme.palette.neutralLight
     },
     links: {
-      color: `${theme.palette.blueMid} !important`,
+      color: `${theme.palette.blueMid} !important`
     },
     sidebarToggle: {
       marginBottom: theme.spacing.s1,
-      marginTop: theme.spacing.s1,
+      marginTop: theme.spacing.s1
     },
     previewButton: {
-      marginTop: theme.spacing.s1,
+      marginTop: theme.spacing.s1
     },
     graphExplorerLabel: {
       fontSize: FontSizes.xLarge,
-      fontWeight: 600,
+      fontWeight: 600
     },
     graphExplorerLabelContainer: {
       display: 'flex',
@@ -52,6 +52,12 @@ export const appStyles = (theme: ITheme) => {
       fontSize: '10px',
       paddingLeft: 3,
       paddingTop: 5
+    },
+    statusAreaMobileScreen: {
+      marginTop: 5
+    },
+    statusAreaLaptopScreen: {
+      marginTop: 0
     }
   };
 };

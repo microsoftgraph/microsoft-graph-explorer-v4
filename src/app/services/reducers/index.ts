@@ -20,6 +20,7 @@ import { termsOfUse } from './terms-of-use-reducer';
 import { theme } from './theme-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
 import { proxyUrl } from './proxy-url-reducer';
+import { policies } from './ocps-reducers';
 
 export default combineReducers({
   adaptiveCard,
@@ -44,4 +45,5 @@ export default combineReducers({
   theme,
   dimensions,
   permissionsPanelOpen,
+  policies
 });

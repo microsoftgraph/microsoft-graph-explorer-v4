@@ -16,11 +16,11 @@ describe('Query Runner Reducer', () => {
     const initialState: IGraphResponse = { body: undefined, headers: undefined };
     const mockResponse = {
       body: {
-        displayName: 'Megan Bowen',
+        displayName: 'Megan Bowen'
       },
       headers: {
-        'content-type': 'application-json',
-      },
+        'content-type': 'application-json'
+      }
     };
     const queryAction = { type: QUERY_GRAPH_SUCCESS, response: mockResponse };
     const newState = graphResponse(initialState, queryAction);

@@ -1,43 +1,64 @@
+import { AgeGroup } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
 import {
-  ACCOUNT_TYPE, BETA_USER_INFO_URL, DEFAULT_USER_SCOPES,
-  USER_INFO_URL, USER_PICTURE_URL
+  ACCOUNT_TYPE,
+  BETA_USER_INFO_URL,
+  DEFAULT_USER_SCOPES,
+  USER_INFO_URL,
+  USER_PICTURE_URL
 } from '../graph-constants';
-import { PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS } from '../redux-constants';
-import { makeRequest, parseResponse } from './query-action-creator-util';
+import {
+  PROFILE_REQUEST_ERROR,
+  PROFILE_REQUEST_SUCCESS
+} from '../redux-constants';
+import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 import { queryRunningStatus } from './query-loading-action-creators';
+
+interface IBetaProfile {
+  ageGroup: number;
+  profileType: ACCOUNT_TYPE;
+}
+
+interface IProfileResponse {
+  userInfo: any;
+  response: any;
+}
 
 export function profileRequestSuccess(response: object): any {
   return {
     type: PROFILE_REQUEST_SUCCESS,
-    response,
+    response
   };
 }
 
 export function profileRequestError(response: object): any {
   return {
     type: PROFILE_REQUEST_ERROR,
-    response,
+    response
   };
 }
 
 const query: IQuery = {
   selectedVerb: 'GET',
-  sampleHeaders: [{
-    name: 'Cache-Control',
-    value: 'no-cache'
-  }],
+  sampleHeaders: [
+    {
+      name: 'Cache-Control',
+      value: 'no-cache'
+    }
+  ],
   selectedVersion: '',
   sampleUrl: ''
-}
+};
 
 export function getProfileInfo(): Function {
   return async (dispatch: Function) => {
     dispatch(queryRunningStatus(true));
     try {
       const profile: IUser = await getProfileInformation();
-      profile.profileType = await getProfileType();
+      const {profileType, ageGroup} = await getBetaProfile();
+      profile.profileType = profileType;
+      profile.ageGroup = ageGroup;
       profile.profileImageUrl = await getProfileImage();
       dispatch(profileRequestSuccess(profile));
     } catch (error) {
@@ -51,6 +72,8 @@ async function getProfileInformation(): Promise<IUser> {
     displayName: '',
     emailAddress: '',
     profileImageUrl: '',
+    profileType: ACCOUNT_TYPE.UNDEFINED,
+    ageGroup: 0
   };
   try {
     query.sampleUrl = USER_INFO_URL;
@@ -63,14 +86,36 @@ async function getProfileInformation(): Promise<IUser> {
   }
 }
 
-async function getProfileType(): Promise<ACCOUNT_TYPE> {
+async function getBetaProfile(): Promise<IBetaProfile> {
   try {
     query.sampleUrl = BETA_USER_INFO_URL;
     const { userInfo } = await getProfileResponse();
-    return userInfo?.account?.[0]?.source?.type?.[0];
+    const ageGroup =  getAgeGroup(userInfo);
+    const profileType = getProfileType(userInfo);
+    return {ageGroup, profileType};
   } catch (error) {
-    return ACCOUNT_TYPE.MSA;
+    return {ageGroup: 0, profileType: ACCOUNT_TYPE.MSA};
   }
+}
+
+function getAgeGroup(userInfo: any): AgeGroup {
+  const profileType = getProfileType(userInfo);
+  if (profileType === ACCOUNT_TYPE.MSA) {
+    const ageGroup = userInfo?.account?.[0]?.ageGroup;
+    if (ageGroup === undefined || ageGroup === '') {
+      return 0;
+    }
+    return ageGroup;
+  } else {
+    return 0;
+  }
+}
+function getProfileType(userInfo: any): ACCOUNT_TYPE {
+  const profileType: ACCOUNT_TYPE = userInfo?.account?.[0]?.source?.type?.[0];
+  if (profileType === undefined) {
+    return ACCOUNT_TYPE.UNDEFINED;
+  }
+  return profileType;
 }
 
 async function getProfileImage(): Promise<string> {
@@ -89,14 +134,15 @@ async function getProfileImage(): Promise<string> {
   return profileImageUrl;
 }
 
-async function getProfileResponse() {
+async function getProfileResponse(): Promise<IProfileResponse> {
   const scopes = DEFAULT_USER_SCOPES.split(' ');
   const respHeaders: any = {};
 
-  const response = await makeRequest(query.selectedVerb, scopes)(query);
+  const response = await makeGraphRequest(scopes)(query);
   const userInfo = await parseResponse(response, respHeaders);
   return {
     userInfo,
     response
   };
 }
+

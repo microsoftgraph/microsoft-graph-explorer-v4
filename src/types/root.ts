@@ -5,6 +5,7 @@ import { IDevxAPI } from './devx-api';
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
 import { IHistoryItem } from './history';
+import { IPolicies } from './ocps-api';
 import { IScopes } from './permissions';
 import { IUser } from './profile';
 import { IGraphResponse } from './query-response';
@@ -23,7 +24,11 @@ export interface IRootState {
   termsOfUse: boolean;
   sidebarProperties: ISidebarProps;
   authToken: IAuthenticateResult;
-  samples: ISampleQuery[];
+  samples: {
+    queries: ISampleQuery[];
+    pending: boolean;
+    error: string | null;
+  };
   consentedScopes: string[];
   scopes: IScopes;
   history: IHistoryItem[];
@@ -35,6 +40,7 @@ export interface IRootState {
   dimensions: IDimensions;
   autoComplete: IAutocompleteResponse;
   devxApi: IDevxAPI;
+  policies: IPolicies;
 }
 
 export interface IApiFetch {

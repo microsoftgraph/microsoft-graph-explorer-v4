@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -18,7 +19,7 @@ describe('query actions', () => {
 
     setTimeout(() => { // delays request time by 1 second so that the createdAt dates match
       fetchMock.mockResponseOnce(JSON.stringify({ displayName: 'Megan Bowen', ok: true }), {
-        headers: { 'content-type': 'application-json' },
+        headers: { 'content-type': 'application-json' }
       });
     }, 1000);
 
@@ -54,9 +55,9 @@ describe('query actions', () => {
         type: QUERY_GRAPH_SUCCESS,
         response: {
           body: { displayName: 'Megan Bowen', ok: true },
-          headers: { 'content-type': 'application-json' },
-        },
-      },
+          headers: { 'content-type': 'application-json' }
+        }
+      }
     ];
 
     const store = mockStore({ graphResponse: '' });
@@ -87,8 +88,13 @@ describe('query actions', () => {
           body: undefined,
           createdAt,
           duration: undefined,
-          // tslint:disable-next-line:max-line-length
-          har: '{"log":{"version":"2.0","creator":{"name":"Graph Explorer","version":"2.0"},"entries":[{"startedDateTime":"' + createdAt + '","request":{"url":"' + sampleUrl + '","httpVersion":"HTTP/1.1","cookies":[],"queryString":[{"name":"","value":""}],"headersSize":-1,"bodySize":-1},"response":{"status":200,"statusText":"OK","httpVersion":"HTTP/1.1","cookies":[],"headers":{},"content":{"text":"{\\"ok\\":false}","size":12,"mimeType":"application/json"},"redirectURL":"","headersSize":-1,"bodySize":-1},"cache":{},"timings":{"send":0,"wait":0,"receive":0},"connection":""}]}}',
+          har: '{"log":{"version":"2.0","creator":{"name":"Graph Explorer","version":"2.0"},"entries":[{"startedDateTime":"' +
+            createdAt + '","request":{"url":"' + sampleUrl +
+            '","httpVersion":"HTTP/1.1","cookies":[],' +
+            '"queryString":[{"name":"","value":""}],"headersSize":-1,"bodySize":-1},' +
+            '"response":{"status":200,"statusText":"OK","httpVersion":"HTTP/1.1","cookies":[],"headers":{},' +
+            '"content":{"text":"{\\"ok\\":false}","size":12,"mimeType":"application/json"},"redirectURL":"",' +
+            '"headersSize":-1,"bodySize":-1},"cache":{},"timings":{"send":0,"wait":0,"receive":0},"connection":""}]}}',
           headers: undefined,
           method: undefined,
           responseHeaders:
