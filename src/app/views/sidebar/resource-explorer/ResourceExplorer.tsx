@@ -1,9 +1,9 @@
 import {
   Breadcrumb, ChoiceGroup, DefaultButton,
-  IBreadcrumbItem, IChoiceGroupOption, Label, Nav, Panel,
+  IBreadcrumbItem, IChoiceGroupOption, INavLinkGroup, Label, Nav, Panel,
   PanelType, SearchBox, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
@@ -27,36 +27,27 @@ const ResourceExplorer = (props: any) => {
   const classes = classNames(props);
   const { data, pending } = resources;
 
-  if (pending) {
-    return (
-      <Spinner
-        className={classes.spinner}
-        size={SpinnerSize.large}
-        label={`${translateMessage('loading resources')} ...`}
-        ariaLive='assertive'
-        labelPosition='top'
-      />
-    );
-  }
-
-  if (!data && !pending) {
-    return (<div />);
-  }
-
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
     { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
   ];
   const [version, setVersion] = useState(versions[0].key);
-  const [searchText, setSearchText] = useState<string>('');
-
   const filteredPayload = getResourcesSupportedByVersion(data, version);
+  const navigationGroup = createList(filteredPayload.children, version);
+
   const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
-  const [items, setItems] = useState(createList(resourceItems, version));
+  const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
+
+  useEffect(() => {
+    setItems(navigationGroup);
+    setResourceItems(filteredPayload.children)
+  }, [filteredPayload.children.length]);
+
   const [isolated, setIsolated] = useState<any>(null);
   const [panelIsOpen, setPanelIsOpen] = useState<boolean>(false);
   const [panelContext, setPanelContext] = useState<any>(null);
   const [panelHeaderText, setPanelHeaderText] = useState('');
+  const [searchText, setSearchText] = useState<string>('');
 
   const performSearch = (needle: string, haystack: IResource[]) => {
     const keyword = needle.toLowerCase();
@@ -170,6 +161,18 @@ const ResourceExplorer = (props: any) => {
   }
 
   const breadCrumbs = (!!isolated) ? generateBreadCrumbs() : [];
+
+  if (pending) {
+    return (
+      <Spinner
+        className={classes.spinner}
+        size={SpinnerSize.large}
+        label={`${translateMessage('loading resources')} ...`}
+        ariaLive='assertive'
+        labelPosition='top'
+      />
+    );
+  }
 
   return (
     <section>
