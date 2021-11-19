@@ -1,4 +1,4 @@
-import { AuthenticationResult } from "@azure/msal-browser";
+import { AccountInfo, AuthenticationResult } from '@azure/msal-browser';
 
 export default interface IAuthenticationWrapper {
   getSessionId(): string | null;
@@ -7,4 +7,5 @@ export default interface IAuthenticationWrapper {
   logOutPopUp(): void;
   consentToScopes(scopes: string[]): Promise<AuthenticationResult>;
   clearCache(): void;
+  getAccount(): AccountInfo | undefined;
 }

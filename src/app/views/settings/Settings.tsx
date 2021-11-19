@@ -1,9 +1,9 @@
+
 import { DropdownMenuItemType, getId, IconButton, TooltipHost } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
-import '../../utils/string-operations';
 import { geLocale } from '../../../appLocale';
 import { Sovereign } from '../../../modules/sovereign-clouds/cloud-options';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
@@ -11,6 +11,7 @@ import { IRootState } from '../../../types/root';
 import { ISettingsProps } from '../../../types/settings';
 import { signOut } from '../../services/actions/auth-action-creators';
 import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
+import '../../utils/string-operations';
 import { PermissionsPanel } from './PermissionsPanel';
 import { SovereignClouds } from './SovereignClouds';
 import { ThemeChooser } from './ThemeChooser';
@@ -27,7 +28,7 @@ function Settings(props: ISettingsProps) {
   const cloudOptions = new Sovereign(profile).getOptions();
 
   const {
-    intl: { messages },
+    intl: { messages }
   }: any = props;
 
   const toggleThemeChooserDialogState = () => {
@@ -53,9 +54,9 @@ function Settings(props: ISettingsProps) {
         href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
         target: '_blank',
         iconProps: {
-          iconName: 'CommandPrompt',
+          iconName: 'CommandPrompt'
         },
-        onClick: () => trackOfficeDevProgramLinkClickEvent(),
+        onClick: () => trackOfficeDevProgramLinkClickEvent()
       },
       {
         key: 'report-issue',
@@ -63,30 +64,30 @@ function Settings(props: ISettingsProps) {
         href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
         target: '_blank',
         iconProps: {
-          iconName: 'ReportWarning',
+          iconName: 'ReportWarning'
         },
-        onClick: () => trackReportAnIssueLinkClickEvent(),
+        onClick: () => trackReportAnIssueLinkClickEvent()
       },
       {
         key: 'divider',
         text: '-',
-        itemType: DropdownMenuItemType.Divider,
+        itemType: DropdownMenuItemType.Divider
       },
       {
         key: 'change-theme',
         text: messages['Change theme'],
         iconProps: {
-          iconName: 'Color',
+          iconName: 'Color'
         },
-        onClick: () => toggleThemeChooserDialogState(),
+        onClick: () => toggleThemeChooserDialogState()
       },
       {
         key: 'select-cloud',
         text: messages['Select cloud'],
         iconProps: {
-          iconName: 'Cloud',
+          iconName: 'Cloud'
         },
-        onClick: () => toggleCloudSelector(),
+        onClick: () => toggleCloudSelector()
       }
     ];
 
@@ -96,17 +97,17 @@ function Settings(props: ISettingsProps) {
           key: 'view-all-permissions',
           text: messages['view all permissions'],
           iconProps: {
-            iconName: 'AzureKeyVault',
+            iconName: 'AzureKeyVault'
           },
-          onClick: () => changePanelState(),
+          onClick: () => changePanelState()
         },
         {
           key: 'sign-out',
           text: messages['sign out'],
           iconProps: {
-            iconName: 'SignOut',
+            iconName: 'SignOut'
           },
-          onClick: () => handleSignOut(),
+          onClick: () => handleSignOut()
         },
       );
     }
@@ -133,26 +134,26 @@ function Settings(props: ISettingsProps) {
 
   const trackSelectPermissionsButtonClickEvent = () => {
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON,
+      ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
     });
   };
 
   const trackReportAnIssueLinkClickEvent = () => {
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.REPORT_AN_ISSUE_LINK,
+      ComponentName: componentNames.REPORT_AN_ISSUE_LINK
     });
   };
 
   const trackOfficeDevProgramLinkClickEvent = () => {
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK,
+      ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
     });
   };
 
   const menuProperties = {
     shouldFocusOnMount: true,
     alignTargetEdge: true,
-    items,
+    items
   };
 
   return (
@@ -167,7 +168,7 @@ function Settings(props: ISettingsProps) {
           role='button'
           styles={{
             label: { marginBottom: -20 },
-            menuIcon: { fontSize: 20 },
+            menuIcon: { fontSize: 20 }
           }}
           menuIconProps={{ iconName: 'More' }}
           menuProps={menuProperties}

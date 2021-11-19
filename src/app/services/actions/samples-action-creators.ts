@@ -1,25 +1,29 @@
 import { geLocale } from '../../../appLocale';
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
-import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_PENDING, SAMPLES_FETCH_SUCCESS } from '../redux-constants';
+import {
+  SAMPLES_FETCH_ERROR,
+  SAMPLES_FETCH_PENDING,
+  SAMPLES_FETCH_SUCCESS
+} from '../redux-constants';
 
 export function fetchSamplesSuccess(response: object): IAction {
   return {
     type: SAMPLES_FETCH_SUCCESS,
-    response,
+    response
   };
 }
 
 export function fetchSamplesError(response: object): IAction {
   return {
     type: SAMPLES_FETCH_ERROR,
-    response,
+    response
   };
 }
 
 export function fetchSamplesPending(): any {
   return {
-    type: SAMPLES_FETCH_PENDING,
+    type: SAMPLES_FETCH_PENDING
   };
 }
 
@@ -34,7 +38,7 @@ export function fetchSamples(): Function {
 
     const headers = {
       'Content-Type': 'application/json',
-      'Accept-Language': geLocale,
+      'Accept-Language': geLocale
     };
 
     const options: IRequestOptions = { headers };

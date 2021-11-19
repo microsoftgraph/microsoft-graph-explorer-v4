@@ -1,33 +1,36 @@
 import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
-import { AUTHENTICATION_PENDING, GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS, LOGOUT_SUCCESS } from '../redux-constants';
+import {
+  AUTHENTICATION_PENDING, GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS,
+  LOGOUT_SUCCESS
+} from '../redux-constants';
 
 export function getAuthTokenSuccess(response: boolean): any {
   return {
     type: GET_AUTH_TOKEN_SUCCESS,
-    response,
+    response
   };
 }
 
 export function getConsentedScopesSuccess(response: string[]): IAction {
   return {
     type: GET_CONSENTED_SCOPES_SUCCESS,
-    response,
+    response
   };
 }
 
 export function signOutSuccess(response: boolean): any {
   return {
     type: LOGOUT_SUCCESS,
-    response,
+    response
   };
 }
 
 export function setAuthenticationPending(response: boolean): any {
   return {
     type: AUTHENTICATION_PENDING,
-    response,
+    response
   };
 }
 

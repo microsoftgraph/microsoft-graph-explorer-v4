@@ -29,7 +29,7 @@ const Authentication = (props: any) => {
   const classes = classNames(props);
 
   const {
-    intl: { messages },
+    intl: { messages }
   }: any = props;
   const signIn = async (): Promise<void> => {
     setLoginInProgress(true);
@@ -41,18 +41,19 @@ const Authentication = (props: any) => {
         dispatch(getAuthTokenSuccess(!!authResponse.accessToken));
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
       }
-    } catch (error) {
-      const { errorCode } = error;
-      if (signInAuthError(errorCode)) {
+    } catch (error: any) {
+      console.log(JSON.stringify(error))
+      const errorCode = error.errorCode;
+      if (errorCode && signInAuthError(errorCode)) {
         authenticationWrapper.clearSession();
       }
       dispatch(
         setQueryResponseStatus({
           ok: false,
           statusText: messages['Authentication failed'],
-          status: removeUnderScore(errorCode),
+          status: (errorCode) ? removeUnderScore(errorCode) : '',
           messageType: MessageBarType.error,
-          hint: getSignInAuthErrorHint(errorCode)
+          hint: (errorCode) ? getSignInAuthErrorHint(errorCode) : null
         })
       );
       setLoginInProgress(false);
@@ -61,8 +62,7 @@ const Authentication = (props: any) => {
         SeverityLevel.Error,
         {
           ComponentName: componentNames.AUTHENTICATION_ACTION,
-          Message: `Authentication failed: ${errorCode ? removeUnderScore(errorCode) : ''
-            }`,
+          Message: `Authentication failed: ${errorCode ? removeUnderScore(errorCode) : ''}`
         }
       );
     }

@@ -1,4 +1,4 @@
-name: Azure Static Web Apps CI/CD
+name: Static preview site creation
 
 on:
   push:
@@ -22,7 +22,11 @@ jobs:
         env:
           REACT_APP_CLIENT_ID: ${{ secrets.REACT_APP_CLIENT_ID }}
           REACT_APP_CLIENT_ID_CHINA: ${{ secrets.REACT_APP_CLIENT_ID_CHINA }}
+          REACT_APP_FEEDBACK_CAMPAIGN_ID: ${{ secrets.REACT_APP_FEEDBACK_CAMPAIGN_ID }},
+          REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: ${{secrets.REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID}}
           REACT_APP_INSTRUMENTATION_KEY: ${{ secrets.REACT_APP_STAGING_INSTRUMENTATION_KEY }}
+          REACT_APP_NOMINATION_PERIOD: ${{secrets.REACT_APP_NOMINATION_PERIOD}}
+          REACT_APP_COOLDOWN_PERIOD: ${{secrets.REACT_APP_COOLDOWN_PERIOD}}
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v0.0.1-preview
         with:

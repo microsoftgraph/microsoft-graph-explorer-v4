@@ -4,7 +4,7 @@ import {
   IParameterValue,
   IParsedOpenApiResponse,
   IPathValue,
-  IQueryParameter,
+  IQueryParameter
 } from '../../types/open-api';
 
 export function parseOpenApiResponse(
@@ -12,7 +12,7 @@ export function parseOpenApiResponse(
 ): IParsedOpenApiResponse {
   const {
     response: { paths },
-    url,
+    url
   } = params;
 
   try {
@@ -25,7 +25,7 @@ export function parseOpenApiResponse(
       parameters.push({
         verb,
         values: getVerbParameterValues(pathValues[`${verb}`]),
-        links: getLinkValues(pathValues[`${verb}`]),
+        links: getLinkValues(pathValues[`${verb}`])
       });
     });
 
@@ -47,7 +47,7 @@ function getVerbParameterValues(values: IPathValue): IParameterValue[] {
           items:
             parameter.schema && parameter.schema.items
               ? parameter.schema.items.enum
-              : [],
+              : []
         });
       }
     });

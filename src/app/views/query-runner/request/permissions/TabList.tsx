@@ -54,7 +54,6 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   }
 
 
-
   return (
     <>
       <Label className={classes.permissionLength}>
@@ -68,7 +67,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
         onMouseEnter={() => setIsHoverOverPermissionsList(true)}
         onMouseLeave={() => setIsHoverOverPermissionsList(false)}>
         <DetailsList
-          styles={isHoverOverPermissionsList ? { root: { maxHeight } } : { root: { maxHeight, overflow: "hidden" } }}
+          styles={isHoverOverPermissionsList ? { root: { maxHeight } } : { root: { maxHeight, overflow: 'hidden' } }}
           items={permissions}
           columns={columns}
           onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}
@@ -84,7 +83,5 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
 };
 
 export default TabList;
-
-
 
 

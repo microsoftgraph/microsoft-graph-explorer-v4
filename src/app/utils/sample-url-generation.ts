@@ -18,7 +18,7 @@ export function parseSampleUrl(url: string, version?: string): IParsedSample {
       search = generateSearchParameters(url, search);
       sampleUrl = generateSampleUrl(url, queryVersion, requestUrl, search);
     } catch (error) {
-      if (error.message === `Failed to construct 'URL': Invalid URL`) {
+      if (error.message === 'Failed to construct \'URL\': Invalid URL') {
         return {
           queryVersion, requestUrl, sampleUrl, search
         };

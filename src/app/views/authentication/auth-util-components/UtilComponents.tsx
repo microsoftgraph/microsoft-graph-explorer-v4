@@ -17,11 +17,11 @@ export function showSignInButtonOrProfile(
     iconProps={{ iconName: 'Contact' }}
     title={translateMessage('sign in')}
     onClick={() => signIn()} /> : <PrimaryButton
-      ariaLabel={translateMessage('sign in')}
-      role='button'
-      iconProps={{ iconName: 'Contact' }}
-      onClick={() => signIn()}
-    >
+    ariaLabel={translateMessage('sign in')}
+    role='button'
+    iconProps={{ iconName: 'Contact' }}
+    onClick={() => signIn()}
+  >
     {!mobileScreen && <FormattedMessage id='sign in' />}
   </PrimaryButton>;
 

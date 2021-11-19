@@ -17,7 +17,7 @@ describe('Sample Url Generation', () => {
   });
 
   it('destructures sample url with search parameters', () => {
-    const search = `?$select=subject`;
+    const search = '?$select=subject';
     const url = `https://graph.microsoft.com/v1.0/me/messages${search}`;
 
     const expectedUrl = {

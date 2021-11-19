@@ -3,11 +3,11 @@ export const queryRunnerStyles = () => {
     verbSelector: {
       title: {
         paddingRight: 0,
-        color: '#ffffff !important',
+        color: '#ffffff !important'
       },
       caretDown: {
-        color: '#ffffff !important',
-      },
-    },
+        color: '#ffffff !important'
+      }
+    }
   };
 };

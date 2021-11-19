@@ -9,29 +9,36 @@ import { IRootState } from '../../../types/root';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
-import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../redux-constants';
-import { getAuthTokenSuccess, getConsentedScopesSuccess } from './auth-action-creators';
 import { getConsentAuthErrorHint } from '../../views/authentication/AuthenticationErrorsHints';
 import { ACCOUNT_TYPE, PERMS_SCOPE } from '../graph-constants';
+import {
+  FETCH_SCOPES_ERROR,
+  FETCH_SCOPES_PENDING,
+  FETCH_SCOPES_SUCCESS
+} from '../redux-constants';
+import {
+  getAuthTokenSuccess,
+  getConsentedScopesSuccess
+} from './auth-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
 
 export function fetchScopesSuccess(response: object): IAction {
   return {
     type: FETCH_SCOPES_SUCCESS,
-    response,
+    response
   };
 }
 
 export function fetchScopesPending(): any {
   return {
-    type: FETCH_SCOPES_PENDING,
+    type: FETCH_SCOPES_PENDING
   };
 }
 
 export function fetchScopesError(response: object): IAction {
   return {
     type: FETCH_SCOPES_ERROR,
-    response,
+    response
   };
 }
 
@@ -52,18 +59,18 @@ export function fetchScopes(): Function {
           throw new Error('url is invalid');
         }
 
+        // eslint-disable-next-line max-len
         permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scopeType}`;
         hasUrl = true;
       }
 
       if (devxApi.parameters) {
-        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters
-          }`;
+        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters}`;
       }
 
       const headers = {
         'Content-Type': 'application/json',
-        'Accept-Language': geLocale,
+        'Accept-Language': geLocale
       };
 
       const options: IRequestOptions = { headers };
@@ -76,7 +83,7 @@ export function fetchScopes(): Function {
         return dispatch(
           fetchScopesSuccess({
             hasUrl,
-            scopes,
+            scopes
           })
         );
       }
@@ -85,7 +92,7 @@ export function fetchScopes(): Function {
       return dispatch(
         fetchScopesError({
           hasUrl,
-          error,
+          error
         })
       );
     }
@@ -107,7 +114,7 @@ export function consentToScopes(scopes: string[]): Function {
         dispatch(getAuthTokenSuccess(true));
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
       }
-    } catch (error) {
+    } catch (error: any) {
       const { errorCode } = error;
       dispatch(
         setQueryResponseStatus({

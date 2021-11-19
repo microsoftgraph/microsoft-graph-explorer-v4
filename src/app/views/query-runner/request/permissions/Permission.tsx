@@ -1,4 +1,5 @@
 import {
+  Checkbox,
   FontSizes,
   getId,
   IColumn,
@@ -30,7 +31,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   constructor(props: IPermissionProps) {
     super(props);
     this.state = {
-      permissions: [],
+      permissions: []
     };
   }
 
@@ -39,7 +40,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 
   public componentDidUpdate = (prevProps: IPermissionProps) => {
-    if ((prevProps.sample !== this.props.sample) || (prevProps.permissionsPanelOpen !== this.props.permissionsPanelOpen)) {
+    if ((prevProps.sample !== this.props.sample) ||
+      (prevProps.permissionsPanelOpen !== this.props.permissionsPanelOpen)) {
       this.getPermissions();
     }
     const permissions = this.props.scopes.data;
@@ -74,7 +76,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const consented = !!item.consented;
     const classes = classNames(this.props);
     const {
-      panel,
+      panel
     }: any = this.props;
 
     if (column) {
@@ -122,8 +124,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
                 {item.consentDescription}
               </span>
             </TooltipHost>
-          </>
-            ;
+          </>;
 
         default:
           return (
@@ -153,11 +154,19 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     });
   }
 
+  private renderCustomCheckbox(props: any): any {
+    return (
+      <div style={{ pointerEvents: 'none' }} >
+        <Checkbox checked={props ? props.checked : undefined} />
+      </div>
+    )
+  }
+
   private getColumns = () => {
     const {
       tokenPresent,
       panel,
-      intl: { messages },
+      intl: { messages }
     }: any = this.props;
 
     const columns: IColumn[] = [
@@ -221,7 +230,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     const { pending: loading } = scopes;
 
     const {
-      intl: { messages },
+      intl: { messages }
     }: any = this.props;
 
     const selection = new Selection({
@@ -255,6 +264,7 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
           renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
             this.renderItemColumn(item, index, column)}
           renderDetailsHeader={this.renderDetailsHeader}
+          renderCustomCheckbox={this.renderCustomCheckbox}
         />
       </div>
     };
@@ -278,7 +288,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
   }
 }
 
-function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dimensions, permissionsPanelOpen }: IRootState) {
+function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes,
+  dimensions, permissionsPanelOpen }: IRootState) {
   return {
     sample: sampleQuery,
     scopes,
@@ -292,8 +303,8 @@ function mapStateToProps({ sampleQuery, scopes, authToken, consentedScopes, dime
 function mapDispatchToProps(dispatch: Dispatch): object {
   return {
     actions: bindActionCreators({
-      ...permissionActionCreators,
-    }, dispatch),
+      ...permissionActionCreators
+    }, dispatch)
   };
 }
 

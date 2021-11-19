@@ -2,7 +2,7 @@
 import { IQuery } from '../../types/query-runner';
 import {
   isAllAlpha,
-  sanitizeQueryParameter,
+  sanitizeQueryParameter
 } from './query-parameter-sanitization';
 import { parseSampleUrl } from './sample-url-generation';
 

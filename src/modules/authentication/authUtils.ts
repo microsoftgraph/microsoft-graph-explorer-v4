@@ -21,5 +21,5 @@ export function getLoginType(): LoginType {
 */
 export function getCurrentUri(): string {
   const currentUrl = window.location.href.split('?')[0].split('#')[0];
-  return currentUrl.toLowerCase() ;
+  return currentUrl.toLowerCase();
 }

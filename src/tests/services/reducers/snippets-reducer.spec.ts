@@ -17,7 +17,7 @@ describe('Graph Explorer Snippet Reducer', () => {
     };
     const dummyAction = {
       type: GET_SNIPPET_SUCCESS,
-      response: snippet,
+      response: snippet
     };
 
     const newState = snippets(initialState, dummyAction);

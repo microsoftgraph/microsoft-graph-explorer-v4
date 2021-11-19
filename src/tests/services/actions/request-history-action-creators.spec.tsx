@@ -14,7 +14,7 @@ describe('Request History Action Creators', () => {
       {
         type: ADD_HISTORY_ITEM_SUCCESS,
         response: historyItem
-      },
+      }
     ];
 
     const store = mockStore({ history: []});

@@ -21,7 +21,7 @@ const configuration: Configuration = {
   },
   cache: {
     cacheLocation: 'localStorage',
-    storeAuthStateInCookie: true,
+    storeAuthStateInCookie: true
   }
 };
 

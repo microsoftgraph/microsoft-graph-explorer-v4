@@ -27,12 +27,12 @@ const QueryInput = (props: IQueryInputProps) => {
     { key: 'POST', text: 'POST' },
     { key: 'PUT', text: 'PUT' },
     { key: 'PATCH', text: 'PATCH' },
-    { key: 'DELETE', text: 'DELETE' },
+    { key: 'DELETE', text: 'DELETE' }
   ];
 
   const urlVersions: IDropdownOption[] = [
     { key: 'v1.0', text: 'v1.0' },
-    { key: 'beta', text: 'beta' },
+    { key: 'beta', text: 'beta' }
   ];
 
   const { sampleQuery, authToken,
@@ -43,7 +43,7 @@ const QueryInput = (props: IQueryInputProps) => {
   const verbSelector: any = queryRunnerStyles().verbSelector;
   verbSelector.title = {
     ...verbSelector.title,
-    background: getStyleFor(sampleQuery.selectedVerb),
+    background: getStyleFor(sampleQuery.selectedVerb)
   };
 
   const contentChanged = (value: string) => {
@@ -113,6 +113,7 @@ const QueryInput = (props: IQueryInputProps) => {
           role='button'
           handleOnClick={() => runQuery()}
           submitting={submitting}
+          allowDisabledFocus={true}
         />
       </div>
     </div>)
