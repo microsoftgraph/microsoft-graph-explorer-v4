@@ -40,7 +40,7 @@ export const ThemeChooser = ({ dialogHidden, toggleThemeChooserDialogState }: IT
       dialogContentProps={{
         type: DialogType.normal,
         title: translateMessage('Change theme'),
-        isMultiline: false,
+        isMultiline: false
       }}
     >
 
@@ -61,7 +61,7 @@ export const ThemeChooser = ({ dialogHidden, toggleThemeChooserDialogState }: IT
           {
             key: AppTheme.HighContrast,
             iconProps: { iconName: 'Contrast' },
-            text: translateMessage('High Contrast'),
+            text: translateMessage('High Contrast')
           }
         ]}
         onChange={(event, selectedTheme) => handleChangeTheme(selectedTheme)}

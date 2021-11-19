@@ -76,14 +76,14 @@ describe('Sample Url Generation', () => {
   });
 
   it('returns appropriate version number', () => {
-    const url = `https://graph.microsoft.com/v1.0/users`;
+    const url = 'https://graph.microsoft.com/v1.0/users';
     const expectedVersion = 'v1.0';
     const parsedUrl = parseSampleUrl(url);
     expect(parsedUrl.queryVersion).toEqual(expectedVersion);
   });
 
   it('destructures sample url with long version number', () => {
-    const url = `https://graph.microsoft.com/longversionnumberv2/me/messages`;
+    const url = 'https://graph.microsoft.com/longversionnumberv2/me/messages';
 
     const expectedUrl = {
       requestUrl: 'me/messages',

@@ -88,7 +88,7 @@ export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt
       dialogContentProps={dialogContentProps}
       modalProps={{
         isBlocking: false,
-        styles: { main: { maxWidth: 450 } },
+        styles: { main: { maxWidth: 450 } }
       }}
     >
       <ChoiceGroup
