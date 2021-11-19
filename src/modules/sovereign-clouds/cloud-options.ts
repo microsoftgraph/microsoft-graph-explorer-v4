@@ -42,8 +42,7 @@ export class Sovereign {
       return false;
     }
 
-    const { mail, userPrincipalName }: any = this.profile;
-    const emailAddress = mail || userPrincipalName;
+    const { emailAddress }: any = this.profile;
     return (emailAddress && emailAddress.includes('@microsoft.com'));
   }
 }
