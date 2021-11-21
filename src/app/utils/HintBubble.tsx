@@ -51,7 +51,7 @@ const HintBubble = (props: IBubbleProps) => {
         >
           <TeachingBubbleContent
             headline={props.headline}
-            onDismiss={() => closePopup}
+            onDismiss={closePopup}
             primaryButtonProps={closeButton}
             styles={{root: {lineHeight: '1.5'}}}
             hasCloseButton
