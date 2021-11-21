@@ -1,4 +1,4 @@
-import { Announced, getTheme, IStackTokens, ITheme, styled } from '@fluentui/react';
+import { Announced, DirectionalHint, getTheme, IStackTokens, ITheme, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -23,6 +23,7 @@ import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator
 import { changeTheme } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { GRAPH_URL } from '../services/graph-constants';
+import  HintBubble from '../utils/HintBubble';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
@@ -64,6 +65,7 @@ interface IAppProps {
     signIn: Function;
     storeScopes: Function;
     changeTheme: Function;
+    clearAnonymousRequestsCounter: Function;
   };
 }
 
@@ -311,6 +313,10 @@ class App extends Component<IAppProps, IAppState> {
     );
   };
 
+  private dismissHintBubble = () => {
+    this.props.actions!.clearAnonymousRequestsCounter();
+  }
+
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
@@ -353,6 +359,13 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
+        {anonymousRequestsCounter > 8 && <HintBubble
+          headline={ translateMessage('Sign in')}
+          content= {translateMessage('Sign in for real data')}
+          target = {'.sign-in-section'}
+          position = {DirectionalHint.bottomCenter}
+          onDismiss = {() => this.dismissHintBubble()}
+        />}
         <div className={`container-fluid ${classes.app}`}>
           <Announced
             message={
@@ -398,7 +411,7 @@ class App extends Component<IAppProps, IAppState> {
                     <QueryRunner onSelectVerb={this.handleSelectVerb} />
                   </div>
                   <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
-                    {statusMessages(queryState, sampleQuery, actions, anonymousRequestsCounter)}
+                    {statusMessages(queryState, sampleQuery, actions)}
                     {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
                   </div>
                   {

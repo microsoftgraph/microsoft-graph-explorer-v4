@@ -8,12 +8,8 @@ import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
-import { translateMessage } from '../../utils/translate-messages';
 
-export function statusMessages(queryState: any, sampleQuery: IQuery, actions: any, anonymousRequestsCounter?: number) {
-  if(anonymousRequestsCounter && anonymousRequestsCounter > 6) {
-    actions.clearAnonymousRequestsCounter();
-  }
+export function statusMessages(queryState: any, sampleQuery: IQuery, actions: any) {
   function displayStatusMessage(message: string, urls: any) {
     const { matches, parts } = getMatchesAndParts(message);
 
@@ -67,8 +63,6 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
         {duration && <>
           {` - ${duration}`}<FormattedMessage id='milliseconds' />
         </>}
-        {anonymousRequestsCounter && anonymousRequestsCounter === 5 ?
-          ` ${translateMessage('Sign in for real data')}`  : null }
 
         {status === 403 && <>.
           <FormattedMessage id='consent to scopes' />

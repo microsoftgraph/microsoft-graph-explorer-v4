@@ -414,5 +414,10 @@
   "Please tell us more. Why did you choose that answer": "Please tell us more. Why did you choose that answer?",
   "Not at all likely": "Not at all likely",
   "Extremely likely": "Extremely likely",
-  "Sign in for real data": "Hey, you can sign in and see real data on the response"
+  "Sign in for real data": "Hey, you are currently running queries against a sample account. You can sign in and see real data on the response",
+  "Got it": "Got it",
+  "A coachmark has appeared": "A coachmark has appeared",
+  "Coachmark description": "This coachmark contains information on the highlighted feature",
+  "How to open the coachmark": "Press enter or alt + C to open the coachmark notification",
+  "Coachmark notification": "Coachmark notification"
 }

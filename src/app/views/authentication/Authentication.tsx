@@ -41,7 +41,7 @@ const Authentication = (props: any) => {
         dispatch(getAuthTokenSuccess(!!authResponse.accessToken));
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
       }
-    } catch (error) {
+    } catch (error: any) {
       const { errorCode } = error;
       if (signInAuthError(errorCode)) {
         authenticationWrapper.clearSession();
@@ -114,7 +114,7 @@ const Authentication = (props: any) => {
   }
 
   return (
-    <>
+    <div className='sign-in-section'>
       {loginInProgress ? (
         showProgressSpinner()
       ) : mobileScreen ? (
@@ -135,7 +135,7 @@ const Authentication = (props: any) => {
           <br />
         </>
       )}
-    </>
+    </div>
   );
 };
 
