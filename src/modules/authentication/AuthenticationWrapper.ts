@@ -50,12 +50,15 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   public logOut() {
     this.deleteHomeAccountId();
-    msalApplication.logoutRedirect();
+    msalApplication.logout();
   }
 
   public async logOutPopUp() {
+    const endSessionEndpoint = (await msalApplication.getDiscoveredAuthority())
+      .endSessionEndpoint;
+    (window as any).open(endSessionEndpoint, 'msal', 400, 600);
+    this.clearCache();
     this.deleteHomeAccountId();
-    msalApplication.logoutPopup();
   }
 
   /**
