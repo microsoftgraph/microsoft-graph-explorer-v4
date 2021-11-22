@@ -10,6 +10,7 @@ import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
+import { MethodIndicator } from './methods';
 import { getAvailableMethods, getUrlFromLink, removeCounter } from './resource-explorer.utils';
 
 interface IResourceLink {
@@ -39,11 +40,14 @@ const ResourceLink = (props: IResourceLink) => {
   }
 
   const items = getMenuItems();
+  const availableMethods = getAvailableMethods(resourceLink.labels, version);
 
   return <span style={{ display: 'flex' }}>
     {!!resourceLink.iconresourceLink && <Icon style={{ margin: '0 4px' }}
       {...resourceLink.iconresourceLink} />}
     {resourceLink.name}
+    {availableMethods.length > 0 && <MethodIndicator methods={availableMethods} key={resourceLink.key} />}
+
     {items.length > 0 && <IconButton
       ariaLabel={translateMessage('More actions')}
       role='button'

@@ -31,7 +31,7 @@ export function resources(state: IResources = initialState, action: IAction): an
     case FETCH_RESOURCES_PENDING:
       return {
         pending: true,
-        data: {},
+        data: initialState.data,
         error: null
       };
     default:

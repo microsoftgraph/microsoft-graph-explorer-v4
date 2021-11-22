@@ -8,7 +8,13 @@ interface ITreeFilter {
   version: string;
 }
 
-export function createList(source: IResource[], version: string): INavLinkGroup[] {
+export function createList(source: IResource[], version: string, methods?: string[]): INavLinkGroup[] {
+  let resourcesWithMethodSupport: IResource[] = [];
+  if (methods) {
+    const flattenedSource = flatten(source);
+    resourcesWithMethodSupport = flattenedSource.filter(
+      (resource) => methodsAreSupported(resource, methods!, version))
+  }
   function getIcon({ segment, links }: any): string | undefined {
     const graphFunction = segment.includes('microsoft.graph');
     let icon;
@@ -28,6 +34,11 @@ export function createList(source: IResource[], version: string): INavLinkGroup[
     const versionedChildren = (children) ? children.filter(child => versionExists(child, version)) : [];
     const key = `${level}-${(parent === '/' ? 'root' : parent)}-${segment}`;
     const icon = getIcon({ ...info, links: versionedChildren });
+    let supportsMethods = true;
+    if (resourcesWithMethodSupport.length > 0) {
+      const existsInList = !!resourcesWithMethodSupport.find(k => k === info);
+      supportsMethods = !existsInList;
+    }
     return {
       key,
       url: key,
@@ -38,6 +49,7 @@ export function createList(source: IResource[], version: string): INavLinkGroup[
       level,
       paths,
       icon,
+      supportsMethods,
       type: (icon === 'LightningBolt') ? 'function' : 'path',
       links: (children) ? versionedChildren.map(child => createNavLink(child, segment, [...paths, segment])) : []
     };
@@ -133,4 +145,24 @@ export function getUrlFromLink(link: INavLink) {
   }
   url += removeCounter(link.name);
   return url;
+}
+
+export function flatten(content: any[]): any[] {
+  let result: any[] = [];
+  content.forEach(function (item) {
+    result.push(item);
+    if (Array.isArray(item.children)) {
+      result = result.concat(flatten(item.children));
+    }
+  });
+  return result;
+}
+
+export function methodsAreSupported(resource: IResource, methods: string[], version: string) {
+  const theMethods = resource.labels.find((k: IResourceLabel) => k.name === version)?.methods || null;
+  return (theMethods) ? arrayIncludesAnotherArray(theMethods, methods) : false;
+}
+
+export function arrayIncludesAnotherArray(mainArray: string[], subsetArray: string[]): boolean {
+  return subsetArray.some(method => mainArray.includes(toTitleCase(method)));
 }

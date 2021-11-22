@@ -160,6 +160,10 @@ const ResourceExplorer = (props: any) => {
     }
   }
 
+  const filterContent = (selection: string[]) => {
+    setItems(createList(resourceItems, version, selection));
+  }
+
   const breadCrumbs = (!!isolated) ? generateBreadCrumbs() : [];
 
   if (pending) {
@@ -194,7 +198,7 @@ const ResourceExplorer = (props: any) => {
             />
             <div>
               <Label><FormattedMessage id='Methods available' /></Label>
-              <AvailableMethods />
+              <AvailableMethods changeAvailableMethods={filterContent} />
             </div>
           </Stack>
         </div>
