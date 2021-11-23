@@ -20,9 +20,9 @@ jobs:
           echo "::set-output name=is_SONAR_TOKEN_set::${{ env.SONAR_TOKEN != '' }}"
 
   sonar_cloud_analysis:
-    name: GE SonarCloud
+    name: sonar cloud analysis
     needs: [checksecret]
-    if: needs.checksecret.output.is_SONAR_TOKEN_set == 'true'
+    if: needs.checksecret.outputs.is_SONAR_TOKEN_set == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
