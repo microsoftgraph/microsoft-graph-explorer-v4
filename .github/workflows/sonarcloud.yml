@@ -1,10 +1,28 @@
-name: SonarCloud
+name: Sonar Cloud Analysis
+
 on:
   push
-  
+
+env:
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 jobs:
-  sonarcloud:
-    name: SonarCloud
+  checksecret:
+    name: Check if sonar secrets are available
+    runs-on: ubuntu-latest
+    outputs:
+      is_SONAR_TOKEN_set: ${{ steps.checksecret_job.outputs.is_SONAR_TOKEN_set }}
+    steps:
+      - name: Verify sonar secrets
+        id: checksecret_job
+        run: |
+          echo "is_SONAR_TOKEN_set: ${{ env.SONAR_TOKEN != '' }}"
+          echo "::set-output name=is_SONAR_TOKEN_set::${{ env.SONAR_TOKEN != '' }}"
+
+  sonar_cloud_analysis:
+    name: GE SonarCloud
+    needs: [checksecret]
+    if: needs.checksecret.output.is_SONAR_TOKEN_set == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
