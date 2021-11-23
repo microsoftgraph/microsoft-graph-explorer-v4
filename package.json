@@ -40,7 +40,7 @@
         "html-webpack-plugin": "4.0.0-alpha.2",
         "identity-obj-proxy": "3.0.0",
         "isomorphic-fetch": "2.2.1",
-        "jest": "23.6.0",
+        "jest": "27.3.1",
         "jest-junit-reporter": "1.1.0",
         "jest-pnp-resolver": "1.0.2",
         "jest-resolve": "23.6.0",
