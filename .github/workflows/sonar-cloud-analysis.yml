@@ -1,0 +1,38 @@
+name: Sonar Cloud Analysis
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+env:
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+jobs:
+  check_secret:
+    name: Check if sonar secrets are available
+    runs-on: ubuntu-latest
+    outputs:
+      is_SONAR_TOKEN_set: ${{ steps.check_secret_job.outputs.is_SONAR_TOKEN_set }}
+    steps:
+      - name: Verify sonar secrets
+      - id: check_secret_job
+        run: |
+          echo "is_SONAR_TOKEN_set: ${{ env.SONAR_TOKEN != '' }}"
+          echo "::set-output name=is_SONAR_TOKEN_set::${{ env.SONAR_TOKEN != '' }}"
+
+  sonar_cloud_analysis:
+    needs: [check_secret]
+    if: needs.check_secret.output.is_SONAR_TOKEN_set == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Sonar cloud analysis started"
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
