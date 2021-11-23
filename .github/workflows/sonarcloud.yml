@@ -4,10 +4,8 @@ on:
   push:
     branches:
       - dev
-    path-ignore: '.vscode/**'
   pull_request:
     types: [opened, synchronize, reopened, closed]
-    path-ignore: '.vscode/**'
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
