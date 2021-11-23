@@ -21,7 +21,6 @@ import {
 import SuffixRenderer from './suffix/SuffixRenderer';
 import SuggestionsList from './SuggestionsList';
 
-
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
   private element: HTMLDivElement | null | undefined;
