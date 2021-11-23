@@ -4,30 +4,33 @@ on:
   push:
     branches:
       - dev
+    path-ignore: '.vscode/**'
   pull_request:
     types: [opened, synchronize, reopened, closed]
+    path-ignore: '.vscode/**'
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 jobs:
-  check_secret:
+  checksecret:
     name: Check if sonar secrets are available
     runs-on: ubuntu-latest
     outputs:
-      is_SONAR_TOKEN_set: ${{ steps.check_secret_job.outputs.is_SONAR_TOKEN_set }}
+      is_SONAR_TOKEN_set: ${{ steps.checksecret_job.outputs.is_SONAR_TOKEN_set }}
     steps:
       - name: Verify sonar secrets
-      - id: check_secret_job
+      - id: checksecret_job
         run: |
           echo "is_SONAR_TOKEN_set: ${{ env.SONAR_TOKEN != '' }}"
           echo "::set-output name=is_SONAR_TOKEN_set::${{ env.SONAR_TOKEN != '' }}"
 
   sonar_cloud_analysis:
-    needs: [check_secret]
-    if: needs.check_secret.output.is_SONAR_TOKEN_set == 'true'
+    name: GE SonarCloud
+    needs: [checksecret]
+    if: needs.checksecret.output.is_SONAR_TOKEN_set == 'true'
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Sonar cloud analysis started"
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
