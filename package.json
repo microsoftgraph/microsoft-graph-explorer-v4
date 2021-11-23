@@ -116,7 +116,7 @@
         "@types/selenium-webdriver": "4.0.6",
         "@typescript-eslint/eslint-plugin": "4.15.0",
         "@typescript-eslint/eslint-plugin-tslint": "4.15.0",
-        "@typescript-eslint/parser": "4.15.0",
+        "@typescript-eslint/parser": "4.33.0",
         "axe-core": "4.3.3",
         "axe-sarif-converter": "2.3.0",
         "axios": "0.21.4",
