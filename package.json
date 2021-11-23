@@ -135,7 +135,7 @@
         "merge": "2.1.1",
         "merge-deep": "3.0.3",
         "node-fetch": "2.6.1",
-        "node-notifier": "8.0.1",
+        "node-notifier": "10.0.0",
         "path-parse": "1.0.7",
         "react-dev-utils": "7.0.3",
         "react-test-renderer": "16.13.0",
