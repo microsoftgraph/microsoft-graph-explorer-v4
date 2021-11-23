@@ -37,7 +37,7 @@
         "fork-ts-checker-webpack-plugin-alt": "0.4.14",
         "fs-extra": "7.0.1",
         "guid-typescript": "1.0.9",
-        "html-webpack-plugin": "4.0.0-alpha.2",
+        "html-webpack-plugin": "4.5.2",
         "identity-obj-proxy": "3.0.0",
         "isomorphic-fetch": "2.2.1",
         "jest": "23.6.0",
