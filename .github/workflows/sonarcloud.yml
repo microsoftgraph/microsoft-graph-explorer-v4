@@ -18,7 +18,7 @@ jobs:
       is_SONAR_TOKEN_set: ${{ steps.checksecret_job.outputs.is_SONAR_TOKEN_set }}
     steps:
       - name: Verify sonar secrets
-      - id: checksecret_job
+        id: checksecret_job
         run: |
           echo "is_SONAR_TOKEN_set: ${{ env.SONAR_TOKEN != '' }}"
           echo "::set-output name=is_SONAR_TOKEN_set::${{ env.SONAR_TOKEN != '' }}"
