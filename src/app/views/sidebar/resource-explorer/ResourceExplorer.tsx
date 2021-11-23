@@ -12,7 +12,6 @@ import { IRootState } from '../../../../types/root';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import { AvailableMethods } from './methods';
 import QueryParameters from './QueryParameters';
 import {
   createList, getCurrentTree,
@@ -160,10 +159,6 @@ const ResourceExplorer = (props: any) => {
     }
   }
 
-  const filterContent = (selection: string[]) => {
-    setItems(createList(resourceItems, version, selection));
-  }
-
   const breadCrumbs = (!!isolated) ? generateBreadCrumbs() : [];
 
   if (pending) {
@@ -188,21 +183,14 @@ const ResourceExplorer = (props: any) => {
           styles={{ field: { paddingLeft: 10 } }}
         />
         <hr />
-        <div className='row'>
-          <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
-            <ChoiceGroup
-              label={translateMessage('Select version')}
-              defaultSelectedKey={version}
-              options={versions}
-              onChange={changeVersion}
-            />
-            <div>
-              <Label><FormattedMessage id='Methods available' /></Label>
-              <AvailableMethods changeAvailableMethods={filterContent} />
-            </div>
-          </Stack>
-        </div>
-        <br />
+        <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
+          <ChoiceGroup
+            label={translateMessage('Select version')}
+            defaultSelectedKey={version}
+            options={versions}
+            onChange={changeVersion}
+          />
+        </Stack>
       </>}
 
       {isolated && breadCrumbs.length > 0 &&

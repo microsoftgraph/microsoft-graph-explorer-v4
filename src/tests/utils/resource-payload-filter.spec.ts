@@ -21,10 +21,4 @@ describe('Resource payload should', () => {
     const filtered = createList(resource.children, 'v1.0')[0];
     expect(filtered.links.length).toBe(64);
   });
-
-  it('return children with version v1.0 and GET,POST', async () => {
-    const resources = getResourcesSupportedByVersion(resource, 'v1.0', ['GET', 'POST']);
-    expect(resources.children.length).toBe(39);
-  });
-
 });

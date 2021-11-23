@@ -6,11 +6,9 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { IQuery } from '../../../../types/query-runner';
-import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
-import { MethodIndicator } from './methods';
 import { getAvailableMethods, getUrlFromLink, removeCounter } from './resource-explorer.utils';
 
 interface IResourceLink {
@@ -24,29 +22,24 @@ const ResourceLink = (props: IResourceLink) => {
   const dispatch = useDispatch();
   const { link: resourceLink, version } = props;
 
-  const setQuery = (link: INavLink) => {
+  const setQuery = (link: INavLink, selectedVerb: string) => {
     const sampleUrl = `${GRAPH_URL}/${version}${getUrlFromLink(link)}`;
     const query: IQuery = {
-      selectedVerb: 'GET',
+      selectedVerb,
       selectedVersion: version,
       sampleUrl,
       sampleHeaders: [],
       sampleBody: undefined
     };
     dispatch(setSampleQuery(query));
-    if (!sampleUrl.includes('{')) {
-      dispatch(runQuery(query));
-    }
   }
 
   const items = getMenuItems();
-  const availableMethods = getAvailableMethods(resourceLink.labels, version);
 
   return <span style={{ display: 'flex' }}>
     {!!resourceLink.iconresourceLink && <Icon style={{ margin: '0 4px' }}
       {...resourceLink.iconresourceLink} />}
     {resourceLink.name}
-    {availableMethods.length > 0 && <MethodIndicator methods={availableMethods} key={resourceLink.key} />}
 
     {items.length > 0 && <IconButton
       ariaLabel={translateMessage('More actions')}
@@ -66,6 +59,7 @@ const ResourceLink = (props: IResourceLink) => {
   </span>;
 
   function getMenuItems() {
+    const availableMethods = getAvailableMethods(resourceLink.labels, version);
     const menuItems: IContextualMenuItem[] = [];
 
     if (resourceLink!.links!.length > 0) {
@@ -81,12 +75,6 @@ const ResourceLink = (props: IResourceLink) => {
     if (resourceLink.type === 'path') {
       menuItems.push(
         {
-          key: 'run-query',
-          text: translateMessage('Run Query'),
-          itemType: ContextualMenuItemType.Normal,
-          onClick: () => setQuery(resourceLink)
-        },
-        {
           key: 'show-query-parameters',
           text: translateMessage('Access query parameters'),
           itemType: ContextualMenuItemType.Normal,
@@ -94,16 +82,20 @@ const ResourceLink = (props: IResourceLink) => {
         });
     }
 
-    const availableMethods = getAvailableMethods(resourceLink.labels, version);
     if (availableMethods.length > 0) {
       const subMenuItems: IContextualMenuItem[] = [];
       availableMethods.forEach(element => {
-        subMenuItems.push({ key: element, text: element.toUpperCase(), disabled: true })
+        subMenuItems.push({
+          key: element,
+          text: element.toUpperCase(),
+          onClick: () => setQuery(resourceLink, element.toUpperCase())
+        })
       });
+
       menuItems.unshift({
-        key: 'supported-methods',
+        key: 'set-query',
+        text: translateMessage('Set Query'),
         itemType: ContextualMenuItemType.Normal,
-        text: translateMessage('Show methods'),
         subMenuProps: {
           items: subMenuItems
         }
