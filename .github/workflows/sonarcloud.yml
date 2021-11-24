@@ -42,7 +42,7 @@ jobs:
           ls testfiles
 
       - name: Fix code coverage paths
-        run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' lcov.info
+        run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
