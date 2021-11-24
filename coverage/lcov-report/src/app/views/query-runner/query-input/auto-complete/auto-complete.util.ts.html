@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/views/query-runner/query-input/auto-complete/auto-complete.util.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\..\..\..\..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\..\..\..\..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\..\..\..\..\..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\..\..\..\..\..\index.html">All files</a> / <a href="index.html">src/app/views/query-runner/query-input/auto-complete</a> auto-complete.util.ts
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { IAutoCompleteProps } from '../../../../../types/auto-complete';
+&nbsp;
+export function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
+  let finalSelectedSuggestion = `${userInput + selected}`;
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (compare) {
+    /**
+     * Removes the characters used to filter the suggestions
+     * and replaces them with the provided suggestion
+     */
+    finalSelectedSuggestion = userInput.slice(0, -compare.length);
+    return finalSelectedSuggestion + selected;
+  }
+<span class="cstat-no" title="statement not covered" >  return finalSelectedSuggestion;</span>
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >getParametersWithVerb(</span>properties: IAutoCompleteProps) {
+  const { autoCompleteOptions, sampleQuery: { selectedVerb } } = <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >properties;</span></span>
+<span class="cstat-no" title="statement not covered" >  if (!autoCompleteOptions) {</span>
+<span class="cstat-no" title="statement not covered" >    return;</span>
+  }
+  const parameters = <span class="cstat-no" title="statement not covered" >autoCompleteOptions.parameters;</span>
+<span class="cstat-no" title="statement not covered" >  if (!parameters) {</span>
+<span class="cstat-no" title="statement not covered" >    return;</span>
+  }
+<span class="cstat-no" title="statement not covered" >  return parameters.find(<span class="fstat-no" title="function not covered" >parameter =&gt; <span class="cstat-no" title="statement not covered" >parameter.verb === selectedVerb.toLowerCase())</span>;</span></span>
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >getLastCharacterOf(</span>content: string) {
+<span class="cstat-no" title="statement not covered" >  return content.slice(-1);</span>
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >getLastSymbolInUrl(</span>url: string) {
+  const availableSymbols = <span class="cstat-no" title="statement not covered" >[</span>
+    {
+      key: '/',
+      value: 0
+    },
+    {
+      key: ',',
+      value: 0
+    },
+    {
+      key: '$',
+      value: 0
+    },
+    {
+      key: '=',
+      value: 0
+    },
+    {
+      key: '&amp;',
+      value: 0
+    },
+    {
+      key: '?',
+      value: 0
+    }
+  ];
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  availableSymbols.forEach(<span class="fstat-no" title="function not covered" >element =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    element.value = url.lastIndexOf(element.key);</span>
+  });
+  const max = <span class="cstat-no" title="statement not covered" >availableSymbols.reduce(<span class="fstat-no" title="function not covered" >(</span>prev, current) =&gt; <span class="cstat-no" title="statement not covered" >(prev.value &gt; current.value) ? prev : current)</span>;</span>
+<span class="cstat-no" title="statement not covered" >  return max;</span>
+}
+&nbsp;
+// Filter out suggestions that don't contain the user's input
+export function <span class="fstat-no" title="function not covered" >getFilteredSuggestions(</span>compareString: string, suggestions: string[]) {
+<span class="cstat-no" title="statement not covered" >  return suggestions.filter(<span class="fstat-no" title="function not covered" >(</span>suggestion: string) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) &gt; -1;</span>
+  });
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 24 2021 12:09:44 GMT+0300 (East Africa Time)
+</div>
+</div>
+<script src="..\..\..\..\..\..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\..\..\..\..\..\sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/services/actions/permissions-action-creator.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\..\..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\..\..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\..\..\..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\..\..\..\index.html">All files</a> / <a href="index.html">src/app/services/actions</a> permissions-action-creator.ts
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { MessageBarType } from '@fluentui/react';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >import { geLocale } from '../../../appLocale';</span>
+<span class="cstat-no" title="statement not covered" >import { authenticationWrapper } from '../../../modules/authentication';</span>
+import { IAction } from '../../../types/action';
+import { IUser } from '../../../types/profile';
+import { IRequestOptions } from '../../../types/request';
+import { IRootState } from '../../../types/root';
+<span class="cstat-no" title="statement not covered" >import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';</span>
+<span class="cstat-no" title="statement not covered" >import { parseSampleUrl } from '../../utils/sample-url-generation';</span>
+<span class="cstat-no" title="statement not covered" >import { translateMessage } from '../../utils/translate-messages';</span>
+<span class="cstat-no" title="statement not covered" >import { getConsentAuthErrorHint } from '../../views/authentication/AuthenticationErrorsHints';</span>
+<span class="cstat-no" title="statement not covered" >import { ACCOUNT_TYPE, PERMS_SCOPE } from '../graph-constants';</span>
+<span class="cstat-no" title="statement not covered" >import {</span>
+  FETCH_SCOPES_ERROR,
+  FETCH_SCOPES_PENDING,
+  FETCH_SCOPES_SUCCESS
+} from '../redux-constants';
+<span class="cstat-no" title="statement not covered" >import {</span>
+  getAuthTokenSuccess,
+  getConsentedScopesSuccess
+} from './auth-action-creators';
+<span class="cstat-no" title="statement not covered" >import { setQueryResponseStatus } from './query-status-action-creator';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >fetchScopesSuccess(</span>response: object): IAction {</span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    type: FETCH_SCOPES_SUCCESS,
+    response
+  };
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >fetchScopesPending(</span>): any {</span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    type: FETCH_SCOPES_PENDING
+  };
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >fetchScopesError(</span>response: object): IAction {</span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    type: FETCH_SCOPES_ERROR,
+    response
+  };
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >fetchScopes(</span>): Function {</span></span>
+<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >async (</span>dispatch: Function, getState: Function) =&gt; {</span>
+    let <span class="cstat-no" title="statement not covered" >hasUrl = false; </span>// whether permissions are for a specific url
+    try {
+      const <span class="cstat-no" title="statement not covered" >{ devxApi, permissionsPanelOpen, profile, sampleQuery: query }: IRootState = getState();</span>
+      let <span class="cstat-no" title="statement not covered" >permissionsUrl = `${devxApi.baseUrl}/permissions`;</span>
+&nbsp;
+      const <span class="cstat-no" title="statement not covered" >scopeType = getPermissionsScopeType(profile);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (!permissionsPanelOpen) {</span>
+        const <span class="cstat-no" title="statement not covered" >signature = sanitizeQueryUrl(query.sampleUrl);</span>
+        const <span class="cstat-no" title="statement not covered" >{ requestUrl, sampleUrl } = parseSampleUrl(signature);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!sampleUrl) {</span>
+<span class="cstat-no" title="statement not covered" >          throw new Error('url is invalid');</span>
+        }
+&nbsp;
+        // eslint-disable-next-line max-len
+<span class="cstat-no" title="statement not covered" >        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&amp;method=${query.selectedVerb}&amp;scopeType=${scopeType}`;</span>
+<span class="cstat-no" title="statement not covered" >        hasUrl = true;</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (devxApi.parameters) {</span>
+<span class="cstat-no" title="statement not covered" >        permissionsUrl = `${permissionsUrl}${query ? '&amp;' : '?'}${devxApi.parameters}`;</span>
+      }
+&nbsp;
+      const <span class="cstat-no" title="statement not covered" >headers = {</span>
+        'Content-Type': 'application/json',
+        'Accept-Language': geLocale
+      };
+&nbsp;
+      const <span class="cstat-no" title="statement not covered" >options: IRequestOptions = { headers };</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      dispatch(fetchScopesPending());</span>
+&nbsp;
+      const <span class="cstat-no" title="statement not covered" >response = <span class="cstat-no" title="statement not covered" >await fetch(permissionsUrl, options);</span></span>
+      if (<span class="cstat-no" title="statement not covered" >response.ok)</span> {
+        const <span class="cstat-no" title="statement not covered" >scopes = <span class="cstat-no" title="statement not covered" >await response.json();</span></span>
+<span class="cstat-no" title="statement not covered" >        return dispatch(</span>
+          fetchScopesSuccess({
+            hasUrl,
+            scopes
+          })
+        );
+      }
+<span class="cstat-no" title="statement not covered" >      throw response;</span>
+    } catch (error) {
+<span class="cstat-no" title="statement not covered" >      return dispatch(</span>
+        fetchScopesError({
+          hasUrl,
+          error
+        })
+      );
+    }
+  };
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >getPermissionsScopeType(</span>profile: IUser | null | undefined) {
+<span class="cstat-no" title="statement not covered" >  if (profile?.profileType === ACCOUNT_TYPE.MSA) {</span>
+<span class="cstat-no" title="statement not covered" >    return PERMS_SCOPE.PERSONAL;</span>
+  }
+<span class="cstat-no" title="statement not covered" >  return PERMS_SCOPE.WORK;</span>
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >consentToScopes(</span>scopes: string[]): Function {</span></span>
+<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >async (</span>dispatch: Function) =&gt; {</span>
+    try {
+      const <span class="cstat-no" title="statement not covered" >authResponse = <span class="cstat-no" title="statement not covered" >await authenticationWrapper.consentToScopes(scopes);</span></span>
+<span class="cstat-no" title="statement not covered" >      if (authResponse &amp;&amp; authResponse.accessToken) {</span>
+<span class="cstat-no" title="statement not covered" >        dispatch(getAuthTokenSuccess(true));</span>
+<span class="cstat-no" title="statement not covered" >        dispatch(getConsentedScopesSuccess(authResponse.scopes));</span>
+      }
+    } catch (error: any) {
+      const { <span class="cstat-no" title="statement not covered" >errorCode } = error;</span>
+<span class="cstat-no" title="statement not covered" >      dispatch(</span>
+        setQueryResponseStatus({
+          statusText: translateMessage('Scope consent failed'),
+          status: errorCode,
+          ok: false,
+          messageType: MessageBarType.error,
+          hint: getConsentAuthErrorHint(errorCode)
+        })
+      );
+    }
+  };
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 24 2021 12:09:44 GMT+0300 (East Africa Time)
+</div>
+</div>
+<script src="..\..\..\..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\..\..\..\sorter.js"></script>
+</body>
+</html>

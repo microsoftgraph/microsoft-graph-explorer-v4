@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/views/sidebar/history/history-utils.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\..\..\..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\..\..\..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\..\..\..\..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\..\..\..\..\index.html">All files</a> / <a href="index.html">src/app/views/sidebar/history</a> history-utils.ts
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50</td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import localforage from 'localforage';
+import { IHistoryItem } from '../../../../types/history';
+&nbsp;
+const historyStorage = localforage.createInstance({
+  storeName: 'history',
+  name: 'GE_V4'
+});
+&nbsp;
+export async function writeHistoryData(historyItem: IHistoryItem) {
+  historyStorage.setItem(historyItem.createdAt, historyItem);
+}
+&nbsp;
+export async function <span class="fstat-no" title="function not covered" >readHistoryData(</span>): Promise&lt;IHistoryItem[]&gt; {
+  let <span class="cstat-no" title="statement not covered" >historyData: IHistoryItem[] = [];</span>
+  const <span class="cstat-no" title="statement not covered" >keys = <span class="cstat-no" title="statement not covered" >await historyStorage.keys();</span></span>
+  for (const <span class="cstat-no" title="statement not covered" >creationTime </span>of <span class="cstat-no" title="statement not covered" >keys<span class="cstat-no" title="statement not covered" >)</span> {</span>
+    if (<span class="cstat-no" title="statement not covered" >historyItemHasExpired(creationTime))</span> {
+<span class="cstat-no" title="statement not covered" >      historyStorage.removeItem(creationTime);</span>
+    } else {
+      const <span class="cstat-no" title="statement not covered" >historyItem: IHistoryItem = <span class="cstat-no" title="statement not covered" >await historyStorage.getItem(creationTime);</span></span>
+<span class="cstat-no" title="statement not covered" >      historyData = [...historyData, historyItem];</span>
+    }
+  }
+<span class="cstat-no" title="statement not covered" >  return historyData;</span>
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >historyItemHasExpired(</span>createdAt: string): boolean {
+  const ageInDays: number = <span class="cstat-no" title="statement not covered" >30;</span>
+  const dateToCompare = <span class="cstat-no" title="statement not covered" >new Date();</span>
+<span class="cstat-no" title="statement not covered" >  dateToCompare.setDate(dateToCompare.getDate() - ageInDays);</span>
+  const expiryDate = <span class="cstat-no" title="statement not covered" >dateToCompare.getTime();</span>
+  const createdTime = <span class="cstat-no" title="statement not covered" >new Date(createdAt).getTime();</span>
+<span class="cstat-no" title="statement not covered" >  return (createdTime &lt; expiryDate);</span>
+}
+&nbsp;
+export const removeHistoryData = <span class="fstat-no" title="function not covered" >async (</span>historyItem: IHistoryItem) =&gt; {
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >  await historyStorage.removeItem(historyItem.createdAt);</span></span>
+<span class="cstat-no" title="statement not covered" >  return true;</span>
+};
+&nbsp;
+export const bulkRemoveHistoryData = <span class="fstat-no" title="function not covered" >async (</span>listOfKeys: string[]) =&gt; {
+<span class="cstat-no" title="statement not covered" >  historyStorage.iterate(<span class="fstat-no" title="function not covered" >(</span>_value, key) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (listOfKeys.includes(key)) {</span>
+<span class="cstat-no" title="statement not covered" >      historyStorage.removeItem(key);</span>
+    }
+  }).then(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return true;</span>
+  });
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 24 2021 12:09:44 GMT+0300 (East Africa Time)
+</div>
+</div>
+<script src="..\..\..\..\..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\..\..\..\..\sorter.js"></script>
+</body>
+</html>

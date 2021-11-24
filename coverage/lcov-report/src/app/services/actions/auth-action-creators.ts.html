@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/services/actions/auth-action-creators.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\..\..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\..\..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\..\..\..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\..\..\..\index.html">All files</a> / <a href="index.html">src/app/services/actions</a> auth-action-creators.ts
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { authenticationWrapper } from '../../../modules/authentication';</span>
+import { IAction } from '../../../types/action';
+<span class="cstat-no" title="statement not covered" >import { Mode } from '../../../types/enums';</span>
+<span class="cstat-no" title="statement not covered" >import {</span>
+  AUTHENTICATION_PENDING, GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS,
+  LOGOUT_SUCCESS
+} from '../redux-constants';
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >getAuthTokenSuccess(</span>response: boolean): any {</span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    type: GET_AUTH_TOKEN_SUCCESS,
+    response
+  };
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >getConsentedScopesSuccess(</span>response: string[]): IAction {</span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    type: GET_CONSENTED_SCOPES_SUCCESS,
+    response
+  };
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >signOutSuccess(</span>response: boolean): any {</span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    type: LOGOUT_SUCCESS,
+    response
+  };
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >setAuthenticationPending(</span>response: boolean): any {</span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    type: AUTHENTICATION_PENDING,
+    response
+  };
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >signOut(</span>) {</span>
+<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >(</span>dispatch: Function, getState: Function) =&gt; {</span>
+    const { graphExplorerMode } = <span class="cstat-no" title="statement not covered" >getState();</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(setAuthenticationPending(true));</span>
+<span class="cstat-no" title="statement not covered" >    if (graphExplorerMode === Mode.Complete) {</span>
+<span class="cstat-no" title="statement not covered" >      authenticationWrapper.logOut();</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      authenticationWrapper.logOutPopUp();</span>
+<span class="cstat-no" title="statement not covered" >      dispatch(signOutSuccess(false));</span>
+    }
+  };
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >signIn(</span>) {</span>
+<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >(</span>dispatch: Function) =&gt; <span class="cstat-no" title="statement not covered" >dispatch(getAuthTokenSuccess(true));</span></span>
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >storeScopes(</span>consentedScopes: string[]) {</span>
+<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >(</span>dispatch: Function) =&gt; <span class="cstat-no" title="statement not covered" >dispatch(getConsentedScopesSuccess(consentedScopes));</span></span>
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 24 2021 12:09:44 GMT+0300 (East Africa Time)
+</div>
+</div>
+<script src="..\..\..\..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\..\..\..\sorter.js"></script>
+</body>
+</html>

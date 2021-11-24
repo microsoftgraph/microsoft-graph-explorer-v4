@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/views/query-response/pivot-items/pivot-items.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\..\..\..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\..\..\..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\..\..\..\..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\..\..\..\..\index.html">All files</a> / <a href="index.html">src/app/views/query-response/pivot-items</a> pivot-items.tsx
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { getId, getTheme, Icon, ITheme, PivotItem, TooltipHost } from '@fluentui/react';</span>
+<span class="cstat-no" title="statement not covered" >import React from 'react';</span>
+<span class="cstat-no" title="statement not covered" >import { useSelector } from 'react-redux';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >import { componentNames, telemetry } from '../../../../telemetry';</span>
+<span class="cstat-no" title="statement not covered" >import { ThemeContext } from '../../../../themes/theme-context';</span>
+<span class="cstat-no" title="statement not covered" >import { Mode } from '../../../../types/enums';</span>
+import { IQuery } from '../../../../types/query-runner';
+import { IRootState } from '../../../../types/root';
+<span class="cstat-no" title="statement not covered" >import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';</span>
+<span class="cstat-no" title="statement not covered" >import { validateExternalLink } from '../../../utils/external-link-validation';</span>
+<span class="cstat-no" title="statement not covered" >import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';</span>
+<span class="cstat-no" title="statement not covered" >import { translateMessage } from '../../../utils/translate-messages';</span>
+<span class="cstat-no" title="statement not covered" >import AdaptiveCard from '../adaptive-cards/AdaptiveCard';</span>
+<span class="cstat-no" title="statement not covered" >import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';</span>
+<span class="cstat-no" title="statement not covered" >import GraphToolkit from '../graph-toolkit/GraphToolkit';</span>
+<span class="cstat-no" title="statement not covered" >import { ResponseHeaders } from '../headers';</span>
+<span class="cstat-no" title="statement not covered" >import { queryResponseStyles } from '../queryResponse.styles';</span>
+<span class="cstat-no" title="statement not covered" >import { Response } from '../response';</span>
+<span class="cstat-no" title="statement not covered" >import { Snippets } from '../snippets';</span>
+&nbsp;
+export const <span class="cstat-no" title="statement not covered" >getPivotItems = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span></span>
+&nbsp;
+  const { graphExplorerMode: mode<span class="cstat-no" title="statement not covered" >, sampleQuery<span class="cstat-no" title="statement not covered" >, graphResponse: { body<span class="cstat-no" title="statement not covered" > } } = <span class="cstat-no" title="statement not covered" >useSelector(<span class="fstat-no" title="function not covered" >(</span>state: IRootState) =&gt; <span class="cstat-no" title="statement not covered" >state)</span>;</span></span></span></span>
+&nbsp;
+  const currentTheme: ITheme = <span class="cstat-no" title="statement not covered" >getTheme();</span>
+  const dotStyle = <span class="cstat-no" title="statement not covered" >queryResponseStyles(currentTheme).dot;</span>
+&nbsp;
+  function <span class="fstat-no" title="function not covered" >showDotIfAdaptiveCardPresent(</span>) {
+<span class="cstat-no" title="statement not covered" >    if (!!body) {</span>
+      const template = <span class="cstat-no" title="statement not covered" >lookupTemplate(sampleQuery);</span>
+<span class="cstat-no" title="statement not covered" >      if (template) {</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;span style={dotStyle} /&gt;;</span>
+      }
+    }
+<span class="cstat-no" title="statement not covered" >    return null;</span>
+  }
+&nbsp;
+  function <span class="fstat-no" title="function not covered" >showDotIfGraphToolkitPresent(</span>) {
+<span class="cstat-no" title="statement not covered" >    if (!!body) {</span>
+      const { toolkitUrl<span class="cstat-no" title="statement not covered" >, exampleUrl<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >lookupToolkitUrl(sampleQuery);</span></span></span>
+<span class="cstat-no" title="statement not covered" >      if (toolkitUrl &amp;&amp; exampleUrl) {</span>
+<span class="cstat-no" title="statement not covered" >        validateExternalLink(toolkitUrl, componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK, null, sampleQuery);</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;span style={dotStyle} /&gt;;</span>
+      }
+    }
+<span class="cstat-no" title="statement not covered" >    return null;</span>
+  }
+&nbsp;
+  function <span class="fstat-no" title="function not covered" >renderItemLink(</span>link: any) {
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}&gt;
+        &lt;Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} /&gt;
+        {link.headerText}
+&nbsp;
+        {link.ariaLabel === 'Adaptive Cards' &amp;&amp; showDotIfAdaptiveCardPresent()}
+        {link.ariaLabel === 'Graph Toolkit' &amp;&amp; showDotIfGraphToolkitPresent()}
+      &lt;/TooltipHost&gt;
+    );
+  }
+&nbsp;
+  const pivotItems = <span class="cstat-no" title="statement not covered" >[</span>
+    &lt;PivotItem
+      key='response-preview'
+      ariaLabel={translateMessage('Response Preview')}
+      itemIcon='Reply'
+      itemKey='response-preview' // To be used to construct component name for telemetry data
+      headerText={translateMessage('Response Preview')}
+      title={translateMessage('Response Preview')}
+      onRenderItemLink={renderItemLink}
+    &gt;
+      &lt;Response /&gt;
+    &lt;/PivotItem&gt;,
+    &lt;PivotItem
+      key='response-headers'
+      ariaLabel={translateMessage('Response Headers')}
+      headerText={translateMessage('Response Headers')}
+      itemIcon='FileComment'
+      itemKey='response-headers'
+      title={translateMessage('Response Headers')}
+      onRenderItemLink={renderItemLink}
+    &gt;
+      &lt;ResponseHeaders /&gt;
+    &lt;/PivotItem&gt;
+  ];
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (mode === Mode.Complete) {</span>
+<span class="cstat-no" title="statement not covered" >    pivotItems.push(</span>
+      &lt;PivotItem
+        key='code-snippets'
+        ariaLabel={translateMessage('Snippets')}
+        title={translateMessage('Snippets')}
+        headerText={translateMessage('Snippets')}
+        itemIcon='PasteAsCode'
+        itemKey='code-snippets'
+        onRenderItemLink={renderItemLink}
+      &gt;
+        &lt;Snippets /&gt;
+      &lt;/PivotItem&gt;,
+      &lt;PivotItem
+        key='graph-toolkit'
+        ariaLabel={translateMessage('Graph toolkit')}
+        itemIcon='CustomizeToolbar'
+        itemKey='toolkit-component'
+        headerText={translateMessage('Graph toolkit')}
+        title={translateMessage('Graph toolkit')}
+        onRenderItemLink={renderItemLink}
+      &gt;
+        &lt;GraphToolkit /&gt;
+      &lt;/PivotItem&gt;,
+      &lt;PivotItem
+        key='adaptive-cards'
+        ariaLabel={translateMessage('Adaptive Cards')}
+        headerText={translateMessage('Adaptive Cards')}
+        title={translateMessage('Adaptive Cards')}
+        itemIcon='ContactCard'
+        itemKey='adaptive-cards'
+        onRenderItemLink={renderItemLink}
+      &gt;
+        &lt;ThemeContext.Consumer &gt;
+          {<span class="fstat-no" title="function not covered" >(</span>theme) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+            // @ts-ignore
+            &lt;AdaptiveCard
+              body={body}
+              hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
+            /&gt;
+          )}
+        &lt;/ThemeContext.Consumer&gt;
+      &lt;/PivotItem&gt;
+    );
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return pivotItems;</span>
+};
+&nbsp;
+export const <span class="cstat-no" title="statement not covered" >onPivotItemClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>query: IQuery, item?: PivotItem) =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >  if (!item) { <span class="cstat-no" title="statement not covered" >return; </span>}</span>
+  const tabKey = <span class="cstat-no" title="statement not covered" >item.props.itemKey;</span>
+<span class="cstat-no" title="statement not covered" >  if (tabKey) {</span>
+<span class="cstat-no" title="statement not covered" >    telemetry.trackTabClickEvent(tabKey, query);</span>
+  }
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 24 2021 12:09:44 GMT+0300 (East Africa Time)
+</div>
+</div>
+<script src="..\..\..\..\..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\..\..\..\..\sorter.js"></script>
+</body>
+</html>

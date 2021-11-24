@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/views/common/share.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\..\..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\..\..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\..\..\..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\..\..\..\index.html">All files</a> / <a href="index.html">src/app/views/common</a> share.ts
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { geLocale } from '../../../appLocale';</span>
+<span class="cstat-no" title="statement not covered" >import { authenticationWrapper } from '../../../modules/authentication';</span>
+import { IQuery } from '../../../types/query-runner';
+<span class="cstat-no" title="statement not covered" >import { encodeHashCharacters } from '../../utils/query-url-sanitization';</span>
+<span class="cstat-no" title="statement not covered" >import { parseSampleUrl } from '../../utils/sample-url-generation';</span>
+&nbsp;
+/**
+ * Creates a shareable link
+ * @param sampleQuery  The query you want to share ´text´.
+ * @param authenticated Optional. Informs the browser that someone is logged in.
+ */
+export const <span class="cstat-no" title="statement not covered" >createShareLink = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>sampleQuery: IQuery, authenticated?: boolean): string =&gt; {</span></span>
+  const { sampleBody, selectedVerb, sampleHeaders } = <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >sampleQuery;</span></span></span>
+  const { queryVersion<span class="cstat-no" title="statement not covered" >, requestUrl<span class="cstat-no" title="statement not covered" >, sampleUrl<span class="cstat-no" title="statement not covered" >, search<span class="cstat-no" title="statement not covered" > } =</span></span></span></span>
+<span class="cstat-no" title="statement not covered" >    parseSampleUrl(encodeHashCharacters(sampleQuery));</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (!sampleUrl) {</span>
+<span class="cstat-no" title="statement not covered" >    return '';</span>
+  }
+&nbsp;
+  const url = <span class="cstat-no" title="statement not covered" >new URL(sampleUrl);</span>
+  const graphUrl = <span class="cstat-no" title="statement not covered" >url.origin;</span>
+  const appUrl = <span class="cstat-no" title="statement not covered" >'https://developer.microsoft.com/' + geLocale.toLowerCase() + '/graph/graph-explorer';</span>
+&nbsp;
+  const graphUrlRequest = <span class="cstat-no" title="statement not covered" >encodeURIComponent(requestUrl + search);</span>
+  let shareLink =
+    // tslint:disable-next-line:max-line-length
+    `${<span class="cstat-no" title="statement not covered" >appUrl}?request=${graphUrlRequest}&amp;method=${selectedVerb}&amp;version=${queryVersion}&amp;GraphUrl=${graphUrl}`;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (sampleBody &amp;&amp; Object.keys(sampleBody).length &gt; 0) {</span>
+    const requestBody = <span class="cstat-no" title="statement not covered" >hashEncode(JSON.stringify(sampleBody));</span>
+<span class="cstat-no" title="statement not covered" >    shareLink = `${shareLink}&amp;requestBody=${requestBody}`;</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (sampleHeaders &amp;&amp; sampleHeaders.length &gt; 0) {</span>
+    const headers = <span class="cstat-no" title="statement not covered" >hashEncode(JSON.stringify(sampleHeaders));</span>
+<span class="cstat-no" title="statement not covered" >    shareLink = `${shareLink}&amp;headers=${headers}`;</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (authenticated) {</span>
+    const sessionId = <span class="cstat-no" title="statement not covered" >authenticationWrapper.getSessionId();</span>
+<span class="cstat-no" title="statement not covered" >    if (sessionId) {</span>
+<span class="cstat-no" title="statement not covered" >      shareLink = `${shareLink}&amp;sid=${sessionId}`;</span>
+    }
+  }
+<span class="cstat-no" title="statement not covered" >  return shareLink;</span>
+};
+&nbsp;
+const hashEncode = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>requestBody: string): string =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return btoa(unescape(encodeURIComponent(requestBody)));</span>
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 24 2021 12:09:44 GMT+0300 (East Africa Time)
+</div>
+</div>
+<script src="..\..\..\..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\..\..\..\sorter.js"></script>
+</body>
+</html>

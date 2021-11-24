@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/services/actions/profile-action-creators.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\..\..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\..\..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\..\..\..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\..\..\..\index.html">All files</a> / <a href="index.html">src/app/services/actions</a> profile-action-creators.ts
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { AgeGroup } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
+import { IUser } from '../../../types/profile';
+import { IQuery } from '../../../types/query-runner';
+import {
+  ACCOUNT_TYPE,
+  BETA_USER_INFO_URL,
+  DEFAULT_USER_SCOPES,
+  USER_INFO_URL,
+  USER_PICTURE_URL
+} from '../graph-constants';
+import {
+  PROFILE_REQUEST_ERROR,
+  PROFILE_REQUEST_SUCCESS
+} from '../redux-constants';
+import { makeGraphRequest, parseResponse } from './query-action-creator-util';
+import { queryRunningStatus } from './query-loading-action-creators';
+&nbsp;
+interface IBetaProfile {
+  ageGroup: number;
+  profileType: ACCOUNT_TYPE;
+}
+&nbsp;
+interface IProfileResponse {
+  userInfo: any;
+  response: any;
+}
+&nbsp;
+export function profileRequestSuccess(response: object): any {
+  return {
+    type: PROFILE_REQUEST_SUCCESS,
+    response
+  };
+}
+&nbsp;
+export function profileRequestError(response: object): any {
+  return {
+    type: PROFILE_REQUEST_ERROR,
+    response
+  };
+}
+&nbsp;
+const query: IQuery = {
+  selectedVerb: 'GET',
+  sampleHeaders: [
+    {
+      name: 'Cache-Control',
+      value: 'no-cache'
+    }
+  ],
+  selectedVersion: '',
+  sampleUrl: ''
+};
+&nbsp;
+export function getProfileInfo(): Function {
+  return async (dispatch: Function) =&gt; {
+    dispatch(queryRunningStatus(true));
+    try {
+      const profile: IUser = await getProfileInformation();
+      const <span class="cstat-no" title="statement not covered" >{profileType, ageGroup}</span> = <span class="cstat-no" title="statement not covered" >await getBetaProfile();</span>
+<span class="cstat-no" title="statement not covered" >      profile.profileType = profileType;</span>
+<span class="cstat-no" title="statement not covered" >      profile.ageGroup = ageGroup;</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >      profile.</span>profileImageUrl = <span class="cstat-no" title="statement not covered" >await getProfileImage();</span></span>
+<span class="cstat-no" title="statement not covered" >      dispatch(profileRequestSuccess(profile));</span>
+    } catch (error) {
+      dispatch(profileRequestError({ error }));
+    }
+  };
+}
+&nbsp;
+async function getProfileInformation(): Promise&lt;IUser&gt; {
+  const profile: IUser = {
+    displayName: '',
+    emailAddress: '',
+    profileImageUrl: '',
+    profileType: ACCOUNT_TYPE.UNDEFINED,
+    ageGroup: 0
+  };
+  try {
+    query.sampleUrl = USER_INFO_URL;
+    const { userInfo } = await getProfileResponse();
+<span class="cstat-no" title="statement not covered" >    profile.displayName = userInfo.displayName;</span>
+<span class="cstat-no" title="statement not covered" >    profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;</span>
+<span class="cstat-no" title="statement not covered" >    return profile;</span>
+  } catch (error) {
+    throw error;
+  }
+}
+&nbsp;
+async function <span class="fstat-no" title="function not covered" >getBetaProfile(</span>): Promise&lt;IBetaProfile&gt; {
+  try {
+<span class="cstat-no" title="statement not covered" >    query.sampleUrl = BETA_USER_INFO_URL;</span>
+    const { <span class="cstat-no" title="statement not covered" >userInfo </span>} = <span class="cstat-no" title="statement not covered" >await getProfileResponse();</span>
+    const <span class="cstat-no" title="statement not covered" >ageGroup =  getAgeGroup(userInfo);</span>
+    const <span class="cstat-no" title="statement not covered" >profileType = getProfileType(userInfo);</span>
+<span class="cstat-no" title="statement not covered" >    return {ageGroup, profileType};</span>
+  } catch (error) {
+<span class="cstat-no" title="statement not covered" >    return {ageGroup: 0, profileType: ACCOUNT_TYPE.MSA};</span>
+  }
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >getAgeGroup(</span>userInfo: any): AgeGroup {
+  const profileType = <span class="cstat-no" title="statement not covered" >getProfileType(userInfo);</span>
+<span class="cstat-no" title="statement not covered" >  if (profileType === ACCOUNT_TYPE.MSA) {</span>
+    const ageGroup<span class="cstat-no" title="statement not covered" > = userInfo?.account?.[0]?.ageGroup;</span>
+<span class="cstat-no" title="statement not covered" >    if (ageGroup === undefined || ageGroup === '') {</span>
+<span class="cstat-no" title="statement not covered" >      return 0;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return ageGroup;</span>
+  } else {
+<span class="cstat-no" title="statement not covered" >    return 0;</span>
+  }
+}
+function <span class="fstat-no" title="function not covered" >getProfileType(</span>userInfo: any): ACCOUNT_TYPE {
+  const profileType<span class="cstat-no" title="statement not covered" >: ACCOUNT_TYPE = userInfo?.account?.[0]?.source?.type?.[0];</span>
+<span class="cstat-no" title="statement not covered" >  if (profileType === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >    return ACCOUNT_TYPE.UNDEFINED;</span>
+  }
+<span class="cstat-no" title="statement not covered" >  return profileType;</span>
+}
+&nbsp;
+async function <span class="fstat-no" title="function not covered" >getProfileImage(</span>): Promise&lt;string&gt; {
+  let <span class="cstat-no" title="statement not covered" >profileImageUrl = '';</span>
+  try {
+<span class="cstat-no" title="statement not covered" >    query.sampleUrl = USER_PICTURE_URL;</span>
+    const <span class="cstat-no" title="statement not covered" >{ response, userInfo: userPicture </span>} = <span class="cstat-no" title="statement not covered" >await getProfileResponse();</span>
+    if (<span class="cstat-no" title="statement not covered" >userPicture)</span> {
+      const <span class="cstat-no" title="statement not covered" >buffer = <span class="cstat-no" title="statement not covered" >await response.arrayBuffer();</span></span>
+      const <span class="cstat-no" title="statement not covered" >blob = new Blob([buffer], { type: 'image/jpeg' });</span>
+<span class="cstat-no" title="statement not covered" >      profileImageUrl = URL.createObjectURL(blob);</span>
+    }
+  } catch (error) {
+<span class="cstat-no" title="statement not covered" >    return profileImageUrl;</span>
+  }
+<span class="cstat-no" title="statement not covered" >  return profileImageUrl;</span>
+}
+&nbsp;
+async function getProfileResponse(): Promise&lt;IProfileResponse&gt; {
+  const scopes = DEFAULT_USER_SCOPES.split(' ');
+  const respHeaders: any = {};
+&nbsp;
+  const response = await makeGraphRequest(scopes)(query);
+  const <span class="cstat-no" title="statement not covered" >userInfo = <span class="cstat-no" title="statement not covered" >await parseResponse(response, respHeaders);</span></span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    userInfo,
+    response
+  };
+}
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 24 2021 12:09:44 GMT+0300 (East Africa Time)
+</div>
+</div>
+<script src="..\..\..\..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\..\..\..\sorter.js"></script>
+</body>
+</html>

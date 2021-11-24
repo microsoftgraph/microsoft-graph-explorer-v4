@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/views/app-sections/TermsOfUseMessage.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\..\..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\..\..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\..\..\..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\..\..\..\index.html">All files</a> / <a href="index.html">src/app/views/app-sections</a> TermsOfUseMessage.tsx
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { MessageBar, MessageBarType } from '@fluentui/react';</span>
+<span class="cstat-no" title="statement not covered" >import React from 'react';</span>
+<span class="cstat-no" title="statement not covered" >import { FormattedMessage } from 'react-intl';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >import { componentNames, telemetry } from '../../../telemetry';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >termsOfUseMessage(</span>termsOfUse: any, actions: any, classes: any, language: string) {</span>
+<span class="cstat-no" title="statement not covered" >  return termsOfUse &amp;&amp; (</span>
+    &lt;MessageBar messageBarType={MessageBarType.info}
+      isMultiline={true}
+      onDismiss={actions.clearTermsOfUse}
+      dismissButtonAriaLabel='Close'
+      style={{ position: 'relative' }}&gt;
+      &lt;FormattedMessage id='use the Microsoft Graph API' /&gt;
+      &lt;a
+        onClick={<span class="fstat-no" title="function not covered" >(</span>e) =&gt;
+<span class="cstat-no" title="statement not covered" >          telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.MICROSOFT_APIS_TERMS_OF_USE_LINK)}</span>
+        className={classes.links} href={'https://docs.microsoft.com/' + language +
+          '/legal/microsoft-apis/terms-of-use?context=graph/context'} target='_blank' rel='noopener noreferrer'&gt;
+        &lt;FormattedMessage id='Terms of use' /&gt;&lt;/a&gt;.
+      &lt;FormattedMessage id='View the' /&gt;
+      &lt;a
+        onClick={<span class="fstat-no" title="function not covered" >(</span>e) =&gt;
+<span class="cstat-no" title="statement not covered" >          telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.MICROSOFT_PRIVACY_STATEMENT_LINK)}</span>
+        className={classes.links} href={'https://privacy.microsoft.com/' + language + '/privacystatement'}
+        target='_blank' rel='noopener noreferrer'&gt;
+        &lt;FormattedMessage id='Microsoft Privacy Statement' /&gt;&lt;/a&gt;.
+    &lt;/MessageBar&gt;);
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 24 2021 12:09:44 GMT+0300 (East Africa Time)
+</div>
+</div>
+<script src="..\..\..\..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\..\..\..\sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/views/query-runner/request/auth/Auth.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\..\..\..\..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\..\..\..\..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\..\..\..\..\..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\..\..\..\..\..\index.html">All files</a> / <a href="index.html">src/app/views/query-runner/request/auth</a> Auth.tsx
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { AuthenticationResult } from '@azure/msal-browser';
+<span class="cstat-no" title="statement not covered" >import { IconButton, IIconProps, Label, MessageBar, MessageBarType, styled } from '@fluentui/react';</span>
+<span class="cstat-no" title="statement not covered" >import React, { useEffect, useState } from 'react';</span>
+<span class="cstat-no" title="statement not covered" >import { FormattedMessage } from 'react-intl';</span>
+<span class="cstat-no" title="statement not covered" >import { useSelector } from 'react-redux';</span>
+<span class="cstat-no" title="statement not covered" >import { authenticationWrapper } from '../../../../../modules/authentication';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >import { componentNames, telemetry } from '../../../../../telemetry';</span>
+import { IRootState } from '../../../../../types/root';
+<span class="cstat-no" title="statement not covered" >import { translateMessage } from '../../../../utils/translate-messages';</span>
+<span class="cstat-no" title="statement not covered" >import { classNames } from '../../../classnames';</span>
+<span class="cstat-no" title="statement not covered" >import { trackedGenericCopy } from '../../../common/copy';</span>
+<span class="cstat-no" title="statement not covered" >import { convertVhToPx } from '../../../common/dimensions-adjustment';</span>
+<span class="cstat-no" title="statement not covered" >import { authStyles } from './Auth.styles';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >Auth(</span>props: any) {</span></span>
+  const { authToken<span class="cstat-no" title="statement not covered" >, dimensions: { request: { height<span class="cstat-no" title="statement not covered" > } } } = <span class="cstat-no" title="statement not covered" >useSelector(<span class="fstat-no" title="function not covered" >(</span>state: IRootState) =&gt; <span class="cstat-no" title="statement not covered" >state)</span>;</span></span></span>
+  const requestHeight = <span class="cstat-no" title="statement not covered" >convertVhToPx(height, 60);</span>
+  const [accessToken<span class="cstat-no" title="statement not covered" >, setAccessToken<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >useState&lt;string | null&gt;(null);</span></span></span>
+  const [loading<span class="cstat-no" title="statement not covered" >, setLoading<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >useState(false);</span></span></span>
+&nbsp;
+  const handleCopy = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    trackedGenericCopy(accessToken || '', componentNames.ACCESS_TOKEN_COPY_BUTTON);</span>
+  };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    setLoading(true);</span>
+<span class="cstat-no" title="statement not covered" >    authenticationWrapper.getToken().then(<span class="fstat-no" title="function not covered" >(</span>response: AuthenticationResult) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      setAccessToken(response.accessToken);</span>
+<span class="cstat-no" title="statement not covered" >      setLoading(false);</span>
+    }).catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      setLoading(false);</span>
+    });
+  }, []);
+&nbsp;
+  const classes = <span class="cstat-no" title="statement not covered" >classNames(props);</span>
+  const copyIcon: IIconProps = <span class="cstat-no" title="statement not covered" >{</span>
+    iconName: 'copy'
+  };
+&nbsp;
+  const tokenDetailsIcon: IIconProps = <span class="cstat-no" title="statement not covered" >{</span>
+    iconName: 'code'
+  };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (!authToken.token) {</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;MessageBar messageBarType={MessageBarType.blocked}&gt;</span>
+      &lt;FormattedMessage id='Sign In to see your access token.' /&gt;
+    &lt;/MessageBar&gt;;
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return (&lt;div className={classes.auth} style={{ height: requestHeight }}&gt;</span>
+    {!loading ?
+      &lt;div&gt;
+        &lt;div className={classes.accessTokenContainer}&gt;
+          &lt;Label className={classes.accessTokenLabel}&gt;&lt;FormattedMessage id='Access Token' /&gt;&lt;/Label&gt;
+          &lt;IconButton onClick={handleCopy} iconProps={copyIcon}
+            title={translateMessage('Copy')}
+            ariaLabel={translateMessage('Copy')} /&gt;
+          &lt;IconButton iconProps={tokenDetailsIcon}
+            title={translateMessage('Get token details (Powered by jwt.ms)')}
+            ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
+            href={`https://jwt.ms#access_token=${accessToken}`}
+            target='_blank' /&gt;
+        &lt;/div&gt;
+        &lt;Label className={classes.accessToken} &gt;{accessToken}&lt;/Label&gt;
+      &lt;/div&gt;
+      :
+      &lt;Label className={classes.emptyStateLabel}&gt;
+        &lt;FormattedMessage id='Getting your access token' /&gt; ...
+      &lt;/Label&gt;
+    }
+  &lt;/div&gt;);
+}
+&nbsp;
+const trackedComponent = <span class="cstat-no" title="statement not covered" >telemetry.trackReactComponent(Auth, componentNames.ACCESS_TOKEN_TAB);</span>
+// @ts-ignore
+<span class="cstat-no" title="statement not covered" >export default styled(trackedComponent, authStyles);</span></pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 24 2021 12:09:44 GMT+0300 (East Africa Time)
+</div>
+</div>
+<script src="..\..\..\..\..\..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\..\..\..\..\..\sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/views/query-runner/query-input/auto-complete/suffix/suffix-util.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\..\..\..\..\..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\..\..\..\..\..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\..\..\..\..\..\..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\..\..\..\..\..\..\index.html">All files</a> / <a href="index.html">src/app/views/query-runner/query-input/auto-complete/suffix</a> suffix-util.ts
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
+import { IQuery, ISampleQuery } from '../../../../../../types/query-runner';
+<span class="cstat-no" title="statement not covered" >import { GRAPH_URL } from '../../../../../services/graph-constants';</span>
+<span class="cstat-no" title="statement not covered" >import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';</span>
+<span class="cstat-no" title="statement not covered" >import { parseSampleUrl } from '../../../../../utils/sample-url-generation';</span>
+&nbsp;
+export interface IHint {
+  link?: {
+    url: string;
+    name: string;
+  };
+  description?: string;
+}
+&nbsp;
+export interface ISampleFilter {
+  queries: ISampleQuery[];
+  sampleQuery: IQuery;
+  sampleUrl: string;
+  queryRunnerStatus: any
+}
+&nbsp;
+export const <span class="cstat-no" title="statement not covered" >getMatchingSamples = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span>filterParams: ISampleFilter): ISampleQuery[] =&gt; {</span></span>
+  const { queries, sampleQuery, sampleUrl, queryRunnerStatus } = <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >filterParams;</span></span></span></span>
+  const querySamples: ISampleQuery[] = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >  queries</span>
+    .filter(<span class="fstat-no" title="function not covered" >(</span>sample: ISampleQuery) =&gt; <span class="cstat-no" title="statement not covered" >sample.method === sampleQuery.selectedVerb)</span>
+    .forEach(<span class="fstat-no" title="function not covered" >(</span>sample: ISampleQuery) =&gt; {
+      const { requestUrl: baseUrl<span class="cstat-no" title="statement not covered" >, queryVersion: version<span class="cstat-no" title="statement not covered" > } =</span></span>
+<span class="cstat-no" title="statement not covered" >        parseSampleUrl(sanitizeQueryUrl(GRAPH_URL + sample.requestUrl));</span>
+      const baseUrlMatches = <span class="cstat-no" title="statement not covered" >`/${version}/${baseUrl}` === sampleUrl;</span>
+<span class="cstat-no" title="statement not covered" >      if (baseUrlMatches) {</span>
+<span class="cstat-no" title="statement not covered" >        querySamples.push(sample);</span>
+      }
+    });
+<span class="cstat-no" title="statement not covered" >  if (querySamples.length &gt; 1) {</span>
+    const tipFilter = <span class="cstat-no" title="statement not covered" >filterQueriesUsingTip(querySamples, queryRunnerStatus);</span>
+<span class="cstat-no" title="statement not covered" >    if (tipFilter.length &gt; 1) {</span>
+<span class="cstat-no" title="statement not covered" >      return filterQueriesUsingQueryParameters(querySamples, sampleQuery);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return tipFilter;</span>
+  }
+<span class="cstat-no" title="statement not covered" >  return querySamples;</span>
+};
+&nbsp;
+function <span class="fstat-no" title="function not covered" >filterQueriesUsingTip(</span>querySamples: ISampleQuery[], queryRunnerStatus: any) {
+<span class="cstat-no" title="statement not covered" >  if (queryRunnerStatus &amp;&amp; queryRunnerStatus.statusText === 'Tip') {</span>
+    const exact = <span class="cstat-no" title="statement not covered" >querySamples.filter(<span class="fstat-no" title="function not covered" >k =&gt; <span class="cstat-no" title="statement not covered" >k.tip === queryRunnerStatus.status)</span>;</span></span>
+<span class="cstat-no" title="statement not covered" >    if (exact.length === 1) {</span>
+<span class="cstat-no" title="statement not covered" >      return exact;</span>
+    }
+  }
+<span class="cstat-no" title="statement not covered" >  return querySamples;</span>
+}
+&nbsp;
+function <span class="fstat-no" title="function not covered" >filterQueriesUsingQueryParameters(</span>querySamples: ISampleQuery[], sampleQuery: IQuery) {
+  const { search } = <span class="cstat-no" title="statement not covered" >parseSampleUrl(sampleQuery.sampleUrl);</span>
+<span class="cstat-no" title="statement not covered" >  if (search) {</span>
+    const parameters: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
+    const splitSearch = <span class="cstat-no" title="statement not covered" >search.split('&amp;');</span>
+<span class="cstat-no" title="statement not covered" >    if (splitSearch.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      splitSearch.forEach(<span class="fstat-no" title="function not covered" >element =&gt; {</span></span>
+        const parameter = <span class="cstat-no" title="statement not covered" >element.substring(element.indexOf('$') + 1, element.lastIndexOf('='));</span>
+<span class="cstat-no" title="statement not covered" >        parameters.push(parameter);</span>
+      });
+&nbsp;
+      const list: ISampleQuery[] = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >      parameters.forEach(<span class="fstat-no" title="function not covered" >param =&gt; {</span></span>
+        const fit = <span class="cstat-no" title="statement not covered" >querySamples.find(<span class="fstat-no" title="function not covered" >k =&gt; <span class="cstat-no" title="statement not covered" >k.requestUrl.includes(param))</span>;</span></span>
+<span class="cstat-no" title="statement not covered" >        if (fit) {</span>
+<span class="cstat-no" title="statement not covered" >          list.push(fit);</span>
+        }
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (list.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >        return getUniqueSample(list);</span>
+      }
+    }
+  }
+<span class="cstat-no" title="statement not covered" >  return querySamples;</span>
+&nbsp;
+  function <span class="fstat-no" title="function not covered" >getUniqueSample(</span>list: ISampleQuery[]) {
+<span class="cstat-no" title="statement not covered" >    return list.filter(<span class="fstat-no" title="function not covered" >(</span>sample, index, filteredList) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      filteredList.findIndex(<span class="fstat-no" title="function not covered" >query =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >        (query.id === sample.id))</span> === index);
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 24 2021 12:09:44 GMT+0300 (East Africa Time)
+</div>
+</div>
+<script src="..\..\..\..\..\..\..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\..\..\..\..\..\..\sorter.js"></script>
+</body>
+</html>

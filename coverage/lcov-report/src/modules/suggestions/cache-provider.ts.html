@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/modules/suggestions/cache-provider.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="..\..\..\prettify.css" />
+    <link rel="stylesheet" href="..\..\..\base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(..\..\..\sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="..\..\..\index.html">All files</a> / <a href="index.html">src/modules/suggestions</a> cache-provider.ts
+    </h1>
+    <div class='clearfix'>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import localforage from 'localforage';</span>
+<span class="cstat-no" title="statement not covered" >import { stringToHash } from '../../app/utils/hash-string';</span>
+import { IParsedOpenApiResponse } from '../../types/open-api';
+&nbsp;
+const suggestionsStorage = <span class="cstat-no" title="statement not covered" >localforage.createInstance({</span>
+  storeName: 'autocomplete',
+  name: 'GE_V4'
+});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export async function <span class="fstat-no" title="function not covered" >storeSuggestionsInCache(</span>content: IParsedOpenApiResponse, version: string) {</span>
+  const <span class="cstat-no" title="statement not covered" >key = `${version}/${content.url}`;</span>
+  const <span class="cstat-no" title="statement not covered" >hashedUrl = stringToHash(key).toString();</span>
+<span class="cstat-no" title="statement not covered" >  suggestionsStorage.setItem(hashedUrl, content);</span>
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >export async function <span class="fstat-no" title="function not covered" >getSuggestionsFromCache(</span>url: string): Promise&lt;IParsedOpenApiResponse | null&gt; {</span>
+  const <span class="cstat-no" title="statement not covered" >hashedUrl = stringToHash(url).toString();</span>
+  try {
+    const <span class="cstat-no" title="statement not covered" >options: IParsedOpenApiResponse = <span class="cstat-no" title="statement not covered" >await suggestionsStorage.getItem(hashedUrl);</span></span>
+<span class="cstat-no" title="statement not covered" >    if (suggestionHasExpired(options.createdAt)) {</span>
+<span class="cstat-no" title="statement not covered" >      suggestionsStorage.removeItem(hashedUrl);</span>
+<span class="cstat-no" title="statement not covered" >      return null;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return options;</span>
+  } catch (error) {
+<span class="cstat-no" title="statement not covered" >    return null;</span>
+  }
+}
+&nbsp;
+/**
+ * Autocomplete options may be changed by the API.
+ * We do not want to keep the options in the cache for too long
+ * @param createdAt
+ */
+function <span class="fstat-no" title="function not covered" >suggestionHasExpired(</span>createdAt: string): boolean {
+  const ageInDays: number = <span class="cstat-no" title="statement not covered" >7;</span>
+  const dateToCompare = <span class="cstat-no" title="statement not covered" >new Date();</span>
+<span class="cstat-no" title="statement not covered" >  dateToCompare.setDate(dateToCompare.getDate() - ageInDays);</span>
+  const expiryDate = <span class="cstat-no" title="statement not covered" >dateToCompare.getTime();</span>
+  const createdTime = <span class="cstat-no" title="statement not covered" >new Date(createdAt).getTime();</span>
+<span class="cstat-no" title="statement not covered" >  return (createdTime &lt; expiryDate);</span>
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 24 2021 12:09:44 GMT+0300 (East Africa Time)
+</div>
+</div>
+<script src="..\..\..\prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="..\..\..\sorter.js"></script>
+</body>
+</html>
