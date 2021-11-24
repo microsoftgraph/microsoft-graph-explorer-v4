@@ -42,7 +42,6 @@ const Authentication = (props: any) => {
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
       }
     } catch (error: any) {
-      console.log(JSON.stringify(error))
       const errorCode = error.errorCode;
       if (errorCode && signInAuthError(errorCode)) {
         authenticationWrapper.clearSession();

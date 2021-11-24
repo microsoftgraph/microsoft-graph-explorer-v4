@@ -5,11 +5,13 @@ import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
+import { globalCloud, storeCloudValue } from '../../../modules/sovereign-clouds';
 import { Sovereign } from '../../../modules/sovereign-clouds/cloud-options';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { IRootState } from '../../../types/root';
 import { ISettingsProps } from '../../../types/settings';
 import { signOut } from '../../services/actions/auth-action-creators';
+import { setActiveCloud } from '../../services/actions/cloud-action-creator';
 import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
 import '../../utils/string-operations';
 import { PermissionsPanel } from './PermissionsPanel';
@@ -43,6 +45,8 @@ function Settings(props: ISettingsProps) {
   };
 
   const handleSignOut = () => {
+    storeCloudValue(globalCloud.name);
+    dispatch(setActiveCloud(globalCloud));
     dispatch(signOut());
   };
 
