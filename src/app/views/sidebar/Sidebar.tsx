@@ -7,7 +7,6 @@ import History from './history/History';
 import { ResourceExplorer } from './resource-explorer';
 import SampleQueries from './sample-queries/SampleQueries';
 
-
 export const Sidebar = () => {
   return (
     <div>

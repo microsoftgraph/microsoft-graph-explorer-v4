@@ -1,31 +1,70 @@
 import {
   Checkbox,
-  Icon, Label, Stack
+  Icon, Stack
 } from '@fluentui/react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { httpMethods } from '../../../../../types/query-runner';
 import { getMethodIcon, getStyleFor } from '../../../../utils/http-methods.utils';
+import { classes } from './methods.styles';
 
-const AvailableMethods = () => {
+interface IAvailableMethods {
+  changeAvailableMethods: Function;
+}
 
+const AvailableMethods = (props: IAvailableMethods) => {
 
   httpMethods.forEach((element: any) => {
     element.selected = true;
     element.icon = getMethodIcon(element.text)
   });
 
+  const [selectedMethods, setSelectedMethods] = useState<any[]>(httpMethods);
+
+  const changeSelectedMethods = (ev?: any, checked?: boolean): void => {
+    const methods = selectedMethods.map(a => ({ ...a }));
+    methods[selectedMethods.findIndex(k => k.key === ev.key)].selected = checked;
+    setSelectedMethods(methods);
+    const availableMethods: string[] = getMethodsAsStringArray(methods);
+    props.changeAvailableMethods(availableMethods);
+  }
+
+  const getMethodsAsStringArray = (methods: any[]) => {
+    const methodsArray: string[] = [];
+    methods.forEach((method: any) => {
+      if (method.selected) {
+        methodsArray.push(method.text);
+      }
+    });
+    return methodsArray;
+  }
+
   return (
-    <Stack>
-      {httpMethods.map((method: any, index: number) => {
+    <Stack horizontal wrap>
+      {selectedMethods.map((method: any, index: number) => {
         return (
-          <Label key={index} style={{ marginRight: 5, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Checkbox checked={true} />
-            <Icon
-              style={{ color: getStyleFor(method.text), marginRight: 3, alignItems: 'center' }}
-              iconName={method.icon} />
-            {method.text}
-          </Label>
+          <Checkbox
+            key={index}
+            className={classes.checkbox}
+            checked={method.selected}
+            label={method.text}
+            onChange={(event, choice) => changeSelectedMethods(method, choice)}
+            onRenderLabel={() => {
+              return (
+                <span style={{ marginTop: 5 }}>
+                  <Icon
+                    style={{ color: getStyleFor(method.text) }}
+                    className={classes.icon}
+                    iconName={method.icon} />
+                  {method.text}
+                </span>
+              )
+            }}
+            styles={{
+              label: {
+                display: 'block'
+              }
+            }} />
         );
       })}
     </Stack>
