@@ -1,6 +1,6 @@
 import {
   ContextualMenuItemType, Icon, IconButton,
-  IContextualMenuItem, INavLink
+  IContextualMenuItem, INavLink, mergeStyleSets
 } from '@fluentui/react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -22,6 +22,11 @@ const ResourceLink = (props: IResourceLink) => {
   const dispatch = useDispatch();
   const { link: resourceLink, version } = props;
 
+  const iconButtonStyles = {
+    root: { paddingBottom: 10 },
+    menuIcon: { fontSize: 20, padding: 10 }
+  };
+
   const setQuery = (link: INavLink, selectedVerb: string) => {
     const sampleUrl = `${GRAPH_URL}/${version}${getUrlFromLink(link)}`;
     const query: IQuery = {
@@ -36,7 +41,7 @@ const ResourceLink = (props: IResourceLink) => {
 
   const items = getMenuItems();
 
-  return <span style={{ display: 'flex' }}>
+  return <span className={linkStyle.link}>
     {!!resourceLink.iconresourceLink && <Icon style={{ margin: '0 4px' }}
       {...resourceLink.iconresourceLink} />}
     {resourceLink.name}
@@ -44,11 +49,8 @@ const ResourceLink = (props: IResourceLink) => {
     {items.length > 0 && <IconButton
       ariaLabel={translateMessage('More actions')}
       role='button'
-      style={{ float: 'right', position: 'absolute', right: 0 }}
-      styles={{
-        label: { marginBottom: -20 },
-        menuIcon: { fontSize: 20 }
-      }}
+      className={linkStyle.button}
+      styles={iconButtonStyles}
       menuIconProps={{ iconName: 'MoreVertical' }}
       menuProps={{
         shouldFocusOnMount: true,
@@ -112,5 +114,12 @@ const ResourceLink = (props: IResourceLink) => {
     return menuItems;
   }
 }
+
+const linkStyle = mergeStyleSets(
+  {
+    link: { display: 'flex' },
+    button: { float: 'right', position: 'absolute', right: 0 }
+  }
+);
 
 export default ResourceLink;
