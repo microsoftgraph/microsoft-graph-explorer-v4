@@ -25,6 +25,8 @@ jobs:
     if: needs.checksecret.outputs.is_SONAR_TOKEN_set == 'true'
     runs-on: ubuntu-latest
     steps:
+      - name: Run unit tests
+        run: npm run test
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
