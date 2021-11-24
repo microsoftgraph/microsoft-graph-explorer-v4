@@ -33,12 +33,12 @@ jobs:
           node-version: '12.x'
       - name: Install dependencies
         run: npm install
-      - name: Run unit tests
-        run: npm run test -- --coverage --watchAll=false
+
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarCloud Scan
+        run: npm run test -- --coverage --watchAll=false
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
