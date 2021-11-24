@@ -41,6 +41,9 @@ jobs:
           mkdir -p testfiles && cp -r coverage/* testfiles
           ls testfiles
 
+      - name: Fix code coverage paths
+        run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' lcov.info
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
