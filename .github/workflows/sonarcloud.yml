@@ -36,10 +36,15 @@ jobs:
         run: npm install
 
       - name: Run unit tests
-        run: npm run test -- --coverage --watchAll=false
+        run: |
+          npm run test -- --coverage --watchAll=false
+          mkdir -p coverage && cp coverage/* coverage
+          ls coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          sonar.javascript.lcov.reportPaths: coverage/lcov.info
