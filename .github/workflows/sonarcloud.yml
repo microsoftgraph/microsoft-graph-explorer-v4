@@ -37,7 +37,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          npm run test -- --coverage --watchAll=false
+          npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
           mkdir -p testfiles && cp -r coverage/* testfiles
           ls testfiles
 
