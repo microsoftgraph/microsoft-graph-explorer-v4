@@ -158,10 +158,16 @@
     },
     "jest": {
         "collectCoverageFrom": [
-        "src/**/*.{js,jsx,ts,tsx}",
-        "!<rootDir>/node_modules/",
-        "!<rootDir>/path/to/dir/"
+            "src/**/*.{js,jsx}",
+            "!**/node_modules/**",
+            "!build/**"
         ],
-        "coverageReporters": ["text"]
-  }
+        "coverageReporters": [
+            "lcov",
+            "text"
+        ]
+        },
+    "jest-junit": {
+        "output": "test-results/test-report.junit.xml"
+    }
 }
