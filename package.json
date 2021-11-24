@@ -155,5 +155,13 @@
         "url-parse": "1.5.3",
         "ws": "8.0.0",
         "yargs-parser": "13.1.2"
-    }
+    },
+    "jest": {
+        "collectCoverageFrom": [
+        "src/**/*.{js,jsx,ts,tsx}",
+        "!<rootDir>/node_modules/",
+        "!<rootDir>/path/to/dir/"
+        ],
+        "coverageReporters": ["text"]
+  }
 }
