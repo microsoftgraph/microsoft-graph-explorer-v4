@@ -38,7 +38,7 @@ jobs:
       - name: Run unit tests
         run: |
           npm run test -- --coverage --watchAll=false
-          mkdir -p testfiles && cp coverage/* testfiles
+          mkdir -p testfiles && cp -r coverage/* testfiles
           ls testfiles
 
       - name: SonarCloud Scan
