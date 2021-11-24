@@ -44,6 +44,7 @@
         "jest-junit-reporter": "1.1.0",
         "jest-pnp-resolver": "1.0.2",
         "jest-resolve": "23.6.0",
+        "jest-sonar-reporter": "^2.0.0",
         "jest-watch-typeahead": "0.5.0",
         "jwt-decode": "2.2.0",
         "localforage": "1.7.3",
@@ -158,16 +159,9 @@
     },
     "jest": {
         "collectCoverageFrom": [
-            "src/**/*.{js,jsx}",
+            "src/**/*.{ts,tsx,js}",
             "!**/node_modules/**",
             "!build/**"
-        ],
-        "coverageReporters": [
-            "lcov",
-            "text"
         ]
-        },
-    "jest-junit": {
-        "output": "test-results/test-report.junit.xml"
     }
 }
