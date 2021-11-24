@@ -25,8 +25,16 @@ jobs:
     if: needs.checksecret.outputs.is_SONAR_TOKEN_set == 'true'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12.x'
+      - name: Install dependencies
+        run: npm install
       - name: Run unit tests
-        run: npm run test
+        run: npm run test -- --coverage ---watchAll=false
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
