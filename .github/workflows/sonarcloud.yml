@@ -1,7 +1,13 @@
 name: Sonar Cloud Analysis
 
 on:
-  push
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - dev
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
