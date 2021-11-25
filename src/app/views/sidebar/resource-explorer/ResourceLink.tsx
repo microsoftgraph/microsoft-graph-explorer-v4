@@ -1,6 +1,6 @@
 import {
-  ContextualMenuItemType, Icon, IconButton,
-  IContextualMenuItem, INavLink, mergeStyleSets
+  ContextualMenuItemType, getId, Icon, IconButton,
+  IContextualMenuItem, INavLink, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -46,18 +46,26 @@ const ResourceLink = (props: IResourceLink) => {
       {...resourceLink.iconresourceLink} />}
     {resourceLink.name}
 
-    {items.length > 0 && <IconButton
-      ariaLabel={translateMessage('More actions')}
-      role='button'
-      className={linkStyle.button}
-      styles={iconButtonStyles}
-      menuIconProps={{ iconName: 'MoreVertical' }}
-      menuProps={{
-        shouldFocusOnMount: true,
-        alignTargetEdge: true,
-        items
-      }}
-    />}
+    {items.length > 0 &&
+      <TooltipHost
+        content={'More actions'}
+        id={getId()}
+        calloutProps={{ gapSpace: 0 }}
+      >
+        <IconButton
+          ariaLabel={translateMessage('More actions')}
+          role='button'
+          className={linkStyle.button}
+          styles={iconButtonStyles}
+          menuIconProps={{ iconName: 'MoreVertical' }}
+          menuProps={{
+            shouldFocusOnMount: true,
+            alignTargetEdge: true,
+            items
+          }}
+        />
+      </TooltipHost>
+    }
   </span>;
 
   function getMenuItems() {
