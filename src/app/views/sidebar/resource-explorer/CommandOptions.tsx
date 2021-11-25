@@ -2,7 +2,7 @@ import { CommandBar, ICommandBarItemProps, INavLink } from '@fluentui/react';
 import React, { useState } from 'react';
 
 import { translateMessage } from '../../../utils/translate-messages';
-import PostmanCollection from './panels/PostmanCollection';
+import PathsReview from './panels/PathsReview';
 
 interface ICommandOptions {
   list: INavLink[],
@@ -52,7 +52,7 @@ const CommandOptions = (props: ICommandOptions) => {
         primaryGroupAriaLabel='Selection actions'
         farItemsGroupAriaLabel='More selection actions'
       />
-      <PostmanCollection
+      <PathsReview
         isOpen={isOpen}
         items={items}
         version={version}

@@ -7,9 +7,10 @@ import { FormattedMessage } from 'react-intl';
 
 import { IResourceLabel } from '../../../../../types/resources';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { flatten, getUrlFromLink } from '../resource-explorer.utils';
+import { flatten, getUrlFromLink, removeCounter } from '../resource-explorer.utils';
+import { exportCollection } from './postman.util';
 
-const PostmanCollection = (props: any) => {
+const PathsReview = (props: any) => {
   const { isOpen, items, version } = props;
   const headerText = translateMessage('Selected Resources') + ' ' + translateMessage('Preview');
 
@@ -52,16 +53,33 @@ const PostmanCollection = (props: any) => {
     }
   };
 
-  const paths = getPaths(items, version);
+  const resources = getResourcePaths(items, version);
 
-  const generatePostmanCollection = () => {
-    alert('generated');
+  const generateCollection = () => {
+    const list: any[] = [];
+    resources.forEach(element => {
+      const { methods, url, version: pathVersion, name, paths } = element;
+      const pathName = removeCounter(name);
+      const path = [...paths];
+      path.push(pathName);
+      path.shift();
+      methods.forEach((method: any) => {
+        list.push({
+          method: method.name,
+          name: `${pathName}-${method.name}`,
+          url,
+          version: pathVersion,
+          path
+        })
+      });
+    });
+    exportCollection(list);
   }
 
   const renderFooterContent = () => {
     return (
       <div>
-        <PrimaryButton onClick={generatePostmanCollection}>
+        <PrimaryButton onClick={generateCollection}>
           <FormattedMessage id='Download as postman collection' />
         </PrimaryButton>
       </div>
@@ -96,7 +114,7 @@ const PostmanCollection = (props: any) => {
         />
         <DetailsList
           compact={true}
-          items={paths}
+          items={resources}
           onRenderItemColumn={renderItemColumn}
           columns={columns}
           setKey='set'
@@ -107,7 +125,7 @@ const PostmanCollection = (props: any) => {
   )
 }
 
-function getPaths(items: any, version: string) {
+function getResourcePaths(items: any, version: string) {
   const links = items[0].links
   const content = flatten(links).filter(k => k.type === 'path');
   if (content.length > 0) {
@@ -127,4 +145,4 @@ function getPaths(items: any, version: string) {
   }
   return content;
 }
-export default PostmanCollection;
+export default PathsReview;
