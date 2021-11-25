@@ -3,11 +3,11 @@ import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IRootState } from '../../../../types/root';
-import { fetchAutoCompleteOptions } from '../../../services/actions/autocomplete-action-creators';
-import { translateMessage } from '../../../utils/translate-messages';
-import { classNames } from '../../classnames';
-import { getUrlFromLink } from './resource-explorer.utils';
+import { IRootState } from '../../../../../types/root';
+import { fetchAutoCompleteOptions } from '../../../../services/actions/autocomplete-action-creators';
+import { translateMessage } from '../../../../utils/translate-messages';
+import { classNames } from '../../../classnames';
+import { getUrlFromLink } from '../resource-explorer.utils';
 
 const QueryParameters = (props: any) => {
 

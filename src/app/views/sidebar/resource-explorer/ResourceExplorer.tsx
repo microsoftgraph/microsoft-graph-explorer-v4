@@ -13,7 +13,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import CommandOptions from './CommandOptions';
-import QueryParameters from './QueryParameters';
+import QueryParameters from './panels/QueryParameters';
 import {
   createList, getCurrentTree,
   getResourcesSupportedByVersion, getUrlFromLink, removeCounter
