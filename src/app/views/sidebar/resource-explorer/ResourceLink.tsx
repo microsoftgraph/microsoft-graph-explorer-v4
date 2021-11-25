@@ -3,6 +3,7 @@ import {
   IContextualMenuItem, INavLink, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { IQuery } from '../../../../types/query-runner';
@@ -48,9 +49,16 @@ const ResourceLink = (props: IResourceLink) => {
 
     {items.length > 0 &&
       <TooltipHost
-        content={'More actions'}
+        content={translateMessage('More actions')}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}
+        tooltipProps={{
+          onRenderContent: function renderContent() {
+            return <div style={{ paddingBottom: 3 }}>
+              <FormattedMessage id={'More actions'} />
+            </div>
+          }
+        }}
       >
         <IconButton
           ariaLabel={translateMessage('More actions')}
@@ -58,6 +66,7 @@ const ResourceLink = (props: IResourceLink) => {
           className={linkStyle.button}
           styles={iconButtonStyles}
           menuIconProps={{ iconName: 'MoreVertical' }}
+          title={translateMessage('More actions')}
           menuProps={{
             shouldFocusOnMount: true,
             alignTargetEdge: true,
