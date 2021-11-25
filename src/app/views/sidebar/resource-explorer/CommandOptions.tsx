@@ -1,16 +1,18 @@
-import { CommandBar, ICommandBarItemProps, INavLink, Nav, Panel, PanelType } from '@fluentui/react';
+import { CommandBar, DetailsList, DetailsListLayoutMode, ICommandBarItemProps, INavLink, Panel, PanelType } from '@fluentui/react';
 import React, { useState } from 'react';
+
+import { IResourceLabel } from '../../../../types/resources';
 import { translateMessage } from '../../../utils/translate-messages';
+import { flatten, getUrlFromLink } from './resource-explorer.utils';
 
 interface ICommandOptions {
-  list: INavLink[]
+  list: INavLink[],
+  version: string;
 }
 
 const CommandOptions = (props: ICommandOptions) => {
   const [isOpen, setIsOpen] = useState(false);
-
-
-  const { list } = props;
+  const { list, version } = props;
   const options: ICommandBarItemProps[] = [
     {
       key: 'preview',
@@ -49,16 +51,13 @@ const CommandOptions = (props: ICommandOptions) => {
   }]
 
   const headerText = translateMessage('Selected Resources') + ' ' + translateMessage('Preview');
-  const navStyles: any = (properties: any) => ({
-    chevronIcon: [
-      properties.isExpanded && {
-        transform: 'rotate(0deg)'
-      },
-      !properties.isExpanded && {
-        transform: 'rotate(-90deg)'
-      }
-    ]
-  });
+
+  const columns = [
+    { key: 'url', name: 'Url', fieldName: 'url', minWidth: 200, maxWidth: 300, isResizable: true },
+    { key: 'methods', name: 'Methods', fieldName: 'methods', minWidth: 100, maxWidth: 200, isResizable: true }
+  ];
+
+  const paths = getPaths();
 
   return (
     <div>
@@ -74,17 +73,44 @@ const CommandOptions = (props: ICommandOptions) => {
         headerText={`${headerText}`}
         isOpen={isOpen}
         onDismiss={toggleSelectedResourcesPreview}
-        type={PanelType.medium}
+        type={PanelType.large}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
         closeButtonAriaLabel="Close"
       >
-        <Nav
-          groups={items}
-          styles={navStyles}
+        <DetailsList
+          compact={true}
+          items={paths}
+          columns={columns}
+          setKey="set"
+          layoutMode={DetailsListLayoutMode.fixedColumns}
         />
       </Panel>
     </div>
   )
+
+  function getPaths() {
+    const links = items[0].links
+    const content = flatten(links).filter(k => k.type === 'path');
+    if (content.length > 0) {
+      content.forEach(element => {
+        const methods = element.labels.find((k: IResourceLabel) => k.name === version)?.methods || [];
+        element.version = version;
+        element.url = `${getUrlFromLink(element)}`;
+        element.methods = getListOfMethods(methods);
+      });
+    }
+    return content;
+  }
+
+  function getListOfMethods(methods: string[]) {
+    let listOfMethods = '';
+    if (methods.length > 0) {
+      methods.forEach((method: string, index: number) => {
+        listOfMethods += `${method.toUpperCase()}${(index === methods.length - 1) ? '' : ','}`;
+      });
+    }
+    return listOfMethods;
+  }
 }
 
 export default CommandOptions;

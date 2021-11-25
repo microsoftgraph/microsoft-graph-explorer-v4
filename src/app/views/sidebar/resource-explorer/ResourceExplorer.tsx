@@ -206,7 +206,7 @@ const ResourceExplorer = (props: any) => {
 
       {selectedLinks.length > 0 && <>
         <Label><FormattedMessage id="Selected Resources" /> ({selectedLinks.length})</Label>
-        <CommandOptions list={selectedLinks} />
+        <CommandOptions list={selectedLinks} version={version} />
       </>
       }
 

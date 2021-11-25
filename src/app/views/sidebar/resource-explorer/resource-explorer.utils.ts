@@ -109,3 +109,14 @@ export function getUrlFromLink(link: INavLink) {
   url += removeCounter(link.name);
   return url;
 }
+
+export function flatten(content: INavLink[]): any[] {
+  let result: any[] = [];
+  content.forEach(function (item: INavLink) {
+    result.push(item);
+    if (Array.isArray(item.links)) {
+      result = result.concat(flatten(item.links));
+    }
+  });
+  return result;
+}
