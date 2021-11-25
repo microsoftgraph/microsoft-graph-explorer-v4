@@ -1,8 +1,9 @@
 import {
-  ContextualMenuItemType, Icon, IconButton,
-  IContextualMenuItem, INavLink, mergeStyleSets
+  ContextualMenuItemType, getId, Icon, IconButton,
+  IContextualMenuItem, INavLink, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { IQuery } from '../../../../types/query-runner';
@@ -46,18 +47,34 @@ const ResourceLink = (props: IResourceLink) => {
       {...resourceLink.iconresourceLink} />}
     {resourceLink.name}
 
-    {items.length > 0 && <IconButton
-      ariaLabel={translateMessage('More actions')}
-      role='button'
-      className={linkStyle.button}
-      styles={iconButtonStyles}
-      menuIconProps={{ iconName: 'MoreVertical' }}
-      menuProps={{
-        shouldFocusOnMount: true,
-        alignTargetEdge: true,
-        items
-      }}
-    />}
+    {items.length > 0 &&
+      <TooltipHost
+        content={translateMessage('More actions')}
+        id={getId()}
+        calloutProps={{ gapSpace: 0 }}
+        tooltipProps={{
+          onRenderContent: function renderContent() {
+            return <div style={{ paddingBottom: 3 }}>
+              <FormattedMessage id={'More actions'} />
+            </div>
+          }
+        }}
+      >
+        <IconButton
+          ariaLabel={translateMessage('More actions')}
+          role='button'
+          className={linkStyle.button}
+          styles={iconButtonStyles}
+          menuIconProps={{ iconName: 'MoreVertical' }}
+          title={translateMessage('More actions')}
+          menuProps={{
+            shouldFocusOnMount: true,
+            alignTargetEdge: true,
+            items
+          }}
+        />
+      </TooltipHost>
+    }
   </span>;
 
   function getMenuItems() {
