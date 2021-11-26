@@ -36,12 +36,7 @@ jobs:
         run: npm install
 
       - name: Run unit tests
-        run: |
-          npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
-          mkdir -p testfiles && cp -r coverage/* testfiles
-          mkdir -p reportFiles && cp -r reports/* reportFiles
-          ls testfiles
-          ls reportFiles
+        run: npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
 
       - name: Fix code coverage paths
         run: |
