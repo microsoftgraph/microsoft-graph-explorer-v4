@@ -73,13 +73,10 @@ const ResourceExplorer = (props: any) => {
     return [];
   }
 
-  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
-    ev!.preventDefault();
-    if (item && item.name) {
-      const itemsToSelect: INavLink[] = [...selectedLinks];
-      itemsToSelect.push(item);
-      setSelectedLinks(itemsToSelect);
-    }
+  const addToCollection = (item: INavLink) => {
+    const itemsToSelect: INavLink[] = [...selectedLinks];
+    itemsToSelect.push(item);
+    setSelectedLinks(itemsToSelect);
   }
 
   const changeVersion = (ev: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
@@ -156,8 +153,11 @@ const ResourceExplorer = (props: any) => {
     setPanelContext(null);
   }
 
-  const openPanel = (activity: string, context: any) => {
+  const resourceOptionSelected = (activity: string, context: any) => {
     switch (activity) {
+      case 'add-to-collection':
+        addToCollection(context);
+        break;
       default:
         const requestUrl = getUrlFromLink(context);
         setPanelIsOpen(true);
@@ -239,10 +239,9 @@ const ResourceExplorer = (props: any) => {
             link={link}
             isolateTree={isolateTree}
             version={version}
-            openPanel={(activity: string, context: any) => openPanel(activity, context)}
+            resourceOptionSelected={(activity: string, context: any) => resourceOptionSelected(activity, context)}
           />
         }}
-        onLinkClick={clickLink}
         className={classes.queryList} />
 
       <Panel

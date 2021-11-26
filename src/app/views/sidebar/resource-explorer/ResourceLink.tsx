@@ -15,7 +15,7 @@ import { getAvailableMethods, getUrlFromLink, removeCounter } from './resource-e
 interface IResourceLink {
   link: any;
   isolateTree: Function;
-  openPanel: Function;
+  resourceOptionSelected: Function;
   version: string;
 }
 
@@ -97,7 +97,14 @@ const ResourceLink = (props: IResourceLink) => {
           key: 'show-query-parameters',
           text: translateMessage('Access query parameters'),
           itemType: ContextualMenuItemType.Normal,
-          onClick: () => props.openPanel('show-query-parameters', resourceLink)
+          onClick: () => props.resourceOptionSelected('show-query-parameters', resourceLink)
+        });
+      menuItems.push(
+        {
+          key: 'add-to-collection',
+          text: translateMessage('Add to collection'),
+          itemType: ContextualMenuItemType.Normal,
+          onClick: () => props.resourceOptionSelected('add-to-collection', resourceLink)
         });
     }
 
