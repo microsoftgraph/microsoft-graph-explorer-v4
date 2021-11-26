@@ -45,7 +45,9 @@ jobs:
         run: |
           npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
           mkdir -p testfiles && cp -r coverage/* testfiles
+          mkdir -p reportFiles && cp -r reports/* reportFiles
           ls testfiles
+          ls reportFiles
 
       - name: Fix code coverage paths
         run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
@@ -57,3 +59,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           sonar.javascript.lcov.reportPaths: testfiles/lcov.info
+          sonar.testExecutionReportPaths: reportFiles/test-report.xml

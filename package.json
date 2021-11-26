@@ -162,6 +162,12 @@
             "src/**/*.{ts,tsx,js}",
             "!**/node_modules/**",
             "!build/**"
-        ]
+        ],
+        "testResultsProcessor": "jest-sonar-reporter"
+    },
+    "jestSonar": {
+        "reportPath": "reports",
+        "reportFile": "test-report.xml",
+        "indent": 4
     }
 }
