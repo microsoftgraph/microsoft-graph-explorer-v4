@@ -1,7 +1,13 @@
 name: Sonar Cloud Analysis
 
 on:
-  push
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - dev
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -36,9 +42,7 @@ jobs:
         run: npm install
 
       - name: Run unit tests
-        run: |
-          npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
-          cat coverage/lcov.info | egrep "^(SF|DA|BRDA):" > lcov.info.new; mv lcov.info.new lcov.info
+        run: npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
 
       - name: Fix code coverage paths
         run: |
