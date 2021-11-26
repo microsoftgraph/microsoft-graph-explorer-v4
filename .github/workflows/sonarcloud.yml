@@ -38,7 +38,7 @@ jobs:
       - name: Run unit tests
         run: |
           npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
-          cat lcov.info | egrep "^(SF|DA|BRDA):" > lcov.info.new; mv lcov.info.new lcov.info
+          cat coverage/lcov.info | egrep "^(SF|DA|BRDA):" > lcov.info.new; mv lcov.info.new lcov.info
 
       - name: Fix code coverage paths
         run: |
