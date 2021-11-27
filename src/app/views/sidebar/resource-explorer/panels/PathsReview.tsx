@@ -1,59 +1,25 @@
 import {
-  Panel, PanelType, DetailsList, DetailsListLayoutMode,
-  PrimaryButton, getId, IColumn, TooltipHost, CommandBar, ICommandBarItemProps
+  CommandBar, ICommandBarItemProps, Panel, PanelType, PrimaryButton
 } from '@fluentui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { IResourceLabel } from '../../../../../types/resources';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { flatten, getUrlFromLink, removeCounter } from '../resource-explorer.utils';
+import Paths from './Paths';
 import { exportCollection } from './postman.util';
 
 const PathsReview = (props: any) => {
   const { isOpen, items, version } = props;
   const headerText = translateMessage('Selected Resources') + ' ' + translateMessage('Preview');
+  const [selectedItems, setSelectedItems] = useState<any[]>([]);
+  const [resources, setResources] = useState(getResourcePaths(items, version))
 
   const columns = [
     { key: 'url', name: 'Url', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true },
     { key: 'methods', name: 'Methods', fieldName: 'methods', minWidth: 100, maxWidth: 200, isResizable: true }
   ];
-  const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
-    if (column) {
-      const itemContent = item[column.fieldName as keyof any] as string;
-
-      switch (column.key) {
-        case 'methods':
-          return item.methods.map((method: any, key: number) => (
-            <span key={key}
-              style={{
-                textAlign: 'center',
-                display: 'inline-flex',
-                marginRight: 6
-              }}
-            >
-              {method.name}
-            </span>
-          ));
-
-        default:
-          return (
-            <TooltipHost
-              tooltipProps={{
-                content: item.url
-              }}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
-              styles={{ root: { display: 'inline-block' } }}
-            >
-              {itemContent}
-            </TooltipHost>
-          );
-      }
-    }
-  };
-
-  const resources = getResourcePaths(items, version);
 
   const generateCollection = () => {
     const list: any[] = [];
@@ -86,15 +52,27 @@ const PathsReview = (props: any) => {
     )
   }
 
+  const removeSelectedItems = () => {
+    const arr = [...resources];
+    for (let i = 0; i < selectedItems.length; i++) {
+      arr.splice(i, 1);
+    }
+    setResources(arr);
+  }
+
   const options: ICommandBarItemProps[] = [
     {
       key: 'remove',
       text: translateMessage('Remove'),
       iconProps: { iconName: 'Delete' },
-      disabled: true,
-      onClick: () => console.log('delete from tree')
+      disabled: selectedItems.length === 0,
+      onClick: () => removeSelectedItems()
     }
   ];
+
+  const selectItems = (content: any[]) => {
+    setSelectedItems(content);
+  };
 
   return (
     <>
@@ -112,14 +90,11 @@ const PathsReview = (props: any) => {
           primaryGroupAriaLabel='Selection actions'
           farItemsGroupAriaLabel='More selection actions'
         />
-        <DetailsList
-          compact={true}
-          items={resources}
-          onRenderItemColumn={renderItemColumn}
+        {resources && <Paths
+          resources={resources}
           columns={columns}
-          setKey='set'
-          layoutMode={DetailsListLayoutMode.fixedColumns}
-        />
+          selectItems={selectItems}
+        />}
       </Panel>
     </>
   )
