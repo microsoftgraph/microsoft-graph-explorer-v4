@@ -1,25 +1,26 @@
 import {
   ContextualMenuItemType, getId, Icon, IconButton,
-  IContextualMenuItem, INavLink, mergeStyleSets, TooltipHost
+  IContextualMenuItem, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { IQuery } from '../../../../types/query-runner';
+import { IResourceLink } from '../../../../types/resources';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { getAvailableMethods, getUrlFromLink, removeCounter } from './resource-explorer.utils';
 
-interface IResourceLink {
+interface IResourceLinkProps {
   link: any;
   isolateTree: Function;
   resourceOptionSelected: Function;
   version: string;
 }
 
-const ResourceLink = (props: IResourceLink) => {
+const ResourceLink = (props: IResourceLinkProps) => {
   const dispatch = useDispatch();
   const { link: resourceLink, version } = props;
 
@@ -28,7 +29,7 @@ const ResourceLink = (props: IResourceLink) => {
     menuIcon: { fontSize: 20, padding: 10 }
   };
 
-  const setQuery = (link: INavLink, selectedVerb: string) => {
+  const setQuery = (link: IResourceLink, selectedVerb: string) => {
     const sampleUrl = `${GRAPH_URL}/${version}${getUrlFromLink(link)}`;
     const query: IQuery = {
       selectedVerb,

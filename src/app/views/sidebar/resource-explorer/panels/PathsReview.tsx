@@ -4,14 +4,21 @@ import {
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { IResourceLabel } from '../../../../../types/resources';
+import { IResourceLabel, IResourceLink, MethodObject } from '../../../../../types/resources';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { flatten, getUrlFromLink, removeCounter } from '../resource-explorer.utils';
 import Paths from './Paths';
 import { exportCollection } from './postman.util';
 
+export interface IPathsReview {
+  isOpen: boolean;
+  items: IResourceLink[];
+  version: string;
+}
+
 const PathsReview = (props: any) => {
   const { isOpen, items, version } = props;
+  console.log(JSON.stringify(items));
   const headerText = translateMessage('Selected Resources') + ' ' + translateMessage('Preview');
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [resources, setResources] = useState(getResourcePaths(items, version))
@@ -29,7 +36,7 @@ const PathsReview = (props: any) => {
       const path = [...paths];
       path.push(pathName);
       path.shift();
-      methods.forEach((method: any) => {
+      methods?.forEach((method: MethodObject) => {
         list.push({
           method: method.name,
           name: `${pathName}-${method.name}`,
@@ -70,7 +77,7 @@ const PathsReview = (props: any) => {
     }
   ];
 
-  const selectItems = (content: any[]) => {
+  const selectItems = (content: IResourceLink[]) => {
     setSelectedItems(content);
   };
 
@@ -100,13 +107,13 @@ const PathsReview = (props: any) => {
   )
 }
 
-function getResourcePaths(items: any, version: string) {
+function getResourcePaths(items: IResourceLink, version: string): IResourceLink[] {
   const links = items[0].links
   const content = flatten(links).filter(k => k.type === 'path');
   if (content.length > 0) {
     content.forEach(element => {
       const methods = element.labels.find((k: IResourceLabel) => k.name === version)?.methods || [];
-      const listOfMethods: any[] = [];
+      const listOfMethods: MethodObject[] = [];
       methods.forEach((method: string) => {
         listOfMethods.push({
           name: method.toUpperCase(),

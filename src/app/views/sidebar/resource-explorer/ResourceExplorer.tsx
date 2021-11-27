@@ -1,13 +1,13 @@
 import {
   Breadcrumb, ChoiceGroup, DefaultButton,
-  IBreadcrumbItem, IChoiceGroupOption, INavLink, INavLinkGroup, Label, Nav, Panel,
+  IBreadcrumbItem, IChoiceGroupOption, INavLinkGroup, Label, Nav, Panel,
   PanelType, SearchBox, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 
-import { IResource } from '../../../../types/resources';
+import { IResource, IResourceLink } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
@@ -26,7 +26,7 @@ const ResourceExplorer = (props: any) => {
   );
   const classes = classNames(props);
   const { data, pending } = resources;
-  const [selectedLinks, setSelectedLinks] = useState<INavLink[]>([]);
+  const [selectedLinks, setSelectedLinks] = useState<IResourceLink[]>([]);
 
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
@@ -73,8 +73,8 @@ const ResourceExplorer = (props: any) => {
     return [];
   }
 
-  const addToCollection = (item: INavLink) => {
-    const itemsToSelect: INavLink[] = [...selectedLinks];
+  const addToCollection = (item: IResourceLink) => {
+    const itemsToSelect: IResourceLink[] = [...selectedLinks];
     itemsToSelect.push(item);
     setSelectedLinks(itemsToSelect);
   }
@@ -151,6 +151,10 @@ const ResourceExplorer = (props: any) => {
   const dismissPanel = () => {
     setPanelIsOpen(!panelIsOpen);
     setPanelContext(null);
+  }
+
+  const clickLink = (ev?: React.MouseEvent<HTMLElement>) => {
+    ev!.preventDefault();
   }
 
   const resourceOptionSelected = (activity: string, context: any) => {
@@ -239,9 +243,10 @@ const ResourceExplorer = (props: any) => {
             link={link}
             isolateTree={isolateTree}
             version={version}
-            resourceOptionSelected={(activity: string, context: any) => resourceOptionSelected(activity, context)}
+            resourceOptionSelected={(activity: string, context: unknown) => resourceOptionSelected(activity, context)}
           />
         }}
+        onLinkClick={clickLink}
         className={classes.queryList} />
 
       <Panel

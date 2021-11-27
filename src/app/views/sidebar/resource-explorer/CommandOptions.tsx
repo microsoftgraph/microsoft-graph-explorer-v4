@@ -1,11 +1,12 @@
-import { CommandBar, ICommandBarItemProps, INavLink } from '@fluentui/react';
+import { CommandBar, ICommandBarItemProps } from '@fluentui/react';
 import React, { useState } from 'react';
 
+import { IResourceLink } from '../../../../types/resources';
 import { translateMessage } from '../../../utils/translate-messages';
 import PathsReview from './panels/PathsReview';
 
 interface ICommandOptions {
-  list: INavLink[],
+  list: IResourceLink[],
   version: string;
 }
 

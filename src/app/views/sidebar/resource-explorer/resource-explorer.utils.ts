@@ -1,5 +1,6 @@
-import { INavLink, INavLinkGroup } from '@fluentui/react';
-import { IResource, IResourceLabel } from '../../../../types/resources';
+import { INavLinkGroup } from '@fluentui/react';
+
+import { IResource, IResourceLabel, IResourceLink } from '../../../../types/resources';
 
 interface ITreeFilter {
   paths: string[];
@@ -22,7 +23,7 @@ export function createList(source: IResource[], version: string): INavLinkGroup[
     return icon;
   }
 
-  function createNavLink(info: IResource, parent: string | null = null, paths: string[] = []): INavLink {
+  function createNavLink(info: IResource, parent: string, paths: string[] = []): IResourceLink {
     const { segment, children, labels } = info;
     const level = paths.length;
     const versionedChildren = (children) ? children.filter(child => versionExists(child, version)) : [];
@@ -47,7 +48,7 @@ export function createList(source: IResource[], version: string): INavLinkGroup[
     segment: '/',
     labels: [],
     children: source
-  });
+  }, '');
 
   return [
     {
@@ -98,7 +99,7 @@ export function getAvailableMethods(labels: IResourceLabel[], version: string): 
   return (current) ? current.methods : [];
 }
 
-export function getUrlFromLink(link: INavLink) {
+export function getUrlFromLink(link: IResourceLink) {
   const { paths } = link;
   let url = '/';
   if (paths.length > 1) {
@@ -110,9 +111,9 @@ export function getUrlFromLink(link: INavLink) {
   return url;
 }
 
-export function flatten(content: INavLink[]): any[] {
+export function flatten(content: IResourceLink[]): IResourceLink[] {
   let result: any[] = [];
-  content.forEach(function (item: INavLink) {
+  content.forEach(function (item: IResourceLink) {
     result.push(item);
     if (Array.isArray(item.links)) {
       result = result.concat(flatten(item.links));
