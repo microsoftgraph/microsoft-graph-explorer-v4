@@ -29,6 +29,11 @@ jobs:
     - name: Build
       run: npm run build
 
+    - name: Sonar cloud analysis
+      uses : actions/checkout@v2
+      with:
+        fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of results
+
     - name: Generate test coverage report
       run: npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
 
