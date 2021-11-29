@@ -15,6 +15,7 @@ export interface IResources {
   pending: boolean;
   data: IResource;
   error: Error | null;
+  paths: IResourceLink[];
 }
 
 export interface MethodObject {

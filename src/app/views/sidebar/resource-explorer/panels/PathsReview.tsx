@@ -3,10 +3,13 @@ import {
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { IResourceLabel, IResourceLink, MethodObject } from '../../../../../types/resources';
+import { IResourceLink, MethodObject } from '../../../../../types/resources';
+import { IRootState } from '../../../../../types/root';
+import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { flatten, getUrlFromLink, removeCounter } from '../resource-explorer.utils';
+import { removeCounter } from '../resource-explorer.utils';
 import Paths from './Paths';
 import { exportCollection } from './postman.util';
 
@@ -17,11 +20,14 @@ export interface IPathsReview {
 }
 
 const PathsReview = (props: any) => {
-  const { isOpen, items, version } = props;
-  console.log(JSON.stringify(items));
+  const dispatch = useDispatch();
+  const { resources: resourceItems } = useSelector(
+    (state: IRootState) => state
+  );
+  const { paths: items } = resourceItems;
+  const { isOpen } = props;
   const headerText = translateMessage('Selected Resources') + ' ' + translateMessage('Preview');
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
-  const [resources, setResources] = useState(getResourcePaths(items, version))
 
   const columns = [
     { key: 'url', name: 'Url', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true },
@@ -30,7 +36,7 @@ const PathsReview = (props: any) => {
 
   const generateCollection = () => {
     const list: any[] = [];
-    resources.forEach(element => {
+    items.forEach((element: any) => {
       const { methods, url, version: pathVersion, name, paths } = element;
       const pathName = removeCounter(name);
       const path = [...paths];
@@ -60,11 +66,7 @@ const PathsReview = (props: any) => {
   }
 
   const removeSelectedItems = () => {
-    const arr = [...resources];
-    for (let i = 0; i < selectedItems.length; i++) {
-      arr.splice(i, 1);
-    }
-    setResources(arr);
+    dispatch(removeResourcePaths(selectedItems));
   }
 
   const options: ICommandBarItemProps[] = [
@@ -97,8 +99,8 @@ const PathsReview = (props: any) => {
           primaryGroupAriaLabel='Selection actions'
           farItemsGroupAriaLabel='More selection actions'
         />
-        {resources && <Paths
-          resources={resources}
+        {items && <Paths
+          resources={items}
           columns={columns}
           selectItems={selectItems}
         />}
@@ -107,24 +109,4 @@ const PathsReview = (props: any) => {
   )
 }
 
-function getResourcePaths(items: IResourceLink, version: string): IResourceLink[] {
-  const links = items[0].links
-  const content = flatten(links).filter(k => k.type === 'path');
-  if (content.length > 0) {
-    content.forEach(element => {
-      const methods = element.labels.find((k: IResourceLabel) => k.name === version)?.methods || [];
-      const listOfMethods: MethodObject[] = [];
-      methods.forEach((method: string) => {
-        listOfMethods.push({
-          name: method.toUpperCase(),
-          checked: true
-        });
-      });
-      element.version = version;
-      element.url = `${getUrlFromLink(element)}`;
-      element.methods = listOfMethods;
-    });
-  }
-  return content;
-}
 export default PathsReview;

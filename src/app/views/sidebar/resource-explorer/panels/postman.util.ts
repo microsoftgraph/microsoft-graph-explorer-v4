@@ -1,6 +1,8 @@
 import { IPostmanCollection, Item } from '../../../../../types/postman-collection';
+import { IResourceLink, IResourceLabel, MethodObject } from '../../../../../types/resources';
 import { GRAPH_URL } from '../../../../services/graph-constants';
 import { downloadToLocal } from '../../../../utils/download';
+import { flatten, getUrlFromLink } from '../resource-explorer.utils';
 
 function generatePostmanCollection(paths: any[]): IPostmanCollection {
   const collection: IPostmanCollection = {
@@ -18,6 +20,28 @@ export function exportCollection(paths: any[]) {
   const content = generatePostmanCollection(paths);
   const filename = `${content.info.name}-${content.info._postman_id}.postman_collection.json`;
   downloadToLocal(content, filename);
+}
+
+export function getResourcePaths(item: IResourceLink, version: string): IResourceLink[] {
+  const { links } = item;
+  const content: IResourceLink[] = flatten(links).filter((k: any) => k.type === 'path');
+  content.unshift(item);
+  if (content.length > 0) {
+    content.forEach((element: any) => {
+      const methods = element.labels.find((k: IResourceLabel) => k.name === version)?.methods || [];
+      const listOfMethods: MethodObject[] = [];
+      methods.forEach((method: string) => {
+        listOfMethods.push({
+          name: method.toUpperCase(),
+          checked: true
+        });
+      });
+      element.version = version;
+      element.url = `${getUrlFromLink(element)}`;
+      element.methods = listOfMethods;
+    });
+  }
+  return content;
 }
 
 function generateItemsFromPaths(resources: any[]): Item[] {

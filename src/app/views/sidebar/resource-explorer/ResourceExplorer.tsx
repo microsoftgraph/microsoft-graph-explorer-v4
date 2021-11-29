@@ -5,14 +5,16 @@ import {
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { IResource, IResourceLink } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
+import { addResourcePaths } from '../../../services/actions/resource-explorer-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import CommandOptions from './CommandOptions';
+import { getResourcePaths } from './panels/postman.util';
 import QueryParameters from './panels/QueryParameters';
 import {
   createList, getCurrentTree,
@@ -21,12 +23,13 @@ import {
 import ResourceLink from './ResourceLink';
 
 const ResourceExplorer = (props: any) => {
+  const dispatch = useDispatch();
+
   const { resources } = useSelector(
     (state: IRootState) => state
   );
   const classes = classNames(props);
-  const { data, pending } = resources;
-  const [selectedLinks, setSelectedLinks] = useState<IResourceLink[]>([]);
+  const { data, pending, paths: selectedLinks } = resources;
 
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
@@ -74,9 +77,7 @@ const ResourceExplorer = (props: any) => {
   }
 
   const addToCollection = (item: IResourceLink) => {
-    const itemsToSelect: IResourceLink[] = [...selectedLinks];
-    itemsToSelect.push(item);
-    setSelectedLinks(itemsToSelect);
+    dispatch(addResourcePaths(getResourcePaths(item, version)));
   }
 
   const changeVersion = (ev: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
@@ -208,9 +209,9 @@ const ResourceExplorer = (props: any) => {
         </Stack>
       </>}
 
-      {selectedLinks.length > 0 && <>
-        <Label><FormattedMessage id="Selected Resources" /> ({selectedLinks.length})</Label>
-        <CommandOptions list={selectedLinks} version={version} />
+      {selectedLinks && selectedLinks.length > 0 && <>
+        <Label><FormattedMessage id='Selected Resources' /> ({selectedLinks.length})</Label>
+        <CommandOptions version={version} />
       </>
       }
 
@@ -252,7 +253,7 @@ const ResourceExplorer = (props: any) => {
       <Panel
         isOpen={panelIsOpen}
         onDismiss={dismissPanel}
-        closeButtonAriaLabel="Close"
+        closeButtonAriaLabel='Close'
         headerText={panelHeaderText}
         type={PanelType.medium}
       >

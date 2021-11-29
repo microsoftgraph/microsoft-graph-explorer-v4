@@ -1,18 +1,16 @@
 import { CommandBar, ICommandBarItemProps } from '@fluentui/react';
 import React, { useState } from 'react';
 
-import { IResourceLink } from '../../../../types/resources';
 import { translateMessage } from '../../../utils/translate-messages';
 import PathsReview from './panels/PathsReview';
 
 interface ICommandOptions {
-  list: IResourceLink[],
   version: string;
 }
 
 const CommandOptions = (props: ICommandOptions) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { list, version } = props;
+  const { version } = props;
   const options: ICommandBarItemProps[] = [
     {
       key: 'preview',
@@ -39,10 +37,6 @@ const CommandOptions = (props: ICommandOptions) => {
     setIsOpen(open);
   }
 
-  const items = [{
-    links: list
-  }]
-
   return (
     <div>
       <CommandBar
@@ -54,7 +48,6 @@ const CommandOptions = (props: ICommandOptions) => {
       />
       <PathsReview
         isOpen={isOpen}
-        items={items}
         version={version}
         toggleSelectedResourcesPreview={toggleSelectedResourcesPreview}
       />
