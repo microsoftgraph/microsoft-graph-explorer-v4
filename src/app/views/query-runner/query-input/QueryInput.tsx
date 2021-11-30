@@ -3,11 +3,11 @@ import { Dropdown } from '@fluentui/react';
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { IQueryInputProps } from '../../../../types/query-runner';
+import { httpMethods, IQueryInputProps } from '../../../../types/query-runner';
 
 import { IRootState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { getStyleFor } from '../../../utils/badge-color';
+import { getStyleFor } from '../../../utils/http-methods.utils';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
 import SubmitButton from '../../../views/common/submit-button/SubmitButton';
@@ -22,13 +22,7 @@ const QueryInput = (props: IQueryInputProps) => {
   } = props;
 
   const dispatch = useDispatch();
-  const httpMethods: IDropdownOption[] = [
-    { key: 'GET', text: 'GET' },
-    { key: 'POST', text: 'POST' },
-    { key: 'PUT', text: 'PUT' },
-    { key: 'PATCH', text: 'PATCH' },
-    { key: 'DELETE', text: 'DELETE' }
-  ];
+
 
   const urlVersions: IDropdownOption[] = [
     { key: 'v1.0', text: 'v1.0' },
