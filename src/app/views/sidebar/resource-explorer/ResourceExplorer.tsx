@@ -22,9 +22,9 @@ import {
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 
-const ResourceExplorer = (props: any) => {
-  const dispatch = useDispatch();
 
+const unstyledResourceExplorer = (props: any) => {
+  const dispatch = useDispatch();
   const { resources } = useSelector(
     (state: IRootState) => state
   );
@@ -175,7 +175,7 @@ const ResourceExplorer = (props: any) => {
     }
   }
 
-  const breadCrumbs = (!!isolated) ? generateBreadCrumbs() : [];
+  const breadCrumbs = generateBreadCrumbs();
 
   if (pending) {
     return (
@@ -267,5 +267,5 @@ const ResourceExplorer = (props: any) => {
 }
 
 // @ts-ignore
-const styledResourceExplorer = styled(ResourceExplorer, sidebarStyles);
-export default styledResourceExplorer;
+const ResourceExplorer = styled(unstyledResourceExplorer, sidebarStyles);
+export default ResourceExplorer;

@@ -24,6 +24,9 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const dispatch = useDispatch();
   const { link: resourceLink, version } = props;
 
+  const tooltipId = getId('tooltip');
+  const buttonId = getId('targetButton');
+
   const iconButtonStyles = {
     root: { paddingBottom: 10 },
     menuIcon: { fontSize: 20, padding: 10 }
@@ -51,8 +54,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
     {items.length > 0 &&
       <TooltipHost
         content={translateMessage('More actions')}
-        id={getId()}
-        calloutProps={{ gapSpace: 0 }}
+        id={tooltipId}
+        calloutProps={{ gapSpace: 0, target: `#${buttonId}` }}
         tooltipProps={{
           onRenderContent: function renderContent() {
             return <div style={{ paddingBottom: 3 }}>
@@ -64,6 +67,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
         <IconButton
           ariaLabel={translateMessage('More actions')}
           role='button'
+          id={buttonId}
+          aria-describedby={tooltipId}
           className={linkStyle.button}
           styles={iconButtonStyles}
           menuIconProps={{ iconName: 'MoreVertical' }}
@@ -82,7 +87,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
     const availableMethods = getAvailableMethods(resourceLink.labels, version);
     const menuItems: IContextualMenuItem[] = [];
 
-    if (resourceLink!.links!.length > 0) {
+    if (resourceLink && resourceLink.links && resourceLink.links.length > 0) {
       menuItems.push(
         {
           key: 'isolate',

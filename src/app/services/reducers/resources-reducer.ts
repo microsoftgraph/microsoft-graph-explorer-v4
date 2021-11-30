@@ -18,25 +18,28 @@ const initialState: IResources = {
   paths: []
 };
 
-export function resources(state = initialState, action: IAction): any {
+export function resources(state: IResources = initialState, action: IAction): IResources {
   switch (action.type) {
     case FETCH_RESOURCES_SUCCESS:
       return {
         pending: false,
         data: action.response,
-        error: null
+        error: null,
+        paths: []
       };
     case FETCH_RESOURCES_ERROR:
       return {
         pending: false,
         error: action.response,
-        data: res
+        data: res,
+        paths: []
       };
     case FETCH_RESOURCES_PENDING:
       return {
         pending: true,
         data: initialState.data,
-        error: null
+        error: null,
+        paths: []
       };
     case RESOURCEPATHS_ADD_SUCCESS:
       const paths: IResourceLink[] = state.paths || [];
