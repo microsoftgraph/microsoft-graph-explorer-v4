@@ -38,6 +38,5 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname'
   ],
-  testResultsProcessor: './node_modules/jest-junit-reporter',
-  testPathIgnorePatterns: ['/scripts/test.js','/src/tests/accessibility/']
+  testResultsProcessor: './node_modules/jest-junit-reporter'
 };
