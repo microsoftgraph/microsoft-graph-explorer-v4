@@ -1,6 +1,6 @@
 import {
   DetailsRow, GroupedList, IGroup,
-  INavLink, Label, Spinner, SpinnerSize
+  Label, Spinner, SpinnerSize
 } from '@fluentui/react';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
