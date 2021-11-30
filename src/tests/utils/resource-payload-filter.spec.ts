@@ -1,6 +1,6 @@
 import content from '../../app/utils/resources/resources.json';
 import {
-  createList, getCurrentTree, getResourcesSupportedByVersion
+  createList, getAvailableMethods, getCurrentTree, getResourcesSupportedByVersion, removeCounter
 } from '../../app/views/sidebar/resource-explorer/resource-explorer.utils';
 import { IResource } from '../../types/resources';
 const resource = JSON.parse(JSON.stringify(content)) as IResource;
@@ -30,5 +30,18 @@ describe('Resource payload should', () => {
     expect(currentTree).not.toBeNull();
   });
 
+  it('return available methods', async () => {
+    const version = 'v1.0';
+    const filtered = createList(resource.children, version)[0];
+    const resourceLink = filtered.links[0];
+    const availableMethods = getAvailableMethods(resourceLink.labels, version);
+    expect(availableMethods).not.toBeNull();
+  });
+
+  it('return a string without counters', async () => {
+    const name = 'teamsApps (1)';
+    const withoutCounter = removeCounter(name);
+    expect(withoutCounter).not.toBe(name);
+  });
 
 });
