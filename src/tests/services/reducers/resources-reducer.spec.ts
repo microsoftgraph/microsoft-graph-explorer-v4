@@ -14,7 +14,8 @@ const initialState: IResources = {
     labels: [],
     segment: ''
   },
-  error: null
+  error: null,
+  paths: []
 };
 
 describe('Resources Reducer', () => {
