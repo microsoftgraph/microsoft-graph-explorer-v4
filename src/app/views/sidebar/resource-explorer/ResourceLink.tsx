@@ -23,6 +23,9 @@ const ResourceLink = (props: IResourceLink) => {
   const dispatch = useDispatch();
   const { link: resourceLink, version } = props;
 
+  const tooltipId = getId('tooltip');
+  const buttonId = getId('targetButton');
+
   const iconButtonStyles = {
     root: { paddingBottom: 10 },
     menuIcon: { fontSize: 20, padding: 10 }
@@ -50,8 +53,8 @@ const ResourceLink = (props: IResourceLink) => {
     {items.length > 0 &&
       <TooltipHost
         content={translateMessage('More actions')}
-        id={getId()}
-        calloutProps={{ gapSpace: 0 }}
+        id={tooltipId}
+        calloutProps={{ gapSpace: 0, target: `#${buttonId}` }}
         tooltipProps={{
           onRenderContent: function renderContent() {
             return <div style={{ paddingBottom: 3 }}>
@@ -63,6 +66,8 @@ const ResourceLink = (props: IResourceLink) => {
         <IconButton
           ariaLabel={translateMessage('More actions')}
           role='button'
+          id={buttonId}
+          aria-describedby={tooltipId}
           className={linkStyle.button}
           styles={iconButtonStyles}
           menuIconProps={{ iconName: 'MoreVertical' }}
