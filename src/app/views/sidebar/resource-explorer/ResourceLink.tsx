@@ -81,7 +81,7 @@ const ResourceLink = (props: IResourceLink) => {
     const availableMethods = getAvailableMethods(resourceLink.labels, version);
     const menuItems: IContextualMenuItem[] = [];
 
-    if (resourceLink!.links!.length > 0) {
+    if (resourceLink && resourceLink.links && resourceLink.links.length > 0) {
       menuItems.push(
         {
           key: 'isolate',

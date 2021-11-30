@@ -19,7 +19,7 @@ import {
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 
-const ResourceExplorer = (props: any) => {
+const unstyledResourceExplorer = (props: any) => {
   const { resources } = useSelector(
     (state: IRootState) => state
   );
@@ -146,16 +146,14 @@ const ResourceExplorer = (props: any) => {
   }
 
   const openPanel = (activity: string, context: any) => {
-    switch (activity) {
-      default:
-        const requestUrl = getUrlFromLink(context);
-        setPanelIsOpen(true);
-        setPanelContext({
-          activity,
-          context
-        });
-        setPanelHeaderText(`${requestUrl}`);
-        break;
+    if (activity) {
+      const requestUrl = getUrlFromLink(context);
+      setPanelIsOpen(true);
+      setPanelContext({
+        activity,
+        context
+      });
+      setPanelHeaderText(`${requestUrl}`);
     }
   }
 
@@ -243,5 +241,5 @@ const ResourceExplorer = (props: any) => {
 }
 
 // @ts-ignore
-const styledResourceExplorer = styled(ResourceExplorer, sidebarStyles);
-export default styledResourceExplorer;
+const ResourceExplorer = styled(unstyledResourceExplorer, sidebarStyles);
+export default ResourceExplorer;

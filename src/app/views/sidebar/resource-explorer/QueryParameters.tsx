@@ -42,10 +42,7 @@ const QueryParameters = (props: any) => {
     return (<div />);
   }
 
-  const { parameters } = data!;
-  const odataParameters = parameters.find(k => k.verb.toLowerCase() === 'get');
-
-  const items: any[] = [];
+  const items: any[] = []; let groups: IGroup[] = [];
   const columns = [{
     key: 'name',
     name: 'name',
@@ -81,7 +78,12 @@ const QueryParameters = (props: any) => {
     return listItems;
   }
 
-  const groups = generateChildren(odataParameters!.values, odataParameters!.verb);
+  if (data) {
+    const { parameters } = data;
+    const odataParameters = parameters.find(k => k.verb.toLowerCase() === 'get');
+    groups = generateChildren(odataParameters!.values, odataParameters!.verb);
+  }
+
   const onRenderCell = (depth?: number, item?: any, index?: number, group?: IGroup): React.ReactNode => {
     return item && typeof index === 'number' && index > -1 ? (
       <DetailsRow

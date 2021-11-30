@@ -14,7 +14,7 @@ const initialState: IResources = {
   error: null
 };
 
-export function resources(state: IResources = initialState, action: IAction): any {
+export function resources(state: IResources = initialState, action: IAction): IResources {
   switch (action.type) {
     case FETCH_RESOURCES_SUCCESS:
       return {
