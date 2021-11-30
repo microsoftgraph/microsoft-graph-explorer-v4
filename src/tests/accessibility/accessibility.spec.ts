@@ -40,7 +40,6 @@ describe('Graph Explorer accessibility', () => {
       .disableRules([
         'landmark-one-main',
         'region',
-        'aria-required-children',
         'document-title',
         'html-has-lang',
         'page-has-heading-one',
