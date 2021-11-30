@@ -1,4 +1,7 @@
-import { DetailsRow, GroupedList, IGroup, Label, Spinner, SpinnerSize } from '@fluentui/react';
+import {
+  DetailsRow, GroupedList, IGroup,
+  INavLink, Label, Spinner, SpinnerSize
+} from '@fluentui/react';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,10 +9,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../../../types/root';
 import { fetchAutoCompleteOptions } from '../../../services/actions/autocomplete-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
-import { classNames } from '../../classnames';
 import { getUrlFromLink } from './resource-explorer.utils';
 
-const QueryParameters = (props: any) => {
+interface IQueryParametersProps {
+  version: string;
+  context: INavLink;
+}
+
+const QueryParameters = (props: IQueryParametersProps) => {
 
   const { autoComplete } = useSelector(
     (state: IRootState) => state
@@ -19,7 +26,6 @@ const QueryParameters = (props: any) => {
 
   const dispatch = useDispatch();
 
-  const classes = classNames(props);
   const requestUrl = getUrlFromLink(context);
 
   useEffect(() => {
@@ -30,7 +36,6 @@ const QueryParameters = (props: any) => {
 
   if (pending) {
     return <Spinner
-      className={classes.spinner}
       size={SpinnerSize.large}
       label={`${translateMessage('Loading parameters')} ...`}
       ariaLive='assertive'
@@ -98,7 +103,7 @@ const QueryParameters = (props: any) => {
 
   return (
     <section>
-      <Label><FormattedMessage id="Query parameters" /></Label>
+      <Label><FormattedMessage id='Query parameters' /></Label>
       <GroupedList
         items={items}
         onRenderCell={onRenderCell}
