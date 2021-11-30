@@ -2,7 +2,6 @@ import AxeBuilder from '@axe-core/webdriverjs';
 import webdriver, { ThenableWebDriver } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 300000; // in milliseconds = 5min
 const TEST_TIMEOUT_MS = 300000; // in milliseconds = 5min
 
 describe('Graph Explorer accessibility', () => {
