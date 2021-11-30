@@ -11,7 +11,7 @@ function GetSnippets() {
     'Java',
     'Objective-C',
     'Go',
-    'PowerShell',
+    'PowerShell'
   ];
 
   return <Pivot>{renderSnippets(supportedLanguages)}</Pivot>;
