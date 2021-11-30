@@ -1,5 +1,10 @@
 module.exports = {
-  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!**/node_modules/**',
+    '!build/**',
+    '!src/**/*.d.ts'
+  ],
   resolver: 'jest-pnp-resolver',
   setupFiles: ['react-app-polyfill/jsdom'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
@@ -38,5 +43,5 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname'
   ],
-  testResultsProcessor: './node_modules/jest-junit-reporter'
+  testResultsProcessor: 'jest-sonar-reporter'
 };

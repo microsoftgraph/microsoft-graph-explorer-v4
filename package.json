@@ -44,6 +44,7 @@
         "jest-junit-reporter": "1.1.0",
         "jest-pnp-resolver": "1.2.2",
         "jest-resolve": "27.4.0",
+        "jest-sonar-reporter": "2.0.0",
         "jest-watch-typeahead": "1.0.0",
         "jwt-decode": "2.2.0",
         "localforage": "1.7.3",
@@ -155,5 +156,10 @@
         "url-parse": "1.5.3",
         "ws": "8.2.3",
         "yargs-parser": "13.1.2"
+    },
+    "jestSonar": {
+        "reportPath": "reports",
+        "reportFile": "test-report.xml",
+        "indent": 4
     }
 }
