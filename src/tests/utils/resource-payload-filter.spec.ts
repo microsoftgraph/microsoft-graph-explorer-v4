@@ -1,6 +1,6 @@
 import content from '../../app/utils/resources/resources.json';
 import {
-  createList, getResourcesSupportedByVersion
+  createList, getCurrentTree, getResourcesSupportedByVersion
 } from '../../app/views/sidebar/resource-explorer/resource-explorer.utils';
 import { IResource } from '../../types/resources';
 const resource = JSON.parse(JSON.stringify(content)) as IResource;
@@ -21,4 +21,14 @@ describe('Resource payload should', () => {
     const filtered = createList(resource.children, 'v1.0')[0];
     expect(filtered.links.length).toBe(64);
   });
+
+  it('return specific tree', async () => {
+    const version = 'v1.0';
+    const paths = ['/', 'appCatalogs', 'teamsApps'];
+    const level = 2;
+    const currentTree = getCurrentTree({ paths, level, resourceItems: resource.children, version });
+    expect(currentTree).not.toBeNull();
+  });
+
+
 });
