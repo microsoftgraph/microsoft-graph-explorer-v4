@@ -51,7 +51,8 @@ describe('Resource payload should', () => {
     const paths = ['/', 'appCatalogs', 'teamsApps'];
     const level = 2;
     const currentTree = getCurrentTree({ paths, level, resourceItems: resource.children, version });
-    const withoutCounter = getUrlFromLink(currentTree.links[0]);
+    const link = currentTree.links[0];
+    const withoutCounter = getUrlFromLink(link);
     expect(withoutCounter).toBe('/appCatalogs/teamsApps/{teamsApp-id}');
   });
 

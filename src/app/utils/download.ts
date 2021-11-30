@@ -1,5 +1,5 @@
 export function downloadToLocal(content: any, filename: string) {
-  const blob = new Blob([JSON.stringify(content)], { type: 'text/json' });
+  const blob = new Blob([JSON.stringify(content, null, 4)], { type: 'text/json' });
 
   const elem = window.document.createElement('a');
   elem.href = window.URL.createObjectURL(blob);

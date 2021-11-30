@@ -1,4 +1,4 @@
-import { INavLinkGroup } from '@fluentui/react';
+import { INavLink, INavLinkGroup } from '@fluentui/react';
 
 import { IResource, IResourceLabel, IResourceLink } from '../../../../types/resources';
 
@@ -99,7 +99,7 @@ export function getAvailableMethods(labels: IResourceLabel[], version: string): 
   return (current) ? current.methods : [];
 }
 
-export function getUrlFromLink(link: IResourceLink) {
+export function getUrlFromLink(link: IResourceLink | INavLink): string {
   const { paths } = link;
   let url = '/';
   if (paths.length > 1) {
