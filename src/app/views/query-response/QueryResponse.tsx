@@ -31,6 +31,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [query, setQuery] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
   const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
+  const [copied, setCopied] = useState(false);
 
 
   const {
@@ -53,6 +54,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const handleCopy = () => {
     copy('share-query-text').then(() => toggleShareQueryDialogState());
     trackCopyEvent();
+    setCopied(true);
   };
 
   const trackCopyEvent = () => {
@@ -200,7 +202,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           aria-label={translateMessage('Share Query')}
         />
         <DialogFooter>
-          <PrimaryButton text={messages.Copy} onClick={handleCopy} />
+          <PrimaryButton text={!copied ? translateMessage('Copy') : translateMessage('Copied')} onClick={handleCopy} />
           <DefaultButton
             text={messages.Close}
             onClick={toggleShareQueryDialogState}

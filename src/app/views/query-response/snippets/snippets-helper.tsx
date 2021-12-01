@@ -1,5 +1,5 @@
-import { IconButton, Label, PivotItem } from '@fluentui/react';
-import React, { useEffect } from 'react';
+import { IconButton, IIconProps, Label, PivotItem } from '@fluentui/react';
+import React, { useEffect, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { FormattedMessage } from 'react-intl';
@@ -42,16 +42,21 @@ function Snippet(props: ISnippetProps) {
   const { dimensions: { response }, snippets, responseAreaExpanded } = useSelector((state: IRootState) => state);
   const { data, pending: loadingState } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
+  const [copied, setCopied] = useState(false);
 
   const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
   const height = convertVhToPx(responseHeight, 140);
 
   const dispatch = useDispatch();
 
-  const copyIcon = {
-    iconName: 'copy'
+  const copyIcon: IIconProps = {
+    iconName: !copied ? 'Copy' : 'CheckMark'
   };
 
+  const handleCopy = async () => {
+    trackedGenericCopy(snippet, CODE_SNIPPETS_COPY_BUTTON, sampleQuery,{ Language: language });
+    setCopied(true);
+  }
   useEffect(() => {
     dispatch(getSnippet(language));
   }, [sampleQuery.sampleUrl]);
@@ -66,15 +71,12 @@ function Snippet(props: ISnippetProps) {
       {!loadingState && snippet &&
         <>
           <IconButton
+            toggle
             style={{ float: 'right', zIndex: 1 }}
-            ariaLabel={translateMessage('Copy')}
-            iconProps={copyIcon}
-            onClick={async () =>
-              trackedGenericCopy(
-                snippet,
-                CODE_SNIPPETS_COPY_BUTTON,
-                sampleQuery,
-                { Language: language })}
+            title={ !copied ? translateMessage('Copy') : translateMessage('Copied')}
+            ariaLabel={ !copied ? translateMessage('Copy') : translateMessage('Copied')}
+            iconProps={ copyIcon }
+            onClick={handleCopy}
           />
           <Monaco
             body={snippet}

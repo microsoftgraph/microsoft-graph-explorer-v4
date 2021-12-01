@@ -18,9 +18,11 @@ export function Auth(props: any) {
   const requestHeight = convertVhToPx(height, 60);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     trackedGenericCopy(accessToken || '', componentNames.ACCESS_TOKEN_COPY_BUTTON);
+    setCopied(true);
   };
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export function Auth(props: any) {
 
   const classes = classNames(props);
   const copyIcon: IIconProps = {
-    iconName: 'copy'
+    iconName: !copied ? 'Copy' : 'CheckMark'
   };
 
   const tokenDetailsIcon: IIconProps = {
@@ -53,9 +55,13 @@ export function Auth(props: any) {
       <div>
         <div className={classes.accessTokenContainer}>
           <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
-          <IconButton onClick={handleCopy} iconProps={copyIcon}
-            title={translateMessage('Copy')}
-            ariaLabel={translateMessage('Copy')} />
+          <IconButton
+            toggle
+            onClick={handleCopy}
+            iconProps={copyIcon }
+            title={ !copied ? translateMessage('Copy') : translateMessage('Copied')}
+            ariaLabel={ !copied ? translateMessage('Copy') : translateMessage('Copied')}
+          />
           <IconButton iconProps={tokenDetailsIcon}
             title={translateMessage('Get token details (Powered by jwt.ms)')}
             ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
