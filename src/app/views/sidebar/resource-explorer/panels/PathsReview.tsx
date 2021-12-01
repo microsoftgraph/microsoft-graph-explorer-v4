@@ -8,10 +8,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IResourceLink, IResourceMethod } from '../../../../../types/resources';
 import { IRootState } from '../../../../../types/root';
 import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
+import { downloadToLocal } from '../../../../utils/download';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { removeCounter } from '../resource-explorer.utils';
 import Paths from './Paths';
-import { exportCollection } from './postman.util';
+import { generatePostmanCollection } from './postman.util';
 
 export interface IPathsReview {
   isOpen: boolean;
@@ -52,7 +53,9 @@ const PathsReview = (props: any) => {
         })
       });
     });
-    exportCollection(list);
+    const content = generatePostmanCollection(list);
+    const filename = `${content.info.name}-${content.info._postman_id}.postman_collection.json`;
+    downloadToLocal(content, filename);
   }
 
   const renderFooterContent = () => {

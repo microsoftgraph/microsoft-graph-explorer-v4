@@ -1,6 +1,9 @@
 import { INavLink, INavLinkGroup } from '@fluentui/react';
 
-import { IResource, IResourceLabel, IResourceLink } from '../../../../types/resources';
+import {
+  IResource, IResourceLabel,
+  IResourceLink, IResourceMethod
+} from '../../../../types/resources';
 
 interface ITreeFilter {
   paths: string[];
@@ -111,7 +114,29 @@ export function getUrlFromLink(link: IResourceLink | INavLink): string {
   return url;
 }
 
-export function flatten(content: IResourceLink[]): IResourceLink[] {
+export function getResourcePaths(item: IResourceLink, version: string): IResourceLink[] {
+  const { links } = item;
+  const content: IResourceLink[] = flatten(links).filter((k: IResourceLink) => k.type === 'path');
+  content.unshift(item);
+  if (content.length > 0) {
+    content.forEach((element: IResourceLink) => {
+      const methods = element.labels.find((k: IResourceLabel) => k.name === version)?.methods || [];
+      const listOfMethods: IResourceMethod[] = [];
+      methods.forEach((method: string) => {
+        listOfMethods.push({
+          name: method.toUpperCase(),
+          checked: true
+        });
+      });
+      element.version = version;
+      element.url = `${getUrlFromLink(element)}`;
+      element.methods = listOfMethods;
+    });
+  }
+  return content;
+}
+
+function flatten(content: IResourceLink[]): IResourceLink[] {
   let result: any[] = [];
   content.forEach(function (item: IResourceLink) {
     result.push(item);

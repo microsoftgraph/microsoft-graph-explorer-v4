@@ -14,10 +14,10 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import CommandOptions from './CommandOptions';
-import { getResourcePaths } from './panels/postman.util';
 import QueryParameters from './panels/QueryParameters';
 import {
   createList, getCurrentTree,
+  getResourcePaths,
   getResourcesSupportedByVersion, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
