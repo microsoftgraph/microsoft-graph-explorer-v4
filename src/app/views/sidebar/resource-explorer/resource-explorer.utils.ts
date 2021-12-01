@@ -52,7 +52,7 @@ export function createList(source: IResource[], version: string): INavLinkGroup[
 
   return [
     {
-      links: navLink.links!
+      links: navLink.links
     }
   ];
 }

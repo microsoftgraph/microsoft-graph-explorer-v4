@@ -22,37 +22,34 @@ export default class Paths extends Component<any, any> {
   private renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     if (column) {
       const itemContent = item[column.fieldName as keyof any] as string;
-
-      switch (column.key) {
-        case 'methods':
-          return item.methods.map((method: any, key: number) => (
-            <span key={key}
-              style={{
-                textAlign: 'center',
-                display: 'inline-flex',
-                marginRight: 6
-              }}
-            >
-              {method.name}
-            </span>
-          ));
-
-        default:
-          return (
-            <TooltipHost
-              tooltipProps={{
-                content: item.url
-              }}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
-              styles={{ root: { display: 'inline-block' } }}
-            >
-              {itemContent}
-            </TooltipHost>
-          );
+      if (column.key === 'methods') {
+        return item.methods.map((method: any, key: number) => (
+          <span key={key}
+            style={{
+              textAlign: 'center',
+              display: 'inline-flex',
+              marginRight: 6
+            }}
+          >
+            {method.name}
+          </span>
+        ));
       }
+
+      return (
+        <TooltipHost
+          tooltipProps={{
+            content: item.url
+          }}
+          id={getId()}
+          calloutProps={{ gapSpace: 0 }}
+          styles={{ root: { display: 'inline-block' } }}
+        >
+          {itemContent}
+        </TooltipHost>
+      );
     }
-  };
+  }
 
 
   public render(): JSX.Element {

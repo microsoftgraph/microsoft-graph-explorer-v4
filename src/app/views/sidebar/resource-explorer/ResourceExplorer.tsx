@@ -159,19 +159,16 @@ const unstyledResourceExplorer = (props: any) => {
   }
 
   const resourceOptionSelected = (activity: string, context: any) => {
-    switch (activity) {
-      case 'add-to-collection':
-        addToCollection(context);
-        break;
-      default:
-        const requestUrl = getUrlFromLink(context);
-        setPanelIsOpen(true);
-        setPanelContext({
-          activity,
-          context
-        });
-        setPanelHeaderText(`${requestUrl}`);
-        break;
+    if (activity === 'add-to-collection') {
+      addToCollection(context);
+    } else {
+      const requestUrl = getUrlFromLink(context);
+      setPanelIsOpen(true);
+      setPanelContext({
+        activity,
+        context
+      });
+      setPanelHeaderText(`${requestUrl}`);
     }
   }
 
