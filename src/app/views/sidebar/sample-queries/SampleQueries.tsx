@@ -22,7 +22,7 @@ import * as queryInputActionCreators from '../../../services/actions/query-input
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
-import { getStyleFor } from '../../../utils/badge-color';
+import { getStyleFor } from '../../../utils/http-methods.utils';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
@@ -344,7 +344,9 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const groups = generateGroupsFromList(sampleQueries, 'category');
     if (this.state.selectedQuery) {
       const index = groups.findIndex(k => k.key === this.state.selectedQuery.category);
-      groups[index].isCollapsed = false;
+      if (index !== -1) {
+        groups[index].isCollapsed = false;
+      }
     }
 
     if (pending) {
