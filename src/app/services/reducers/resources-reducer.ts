@@ -42,21 +42,36 @@ export function resources(state: IResources = initialState, action: IAction): IR
         paths: []
       };
     case RESOURCEPATHS_ADD_SUCCESS:
-      const paths: IResourceLink[] = [...state.paths];
-      action.response.forEach((element: any) => {
-        const exists = !!paths.find(k => k.key === element.key);
-        if (!exists) {
-          paths.push(element);
-        }
-      });
-      return { ...state, paths };
+      return {
+        ...state,
+        paths: addResourcesToPaths(state, action.response)
+      };
     case RESOURCEPATHS_DELETE_SUCCESS:
-      const list: IResourceLink[] = [...state.paths];
-      for (let i = 0; i < action.response.length; i++) {
-        list.splice(i, 1);
-      }
-      return { ...state, paths: list };
+      return {
+        ...state,
+        paths: removeResourcePaths(state, action.response)
+      };
     default:
       return state;
   }
+}
+
+function addResourcesToPaths(state: IResources, resourcePaths: IResourceLink[]) {
+  const paths: IResourceLink[] = [...state.paths];
+  resourcePaths.forEach((element: any) => {
+    const exists = !!paths.find(k => k.key === element.key);
+    if (!exists) {
+      paths.push(element);
+    }
+  });
+  return paths;
+}
+
+function removeResourcePaths(state: IResources, resourcePaths: IResourceLink[]) {
+  const list: IResourceLink[] = [...state.paths];
+  resourcePaths.forEach((path: IResourceLink) => {
+    const index = list.findIndex(k => k.key === path.key);
+    list.splice(index, 1);
+  });
+  return list;
 }

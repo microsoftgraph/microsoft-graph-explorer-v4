@@ -21,13 +21,12 @@ export interface IPathsReview {
 
 const PathsReview = (props: any) => {
   const dispatch = useDispatch();
-  const { resources: resourceItems } = useSelector(
+  const { resources: { paths: items } } = useSelector(
     (state: IRootState) => state
   );
-  const { paths: items } = resourceItems;
   const { isOpen } = props;
   const headerText = translateMessage('Selected Resources') + ' ' + translateMessage('Preview');
-  const [selectedItems, setSelectedItems] = useState<any[]>([]);
+  const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
 
   const columns = [
     { key: 'url', name: 'Url', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true },
@@ -68,6 +67,7 @@ const PathsReview = (props: any) => {
 
   const removeSelectedItems = () => {
     dispatch(removeResourcePaths(selectedItems));
+    setSelectedItems([]);
   }
 
   const options: ICommandBarItemProps[] = [

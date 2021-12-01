@@ -74,6 +74,5 @@ export function getResourcePaths(item: IResourceLink, version: string): IResourc
       element.methods = listOfMethods;
     });
   }
-  console.log(JSON.stringify(content));
   return content;
 }
