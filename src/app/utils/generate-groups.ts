@@ -20,6 +20,7 @@ export function generateGroupsFromList(list: any[], property: string) {
         isCollapsed = true;
       }
       groups.push({
+        ...listItem,
         name: listItem[property],
         key: listItem[property],
         startIndex: previousCount,
