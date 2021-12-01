@@ -1,6 +1,6 @@
 import { Guid } from 'guid-typescript';
 import { IPostmanCollection, Item } from '../../../../../types/postman-collection';
-import { IResourceLink, IResourceLabel, MethodObject } from '../../../../../types/resources';
+import { IResourceLink, IResourceLabel, IResourceMethod } from '../../../../../types/resources';
 import { GRAPH_URL } from '../../../../services/graph-constants';
 import { downloadToLocal } from '../../../../utils/download';
 import { flatten, getUrlFromLink } from '../resource-explorer.utils';
@@ -62,7 +62,7 @@ export function getResourcePaths(item: IResourceLink, version: string): IResourc
   if (content.length > 0) {
     content.forEach((element: IResourceLink) => {
       const methods = element.labels.find((k: IResourceLabel) => k.name === version)?.methods || [];
-      const listOfMethods: MethodObject[] = [];
+      const listOfMethods: IResourceMethod[] = [];
       methods.forEach((method: string) => {
         listOfMethods.push({
           name: method.toUpperCase(),

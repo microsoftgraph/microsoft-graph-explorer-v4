@@ -4,11 +4,17 @@ import {
   IColumn, Selection
 } from '@fluentui/react/lib/DetailsList';
 import { getId, MarqueeSelection, TooltipHost } from '@fluentui/react';
+import { IResourceLink, IResourceMethod } from '../../../../../types/resources';
 
-export default class Paths extends Component<any, any> {
+interface IPathProps {
+  resources: IResourceLink[];
+  columns: IColumn[];
+  selectItems: Function;
+}
+export default class Paths extends Component<IPathProps> {
   private _selection: Selection;
 
-  constructor(props: any) {
+  constructor(props: IPathProps) {
     super(props);
 
     this._selection = new Selection({
@@ -23,7 +29,7 @@ export default class Paths extends Component<any, any> {
     if (column) {
       const itemContent = item[column.fieldName as keyof any] as string;
       if (column.key === 'methods') {
-        return item.methods.map((method: any, key: number) => (
+        return item.methods.map((method: IResourceMethod, key: number) => (
           <span key={key}
             style={{
               textAlign: 'center',

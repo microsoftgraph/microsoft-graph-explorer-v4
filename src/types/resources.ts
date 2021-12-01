@@ -18,7 +18,7 @@ export interface IResources {
   paths: IResourceLink[];
 }
 
-export interface MethodObject {
+export interface IResourceMethod {
   name: string;
   checked: boolean;
 }
@@ -31,6 +31,6 @@ export interface IResourceLink extends INavLink {
   type: string;
   links: IResourceLink[];
   version?: string;
-  methods?: MethodObject[]
+  methods?: IResourceMethod[]
 }
 

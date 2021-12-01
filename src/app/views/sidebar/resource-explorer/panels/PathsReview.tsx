@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IResourceLink, MethodObject } from '../../../../../types/resources';
+import { IResourceLink, IResourceMethod } from '../../../../../types/resources';
 import { IRootState } from '../../../../../types/root';
 import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -43,7 +43,7 @@ const PathsReview = (props: any) => {
       path.push(pathName);
       path.shift();
       path.unshift(pathVersion);
-      methods?.forEach((method: MethodObject) => {
+      methods?.forEach((method: IResourceMethod) => {
         list.push({
           method: method.name,
           name: `${pathName}-${method.name}`,
