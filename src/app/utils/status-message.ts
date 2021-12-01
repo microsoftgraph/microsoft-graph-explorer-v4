@@ -38,7 +38,7 @@ export function getMatchesAndParts(message: string) {
   return { matches, parts };
 }
 
-const responseStatusTextMap = new Map([
+const httpStatusMessage = new Map([
   [100, 'Continue'],
   [101, 'Switching Protocols'],
   [102, 'Processing'],
@@ -83,6 +83,6 @@ const responseStatusTextMap = new Map([
 ]);
 
 export function setStatusMessage(status: number): string {
-  const statusMessage = responseStatusTextMap.get(status);
+  const statusMessage = httpStatusMessage.get(status);
   return statusMessage ? statusMessage : '';
 }
