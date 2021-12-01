@@ -42,6 +42,7 @@ const PathsReview = (props: any) => {
       const path = [...paths];
       path.push(pathName);
       path.shift();
+      path.unshift(pathVersion);
       methods?.forEach((method: MethodObject) => {
         list.push({
           method: method.name,
