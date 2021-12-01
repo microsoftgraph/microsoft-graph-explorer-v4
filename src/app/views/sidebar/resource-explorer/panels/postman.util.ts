@@ -4,7 +4,7 @@ import { GRAPH_URL } from '../../../../services/graph-constants';
 import { downloadToLocal } from '../../../../utils/download';
 import { flatten, getUrlFromLink } from '../resource-explorer.utils';
 
-function generatePostmanCollection(paths: any[]): IPostmanCollection {
+function generatePostmanCollection(paths: IResourceLink[]): IPostmanCollection {
   const collection: IPostmanCollection = {
     info: {
       _postman_id: Math.random().toString().replace('.', ''),
@@ -16,7 +16,7 @@ function generatePostmanCollection(paths: any[]): IPostmanCollection {
   return collection;
 }
 
-export function exportCollection(paths: any[]) {
+export function exportCollection(paths: IResourceLink[]) {
   const content = generatePostmanCollection(paths);
   const filename = `${content.info.name}-${content.info._postman_id}.postman_collection.json`;
   downloadToLocal(content, filename);
@@ -27,7 +27,7 @@ export function getResourcePaths(item: IResourceLink, version: string): IResourc
   const content: IResourceLink[] = flatten(links).filter((k: any) => k.type === 'path');
   content.unshift(item);
   if (content.length > 0) {
-    content.forEach((element: any) => {
+    content.forEach((element: IResourceLink) => {
       const methods = element.labels.find((k: IResourceLabel) => k.name === version)?.methods || [];
       const listOfMethods: MethodObject[] = [];
       methods.forEach((method: string) => {
@@ -44,7 +44,7 @@ export function getResourcePaths(item: IResourceLink, version: string): IResourc
   return content;
 }
 
-function generateItemsFromPaths(resources: any[]): Item[] {
+function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
   const list: Item[] = [];
   resources.forEach(resource => {
     const {
