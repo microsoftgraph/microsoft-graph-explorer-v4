@@ -42,7 +42,7 @@ export function resources(state: IResources = initialState, action: IAction): IR
         paths: []
       };
     case RESOURCEPATHS_ADD_SUCCESS:
-      const paths: IResourceLink[] = state.paths || [];
+      const paths: IResourceLink[] = [...state.paths];
       action.response.forEach((element: any) => {
         const exists = !!paths.find(k => k.key === element.key);
         if (!exists) {
@@ -51,7 +51,7 @@ export function resources(state: IResources = initialState, action: IAction): IR
       });
       return { ...state, paths };
     case RESOURCEPATHS_DELETE_SUCCESS:
-      const list: IResourceLink[] = state.paths || [];
+      const list: IResourceLink[] = [...state.paths];
       for (let i = 0; i < action.response.length; i++) {
         list.splice(i, 1);
       }
