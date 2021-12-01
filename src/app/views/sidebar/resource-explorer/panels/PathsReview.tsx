@@ -59,7 +59,7 @@ const PathsReview = (props: any) => {
     return (
       <div>
         <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
-          <FormattedMessage id='Download as postman collection' />
+          <FormattedMessage id='Download postman collection' />
         </PrimaryButton>
       </div>
     )

@@ -14,20 +14,9 @@ const CommandOptions = (props: ICommandOptions) => {
   const options: ICommandBarItemProps[] = [
     {
       key: 'preview',
-      text: translateMessage('Preview tree'),
+      text: translateMessage('Preview collection'),
       iconProps: { iconName: 'View' },
       onClick: () => toggleSelectedResourcesPreview()
-    }
-  ];
-
-  const farRightItems: ICommandBarItemProps[] = [
-    {
-      key: 'info',
-      text: 'Info',
-      ariaLabel: 'Info',
-      iconOnly: true,
-      iconProps: { iconName: 'Info' },
-      onClick: () => console.log('info')
     }
   ];
 
@@ -41,7 +30,6 @@ const CommandOptions = (props: ICommandOptions) => {
     <div>
       <CommandBar
         items={options}
-        farItems={farRightItems}
         ariaLabel='Selection actions'
         primaryGroupAriaLabel='Selection actions'
         farItemsGroupAriaLabel='More selection actions'
