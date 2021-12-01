@@ -1,6 +1,7 @@
 import {
-  DetailsRow, GroupedList, IGroup,
-  Label, Spinner, SpinnerSize
+  DetailsList,
+  DetailsListLayoutMode,
+  getId, getTheme, IColumn, Label, SelectionMode, Spinner, SpinnerSize, Stack, TooltipHost
 } from '@fluentui/react';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -26,7 +27,6 @@ const QueryParameters = (props: IQueryParametersProps) => {
   const { context, version } = props;
 
   const dispatch = useDispatch();
-
   const requestUrl = getUrlFromLink(context);
 
   useEffect(() => {
@@ -48,70 +48,101 @@ const QueryParameters = (props: IQueryParametersProps) => {
     return (<div />);
   }
 
-  const items: any[] = []; let groups: IGroup[] = [];
-  const columns = [{
-    key: 'name',
-    name: 'name',
-    fieldName: 'name',
-    minWidth: 300
-  }];
-
-  const flattenList = (parameter: any, name: any, parent: string) => {
-    parameter.items.forEach((item: string) => {
-      items.push({
-        category: name,
-        key: `${parent}-${name}-${item}`,
-        name: item,
-        parent
-      });
-    });
-  }
-
-  const generateChildren = (values: any[], parent: string) => {
-    const listItems: IGroup[] = [];
-    values.forEach((parameter: any, index: number) => {
-      const { name } = parameter;
-      listItems.push({
-        key: name,
-        name,
-        startIndex: index,
-        count: parameter.items.length,
-        isCollapsed: true,
-        level: 0
-      });
-      flattenList(parameter, name, parent);
-    });
-    return listItems;
-  }
+  const items: any[] = [];
+  const columns = [
+    {
+      key: 'name',
+      name: 'name',
+      fieldName: 'name',
+      minWidth: 50,
+      maxWidth: 100,
+      isResizable: true
+    },
+    {
+      key: 'properties',
+      name: 'Properties',
+      fieldName: 'properties',
+      minWidth: 100,
+      maxWidth: 200,
+      isResizable: true
+    }
+  ];
 
   if (data) {
     const { parameters } = data;
     const odataParameters = parameters.find(k => k.verb.toLowerCase() === 'get');
-    groups = generateChildren(odataParameters!.values, odataParameters!.verb);
+    if (odataParameters) {
+      odataParameters.values.forEach(element => {
+        items.push(element);
+      });
+    }
   }
 
-  const onRenderCell = (depth?: number, item?: any, index?: number, group?: IGroup): React.ReactNode => {
-    return item && typeof index === 'number' && index > -1 ? (
-      <DetailsRow
-        columns={columns}
-        groupNestingDepth={depth}
-        item={item}
-        itemIndex={index}
-        group={group}
-      />
-    ) : null;
-  };
+  const theme = getTheme();
+
+  const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+    if (column) {
+      const itemContent = item[column.fieldName as keyof any] as string;
+      if (column.key === 'properties') {
+        if (item.items.length > 0) {
+          return (
+            <Stack horizontal wrap
+              styles={{
+                root: {
+                  width: 420
+                }
+              }}
+              tokens={{
+                childrenGap: 5,
+                padding: 10
+
+              }}>
+              {getLabels()}
+            </Stack>
+          );
+        }
+      }
+
+      return (
+        <TooltipHost
+          tooltipProps={{
+            content: item.name
+          }}
+          id={getId()}
+          calloutProps={{ gapSpace: 0 }}
+          styles={{ root: { display: 'inline-block' } }}
+        >
+          {itemContent}
+        </TooltipHost>
+      );
+    }
+
+    function getLabels() {
+      return item.items.map((value: any, key: number) => (
+        <span key={key} style={{
+          padding: 6,
+          border: '1px solid ' + theme.palette.neutralPrimary
+        }} >
+          {value}
+        </span>
+      ));
+    }
+  }
 
   return (
     <section>
       <Label><FormattedMessage id='Query parameters' /></Label>
-      <GroupedList
+      <DetailsList
         items={items}
-        onRenderCell={onRenderCell}
-        groups={groups}
-        groupProps={{
-          showEmptyGroups: true
-        }}
+        columns={columns}
+        setKey='set'
+        onRenderItemColumn={renderItemColumn}
+        selectionMode={SelectionMode.none}
+        layoutMode={DetailsListLayoutMode.justified}
+        selectionPreservedOnEmptyClick={true}
+        ariaLabelForSelectionColumn='Toggle selection'
+        ariaLabelForSelectAllCheckbox='Toggle selection for all items'
+        checkButtonAriaLabel='select row'
       />
     </section>
   );

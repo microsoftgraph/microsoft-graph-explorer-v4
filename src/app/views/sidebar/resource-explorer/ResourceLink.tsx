@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { IQuery } from '../../../../types/query-runner';
-import { IResourceLink } from '../../../../types/resources';
+import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -100,17 +100,17 @@ const ResourceLink = (props: IResourceLinkProps) => {
     if (resourceLink.type === 'path') {
       menuItems.push(
         {
-          key: 'show-query-parameters',
+          key: ResourceOptions.SHOW_QUERY_PARAMETERS,
           text: translateMessage('Access query parameters'),
           itemType: ContextualMenuItemType.Normal,
-          onClick: () => props.resourceOptionSelected('show-query-parameters', resourceLink)
+          onClick: () => props.resourceOptionSelected(ResourceOptions.SHOW_QUERY_PARAMETERS, resourceLink)
         });
       menuItems.push(
         {
-          key: 'add-to-collection',
+          key: ResourceOptions.ADD_TO_COLLECTION,
           text: translateMessage('Add to collection'),
           itemType: ContextualMenuItemType.Normal,
-          onClick: () => props.resourceOptionSelected('add-to-collection', resourceLink)
+          onClick: () => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, resourceLink)
         });
     }
 

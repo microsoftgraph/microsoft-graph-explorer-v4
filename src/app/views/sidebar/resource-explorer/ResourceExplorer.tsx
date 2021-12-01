@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IResource, IResourceLink } from '../../../../types/resources';
+import { IResource, IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
 import { addResourcePaths } from '../../../services/actions/resource-explorer-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -21,7 +21,6 @@ import {
   getResourcesSupportedByVersion, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
-
 
 const unstyledResourceExplorer = (props: any) => {
   const dispatch = useDispatch();
@@ -159,7 +158,7 @@ const unstyledResourceExplorer = (props: any) => {
   }
 
   const resourceOptionSelected = (activity: string, context: any) => {
-    if (activity === 'add-to-collection') {
+    if (activity === ResourceOptions.ADD_TO_COLLECTION) {
       addToCollection(context);
     } else {
       const requestUrl = getUrlFromLink(context);

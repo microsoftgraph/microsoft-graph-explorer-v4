@@ -3,7 +3,9 @@ import thunk from 'redux-thunk';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
-import { addResourcePaths, fetchResourcesSuccess } from '../../../app/services/actions/resource-explorer-action-creators';
+import {
+  addResourcePaths, fetchResourcesSuccess
+} from '../../../app/services/actions/resource-explorer-action-creators';
 import {
   FETCH_RESOURCES_SUCCESS, RESOURCEPATHS_ADD_SUCCESS
 } from '../../../app/services/redux-constants';
@@ -13,7 +15,10 @@ const paths = [
     key: '5-{serviceHealth-id}-issues',
     url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues',
     name: 'issues (1)',
-    labels: [{ name: 'v1.0', methods: ['Get', 'Post'] }, { name: 'beta', methods: ['Get', 'Post'] }],
+    labels: [
+      { name: 'v1.0', methods: ['Get', 'Post'] },
+      { name: 'beta', methods: ['Get', 'Post'] }
+    ],
     isExpanded: true,
     parent: '{serviceHealth-id}',
     level: 5,
@@ -24,7 +29,10 @@ const paths = [
     key: '6-issues-{serviceHealthIssue-id}',
     url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues/{serviceHealthIssue-id}',
     name: '{serviceHealthIssue-id} (1)',
-    labels: [{ name: 'v1.0', methods: ['Get', 'Patch', 'Delete'] }, { name: 'beta', methods: ['Get', 'Patch', 'Delete'] }],
+    labels: [
+      { name: 'v1.0', methods: ['Get', 'Patch', 'Delete'] },
+      { name: 'beta', methods: ['Get', 'Patch', 'Delete'] }
+    ],
     isExpanded: true,
     parent: 'issues',
     level: 6,
