@@ -23,7 +23,13 @@ export function Auth(props: any) {
   const handleCopy = async () => {
     trackedGenericCopy(accessToken || '', componentNames.ACCESS_TOKEN_COPY_BUTTON);
     setCopied(true);
+    handleTimeout();
   };
+
+  const handleTimeout = () => {
+    const timer = setTimeout(() => { setCopied(false) }, 3000); // 3 seconds
+    return () => clearTimeout(timer);
+  }
 
   useEffect(() => {
     setLoading(true);

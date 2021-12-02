@@ -55,6 +55,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
     copy('share-query-text').then(() => toggleShareQueryDialogState());
     trackCopyEvent();
     setCopied(true);
+    handleTimeout();
   };
 
   const trackCopyEvent = () => {
@@ -64,6 +65,11 @@ const QueryResponse = (props: IQueryResponseProps) => {
         ComponentName: componentNames.SHARE_QUERY_COPY_BUTTON,
         QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
       });
+  }
+
+  const handleTimeout = () => {
+    const timer = setTimeout(() => { setCopied(false) }, 3000); // 3 seconds
+    return () => clearTimeout(timer);
   }
 
   const handlePivotItemClick = (pivotItem?: PivotItem) => {

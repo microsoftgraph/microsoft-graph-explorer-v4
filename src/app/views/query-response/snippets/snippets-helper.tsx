@@ -56,7 +56,14 @@ function Snippet(props: ISnippetProps) {
   const handleCopy = async () => {
     trackedGenericCopy(snippet, CODE_SNIPPETS_COPY_BUTTON, sampleQuery,{ Language: language });
     setCopied(true);
+    handleTimeout();
   }
+
+  const handleTimeout = () => {
+    const timer = setTimeout(() => { setCopied(false) }, 3000); // 3 seconds
+    return () => clearTimeout(timer);
+  }
+
   useEffect(() => {
     dispatch(getSnippet(language));
   }, [sampleQuery.sampleUrl]);
