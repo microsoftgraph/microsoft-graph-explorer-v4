@@ -429,5 +429,6 @@
   "Set Query": "Set Query",
   "Query parameters": "Query parameters",
   "Preview collection": "Preview collection",
-  "Download postman collection": "Download postman collection"
+  "Download postman collection": "Download postman collection",
+  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove"
 }

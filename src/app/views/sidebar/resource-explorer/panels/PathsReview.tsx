@@ -1,5 +1,5 @@
 import {
-  CommandBar, ICommandBarItemProps, Panel, PanelType, PrimaryButton
+  CommandBar, ICommandBarItemProps, Label, Panel, PanelType, PrimaryButton
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -97,6 +97,10 @@ const PathsReview = (props: IPathsReview) => {
         onRenderFooterContent={renderFooterContent}
         closeButtonAriaLabel='Close'
       >
+        <Label>
+          <FormattedMessage id='You can export the entire list as a Postman Collection.
+          If there are items in the list you would not want, select them to remove' />
+        </Label>
         <CommandBar
           items={options}
           ariaLabel='Selection actions'
