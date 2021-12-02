@@ -103,7 +103,10 @@ class AdaptiveCard extends Component<IAdaptiveCardProps, IAdaptiveCardState> {
       try {
         this.adaptiveCard!.parse(data.card);
         const renderedCard = this.adaptiveCard!.render();
-
+        const handleCopy = async () =>{ trackedGenericCopy(JSON.stringify(data.template, null, 4),
+          componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
+        this.setState({copied: true});
+        }
         return (
           <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
             <PivotItem
@@ -156,15 +159,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps, IAdaptiveCardState> {
                 iconProps={{
                   iconName: this.state.copied ? 'checkmark' : 'copy'
                 }}
-                onClick={async () =>
-                {
-                  trackedGenericCopy(
-                    JSON.stringify(data.template, null, 4),
-                    componentNames.JSON_SCHEMA_COPY_BUTTON,
-                    sampleQuery)
-                  this.setState({copied: true});
-                }
-                }
+                onClick={handleCopy}
               />
               <Monaco
                 language='json'
