@@ -155,9 +155,10 @@ class AdaptiveCard extends Component<IAdaptiveCardProps, IAdaptiveCardState> {
               <IconButton
                 toggle
                 className={classes.copyIcon}
-                ariaLabel={translateMessage('Copy')}
+                title={ !this.state.copied ? translateMessage('Copy') : translateMessage('Copied')}
+                ariaLabel={ !this.state.copied ? translateMessage('Copy') : translateMessage('Copied')}
                 iconProps={{
-                  iconName: this.state.copied ? 'checkmark' : 'copy'
+                  iconName: !this.state.copied ? 'copy' : 'checkmark'
                 }}
                 onClick={handleCopy}
               />
