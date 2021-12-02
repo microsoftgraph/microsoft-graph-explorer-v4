@@ -1,5 +1,8 @@
 import { IAction } from '../../../types/action';
-import { FETCH_RESOURCES_SUCCESS, FETCH_RESOURCES_PENDING, FETCH_RESOURCES_ERROR } from '../redux-constants';
+import {
+  FETCH_RESOURCES_SUCCESS, FETCH_RESOURCES_PENDING,
+  FETCH_RESOURCES_ERROR, RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
+} from '../redux-constants';
 import { IResource } from '../../../types/resources';
 import { IRootState } from '../../../types/root';
 import { IRequestOptions } from '../../../types/request';
@@ -20,6 +23,20 @@ export function fetchResourcesPending(): any {
 export function fetchResourcesError(response: object): IAction {
   return {
     type: FETCH_RESOURCES_ERROR,
+    response
+  };
+}
+
+export function addResourcePaths(response: object): IAction {
+  return {
+    type: RESOURCEPATHS_ADD_SUCCESS,
+    response
+  };
+}
+
+export function removeResourcePaths(response: object): IAction {
+  return {
+    type: RESOURCEPATHS_DELETE_SUCCESS,
     response
   };
 }
