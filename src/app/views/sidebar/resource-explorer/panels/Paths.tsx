@@ -51,7 +51,7 @@ export default class Paths extends Component<IPathProps> {
           calloutProps={{ gapSpace: 0 }}
           styles={{ root: { display: 'inline-block' } }}
         >
-          {itemContent}
+          {`${item.version}${itemContent}`}
         </TooltipHost>
       );
     }
