@@ -16,11 +16,11 @@ import { generatePostmanCollection } from './postman.util';
 
 export interface IPathsReview {
   isOpen: boolean;
-  items: IResourceLink[];
   version: string;
+  toggleSelectedResourcesPreview: Function;
 }
 
-const PathsReview = (props: any) => {
+const PathsReview = (props: IPathsReview) => {
   const dispatch = useDispatch();
   const { resources: { paths: items } } = useSelector(
     (state: IRootState) => state
@@ -92,7 +92,7 @@ const PathsReview = (props: any) => {
       <Panel
         headerText={`${headerText}`}
         isOpen={isOpen}
-        onDismiss={props.toggleSelectedResourcesPreview}
+        onDismiss={() => props.toggleSelectedResourcesPreview()}
         type={PanelType.large}
         onRenderFooterContent={renderFooterContent}
         closeButtonAriaLabel='Close'
