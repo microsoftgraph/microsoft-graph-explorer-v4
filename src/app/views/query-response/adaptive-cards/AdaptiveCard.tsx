@@ -16,12 +16,16 @@ import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 import { queryResponseStyles } from './../queryResponse.styles';
 
-class AdaptiveCard extends Component<IAdaptiveCardProps> {
+interface ICopyProps{
+  copied: boolean;
+}
+class AdaptiveCard extends Component<IAdaptiveCardProps, ICopyProps> {
   private adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null;
 
   constructor(props: IAdaptiveCardProps) {
     super(props);
     this.adaptiveCard = new AdaptiveCardsAPI.AdaptiveCard();
+    this.state = { copied: false };
   }
 
   public componentDidMount() {
@@ -34,7 +38,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     }
   }
 
-  public componentDidUpdate(nextProps: IAdaptiveCardProps) {
+  public componentDidUpdate(nextProps: any) {
     const { body, sampleQuery } = this.props;
     if (JSON.stringify(nextProps.body) !== JSON.stringify(body)) {
       // we need to update the card as our body has changed
@@ -47,13 +51,16 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     this.adaptiveCard = null;
   }
 
-  public shouldComponentUpdate(nextProps: IAdaptiveCardProps) {
+  public shouldComponentUpdate(nextProps: IAdaptiveCardProps, nextState: any) {
+
     if (JSON.stringify(this.props.body) !== JSON.stringify(nextProps.body)) {
       return true; // body has changed so card will too
     }
-    if (
-      JSON.stringify(nextProps.card.data) === JSON.stringify(this.props.card.data)
-    ) {
+    if(nextState.copied === true){
+      this.setState({ copied: false });
+      return true;
+    }
+    if (JSON.stringify(nextProps.card.data) === JSON.stringify(this.props.card.data) ) {
       return false; // card still the same no need to re-render
     }
     return true;
@@ -147,13 +154,17 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               <IconButton className={classes.copyIcon}
                 ariaLabel={translateMessage('Copy')}
                 iconProps={{
-                  iconName: 'copy'
+                  iconName: this.state.copied ? 'checkmark' : 'copy'
                 }}
                 onClick={async () =>
+                {
                   trackedGenericCopy(
                     JSON.stringify(data.template, null, 4),
                     componentNames.JSON_SCHEMA_COPY_BUTTON,
-                    sampleQuery)}
+                    sampleQuery)
+                  this.setState({copied: true});
+                }
+                }
               />
               <Monaco
                 language='json'
@@ -163,7 +174,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             </PivotItem>
           </Pivot>
         );
-      } catch (err) {
+      } catch (err : any) {
         return <div style={{ color: 'red' }}>{err.message}</div>;
       }
     }
