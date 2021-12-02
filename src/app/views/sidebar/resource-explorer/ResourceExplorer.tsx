@@ -5,26 +5,30 @@ import {
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { IResource } from '../../../../types/resources';
+import { IResource, IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
+import { addResourcePaths } from '../../../services/actions/resource-explorer-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import QueryParameters from './QueryParameters';
+import CommandOptions from './CommandOptions';
+import QueryParameters from './panels/QueryParameters';
 import {
   createList, getCurrentTree,
+  getResourcePaths,
   getResourcesSupportedByVersion, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 
 const unstyledResourceExplorer = (props: any) => {
+  const dispatch = useDispatch();
   const { resources } = useSelector(
     (state: IRootState) => state
   );
   const classes = classNames(props);
-  const { data, pending } = resources;
+  const { data, pending, paths: selectedLinks } = resources;
 
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
@@ -69,6 +73,10 @@ const unstyledResourceExplorer = (props: any) => {
       return breadcrumbItems;
     }
     return [];
+  }
+
+  const addToCollection = (item: IResourceLink) => {
+    dispatch(addResourcePaths(getResourcePaths(item, version)));
   }
 
   const changeVersion = (ev: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
@@ -145,8 +153,14 @@ const unstyledResourceExplorer = (props: any) => {
     setPanelContext(null);
   }
 
-  const openPanel = (activity: string, context: any) => {
-    if (activity) {
+  const clickLink = (ev?: React.MouseEvent<HTMLElement>) => {
+    ev!.preventDefault();
+  }
+
+  const resourceOptionSelected = (activity: string, context: any) => {
+    if (activity === ResourceOptions.ADD_TO_COLLECTION) {
+      addToCollection(context);
+    } else {
       const requestUrl = getUrlFromLink(context);
       setPanelIsOpen(true);
       setPanelContext({
@@ -157,7 +171,7 @@ const unstyledResourceExplorer = (props: any) => {
     }
   }
 
-  const breadCrumbs = (!!isolated) ? generateBreadCrumbs() : [];
+  const breadCrumbs = generateBreadCrumbs();
 
   if (pending) {
     return (
@@ -191,7 +205,14 @@ const unstyledResourceExplorer = (props: any) => {
         </Stack>
       </>}
 
-      {isolated && breadCrumbs.length > 0 &&
+      {selectedLinks && selectedLinks.length > 0 && <>
+        <Label><FormattedMessage id='Selected Resources' /> ({selectedLinks.length})</Label>
+        <CommandOptions version={version} />
+      </>
+      }
+
+      {
+        isolated && breadCrumbs.length > 0 &&
         <>
           <DefaultButton
             text={translateMessage('Close isolation')}
@@ -205,7 +226,8 @@ const unstyledResourceExplorer = (props: any) => {
             ariaLabel={translateMessage('Path display')}
             overflowAriaLabel={translateMessage('More path links')}
           />
-        </>}
+        </>
+      }
 
       <Label>
         <FormattedMessage id='Resources available' />
@@ -218,16 +240,16 @@ const unstyledResourceExplorer = (props: any) => {
             link={link}
             isolateTree={isolateTree}
             version={version}
-            openPanel={(activity: string, context: any) => openPanel(activity, context)}
+            resourceOptionSelected={(activity: string, context: unknown) => resourceOptionSelected(activity, context)}
           />
         }}
-        onLinkClick={(event: any) => { event.preventDefault() }}
+        onLinkClick={clickLink}
         className={classes.queryList} />
 
       <Panel
         isOpen={panelIsOpen}
         onDismiss={dismissPanel}
-        closeButtonAriaLabel="Close"
+        closeButtonAriaLabel='Close'
         headerText={panelHeaderText}
         type={PanelType.medium}
       >
@@ -236,7 +258,7 @@ const unstyledResourceExplorer = (props: any) => {
           version={version}
         />}
       </Panel>
-    </section>
+    </section >
   );
 }
 

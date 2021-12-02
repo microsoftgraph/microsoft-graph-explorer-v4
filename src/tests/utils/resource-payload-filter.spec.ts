@@ -1,7 +1,8 @@
 import content from '../../app/utils/resources/resources.json';
 import {
   createList, getAvailableMethods,
-  getCurrentTree, getResourcesSupportedByVersion,
+  getCurrentTree, getResourcePaths,
+  getResourcesSupportedByVersion,
   getUrlFromLink, removeCounter
 } from '../../app/views/sidebar/resource-explorer/resource-explorer.utils';
 import { IResource } from '../../types/resources';
@@ -51,8 +52,17 @@ describe('Resource payload should', () => {
     const paths = ['/', 'appCatalogs', 'teamsApps'];
     const level = 2;
     const currentTree = getCurrentTree({ paths, level, resourceItems: resource.children, version });
-    const withoutCounter = getUrlFromLink(currentTree.links[0]);
+    const link = currentTree.links[0];
+    const withoutCounter = getUrlFromLink(link);
     expect(withoutCounter).toBe('/appCatalogs/teamsApps/{teamsApp-id}');
+  });
+
+  it('return a flattened list of links', async () => {
+    const version = 'v1.0';
+    const filtered = createList(resource.children, version)[0];
+    const item: any = filtered.links[0];
+    const paths = getResourcePaths(item, version);
+    expect(paths.length).toBe(10);
   });
 
 });
