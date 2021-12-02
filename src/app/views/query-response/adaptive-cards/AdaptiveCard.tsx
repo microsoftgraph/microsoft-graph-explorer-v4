@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { componentNames, telemetry } from '../../../../telemetry';
-import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
+import { IAdaptiveCardProps, IAdaptiveCardState } from '../../../../types/adaptivecard';
 import { IQuery } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
@@ -16,12 +16,13 @@ import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 import { queryResponseStyles } from './../queryResponse.styles';
 
-class AdaptiveCard extends Component<IAdaptiveCardProps> {
+class AdaptiveCard extends Component<IAdaptiveCardProps, IAdaptiveCardState> {
   private adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null;
 
   constructor(props: IAdaptiveCardProps) {
     super(props);
     this.adaptiveCard = new AdaptiveCardsAPI.AdaptiveCard();
+    this.state = {copied: false};
   }
 
   public componentDidMount() {
@@ -39,6 +40,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     if (JSON.stringify(nextProps.body) !== JSON.stringify(body)) {
       // we need to update the card as our body has changed
       this.props.actions!.getAdaptiveCard(body, sampleQuery);
+      this.setState({copied: false});
     }
   }
 
@@ -58,11 +60,17 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     }
     return true;
   }
+  handleCopy = (data: any, sampleQuery: any) => {trackedGenericCopy(JSON.stringify(data.template, null, 4),
+    componentNames.JSON_SCHEMA_COPY_BUTTON,sampleQuery);
+  this.setState({copied:true});
+  console.log(this.state.copied);
+  }
 
   public render() {
     const { data, pending } = this.props.card;
     const { body, queryStatus, sampleQuery } = this.props;
     const classes = classNames(this.props);
+    const { copied } = this.state;
 
     if (!body) {
       return <div />;
@@ -99,6 +107,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
       try {
         this.adaptiveCard!.parse(data.card);
         const renderedCard = this.adaptiveCard!.render();
+
         return (
           <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
             <PivotItem
@@ -144,16 +153,12 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                   <FormattedMessage id='Adaptive Cards designer' />
                 </a>
               </MessageBar>
-              <IconButton className={classes.copyIcon}
+              <IconButton
+                toggle
+                className={classes.copyIcon}
                 ariaLabel={translateMessage('Copy')}
-                iconProps={{
-                  iconName: 'copy'
-                }}
-                onClick={async () =>
-                  trackedGenericCopy(
-                    JSON.stringify(data.template, null, 4),
-                    componentNames.JSON_SCHEMA_COPY_BUTTON,
-                    sampleQuery)}
+                iconProps={{ iconName: !copied ? 'copy' : 'checkMark'}}
+                onClick={(e: any) => this.handleCopy(data.template, sampleQuery)}
               />
               <Monaco
                 language='json'
@@ -163,7 +168,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             </PivotItem>
           </Pivot>
         );
-      } catch (err) {
+      } catch (err: any) {
         return <div style={{ color: 'red' }}>{err.message}</div>;
       }
     }
