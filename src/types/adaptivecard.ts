@@ -28,3 +28,7 @@ export interface IAdaptiveCardResponse {
   data?: IAdaptiveCardContent;
   error?: string;
 }
+
+export interface IAdaptiveCardState {
+  copied: boolean;
+}

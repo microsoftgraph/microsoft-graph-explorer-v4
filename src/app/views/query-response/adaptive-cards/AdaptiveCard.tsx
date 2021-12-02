@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { componentNames, telemetry } from '../../../../telemetry';
-import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
+import { IAdaptiveCardProps, IAdaptiveCardState } from '../../../../types/adaptivecard';
 import { IQuery } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
@@ -16,10 +16,7 @@ import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 import { queryResponseStyles } from './../queryResponse.styles';
 
-interface ICopyProps{
-  copied: boolean;
-}
-class AdaptiveCard extends Component<IAdaptiveCardProps, ICopyProps> {
+class AdaptiveCard extends Component<IAdaptiveCardProps, IAdaptiveCardState> {
   private adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null;
 
   constructor(props: IAdaptiveCardProps) {
@@ -106,6 +103,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps, ICopyProps> {
       try {
         this.adaptiveCard!.parse(data.card);
         const renderedCard = this.adaptiveCard!.render();
+
         return (
           <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
             <PivotItem
@@ -151,7 +149,9 @@ class AdaptiveCard extends Component<IAdaptiveCardProps, ICopyProps> {
                   <FormattedMessage id='Adaptive Cards designer' />
                 </a>
               </MessageBar>
-              <IconButton className={classes.copyIcon}
+              <IconButton
+                toggle
+                className={classes.copyIcon}
                 ariaLabel={translateMessage('Copy')}
                 iconProps={{
                   iconName: this.state.copied ? 'checkmark' : 'copy'
