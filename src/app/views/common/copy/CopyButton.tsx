@@ -1,4 +1,4 @@
-import { IconButton, IIconProps } from '@fluentui/react';
+import { IconButton, IIconProps, PrimaryButton } from '@fluentui/react';
 import React, { useState } from 'react';
 import { translateMessage } from '../../../utils/translate-messages';
 
@@ -6,6 +6,7 @@ interface ICopyButtonProps {
   style?: any;
   handleOnClick: Function;
   className?: any;
+  isIconButton: boolean;
 }
 
 export function CopyButton(props:ICopyButtonProps) {
@@ -29,14 +30,20 @@ export function CopyButton(props:ICopyButtonProps) {
   }
 
   return (
-    <IconButton
-      toggle
-      onClick={handleCopyClick}
-      iconProps={copyIcon}
-      title={copyLabel}
-      ariaLabel={copyLabel}
-      style={props.style}
-      className={props.className}
-    />
+    <>
+      {props.isIconButton ?
+        <IconButton
+          toggle
+          onClick={handleCopyClick}
+          iconProps={copyIcon}
+          title={copyLabel}
+          ariaLabel={copyLabel}
+          style={props.style}
+          className={props.className}
+        />
+        :
+        <PrimaryButton onClick={handleCopyClick} text={copyLabel}/>
+      }
+    </>
   )
 }

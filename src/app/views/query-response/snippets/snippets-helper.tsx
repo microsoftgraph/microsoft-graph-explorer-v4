@@ -65,7 +65,7 @@ function Snippet(props: ISnippetProps) {
       }
       {!loadingState && snippet &&
         <>
-          <CopyButton style={{ float: 'right', zIndex: 1 }} handleOnClick={handleCopy} />
+          <CopyButton isIconButton={true} style={{ float: 'right', zIndex: 1 }} handleOnClick={handleCopy} />
           <Monaco
             body={snippet}
             language={language}

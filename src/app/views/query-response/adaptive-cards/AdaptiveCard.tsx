@@ -150,6 +150,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               <CopyButton
                 className={classes.copyIcon}
                 handleOnClick={handleCopy}
+                isIconButton={true}
               />
               <Monaco
                 language='json'

@@ -51,7 +51,7 @@ export function Auth(props: any) {
       <div>
         <div className={classes.accessTokenContainer}>
           <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
-          <CopyButton handleOnClick={handleCopy} />
+          <CopyButton isIconButton={true} handleOnClick={handleCopy} />
           <IconButton iconProps={tokenDetailsIcon}
             title={translateMessage('Get token details (Powered by jwt.ms)')}
             ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
