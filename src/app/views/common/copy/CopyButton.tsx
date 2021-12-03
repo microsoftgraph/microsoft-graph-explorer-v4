@@ -15,6 +15,8 @@ export function CopyButton(props:ICopyButtonProps) {
     iconName: !copied ? 'Copy' : 'CheckMark'
   };
 
+  const copyLabel: string = !copied ? translateMessage('Copy') : translateMessage('Copied');
+
   const handleCopyClick = async () => {
     props.handleOnClick(props);
     setCopied(true);
@@ -30,9 +32,9 @@ export function CopyButton(props:ICopyButtonProps) {
     <IconButton
       toggle
       onClick={handleCopyClick}
-      iconProps={copyIcon }
-      title={ !copied ? translateMessage('Copy') : translateMessage('Copied')}
-      ariaLabel={ !copied ? translateMessage('Copy') : translateMessage('Copied')}
+      iconProps={copyIcon}
+      title={copyLabel}
+      ariaLabel={copyLabel}
       style={props.style}
       className={props.className}
     />
