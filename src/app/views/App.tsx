@@ -334,12 +334,9 @@ class App extends Component<IAppProps, IAppState> {
     const { showCloudDialog } = this.state;
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
-      actions, sidebarProperties, intl: { messages } }: any = this.props;
+      actions, sidebarProperties }: any = this.props;
 
     const query = createShareLink(sampleQuery, authenticated);
-    const sampleHeaderText = messages['Sample Queries'];
-    // tslint:disable-next-line:no-string-literal
-    const historyHeaderText = messages.History;
     const { mobileScreen, showSidebar } = sidebarProperties;
 
     let displayContent = true;
@@ -402,9 +399,7 @@ class App extends Component<IAppProps, IAppState> {
                 <hr className={classes.separator} />
 
                 {showSidebar && (
-                  <>
-                    <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
-                  </>
+                  <Sidebar />
                 )}
               </div>
             )}

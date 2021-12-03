@@ -37,6 +37,7 @@ import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
 import { changeTheme } from './app/services/actions/theme-action-creator';
+import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
 
 // removes the loading spinner from GE html after the app is loaded
 const spinner = document.getElementById('spinner');
@@ -144,6 +145,11 @@ readHistoryData().then((data: any) => {
     });
   }
 });
+
+function loadResources() {
+  appStore.dispatch(fetchResources());
+}
+loadResources();
 
 /**
  * Set's up Monaco Editor's Workers.

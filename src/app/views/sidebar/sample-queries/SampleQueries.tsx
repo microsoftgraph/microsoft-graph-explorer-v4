@@ -23,7 +23,7 @@ import * as queryInputActionCreators from '../../../services/actions/query-input
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
-import { getStyleFor } from '../../../utils/badge-color';
+import { getStyleFor } from '../../../utils/http-methods.utils';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';

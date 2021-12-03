@@ -4,6 +4,7 @@ import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
+import { setStatusMessage } from '../../utils/status-message';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
 import {
   anonymousRequest,
@@ -95,7 +96,7 @@ export function runQuery(query: IQuery): Function {
 
     if (response) {
       status.status = response.status;
-      status.statusText = response.statusText;
+      status.statusText = response.statusText === '' ? setStatusMessage(response.status) : response.statusText;
     }
 
     if (response && response.ok) {
