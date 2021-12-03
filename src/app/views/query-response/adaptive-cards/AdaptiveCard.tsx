@@ -1,12 +1,12 @@
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { IconButton, Label, MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
+import { Label, MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { componentNames, telemetry } from '../../../../telemetry';
-import { IAdaptiveCardProps, IAdaptiveCardState } from '../../../../types/adaptivecard';
+import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { IQuery } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
@@ -15,14 +15,14 @@ import { classNames } from '../../classnames';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 import { queryResponseStyles } from './../queryResponse.styles';
+import { CopyButton } from '../../common/copy/CopyButton';
 
-class AdaptiveCard extends Component<IAdaptiveCardProps, IAdaptiveCardState> {
+class AdaptiveCard extends Component<IAdaptiveCardProps> {
   private adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null;
 
   constructor(props: IAdaptiveCardProps) {
     super(props);
     this.adaptiveCard = new AdaptiveCardsAPI.AdaptiveCard();
-    this.state = { copied: false };
   }
 
   public componentDidMount() {
@@ -48,14 +48,10 @@ class AdaptiveCard extends Component<IAdaptiveCardProps, IAdaptiveCardState> {
     this.adaptiveCard = null;
   }
 
-  public shouldComponentUpdate(nextProps: IAdaptiveCardProps, nextState: any) {
+  public shouldComponentUpdate(nextProps: IAdaptiveCardProps) {
 
     if (JSON.stringify(this.props.body) !== JSON.stringify(nextProps.body)) {
       return true; // body has changed so card will too
-    }
-    if(nextState.copied === true){
-      this.setState({ copied: false });
-      return true;
     }
     if (JSON.stringify(nextProps.card.data) === JSON.stringify(this.props.card.data) ) {
       return false; // card still the same no need to re-render
@@ -105,7 +101,6 @@ class AdaptiveCard extends Component<IAdaptiveCardProps, IAdaptiveCardState> {
         const renderedCard = this.adaptiveCard!.render();
         const handleCopy = async () =>{ trackedGenericCopy(JSON.stringify(data.template, null, 4),
           componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
-        this.setState({copied: true});
         }
         return (
           <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
@@ -152,15 +147,9 @@ class AdaptiveCard extends Component<IAdaptiveCardProps, IAdaptiveCardState> {
                   <FormattedMessage id='Adaptive Cards designer' />
                 </a>
               </MessageBar>
-              <IconButton
-                toggle
+              <CopyButton
                 className={classes.copyIcon}
-                title={ !this.state.copied ? translateMessage('Copy') : translateMessage('Copied')}
-                ariaLabel={ !this.state.copied ? translateMessage('Copy') : translateMessage('Copied')}
-                iconProps={{
-                  iconName: !this.state.copied ? 'copy' : 'checkmark'
-                }}
-                onClick={handleCopy}
+                handleOnClick={handleCopy}
               />
               <Monaco
                 language='json'

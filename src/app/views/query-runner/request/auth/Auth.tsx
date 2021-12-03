@@ -10,6 +10,7 @@ import { IRootState } from '../../../../../types/root';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { trackedGenericCopy } from '../../../common/copy';
+import { CopyButton } from '../../../common/copy/CopyButton';
 import { convertVhToPx } from '../../../common/dimensions-adjustment';
 import { authStyles } from './Auth.styles';
 
@@ -18,18 +19,10 @@ export function Auth(props: any) {
   const requestHeight = convertVhToPx(height, 60);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     trackedGenericCopy(accessToken || '', componentNames.ACCESS_TOKEN_COPY_BUTTON);
-    setCopied(true);
-    handleTimeout();
   };
-
-  const handleTimeout = () => {
-    const timer = setTimeout(() => { setCopied(false) }, 3000); // 3 seconds
-    return () => clearTimeout(timer);
-  }
 
   useEffect(() => {
     setLoading(true);
@@ -42,9 +35,6 @@ export function Auth(props: any) {
   }, []);
 
   const classes = classNames(props);
-  const copyIcon: IIconProps = {
-    iconName: !copied ? 'Copy' : 'CheckMark'
-  };
 
   const tokenDetailsIcon: IIconProps = {
     iconName: 'code'
@@ -61,13 +51,7 @@ export function Auth(props: any) {
       <div>
         <div className={classes.accessTokenContainer}>
           <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
-          <IconButton
-            toggle
-            onClick={handleCopy}
-            iconProps={copyIcon }
-            title={ !copied ? translateMessage('Copy') : translateMessage('Copied')}
-            ariaLabel={ !copied ? translateMessage('Copy') : translateMessage('Copied')}
-          />
+          <CopyButton handleOnClick={handleCopy} />
           <IconButton iconProps={tokenDetailsIcon}
             title={translateMessage('Get token details (Powered by jwt.ms)')}
             ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
