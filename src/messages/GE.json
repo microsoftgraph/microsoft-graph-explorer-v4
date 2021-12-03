@@ -395,6 +395,7 @@
   "Path display": "Path display",
   "More path links": "More path links",
   "Resources available": "Resources available",
+  "Selected Resources": "Selected Resources",
   "Methods available": "Methods available",
   "Access query parameters": "Access query parameters",
   "A documentation link for this URL exists. Click learn more to access it": "A documentation link for this URL exists. Click learn more to access it",
@@ -427,5 +428,8 @@
   "Show methods": "Show methods",
   "Set Query": "Set Query",
   "Query parameters": "Query parameters",
+  "Preview collection": "Preview collection",
+  "Download postman collection": "Download postman collection",
+  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove",
   "Copied": "Copied"
 }

@@ -1,5 +1,9 @@
 import { INavLink, INavLinkGroup } from '@fluentui/react';
-import { IResource, IResourceLabel } from '../../../../types/resources';
+
+import {
+  IResource, IResourceLabel,
+  IResourceLink, IResourceMethod
+} from '../../../../types/resources';
 
 interface ITreeFilter {
   paths: string[];
@@ -22,7 +26,7 @@ export function createList(source: IResource[], version: string): INavLinkGroup[
     return icon;
   }
 
-  function createNavLink(info: IResource, parent: string | null = null, paths: string[] = []): INavLink {
+  function createNavLink(info: IResource, parent: string, paths: string[] = []): IResourceLink {
     const { segment, children, labels } = info;
     const level = paths.length;
     const versionedChildren = (children) ? children.filter(child => versionExists(child, version)) : [];
@@ -47,11 +51,11 @@ export function createList(source: IResource[], version: string): INavLinkGroup[
     segment: '/',
     labels: [],
     children: source
-  });
+  }, '');
 
   return [
     {
-      links: navLink.links!
+      links: navLink.links
     }
   ];
 }
@@ -98,7 +102,7 @@ export function getAvailableMethods(labels: IResourceLabel[], version: string): 
   return (current) ? current.methods : [];
 }
 
-export function getUrlFromLink(link: INavLink) {
+export function getUrlFromLink(link: IResourceLink | INavLink): string {
   const { paths } = link;
   let url = '/';
   if (paths.length > 1) {
@@ -108,4 +112,37 @@ export function getUrlFromLink(link: INavLink) {
   }
   url += removeCounter(link.name);
   return url;
+}
+
+export function getResourcePaths(item: IResourceLink, version: string): IResourceLink[] {
+  const { links } = item;
+  const content: IResourceLink[] = flatten(links).filter((k: IResourceLink) => k.type === 'path');
+  content.unshift(item);
+  if (content.length > 0) {
+    content.forEach((element: IResourceLink) => {
+      const methods = element.labels.find((k: IResourceLabel) => k.name === version)?.methods || [];
+      const listOfMethods: IResourceMethod[] = [];
+      methods.forEach((method: string) => {
+        listOfMethods.push({
+          name: method.toUpperCase(),
+          checked: true
+        });
+      });
+      element.version = version;
+      element.url = `${getUrlFromLink(element)}`;
+      element.methods = listOfMethods;
+    });
+  }
+  return content;
+}
+
+function flatten(content: IResourceLink[]): IResourceLink[] {
+  let result: any[] = [];
+  content.forEach(function (item: IResourceLink) {
+    result.push(item);
+    if (Array.isArray(item.links)) {
+      result = result.concat(flatten(item.links));
+    }
+  });
+  return result;
 }

@@ -1,25 +1,26 @@
 import {
   ContextualMenuItemType, getId, Icon, IconButton,
-  IContextualMenuItem, INavLink, mergeStyleSets, TooltipHost
+  IContextualMenuItem, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { IQuery } from '../../../../types/query-runner';
+import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { getAvailableMethods, getUrlFromLink, removeCounter } from './resource-explorer.utils';
 
-interface IResourceLink {
+interface IResourceLinkProps {
   link: any;
   isolateTree: Function;
-  openPanel: Function;
+  resourceOptionSelected: Function;
   version: string;
 }
 
-const ResourceLink = (props: IResourceLink) => {
+const ResourceLink = (props: IResourceLinkProps) => {
   const dispatch = useDispatch();
   const { link: resourceLink, version } = props;
 
@@ -31,7 +32,7 @@ const ResourceLink = (props: IResourceLink) => {
     menuIcon: { fontSize: 20, padding: 10 }
   };
 
-  const setQuery = (link: INavLink, selectedVerb: string) => {
+  const setQuery = (link: IResourceLink, selectedVerb: string) => {
     const sampleUrl = `${GRAPH_URL}/${version}${getUrlFromLink(link)}`;
     const query: IQuery = {
       selectedVerb,
@@ -99,10 +100,17 @@ const ResourceLink = (props: IResourceLink) => {
     if (resourceLink.type === 'path') {
       menuItems.push(
         {
-          key: 'show-query-parameters',
+          key: ResourceOptions.SHOW_QUERY_PARAMETERS,
           text: translateMessage('Access query parameters'),
           itemType: ContextualMenuItemType.Normal,
-          onClick: () => props.openPanel('show-query-parameters', resourceLink)
+          onClick: () => props.resourceOptionSelected(ResourceOptions.SHOW_QUERY_PARAMETERS, resourceLink)
+        });
+      menuItems.push(
+        {
+          key: ResourceOptions.ADD_TO_COLLECTION,
+          text: translateMessage('Add to collection'),
+          itemType: ContextualMenuItemType.Normal,
+          onClick: () => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, resourceLink)
         });
     }
 
