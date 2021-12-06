@@ -1,7 +1,5 @@
-import { ITheme } from '@fluentui/react';
-
+import { ITheme, IDropdownOption } from '@fluentui/react';
 import { ICloud } from './cloud';
-import { IDropdownOption, ITheme } from '@fluentui/react';
 import { Mode } from './enums';
 
 export interface IQueryRunnerState {
