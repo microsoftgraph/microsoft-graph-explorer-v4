@@ -35,7 +35,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     }
   }
 
-  public componentDidUpdate(nextProps: IAdaptiveCardProps)
+  public componentDidUpdate(nextProps: IAdaptiveCardProps) {
     const { body, sampleQuery } = this.props;
     if (JSON.stringify(nextProps.body) !== JSON.stringify(body)) {
       // we need to update the card as our body has changed
