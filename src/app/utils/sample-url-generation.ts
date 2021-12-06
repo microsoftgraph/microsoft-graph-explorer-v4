@@ -17,7 +17,7 @@ export function parseSampleUrl(url: string, version?: string): IParsedSample {
       requestUrl = getRequestUrl(url, queryVersion);
       search = generateSearchParameters(url, search);
       sampleUrl = generateSampleUrl(url, queryVersion, requestUrl, search);
-    } catch (error) {
+    } catch (error: any) {
       if (error.message === 'Failed to construct \'URL\': Invalid URL') {
         return {
           queryVersion, requestUrl, sampleUrl, search
@@ -35,7 +35,7 @@ function getRequestUrl(url: string, version: string): string {
   const { pathname } = new URL(url);
   const versionToReplace = (pathname.startsWith(`/${version}`)) ? version : getGraphVersion(url);
   const requestContent = pathname.split(versionToReplace + '/').pop()!;
-  return decodeURIComponent(requestContent!.replace(/\/$/, ''));
+  return decodeURIComponent(requestContent?.replace(/\/$/, ''));
 }
 
 function getGraphVersion(url: string): string {
@@ -50,7 +50,7 @@ function generateSearchParameters(url: string, search: string) {
     try {
       search = decodeURI(searchParameters);
     }
-    catch (error) {
+    catch (error: any) {
       if (error.message === 'URI malformed') {
         search = searchParameters;
       }

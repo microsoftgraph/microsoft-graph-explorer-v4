@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
-import { useRef } from 'react';
-
+import { useRef, useEffect } from 'react';
 /**
  * Keeps track of the previous value of the item passed to it before a re-render
  *

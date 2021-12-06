@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
-import { globalCloud, replaceBaseUrl } from '../../../../modules/sovereign-clouds';
 import { Mode } from '../../../../types/enums';
 import { IRootState } from '../../../../types/root';
 import { getPolicies } from '../../../services/actions/ocps-action-creators';

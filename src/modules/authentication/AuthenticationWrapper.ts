@@ -8,7 +8,6 @@ import {
 
 import { getCurrentCloud, globalCloud } from '../sovereign-clouds';
 import {
-  AUTH_URL,
   DEFAULT_USER_SCOPES,
   HOME_ACCOUNT_KEY
 } from '../../app/services/graph-constants';
