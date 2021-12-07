@@ -1,13 +1,7 @@
 name: Lint and Build
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - master
-      - dev
-  pull_request:
-    types: [opened, synchronize, reopened]
+  push
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
