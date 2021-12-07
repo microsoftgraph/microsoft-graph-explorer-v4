@@ -55,3 +55,11 @@ export const AUTHENTICATION_ACTION = 'Authentication action';
 export const GET_ADAPTIVE_CARD_ACTION = 'Get adaptive card action';
 export const FETCH_PERMISSIONS_ACTION = 'Fetch permissions action';
 export const MONACO_EDITOR = 'Monaco editor display';
+export const ADD_RESOURCE_TO_COLLECTION = 'Add resource to collection action';
+export const REMOVE_RESOURCE_FROM_COLLECTION = 'Remove resource from collection action';
+export const SET_QUERY_ACTION = 'Resources set query action';
+export const ISOLATE_QUERY_ACTION = 'Resources isolate query action';
+export const DOWNLOAD_ACTION = 'Content download action';
+
+// Panels
+export const DISPLAY_QUERY_PARAMETERS_PANEL = 'Resources display query parameters panel';

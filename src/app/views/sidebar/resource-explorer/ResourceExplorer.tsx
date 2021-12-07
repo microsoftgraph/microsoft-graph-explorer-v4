@@ -6,6 +6,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import { telemetry, eventTypes, componentNames } from '../../../../telemetry';
 
 import { IResource, IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
@@ -139,6 +140,11 @@ const unstyledResourceExplorer = (props: any) => {
     ];
     setItems(tree);
     setIsolated(navLink);
+    telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
+      {
+        ComponentName: componentNames.ISOLATE_QUERY_ACTION,
+        tree
+      });
   }
 
   const disableIsolation = (): void => {
@@ -168,6 +174,11 @@ const unstyledResourceExplorer = (props: any) => {
         context
       });
       setPanelHeaderText(`${requestUrl}`);
+      telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
+        {
+          ComponentName: componentNames.DISPLAY_QUERY_PARAMETERS_PANEL,
+          requestUrl
+        });
     }
   }
 
