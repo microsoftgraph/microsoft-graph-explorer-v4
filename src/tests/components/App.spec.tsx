@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, render, fireEvent } from '@testing-library/react';
 import App from '../../app/views/App';
 import { Mode } from '../../types/enums';
 import { IntlProvider } from 'react-intl';
@@ -80,9 +80,27 @@ jest.mock('@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptio
   AuthenticationType: 0
 }))
 
-describe('It should mount the main app', () => {
-  it('Should render the main app component', () => {
+describe('It should render the main GE site', () => {
+  it('Should confirm that all the major sections are rendered', () => {
     const { getByText } = renderApp();
     getByText('Run query');
+    getByText('Sign in to Graph Explorer');
+    getByText('Request body');
+    getByText('Request headers');
+    getByText('Modify permissions (Preview)');
+    getByText('Access token');
+    getByText('Got feedback?');
+    getByText('Response preview');
+    getByText('Response headers');
+    getByText('Code snippets');
+    getByText('Toolkit component');
+    getByText('Adaptive cards');
+    getByText('Expand');
+    getByText('Share');
+    getByText('Authentication');
+    getByText('Sample queries');
+    getByText('History');
   })
+
+  //fire events e.g runquery
 })

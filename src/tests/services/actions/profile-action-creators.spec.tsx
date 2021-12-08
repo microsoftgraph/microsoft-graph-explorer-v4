@@ -3,10 +3,7 @@ import thunk from 'redux-thunk';
 
 import { getProfileInfo, profileRequestSuccess } from '../../../app/services/actions/profile-action-creators';
 import {
-  PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS,
-  QUERY_GRAPH_RUNNING
-} from '../../../app/services/redux-constants';
-
+  PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS} from '../../../app/services/redux-constants';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 

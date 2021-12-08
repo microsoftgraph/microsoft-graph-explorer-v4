@@ -87,9 +87,9 @@ export function getPolicy(response: any): IPolicyValues {
   return values;
 }
 
-function getPolicyUrl():string {
+function getPolicyUrl(): string {
   const { NODE_ENV } = process.env;
-  if(NODE_ENV === 'development'){
+  if (NODE_ENV === 'development') {
     return 'https://sip.clients.config.office.net/user/v1.0/web/policies';
   } else {
     return 'https://clients.config.office.net/user/v1.0/web/policies';

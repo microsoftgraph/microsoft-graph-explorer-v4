@@ -56,7 +56,7 @@ export function getProfileInfo(): Function {
     dispatch(queryRunningStatus(true));
     try {
       const profile: IUser = await getProfileInformation();
-      const {profileType, ageGroup} = await getBetaProfile();
+      const { profileType, ageGroup } = await getBetaProfile();
       profile.profileType = profileType;
       profile.ageGroup = ageGroup;
       profile.profileImageUrl = await getProfileImage();
@@ -90,11 +90,11 @@ async function getBetaProfile(): Promise<IBetaProfile> {
   try {
     query.sampleUrl = BETA_USER_INFO_URL;
     const { userInfo } = await getProfileResponse();
-    const ageGroup =  getAgeGroup(userInfo);
+    const ageGroup = getAgeGroup(userInfo);
     const profileType = getProfileType(userInfo);
-    return {ageGroup, profileType};
+    return { ageGroup, profileType };
   } catch (error) {
-    return {ageGroup: 0, profileType: ACCOUNT_TYPE.MSA};
+    return { ageGroup: 0, profileType: ACCOUNT_TYPE.MSA };
   }
 }
 
@@ -110,7 +110,7 @@ function getAgeGroup(userInfo: any): AgeGroup {
     return 0;
   }
 }
-function getProfileType(userInfo: any): ACCOUNT_TYPE {
+export function getProfileType(userInfo: any): ACCOUNT_TYPE {
   const profileType: ACCOUNT_TYPE = userInfo?.account?.[0]?.source?.type?.[0];
   if (profileType === undefined) {
     return ACCOUNT_TYPE.UNDEFINED;

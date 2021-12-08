@@ -62,7 +62,7 @@ export function getAdaptiveCard(
         template: templatePayload
       };
       return dispatch(getAdaptiveCardSuccess(adaptiveCardContent));
-    } catch (error) {
+    } catch (error: any) {
       // something wrong happened
       return dispatch(getAdaptiveCardError(error));
     }
