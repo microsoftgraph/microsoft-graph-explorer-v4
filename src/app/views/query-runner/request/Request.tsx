@@ -180,7 +180,7 @@ export class Request extends Component<IRequestComponent, any> {
     const requestPivotItems = this.getPivotItems(dimensions.request.height);
     const { selectedPivot } = this.state;
     const pivot = selectedPivot.replace('.$', '');
-    const minHeight = 260;
+    const minHeight = 60;
     const maxHeight = 800;
     return (
       <>

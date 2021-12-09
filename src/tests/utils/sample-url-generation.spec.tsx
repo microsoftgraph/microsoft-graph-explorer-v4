@@ -1,4 +1,4 @@
-import { parseSampleUrl } from '../../app/utils/sample-url-generation';
+import { hasWhiteSpace, parseSampleUrl } from '../../app/utils/sample-url-generation';
 
 describe('Sample Url Generation', () => {
 
@@ -76,3 +76,23 @@ describe('Sample Url Generation', () => {
   });
 
 });
+
+
+describe('hasWhiteSpaces should', () => {
+  const invalidUrls = [
+    {url: ' https://graph.microsoft.com/v1.0/me', output: true},
+    {url: 'https: //graph.microsoft.com/v1.0/me', output: true},
+    {url: 'https://%20graph.microsoft.com/v1.0/me', output: true},
+    {url: 'https://graph.microsoft.com/ v1.0/me', output: true},
+    {url: 'https://graph.microsoft.com/v1.0/ me', output: true},
+    {url:
+      'https://graph.microsoft.com/v1.0/me/contacts?$filter=emailAddresses/any(a:a/address eq \'garth@contoso.com\')',
+    output: false}
+  ];
+  invalidUrls.forEach(invalidUrl => {
+    it(`validate whitespaces in the url: ${invalidUrl.url}`, () => {
+      expect(hasWhiteSpace(invalidUrl.url)).toBe(invalidUrl.output);
+    });
+  });
+});
+
