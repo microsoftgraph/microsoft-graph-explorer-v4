@@ -1,7 +1,7 @@
 import {
   Announced, Dialog, DialogFooter, DialogType,
   DefaultButton, FontSizes, getId, Icon, IconButton,
-  Modal, Pivot, PivotItem, PrimaryButton, TooltipHost
+  Modal, Pivot, PivotItem, TooltipHost
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { useEffect, useState } from 'react';
@@ -21,6 +21,7 @@ import { createShareLink } from '../common/share';
 import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 import { IRootState } from '../../../types/root';
+import { CopyButton } from '../common/copy/CopyButton';
 
 
 const QueryResponse = (props: IQueryResponseProps) => {
@@ -31,7 +32,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [query, setQuery] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
   const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
-
 
   const {
     intl: { messages }
@@ -200,7 +200,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           aria-label={translateMessage('Share Query')}
         />
         <DialogFooter>
-          <PrimaryButton text={messages.Copy} onClick={handleCopy} />
+          <CopyButton handleOnClick={handleCopy} isIconButton={false} />
           <DefaultButton
             text={messages.Close}
             onClick={toggleShareQueryDialogState}

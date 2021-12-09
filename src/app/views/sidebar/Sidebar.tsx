@@ -14,9 +14,6 @@ export const Sidebar = () => {
         <PivotItem headerText={translateMessage('Sample Queries')} itemIcon='Rocket' itemKey='sample-queries'>
           <SampleQueries />
         </PivotItem>
-        <PivotItem headerText={translateMessage('Resources')} itemIcon='ExploreData' itemKey='resources'>
-          <ResourceExplorer />
-        </PivotItem>
         <PivotItem headerText={translateMessage('History')} itemIcon='History' itemKey='history'>
           <History />
         </PivotItem>

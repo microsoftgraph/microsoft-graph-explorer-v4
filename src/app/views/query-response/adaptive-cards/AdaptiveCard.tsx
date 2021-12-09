@@ -1,5 +1,5 @@
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { IconButton, Label, MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
+import { Label, MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -15,6 +15,7 @@ import { classNames } from '../../classnames';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 import { queryResponseStyles } from './../queryResponse.styles';
+import { CopyButton } from '../../common/copy/CopyButton';
 
 class AdaptiveCard extends Component<IAdaptiveCardProps> {
   private adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null;
@@ -48,12 +49,11 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 
   public shouldComponentUpdate(nextProps: IAdaptiveCardProps) {
+
     if (JSON.stringify(this.props.body) !== JSON.stringify(nextProps.body)) {
       return true; // body has changed so card will too
     }
-    if (
-      JSON.stringify(nextProps.card.data) === JSON.stringify(this.props.card.data)
-    ) {
+    if (JSON.stringify(nextProps.card.data) === JSON.stringify(this.props.card.data) ) {
       return false; // card still the same no need to re-render
     }
     return true;
@@ -99,6 +99,9 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
       try {
         this.adaptiveCard!.parse(data.card);
         const renderedCard = this.adaptiveCard!.render();
+        const handleCopy = async () =>{ trackedGenericCopy(JSON.stringify(data.template, null, 4),
+          componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
+        }
         return (
           <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
             <PivotItem
@@ -144,16 +147,10 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                   <FormattedMessage id='Adaptive Cards designer' />
                 </a>
               </MessageBar>
-              <IconButton className={classes.copyIcon}
-                ariaLabel={translateMessage('Copy')}
-                iconProps={{
-                  iconName: 'copy'
-                }}
-                onClick={async () =>
-                  trackedGenericCopy(
-                    JSON.stringify(data.template, null, 4),
-                    componentNames.JSON_SCHEMA_COPY_BUTTON,
-                    sampleQuery)}
+              <CopyButton
+                className={classes.copyIcon}
+                handleOnClick={handleCopy}
+                isIconButton={true}
               />
               <Monaco
                 language='json'
@@ -163,7 +160,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             </PivotItem>
           </Pivot>
         );
-      } catch (err) {
+      } catch (err : any) {
         return <div style={{ color: 'red' }}>{err.message}</div>;
       }
     }

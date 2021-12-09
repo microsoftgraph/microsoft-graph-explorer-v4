@@ -340,7 +340,7 @@
   "sign in to view a list of all permissions": "Permissions for the query are missing on this tab. Sign in to use the Select permissions option in the settings icon next to your profile to see the full list of Microsoft Graph permissions and select the permission(s) you want and consent to them from there.",
   "open permissions panel": "Open the permissions panel",
   "permissions list": " to see the full list of Microsoft Graph permissions and select the permission(s) you want and consent to them from there.",
-  "Get started with adaptive cards on": "Get started with adaptive cards on",
+  "Get started with adaptive cards on": "Get started with adaptive cards on ",
   "Adaptive Cards Templating SDK": "Adaptive Cards Templating SDK",
   "card": "Card",
   "JSON Schema": "JSON template",
@@ -430,5 +430,7 @@
   "Query parameters": "Query parameters",
   "Preview collection": "Preview collection",
   "Download postman collection": "Download postman collection",
-  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove"
+  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove",
+  "Copied": "Copied",
+  "Invalid whitespace in URL": "Invalid whitespace in URL"
 }

@@ -1,6 +1,13 @@
 /* eslint-disable no-useless-escape */
 // OData filter operators
-const QUERY_FUNCTIONS = ['startswith', 'endswith', 'contains', 'substring', 'indexof', 'concat'];
+const QUERY_FUNCTIONS = [
+  'startswith',
+  'endswith',
+  'contains',
+  'substring',
+  'indexof',
+  'concat'
+];
 const ARITHMETIC_OPERATORS = ['add', 'sub', 'mul', 'div', 'divby', 'mod'];
 const COMPARISON_OPERATORS = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'];
 const LOGICAL_OPERATORS = ['and', 'or', 'not'];
@@ -15,12 +22,14 @@ const MEDIA_TYPE_REGEX = /^(([a-z]+\/)?\w[\w+-.]*)$/i;
 // Matches the format key=value
 const KEY_VALUE_REGEX = /^[a-z]+=[a-z]+$/i;
 // Matches property name patterns e.g. displayName or from/emailAddress/address or microsoft.graph.itemAttachment/item
-const PROPERTY_NAME_REGEX = /^((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)$/i;
+const PROPERTY_NAME_REGEX =
+  /^((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)$/i;
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const QUOTED_TEXT_REGEX = /^["']([^"]*)['"]$/;
 // Matches segments of $filter query option values e.g. isRead eq false will match isRead, eq, false
 // eslint-disable-next-line max-len
-const FILTER_SEGMENT_REGEX = /(((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)\(.*?\))|("[^\"]+")|('[^\']+')|\(.*?\)|[^\s]+/gi;
+const FILTER_SEGMENT_REGEX =
+  /(((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)\(.*?\))|("[^\"]+")|('[^\']+')|\(.*?\)|[^\s]+/gi;
 // Matches segments of $search query option e.g.
 // "description:One" AND ("displayName:Video" OR "displayName:Drive") will match
 // "description:One", AND, ("displayName:Video" OR "displayName:Drive")
@@ -64,7 +73,9 @@ export function sanitizeQueryParameter(queryParameter: string): string {
   }
 
   let key: string = queryParameter.split('=')[0].toLowerCase().trim();
-  let value: string = queryParameter.substring(queryParameter.indexOf('=') + 1).trim();
+  let value: string = queryParameter
+    .substring(queryParameter.indexOf('=') + 1)
+    .trim();
 
   switch (key) {
     case '$top': {
@@ -126,7 +137,11 @@ export function sanitizeQueryParameter(queryParameter: string): string {
 
     default: {
       // Parameters like $id, $levels will be left as they are
-      if (!isAllAlpha(key) && !key.startsWith('$') && !isAllAlpha(key.substring(1))) {
+      if (
+        !isAllAlpha(key) &&
+        !key.startsWith('$') &&
+        !isAllAlpha(key.substring(1))
+      ) {
         key = '<invalid-key>';
       }
       value = '<value>';
@@ -169,7 +184,9 @@ function sanitizeFormatQueryOptionValue(queryOptionValue: string): string {
     // first segment is supposed to be media type
     if (index === 0) {
       const mediaType = segment.trim();
-      formatSegments[index] = !isMediaType(mediaType) ? '<invalid-media-type>' : mediaType;
+      formatSegments[index] = !isMediaType(mediaType)
+        ? '<invalid-media-type>'
+        : mediaType;
     }
     // This should be a parameter, key-value pair e.g. odata=minimalmetadata
     else if (!isKeyValuePair(segment)) {
@@ -192,10 +209,13 @@ function sanitizeOrderByQueryOptionValue(queryOptionValue: string): string {
   const sortingExpressions = queryOptionValue.split(',');
 
   sortingExpressions.forEach((expr, index) => {
-    const expressionParts = expr.split(' ').filter(x => x !== ''); // i.e. property name and sort order
-    let propertyName = expressionParts[0].trim();
-    if (!isPropertyName(propertyName) && !propertyName.endsWith('/$count') &&
-      !isPropertyName(propertyName.slice(-7))) {
+    const expressionParts = expr.split(' ').filter((x) => x !== ''); // i.e. property name and sort order
+    let propertyName = expressionParts[0]?.trim();
+    if (
+      !isPropertyName(propertyName) &&
+      !propertyName.endsWith('/$count') &&
+      !isPropertyName(propertyName.slice(-7))
+    ) {
       propertyName = '<invalid-property>';
     }
     let sanitizedExpression = propertyName;
@@ -244,8 +264,7 @@ function sanitizeSearchQueryOptionValue(queryOptionValue: string): string {
     if (QUOTED_TEXT_REGEX.test(segment)) {
       if (!segment.includes(':')) {
         sanitizedQueryString += ' <value>';
-      }
-      else {
+      } else {
         // Extract property name
         let propertyName = segment.substring(1, segment.indexOf(':')).trim();
         if (!isPropertyName(propertyName)) {
@@ -266,7 +285,6 @@ function sanitizeSearchQueryOptionValue(queryOptionValue: string): string {
 
     // Anything that get's here is unknown
     sanitizedQueryString += isAllAlpha(segment) ? ' <value>' : ' <unknown>';
-
   }
   return sanitizedQueryString.trim();
 }
@@ -303,8 +321,13 @@ function sanitizeExpandQueryOptionValue(queryParameterValue: string): string {
         propertyName = '<property>';
       }
       // Sanitize text within brackets which should be key-value pairs of OData query options
-      const textWithinBrackets = segment.substring(openingBracketIndex + 1, segment.length - 1).trim();
-      const sanitizedText = textWithinBrackets.split(';').map(sanitizeQueryParameter).join(';');
+      const textWithinBrackets = segment
+        .substring(openingBracketIndex + 1, segment.length - 1)
+        .trim();
+      const sanitizedText = textWithinBrackets
+        .split(';')
+        .map(sanitizeQueryParameter)
+        .join(';');
       sanitizedQueryString += `${propertyName}(${sanitizedText})`;
       continue;
     }
@@ -344,8 +367,11 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
 
     // No processing needed for operators; append operator to query string.
     const lowerCaseOperator = segment.toLowerCase();
-    if (LOGICAL_OPERATORS.includes(lowerCaseOperator) || COMPARISON_OPERATORS.includes(lowerCaseOperator) ||
-      ARITHMETIC_OPERATORS.includes(lowerCaseOperator)) {
+    if (
+      LOGICAL_OPERATORS.includes(lowerCaseOperator) ||
+      COMPARISON_OPERATORS.includes(lowerCaseOperator) ||
+      ARITHMETIC_OPERATORS.includes(lowerCaseOperator)
+    ) {
       sanitizedQueryString += ` ${lowerCaseOperator} `;
       continue;
     }
@@ -360,14 +386,22 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
       if (!isPropertyName(propertyName)) {
         propertyName = '<property-name>';
       }
-      let textWithinBrackets = segment.substring(openingBracketIndex + 1, segment.length - 1).trim();
+      let textWithinBrackets = segment
+        .substring(openingBracketIndex + 1, segment.length - 1)
+        .trim();
       if (textWithinBrackets) {
         let key = '';
         if (textWithinBrackets.includes(':')) {
-          key = textWithinBrackets.substring(0, textWithinBrackets.indexOf(':')).trim();
-          textWithinBrackets = textWithinBrackets.substring(textWithinBrackets.indexOf(':') + 1);
+          key = textWithinBrackets
+            .substring(0, textWithinBrackets.indexOf(':'))
+            .trim();
+          textWithinBrackets = textWithinBrackets.substring(
+            textWithinBrackets.indexOf(':') + 1
+          );
         }
-        textWithinBrackets = `${key}: ${sanitizeFilterQueryOptionValue(textWithinBrackets)}`;
+        textWithinBrackets = `${key}: ${sanitizeFilterQueryOptionValue(
+          textWithinBrackets
+        )}`;
       }
       sanitizedQueryString += `${propertyName}${lambdaOperator}(${textWithinBrackets})`;
       continue;
@@ -376,7 +410,7 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
     // Check if segment is a query function then transform query functions to look like this,
     // 'startswith(userPrincipalName,<value>)' as an example
     let queryFunctionPrefix: string = '';
-    QUERY_FUNCTIONS.forEach(funcName => {
+    QUERY_FUNCTIONS.forEach((funcName) => {
       if (segment.toLowerCase().startsWith(funcName)) {
         queryFunctionPrefix = funcName;
         return;
@@ -386,16 +420,22 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
       const commaIndex = segment.indexOf(',');
       if (openingBracketIndex > 0) {
         // End of property name is when we encounter a comma, bracket or end of segment, in that order
-        const endIndex = commaIndex > 0 ? commaIndex :
-          closingBracketIndex > 0 ? closingBracketIndex : segment.length;
-        propertyName = segment.substring(openingBracketIndex + 1, endIndex).trim();
+        const endIndex =
+          commaIndex > 0
+            ? commaIndex
+            : closingBracketIndex > 0
+              ? closingBracketIndex
+              : segment.length;
+        propertyName = segment
+          .substring(openingBracketIndex + 1, endIndex)
+          .trim();
 
         if (!isPropertyName(propertyName)) {
           propertyName = '<property>';
         }
-        sanitizedQueryString += `${queryFunctionPrefix}(${propertyName}${commaIndex > 0 ? ',<value>' : ''})`;
-      }
-      else {
+        sanitizedQueryString += `${queryFunctionPrefix}(${propertyName}${commaIndex > 0 ? ',<value>' : ''
+          })`;
+      } else {
         sanitizedQueryString += `${queryFunctionPrefix}(<unknown>)`;
         break;
       }
@@ -415,17 +455,23 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
       // check if succeeded by comparison operator
       if (index < numberOfFilterSegments - 2) {
         const expectedOperator = filterSegments[index + 1].toLowerCase();
-        if (COMPARISON_OPERATORS.includes(expectedOperator) || ARITHMETIC_OPERATORS.includes(expectedOperator)) {
-          sanitizedQueryString += `${segment} ${filterSegments[index + 1]} <value>`;
+        if (
+          COMPARISON_OPERATORS.includes(expectedOperator) ||
+          ARITHMETIC_OPERATORS.includes(expectedOperator)
+        ) {
+          sanitizedQueryString += `${segment} ${filterSegments[index + 1]
+            } <value>`;
           index += 2;
           continue;
         }
       }
-    }
-    else if (index > 0) {
+    } else if (index > 0) {
       // We are checking if this is a value following a comparison or arithmetic operator
       const expectedOperator = filterSegments[index - 1];
-      if (COMPARISON_OPERATORS.includes(expectedOperator) || ARITHMETIC_OPERATORS.includes(expectedOperator)) {
+      if (
+        COMPARISON_OPERATORS.includes(expectedOperator) ||
+        ARITHMETIC_OPERATORS.includes(expectedOperator)
+      ) {
         sanitizedQueryString += '<value>';
         continue;
       }
