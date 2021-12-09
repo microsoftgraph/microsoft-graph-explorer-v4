@@ -42,3 +42,8 @@ function generateSearchParameters(urlObject: URL, search: string) {
   return search;
 }
 
+export function hasWhiteSpace(url: string):boolean {
+  const parts = url.split('?');
+  const whitespaceChars = [' ', '\t', '\n', '%20'];
+  return whitespaceChars.some(char => parts[0].includes(char));
+}
