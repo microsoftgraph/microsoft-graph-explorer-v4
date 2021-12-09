@@ -1,7 +1,6 @@
 import { FocusZone } from '@fluentui/react';
 import React from 'react';
 import Editor, { OnChange } from '@monaco-editor/react';
-import MonacoEditor, { ChangeHandler } from 'react-monaco-editor';
 
 import { ThemeContext } from '../../../../themes/theme-context';
 import './monaco.scss';
@@ -46,7 +45,9 @@ export function Monaco(props: IMonaco) {
                 horizontal: 'visible',
                 horizontalScrollbarSize: 17
               },
-              wordWrap: 'on'
+              wordWrap: 'on',
+              folding: true,
+              foldingStrategy: 'indentation'
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
