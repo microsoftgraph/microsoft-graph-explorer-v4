@@ -142,6 +142,7 @@
         "react-test-renderer": "16.14.0",
         "redux-logger": "3.0.6",
         "redux-mock-store": "1.5.3",
+        "reusify": "1.0.4",
         "selenium-webdriver": "4.0.0-beta.4",
         "serialize-javascript": "6.0.0",
         "ssri": "8.0.1",
