@@ -10,7 +10,7 @@ import { IRootState } from '../../../../../types/root';
 import * as autoCompleteActionCreators from '../../../../services/actions/autocomplete-action-creators';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
-import { parseSampleUrl } from '../../../../utils/sample-url-generation';
+import { hasWhiteSpace, parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
 import {
@@ -389,7 +389,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
             onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
             ariaLabel={translateMessage('Query Sample Input')}
             role='textbox'
-            errorMessage={!queryUrl ? translateMessage('Missing url') : ''}
+            errorMessage={getErrorMessage()}
           />
         </div>
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
@@ -399,6 +399,16 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
             onClick={(e: any) => this.selectSuggestion(e)} />}
       </div>
     );
+
+    function getErrorMessage(): string | JSX.Element | undefined {
+      if( !queryUrl){
+        return translateMessage('Missing url');
+      }
+      if(hasWhiteSpace(queryUrl)){
+        return translateMessage('Invalid whitespace in URL');
+      }
+      return '';
+    }
   }
 }
 
