@@ -8,7 +8,7 @@ export function parseSampleUrl(url: string, version?: string) {
 
   if (url !== '') {
     try {
-      const urlObject: URL = new URL(url.trim());
+      const urlObject: URL = new URL(url);
       requestUrl = decodeURIComponent(urlObject.pathname.substr(6).replace(/\/$/, ''));
       queryVersion = (version) ? version : urlObject.pathname.substring(1, 5);
       search = generateSearchParameters(urlObject, search);
