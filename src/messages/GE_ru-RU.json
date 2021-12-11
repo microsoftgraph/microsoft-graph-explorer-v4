@@ -340,7 +340,7 @@
   "sign in to view a list of all permissions": "На этой вкладке отсутствуют разрешения для запроса. Войдите, чтобы использовать параметр \"Выберите разрешения\" на вкладке \"Параметры\" рядом с профилем, чтобы просмотреть полный список разрешений Microsoft Graph, а также выбрать нужные разрешения и дать свое согласие.",
   "open permissions panel": "Открыть панель \"Разрешения\"",
   "permissions list": " чтобы просмотреть полный список разрешений Microsoft Graph, выбрать нужные разрешения и дать свое согласие.",
-  "Get started with adaptive cards on": "Начните работу с адаптивными карточками",
+  "Get started with adaptive cards on": "Начните работу с адаптивными карточками ",
   "Adaptive Cards Templating SDK": "SDK шаблонов адаптивных карточек",
   "card": "Карточка",
   "JSON Schema": "Шаблон JSON",
@@ -430,5 +430,7 @@
   "Query parameters": "Параметры запроса",
   "Preview collection": "Коллекция предварительных версий",
   "Download postman collection": "Скачать коллекцию Postman",
-  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "Можно экспортировать весь список как коллекцию Postman. Если в списке есть элементы, которые вам не нужны, выберите их, чтобы удалить"
+  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "Можно экспортировать весь список как коллекцию Postman. Если в списке есть элементы, которые вам не нужны, выберите их, чтобы удалить",
+  "Copied": "Скопировано",
+  "Invalid whitespace in URL": "Недопустимый пробел в URL-адресе"
 }
