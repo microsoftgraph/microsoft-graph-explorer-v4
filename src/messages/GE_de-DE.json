@@ -340,7 +340,7 @@
   "sign in to view a list of all permissions": "Auf dieser Registerkarte fehlen Berechtigungen für die Abfrage. Melden Sie sich an und verwenden Sie die Option \"Berechtigungen auswählen\" im Einstellungssymbol neben Ihrem Profil, um die vollständige Liste der Microsoft Graph-Berechtigungen anzuzeigen, und wählen Sie die gewünschte(n) Berechtigung(en) aus und stimmen Sie diese von dort aus zu.",
   "open permissions panel": "Öffnen Sie das Berechtigungsfenster",
   "permissions list": " um die vollständige Liste der Microsoft Graph-Berechtigungen anzuzeigen. Wählen Sie die gewünschte(n) Berechtigung(en) aus und stimmen Sie diese(n) von dort aus zu.",
-  "Get started with adaptive cards on": "Erste Schritte mit angepassten Karten auf",
+  "Get started with adaptive cards on": "Erste Schritte mit angepassten Karten auf ",
   "Adaptive Cards Templating SDK": "Adaptive Cards Templating SDK",
   "card": "Karte",
   "JSON Schema": "JSON-Vorlage",
@@ -430,5 +430,7 @@
   "Query parameters": "Abfrageparameter",
   "Preview collection": "Vorschau der Sammlung",
   "Download postman collection": "Postman-Sammlung herunterladen",
-  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "Sie können die gesamte Liste als Postman-Sammlung exportieren. Wenn die Liste Elemente enthält, die Sie nicht benötigen, wählen Sie diese aus, um sie zu entfernen."
+  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "Sie können die gesamte Liste als Postman-Sammlung exportieren. Wenn die Liste Elemente enthält, die Sie nicht benötigen, wählen Sie diese aus, um sie zu entfernen.",
+  "Copied": "Kopiert",
+  "Invalid whitespace in URL": "Ungültige Leerzeichen in URL"
 }
