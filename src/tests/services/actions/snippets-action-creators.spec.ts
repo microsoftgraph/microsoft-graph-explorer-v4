@@ -1,8 +1,11 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { getSnippetSuccess } from '../../../app/services/actions/snippet-action-creator';
-import { GET_SNIPPET_SUCCESS } from '../../../app/services/redux-constants';
+import {
+  getSnippetSuccess, getSnippetError,
+  getSnippetPending
+} from '../../../app/services/actions/snippet-action-creator';
+import { GET_SNIPPET_SUCCESS, GET_SNIPPET_ERROR, GET_SNIPPET_PENDING } from '../../../app/services/redux-constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -27,4 +30,26 @@ describe('snippet actions', () => {
 
     expect(store.getActions()).toEqual(expectedAction);
   });
+
+  it('creates GET_SNIPPET_PENDING when getSnippetPending is called', () => {
+    const expectedAction = {
+      type: GET_SNIPPET_PENDING
+    };
+
+    const action = getSnippetPending();
+
+    expect(action).toEqual(expectedAction);
+  })
+
+  it('creates GET_SNIPPET_ERROR when getSnippetError is called', () => {
+    const response = {};
+    const expectedAction = {
+      type: GET_SNIPPET_ERROR,
+      response
+    };
+
+    const action = getSnippetError(response);
+
+    expect(action).toEqual(expectedAction);
+  })
 });

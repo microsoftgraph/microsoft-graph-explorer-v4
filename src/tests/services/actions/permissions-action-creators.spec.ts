@@ -4,7 +4,7 @@ import {
   FETCH_SCOPES_SUCCESS
 } from '../../../app/services/redux-constants';
 
-import { fetchScopesSuccess, fetchScopesPending, fetchScopesError, getPermissionsScopeType } from
+import { fetchScopesSuccess, fetchScopesPending, fetchScopesError, getPermissionsScopeType, fetchScopes } from
   '../../../app/services/actions/permissions-action-creator';
 import { IPermissionsResponse } from '../../../types/permissions';
 
@@ -77,7 +77,5 @@ describe('tests permissions action creators', () => {
     // Assert
     expect(result).toEqual(expectedResult);
 
-  }
-  )
-
+  });
 })

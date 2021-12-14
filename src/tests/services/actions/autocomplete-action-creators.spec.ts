@@ -74,7 +74,7 @@ describe('Test autocomplete action creators', () => {
   // Fix the thunk call
 
   describe('Load autocomplete suggestions thunk', () => {
-    it('Should begin the api call and pull autocomplete suggestions ', () => {
+    it('Should begin the api call and pull autocomplete suggestions, but fails and returns an empty array ', () => {
       // Arrange
       const expectedResponse = {
         url: 'https://graph.microsoft.com/v1.0/',
@@ -87,12 +87,14 @@ describe('Test autocomplete action creators', () => {
       }
       fetch.mockResponseOnce(JSON.stringify(expectedResponse));
 
-      const expectedActions = [
-        { type: AUTOCOMPLETE_FETCH_PENDING },
-        { type: AUTOCOMPLETE_FETCH_SUCCESS, response: expectedResponse }
-      ]
-
       const store = mockStore({ autocomplete: null });
+
+      // Act
+      // @ts-ignore
+      store.dispatch(fetchAutoCompleteOptions('https://graph.microsoft.com/v1.0/', 'v1.0'));
+
+      // Assert
+      expect(store.getActions()).toEqual([]);
     })
   })
 

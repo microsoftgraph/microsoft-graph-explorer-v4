@@ -11,9 +11,9 @@ describe('Tests Proxy-Action-Creators', () => {
     }
 
     // Act
-    const actualAction = setGraphProxyUrl(response);
+    const action = setGraphProxyUrl(response);
 
     // Assert
-    expect(actualAction).toEqual(expectedAction);
+    expect(action).toEqual(expectedAction);
   })
 })

@@ -4,10 +4,11 @@ import thunk from 'redux-thunk';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 import {
-  addResourcePaths, fetchResourcesSuccess
+  addResourcePaths, fetchResourcesSuccess, fetchResourcesError, fetchResourcesPending, removeResourcePaths
 } from '../../../app/services/actions/resource-explorer-action-creators';
 import {
-  FETCH_RESOURCES_SUCCESS, RESOURCEPATHS_ADD_SUCCESS
+  FETCH_RESOURCES_SUCCESS, RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, FETCH_RESOURCES_ERROR,
+  FETCH_RESOURCES_PENDING
 } from '../../../app/services/redux-constants';
 
 const paths = [
@@ -77,5 +78,52 @@ describe('Resource Explorer actions', () => {
     store.dispatch(addResourcePaths(paths));
     expect(store.getActions()).toEqual(expectedActions);
   });
+
+  // it('Removes resource paths from state', () => {
+
+  //   const expectedActions = [
+  //     {
+  //       type: RESOURCEPATHS_DELETE_SUCCESS,
+  //       response: []
+  //     }
+  //   ];
+
+  //   const store = mockStore({
+  //     resources: {
+  //       paths
+  //     }
+  //   });
+
+  //   store.dispatch(removeResourcePaths(paths));
+  //   expect(store.getActions()).toEqual(expectedActions);
+  // })
+
+  it('creates FETCH_RESOURCES_ERROR when fetchResourcesError is called', () => {
+    // Arrange
+    const response = {};
+    const expectedAction = {
+      type: FETCH_RESOURCES_ERROR,
+      response
+    }
+
+    // Act
+    const action = fetchResourcesError(response);
+
+    // Assert
+    expect(action).toEqual(expectedAction);
+  })
+
+  it('crates FETCH_RESOURCES_PENDING when resources are being fetched', () => {
+    // Arrange
+    const expectedAction = {
+      type: FETCH_RESOURCES_PENDING
+    }
+
+    // Act
+    const action = fetchResourcesPending();
+
+    // Assert
+    expect(action).toEqual(expectedAction);
+  })
 
 });

@@ -53,11 +53,10 @@ export function getSnippet(language: string): Function {
         'Content-Type': 'application/http'
       };
       // eslint-disable-next-line max-len
-      const body = `${sampleQuery.selectedVerb} /${queryVersion}/${
-        requestUrl + search
-      } HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(
-        sampleQuery.sampleBody
-      )}`;
+      const body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search
+        } HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(
+          sampleQuery.sampleBody
+        )}`;
       const options: IRequestOptions = { method, headers, body };
       const obj: any = {};
 

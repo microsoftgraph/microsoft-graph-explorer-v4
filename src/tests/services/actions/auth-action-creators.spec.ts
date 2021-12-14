@@ -5,8 +5,16 @@ import {
 
 import {
   getAuthTokenSuccess, getConsentedScopesSuccess, signOutSuccess,
-  setAuthenticationPending
+  setAuthenticationPending,
+  storeScopes, signIn
 } from '../../../app/services/actions/auth-action-creators';
+
+import configureMockStore from 'redux-mock-store';
+
+import thunk from 'redux-thunk';
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 describe('Auth Action Creators test', () => {
   it('tests the authentication pending action', () => {
@@ -68,5 +76,59 @@ describe('Auth Action Creators test', () => {
     expect(action).toEqual(expectedAction);
   })
 
-  // Add tests for the thunk
+  it('Dispatches getConsentedScopesSuccess when storeScopes is called', () => {
+    // Arrange
+    const response: string[] = ['mail.read', 'profile.read'];
+    const expectedAction = {
+      type: GET_CONSENTED_SCOPES_SUCCESS,
+      response
+    }
+
+    // Act
+    const store = mockStore({ consentedScopes: [] });
+
+    // @ts-ignore
+    store.dispatch(storeScopes(response));
+
+    // Assert
+    expect(store.getActions()).toEqual([expectedAction]);
+
+  })
+
+  it('It dispatches the getAuthTokenSuccess action creater when signIn is called', () => {
+    // Arrange
+    const response: boolean = true;
+    const expectedAction = {
+      type: GET_AUTH_TOKEN_SUCCESS,
+      response
+    }
+
+    // Act
+    const store = mockStore({ authToken: {} });
+
+    // @ts-ignore
+    store.dispatch(signIn(response));
+
+    // Assert
+    expect(store.getActions()).toEqual([expectedAction]);
+  })
+
+  it('Dispatches signout success when signOut is called', () => {
+    // Arrange
+    const response: boolean = false;
+    const expectedAction = {
+      type: LOGOUT_SUCCESS,
+      response
+    }
+
+    // Act
+    const store = mockStore({ authToken: {} });
+
+    // @ts-ignore
+    store.dispatch(signOutSuccess(response));
+
+    // Assert
+    expect(store.getActions()).toEqual([expectedAction]);
+
+  })
 })
