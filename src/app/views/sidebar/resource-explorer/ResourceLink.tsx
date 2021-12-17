@@ -34,7 +34,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
   };
 
   const setQuery = (link: IResourceLink, selectedVerb: string) => {
-    const sampleUrl = `${GRAPH_URL}/${version}${getUrlFromLink(link)}`;
+    const resourceUrl = getUrlFromLink(link);
+    const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
     const query: IQuery = {
       selectedVerb,
       selectedVersion: version,
@@ -45,8 +46,9 @@ const ResourceLink = (props: IResourceLinkProps) => {
     dispatch(setSampleQuery(query));
     telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
       {
-        ComponentName: componentNames.SET_QUERY_ACTION,
-        sampleUrl
+        ComponentName: componentNames.RESOURCES_SET_QUERY_LIST_ITEM,
+        SelectedVerb: selectedVerb,
+        ResourcePath: resourceUrl
       });
   }
 

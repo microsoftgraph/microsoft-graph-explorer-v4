@@ -142,8 +142,8 @@ const unstyledResourceExplorer = (props: any) => {
     setIsolated(navLink);
     telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
       {
-        ComponentName: componentNames.ISOLATE_QUERY_ACTION,
-        tree
+        ComponentName: componentNames.RESOURCES_ISOLATE_QUERY_LIST_ITEM,
+        ResourcePath: getUrlFromLink(navLink)
       });
   }
 
@@ -176,8 +176,8 @@ const unstyledResourceExplorer = (props: any) => {
       setPanelHeaderText(`${requestUrl}`);
       telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
         {
-          ComponentName: componentNames.DISPLAY_QUERY_PARAMETERS_PANEL,
-          requestUrl
+          ComponentName: componentNames.RESOURCES_QUERY_PARAMETERS_LIST_ITEM,
+          ResourcePath: requestUrl
         });
     }
   }

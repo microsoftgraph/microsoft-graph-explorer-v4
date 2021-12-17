@@ -15,10 +15,16 @@ export const VIEW_ALL_PERMISSIONS_BUTTON = 'View all permissions button';
 export const EXPORT_HISTORY_ITEM_BUTTON = 'Export history item button';
 export const DELETE_HISTORY_ITEM_BUTTON = 'Delete history item button';
 export const RESPONSE_HEADERS_COPY_BUTTON = 'Response headers copy button';
+export const DOWNLOAD_POSTMAN_COLLECTION_BUTTON = 'Download postman collection button';
+export const REMOVE_RESOURCE_FROM_COLLECTION_BUTTON = 'Remove resource from collection button';
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
 export const SAMPLE_QUERY_LIST_ITEM = 'Sample query list item';
+export const RESOURCES_SET_QUERY_LIST_ITEM = 'Resources set query list item';
+export const RESOURCES_ISOLATE_QUERY_LIST_ITEM = 'Resources isolate query list item';
+export const RESOURCES_QUERY_PARAMETERS_LIST_ITEM ='Resources query parameters list item';
+export const ADD_RESOURCE_TO_COLLECTION_LIST_ITEM = 'Add resource to collection list item';
 
 // Tabs
 export const HISTORY_TAB = 'History tab';
@@ -41,12 +47,12 @@ export const QUERY_URL_AUTOCOMPLETE_DROPDOWN = 'Query URL autocomplete dropdown'
 
 // Links
 export const DOCUMENTATION_LINK = 'Documentation link';
+export const REPORT_AN_ISSUE_LINK = 'Report an issue link';
 export const OFFICE_DEV_PROGRAM_LINK = 'Office dev program link';
 export const GRAPH_TOOLKIT_PLAYGROUND_LINK = 'Graph toolkit playground link';
 export const MICROSOFT_APIS_TERMS_OF_USE_LINK = 'Microsoft APIs terms of use link';
 export const MICROSOFT_PRIVACY_STATEMENT_LINK = 'Microsoft privacy statement link';
 export const MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK = 'Microsoft graph API reference docs link';
-export const REPORT_AN_ISSUE_LINK = 'Report an issue link';
 
 // Actions
 export const GET_SNIPPET_ACTION = 'Get snippet action';
@@ -54,12 +60,4 @@ export const FETCH_SAMPLES_ACTION = 'Fetch samples action';
 export const AUTHENTICATION_ACTION = 'Authentication action';
 export const GET_ADAPTIVE_CARD_ACTION = 'Get adaptive card action';
 export const FETCH_PERMISSIONS_ACTION = 'Fetch permissions action';
-export const MONACO_EDITOR = 'Monaco editor display';
-export const ADD_RESOURCE_TO_COLLECTION = 'Add resource to collection action';
-export const REMOVE_RESOURCE_FROM_COLLECTION = 'Remove resource from collection action';
-export const SET_QUERY_ACTION = 'Resources set query action';
-export const ISOLATE_QUERY_ACTION = 'Resources isolate query action';
-export const DOWNLOAD_ACTION = 'Content download action';
-
-// Panels
-export const DISPLAY_QUERY_PARAMETERS_PANEL = 'Resources display query parameters panel';
+export const MONACO_EDITOR_FORMAT_JSON_ACTION = 'Monaco editor format JSON action';
