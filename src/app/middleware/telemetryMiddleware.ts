@@ -17,7 +17,6 @@ import {
   SAMPLES_FETCH_ERROR
 } from '../services/redux-constants';
 import { sanitizeQueryUrl } from '../utils/query-url-sanitization';
-import { getUrlFromLink } from '../views/sidebar/resource-explorer/resource-explorer.utils';
 
 const telemetryMiddleware =
   (store: any) => (next: any) => async (action: IAction) => {
