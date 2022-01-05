@@ -434,7 +434,7 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
           propertyName = '<property>';
         }
         sanitizedQueryString += `${queryFunctionPrefix}(${propertyName}${commaIndex > 0 ? ',<value>' : ''
-        })`;
+          })`;
       } else {
         sanitizedQueryString += `${queryFunctionPrefix}(<unknown>)`;
         break;
@@ -460,7 +460,7 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
           ARITHMETIC_OPERATORS.includes(expectedOperator)
         ) {
           sanitizedQueryString += `${segment} ${filterSegments[index + 1]
-          } <value>`;
+            } <value>`;
           index += 2;
           continue;
         }
