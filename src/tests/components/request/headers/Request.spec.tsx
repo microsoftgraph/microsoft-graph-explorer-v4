@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render, screen, fireEvent } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { Request } from '../../../../app/views/query-runner/request/Request';
 import { Mode } from '../../../../types/enums';
 import {messages_} from '../../../utils/get-messages'
@@ -7,7 +7,6 @@ import { IRequestComponent } from '../../../../types/request';
 import { IntlProvider } from 'react-intl';
 import { geLocale } from '../../../../appLocale';
 import { store } from '../../../../store';
-import messages from '../../../../messages';
 
 afterEach(cleanup);
 const renderRequest = (args?: any): any => {
