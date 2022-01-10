@@ -71,10 +71,25 @@ describe('Test autocomplete action creators', () => {
     expect(action).toEqual(expectedAction);
   })
 
-  // Fix the thunk call
+  jest.mock('../../../../src/modules/suggestions/suggestions.ts', () => {
+    return {
+      getSuggestions: () => {
+        return Promise.resolve({
+          url: 'https://graph.microsoft.com/v1.0/',
+          parameters: [
+            {
+              name: 'verb',
+              values: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+            }
+          ],
+          createdAt: '363647474'
+        });
+      }
+    }
+  })
 
   describe('Load autocomplete suggestions thunk', () => {
-    it('Should begin the api call and pull autocomplete suggestions, but fails and returns an empty array ', () => {
+    it('Should begin the api call and pull autocomplete suggestions, but fail and return an empty array ', () => {
       // Arrange
       const expectedResponse = {
         url: 'https://graph.microsoft.com/v1.0/',
@@ -95,6 +110,24 @@ describe('Test autocomplete action creators', () => {
 
       // Assert
       expect(store.getActions()).toEqual([]);
+    });
+
+    it('Dispatches autocomplete_fetch_error when fetch fails', () => {
+      // Arrange
+      const expectedAction = {
+        type: AUTOCOMPLETE_FETCH_ERROR,
+        response: {}
+      };
+      const store = mockStore({})
+
+      // Act
+      // @ts-ignore
+      store.dispatch(fetchAutoCompleteOptions('https://graph.microsoft.com/v1.0/', 'v1.0'))
+        .then(() => {
+          // Assert
+          expect(store.getActions()).toEqual([expectedAction]);
+        })
+
     })
   })
 

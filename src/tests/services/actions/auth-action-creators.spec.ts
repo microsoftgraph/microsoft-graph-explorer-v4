@@ -6,13 +6,12 @@ import {
 import {
   getAuthTokenSuccess, getConsentedScopesSuccess, signOutSuccess,
   setAuthenticationPending,
-  storeScopes, signIn
+  storeScopes, signIn, signOut
 } from '../../../app/services/actions/auth-action-creators';
 
 import configureMockStore from 'redux-mock-store';
 
 import thunk from 'redux-thunk';
-
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
@@ -131,4 +130,24 @@ describe('Auth Action Creators test', () => {
     expect(store.getActions()).toEqual([expectedAction]);
 
   })
+
+  it('Tests signOut method', () => {
+    // Arrange
+    const store = mockStore({});
+    const expectedActions = [
+      {
+        type: AUTHENTICATION_PENDING,
+        response: true
+      }
+    ];
+
+    // Act and assert
+    //@ts-ignore
+    store.dispatch(signOut())
+
+    expect(store.getActions()[0].type).toEqual(expectedActions[0].type);
+
+  })
+
+
 })

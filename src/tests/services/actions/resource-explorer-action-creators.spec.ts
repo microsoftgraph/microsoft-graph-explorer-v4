@@ -4,7 +4,8 @@ import thunk from 'redux-thunk';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 import {
-  addResourcePaths, fetchResourcesSuccess, fetchResourcesError, fetchResourcesPending, removeResourcePaths
+  addResourcePaths, fetchResourcesSuccess, fetchResourcesError,
+  fetchResourcesPending, removeResourcePaths, fetchResources
 } from '../../../app/services/actions/resource-explorer-action-creators';
 import {
   FETCH_RESOURCES_SUCCESS, RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, FETCH_RESOURCES_ERROR,
@@ -79,24 +80,24 @@ describe('Resource Explorer actions', () => {
     expect(store.getActions()).toEqual(expectedActions);
   });
 
-  // it('Removes resource paths from state', () => {
+  it('dispatches RESOURCEPATHS_DELETE_SUCCESS when removeResourcePaths is dispatched', () => {
 
-  //   const expectedActions = [
-  //     {
-  //       type: RESOURCEPATHS_DELETE_SUCCESS,
-  //       response: []
-  //     }
-  //   ];
+    const expectedActions = [
+      {
+        type: RESOURCEPATHS_DELETE_SUCCESS,
+        response: paths
+      }
+    ];
 
-  //   const store = mockStore({
-  //     resources: {
-  //       paths
-  //     }
-  //   });
+    const store = mockStore({
+      resources: {
+        paths
+      }
+    });
 
-  //   store.dispatch(removeResourcePaths(paths));
-  //   expect(store.getActions()).toEqual(expectedActions);
-  // })
+    store.dispatch(removeResourcePaths(paths));
+    expect(store.getActions()).toEqual(expectedActions);
+  })
 
   it('creates FETCH_RESOURCES_ERROR when fetchResourcesError is called', () => {
     // Arrange
@@ -124,6 +125,24 @@ describe('Resource Explorer actions', () => {
 
     // Assert
     expect(action).toEqual(expectedAction);
+  });
+
+  it('fetches resource paths and dispatches FETCH_RESOURCES_SUCCESS', () => {
+    // Arrange
+    const expectedAction = {
+      type: FETCH_RESOURCES_SUCCESS,
+      response: paths
+    }
+
+    const store = mockStore({});
+    fetchMock.mockResponseOnce(JSON.stringify({ paths, ok: true }));
+
+    // Act and Assert
+    // @ts-ignore
+    store.dispatch(fetchResources())
+      .then(() => {
+        expect(store.getActions()).toEqual([expectedAction]);
+      })
   })
 
 });

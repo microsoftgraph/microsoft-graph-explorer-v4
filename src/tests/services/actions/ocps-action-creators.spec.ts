@@ -3,12 +3,16 @@ import {
   getPoliciesSuccess, getPoliciesError, getPoliciesPending, getPolicies, getPolicy, getPolicyUrl
 } from '../../../app/services/actions/ocps-action-creators';
 import configureMockStore from 'redux-mock-store';
-
+import fetch from 'jest-fetch-mock';
 import thunk from 'redux-thunk';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 describe('Tests OCPS action creators', () => {
+  beforeEach(() => {
+    // eslint-disable-next-line no-undef
+    fetchMock.resetMocks();
+  });
   it('tests response with valid policies object ', () => {
     // Arrange
     const response = {
@@ -57,22 +61,33 @@ describe('Tests OCPS action creators', () => {
   })
 
   it('Tests getPolicies() and returns an empty array', () => {
-    // Act
+    // Arrange
     const store = mockStore({});
+    const expectedAction = [
+      {
+        type: GET_POLICY_PENDING
+      },
+      {
+        type: GET_POLICY_ERROR,
+        response: Object
+      }
+    ]
+    fetch.mockResponseOnce(JSON.stringify({}));
     // @ts-ignore
-    store.dispatch(getPolicies());
-
-    // Assert
-    expect(store.getActions()).toEqual([]);
+    store.dispatch(getPolicies())
+      .then(() => {
+        expect(store.getActions()[0]).toEqual(expectedAction[0].type);
+        expect(store.getActions()[1]).toEqual(expectedAction[1].type);
+      })
 
   });
 
   it('Tests getPolicy which returns policy values', () => {
     // Arrange
     const response = {
-      email: 1,
-      screenshot: 1,
-      feedback: 20,
+      email: 0,
+      screenshot: 0,
+      feedback: 0,
       value: [
         { randomValue: 1 }
       ]

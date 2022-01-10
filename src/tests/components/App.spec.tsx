@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render, fireEvent } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react';
 import App from '../../app/views/App';
 import { Mode } from '../../types/enums';
 import { IntlProvider } from 'react-intl';
@@ -15,7 +15,7 @@ const renderApp = (args?: any) : any => {
     queryState: null,
     termsOfUse: true,
     graphExplorerMode: Mode.Complete,
-    sidebarProperties: {mobileScreen: false, showSidebar: true},
+    sidebarProperties: {mobileScreen: args?.mobileScreen, showSidebar: true},
     sampleQuery: {
       selectedVerb: 'GET',
       selectedVersion: 'v1',
@@ -82,7 +82,7 @@ jest.mock('@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptio
 
 describe('It should render the main GE site', () => {
   it('Should confirm that all the major sections are rendered', () => {
-    const { getByText } = renderApp();
+    const { getByText } = renderApp({mobileScreen: false});
     getByText('Run query');
     getByText('Sign in to Graph Explorer');
     getByText('Request body');
@@ -100,7 +100,10 @@ describe('It should render the main GE site', () => {
     getByText('Authentication');
     getByText('Sample queries');
     getByText('History');
-  })
+  });
 
-  //fire events e.g runquery
+  it('Should render the main app with a mobile screen view', ()=> {
+    const { getByText } = renderApp({mobileScreen: true});
+    getByText('Run query');
+  });
 })

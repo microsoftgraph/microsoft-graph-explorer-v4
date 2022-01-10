@@ -1,12 +1,11 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { getProfileInfo, profileRequestError,
-  profileRequestSuccess } from '../../../app/services/actions/profile-action-creators';
-import { ACCOUNT_TYPE } from '../../../app/services/graph-constants';
+import { getProfileInfo, profileRequestError, getProfileInformation,
+  profileRequestSuccess, getBetaProfile, getAgeGroup, getProfileType,
+  getProfileImage, getProfileResponse } from '../../../app/services/actions/profile-action-creators';
 import {
   PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS} from '../../../app/services/redux-constants';
-import { IUser } from '../../../types/profile';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
@@ -38,29 +37,7 @@ describe('actions', () => {
       });
   });
 
-  it('should return profile_request_success', () => {
-    // Arrange
-    const response: IUser = {
-      displayName: 'Megan Bowen',
-      emailAddress: 'megan@microsoft.com',
-      profileImageUrl: 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50',
-      profileType: ACCOUNT_TYPE.MSA,
-      ageGroup: 0
-    }
-
-    const expectedAction = {
-      type: PROFILE_REQUEST_SUCCESS,
-      response
-    }
-
-    // Act
-    const action = profileRequestSuccess(response);
-
-    // Assert
-    expect(action).toEqual(expectedAction);
-  });
-
-  it('should return an error if profile request fails', () => {
+  it('dispatches PROFILE_REQUEST_ERROR if profile request fails', () => {
     // Arrange
     const response = {};
     const expectedAction = {
@@ -74,4 +51,30 @@ describe('actions', () => {
     // Assert
     expect(action).toEqual(expectedAction);
   });
+
+  it('throws on getProfileInformation', () => {
+    fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
+    expect(getProfileInformation()).toBeDefined();
+  });
+
+  it('throws on getProfileInformation', () => {
+    fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
+    expect(getBetaProfile()).toBeDefined();
+  });
+
+  it('throws on getProfileInformation', () => {
+    fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
+    expect(getProfileImage()).toBeDefined();
+  });
+
+  it('throws on getProfileInformation', () => {
+    fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
+    expect(getProfileResponse()).toBeDefined();
+  });
+
+  it('throws on getProfileInformation', () => {
+    fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
+    expect(getProfileType({})).toBeDefined();
+  });
+
 });
