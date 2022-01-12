@@ -381,11 +381,6 @@
   "access_denied_consent": "Seu consentimento com essa permissão foi bloqueado pelo administrador de locatários. Peça a seu administrador que lhe conceda acesso e depois tente novamente.",
   "This response contains unviewable content": "Esta resposta contém conteúdo que pode não ser visível neste editor.",
   "Click to download file": "Clique para baixar o arquivo.",
-  "File response is available in original format only": "Devido às limitações da solução alternativa, o arquivo só está disponível para download em seu formato original.",
-  "Response is result of workaround": "Uma consulta alternativa foi usada para buscar a URL de download, pois a URL redirecionada da solicitação original não está em conformidade com CORS.",
-  "For more information": "Para obter mais informações, consulte:",
-  "documentation": "documentação",
-  "Missing response headers for query workaround": "Alguns cabeçalhos, normalmente retornados para essa solicitação, podem estar ausentes devido às limitações da solução alternativa.",
   "Learn more": "Saiba mais",
   "loading resources": "carregando recursos",
   "Isolate": "Isolar",
@@ -433,4 +428,4 @@
   "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "Você pode exportar a lista inteira como uma Coleção de carteiros. Se houver itens na lista que você não quer, selecione-os para removê-los",
   "Copied": "Copiado",
   "Invalid whitespace in URL": "Espaço em branco inválido na URL"
-}
+

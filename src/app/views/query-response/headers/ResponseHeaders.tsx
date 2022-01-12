@@ -1,7 +1,6 @@
 
-import { IconButton, MessageBar, MessageBarType } from '@fluentui/react';
+import { IconButton } from '@fluentui/react';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { RESPONSE_HEADERS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { IRootState } from '../../../../types/root';
@@ -14,18 +13,9 @@ import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjust
 const ResponseHeaders = () => {
   const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } =
     useSelector((state: IRootState) => state);
-  const { body, headers } = graphResponse;
+  const { headers } = graphResponse;
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
-
-  const responseIsDownloadUrl = body?.contentDownloadUrl;
-  if (!headers && responseIsDownloadUrl) {
-    return (
-      <MessageBar messageBarType={MessageBarType.warning}>
-        <FormattedMessage id={'Missing response headers for query workaround'} />
-      </MessageBar>
-    )
-  }
 
   if (headers) {
     return (

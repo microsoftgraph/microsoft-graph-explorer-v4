@@ -5,6 +5,7 @@ import {
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
+import { telemetry, eventTypes, componentNames } from '../../../../telemetry';
 
 import { IQuery } from '../../../../types/query-runner';
 import { IResourceLink, ResourceOptions } from '../../../../types/resources';
@@ -33,7 +34,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
   };
 
   const setQuery = (link: IResourceLink, selectedVerb: string) => {
-    const sampleUrl = `${GRAPH_URL}/${version}${getUrlFromLink(link)}`;
+    const resourceUrl = getUrlFromLink(link);
+    const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
     const query: IQuery = {
       selectedVerb,
       selectedVersion: version,
@@ -42,6 +44,12 @@ const ResourceLink = (props: IResourceLinkProps) => {
       sampleBody: undefined
     };
     dispatch(setSampleQuery(query));
+    telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
+      {
+        ComponentName: componentNames.RESOURCES_SET_QUERY_LIST_ITEM,
+        SelectedVerb: selectedVerb,
+        ResourcePath: resourceUrl
+      });
   }
 
   const items = getMenuItems();
