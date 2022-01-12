@@ -141,14 +141,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
         }
       });
     }
-
-    if (menuItems.length > 0) {
-      menuItems.unshift({
-        key: 'actions',
-        itemType: ContextualMenuItemType.Header,
-        text: removeCounter(resourceLink.name)
-      });
-    }
     return menuItems;
   }
 }
