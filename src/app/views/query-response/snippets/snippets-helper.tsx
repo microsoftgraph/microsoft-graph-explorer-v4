@@ -1,4 +1,4 @@
-import { IconButton, Label, PivotItem } from '@fluentui/react';
+import { Label, PivotItem } from '@fluentui/react';
 import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
@@ -10,7 +10,7 @@ import { trackedGenericCopy } from '../../common/copy';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
 import { IRootState } from '../../../../types/root';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
-import { translateMessage } from '../../../utils/translate-messages';
+import { CopyButton } from '../../common/copy/CopyButton';
 
 interface ISnippetProps {
   language: string;
@@ -48,9 +48,9 @@ function Snippet(props: ISnippetProps) {
 
   const dispatch = useDispatch();
 
-  const copyIcon = {
-    iconName: 'copy'
-  };
+  const handleCopy = async () => {
+    trackedGenericCopy(snippet, CODE_SNIPPETS_COPY_BUTTON, sampleQuery,{ Language: language });
+  }
 
   useEffect(() => {
     dispatch(getSnippet(language));
@@ -65,17 +65,7 @@ function Snippet(props: ISnippetProps) {
       }
       {!loadingState && snippet &&
         <>
-          <IconButton
-            style={{ float: 'right', zIndex: 1 }}
-            ariaLabel={translateMessage('Copy')}
-            iconProps={copyIcon}
-            onClick={async () =>
-              trackedGenericCopy(
-                snippet,
-                CODE_SNIPPETS_COPY_BUTTON,
-                sampleQuery,
-                { Language: language })}
-          />
+          <CopyButton isIconButton={true} style={{ float: 'right', zIndex: 1 }} handleOnClick={handleCopy} />
           <Monaco
             body={snippet}
             language={language}

@@ -10,6 +10,7 @@ import { IScopes } from './permissions';
 import { IUser } from './profile';
 import { IGraphResponse } from './query-response';
 import { IQuery, ISampleQuery } from './query-runner';
+import { IResources } from './resources';
 import { ISidebarProps } from './sidebar';
 import { ISnippet } from './snippets';
 import { IStatus } from './status';
@@ -40,6 +41,7 @@ export interface IRootState {
   dimensions: IDimensions;
   autoComplete: IAutocompleteResponse;
   devxApi: IDevxAPI;
+  resources: IResources;
   policies: IPolicies;
 }
 

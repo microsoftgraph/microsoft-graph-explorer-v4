@@ -1,5 +1,6 @@
 import { IHarFormat, IHarHeaders, IHarPayload } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
+import { downloadToLocal } from '../../common/download';
 
 export function createHarPayload(query: IHistoryItem): IHarPayload {
   const queryResult = JSON.stringify(query.result);
@@ -108,18 +109,11 @@ function createEntries(payloads: IHarPayload[]) {
 }
 
 export function exportQuery(content: IHarFormat, requestUrl: string) {
-  const blob = new Blob([JSON.stringify(content)], { type: 'text/json' });
-
   const url = requestUrl.substr(8).split('/');
   url.pop();
 
   const filename = `${url.join('_')}.har`;
-  const elem = window.document.createElement('a');
-  elem.href = window.URL.createObjectURL(blob);
-  elem.download = filename;
-  document.body.appendChild(elem);
-  elem.click();
-  document.body.removeChild(elem);
+  downloadToLocal(content, filename);
 }
 
 

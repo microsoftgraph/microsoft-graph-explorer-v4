@@ -117,7 +117,8 @@ module.exports = {
     'no-multiple-empty-lines': 'error',
     'no-new-wrappers': 'error',
     'quotes': ['error', 'single'],
-    'no-shadow': [
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': [
       'warn',
       {
         hoist: 'all',

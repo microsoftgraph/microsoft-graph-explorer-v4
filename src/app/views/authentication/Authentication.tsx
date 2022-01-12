@@ -41,7 +41,7 @@ const Authentication = (props: any) => {
         dispatch(getAuthTokenSuccess(!!authResponse.accessToken));
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
       }
-    } catch (error : any) {
+    } catch (error: any) {
       const { errorCode } = error;
       if (signInAuthError(errorCode)) {
         authenticationWrapper.clearSession();
