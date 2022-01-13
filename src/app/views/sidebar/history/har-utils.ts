@@ -1,6 +1,6 @@
 import { IHarFormat, IHarHeaders, IHarPayload } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
-import { downloadToLocal } from '../../../utils/download';
+import { downloadToLocal } from '../../common/download';
 
 export function createHarPayload(query: IHistoryItem): IHarPayload {
   const queryResult = JSON.stringify(query.result);
