@@ -41,9 +41,10 @@ export function getSnippet(language: string): Function {
       }
       if (language !== 'csharp') {
         snippetsUrl += `?lang=${language}`;
-        if (language === 'go') {
-          snippetsUrl += '&generation=openapi';
-        }
+      }
+      const openApiSnippets: string[] = ['go', 'powershell'];
+      if (openApiSnippets.includes(language)) {
+        snippetsUrl += '&generation=openapi';
       }
 
       dispatch(getSnippetPending());
@@ -52,12 +53,17 @@ export function getSnippet(language: string): Function {
       const headers = {
         'Content-Type': 'application/http'
       };
-      // eslint-disable-next-line max-len
+
+      const requestBody =
+        sampleQuery.sampleBody &&
+        Object.keys(sampleQuery.sampleBody).length !== 0 && // check if empty object
+        sampleQuery.sampleBody.trim() !== ''
+          ? JSON.stringify(sampleQuery.sampleBody)
+          : '';
+
       const body = `${sampleQuery.selectedVerb} /${queryVersion}/${
         requestUrl + search
-      } HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(
-        sampleQuery.sampleBody
-      )}`;
+      } HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${requestBody}`;
       const options: IRequestOptions = { method, headers, body };
       const obj: any = {};
 
