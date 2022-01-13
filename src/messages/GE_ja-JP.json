@@ -340,7 +340,7 @@
   "sign in to view a list of all permissions": "このタブにはクエリのアクセス許可がありません。サインインして、プロファイルの横にある設定アイコンの [アクセス許可を選択する] オプションを使用して、[Microsoft Graph のアクセス許可] の完全なリストを表示し、必要なアクセス許可を選択して、そこから同意します。",
   "open permissions panel": "[アクセス許可] パネルを開きます。",
   "permissions list": " [Microsoft Graph のアクセス許可] の完全なリストを表示し、必要なアクセス許可を選択して、そこから同意します。",
-  "Get started with adaptive cards on": "アダプティブ カードを使ってみる",
+  "Get started with adaptive cards on": "アダプティブ カードを使ってみる ",
   "Adaptive Cards Templating SDK": "アダプティブ カード テンプレート SDK",
   "card": "カード",
   "JSON Schema": "JSON テンプレート",
@@ -381,11 +381,6 @@
   "access_denied_consent": "このアクセス許可に対する同意は、テナント管理者によってブロックされています。管理者にアクセス権の付与を依頼してから、もう一度お試しください。",
   "This response contains unviewable content": "この応答には、このエディターで表示できない可能性があるコンテンツが含まれています。",
   "Click to download file": "クリックしてファイルをダウンロードします。",
-  "File response is available in original format only": "回避策の制限により、ファイルは元の形式でのみダウンロードできます。",
-  "Response is result of workaround": "元の要求からリダイレクトされた URL が CORS に準拠していないため、代替のクエリを使用してダウンロード URL を取得しました。",
-  "For more information": "詳細については、次を参照してください",
-  "documentation": "ドキュメント",
-  "Missing response headers for query workaround": "この要求に対して通常返される一部のヘッダーは、回避策の制限により欠落している可能性があります。",
   "Learn more": "詳細情報",
   "loading resources": "リソースの読み込み",
   "Isolate": "分離する",
@@ -430,5 +425,7 @@
   "Query parameters": "クエリ パラメーター",
   "Preview collection": "プレビュー コレクション",
   "Download postman collection": "Postman コレクションをダウンロード",
-  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "リスト全体を Postman コレクションとしてエクスポートできます。リストに不要なアイテムがある場合は、それらを選択して削除します"
+  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "リスト全体を Postman コレクションとしてエクスポートできます。リストに不要なアイテムがある場合は、それらを選択して削除します",
+  "Copied": "コピー済み",
+  "Invalid whitespace in URL": "URL 内の空白文字が無効です"
 }
