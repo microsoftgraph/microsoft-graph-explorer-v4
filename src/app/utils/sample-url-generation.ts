@@ -13,7 +13,7 @@ export function parseSampleUrl(url: string, version?: string) {
       queryVersion = (version) ? version : urlObject.pathname.substring(1, 5);
       search = generateSearchParameters(urlObject, search);
       sampleUrl = `${GRAPH_URL}/${queryVersion}/${requestUrl + search}`;
-    } catch (error) {
+    } catch (error:any) {
       if (error.message === 'Failed to construct \'URL\': Invalid URL') {
         return {
           queryVersion, requestUrl, sampleUrl, search
@@ -33,7 +33,7 @@ function generateSearchParameters(urlObject: URL, search: string) {
     try {
       search = decodeURI(searchParameters);
     }
-    catch (error) {
+    catch (error:any) {
       if (error.message === 'URI malformed') {
         search = searchParameters;
       }
@@ -42,3 +42,8 @@ function generateSearchParameters(urlObject: URL, search: string) {
   return search;
 }
 
+export function hasWhiteSpace(url: string):boolean {
+  const parts = url.split('?');
+  const whitespaceChars = [' ', '\t', '\n', '%20'];
+  return whitespaceChars.some(char => parts[0].includes(char));
+}

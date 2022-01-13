@@ -53,8 +53,8 @@ export const getPivotItems = () => {
         <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
         {link.headerText}
 
-        {link.ariaLabel === 'Adaptive Cards' && showDotIfAdaptiveCardPresent()}
-        {link.ariaLabel === 'Graph Toolkit' && showDotIfGraphToolkitPresent()}
+        {link.itemKey === 'adaptive-cards' && showDotIfAdaptiveCardPresent()}
+        {link.itemKey === 'toolkit-component' && showDotIfGraphToolkitPresent()}
       </TooltipHost>
     );
   }
