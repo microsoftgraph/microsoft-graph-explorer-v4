@@ -2,7 +2,7 @@ import {
   ContextualMenuItemType, getId, Icon, IconButton,
   IContextualMenuItem, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { telemetry, eventTypes, componentNames } from '../../../../telemetry';
@@ -24,6 +24,15 @@ interface IResourceLinkProps {
 const ResourceLink = (props: IResourceLinkProps) => {
   const dispatch = useDispatch();
   const { link: resourceLink, version } = props;
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+  }, []);
+
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  }
 
   const tooltipId = getId('tooltip');
   const buttonId = getId('targetButton');
@@ -54,12 +63,30 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   const items = getMenuItems();
 
-  return <span className={linkStyle.link}>
-    {!!resourceLink.iconresourceLink && <Icon style={{ margin: '0 4px' }}
-      {...resourceLink.iconresourceLink} />}
-    {resourceLink.name}
+  const setOverflowWidth = () : string => {
+    if (windowWidth < 1600) {return '200px';}
+    if (windowWidth > 2000) {return '700px';}
+    return ''
+  }
 
-    {items.length > 0 &&
+  return <span
+    className={linkStyle.link}>
+
+    <span
+      style={{
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        maxWidth: setOverflowWidth()
+      }}
+    >
+      {!!resourceLink.iconresourceLink && <Icon style={{ margin: '0 4px' }}
+        {...resourceLink.iconresourceLink} />}
+      {resourceLink.name}
+    </span>
+
+    <span>
+      {items.length > 0 &&
       <TooltipHost
         content={translateMessage('More actions')}
         id={tooltipId}
@@ -88,7 +115,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
           }}
         />
       </TooltipHost>
-    }
+      }
+    </span>
   </span>;
 
   function getMenuItems() {
