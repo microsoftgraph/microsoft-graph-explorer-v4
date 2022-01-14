@@ -105,7 +105,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         });
     }
 
-    if (resourceLink.type === 'path') {
+    if (resourceLink.type === 'path' || resourceLink.type === 'function') {
       menuItems.push(
         {
           key: ResourceOptions.SHOW_QUERY_PARAMETERS,
