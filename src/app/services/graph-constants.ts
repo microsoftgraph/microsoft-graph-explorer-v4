@@ -18,11 +18,29 @@ export enum ACCOUNT_TYPE {
 export enum PERMS_SCOPE {
   WORK = 'DelegatedWork',
   APPLICATION = 'Application',
-  PERSONAL = 'DelegatedPersonal',
+  PERSONAL = 'DelegatedPersonal'
+}
+export enum WORKLOAD {
+  ONEDRIVE = 'OneDrive',
+  O365REPORTING = 'O365Reporting'
 }
 export const ADAPTIVE_CARD_URL =
   'https://templates.adaptivecards.io/graph.microsoft.com';
 export const GRAPH_TOOOLKIT_EXAMPLE_URL = 'https://mgt.dev/?path=/story';
+export const MOZILLA_CORS_DOCUMENTATION_LINK =
+  'https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS';
 export const ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK =
-  'https://docs.microsoft.com/en-us/onedrive/developer/rest-api/concepts/working-with-cors' +
-  '#downloading-onedrive-files-in-javascript-apps';
+  'https://docs.microsoft.com/en-us/graph/api/driveitem-get-content?view=graph-rest-1.0&tabs=http';
+export const CORS_ERROR_QUERIES = new Map([
+  ['groups/{groups-id}/drive/items/{items-id}/content', WORKLOAD.ONEDRIVE],
+  ['sites/{sites-id}/drive/items/{items-id}/content', WORKLOAD.ONEDRIVE],
+  ['users/{users-id}/drive/items/{items-id}/content', WORKLOAD.ONEDRIVE],
+  ['drives/{drives-id}/items/{items-id}/content', WORKLOAD.ONEDRIVE],
+  ['shares/{shares-id}/driveItem/content', WORKLOAD.ONEDRIVE],
+  ['me/drive/items/{items-id}/content', WORKLOAD.ONEDRIVE],
+  ['me/drive/root:<value>/content', WORKLOAD.ONEDRIVE],
+  ['reports/getYammerGroupsActivityDetail(period=<value>)', WORKLOAD.O365REPORTING],
+  ['reports/getTeamsDeviceUsageUserCounts(period=<value>)', WORKLOAD.O365REPORTING],
+  ['reports/getSharePointSiteUsageDetail(period=<value>)',WORKLOAD.O365REPORTING],
+  ['reports/getOneDriveUsageFileCounts(period=<value>)', WORKLOAD.O365REPORTING]
+]);
