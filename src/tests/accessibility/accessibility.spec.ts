@@ -42,7 +42,8 @@ describe('Graph Explorer accessibility', () => {
         'document-title',
         'html-has-lang',
         'page-has-heading-one',
-        'button-name'
+        'button-name',
+        'landmark-unique'
       ])
       .analyze();
     expect(accessibilityScanResults.violations).toStrictEqual([]);
