@@ -1,7 +1,6 @@
 import { CommandBar, CommandBarButton, getTheme, IButtonProps, ICommandBarItemProps, ICommandBarStyles,
-  IComponentAs, IContextualMenuItemStyles, PrimaryButton } from '@fluentui/react';
+  IContextualMenuItemStyles } from '@fluentui/react';
 import React, { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 
 import { translateMessage } from '../../../utils/translate-messages';
 import PathsReview from './panels/PathsReview';
@@ -36,6 +35,12 @@ const CommandOptions = (props: ICommandOptions) => {
       marginLeft: '-15px'
     }
   };
+
+  const commandBarStyles: Partial<ICommandBarStyles> = {
+    root: {
+      backgroundColor: theme.palette.neutralLighter
+    }
+  }
   const CustomButton: React.FunctionComponent<IButtonProps> = (props_: any) => {
     return <CommandBarButton {...props_} onClick={toggleSelectedResourcesPreview} styles={itemStyles}/>;
   };
@@ -48,6 +53,7 @@ const CommandOptions = (props: ICommandOptions) => {
         primaryGroupAriaLabel='Selection actions'
         farItemsGroupAriaLabel='More selection actions'
         buttonAs={CustomButton}
+        styles={commandBarStyles}
       />
       <PathsReview
         isOpen={isOpen}
