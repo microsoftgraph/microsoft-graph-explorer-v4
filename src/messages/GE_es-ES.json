@@ -340,7 +340,7 @@
   "sign in to view a list of all permissions": "Faltan los permisos para realizar la consulta en esta pestaña. Inicie sesión para usar la opción Seleccionar permisos en el icono de configuración junto a su perfil y ver la lista completa de permisos de Microsoft Graph, y seleccione los permisos que desea y consiente desde aquí.",
   "open permissions panel": "Abra el panel de permisos",
   "permissions list": " para ver la lista completa de permisos de Microsoft Graph y seleccione los permisos que quiere y consiente desde ahí.",
-  "Get started with adaptive cards on": "Introducción a las tarjetas adaptables en",
+  "Get started with adaptive cards on": "Introducción a las tarjetas adaptables en ",
   "Adaptive Cards Templating SDK": "SDK de plantillas de tarjetas adaptables",
   "card": "Tarjeta",
   "JSON Schema": "Plantilla JSON",
@@ -381,11 +381,6 @@
   "access_denied_consent": "El administrador del espacio empresarial ha bloqueado su consentimiento para este permiso. Pida al administrador que le conceda acceso e inténtelo de nuevo.",
   "This response contains unviewable content": "Esta respuesta contiene contenido que puede que no se pueda ver en este editor.",
   "Click to download file": "Haga clic para descargar el archivo.",
-  "File response is available in original format only": "Debido a las limitaciones de la solución alternativa, el archivo solo está disponible para su descarga en su formato original.",
-  "Response is result of workaround": "Se ha usado una consulta alternativa para capturar la dirección URL de descarga, ya que la dirección URL redirigida de la solicitud original no es compatible con CORS.",
-  "For more information": "Para más información, consulte",
-  "documentation": "documentación",
-  "Missing response headers for query workaround": "Es posible que falten algunos encabezados, que normalmente se devuelven para esta solicitud, debido a las limitaciones de la solución alternativa.",
   "Learn more": "Más información",
   "loading resources": "cargando recursos",
   "Isolate": "Aislar",
@@ -430,5 +425,7 @@
   "Query parameters": "Parámetros de consulta",
   "Preview collection": "Vista previa de la colección",
   "Download postman collection": "Descargar colección Postman",
-  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "Se puede exportar toda la lista como una colección de Postman. Si hay elementos en la lista que no desea, selecciónelos para quitarlos."
+  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "Se puede exportar toda la lista como una colección de Postman. Si hay elementos en la lista que no desea, selecciónelos para quitarlos.",
+  "Copied": "Copiado",
+  "Invalid whitespace in URL": "Espacio en blanco no válido en la dirección URL"
 }
