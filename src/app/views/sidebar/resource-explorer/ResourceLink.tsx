@@ -12,7 +12,7 @@ import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
-import { getAvailableMethods, getUrlFromLink, removeCounter } from './resource-explorer.utils';
+import { getAvailableMethods, getUrlFromLink } from './resource-explorer.utils';
 
 interface IResourceLinkProps {
   link: any;
