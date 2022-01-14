@@ -115,7 +115,7 @@
         "@types/redux-logger": "3.0.7",
         "@types/redux-mock-store": "1.0.0",
         "@types/selenium-webdriver": "4.0.16",
-        "@typescript-eslint/eslint-plugin": "4.15.0",
+        "@typescript-eslint/eslint-plugin": "4.33.0",
         "@typescript-eslint/eslint-plugin-tslint": "4.33.0",
         "@typescript-eslint/parser": "4.33.0",
         "acorn": "8.6.0",
