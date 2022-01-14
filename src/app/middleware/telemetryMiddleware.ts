@@ -1,10 +1,5 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
-import {
-  componentNames,
-  errorTypes,
-  eventTypes,
-  telemetry
-} from '../../telemetry';
+import { componentNames, errorTypes, telemetry } from '../../telemetry';
 import { IAction } from '../../types/action';
 import { IQuery } from '../../types/query-runner';
 import { IRootState } from '../../types/root';
@@ -12,8 +7,6 @@ import {
   FETCH_ADAPTIVE_CARD_ERROR,
   FETCH_SCOPES_ERROR,
   GET_SNIPPET_ERROR,
-  RESOURCEPATHS_ADD_SUCCESS,
-  RESOURCEPATHS_DELETE_SUCCESS,
   SAMPLES_FETCH_ERROR
 } from '../services/redux-constants';
 import { sanitizeQueryUrl } from '../utils/query-url-sanitization';
@@ -60,20 +53,6 @@ const telemetryMiddleware =
           action.response,
           {}
         );
-        break;
-      }
-      case RESOURCEPATHS_ADD_SUCCESS: {
-        telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
-          ComponentName: componentNames.ADD_RESOURCE_TO_COLLECTION_LIST_ITEM,
-          ResourcePath: action.response[0].url
-        });
-        break;
-      }
-      case RESOURCEPATHS_DELETE_SUCCESS: {
-        telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
-          ComponentName: componentNames.REMOVE_RESOURCE_FROM_COLLECTION_BUTTON,
-          ResourceCount: action.response.length
-        });
         break;
       }
     }
