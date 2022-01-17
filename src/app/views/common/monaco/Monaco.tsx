@@ -47,7 +47,8 @@ export function Monaco(props: IMonaco) {
               },
               wordWrap: 'on',
               folding: true,
-              foldingStrategy: 'indentation'
+              foldingStrategy: 'indentation',
+              showFoldingControls: 'always'
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
