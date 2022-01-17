@@ -49,6 +49,7 @@ export class Request extends Component<IRequestComponent, any> {
     const containerStyle: CSSProperties = {
       height: convertVhToPx(height, heightAdjustment),
       overflowY: 'hidden',
+      overflowX: 'hidden',
       borderBottom: '1px solid #ddd'
     };
 
