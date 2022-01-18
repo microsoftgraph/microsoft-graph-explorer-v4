@@ -52,6 +52,7 @@ const unstyledResourceExplorer = (props: any) => {
   const [panelContext, setPanelContext] = useState<any>(null);
   const [panelHeaderText, setPanelHeaderText] = useState('');
   const [searchText, setSearchText] = useState<string>('');
+  const [linkLevel, setLinkLevel] = useState(-1);
 
   const performSearch = (needle: string, haystack: IResource[]) => {
     const keyword = needle.toLowerCase();
@@ -140,6 +141,7 @@ const unstyledResourceExplorer = (props: any) => {
     ];
     setItems(tree);
     setIsolated(navLink);
+    setLinkLevel(navLink.level);
     telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
       {
         ComponentName: componentNames.RESOURCES_ISOLATE_QUERY_LIST_ITEM,
@@ -152,6 +154,7 @@ const unstyledResourceExplorer = (props: any) => {
     setSearchText('');
     const filtered = getResourcesSupportedByVersion(data, version);
     setItems(createList(filtered.children, version));
+    setLinkLevel(-1);
   }
 
   const dismissPanel = () => {
@@ -252,6 +255,7 @@ const unstyledResourceExplorer = (props: any) => {
             isolateTree={isolateTree}
             version={version}
             resourceOptionSelected={(activity: string, context: unknown) => resourceOptionSelected(activity, context)}
+            linkLevel={linkLevel}
           />
         }}
         onLinkClick={clickLink}

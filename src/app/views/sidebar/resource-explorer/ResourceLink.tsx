@@ -19,16 +19,23 @@ interface IResourceLinkProps {
   isolateTree: Function;
   resourceOptionSelected: Function;
   version: string;
+  linkLevel: number;
 }
 
 const ResourceLink = (props: IResourceLinkProps) => {
   const dispatch = useDispatch();
   const { link: resourceLink, version } = props;
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [resourceLevelOnIsolation, setResourceLevelOnIsolation] = useState(-1);
+  const [isolationFlag, setIsolationFlag] = useState(false);
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    setResourceLevelOnIsolation(props.linkLevel);
+  },  [isolationFlag]);
 
   const handleResize = () => {
     setWindowWidth(window.innerWidth);
@@ -63,10 +70,41 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   const items = getMenuItems();
 
-  const setOverflowWidth = () : string => {
-    if (windowWidth < 1600) {return '200px';}
-    if (windowWidth > 2000) {return '700px';}
+  const setMaxOverflowWidth = () : string => {
+    const compensation = compensateForLevelPx();
+    if (windowWidth > 800 && windowWidth < 1024){ return `${130 - compensation}px`}
+    if (windowWidth > 1024 && windowWidth < 1280){ return `${180 - compensation}px`}
+    if (windowWidth < 1600) {return  `${205 - compensation}px`;}
+    if (windowWidth >= 1600 && windowWidth < 2000) {return `${310-compensation}px`;}
+    if (windowWidth >= 2000) {return `${400-compensation}px`;}
     return ''
+  }
+
+  const isolateResourceLink = (resourceLink_: IResourceLink) => {
+    setIsolationFlag(true);
+    props.isolateTree(resourceLink_);
+  }
+
+  const compensateForLevelPx = () : number => {
+    const levelCompensation = new Map([
+      [1, 0],
+      [2, 23],
+      [3, 30],
+      [4, 40],
+      [5, 55],
+      [6, 65],
+      [7, 75],
+      [8, 80],
+      [9, 85],
+      [10, 90]
+    ])
+    const currentLevel: number = resourceLevelOnIsolation === -1 ? resourceLink.level :
+      resourceLink.level - resourceLevelOnIsolation;
+    if(currentLevel >= 11) {
+      return 100;
+    }
+    const compensation = levelCompensation.get(currentLevel);
+    return  compensation ? compensation : 0;
   }
 
   return <span
@@ -77,7 +115,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
-        maxWidth: setOverflowWidth()
+        maxWidth: setMaxOverflowWidth()
       }}
     >
       {!!resourceLink.iconresourceLink && <Icon style={{ margin: '0 4px' }}
@@ -129,7 +167,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
           key: 'isolate',
           text: translateMessage('Isolate'),
           itemType: ContextualMenuItemType.Normal,
-          onClick: () => props.isolateTree(resourceLink)
+          onClick: () => isolateResourceLink(resourceLink)
         });
     }
 
