@@ -340,7 +340,7 @@
   "sign in to view a list of all permissions": "このタブにはクエリのアクセス許可がありません。サインインして、プロファイルの横にある設定アイコンの [アクセス許可を選択する] オプションを使用して、[Microsoft Graph のアクセス許可] の完全なリストを表示し、必要なアクセス許可を選択して、そこから同意します。",
   "open permissions panel": "[アクセス許可] パネルを開きます。",
   "permissions list": " [Microsoft Graph のアクセス許可] の完全なリストを表示し、必要なアクセス許可を選択して、そこから同意します。",
-  "Get started with adaptive cards on": "アダプティブ カードを使ってみる",
+  "Get started with adaptive cards on": "アダプティブ カードを使ってみる ",
   "Adaptive Cards Templating SDK": "アダプティブ カード テンプレート SDK",
   "card": "カード",
   "JSON Schema": "JSON テンプレート",
@@ -425,5 +425,9 @@
   "Query parameters": "クエリ パラメーター",
   "Preview collection": "プレビュー コレクション",
   "Download postman collection": "Postman コレクションをダウンロード",
-  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "リスト全体を Postman コレクションとしてエクスポートできます。リストに不要なアイテムがある場合は、それらを選択して削除します"
+  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "リスト全体を Postman コレクションとしてエクスポートできます。リストに不要なアイテムがある場合は、それらを選択して削除します",
+  "Copied": "コピー済み",
+  "Invalid whitespace in URL": "URL 内の空白文字は無効です",
+  "Response content not available due to CORS policy": "CORS ポリシーにより、Graph エクスプローラーでは応答コンテンツを使用できません。この要求は、Postman などの API クライアントで実行できます。CORS の詳細を読み、そのしくみを理解してください",
+  "here": "こちら"
 }
