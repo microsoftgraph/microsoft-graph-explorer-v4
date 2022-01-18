@@ -380,7 +380,7 @@
   "user_cancelled_consent": "Bitte warten Sie, bis der Zustimmungsprozess abgeschlossen ist.",
   "access_denied_consent": "Ihre Zustimmung zu dieser Berechtigung wurde von Ihrem Mandantenadministrator blockiert. Bitten Sie Ihren Administrator, Ihnen Zugriff zu gewähren, und versuchen Sie es dann erneut.",
   "This response contains unviewable content": "Diese Antwort enthält Inhalte, die in diesem Editor möglicherweise nicht angezeigt werden können.",
-  "Click to download file": "Zum Herunterladen der Datei klicken.",
+  "Click to download file": "Klicken, um die Datei herunterzuladen.",
   "Learn more": "Weitere Informationen",
   "loading resources": "Ressourcen werden geladen",
   "Isolate": "Isolieren",
@@ -427,5 +427,7 @@
   "Download postman collection": "Postman-Sammlung herunterladen",
   "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "Sie können die gesamte Liste als Postman-Sammlung exportieren. Wenn die Liste Elemente enthält, die Sie nicht benötigen, wählen Sie diese aus, um sie zu entfernen.",
   "Copied": "Kopiert",
-  "Invalid whitespace in URL": "Ungültige Leerzeichen in URL"
+  "Invalid whitespace in URL": "Ungültige Leerzeichen in URL",
+  "Response content not available due to CORS policy": "Der Antwortinhalt ist im Graph-Tester aufgrund der CORS-Richtlinie nicht verfügbar. Sie können diese Anforderung in einem API-Client wie Postman ausführen. Erfahren Sie mehr über CORS, und lernen Sie, wie es funktioniert",
+  "here": "hier"
 }
