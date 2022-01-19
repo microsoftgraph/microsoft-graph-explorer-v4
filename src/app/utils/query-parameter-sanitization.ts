@@ -433,8 +433,7 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
         if (!isPropertyName(propertyName)) {
           propertyName = '<property>';
         }
-        sanitizedQueryString += `${queryFunctionPrefix}(${propertyName}${
-          commaIndex > 0 ? ',<value>' : ''
+        sanitizedQueryString += `${queryFunctionPrefix}(${propertyName}${commaIndex > 0 ? ',<value>' : ''
         })`;
       } else {
         sanitizedQueryString += `${queryFunctionPrefix}(<unknown>)`;
@@ -460,8 +459,7 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
           COMPARISON_OPERATORS.includes(expectedOperator) ||
           ARITHMETIC_OPERATORS.includes(expectedOperator)
         ) {
-          sanitizedQueryString += `${segment} ${
-            filterSegments[index + 1]
+          sanitizedQueryString += `${segment} ${filterSegments[index + 1]
           } <value>`;
           index += 2;
           continue;

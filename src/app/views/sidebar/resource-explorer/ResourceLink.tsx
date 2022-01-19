@@ -5,13 +5,14 @@ import {
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
+import { telemetry, eventTypes, componentNames } from '../../../../telemetry';
 
 import { IQuery } from '../../../../types/query-runner';
 import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
-import { getAvailableMethods, getUrlFromLink, removeCounter } from './resource-explorer.utils';
+import { getAvailableMethods, getUrlFromLink } from './resource-explorer.utils';
 
 interface IResourceLinkProps {
   link: any;
@@ -33,7 +34,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
   };
 
   const setQuery = (link: IResourceLink, selectedVerb: string) => {
-    const sampleUrl = `${GRAPH_URL}/${version}${getUrlFromLink(link)}`;
+    const resourceUrl = getUrlFromLink(link);
+    const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
     const query: IQuery = {
       selectedVerb,
       selectedVersion: version,
@@ -42,6 +44,12 @@ const ResourceLink = (props: IResourceLinkProps) => {
       sampleBody: undefined
     };
     dispatch(setSampleQuery(query));
+    telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
+      {
+        ComponentName: componentNames.RESOURCES_SET_QUERY_LIST_ITEM,
+        SelectedVerb: selectedVerb,
+        ResourcePath: resourceUrl
+      });
   }
 
   const items = getMenuItems();
@@ -97,14 +105,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         });
     }
 
-    if (resourceLink.type === 'path') {
-      menuItems.push(
-        {
-          key: ResourceOptions.SHOW_QUERY_PARAMETERS,
-          text: translateMessage('Access query parameters'),
-          itemType: ContextualMenuItemType.Normal,
-          onClick: () => props.resourceOptionSelected(ResourceOptions.SHOW_QUERY_PARAMETERS, resourceLink)
-        });
+    if (resourceLink.type === 'path' || resourceLink.type === 'function') {
       menuItems.push(
         {
           key: ResourceOptions.ADD_TO_COLLECTION,
@@ -131,14 +132,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
         subMenuProps: {
           items: subMenuItems
         }
-      });
-    }
-
-    if (menuItems.length > 0) {
-      menuItems.unshift({
-        key: 'actions',
-        itemType: ContextualMenuItemType.Header,
-        text: removeCounter(resourceLink.name)
       });
     }
     return menuItems;
