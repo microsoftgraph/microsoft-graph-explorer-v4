@@ -15,7 +15,7 @@ import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import CommandOptions from './CommandOptions';
 import {
-  createList, getCurrentTree,
+  createResourcesList, getCurrentTree,
   getResourcePaths,
   getResourcesSupportedByVersion, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
@@ -35,7 +35,7 @@ const unstyledResourceExplorer = (props: any) => {
   ];
   const [version, setVersion] = useState(versions[0].key);
   const filteredPayload = getResourcesSupportedByVersion(data, version);
-  const navigationGroup = createList(filteredPayload.children, version);
+  const navigationGroup = createResourcesList(filteredPayload.children, version);
 
   const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
   const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
@@ -82,7 +82,7 @@ const unstyledResourceExplorer = (props: any) => {
     const list = getResourcesSupportedByVersion(data, selectedVersion);
     const dataSet = (searchText) ? performSearch(searchText, list.children) : list.children;
     setResourceItems(dataSet);
-    setItems(createList(dataSet, selectedVersion));
+    setItems(createResourcesList(dataSet, selectedVersion));
   }
 
   const changeSearchValue = (event: any, value?: string) => {
@@ -97,7 +97,7 @@ const unstyledResourceExplorer = (props: any) => {
       segment: data.segment
     }, version).children;
     setResourceItems(dataSet);
-    setItems(createList(dataSet, version));
+    setItems(createResourcesList(dataSet, version));
   }
 
   const navigateToBreadCrumb = (ev?: any, item?: IBreadcrumbItem): void => {
@@ -146,7 +146,7 @@ const unstyledResourceExplorer = (props: any) => {
     setIsolated(null);
     setSearchText('');
     const filtered = getResourcesSupportedByVersion(data, version);
-    setItems(createList(filtered.children, version));
+    setItems(createResourcesList(filtered.children, version));
   }
 
   const clickLink = (ev?: React.MouseEvent<HTMLElement>) => {
