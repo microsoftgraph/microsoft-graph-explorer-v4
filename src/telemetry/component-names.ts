@@ -23,7 +23,6 @@ export const HISTORY_LIST_ITEM = 'History list item';
 export const SAMPLE_QUERY_LIST_ITEM = 'Sample query list item';
 export const RESOURCES_SET_QUERY_LIST_ITEM = 'Resources set query list item';
 export const RESOURCES_ISOLATE_QUERY_LIST_ITEM = 'Resources isolate query list item';
-export const RESOURCES_QUERY_PARAMETERS_LIST_ITEM ='Resources query parameters list item';
 export const ADD_RESOURCE_TO_COLLECTION_LIST_ITEM = 'Add resource to collection list item';
 
 // Tabs
