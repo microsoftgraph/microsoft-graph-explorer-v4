@@ -10,7 +10,7 @@ import { IRootState } from '../../../../../types/root';
 import * as autoCompleteActionCreators from '../../../../services/actions/autocomplete-action-creators';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
-import { hasWhiteSpace, parseSampleUrl } from '../../../../utils/sample-url-generation';
+import { hasWhiteSpace, parseSampleUrl, removeExtraSlashesFromUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
 import {
@@ -106,10 +106,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   private initialiseAutoComplete = (url: string) => {
-    const isSlashPreceed = url.substring(url.length - 1, url.length - 2);
-    if (isSlashPreceed === '/') {
-      return;
-    }
+    url = removeExtraSlashesFromUrl(url);
     switch (getLastCharacterOf(url)) {
       case '/':
       case '?':
