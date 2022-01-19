@@ -8,6 +8,7 @@ import { IAutoCompleteProps, IAutoCompleteState } from '../../../../../types/aut
 import { SortOrder } from '../../../../../types/enums';
 import { IRootState } from '../../../../../types/root';
 import * as autoCompleteActionCreators from '../../../../services/actions/autocomplete-action-creators';
+import { GRAPH_API_VERSIONS } from '../../../../services/graph-constants';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { hasWhiteSpace, parseSampleUrl, removeExtraSlashesFromUrl } from '../../../../utils/sample-url-generation';
@@ -281,7 +282,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private requestForAutocompleteOptions(url: string) {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
-    if (queryVersion) {
+    if (GRAPH_API_VERSIONS.includes(queryVersion.toLowerCase())) {
       if (!requestUrl) {
         this.props.actions!.fetchAutoCompleteOptions('', queryVersion);
       } else {
