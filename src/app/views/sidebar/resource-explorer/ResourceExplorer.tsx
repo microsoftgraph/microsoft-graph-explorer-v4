@@ -1,6 +1,5 @@
-import {
-  Breadcrumb, ChoiceGroup, DefaultButton,
-  IBreadcrumbItem, IChoiceGroupOption, INavLinkGroup, Label, Nav, Panel,
+import {  Breadcrumb, ChoiceGroup, DefaultButton,
+  IBreadcrumbItem, IChoiceGroupOption, INavLink, INavLinkGroup, Label, Nav, Panel,
   PanelType, SearchBox, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
@@ -159,8 +158,9 @@ const unstyledResourceExplorer = (props: any) => {
     setPanelContext(null);
   }
 
-  const clickLink = (ev?: React.MouseEvent<HTMLElement>) => {
+  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
     ev!.preventDefault();
+    item!.isExpanded = !item!.isExpanded;
   }
 
   const resourceOptionSelected = (activity: string, context: any) => {
