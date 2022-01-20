@@ -1,4 +1,3 @@
-import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
 import {
@@ -39,11 +38,11 @@ export function getPolicies(): Function {
   return async (dispatch: Function) => {
     try {
       const policyUrl = getPolicyUrl();
-      const token = await authenticationWrapper.getOcpsToken();
+      //const token = await authenticationWrapper.getOcpsToken();
 
       const headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
+        'Authorization': 'Bearer '
 
       };
       const options: IRequestOptions = { headers, method: 'GET' };
