@@ -35,7 +35,6 @@ export interface IResourceLink extends INavLink {
 }
 
 export enum ResourceOptions {
-  ADD_TO_COLLECTION = 'add-to-collection',
-  SHOW_QUERY_PARAMETERS = 'show-query-parameters'
+  ADD_TO_COLLECTION = 'add-to-collection'
 }
 

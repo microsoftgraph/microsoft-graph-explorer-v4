@@ -3,8 +3,8 @@ import {
   GraphRequest,
   ResponseType
 } from '@microsoft/microsoft-graph-client';
-import { 
-  MSALAuthenticationProviderOptions 
+import {
+  MSALAuthenticationProviderOptions
 } from '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
 
 import { IAction } from '../../../types/action';
