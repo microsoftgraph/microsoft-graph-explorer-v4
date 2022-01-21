@@ -171,14 +171,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         });
     }
 
-    if (resourceLink.type === 'path') {
-      menuItems.push(
-        {
-          key: ResourceOptions.SHOW_QUERY_PARAMETERS,
-          text: translateMessage('Access query parameters'),
-          itemType: ContextualMenuItemType.Normal,
-          onClick: () => props.resourceOptionSelected(ResourceOptions.SHOW_QUERY_PARAMETERS, resourceLink)
-        });
+    if (resourceLink.type === 'path' || resourceLink.type === 'function') {
       menuItems.push(
         {
           key: ResourceOptions.ADD_TO_COLLECTION,

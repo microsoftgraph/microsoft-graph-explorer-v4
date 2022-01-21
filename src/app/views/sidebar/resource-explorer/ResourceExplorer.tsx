@@ -1,7 +1,6 @@
 import {
   Breadcrumb, ChoiceGroup, DefaultButton,
-  IBreadcrumbItem, IChoiceGroupOption, INavLinkGroup, Label, Nav, Panel,
-  PanelType, SearchBox, Spinner, SpinnerSize, Stack, styled
+  IBreadcrumbItem, IChoiceGroupOption, INavLinkGroup, Label, Nav, SearchBox, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -15,7 +14,6 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import CommandOptions from './CommandOptions';
-import QueryParameters from './panels/QueryParameters';
 import {
   createList, getCurrentTree,
   getResourcePaths,
@@ -48,9 +46,6 @@ const unstyledResourceExplorer = (props: any) => {
   }, [filteredPayload.children.length]);
 
   const [isolated, setIsolated] = useState<any>(null);
-  const [panelIsOpen, setPanelIsOpen] = useState<boolean>(false);
-  const [panelContext, setPanelContext] = useState<any>(null);
-  const [panelHeaderText, setPanelHeaderText] = useState('');
   const [searchText, setSearchText] = useState<string>('');
   const [linkLevel, setLinkLevel] = useState(-1);
 
@@ -157,11 +152,6 @@ const unstyledResourceExplorer = (props: any) => {
     setLinkLevel(-1);
   }
 
-  const dismissPanel = () => {
-    setPanelIsOpen(!panelIsOpen);
-    setPanelContext(null);
-  }
-
   const clickLink = (ev?: React.MouseEvent<HTMLElement>) => {
     ev!.preventDefault();
   }
@@ -169,19 +159,6 @@ const unstyledResourceExplorer = (props: any) => {
   const resourceOptionSelected = (activity: string, context: any) => {
     if (activity === ResourceOptions.ADD_TO_COLLECTION) {
       addToCollection(context);
-    } else {
-      const requestUrl = getUrlFromLink(context);
-      setPanelIsOpen(true);
-      setPanelContext({
-        activity,
-        context
-      });
-      setPanelHeaderText(`${requestUrl}`);
-      telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
-        {
-          ComponentName: componentNames.RESOURCES_QUERY_PARAMETERS_LIST_ITEM,
-          ResourcePath: requestUrl
-        });
     }
   }
 
@@ -260,19 +237,6 @@ const unstyledResourceExplorer = (props: any) => {
         }}
         onLinkClick={clickLink}
         className={classes.queryList} />
-
-      <Panel
-        isOpen={panelIsOpen}
-        onDismiss={dismissPanel}
-        closeButtonAriaLabel='Close'
-        headerText={panelHeaderText}
-        type={PanelType.medium}
-      >
-        {panelContext && panelContext.activity === 'show-query-parameters' && <QueryParameters
-          context={panelContext.context}
-          version={version}
-        />}
-      </Panel>
     </section >
   );
 }
