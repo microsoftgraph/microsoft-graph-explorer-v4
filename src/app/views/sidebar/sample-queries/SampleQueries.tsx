@@ -149,7 +149,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               calloutProps={{ gapSpace: 0 }}
             >
               <Icon
-                iconName='NavigateExternalInline'
+                iconName='TextDocument'
                 onClick={() => this.onDocumentationLinkClicked(item)}
                 className={classes.docLink}
                 style={{

@@ -1,7 +1,4 @@
-import {
-  FontSizes, FontWeights,
-  ITheme
-} from '@fluentui/react';
+import { FontSizes, FontWeights, ITheme } from '@fluentui/react';
 
 export const sidebarStyles = (theme: ITheme) => {
   const pageHeightInVh = '60vh';
@@ -113,7 +110,8 @@ export const sidebarStyles = (theme: ITheme) => {
       fontSize: FontSizes.icon,
       textAlign: 'left',
       verticalAlign: 'center',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      color: 'rgb(0, 120, 212)'
     },
     links: {
       color: `${theme.palette.blueMid} !important`
