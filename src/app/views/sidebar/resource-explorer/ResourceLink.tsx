@@ -13,6 +13,8 @@ import { setSampleQuery } from '../../../services/actions/query-input-action-cre
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { getAvailableMethods, getUrlFromLink } from './resource-explorer.utils';
+import { getScreenResolution } from '../../common/screen-resolution/screen-resolution';
+import { ScreenResolution } from '../../common/screen-resolution/util/resolution-types';
 
 interface IResourceLinkProps {
   link: any;
@@ -25,21 +27,13 @@ interface IResourceLinkProps {
 const ResourceLink = (props: IResourceLinkProps) => {
   const dispatch = useDispatch();
   const { link: resourceLink, version } = props;
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [resourceLevelOnIsolation, setResourceLevelOnIsolation] = useState(-1);
   const [isolationFlag, setIsolationFlag] = useState(false);
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-  }, []);
+  const {device: resolution, width, currentResolution} = getScreenResolution();
 
   useEffect(() => {
     setResourceLevelOnIsolation(props.linkLevel);
   },  [isolationFlag]);
-
-  const handleResize = () => {
-    setWindowWidth(window.innerWidth);
-  }
 
   const tooltipId = getId('tooltip');
   const buttonId = getId('targetButton');
@@ -71,13 +65,45 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const items = getMenuItems();
 
   const setMaxOverflowWidth = () : string => {
-    const compensation = compensateForLevelPx();
-    if (windowWidth > 800 && windowWidth < 1024){ return `${130 - compensation}px`}
-    if (windowWidth > 1024 && windowWidth < 1280){ return `${180 - compensation}px`}
-    if (windowWidth < 1600) {return  `${205 - compensation}px`;}
-    if (windowWidth >= 1600 && windowWidth < 2000) {return `${310-compensation}px`;}
-    if (windowWidth >= 2000) {return `${400-compensation}px`;}
+    const compensation = compensateForLinkIndent();
+    if (resolution === ScreenResolution.MOBILE) {
+      return `${200 - compensation}px`}
+
+    if (resolution === ScreenResolution.TABLET){
+      return `${updateOverflowWidth(265, 320) - compensation}px`}
+
+    if (resolution === ScreenResolution.TABLET_MEDIUM){
+      return `${updateOverflowWidth(410, 450) - compensation}px`}
+
+    if (resolution === ScreenResolution.TABLET_LARGE){
+      return `${updateOverflowWidth(485, 700) - compensation}px`}
+
+    if (resolution === ScreenResolution.LAPTOP_SMALL){
+      return `${updateOverflowWidth(130, 132) - compensation}px`}
+
+    if (resolution === ScreenResolution.LAPTOP_MEDIUM){
+      return `${updateOverflowWidth(135, 150) - compensation}px`}
+
+    if (resolution === ScreenResolution.LAPTOP_LARGE){
+      return `${updateOverflowWidth(180, 200) - compensation}px`}
+
+    if (resolution === ScreenResolution.DESKTOP){
+      return `${updateOverflowWidth(220, 230) - compensation}px`}
+
+    if (resolution === ScreenResolution.DESKTOP_LARGE) {
+      return `${updateOverflowWidth(390, 530) - compensation}px`}
+
+    if (resolution === ScreenResolution.DESKTOP_XLARGE || resolution === ScreenResolution.DESKTOP_XXLARGE ){
+      return `${updateOverflowWidth(500, 800)}px`;}
     return ''
+  }
+
+  const updateOverflowWidth = ( minimumOverflowWidth: number, maximumOverflowWidth: number) : number => {
+    const current_resolution = currentResolution;
+    const lowestDeviceWidth = width.minimumWidth;
+    const highestDeviceWidth = width.maximumWidth;
+    return (current_resolution - lowestDeviceWidth) * (maximumOverflowWidth - minimumOverflowWidth) /
+     (highestDeviceWidth - lowestDeviceWidth) + minimumOverflowWidth;
   }
 
   const isolateResourceLink = (resourceLink_: IResourceLink) => {
@@ -85,9 +111,9 @@ const ResourceLink = (props: IResourceLinkProps) => {
     props.isolateTree(resourceLink_);
   }
 
-  const compensateForLevelPx = () : number => {
+  const compensateForLinkIndent = () : number => {
     const levelCompensation = new Map([
-      [1, 0],
+      [1, -10],
       [2, 23],
       [3, 30],
       [4, 40],
