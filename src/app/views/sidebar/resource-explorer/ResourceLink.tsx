@@ -2,17 +2,17 @@ import {
   ContextualMenuItemType, getId, Icon, IconButton,
   IContextualMenuItem, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { IQuery } from '../../../../types/query-runner';
-import { IResourceLink, ResourceOptions } from '../../../../types/resources';
+import { ResourceOptions } from '../../../../types/resources';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
-import { getAvailableMethods, getUrlFromLink } from './resource-explorer.utils';
+import { getUrlFromLink } from './resource-explorer.utils';
 
 interface IResourceLinkProps {
   link: any;
@@ -34,7 +34,16 @@ const ResourceLink = (props: IResourceLinkProps) => {
     menuIcon: { fontSize: 20, padding: 10 }
   };
 
+  const methodButtonStyles: CSSProperties = {
+    background: getStyleFor(resourceLink.method),
+    textAlign: 'center',
+    marginRight: '12px',
+    marginLeft: '6px',
+    maxHeight: 24
+  }
+
   const setQuery = () => {
+    console.log(resourceLink)
     const resourceUrl = getUrlFromLink(resourceLink);
     const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
     const query: IQuery = {
@@ -55,15 +64,12 @@ const ResourceLink = (props: IResourceLinkProps) => {
     {resourceLink.method &&
     <span
     className={classes.badge}
-      style={{
-        background: getStyleFor(resourceLink.method),
-        textAlign: 'center'
-      }}
+      style={methodButtonStyles}
       onClick={setQuery}
     >
       {resourceLink.method}
     </span>}
-    <span style={{paddingLeft: 12}}>{resourceLink.name}</span>
+    {resourceLink.name}
 
 
     {items.length > 0 &&
@@ -126,7 +132,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
 const linkStyle = mergeStyleSets(
   {
-    link: { display: 'flex' },
+    link: { display: 'flex', lineHeight: 'normal' },
     button: { float: 'right', position: 'absolute', right: 0 }
   }
 );
