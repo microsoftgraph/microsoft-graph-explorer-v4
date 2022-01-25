@@ -19,13 +19,13 @@ export function createResourcesList(
   version: string
 ): INavLinkGroup[] {
   function getIcon({ segment, links }: any): string | undefined {
-    const graphFunction = segment.includes('microsoft.graph');
+    const isGraphFunction = segment.startsWith('microsoft.graph');
     let icon;
-    const hasChidlren = links && links.length > 0;
-    if (!hasChidlren) {
+    const hasChildren = links && links.length > 0;
+    if (!hasChildren) {
       icon = 'PlugDisconnected';
     }
-    if (graphFunction) {
+    if (isGraphFunction) {
       icon = 'LightningBolt';
     }
     return icon;
@@ -34,15 +34,27 @@ export function createResourcesList(
   function createNavLink(
     info: IResource,
     parent: string,
-    paths: string[] = []
+    paths: string[] = [],
+    method?: string
   ): IResourceLink {
-    const { segment, children, labels } = info;
+    const { segment, labels } = info;
     const level = paths.length;
-    const versionedChildren = children
-      ? children.filter((child) => versionExists(child, version))
-      : [];
-    const key = `${level}-${parent === '/' ? 'root' : parent}-${segment}`;
+    const key = `${level}-${parent === '/' ? 'root' : parent}-${segment}${
+      method ? `-${method?.toLowerCase()}` : ''
+    }`;
+    const availableMethods = getAvailableMethods(labels, version);
+    const versionedChildren = getVersionedChildren(
+      info,
+      paths,
+      version,
+      availableMethods
+    );
+    if (availableMethods.length === 1 && versionedChildren.length === 0) {
+      paths = [...paths, segment];
+      method = availableMethods[0].toUpperCase();
+    }
     const icon = getIcon({ ...info, links: versionedChildren });
+
     return {
       key,
       url: key,
@@ -57,13 +69,43 @@ export function createResourcesList(
       level,
       paths,
       icon,
+      method,
       type: icon === 'LightningBolt' ? 'function' : 'path',
-      links: children
-        ? versionedChildren.map((child) =>
-            createNavLink(child, segment, [...paths, segment])
-          )
-        : []
+      links: versionedChildren
     };
+  }
+
+  function getVersionedChildren(
+    parent: IResource,
+    paths: string[],
+    version: string,
+    methods: string[]
+  ): IResourceLink[] {
+    const { segment, children } = parent;
+    const versionedChildren = children
+      ? children.filter((child) => versionExists(child, version))
+      : [];
+    const links: IResourceLink[] = versionedChildren.map((child) =>
+      createNavLink(child, segment, [...paths, segment])
+    );
+
+    if (methods.length > 1)
+      methods.forEach((method) => {
+        links.push(
+          createNavLink(
+            {
+              segment,
+              labels: [],
+              children: []
+            },
+            segment,
+            [...paths, segment],
+            method.toUpperCase()
+          )
+        );
+      });
+
+    return links;
   }
 
   const navLink = createNavLink(
@@ -139,13 +181,12 @@ export function getAvailableMethods(
 
 export function getUrlFromLink(link: IResourceLink | INavLink): string {
   const { paths } = link;
-  let url = '/';
+  let url = '';
   if (paths.length > 1) {
     paths.slice(1).forEach((path: string) => {
-      url += path + '/';
+      url += '/' + path;
     });
   }
-  url += removeCounter(link.name);
   return url;
 }
 

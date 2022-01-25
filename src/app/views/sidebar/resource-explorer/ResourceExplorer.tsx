@@ -229,6 +229,7 @@ const unstyledResourceExplorer = (props: any) => {
             isolateTree={isolateTree}
             version={version}
             resourceOptionSelected={(activity: string, context: unknown) => resourceOptionSelected(activity, context)}
+            classes={classes}
           />
         }}
         onLinkClick={clickLink}
