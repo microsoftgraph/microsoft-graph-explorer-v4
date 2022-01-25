@@ -89,6 +89,79 @@ export const resolution = [
   }
 ]
 
+export const textOverflowWidthRange = [
+  {
+    key: ScreenResolution.MOBILE,
+    range: {
+      minumumOverflowWidth: 200,
+      maximumOverflowWidth: 210
+    }
+  },
+  {
+    key: ScreenResolution.TABLET,
+    range: {
+      minimumOverflowWidth: 265,
+      maximumOverflowWidth: 320
+    }
+  },
+  {
+    key: ScreenResolution.TABLET_MEDIUM,
+    range: {
+      minimumOverflowWidth: 410,
+      maximumOverflowWidth: 450
+    }
+  },
+  {
+    key: ScreenResolution.TABLET_LARGE,
+    range: {
+      minimumOverflowWidth: 485,
+      maximumOverflowWidth: 700
+    }
+  },
+  {
+    key: ScreenResolution.LAPTOP_SMALL,
+    range: {
+      minimumOverflowWidth: 130,
+      maximumOverflowWidth: 132
+    }
+  },
+  {
+    key: ScreenResolution.LAPTOP_MEDIUM,
+    range: {
+      minimumOverflowWidth: 135,
+      maximumOverflowWidth: 150
+    }
+  },
+  {
+    key: ScreenResolution.LAPTOP_LARGE,
+    range: {
+      minimumOverflowWidth: 180,
+      maximumOverflowWidth: 200
+    }
+  },
+  {
+    key: ScreenResolution.DESKTOP,
+    range: {
+      minimumOverflowWidth: 220,
+      maximumOverflowWidth: 230
+    }
+  },
+  {
+    key: ScreenResolution.DESKTOP_LARGE,
+    range: {
+      minimumOverflowWidth: 390,
+      maximumOverflowWidth: 530
+    }
+  },
+  {
+    key: ScreenResolution.DESKTOP_XLARGE,
+    range: {
+      minimumOverflowWidth: 500,
+      maximumOverflowWidth: 800
+    }
+  }
+]
+
 export const getScreenResolution = (): IResolution => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {

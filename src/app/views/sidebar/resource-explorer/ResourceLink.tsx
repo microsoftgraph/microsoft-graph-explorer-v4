@@ -12,9 +12,8 @@ import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
-import { getAvailableMethods, getUrlFromLink } from './resource-explorer.utils';
+import { getAvailableMethods, getUrlFromLink, getOverflowWidthRange } from './resource-explorer.utils';
 import { getScreenResolution } from '../../common/screen-resolution/screen-resolution';
-import { ScreenResolution } from '../../common/screen-resolution/util/resolution-types';
 
 interface IResourceLinkProps {
   link: any;
@@ -64,38 +63,10 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   const items = getMenuItems();
 
-  const setMaxOverflowWidth = () : string => {
+  const setMaximumOverflowWidth = () : string => {
     const compensation = compensateForLinkIndent();
-    if (resolution === ScreenResolution.MOBILE) {
-      return `${200 - compensation}px`}
-
-    if (resolution === ScreenResolution.TABLET){
-      return `${updateOverflowWidth(265, 320) - compensation}px`}
-
-    if (resolution === ScreenResolution.TABLET_MEDIUM){
-      return `${updateOverflowWidth(410, 450) - compensation}px`}
-
-    if (resolution === ScreenResolution.TABLET_LARGE){
-      return `${updateOverflowWidth(485, 700) - compensation}px`}
-
-    if (resolution === ScreenResolution.LAPTOP_SMALL){
-      return `${updateOverflowWidth(130, 132) - compensation}px`}
-
-    if (resolution === ScreenResolution.LAPTOP_MEDIUM){
-      return `${updateOverflowWidth(135, 150) - compensation}px`}
-
-    if (resolution === ScreenResolution.LAPTOP_LARGE){
-      return `${updateOverflowWidth(180, 200) - compensation}px`}
-
-    if (resolution === ScreenResolution.DESKTOP){
-      return `${updateOverflowWidth(220, 230) - compensation}px`}
-
-    if (resolution === ScreenResolution.DESKTOP_LARGE) {
-      return `${updateOverflowWidth(390, 530) - compensation}px`}
-
-    if (resolution === ScreenResolution.DESKTOP_XLARGE || resolution === ScreenResolution.DESKTOP_XXLARGE ){
-      return `${updateOverflowWidth(500, 800)}px`;}
-    return ''
+    const { minimumOverflowWidth, maximumOverflowWidth } = getOverflowWidthRange(resolution);
+    return `${updateOverflowWidth(minimumOverflowWidth, maximumOverflowWidth) - compensation}px`
   }
 
   const updateOverflowWidth = ( minimumOverflowWidth: number, maximumOverflowWidth: number) : number => {
@@ -141,7 +112,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
-        maxWidth: setMaxOverflowWidth()
+        maxWidth: setMaximumOverflowWidth()
       }}
     >
       {!!resourceLink.iconresourceLink && <Icon style={{ margin: '0 4px' }}

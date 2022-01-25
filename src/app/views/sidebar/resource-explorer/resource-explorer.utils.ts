@@ -5,11 +5,17 @@ import {
   IResourceLink, IResourceMethod
 } from '../../../../types/resources';
 
+import { textOverflowWidthRange } from '../../common/screen-resolution/screen-resolution';
 interface ITreeFilter {
   paths: string[];
   level: number;
   resourceItems: IResource[];
   version: string;
+}
+
+interface IOverflowWidthRange {
+  minimumOverflowWidth: number;
+  maximumOverflowWidth: number;
 }
 
 export function createList(source: IResource[], version: string): INavLinkGroup[] {
@@ -145,4 +151,12 @@ function flatten(content: IResourceLink[]): IResourceLink[] {
     }
   });
   return result;
+}
+
+export function getOverflowWidthRange(resolution: string): IOverflowWidthRange {
+  const overFlowRange = textOverflowWidthRange.find(k => k.key === resolution);
+  return {
+    minimumOverflowWidth: overFlowRange!.range.minimumOverflowWidth || 0,
+    maximumOverflowWidth: overFlowRange!.range.maximumOverflowWidth || 0
+  };
 }
