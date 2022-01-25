@@ -21,6 +21,7 @@ import {
   getResourcesSupportedByVersion, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
+import { navStyles } from './resources.styles';
 
 const unstyledResourceExplorer = (props: any) => {
   const dispatch = useDispatch();
@@ -115,17 +116,6 @@ const unstyledResourceExplorer = (props: any) => {
       isolateTree(currentTree);
     }
   }
-
-  const navStyles: any = (properties: any) => ({
-    chevronIcon: [
-      properties.isExpanded && {
-        transform: 'rotate(0deg)'
-      },
-      !properties.isExpanded && {
-        transform: 'rotate(-90deg)'
-      }
-    ]
-  });
 
   const isolateTree = (navLink: any): void => {
     const tree = [
