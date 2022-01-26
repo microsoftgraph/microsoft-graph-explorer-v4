@@ -82,23 +82,24 @@ const ResourceLink = (props: IResourceLinkProps) => {
     props.isolateTree(resourceLink_);
   }
 
+  // Adjusts maximum width for each link level
   const compensateForLinkIndent = () : number => {
     const levelCompensation = new Map([
-      [1, -10],
-      [2, 23],
-      [3, 30],
-      [4, 40],
-      [5, 55],
-      [6, 65],
-      [7, 75],
-      [8, 80],
-      [9, 85],
-      [10, 90]
+      [1, -30],
+      [2, -20],
+      [3, 10],
+      [4, 25],
+      [5, 40],
+      [6, 60],
+      [7, 70],
+      [8, 75],
+      [9, 80],
+      [10, 85]
     ])
     const currentLevel: number = resourceLevelOnIsolation === -1 ? resourceLink.level :
       resourceLink.level - resourceLevelOnIsolation;
     if(currentLevel >= 11) {
-      return 100;
+      return 120;
     }
     const compensation = levelCompensation.get(currentLevel);
     return  compensation ? compensation : 0;

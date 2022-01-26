@@ -143,7 +143,7 @@ export const textOverflowWidthRange = [
     key: ScreenResolution.DESKTOP,
     range: {
       minimumOverflowWidth: 220,
-      maximumOverflowWidth: 230
+      maximumOverflowWidth: 310
     }
   },
   {
