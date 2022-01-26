@@ -405,6 +405,10 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       if(hasWhiteSpace(queryUrl)){
         return translateMessage('Invalid whitespace in URL');
       }
+      const {queryVersion} = parseSampleUrl(queryUrl)
+      if (!GRAPH_API_VERSIONS.includes(queryVersion)){
+        return translateMessage('Invalid version in URL');
+      }
       return '';
     }
   }
