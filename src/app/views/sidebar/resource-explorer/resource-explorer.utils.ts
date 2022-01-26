@@ -3,8 +3,7 @@ import { INavLink, INavLinkGroup } from '@fluentui/react';
 import {
   IResource,
   IResourceLabel,
-  IResourceLink,
-  IResourceMethod
+  IResourceLink
 } from '../../../../types/resources';
 
 interface ITreeFilter {
@@ -39,7 +38,6 @@ export function createResourcesList(
   ): IResourceLink[] {
     const { segment, children } = parent;
     const links: IResourceLink[] = [];
-
     if (methods.length > 1) {
       methods.forEach((method) => {
         links.push(
@@ -218,23 +216,12 @@ export function getResourcePaths(
   );
   content.unshift(item);
   if (content.length > 0) {
-    content.forEach((element: IResourceLink) => {
-      const methods =
-        element.labels.find((k: IResourceLabel) => k.name === version)
-          ?.methods || [];
-      const listOfMethods: IResourceMethod[] = [];
-      methods.forEach((method: string) => {
-        listOfMethods.push({
-          name: method.toUpperCase(),
-          checked: true
-        });
+    content
+      .filter((element) => element.method)
+      .forEach((element: IResourceLink) => {
+        element.version = version;
+        element.url = `${getUrlFromLink(element)}`;
       });
-      element.version = version;
-      element.url = `${getUrlFromLink(element)}`;
-      element.methods = listOfMethods;
-      element.version = version;
-      element.url = `${getUrlFromLink(element)}`;
-    });
   }
   return content;
 }

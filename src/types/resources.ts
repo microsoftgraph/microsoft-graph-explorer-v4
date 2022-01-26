@@ -18,11 +18,6 @@ export interface IResources {
   paths: IResourceLink[];
 }
 
-export interface IResourceMethod {
-  name: string;
-  checked: boolean;
-}
-
 export interface IResourceLink extends INavLink {
   labels: IResourceLabel[];
   parent: string;

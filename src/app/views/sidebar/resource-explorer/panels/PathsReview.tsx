@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IResourceLink, IResourceMethod } from '../../../../../types/resources';
+import { IResourceLink } from '../../../../../types/resources';
 import { IRootState } from '../../../../../types/root';
 import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -22,7 +22,7 @@ export interface IPathsReview {
 
 const PathsReview = (props: IPathsReview) => {
   const dispatch = useDispatch();
-  const { resources: { paths: items } } = useSelector(
+  const { resources: { paths } } = useSelector(
     (state: IRootState) => state
   );
   const { isOpen } = props;
@@ -30,30 +30,13 @@ const PathsReview = (props: IPathsReview) => {
   const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
 
   const columns = [
-    { key: 'url', name: 'Url', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true },
-    { key: 'methods', name: 'Methods', fieldName: 'methods', minWidth: 100, maxWidth: 200, isResizable: true }
+    { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true }
   ];
 
+  const items = paths.filter(item => item.method);
+
   const generateCollection = () => {
-    const list: any[] = [];
-    items.forEach((element: any) => {
-      const { methods, url, version: pathVersion, name, paths } = element;
-      const pathName = removeCounter(name);
-      const path = [...paths];
-      path.push(pathName);
-      path.shift();
-      path.unshift(pathVersion);
-      methods?.forEach((method: IResourceMethod) => {
-        list.push({
-          method: method.name,
-          name: `${pathName}-${method.name}`,
-          url,
-          version: pathVersion,
-          path
-        })
-      });
-    });
-    const content = generatePostmanCollection(list);
+    const content = generatePostmanCollection(items);
     const filename = `${content.info.name}-${content.info._postman_id}.postman_collection.json`;
     downloadToLocal(content, filename);
   }
