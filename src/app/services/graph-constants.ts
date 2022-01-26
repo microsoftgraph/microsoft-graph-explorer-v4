@@ -1,4 +1,5 @@
 export const GRAPH_URL = 'https://graph.microsoft.com';
+export const GRAPH_API_VERSIONS = ['v1.0','beta'];
 export const USER_INFO_URL = `${GRAPH_URL}/v1.0/me`;
 export const BETA_USER_INFO_URL = `${GRAPH_URL}/beta/me/profile`;
 export const USER_PICTURE_URL = `${GRAPH_URL}/beta/me/photo/$value`;
