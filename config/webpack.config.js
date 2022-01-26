@@ -9,7 +9,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
@@ -18,7 +18,7 @@ const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
@@ -85,16 +85,18 @@ module.exports = function (webpackEnv) {
         options: {
           // Necessary for external CSS imports to work
           // https://github.com/facebook/create-react-app/issues/2677
-          ident: 'postcss',
-          plugins: () => [
-            require('postcss-flexbugs-fixes'),
-            require('postcss-preset-env')({
-              autoprefixer: {
-                flexbox: 'no-2009'
-              },
-              stage: 3
-            })
-          ],
+          implementation: require('postcss'),
+          postcssOptions: {
+            plugins: () => [
+              require('postcss-flexbugs-fixes'),
+              require('postcss-preset-env')({
+                autoprefixer: {
+                  flexbox: 'no-2009'
+                },
+                stage: 3
+              })
+            ]
+          },
           sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment
         }
       }
@@ -465,7 +467,7 @@ module.exports = function (webpackEnv) {
       // Generate a manifest file which contains a mapping of all asset filenames
       // to their corresponding output file so that tools can pick it up without
       // having to parse `index.html`.
-      new ManifestPlugin({
+      new WebpackManifestPlugin({
         fileName: 'asset-manifest.json',
         publicPath
       }),
@@ -494,30 +496,32 @@ module.exports = function (webpackEnv) {
       // TypeScript type checking
       useTypeScript &&
       new ForkTsCheckerWebpackPlugin({
-        typescript: resolve.sync('typescript', {
-          basedir: paths.appNodeModules
-        }),
-        async: false,
-        checkSyntacticErrors: true,
-        tsconfig: paths.appTsConfig,
-        compilerOptions: {
-          module: 'esnext',
-          moduleResolution: 'node',
-          resolveJsonModule: true,
-          isolatedModules: true,
-          noEmit: true,
-          jsx: 'preserve'
+        typescript: {
+          enabled: true,
+          config: paths.appTsConfig,
+          diagnosticOptions: {syntactic: true}
         },
-        reportFiles: [
-          '**',
-          '!**/*.json',
-          '!**/__tests__/**',
-          '!**/?(*.)(spec|test).*',
-          '!**/src/setupProxy.*',
-          '!**/src/setupTests.*'
-        ],
-        watch: paths.appSrc,
-        silent: true,
+        async: false,
+        // checkSyntacticErrors: true,
+        // tsconfig: paths.appTsConfig,
+        // compilerOptions: {
+        //   module: 'esnext',
+        //   moduleResolution: 'node',
+        //   resolveJsonModule: true,
+        //   isolatedModules: true,
+        //   noEmit: true,
+        //   jsx: 'preserve'
+        // },
+        // reportFiles: [
+        //   '**',
+        //   '!**/*.json',
+        //   '!**/__tests__/**',
+        //   '!**/?(*.)(spec|test).*',
+        //   '!**/src/setupProxy.*',
+        //   '!**/src/setupTests.*'
+        // ],
+        // watch: paths.appSrc,
+        logger: { infrastructure: 'silent' },
         formatter: typescriptFormatter
       })
     ].filter(Boolean),
