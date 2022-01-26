@@ -66,7 +66,7 @@ describe('Resource payload should', () => {
     });
     const link = currentTree.links[0];
     const withoutCounter = getUrlFromLink(link);
-    expect(withoutCounter).toBe('/appCatalogs/teamsApps/{teamsApp-id}');
+    expect(withoutCounter).toBe('/appCatalogs/teamsApps');
   });
 
   it('return a flattened list of links', async () => {
@@ -74,6 +74,6 @@ describe('Resource payload should', () => {
     const filtered = createResourcesList(resource.children, version)[0];
     const item: any = filtered.links[0];
     const paths = getResourcePaths(item, version);
-    expect(paths.length).toBe(10);
+    expect(paths.length).toBe(35);
   });
 });
