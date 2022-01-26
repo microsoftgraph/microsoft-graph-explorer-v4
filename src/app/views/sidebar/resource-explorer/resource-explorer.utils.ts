@@ -31,6 +31,51 @@ export function createResourcesList(
     return icon;
   }
 
+  function getVersionedChildLinks(
+    parent: IResource,
+    paths: string[],
+    version: string,
+    methods: string[]
+  ): IResourceLink[] {
+    const { segment, children } = parent;
+    const links: IResourceLink[] = [];
+
+    if (methods.length > 1) {
+      methods.forEach((method) => {
+        links.push(
+          createNavLink(
+            {
+              segment,
+              labels: [],
+              children: []
+            },
+            segment,
+            [...paths, segment],
+            method.toUpperCase()
+          )
+        );
+      });
+    }
+
+    // versioned children
+    if (children)
+      children
+        .filter((child) => versionExists(child, version))
+        .forEach((versionedChild) => {
+          links.push(
+            createNavLink(versionedChild, segment, [...paths, segment])
+          );
+        });
+
+    return links;
+  }
+
+  function sortResourceLinks(a: IResourceLink, b: IResourceLink): number {
+    if (a.links.length === 0 && a.links.length < b.links.length) return -1;
+    if (b.links.length === 0 && a.links.length > b.links.length) return 1;
+    return 0;
+  }
+
   function createNavLink(
     info: IResource,
     parent: string,
@@ -43,12 +88,14 @@ export function createResourcesList(
       method ? `-${method?.toLowerCase()}` : ''
     }`;
     const availableMethods = getAvailableMethods(labels, version);
-    const versionedChildren = getVersionedChildren(
+    const versionedChildren = getVersionedChildLinks(
       info,
       paths,
       version,
       availableMethods
-    );
+    ).sort(sortResourceLinks); // show functions at the top
+
+    // if segment has one method only and no children, do not make segment a node
     if (availableMethods.length === 1 && versionedChildren.length === 0) {
       paths = [...paths, segment];
       method = availableMethods[0].toUpperCase();
@@ -73,39 +120,6 @@ export function createResourcesList(
       type: icon === 'LightningBolt' ? 'function' : 'path',
       links: versionedChildren
     };
-  }
-
-  function getVersionedChildren(
-    parent: IResource,
-    paths: string[],
-    version: string,
-    methods: string[]
-  ): IResourceLink[] {
-    const { segment, children } = parent;
-    const versionedChildren = children
-      ? children.filter((child) => versionExists(child, version))
-      : [];
-    const links: IResourceLink[] = versionedChildren.map((child) =>
-      createNavLink(child, segment, [...paths, segment])
-    );
-
-    if (methods.length > 1)
-      methods.forEach((method) => {
-        links.push(
-          createNavLink(
-            {
-              segment,
-              labels: [],
-              children: []
-            },
-            segment,
-            [...paths, segment],
-            method.toUpperCase()
-          )
-        );
-      });
-
-    return links;
   }
 
   const navLink = createNavLink(
@@ -214,6 +228,8 @@ export function getResourcePaths(
       element.version = version;
       element.url = `${getUrlFromLink(element)}`;
       element.methods = listOfMethods;
+      element.version = version;
+      element.url = `${getUrlFromLink(element)}`;
     });
   }
   return content;
