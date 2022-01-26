@@ -69,6 +69,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
     return `${updateOverflowWidth(minimumOverflowWidth, maximumOverflowWidth) - compensation}px`
   }
 
+  // Dynamically maps the overflow width range over the screen resolution range
   const updateOverflowWidth = ( minimumOverflowWidth: number, maximumOverflowWidth: number) : number => {
     const current_resolution = currentResolution;
     const lowestDeviceWidth = width.minimumWidth;

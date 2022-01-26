@@ -136,7 +136,7 @@ export const textOverflowWidthRange = [
     key: ScreenResolution.LAPTOP_LARGE,
     range: {
       minimumOverflowWidth: 180,
-      maximumOverflowWidth: 200
+      maximumOverflowWidth: 220
     }
   },
   {

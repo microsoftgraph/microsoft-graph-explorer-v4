@@ -155,8 +155,14 @@ function flatten(content: IResourceLink[]): IResourceLink[] {
 
 export function getOverflowWidthRange(resolution: string): IOverflowWidthRange {
   const overFlowRange = textOverflowWidthRange.find(k => k.key === resolution);
+  if (!overFlowRange) {
+    return {
+      minimumOverflowWidth: 1000,
+      maximumOverflowWidth: 2000
+    };
+  }
   return {
-    minimumOverflowWidth: overFlowRange!.range.minimumOverflowWidth || 0,
-    maximumOverflowWidth: overFlowRange!.range.maximumOverflowWidth || 0
+    minimumOverflowWidth: overFlowRange.range.minimumOverflowWidth || 0,
+    maximumOverflowWidth: overFlowRange.range.maximumOverflowWidth || 0
   };
 }
