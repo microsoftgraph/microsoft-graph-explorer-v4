@@ -31,10 +31,9 @@ export interface IResourceLink extends INavLink {
   type: string;
   links: IResourceLink[];
   version?: string;
-  methods?: IResourceMethod[]
+  method?: string;
 }
 
 export enum ResourceOptions {
   ADD_TO_COLLECTION = 'add-to-collection'
 }
-

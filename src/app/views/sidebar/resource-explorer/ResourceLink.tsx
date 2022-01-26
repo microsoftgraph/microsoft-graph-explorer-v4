@@ -43,7 +43,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
   }
 
   const setQuery = () => {
-    console.log(resourceLink)
     const resourceUrl = getUrlFromLink(resourceLink);
     const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
     const query: IQuery = {
@@ -63,7 +62,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
       {...resourceLink.iconresourceLink} />}
     {resourceLink.method &&
     <span
-    className={classes.badge}
+      className={classes.badge}
       style={methodButtonStyles}
       onClick={setQuery}
     >

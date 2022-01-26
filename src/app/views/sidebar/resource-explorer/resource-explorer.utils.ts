@@ -58,7 +58,7 @@ export function createResourcesList(
     }
 
     // versioned children
-    if (children)
+    children &&
       children
         .filter((child) => versionExists(child, version))
         .forEach((versionedChild) => {
@@ -71,8 +71,12 @@ export function createResourcesList(
   }
 
   function sortResourceLinks(a: IResourceLink, b: IResourceLink): number {
-    if (a.links.length === 0 && a.links.length < b.links.length) return -1;
-    if (b.links.length === 0 && a.links.length > b.links.length) return 1;
+    if (a.links.length === 0 && a.links.length < b.links.length) {
+      return -1;
+    }
+    if (b.links.length === 0 && a.links.length > b.links.length) {
+      return 1;
+    }
     return 0;
   }
 
