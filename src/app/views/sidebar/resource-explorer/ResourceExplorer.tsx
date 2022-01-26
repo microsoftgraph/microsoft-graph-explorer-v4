@@ -1,6 +1,7 @@
 import {
   Breadcrumb, ChoiceGroup, DefaultButton,
-  IBreadcrumbItem, IChoiceGroupOption, INavLinkGroup, Label, Nav, SearchBox, Spinner, SpinnerSize, Stack, styled
+  IBreadcrumbItem, IChoiceGroupOption, INavLink, INavLinkGroup, Label, Nav, SearchBox, Spinner, SpinnerSize,
+  Stack, styled
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -20,6 +21,7 @@ import {
   getResourcesSupportedByVersion, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
+import { navStyles } from './resources.styles';
 
 const unstyledResourceExplorer = (props: any) => {
   const dispatch = useDispatch();
@@ -116,17 +118,6 @@ const unstyledResourceExplorer = (props: any) => {
     }
   }
 
-  const navStyles: any = (properties: any) => ({
-    chevronIcon: [
-      properties.isExpanded && {
-        transform: 'rotate(0deg)'
-      },
-      !properties.isExpanded && {
-        transform: 'rotate(-90deg)'
-      }
-    ]
-  });
-
   const isolateTree = (navLink: any): void => {
     const tree = [
       {
@@ -152,8 +143,9 @@ const unstyledResourceExplorer = (props: any) => {
     setLinkLevel(-1);
   }
 
-  const clickLink = (ev?: React.MouseEvent<HTMLElement>) => {
+  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item? : INavLink) => {
     ev!.preventDefault();
+    item!.isExpanded = !item!.isExpanded;
   }
 
   const resourceOptionSelected = (activity: string, context: any) => {
