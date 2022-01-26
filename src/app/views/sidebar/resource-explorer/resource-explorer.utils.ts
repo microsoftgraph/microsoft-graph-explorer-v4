@@ -33,7 +33,6 @@ export function createResourcesList(
   function getVersionedChildLinks(
     parent: IResource,
     paths: string[],
-    version: string,
     methods: string[]
   ): IResourceLink[] {
     const { segment, children } = parent;
@@ -86,16 +85,15 @@ export function createResourcesList(
   ): IResourceLink {
     const { segment, labels } = info;
     const level = paths.length;
-    const key = `${level}-${parent === '/' ? 'root' : parent}-${segment}${
-      method ? `-${method?.toLowerCase()}` : ''
-    }`;
+    const parentKeyPart = parent === '/' ? 'root' : parent;
+    const methodKeyPart = method ? `-${method?.toLowerCase()}` : '';
+    const key = `${level}-${parentKeyPart}-${segment}${methodKeyPart}`;
     const availableMethods = getAvailableMethods(labels, version);
     const versionedChildren = getVersionedChildLinks(
       info,
       paths,
-      version,
       availableMethods
-    ).sort(sortResourceLinks); // show functions at the top
+    ).sort(sortResourceLinks); // show graph functions at the top
 
     // if segment has one method only and no children, do not make segment a node
     if (availableMethods.length === 1 && versionedChildren.length === 0) {
@@ -103,15 +101,15 @@ export function createResourcesList(
       method = availableMethods[0].toUpperCase();
     }
     const icon = getIcon({ ...info, links: versionedChildren });
+    const enclosedCounter =
+      versionedChildren && versionedChildren.length > 0
+        ? ` (${versionedChildren.length})`
+        : '';
 
     return {
       key,
       url: key,
-      name: `${segment}${
-        versionedChildren && versionedChildren.length > 0
-          ? ` (${versionedChildren.length})`
-          : ''
-      }`,
+      name: `${segment}${enclosedCounter}`,
       labels,
       isExpanded: false,
       parent,

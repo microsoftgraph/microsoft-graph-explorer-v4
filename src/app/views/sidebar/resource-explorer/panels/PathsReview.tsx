@@ -10,7 +10,6 @@ import { IRootState } from '../../../../../types/root';
 import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
-import { removeCounter } from '../resource-explorer.utils';
 import Paths from './Paths';
 import { generatePostmanCollection } from './postman.util';
 
