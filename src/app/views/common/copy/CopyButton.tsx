@@ -1,4 +1,4 @@
-import { IconButton, IIconProps, PrimaryButton } from '@fluentui/react';
+import { IButton, IconButton, IIconProps, PrimaryButton } from '@fluentui/react';
 import React, { useState } from 'react';
 import { translateMessage } from '../../../utils/translate-messages';
 
@@ -18,10 +18,14 @@ export function CopyButton(props:ICopyButtonProps) {
 
   const copyLabel: string = !copied ? translateMessage('Copy') : translateMessage('Copied');
 
+  const copyRef = React.createRef<IButton>();
+  const onSetFocus = () => copyRef.current!.focus();
+
   const handleCopyClick = async () => {
     props.handleOnClick(props);
     setCopied(true);
     handleTimeout();
+    onSetFocus();
   };
 
   const handleTimeout = () => {
@@ -40,9 +44,10 @@ export function CopyButton(props:ICopyButtonProps) {
           ariaLabel={copyLabel}
           style={props.style}
           className={props.className}
+          componentRef={copyRef}
         />
         :
-        <PrimaryButton onClick={handleCopyClick} text={copyLabel}/>
+        <PrimaryButton onClick={handleCopyClick} text={copyLabel} componentRef={copyRef}/>
       }
     </>
   )
