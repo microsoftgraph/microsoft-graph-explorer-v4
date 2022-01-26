@@ -36,15 +36,15 @@ export default class Paths extends Component<IPathProps> {
           calloutProps={{ gapSpace: 0 }}
           styles={{ root: { display: 'inline-block' } }}
         >
-        <span
-          style={{
-            fontWeight: 'bold',
-            display: 'inline-block',
-            minWidth: '55px'
-          }}
-        >
-          {item.method}
-        </span>
+          <span
+            style={{
+              fontWeight: 'bold',
+              display: 'inline-block',
+              minWidth: '55px'
+            }}
+          >
+            {item.method}
+          </span>
           {`/${item.version}${itemContent}`}
         </TooltipHost>
       );
