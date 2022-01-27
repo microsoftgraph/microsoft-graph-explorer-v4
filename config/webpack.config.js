@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const resolve = require('resolve');
-const PnpWebpackPlugin = require('pnp-webpack-plugin');
+// const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
@@ -21,6 +21,7 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const FixMessageFormatterPlugin = require('./FixMessageFormatterPlugin');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -171,6 +172,15 @@ module.exports = function (webpackEnv) {
         // It is guaranteed to exist because we tweak it in `env.js`
         process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
       ),
+      fallback: {
+        module: 'false',
+        dgram: 'false',
+        dns: 'mock',
+        fs: 'false',
+        net: 'false',
+        tls: 'false',
+        child_process: 'false'
+      },
       // These are the reasonable defaults supported by the Node ecosystem.
       // We also include JSX as a common component filename extension to support
       // some tools, although we do not recommend using it, see:
@@ -188,7 +198,7 @@ module.exports = function (webpackEnv) {
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding
         // guards against forgotten dependencies and such.
-        PnpWebpackPlugin,
+        // PnpWebpackPlugin,
         // Prevents users from importing files from outside of src/ (or node_modules/).
         // This often causes confusion because we only process files within src/ with babel.
         // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
@@ -201,7 +211,7 @@ module.exports = function (webpackEnv) {
       plugins: [
         // Also related to Plug'n'Play, but this time it tells Webpack to load its loaders
         // from the current package.
-        PnpWebpackPlugin.moduleLoader(module)
+        // PnpWebpackPlugin.moduleLoader(module)
       ]
     },
     module: {
@@ -240,7 +250,7 @@ module.exports = function (webpackEnv) {
               loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
-                name: 'static/media/[name].[hash:8].[ext]'
+                name: 'static/media/[name].[contenthash:8].[ext]'
               }
             },
             // Process application JS with Babel.
@@ -385,7 +395,7 @@ module.exports = function (webpackEnv) {
               // by webpacks internal loaders.
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
-                name: 'static/media/[name].[hash:8].[ext]'
+                name: 'static/media/[name].[contenthash:8].[ext]'
               }
             }
             // ** STOP ** Are you adding a new loader?
@@ -398,6 +408,7 @@ module.exports = function (webpackEnv) {
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1
       }),
+      new FixMessageFormatterPlugin(),
       new MonacoWebpackPlugin({
         languages: ['json', 'javascript', 'java', 'objective-c', 'csharp', 'html', 'powershell', 'go']
       }),
@@ -476,7 +487,10 @@ module.exports = function (webpackEnv) {
       // solution that requires the user to opt into importing specific locales.
       // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
       // You can remove this if you don't use Moment.js:
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^\.\/locale$/,
+        contextRegExp: /moment$/
+      }),
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the Webpack build.
       isEnvProduction &&
@@ -527,17 +541,28 @@ module.exports = function (webpackEnv) {
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
-    node: {
-      module: 'empty',
-      dgram: 'empty',
-      dns: 'mock',
-      fs: 'empty',
-      net: 'empty',
-      tls: 'empty',
-      child_process: 'empty'
-    },
+    // node: {
+    //   // module: 'empty',
+    //   // dgram: 'empty',
+    //   // dns: 'mock',
+    //   // fs: 'empty',
+    //   // net: 'empty',
+    //   // tls: 'empty',
+    //   // child_process: 'empty'
+    // },
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter
     performance: false
   };
 };
+
+// @ts-check
+
+/**
+ * formatWebpackMessages helper from Create-react-app expects errors and warnings to be
+ * arrays of strings as they are in Webpack 4.
+ * Webpack 5 changed them to objects.
+ * This plugin changes them back to strings until the issue is resolved
+ * https://github.com/facebook/create-react-app/issues/9880
+ */
+
