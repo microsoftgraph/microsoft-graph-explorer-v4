@@ -18,6 +18,13 @@ interface IOverflowWidthRange {
   maximumOverflowWidth: number;
 }
 
+interface IOverflowProps {
+  currentScreenWidth: number;
+  lowestDeviceWidth: number;
+  highestDeviceWidth: number;
+  overflowRange: IOverflowWidthRange;
+}
+
 export function createList(source: IResource[], version: string): INavLinkGroup[] {
   function getIcon({ segment, links }: any): string | undefined {
     const graphFunction = segment.includes('microsoft.graph');
@@ -165,4 +172,36 @@ export function getOverflowWidthRange(resolution: string): IOverflowWidthRange {
     minimumOverflowWidth: overFlowRange.range.minimumOverflowWidth || 0,
     maximumOverflowWidth: overFlowRange.range.maximumOverflowWidth || 0
   };
+}
+
+// Adjusts overflow width based on screen resolution
+export function updateOverflowWidth(overflowProps: IOverflowProps) {
+  const { currentScreenWidth, lowestDeviceWidth, highestDeviceWidth, overflowRange } = overflowProps;
+  const { minimumOverflowWidth, maximumOverflowWidth } = overflowRange;
+
+  return (currentScreenWidth - lowestDeviceWidth) * (maximumOverflowWidth - minimumOverflowWidth) /
+    (highestDeviceWidth - lowestDeviceWidth) + minimumOverflowWidth;
+}
+
+// adjusts overflow width for each resource link level
+export function compensateForLinkIndent(resourceLevelOnIsolation: number, linkLevel: number) {
+  const levelCompensation = new Map([
+    [1, -30],
+    [2, -20],
+    [3, 10],
+    [4, 25],
+    [5, 40],
+    [6, 60],
+    [7, 70],
+    [8, 75],
+    [9, 80],
+    [10, 85]
+  ])
+  const currentLevel: number = resourceLevelOnIsolation === -1 ? linkLevel :
+    linkLevel - resourceLevelOnIsolation;
+  if (currentLevel >= 11) {
+    return 120;
+  }
+  const compensation = levelCompensation.get(currentLevel);
+  return compensation ? compensation : 0;
 }

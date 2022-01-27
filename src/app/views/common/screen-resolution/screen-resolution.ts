@@ -7,7 +7,7 @@ interface IResolution {
     minimumWidth: number;
     maximumWidth: number;
   },
-  currentResolution: number
+  currentScreenWidth: number
 }
 export const resolution = [
   {
@@ -178,6 +178,6 @@ export const getScreenResolution = (): IResolution => {
   return {
     device: screenResolution ? screenResolution.name : '',
     width: screenResolution?.dimensions ?? { minimumWidth: 0, maximumWidth: 0 },
-    currentResolution: windowWidth
+    currentScreenWidth: windowWidth
   }
 }

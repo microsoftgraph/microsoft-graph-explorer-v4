@@ -12,7 +12,9 @@ import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
-import { getAvailableMethods, getUrlFromLink, getOverflowWidthRange } from './resource-explorer.utils';
+import { getAvailableMethods, getUrlFromLink, getOverflowWidthRange,
+  updateOverflowWidth,
+  compensateForLinkIndent} from './resource-explorer.utils';
 import { getScreenResolution } from '../../common/screen-resolution/screen-resolution';
 
 interface IResourceLinkProps {
@@ -28,7 +30,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const { link: resourceLink, version } = props;
   const [resourceLevelOnIsolation, setResourceLevelOnIsolation] = useState(-1);
   const [isolationFlag, setIsolationFlag] = useState(false);
-  const {device: resolution, width, currentResolution} = getScreenResolution();
+  const {device: resolution, width, currentScreenWidth} = getScreenResolution();
 
   useEffect(() => {
     setResourceLevelOnIsolation(props.linkLevel);
@@ -64,46 +66,24 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const items = getMenuItems();
 
   const setMaximumOverflowWidth = () : string => {
-    const compensation = compensateForLinkIndent();
+    const compensation = compensateForLinkIndent(resourceLevelOnIsolation, resourceLink.level);
     const { minimumOverflowWidth, maximumOverflowWidth } = getOverflowWidthRange(resolution);
-    return `${updateOverflowWidth(minimumOverflowWidth, maximumOverflowWidth) - compensation}px`
-  }
+    const overflowProps = {
+      currentScreenWidth,
+      lowestDeviceWidth: width.minimumWidth,
+      highestDeviceWidth: width.maximumWidth,
+      overflowRange: {
+        minimumOverflowWidth,
+        maximumOverflowWidth
+      }
 
-  // Dynamically maps the overflow width range over the screen resolution range
-  const updateOverflowWidth = ( minimumOverflowWidth: number, maximumOverflowWidth: number) : number => {
-    const current_resolution = currentResolution;
-    const lowestDeviceWidth = width.minimumWidth;
-    const highestDeviceWidth = width.maximumWidth;
-    return (current_resolution - lowestDeviceWidth) * (maximumOverflowWidth - minimumOverflowWidth) /
-     (highestDeviceWidth - lowestDeviceWidth) + minimumOverflowWidth;
+    }
+    return `${updateOverflowWidth(overflowProps) - compensation}px`
   }
 
   const isolateResourceLink = (resourceLink_: IResourceLink) => {
     setIsolationFlag(true);
     props.isolateTree(resourceLink_);
-  }
-
-  // Adjusts maximum width for each link level
-  const compensateForLinkIndent = () : number => {
-    const levelCompensation = new Map([
-      [1, -30],
-      [2, -20],
-      [3, 10],
-      [4, 25],
-      [5, 40],
-      [6, 60],
-      [7, 70],
-      [8, 75],
-      [9, 80],
-      [10, 85]
-    ])
-    const currentLevel: number = resourceLevelOnIsolation === -1 ? resourceLink.level :
-      resourceLink.level - resourceLevelOnIsolation;
-    if(currentLevel >= 11) {
-      return 120;
-    }
-    const compensation = levelCompensation.get(currentLevel);
-    return  compensation ? compensation : 0;
   }
 
   return <span
