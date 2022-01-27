@@ -238,6 +238,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               (selectionDisabled ? classes.rowDisabled : '')
             }
             data-selection-disabled={selectionDisabled}
+            getRowAriaLabel={() => props.item.method.toLowerCase() + props.item.humanName}
           />
         </div>
       );
