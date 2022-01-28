@@ -23,23 +23,33 @@ export function generatePostmanCollection(
 }
 
 function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
-  const list: Item[] = [];
-  resources.forEach((resource) => {
-    const { method, name, url, version, path } = resource;
+  const folderNames = resources
+    .map((resource) => {
+      if (resource.paths.length > 1) return resource.paths[1];
+    })
+    .filter((value, i, arr) => arr.indexOf(value) === i);
 
-    const item: Item = {
-      name,
-      request: {
-        method: method!,
-        url: {
-          raw: `${GRAPH_URL}/${version}${url}`,
-          protocol: 'https',
-          host: ['graph', 'microsoft', 'com'],
-          path
-        }
-      }
-    };
-    list.push(item);
+  const items: any[] = folderNames.map((folder) => {
+    const childItems = resources
+      .filter((resource) => resource.url.startsWith(`/${folder}/`))
+      .map((resource) => {
+        const { method, url, version, paths: path } = resource;
+        path.unshift(version!);
+        const item: Item = {
+          name: url,
+          request: {
+            method: method!,
+            url: {
+              raw: `${GRAPH_URL}/${version}${url}`,
+              protocol: 'https',
+              host: ['graph', 'microsoft', 'com'],
+              path
+            }
+          }
+        };
+        return item;
+      });
+    return { name: folder, item: childItems };
   });
-  return list;
+  return items;
 }
