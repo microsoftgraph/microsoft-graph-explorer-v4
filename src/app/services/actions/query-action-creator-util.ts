@@ -48,6 +48,8 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
 
   const authToken = '{token:https://graph.microsoft.com/}';
   const headers = {
+    'cache-control': 'no-cache',
+    pragma: 'no-cache',
     Authorization: `Bearer ${authToken}`,
     'Content-Type': 'application/json',
     SdkVersion: 'GraphExplorer/4.0',
