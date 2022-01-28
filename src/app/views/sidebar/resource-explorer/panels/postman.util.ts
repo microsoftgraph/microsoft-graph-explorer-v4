@@ -25,7 +25,9 @@ export function generatePostmanCollection(
 function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
   const folderNames = resources
     .map((resource) => {
-      if (resource.paths.length > 1) return resource.paths[1];
+      if (resource.paths.length > 1) {
+        return resource.paths[1];
+      }
     })
     .filter((value, i, arr) => arr.indexOf(value) === i);
 

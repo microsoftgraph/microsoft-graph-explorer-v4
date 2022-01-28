@@ -44,6 +44,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   const setQuery = () => {
     const resourceUrl = getUrlFromLink(resourceLink);
+    if (!resourceUrl) { return; }
     const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
     const query: IQuery = {
       selectedVerb: resourceLink.method,
@@ -57,14 +58,13 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   const items = getMenuItems();
 
-  return <span className={linkStyle.link}>
+  return <span onClick={setQuery} className={linkStyle.link}>
     {!!resourceLink.iconresourceLink && <Icon style={{ margin: '0 4px' }}
       {...resourceLink.iconresourceLink} />}
     {resourceLink.method &&
     <span
       className={classes.badge}
       style={methodButtonStyles}
-      onClick={setQuery}
     >
       {resourceLink.method}
     </span>}
