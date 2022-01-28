@@ -427,5 +427,6 @@
   "Copied": "コピー済み",
   "Invalid whitespace in URL": "URL 内の空白文字は無効です",
   "Response content not available due to CORS policy": "CORS ポリシーにより、Graph エクスプローラーでは応答コンテンツを使用できません。この要求は、Postman などの API クライアントで実行できます。CORS の詳細を読み、そのしくみを理解してください",
-  "here": "こちら"
+  "here": "こちら",
+  "Invalid version in URL": "URL 内のバージョンが無効です。"
 }
