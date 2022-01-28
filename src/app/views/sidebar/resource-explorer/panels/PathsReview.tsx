@@ -80,7 +80,7 @@ const PathsReview = (props: IPathsReview) => {
         closeButtonAriaLabel='Close'
       >
         <Label>
-          <FormattedMessage id='You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove' />
+          <FormattedMessage id='Export list as a Postman collection message' />
         </Label>
         <CommandBar
           items={options}
