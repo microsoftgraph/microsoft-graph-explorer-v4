@@ -22,6 +22,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const FixMessageFormatterPlugin = require('./FixMessageFormatterPlugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -225,21 +226,11 @@ module.exports = function (webpackEnv) {
 
         // First, run the linter.
         // It's important to do this before Babel processes the JS.
-        {
-          test: /\.(js|mjs|jsx)$/,
-          enforce: 'pre',
-          use: [
-            {
-              options: {
-                formatter: require.resolve('react-dev-utils/eslintFormatter'),
-                eslintPath: require.resolve('eslint')
-
-              },
-              loader: require.resolve('eslint-loader')
-            }
-          ],
-          include: paths.appSrc
-        },
+        // {
+        //   test: /\.(js|mjs|jsx)$/,
+        //   enforce: 'pre',
+        //   include: paths.appSrc
+        // },
         {
           // "oneOf" will traverse all following loaders until one will
           // match the requirements. When no loader matches it will fall
@@ -441,6 +432,10 @@ module.exports = function (webpackEnv) {
             : undefined
         )
       ),
+      new ESLintPlugin({
+        formatter: require.resolve('react-dev-utils/eslintFormatter'),
+        eslintPath: require.resolve('eslint')
+      }),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       isEnvProduction &&
@@ -516,7 +511,8 @@ module.exports = function (webpackEnv) {
         typescript: {
           enabled: true,
           config: paths.appTsConfig,
-          diagnosticOptions: {syntactic: true}
+          diagnosticOptions: {syntactic: true},
+          memoryLimit: 4096
         },
         async: false,
         // checkSyntacticErrors: true,
