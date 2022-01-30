@@ -429,5 +429,6 @@
   "Copied": "Kopiert",
   "Invalid whitespace in URL": "Ungültige Leerzeichen in URL",
   "Response content not available due to CORS policy": "Der Antwortinhalt ist im Graph-Tester aufgrund der CORS-Richtlinie nicht verfügbar. Sie können diese Anforderung in einem API-Client wie Postman ausführen. Erfahren Sie mehr über CORS, und lernen Sie, wie es funktioniert",
-  "here": "hier"
+  "here": "hier",
+  "Invalid version in URL": "Ungültige Version in URL"
 }

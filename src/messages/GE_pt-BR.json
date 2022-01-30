@@ -429,5 +429,6 @@
   "Copied": "Copiado",
   "Invalid whitespace in URL": "Espaço em branco inválido na URL",
   "Response content not available due to CORS policy": "O conteúdo da resposta não está disponível no Graph Explorer devido à política CORS. Você pode executar essa solicitação em um cliente de API, como o Postman. Leia mais sobre o CORS e entenda como ele funciona",
-  "here": "aqui"
+  "here": "aqui",
+  "Invalid version in URL": "Versão inválida na URL"
 }
