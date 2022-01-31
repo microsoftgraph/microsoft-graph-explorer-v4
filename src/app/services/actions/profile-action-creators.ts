@@ -82,7 +82,7 @@ async function getProfileInformation(): Promise<IUser> {
     profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;
     return profile;
   } catch (error) {
-    throw error;
+    return profile;
   }
 }
 

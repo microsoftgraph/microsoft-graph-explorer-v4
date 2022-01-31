@@ -44,7 +44,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     try {
       return await this.getAuthResult([], sessionId);
     } catch (error) {
-      throw error;
+      throw new Error(`${error}`);
     }
   }
 
@@ -69,7 +69,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const authResult = await this.loginWithInteraction(scopes);
       return authResult;
     } catch (error) {
-      throw error;
+      throw new Error(`${error}`);
     }
   }
 
@@ -102,7 +102,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
       return response;
     } catch (error) {
-      throw error;
+      throw new Error(`${error}`);
     }
   }
 
