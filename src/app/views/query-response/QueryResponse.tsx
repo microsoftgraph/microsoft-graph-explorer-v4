@@ -51,7 +51,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
   };
 
   const handleCopy = () => {
-    copy('share-query-text').then(() => toggleShareQueryDialogState());
+    copy('share-query-text');
     trackCopyEvent();
   };
 
@@ -190,7 +190,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
             width: '100%',
             height: 63,
             overflowY: 'scroll',
-            border: 'none',
             resize: 'none',
             color: 'black'
           }}
