@@ -111,7 +111,7 @@ export const sidebarStyles = (theme: ITheme) => {
       textAlign: 'left',
       verticalAlign: 'center',
       cursor: 'pointer',
-      color: 'rgb(0, 120, 212)'
+      color: theme.palette.themePrimary
     },
     links: {
       color: `${theme.palette.blueMid} !important`
