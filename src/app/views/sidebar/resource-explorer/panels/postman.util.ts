@@ -29,13 +29,14 @@ function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
         return resource.paths[1];
       }
     })
-    .filter((value, i, arr) => arr.indexOf(value) === i);
-
+    .filter((value, i, arr) => arr.indexOf(value) === i) // selects distinct folder names
+    .sort();
   const items: any[] = folderNames.map((folder) => {
     const childItems = resources
-      .filter((resource) => resource.url.startsWith(`/${folder}/`))
+      .filter((resource) => resource.url.match(`^\/${folder}\/?`))
       .map((resource) => {
         const { method, url, version, paths: path } = resource;
+        path.shift();
         path.unshift(version!);
         const item: Item = {
           name: url,
