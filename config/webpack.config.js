@@ -19,7 +19,7 @@ const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
+// const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const FixMessageFormatterPlugin = require('./FixMessageFormatterPlugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
@@ -509,33 +509,46 @@ module.exports = function (webpackEnv) {
       useTypeScript &&
       new ForkTsCheckerWebpackPlugin({
         typescript: {
-          enabled: true,
-          config: paths.appTsConfig,
-          diagnosticOptions: {syntactic: true},
-          memoryLimit: 4096
+          typescriptPath: resolve.sync('typescript', {
+            basedir: paths.appNodeModules
+          }),
+          async: false,
+          configOverwrite: {
+            compilerOptions: {
+              sourceMap: isEnvProduction
+                ? shouldUseSourceMap
+                : isEnvDevelopment,
+              skipLibCheck: true,
+              inlineSourceMap: false,
+              declarationMap: false,
+              noEmit: true,
+              incremental: true
+            }
+          },
+          context: paths.appPath,
+          diagnosticOptions: {
+            syntactic: true
+          },
+          mode: 'write-references'
+          // profile: true,
         },
-        async: false,
-        // checkSyntacticErrors: true,
-        // tsconfig: paths.appTsConfig,
-        // compilerOptions: {
-        //   module: 'esnext',
-        //   moduleResolution: 'node',
-        //   resolveJsonModule: true,
-        //   isolatedModules: true,
-        //   noEmit: true,
-        //   jsx: 'preserve'
-        // },
-        // reportFiles: [
-        //   '**',
-        //   '!**/*.json',
-        //   '!**/__tests__/**',
-        //   '!**/?(*.)(spec|test).*',
-        //   '!**/src/setupProxy.*',
-        //   '!**/src/setupTests.*'
-        // ],
-        // watch: paths.appSrc,
-        logger: { infrastructure: 'silent' },
-        formatter: typescriptFormatter
+        issue: {
+          // This one is specifically to match during CI tests,
+          // as micromatch doesn't match
+          // '../cra-template-typescript/template/src/App.tsx'
+          // otherwise.
+          include: [
+            { file: '../**/src/**/*.{ts,tsx}' },
+            { file: '**/src/**/*.{ts,tsx}' }
+          ],
+          exclude: [
+            { file: '**/src/**/__tests__/**' },
+            { file: '**/src/**/?(*.){spec|test}.*' },
+            { file: '**/src/setupProxy.*' },
+            { file: '**/src/setupTests.*' }
+          ]
+        },
+        logger: { infrastructure: 'silent' }
       })
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
