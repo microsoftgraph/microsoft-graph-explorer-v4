@@ -2,23 +2,23 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    node: true,
+    node: true
   },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/eslint-recommended'
   ],
   globals: {
     Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly',
+    SharedArrayBuffer: 'readonly'
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: 'tsconfig.json',
     createDefaultProgram: true,
     ecmaVersion: 6,
-    sourceType: 'module',
+    sourceType: 'module'
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
@@ -30,8 +30,8 @@ module.exports = {
     '@typescript-eslint/explicit-member-accessibility': [
       'off',
       {
-        accessibility: 'explicit',
-      },
+        accessibility: 'explicit'
+      }
     ],
     '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/interface-name-prefix': 'off',
@@ -40,13 +40,13 @@ module.exports = {
       {
         multiline: {
           delimiter: 'none',
-          requireLast: true,
+          requireLast: true
         },
         singleline: {
           delimiter: 'semi',
-          requireLast: false,
-        },
-      },
+          requireLast: false
+        }
+      }
     ],
     '@typescript-eslint/member-ordering': 'off',
     '@typescript-eslint/no-empty-function': 'error',
@@ -58,8 +58,8 @@ module.exports = {
     '@typescript-eslint/no-unused-expressions': [
       'error',
       {
-        allowShortCircuit: true,
-      },
+        allowShortCircuit: true
+      }
     ],
     '@typescript-eslint/no-unused-vars': [
       'warn',
@@ -67,8 +67,8 @@ module.exports = {
         args: 'after-used',
         argsIgnorePattern: '^_',
         ignoreRestSiblings: false,
-        vars: 'all',
-      },
+        vars: 'all'
+      }
     ],
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-var-requires': 'off',
@@ -121,8 +121,8 @@ module.exports = {
     '@typescript-eslint/no-shadow': [
       'warn',
       {
-        hoist: 'all',
-      },
+        hoist: 'all'
+      }
     ],
     'no-throw-literal': 'error',
     'no-trailing-spaces': 'warn',
@@ -147,11 +147,11 @@ module.exports = {
     }],
     'spaced-comment': 'off',
     'use-isnan': 'error',
-    'valid-typeof': 'off',
+    'valid-typeof': 'off'
   },
   settings: {
     react: {
-      version: 'detect',
-    },
-  },
+      version: 'detect'
+    }
+  }
 };
