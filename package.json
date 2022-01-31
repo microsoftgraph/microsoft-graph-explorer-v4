@@ -53,7 +53,7 @@
         "mini-css-extract-plugin": "1.6.2",
         "monaco-editor": "0.25.2",
         "monaco-editor-webpack-plugin": "4.0.0",
-        "node-sass": "4.14.1",
+        "node-sass": "7.0.1",
         "optimize-css-assets-webpack-plugin": "5.0.1",
         "pnp-webpack-plugin": "1.7.0",
         "postcss-flexbugs-fixes": "4.1.0",
