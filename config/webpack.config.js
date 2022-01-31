@@ -18,7 +18,10 @@ const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const ForkTsCheckerWebpackPlugin =
+process.env.TSC_COMPILE_ON_ERROR === 'true'
+  ? require('react-dev-utils/ForkTsCheckerWarningWebpackPlugin')
+  : require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 // const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const FixMessageFormatterPlugin = require('./FixMessageFormatterPlugin');
