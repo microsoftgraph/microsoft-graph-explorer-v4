@@ -1,5 +1,4 @@
 import { INavLink, INavLinkGroup } from '@fluentui/react';
-import { key } from 'localforage';
 
 import {
   IResource,
@@ -33,12 +32,10 @@ export function createResourcesList(
   function getLinkType({ segment, links }: any): ResourceLinkType {
     const isGraphFunction = segment.startsWith('microsoft.graph');
     const hasChildren = links && links.length > 0;
-    const type = hasChildren
-      ? ResourceLinkType.NODE
-      : isGraphFunction
-        ? ResourceLinkType.FUNCTION
-        : ResourceLinkType.PATH;
-    return type;
+    if (hasChildren) {
+      return ResourceLinkType.NODE;
+    }
+    return isGraphFunction ? ResourceLinkType.FUNCTION : ResourceLinkType.PATH;
   }
 
   function getVersionedChildLinks(
