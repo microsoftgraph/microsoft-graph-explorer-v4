@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { IQuery } from '../../../../types/query-runner';
-import { ResourceOptions } from '../../../../types/resources';
+import { ResourceLinkType, ResourceOptions } from '../../../../types/resources';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
@@ -106,17 +106,18 @@ const ResourceLink = (props: IResourceLinkProps) => {
   function getMenuItems() {
     const menuItems: IContextualMenuItem[] = [];
 
-    if (resourceLink && resourceLink.links && resourceLink.links.length > 0) {
-      menuItems.push(
-        {
-          key: 'isolate',
-          text: translateMessage('Isolate'),
-          itemType: ContextualMenuItemType.Normal,
-          onClick: () => props.isolateTree(resourceLink)
-        });
-    }
+    if (resourceLink)
+    {
+      if (resourceLink.type === ResourceLinkType.NODE) {
+        menuItems.push(
+          {
+            key: 'isolate',
+            text: translateMessage('Isolate'),
+            itemType: ContextualMenuItemType.Normal,
+            onClick: () => props.isolateTree(resourceLink)
+          });
+      }
 
-    if (resourceLink.type === 'path' || resourceLink.type === 'function') {
       menuItems.push(
         {
           key: ResourceOptions.ADD_TO_COLLECTION,

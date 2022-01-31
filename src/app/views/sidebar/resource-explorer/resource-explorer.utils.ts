@@ -1,9 +1,11 @@
 import { INavLink, INavLinkGroup } from '@fluentui/react';
+import { key } from 'localforage';
 
 import {
   IResource,
   IResourceLabel,
-  IResourceLink
+  IResourceLink,
+  ResourceLinkType
 } from '../../../../types/resources';
 
 interface ITreeFilter {
@@ -17,17 +19,26 @@ export function createResourcesList(
   source: IResource[],
   version: string
 ): INavLinkGroup[] {
-  function getIcon({ segment, links }: any): string | undefined {
-    const isGraphFunction = segment.startsWith('microsoft.graph');
+  function getIcon(type: ResourceLinkType): string | undefined {
     let icon;
-    const hasChildren = links && links.length > 0;
-    if (!hasChildren) {
+    if (type === ResourceLinkType.PATH) {
       icon = 'PlugDisconnected';
     }
-    if (isGraphFunction) {
+    if (type === ResourceLinkType.FUNCTION) {
       icon = 'LightningBolt';
     }
     return icon;
+  }
+
+  function getLinkType({ segment, links }: any): ResourceLinkType {
+    const isGraphFunction = segment.startsWith('microsoft.graph');
+    const hasChildren = links && links.length > 0;
+    const type = hasChildren
+      ? ResourceLinkType.NODE
+      : isGraphFunction
+      ? ResourceLinkType.FUNCTION
+      : ResourceLinkType.PATH;
+    return type;
   }
 
   function getVersionedChildLinks(
@@ -100,7 +111,8 @@ export function createResourcesList(
       paths = [...paths, segment];
       method = availableMethods[0].toUpperCase();
     }
-    const icon = getIcon({ ...info, links: versionedChildren });
+    const type = getLinkType({ ...info, links: versionedChildren });
+    const icon = getIcon(type);
     const enclosedCounter =
       versionedChildren && versionedChildren.length > 0
         ? ` (${versionedChildren.length})`
@@ -117,7 +129,7 @@ export function createResourcesList(
       paths,
       icon,
       method,
-      type: icon === 'LightningBolt' ? 'function' : 'path',
+      type,
       links: versionedChildren
     };
   }
@@ -209,17 +221,14 @@ export function getResourcePaths(
   version: string
 ): IResourceLink[] {
   const { links } = item;
-  const content: IResourceLink[] = flatten(links).filter(
-    (k: IResourceLink) => k.type === 'path'
+  let content: IResourceLink[] = flatten(links).filter(
+    (k: IResourceLink) => k.type === ResourceLinkType.PATH
   );
-  content.unshift(item);
   if (content.length > 0) {
-    content
-      .filter((element) => element.method)
-      .forEach((element: IResourceLink) => {
-        element.version = version;
-        element.url = `${getUrlFromLink(element)}`;
-      });
+    content.forEach((element: IResourceLink) => {
+      element.version = version;
+      element.url = `${getUrlFromLink(element)}`;
+    });
   }
   return content;
 }

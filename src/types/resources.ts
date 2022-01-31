@@ -23,10 +23,16 @@ export interface IResourceLink extends INavLink {
   parent: string;
   level: number;
   paths: string[];
-  type: string;
+  type: ResourceLinkType;
   links: IResourceLink[];
   version?: string;
   method?: string;
+}
+
+export enum ResourceLinkType {
+  NODE = 'node',
+  FUNCTION = 'function',
+  PATH = 'path'
 }
 
 export enum ResourceOptions {

@@ -21,7 +21,7 @@ export interface IPathsReview {
 
 const PathsReview = (props: IPathsReview) => {
   const dispatch = useDispatch();
-  const { resources: { paths } } = useSelector(
+  const { resources: { paths: items } } = useSelector(
     (state: IRootState) => state
   );
   const { isOpen } = props;
@@ -31,8 +31,6 @@ const PathsReview = (props: IPathsReview) => {
   const columns = [
     { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true }
   ];
-
-  const items = paths.filter(item => item.method);
 
   const generateCollection = () => {
     const content = generatePostmanCollection(items);
