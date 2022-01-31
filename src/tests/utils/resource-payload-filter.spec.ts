@@ -74,6 +74,6 @@ describe('Resource payload should', () => {
     const filtered = createResourcesList(resource.children, version)[0];
     const item: any = filtered.links[0];
     const paths = getResourcePaths(item, version);
-    expect(paths.length).toBe(35);
+    expect(paths.length).toBe(33);
   });
 });

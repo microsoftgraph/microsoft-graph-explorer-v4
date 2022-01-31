@@ -36,8 +36,8 @@ export function createResourcesList(
     const type = hasChildren
       ? ResourceLinkType.NODE
       : isGraphFunction
-      ? ResourceLinkType.FUNCTION
-      : ResourceLinkType.PATH;
+        ? ResourceLinkType.FUNCTION
+        : ResourceLinkType.PATH;
     return type;
   }
 
@@ -221,8 +221,10 @@ export function getResourcePaths(
   version: string
 ): IResourceLink[] {
   const { links } = item;
-  let content: IResourceLink[] = flatten(links).filter(
-    (k: IResourceLink) => k.type === ResourceLinkType.PATH
+  let content: IResourceLink[] = flatten(links);
+  content.unshift(item);
+  content = content.filter(
+    (k: IResourceLink) => k.type !== ResourceLinkType.NODE
   );
   if (content.length > 0) {
     content.forEach((element: IResourceLink) => {

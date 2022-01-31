@@ -5,6 +5,7 @@ import {
 import React, { CSSProperties } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 
 import { IQuery } from '../../../../types/query-runner';
 import { ResourceLinkType, ResourceOptions } from '../../../../types/resources';
@@ -54,6 +55,11 @@ const ResourceLink = (props: IResourceLinkProps) => {
       sampleBody: undefined
     };
     dispatch(setSampleQuery(query));
+    telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
+      ComponentName: componentNames.RESOURCES_LIST_ITEM,
+      ResourceLink: resourceUrl,
+      SelectedVersion: version
+    });
   }
 
   const items = getMenuItems();

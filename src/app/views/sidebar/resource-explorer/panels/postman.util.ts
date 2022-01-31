@@ -31,9 +31,10 @@ function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
     })
     .filter((value, i, arr) => arr.indexOf(value) === i) // selects distinct folder names
     .sort();
-  const items: any[] = folderNames.map((folder) => {
-    const childItems = resources
-      .filter((resource) => resource.url.match(`^\/${folder}\/?`))
+
+  const folderItems: any = folderNames.map((folder) => {
+    const items = resources
+      .filter((resource) => resource.url.match(`^/${folder}/?`))
       .map((resource) => {
         const { method, url, version, paths: path } = resource;
         path.shift();
@@ -52,7 +53,7 @@ function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
         };
         return item;
       });
-    return { name: folder, item: childItems };
+    return { name: folder, item: items };
   });
-  return items;
+  return folderItems;
 }

@@ -14,6 +14,7 @@ describe('Postman collection should', () => {
     const item: any = filtered.links[0];
     const paths = getResourcePaths(item, version);
     const collection = generatePostmanCollection(paths);
-    expect(collection.item.length).toBe(35);
+    const folderItems: any = collection.item[0];
+    expect(folderItems.item.length).toBe(33);
   });
 });
