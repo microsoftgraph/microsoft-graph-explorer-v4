@@ -427,5 +427,6 @@
   "Copied": "Скопировано",
   "Invalid whitespace in URL": "Недопустимый пробел в URL-адресе",
   "Response content not available due to CORS policy": "Содержимое отклика недоступно в песочнице Graph из-за политики CORS. Вы можете выполнить этот запрос в клиенте API, таком как Postman. Дополнительные сведения о CORS и том, как это работает",
-  "here": "здесь"
+  "here": "здесь",
+  "Invalid version in URL": "Недопустимая версия в URL-адресе"
 }
