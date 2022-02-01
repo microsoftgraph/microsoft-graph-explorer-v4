@@ -1,5 +1,5 @@
 import {
-  Callout, getId, Icon, ITooltipHostStyles,
+  Callout, getId, IconButton, IIconProps, ITooltipHostStyles,
   Spinner, Text, TooltipHost
 } from '@fluentui/react';
 import React, { useState } from 'react';
@@ -84,15 +84,17 @@ const SuffixRenderer = () => {
   }
   const hints = getHints();
   const hintsAvailable = hints.length > 0;
+  const infoIcon: IIconProps = {iconName: 'Info'};
 
   if (hintsAvailable) {
     return (
       <>
-        <Icon
-          iconName='Info'
+        <IconButton
+          iconProps={infoIcon}
           className={styles.iconButton}
           onClick={toggleCallout}
           id={buttonId}
+          ariaLabel={translateMessage('More Info')}
         />
         {isCalloutVisible && (
           <Callout
