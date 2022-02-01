@@ -18,10 +18,7 @@ const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const ForkTsCheckerWebpackPlugin =
-process.env.TSC_COMPILE_ON_ERROR === 'true'
-  ? require('react-dev-utils/ForkTsCheckerWarningWebpackPlugin')
-  : require('react-dev-utils/ForkTsCheckerWebpackPlugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 // const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const FixMessageFormatterPlugin = require('./FixMessageFormatterPlugin');
@@ -498,9 +495,9 @@ module.exports = function (webpackEnv) {
       new WorkboxWebpackPlugin.GenerateSW({
         clientsClaim: true,
         exclude: [/\.map$/, /asset-manifest\.json$/],
-        importWorkboxFrom: 'cdn',
+        importScripts: ['cdn'],
         navigateFallback: publicUrl + '/index.html',
-        navigateFallbackBlacklist: [
+        navigateFallbackDenylist: [
           // Exclude URLs starting with /_, as they're likely an API call
           new RegExp('^/_'),
           // Exclude URLs containing a dot, as they're likely a resource in
