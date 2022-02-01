@@ -4,16 +4,10 @@ import {
 } from '@fluentui/react';
 import React, { CSSProperties } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch } from 'react-redux';
-import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 
-import { IQuery } from '../../../../types/query-runner';
 import { ResourceLinkType, ResourceOptions } from '../../../../types/resources';
-import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
-import { getUrlFromLink } from './resource-explorer.utils';
 
 interface IResourceLinkProps {
   link: any;
@@ -24,7 +18,6 @@ interface IResourceLinkProps {
 }
 
 const ResourceLink = (props: IResourceLinkProps) => {
-  const dispatch = useDispatch();
   const { link: resourceLink, version, classes } = props;
 
   const tooltipId = getId('tooltip');
@@ -39,34 +32,12 @@ const ResourceLink = (props: IResourceLinkProps) => {
     background: getStyleFor(resourceLink.method),
     textAlign: 'center',
     marginRight: '12px',
-    marginLeft: '6px',
     maxHeight: 24
-  }
-
-  const setQuery = () => {
-    const resourceUrl = getUrlFromLink(resourceLink);
-    if (!resourceUrl) { return; }
-    const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
-    const query: IQuery = {
-      selectedVerb: resourceLink.method,
-      selectedVersion: version,
-      sampleUrl,
-      sampleHeaders: [],
-      sampleBody: undefined
-    };
-    dispatch(setSampleQuery(query));
-    telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
-      ComponentName: componentNames.RESOURCES_LIST_ITEM,
-      ResourceLink: resourceUrl,
-      SelectedVersion: version
-    });
   }
 
   const items = getMenuItems();
 
-  return <span onClick={setQuery} className={linkStyle.link}>
-    {!!resourceLink.iconresourceLink && <Icon style={{ margin: '0 4px' }}
-      {...resourceLink.iconresourceLink} />}
+  return <span className={linkStyle.link}>
     {resourceLink.method &&
     <span
       className={classes.badge}
