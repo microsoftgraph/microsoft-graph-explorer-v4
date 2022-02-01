@@ -18,17 +18,6 @@ export function createResourcesList(
   source: IResource[],
   version: string
 ): INavLinkGroup[] {
-  function getIcon(type: ResourceLinkType): string | undefined {
-    let icon;
-    if (type === ResourceLinkType.PATH) {
-      icon = 'PlugDisconnected';
-    }
-    if (type === ResourceLinkType.FUNCTION) {
-      icon = 'LightningBolt';
-    }
-    return icon;
-  }
-
   function getLinkType({ segment, links }: any): ResourceLinkType {
     const isGraphFunction = segment.startsWith('microsoft.graph');
     const hasChildren = links && links.length > 0;
@@ -109,7 +98,6 @@ export function createResourcesList(
       method = availableMethods[0].toUpperCase();
     }
     const type = getLinkType({ ...info, links: versionedChildren });
-    const icon = getIcon(type);
     const enclosedCounter =
       versionedChildren && versionedChildren.length > 0
         ? ` (${versionedChildren.length})`
@@ -124,7 +112,6 @@ export function createResourcesList(
       parent,
       level,
       paths,
-      icon,
       method,
       type,
       links: versionedChildren
