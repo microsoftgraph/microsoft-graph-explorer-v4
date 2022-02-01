@@ -495,7 +495,6 @@ module.exports = function (webpackEnv) {
       new WorkboxWebpackPlugin.GenerateSW({
         clientsClaim: true,
         exclude: [/\.map$/, /asset-manifest\.json$/],
-        importScripts: ['cdn'],
         navigateFallback: publicUrl + '/index.html',
         navigateFallbackDenylist: [
           // Exclude URLs starting with /_, as they're likely an API call
@@ -503,7 +502,8 @@ module.exports = function (webpackEnv) {
           // Exclude URLs containing a dot, as they're likely a resource in
           // public/ and not a SPA route
           new RegExp('/[^/]+\\.[^/]+$')
-        ]
+        ],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
       }),
       // TypeScript type checking
       useTypeScript &&
