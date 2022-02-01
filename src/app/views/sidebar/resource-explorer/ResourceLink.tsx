@@ -1,5 +1,5 @@
 import {
-  ContextualMenuItemType, getId, Icon, IconButton,
+  ContextualMenuItemType, getId, IconButton,
   IContextualMenuItem, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
 import React, { CSSProperties } from 'react';
@@ -13,12 +13,11 @@ interface IResourceLinkProps {
   link: any;
   isolateTree: Function;
   resourceOptionSelected: Function;
-  version: string;
   classes: any;
 }
 
 const ResourceLink = (props: IResourceLinkProps) => {
-  const { link: resourceLink, version, classes } = props;
+  const { link: resourceLink, classes } = props;
 
   const tooltipId = getId('tooltip');
   const buttonId = getId('targetButton');
