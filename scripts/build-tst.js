@@ -174,7 +174,6 @@ function build(previousFileSizes) {
 
       return resolve(resolveArgs);
     });
-    compiler.close();
   });
 }
 
