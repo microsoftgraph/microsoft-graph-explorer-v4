@@ -156,7 +156,7 @@
         "tslint-config-prettier": "1.18.0",
         "tslint-react": "4.0.0",
         "url-parse": "1.5.3",
-        "ws": "8.2.3",
+        "ws": "8.4.2",
         "yargs-parser": "13.1.2"
     },
     "jestSonar": {
