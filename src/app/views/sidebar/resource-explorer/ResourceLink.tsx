@@ -1,5 +1,5 @@
 import {
-  ContextualMenuItemType, getId, Icon, IconButton,
+  ContextualMenuItemType, getId, IconButton,
   IContextualMenuItem, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState, CSSProperties } from 'react';
@@ -54,8 +54,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
     props.isolateTree(resourceLink_);
   }
 
-  return <span
-    className={linkStyle.link}>
+  return <span className={linkStyle.link}>
     {resourceLink.method &&
     <span
       className={classes.badge}
@@ -69,15 +68,14 @@ const ResourceLink = (props: IResourceLinkProps) => {
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         maxWidth: setMaximumOverflowWidth(overflowProps)
-      }}
-    >
-      {!!resourceLink.iconresourceLink && <Icon style={{ margin: '0 4px' }}
-        {...resourceLink.iconresourceLink} />}
+      }}>
+
       {resourceLink.name}
+
     </span>
 
-    <span>
-      {items.length > 0 &&
+
+    {items.length > 0 &&
       <TooltipHost
         content={translateMessage('More actions')}
         id={tooltipId}
@@ -106,9 +104,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
           }}
         />
       </TooltipHost>
-      }
-    </span>
-  </span>;
+    }
+  </span>
 
   function getMenuItems() {
     const menuItems: IContextualMenuItem[] = [];
@@ -139,7 +136,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
 const linkStyle = mergeStyleSets(
   {
-    link: { display: 'flex', lineHeight: 'normal', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' },
+    link: { display: 'flex', lineHeight: 'normal' },
     button: { float: 'right', position: 'absolute', right: 0 }
   }
 );
