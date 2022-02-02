@@ -223,6 +223,12 @@ module.exports = function (webpackEnv) {
           test: /\.[cm]?(js|tsx?)$/,
           parser: { requireEnsure: false }
         },
+        {
+          test: /\.m?js/,
+          resolve: {
+            fullySpecified: false
+          }
+        },
 
         // First, run the linter.
         // It's important to do this before Babel processes the JS.
