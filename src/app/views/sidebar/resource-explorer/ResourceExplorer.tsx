@@ -149,6 +149,7 @@ const unstyledResourceExplorer = (props: any) => {
   const clickLink = (ev?: React.MouseEvent<HTMLElement>, item? : INavLink) => {
     ev!.preventDefault();
     item!.isExpanded = !item!.isExpanded;
+    console.log('This is the level', item?.level);
     setQuery(item!);
   }
 

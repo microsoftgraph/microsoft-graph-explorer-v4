@@ -269,45 +269,45 @@ export function updateOverflowWidth(overflowProps: IOverflowProps) {
 // adjusts overflow width for each resource link level
 export function compensateForLinkIndent(resourceLevelOnIsolation: number, linkLevel: number, method: string) {
   const levelCompensationWithMethod = new Map([
-    [1, 10],
+    [1, 30],
     [2, 45],
-    [3, 65],
-    [4, 75],
-    [5, 88],
+    [3, 70],
+    [4, 80],
+    [5, 90],
     [6, 100],
     [7, 110],
-    [8, 125],
-    [9, 140],
-    [10, 170],
-    [11, 175],
-    [12, 190],
-    [13, 200],
-    [14, 210],
-    [15, 220]
+    [8, 145],
+    [9, 150],
+    [10, 180],
+    [11, 195],
+    [12, 205],
+    [13, 215],
+    [14, 225],
+    [15, 235]
   ])
 
   const levelCompensationWithoutMethod = new Map([
     [1, -30],
     [2, -20],
     [3, 10],
-    [4, 28],
+    [4, 30],
     [5, 40],
     [6, 60],
     [7, 70],
-    [8, 75],
-    [9, 80],
-    [10, 85],
-    [11, 98],
-    [12, 100],
-    [13, 110],
-    [14, 120],
-    [15, 130]
+    [8, 80],
+    [9, 90],
+    [10, 100],
+    [11, 110],
+    [12, 120],
+    [13, 130],
+    [14, 140],
+    [15, 150]
   ])
   const currentLevel: number = resourceLevelOnIsolation === -1 ? linkLevel :
     linkLevel - resourceLevelOnIsolation;
 
   if (currentLevel >= 16) {
-    return method ? 230 : 150;
+    return method ? 240 : 160;
   }
   let compensation;
 
