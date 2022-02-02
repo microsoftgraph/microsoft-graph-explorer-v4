@@ -1,15 +1,17 @@
 import content from '../../app/utils/resources/resources.json';
 import {
-  createList, getAvailableMethods,
-  getCurrentTree, getResourcePaths,
+  createResourcesList,
+  getAvailableMethods,
+  getCurrentTree,
+  getResourcePaths,
   getResourcesSupportedByVersion,
-  getUrlFromLink, removeCounter
+  getUrlFromLink,
+  removeCounter
 } from '../../app/views/sidebar/resource-explorer/resource-explorer.utils';
 import { IResource } from '../../types/resources';
 const resource = JSON.parse(JSON.stringify(content)) as IResource;
 
 describe('Resource payload should', () => {
-
   it('have children', async () => {
     const resources: any = { ...content };
     expect(resources.children.length).toBeGreaterThan(0);
@@ -21,7 +23,7 @@ describe('Resource payload should', () => {
   });
 
   it('return links with version v1.0', async () => {
-    const filtered = createList(resource.children, 'v1.0')[0];
+    const filtered = createResourcesList(resource.children, 'v1.0')[0];
     expect(filtered.links.length).toBe(64);
   });
 
@@ -29,13 +31,18 @@ describe('Resource payload should', () => {
     const version = 'v1.0';
     const paths = ['/', 'appCatalogs', 'teamsApps'];
     const level = 2;
-    const currentTree = getCurrentTree({ paths, level, resourceItems: resource.children, version });
+    const currentTree = getCurrentTree({
+      paths,
+      level,
+      resourceItems: resource.children,
+      version
+    });
     expect(currentTree).not.toBeNull();
   });
 
   it('return available methods', async () => {
     const version = 'v1.0';
-    const filtered = createList(resource.children, version)[0];
+    const filtered = createResourcesList(resource.children, version)[0];
     const resourceLink = filtered.links[0];
     const availableMethods = getAvailableMethods(resourceLink.labels, version);
     expect(availableMethods).not.toBeNull();
@@ -51,18 +58,22 @@ describe('Resource payload should', () => {
     const version = 'v1.0';
     const paths = ['/', 'appCatalogs', 'teamsApps'];
     const level = 2;
-    const currentTree = getCurrentTree({ paths, level, resourceItems: resource.children, version });
+    const currentTree = getCurrentTree({
+      paths,
+      level,
+      resourceItems: resource.children,
+      version
+    });
     const link = currentTree.links[0];
     const withoutCounter = getUrlFromLink(link);
-    expect(withoutCounter).toBe('/appCatalogs/teamsApps/{teamsApp-id}');
+    expect(withoutCounter).toBe('/appCatalogs/teamsApps');
   });
 
   it('return a flattened list of links', async () => {
     const version = 'v1.0';
-    const filtered = createList(resource.children, version)[0];
+    const filtered = createResourcesList(resource.children, version)[0];
     const item: any = filtered.links[0];
     const paths = getResourcePaths(item, version);
-    expect(paths.length).toBe(10);
+    expect(paths.length).toBe(33);
   });
-
 });
