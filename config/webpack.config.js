@@ -527,7 +527,7 @@ module.exports = function (webpackEnv) {
           // public/ and not a SPA route
           new RegExp('/[^/]+\\.[^/]+$')
         ],
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024
+        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024
       }),
       // TypeScript type checking
       useTypeScript &&
