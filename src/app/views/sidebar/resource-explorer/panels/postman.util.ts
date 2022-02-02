@@ -1,15 +1,21 @@
 import { Guid } from 'guid-typescript';
 
-import { IPostmanCollection, Item } from '../../../../../types/postman-collection';
+import {
+  IPostmanCollection,
+  Item
+} from '../../../../../types/postman-collection';
 import { IResourceLink } from '../../../../../types/resources';
 import { GRAPH_URL } from '../../../../services/graph-constants';
 
-export function generatePostmanCollection(paths: IResourceLink[]): IPostmanCollection {
+export function generatePostmanCollection(
+  paths: IResourceLink[]
+): IPostmanCollection {
   const collection: IPostmanCollection = {
     info: {
       _postman_id: Guid.create().toString(),
       name: 'Graph-Collection',
-      schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
+      schema:
+        'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
     },
     item: generateItemsFromPaths(paths)
   };
@@ -17,33 +23,37 @@ export function generatePostmanCollection(paths: IResourceLink[]): IPostmanColle
 }
 
 function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
-  const list: Item[] = [];
-  resources.forEach(resource => {
-    const {
-      method,
-      name,
-      url,
-      version,
-      path
-    } = resource;
-
-    const item: Item = {
-      name,
-      request: {
-        method,
-        url: {
-          raw: `${GRAPH_URL}/${version}${url}`,
-          protocol: 'https',
-          host: [
-            'graph',
-            'microsoft',
-            'com'
-          ],
-          path
-        }
+  const folderNames = resources
+    .map((resource) => {
+      if (resource.paths.length > 1) {
+        return resource.paths[1];
       }
-    }
-    list.push(item);
+    })
+    .filter((value, i, arr) => arr.indexOf(value) === i) // selects distinct folder names
+    .sort();
+
+  const folderItems: any = folderNames.map((folder) => {
+    const items = resources
+      .filter((resource) => resource.url.match(`^/${folder}/?`))
+      .map((resource) => {
+        const { method, url, version, paths: path } = resource;
+        path.shift();
+        path.unshift(version!);
+        const item: Item = {
+          name: url,
+          request: {
+            method: method!,
+            url: {
+              raw: `${GRAPH_URL}/${version}${url}`,
+              protocol: 'https',
+              host: ['graph', 'microsoft', 'com'],
+              path
+            }
+          }
+        };
+        return item;
+      });
+    return { name: folder, item: items };
   });
-  return list;
+  return folderItems;
 }
