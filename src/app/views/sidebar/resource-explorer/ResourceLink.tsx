@@ -2,35 +2,25 @@ import {
   ContextualMenuItemType, getId, Icon, IconButton,
   IContextualMenuItem, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, CSSProperties } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch } from 'react-redux';
-import { telemetry, eventTypes, componentNames } from '../../../../telemetry';
 
-import { IQuery } from '../../../../types/query-runner';
-import { IResourceLink, ResourceOptions } from '../../../../types/resources';
-import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { GRAPH_URL } from '../../../services/graph-constants';
+import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
+import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
-import { getAvailableMethods, getUrlFromLink, getOverflowWidthRange,
-  updateOverflowWidth,
-  compensateForLinkIndent} from './resource-explorer.utils';
-import { getScreenResolution } from '../../common/screen-resolution/screen-resolution';
-
+import { setMaximumOverflowWidth} from './resource-explorer.utils';
 interface IResourceLinkProps {
   link: any;
   isolateTree: Function;
   resourceOptionSelected: Function;
-  version: string;
   linkLevel: number;
+  classes: any;
 }
 
 const ResourceLink = (props: IResourceLinkProps) => {
-  const dispatch = useDispatch();
-  const { link: resourceLink, version } = props;
+  const { link: resourceLink, classes } = props;
   const [resourceLevelOnIsolation, setResourceLevelOnIsolation] = useState(-1);
   const [isolationFlag, setIsolationFlag] = useState(false);
-  const {device: resolution, width, currentScreenWidth} = getScreenResolution();
 
   useEffect(() => {
     setResourceLevelOnIsolation(props.linkLevel);
@@ -44,41 +34,19 @@ const ResourceLink = (props: IResourceLinkProps) => {
     menuIcon: { fontSize: 20, padding: 10 }
   };
 
-  const setQuery = (link: IResourceLink, selectedVerb: string) => {
-    const resourceUrl = getUrlFromLink(link);
-    const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
-    const query: IQuery = {
-      selectedVerb,
-      selectedVersion: version,
-      sampleUrl,
-      sampleHeaders: [],
-      sampleBody: undefined
-    };
-    dispatch(setSampleQuery(query));
-    telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
-      {
-        ComponentName: componentNames.RESOURCES_SET_QUERY_LIST_ITEM,
-        SelectedVerb: selectedVerb,
-        ResourcePath: resourceUrl
-      });
+  const methodButtonStyles: CSSProperties = {
+    background: getStyleFor(resourceLink.method),
+    textAlign: 'center',
+    marginRight: '12px',
+    maxHeight: 24
   }
 
   const items = getMenuItems();
 
-  const setMaximumOverflowWidth = () : string => {
-    const compensation = compensateForLinkIndent(resourceLevelOnIsolation, resourceLink.level);
-    const { minimumOverflowWidth, maximumOverflowWidth } = getOverflowWidthRange(resolution);
-    const overflowProps = {
-      currentScreenWidth,
-      lowestDeviceWidth: width.minimumWidth,
-      highestDeviceWidth: width.maximumWidth,
-      overflowRange: {
-        minimumOverflowWidth,
-        maximumOverflowWidth
-      }
-
-    }
-    return `${updateOverflowWidth(overflowProps) - compensation}px`
+  const overflowProps = {
+    resourceLevelOnIsolation,
+    level: resourceLink.level,
+    method: resourceLink.method
   }
 
   const isolateResourceLink = (resourceLink_: IResourceLink) => {
@@ -88,13 +56,19 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   return <span
     className={linkStyle.link}>
-
+    {resourceLink.method &&
+    <span
+      className={classes.badge}
+      style={methodButtonStyles}
+    >
+      {resourceLink.method}
+    </span>}
     <span
       style={{
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
-        maxWidth: setMaximumOverflowWidth()
+        maxWidth: setMaximumOverflowWidth(overflowProps)
       }}
     >
       {!!resourceLink.iconresourceLink && <Icon style={{ margin: '0 4px' }}
@@ -137,20 +111,20 @@ const ResourceLink = (props: IResourceLinkProps) => {
   </span>;
 
   function getMenuItems() {
-    const availableMethods = getAvailableMethods(resourceLink.labels, version);
     const menuItems: IContextualMenuItem[] = [];
 
-    if (resourceLink && resourceLink.links && resourceLink.links.length > 0) {
-      menuItems.push(
-        {
-          key: 'isolate',
-          text: translateMessage('Isolate'),
-          itemType: ContextualMenuItemType.Normal,
-          onClick: () => isolateResourceLink(resourceLink)
-        });
-    }
+    if (resourceLink)
+    {
+      if (resourceLink.type === ResourceLinkType.NODE) {
+        menuItems.push(
+          {
+            key: 'isolate',
+            text: translateMessage('Isolate'),
+            itemType: ContextualMenuItemType.Normal,
+            onClick: () => isolateResourceLink(resourceLink)
+          });
+      }
 
-    if (resourceLink.type === 'path' || resourceLink.type === 'function') {
       menuItems.push(
         {
           key: ResourceOptions.ADD_TO_COLLECTION,
@@ -159,33 +133,13 @@ const ResourceLink = (props: IResourceLinkProps) => {
           onClick: () => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, resourceLink)
         });
     }
-
-    if (availableMethods.length > 0) {
-      const subMenuItems: IContextualMenuItem[] = [];
-      availableMethods.forEach(element => {
-        subMenuItems.push({
-          key: element,
-          text: element.toUpperCase(),
-          onClick: () => setQuery(resourceLink, element.toUpperCase())
-        })
-      });
-
-      menuItems.unshift({
-        key: 'set-query',
-        text: translateMessage('Set Query'),
-        itemType: ContextualMenuItemType.Normal,
-        subMenuProps: {
-          items: subMenuItems
-        }
-      });
-    }
     return menuItems;
   }
 }
 
 const linkStyle = mergeStyleSets(
   {
-    link: { display: 'flex' },
+    link: { display: 'flex', lineHeight: 'normal', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' },
     button: { float: 'right', position: 'absolute', right: 0 }
   }
 );

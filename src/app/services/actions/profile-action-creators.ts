@@ -56,7 +56,7 @@ export function getProfileInfo(): Function {
     dispatch(queryRunningStatus(true));
     try {
       const profile: IUser = await getProfileInformation();
-      const {profileType, ageGroup} = await getBetaProfile();
+      const { profileType, ageGroup } = await getBetaProfile();
       profile.profileType = profileType;
       profile.ageGroup = ageGroup;
       profile.profileImageUrl = await getProfileImage();
@@ -69,6 +69,7 @@ export function getProfileInfo(): Function {
 
 async function getProfileInformation(): Promise<IUser> {
   const profile: IUser = {
+    id: '',
     displayName: '',
     emailAddress: '',
     profileImageUrl: '',
@@ -78,6 +79,7 @@ async function getProfileInformation(): Promise<IUser> {
   try {
     query.sampleUrl = USER_INFO_URL;
     const { userInfo } = await getProfileResponse();
+    profile.id = userInfo.id;
     profile.displayName = userInfo.displayName;
     profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;
     return profile;
@@ -90,11 +92,11 @@ async function getBetaProfile(): Promise<IBetaProfile> {
   try {
     query.sampleUrl = BETA_USER_INFO_URL;
     const { userInfo } = await getProfileResponse();
-    const ageGroup =  getAgeGroup(userInfo);
+    const ageGroup = getAgeGroup(userInfo);
     const profileType = getProfileType(userInfo);
-    return {ageGroup, profileType};
+    return { ageGroup, profileType };
   } catch (error) {
-    return {ageGroup: 0, profileType: ACCOUNT_TYPE.MSA};
+    return { ageGroup: 0, profileType: ACCOUNT_TYPE.MSA };
   }
 }
 
@@ -145,4 +147,3 @@ async function getProfileResponse(): Promise<IProfileResponse> {
     response
   };
 }
-

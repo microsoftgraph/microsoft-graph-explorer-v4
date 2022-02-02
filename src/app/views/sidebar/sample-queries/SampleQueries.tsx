@@ -149,7 +149,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               calloutProps={{ gapSpace: 0 }}
             >
               <Icon
-                iconName='NavigateExternalInline'
+                iconName='TextDocument'
                 onClick={() => this.onDocumentationLinkClicked(item)}
                 className={classes.docLink}
                 style={{
@@ -238,6 +238,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               (selectionDisabled ? classes.rowDisabled : '')
             }
             data-selection-disabled={selectionDisabled}
+            getRowAriaLabel={() => props.item.method.toLowerCase() + props.item.humanName}
           />
         </div>
       );

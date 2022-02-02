@@ -4,7 +4,7 @@ import {
   IColumn, Selection
 } from '@fluentui/react/lib/DetailsList';
 import { getId, MarqueeSelection, TooltipHost } from '@fluentui/react';
-import { IResourceLink, IResourceMethod } from '../../../../../types/resources';
+import { IResourceLink } from '../../../../../types/resources';
 
 interface IPathProps {
   resources: IResourceLink[];
@@ -24,24 +24,9 @@ export default class Paths extends Component<IPathProps> {
       }
     });
   }
-
   private renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     if (column) {
       const itemContent = item[column.fieldName as keyof any] as string;
-      if (column.key === 'methods') {
-        return item.methods.map((method: IResourceMethod, key: number) => (
-          <span key={key}
-            style={{
-              textAlign: 'center',
-              display: 'inline-flex',
-              marginRight: 6
-            }}
-          >
-            {method.name}
-          </span>
-        ));
-      }
-
       return (
         <TooltipHost
           tooltipProps={{
@@ -51,7 +36,16 @@ export default class Paths extends Component<IPathProps> {
           calloutProps={{ gapSpace: 0 }}
           styles={{ root: { display: 'inline-block' } }}
         >
-          {`${item.version}${itemContent}`}
+          <span
+            style={{
+              fontWeight: 'bold',
+              display: 'inline-block',
+              minWidth: '55px'
+            }}
+          >
+            {item.method}
+          </span>
+          {`/${item.version}${itemContent}`}
         </TooltipHost>
       );
     }
