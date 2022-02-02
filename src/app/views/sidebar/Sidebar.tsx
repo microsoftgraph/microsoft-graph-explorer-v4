@@ -4,13 +4,18 @@ import React from 'react';
 import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';
 import History from './history/History';
+import { ResourceExplorer } from './resource-explorer';
 import SampleQueries from './sample-queries/SampleQueries';
+
 export const Sidebar = () => {
   return (
     <div>
       <Pivot onLinkClick={onPivotItemClick} overflowBehavior='menu'>
         <PivotItem headerText={translateMessage('Sample Queries')} itemIcon='Rocket' itemKey='sample-queries'>
           <SampleQueries />
+        </PivotItem>
+        <PivotItem headerText={translateMessage('Resources')} itemIcon='ExploreData' itemKey='resources'>
+          <ResourceExplorer />
         </PivotItem>
         <PivotItem headerText={translateMessage('History')} itemIcon='History' itemKey='history'>
           <History />
