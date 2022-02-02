@@ -391,8 +391,6 @@
   "More path links": "その他のパス リンク",
   "Resources available": "使用可能なリソース数",
   "Selected Resources": "選択したリソース",
-  "Methods available": "使用可能なメソッド",
-  "Access query parameters": "クエリ パラメーターにアクセスする",
   "A documentation link for this URL exists. Click learn more to access it": "この URL のドキュメント リンクが存在します。アクセスするには、[詳細] をクリックしてください",
   "Feedback": "フィードバックがありますか?",
   "Comment question": "体験談をお聞かせください",
@@ -425,9 +423,10 @@
   "Query parameters": "クエリ パラメーター",
   "Preview collection": "プレビュー コレクション",
   "Download postman collection": "Postman コレクションをダウンロード",
-  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "リスト全体を Postman コレクションとしてエクスポートできます。リストに不要なアイテムがある場合は、それらを選択して削除します",
+  "Export list as a Postman collection message": "リスト全体を Postman コレクションとしてエクスポートできます。リストに不要なアイテムがある場合は、それらを選択して削除します",
   "Copied": "コピー済み",
   "Invalid whitespace in URL": "URL 内の空白文字は無効です",
   "Response content not available due to CORS policy": "CORS ポリシーにより、Graph エクスプローラーでは応答コンテンツを使用できません。この要求は、Postman などの API クライアントで実行できます。CORS の詳細を読み、そのしくみを理解してください",
-  "here": "こちら"
+  "here": "こちら",
+  "Invalid version in URL": "URL 内のバージョンが無効です。"
 }

@@ -1,16 +1,20 @@
 import content from '../../app/utils/resources/resources.json';
 import { generatePostmanCollection } from '../../app/views/sidebar/resource-explorer/panels/postman.util';
-import { createList, getResourcePaths } from '../../app/views/sidebar/resource-explorer/resource-explorer.utils';
+import {
+  createResourcesList,
+  getResourcePaths
+} from '../../app/views/sidebar/resource-explorer/resource-explorer.utils';
 import { IResource } from '../../types/resources';
 const resource = JSON.parse(JSON.stringify(content)) as IResource;
 
 describe('Postman collection should', () => {
   it('have items generated', async () => {
     const version = 'v1.0';
-    const filtered = createList(resource.children, version)[0];
+    const filtered = createResourcesList(resource.children, version)[0];
     const item: any = filtered.links[0];
     const paths = getResourcePaths(item, version);
     const collection = generatePostmanCollection(paths);
-    expect(collection.item.length).toBe(10);
+    const folderItems: any = collection.item[0];
+    expect(folderItems.item.length).toBe(33);
   });
 });
