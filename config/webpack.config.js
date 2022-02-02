@@ -39,6 +39,12 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
+const hasJsxRuntime = (() => {
+  if(process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
+    return false;
+  }
+})
+
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
 module.exports = function (webpackEnv) {
@@ -224,9 +230,13 @@ module.exports = function (webpackEnv) {
           parser: { requireEnsure: false }
         },
         {
-          test: /\.m?js/,
-          resolve: {
-            fullySpecified: false
+          test: /\.m?js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env']
+            }
           }
         },
 
@@ -265,7 +275,10 @@ module.exports = function (webpackEnv) {
                 ),
                 presets: [
                   [
-                    require.resolve('babel-preset-react-app')
+                    require.resolve('babel-preset-react-app'),
+                    {
+                      runtime: hasJsxRuntime ? 'automatic' : 'classic'
+                    }
                   ]
                 ],
 
