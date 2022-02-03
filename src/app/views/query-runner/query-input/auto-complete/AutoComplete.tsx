@@ -8,9 +8,10 @@ import { IAutoCompleteProps, IAutoCompleteState } from '../../../../../types/aut
 import { SortOrder } from '../../../../../types/enums';
 import { IRootState } from '../../../../../types/root';
 import * as autoCompleteActionCreators from '../../../../services/actions/autocomplete-action-creators';
+import { GRAPH_API_VERSIONS } from '../../../../services/graph-constants';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
-import { hasWhiteSpace, parseSampleUrl } from '../../../../utils/sample-url-generation';
+import { hasWhiteSpace, parseSampleUrl, removeExtraSlashesFromUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
 import {
@@ -106,10 +107,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   private initialiseAutoComplete = (url: string) => {
-    const isSlashPreceed = url.substring(url.length - 1, url.length - 2);
-    if (isSlashPreceed === '/') {
-      return;
-    }
+    url = removeExtraSlashesFromUrl(url);
     switch (getLastCharacterOf(url)) {
       case '/':
       case '?':
@@ -284,7 +282,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private requestForAutocompleteOptions(url: string) {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
-    if (queryVersion) {
+    if (GRAPH_API_VERSIONS.includes(queryVersion.toLowerCase())) {
       if (!requestUrl) {
         this.props.actions!.fetchAutoCompleteOptions('', queryVersion);
       } else {
@@ -406,6 +404,10 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
       }
       if(hasWhiteSpace(queryUrl)){
         return translateMessage('Invalid whitespace in URL');
+      }
+      const {queryVersion} = parseSampleUrl(queryUrl)
+      if (!GRAPH_API_VERSIONS.includes(queryVersion)){
+        return translateMessage('Invalid version in URL');
       }
       return '';
     }
