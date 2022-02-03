@@ -268,56 +268,34 @@ export function updateOverflowWidth(overflowProps: IOverflowProps) {
 
 // adjusts overflow width for each resource link level
 export function compensateForLinkIndent(resourceLevelOnIsolation: number, linkLevel: number, method: string) {
-  const levelCompensationWithMethod = new Map([
-    [1, 30],
-    [2, 45],
-    [3, 70],
-    [4, 80],
-    [5, 90],
-    [6, 100],
-    [7, 110],
-    [8, 145],
-    [9, 150],
-    [10, 180],
-    [11, 195],
-    [12, 205],
-    [13, 215],
-    [14, 225],
-    [15, 235]
-  ])
-
-  const levelCompensationWithoutMethod = new Map([
-    [1, -30],
-    [2, -20],
-    [3, 10],
+  const levelCompensation = new Map([
+    [1, -20],
+    [2, 10],
+    [3, 20],
     [4, 30],
     [5, 40],
     [6, 60],
     [7, 70],
     [8, 80],
-    [9, 90],
-    [10, 100],
-    [11, 110],
-    [12, 120],
-    [13, 130],
-    [14, 140],
-    [15, 150]
+    [9, 110],
+    [10, 120],
+    [11, 130],
+    [12, 140],
+    [13, 150],
+    [14, 160]
   ])
   const currentLevel: number = resourceLevelOnIsolation === -1 ? linkLevel :
     linkLevel - resourceLevelOnIsolation;
 
   if (currentLevel >= 16) {
-    return method ? 240 : 160;
+    return 170;
   }
   let compensation;
+  compensation = levelCompensation.get(currentLevel);
 
   if (method) {
-    compensation = levelCompensationWithMethod.get(currentLevel);
+    compensation = compensation! + 50
   }
-  else {
-    compensation = levelCompensationWithoutMethod.get(currentLevel);
-  }
-
   return compensation ? compensation : 0;
 }
 
@@ -336,6 +314,8 @@ export function setMaximumOverflowWidth(widthProps: any): string {
       maximumOverflowWidth
     }
   }
+
+  if (compensation < 0 && level !== 1 && resourceLevelOnIsolation !== -1) { return '0px'; }
 
   return `${updateOverflowWidth(overflowProps) - compensation}px`
 }
