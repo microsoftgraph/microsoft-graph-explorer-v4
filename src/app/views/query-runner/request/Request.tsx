@@ -16,6 +16,7 @@ import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { IRootState } from '../../../../types/root';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
+import { ACCOUNT_TYPE } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions-adjustment';
 import { Auth } from './auth';
@@ -42,6 +43,7 @@ export class Request extends Component<IRequestComponent, any> {
     const {
       handleOnEditorChange,
       mode,
+      profile,
       intl: { messages }
     }: any = this.props;
 
@@ -49,6 +51,7 @@ export class Request extends Component<IRequestComponent, any> {
     const containerStyle: CSSProperties = {
       height: convertVhToPx(height, heightAdjustment),
       overflowY: 'hidden',
+      overflowX: 'hidden',
       borderBottom: '1px solid #ddd'
     };
 
@@ -91,19 +94,8 @@ export class Request extends Component<IRequestComponent, any> {
         <div style={containerStyle}>
           <Permission />
         </div>
-      </PivotItem>,
-      <PivotItem
-        key='feedback'
-        itemIcon='HeartFill'
-        itemKey='feedback'
-        onRenderItemLink={this.getTooltipDisplay}
-        ariaLabel={translateMessage('Feedback')}
-        title={translateMessage('Feedback')}
-        headerText={translateMessage('Feedback')}
-      >
       </PivotItem>
     ];
-
     if (mode === Mode.Complete) {
       pivotItems.push(
         <PivotItem
@@ -120,6 +112,21 @@ export class Request extends Component<IRequestComponent, any> {
         </PivotItem>,
       );
     }
+    if(profile !== ACCOUNT_TYPE.AAD){
+      pivotItems.push(
+        <PivotItem
+          key='feedback'
+          itemIcon='HeartFill'
+          itemKey='feedback'
+          onRenderItemLink={this.getTooltipDisplay}
+          ariaLabel={translateMessage('Feedback')}
+          title={translateMessage('Feedback')}
+          headerText={translateMessage('Feedback')}
+        >
+        </PivotItem>
+      )
+    }
+
     return pivotItems;
   }
 
@@ -223,13 +230,14 @@ export class Request extends Component<IRequestComponent, any> {
 }
 
 function mapStateToProps(
-  { graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions }: IRootState) {
+  { graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions, profile }: IRootState) {
   return {
     mode: graphExplorerMode,
     sampleBody: sampleQuery.sampleBody,
     theme,
     mobileScreen: !!sidebarProperties.mobileScreen,
-    dimensions
+    dimensions,
+    profile: profile?.profileType
   };
 }
 

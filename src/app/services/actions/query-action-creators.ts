@@ -159,7 +159,7 @@ async function createHistory(
   duration: number
 ) {
   const status = response.status;
-  const statusText = response.statusText;
+  const statusText = response.statusText === '' ? setStatusMessage(status) : response.statusText;
   const responseHeaders = { ...respHeaders };
   const contentType = respHeaders['content-type'];
 

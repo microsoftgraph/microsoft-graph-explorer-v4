@@ -1,26 +1,30 @@
 import {
   Breadcrumb, ChoiceGroup, DefaultButton,
-  IBreadcrumbItem, IChoiceGroupOption, INavLinkGroup, Label, Nav, Panel,
-  PanelType, SearchBox, Spinner, SpinnerSize, Stack, styled
+  IBreadcrumbItem, IChoiceGroupOption, INavLink, INavLinkGroup, Label, Nav, SearchBox, Spinner, SpinnerSize,
+  Stack, styled
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import { telemetry, eventTypes, componentNames } from '../../../../telemetry';
+import { IQuery } from '../../../../types/query-runner';
 
-import { IResource, IResourceLink, ResourceOptions } from '../../../../types/resources';
+import { IResource, IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
+import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { addResourcePaths } from '../../../services/actions/resource-explorer-action-creators';
+import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import CommandOptions from './CommandOptions';
-import QueryParameters from './panels/QueryParameters';
 import {
-  createList, getCurrentTree,
+  createResourcesList, getCurrentTree,
   getResourcePaths,
   getResourcesSupportedByVersion, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
+import { navStyles } from './resources.styles';
 
 const unstyledResourceExplorer = (props: any) => {
   const dispatch = useDispatch();
@@ -36,7 +40,7 @@ const unstyledResourceExplorer = (props: any) => {
   ];
   const [version, setVersion] = useState(versions[0].key);
   const filteredPayload = getResourcesSupportedByVersion(data, version);
-  const navigationGroup = createList(filteredPayload.children, version);
+  const navigationGroup = createResourcesList(filteredPayload.children, version);
 
   const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
   const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
@@ -47,9 +51,6 @@ const unstyledResourceExplorer = (props: any) => {
   }, [filteredPayload.children.length]);
 
   const [isolated, setIsolated] = useState<any>(null);
-  const [panelIsOpen, setPanelIsOpen] = useState<boolean>(false);
-  const [panelContext, setPanelContext] = useState<any>(null);
-  const [panelHeaderText, setPanelHeaderText] = useState('');
   const [searchText, setSearchText] = useState<string>('');
 
   const performSearch = (needle: string, haystack: IResource[]) => {
@@ -86,7 +87,7 @@ const unstyledResourceExplorer = (props: any) => {
     const list = getResourcesSupportedByVersion(data, selectedVersion);
     const dataSet = (searchText) ? performSearch(searchText, list.children) : list.children;
     setResourceItems(dataSet);
-    setItems(createList(dataSet, selectedVersion));
+    setItems(createResourcesList(dataSet, selectedVersion));
   }
 
   const changeSearchValue = (event: any, value?: string) => {
@@ -101,7 +102,7 @@ const unstyledResourceExplorer = (props: any) => {
       segment: data.segment
     }, version).children;
     setResourceItems(dataSet);
-    setItems(createList(dataSet, version));
+    setItems(createResourcesList(dataSet, version));
   }
 
   const navigateToBreadCrumb = (ev?: any, item?: IBreadcrumbItem): void => {
@@ -119,17 +120,6 @@ const unstyledResourceExplorer = (props: any) => {
     }
   }
 
-  const navStyles: any = (properties: any) => ({
-    chevronIcon: [
-      properties.isExpanded && {
-        transform: 'rotate(0deg)'
-      },
-      !properties.isExpanded && {
-        transform: 'rotate(-90deg)'
-      }
-    ]
-  });
-
   const isolateTree = (navLink: any): void => {
     const tree = [
       {
@@ -139,37 +129,52 @@ const unstyledResourceExplorer = (props: any) => {
     ];
     setItems(tree);
     setIsolated(navLink);
+    telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
+      {
+        ComponentName: componentNames.RESOURCES_ISOLATE_QUERY_LIST_ITEM,
+        ResourcePath: getUrlFromLink(navLink)
+      });
   }
 
   const disableIsolation = (): void => {
     setIsolated(null);
     setSearchText('');
     const filtered = getResourcesSupportedByVersion(data, version);
-    setItems(createList(filtered.children, version));
+    setItems(createResourcesList(filtered.children, version));
   }
 
-  const dismissPanel = () => {
-    setPanelIsOpen(!panelIsOpen);
-    setPanelContext(null);
-  }
-
-  const clickLink = (ev?: React.MouseEvent<HTMLElement>) => {
+  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item? : INavLink) => {
     ev!.preventDefault();
+    item!.isExpanded = !item!.isExpanded;
+    setQuery(item!);
   }
 
   const resourceOptionSelected = (activity: string, context: any) => {
     if (activity === ResourceOptions.ADD_TO_COLLECTION) {
       addToCollection(context);
-    } else {
-      const requestUrl = getUrlFromLink(context);
-      setPanelIsOpen(true);
-      setPanelContext({
-        activity,
-        context
-      });
-      setPanelHeaderText(`${requestUrl}`);
     }
   }
+
+  const setQuery = (resourceLink: INavLink) => {
+    if (resourceLink.type === ResourceLinkType.NODE) { return; }
+    const resourceUrl = getUrlFromLink(resourceLink);
+    if (!resourceUrl) { return; }
+    const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
+    const query: IQuery = {
+      selectedVerb: resourceLink.method!,
+      selectedVersion: version,
+      sampleUrl,
+      sampleHeaders: [],
+      sampleBody: undefined
+    };
+    dispatch(setSampleQuery(query));
+    telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
+      ComponentName: componentNames.RESOURCES_LIST_ITEM,
+      ResourceLink: resourceUrl,
+      SelectedVersion: version
+    });
+  }
+
 
   const breadCrumbs = generateBreadCrumbs();
 
@@ -239,25 +244,12 @@ const unstyledResourceExplorer = (props: any) => {
           return <ResourceLink
             link={link}
             isolateTree={isolateTree}
-            version={version}
             resourceOptionSelected={(activity: string, context: unknown) => resourceOptionSelected(activity, context)}
+            classes={classes}
           />
         }}
         onLinkClick={clickLink}
         className={classes.queryList} />
-
-      <Panel
-        isOpen={panelIsOpen}
-        onDismiss={dismissPanel}
-        closeButtonAriaLabel='Close'
-        headerText={panelHeaderText}
-        type={PanelType.medium}
-      >
-        {panelContext && panelContext.activity === 'show-query-parameters' && <QueryParameters
-          context={panelContext.context}
-          version={version}
-        />}
-      </Panel>
     </section >
   );
 }

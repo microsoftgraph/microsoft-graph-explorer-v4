@@ -31,7 +31,7 @@ export function parseOpenApiResponse(
 
     const createdAt = new Date().toISOString();
     return { url, parameters, createdAt };
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error);
   }
 }
