@@ -19,6 +19,8 @@ const renderHintList = () : any => {
   )
 }
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
 describe('Tests hint suggestions', () => {
   it('Renders hint list without crashing', () => {
     renderHintList();

@@ -36,6 +36,9 @@ const renderStatusMessage = () => {
   )
 }
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Renders the status bar', () =>{
   it('Renders the status bar', () => {
     renderStatusMessage();

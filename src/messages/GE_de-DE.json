@@ -340,7 +340,7 @@
   "sign in to view a list of all permissions": "Auf dieser Registerkarte fehlen Berechtigungen für die Abfrage. Melden Sie sich an und verwenden Sie die Option \"Berechtigungen auswählen\" im Einstellungssymbol neben Ihrem Profil, um die vollständige Liste der Microsoft Graph-Berechtigungen anzuzeigen, und wählen Sie die gewünschte(n) Berechtigung(en) aus und stimmen Sie diese von dort aus zu.",
   "open permissions panel": "Öffnen Sie das Berechtigungsfenster",
   "permissions list": " um die vollständige Liste der Microsoft Graph-Berechtigungen anzuzeigen. Wählen Sie die gewünschte(n) Berechtigung(en) aus und stimmen Sie diese(n) von dort aus zu.",
-  "Get started with adaptive cards on": "Erste Schritte mit angepassten Karten auf",
+  "Get started with adaptive cards on": "Erste Schritte mit angepassten Karten auf ",
   "Adaptive Cards Templating SDK": "Adaptive Cards Templating SDK",
   "card": "Karte",
   "JSON Schema": "JSON-Vorlage",
@@ -380,12 +380,7 @@
   "user_cancelled_consent": "Bitte warten Sie, bis der Zustimmungsprozess abgeschlossen ist.",
   "access_denied_consent": "Ihre Zustimmung zu dieser Berechtigung wurde von Ihrem Mandantenadministrator blockiert. Bitten Sie Ihren Administrator, Ihnen Zugriff zu gewähren, und versuchen Sie es dann erneut.",
   "This response contains unviewable content": "Diese Antwort enthält Inhalte, die in diesem Editor möglicherweise nicht angezeigt werden können.",
-  "Click to download file": "Zum Herunterladen der Datei klicken.",
-  "File response is available in original format only": "Aufgrund der Einschränkungen der Problemumgehung steht die Datei nur im ursprünglichen Format zum Download zur Verfügung.",
-  "Response is result of workaround": "Zum Abrufen der Download-URL wurde eine alternative Abfrage verwendet, da die umgeleitete URL aus der ursprünglichen Anforderung nicht CORS-kompatibel ist.",
-  "For more information": "Weitere Informationen finden Sie unter",
-  "documentation": "Dokumentation",
-  "Missing response headers for query workaround": "Einige Header, die normalerweise für diese Anforderung zurückgegeben werden, fehlen möglicherweise aufgrund der Einschränkungen der Problemumgehung.",
+  "Click to download file": "Klicken, um die Datei herunterzuladen.",
   "Learn more": "Weitere Informationen",
   "loading resources": "Ressourcen werden geladen",
   "Isolate": "Isolieren",
@@ -430,5 +425,9 @@
   "Query parameters": "Abfrageparameter",
   "Preview collection": "Vorschau der Sammlung",
   "Download postman collection": "Postman-Sammlung herunterladen",
-  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "Sie können die gesamte Liste als Postman-Sammlung exportieren. Wenn die Liste Elemente enthält, die Sie nicht benötigen, wählen Sie diese aus, um sie zu entfernen."
+  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "Sie können die gesamte Liste als Postman-Sammlung exportieren. Wenn die Liste Elemente enthält, die Sie nicht benötigen, wählen Sie diese aus, um sie zu entfernen.",
+  "Copied": "Kopiert",
+  "Invalid whitespace in URL": "Ungültige Leerzeichen in URL",
+  "Response content not available due to CORS policy": "Der Antwortinhalt ist im Graph-Tester aufgrund der CORS-Richtlinie nicht verfügbar. Sie können diese Anforderung in einem API-Client wie Postman ausführen. Erfahren Sie mehr über CORS, und lernen Sie, wie es funktioniert",
+  "here": "hier"
 }

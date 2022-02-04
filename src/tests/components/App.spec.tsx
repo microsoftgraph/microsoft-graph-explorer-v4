@@ -1,5 +1,7 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event'
+
 import App from '../../app/views/App';
 import { Mode } from '../../types/enums';
 import { IntlProvider } from 'react-intl';
@@ -80,6 +82,9 @@ jest.mock('@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptio
   AuthenticationType: 0
 }))
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('It should render the main GE site', () => {
   it('Should confirm that all the major sections are rendered', () => {
     const { getByText } = renderApp({mobileScreen: false});
@@ -105,5 +110,6 @@ describe('It should render the main GE site', () => {
   it('Should render the main app with a mobile screen view', ()=> {
     const { getByText } = renderApp({mobileScreen: true});
     getByText('Run query');
+    userEvent.click(getByText('Run query'));
   });
 })

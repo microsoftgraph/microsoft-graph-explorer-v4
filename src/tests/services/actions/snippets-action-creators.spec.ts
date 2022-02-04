@@ -58,9 +58,9 @@ describe('snippet actions', () => {
     // Arrange
     const expectedActions = [
       {
-        type: GET_SNIPPET_PENDING,
+        type: GET_SNIPPET_SUCCESS,
         response: {
-          CSharp: { ok: false }
+          CSharp: '{"ok":false}'
         }
       }
     ]

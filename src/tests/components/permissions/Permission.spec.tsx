@@ -103,14 +103,17 @@ jest.mock('@microsoft/applicationinsights-react-js', () => ({
   ReactPlugin: Object
 }))
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Tests Permission', () => {
   it('Renders permissions panel without crashing', () => {
     renderPermission({panel: true, permissionsPanelOpen: true});
-    screen.debug();
+    screen.getByText(/To try out different Microsoft Graph API endpoints/)
   })
 
   it('Renders permissions tab without crashing', () => {
     renderPermission();
-    screen.debug();
+    screen.getByText(/Permissions for the query are missing on this tab/)
   })
 })

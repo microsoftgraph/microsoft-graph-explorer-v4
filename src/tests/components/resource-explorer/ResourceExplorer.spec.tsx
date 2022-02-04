@@ -79,6 +79,9 @@ jest.mock('react-redux', () => {
   }
 })
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Tests Resource Explorer', () => {
   it('Renders the resource explorer', () => {
     const { getByTestId } = renderResourceExplorer();

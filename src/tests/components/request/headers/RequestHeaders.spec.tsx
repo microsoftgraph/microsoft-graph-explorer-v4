@@ -55,6 +55,9 @@ jest.mock('../../../../app/views/common/dimensions-adjustment.ts', () => {
   }
 })
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Tests RequestHeaders component', () => {
   it('Renders the RequestHeaders component without crashing', () => {
     renderRequestHeaders();

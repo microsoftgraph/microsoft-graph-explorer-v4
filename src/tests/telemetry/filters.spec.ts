@@ -4,6 +4,7 @@ import {
   sanitizeStackTrace
 } from '../../../src/telemetry/filters';
 
+
 describe('Tests telemetry filters', () => {
   it('Ensures telemetry types to include are correct', () => {
     // Arrange
@@ -23,7 +24,7 @@ describe('Tests telemetry filters', () => {
 
   });
 
-  it('Filters remote dependency data from the telemetry data', () => {
+  it('Returns true by default', () => {
     // Arrange
     const envelope: ITelemetryItem = {
       ver: '1.0',

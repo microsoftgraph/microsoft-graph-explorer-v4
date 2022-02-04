@@ -66,6 +66,8 @@ jest.mock('react', () => {
   }
 })
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
 
 describe('Tests QueryParameters rendering in resources', ()=> {
   it('Renders query parameters without crashing', () => {

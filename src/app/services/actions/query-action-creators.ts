@@ -4,8 +4,11 @@ import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
+import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
+import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { setStatusMessage } from '../../utils/status-message';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
+import { CORS_ERROR_QUERIES } from '../graph-constants';
 import {
   anonymousRequest,
   authenticatedRequest,
@@ -13,8 +16,7 @@ import {
   isFileResponse,
   isImageResponse,
   parseResponse,
-  queryResponse,
-  queryResultsInCorsError
+  queryResponse
 } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
@@ -96,7 +98,10 @@ export function runQuery(query: IQuery): Function {
 
     if (response) {
       status.status = response.status;
-      status.statusText = response.statusText === '' ? setStatusMessage(response.status) : response.statusText;
+      status.statusText =
+        response.statusText === ''
+          ? setStatusMessage(response.status)
+          : response.statusText;
     }
 
     if (response && response.ok) {
@@ -124,92 +129,24 @@ export function runQuery(query: IQuery): Function {
         })
       );
     } else {
-      if (
-        response.status === 0 &&
-        tokenPresent &&
-        queryResultsInCorsError(query)
-      ) {
-        fetchContentDownloadUrl(query, dispatch);
-      } else {
-        dispatch(
-          queryResponse({
-            body: result,
-            headers: respHeaders
-          })
-        );
-        return dispatch(setQueryResponseStatus(status));
+      const { requestUrl } = parseSampleUrl(sanitizeQueryUrl(query.sampleUrl));
+      // check if this is one of the queries that result in a CORS error
+      if (response.status === 0 && CORS_ERROR_QUERIES.has(requestUrl)) {
+        result = {
+          throwsCorsError: true,
+          workload: CORS_ERROR_QUERIES.get(requestUrl)
+        };
       }
-    }
-  }
-}
 
-async function fetchContentDownloadUrl(
-  sampleQuery: IQuery,
-  dispatch: Function
-) {
-  const requestUrl = new URL(sampleQuery.sampleUrl);
-  const isOriginalFormat = !requestUrl.searchParams.has('format');
-
-  // drop any search params from query URL
-  requestUrl.search = '';
-
-  // remove /content from path
-  requestUrl.pathname = requestUrl.pathname.replace(/\/content(\/)*$/i, '');
-
-  // set new sampleUrl for fetching download URL
-  const query: IQuery = { ...sampleQuery };
-  query.sampleUrl = requestUrl.toString();
-
-  const status: IStatus = {
-    messageType: MessageBarType.error,
-    ok: false,
-    status: 400,
-    statusText: ''
-  };
-
-  authenticatedRequest(dispatch, query)
-    .then(async (response: Response) => {
-      if (response) {
-        status.status = response.status;
-        status.statusText = response.statusText;
-        status.ok = response.ok;
-
-        if (response.ok) {
-          status.messageType = MessageBarType.success;
-
-          const result = await parseResponse(response);
-          const downloadUrl = result['@microsoft.graph.downloadUrl'];
-
-          dispatch(
-            queryResponse({
-              body: {
-                contentDownloadUrl: downloadUrl,
-                isOriginalFormat,
-                isWorkaround: true
-              },
-              headers: null
-            })
-          );
-        }
-      } else {
-        dispatch(
-          queryResponse({
-            body: null,
-            headers: null
-          })
-        );
-      }
-      return dispatch(setQueryResponseStatus(status));
-    })
-    .catch(async (error: any) => {
       dispatch(
         queryResponse({
-          body: error,
-          headers: null
+          body: result,
+          headers: respHeaders
         })
       );
       return dispatch(setQueryResponseStatus(status));
-    });
+    }
+  }
 }
 
 async function createHistory(
@@ -222,7 +159,7 @@ async function createHistory(
   duration: number
 ) {
   const status = response.status;
-  const statusText = response.statusText;
+  const statusText = response.statusText === '' ? setStatusMessage(status) : response.statusText;
   const responseHeaders = { ...respHeaders };
   const contentType = respHeaders['content-type'];
 

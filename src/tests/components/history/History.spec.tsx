@@ -40,6 +40,8 @@ const renderHistoryTab = (args?: any) => {
   )
 }
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
 
 jest.mock('@microsoft/applicationinsights-react-js', () => ({
   // eslint-disable-next-line react/display-name
@@ -50,6 +52,7 @@ jest.mock('@microsoft/applicationinsights-react-js', () => ({
 describe('Tests History Tab', () => {
   it('Renders history tab without crashing', () => {
     renderHistoryTab();
-    screen.debug();
+    expect(screen.getByRole('searchbox'));
+    screen.getByText(/Older/);
   })
 })

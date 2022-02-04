@@ -32,6 +32,9 @@ jest.mock('react-redux', () => ({
   })
 }))
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Tests Profile.tsx', () => {
   it('Renders Profile.tsx', () => {
     const { getByText } = renderProfile();

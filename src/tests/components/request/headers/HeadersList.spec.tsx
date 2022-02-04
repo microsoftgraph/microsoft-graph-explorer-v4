@@ -20,6 +20,9 @@ const renderHeadersList = () => {
   )
 }
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Tests HeadersList component', () => {
   it('Renders HeadersList without crashing', () => {
     renderHeadersList();

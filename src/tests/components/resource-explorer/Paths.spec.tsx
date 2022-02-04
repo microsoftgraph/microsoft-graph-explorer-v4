@@ -44,6 +44,8 @@ const renderPaths = () => {
   )
 }
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
 
 describe('Tests resource paths rendering', () => {
   it('Renders resource paths', () => {

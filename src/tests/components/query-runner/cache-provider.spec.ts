@@ -2,7 +2,7 @@ import { getSuggestionsFromCache, storeSuggestionsInCache } from '../../../modul
 import { IParsedOpenApiResponse } from '../../../types/open-api';
 
 describe('Tests cache provider utils for suggestions', () => {
-  it('Returns options from local storage which is null because suggestions are expired', () => {
+  it('Returns options from local storage which is null because suggestions are expired', async () => {
     const content_ = {
       url: 'https://api.github.com/search/users?q=tom',
       createdAt: '2020-04-01T00:00:00.000Z',
@@ -36,7 +36,7 @@ describe('Tests cache provider utils for suggestions', () => {
     }
 
     const version = 'v1';
-    storeSuggestionsInCache(openApiContent, version);
+    await storeSuggestionsInCache(openApiContent, version);
     return getSuggestionsFromCache(content_.url)
       .then((data) => {
         expect(data).toBeNull();

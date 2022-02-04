@@ -1,7 +1,32 @@
 import { AuthenticationWrapper } from '../../../src/modules/authentication/AuthenticationWrapper';
+import { HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
 
+window.open = jest.fn();
+jest.spyOn(window.sessionStorage.__proto__, 'clear');
+
+jest.spyOn(window.localStorage.__proto__, 'setItem');
+jest.spyOn(window.localStorage.__proto__, 'getItem');
+jest.spyOn(window.localStorage.__proto__, 'removeItem');
+
+jest.mock('../../modules/authentication/msal-app.ts', () => {
+  const msalApplication = {
+    account: null,
+    getAccount: jest.fn(),
+    logoutRedirect: jest.fn(),
+    logoutPopup: jest.fn(),
+    loginRedirect: jest.fn(),
+    loginPopup: jest.fn(),
+    acquireTokenSilent: jest.fn(),
+    acquireTokenPopup: jest.fn(),
+    getAllAccounts: jest.fn()
+  };
+
+  return {
+    msalApplication
+  };
+})
 describe('Tests authentication wrapper functions', () => {
-  it('Returns null when getSessionId is called with no logged in account', () => {
+  it('Returns null when account data is null', () => {
     const sessionId = new AuthenticationWrapper().getSessionId();
     expect(sessionId).toBeNull();
   });
@@ -26,8 +51,36 @@ describe('Tests authentication wrapper functions', () => {
     expect(getToken).rejects.toThrow();
   });
 
-  it('Throws an error when getOcpsToken fails ', () => {
-    const getOcpsToken = new AuthenticationWrapper().getOcpsToken();
-    expect(getOcpsToken).rejects.toThrow();
+  describe('Throws an error when getOcpsToken fails ', () => {
+    it('Throws an error when getOcpsToken fails', () => {
+      const getOcpsToken = new AuthenticationWrapper().getOcpsToken();
+      expect(getOcpsToken).rejects.toThrow();
+    });
+  })
+
+  it('Logs out a user and calls removeItem with the home_account_key', () => {
+    new AuthenticationWrapper().logOut();
+    expect(window.localStorage.removeItem).toHaveBeenCalledWith(HOME_ACCOUNT_KEY);
+  })
+
+  it('Logs out a user with logoutPopup and calls removeItem once with the home_account_key', () => {
+    new AuthenticationWrapper().logOutPopUp();
+    expect(window.localStorage.removeItem).toHaveBeenCalledWith(HOME_ACCOUNT_KEY);
+  })
+
+  it('Calls removeItem from localStorage when deleting home account id', () => {
+    new AuthenticationWrapper().deleteHomeAccountId();
+    expect(window.localStorage.removeItem).toHaveBeenCalledWith(HOME_ACCOUNT_KEY);
+  });
+
+  it('Clears the cache by calling removeItem with all available msal keys', () => {
+    new AuthenticationWrapper().clearCache();
+    expect(window.localStorage.removeItem).toHaveBeenCalled();
+  });
+
+  it('Clears user current session, calling removeItem from localStorage and window.sessionStorage.clear', () => {
+    new AuthenticationWrapper().clearSession();
+    expect(window.localStorage.removeItem).toHaveBeenCalled();
+    expect(window.sessionStorage.clear).toHaveBeenCalled();
   })
 })

@@ -84,6 +84,10 @@ jest.mock('react-redux', () => {
     })
   };
 })
+
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Renders QuerResponse', () => {
   it('Renders QuerResponse without crashing', () => {
     renderQueryResponse();

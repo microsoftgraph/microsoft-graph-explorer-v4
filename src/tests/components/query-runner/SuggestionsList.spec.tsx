@@ -13,6 +13,9 @@ const renderSuggestionsList = (args?: any): any => {
   return render(<SuggestionsList {...props} />);
 }
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Tests SuggestionsList component', () => {
   it('Renders suggestionslist without crashing', () => {
     renderSuggestionsList();

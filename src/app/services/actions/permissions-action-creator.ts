@@ -47,6 +47,7 @@ export function fetchScopes(): Function {
     let hasUrl = false; // whether permissions are for a specific url
     try {
       const { devxApi, permissionsPanelOpen, profile, sampleQuery: query }: IRootState = getState();
+      console.log(devxApi);
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
 
       const scopeType = getPermissionsScopeType(profile);

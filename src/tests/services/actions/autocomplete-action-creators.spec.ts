@@ -6,7 +6,9 @@ import {
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import fetch from 'jest-fetch-mock';
-
+import { store } from '../../../../src/store/index';
+import { IRootState } from '../../../types/root';
+import { Mode } from '../../../types/enums';
 import {
   fetchAutocompleteSuccess, fetchAutocompleteError,
   fetchAutocompletePending, fetchAutoCompleteOptions
@@ -14,6 +16,100 @@ import {
 
 const middleware = [thunk];
 const mockStore = configureMockStore(middleware);
+
+jest.mock('../../../../src/store/index');
+
+const mockState: IRootState = {
+  devxApi: {
+    baseUrl: 'https://graph.microsoft.com/v1.0/me',
+    parameters: '$count=true'
+  },
+  permissionsPanelOpen: true,
+  profile: null,
+  sampleQuery: {
+    sampleUrl: 'http://localhost:8080/api/v1/samples/1',
+    selectedVerb: 'GET',
+    selectedVersion: 'v1',
+    sampleHeaders: []
+  },
+  authToken: { token: false, pending: false },
+  consentedScopes: [],
+  isLoadingData: false,
+  queryRunnerStatus: null,
+  termsOfUse: true,
+  theme: 'dark',
+  adaptiveCard: {
+    pending: false,
+    data: {
+      template: 'Template'
+    }
+  },
+  graphExplorerMode: Mode.Complete,
+  sidebarProperties: {
+    showSidebar: true,
+    mobileScreen: false
+  },
+  samples: {
+    queries: [],
+    pending: false,
+    error: null
+  },
+  scopes: {
+    pending: false,
+    data: [],
+    hasUrl: false,
+    error: null
+  },
+  history: [],
+  graphResponse: {
+    body: undefined,
+    headers: undefined
+  },
+  snippets: {
+    pending: false,
+    data: [],
+    error: null
+  },
+  responseAreaExpanded: false,
+  dimensions: {
+    request: {
+      width: '100px',
+      height: '100px'
+    },
+    response: {
+      width: '100px',
+      height: '100px'
+    }
+  },
+  autoComplete: {
+    data: null,
+    error: null,
+    pending: false
+  },
+  resources: {
+    pending: false,
+    data: {
+      segment: '',
+      labels: [],
+      children: []
+    },
+    error: null,
+    paths: []
+  },
+  policies: {
+    pending: false,
+    data: {},
+    error: null
+  }
+}
+
+const currentState = store.getState();
+store.getState = () => {
+  return {
+    mockState,
+    ...currentState
+  }
+}
 describe('Test autocomplete action creators', () => {
   beforeEach(() => {
     // eslint-disable-next-line no-undef
@@ -102,14 +198,14 @@ describe('Test autocomplete action creators', () => {
       }
       fetch.mockResponseOnce(JSON.stringify(expectedResponse));
 
-      const store = mockStore({ autocomplete: null });
+      const store_ = mockStore({ autocomplete: null });
 
       // Act
       // @ts-ignore
-      store.dispatch(fetchAutoCompleteOptions('https://graph.microsoft.com/v1.0/', 'v1.0'));
+      store_.dispatch(fetchAutoCompleteOptions('https://graph.microsoft.com/v1.0/', 'v1.0'));
 
       // Assert
-      expect(store.getActions()).toEqual([]);
+      expect(store_.getActions()).toEqual([]);
     });
 
     it('Dispatches autocomplete_fetch_error when fetch fails', () => {
@@ -118,16 +214,22 @@ describe('Test autocomplete action creators', () => {
         type: AUTOCOMPLETE_FETCH_ERROR,
         response: {}
       };
-      const store = mockStore({})
+      const store_ = mockStore({})
 
       // Act
       // @ts-ignore
-      store.dispatch(fetchAutoCompleteOptions('https://graph.microsoft.com/v1.0/', 'v1.0'))
+      store_.dispatch(fetchAutoCompleteOptions('https://graph.microsoft.com/v1.0/', 'v1.0'))
         .then(() => {
           // Assert
-          expect(store.getActions()).toEqual([expectedAction]);
+          expect(store_.getActions()).toEqual([expectedAction]);
         })
 
+    })
+
+    it('Fetches autocomplete options', () => {
+      // @ts-ignore
+      const response = store.dispatch(fetchAutoCompleteOptions('https://graph.microsoft.com/v1.0/', 'v1.0'));
+      expect(response).toBe(undefined);
     })
   })
 

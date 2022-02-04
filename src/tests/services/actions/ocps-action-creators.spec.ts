@@ -5,9 +5,13 @@ import {
 import configureMockStore from 'redux-mock-store';
 import fetch from 'jest-fetch-mock';
 import thunk from 'redux-thunk';
+import { authenticationWrapper } from '../../../modules/authentication';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
+
+authenticationWrapper.getOcpsToken = jest.fn(() => Promise.resolve('token'));
+
 describe('Tests OCPS action creators', () => {
   beforeEach(() => {
     // eslint-disable-next-line no-undef
@@ -72,7 +76,15 @@ describe('Tests OCPS action creators', () => {
         response: Object
       }
     ]
-    fetch.mockResponseOnce(JSON.stringify({}));
+    fetch.mockResponseOnce(JSON.stringify({
+      ok: true,
+      email: 0,
+      screenshot: 0,
+      feedback: 0,
+      value: [
+        { randomValue: 1 }
+      ]
+    }));
     // @ts-ignore
     store.dispatch(getPolicies())
       .then(() => {
@@ -89,7 +101,12 @@ describe('Tests OCPS action creators', () => {
       screenshot: 0,
       feedback: 0,
       value: [
-        { randomValue: 1 }
+        {
+          policiesPayload: {
+            settingId: ['L_EmailCollection', 'L_Screenshot', 'L_SendFeedback'],
+            value: '20'
+          }
+        }
       ]
     }
 
@@ -108,6 +125,6 @@ describe('Tests OCPS action creators', () => {
     const url = getPolicyUrl();
 
     // Assert
-    expect(url).toBeDefined();
+    expect(url).toBeTruthy();
   })
 })

@@ -14,7 +14,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
-
+window.open = jest.fn();
 describe('Auth Action Creators test', () => {
   it('tests the authentication pending action', () => {
     // Arrange

@@ -1,5 +1,6 @@
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event'
 import SampleQueries  from '../../app/views/sidebar/sample-queries/SampleQueries';
 import { ISampleQueriesProps } from '../../types/query-runner';
 import { messages_ } from '../utils/get-messages';
@@ -41,6 +42,16 @@ const renderSampleQueries = () => {
     }
   }
 
+  jest.mock('../../app/views/query-runner/query-input/QueryInput.tsx', () => {
+    return {
+      __esModule: true,
+      // eslint-disable-next-line react/display-name
+      default: () => {
+        return <div>QueryInput</div>;
+      }
+    }
+  })
+
   return render(
     <IntlProvider
       locale={geLocale}
@@ -59,9 +70,14 @@ jest.mock('react-redux', () => {
   }
 })
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Tests SampleQueries', () => {
   it('Renders SampleQueries without crashing', () => {
     renderSampleQueries();
     expect(screen.getByRole('searchbox'));
+    userEvent.type(screen.getByRole('searchbox'), 'my profile');
+    expect(screen.getByText(/my profile/));
   })
 })

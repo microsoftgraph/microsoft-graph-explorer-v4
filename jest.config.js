@@ -4,7 +4,11 @@ module.exports = {
     'src/**/*.{js,jsx,ts,tsx}',
     '!**/node_modules/**',
     '!build/**',
-    '!src/**/*.d.ts'
+    '!src/**/*.d.ts',
+    '!src/index.tsx',
+    '!src/tests/accessibility/**',
+    '!src/app/middleware/telemetryMiddleware.ts',
+    '!src/telemetry/telemetry.ts'
   ],
   resolver: 'jest-pnp-resolver',
   setupFiles: ['react-app-polyfill/jsdom'],

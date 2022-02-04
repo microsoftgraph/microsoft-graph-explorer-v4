@@ -29,6 +29,9 @@ const renderResponseMessages = (): any => {
   )
 }
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Renders response messages', () => {
   it('Renders the response messages', () => {
     renderResponseMessages();

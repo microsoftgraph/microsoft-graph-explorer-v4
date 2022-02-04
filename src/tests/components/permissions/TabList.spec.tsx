@@ -77,6 +77,9 @@ jest.mock('react-redux', () => {
   }
 })
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Renders permissions tab', () => {
   it('Renders Modify Permissions Tab without crasing', () => {
     const { getByText } = renderTabList();

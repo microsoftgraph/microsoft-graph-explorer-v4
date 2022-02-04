@@ -2,7 +2,7 @@ import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
 import { Request } from '../../../../app/views/query-runner/request/Request';
 import { Mode } from '../../../../types/enums';
-import {messages_} from '../../../utils/get-messages'
+import { messages_ } from '../../../utils/get-messages'
 import { IRequestComponent } from '../../../../types/request';
 import { IntlProvider } from 'react-intl';
 import { geLocale } from '../../../../appLocale';
@@ -51,7 +51,10 @@ const renderRequest = (args?: any): any => {
 
   )
 }
-{/* <Request {...requestProps} /> */}
+
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 jest.mock('@microsoft/applicationinsights-react-js', () => ({
   // eslint-disable-next-line react/display-name
   withAITracking: () => React.Component,
@@ -103,9 +106,11 @@ jest.mock('react-redux', () => {
 describe('Tests Request component', () => {
   it('Renders Request section without crashing', () => {
     const { getByText } =renderRequest();
-    screen.debug();
     getByText(/Request body/);
     getByText(/Request headers/);
     getByText(/Got feedback/)
+    getByText(/Modify permissions/);
+    getByText(/Got feedback/);
+    getByText(/Access token/);
   })
 })

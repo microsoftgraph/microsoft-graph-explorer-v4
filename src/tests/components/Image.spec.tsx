@@ -10,6 +10,8 @@ const renderImage = () => {
   const props = { body, alt, styles };
   return render(<Image {...props} />);
 }
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
 
 describe('Tests image rendering', () => {
   it('Renders image', () => {

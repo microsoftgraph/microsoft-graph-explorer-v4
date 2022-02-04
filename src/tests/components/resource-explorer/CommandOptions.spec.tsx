@@ -50,6 +50,9 @@ jest.mock('react-redux', () => {
   }
 })
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Tests CommandOptions', () => {
   it('Renders command options', () => {
     const { getByText } = renderCommandOptions();

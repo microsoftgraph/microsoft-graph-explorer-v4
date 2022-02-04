@@ -1,9 +1,10 @@
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event'
 import AutoComplete from '../../../app/views/query-runner/query-input/auto-complete/AutoComplete';
 import { IAutoCompleteProps, IAutoCompleteState } from '../../../types/auto-complete';
-
 afterEach(cleanup);
+
 const renderAutoComplete = (args?: any): any => {
   const autoCompleteProps: IAutoCompleteProps = {
     suggestions: ['sugggestion 1', 'sugggestion 2', 'sugggestion 3'],
@@ -31,7 +32,7 @@ const renderAutoComplete = (args?: any): any => {
     filteredSuggestions: [],
     suggestions: ['sugggestion 1', 'sugggestion 2', 'sugggestion 3'],
     showSuggestions: true,
-    userInput: '/m',
+    userInput: '/',
     compare: '',
     queryUrl: 'https://graph.microsoft.com/v1.0/me',
     multiline: false
@@ -92,9 +93,14 @@ jest.mock('react-redux', () => {
   }
 })
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Tests AutoComplete render', () => {
   it('Renders autocomplete suggestions without crashing', () => {
     renderAutoComplete();
     screen.getByRole('textbox');
+    userEvent.type(screen.getByRole('textbox'), 'sugggestion 1');
+    screen.debug();
   })
 })

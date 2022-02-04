@@ -12,7 +12,7 @@ import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
-import { getAvailableMethods, getUrlFromLink, removeCounter } from './resource-explorer.utils';
+import { getAvailableMethods, getUrlFromLink } from './resource-explorer.utils';
 
 interface IResourceLinkProps {
   link: any;
@@ -34,6 +34,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
   };
 
   const setQuery = (link: IResourceLink, selectedVerb: string) => {
+    console.log('Here is resource link', link);
     const resourceUrl = getUrlFromLink(link);
     const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
     const query: IQuery = {
@@ -105,14 +106,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         });
     }
 
-    if (resourceLink.type === 'path') {
-      menuItems.push(
-        {
-          key: ResourceOptions.SHOW_QUERY_PARAMETERS,
-          text: translateMessage('Access query parameters'),
-          itemType: ContextualMenuItemType.Normal,
-          onClick: () => props.resourceOptionSelected(ResourceOptions.SHOW_QUERY_PARAMETERS, resourceLink)
-        });
+    if (resourceLink.type === 'path' || resourceLink.type === 'function') {
       menuItems.push(
         {
           key: ResourceOptions.ADD_TO_COLLECTION,
@@ -139,14 +133,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
         subMenuProps: {
           items: subMenuItems
         }
-      });
-    }
-
-    if (menuItems.length > 0) {
-      menuItems.unshift({
-        key: 'actions',
-        itemType: ContextualMenuItemType.Header,
-        text: removeCounter(resourceLink.name)
       });
     }
     return menuItems;

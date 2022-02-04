@@ -1,11 +1,12 @@
 import React from 'react';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { QueryRunner } from '../../../app/views/query-runner/QueryRunner';
-import { IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runner';
+import { IQueryInputProps, IQueryRunnerProps, IQueryRunnerState } from '../../../types/query-runner';
 import { IntlProvider } from 'react-intl';
 import { geLocale } from '../../../appLocale';
 import messages from '../../../messages';
-
+import QueryInput from '../../../app/views/query-runner/query-input/QueryInput';
+import { Mode } from '../../../types/enums';
 afterEach(cleanup);
 const renderQueryRunner = (args?: any): any => {
   const queryRunnerProps: IQueryRunnerProps = {
@@ -59,21 +60,50 @@ jest.mock('react-redux', () => {
           pending: false,
           token: true
         },
-        isLoadingData: false
+        isLoadingData: false,
+        submitting: false,
+        authenticated: false,
+        mode: Mode.Complete,
+        intl: {
+          message: messages
+        }
       })
     })
   }
 })
 
-jest.mock('../../../app/views/query-runner/query-input/QueryInput.tsx', () => {
-  return {
-    __esModule: true,
-    // eslint-disable-next-line react/display-name
-    default: () => {
-      return <div>QueryInput</div>;
-    }
+const handleOnRunQuery = jest.fn();
+const handleOnMethodChange = jest.fn();
+const handleOnVersionChange = jest.fn();
+
+const  sampleQuery =  {
+  selectedVerb: 'GET',
+  selectedVersion: 'v1',
+  sampleUrl: 'https://graph.microsoft.com/v1.0/me',
+  sampleHeaders: []
+}
+
+const queryInputProps : IQueryInputProps = {
+  sampleQuery,
+  handleOnRunQuery,
+  handleOnMethodChange,
+  handleOnVersionChange,
+  handleOnUrlChange: jest.fn(),
+  handleOnBlur: jest.fn(),
+  submitting: false,
+  authenticated: false,
+  mode: Mode.Complete,
+  intl: {
+    message: messages
   }
-})
+}
+// jest.mock('../../../app/views/query-runner/query-input/QueryInput.tsx', () => {
+//   return {
+//     __esModule: true,
+//     // eslint-disable-next-line react/display-name
+//     default: () =>  <QueryInput {...queryInputProps}/>
+//   }
+// })
 
 jest.mock('../../../app/views/query-runner/request/Request.tsx', () => {
   return {
@@ -84,6 +114,9 @@ jest.mock('../../../app/views/query-runner/request/Request.tsx', () => {
     }
   }
 })
+
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
 
 jest.mock('@microsoft/applicationinsights-react-js', () => ({
   // eslint-disable-next-line react/display-name
@@ -105,8 +138,8 @@ jest.mock('@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptio
 
 describe('Tests QueryRunner', () => {
   it('Renders query runner without crashing', () => {
-    const { getByText } = renderQueryRunner();
-    getByText(/QueryInput/);
+    // const { getByText } = renderQueryRunner();
+    screen.debug();
     getByText(/Request/);
   })
 })

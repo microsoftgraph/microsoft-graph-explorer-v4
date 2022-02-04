@@ -36,6 +36,9 @@ jest.mock('@microsoft/applicationinsights-react-js', () => ({
   ReactPlugin: Object
 }))
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 jest.mock('../../../app/views/common/dimensions-adjustment.ts', () => {
   return {
     convertVhToPx: jest.fn(() => {

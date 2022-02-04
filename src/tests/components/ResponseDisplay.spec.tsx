@@ -10,6 +10,9 @@ const renderResponseDisplay = (properties: any): any => {
   )
 }
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('Tests Response display of different formats', () => {
   it('Renders xml response type', ()=> {
     // Arrange

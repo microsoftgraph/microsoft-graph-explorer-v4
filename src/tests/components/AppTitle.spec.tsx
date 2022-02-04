@@ -27,6 +27,9 @@ const renderTitleOnFullScreen = (args?: any) => {
   )
 }
 
+// eslint-disable-next-line no-console
+console.warn = jest.fn()
+
 describe('It should render the app title section in mobile screen size', () => {
   it('Renders app title section', () => {
     const { getByText } = renderTitle();

@@ -10,7 +10,7 @@ import {
   RESOURCEPATHS_DELETE_SUCCESS
 } from '../../../app/services/redux-constants';
 import content from '../../../app/utils/resources/resources.json';
-import { IResource, IResources } from '../../../types/resources';
+import { IResource, IResourceLink, IResources } from '../../../types/resources';
 
 const res = JSON.parse(JSON.stringify(content)) as IResource;
 const middlewares = [thunk];
@@ -44,6 +44,24 @@ const paths = [{
   type: 'path',
   links: []
 }];
+
+const resourceLinks: IResourceLink[] = [
+  {
+    labels: [
+      { name: 'v1.0', methods: ['Get', 'Post'] }
+    ],
+    key: '5-issues',
+    url: '/issues',
+    name: 'issues (1)',
+    icon: 'LightningBolt',
+    isExpanded: true,
+    level: 7,
+    parent: '/',
+    paths: ['/'],
+    type: 'path',
+    links: []
+  }
+];
 
 describe('Resources Reducer', () => {
   it('should return initial state', () => {
@@ -101,6 +119,38 @@ describe('Resources Reducer', () => {
     });
     store.dispatch(removeResourcePaths(paths));
     expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('should handle RESOURCEPATHS_ADD_SUCCESS and return new state with the paths', () => {
+    const newState = { ...initialState };
+    newState.paths = resourceLinks;
+    const action_ = {
+      type: RESOURCEPATHS_ADD_SUCCESS,
+      response: paths
+    }
+    const state_ = resources(newState, action_);
+    expect(state_.paths).toEqual(resourceLinks);
+  });
+
+  it('should handle RESOURCEPATHS_DELETE_SUCCESS and return new state with no resource paths', () => {
+    const newState = { ...initialState };
+    newState.paths = resourceLinks;
+    const action_ = {
+      type: RESOURCEPATHS_DELETE_SUCCESS,
+      response: paths
+    }
+    const state_ = resources(newState, action_);
+    expect(state_.paths).toEqual([]);
+  });
+
+  it('should return unchanged state if no relevant action is passed', () => {
+    const newState = { ...initialState };
+    const action_ = {
+      type: 'Dummy',
+      response: { dummy: 'Dummy' }
+    }
+    const state_ = resources(newState, action_);
+    expect(state_).toEqual(newState);
   });
 
 });
