@@ -14,7 +14,7 @@ env:
 
 jobs:
   code-linting:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
@@ -39,6 +39,11 @@ jobs:
 
     - name: Generate test coverage report
       run: npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
+
+    - name: Fix code coverage paths
+      run: |
+        sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
+        sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
 
     - name: Run sonar cloud analysis
       uses: SonarSource/sonarcloud-github-action@master
