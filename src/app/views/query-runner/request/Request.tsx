@@ -64,8 +64,11 @@ export class Request extends Component<IRequestComponent, any> {
         ariaLabel={messages['request body']}
         title={messages['request body']}
         headerText={messages['request body']}
+        headerButtonProps={{
+          'aria-controls': 'request-body-tab'
+        }}
       >
-        <div style={containerStyle}>
+        <div style={containerStyle} id={'request-body-tab'}>
           <RequestBody handleOnEditorChange={handleOnEditorChange} />
         </div>
       </PivotItem>,
@@ -77,8 +80,11 @@ export class Request extends Component<IRequestComponent, any> {
         ariaLabel={messages['request header']}
         title={messages['request header']}
         headerText={messages['request header']}
+        headerButtonProps={{
+          'aria-controls': 'request-header-tab'
+        }}
       >
-        <div style={containerStyle}>
+        <div style={containerStyle} id={'request-header-tab'}>
           <RequestHeaders />
         </div>
       </PivotItem>,
@@ -87,11 +93,14 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='AzureKeyVault'
         itemKey='modify-permissions'
         onRenderItemLink={this.getTooltipDisplay}
-        ariaLabel={translateMessage('permissions preview')}
+        ariaLabel={translateMessage('modify permissions')}
         title={translateMessage('permissions preview')}
         headerText={messages['modify permissions']}
+        headerButtonProps={{
+          'aria-controls': 'permission-tab'
+        }}
       >
-        <div style={containerStyle}>
+        <div style={containerStyle} id={'permission-tab'}>
           <Permission />
         </div>
       </PivotItem>
@@ -105,8 +114,11 @@ export class Request extends Component<IRequestComponent, any> {
           onRenderItemLink={this.getTooltipDisplay}
           ariaLabel={translateMessage('Access Token')}
           title={translateMessage('Access Token')}
-          headerText={translateMessage('Access Token')}>
-          <div style={containerStyle}>
+          headerText={translateMessage('Access Token')}
+          headerButtonProps={{
+            'aria-controls': 'access-token-tab'
+          }}>
+          <div style={containerStyle} id={'access-token-tab'}>
             <Auth />
           </div>
         </PivotItem>,
@@ -122,6 +134,9 @@ export class Request extends Component<IRequestComponent, any> {
           ariaLabel={translateMessage('Feedback')}
           title={translateMessage('Feedback')}
           headerText={translateMessage('Feedback')}
+          headerButtonProps={{
+            'aria-controls': 'feedback-tab'
+          }}
         >
         </PivotItem>
       )
@@ -223,7 +238,9 @@ export class Request extends Component<IRequestComponent, any> {
             </Pivot>
           </div>
         </Resizable>
-        <FeedbackForm activated={this.state.enableShowSurvey} dismissSurvey={this.toggleCustomSurvey} />
+        <div id={'feedback-tab'}>
+          <FeedbackForm activated={this.state.enableShowSurvey} dismissSurvey={this.toggleCustomSurvey} />
+        </div>
       </>
     );
   }
