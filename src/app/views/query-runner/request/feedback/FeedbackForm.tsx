@@ -96,7 +96,7 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
       autoDismiss: 2,
       campaignDefinitions: CampaignDefinitions,
       showEmailAddress: (policies?.data?.email !== 2),
-      surveyEnabled: (policies?.data?.feedback !== 2),
+      surveyEnabled: (profile?.profileType !== ACCOUNT_TYPE.AAD),
       onDismiss: (campaignId: string, submitted: boolean) => {
         if (submitted) {
           dispatch(setQueryResponseStatus({

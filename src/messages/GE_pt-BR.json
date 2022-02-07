@@ -390,7 +390,7 @@
   "Path display": "Exibição do caminho",
   "More path links": "Mais links de caminho",
   "Resources available": "Recursos disponíveis",
-  "Selected Resources": "Recursos selecionados",
+  "Selected Resources": "Recursos Selecionados",
   "A documentation link for this URL exists. Click learn more to access it": "Existe um link de documentação dessa URL. Clique em Saiba mais para acessar",
   "Feedback": "Tem comentários?",
   "Comment question": "Conte-nos mais sobre sua experiência",
@@ -423,10 +423,11 @@
   "Query parameters": "Parâmetros de consulta",
   "Preview collection": "Visualizar a coleção",
   "Download postman collection": "Baixar a coleção de carteiros",
-  "Export list as a Postman collection message": "Você pode exportar a lista inteira como uma Coleção de carteiros. Se houver itens na lista que você não quer, selecione-os para removê-los",
+  "Export list as a Postman collection message": "Você pode exportar a lista inteira como uma Coleção do Postman. Se houver itens na lista que você não deseja, selecione-os para removê-los.",
   "Copied": "Copiado",
   "Invalid whitespace in URL": "Espaço em branco inválido na URL",
   "Response content not available due to CORS policy": "O conteúdo da resposta não está disponível no Graph Explorer devido à política CORS. Você pode executar essa solicitação em um cliente de API, como o Postman. Leia mais sobre o CORS e entenda como ele funciona",
   "here": "aqui",
-  "Invalid version in URL": "Versão inválida na URL"
+  "Invalid version in URL": "Versão inválida na URL",
+  "More info": "Mais informações"
 }

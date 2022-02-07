@@ -3,6 +3,7 @@ import fetch from 'isomorphic-fetch';
 import { isValidHttpsUrl } from '../../app/utils/external-link-validation';
 import { createAnonymousRequest } from '../../app/services/actions/query-action-creator-util';
 import { IQuery } from '../../types/query-runner';
+import { IStatus } from '../../types/status';
 
 describe('Sandbox api fetch should', () => {
 
@@ -24,7 +25,16 @@ describe('Sandbox api fetch should', () => {
       sampleBody: ''
     }
 
-    const { graphUrl, options } = createAnonymousRequest(query, proxyUrl);
+    const queryRunnerStatus: IStatus = {
+      messageType: 0,
+      ok: false,
+      status: 400,
+      statusText: '',
+      duration: 100,
+      hint: ''
+    }
+
+    const { graphUrl, options } = createAnonymousRequest(query, proxyUrl, queryRunnerStatus);
     const response = await fetch(graphUrl, options);
     expect(response.ok).toBe(true);
   });
