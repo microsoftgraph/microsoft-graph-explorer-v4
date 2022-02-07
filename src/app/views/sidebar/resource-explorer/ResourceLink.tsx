@@ -2,22 +2,29 @@ import {
   ContextualMenuItemType, getId, IconButton,
   IContextualMenuItem, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
-import React, { CSSProperties } from 'react';
+import React, { useEffect, useState, CSSProperties } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { ResourceLinkType, ResourceOptions } from '../../../../types/resources';
+import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
-
+import { setMaximumOverflowWidth} from './resource-explorer.utils';
 interface IResourceLinkProps {
   link: any;
   isolateTree: Function;
   resourceOptionSelected: Function;
+  linkLevel: number;
   classes: any;
 }
 
 const ResourceLink = (props: IResourceLinkProps) => {
   const { link: resourceLink, classes } = props;
+  const [resourceLevelOnIsolation, setResourceLevelOnIsolation] = useState(-1);
+  const [isolationFlag, setIsolationFlag] = useState(false);
+
+  useEffect(() => {
+    setResourceLevelOnIsolation(props.linkLevel);
+  },  [isolationFlag]);
 
   const tooltipId = getId('tooltip');
   const buttonId = getId('targetButton');
@@ -36,6 +43,17 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   const items = getMenuItems();
 
+  const overflowProps = {
+    resourceLevelOnIsolation,
+    level: resourceLink.level,
+    method: resourceLink.method
+  }
+
+  const isolateResourceLink = (resourceLink_: IResourceLink) => {
+    setIsolationFlag(true);
+    props.isolateTree(resourceLink_);
+  }
+
   return <span className={linkStyle.link}>
     {resourceLink.method &&
     <span
@@ -44,7 +62,17 @@ const ResourceLink = (props: IResourceLinkProps) => {
     >
       {resourceLink.method}
     </span>}
-    {resourceLink.name}
+    <span
+      style={{
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        maxWidth: setMaximumOverflowWidth(overflowProps)
+      }}>
+
+      {resourceLink.name}
+
+    </span>
 
 
     {items.length > 0 &&
@@ -77,7 +105,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         />
       </TooltipHost>
     }
-  </span>;
+  </span>
 
   function getMenuItems() {
     const menuItems: IContextualMenuItem[] = [];
@@ -90,7 +118,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
             key: 'isolate',
             text: translateMessage('Isolate'),
             itemType: ContextualMenuItemType.Normal,
-            onClick: () => props.isolateTree(resourceLink)
+            onClick: () => isolateResourceLink(resourceLink)
           });
       }
 
