@@ -145,7 +145,7 @@ jobs:
 
       - script: |
           mkdir -p $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/_manifest
-          displayName: "Create _manifest directory"
+        displayName: "Create _manifest directory"
 
       - task: ManifestGeneratorTask@0
         inputs:
