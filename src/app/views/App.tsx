@@ -340,6 +340,13 @@ class App extends Component<IAppProps, IAppState> {
       sidebarProperties, dimensions }: any = this.props;
     const { sidebar, content } = dimensions;
 
+    let sidebarWidth = classes.sidebar;
+    let layout = '';
+    let sideWidth = sidebar.width;
+    let sideHeight = sidebar.height;
+    let maxWidth = '50%';
+    let contentWidth = content.width;
+
     const query = createShareLink(sampleQuery, authenticated);
     const { mobileScreen, showSidebar } = sidebarProperties;
 
@@ -353,10 +360,12 @@ class App extends Component<IAppProps, IAppState> {
       padding: 10
     };
 
-    let sidebarWidth = classes.sidebar;
-    let layout = mobileScreen ? 'col-xs-12 col-sm-12' : '';
     if (mobileScreen) {
       layout = sidebarWidth = 'col-xs-12 col-sm-12';
+      sideWidth = '100%';
+      sideHeight = '150px';
+      maxWidth = '100%';
+      contentWidth = '100%';
     } else if (minimised) {
       sidebarWidth = classes.sidebarMini;
     }
@@ -382,7 +391,7 @@ class App extends Component<IAppProps, IAppState> {
                 }}
                 className={sidebarWidth}
                 minWidth={'4vw'}
-                maxWidth={mobileScreen ? '100%' : '50%'}
+                maxWidth={maxWidth}
                 enable={{
                   right: true
                 }}
@@ -394,8 +403,8 @@ class App extends Component<IAppProps, IAppState> {
                 }}
                 bounds={'window'}
                 size={{
-                  width: mobileScreen ? '100%' : sidebar.width,
-                  height: mobileScreen ? '150px' : sidebar.height
+                  width: sideWidth,
+                  height: sideHeight
                 }}
               >
 
@@ -416,9 +425,7 @@ class App extends Component<IAppProps, IAppState> {
                 {this.displayAuthenticationSection(minimised)}
                 <hr className={classes.separator} />
 
-                {showSidebar && (
-                  <Sidebar />
-                )}
+                {showSidebar && (<Sidebar />)}
               </Resizable>
             )}
             {graphExplorerMode === Mode.TryIt &&
@@ -435,7 +442,7 @@ class App extends Component<IAppProps, IAppState> {
                   right: false
                 }}
                 size={{
-                  width: mobileScreen ? '100%' : content.width,
+                  width: contentWidth,
                   height: '98vh'
                 }}
               >
