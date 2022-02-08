@@ -1,4 +1,5 @@
 import { Announced, getTheme, IStackTokens, ITheme, styled } from '@fluentui/react';
+import { Resizable } from 're-resizable';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -15,6 +16,7 @@ import { IRootState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import * as authActionCreators from '../services/actions/auth-action-creators';
+import { setDimensions } from '../services/actions/dimensions-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
@@ -62,6 +64,7 @@ interface IAppProps {
     signIn: Function;
     storeScopes: Function;
     changeTheme: Function;
+    setDimensions: Function;
   };
 }
 
@@ -309,10 +312,30 @@ class App extends Component<IAppProps, IAppState> {
     );
   };
 
+  private setSidebarAndContentDimensions(sidebarWidth: string) {
+    const maxWidth = 98;
+    let width = parseFloat(sidebarWidth.replace('%', ''));
+    if (width < 10) {
+      width = 4;
+    }
+
+    const { dimensions }: any = this.props;
+    const dimensionsToUpdate = { ...dimensions };
+    dimensionsToUpdate.content.width = `${maxWidth - width}%`;
+    dimensionsToUpdate.sidebar.width = `${width}%`;
+    this.props.actions!.setDimensions(dimensionsToUpdate);
+
+    if (width === 4) {
+      this.toggleSidebar();
+    }
+  }
+
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
-      actions, sidebarProperties }: any = this.props;
+      actions, sidebarProperties, dimensions }: any = this.props;
+
+    const { sidebar, content } = dimensions;
 
     const query = createShareLink(sampleQuery, authenticated);
     const { mobileScreen, showSidebar } = sidebarProperties;
@@ -329,22 +352,6 @@ class App extends Component<IAppProps, IAppState> {
       padding: 10
     };
 
-    let sidebarWidth = `col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`;
-
-    let layout =
-      graphExplorerMode === Mode.TryIt
-        ? 'col-xs-12 col-sm-12'
-        : 'col-xs-12 col-sm-12 col-lg-9 col-md-8';
-
-    if (minimised) {
-      sidebarWidth = `${classes.sidebarMini}`;
-      layout = `col-xs-12 col-sm-12 col-lg-11 col-md-11 ${classes.layoutExtra}`;
-    }
-
-    if (mobileScreen) {
-      sidebarWidth = layout = 'col-xs-12 col-sm-12';
-    }
-
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
@@ -358,7 +365,31 @@ class App extends Component<IAppProps, IAppState> {
           />
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
-              <div className={sidebarWidth}>
+              <Resizable
+                style={{
+                  borderRight: 'solid 3px #ddd',
+                  margin: 10
+                }}
+                onResizeStop={(e: any, direction: any, ref: any, d: any) => {
+                  if (ref && ref.style && ref.style.width) {
+                    this.setSidebarAndContentDimensions(ref.style.width);
+                  }
+                }}
+                className={
+                  minimised ? `${classes.sidebarMini}` : `${classes.sidebar}`
+                }
+                minWidth={'4vw'}
+                maxWidth={'50vw'}
+                enable={{
+                  right: true
+                }}
+                bounds={'window'}
+                size={{
+                  width: sidebar.width,
+                  height: sidebar.height
+                }}
+              >
+                {JSON.stringify(sidebar)}
                 {mobileScreen && appTitleDisplayOnMobileScreen(
                   stackTokens,
                   classes,
@@ -379,28 +410,39 @@ class App extends Component<IAppProps, IAppState> {
                 {showSidebar && (
                   <Sidebar />
                 )}
-              </div>
+              </Resizable>
             )}
-            <div className={layout}>
-              {graphExplorerMode === Mode.TryIt &&
-                headerMessaging(classes, query)}
+            {graphExplorerMode === Mode.TryIt &&
+              headerMessaging(classes, query)}
 
-              {displayContent && (
-                <>
-                  <div style={{ marginBottom: 8 }}>
-                    <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                  </div>
-                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
-                    {statusMessages(queryState, sampleQuery, actions)}
-                    {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
-                  </div>
-                  {
-                    // @ts-ignore
-                    <QueryResponse verb={this.state.selectedVerb} />
-                  }
-                </>
-              )}
-            </div>
+            {displayContent && (
+              <Resizable
+                bounds={'window'}
+                style={{
+                  marginLeft: 5
+                }}
+                enable={{
+                  right: false
+                }}
+                size={{
+                  width: content.width,
+                  height: '98vh'
+                }}
+              >
+                {JSON.stringify(content)}
+                <div style={{ marginBottom: 8 }}>
+                  <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                </div>
+                <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
+                  {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
+                  {statusMessages(queryState, sampleQuery, actions)}
+                </div>
+                {
+                  // @ts-ignore
+                  <QueryResponse verb={this.state.selectedVerb} />
+                }
+              </Resizable>
+            )}
           </div>
         </div>
       </ThemeContext.Provider>
@@ -408,7 +450,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 }
 
-const mapStateToProps = ({ sidebarProperties, theme,
+const mapStateToProps = ({ sidebarProperties, theme, dimensions,
   queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
@@ -424,6 +466,7 @@ const mapStateToProps = ({ sidebarProperties, theme,
     termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery,
+    dimensions,
     authenticated: !!authToken.token
   };
 };
@@ -438,7 +481,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         setSampleQuery,
         toggleSidebar,
         ...authActionCreators,
-        changeTheme
+        changeTheme,
+        setDimensions
       },
       dispatch
     )

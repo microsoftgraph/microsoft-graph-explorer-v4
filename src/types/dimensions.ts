@@ -6,4 +6,6 @@ export interface IDimensionProperies {
 export interface IDimensions {
   request: IDimensionProperies;
   response: IDimensionProperies;
+  sidebar: IDimensionProperies;
+  content: IDimensionProperies;
 }
