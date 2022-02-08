@@ -12,13 +12,11 @@ export const appStyles = (theme: ITheme) => {
       marginBottom: theme.spacing.s1
     },
     sidebar: {
-      background: theme.palette.neutralLighter,
-      borderRight: '1px solid silver',
-      paddingRight: 5
+      background: theme.palette.neutralLighter
+
     },
     sidebarMini: {
       background: theme.palette.neutralLighter,
-      borderRight: '1px solid silver',
       maxWidth: '65px',
       minWidth: '55px',
       padding: 10
@@ -61,6 +59,13 @@ export const appStyles = (theme: ITheme) => {
     },
     statusAreaLaptopScreen: {
       marginTop: 0
+    },
+    vResizeHandle: {
+      zIndex: 1,
+      borderRight: '1px solid silver',
+      '&:hover': {
+        borderRight: '3px solid silver'
+      }
     }
   };
 };

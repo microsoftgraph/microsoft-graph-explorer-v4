@@ -395,11 +395,8 @@ class App extends Component<IAppProps, IAppState> {
                 enable={{
                   right: true
                 }}
-                handleStyles={{
-                  right: {
-                    zIndex: 1,
-                    padding: 7
-                  }
+                handleClasses={{
+                  right: classes.vResizeHandle
                 }}
                 bounds={'window'}
                 size={{
@@ -436,7 +433,7 @@ class App extends Component<IAppProps, IAppState> {
                 bounds={'window'}
                 className={layout}
                 style={{
-                  marginLeft: 5
+                  marginLeft: 10
                 }}
                 enable={{
                   right: false
