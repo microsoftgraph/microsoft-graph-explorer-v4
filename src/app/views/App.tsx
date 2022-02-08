@@ -344,10 +344,8 @@ class App extends Component<IAppProps, IAppState> {
     const { mobileScreen, showSidebar } = sidebarProperties;
 
     let displayContent = true;
-    if (graphExplorerMode === Mode.Complete) {
-      if (mobileScreen && showSidebar) {
-        displayContent = false;
-      }
+    if (graphExplorerMode === Mode.Complete && (mobileScreen && showSidebar)) {
+      displayContent = false;
     }
 
     const stackTokens: IStackTokens = {
@@ -356,12 +354,12 @@ class App extends Component<IAppProps, IAppState> {
     };
 
     let sidebarWidth = classes.sidebar;
+    let layout = mobileScreen ? 'col-xs-12 col-sm-12' : '';
     if (mobileScreen) {
-      sidebarWidth = 'col-xs-12 col-sm-12';
+      layout = sidebarWidth = 'col-xs-12 col-sm-12';
     } else if (minimised) {
       sidebarWidth = classes.sidebarMini;
     }
-    const layout = mobileScreen ? 'col-xs-12 col-sm-12' : '';
 
     return (
       // @ts-ignore
