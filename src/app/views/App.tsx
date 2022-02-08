@@ -5,7 +5,6 @@ import { InjectedIntl, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { geLocale } from '../../appLocale';
 import { authenticationWrapper } from '../../modules/authentication';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
@@ -32,8 +31,7 @@ import {
   appTitleDisplayOnMobileScreen
 } from './app-sections/AppTitle';
 import { headerMessaging } from './app-sections/HeaderMessaging';
-import { StatusMessages } from './app-sections';
-import { termsOfUseMessage } from './app-sections/TermsOfUseMessage';
+import { StatusMessages, TermsOfUseMessage } from './app-sections';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
 import { classNames } from './classnames';
@@ -49,7 +47,6 @@ interface IAppProps {
   styles?: object;
   intl: InjectedIntl;
   profile: object;
-  termsOfUse: boolean;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
@@ -336,8 +333,8 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { authenticated, graphExplorerMode, minimised, termsOfUse, sampleQuery,
-      actions, sidebarProperties, dimensions }: any = this.props;
+    const { authenticated, graphExplorerMode, minimised, sampleQuery,
+      sidebarProperties, dimensions }: any = this.props;
 
     const { sidebar, content } = dimensions;
 
@@ -435,7 +432,7 @@ class App extends Component<IAppProps, IAppState> {
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
                 <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
-                  {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
+                  <TermsOfUseMessage />
                   <StatusMessages />
                 </div>
                 {
@@ -452,7 +449,7 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme, dimensions,
-  profile, sampleQuery, termsOfUse, authToken, graphExplorerMode
+  profile, sampleQuery, authToken, graphExplorerMode
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -463,7 +460,6 @@ const mapStateToProps = ({ sidebarProperties, theme, dimensions,
     profile,
     receivedSampleQuery: sampleQuery,
     sidebarProperties,
-    termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery,
     dimensions,
