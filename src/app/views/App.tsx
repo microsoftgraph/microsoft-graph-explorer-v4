@@ -355,6 +355,14 @@ class App extends Component<IAppProps, IAppState> {
       padding: 10
     };
 
+    let sidebarWidth = classes.sidebar;
+    if (mobileScreen) {
+      sidebarWidth = 'col-xs-12 col-sm-12';
+    } else if (minimised) {
+      sidebarWidth = classes.sidebarMini;
+    }
+    const layout = mobileScreen ? 'col-xs-12 col-sm-12' : '';
+
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
@@ -374,43 +382,39 @@ class App extends Component<IAppProps, IAppState> {
                     this.resizeSideBar(ref.style.width);
                   }
                 }}
-                className={
-                  minimised ? `${classes.sidebarMini}` : `${classes.sidebar}`
-                }
+                className={sidebarWidth}
                 minWidth={'4vw'}
-                maxWidth={'50%'}
+                maxWidth={mobileScreen ? '100%' : '50%'}
                 enable={{
                   right: true
                 }}
                 bounds={'window'}
                 size={{
-                  width: sidebar.width,
-                  height: sidebar.height
+                  width: mobileScreen ? '100%' : sidebar.width,
+                  height: mobileScreen ? '150px' : sidebar.height
                 }}
               >
-                <div className={minimised ? `${classes.sidebarMini}` : `${classes.sidebar}`}>
 
-                  {mobileScreen && appTitleDisplayOnMobileScreen(
-                    stackTokens,
-                    classes,
-                    this.toggleSidebar
-                  )}
+                {mobileScreen && appTitleDisplayOnMobileScreen(
+                  stackTokens,
+                  classes,
+                  this.toggleSidebar
+                )}
 
-                  {!mobileScreen && appTitleDisplayOnFullScreen(
-                    classes,
-                    minimised,
-                    this.toggleSidebar
-                  )}
+                {!mobileScreen && appTitleDisplayOnFullScreen(
+                  classes,
+                  minimised,
+                  this.toggleSidebar
+                )}
 
-                  <hr className={classes.separator} />
+                <hr className={classes.separator} />
 
-                  {this.displayAuthenticationSection(minimised)}
-                  <hr className={classes.separator} />
+                {this.displayAuthenticationSection(minimised)}
+                <hr className={classes.separator} />
 
-                  {showSidebar && (
-                    <Sidebar />
-                  )}
-                </div>
+                {showSidebar && (
+                  <Sidebar />
+                )}
               </Resizable>
             )}
             {graphExplorerMode === Mode.TryIt &&
@@ -419,6 +423,7 @@ class App extends Component<IAppProps, IAppState> {
             {displayContent && (
               <Resizable
                 bounds={'window'}
+                className={layout}
                 style={{
                   marginLeft: 5
                 }}
@@ -426,7 +431,7 @@ class App extends Component<IAppProps, IAppState> {
                   right: false
                 }}
                 size={{
-                  width: content.width,
+                  width: mobileScreen ? '100%' : content.width,
                   height: '98vh'
                 }}
               >
