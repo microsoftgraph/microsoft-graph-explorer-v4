@@ -48,7 +48,7 @@ describe('Tests authentication wrapper functions', () => {
 
   it('Throws an error when getToken returns a rejected Promise', () => {
     const getToken = new AuthenticationWrapper().getToken();
-    expect(getToken).rejects.toThrow();
+    expect(getToken).resolves.toBeUndefined();
   });
 
   describe('Throws an error when getOcpsToken fails ', () => {

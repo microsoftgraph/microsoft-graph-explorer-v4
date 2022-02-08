@@ -380,7 +380,7 @@
   "user_cancelled_consent": "Подождите, пока процесс предоставления согласия не завершится.",
   "access_denied_consent": "Ваше согласие на это разрешение заблокировано администратором клиента. Попросите администратора предоставить вам доступ и повторите попытку.",
   "This response contains unviewable content": "Этот отклик содержит контент, который может не открываться для просмотра в этом редакторе.",
-  "Click to download file": "Щелкните, чтобы скачать файл.",
+  "Click to download file": "Нажмите, чтобы загрузить файл.",
   "Learn more": "Подробнее",
   "loading resources": "загрузка ресурсов",
   "Isolate": "Изолировать",
@@ -391,8 +391,6 @@
   "More path links": "Дополнительные ссылки на пути",
   "Resources available": "Доступные ресурсы",
   "Selected Resources": "Выбранные ресурсы",
-  "Methods available": "Доступные методы",
-  "Access query parameters": "Использование параметров запроса",
   "A documentation link for this URL exists. Click learn more to access it": "Существует ссылка на документацию для этого URL-адреса. Щелкните \"Подробнее\", чтобы получить к ней доступ",
   "Feedback": "Хотите оставить отзыв?",
   "Comment question": "Расскажите нам больше о своих впечатлениях",
@@ -425,7 +423,11 @@
   "Query parameters": "Параметры запроса",
   "Preview collection": "Коллекция предварительных версий",
   "Download postman collection": "Скачать коллекцию Postman",
-  "You can export the entire list as a Postman Collection. If there are items in the list you would not want, select them to remove": "Можно экспортировать весь список как коллекцию Postman. Если в списке есть элементы, которые вам не нужны, выберите их, чтобы удалить",
+  "Export list as a Postman collection message": "Можно экспортировать весь список как коллекцию Postman. Если в списке есть элементы, которые вам не нужны, выберите их, чтобы удалить.",
   "Copied": "Скопировано",
-  "Invalid whitespace in URL": "Недопустимый пробел в URL-адресе"
+  "Invalid whitespace in URL": "Недопустимый пробел в URL-адресе",
+  "Response content not available due to CORS policy": "Содержимое отклика недоступно в песочнице Graph из-за политики CORS. Вы можете выполнить этот запрос в клиенте API, таком как Postman. Дополнительные сведения о CORS и том, как это работает",
+  "here": "здесь",
+  "Invalid version in URL": "Недопустимая версия в URL-адресе",
+  "More info": "Дополнительные сведения"
 }

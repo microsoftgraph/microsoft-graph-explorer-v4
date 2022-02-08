@@ -69,6 +69,7 @@ export function getProfileInfo(): Function {
 
 export async function getProfileInformation(): Promise<IUser> {
   const profile: IUser = {
+    id: '',
     displayName: '',
     emailAddress: '',
     profileImageUrl: '',
@@ -78,6 +79,7 @@ export async function getProfileInformation(): Promise<IUser> {
   try {
     query.sampleUrl = USER_INFO_URL;
     const { userInfo } = await getProfileResponse();
+    profile.id = userInfo.id;
     profile.displayName = userInfo.displayName;
     profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;
     return profile;
@@ -145,4 +147,3 @@ export async function getProfileResponse(): Promise<IProfileResponse> {
     response
   };
 }
-

@@ -6,6 +6,7 @@ import { httpMethods, IQueryInputProps } from '../../../../types/query-runner';
 
 import { IRootState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { GRAPH_API_VERSIONS } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -22,11 +23,13 @@ const QueryInput = (props: IQueryInputProps) => {
 
   const dispatch = useDispatch();
 
-
-  const urlVersions: IDropdownOption[] = [
-    { key: 'v1.0', text: 'v1.0' },
-    { key: 'beta', text: 'beta' }
-  ];
+  const urlVersions: IDropdownOption[] = [];
+  GRAPH_API_VERSIONS.forEach(version => {
+    urlVersions.push({
+      key: version,
+      text: version
+    })
+  });
 
   const { sampleQuery, authToken,
     isLoadingData: submitting } = useSelector((state: IRootState) => state);

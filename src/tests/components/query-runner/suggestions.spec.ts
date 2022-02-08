@@ -12,7 +12,8 @@ describe('Tests suggestions fetching ', () => {
     return suggestions.getSuggestions(url, api, version)
       .then((data) => {
         expect(data).toBeNull();
-      });
+      })
+      .catch((e: Error) => { throw e });
   })
 
   it('Returns defined data when correct response is received', () => {
@@ -30,6 +31,7 @@ describe('Tests suggestions fetching ', () => {
     return suggestions.getSuggestions(url, api, version)
       .then((data) => {
         expect(data).toBeDefined();
-      });
+      })
+      .catch((e: Error) => { throw e })
   })
 })

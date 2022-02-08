@@ -20,6 +20,7 @@ import {
   getAuthTokenSuccess,
   getConsentedScopesSuccess
 } from './auth-action-creators';
+import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
 
 export function fetchScopesSuccess(response: object): IAction {
@@ -107,12 +108,19 @@ export function getPermissionsScopeType(profile: IUser | null | undefined) {
 }
 
 export function consentToScopes(scopes: string[]): Function {
-  return async (dispatch: Function) => {
+  return async (dispatch: Function, getState: Function) => {
     try {
+      const { profile }: IRootState = getState();
       const authResponse = await authenticationWrapper.consentToScopes(scopes);
       if (authResponse && authResponse.accessToken) {
         dispatch(getAuthTokenSuccess(true));
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
+        if (
+          authResponse.account &&
+          authResponse.account.localAccountId !== profile?.id
+        ) {
+          dispatch(getProfileInfo());
+        }
       }
     } catch (error: any) {
       const { errorCode } = error;

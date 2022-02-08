@@ -10,7 +10,7 @@ import {
   RESOURCEPATHS_DELETE_SUCCESS
 } from '../../../app/services/redux-constants';
 import content from '../../../app/utils/resources/resources.json';
-import { IResource, IResourceLink, IResources } from '../../../types/resources';
+import { IResource, IResourceLink, IResources, ResourceLinkType } from '../../../types/resources';
 
 const res = JSON.parse(JSON.stringify(content)) as IResource;
 const middlewares = [thunk];
@@ -58,7 +58,7 @@ const resourceLinks: IResourceLink[] = [
     level: 7,
     parent: '/',
     paths: ['/'],
-    type: 'path',
+    type: ResourceLinkType.PATH,
     links: []
   }
 ];

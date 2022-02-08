@@ -1,6 +1,7 @@
 import React from 'react';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import Paths from '../../../app/views/sidebar/resource-explorer/panels/Paths';
+import { IResourceLink, ResourceLinkType } from '../../../types/resources';
 
 afterEach(cleanup);
 const renderPaths = () => {
@@ -8,7 +9,7 @@ const renderPaths = () => {
     { key: 'url', name: 'Url', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true }
   ];
 
-  const paths = [
+  const paths : IResourceLink[] = [
     {
       key: '5-{serviceHealth-id}-issues',
       url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues',
@@ -21,7 +22,7 @@ const renderPaths = () => {
       parent: '{serviceHealth-id}',
       level: 5,
       paths: ['/', 'admin', 'serviceAnnouncement', 'healthOverviews', '{serviceHealth-id}'],
-      type: 'path',
+      type: ResourceLinkType.PATH,
       links: []
     }, {
       key: '6-issues-{serviceHealthIssue-id}',
@@ -35,7 +36,7 @@ const renderPaths = () => {
       parent: 'issues',
       level: 6,
       paths: ['/', 'admin', 'serviceAnnouncement', 'healthOverviews', '{serviceHealth-id}', 'issues'],
-      type: 'path',
+      type: ResourceLinkType.PATH,
       links: []
     }
   ];
@@ -48,7 +49,8 @@ const renderPaths = () => {
 console.warn = jest.fn()
 
 describe('Tests resource paths rendering', () => {
-  it('Renders resource paths', () => {
+  it('Renders resource paths without crashing', () => {
     const { getByText } = renderPaths();
+    getByText(/Toggle selection for all items/);
   })
 })

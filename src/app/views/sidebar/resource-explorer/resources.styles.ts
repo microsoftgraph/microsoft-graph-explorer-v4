@@ -16,3 +16,42 @@ export const resourceExplorerStyles = (theme: ITheme) => {
     }
   }
 }
+
+export const navStyles: any = (properties: any) => ({
+  chevronIcon: [
+    properties.isExpanded && {
+      transform: 'rotate(0deg)'
+    },
+    !properties.isExpanded && {
+      transform: 'rotate(-90deg)'
+    }
+  ],
+  chevronButton: [
+    properties.isExpanded && {
+      selectors: {
+        '::after': {
+          borderStyle: 'none !important',
+          borderLeft: '0px !important'
+        }
+      }
+    },
+    !properties.isExpanded && {
+      selectors: {
+        '::after': {
+          borderStyle: 'none !important',
+          borderLeft: '0px !important'
+        }
+      }
+    }
+  ],
+  link: [
+    properties.isSelected && {
+      selectors: {
+        '::after': {
+          borderStyle: 'none !important',
+          borderLeft: '0px !important'
+        }
+      }
+    }
+  ]
+});
