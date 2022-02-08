@@ -18,8 +18,6 @@ import * as authActionCreators from '../services/actions/auth-action-creators';
 import { setDimensions } from '../services/actions/dimensions-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
-import { clearQueryStatus } from '../services/actions/query-status-action-creator';
-import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
 import { changeTheme } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { GRAPH_URL } from '../services/graph-constants';
@@ -52,8 +50,6 @@ interface IAppProps {
   sampleQuery: IQuery;
   authenticated: boolean;
   actions: {
-    clearQueryStatus: Function;
-    clearTermsOfUse: Function;
     setSampleQuery: Function;
     runQuery: Function;
     toggleSidebar: Function;
@@ -232,7 +228,6 @@ class App extends Component<IAppProps, IAppState> {
     setTimeout(() => {
       if (actions) {
         const { queryVersion } = parseSampleUrl(url);
-
         const requestHeaders = headers.map((header: any) => {
           return {
             name: Object.keys(header)[0],
@@ -262,10 +257,8 @@ class App extends Component<IAppProps, IAppState> {
   };
 
   public toggleSidebar = (): void => {
-    const { sidebarProperties } = this.props;
-    const properties = { ...sidebarProperties };
-    properties.showSidebar = !properties.showSidebar;
-    this.props.actions!.toggleSidebar(properties);
+    const shouldShowSidebar = this.setSidebarProperties();
+    this.changeDimensions(shouldShowSidebar ? '26%' : '4%');
     telemetry.trackEvent(
       eventTypes.BUTTON_CLICK_EVENT,
       {
@@ -296,7 +289,6 @@ class App extends Component<IAppProps, IAppState> {
           justifyContent: minimised ? '' : 'center',
           alignItems: minimised ? '' : 'center',
           marginLeft: minimised ? '' : '-0.9em'
-
         }}>
         <div className={minimised ? '' : 'col-10'}>
           <Authentication />
@@ -308,12 +300,30 @@ class App extends Component<IAppProps, IAppState> {
     );
   };
 
-  private setSidebarAndContentDimensions(sidebarWidth: string) {
-    const maxWidth = 98;
-    let width = parseFloat(sidebarWidth.replace('%', ''));
-    if (width < 16) {
-      width = 4;
+  private setSidebarProperties() {
+    const { sidebarProperties } = this.props;
+    const properties = { ...sidebarProperties };
+    const shouldShowSidebar = !properties.showSidebar;
+    properties.showSidebar = shouldShowSidebar;
+    this.props.actions!.toggleSidebar(properties);
+    return shouldShowSidebar;
+  }
+
+  private resizeSideBar(sidebarWidth: string) {
+    const breakPoint = 15;
+    const width = this.changeDimensions(sidebarWidth);
+    const { sidebarProperties } = this.props;
+    const minimised = !sidebarProperties.showSidebar;
+    if (width <= breakPoint && !minimised) {
+      this.setSidebarProperties();
+    } else if (width > breakPoint && minimised) {
+      this.setSidebarProperties();
     }
+  }
+
+  private changeDimensions(sidebarWidth: string): number {
+    const maxWidth = 98;
+    const width = parseFloat(sidebarWidth.replace('%', ''));
 
     const { dimensions }: any = this.props;
     const dimensionsToUpdate = { ...dimensions };
@@ -321,21 +331,13 @@ class App extends Component<IAppProps, IAppState> {
     dimensionsToUpdate.sidebar.width = `${width}%`;
     this.props.actions!.setDimensions(dimensionsToUpdate);
 
-    if (width === 4) {
-      this.toggleSidebar();
-    } else {
-      const { sidebarProperties } = this.props;
-      if (!sidebarProperties.showSidebar) {
-        this.toggleSidebar();
-      }
-    }
+    return width;
   }
 
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, minimised, sampleQuery,
       sidebarProperties, dimensions }: any = this.props;
-
     const { sidebar, content } = dimensions;
 
     const query = createShareLink(sampleQuery, authenticated);
@@ -369,7 +371,7 @@ class App extends Component<IAppProps, IAppState> {
               <Resizable
                 onResize={(e: any, direction: any, ref: any, d: any) => {
                   if (ref && ref.style && ref.style.width) {
-                    this.setSidebarAndContentDimensions(ref.style.width);
+                    this.resizeSideBar(ref.style.width);
                   }
                 }}
                 className={
@@ -386,7 +388,7 @@ class App extends Component<IAppProps, IAppState> {
                   height: sidebar.height
                 }}
               >
-                <div style={{ padding: 4 }}>
+                <div className={minimised ? `${classes.sidebarMini}` : `${classes.sidebar}`}>
 
                   {mobileScreen && appTitleDisplayOnMobileScreen(
                     stackTokens,
@@ -471,8 +473,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     actions: bindActionCreators(
       {
-        clearQueryStatus,
-        clearTermsOfUse,
         runQuery,
         setSampleQuery,
         toggleSidebar,
