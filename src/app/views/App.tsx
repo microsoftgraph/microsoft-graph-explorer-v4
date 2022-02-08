@@ -32,7 +32,7 @@ import {
   appTitleDisplayOnMobileScreen
 } from './app-sections/AppTitle';
 import { headerMessaging } from './app-sections/HeaderMessaging';
-import { statusMessages } from './app-sections/StatusMessages';
+import { StatusMessages } from './app-sections';
 import { termsOfUseMessage } from './app-sections/TermsOfUseMessage';
 import { appStyles } from './App.styles';
 import { Authentication } from './authentication';
@@ -49,7 +49,6 @@ interface IAppProps {
   styles?: object;
   intl: InjectedIntl;
   profile: object;
-  queryState: object | null;
   termsOfUse: boolean;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
@@ -337,7 +336,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
+    const { authenticated, graphExplorerMode, minimised, termsOfUse, sampleQuery,
       actions, sidebarProperties, dimensions }: any = this.props;
 
     const { sidebar, content } = dimensions;
@@ -437,7 +436,7 @@ class App extends Component<IAppProps, IAppState> {
                 </div>
                 <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
                   {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
-                  {statusMessages(queryState, sampleQuery, actions)}
+                  <StatusMessages />
                 </div>
                 {
                   // @ts-ignore
@@ -453,7 +452,7 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme, dimensions,
-  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode
+  profile, sampleQuery, termsOfUse, authToken, graphExplorerMode
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -462,7 +461,6 @@ const mapStateToProps = ({ sidebarProperties, theme, dimensions,
     appTheme: theme,
     graphExplorerMode,
     profile,
-    queryState: queryRunnerStatus,
     receivedSampleQuery: sampleQuery,
     sidebarProperties,
     termsOfUse,
