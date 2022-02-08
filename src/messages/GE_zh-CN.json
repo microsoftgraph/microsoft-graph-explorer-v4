@@ -423,10 +423,11 @@
   "Query parameters": "查询参数",
   "Preview collection": "预览集合",
   "Download postman collection": "下载 postman 集合",
-  "Export list as a Postman collection message": "可以将整个列表导出为 Postman 集合。如果列表中存在你不想要的项目，请选择它们以将其删除",
+  "Export list as a Postman collection message": "可以将整个列表导出为 Postman 集合。如果列表中存在你不想要的项目，请选择要删除的项。",
   "Copied": "已复制",
   "Invalid whitespace in URL": "URL 中的无效空白",
   "Response content not available due to CORS policy": "由于 CORS 策略，响应内容在 Graph 浏览器中不可用。可以在 API 客户端（如 Postman）中执行此请求。详细了解 CORS 并了解其工作原理",
   "here": "此处",
-  "Invalid version in URL": "URL 中的版本无效"
+  "Invalid version in URL": "URL 中的版本无效",
+  "More info": "详细信息"
 }
