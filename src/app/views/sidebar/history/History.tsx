@@ -24,6 +24,7 @@ import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
+import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -101,9 +102,13 @@ export class History extends Component<IHistoryProps, any> {
       element.category = date;
       items.push(element);
     });
+    return this.sortItems(items);
+  }
+
+  private sortItems = ( items: any ) => {
     items
       .sort(dynamicSort('createdAt', SortOrder.DESC))
-      .forEach((value, index) => {
+      .forEach((value : any, index: any) => {
         value.index = index;
       });
     return items;
@@ -509,7 +514,7 @@ export class History extends Component<IHistoryProps, any> {
             placeholder={messages['Search history items']}
             className={classes.searchBox}
             onChange={this.searchValueChanged}
-            styles={{ field: { paddingLeft: 10 } }}
+            styles={searchBoxStyles}
           />
           <hr />
           <MessageBar
