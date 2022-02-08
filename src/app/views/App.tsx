@@ -315,7 +315,7 @@ class App extends Component<IAppProps, IAppState> {
   private setSidebarAndContentDimensions(sidebarWidth: string) {
     const maxWidth = 98;
     let width = parseFloat(sidebarWidth.replace('%', ''));
-    if (width < 10) {
+    if (width < 16) {
       width = 4;
     }
 
@@ -327,6 +327,11 @@ class App extends Component<IAppProps, IAppState> {
 
     if (width === 4) {
       this.toggleSidebar();
+    } else {
+      const { sidebarProperties } = this.props;
+      if (!sidebarProperties.showSidebar) {
+        this.toggleSidebar();
+      }
     }
   }
 
@@ -366,11 +371,7 @@ class App extends Component<IAppProps, IAppState> {
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <Resizable
-                style={{
-                  borderRight: 'solid 3px #ddd',
-                  margin: 10
-                }}
-                onResizeStop={(e: any, direction: any, ref: any, d: any) => {
+                onResize={(e: any, direction: any, ref: any, d: any) => {
                   if (ref && ref.style && ref.style.width) {
                     this.setSidebarAndContentDimensions(ref.style.width);
                   }
@@ -379,7 +380,7 @@ class App extends Component<IAppProps, IAppState> {
                   minimised ? `${classes.sidebarMini}` : `${classes.sidebar}`
                 }
                 minWidth={'4vw'}
-                maxWidth={'50vw'}
+                maxWidth={'50%'}
                 enable={{
                   right: true
                 }}
@@ -389,27 +390,29 @@ class App extends Component<IAppProps, IAppState> {
                   height: sidebar.height
                 }}
               >
-                {JSON.stringify(sidebar)}
-                {mobileScreen && appTitleDisplayOnMobileScreen(
-                  stackTokens,
-                  classes,
-                  this.toggleSidebar
-                )}
+                <div style={{ padding: 4 }}>
 
-                {!mobileScreen && appTitleDisplayOnFullScreen(
-                  classes,
-                  minimised,
-                  this.toggleSidebar
-                )}
+                  {mobileScreen && appTitleDisplayOnMobileScreen(
+                    stackTokens,
+                    classes,
+                    this.toggleSidebar
+                  )}
 
-                <hr className={classes.separator} />
+                  {!mobileScreen && appTitleDisplayOnFullScreen(
+                    classes,
+                    minimised,
+                    this.toggleSidebar
+                  )}
 
-                {this.displayAuthenticationSection(minimised)}
-                <hr className={classes.separator} />
+                  <hr className={classes.separator} />
 
-                {showSidebar && (
-                  <Sidebar />
-                )}
+                  {this.displayAuthenticationSection(minimised)}
+                  <hr className={classes.separator} />
+
+                  {showSidebar && (
+                    <Sidebar />
+                  )}
+                </div>
               </Resizable>
             )}
             {graphExplorerMode === Mode.TryIt &&
@@ -429,7 +432,6 @@ class App extends Component<IAppProps, IAppState> {
                   height: '98vh'
                 }}
               >
-                {JSON.stringify(content)}
                 <div style={{ marginBottom: 8 }}>
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
