@@ -278,6 +278,7 @@ class App extends Component<IAppProps, IAppState> {
       showSidebar
     };
 
+    // @ts-ignore
     this.props.actions!.toggleSidebar(properties);
   };
 
@@ -314,9 +315,7 @@ class App extends Component<IAppProps, IAppState> {
     const width = this.changeDimensions(sidebarWidth);
     const { sidebarProperties } = this.props;
     const minimised = !sidebarProperties.showSidebar;
-    if (width <= breakPoint && !minimised) {
-      this.setSidebarProperties();
-    } else if (width > breakPoint && minimised) {
+    if ((width <= breakPoint && !minimised) || (width > breakPoint && minimised)) {
       this.setSidebarProperties();
     }
   }
@@ -329,6 +328,7 @@ class App extends Component<IAppProps, IAppState> {
     const dimensionsToUpdate = { ...dimensions };
     dimensionsToUpdate.content.width = `${maxWidth - width}%`;
     dimensionsToUpdate.sidebar.width = `${width}%`;
+    // @ts-ignore
     this.props.actions!.setDimensions(dimensionsToUpdate);
 
     return width;
