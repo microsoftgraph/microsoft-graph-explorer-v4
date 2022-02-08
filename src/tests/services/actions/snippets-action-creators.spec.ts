@@ -58,9 +58,12 @@ describe('snippet actions', () => {
     // Arrange
     const expectedActions = [
       {
+        type: 'GET_SNIPPET_PENDING'
+      },
+      {
         type: GET_SNIPPET_SUCCESS,
         response: {
-          CSharp: '{"ok":false}'
+          CSharp: '{"ok":true}'
         }
       }
     ]
@@ -78,7 +81,7 @@ describe('snippet actions', () => {
         selectedVersion: 'v1.0'
       }
     });
-    fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
+    fetchMock.mockResponseOnce(JSON.stringify({ ok: true }));
 
     // Act and Assert
     // @ts-ignore
@@ -86,6 +89,7 @@ describe('snippet actions', () => {
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       })
+      .catch((e: Error) => { throw e });
 
   })
 });

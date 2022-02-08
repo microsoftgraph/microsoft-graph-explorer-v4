@@ -67,13 +67,15 @@ describe('Tests OCPS action creators', () => {
   it('Tests getPolicies() and returns an empty array', () => {
     // Arrange
     const store = mockStore({});
-    const expectedAction = [
+    const expectedActions = [
       {
         type: GET_POLICY_PENDING
       },
       {
-        type: GET_POLICY_ERROR,
-        response: Object
+        type: GET_POLICY_SUCCESS,
+        response: {
+          email: 0, screenshot: 0, feedback: 0
+        }
       }
     ]
     fetch.mockResponseOnce(JSON.stringify({
@@ -82,16 +84,15 @@ describe('Tests OCPS action creators', () => {
       screenshot: 0,
       feedback: 0,
       value: [
-        { randomValue: 1 }
+        { randomValue: 0 }
       ]
     }));
     // @ts-ignore
     store.dispatch(getPolicies())
       .then(() => {
-        expect(store.getActions()[0]).toEqual(expectedAction[0].type);
-        expect(store.getActions()[1]).toEqual(expectedAction[1].type);
+        expect(store.getActions()).toEqual(expectedActions);
       })
-
+      .catch((e: Error) => { throw e });
   });
 
   it('Tests getPolicy which returns policy values', () => {

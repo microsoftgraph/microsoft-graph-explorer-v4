@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'
 
 import App from '../../app/views/App';
@@ -109,7 +109,7 @@ describe('It should render the main GE site', () => {
 
   it('Should render the main app with a mobile screen view', ()=> {
     const { getByText } = renderApp({mobileScreen: true});
-    getByText('Run query');
-    userEvent.click(getByText('Run query'));
+    getByText(/Run query/);
+    getByText(/Authentication/);
   });
 })

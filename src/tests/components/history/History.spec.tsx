@@ -41,7 +41,8 @@ const renderHistoryTab = (args?: any) => {
 }
 
 // eslint-disable-next-line no-console
-console.warn = jest.fn()
+console.warn = jest.fn();
+console.error = jest.fn();
 
 jest.mock('@microsoft/applicationinsights-react-js', () => ({
   // eslint-disable-next-line react/display-name

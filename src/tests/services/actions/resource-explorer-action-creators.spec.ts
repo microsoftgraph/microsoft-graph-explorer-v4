@@ -11,6 +11,92 @@ import {
   FETCH_RESOURCES_SUCCESS, RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, FETCH_RESOURCES_ERROR,
   FETCH_RESOURCES_PENDING
 } from '../../../app/services/redux-constants';
+import { Mode } from '../../../types/enums';
+import { IRootState } from '../../../types/root';
+
+const mockState: IRootState = {
+  devxApi: {
+    baseUrl: 'https://graph.microsoft.com/v1.0/me',
+    parameters: '$count=true'
+  },
+  permissionsPanelOpen: true,
+  profile: null,
+  sampleQuery: {
+    sampleUrl: 'http://localhost:8080/api/v1/samples/1',
+    selectedVerb: 'GET',
+    selectedVersion: 'v1',
+    sampleHeaders: []
+  },
+  authToken: { token: false, pending: false },
+  consentedScopes: [],
+  isLoadingData: false,
+  queryRunnerStatus: null,
+  termsOfUse: true,
+  theme: 'dark',
+  adaptiveCard: {
+    pending: false,
+    data: {
+      template: 'Template'
+    }
+  },
+  graphExplorerMode: Mode.Complete,
+  sidebarProperties: {
+    showSidebar: true,
+    mobileScreen: false
+  },
+  samples: {
+    queries: [],
+    pending: false,
+    error: null
+  },
+  scopes: {
+    pending: false,
+    data: [],
+    hasUrl: false,
+    error: null
+  },
+  history: [],
+  graphResponse: {
+    body: undefined,
+    headers: undefined
+  },
+  snippets: {
+    pending: false,
+    data: [],
+    error: null
+  },
+  responseAreaExpanded: false,
+  dimensions: {
+    request: {
+      width: '100px',
+      height: '100px'
+    },
+    response: {
+      width: '100px',
+      height: '100px'
+    }
+  },
+  autoComplete: {
+    data: null,
+    error: null,
+    pending: false
+  },
+  resources: {
+    pending: false,
+    data: {
+      segment: '',
+      labels: [],
+      children: []
+    },
+    error: null,
+    paths: []
+  },
+  policies: {
+    pending: false,
+    data: {},
+    error: null
+  }
+}
 
 const paths = [
   {
@@ -70,14 +156,14 @@ describe('Resource Explorer actions', () => {
       }
     ];
 
-    const store = mockStore({
+    const store_ = mockStore({
       resources: {
         paths: []
       }
     });
 
-    store.dispatch(addResourcePaths(paths));
-    expect(store.getActions()).toEqual(expectedActions);
+    store_.dispatch(addResourcePaths(paths));
+    expect(store_.getActions()).toEqual(expectedActions);
   });
 
   it('dispatches RESOURCEPATHS_DELETE_SUCCESS when removeResourcePaths is dispatched', () => {
@@ -89,14 +175,14 @@ describe('Resource Explorer actions', () => {
       }
     ];
 
-    const store = mockStore({
+    const store_ = mockStore({
       resources: {
         paths
       }
     });
 
-    store.dispatch(removeResourcePaths(paths));
-    expect(store.getActions()).toEqual(expectedActions);
+    store_.dispatch(removeResourcePaths(paths));
+    expect(store_.getActions()).toEqual(expectedActions);
   })
 
   it('creates FETCH_RESOURCES_ERROR when fetchResourcesError is called', () => {
@@ -129,20 +215,24 @@ describe('Resource Explorer actions', () => {
 
   it('fetches resource paths and dispatches FETCH_RESOURCES_SUCCESS', () => {
     // Arrange
-    const expectedAction = {
-      type: FETCH_RESOURCES_SUCCESS,
-      response: paths
-    }
+    const expectedAction = [
+      { type: FETCH_RESOURCES_PENDING },
+      {
+        type: FETCH_RESOURCES_SUCCESS,
+        response: { paths, ok: true }
+      }
+    ]
 
-    const store = mockStore({});
+    const store = mockStore(mockState);
     fetchMock.mockResponseOnce(JSON.stringify({ paths, ok: true }));
 
     // Act and Assert
     // @ts-ignore
     store.dispatch(fetchResources())
       .then(() => {
-        expect(store.getActions()).toEqual([expectedAction]);
+        expect(store.getActions()).toEqual(expectedAction);
       })
+      .catch((e: Error) => { throw e })
   })
 
 });

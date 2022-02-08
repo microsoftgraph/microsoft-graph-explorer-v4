@@ -6,7 +6,6 @@ import { messages_ } from '../utils/get-messages';
 import { IntlProvider } from 'react-intl';
 import { geLocale } from '../../appLocale';
 import userEvent from '@testing-library/user-event'
-import { useSelector } from 'react-redux';
 
 afterEach(cleanup);
 const renderSettings = (args? : any) => {
@@ -73,18 +72,8 @@ describe('Tests Settings component', () => {
   describe('Tests settings button', () => {
     it('Renders Settings component without crashing', () => {
       renderSettings();
-      screen.debug();
       const settingsButton = screen.getByRole('button');
       userEvent.click(settingsButton);
-      screen.debug();
     })
   });
-
-  describe('Opens permissions panel', () => {
-    it('Opens permissions panel', () => {
-      renderSettings();
-      screen.debug();
-    })
-  })
-
 })

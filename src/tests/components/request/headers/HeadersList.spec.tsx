@@ -25,6 +25,7 @@ console.warn = jest.fn()
 
 describe('Tests HeadersList component', () => {
   it('Renders HeadersList without crashing', () => {
-    renderHeadersList();
+    const { getAllByText } = renderHeadersList();
+    getAllByText(/Key/);
   })
 })

@@ -41,6 +41,7 @@ describe('Tests Proxy-Action-Creators', () => {
     store.dispatch(getGraphProxyUrl()).then(() => {
       expect(store.getActions()).toEqual([expectedAction]);
     })
+      .catch((e: Error) => { throw e })
 
   })
 })

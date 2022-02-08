@@ -15,21 +15,12 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import fetch from 'jest-fetch-mock';
 import { store } from '../../../../src/store/index';
-import { sidebarProperties } from '../../../app/services/reducers/toggle-sidebar-reducer';
-import { consentedScopes } from '../../../app/services/reducers/auth-reducers';
 import { IRootState } from '../../../types/root';
 import { Mode } from '../../../types/enums';
-import { responseAreaExpanded } from '../../../app/services/reducers/response-expanded-reducer';
 const middleware = [thunk];
 const mockStore = configureMockStore(middleware);
 
 window.open = jest.fn();
-jest.mock('../../../../src/store/index', () => {
-  const actualStore = jest.requireActual('../../../../src/store/index');
-  return {
-    ...actualStore
-  }
-});
 
 const mockState: IRootState = {
   devxApi: {
@@ -122,12 +113,6 @@ store.getState = () => {
   }
 }
 
-// store.getState = jest.fn(() => {
-//   return {
-//     ...mockState
-//   }
-// })
-
 jest.mock('../../../app/services/actions/autocomplete-action-creators.ts', () => {
   const autocomplete_ = jest.requireActual('../../../app/services/actions/autocomplete-action-creators.ts');
   return {
@@ -209,28 +194,20 @@ describe('tests permissions action creators', () => {
 
   it('Tests the fetchScopes function', () => {
     // Arrange
-    const response = {
-      permissions: {},
+    const api_response = {
+      scopes: [],
       ok: true
     }
-    fetch.mockResponseOnce(JSON.stringify(response));
-    const expectedActions = {
-      type: FETCH_SCOPES_SUCCESS,
-      response: {
-        hasUrl: true,
-        scopes: {
-          response
-        }
-      }
-    }
+    fetch.mockResponseOnce(JSON.stringify(api_response));
 
     try {
       // Act
       // @ts-ignore
       store.dispatch(fetchScopes())
-        .then((resp: any) => {
-          expect(resp).toEqual(expectedActions);
+        .then((response_: any) => {
+          expect(response_.scopes).toBe(undefined);
         })
+        .catch((e: any) => { throw e })
     }
     catch (e) {
       //
@@ -249,5 +226,6 @@ describe('tests permissions action creators', () => {
       .then(() => {
         expect(store_.getActions()[0].type).toEqual(QUERY_GRAPH_STATUS);
       })
+      .catch((e: any) => { throw e })
   })
 })

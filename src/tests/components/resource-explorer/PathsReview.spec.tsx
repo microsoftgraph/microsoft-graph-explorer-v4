@@ -61,8 +61,9 @@ jest.mock('react-redux', () => {
 // eslint-disable-next-line no-console
 console.warn = jest.fn()
 
-describe('Tests PathReview rendering', () => {
+describe('Tests postman collections panel', () => {
   it('Renders the path review section of resource explorer', () => {
     const { getByText } = renderPathsReview();
+    getByText(/Download postman collection/);
   } )
 })

@@ -94,13 +94,14 @@ jest.mock('react-redux', () => {
 })
 
 // eslint-disable-next-line no-console
-console.warn = jest.fn()
+console.warn = jest.fn();
+// eslint-disable-next-line no-console
+console.error = jest.fn();
 
 describe('Tests AutoComplete render', () => {
   it('Renders autocomplete suggestions without crashing', () => {
     renderAutoComplete();
     screen.getByRole('textbox');
     userEvent.type(screen.getByRole('textbox'), 'sugggestion 1');
-    screen.debug();
   })
 })

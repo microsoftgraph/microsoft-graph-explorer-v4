@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render } from '@testing-library/react';
+import { act, cleanup, render, screen } from '@testing-library/react';
 import { Auth } from '../../../app/views/query-runner/request/auth/Auth';
 
 afterEach(cleanup);
@@ -38,6 +38,7 @@ jest.mock('@microsoft/applicationinsights-react-js', () => ({
 
 // eslint-disable-next-line no-console
 console.warn = jest.fn()
+console.error = jest.fn();
 
 jest.mock('../../../app/views/common/dimensions-adjustment.ts', () => {
   return {
@@ -52,6 +53,9 @@ jest.mock('../../../app/views/common/dimensions-adjustment.ts', () => {
 
 describe('Tests Auth component', () => {
   it('Renders the Auth component without crashing', () => {
-    renderAuthSection();
+    act(() => {
+      expect(renderAuthSection()).toBeDefined();
+      expect(screen.getByRole('alert'))
+    })
   })
 })

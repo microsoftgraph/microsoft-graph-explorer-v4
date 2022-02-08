@@ -1,15 +1,14 @@
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react';
 import { Request } from '../../../../app/views/query-runner/request/Request';
 import { Mode } from '../../../../types/enums';
 import { messages_ } from '../../../utils/get-messages'
 import { IRequestComponent } from '../../../../types/request';
 import { IntlProvider } from 'react-intl';
 import { geLocale } from '../../../../appLocale';
-import { store } from '../../../../store';
 
 afterEach(cleanup);
-const renderRequest = (args?: any): any => {
+const renderRequest = (): any => {
   const messages = (messages_ as { [key: string]: object })[geLocale];
 
   const requestProps : IRequestComponent = {
@@ -40,7 +39,6 @@ const renderRequest = (args?: any): any => {
     officeBrowserFeedback: {},
     enableShowSurvey: true
   }
-  const appStore: any = store;
   return render(
     <IntlProvider
       locale={geLocale}
@@ -105,7 +103,7 @@ jest.mock('react-redux', () => {
 
 describe('Tests Request component', () => {
   it('Renders Request section without crashing', () => {
-    const { getByText } =renderRequest();
+    const { getByText } = renderRequest();
     getByText(/Request body/);
     getByText(/Request headers/);
     getByText(/Got feedback/)
