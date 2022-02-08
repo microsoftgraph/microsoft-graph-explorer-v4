@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react';
 import Paths from '../../../app/views/sidebar/resource-explorer/panels/Paths';
 import { IResourceLink, ResourceLinkType } from '../../../types/resources';
 
