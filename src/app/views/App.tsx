@@ -388,6 +388,12 @@ class App extends Component<IAppProps, IAppState> {
                 enable={{
                   right: true
                 }}
+                handleStyles={{
+                  right: {
+                    zIndex: 1,
+                    padding: 7
+                  }
+                }}
                 bounds={'window'}
                 size={{
                   width: mobileScreen ? '100%' : sidebar.width,
