@@ -83,8 +83,8 @@ async function getProfileInformation(): Promise<IUser> {
     profile.displayName = userInfo.displayName;
     profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;
     return profile;
-  } catch (error) {
-    return profile;
+  } catch (error: any) {
+    throw new Error('Failed to get profile information - ' + error.toString());
   }
 }
 

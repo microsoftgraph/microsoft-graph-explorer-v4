@@ -11,6 +11,7 @@ import {
   DEFAULT_USER_SCOPES,
   HOME_ACCOUNT_KEY
 } from '../../app/services/graph-constants';
+import { translateMessage } from '../../app/utils/translate-messages';
 import { signInAuthError } from '../../app/views/authentication/AuthenticationErrorsHints';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
@@ -101,8 +102,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     try {
       const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
       return response;
-    } catch (error) {
-      throw new Error(`${error}`);
+    } catch (error: any) {
+      throw new Error(translateMessage('Failed to get token - ' + error.toString()));
     }
   }
 
