@@ -4,6 +4,7 @@ import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
+import { ClientError } from '../../utils/ClientError';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { setStatusMessage } from '../../utils/status-message';
@@ -36,9 +37,6 @@ export function runQuery(query: IQuery): Function {
             dispatch,
             createdAt,
           );
-        })
-        .catch(async (error: any) => {
-          return handleError(dispatch, error);
         });
     }
 
@@ -143,6 +141,16 @@ function handleError(dispatch: Function, error: any) {
       headers: null
     })
   );
+  if (error instanceof ClientError) {
+    return dispatch(
+      setQueryResponseStatus({
+        messageType: MessageBarType.error,
+        ok: false,
+        status: 0,
+        statusText: error
+      })
+    );
+  }
   return dispatch(
     setQueryResponseStatus({
       messageType: MessageBarType.error,
