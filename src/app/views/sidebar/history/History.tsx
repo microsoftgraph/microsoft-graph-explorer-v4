@@ -73,12 +73,12 @@ export class History extends Component<IHistoryProps, any> {
     return `${year}-${month}-${day}`;
   };
 
-  public getItems(history: any[]) {
+  public getItems(history: History[]) {
     const {
       intl: { messages }
     }: any = this.props;
 
-    const items: any[] = [];
+    const items: History[] = [];
 
     // tslint:disable-next-line:no-string-literal
     const olderText = messages.older;
@@ -105,12 +105,11 @@ export class History extends Component<IHistoryProps, any> {
     return this.sortItems(items);
   }
 
-  private sortItems = ( items: any ) => {
-    items
-      .sort(dynamicSort('createdAt', SortOrder.DESC))
-      .forEach((value : any, index: any) => {
-        value.index = index;
-      });
+  private sortItems = ( items: History[] ) => {
+    items.sort(dynamicSort('createdAt', SortOrder.DESC));
+    items.forEach((value : any, index: number) => {
+      value.index = index;
+    });
     return items;
   }
 
