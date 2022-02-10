@@ -324,13 +324,13 @@ class App extends Component<IAppProps, IAppState> {
     const maxWidth = 98;
     const width = parseFloat(sidebarWidth.replace('%', ''));
 
-    const { dimensions }: any = this.props;
+    const { dimensions, actions }: any = this.props;
     const dimensionsToUpdate = { ...dimensions };
     dimensionsToUpdate.content.width = `${maxWidth - width}%`;
     dimensionsToUpdate.sidebar.width = `${width}%`;
-    // @ts-ignore
-    this.props.actions!.setDimensions(dimensionsToUpdate);
-
+    if (actions) {
+      actions.setDimensions(dimensionsToUpdate);
+    }
     return width;
   }
 
