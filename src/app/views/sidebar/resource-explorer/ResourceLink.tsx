@@ -30,8 +30,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const buttonId = getId('targetButton');
 
   const iconButtonStyles = {
-    root: { paddingBottom: 10 },
-    menuIcon: { fontSize: 20, padding: 10 }
+    root: { paddingBottom:10, marginTop: -5, marginRight: 2 },
+    menuIcon: { fontSize: 20, padding: 5 }
   };
 
   const methodButtonStyles: CSSProperties = {
