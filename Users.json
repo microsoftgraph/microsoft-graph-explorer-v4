@@ -5,12 +5,12 @@
     "body": [
         {
             "type": "Container",
-            "$data": "{value}",
+            "$data": "${value}",
             "items": [
                 {
                     "type": "TextBlock",
                     "weight": "Bolder",
-                    "text": "{displayName}"
+                    "text": "${displayName}"
                 },
                 {
                     "type": "Container",
@@ -18,23 +18,23 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "{toUpper(jobTitle)}",
+                            "text": "${toUpper(jobTitle)}",
                             "spacing": "Small"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{officeLocation}",
+                            "text": "${officeLocation}",
                             "spacing": "None"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{$data}",
-                            "$data": "{businessPhones}",
+                            "text": "${$data}",
+                            "$data": "${businessPhones}",
                             "spacing": "None"
                         },
                         {
                             "type": "TextBlock",
-                            "text": "{mail}",
+                            "text": "${mail}",
                             "spacing": "None"
                         }
                     ]
