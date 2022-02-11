@@ -13,16 +13,34 @@
                     "items": [
                         {
                             "type": "TextBlock",
-                            "text": "${displayName}",
-                            "size": "medium",
-                            "weight": "bolder"
+                            "$when": "${visibility != $null}",
+                            "text": "${displayName} (${visibility})",
+                            "size": "Medium",
+                            "weight": "Bolder"
                         },
                         {
                             "type": "TextBlock",
+                            "$when": "${visibility == $null}",
+                            "text": "${displayName}",
+                            "size": "Medium",
+                            "weight": "Bolder"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "$when": "${description != $null}",
                             "text": "${description}",
                             "spacing": "Small",
                             "wrap": true,
                             "maxLines": 2
+                        },
+                        {
+                            "type": "TextBlock",
+                            "$when": "${description == $null}",
+                            "text": "No description provided",
+                            "spacing": "Small",
+                            "wrap": true,
+                            "maxLines": 2,
+                            "isSubtle": true
                         }
                     ]
                 },
