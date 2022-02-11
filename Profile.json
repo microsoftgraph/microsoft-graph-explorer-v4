@@ -12,7 +12,7 @@
                         {
                             "type": "Image",
                             "altText": "",
-                            "url": "https://graph.microsoft.com/v1.0/users/{mail}/photo/$value",
+                            "url": "https://graph.microsoft.com/v1.0/users/${id}/photo/$value",
                             "style": "person",
                             "size": "medium"
                         }
