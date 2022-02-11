@@ -1,4 +1,4 @@
-import { MessageBar, MessageBarType } from '@fluentui/react';
+import { MessageBar, MessageBarType, styled } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import { componentNames, telemetry } from '../../../telemetry';
 import { IRootState } from '../../../types/root';
 import { clearTermsOfUse } from '../../services/actions/terms-of-use-action-creator';
 import { classNames } from '../classnames';
+import { appStyles } from '../App.styles';
 
 const TermsOfUseMessage = (props: any) => {
 
@@ -41,5 +42,6 @@ const TermsOfUseMessage = (props: any) => {
   }
   return <div />;
 }
-
-export default TermsOfUseMessage;
+// @ts-ignore
+const styledTermsOfUseMessage = styled(TermsOfUseMessage, appStyles);
+export default styledTermsOfUseMessage;
