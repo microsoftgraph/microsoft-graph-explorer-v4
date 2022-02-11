@@ -1,63 +1,39 @@
 {
-    "type": "AdaptiveCard",
-    "@odata.type": "#microsoft.graph.user",
-    "body": [
+  "type": "AdaptiveCard",
+  "@odata.type": "#microsoft.graph.user",
+  "body": [
+    {
+      "type": "TextBlock",
+      "size": "large",
+      "weight": "bolder",
+      "text": "${displayName}"
+    },
+    {
+      "type": "FactSet",
+      "facts": [
         {
-            "type": "ColumnSet",
-            "columns": [
-                {
-                    "type": "Column",
-                    "width": "auto",
-                    "items": [
-                        {
-                            "type": "Image",
-                            "altText": "",
-                            "url": "https://graph.microsoft.com/v1.0/users/${id}/photo/$value",
-                            "style": "person",
-                            "size": "medium"
-                        }
-                    ]
-                },
-                {
-                    "type": "Column",
-                    "width": "auto",
-                    "items": [        
-                        {
-                            "type": "TextBlock",
-                            "size": "large",
-                            "weight": "bolder",
-                            "text": "${displayName}"
-                        },
-                        {
-                            "type": "FactSet",
-                            "facts": [
-                                {
-                                    "title": "Given name",
-                                    "value": "${givenName}"
-                                },
-                                {
-                                    "title": "Surname",
-                                    "value": "${surname}"
-                                },
-                                {
-                                    "title": "Job title",
-                                    "value": "${jobTitle}"
-                                },
-                                {
-                                    "title": "Office location",
-                                    "value": "${officeLocation}"
-                                },
-                                {
-                                    "title": "Email",
-                                    "value": "${mail}"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
+          "title": "Given name",
+          "value": "${givenName}"
+        },
+        {
+          "title": "Surname",
+          "value": "${surname}"
+        },
+        {
+          "title": "Job title",
+          "value": "${jobTitle}"
+        },
+        {
+          "title": "Office location",
+          "value": "${officeLocation}"
+        },
+        {
+          "title": "Email",
+          "value": "${mail}"
         }
-    ],
-    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-    "version": "1.0"
+      ]
+    }
+  ],
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.0"
 }
