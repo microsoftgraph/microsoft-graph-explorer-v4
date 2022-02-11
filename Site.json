@@ -4,46 +4,34 @@
     "@odata.type": "#microsoft.graph.site",
     "body": [
         {
-            "type": "ColumnSet",
-            "$data": "{value}",
-            "columns": [
+            "type": "Container",
+            "$data": "${value}",
+            "items": [
                 {
-                    "type": "Column",
-                    "width": "stretch",
-                    "items": [
-                        {
-                            "type": "TextBlock",
-                            "text": "{displayName}",
-                            "size": "Medium",
-                            "weight": "Bolder"
-                        },
-                        {
-                            "type": "TextBlock",
-                            "text": "{description}",
-                            "spacing": "Small",
-                            "wrap": true,
-                            "maxLines": 2
-                        }
-                    ]
+                    "type": "TextBlock",
+                    "text": "${displayName}",
+                    "size": "Medium",
+                    "weight": "Bolder"
                 },
                 {
-                    "type": "Column",
-                    "width": "auto",
-                    "items": [
+                    "type": "TextBlock",
+                    "text": "${description}",
+                    "spacing": "Small",
+                    "wrap": true,
+                    "maxLines": 2
+                },
+                {
+                    "type": "ActionSet",
+                    "actions": [
                         {
-                            "type": "ActionSet",
-                            "actions": [
-                                {
-                                    "type": "Action.OpenUrl",
-                                    "title": "View site",
-                                    "url": "{webUrl}"
-                                }
-                            ]
+                            "type": "Action.OpenUrl",
+                            "title": "Open site",
+                            "url": "${webUrl}"
                         }
-                    ],
-                    "verticalContentAlignment": "Center"
+                    ]
                 }
-            ]
+            ],
+            "separator": true
         }
     ],
     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
