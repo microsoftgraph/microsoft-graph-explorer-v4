@@ -1,11 +1,11 @@
-export interface IDimensionProperies {
+export interface IDimensionProperties {
   width: string;
   height: string;
 }
 
 export interface IDimensions {
-  request: IDimensionProperies;
-  response: IDimensionProperies;
-  sidebar: IDimensionProperies;
-  content: IDimensionProperies;
+  request: IDimensionProperties;
+  response: IDimensionProperties;
+  sidebar: IDimensionProperties;
+  content: IDimensionProperties;
 }
