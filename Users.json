@@ -1,35 +1,30 @@
 {
     "type": "AdaptiveCard",
-    "version": "1.0",
-    "@odata.type": "#microsoft.graph.user",
-    "body": [
+    "version": "1.4",
+    "@odata.type": "#microsoft.graph.group",
+    "body": [        
         {
             "type": "Container",
             "$data": "${value}",
             "items": [
                 {
                     "type": "TextBlock",
-                    "weight": "Bolder",
+                    "weight": "bolder",
                     "text": "${displayName}"
                 },
                 {
                     "type": "Container",
-                    "spacing": "Small",
+                    "spacing": "small",
                     "items": [
                         {
                             "type": "TextBlock",
+                            "$when": "${jobTitle != $null}",
                             "text": "${toUpper(jobTitle)}",
-                            "spacing": "Small"
+                            "spacing": "small"
                         },
                         {
                             "type": "TextBlock",
                             "text": "${officeLocation}",
-                            "spacing": "None"
-                        },
-                        {
-                            "type": "TextBlock",
-                            "text": "${$data}",
-                            "$data": "${businessPhones}",
                             "spacing": "None"
                         },
                         {
@@ -39,8 +34,7 @@
                         }
                     ]
                 }
-            ],
-            "separator": true
+            ]
         }
     ],
     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
