@@ -12,8 +12,8 @@ export const appStyles = (theme: ITheme) => {
       marginBottom: theme.spacing.s1
     },
     sidebar: {
-      background: theme.palette.neutralLighter
-
+      background: theme.palette.neutralLighter,
+      paddingLeft: 10
     },
     sidebarMini: {
       background: theme.palette.neutralLighter,
