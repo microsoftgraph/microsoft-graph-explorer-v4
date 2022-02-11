@@ -2,25 +2,25 @@
     "type": "AdaptiveCard",
     "version": "1.4",
     "@odata.type": "#microsoft.graph.group",
-    "body": [        
+    "body": [
         {
             "type": "Container",
             "$data": "${value}",
             "items": [
                 {
                     "type": "TextBlock",
-                    "weight": "bolder",
+                    "weight": "Bolder",
                     "text": "${displayName}"
                 },
                 {
                     "type": "Container",
-                    "spacing": "small",
+                    "spacing": "Small",
                     "items": [
                         {
                             "type": "TextBlock",
                             "$when": "${jobTitle != $null}",
                             "text": "${toUpper(jobTitle)}",
-                            "spacing": "small"
+                            "spacing": "Small"
                         },
                         {
                             "type": "TextBlock",
@@ -33,8 +33,26 @@
                             "spacing": "None"
                         }
                     ]
+                },
+                {
+                    "type": "ActionSet",
+                    "actions": [
+                        {
+                            "type": "Action.OpenUrl",
+                            "$when": "${userPrincipalName != $null}",
+                            "title": "Send a message",
+                            "url": "im:${userPrincipalName}"
+                        },
+                        {
+                            "type": "Action.OpenUrl",
+                            "$when": "${mail != $null}",
+                            "title": "Send an email",
+                            "url": "mailto:${mail}"
+                        }
+                    ]
                 }
-            ]
+            ],
+            "separator": true
         }
     ],
     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"

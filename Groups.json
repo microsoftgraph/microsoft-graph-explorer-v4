@@ -4,60 +4,48 @@
     "@odata.type": "#microsoft.graph.group",
     "body": [
         {
-            "type": "ColumnSet",
+            "type": "Container",
             "$data": "${value}",
-            "columns": [
+            "items": [
                 {
-                    "width": "stretch",
-                    "type": "Column",
-                    "items": [
-                        {
-                            "type": "TextBlock",
-                            "$when": "${visibility != $null}",
-                            "text": "${displayName} (${visibility})",
-                            "size": "Medium",
-                            "weight": "Bolder"
-                        },
-                        {
-                            "type": "TextBlock",
-                            "$when": "${visibility == $null}",
-                            "text": "${displayName}",
-                            "size": "Medium",
-                            "weight": "Bolder"
-                        },
-                        {
-                            "type": "TextBlock",
-                            "$when": "${description != $null}",
-                            "text": "${description}",
-                            "spacing": "Small",
-                            "wrap": true,
-                            "maxLines": 2
-                        },
-                        {
-                            "type": "TextBlock",
-                            "$when": "${description == $null}",
-                            "text": "No description provided",
-                            "spacing": "Small",
-                            "wrap": true,
-                            "maxLines": 2,
-                            "isSubtle": true
-                        }
-                    ]
+                    "type": "TextBlock",
+                    "$when": "${visibility != $null}",
+                    "text": "${displayName} (${visibility})",
+                    "size": "Medium",
+                    "weight": "Bolder"
                 },
                 {
-                    "type": "Column",
-                    "width": "auto",
-                    "items": [
+                    "type": "TextBlock",
+                    "$when": "${visibility == $null}",
+                    "text": "${displayName}",
+                    "size": "Medium",
+                    "weight": "Bolder"
+                },
+                {
+                    "type": "TextBlock",
+                    "$when": "${description != $null}",
+                    "text": "${description}",
+                    "spacing": "Small",
+                    "wrap": true,
+                    "maxLines": 2
+                },
+                {
+                    "type": "TextBlock",
+                    "$when": "${description == $null}",
+                    "text": "No description provided",
+                    "spacing": "Small",
+                    "wrap": true,
+                    "maxLines": 2,
+                    "isSubtle": true
+                },
+                {
+                    "type": "ActionSet",
+                    "actions": [
                         {
-                            "type": "ActionSet",
-                            "actions": [
-                                {
-                                    "type": "Action.OpenUrl",
-                                    "$when": "${mail != $null}",
-                                    "title": "📩 Send an email",
-                                    "url": "mailto:${mail}"
-                                }
-                            ]
+                            "type": "Action.OpenUrl",
+                            "$when": "${mail != $null}",
+                            "title": "Send an email",
+                            "url": "mailto:${mail}"
                         }
                     ]
                 }
