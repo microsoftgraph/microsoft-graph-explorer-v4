@@ -5,7 +5,7 @@
     "body": [
         {
             "type": "Container",
-            "$data": "{value}",
+            "$data": "${value}",
             "items": [
                 {
                     "type": "ColumnSet",
@@ -16,16 +16,16 @@
                             "items": [
                                 {
                                     "type": "TextBlock",
-                                    "text": "{from.emailAddress.name}",
+                                    "text": "${from.emailAddress.name}",
                                     "size": "Medium",
-                                    "weight": "{if(isRead, 'normal', 'bolder')}"
+                                    "weight": "${if(isRead, 'normal', 'bolder')}"
                                 },
                                 {
                                     "type": "TextBlock",
-                                    "text": "{subject}",
+                                    "text": "${subject}",
                                     "spacing": "None",
                                     "size": "Small",
-                                    "weight": "{if(isRead, 'normal', 'bolder')}"
+                                    "weight": "${if(isRead, 'normal', 'bolder')}"
                                 }
                             ]
                         },
@@ -35,12 +35,12 @@
                             "items": [
                                 {
                                     "type": "TextBlock",
-                                    "text": "{if(hasAttachments, '📎', '')} {if(importance == 'normal', '', '❗')} {if(flag.flagStatus == 'flagged', '🚩', '')}",
+                                    "text": "${if(hasAttachments, '📎', '')} ${if(importance == 'normal', '', '❗')} ${if(flag.flagStatus == 'flagged', '🚩', '')}",
                                     "horizontalAlignment": "Right"
                                 },
                                 {
                                     "type": "TextBlock",
-                                    "text": "{{DATE({sentDateTime}, COMPACT)}} {{TIME({sentDateTime})}}",
+                                    "text": "{{DATE(${sentDateTime}, COMPACT)}} {{TIME(${sentDateTime})}}",
                                     "spacing": "None",
                                     "size": "Small"
                                 }
@@ -51,10 +51,20 @@
                 },
                 {
                     "type": "TextBlock",
-                    "text": "{bodyPreview}",
+                    "text": "${bodyPreview}",
                     "isVisible": false,
                     "size": "Small",
                     "isSubtle": true
+                },
+                {
+                    "type": "ActionSet",
+                    "actions": [
+                        {
+                            "type": "Action.OpenUrl",
+                            "title": "Open email",
+                            "url": "${webLink}"
+                        }
+                    ]
                 }
             ],
             "separator": true
