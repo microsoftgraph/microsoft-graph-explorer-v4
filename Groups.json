@@ -35,6 +35,7 @@
                             "actions": [
                                 {
                                     "type": "Action.OpenUrl",
+                                    "$when": "${mail != $null}",
                                     "title": "📩",
                                     "url": "mailto:${mail}"
                                 }
