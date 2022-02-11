@@ -1,64 +1,61 @@
 {
     "type": "AdaptiveCard",
     "@odata.type": "#microsoft.graph.user",
-    "$sampleData": {
-        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users/$entity",
-        "businessPhones": [
-            "+1 412 555 0109"
-        ],
-        "displayName": "Megan Bowen",
-        "givenName": "Megan",
-        "jobTitle": "Auditor",
-        "mail": "MeganB@M365x214355.onmicrosoft.com",
-        "mobilePhone": null,
-        "officeLocation": "12/1110",
-        "preferredLanguage": "en-US",
-        "surname": "Bowen",
-        "userPrincipalName": "MeganB@M365x214355.onmicrosoft.com",
-        "id": "48d31887-5fad-4d73-a9f5-3c356e68a038"
-    },
     "body": [
         {
-            "type": "TextBlock",
-            "size": "Medium",
-            "weight": "Bolder",
-            "text": "{displayName}"
-        },
-        {
-            "type": "FactSet",
-            "facts": [
+            "type": "ColumnSet",
+            "columns": [
                 {
-                    "title": "Given name",
-                    "value": "{givenName}"
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [
+                        {
+                            "type": "Image",
+                            "altText": "",
+                            "url": "https://graph.microsoft.com/v1.0/users/{mail}/photo/$value",
+                            "style": "person",
+                            "size": "medium"
+                        }
+                    ]
                 },
                 {
-                    "title": "Surname",
-                    "value": "{surname}"
-                },
-                {
-                    "title": "Job title",
-                    "value": "{jobTitle}"
-                },
-                {
-                    "title": "Office location",
-                    "value": "{officeLocation}"
-                },
-                {
-                    "title": "Email",
-                    "value": "{mail}"
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [        
+                        {
+                            "type": "TextBlock",
+                            "size": "large",
+                            "weight": "bolder",
+                            "text": "${displayName}"
+                        },
+                        {
+                            "type": "FactSet",
+                            "facts": [
+                                {
+                                    "title": "Given name",
+                                    "value": "${givenName}"
+                                },
+                                {
+                                    "title": "Surname",
+                                    "value": "${surname}"
+                                },
+                                {
+                                    "title": "Job title",
+                                    "value": "${jobTitle}"
+                                },
+                                {
+                                    "title": "Office location",
+                                    "value": "${officeLocation}"
+                                },
+                                {
+                                    "title": "Email",
+                                    "value": "${mail}"
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
-        },
-        {
-            "type": "TextBlock",
-            "text": "Business phones",
-            "weight": "Bolder"
-        },
-        {
-            "type": "TextBlock",
-            "text": "{$data}",
-            "$data": "{businessPhones}",
-            "spacing": "None"
         }
     ],
     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
