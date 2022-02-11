@@ -429,5 +429,6 @@
   "Response content not available due to CORS policy": "The response content is not available in Graph Explorer due to CORS policy. You can execute this request in an API client, like Postman. Read more about CORS and understand how it works",
   "here": "here",
   "Invalid version in URL": "Invalid version in URL",
-  "More info": "More info"
+  "More info": "More info",
+  "Could not connect to the sandbox": "Could not connect to the sandbox"
 }
