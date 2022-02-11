@@ -54,7 +54,7 @@
                                 {
                                     "type": "Action.OpenUrl",
                                     "$when": "${mail != $null}",
-                                    "title": "📩",
+                                    "title": "📩 Send an email",
                                     "url": "mailto:${mail}"
                                 }
                             ]
