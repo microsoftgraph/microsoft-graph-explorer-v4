@@ -3,39 +3,39 @@
     "@odata.type": "#microsoft.graph.driveItem",
     "body": [
         {
-            "type": "TextBlock",
-            "size": "Medium",
-            "weight": "Bolder",
-            "text": "Recent files"
-        },
-        {
+            "$data": "${value}",
             "type": "Container",
             "items": [
                 {
                     "type": "TextBlock",
-                    "text": "{name}",
+                    "text": "${name}",
                     "weight": "Bolder"
-                },
+                },     
                 {
                     "type": "FactSet",
                     "facts": [
                         {
                             "title": "Created",
-                            "value": "{{DATE({createdDateTime}, SHORT)}} by {createdBy.user.displayName}"
+                            "value": "{{DATE(${createdDateTime}, SHORT)}} by ${createdBy.user.displayName}"
                         },
                         {
                             "title": "Modified",
-                            "value": "{{DATE({lastModifiedDateTime}, SHORT)}} by {lastModifiedBy.user.displayName}"
+                            "value": "{{DATE(${lastModifiedDateTime}, SHORT)}} by ${lastModifiedBy.user.displayName}"
+                        }
+                    ]
+                },           
+                {
+                    "type": "ActionSet",
+                    "actions": [
+                        {
+                            "type": "Action.OpenUrl",
+                            "title": "Open file",
+                            "url": "${webUrl}"
                         }
                     ]
                 }
             ],
-            "$data": "{value}",
-            "style": "emphasis",
-            "selectAction": {
-                "type": "Action.OpenUrl",
-                "url": "{webUrl}"
-            }
+            "separator": true
         }
     ],
     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
