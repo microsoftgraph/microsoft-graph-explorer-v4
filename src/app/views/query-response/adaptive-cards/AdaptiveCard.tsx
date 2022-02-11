@@ -109,8 +109,11 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               ariaLabel={translateMessage('card')}
               headerText={translateMessage('card')}
               className={classes.card}
+              headerButtonProps={{
+                'aria-controls': 'card-tab'
+              }}
             >
-              <div
+              <div id={'card-tab'}
                 ref={(n) => {
                   if (n && !n.firstChild) {
                     n.appendChild(renderedCard);
@@ -126,37 +129,42 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               itemKey='JSON-schema'
               ariaLabel={translateMessage('JSON Schema')}
               headerText={translateMessage('JSON Schema')}
+              headerButtonProps={{
+                'aria-controls': 'json-schema-tab'
+              }}
             >
-              <MessageBar messageBarType={MessageBarType.info}>
-                <FormattedMessage id='Get started with adaptive cards on' />
-                <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  tabIndex={0}
-                  className={classes.link}
-                >
-                  <FormattedMessage id='Adaptive Cards Templating SDK' />
-                </a>
-                <FormattedMessage id='and experiment on' />
-                <a href={'https://adaptivecards.io/designer/'}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  tabIndex={0}
-                  className={classes.link}
-                >
-                  <FormattedMessage id='Adaptive Cards designer' />
-                </a>
-              </MessageBar>
-              <CopyButton
-                className={classes.copyIcon}
-                handleOnClick={handleCopy}
-                isIconButton={true}
-              />
-              <Monaco
-                language='json'
-                body={data.template}
-                height={'800px'}
-              />
+              <div id={'json-schema-tab'}>
+                <MessageBar messageBarType={MessageBarType.info}>
+                  <FormattedMessage id='Get started with adaptive cards on' />
+                  <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    tabIndex={0}
+                    className={classes.link}
+                  >
+                    <FormattedMessage id='Adaptive Cards Templating SDK' />
+                  </a>
+                  <FormattedMessage id='and experiment on' />
+                  <a href={'https://adaptivecards.io/designer/'}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    tabIndex={0}
+                    className={classes.link}
+                  >
+                    <FormattedMessage id='Adaptive Cards designer' />
+                  </a>
+                </MessageBar>
+                <CopyButton
+                  className={classes.copyIcon}
+                  handleOnClick={handleCopy}
+                  isIconButton={true}
+                />
+                <Monaco
+                  language='json'
+                  body={data.template}
+                  height={'800px'}
+                />
+              </div>
             </PivotItem>
           </Pivot>
         );
