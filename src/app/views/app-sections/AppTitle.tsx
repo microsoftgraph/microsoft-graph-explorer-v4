@@ -1,12 +1,13 @@
 import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { FeedbackButton } from './FeedbackButton';
 
 export function appTitleDisplayOnFullScreen(
   classes: any,
   minimised: any,
   toggleSidebar: Function,
-): React.ReactNode {
+){
 
   return <div style={{ display: 'flex', width: '100%' }}>
     <TooltipHost
@@ -31,6 +32,13 @@ export function appTitleDisplayOnFullScreen(
           {displayGraphLabel(classes)}
         </>}
     </div>
+    <div style={{position: 'relative', top: '10px'}}>
+      {!minimised &&
+      <>
+       <FeedbackButton/>
+      </>
+      }
+    </div>
   </div>;
 }
 
@@ -38,7 +46,7 @@ export function appTitleDisplayOnMobileScreen(
   stackTokens: IStackTokens,
   classes: any,
   toggleSidebar: Function
-): React.ReactNode {
+) {
   return <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
     <>
       <IconButton
@@ -50,6 +58,9 @@ export function appTitleDisplayOnMobileScreen(
       />
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
         {displayGraphLabel(classes)}
+      </div>
+      <div style={{position: 'relative', top: '10px'}}>
+        <FeedbackButton/>
       </div>
     </>
   </Stack>;
