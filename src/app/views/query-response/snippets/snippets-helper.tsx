@@ -21,6 +21,9 @@ export function renderSnippets(supportedLanguages: string[]) {
     <PivotItem
       key={language}
       headerText={language}
+      headerButtonProps={{
+        'aria-controls': `${language}-tab`
+      }}
     >
       <Snippet language={language} />
     </PivotItem>
@@ -57,7 +60,7 @@ function Snippet(props: ISnippetProps) {
   }, [sampleQuery.sampleUrl]);
 
   return (
-    <div style={{ display: 'block' }}>
+    <div style={{ display: 'block' }} id={`${language}-tab`}>
       {loadingState &&
         <Label style={{ padding: 10 }}>
           <FormattedMessage id='Fetching code snippet' />...
