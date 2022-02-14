@@ -7,7 +7,7 @@ export function appTitleDisplayOnFullScreen(
   classes: any,
   minimised: any,
   toggleSidebar: Function,
-){
+): React.ReactNode{
 
   return <div style={{ display: 'flex', width: '100%' }}>
     <TooltipHost
@@ -46,7 +46,7 @@ export function appTitleDisplayOnMobileScreen(
   stackTokens: IStackTokens,
   classes: any,
   toggleSidebar: Function
-) {
+): React.ReactNode {
   return <Stack horizontal={true} disableShrink={true} tokens={stackTokens}>
     <>
       <IconButton
