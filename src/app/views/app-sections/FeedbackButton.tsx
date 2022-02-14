@@ -34,6 +34,7 @@ export const FeedbackButton = () => {
           title={feedbackTitle}
           ariaLabel={feedbackTitle}
           styles={feedbackIconStyles}
+          role={'button'}
         />
       <FeedbackForm dismissSurvey={toggleFeedback} activated={enableSurvey} />
       </>}
