@@ -353,10 +353,7 @@ class App extends Component<IAppProps, IAppState> {
     const query = createShareLink(sampleQuery, authenticated);
     const { mobileScreen, showSidebar } = sidebarProperties;
 
-    let displayContent = true;
-    if (graphExplorerMode === Mode.Complete && (mobileScreen && showSidebar)) {
-      displayContent = false;
-    }
+    const displayContent = shouldDisplayContent();
 
     const stackTokens: IStackTokens = {
       childrenGap: 10,
@@ -391,7 +388,7 @@ class App extends Component<IAppProps, IAppState> {
             {graphExplorerMode === Mode.Complete && (
               <Resizable
                 onResize={(e: any, direction: any, ref: any, d: any) => {
-                  if (ref && ref.style && ref.style.width) {
+                  if (ref?.style?.width) {
                     this.resizeSideBar(ref.style.width);
                   }
                 }}
@@ -466,6 +463,13 @@ class App extends Component<IAppProps, IAppState> {
         </div>
       </ThemeContext.Provider>
     );
+
+    function shouldDisplayContent() {
+      if (graphExplorerMode === Mode.Complete && (mobileScreen && showSidebar)) {
+        return false;
+      }
+      return true;
+    }
 
     function removeFlexBasisProperty() {
       /*
