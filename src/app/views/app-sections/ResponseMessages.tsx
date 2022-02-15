@@ -49,7 +49,7 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
   if (odataLink) {
     return (
       <MessageBar messageBarType={MessageBarType.info}>
-        <FormattedMessage id={'This response contains an @odata property'} />: @odata.{odataLink!.name}
+        <FormattedMessage id={'This response contains an @odata property.'} />: @odata.{odataLink!.name}
         <Link onClick={() => setQuery()}>
           &nbsp;<FormattedMessage id='Click here to follow the link' />
         </Link>
