@@ -86,16 +86,24 @@ const SuffixRenderer = () => {
   const hintsAvailable = hints.length > 0;
   const infoIcon: IIconProps = {iconName: 'Info'};
 
-  if (hintsAvailable) {
-    return (
-      <>
+
+  return (
+    <>
+      <TooltipHost
+        content={translateMessage('More info')}
+        id={getId()}
+        calloutProps={calloutProps}
+        styles={hostStyles}
+      >
         <IconButton
           iconProps={infoIcon}
           className={styles.iconButton}
           onClick={toggleCallout}
           id={buttonId}
           ariaLabel={translateMessage('More Info')}
+          disabled={!hintsAvailable}
         />
+      </TooltipHost>
         {isCalloutVisible && (
           <Callout
             className={styles.callout}
@@ -113,9 +121,8 @@ const SuffixRenderer = () => {
             <HintList hints={hints} />
           </Callout>
         )}
-      </>);
-  }
-  return null;
+    </>
+  );
 }
 
 export default SuffixRenderer;

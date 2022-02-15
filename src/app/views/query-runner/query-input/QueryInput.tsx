@@ -3,6 +3,7 @@ import { Dropdown } from '@fluentui/react';
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import { componentNames } from '../../../../telemetry';
 import { httpMethods, IQueryInputProps } from '../../../../types/query-runner';
 
 import { IRootState } from '../../../../types/root';
@@ -12,8 +13,12 @@ import { getStyleFor } from '../../../utils/http-methods.utils';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
 import SubmitButton from '../../../views/common/submit-button/SubmitButton';
+import { trackedGenericCopy } from '../../common/copy';
+import { CopyButton } from '../../common/copy/CopyButton';
+import { createShareLink } from '../../common/share';
 import { queryRunnerStyles } from '../QueryRunner.styles';
 import { AutoComplete } from './auto-complete';
+import SuffixRenderer from './auto-complete/suffix/SuffixRenderer';
 
 const QueryInput = (props: IQueryInputProps) => {
   const {
@@ -74,6 +79,11 @@ const QueryInput = (props: IQueryInputProps) => {
     }, 500);
   };
 
+  const handleCopy = () => {
+    const shareableLink = createShareLink(sampleQuery);
+    trackedGenericCopy(shareableLink, componentNames.QUERY_COPY_BUTTON, sampleQuery);
+  }
+
   return (
     <div className='row'>
       <div className='col-xs-12 col-lg-2'>
@@ -94,11 +104,24 @@ const QueryInput = (props: IQueryInputProps) => {
           onChange={(event, method) => handleOnVersionChange(method)}
         />
       </div>
-      <div className='col-xs-12 col-lg-6'>
+      <div className='col-xs-12 col-lg-5'>
         <AutoComplete
           contentChanged={contentChanged}
           runQuery={runQuery}
         />
+      </div>
+      <div className='col-xs-12 col-lg-1'>
+        <div className='row' style={{marginLeft: '3px', display:'inline-flex !important'}}>
+          <div className='col-xs-6'>
+            <SuffixRenderer />
+          </div>
+          <div className='col-xs-6'>
+            <CopyButton
+              isIconButton={true}
+              handleOnClick={handleCopy}
+            />
+          </div>
+        </div>
       </div>
       <div className='col-xs-12 col-lg-2'>
         <SubmitButton
@@ -111,7 +134,8 @@ const QueryInput = (props: IQueryInputProps) => {
           allowDisabledFocus={true}
         />
       </div>
-    </div>)
+    </div>
+  )
 }
 
 // @ts-ignore

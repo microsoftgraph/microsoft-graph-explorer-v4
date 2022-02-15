@@ -72,19 +72,10 @@ const QueryResponse = (props: IQueryResponseProps) => {
     toggleModal(pivotItem);
   };
 
-  const handleShareQuery = () => {
-    const shareableLink = createShareLink(sampleQuery);
-    setQuery(shareableLink);
-    toggleShareQueryDialogState();
-  };
-
   const toggleModal = (event: any) => {
     const { key } = event;
     if (key && key.includes('expand')) {
       toggleExpandResponse();
-    }
-    if (key && key.includes('share')) {
-      handleShareQuery();
     }
   };
 
@@ -127,15 +118,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
           <Pivot overflowBehavior="menu" onLinkClick={handlePivotItemClick}
             className={'pivot-response'} >
             {getPivotItems()}
-            <PivotItem
-              headerText='Share'
-              key='share'
-              itemIcon='Share'
-              itemKey='share-query' // To be used to construct component name for telemetry data
-              ariaLabel={translateMessage('Share Query Message')}
-              title={translateMessage('Share Query Message')}
-              onRenderItemLink={renderItemLink}
-            />
             <PivotItem
               headerText='Expand'
               key='expand'
