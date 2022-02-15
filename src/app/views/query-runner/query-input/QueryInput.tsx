@@ -111,7 +111,7 @@ const QueryInput = (props: IQueryInputProps) => {
         />
       </div>
       <div className='col-xs-12 col-lg-1'>
-        <div className='row' style={{marginLeft: '3px', display:'inline-flex !important'}}>
+        <div className='row' style={{marginLeft: '2px', display:'inline-flex !important'}}>
           <div className='col-xs-6'>
             <SuffixRenderer />
           </div>
