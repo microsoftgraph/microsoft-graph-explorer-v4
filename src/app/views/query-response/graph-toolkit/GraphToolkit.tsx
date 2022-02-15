@@ -45,7 +45,19 @@ class GraphToolkit extends Component<any> {
     }
 
     return (
-      <Label className={classes.emptyStateLabel}>
+      <Label styles={{root: {
+        padding: '20px',
+        width: '100%',
+        margin: 'auto',
+        justifyContent: 'center',
+        alignItems: 'center',
+        display: 'inline-block',
+        position: 'relative',
+        top: '120px',
+        lineHeight: '1.5'
+      }}}
+      >
+
         <FormattedMessage id='We did not find a Graph toolkit for this query' />
         &nbsp;
         <a
@@ -58,6 +70,7 @@ class GraphToolkit extends Component<any> {
           <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />
           .
         </a>
+
       </Label>
     );
   }
