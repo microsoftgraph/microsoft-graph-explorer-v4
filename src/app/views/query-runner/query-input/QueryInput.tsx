@@ -110,16 +110,16 @@ const QueryInput = (props: IQueryInputProps) => {
           runQuery={runQuery}
         />
       </div>
-      <div className='col-xs-12 col-lg-1'>
-        <div className='row' style={{marginLeft: '2px', display:'inline-flex !important'}}>
-          <div className='col-xs-6'>
-            <SuffixRenderer />
-          </div>
+      <div className='col-xs-12 col-lg-1 copy-info-section'>
+        <div className='row' style={{display:'inline-flex !important'}}>
           <div className='col-xs-6'>
             <CopyButton
               isIconButton={true}
               handleOnClick={handleCopy}
             />
+          </div>
+          <div className='col-xs-6'>
+            <SuffixRenderer />
           </div>
         </div>
       </div>
