@@ -316,7 +316,7 @@ export function setMaximumOverflowWidth(widthProps: any): string {
   }
 
   const overflow = updateOverflowWidth(overflowProps) - compensation;
-  if (overflow <= 0) {
+  if (overflow < 0) {
     return '0px';
   }
 
