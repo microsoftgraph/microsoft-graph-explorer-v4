@@ -4,6 +4,7 @@ import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
+import { ClientError } from '../../utils/ClientError';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { setStatusMessage } from '../../utils/status-message';
@@ -35,38 +36,23 @@ export function runQuery(query: IQuery): Function {
             respHeaders,
             dispatch,
             createdAt,
-            tokenPresent
-          );
-        })
-        .catch(async (error: any) => {
-          dispatch(
-            queryResponse({
-              body: error,
-              headers: null
-            })
-          );
-          return dispatch(
-            setQueryResponseStatus({
-              messageType: MessageBarType.error,
-              ok: false,
-              status: 400,
-              statusText: 'Bad Request'
-            })
           );
         });
     }
 
-    return anonymousRequest(dispatch, query, getState).then(
-      async (response: Response) => {
-        await processResponse(
-          response,
-          respHeaders,
-          dispatch,
-          createdAt,
-          tokenPresent
-        );
-      }
-    );
+    return anonymousRequest(dispatch, query, getState)
+      .then(
+        async (response: Response) => {
+          await processResponse(
+            response,
+            respHeaders,
+            dispatch,
+            createdAt,
+          );
+        }
+      ).catch(async (error: any) => {
+        return handleError(dispatch, error);
+      });
   };
 
   async function processResponse(
@@ -74,7 +60,6 @@ export function runQuery(query: IQuery): Function {
     respHeaders: any,
     dispatch: Function,
     createdAt: any,
-    tokenPresent: boolean
   ) {
     let result = await parseResponse(response, respHeaders);
     const duration = new Date().getTime() - new Date(createdAt).getTime();
@@ -147,6 +132,33 @@ export function runQuery(query: IQuery): Function {
       return dispatch(setQueryResponseStatus(status));
     }
   }
+}
+
+function handleError(dispatch: Function, error: any) {
+  dispatch(
+    queryResponse({
+      body: error,
+      headers: null
+    })
+  );
+  if (error instanceof ClientError) {
+    return dispatch(
+      setQueryResponseStatus({
+        messageType: MessageBarType.error,
+        ok: false,
+        status: 0,
+        statusText: error
+      })
+    );
+  }
+  return dispatch(
+    setQueryResponseStatus({
+      messageType: MessageBarType.error,
+      ok: false,
+      status: 400,
+      statusText: 'Bad Request'
+    })
+  );
 }
 
 async function createHistory(

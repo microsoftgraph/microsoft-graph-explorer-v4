@@ -11,7 +11,10 @@ import { IAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
+import { IStatus } from '../../../types/status';
+import { ClientError } from '../../utils/ClientError';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
+import { translateMessage } from '../../utils/translate-messages';
 import { authProvider, GraphClient } from '../graph-client';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
@@ -29,13 +32,17 @@ export async function anonymousRequest(
   query: IQuery,
   getState: Function
 ) {
+  const { proxyUrl, queryRunnerStatus } = getState();
+  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl, queryRunnerStatus);
   dispatch(queryRunningStatus(true));
-  const { proxyUrl } = getState();
-  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl);
-  return fetch(graphUrl, options);
+  return fetch(graphUrl, options)
+    .catch(() => {
+      throw new ClientError({ error: translateMessage('Could not connect to the sandbox') });
+    })
+    .then((response) => { return response; });
 }
 
-export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
+export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRunnerStatus: IStatus) {
   const escapedUrl = encodeURIComponent(query.sampleUrl);
   const graphUrl = `${proxyUrl}?url=${escapedUrl}`;
   const sampleHeaders: any = {};
@@ -47,12 +54,17 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
   }
 
   const authToken = '{token:https://graph.microsoft.com/}';
-  const headers = {
+  let headers = {
     Authorization: `Bearer ${authToken}`,
     'Content-Type': 'application/json',
     SdkVersion: 'GraphExplorer/4.0',
     ...sampleHeaders
   };
+
+  if (queryRunnerStatus && !queryRunnerStatus.ok) {
+    const updatedHeaders = { ...headers, 'cache-control': 'no-cache', pragma: 'no-cache' }
+    headers = updatedHeaders;
+  }
 
   const options: IRequestOptions = {
     method: query.selectedVerb,
