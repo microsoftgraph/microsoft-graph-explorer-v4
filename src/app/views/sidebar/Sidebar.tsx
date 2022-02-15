@@ -11,14 +11,35 @@ export const Sidebar = () => {
   return (
     <div>
       <Pivot onLinkClick={onPivotItemClick} overflowBehavior='menu'>
-        <PivotItem headerText={translateMessage('Sample Queries')} itemIcon='Rocket' itemKey='sample-queries'>
-          <SampleQueries />
+        <PivotItem
+          headerText={translateMessage('Sample Queries')}
+          itemIcon='Rocket'
+          itemKey='sample-queries'
+          headerButtonProps={{
+            'aria-controls': 'sample-queries-tab'
+          }}
+        >
+          <div id={'sample-queries-tab'}><SampleQueries /></div>
         </PivotItem>
-        <PivotItem headerText={translateMessage('Resources')} itemIcon='ExploreData' itemKey='resources'>
-          <ResourceExplorer />
+        <PivotItem
+          headerText={translateMessage('Resources')}
+          itemIcon='ExploreData'
+          itemKey='resources'
+          headerButtonProps={{
+            'aria-controls': 'resources-tab'
+          }}
+        >
+          <div id={'resources-tab'}><ResourceExplorer /></div>
         </PivotItem>
-        <PivotItem headerText={translateMessage('History')} itemIcon='History' itemKey='history'>
-          <History />
+        <PivotItem
+          headerText={translateMessage('History')}
+          itemIcon='History'
+          itemKey='history'
+          headerButtonProps={{
+            'aria-controls': 'history-tab'
+          }}
+        >
+          <div id={'history-tab'}><History /></div>
         </PivotItem>
       </Pivot>
     </div>

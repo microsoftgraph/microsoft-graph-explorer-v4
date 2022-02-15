@@ -24,6 +24,7 @@ import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
+import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -72,12 +73,12 @@ export class History extends Component<IHistoryProps, any> {
     return `${year}-${month}-${day}`;
   };
 
-  public getItems(history: any[]) {
+  public getItems(history: History[]) {
     const {
       intl: { messages }
     }: any = this.props;
 
-    const items: any[] = [];
+    const items: History[] = [];
 
     // tslint:disable-next-line:no-string-literal
     const olderText = messages.older;
@@ -101,11 +102,14 @@ export class History extends Component<IHistoryProps, any> {
       element.category = date;
       items.push(element);
     });
-    items
-      .sort(dynamicSort('createdAt', SortOrder.DESC))
-      .forEach((value, index) => {
-        value.index = index;
-      });
+    return this.sortItems(items);
+  }
+
+  private sortItems = ( items: History[] ) => {
+    items.sort(dynamicSort('createdAt', SortOrder.DESC));
+    items.forEach((value : any, index: number) => {
+      value.index = index;
+    });
     return items;
   }
 
@@ -509,7 +513,7 @@ export class History extends Component<IHistoryProps, any> {
             placeholder={messages['Search history items']}
             className={classes.searchBox}
             onChange={this.searchValueChanged}
-            styles={{ field: { paddingLeft: 10 } }}
+            styles={searchBoxStyles}
           />
           <hr />
           <MessageBar
