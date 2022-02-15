@@ -10,11 +10,10 @@ import { clearTermsOfUse } from '../../services/actions/terms-of-use-action-crea
 import { classNames } from '../classnames';
 import { appStyles } from '../App.styles';
 
-const TermsOfUseMessage = (props: any) => {
+const styledTermsOfUseMessage = (props: any) => {
 
   const { termsOfUse } =
     useSelector((state: IRootState) => state);
-
 
   const classes = classNames(props);
   const dispatch = useDispatch();
@@ -43,5 +42,5 @@ const TermsOfUseMessage = (props: any) => {
   return <div />;
 }
 // @ts-ignore
-const styledTermsOfUseMessage = styled(TermsOfUseMessage, appStyles);
-export default styledTermsOfUseMessage;
+const TermsOfUseMessage = styled(styledTermsOfUseMessage, appStyles);
+export default TermsOfUseMessage;
