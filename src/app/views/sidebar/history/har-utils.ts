@@ -7,12 +7,13 @@ export function createHarPayload(query: IHistoryItem): IHarPayload {
 
   const headers: IHarHeaders[] = [];
   if (query.headers) {
-    query.headers.forEach(header => {
+    query.headers.forEach((header) => {
       const { name, value } = header;
       const head: IHarHeaders = {
-        name, value
-      }
-      headers.push(head)
+        name,
+        value
+      };
+      headers.push(head);
     });
   }
 
@@ -33,8 +34,7 @@ export function createHarPayload(query: IHistoryItem): IHarPayload {
     request: {
       headers
     },
-    response:
-    {
+    response: {
       headers: query.responseHeaders
     },
     sendTime: 0,
@@ -44,7 +44,8 @@ export function createHarPayload(query: IHistoryItem): IHarPayload {
   };
 
   if (query.body) {
-    harPayload = Object.assign(harPayload, { //tslint:disable-line
+    harPayload = Object.assign(harPayload, {
+      //tslint:disable-line
       postData: {
         mimeType: 'application/json',
         text: query.body
@@ -70,7 +71,7 @@ export function generateHar(payloads: IHarPayload[]): IHarFormat {
 
 function createEntries(payloads: IHarPayload[]) {
   const entries: any = [];
-  payloads.forEach(payload => {
+  payloads.forEach((payload) => {
     entries.push({
       startedDateTime: payload.startedDateTime,
       time: payload.time,
@@ -115,5 +116,3 @@ export function exportQuery(content: IHarFormat, requestUrl: string) {
   const filename = `${url.join('_')}.har`;
   downloadToLocal(content, filename);
 }
-
-
