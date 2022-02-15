@@ -277,9 +277,12 @@ class App extends Component<IAppProps, IAppState> {
       mobileScreen,
       showSidebar
     };
-
+    if (showSidebar) {
+      this.changeDimensions('26%');
+    }
     // @ts-ignore
     this.props.actions!.toggleSidebar(properties);
+
   };
 
   public displayAuthenticationSection = (minimised: boolean) => {
@@ -366,9 +369,12 @@ class App extends Component<IAppProps, IAppState> {
       sideHeight = '150px';
       maxWidth = '100%';
       contentWidth = '100%';
+      layout += ' layout';
     } else if (minimised) {
       sidebarWidth = classes.sidebarMini;
     }
+
+    removeFlexBasisProperty();
 
     return (
       // @ts-ignore
@@ -460,6 +466,22 @@ class App extends Component<IAppProps, IAppState> {
         </div>
       </ThemeContext.Provider>
     );
+
+    function removeFlexBasisProperty() {
+      /*
+      flex-basis style property is added automatically when the window resizes
+      and is set to 100% leading to a distortion of the page when these exact steps are followed.
+      https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1433#issuecomment-1036135231
+
+      Removing the property altogether helps maintain the layout of the page.
+      */
+
+      const collection = document.getElementsByClassName('layout');
+      if (collection.length > 0) {
+        const element: any = collection[0];
+        element.style.removeProperty('flex-basis');
+      }
+    }
   }
 }
 
