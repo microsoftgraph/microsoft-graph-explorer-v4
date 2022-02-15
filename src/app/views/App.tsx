@@ -465,10 +465,7 @@ class App extends Component<IAppProps, IAppState> {
     );
 
     function shouldDisplayContent() {
-      if (graphExplorerMode === Mode.Complete && (mobileScreen && showSidebar)) {
-        return false;
-      }
-      return true;
+      return !(graphExplorerMode === Mode.Complete && mobileScreen && showSidebar);
     }
 
     function removeFlexBasisProperty() {
@@ -481,10 +478,11 @@ class App extends Component<IAppProps, IAppState> {
       */
 
       const collection = document.getElementsByClassName('layout');
-      if (collection.length > 0) {
-        const element: any = collection[0];
-        element.style.removeProperty('flex-basis');
+      if (collection?.length === 0) {
+        return;
       }
+      const element: any = collection[0];
+      element.style.removeProperty('flex-basis');
     }
   }
 }
