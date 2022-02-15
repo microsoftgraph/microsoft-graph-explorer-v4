@@ -315,7 +315,10 @@ export function setMaximumOverflowWidth(widthProps: any): string {
     }
   }
 
-  if (compensation < 0 && level !== 1 && resourceLevelOnIsolation !== -1) { return '0px'; }
+  const overflow = updateOverflowWidth(overflowProps) - compensation;
+  if (overflow <= 0) {
+    return '0px';
+  }
 
-  return `${updateOverflowWidth(overflowProps) - compensation}px`
+  return `${overflow}px`
 }
