@@ -1,6 +1,7 @@
 import { AgeGroup } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
+import { translateMessage } from '../../utils/translate-messages';
 import {
   ACCOUNT_TYPE,
   BETA_USER_INFO_URL,
@@ -84,7 +85,7 @@ async function getProfileInformation(): Promise<IUser> {
     profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;
     return profile;
   } catch (error: any) {
-    throw new Error('Failed to get profile information - ' + error.toString());
+    throw new Error(translateMessage('Failed to get profile information') + '- ' + error.toString());
   }
 }
 

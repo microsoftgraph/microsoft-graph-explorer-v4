@@ -103,7 +103,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
       return response;
     } catch (error: any) {
-      throw new Error(translateMessage('Failed to get token - ' + error.toString()));
+      throw new Error(translateMessage('Failed to get token' + '- ' + error.toString()));
     }
   }
 
