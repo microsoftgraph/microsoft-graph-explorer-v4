@@ -31,7 +31,7 @@ jest.mock('../../app/views/query-runner/request/feedback/FeedbackForm.tsx', () =
 describe('Tests Feedback button', () => {
   it('Renders feedback button without crashing', () => {
     const { getByText } = renderFeedbackButton();
-    expect(getByText(/Feedback/));
+    expect(getByText(/Feedback/)).toBeDefined();
 
   });
 })
