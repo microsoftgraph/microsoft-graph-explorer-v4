@@ -1,4 +1,4 @@
-import { IconButton, IIconProps } from '@fluentui/react';
+import { DirectionalHint, IconButton, IIconProps, ITooltipHostStyles, TooltipHost } from '@fluentui/react';
 import React, { useState } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { useSelector } from 'react-redux';
@@ -25,21 +25,36 @@ export const FeedbackButton = () => {
       width: '50px'
     }
   }
+  const calloutProps = {
+    gapSpace: 0
+  };
+  const hostStyles = { root: {
+    display: 'inline-block',
+    padding: '4px'
+  }
+  };
 
   return (
     <div>
       {profile?.profileType !== ACCOUNT_TYPE.AAD &&
-      <>
-        <IconButton onClick={toggleFeedback}
-          iconProps={feedbackIcon}
-          title={feedbackTitle}
-          ariaLabel={feedbackTitle}
-          styles={feedbackIconStyles}
-          role={'button'}
-          disabled={enableSurvey}
-        />
+      <div>
+        <TooltipHost
+          content={feedbackTitle}
+          calloutProps={calloutProps}
+          styles={hostStyles}
+          directionalHint={DirectionalHint.leftBottomEdge}
+        >
+          <IconButton onClick={toggleFeedback}
+            iconProps={feedbackIcon}
+            ariaDescription={feedbackTitle}
+            ariaLabel={feedbackTitle}
+            styles={feedbackIconStyles}
+            role={'button'}
+            disabled={enableSurvey}
+          />
+        </TooltipHost>
         <FeedbackForm dismissSurvey={toggleFeedback} activated={enableSurvey} />
-      </>
+      </div>
       }
     </div>
   )
