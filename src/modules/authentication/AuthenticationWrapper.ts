@@ -99,12 +99,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       scopes: defaultScopes, authority: this.getAuthority(),
       account: this.getAccount(), redirectUri: getCurrentUri()
     };
-    try {
-      const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
-      return response;
-    } catch (error: any) {
-      throw new Error(translateMessage('Failed to get token' + '- ' + error.toString()));
-    }
+    const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
+    return response;
   }
 
   public async getOcpsToken() {
