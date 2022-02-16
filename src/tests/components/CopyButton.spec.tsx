@@ -22,6 +22,6 @@ describe('Tests copy button component', () => {
   it('Renders copy button without crashing', () => {
     renderCopyButton();
     userEvent.click(screen.getByRole('button'));
-    expect(screen.getByTitle('Copied'));
+    expect(screen.getByTitle('Copied')).toBeDefined();
   })
 })

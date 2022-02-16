@@ -68,8 +68,8 @@ console.warn = jest.fn()
 describe('Tests SampleQueries', () => {
   it('Renders SampleQueries without crashing', () => {
     renderSampleQueries();
-    expect(screen.getByRole('searchbox'));
+    expect(screen.getByRole('searchbox')).toBeDefined();
     userEvent.type(screen.getByRole('searchbox'), 'my profile');
-    expect(screen.getByText(/my profile/));
+    expect(screen.getByText(/my profile/)).toBeDefined();
   })
 })

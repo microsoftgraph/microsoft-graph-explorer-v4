@@ -53,7 +53,7 @@ jest.mock('@microsoft/applicationinsights-react-js', () => ({
 describe('Tests History Tab', () => {
   it('Renders history tab without crashing', () => {
     renderHistoryTab();
-    expect(screen.getByRole('searchbox'));
+    expect(screen.getByRole('searchbox')).toBeDefined();
     screen.getByText(/Older/);
   })
 })

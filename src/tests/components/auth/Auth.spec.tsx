@@ -57,7 +57,7 @@ describe('Tests Auth component', () => {
   it('Renders the Auth component without crashing', () => {
     act(() => {
       expect(renderAuthSection()).toBeDefined();
-      expect(screen.getByRole('alert'))
+      expect(screen.getByRole('alert')).toBeDefined();
     })
   })
 })

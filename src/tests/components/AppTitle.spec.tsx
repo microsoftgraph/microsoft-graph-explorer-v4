@@ -43,7 +43,7 @@ describe('It should render the app title section in mobile screen size', () => {
 
   it('Renders app title section in minimised mode without crashing', () => {
     renderTitleOnFullScreen({minimised: true});
-    expect(screen.getByRole('heading'))
+    expect(screen.getByRole('heading')).toBeDefined();
   })
 })
 

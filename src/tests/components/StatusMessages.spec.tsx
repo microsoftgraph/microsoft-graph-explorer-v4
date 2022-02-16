@@ -42,6 +42,6 @@ console.warn = jest.fn()
 describe('Renders the status bar', () =>{
   it('Renders the status bar', () => {
     renderStatusMessage();
-    expect(screen.getByRole('status'));
+    expect(screen.getByRole('status')).toBeDefined();
   })
 })
