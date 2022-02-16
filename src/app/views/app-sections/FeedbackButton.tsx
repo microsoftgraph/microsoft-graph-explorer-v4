@@ -18,6 +18,7 @@ export const FeedbackButton = () => {
     iconName : 'Feedback'
   }
   const feedbackTitle = translateMessage('Feedback');
+  const content_ = <div style={{padding:'3px'}}>{translateMessage('Feedback')}</div>
 
   const feedbackIconStyles = {
     root:{
@@ -30,7 +31,7 @@ export const FeedbackButton = () => {
   };
   const hostStyles = { root: {
     display: 'inline-block',
-    padding: '4px'
+    padding: '15px'
   }
   };
 
@@ -39,7 +40,7 @@ export const FeedbackButton = () => {
       {profile?.profileType !== ACCOUNT_TYPE.AAD &&
       <div>
         <TooltipHost
-          content={feedbackTitle}
+          content={content_}
           calloutProps={calloutProps}
           styles={hostStyles}
           directionalHint={DirectionalHint.leftBottomEdge}
