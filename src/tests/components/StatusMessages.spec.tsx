@@ -1,40 +1,38 @@
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
-import { statusMessages } from '../../app/views/app-sections/StatusMessages';
+import statusMessages from '../../app/views/app-sections/StatusMessages';
 
 afterEach(cleanup)
 const renderStatusMessage = () => {
-  const queryState = {
-    messageType: 0,
-    ok: true,
-    status: 200,
-    statusText: 'OK',
-    duration: 200
-  }
-
-  const sampleQuery = {
-    selectedVerb: 'GET',
-    selectedVersion: 'v1',
-    sampleUrl: 'https://graph.microsoft.com/v1.0/me',
-    sampleHeaders: []
-  }
-
-  const actions = {
-    clearQueryStatus: jest.fn(),
-    clearTermsOfUse: jest.fn(),
-    setSampleQuery: jest.fn(),
-    runQuery: jest.fn(),
-    toggleSidebar: jest.fn(),
-    signIn: jest.fn(),
-    storeScopes:jest.fn()
-  }
-
   return render(
     <div>
-      {statusMessages(queryState, sampleQuery, actions)}
+      {statusMessages()}
     </div>
   )
 }
+
+jest.mock('react-redux', () => {
+  return ({
+    useDispatch: jest.fn(),
+    useSelector: jest.fn(() => {
+      return {
+        queryRunnerStatus: {
+          messageType: 1,
+          ok: true,
+          status: 200,
+          statusText: 'OK',
+          duration: 200
+        },
+        sampleQuery: {
+          selectedVerb: 'GET',
+          selectedVersion: 'v1.0',
+          sampleUrl: 'https://graph.microsoft.com/v1.0/me',
+          sampleHeaders: []
+        }
+      }
+    })
+  })
+})
 
 // eslint-disable-next-line no-console
 console.warn = jest.fn()
@@ -42,6 +40,7 @@ console.warn = jest.fn()
 describe('Renders the status bar', () =>{
   it('Renders the status bar', () => {
     renderStatusMessage();
-    expect(screen.getByRole('status')).toBeDefined();
+    expect(screen.getByRole('alert')).toBeDefined();
+    expect(screen.getByTitle('Close')).toBeDefined();
   })
 })

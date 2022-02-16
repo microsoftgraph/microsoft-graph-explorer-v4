@@ -74,6 +74,14 @@ const mockState: IRootState = {
     response: {
       width: '100px',
       height: '100px'
+    },
+    sidebar: {
+      width: '100px',
+      height: '100px'
+    },
+    content: {
+      width: '100px',
+      height: '100px'
     }
   },
   autoComplete: {

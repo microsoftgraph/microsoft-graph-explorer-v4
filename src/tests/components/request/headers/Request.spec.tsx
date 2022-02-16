@@ -22,12 +22,20 @@ const renderRequest = (): any => {
     handleOnEditorChange: jest.fn(),
     dimensions: {
       request: {
-        width: '60',
-        height: '60'
+        width: '60px',
+        height: '60px'
       },
       response: {
-        width: '60',
-        height: '60'
+        width: '60px',
+        height: '60px'
+      },
+      sidebar: {
+        width: '60px',
+        height: '60px'
+      },
+      content: {
+        width: '60px',
+        height: '60px'
       }
     },
     intl: {
