@@ -42,15 +42,7 @@ const renderSampleQueries = () => {
     }
   }
 
-  jest.mock('../../app/views/query-runner/query-input/QueryInput.tsx', () => {
-    return {
-      __esModule: true,
-      // eslint-disable-next-line react/display-name
-      default: () => {
-        return <div>QueryInput</div>;
-      }
-    }
-  })
+  jest.mock('../../app/views/query-runner/query-input/QueryInput.tsx')
 
   return render(
     <IntlProvider
