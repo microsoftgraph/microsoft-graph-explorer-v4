@@ -78,10 +78,10 @@ export function createResourcesList(
   }
 
   function sortResourceLinks(a: IResourceLink, b: IResourceLink): number {
-    if (a.links.length === 0 && a.links.length < b.links.length) {
+    if (a.links.length === 0 && b.links.length > 0) {
       return -1;
     }
-    if (b.links.length === 0 && a.links.length > b.links.length) {
+    if (b.links.length === 0 && a.links.length > 0) {
       return 1;
     }
     return 0;
