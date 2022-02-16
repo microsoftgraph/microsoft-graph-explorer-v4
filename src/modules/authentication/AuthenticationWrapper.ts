@@ -11,7 +11,6 @@ import {
   DEFAULT_USER_SCOPES,
   HOME_ACCOUNT_KEY
 } from '../../app/services/graph-constants';
-import { translateMessage } from '../../app/utils/translate-messages';
 import { signInAuthError } from '../../app/views/authentication/AuthenticationErrorsHints';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
