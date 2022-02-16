@@ -1,4 +1,4 @@
-import { DirectionalHint, IconButton, IIconProps, ITooltipHostStyles, TooltipHost } from '@fluentui/react';
+import { DirectionalHint, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
 import React, { useState } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { useSelector } from 'react-redux';
