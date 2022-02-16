@@ -17,6 +17,7 @@ import { IPermission } from '../../../../../types/permissions';
 import { IRootState } from '../../../../../types/root';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';
+import { searchBoxStyles } from '../../../../utils/searchbox.styles';
 import { setConsentedStatus } from './util';
 
 interface IPanelList {
@@ -84,7 +85,7 @@ const PanelList = ({ messages,
         placeholder={messages['Search permissions']}
         onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
           searchValueChanged(event, newValue)}
-        styles={{ field: { paddingLeft: 10 } }}
+        styles={searchBoxStyles}
       />
       <Announced message={`${permissions.length} search results available.`} />
       <hr />
