@@ -49,12 +49,11 @@ class GraphToolkit extends Component<any> {
         padding: '20px',
         width: '100%',
         margin: 'auto',
-        justifyContent: 'center',
-        alignItems: 'center',
         display: 'inline-block',
         position: 'relative',
-        top: '120px',
-        lineHeight: '1.5'
+        top: '160px',
+        lineHeight: '1.5',
+        textAlign: 'justify'
       }}}
       >
 
