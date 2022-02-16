@@ -62,6 +62,13 @@ jobs:
         inputs:
           toolMajorVersion: "V2"
 
+      - task: ComponentGovernanceComponentDetection@0
+        inputs:
+          scanType: 'Register'
+          verbosity: 'Verbose'
+          alertWarningLevel: 'High'
+          ignoreDirectories: '.github,.vscode/'
+
       - task: NodeTool@0
         inputs:
           versionSpec: "12.x"
@@ -143,28 +150,47 @@ jobs:
           REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
         displayName: "Build static assets for prod"
 
+      - task: PowerShell@2
+        displayName: "Create _manifest directory"
+        inputs:
+          targetType: "inline"
+          script: |
+            $manifestPath = "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/_manifest"
+            mkdir -p $manifestPath
+            Write-Host "Created directory '$manifestPath'."
+
+      - task: ManifestGeneratorTask@0
+        inputs:
+          ManifestDirPath: "$(System.DefaultWorkingDirectory)/_manifest"
+          BuildComponentPath: "$(System.DefaultWorkingDirectory)/build"
+          PackageName: "graph-explorer-v2"
+          PackageVersion: "$(Build.UpdateBuildNumber)"
+      
       - task: CopyFiles@1
-        displayName: "Copy files to: $(Build.ArtifactStagingDirectory)"
+        displayName: "Copy manifest files to artifact staging dir: manifest"
+        inputs:
+          SourceFolder: "$(System.DefaultWorkingDirectory)/_manifest"
+          TargetFolder: "$(Build.ArtifactStagingDirectory)/manifest"
+      
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Artifact: manifest"
+        inputs:
+          PathtoPublish: "$(Build.ArtifactStagingDirectory)/manifest"
+          ArtifactName: manifest
+
+      - task: CopyFiles@1
+        displayName: "Copy files to: $(Build.ArtifactStagingDirectory)/build"
         inputs:
           SourceFolder: "$(System.DefaultWorkingDirectory)/build"
-          TargetFolder: "$(Build.ArtifactStagingDirectory)"
+          TargetFolder: "$(Build.ArtifactStagingDirectory)/build"
 
       - task: PublishBuildArtifacts@1
         displayName: "Publish Artifact: drop"
         inputs:
-          PathtoPublish: "$(build.ArtifactStagingDirectory)"
+          PathtoPublish: "$(build.ArtifactStagingDirectory)/build"
+          ArtifactName: drop
 
       - task: DeleteFiles@1
         inputs:
           contents: node_modules
         displayName: "Delete node_modules"
-
-      # - task: YodLabs.O365PostMessage.O365PostMessageBuild.O365PostMessageBuild@0
-      #   displayName: 'Graph Client Tooling pipeline fail notification'
-      #   inputs:
-      #     addressType: serviceEndpoint
-      #     serviceEndpointName: 'microsoftgraph pipeline status'
-      #     title: '$(Build.DefinitionName) failure notification'
-      #     text: 'This pipeline has failed. View the build details for further information. This is a blocking failure. '
-      #   condition: failed()
-      #   enabled: false
