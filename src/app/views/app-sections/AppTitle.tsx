@@ -59,7 +59,7 @@ export function appTitleDisplayOnMobileScreen(
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
         {displayGraphLabel(classes)}
       </div>
-      <div style={{position: 'relative', top: '10px'}}>
+      <div style={{position:'absolute', top: '10px', right: '15px'}}>
         <FeedbackButton/>
       </div>
     </>

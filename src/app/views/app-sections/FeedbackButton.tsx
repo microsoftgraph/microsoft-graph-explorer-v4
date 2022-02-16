@@ -8,7 +8,7 @@ import { ACCOUNT_TYPE } from '../../services/graph-constants';
 
 export const FeedbackButton = () => {
   const [enableSurvey, setEnableShowSurvey] = useState(false);
-  const { profile } = useSelector( (state: IRootState) => state )
+  const { profile } = useSelector( (state: IRootState) => state );
 
   const toggleFeedback = () => {
     setEnableShowSurvey(prevState => !prevState);
@@ -20,24 +20,27 @@ export const FeedbackButton = () => {
   const feedbackTitle = translateMessage('Feedback');
 
   const feedbackIconStyles = {
-    root: {
-      height: '40px',
-      width: '40px'
+    root:{
+      height: '50px',
+      width: '50px'
     }
   }
 
   return (
-    <>
-      {profile?.profileType !== ACCOUNT_TYPE.AAD && <>
+    <div>
+      {profile?.profileType !== ACCOUNT_TYPE.AAD &&
+      <>
         <IconButton onClick={toggleFeedback}
           iconProps={feedbackIcon}
           title={feedbackTitle}
           ariaLabel={feedbackTitle}
           styles={feedbackIconStyles}
           role={'button'}
+          disabled={enableSurvey}
         />
-      <FeedbackForm dismissSurvey={toggleFeedback} activated={enableSurvey} />
-      </>}
-    </>
+        <FeedbackForm dismissSurvey={toggleFeedback} activated={enableSurvey} />
+      </>
+      }
+    </div>
   )
 }
