@@ -35,7 +35,7 @@ export function appTitleDisplayOnFullScreen(
     <div style={{position: 'relative', top: '10px'}}>
       {!minimised &&
       <>
-       <FeedbackButton/>
+        <FeedbackButton/>
       </>
       }
     </div>
