@@ -29,7 +29,7 @@ const QUOTED_TEXT_REGEX = /^["']([^"]*)['"]$/;
 // Matches segments of $filter query option values e.g. isRead eq false will match isRead, eq, false
 // eslint-disable-next-line max-len
 const FILTER_SEGMENT_REGEX =
-  /(((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)\(.*?\))|("[^\"]+")|('[^\']+')|\(.*?\)|[^\s]+/gi;
+  /(((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)\(.*?\))|("[^\"]+")|('[^\']+')|\(.*?\)|\S+/gi;
 // Matches segments of $search query option e.g.
 // "description:One" AND ("displayName:Video" OR "displayName:Drive") will match
 // "description:One", AND, ("displayName:Video" OR "displayName:Drive")
@@ -424,8 +424,8 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
           commaIndex > 0
             ? commaIndex
             : closingBracketIndex > 0
-              ? closingBracketIndex
-              : segment.length;
+            ? closingBracketIndex
+            : segment.length;
         propertyName = segment
           .substring(openingBracketIndex + 1, endIndex)
           .trim();
@@ -433,7 +433,8 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
         if (!isPropertyName(propertyName)) {
           propertyName = '<property>';
         }
-        sanitizedQueryString += `${queryFunctionPrefix}(${propertyName}${commaIndex > 0 ? ',<value>' : ''
+        sanitizedQueryString += `${queryFunctionPrefix}(${propertyName}${
+          commaIndex > 0 ? ',<value>' : ''
         })`;
       } else {
         sanitizedQueryString += `${queryFunctionPrefix}(<unknown>)`;
@@ -459,7 +460,8 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
           COMPARISON_OPERATORS.includes(expectedOperator) ||
           ARITHMETIC_OPERATORS.includes(expectedOperator)
         ) {
-          sanitizedQueryString += `${segment} ${filterSegments[index + 1]
+          sanitizedQueryString += `${segment} ${
+            filterSegments[index + 1]
           } <value>`;
           index += 2;
           continue;
