@@ -1,6 +1,5 @@
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event'
+import { cleanup, render } from '@testing-library/react';
 
 import App from '../../app/views/App';
 import { Mode } from '../../types/enums';
