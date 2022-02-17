@@ -7,7 +7,10 @@ import {
   ResourceLinkType
 } from '../../../../types/resources';
 
-import { getScreenResolution, textOverflowWidthRange } from '../../common/screen-resolution/screen-resolution';
+import {
+  getScreenResolution,
+  textOverflowWidthRange
+} from '../../common/screen-resolution/screen-resolution';
 interface ITreeFilter {
   paths: string[];
   level: number;
@@ -29,7 +32,8 @@ interface IOverflowProps {
 
 export function createResourcesList(
   source: IResource[],
-  version: string
+  version: string,
+  searchText?: string
 ): INavLinkGroup[] {
   function getLinkType({ segment, links }: any): ResourceLinkType {
     const isGraphFunction = segment.startsWith('microsoft.graph');
@@ -48,20 +52,22 @@ export function createResourcesList(
     const { segment, children } = parent;
     const links: IResourceLink[] = [];
     if (methods.length > 1) {
-      methods.forEach((method) => {
-        links.push(
-          createNavLink(
-            {
+      if (!searchText || (searchText && segment.contains(searchText))) {
+        methods.forEach((method) => {
+          links.push(
+            createNavLink(
+              {
+                segment,
+                labels: [],
+                children: []
+              },
               segment,
-              labels: [],
-              children: []
-            },
-            segment,
-            [...paths, segment],
-            method.toUpperCase()
-          )
-        );
-      });
+              [...paths, segment],
+              method.toUpperCase()
+            )
+          );
+        });
+      }
     }
 
     // versioned children
@@ -116,12 +122,16 @@ export function createResourcesList(
         ? ` (${versionedChildren.length})`
         : '';
 
+    // if segment name does not contain search text, then found text is in child, so expand this link
+    const isExpanded =
+      searchText && !segment.contains(searchText) ? true : false;
+
     return {
       key,
       url: key,
       name: `${segment}${enclosedCounter}`,
       labels,
-      isExpanded: false,
+      isExpanded,
       parent,
       level,
       paths,
@@ -173,23 +183,46 @@ export function removeCounter(title: string): string {
 }
 
 export function getResourcesSupportedByVersion(
-  content: IResource,
-  version: string
-): IResource {
-  const resources: IResource = { ...content };
-  const children: IResource[] = [];
-
-  resources.children.forEach((child: IResource) => {
-    if (versionExists(child, version)) {
-      children.push(child);
+  resources: IResource[],
+  version: string,
+  searchText?: string
+): IResource[] {
+  let versionedResources: IResource[] = [];
+  resources.forEach((resource: IResource) => {
+    if (versionExists(resource, version)) {
+      resource.children = getResourcesSupportedByVersion(
+        resource.children || [],
+        version
+      );
+      versionedResources.push(resource);
     }
   });
-  resources.children = children;
-  return resources;
+  if (searchText) {
+    versionedResources = searchResources(versionedResources, searchText);
+  }
+  return versionedResources;
 }
 
-export function versionExists(child: IResource, version: string): boolean {
-  return !!child.labels.find((k) => k.name === version);
+function searchResources(haystack: IResource[], needle: string): IResource[] {
+  const foundResources: IResource[] = [];
+  haystack.forEach((resource: IResource) => {
+    if (resource.segment.contains(needle)) {
+      foundResources.push(resource);
+      return;
+    }
+    if (resource.children) {
+      const foundChildResources = searchResources(resource.children, needle);
+      if (foundChildResources.length > 0) {
+        resource.children = foundChildResources;
+        foundResources.push(resource);
+      }
+    }
+  });
+  return foundResources;
+}
+
+export function versionExists(resource: IResource, version: string): boolean {
+  return resource.labels.some((k) => k.name === version);
 }
 
 export function getAvailableMethods(
@@ -244,7 +277,9 @@ function flatten(content: IResourceLink[]): IResourceLink[] {
 }
 
 export function getOverflowWidthRange(resolution: string): IOverflowWidthRange {
-  const overFlowRange = textOverflowWidthRange.find(k => k.key === resolution);
+  const overFlowRange = textOverflowWidthRange.find(
+    (k) => k.key === resolution
+  );
   if (!overFlowRange) {
     return {
       minimumOverflowWidth: 1000,
@@ -259,15 +294,28 @@ export function getOverflowWidthRange(resolution: string): IOverflowWidthRange {
 
 // Adjusts overflow width based on screen resolution
 export function updateOverflowWidth(overflowProps: IOverflowProps) {
-  const { currentScreenWidth, lowestDeviceWidth, highestDeviceWidth, overflowRange } = overflowProps;
+  const {
+    currentScreenWidth,
+    lowestDeviceWidth,
+    highestDeviceWidth,
+    overflowRange
+  } = overflowProps;
   const { minimumOverflowWidth, maximumOverflowWidth } = overflowRange;
 
-  return (currentScreenWidth - lowestDeviceWidth) * (maximumOverflowWidth - minimumOverflowWidth) /
-    (highestDeviceWidth - lowestDeviceWidth) + minimumOverflowWidth;
+  return (
+    ((currentScreenWidth - lowestDeviceWidth) *
+      (maximumOverflowWidth - minimumOverflowWidth)) /
+      (highestDeviceWidth - lowestDeviceWidth) +
+    minimumOverflowWidth
+  );
 }
 
 // adjusts overflow width for each resource link level
-export function compensateForLinkIndent(resourceLevelOnIsolation: number, linkLevel: number, method: string) {
+export function compensateForLinkIndent(
+  resourceLevelOnIsolation: number,
+  linkLevel: number,
+  method: string
+) {
   const levelCompensation = new Map([
     [1, -20],
     [2, 10],
@@ -283,9 +331,11 @@ export function compensateForLinkIndent(resourceLevelOnIsolation: number, linkLe
     [12, 140],
     [13, 150],
     [14, 160]
-  ])
-  const currentLevel: number = resourceLevelOnIsolation === -1 ? linkLevel :
-    linkLevel - resourceLevelOnIsolation;
+  ]);
+  const currentLevel: number =
+    resourceLevelOnIsolation === -1
+      ? linkLevel
+      : linkLevel - resourceLevelOnIsolation;
 
   if (currentLevel >= 16) {
     return 170;
@@ -294,16 +344,25 @@ export function compensateForLinkIndent(resourceLevelOnIsolation: number, linkLe
   compensation = levelCompensation.get(currentLevel);
 
   if (method) {
-    compensation = compensation! + 50
+    compensation = compensation! + 50;
   }
   return compensation ? compensation : 0;
 }
 
 export function setMaximumOverflowWidth(widthProps: any): string {
   const { resourceLevelOnIsolation, level, method } = widthProps;
-  const { device: resolution, width, currentScreenWidth } = getScreenResolution();
-  const compensation = compensateForLinkIndent(resourceLevelOnIsolation, level, method);
-  const { minimumOverflowWidth, maximumOverflowWidth } = getOverflowWidthRange(resolution);
+  const {
+    device: resolution,
+    width,
+    currentScreenWidth
+  } = getScreenResolution();
+  const compensation = compensateForLinkIndent(
+    resourceLevelOnIsolation,
+    level,
+    method
+  );
+  const { minimumOverflowWidth, maximumOverflowWidth } =
+    getOverflowWidthRange(resolution);
 
   const overflowProps = {
     currentScreenWidth,
@@ -313,12 +372,12 @@ export function setMaximumOverflowWidth(widthProps: any): string {
       minimumOverflowWidth,
       maximumOverflowWidth
     }
-  }
+  };
 
   const overflow = updateOverflowWidth(overflowProps) - compensation;
   if (overflow < 0) {
     return '0px';
   }
 
-  return `${overflow}px`
+  return `${overflow}px`;
 }

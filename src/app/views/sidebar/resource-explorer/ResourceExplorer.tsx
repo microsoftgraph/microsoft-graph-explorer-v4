@@ -40,28 +40,20 @@ const unstyledResourceExplorer = (props: any) => {
     { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
   ];
   const [version, setVersion] = useState(versions[0].key);
-  const filteredPayload = getResourcesSupportedByVersion(data, version);
-  const navigationGroup = createResourcesList(filteredPayload.children, version);
+  const [searchText, setSearchText] = useState<string>('');
+  const filteredPayload = getResourcesSupportedByVersion([...data.children], version, searchText);
+  const navigationGroup = createResourcesList(filteredPayload, version, searchText);
 
-  const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload.children);
+  const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload);
   const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
 
   useEffect(() => {
     setItems(navigationGroup);
-    setResourceItems(filteredPayload.children)
-  }, [filteredPayload.children.length]);
+    setResourceItems(filteredPayload)
+  }, [filteredPayload.length]);
 
   const [isolated, setIsolated] = useState<any>(null);
-  const [searchText, setSearchText] = useState<string>('');
   const [linkLevel, setLinkLevel] = useState(-1);
-
-  const performSearch = (needle: string, haystack: IResource[]) => {
-    const keyword = needle.toLowerCase();
-    return haystack.filter((sample: IResource) => {
-      const name = sample.segment.toLowerCase();
-      return name.toLowerCase().includes(keyword);
-    });
-  }
 
   const generateBreadCrumbs = () => {
     if (!!isolated && isolated.paths.length > 0) {
@@ -86,25 +78,17 @@ const unstyledResourceExplorer = (props: any) => {
     option: IChoiceGroupOption | undefined): void => {
     const selectedVersion = option!.key;
     setVersion(selectedVersion);
-    const list = getResourcesSupportedByVersion(data, selectedVersion);
-    const dataSet = (searchText) ? performSearch(searchText, list.children) : list.children;
+    const dataSet = getResourcesSupportedByVersion([...data.children], selectedVersion, searchText);
     setResourceItems(dataSet);
-    setItems(createResourcesList(dataSet, selectedVersion));
+    setItems(createResourcesList(dataSet, selectedVersion, searchText));
   }
 
-  const changeSearchValue = (event: any, value?: string) => {
-    let filtered: any[] = [...data.children];
-    setSearchText(value || '');
-    if (value) {
-      filtered = performSearch(value, filtered);
-    }
-    const dataSet = getResourcesSupportedByVersion({
-      children: filtered,
-      labels: data.labels,
-      segment: data.segment
-    }, version).children;
+  const changeSearchValue = async (event: any, value?: string) => {
+    const trimmedSearchText = value ? value.trim() : '';
+    setSearchText(trimmedSearchText);
+    const dataSet = getResourcesSupportedByVersion([...data.children], version, trimmedSearchText);
     setResourceItems(dataSet);
-    setItems(createResourcesList(dataSet, version));
+    setItems(createResourcesList(dataSet, version, trimmedSearchText));
   }
 
   const navigateToBreadCrumb = (ev?: any, item?: IBreadcrumbItem): void => {
@@ -142,9 +126,9 @@ const unstyledResourceExplorer = (props: any) => {
   const disableIsolation = (): void => {
     setIsolated(null);
     setSearchText('');
-    const filtered = getResourcesSupportedByVersion(data, version);
+    const filtered = getResourcesSupportedByVersion(data.children, version);
     setLinkLevel(-1);
-    setItems(createResourcesList(filtered.children, version));
+    setItems(createResourcesList(filtered, version));
   }
 
   const clickLink = (ev?: React.MouseEvent<HTMLElement>, item? : INavLink) => {

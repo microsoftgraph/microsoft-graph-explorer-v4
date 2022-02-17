@@ -18,8 +18,8 @@ describe('Resource payload should', () => {
   });
 
   it('return children with version v1.0', async () => {
-    const resources = getResourcesSupportedByVersion(resource, 'v1.0');
-    expect(resources.children.length).toBe(64);
+    const resources = getResourcesSupportedByVersion(resource.children, 'v1.0');
+    expect(resources.length).toBe(64);
   });
 
   it('return links with version v1.0', async () => {
