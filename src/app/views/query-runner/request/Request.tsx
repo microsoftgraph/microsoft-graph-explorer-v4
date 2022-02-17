@@ -124,7 +124,7 @@ export class Request extends Component<IRequestComponent, any> {
         </PivotItem>,
       );
     }
-    if(profile !== ACCOUNT_TYPE.AAD){
+    if (profile !== ACCOUNT_TYPE.AAD) {
       pivotItems.push(
         <PivotItem
           key='feedback'
@@ -211,7 +211,7 @@ export class Request extends Component<IRequestComponent, any> {
             border: 'solid 1px #ddd',
             marginBottom: 10
           }}
-          onResize={(e: any, direction: any, ref: any) => {
+          onResizeStop={(e: any, direction: any, ref: any) => {
             if (ref && ref.style && ref.style.height) {
               this.setRequestAndResponseHeights(ref.style.height);
             }
