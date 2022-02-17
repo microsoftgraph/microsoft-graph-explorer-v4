@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const resolve = require('resolve');
-// const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
@@ -12,14 +11,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
-// const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-// const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
@@ -187,6 +184,8 @@ module.exports = function (webpackEnv) {
         // It is guaranteed to exist because we tweak it in `env.js`
         process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
       ),
+      // Some libraries import Node modules but don't use them in the browser.
+      // Tell Webpack to provide false mocks for them so importing them works.
       fallback: {
         module: 'false',
         dgram: 'false',
@@ -251,14 +250,6 @@ module.exports = function (webpackEnv) {
             }
           }
         },
-
-        // First, run the linter.
-        // It's important to do this before Babel processes the JS.
-        // {
-        //   test: /\.(js|mjs|jsx)$/,
-        //   enforce: 'pre',
-        //   include: paths.appSrc
-        // },
         {
           // "oneOf" will traverse all following loaders until one will
           // match the requirements. When no loader matches it will fall
@@ -293,19 +284,6 @@ module.exports = function (webpackEnv) {
                     }
                   ]
                 ],
-
-                // plugins: [
-                //   [
-                //     require.resolve('babel-plugin-named-asset-import'),
-                //     {
-                //       loaderMap: {
-                //         svg: {
-                //           ReactComponent: '@svgr/webpack?-svgo![path]'
-                //         }
-                //       }
-                //     }
-                //   ]
-                // ],
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
                 // directory for faster rebuilds.
@@ -566,7 +544,6 @@ module.exports = function (webpackEnv) {
             syntactic: true
           },
           mode: 'write-references'
-          // profile: true,
         },
         issue: {
           // This one is specifically to match during CI tests,
@@ -587,17 +564,6 @@ module.exports = function (webpackEnv) {
         logger: { infrastructure: 'silent' }
       })
     ].filter(Boolean),
-    // Some libraries import Node modules but don't use them in the browser.
-    // Tell Webpack to provide empty mocks for them so importing them works.
-    // node: {
-    //   // module: 'empty',
-    //   // dgram: 'empty',
-    //   // dns: 'mock',
-    //   // fs: 'empty',
-    //   // net: 'empty',
-    //   // tls: 'empty',
-    //   // child_process: 'empty'
-    // },
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter
     performance: false
