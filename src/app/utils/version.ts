@@ -1,5 +1,5 @@
-import * as packageJson from '../../../package.json';
+import version from '../../../package.json';
 
 export function getVersion() {
-  return packageJson.version || 0;
+  return version || 0;
 }
