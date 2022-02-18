@@ -1,6 +1,7 @@
 import { graphResponse } from '../../../app/services/reducers/query-runner-reducers';
 import { queryRunnerStatus } from '../../../app/services/reducers/query-runner-status-reducers';
-import { CLEAR_QUERY_STATUS, QUERY_GRAPH_STATUS, QUERY_GRAPH_SUCCESS } from '../../../app/services/redux-constants';
+import { CLEAR_QUERY_STATUS, QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS,
+  QUERY_GRAPH_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS } from '../../../app/services/redux-constants';
 import { IGraphResponse } from '../../../types/query-response';
 
 describe('Query Runner Reducer', () => {
@@ -47,4 +48,30 @@ describe('Query Runner Reducer', () => {
 
     expect(newState).toEqual(null);
   });
+
+  it('should handle VIEW_HISTORY_ITEM_UCCESS', () => {
+    const initialState: IGraphResponse = { body: undefined, headers: undefined };
+    const mockResponse = {
+      body: {
+        displayName: 'Megan Bowen'
+      },
+      headers: {
+        'content-type': 'application-json'
+      }
+    };
+
+    const action  = { type: VIEW_HISTORY_ITEM_SUCCESS, response: mockResponse };
+
+    const newState = queryRunnerStatus(initialState, action);
+    expect(newState).toEqual(null);
+  });
+
+  it('should handle QUERY_GRAPH_RUNNING', () => {
+    const initialState: IGraphResponse = { body: undefined, headers: undefined };
+    const expectedState = initialState;
+
+    const action = { type: QUERY_GRAPH_RUNNING, response: '' };
+    const newState = graphResponse(initialState, action);
+    expect(newState).toEqual(expectedState);
+  })
 });

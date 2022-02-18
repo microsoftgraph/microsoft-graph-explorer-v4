@@ -1,4 +1,4 @@
-import { changeThemeSuccess } from '../../../app/services/actions/theme-action-creator';
+import { changeThemeSuccess, changeTheme } from '../../../app/services/actions/theme-action-creator';
 import { CHANGE_THEME_SUCCESS } from '../../../app/services/redux-constants';
 import configureMockStore from 'redux-mock-store';
 
@@ -20,6 +20,21 @@ describe('Change theme action creator', () => {
 
     // @ts-ignore
     store.dispatch(changeThemeSuccess('dark'));
+    expect(store.getActions()).toEqual(expectedActions);
+  })
+
+  it('dispatches an action that changes the theme ', () => {
+    const expectedActions = [
+      {
+        type: CHANGE_THEME_SUCCESS,
+        response: 'dark'
+      }
+    ];
+
+    const store = mockStore({ theme: '' });
+
+    // @ts-ignore
+    store.dispatch(changeTheme('dark'));
     expect(store.getActions()).toEqual(expectedActions);
   })
 })

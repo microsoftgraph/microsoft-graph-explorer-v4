@@ -68,7 +68,7 @@ export function getProfileInfo(): Function {
   };
 }
 
-async function getProfileInformation(): Promise<IUser> {
+export async function getProfileInformation(): Promise<IUser> {
   const profile: IUser = {
     id: '',
     displayName: '',
@@ -89,7 +89,7 @@ async function getProfileInformation(): Promise<IUser> {
   }
 }
 
-async function getBetaProfile(): Promise<IBetaProfile> {
+export async function getBetaProfile(): Promise<IBetaProfile> {
   try {
     query.sampleUrl = BETA_USER_INFO_URL;
     const { userInfo } = await getProfileResponse();
@@ -101,7 +101,7 @@ async function getBetaProfile(): Promise<IBetaProfile> {
   }
 }
 
-function getAgeGroup(userInfo: any): AgeGroup {
+export function getAgeGroup(userInfo: any): AgeGroup {
   const profileType = getProfileType(userInfo);
   if (profileType === ACCOUNT_TYPE.MSA) {
     const ageGroup = userInfo?.account?.[0]?.ageGroup;
@@ -113,7 +113,7 @@ function getAgeGroup(userInfo: any): AgeGroup {
     return 0;
   }
 }
-function getProfileType(userInfo: any): ACCOUNT_TYPE {
+export function getProfileType(userInfo: any): ACCOUNT_TYPE {
   const profileType: ACCOUNT_TYPE = userInfo?.account?.[0]?.source?.type?.[0];
   if (profileType === undefined) {
     return ACCOUNT_TYPE.UNDEFINED;
@@ -121,7 +121,7 @@ function getProfileType(userInfo: any): ACCOUNT_TYPE {
   return profileType;
 }
 
-async function getProfileImage(): Promise<string> {
+export async function getProfileImage(): Promise<string> {
   let profileImageUrl = '';
   try {
     query.sampleUrl = USER_PICTURE_URL;
@@ -137,7 +137,7 @@ async function getProfileImage(): Promise<string> {
   return profileImageUrl;
 }
 
-async function getProfileResponse(): Promise<IProfileResponse> {
+export async function getProfileResponse(): Promise<IProfileResponse> {
   const scopes = DEFAULT_USER_SCOPES.split(' ');
   const respHeaders: any = {};
 

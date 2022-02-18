@@ -25,7 +25,7 @@ describe('Toggle Sidebar Action Creators', () => {
     store.dispatch(toggleSidebar({
       mobileScreen: true,
       showSidebar: false
-    }));
+    }))
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
