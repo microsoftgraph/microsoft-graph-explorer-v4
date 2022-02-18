@@ -93,7 +93,7 @@ describe('It should render the main GE site', () => {
     getByText('Request headers');
     getByText('Modify permissions (Preview)');
     getByText('Access token');
-    getByText('Got feedback?');
+    getByText(/Help Improve/);
     getByText('Response preview');
     getByText('Response headers');
     getByText('Code snippets');

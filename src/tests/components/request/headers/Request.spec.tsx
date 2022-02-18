@@ -114,9 +114,7 @@ describe('Tests Request component', () => {
     const { getByText } = renderRequest();
     getByText(/Request body/);
     getByText(/Request headers/);
-    getByText(/Got feedback/)
     getByText(/Modify permissions/);
-    getByText(/Got feedback/);
     getByText(/Access token/);
   })
 })
