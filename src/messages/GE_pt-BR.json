@@ -392,7 +392,7 @@
   "Resources available": "Recursos disponíveis",
   "Selected Resources": "Recursos Selecionados",
   "A documentation link for this URL exists. Click learn more to access it": "Existe um link de documentação dessa URL. Clique em Saiba mais para acessar",
-  "Feedback": "Tem comentários?",
+  "Feedback": "Ajudar a melhorar o Explorador do Graph?",
   "Comment question": "Conte-nos mais sobre sua experiência",
   "Prompt question": "Gostaríamos de receber os seus comentários!",
   "No": "Não",
@@ -429,5 +429,7 @@
   "Response content not available due to CORS policy": "O conteúdo da resposta não está disponível no Graph Explorer devido à política CORS. Você pode executar essa solicitação em um cliente de API, como o Postman. Leia mais sobre o CORS e entenda como ele funciona",
   "here": "aqui",
   "Invalid version in URL": "Versão inválida na URL",
-  "More info": "Mais informações"
+  "More info": "Mais informações",
+  "Could not connect to the sandbox": "Não foi possível conectar ao sandbox",
+  "Failed to get profile information": "Falha ao obter informações do perfil"
 }
