@@ -53,10 +53,4 @@
 
 .query-request {
     overflow: hidden;
-
-     @media screen and (min-width: 1320px){
-        .pivot-request *[data-content='Got feedback? xx'] {
-            float: right !important;
-        }
-    }
 }

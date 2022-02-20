@@ -392,7 +392,7 @@
   "Resources available": "Resources available",
   "Selected Resources": "Selected Resources",
   "A documentation link for this URL exists. Click learn more to access it": "A documentation link for this URL exists. Click learn more to access it",
-  "Feedback": "Got feedback?",
+  "Feedback": "Help Improve Graph Explorer?",
   "Comment question": "Tell us more about your experience",
   "Prompt question": "We'd love your Feedback",
   "No": "No",
@@ -430,5 +430,6 @@
   "here": "here",
   "Invalid version in URL": "Invalid version in URL",
   "More info": "More info",
-  "Could not connect to the sandbox": "Could not connect to the sandbox"
+  "Could not connect to the sandbox": "Could not connect to the sandbox",
+  "Failed to get profile information": "Failed to get profile information"
 }

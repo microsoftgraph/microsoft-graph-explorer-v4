@@ -147,7 +147,7 @@ function handleError(dispatch: Function, error: any) {
         messageType: MessageBarType.error,
         ok: false,
         status: 0,
-        statusText: error
+        statusText: `${error.name}: ${error.message}`
       })
     );
   }

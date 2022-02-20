@@ -182,7 +182,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               >
                 {item.method}
               </span>
-              ;
             </TooltipHost>
           );
 
