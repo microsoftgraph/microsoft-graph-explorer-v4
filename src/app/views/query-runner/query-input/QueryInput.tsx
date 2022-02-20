@@ -111,7 +111,7 @@ const QueryInput = (props: IQueryInputProps) => {
         />
       </div>
       <div className='col-xs-12 col-lg-1 copy-info-section'>
-        <div className='row' style={{display:'inline-flex !important'}}>
+        <div className='row' style={{display:'flex', flexWrap:'nowrap'}}>
           <div className='col-xs-6'>
             <CopyButton
               isIconButton={true}
