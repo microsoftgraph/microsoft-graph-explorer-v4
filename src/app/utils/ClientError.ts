@@ -7,5 +7,6 @@ export class ClientError extends Error {
     super(meta.error);
     Object.assign(this, meta);
     this.name = 'Client Error';
+    this.message = meta.error;
   }
 }

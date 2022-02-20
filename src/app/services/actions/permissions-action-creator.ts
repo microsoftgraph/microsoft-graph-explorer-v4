@@ -100,7 +100,7 @@ export function fetchScopes(): Function {
   };
 }
 
-function getPermissionsScopeType(profile: IUser | null | undefined) {
+export function getPermissionsScopeType(profile: IUser | null | undefined) {
   if (profile?.profileType === ACCOUNT_TYPE.MSA) {
     return PERMS_SCOPE.PERSONAL;
   }

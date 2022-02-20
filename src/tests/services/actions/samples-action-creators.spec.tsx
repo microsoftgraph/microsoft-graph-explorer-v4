@@ -1,6 +1,7 @@
-import { fetchSamplesSuccess } from '../../../app/services/actions/samples-action-creators';
+import { fetchSamplesSuccess, fetchSamplesError,
+  fetchSamplesPending } from '../../../app/services/actions/samples-action-creators';
 import {
-  SAMPLES_FETCH_SUCCESS
+  SAMPLES_FETCH_SUCCESS, SAMPLES_FETCH_PENDING, SAMPLES_FETCH_ERROR
 } from '../../../app/services/redux-constants';
 
 
@@ -20,5 +21,25 @@ describe('actions', () => {
     const action = fetchSamplesSuccess(response);
     expect(action).toEqual(expectedAction);
   });
+
+  it('creates SAMPLES_FETCH_PENDING when fetchSamplesPending is called', () => {
+    const expectedAction = {
+      type: SAMPLES_FETCH_PENDING
+    };
+
+    const action = fetchSamplesPending();
+    expect(action).toEqual(expectedAction);
+  })
+
+  it('creates SAMPLES_FETCH_ERROR when fetchSamplesError is called', () => {
+    const response = new Error('error');
+    const expectedAction = {
+      type: SAMPLES_FETCH_ERROR,
+      response
+    };
+
+    const action = fetchSamplesError(response);
+    expect(action).toEqual(expectedAction);
+  })
 
 });

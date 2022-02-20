@@ -10,7 +10,6 @@ import {
 import { ComponentType } from 'react';
 
 import '../app/utils/string-operations';
-import { version } from '../../package.json';
 import { validateExternalLink } from '../app/utils/external-link-validation';
 import { sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
 import { IQuery } from '../types/query-runner';
@@ -27,6 +26,7 @@ import {
   sanitizeTelemetryItemUriProperty
 } from './filters';
 import ITelemetry from './ITelemetry';
+import { getVersion } from '../app/utils/version';
 
 class Telemetry implements ITelemetry {
   private appInsights: ApplicationInsights;
@@ -58,7 +58,7 @@ class Telemetry implements ITelemetry {
     this.appInsights.addTelemetryInitializer(sanitizeStackTrace);
     this.appInsights.addTelemetryInitializer(sanitizeTelemetryItemUriProperty);
     this.appInsights.addTelemetryInitializer(addCommonTelemetryItemProperties);
-    this.appInsights.context.application.ver = version;
+    this.appInsights.context.application.ver = getVersion().toString();
   }
 
   public trackEvent(name: string, properties: {}) {

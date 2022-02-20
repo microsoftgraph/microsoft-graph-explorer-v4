@@ -7,12 +7,12 @@ import { SET_SAMPLE_QUERY_SUCCESS } from '../../../app/services/redux-constants'
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('actions', () => {
+describe('Query input action creators should', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  it('creates SET_SAMPLE_QUERY_SUCCESS when setSampleQuery is called', () => {
+  it('dispatch SET_SAMPLE_QUERY_SUCCESS when setSampleQuery is called', () => {
     const expectedActions = [
       {
         type: SET_SAMPLE_QUERY_SUCCESS,
