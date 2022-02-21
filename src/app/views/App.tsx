@@ -39,6 +39,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
+import { FeedbackButton } from './app-sections/FeedbackButton';
 
 interface IAppProps {
   theme?: ITheme;
@@ -294,9 +295,14 @@ class App extends Component<IAppProps, IAppState> {
           alignItems: minimised ? '' : 'center',
           marginLeft: minimised ? '' : '-0.9em'
         }}>
-        <div className={minimised ? '' : 'col-10'}>
+        <div className={minimised ? '' : 'col-9'}>
           <Authentication />
         </div>
+        {minimised &&
+        <div className={minimised ? '' : 'col-2'} style={{position:'relative', left: '-24px'}}>
+          <FeedbackButton />
+        </div>
+        }
         <div className={minimised ? '' : 'col-2'}>
           <Settings />
         </div>

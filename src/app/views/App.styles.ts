@@ -26,7 +26,9 @@ export const appStyles = (theme: ITheme) => {
       maxWidth: '96%'
     },
     separator: {
-      borderBottom: '1px solid ' + theme.palette.neutralLight
+      borderBottom: '1px solid ' + theme.palette.neutralLight,
+      position: 'relative',
+      marginLeft: '6px'
     },
     links: {
       color: `${theme.palette.blueMid} !important`

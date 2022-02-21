@@ -7,12 +7,8 @@ import { IRootState } from '../../../types/root';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 
 export const FeedbackButton = () => {
-  const [enableSurvey, setEnableShowSurvey] = useState(false);
+  const [enableSurvey, setEnableSurvey] = useState(false);
   const { profile } = useSelector( (state: IRootState) => state );
-
-  const toggleFeedback = () => {
-    setEnableShowSurvey(prevState => !prevState);
-  }
 
   const feedbackIcon : IIconProps = {
     iconName : 'Feedback'
@@ -35,6 +31,16 @@ export const FeedbackButton = () => {
   }
   };
 
+  const toggleSurvey = () => {
+    console.log('Toggling state normally')
+    setEnableSurvey(prevState => !prevState);
+  }
+
+  const disableSurvey = () => {
+    console.log('Found an error. Setting to false');
+    setEnableSurvey(false);
+  }
+
   return (
     <div>
       {profile?.profileType !== ACCOUNT_TYPE.AAD &&
@@ -45,7 +51,7 @@ export const FeedbackButton = () => {
           styles={hostStyles}
           directionalHint={DirectionalHint.leftBottomEdge}
         >
-          <IconButton onClick={toggleFeedback}
+          <IconButton onClick={toggleSurvey}
             iconProps={feedbackIcon}
             ariaDescription={feedbackTitle}
             ariaLabel={feedbackTitle}
@@ -54,7 +60,7 @@ export const FeedbackButton = () => {
             disabled={enableSurvey}
           />
         </TooltipHost>
-        <FeedbackForm dismissSurvey={toggleFeedback} activated={enableSurvey} />
+        <FeedbackForm dismissSurvey={toggleSurvey} activated={enableSurvey} disableSurvey={disableSurvey} />
       </div>
       }
     </div>
