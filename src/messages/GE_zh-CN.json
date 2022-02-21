@@ -392,7 +392,7 @@
   "Resources available": "可用资源",
   "Selected Resources": "选定资源",
   "A documentation link for this URL exists. Click learn more to access it": "存在此 URL 的文档链接。单击“了解详细信息”以访问它",
-  "Feedback": "要提供反馈？",
+  "Feedback": "帮助改进 Graph 浏览器？",
   "Comment question": "告诉我们有关你的体验更多信息",
   "Prompt question": "我们非常期待你的反馈",
   "No": "不支持",
@@ -429,5 +429,7 @@
   "Response content not available due to CORS policy": "由于 CORS 策略，响应内容在 Graph 浏览器中不可用。可以在 API 客户端（如 Postman）中执行此请求。详细了解 CORS 并了解其工作原理",
   "here": "此处",
   "Invalid version in URL": "URL 中的版本无效",
-  "More info": "详细信息"
+  "More info": "详细信息",
+  "Could not connect to the sandbox": "无法连接到沙盒",
+  "Failed to get profile information": "未能获取用户配置文件信息"
 }
