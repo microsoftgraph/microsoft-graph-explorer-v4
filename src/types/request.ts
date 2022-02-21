@@ -26,7 +26,7 @@ export interface IRequestComponent {
   dimensions: IDimensions;
   headers?: Header[];
   intl: {
-    message: object;
+    messages: object;
   };
   actions: {
     setDimensions: Function;

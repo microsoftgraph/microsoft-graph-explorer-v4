@@ -392,7 +392,7 @@
   "Resources available": "使用可能なリソース数",
   "Selected Resources": "選択したリソース",
   "A documentation link for this URL exists. Click learn more to access it": "この URL のドキュメント リンクが存在します。アクセスするには、[詳細] をクリックしてください",
-  "Feedback": "フィードバックがありますか?",
+  "Feedback": "Graph エクスプローラーの改善にご協力ください。",
   "Comment question": "体験談をお聞かせください",
   "Prompt question": "ご意見をお寄せください",
   "No": "いいえ",
@@ -429,5 +429,7 @@
   "Response content not available due to CORS policy": "CORS ポリシーにより、Graph エクスプローラーでは応答コンテンツを使用できません。この要求は、Postman などの API クライアントで実行できます。CORS の詳細を読み、そのしくみを理解してください",
   "here": "こちら",
   "Invalid version in URL": "URL 内のバージョンが無効です。",
-  "More info": "詳細情報"
+  "More info": "詳細情報",
+  "Could not connect to the sandbox": "サンドボックスに接続できませんでした",
+  "Failed to get profile information": "プロファイル情報を取得できませんでした"
 }

@@ -56,13 +56,12 @@ export function getSnippet(language: string): Function {
 
       const requestBody =
         sampleQuery.sampleBody &&
-        Object.keys(sampleQuery.sampleBody).length !== 0 && // check if empty object
-        sampleQuery.sampleBody.trim() !== ''
+          Object.keys(sampleQuery.sampleBody).length !== 0 && // check if empty object
+          sampleQuery.sampleBody.trim() !== ''
           ? JSON.stringify(sampleQuery.sampleBody)
           : '';
 
-      const body = `${sampleQuery.selectedVerb} /${queryVersion}/${
-        requestUrl + search
+      const body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search
       } HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${requestBody}`;
       const options: IRequestOptions = { method, headers, body };
       const obj: any = {};

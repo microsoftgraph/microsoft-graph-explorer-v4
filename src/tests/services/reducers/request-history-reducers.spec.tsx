@@ -1,5 +1,6 @@
 import { history } from '../../../app/services/reducers/request-history-reducers';
-import { ADD_HISTORY_ITEM_SUCCESS } from '../../../app/services/redux-constants';
+import { ADD_HISTORY_ITEM_SUCCESS, REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
+  REMOVE_HISTORY_ITEM_SUCCESS } from '../../../app/services/redux-constants';
 
 
 describe('Request History Reducer', () => {
@@ -23,5 +24,45 @@ describe('Request History Reducer', () => {
 
     expect(newState).toEqual([dummy]);
   });
+
+  it('should handle REMOVE_HISTORY_ITEM_SUCCESS', () => {
+    const initialState = [
+      1, 2
+    ]
+
+    const expectedState = [
+      1
+    ]
+
+    const action = {
+      type: REMOVE_HISTORY_ITEM_SUCCESS,
+      response: 2
+    }
+
+    const newState = history(initialState, action);
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('should handle REMOVE_ALL_HISTORY_ITEMS_SUCCESS', () => {
+    const initialState = [
+      {
+        index: 0
+      }
+    ]
+
+    const expectedState: any = [
+      {
+        index: 0
+      }
+    ]
+
+    const action = {
+      type: REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
+      response: initialState
+    }
+
+    const newState = history(initialState, action);
+    expect(newState).toEqual(expectedState);
+  })
 
 });
