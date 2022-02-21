@@ -155,7 +155,7 @@
         "tar": "6.1.11",
         "trim-newlines": "4.0.2",
         "ts-jest": "27.0.7",
-        "tslint": "5.12.1",
+        "tslint": "5.20.1",
         "tslint-config-prettier": "1.18.0",
         "tslint-react": "4.0.0",
         "url-parse": "1.5.3",
