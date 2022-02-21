@@ -212,6 +212,7 @@ describe('tests permissions action creators', () => {
       // Act
       // @ts-ignore
       store.dispatch(fetchScopes())
+        // @ts-ignore
         .then((response_: any) => {
           expect(response_.scopes).toBe(undefined);
         })

@@ -1,7 +1,7 @@
 import { Announced, getTheme, IStackTokens, ITheme, styled } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { Component } from 'react';
-import { InjectedIntl, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -43,7 +43,7 @@ import { Sidebar } from './sidebar/Sidebar';
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
-  intl: InjectedIntl;
+  intl: any;
   profile: object;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
