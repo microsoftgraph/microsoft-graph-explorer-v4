@@ -5,13 +5,13 @@ import { IQueryResponseProps } from '../../../types/query-response';
 import { Mode } from '../../../types/enums';
 import { IntlProvider } from 'react-intl';
 import { geLocale } from '../../../appLocale';
-import { messages_ } from '../../utils/get-messages';
 import messages from '../../../messages';
+import { messages_ } from '../../../tests/utils/get-messages';
 
 afterEach(cleanup);
 const renderQueryResponse = () => {
   const message = messages_['en-US'] as object;
-  const queryResponseProps : IQueryResponseProps = {
+  const queryResponseProps: IQueryResponseProps = {
     mode: Mode.Complete,
     dispatch: jest.fn(),
     graphResponse: {
