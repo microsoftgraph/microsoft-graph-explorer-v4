@@ -1,16 +1,19 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import PathsReview from '../../../app/views/sidebar/resource-explorer/panels/PathsReview';
 import { IntlProvider } from 'react-intl';
-import { geLocale } from '../../../appLocale';
-import messages from '../../../messages';
+
+import { ResourceExplorer } from '.';
+import { geLocale } from '../../../../appLocale';
+import messages from '../../../../messages';
 
 afterEach(cleanup);
-const renderPathsReview = () => {
+const renderResourceExplorer = () => {
   return render(
-    <IntlProvider locale={geLocale}
-      messages={(messages as { [key: string]: object })[geLocale]}>
-      <PathsReview isOpen={true} version={'v1.0'} toggleSelectedResourcesPreview={jest.fn()}/>
+    <IntlProvider
+      locale={geLocale}
+      messages={(messages as { [key: string]: object })[geLocale]}
+    >
+      <ResourceExplorer />
     </IntlProvider>
   )
 }
@@ -48,11 +51,30 @@ const paths = [
 ];
 
 jest.mock('react-redux', () => {
-  return{
-    useSelector: jest.fn(() =>{
-      return({
-        resources: paths
-      })
+  return {
+    useSelector: jest.fn(() => {
+      return {
+        resources: {
+          pending: false,
+          error: null,
+          paths,
+          data: {
+            segment: '/',
+            labels: [
+              { name: 'v1.0', methods: ['Get', 'Post'] },
+              { name: 'beta', methods: ['Get', 'Post'] }
+            ],
+            children: [
+              {
+                segment: 'accessReviewDecisions',
+                labels: [
+                  { name: 'v1.0', methods: ['Get', 'Post'] }
+                ]
+              }
+            ]
+          }
+        }
+      }
     }),
     useDispatch: jest.fn()
   }
@@ -61,9 +83,8 @@ jest.mock('react-redux', () => {
 // eslint-disable-next-line no-console
 console.warn = jest.fn()
 
-describe('Tests postman collections panel', () => {
-  it('Renders the path review section of resource explorer', () => {
-    const { getByText } = renderPathsReview();
-    getByText(/Download postman collection/);
-  } )
+describe('Tests Resource Explorer', () => {
+  it('Renders the resource explorer', () => {
+    const { getByTestId } = renderResourceExplorer();
+  })
 })

@@ -1,22 +1,14 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import { ResourceExplorer } from '../../../app/views/sidebar/resource-explorer';
-import { IntlProvider } from 'react-intl';
-import { geLocale } from '../../../appLocale';
-import messages from '../../../messages';
+
+import CommandOptions from './CommandOptions';
 
 afterEach(cleanup);
-const renderResourceExplorer = () => {
+const renderCommandOptions = () => {
   return render(
-    <IntlProvider
-      locale={geLocale}
-      messages={(messages as { [key: string]: object })[geLocale]}
-    >
-      <ResourceExplorer />
-    </IntlProvider>
+    <CommandOptions version={'v1.0'} />
   )
 }
-
 const paths = [
   {
     key: '5-{serviceHealth-id}-issues',
@@ -52,28 +44,9 @@ const paths = [
 jest.mock('react-redux', () => {
   return {
     useSelector: jest.fn(() => {
-      return {
-        resources: {
-          pending: false,
-          error: null,
-          paths,
-          data: {
-            segment: '/',
-            labels: [
-              { name: 'v1.0', methods: ['Get', 'Post'] },
-              {name: 'beta', methods: ['Get', 'Post']}
-            ],
-            children: [
-              {
-                segment: 'accessReviewDecisions',
-                labels: [
-                  { name: 'v1.0', methods: ['Get', 'Post'] }
-                ]
-              }
-            ]
-          }
-        }
-      }
+      return ({
+        resources: paths
+      })
     }),
     useDispatch: jest.fn()
   }
@@ -82,8 +55,8 @@ jest.mock('react-redux', () => {
 // eslint-disable-next-line no-console
 console.warn = jest.fn()
 
-describe('Tests Resource Explorer', () => {
-  it('Renders the resource explorer', () => {
-    const { getByTestId } = renderResourceExplorer();
+describe('Tests CommandOptions', () => {
+  it('Renders command options', () => {
+    const { getByText } = renderCommandOptions();
   })
 })

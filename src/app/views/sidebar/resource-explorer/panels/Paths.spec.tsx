@@ -1,7 +1,8 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import Paths from '../../../app/views/sidebar/resource-explorer/panels/Paths';
-import { IResourceLink, ResourceLinkType } from '../../../types/resources';
+
+import { IResourceLink, ResourceLinkType } from '../../../../../types/resources';
+import Paths from './Paths';
 
 afterEach(cleanup);
 const renderPaths = () => {
@@ -9,7 +10,7 @@ const renderPaths = () => {
     { key: 'url', name: 'Url', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true }
   ];
 
-  const paths : IResourceLink[] = [
+  const paths: IResourceLink[] = [
     {
       key: '5-{serviceHealth-id}-issues',
       url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues',
@@ -41,7 +42,7 @@ const renderPaths = () => {
     }
   ];
   return render(
-    <Paths resources={paths} columns={columns} selectItems={jest.fn()}/>
+    <Paths resources={paths} columns={columns} selectItems={jest.fn()} />
   )
 }
 

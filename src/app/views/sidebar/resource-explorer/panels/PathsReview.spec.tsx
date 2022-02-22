@@ -1,12 +1,21 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import CommandOptions from '../../../app/views/sidebar/resource-explorer/CommandOptions';
+import { IntlProvider } from 'react-intl';
+
+import { geLocale } from '../../../../../appLocale';
+import messages from '../../../../../messages';
+import PathsReview from './PathsReview';
+
 afterEach(cleanup);
-const renderCommandOptions = () => {
+const renderPathsReview = () => {
   return render(
-    <CommandOptions version={'v1.0'}/>
+    <IntlProvider locale={geLocale}
+      messages={(messages as { [key: string]: object })[geLocale]}>
+      <PathsReview isOpen={true} version={'v1.0'} toggleSelectedResourcesPreview={jest.fn()} />
+    </IntlProvider>
   )
 }
+
 const paths = [
   {
     key: '5-{serviceHealth-id}-issues',
@@ -40,9 +49,9 @@ const paths = [
 ];
 
 jest.mock('react-redux', () => {
-  return{
-    useSelector: jest.fn(() =>{
-      return({
+  return {
+    useSelector: jest.fn(() => {
+      return ({
         resources: paths
       })
     }),
@@ -53,8 +62,9 @@ jest.mock('react-redux', () => {
 // eslint-disable-next-line no-console
 console.warn = jest.fn()
 
-describe('Tests CommandOptions', () => {
-  it('Renders command options', () => {
-    const { getByText } = renderCommandOptions();
+describe('Tests postman collections panel', () => {
+  it('Renders the path review section of resource explorer', () => {
+    const { getByText } = renderPathsReview();
+    getByText(/Download postman collection/);
   })
 })

@@ -1,8 +1,10 @@
 import { CommandBar, CommandBarButton, getTheme, IButtonProps, ICommandBarItemProps } from '@fluentui/react';
 import React, { useState } from 'react';
-import { translateMessage } from '../../../utils/translate-messages';
-import PathsReview from './panels/PathsReview';
-import { resourceExplorerStyles } from './resources.styles'
+
+import { translateMessage } from '../../../../utils/translate-messages';
+import PathsReview from '../panels/PathsReview';
+import { resourceExplorerStyles } from '../resources.styles';
+
 interface ICommandOptions {
   version: string;
 }
@@ -30,7 +32,7 @@ const CommandOptions = (props: ICommandOptions) => {
   }
 
   const CustomButton: React.FunctionComponent<IButtonProps> = (props_: any) => {
-    return <CommandBarButton {...props_} onClick={toggleSelectedResourcesPreview} styles={itemStyles}/>;
+    return <CommandBarButton {...props_} onClick={toggleSelectedResourcesPreview} styles={itemStyles} />;
   };
 
   return (
