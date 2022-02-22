@@ -80,7 +80,7 @@ describe('Sample Url Generation', () => {
 
 describe('hasWhiteSpaces should', () => {
   const invalidUrls = [
-    {url: ' https://graph.microsoft.com/v1.0/me', output: true},
+    {url: ' https://graph.microsoft.com/v1.0/me', output: false},
     {url: 'https: //graph.microsoft.com/v1.0/me', output: true},
     {url: 'https://%20graph.microsoft.com/v1.0/me', output: true},
     {url: 'https://graph.microsoft.com/ v1.0/me', output: true},
