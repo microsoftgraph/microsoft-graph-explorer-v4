@@ -1,12 +1,13 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import IntlQueryInput from '../../../app/views/query-runner/query-input/QueryInput';
-import { IQueryInputProps } from '../../../types/query-runner';
-import { Mode } from '../../../types/enums';
-import { messages_ } from '../../utils/get-messages';
 import { IntlProvider } from 'react-intl';
-import { geLocale } from '../../../appLocale';
-import messages from '../../../messages';
+
+import { geLocale } from '../../../../appLocale';
+import messages from '../../../../messages';
+import { messages_ } from '../../../../tests/utils/get-messages';
+import { Mode } from '../../../../types/enums';
+import { IQueryInputProps } from '../../../../types/query-runner';
+import IntlQueryInput from './QueryInput';
 
 afterEach(cleanup);
 const renderQueryInput = (args?: any): any => {
@@ -33,7 +34,7 @@ const renderQueryInput = (args?: any): any => {
     }
   }
 
-  const allProps = {...queryInputProps, ...args};
+  const allProps = { ...queryInputProps, ...args };
   return render(
     <IntlProvider
       locale={geLocale}
@@ -50,14 +51,14 @@ jest.mock('../../../app/views/query-runner/query-input/auto-complete/AutoComplet
 console.warn = jest.fn();
 
 jest.mock('react-redux', () => {
-  return{
+  return {
     useDispatch: jest.fn(),
     connect: jest.fn(
       // eslint-disable-next-line no-unused-vars
       <P extends object>(_props?: any) => (component: React.ComponentType<P>) => component
     ),
     useSelector: jest.fn(() => {
-      return({
+      return ({
         sampleQuery: {
           selectedVerb: 'GET',
           selectedVersion: 'v1.0',
