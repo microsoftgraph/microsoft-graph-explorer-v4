@@ -1,26 +1,27 @@
 import React from 'react';
-import { cleanup, render , screen} from '@testing-library/react';
-import {Permission} from '../../../app/views/query-runner/request/permissions/Permission';
-import { IPermissionProps, IPermissionState } from '../../../types/permissions';
+import { cleanup, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
-import { geLocale } from '../../../appLocale';
-import messages from '../../../messages';
-import { store } from '../../../../src/store';
+
+import { Permission } from '.';
+import { geLocale } from '../../../../../appLocale';
+import messages from '../../../../../messages';
+import { store } from '../../../../../store';
+import { IPermissionProps, IPermissionState } from '../../../../../types/permissions';
 
 afterEach(cleanup);
 
-interface IExtendedPermissions extends IPermissionProps{
+interface IExtendedPermissions extends IPermissionProps {
   intl: object;
 }
 const renderPermission = (args?: any) => {
-  const permissionProps : IExtendedPermissions = {
+  const permissionProps: IExtendedPermissions = {
     dimensions: {
-      request:{
+      request: {
         width: '60',
         height: '60'
       },
-      response:{
+      response: {
         width: '60',
         height: '60'
       }
@@ -65,7 +66,7 @@ const renderPermission = (args?: any) => {
     }
   }
 
-  const permissionState : IPermissionState = {
+  const permissionState: IPermissionState = {
     permissions: [
       {
         value: 'profile.read',
@@ -91,7 +92,7 @@ const renderPermission = (args?: any) => {
         locale={geLocale}
         messages={(messages as { [key: string]: object })[geLocale]}
       >
-        <Permission {...allProps}/>
+        <Permission {...allProps} />
       </IntlProvider>
     </Provider>
   )
@@ -108,7 +109,7 @@ console.warn = jest.fn()
 
 describe('Tests Permission', () => {
   it('Renders permissions panel without crashing', () => {
-    renderPermission({panel: true, permissionsPanelOpen: true});
+    renderPermission({ panel: true, permissionsPanelOpen: true });
     screen.getByText(/To try out different Microsoft Graph API endpoints/)
   })
 

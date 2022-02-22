@@ -1,13 +1,14 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import TabList from '../../../app/views/query-runner/request/permissions/TabList';
 import { IntlProvider } from 'react-intl';
-import { geLocale } from '../../../appLocale';
-import messages from '../../../messages';
+
+import { geLocale } from '../../../../../appLocale';
+import messages from '../../../../../messages';
+import TabList from './TabList';
 
 afterEach(cleanup);
 const renderTabList = () => {
-  const tabProps  = {
+  const tabProps = {
     columns: [
       {
         key: 'value',
@@ -23,8 +24,8 @@ const renderTabList = () => {
         isResizable: true,
         name: 'Admin consent required',
         fieldName: 'isAdmin',
-        minWidth:  200,
-        maxWidth:  300,
+        minWidth: 200,
+        maxWidth: 300,
         ariaLabel: 'Administrator permission',
         columnActionsMode: 0
       }
@@ -46,9 +47,9 @@ const renderTabList = () => {
 }
 
 jest.mock('react-redux', () => {
-  return{
+  return {
     useSelector: jest.fn(() => {
-      return({
+      return ({
         consentedScopes: ['profile.read', 'profile.write', 'mail.read', 'mail.write'],
         scopes: {
           pending: false,
