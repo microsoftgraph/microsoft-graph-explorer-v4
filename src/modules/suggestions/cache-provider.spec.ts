@@ -1,5 +1,5 @@
-import { getSuggestionsFromCache, storeSuggestionsInCache } from '../../../modules/suggestions/cache-provider';
-import { IParsedOpenApiResponse } from '../../../types/open-api';
+import { IParsedOpenApiResponse } from '../../types/open-api';
+import { storeSuggestionsInCache, getSuggestionsFromCache } from './cache-provider';
 
 describe('Tests cache provider utils for suggestions', () => {
   it('Returns options from local storage which is null because suggestions are expired', async () => {

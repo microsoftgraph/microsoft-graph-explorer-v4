@@ -1,4 +1,4 @@
-import { suggestions } from '../../../modules/suggestions/suggestions';
+import { suggestions } from '.';
 
 describe('Tests suggestions fetching ', () => {
   beforeEach(() => {
