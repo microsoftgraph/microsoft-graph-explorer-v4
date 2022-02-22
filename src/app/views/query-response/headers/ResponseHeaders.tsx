@@ -6,7 +6,7 @@ import { IRootState } from '../../../../types/root';
 
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
-import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
+import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { CopyButton } from '../../common/copy/CopyButton';
 
 const ResponseHeaders = () => {
