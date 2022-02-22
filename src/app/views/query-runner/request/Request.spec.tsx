@@ -1,17 +1,18 @@
-import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import { Request } from '../../../../app/views/query-runner/request/Request';
-import { Mode } from '../../../../types/enums';
-import { messages_ } from '../../../utils/get-messages'
-import { IRequestComponent } from '../../../../types/request';
+import React from 'react';
 import { IntlProvider } from 'react-intl';
+
+import { Request } from '../../../../app/views/query-runner/request/Request';
 import { geLocale } from '../../../../appLocale';
+import { messages_ } from '../../../../tests/utils/get-messages';
+import { Mode } from '../../../../types/enums';
+import { IRequestComponent } from '../../../../types/request';
 
 afterEach(cleanup);
 const renderRequest = (): any => {
   const messages = (messages_ as { [key: string]: object })[geLocale];
 
-  const requestProps : IRequestComponent = {
+  const requestProps: IRequestComponent = {
     sampleQuery: {
       selectedVerb: 'GET',
       selectedVersion: 'v1',
@@ -80,9 +81,9 @@ jest.mock('@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptio
 }))
 
 jest.mock('react-redux', () => {
-  return{
+  return {
     useSelector: jest.fn(() => {
-      return({
+      return ({
         dimensions: {
           request: {
             width: '60',

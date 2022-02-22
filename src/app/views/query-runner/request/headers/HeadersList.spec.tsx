@@ -1,11 +1,11 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import HeadersList from '../../../../app/views/query-runner/request/headers/HeadersList';
-import { Header } from '../../../../types/query-runner';
+import { Header } from '../../../../../types/query-runner';
+import HeadersList from './HeadersList';
 
 afterEach(cleanup);
 const renderHeadersList = () => {
-  const headers : Header[] = [
+  const headers: Header[] = [
     {
       name: 'Content-Type',
       value: 'application/json'
@@ -16,7 +16,7 @@ const renderHeadersList = () => {
     }
   ]
   return render(
-    <HeadersList handleOnHeaderDelete={jest.fn()} headers = {headers} messages={''}/>
+    <HeadersList handleOnHeaderDelete={jest.fn()} headers={headers} messages={''} />
   )
 }
 

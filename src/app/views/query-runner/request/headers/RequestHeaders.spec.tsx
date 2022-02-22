@@ -1,9 +1,10 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import RequestHeaders from '../../../../app/views/query-runner/request/headers/RequestHeaders';
 import { IntlProvider } from 'react-intl';
-import { geLocale } from '../../../../appLocale';
-import messages from '../../../../messages';
+
+import { RequestHeaders } from '.';
+import { geLocale } from '../../../../../appLocale';
+import messages from '../../../../../messages';
 
 afterEach(cleanup);
 const renderRequestHeaders = () => {
@@ -18,9 +19,9 @@ const renderRequestHeaders = () => {
 }
 
 jest.mock('react-redux', () => {
-  return{
+  return {
     useSelector: jest.fn(() => {
-      return{
+      return {
         sampleQuery: {
           selectedVerb: 'GET',
           selectedVersion: 'v1',
