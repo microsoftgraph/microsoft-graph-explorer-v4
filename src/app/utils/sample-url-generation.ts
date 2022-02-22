@@ -82,33 +82,6 @@ export function removeExtraSlashesFromUrl(url: string): string {
 
 export function hasWhiteSpace(url: string): boolean {
   const parts = url.split('?');
-  const whitespaceChars = [' ', '\t', '\n', '%20', '\r'];
-  const allParts = url.split(/(%20|\s)/);
-  return whiteSpaceExists(parts, allParts, whitespaceChars);
-}
-
-export function whiteSpaceExists(parts: string[], allParts: string[], whitespaceChars: string[]): boolean {
-  const urlHasArgs = parts.length > 1;
-  if (urlHasArgs) {
-    const hasWhiteSpaceBeforeArgs = whitespaceChars.some((char) => parts[0].trimStart().includes(char));
-    const hasWhiteSpaceAfterArgs = whitespaceChars.some((char) => allParts[allParts.length - 1] === (char));
-
-    if (hasWhiteSpaceBeforeArgs) { return true }
-    if (!hasWhiteSpaceBeforeArgs && hasWhiteSpaceAfterArgs) { return false }
-  }
-  else {
-    const urlWithoutArgs = parts[0].split(/(%20|\s)/);
-
-    const hasWhitespaceAtTheEnd = whitespaceChars.some((char) =>
-      urlWithoutArgs[urlWithoutArgs.length - 1] === (char));
-
-    const urlWithoutTrailingSpaces = urlWithoutArgs.join('').trim();
-
-    const hasWhiteSpaceInBetweenUrl = whitespaceChars.some((char) =>
-      urlWithoutTrailingSpaces.split(/(%20|\s)/).includes(char));
-
-    if (hasWhiteSpaceInBetweenUrl) { return true }
-    if (hasWhitespaceAtTheEnd && !hasWhiteSpaceInBetweenUrl) { return false }
-  }
-  return false;
+  const whitespaceChars = [' ', '\t', '\n', '%20'];
+  return whitespaceChars.some((char) => parts[0].includes(char));
 }
