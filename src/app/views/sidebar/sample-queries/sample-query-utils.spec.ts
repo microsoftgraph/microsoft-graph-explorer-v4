@@ -1,4 +1,4 @@
-import { isJsonString } from '../../app/views/sidebar/sample-queries/sample-query-utils';
+import { isJsonString } from './sample-query-utils';
 
 describe('Tests isJsonString', () => {
   it('Returns true for valid JSON strings', () => {

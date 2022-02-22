@@ -61,8 +61,7 @@ const Authentication = (props: any) => {
         SeverityLevel.Error,
         {
           ComponentName: componentNames.AUTHENTICATION_ACTION,
-          Message: `Authentication failed: ${errorCode ? removeUnderScore(errorCode) : ''
-            }`
+          Message: `Authentication failed: ${errorCode ? removeUnderScore(errorCode) : ''}`
         }
       );
     }

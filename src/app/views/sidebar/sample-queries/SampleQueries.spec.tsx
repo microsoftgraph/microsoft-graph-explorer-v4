@@ -1,18 +1,19 @@
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'
-import SampleQueries  from '../../app/views/sidebar/sample-queries/SampleQueries';
-import { ISampleQueriesProps } from '../../types/query-runner';
-import { messages_ } from '../utils/get-messages';
-import { geLocale } from '../../appLocale';
 import { IntlProvider } from 'react-intl';
+
+import { geLocale } from '../../../../appLocale';
+import { messages_ } from '../../../../tests/utils/get-messages';
+import { ISampleQueriesProps } from '../../../../types/query-runner';
+import SampleQueries from './SampleQueries';
 
 afterEach(cleanup);
 const renderSampleQueries = () => {
   const messages = (messages_ as { [key: string]: object })[geLocale];
   const sampleQueriesProps: ISampleQueriesProps = {
     tokenPresent: true,
-    profile:{},
+    profile: {},
     samples: {
       pending: false,
       queries: [
@@ -54,7 +55,7 @@ const renderSampleQueries = () => {
   )
 }
 jest.mock('react-redux', () => {
-  return{
+  return {
     connect: jest.fn(
       // eslint-disable-next-line no-unused-vars
       <P extends object>(_props?: any) => (component: React.ComponentType<P>) => component

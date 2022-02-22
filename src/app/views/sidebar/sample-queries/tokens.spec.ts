@@ -1,4 +1,4 @@
-import { getTokens } from '../../app/views/sidebar/sample-queries/tokens';
+import { getTokens } from './tokens';
 
 describe('Tests getTokens function', () => {
   it('should return an array of IToken objects', () => {
