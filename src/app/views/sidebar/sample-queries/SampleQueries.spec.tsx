@@ -43,7 +43,7 @@ const renderSampleQueries = () => {
     }
   }
 
-  jest.mock('../../app/views/query-runner/query-input/QueryInput.tsx')
+  jest.mock('../../query-runner/query-input/QueryInput.tsx')
 
   return render(
     <IntlProvider

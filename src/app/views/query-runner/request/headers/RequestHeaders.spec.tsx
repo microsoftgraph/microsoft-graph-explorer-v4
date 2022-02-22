@@ -45,7 +45,7 @@ jest.mock('react-redux', () => {
   }
 })
 
-jest.mock('../../../../app/views/common/dimensions/dimensions-adjustment.ts', () => {
+jest.mock('../../../common/dimensions/dimensions-adjustment.ts', () => {
   return {
     convertVhToPx: jest.fn(() => {
       return 60

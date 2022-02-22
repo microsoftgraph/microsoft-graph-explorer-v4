@@ -45,7 +45,7 @@ const renderQueryInput = (args?: any): any => {
   );
 }
 
-jest.mock('../../../app/views/query-runner/query-input/auto-complete/AutoComplete.tsx')
+jest.mock('../query-input/auto-complete/AutoComplete.tsx')
 
 // eslint-disable-next-line no-console
 console.warn = jest.fn();

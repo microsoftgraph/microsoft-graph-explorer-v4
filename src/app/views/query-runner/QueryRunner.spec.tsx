@@ -84,9 +84,9 @@ jest.mock('react-redux', () => {
 })
 
 // eslint-disable-next-line react/display-name
-jest.mock('../../../app/views/query-runner/query-input/QueryInput.tsx');
+jest.mock('../query-runner/query-input/QueryInput.tsx');
 
-jest.mock('../../../app/views/query-runner/request/Request.tsx');
+jest.mock('../query-runner/request/Request.tsx');
 
 // eslint-disable-next-line no-console
 console.warn = jest.fn()

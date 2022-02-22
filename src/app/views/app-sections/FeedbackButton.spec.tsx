@@ -25,7 +25,7 @@ jest.mock('react-redux', () => ({
 console.warn = jest.fn();
 
 // eslint-disable-next-line react/display-name
-jest.mock('../../app/views/query-runner/request/feedback/FeedbackForm.tsx', () => () => {
+jest.mock('../query-runner/request/feedback/FeedbackForm.tsx', () => () => {
   return <div>Feedback</div>
 })
 
