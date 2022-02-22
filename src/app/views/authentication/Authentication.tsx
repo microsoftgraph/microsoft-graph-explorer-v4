@@ -12,7 +12,7 @@ import { setQueryResponseStatus } from '../../services/actions/query-status-acti
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
-import { getSignInAuthErrorHint, signInAuthError } from './AuthenticationErrorsHints';
+import { getSignInAuthErrorHint, signInAuthError } from '../../../modules/authentication/authentication-error-hints';
 
 const Authentication = (props: any) => {
   const dispatch = useDispatch();
@@ -62,7 +62,7 @@ const Authentication = (props: any) => {
         {
           ComponentName: componentNames.AUTHENTICATION_ACTION,
           Message: `Authentication failed: ${errorCode ? removeUnderScore(errorCode) : ''
-          }`
+            }`
         }
       );
     }

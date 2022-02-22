@@ -11,7 +11,7 @@ import {
   DEFAULT_USER_SCOPES,
   HOME_ACCOUNT_KEY
 } from '../../app/services/graph-constants';
-import { signInAuthError } from '../../app/views/authentication/AuthenticationErrorsHints';
+import { signInAuthError } from './authentication-error-hints';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './IAuthenticationWrapper';

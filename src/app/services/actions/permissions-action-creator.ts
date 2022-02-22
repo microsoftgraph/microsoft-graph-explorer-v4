@@ -9,7 +9,7 @@ import { IRootState } from '../../../types/root';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
-import { getConsentAuthErrorHint } from '../../views/authentication/AuthenticationErrorsHints';
+import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
 import { ACCOUNT_TYPE, PERMS_SCOPE } from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,

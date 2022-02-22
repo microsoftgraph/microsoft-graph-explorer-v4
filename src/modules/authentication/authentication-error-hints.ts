@@ -1,4 +1,4 @@
-import { translateMessage } from '../../utils/translate-messages';
+import { translateMessage } from '../../app/utils/translate-messages';
 
 const authErrorList: string[] = ['user_cancelled', 'null_or_empty_id_token',
   'authorization_code_missing_from_server_response',
