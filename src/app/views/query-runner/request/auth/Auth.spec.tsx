@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, cleanup, render, screen } from '@testing-library/react';
-import { Auth } from '../../../app/views/query-runner/request/auth/Auth';
+import { Auth } from '.';
 
 afterEach(cleanup);
 const renderAuthSection = () => {
@@ -10,7 +10,7 @@ const renderAuthSection = () => {
 }
 
 jest.mock('react-redux', () => {
-  return{
+  return {
     useSelector: jest.fn(() => {
       return {
         authToken: 'JDJDJSKJDKS',
@@ -42,7 +42,7 @@ console.warn = jest.fn()
 // eslint-disable-next-line no-console
 console.error = jest.fn();
 
-jest.mock('../../../app/views/common/dimensions-adjustment.ts', () => {
+jest.mock('../../../common/dimensions-adjustment.ts', () => {
   return {
     convertVhToPx: jest.fn(() => {
       return 60
