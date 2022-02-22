@@ -88,7 +88,7 @@ describe('hasWhiteSpaces should', () => {
     {url:
       'https://graph.microsoft.com/v1.0/me/contacts?$filter=emailAddresses/any(a:a/address eq \'garth@contoso.com\')',
     output: false},
-    {url: 'https://graph.microsoft.com/v1.0/me     ', output: true}
+    {url: 'https://graph.microsoft.com/v1.0/me     ', output: false}
   ];
   invalidUrls.forEach(invalidUrl => {
     it(`validate whitespaces in the url: ${invalidUrl.url}`, () => {
