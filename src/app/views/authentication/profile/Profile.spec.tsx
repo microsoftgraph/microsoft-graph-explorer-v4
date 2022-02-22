@@ -1,7 +1,9 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import Profile from '../../app/views/authentication/profile/Profile';
-import { Mode } from '../../types/enums';
+
+import { Mode } from '../../../../types/enums';
+import Profile from './Profile';
+
 afterEach(cleanup);
 const renderProfile = () => {
   return render(<Profile />);
@@ -9,8 +11,8 @@ const renderProfile = () => {
 
 jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
-  useSelector: jest.fn( () => {
-    return(
+  useSelector: jest.fn(() => {
+    return (
       {
         sidebarProperties: {
           mobileScreen: false,

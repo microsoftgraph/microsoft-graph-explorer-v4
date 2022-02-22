@@ -1,6 +1,6 @@
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
-import statusMessages from '../../app/views/app-sections/StatusMessages';
+import statusMessages from './StatusMessages';
 
 afterEach(cleanup)
 const renderStatusMessage = () => {
@@ -37,7 +37,7 @@ jest.mock('react-redux', () => {
 // eslint-disable-next-line no-console
 console.warn = jest.fn()
 
-describe('Renders the status bar', () =>{
+describe('Renders the status bar', () => {
   it('Renders the status bar', () => {
     renderStatusMessage();
     expect(screen.getByRole('alert')).toBeDefined();

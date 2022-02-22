@@ -1,10 +1,11 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import { FeedbackButton } from '../../app/views/app-sections/FeedbackButton';
+
+import { FeedbackButton } from './FeedbackButton';
 
 afterEach(cleanup);
-const renderFeedbackButton  = () => {
-  return render (
+const renderFeedbackButton = () => {
+  return render(
     <FeedbackButton />
   )
 }

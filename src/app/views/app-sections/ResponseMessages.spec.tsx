@@ -1,6 +1,7 @@
 import React from 'react';
-import { cleanup, render} from '@testing-library/react';
-import { responseMessages } from '../../app/views/app-sections/ResponseMessages';
+import { cleanup, render } from '@testing-library/react';
+
+import { responseMessages } from './ResponseMessages';
 
 afterEach(cleanup);
 const renderResponseMessages = (): any => {

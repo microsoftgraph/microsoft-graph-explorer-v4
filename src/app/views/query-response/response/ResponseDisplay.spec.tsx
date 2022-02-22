@@ -1,12 +1,12 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import ResponseDisplay from '../../app/views/query-response/response/ResponseDisplay';
+import ResponseDisplay from './ResponseDisplay';
 
 afterEach(cleanup);
 const renderResponseDisplay = (properties: any): any => {
-  const {contentType, body, height} = properties;
+  const { contentType, body, height } = properties;
   return render(
-    <ResponseDisplay contentType={contentType} body={body} height={height}/>
+    <ResponseDisplay contentType={contentType} body={body} height={height} />
   )
 }
 
@@ -14,7 +14,7 @@ const renderResponseDisplay = (properties: any): any => {
 console.warn = jest.fn()
 
 describe('Tests Response display of different formats', () => {
-  it('Renders xml response type', ()=> {
+  it('Renders xml response type', () => {
     // Arrange
     const properties = {
       contentType: ['application/xml'],

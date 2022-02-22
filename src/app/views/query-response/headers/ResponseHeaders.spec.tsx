@@ -1,19 +1,19 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import ResponseHeaders from '../../app/views/query-response/headers/ResponseHeaders';
+import ResponseHeaders from './ResponseHeaders';
 
 afterEach(cleanup);
 const renderResponseHeaders = (): any => {
   return render(
-    <ResponseHeaders/>
+    <ResponseHeaders />
   )
 }
 
 jest.mock('react-redux', () => ({
-  useSelector: jest.fn( () => {
-    return({
+  useSelector: jest.fn(() => {
+    return ({
       dimensions: {
-        request:{
+        request: {
           height: 60,
           width: 60
         },
@@ -44,7 +44,7 @@ jest.mock('react-redux', () => ({
 // eslint-disable-next-line no-console
 console.warn = jest.fn()
 
-jest.mock('../../app/views/common/dimensions-adjustment.ts', () => {
+jest.mock('../../common/dimensions-adjustment.ts', () => {
   return {
     convertVhToPx: jest.fn(() => {
       return 60

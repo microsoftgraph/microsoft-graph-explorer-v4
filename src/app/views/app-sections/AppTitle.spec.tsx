@@ -1,6 +1,7 @@
-import { appTitleDisplayOnMobileScreen, appTitleDisplayOnFullScreen } from '../../app/views/app-sections/AppTitle';
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
+
+import { appTitleDisplayOnMobileScreen, appTitleDisplayOnFullScreen } from './AppTitle';
 
 afterEach(cleanup)
 const renderTitle = () => {
@@ -46,7 +47,7 @@ jest.mock('@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptio
 }))
 
 // eslint-disable-next-line react/display-name
-jest.mock('../../app/views/query-runner/request/feedback/FeedbackForm.tsx', () => () => {
+jest.mock('../query-runner/request/feedback/FeedbackForm.tsx', () => () => {
   return <div>Feedback</div>
 });
 
@@ -71,12 +72,12 @@ describe('It should render the app title section in mobile screen size', () => {
   });
 
   it('Renders app title section in full screen without crashing', () => {
-    const { getByText } = renderTitleOnFullScreen({minimised: false});
+    const { getByText } = renderTitleOnFullScreen({ minimised: false });
     getByText('Graph Explorer');
   });
 
   it('Renders app title section in minimised mode without crashing', () => {
-    renderTitleOnFullScreen({minimised: true});
+    renderTitleOnFullScreen({ minimised: true });
     expect(screen.getByRole('heading')).toBeDefined();
   })
 })

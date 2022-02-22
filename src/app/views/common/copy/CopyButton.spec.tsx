@@ -1,12 +1,13 @@
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event'
-import { CopyButton } from '../../app/views/common/copy/CopyButton';
+import userEvent from '@testing-library/user-event';
+
+import { CopyButton } from './CopyButton';
 
 afterEach(cleanup);
 const renderCopyButton = (args?: any): any => {
   const copyProps = {
-    handleOnClick:jest.fn(),
+    handleOnClick: jest.fn(),
     isIconButton: true
   }
 

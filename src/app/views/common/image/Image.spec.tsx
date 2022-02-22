@@ -1,6 +1,6 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import { Image } from '../../app/views/common/image/Image';
+import { Image } from './Image';
 
 afterEach(cleanup);
 const renderImage = () => {
