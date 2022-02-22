@@ -20,7 +20,7 @@ import {
   getParametersWithVerb
 } from './auto-complete.util';
 import SuffixRenderer from './suffix/SuffixRenderer';
-import SuggestionsList from './SuggestionsList';
+import SuggestionsList from './suggestion-list/SuggestionsList';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
@@ -399,14 +399,14 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     );
 
     function getErrorMessage(): string | JSX.Element | undefined {
-      if( !queryUrl){
+      if (!queryUrl) {
         return translateMessage('Missing url');
       }
-      if(hasWhiteSpace(queryUrl)){
+      if (hasWhiteSpace(queryUrl)) {
         return translateMessage('Invalid whitespace in URL');
       }
-      const {queryVersion} = parseSampleUrl(queryUrl)
-      if (!GRAPH_API_VERSIONS.includes(queryVersion)){
+      const { queryVersion } = parseSampleUrl(queryUrl)
+      if (!GRAPH_API_VERSIONS.includes(queryVersion)) {
         return translateMessage('Invalid version in URL');
       }
       return '';

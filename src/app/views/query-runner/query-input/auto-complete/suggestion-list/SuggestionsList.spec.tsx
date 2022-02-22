@@ -1,6 +1,6 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import SuggestionsList from '../../../app/views/query-runner/query-input/auto-complete/SuggestionsList';
+import SuggestionsList from './SuggestionsList';
 
 afterEach(cleanup);
 const renderSuggestionsList = (args?: any): any => {
@@ -9,7 +9,7 @@ const renderSuggestionsList = (args?: any): any => {
     activeSuggestion: 0,
     onClick: jest.fn()
   };
-  const props = {...args, ...defaultProps};
+  const props = { ...args, ...defaultProps };
   return render(<SuggestionsList {...props} />);
 }
 
