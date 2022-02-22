@@ -17,7 +17,6 @@ import { expandResponseArea } from '../../services/actions/response-expanded-act
 import { translateMessage } from '../../utils/translate-messages';
 import { copy } from '../common/copy';
 import { convertVhToPx } from '../common/dimensions-adjustment';
-import { createShareLink } from '../common/share';
 import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 import { IRootState } from '../../../types/root';
@@ -29,7 +28,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
 
   const [showShareQueryDialog, setShareQuaryDialogStatus] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [query, setQuery] = useState('');
+  const [query] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
   const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
 
