@@ -1,14 +1,15 @@
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
-import Settings from '../../app/views/settings/Settings';
-import { ISettingsProps } from '../../types/settings';
-import { messages_ } from '../utils/get-messages';
 import { IntlProvider } from 'react-intl';
-import { geLocale } from '../../appLocale';
-import userEvent from '@testing-library/user-event'
+import userEvent from '@testing-library/user-event';
+
+import { Settings } from '.';
+import { geLocale } from '../../../appLocale';
+import { messages_ } from '../../../tests/utils/get-messages';
+import { ISettingsProps } from '../../../types/settings';
 
 afterEach(cleanup);
-const renderSettings = (args? : any) => {
+const renderSettings = (args?: any) => {
   const messages = (messages_ as { [key: string]: object })['en-US'];
   const settingsProps: ISettingsProps = {
     actions: {
@@ -32,10 +33,10 @@ const renderSettings = (args? : any) => {
 }
 
 jest.mock('react-redux', () => {
-  return{
+  return {
     useDispatch: jest.fn(),
-    useSelector: jest.fn( () => {
-      return(
+    useSelector: jest.fn(() => {
+      return (
         {
           permissionsPanelOpen: false,
           authToken: {
@@ -52,7 +53,7 @@ jest.mock('react-redux', () => {
 // eslint-disable-next-line no-console
 console.warn = jest.fn()
 
-jest.mock('../../app/views/query-runner/request/permissions/Permission.tsx', () => {
+jest.mock('../query-runner/request/permissions/Permission.tsx', () => {
   return {
     __esModule: true,
     // eslint-disable-next-line react/display-name
