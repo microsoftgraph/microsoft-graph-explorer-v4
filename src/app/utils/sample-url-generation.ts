@@ -84,10 +84,10 @@ export function hasWhiteSpace(url: string): boolean {
   const parts = url.split('?');
   const whitespaceChars = [' ', '\t', '\n', '%20', '\r'];
   const allParts = url.split(/(%20|\s)/);
-  return getWhiteSpace(parts, allParts, whitespaceChars);
+  return whiteSpaceExists(parts, allParts, whitespaceChars);
 }
 
-export function getWhiteSpace(parts: string[], allParts: string[], whitespaceChars: string[]): boolean {
+export function whiteSpaceExists(parts: string[], allParts: string[], whitespaceChars: string[]): boolean {
   const urlHasArgs = parts.length > 1;
   if (urlHasArgs) {
     const hasWhiteSpaceBeforeArgs = whitespaceChars.some((char) => parts[0].trimStart().includes(char));

@@ -145,6 +145,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           const selected = filteredSuggestions[activeSuggestion];
           this.appendSuggestionToUrl(selected);
         } else {
+          event.preventDefault();
           this.props.contentChanged(queryUrl);
           this.props.runQuery();
         }
