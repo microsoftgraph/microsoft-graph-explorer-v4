@@ -1,10 +1,11 @@
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
-import {History} from '../../../app/views/sidebar/history/History';
-import { IHistoryProps } from '../../../types/history';
-import { geLocale } from '../../../appLocale';
-import {messages_} from '../../utils/get-messages';
 import { IntlProvider } from 'react-intl';
+
+import { geLocale } from '../../../../appLocale';
+import { messages_ } from '../../../../tests/utils/get-messages';
+import { IHistoryProps } from '../../../../types/history';
+import { History } from './History';
 
 interface IExtendedHistory extends IHistoryProps {
   intl: object;
@@ -28,14 +29,14 @@ const renderHistoryTab = (args?: any) => {
   }
   const _messages = (messages_ as { [key: string]: object })[geLocale];
 
-  const allProps = { ...args, ...historyProps};
+  const allProps = { ...args, ...historyProps };
 
   return render(
     <IntlProvider
       locale={geLocale}
       messages={(_messages as { [key: string]: object })[geLocale]}
     >
-      <History {...allProps}/>
+      <History {...allProps} />
     </IntlProvider>
   )
 }
