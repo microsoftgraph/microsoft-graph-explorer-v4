@@ -1,10 +1,11 @@
 import React from 'react';
 import { cleanup, render } from '@testing-library/react';
-import { HintList } from '../../../app/views/query-runner/query-input/auto-complete/suffix/HintList';
-import { IHint } from '../../../app/views/query-runner/query-input/auto-complete/suffix/suffix-util';
+
+import { HintList } from './HintList';
+import { IHint } from './suffix-util';
 
 afterEach(cleanup);
-const renderHintList = () : any => {
+const renderHintList = (): any => {
   const hints: IHint[] = [
     {
       link: {
@@ -15,7 +16,7 @@ const renderHintList = () : any => {
     }
   ]
   return render(
-    <HintList hints={hints}/>
+    <HintList hints={hints} />
   )
 }
 

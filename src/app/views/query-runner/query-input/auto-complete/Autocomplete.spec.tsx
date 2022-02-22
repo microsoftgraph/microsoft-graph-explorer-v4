@@ -1,8 +1,10 @@
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event'
-import AutoComplete from '../../../app/views/query-runner/query-input/auto-complete/AutoComplete';
-import { IAutoCompleteProps, IAutoCompleteState } from '../../../types/auto-complete';
+import userEvent from '@testing-library/user-event';
+
+import { AutoComplete } from '.';
+import { IAutoCompleteProps, IAutoCompleteState } from '../../../../../types/auto-complete';
+
 afterEach(cleanup);
 
 const renderAutoComplete = (args?: any): any => {
@@ -27,7 +29,7 @@ const renderAutoComplete = (args?: any): any => {
     }
   }
 
-  const autocompleteState :  IAutoCompleteState = {
+  const autocompleteState: IAutoCompleteState = {
     activeSuggestion: 0,
     filteredSuggestions: [],
     suggestions: ['sugggestion 1', 'sugggestion 2', 'sugggestion 3'],
@@ -38,21 +40,21 @@ const renderAutoComplete = (args?: any): any => {
     multiline: false
   }
 
-  const allProps = {...autoCompleteProps, ...autocompleteState , ...args};
+  const allProps = { ...autoCompleteProps, ...autocompleteState, ...args };
   return render(
     <AutoComplete {...allProps} />
   );
 }
 
 jest.mock('react-redux', () => {
-  return{
+  return {
     useDispatch: jest.fn(),
     connect: jest.fn(
       // eslint-disable-next-line no-unused-vars
       <P extends object>(_props?: any) => (component: React.ComponentType<P>) => component
     ),
     useSelector: jest.fn(() => {
-      return({
+      return ({
         autoComplete: {
           data: {
             url: 'https://graph.microsoft.com/v1.0/me',

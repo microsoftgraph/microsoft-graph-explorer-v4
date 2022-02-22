@@ -6,7 +6,9 @@ import { IntlProvider } from 'react-intl';
 import { geLocale } from '../../../appLocale';
 import messages from '../../../messages';
 import { Mode } from '../../../types/enums';
+
 afterEach(cleanup);
+
 const renderQueryRunner = (args?: any): any => {
   const queryRunnerProps: IQueryRunnerProps = {
     headers: [],
@@ -29,7 +31,7 @@ const renderQueryRunner = (args?: any): any => {
     url: 'https://graph.microsoft.com/v1.0/me'
   }
 
-  const allProps = {...queryRunnerState, ...queryRunnerProps, ...args};
+  const allProps = { ...queryRunnerState, ...queryRunnerProps, ...args };
   return render(
     <IntlProvider
       locale={geLocale}
@@ -41,14 +43,14 @@ const renderQueryRunner = (args?: any): any => {
 }
 
 jest.mock('react-redux', () => {
-  return{
+  return {
     useDispatch: jest.fn(),
     connect: jest.fn(
       // eslint-disable-next-line no-unused-vars
       <P extends object>(_props?: any) => (component: React.ComponentType<P>) => component
     ),
-    useSelector: jest.fn( () => {
-      return({
+    useSelector: jest.fn(() => {
+      return ({
         sampleQuery: {
           selectedVerb: 'GET',
           selectedVersion: 'v1',
