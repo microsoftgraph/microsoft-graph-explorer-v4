@@ -1,6 +1,6 @@
-import { isValidHttpsUrl } from '../../app/utils/external-link-validation';
-
+import { isValidHttpsUrl, validateExternalLink } from '../../app/utils/external-link-validation';
 describe('External link', () => {
+
   const links = [
     {
       url: 'data:,%20{%22sampleQueries%22:[{%22id%22:%22%22,%22category%22:%22TEST%20%22,%22method%22:%22' +
@@ -21,4 +21,18 @@ describe('External link', () => {
       expect(isValid).toEqual(link.result);
     });
   });
+
+  it('Tests validateExternal link which throws an error for a failed fetch operation', () => {
+    const url = 'https://someurl';
+    const componentName = 'TestComponent';
+    const sampleId = '2345';
+    const sampleQuery = {
+      selectedVerb: 'GET',
+      sampleUrl: '/v1.0/me',
+      selectedVersion: 'v1.0',
+      sampleBody: '',
+      sampleHeaders: []
+    }
+    return expect(validateExternalLink(url, componentName, sampleId, sampleQuery)).resolves.toBe(undefined);
+  })
 });

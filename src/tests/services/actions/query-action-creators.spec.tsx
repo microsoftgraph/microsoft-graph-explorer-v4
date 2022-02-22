@@ -67,7 +67,8 @@ describe('query actions', () => {
     return store.dispatch(runQuery(query))
       .then(() => {
         expect(store.getActions()[0]).toEqual(expectedActions[0]);
-      });
+      })
+      .catch((e : Error) => { throw e});
   });
 
   it('dispatches QUERY_GRAPH_STATUS for failed requests', () => {
@@ -125,6 +126,7 @@ describe('query actions', () => {
     return store.dispatch(runQuery(query))
       .then(() => {
         expect(store.getActions()[0]).toEqual(expectedActions[0]);
-      });
+      })
+      .catch((e : Error) => { throw e});
   });
 });
