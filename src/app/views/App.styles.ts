@@ -26,9 +26,7 @@ export const appStyles = (theme: ITheme) => {
       maxWidth: '96%'
     },
     separator: {
-      borderBottom: '1px solid ' + theme.palette.neutralLight,
-      position: 'relative',
-      marginLeft: '6px'
+      borderBottom: '1px solid ' + theme.palette.neutralLight
     },
     links: {
       color: `${theme.palette.blueMid} !important`
@@ -68,6 +66,15 @@ export const appStyles = (theme: ITheme) => {
       '&:hover': {
         borderRight: '3px solid silver'
       }
+    },
+    feedbackButtonFullScreenDisplay: {
+      position: 'relative',
+      top: '5px'
+    },
+    feedbackButtonMobileDisplay: {
+      position: 'absolute',
+      top: '-1px',
+      right: '15px'
     }
   };
 };

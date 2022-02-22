@@ -299,7 +299,7 @@ class App extends Component<IAppProps, IAppState> {
           <Authentication />
         </div>
         {minimised &&
-        <div className={minimised ? '' : 'col-2'} style={{position:'relative', left: '-24px'}}>
+        <div className={minimised ? '' : 'col-2'} style={{position:'relative', left: '-7px'}}>
           <FeedbackButton />
         </div>
         }

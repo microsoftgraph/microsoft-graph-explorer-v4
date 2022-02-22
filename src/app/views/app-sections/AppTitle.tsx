@@ -24,7 +24,7 @@ export function appTitleDisplayOnFullScreen(
         iconProps={{ iconName: 'GlobalNavButton' }}
         className={classes.sidebarToggle}
         ariaLabel={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
-        styles={{root: { position:'relative', top: '17px'}}}
+        styles={{root: { position:'relative', top: '3px'}}}
         onClick={() => toggleSidebar()} />
     </TooltipHost>
     <div className={classes.graphExplorerLabelContainer} role={'heading'} aria-level={1}>
@@ -35,7 +35,7 @@ export function appTitleDisplayOnFullScreen(
     </div>
     <div>
       {!minimised &&
-      <div style={{position: 'relative', top: '5px'}}>
+      <div className={classes.feedbackButtonFullScreenDisplay}>
         <FeedbackButton/>
       </div>
       }
@@ -60,7 +60,7 @@ export function appTitleDisplayOnMobileScreen(
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
         {displayGraphLabel(classes)}
       </div>
-      <div style={{position:'absolute', top: '-1px', right: '15px'}}>
+      <div className={classes.feedbackButtonMobileDisplay}>
         <FeedbackButton/>
       </div>
     </>

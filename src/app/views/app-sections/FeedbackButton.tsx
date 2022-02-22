@@ -26,8 +26,7 @@ export const FeedbackButton = () => {
     gapSpace: 0
   };
   const hostStyles = { root: {
-    display: 'inline-block',
-    padding: '15px'
+    display: 'inline-block'
   }
   };
 
@@ -49,7 +48,7 @@ export const FeedbackButton = () => {
           content={content_}
           calloutProps={calloutProps}
           styles={hostStyles}
-          directionalHint={DirectionalHint.leftBottomEdge}
+          directionalHint={DirectionalHint.leftCenter}
         >
           <IconButton onClick={toggleSurvey}
             iconProps={feedbackIcon}
