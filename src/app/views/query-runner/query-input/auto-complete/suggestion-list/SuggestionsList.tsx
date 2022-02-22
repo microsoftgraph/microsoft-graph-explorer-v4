@@ -5,7 +5,7 @@ import { ISuggestionsList } from '../../../../../../types/auto-complete';
 import { classNames } from '../../../../classnames';
 import { autoCompleteStyles } from '../auto-complete.styles';
 
-const SuggestionsList = (props: any) => {
+const styledSuggesions = (props: any) => {
   const { filteredSuggestions, activeSuggestion, onClick }: ISuggestionsList = props;
   const classes = classNames(props);
 
@@ -46,5 +46,5 @@ const SuggestionsList = (props: any) => {
 };
 
 // @ts-ignore
-const styledSuggesions = styled(SuggestionsList, autoCompleteStyles);
-export default styledSuggesions;
+const SuggestionsList = styled(styledSuggesions, autoCompleteStyles);
+export default SuggestionsList;
