@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, cleanup, render, screen } from '@testing-library/react';
-import { Auth } from '.';
+import { Auth } from './Auth';
 
 afterEach(cleanup);
 const renderAuthSection = () => {

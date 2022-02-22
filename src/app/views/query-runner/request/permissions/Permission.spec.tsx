@@ -3,7 +3,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 
-import { Permission } from '.';
+import { Permission } from './Permission';
 import { geLocale } from '../../../../../appLocale';
 import messages from '../../../../../messages';
 import { store } from '../../../../../store';
