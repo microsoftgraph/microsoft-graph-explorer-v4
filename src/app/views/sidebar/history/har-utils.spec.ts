@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/indent */
-import { createHarPayload, generateHar } from '../../../app/views/sidebar/history/har-utils';
-import { IHarPayload } from '../../../types/har';
-import { IHistoryItem } from '../../../types/history';
+
+import { IHarPayload } from '../../../../types/har';
+import { IHistoryItem } from '../../../../types/history';
+import { createHarPayload, generateHar } from './har-utils';
 
 describe('Tests history items util functions', () => {
     it('creates har payload', () => {

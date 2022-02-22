@@ -1,8 +1,5 @@
-import {
-  readHistoryData, removeHistoryData,
-  bulkRemoveHistoryData, writeHistoryData
-} from '../../../app/views/sidebar/history/history-utils';
-import { IHistoryItem } from '../../../types/history';
+import { IHistoryItem } from '../../../../types/history';
+import { writeHistoryData, readHistoryData, removeHistoryData, bulkRemoveHistoryData } from './history-utils';
 
 describe('Tests history utils', () => {
   it('Returns history data', async () => {
