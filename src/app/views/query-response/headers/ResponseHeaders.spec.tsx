@@ -44,7 +44,7 @@ jest.mock('react-redux', () => ({
 // eslint-disable-next-line no-console
 console.warn = jest.fn()
 
-jest.mock('../../common/dimensions-adjustment.ts', () => {
+jest.mock('../../common/dimensions/dimensions-adjustment.ts', () => {
   return {
     convertVhToPx: jest.fn(() => {
       return 60

@@ -1,4 +1,4 @@
-import { convertVhToPx, convertPxToVh, getResponseHeight } from '../../../app/views/common/dimensions-adjustment';
+import { convertVhToPx, convertPxToVh, getResponseHeight } from './dimensions-adjustment';
 
 describe('Tests dimension adjustments', () => {
   it('Converts vh to px', () => {

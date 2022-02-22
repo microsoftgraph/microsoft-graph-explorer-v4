@@ -7,7 +7,7 @@ import { getSnippet } from '../../../services/actions/snippet-action-creator';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 
-import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
+import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { IRootState } from '../../../../types/root';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { CopyButton } from '../../common/copy/CopyButton';
@@ -52,7 +52,7 @@ function Snippet(props: ISnippetProps) {
   const dispatch = useDispatch();
 
   const handleCopy = async () => {
-    trackedGenericCopy(snippet, CODE_SNIPPETS_COPY_BUTTON, sampleQuery,{ Language: language });
+    trackedGenericCopy(snippet, CODE_SNIPPETS_COPY_BUTTON, sampleQuery, { Language: language });
   }
 
   useEffect(() => {

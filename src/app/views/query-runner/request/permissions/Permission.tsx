@@ -21,7 +21,7 @@ import { IRootState } from '../../../../../types/root';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
-import { convertVhToPx } from '../../../common/dimensions-adjustment';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
 import TabList from './TabList';
