@@ -20,7 +20,7 @@ import {
   getParametersWithVerb
 } from './auto-complete.util';
 import SuffixRenderer from './suffix/SuffixRenderer';
-import SuggestionsList from './SuggestionsList';
+import SuggestionsList from './suggestion-list/SuggestionsList';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
@@ -145,6 +145,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           const selected = filteredSuggestions[activeSuggestion];
           this.appendSuggestionToUrl(selected);
         } else {
+          event.preventDefault();
           this.props.contentChanged(queryUrl);
           this.props.runQuery();
         }
@@ -250,13 +251,17 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private setSuggestions(suggestions: string[], compare?: string) {
-    const sortedSuggestions = suggestions.sort(dynamicSort(null, SortOrder.ASC));
+    const sortedSuggestions = this.sortSuggestions(suggestions);
     this.setState({
       filteredSuggestions: sortedSuggestions,
       suggestions: sortedSuggestions,
       showSuggestions: (suggestions.length > 0),
       compare: compare || ''
     });
+  }
+
+  private sortSuggestions(suggestions: string[]): string[]{
+    return suggestions.sort(dynamicSort(null, SortOrder.ASC));
   }
 
   public componentDidUpdate = (prevProps: IAutoCompleteProps) => {
@@ -398,14 +403,14 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     );
 
     function getErrorMessage(): string | JSX.Element | undefined {
-      if( !queryUrl){
+      if (!queryUrl) {
         return translateMessage('Missing url');
       }
-      if(hasWhiteSpace(queryUrl)){
+      if (hasWhiteSpace(queryUrl)) {
         return translateMessage('Invalid whitespace in URL');
       }
-      const {queryVersion} = parseSampleUrl(queryUrl)
-      if (!GRAPH_API_VERSIONS.includes(queryVersion)){
+      const { queryVersion } = parseSampleUrl(queryUrl)
+      if (!GRAPH_API_VERSIONS.includes(queryVersion)) {
         return translateMessage('Invalid version in URL');
       }
       return '';
