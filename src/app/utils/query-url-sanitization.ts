@@ -54,8 +54,15 @@ export function sanitizeGraphAPISandboxUrl(url: string): string {
  * @param url - query URL to be sanitized e.g. https://graph.microsoft.com/v1.0/users/{user-id}
  */
 export function sanitizeQueryUrl(url: string): string {
-  url = decodeURIComponent(url);
-  const { origin } = new URL(url);
+  let origin_;
+  try {
+    url = decodeURIComponent(url);
+    const { origin } = new URL(url);
+    origin_ = origin;
+  }
+  catch (e) {
+    return ''
+  }
 
   const { search, queryVersion, requestUrl } = parseSampleUrl(url);
   const queryString: string = search
@@ -82,8 +89,7 @@ export function sanitizeQueryUrl(url: string): string {
       resourceUrl = resourceUrl.replace(segment, sanitizedSegment);
     });
   }
-
-  return `${origin}/${queryVersion}/${resourceUrl}${queryString}`;
+  return `${origin_}/${queryVersion}/${resourceUrl}${queryString}`;
 }
 
 /**
