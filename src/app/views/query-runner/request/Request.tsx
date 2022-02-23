@@ -17,7 +17,7 @@ import { IRequestComponent } from '../../../../types/request';
 import { IRootState } from '../../../../types/root';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
-import { convertPxToVh, convertVhToPx } from '../../common/dimensions-adjustment';
+import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
 import FeedbackForm from './feedback/FeedbackForm';

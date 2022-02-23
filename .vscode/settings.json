@@ -19,4 +19,10 @@
     "typescript",
     "typescriptreact"
   ],
+  "explorer.experimental.fileNesting.enabled": true,
+  "explorer.experimental.fileNesting.patterns": {
+    "*.ts": "$(capture).js, $(capture).d.ts, $(capture).spec.ts",
+    "*.tsx": "$(capture).ts, $(capture).d.ts, $(capture).spec.tsx, $(capture).styles.ts",
+    "package.json": "package-lock.json, .npmrc"
+  }
 }
