@@ -43,7 +43,7 @@ const unstyledResourceExplorer = (props: any) => {
   ];
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');
-  const filteredPayload = getResourcesSupportedByVersion([...data.children], version, searchText);
+  const filteredPayload = getResourcesSupportedByVersion(data.children, version, searchText);
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
 
   const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload);
@@ -80,17 +80,11 @@ const unstyledResourceExplorer = (props: any) => {
     option: IChoiceGroupOption | undefined): void => {
     const selectedVersion = option!.key;
     setVersion(selectedVersion);
-    const dataSet = getResourcesSupportedByVersion([...data.children], selectedVersion, searchText);
-    setResourceItems(dataSet);
-    setItems(createResourcesList(dataSet, selectedVersion, searchText));
   }
 
   const changeSearchValue = (event: any, value?: string) => {
     const trimmedSearchText = value ? value.trim() : '';
     setSearchText(trimmedSearchText);
-    const dataSet = getResourcesSupportedByVersion([...data.children], version, trimmedSearchText);
-    setResourceItems(dataSet);
-    setItems(createResourcesList(dataSet, version, trimmedSearchText));
   }
 
   const debouncedSearch = useMemo(() => {

@@ -188,7 +188,8 @@ export function getResourcesSupportedByVersion(
   searchText?: string
 ): IResource[] {
   let versionedResources: IResource[] = [];
-  resources.forEach((resource: IResource) => {
+  const resourcesList = JSON.parse(JSON.stringify(resources)); // deep copy
+  resourcesList.forEach((resource: IResource) => {
     if (versionExists(resource, version)) {
       resource.children = getResourcesSupportedByVersion(
         resource.children || [],
@@ -197,10 +198,9 @@ export function getResourcesSupportedByVersion(
       versionedResources.push(resource);
     }
   });
-  if (searchText) {
-    versionedResources = searchResources(versionedResources, searchText);
-  }
-  return versionedResources;
+  return searchText
+    ? searchResources(versionedResources, searchText)
+    : versionedResources;
 }
 
 function searchResources(haystack: IResource[], needle: string): IResource[] {
