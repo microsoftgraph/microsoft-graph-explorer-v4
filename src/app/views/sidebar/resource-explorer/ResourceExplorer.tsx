@@ -3,9 +3,11 @@ import {
   IBreadcrumbItem, IChoiceGroupOption, INavLink, INavLinkGroup, Label, Nav, SearchBox, Spinner, SpinnerSize,
   Stack, styled
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import  debouce  from 'lodash.debounce';
+
 import { telemetry, eventTypes, componentNames } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 
@@ -83,13 +85,17 @@ const unstyledResourceExplorer = (props: any) => {
     setItems(createResourcesList(dataSet, selectedVersion, searchText));
   }
 
-  const changeSearchValue = async (event: any, value?: string) => {
+  const changeSearchValue = (event: any, value?: string) => {
     const trimmedSearchText = value ? value.trim() : '';
     setSearchText(trimmedSearchText);
     const dataSet = getResourcesSupportedByVersion([...data.children], version, trimmedSearchText);
     setResourceItems(dataSet);
     setItems(createResourcesList(dataSet, version, trimmedSearchText));
   }
+
+  const debouncedSearch = useMemo(() => {
+    return debouce(changeSearchValue, 300);
+  }, []);
 
   const navigateToBreadCrumb = (ev?: any, item?: IBreadcrumbItem): void => {
     const iterator = item!.key;
@@ -131,7 +137,7 @@ const unstyledResourceExplorer = (props: any) => {
     setItems(createResourcesList(filtered, version));
   }
 
-  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
+  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item? : INavLink) => {
     ev!.preventDefault();
     item!.isExpanded = !item!.isExpanded;
     setQuery(item!);
@@ -183,7 +189,7 @@ const unstyledResourceExplorer = (props: any) => {
       {!isolated && <>
         <SearchBox
           placeholder={translateMessage('Search resources')}
-          onChange={changeSearchValue}
+          onChange={debouncedSearch}
           disabled={!!isolated}
           styles={searchBoxStyles}
         />
