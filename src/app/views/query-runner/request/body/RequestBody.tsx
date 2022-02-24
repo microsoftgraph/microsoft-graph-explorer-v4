@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { IRootState } from '../../../../../types/root';
 import { Monaco } from '../../../common';
-import { convertVhToPx } from '../../../common/dimensions-adjustment';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
 const RequestBody = ({ handleOnEditorChange }: any) => {
   const { dimensions: { request: { height } }, sampleQuery } = useSelector((state: IRootState) => state);

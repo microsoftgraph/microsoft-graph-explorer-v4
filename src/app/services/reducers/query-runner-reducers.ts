@@ -20,7 +20,6 @@ export function graphResponse(
     case QUERY_GRAPH_SUCCESS:
       return action.response;
     case VIEW_HISTORY_ITEM_SUCCESS:
-      console.log('Here is the item', action.response);
       return action.response;
     case QUERY_GRAPH_RUNNING:
       return initialState;

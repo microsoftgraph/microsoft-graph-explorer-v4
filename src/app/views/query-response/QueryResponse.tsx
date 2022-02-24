@@ -16,7 +16,7 @@ import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { expandResponseArea } from '../../services/actions/response-expanded-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
 import { copy } from '../common/copy';
-import { convertVhToPx } from '../common/dimensions-adjustment';
+import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
 import { createShareLink } from '../common/share';
 import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';

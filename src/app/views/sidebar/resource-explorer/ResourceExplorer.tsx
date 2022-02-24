@@ -18,7 +18,7 @@ import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import CommandOptions from './CommandOptions';
+import CommandOptions from './command-options/CommandOptions';
 import {
   createResourcesList, getCurrentTree,
   getResourcePaths,
@@ -131,7 +131,7 @@ const unstyledResourceExplorer = (props: any) => {
     setItems(createResourcesList(filtered, version));
   }
 
-  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item? : INavLink) => {
+  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
     ev!.preventDefault();
     item!.isExpanded = !item!.isExpanded;
     setQuery(item!);
