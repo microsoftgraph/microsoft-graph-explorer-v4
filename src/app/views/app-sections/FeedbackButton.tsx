@@ -14,7 +14,7 @@ export const FeedbackButton = () => {
     iconName : 'Feedback'
   }
   const feedbackTitle = translateMessage('Feedback');
-  const content_ = <div style={{padding:'3px'}}>{translateMessage('Feedback')}</div>
+  const content = <div style={{padding:'3px'}}>{translateMessage('Feedback')}</div>
 
   const feedbackIconStyles = {
     root:{
@@ -31,12 +31,10 @@ export const FeedbackButton = () => {
   };
 
   const toggleSurvey = () => {
-    console.log('Toggling state normally')
     setEnableSurvey(prevState => !prevState);
   }
 
   const disableSurvey = () => {
-    console.log('Found an error. Setting to false');
     setEnableSurvey(false);
   }
 
@@ -45,7 +43,7 @@ export const FeedbackButton = () => {
       {profile?.profileType !== ACCOUNT_TYPE.AAD &&
       <div>
         <TooltipHost
-          content={content_}
+          content={content}
           calloutProps={calloutProps}
           styles={hostStyles}
           directionalHint={DirectionalHint.leftCenter}
@@ -59,7 +57,9 @@ export const FeedbackButton = () => {
             disabled={enableSurvey}
           />
         </TooltipHost>
-        <FeedbackForm dismissSurvey={toggleSurvey} activated={enableSurvey} disableSurvey={disableSurvey} />
+
+        <FeedbackForm onDismissSurvey={toggleSurvey}
+          activated={enableSurvey} onDisableSurvey={disableSurvey} />
       </div>
       }
     </div>

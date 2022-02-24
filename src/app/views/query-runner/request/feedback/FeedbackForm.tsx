@@ -15,7 +15,7 @@ import { getVersion } from '../../../../utils/version';
 import CampaignDefinitions from './campaignDefinitions';
 import { uiStringMap } from './uiStrings';
 
-export default function FeedbackForm({ activated, dismissSurvey, disableSurvey }: any) {
+export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurvey }: any) {
   const dispatch = useDispatch();
   const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
   const currentTheme = getTheme();
@@ -35,8 +35,7 @@ export default function FeedbackForm({ activated, dismissSurvey, disableSurvey }
 
   useEffect(() => {
     initializeFeedback();
-  }, [])
-
+  }, []);
 
   const showCustomSurvey = () => {
     const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
@@ -58,12 +57,13 @@ export default function FeedbackForm({ activated, dismissSurvey, disableSurvey }
       surveyType: 2,
       title: translateMessage('title')
     }
-
-    officeBrowserFeedback.floodgate.showCustomSurvey(customSurvey).catch(
-      (error: any) => {
-        disableSurvey();
-        throw error; }
-    );
+    if(officeBrowserFeedback){
+      officeBrowserFeedback.floodgate.showCustomSurvey(customSurvey).catch(
+        (error: any) => {
+          onDisableSurvey();
+          throw error; }
+      );
+    }
   }
 
   if (activated) {
@@ -112,7 +112,7 @@ export default function FeedbackForm({ activated, dismissSurvey, disableSurvey }
           }));
 
         }
-        dismissSurvey();
+        onDismissSurvey();
       },
       uIStringGetter: (str: string): any => { return uiStringMap[str]; }
     };

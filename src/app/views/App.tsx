@@ -299,7 +299,7 @@ class App extends Component<IAppProps, IAppState> {
           <Authentication />
         </div>
         {minimised &&
-        <div className={minimised ? '' : 'col-2'} style={{position:'relative', left: '-7px'}}>
+        <div className={minimised ? '' : 'col-2'} style={{position:'relative', left: '-9px'}}>
           <FeedbackButton />
         </div>
         }
@@ -393,7 +393,7 @@ class App extends Component<IAppProps, IAppState> {
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <Resizable
-                onResize={(e: any, direction: any, ref: any, d: any) => {
+                onResize={(e: any, direction: any, ref: any) => {
                   if (ref?.style?.width) {
                     this.resizeSideBar(ref.style.width);
                   }
