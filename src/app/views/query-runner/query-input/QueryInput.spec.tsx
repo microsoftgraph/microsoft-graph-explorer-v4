@@ -93,6 +93,10 @@ jest.mock('react-redux', () => {
           ok: true,
           status: 200,
           statusText:''
+        },
+        sidebarProperties: {
+          showSidebar: false,
+          mobileScreen: false
         }
       })
     })

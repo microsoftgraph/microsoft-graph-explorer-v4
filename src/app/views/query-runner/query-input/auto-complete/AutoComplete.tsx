@@ -389,6 +389,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
             onKeyDown={this.onKeyDown}
             value={queryUrl}
             componentRef={this.autoCompleteRef}
+            onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
             ariaLabel={translateMessage('Query Sample Input')}
             role='textbox'
             errorMessage={getErrorMessage()}
