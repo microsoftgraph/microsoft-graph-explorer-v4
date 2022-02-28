@@ -7,18 +7,14 @@ import { IRootState } from '../../../types/root';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 
 export const FeedbackButton = () => {
-  const [enableSurvey, setEnableShowSurvey] = useState(false);
+  const [enableSurvey, setEnableSurvey] = useState(false);
   const { profile } = useSelector( (state: IRootState) => state );
-
-  const toggleFeedback = () => {
-    setEnableShowSurvey(prevState => !prevState);
-  }
 
   const feedbackIcon : IIconProps = {
     iconName : 'Feedback'
   }
   const feedbackTitle = translateMessage('Feedback');
-  const content_ = <div style={{padding:'3px'}}>{translateMessage('Feedback')}</div>
+  const content = <div style={{padding:'3px'}}>{translateMessage('Feedback')}</div>
 
   const feedbackIconStyles = {
     root:{
@@ -30,22 +26,29 @@ export const FeedbackButton = () => {
     gapSpace: 0
   };
   const hostStyles = { root: {
-    display: 'inline-block',
-    padding: '15px'
+    display: 'inline-block'
   }
   };
+
+  const toggleSurvey = () => {
+    setEnableSurvey(prevState => !prevState);
+  }
+
+  const disableSurvey = () => {
+    setEnableSurvey(false);
+  }
 
   return (
     <div>
       {profile?.profileType !== ACCOUNT_TYPE.AAD &&
       <div>
         <TooltipHost
-          content={content_}
+          content={content}
           calloutProps={calloutProps}
           styles={hostStyles}
-          directionalHint={DirectionalHint.leftBottomEdge}
+          directionalHint={DirectionalHint.leftCenter}
         >
-          <IconButton onClick={toggleFeedback}
+          <IconButton onClick={toggleSurvey}
             iconProps={feedbackIcon}
             ariaDescription={feedbackTitle}
             ariaLabel={feedbackTitle}
@@ -54,7 +57,9 @@ export const FeedbackButton = () => {
             disabled={enableSurvey}
           />
         </TooltipHost>
-        <FeedbackForm dismissSurvey={toggleFeedback} activated={enableSurvey} />
+
+        <FeedbackForm onDismissSurvey={toggleSurvey}
+          activated={enableSurvey} onDisableSurvey={disableSurvey} />
       </div>
       }
     </div>
