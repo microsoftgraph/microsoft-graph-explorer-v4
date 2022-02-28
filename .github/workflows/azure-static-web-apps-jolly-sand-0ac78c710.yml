@@ -26,6 +26,7 @@ jobs:
           REACT_APP_INSTRUMENTATION_KEY: ${{ secrets.REACT_APP_STAGING_INSTRUMENTATION_KEY }}
           REACT_APP_NOMINATION_PERIOD: ${{secrets.REACT_APP_NOMINATION_PERIOD}}
           REACT_APP_COOLDOWN_PERIOD: ${{secrets.REACT_APP_COOLDOWN_PERIOD}}
+          REACT_APP_USAGE_TIME: ${{secrets.REACT_APP_USAGE_TIME}}
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v0.0.1-preview
         with:
