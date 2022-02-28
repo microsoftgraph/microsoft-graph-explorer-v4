@@ -43,7 +43,8 @@ export async function anonymousRequest(
 }
 
 export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRunnerStatus: IStatus) {
-  const escapedUrl = encodeURIComponent(query.sampleUrl);
+  let escapedUrl = encodeURIComponent(query.sampleUrl);
+  escapedUrl = escapedUrl.replace(/%2B/g, '%252b');
   const graphUrl = `${proxyUrl}?url=${escapedUrl}`;
   const sampleHeaders: any = {};
 
