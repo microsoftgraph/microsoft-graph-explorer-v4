@@ -40,15 +40,12 @@ export function Monaco(props: IMonaco) {
               automaticLayout: true,
               minimap: { enabled: false },
               readOnly,
-              scrollbar: {
-                horizontalHasArrows: true,
-                horizontal: 'visible',
-                horizontalScrollbarSize: 17
-              },
               wordWrap: 'on',
               folding: true,
               foldingStrategy: 'indentation',
-              showFoldingControls: 'always'
+              showFoldingControls: 'always',
+              renderLineHighlight: 'none',
+              scrollBeyondLastLine: false
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
