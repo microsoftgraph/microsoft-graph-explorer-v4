@@ -267,6 +267,7 @@ class App extends Component<IAppProps, IAppState> {
   };
 
   public displayToggleButton = (mediaQueryList: any) => {
+    const { graphExplorerMode } = this.props;
     const mobileScreen = mediaQueryList.matches;
     let showSidebar = true;
     if (mobileScreen) {
@@ -280,6 +281,7 @@ class App extends Component<IAppProps, IAppState> {
     if (showSidebar) {
       this.changeDimensions('26%');
     }
+
     // @ts-ignore
     this.props.actions!.toggleSidebar(properties);
 
@@ -442,7 +444,7 @@ class App extends Component<IAppProps, IAppState> {
                   right: false
                 }}
                 size={{
-                  width: contentWidth,
+                  width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
                   height: '98vh'
                 }}
               >
