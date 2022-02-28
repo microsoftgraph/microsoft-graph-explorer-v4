@@ -35,6 +35,5 @@ describe('Tests the share button', () => {
     expect(getByText(/Share Query/)).toBeDefined();
     expect(getByText(/Copy/)).toBeDefined();
     expect(getByText(/developer.microsoft.com/)).toBeDefined();
-    screen.debug();
   })
 })
