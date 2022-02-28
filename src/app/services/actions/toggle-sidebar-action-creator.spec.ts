@@ -1,8 +1,8 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { toggleSidebar } from '../../../app/services/actions/toggle-sidebar-action-creator';
-import { TOGGLE_SIDEBAR_SUCCESS } from '../../../app/services/redux-constants';
+import { toggleSidebar } from './toggle-sidebar-action-creator';
+import { TOGGLE_SIDEBAR_SUCCESS } from '../redux-constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

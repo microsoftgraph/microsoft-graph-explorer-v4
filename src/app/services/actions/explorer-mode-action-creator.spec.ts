@@ -1,8 +1,8 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { setGraphExplorerMode } from '../../../app/services/actions/explorer-mode-action-creator';
-import { SET_GRAPH_EXPLORER_MODE_SUCCESS } from '../../../app/services/redux-constants';
+import { setGraphExplorerMode } from './explorer-mode-action-creator';
+import { SET_GRAPH_EXPLORER_MODE_SUCCESS } from '../redux-constants';
 import { Mode } from '../../../types/enums';
 
 const middlewares = [thunk];

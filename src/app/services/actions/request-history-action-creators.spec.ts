@@ -1,11 +1,15 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { addHistoryItem, viewHistoryItem, removeHistoryItem,
-  bulkRemoveHistoryItems } from '../../../app/services/actions/request-history-action-creators';
-import { ADD_HISTORY_ITEM_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS,
+import {
+  addHistoryItem, viewHistoryItem, removeHistoryItem,
+  bulkRemoveHistoryItems
+} from './request-history-action-creators';
+import {
+  ADD_HISTORY_ITEM_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS,
   REMOVE_HISTORY_ITEM_SUCCESS,
-  REMOVE_ALL_HISTORY_ITEMS_SUCCESS} from '../../../app/services/redux-constants';
+  REMOVE_ALL_HISTORY_ITEMS_SUCCESS
+} from '../redux-constants';
 import { IHistoryItem } from '../../../types/history';
 
 const middlewares = [thunk];
@@ -21,7 +25,7 @@ describe('Request History Action Creators', () => {
       }
     ];
 
-    const store = mockStore({ history: []});
+    const store = mockStore({ history: [] });
 
     // @ts-ignore
     store.dispatch(addHistoryItem(historyItem));

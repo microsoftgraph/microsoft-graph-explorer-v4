@@ -2,8 +2,8 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { runQuery } from '../../../app/services/actions/query-action-creators';
-import { QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS, QUERY_GRAPH_SUCCESS } from '../../../app/services/redux-constants';
+import { runQuery } from './query-action-creators';
+import { QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS, QUERY_GRAPH_SUCCESS } from '../redux-constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -68,7 +68,7 @@ describe('query actions', () => {
       .then(() => {
         expect(store.getActions()[0]).toEqual(expectedActions[0]);
       })
-      .catch((e : Error) => { throw e});
+      .catch((e: Error) => { throw e });
   });
 
   it('dispatches QUERY_GRAPH_STATUS for failed requests', () => {
@@ -127,6 +127,6 @@ describe('query actions', () => {
       .then(() => {
         expect(store.getActions()[0]).toEqual(expectedActions[0]);
       })
-      .catch((e : Error) => { throw e});
+      .catch((e: Error) => { throw e });
   });
 });

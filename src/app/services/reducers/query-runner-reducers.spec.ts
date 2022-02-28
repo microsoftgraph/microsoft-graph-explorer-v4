@@ -1,7 +1,9 @@
-import { graphResponse } from '../../../app/services/reducers/query-runner-reducers';
-import { queryRunnerStatus } from '../../../app/services/reducers/query-runner-status-reducers';
-import { CLEAR_QUERY_STATUS, QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS,
-  QUERY_GRAPH_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS } from '../../../app/services/redux-constants';
+import { graphResponse } from './query-runner-reducers';
+import { queryRunnerStatus } from './query-runner-status-reducers';
+import {
+  CLEAR_QUERY_STATUS, QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS,
+  QUERY_GRAPH_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS
+} from '../redux-constants';
 import { IGraphResponse } from '../../../types/query-response';
 
 describe('Query Runner Reducer', () => {
@@ -60,7 +62,7 @@ describe('Query Runner Reducer', () => {
       }
     };
 
-    const action  = { type: VIEW_HISTORY_ITEM_SUCCESS, response: mockResponse };
+    const action = { type: VIEW_HISTORY_ITEM_SUCCESS, response: mockResponse };
 
     const newState = queryRunnerStatus(initialState, action);
     expect(newState).toEqual(null);

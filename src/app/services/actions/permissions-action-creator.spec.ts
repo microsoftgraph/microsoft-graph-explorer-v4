@@ -3,18 +3,18 @@ import {
   FETCH_SCOPES_PENDING,
   FETCH_SCOPES_SUCCESS,
   QUERY_GRAPH_STATUS
-} from '../../../app/services/redux-constants';
+} from '../redux-constants';
 
 import {
   fetchScopesSuccess, fetchScopesPending, fetchScopesError, getPermissionsScopeType, fetchScopes,
   consentToScopes
 } from
-  '../../../app/services/actions/permissions-action-creator';
+  './permissions-action-creator';
 import { IPermissionsResponse } from '../../../types/permissions';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import fetch from 'jest-fetch-mock';
-import { store } from '../../../../src/store/index';
+import { store } from '../../../store/index';
 import { IRootState } from '../../../types/root';
 import { Mode } from '../../../types/enums';
 const middleware = [thunk];

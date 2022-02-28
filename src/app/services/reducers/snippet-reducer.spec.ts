@@ -1,5 +1,5 @@
-import { snippets } from '../../../app/services/reducers/snippet-reducer';
-import { GET_SNIPPET_ERROR, GET_SNIPPET_SUCCESS } from '../../../app/services/redux-constants';
+import { snippets } from './snippet-reducer';
+import { GET_SNIPPET_ERROR, GET_SNIPPET_SUCCESS } from '../redux-constants';
 
 describe('Graph Explorer Snippet Reducer', () => {
   it('should set csharp code snippet', () => {

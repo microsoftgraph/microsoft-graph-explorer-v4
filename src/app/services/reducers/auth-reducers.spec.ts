@@ -1,5 +1,5 @@
-import { authToken, consentedScopes } from '../../../app/services/reducers/auth-reducers';
-import { GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS } from '../../../app/services/redux-constants';
+import { authToken, consentedScopes } from './auth-reducers';
+import { GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS } from '../redux-constants';
 
 describe('Auth Reducer', () => {
   it('should return initial state', () => {

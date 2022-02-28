@@ -1,11 +1,14 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { getProfileInfo, profileRequestError, getProfileInformation,
-  profileRequestSuccess, getBetaProfile, getProfileType,
-  getProfileImage, getProfileResponse } from '../../../app/services/actions/profile-action-creators';
 import {
-  PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS} from '../../../app/services/redux-constants';
+  getProfileInfo, profileRequestError, getProfileInformation,
+  profileRequestSuccess, getBetaProfile, getProfileType,
+  getProfileImage, getProfileResponse
+} from './profile-action-creators';
+import {
+  PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS
+} from '../redux-constants';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
@@ -35,7 +38,7 @@ describe('actions', () => {
         const includesError = store.getActions().filter(k => k.type === PROFILE_REQUEST_ERROR)
         expect(!!includesError).toEqual(true);
       })
-      .catch( (e : Error) => { throw e})
+      .catch((e: Error) => { throw e })
   });
 
   it('dispatches PROFILE_REQUEST_ERROR if profile request fails', () => {

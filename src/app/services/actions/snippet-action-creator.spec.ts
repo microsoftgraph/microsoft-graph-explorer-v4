@@ -5,8 +5,8 @@ import {
   getSnippetSuccess, getSnippetError,
   getSnippetPending,
   getSnippet
-} from '../../../app/services/actions/snippet-action-creator';
-import { GET_SNIPPET_SUCCESS, GET_SNIPPET_ERROR, GET_SNIPPET_PENDING } from '../../../app/services/redux-constants';
+} from './snippet-action-creator';
+import { GET_SNIPPET_SUCCESS, GET_SNIPPET_ERROR, GET_SNIPPET_PENDING } from '../redux-constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

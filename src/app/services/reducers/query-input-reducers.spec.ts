@@ -1,5 +1,5 @@
-import { sampleQuery } from '../../../app/services/reducers/query-input-reducers';
-import { SET_SAMPLE_QUERY_SUCCESS } from '../../../app/services/redux-constants';
+import { sampleQuery } from './query-input-reducers';
+import { SET_SAMPLE_QUERY_SUCCESS } from '../redux-constants';
 
 describe('Query INput Reducer', () => {
   it('should return initial state', () => {

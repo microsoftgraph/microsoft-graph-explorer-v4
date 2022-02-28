@@ -1,6 +1,8 @@
-import { history } from '../../../app/services/reducers/request-history-reducers';
-import { ADD_HISTORY_ITEM_SUCCESS, REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
-  REMOVE_HISTORY_ITEM_SUCCESS } from '../../../app/services/redux-constants';
+import { history } from './request-history-reducers';
+import {
+  ADD_HISTORY_ITEM_SUCCESS, REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
+  REMOVE_HISTORY_ITEM_SUCCESS
+} from '../redux-constants';
 
 
 describe('Request History Reducer', () => {

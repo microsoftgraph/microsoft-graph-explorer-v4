@@ -1,8 +1,8 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { setSampleQuery } from '../../../app/services/actions/query-input-action-creators';
-import { SET_SAMPLE_QUERY_SUCCESS } from '../../../app/services/redux-constants';
+import { setSampleQuery } from './query-input-action-creators';
+import { SET_SAMPLE_QUERY_SUCCESS } from '../redux-constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);

@@ -1,8 +1,8 @@
-import { sidebarProperties } from '../../../app/services/reducers/toggle-sidebar-reducer';
+import { sidebarProperties } from './toggle-sidebar-reducer';
 import {
   SET_SAMPLE_QUERY_SUCCESS, TOGGLE_SIDEBAR_SUCCESS,
   VIEW_HISTORY_ITEM_SUCCESS
-} from '../../../app/services/redux-constants';
+} from '../redux-constants';
 
 
 describe('Toggle sidebar', () => {

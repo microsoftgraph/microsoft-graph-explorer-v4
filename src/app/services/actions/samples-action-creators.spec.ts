@@ -1,8 +1,10 @@
-import { fetchSamplesSuccess, fetchSamplesError,
-  fetchSamplesPending } from '../../../app/services/actions/samples-action-creators';
+import {
+  fetchSamplesSuccess, fetchSamplesError,
+  fetchSamplesPending
+} from './samples-action-creators';
 import {
   SAMPLES_FETCH_SUCCESS, SAMPLES_FETCH_PENDING, SAMPLES_FETCH_ERROR
-} from '../../../app/services/redux-constants';
+} from '../redux-constants';
 
 
 describe('actions', () => {

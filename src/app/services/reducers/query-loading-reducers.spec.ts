@@ -1,4 +1,4 @@
-import { isLoadingData } from '../../../app/services/reducers/query-loading-reducers';
+import { isLoadingData } from './query-loading-reducers';
 import {
   FETCH_SCOPES_ERROR,
   GET_CONSENT_ERROR,
@@ -7,7 +7,7 @@ import {
   QUERY_GRAPH_RUNNING,
   QUERY_GRAPH_STATUS,
   QUERY_GRAPH_SUCCESS
-} from '../../../app/services/redux-constants';
+} from '../redux-constants';
 
 describe('Query loading reducer', () => {
   it('should return false in case of get_consent error', () => {
