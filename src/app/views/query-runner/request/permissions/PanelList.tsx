@@ -35,7 +35,8 @@ const PanelList = ({ messages,
   renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) => {
 
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
-  const [permissions, setPermissions] = useState(scopes.data.sort(dynamicSort('value', SortOrder.ASC)));
+  const { panelPermissions } = scopes.data;
+  const [permissions, setPermissions] = useState(panelPermissions.sort(dynamicSort('value', SortOrder.ASC)));
   const permissionsList: any[] = [];
   const tokenPresent = !!authToken.token;
 
@@ -50,11 +51,11 @@ const PanelList = ({ messages,
   });
 
   const searchValueChanged = (event: any, value?: string): void => {
-    let filteredPermissions = scopes.data;
+    let filteredPermissions = scopes.data.panelPermissions;
     if (value) {
       const keyword = value.toLowerCase();
 
-      filteredPermissions = scopes.data.filter((permission: IPermission) => {
+      filteredPermissions = panelPermissions.filter((permission: IPermission) => {
         const name = permission.value.toLowerCase();
         return name.includes(keyword);
       });

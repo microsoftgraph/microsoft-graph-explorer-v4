@@ -1,12 +1,12 @@
 import {
   FETCH_SCOPES_ERROR,
   FETCH_SCOPES_PENDING,
-  FETCH_SCOPES_SUCCESS,
-  QUERY_GRAPH_STATUS
+  QUERY_GRAPH_STATUS,
+  FETCH_FULL_SCOPES_SUCCESS
 } from '../../../app/services/redux-constants';
 
 import {
-  fetchScopesSuccess, fetchScopesPending, fetchScopesError, getPermissionsScopeType, fetchScopes,
+  fetchFullScopesSuccess, fetchScopesPending, fetchScopesError, getPermissionsScopeType, fetchScopes,
   consentToScopes
 } from
   '../../../app/services/actions/permissions-action-creator';
@@ -59,7 +59,10 @@ const mockState: IRootState = {
   },
   scopes: {
     pending: false,
-    data: [],
+    data: {
+      panelPermissions: [],
+      tabPermissions: []
+    },
     hasUrl: false,
     error: null
   },
@@ -134,23 +137,19 @@ describe('tests permissions action creators', () => {
     // Arrange
     const response: IPermissionsResponse = {
       hasUrl: true,
-      scopes: [
-        {
-          value: '',
-          consentDescription: '',
-          isAdmin: false,
-          consented: true
-        }
-      ]
+      scopes: {
+        panelPermissions: [],
+        tabPermissions: []
+      }
     }
 
     const expectedAction = {
-      type: FETCH_SCOPES_SUCCESS,
+      type: FETCH_FULL_SCOPES_SUCCESS,
       response
     }
 
     // Act
-    const action = fetchScopesSuccess(response);
+    const action = fetchFullScopesSuccess(response);
 
     // Assert
     expect(action).toEqual(expectedAction);

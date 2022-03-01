@@ -1,9 +1,15 @@
 import { scopes } from '../../../app/services/reducers/permissions-reducer';
-import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../../../app/services/redux-constants';
+import {
+  FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING,
+  FETCH_FULL_SCOPES_SUCCESS
+} from '../../../app/services/redux-constants';
 
 const initialState = {
   pending: false,
-  data: [],
+  data: {
+    panelPermissions: [],
+    tabPermissions: []
+  },
   hasUrl: false,
   error: null
 };
@@ -11,7 +17,7 @@ const initialState = {
 describe('Permissions reducer', () => {
   it('should handle FETCH_SCOPES_SUCCESS', () => {
     const action = {
-      type: FETCH_SCOPES_SUCCESS,
+      type: FETCH_FULL_SCOPES_SUCCESS,
       response: {
         hasUrl: false,
         scopes: ['profile.read', 'profile.write', 'email.read', 'email.write']

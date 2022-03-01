@@ -23,21 +23,30 @@ export interface IPermissionProps {
   actions?: {
     fetchScopes: Function;
     consentToScopes: Function;
-  };
+  }
 }
 
 export interface IPermissionState {
-  permissions: IPermission[];
+  permissions: {
+    tabPermissions: IPermission[];
+    panelPermissions: IPermission[];
+  };
 }
 
 export interface IPermissionsResponse {
   hasUrl: boolean;
-  scopes: IPermission[];
+  scopes: {
+    tabPermissions: IPermission[];
+    panelPermissions: IPermission[];
+  }
 }
 
 export interface IScopes {
   pending: boolean;
-  data: IPermission[];
+  data: {
+    tabPermissions: IPermission[];
+    panelPermissions: IPermission[];
+  };
   hasUrl: boolean;
   error: any | null;
 }

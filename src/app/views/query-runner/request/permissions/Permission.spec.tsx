@@ -67,20 +67,36 @@ const renderPermission = (args?: any) => {
   }
 
   const permissionState: IPermissionState = {
-    permissions: [
-      {
-        value: 'profile.read',
-        isAdmin: false,
-        consentDescription: 'Read your profile',
-        consented: true
-      },
-      {
-        value: 'profile.write',
-        isAdmin: false,
-        consentDescription: 'Write your profile',
-        consented: true
-      }
-    ]
+    permissions: {
+      tabPermissions: [
+        {
+          value: 'profile.read',
+          isAdmin: false,
+          consentDescription: 'Read your profile',
+          consented: true
+        },
+        {
+          value: 'profile.write',
+          isAdmin: false,
+          consentDescription: 'Write your profile',
+          consented: true
+        }
+      ],
+      panelPermissions: [
+        {
+          value: 'profile.read',
+          isAdmin: false,
+          consentDescription: 'Read your profile',
+          consented: true
+        },
+        {
+          value: 'profile.write',
+          isAdmin: false,
+          consentDescription: 'Write your profile',
+          consented: true
+        }
+      ]
+    }
   }
 
   const allProps = { ...permissionProps, ...permissionState };

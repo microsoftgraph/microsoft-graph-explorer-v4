@@ -14,7 +14,8 @@ import { ACCOUNT_TYPE, PERMS_SCOPE } from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
   FETCH_SCOPES_PENDING,
-  FETCH_SCOPES_SUCCESS
+  FETCH_FULL_SCOPES_SUCCESS,
+  FETCH_URL_SCOPES_SUCCESS
 } from '../redux-constants';
 import {
   getAuthTokenSuccess,
@@ -23,11 +24,18 @@ import {
 import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
 
-export function fetchScopesSuccess(response: object): IAction {
+export function fetchFullScopesSuccess(response: object): IAction {
   return {
-    type: FETCH_SCOPES_SUCCESS,
+    type: FETCH_FULL_SCOPES_SUCCESS,
     response
   };
+}
+
+export function fetchUrlScopesSuccess(response: Object): IAction {
+  return {
+    type: FETCH_URL_SCOPES_SUCCESS,
+    response
+  }
 }
 
 export function fetchScopesPending(): any {
@@ -47,7 +55,8 @@ export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
-      const { devxApi, permissionsPanelOpen, profile, sampleQuery: query }: IRootState = getState();
+      const { devxApi, permissionsPanelOpen, profile, sampleQuery: query,
+        scopes: previousPermissions }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
 
       const scopeType = getPermissionsScopeType(profile);
@@ -81,13 +90,17 @@ export function fetchScopes(): Function {
       const response = await fetch(permissionsUrl, options);
       if (response.ok) {
         const scopes = await response.json();
-        return dispatch(
-          fetchScopesSuccess({
-            hasUrl,
-            scopes
-          })
-        );
+
+        return permissionsPanelOpen ? dispatch(fetchFullScopesSuccess({
+          hasUrl: false,
+          scopes: { panelPermissions: scopes, tabPermissions: previousPermissions?.data?.tabPermissions }
+        })) :
+          dispatch(fetchUrlScopesSuccess({
+            hasUrl: true,
+            scopes: { tabPermissions: scopes, panelPermissions: previousPermissions?.data?.panelPermissions }
+          }));
       }
+
       throw response;
     } catch (error) {
       return dispatch(
