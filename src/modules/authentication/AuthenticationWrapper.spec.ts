@@ -1,5 +1,5 @@
-import { AuthenticationWrapper } from '../../../src/modules/authentication/AuthenticationWrapper';
 import { HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
+import { AuthenticationWrapper } from './AuthenticationWrapper';
 
 window.open = jest.fn();
 jest.spyOn(window.sessionStorage.__proto__, 'clear');
@@ -8,7 +8,7 @@ jest.spyOn(window.localStorage.__proto__, 'setItem');
 jest.spyOn(window.localStorage.__proto__, 'getItem');
 jest.spyOn(window.localStorage.__proto__, 'removeItem');
 
-jest.mock('../../modules/authentication/msal-app.ts', () => {
+jest.mock('./msal-app.ts', () => {
   const msalApplication = {
     account: null,
     getAccount: jest.fn(),

@@ -1,5 +1,5 @@
-import { getLoginType, getCurrentUri } from '../../../src/modules/authentication/authUtils';
 import { LoginType } from '../../types/enums';
+import { getLoginType, getCurrentUri } from './authUtils';
 
 describe('Tests auth utils', () => {
   it('Returns valid login type', () => {
