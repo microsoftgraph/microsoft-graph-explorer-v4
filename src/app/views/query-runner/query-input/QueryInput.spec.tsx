@@ -69,7 +69,35 @@ jest.mock('react-redux', () => {
           pending: false,
           token: true
         },
-        isLoadingData: false
+        isLoadingData: false,
+        autoComplete: {
+          data: {},
+          error: null,
+          pending: false
+        },
+        samples: {
+          pending: false,
+          error: null,
+          queries: [
+            {
+              category: 'Sample category',
+              requestUrl: '/me',
+              method: 'GET',
+              humanName: 'Sample name',
+              docLink: 'https://graph.microsoft.com/v1.0/me'
+            }
+          ]
+        },
+        queryRunnerStatus: {
+          messageType: 1,
+          ok: true,
+          status: 200,
+          statusText:''
+        },
+        sidebarProperties: {
+          showSidebar: false,
+          mobileScreen: false
+        }
       })
     })
   }
@@ -77,6 +105,8 @@ jest.mock('react-redux', () => {
 
 describe('Renders QueryInput component without crashing', () => {
   it('renders without crashing', () => {
-    renderQueryInput();
+    const { getByText } = renderQueryInput()
+    getByText(/Run query/);
+    expect(renderQueryInput()).toBeDefined();
   });
 })
