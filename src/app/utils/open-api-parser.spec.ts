@@ -1,7 +1,6 @@
-import { parseOpenApiResponse } from '../../app/utils/open-api-parser';
-import { parseSampleUrl } from '../../app/utils/sample-url-generation';
+import { parseOpenApiResponse } from './open-api-parser';
 import { getSample } from './open-api-sample';
-
+import { parseSampleUrl } from './sample-url-generation';
 
 describe('Open api spec parser should', () => {
 

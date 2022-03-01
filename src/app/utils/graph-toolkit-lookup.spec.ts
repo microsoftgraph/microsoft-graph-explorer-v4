@@ -1,4 +1,4 @@
-import { lookupToolkitUrl } from '../../app/utils/graph-toolkit-lookup';
+import { lookupToolkitUrl } from './graph-toolkit-lookup';
 
 describe('Tests lookToolkitUrl', () => {
   it('Returns valid toolkit url depending on sampleQuery passed', () => {

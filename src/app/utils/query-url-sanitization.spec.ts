@@ -1,26 +1,6 @@
 import {
-  isAllAlpha
-} from '../../app/utils/query-parameter-sanitization';
-import {
   isDeprecation, sanitizeQueryUrl
-} from '../../app/utils/query-url-sanitization';
-
-
-describe('isAllAlpha should ', () => {
-  const list = [
-    { key: 'aaa', isAllAlphabetic: true },
-    { key: 'aZa', isAllAlphabetic: true },
-    { key: '111', isAllAlphabetic: false },
-    { key: '1a1', isAllAlphabetic: false }
-  ];
-
-  list.forEach(element => {
-    it(`return ${element.isAllAlphabetic} for ${element.key}`, () => {
-      const key = isAllAlpha(element.key);
-      expect(key).toBe(element.isAllAlphabetic);
-    });
-  });
-});
+} from './query-url-sanitization';
 
 describe('isDepraction should ', () => {
   const list = [

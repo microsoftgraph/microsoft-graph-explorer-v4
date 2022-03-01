@@ -1,14 +1,11 @@
-import content from '../../app/utils/resources/resources.json';
+import { IResource } from '../../../../types/resources';
+import content from '../../../utils/resources/resources.json';
 import {
-  createResourcesList,
-  getAvailableMethods,
-  getCurrentTree,
-  getResourcePaths,
-  getResourcesSupportedByVersion,
-  getUrlFromLink,
-  removeCounter
-} from '../../app/views/sidebar/resource-explorer/resource-explorer.utils';
-import { IResource } from '../../types/resources';
+  getResourcesSupportedByVersion, createResourcesList,
+  getCurrentTree, getAvailableMethods, removeCounter,
+  getUrlFromLink, getResourcePaths
+} from './resource-explorer.utils';
+
 const resource = JSON.parse(JSON.stringify(content)) as IResource;
 
 describe('Resource payload should', () => {

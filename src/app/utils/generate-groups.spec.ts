@@ -1,4 +1,4 @@
-import { generateGroupsFromList } from '../../app/utils/generate-groups';
+import { generateGroupsFromList } from './generate-groups';
 
 function setUp() {
   return [{

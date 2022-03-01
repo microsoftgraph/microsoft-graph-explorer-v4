@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 
 import { ISuggestionsList } from '../../../../../../types/auto-complete';
 import { classNames } from '../../../../classnames';
-import { autoCompleteStyles } from '../auto-complete.styles';
+import { autoCompleteStyles } from '../AutoComplete.styles';
 
 const styledSuggesions = (props: any) => {
   const { filteredSuggestions, activeSuggestion, onClick }: ISuggestionsList = props;

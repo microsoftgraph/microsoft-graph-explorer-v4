@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { extractUrl, replaceLinks, convertArrayToObject, getMatchesAndParts, setStatusMessage } from '../../app/utils/status-message';
+import { extractUrl, replaceLinks, convertArrayToObject, getMatchesAndParts, setStatusMessage } from './status-message';
 
 describe('status message should', () => {
 

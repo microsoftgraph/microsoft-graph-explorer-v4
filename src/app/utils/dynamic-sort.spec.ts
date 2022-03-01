@@ -1,4 +1,4 @@
-import { dynamicSort } from '../../app/utils/dynamic-sort';
+import { dynamicSort } from './dynamic-sort';
 import { SortOrder } from '../../types/enums';
 
 describe('Dynamic Sort', () => {

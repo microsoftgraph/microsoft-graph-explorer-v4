@@ -1,6 +1,20 @@
-import {
-  sanitizeQueryParameter
-} from '../../app/utils/query-parameter-sanitization';
+import { isAllAlpha, sanitizeQueryParameter } from './query-parameter-sanitization';
+
+describe('isAllAlpha should ', () => {
+  const list = [
+    { key: 'aaa', isAllAlphabetic: true },
+    { key: 'aZa', isAllAlphabetic: true },
+    { key: '111', isAllAlphabetic: false },
+    { key: '1a1', isAllAlphabetic: false }
+  ];
+
+  list.forEach(element => {
+    it(`return ${element.isAllAlphabetic} for ${element.key}`, () => {
+      const key = isAllAlpha(element.key);
+      expect(key).toBe(element.isAllAlphabetic);
+    });
+  });
+});
 
 describe('Sanitize Query Parameters should', () => {
   const list = [

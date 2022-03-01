@@ -1,4 +1,5 @@
-import { isValidHttpsUrl, validateExternalLink } from '../../app/utils/external-link-validation';
+import { isValidHttpsUrl, validateExternalLink } from './external-link-validation';
+
 describe('External link', () => {
 
   const links = [

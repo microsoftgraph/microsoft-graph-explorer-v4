@@ -1,4 +1,4 @@
-import { stringToHash } from '../../app/utils/hash-string';
+import { stringToHash } from './hash-string';
 
 describe('String to hash should', () => {
 
