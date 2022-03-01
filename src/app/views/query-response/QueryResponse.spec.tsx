@@ -6,7 +6,7 @@ import { Mode } from '../../../types/enums';
 import { IntlProvider } from 'react-intl';
 import { geLocale } from '../../../appLocale';
 import messages from '../../../messages';
-import { messages_ } from '../../../tests/utils/get-messages';
+import { messages_ } from '../../utils/get-messages';
 
 afterEach(cleanup);
 const renderQueryResponse = () => {
