@@ -8,6 +8,9 @@ export const appStyles = (theme: ITheme) => {
       paddingTop: theme.spacing.s1,
       width: '100%'
     },
+    appRow: {
+      display: 'flex'
+    },
     tryItMessage: {
       marginBottom: theme.spacing.s1
     },
