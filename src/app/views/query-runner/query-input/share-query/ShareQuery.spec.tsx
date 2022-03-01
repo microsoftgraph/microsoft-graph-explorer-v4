@@ -1,8 +1,8 @@
 import React from 'react';
-import { ShareQuery } from './ShareQuery';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { ShareQuery } from './ShareQuery';
 
 afterEach(cleanup);
 const renderShareQuery = () => {
