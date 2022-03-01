@@ -34,10 +34,8 @@ const QueryInput = (props: IQueryInputProps) => {
   });
 
   const { sampleQuery, authToken,
-    isLoadingData: submitting, sidebarProperties } = useSelector((state: IRootState) => state);
+    isLoadingData: submitting } = useSelector((state: IRootState) => state);
   const authenticated = !!authToken.token;
-
-  const { mobileScreen } = sidebarProperties;
 
   const showError = !authenticated && sampleQuery.selectedVerb !== 'GET';
   const verbSelector: any = queryRunnerStyles().verbSelector;
@@ -104,28 +102,7 @@ const QueryInput = (props: IQueryInputProps) => {
             runQuery={runQuery}
           />
         </div>
-        {!mobileScreen &&
-        <>
-          <div className='col-lg-2'>
-            <SubmitButton
-              className='run-query-button'
-              text={translateMessage('Run Query')}
-              disabled={showError || !sampleQuery.sampleUrl}
-              role='button'
-              handleOnClick={() => runQuery()}
-              submitting={submitting}
-              allowDisabledFocus={true}
-            />
-          </div>
-          <div className='col-lg-1' style={{flexShrink: 2}}>
-            <ShareQuery/>
-          </div>
-        </>
-        }
-      </div>
-      {mobileScreen &&
-      <div style={{display: 'flex'}}>
-        <div style={{flexGrow: 5, flexBasis: '100%'}}>
+        <div className='col-lg-2 col-sm-10 col-xs-10'>
           <SubmitButton
             className='run-query-button'
             text={translateMessage('Run Query')}
@@ -136,11 +113,10 @@ const QueryInput = (props: IQueryInputProps) => {
             allowDisabledFocus={true}
           />
         </div>
-        <div style={{flexGrow: 1, flexShrink: 2}}>
+        <div className='col-lg-1 col-sm-2 col-xs-2'>
           <ShareQuery/>
         </div>
       </div>
-      }
     </>
   )
 }
