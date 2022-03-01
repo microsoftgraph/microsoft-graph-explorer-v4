@@ -391,7 +391,7 @@ class App extends Component<IAppProps, IAppState> {
                 : translateMessage('Sidebar maximized')
             }
           />
-          <div className={mobileScreen? 'ms-Grid-row': `ms-Grid-row ${classes.appRow}`}>
+          <div className={ `ms-Grid-row ${classes.appRow}`}>
             {graphExplorerMode === Mode.Complete && (
               <Resizable
                 onResize={(e: any, direction: any, ref: any) => {
@@ -442,9 +442,6 @@ class App extends Component<IAppProps, IAppState> {
               <Resizable
                 bounds={'window'}
                 className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${layout}`}
-                style={{
-                  marginLeft: 10
-                }}
                 enable={{
                   right: false
                 }}

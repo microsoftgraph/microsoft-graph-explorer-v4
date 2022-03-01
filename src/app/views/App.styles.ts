@@ -6,17 +6,24 @@ export const appStyles = (theme: ITheme) => {
       background: theme.semanticColors.bodyBackground,
       color: theme.semanticColors.bodyText,
       paddingTop: theme.spacing.s1,
-      width: '100%'
+      width: '100%',
+      paddingRight: '15px',
+      paddingLeft: '15px',
+      marginLeft: 'auto',
+      marginRight: 'auto'
     },
     appRow: {
-      display: 'flex'
+      display: 'flex',
+      flexWrap: 'wrap'
     },
     tryItMessage: {
       marginBottom: theme.spacing.s1
     },
     sidebar: {
       background: theme.palette.neutralLighter,
-      paddingLeft: 10
+      paddingLeft: 10,
+      paddingRight: 10,
+      marginRight: 10
     },
     sidebarMini: {
       background: theme.palette.neutralLighter,
