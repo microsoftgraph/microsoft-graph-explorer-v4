@@ -1,4 +1,4 @@
-import { downloadToLocal } from '../../app/views/common/download';
+import { downloadToLocal } from './download';
 
 window.URL.createObjectURL = jest.fn();
 

@@ -1,5 +1,5 @@
-import { formatJsonStringForAllBrowsers } from '../../../app/views/common/monaco/util/format-json';
-import { formatXml } from '../../../app/views/common/monaco/util/format-xml';
+import { formatJsonStringForAllBrowsers } from './format-json';
+import { formatXml } from './format-xml';
 
 describe('Tests json strings formatting in monaco editor ', () => {
   it('Tests json strings formatting in monaco editor', () => {
