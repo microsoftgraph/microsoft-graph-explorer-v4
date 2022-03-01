@@ -55,8 +55,7 @@ export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
     let hasUrl = false; // whether permissions are for a specific url
     try {
-      const { devxApi, permissionsPanelOpen, profile, sampleQuery: query,
-        scopes: previousPermissions }: IRootState = getState();
+      const { devxApi, permissionsPanelOpen, profile, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
 
       const scopeType = getPermissionsScopeType(profile);
@@ -93,11 +92,11 @@ export function fetchScopes(): Function {
 
         return permissionsPanelOpen ? dispatch(fetchFullScopesSuccess({
           hasUrl: false,
-          scopes: { panelPermissions: scopes, tabPermissions: previousPermissions?.data?.tabPermissions }
+          scopes: { panelPermissions: scopes }
         })) :
           dispatch(fetchUrlScopesSuccess({
             hasUrl: true,
-            scopes: { tabPermissions: scopes, panelPermissions: previousPermissions?.data?.panelPermissions }
+            scopes: { tabPermissions: scopes }
           }));
       }
 

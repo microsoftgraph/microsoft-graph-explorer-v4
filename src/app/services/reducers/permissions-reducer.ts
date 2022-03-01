@@ -21,10 +21,7 @@ export function scopes(state: IScopes = initialState, action: IAction): any {
       let response: IPermissionsResponse = { ...action.response as IPermissionsResponse };
       return {
         pending: false,
-        data: {
-          tabPermissions: state.data.tabPermissions,
-          panelPermissions: response.scopes.panelPermissions
-        },
+        data: { ...state.data, panelPermissions: response.scopes.panelPermissions },
         hasUrl: response.hasUrl,
         error: null
       };
@@ -32,10 +29,7 @@ export function scopes(state: IScopes = initialState, action: IAction): any {
       response = { ...action.response as IPermissionsResponse };
       return {
         pending: false,
-        data: {
-          panelPermissions: state.data.panelPermissions,
-          tabPermissions: response.scopes.tabPermissions
-        },
+        data: { ...state.data, tabPermissions: response.scopes.tabPermissions },
         hasUrl: response.hasUrl,
         error: null
       }
