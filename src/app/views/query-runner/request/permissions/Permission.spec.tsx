@@ -42,7 +42,6 @@ const renderPermission = (args?: any) => {
           consented: true
         }
       ],
-      hasUrl: true,
       error: null
     },
     panel: args?.panel || false,

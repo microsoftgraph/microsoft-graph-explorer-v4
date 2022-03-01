@@ -38,9 +38,7 @@ const telemetryMiddleware =
           componentNames.FETCH_PERMISSIONS_ACTION,
           state.sampleQuery,
           action.response.error,
-          {
-            HasRequestUrl: action.response.hasUrl
-          }
+          {}
         );
         break;
       }

@@ -63,7 +63,6 @@ const mockState: IRootState = {
       panelPermissions: [],
       tabPermissions: []
     },
-    hasUrl: false,
     error: null
   },
   history: [],
@@ -136,7 +135,6 @@ describe('tests permissions action creators', () => {
   it('Tests if FETCH_SCOPES_SUCCESS is dispatched when fetchScopesSuccess is called', () => {
     // Arrange
     const response: IPermissionsResponse = {
-      hasUrl: true,
       scopes: {
         panelPermissions: [],
         tabPermissions: []
@@ -158,7 +156,6 @@ describe('tests permissions action creators', () => {
   it('Tests if FETCH_SCOPES_ERROR is dispatched when fetchScopesError is called', () => {
     // Arrange
     const response = {
-      hasUrl: true,
       error: {}
     }
 

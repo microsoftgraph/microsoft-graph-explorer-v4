@@ -11,7 +11,6 @@ const initialState = {
     panelPermissions: [],
     tabPermissions: []
   },
-  hasUrl: false,
   error: null
 };
 
@@ -20,7 +19,6 @@ describe('Permissions reducer', () => {
     const action = {
       type: FETCH_FULL_SCOPES_SUCCESS,
       response: {
-        hasUrl: false,
         scopes: {
           tabPermissions: [],
           panelPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write']
@@ -34,7 +32,6 @@ describe('Permissions reducer', () => {
         panelPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write'],
         tabPermissions: []
       },
-      hasUrl: false,
       error: null
     }
 
@@ -46,7 +43,6 @@ describe('Permissions reducer', () => {
     const action = {
       type: FETCH_URL_SCOPES_SUCCESS,
       response: {
-        hasUrl: true,
         scopes: {
           tabPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write'],
           panelPermissions: []
@@ -60,7 +56,6 @@ describe('Permissions reducer', () => {
         panelPermissions: [],
         tabPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write']
       },
-      hasUrl: true,
       error: null
     }
 
@@ -76,7 +71,6 @@ describe('Permissions reducer', () => {
     const expectedState = {
       pending: false,
       data: {},
-      hasUrl: false,
       error: 'error'
     }
 
@@ -96,7 +90,6 @@ describe('Permissions reducer', () => {
         panelPermissions: [],
         tabPermissions: []
       },
-      hasUrl: false,
       error: null
     }
 

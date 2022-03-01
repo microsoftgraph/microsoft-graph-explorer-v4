@@ -11,7 +11,6 @@ const initialState: IScopes = {
     tabPermissions: [],
     panelPermissions: []
   },
-  hasUrl: false,
   error: null
 };
 
@@ -22,7 +21,6 @@ export function scopes(state: IScopes = initialState, action: IAction): any {
       return {
         pending: false,
         data: { ...state.data, panelPermissions: response.scopes.panelPermissions },
-        hasUrl: response.hasUrl,
         error: null
       };
     case FETCH_URL_SCOPES_SUCCESS:
@@ -30,22 +28,19 @@ export function scopes(state: IScopes = initialState, action: IAction): any {
       return {
         pending: false,
         data: { ...state.data, tabPermissions: response.scopes.tabPermissions },
-        hasUrl: response.hasUrl,
         error: null
       }
     case FETCH_SCOPES_ERROR:
       return {
         pending: false,
         error: action.response,
-        hasUrl: false,
         data: {}
       };
     case FETCH_SCOPES_PENDING:
       return {
         pending: true,
         data: state.data,
-        error: null,
-        hasUrl: false
+        error: null
       };
     default:
       return state;

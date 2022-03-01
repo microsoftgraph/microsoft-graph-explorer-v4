@@ -34,7 +34,6 @@ export interface IPermissionState {
 }
 
 export interface IPermissionsResponse {
-  hasUrl: boolean;
   scopes: {
     tabPermissions: IPermission[];
     panelPermissions: IPermission[];
@@ -47,6 +46,5 @@ export interface IScopes {
     tabPermissions: IPermission[];
     panelPermissions: IPermission[];
   };
-  hasUrl: boolean;
   error: any | null;
 }

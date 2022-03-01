@@ -55,7 +55,6 @@ const mockState: IRootState = {
       panelPermissions: [],
       tabPermissions: []
     },
-    hasUrl: false,
     error: null
   },
   history: [],

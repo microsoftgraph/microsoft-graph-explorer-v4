@@ -53,7 +53,6 @@ export function fetchScopesError(response: object): IAction {
 
 export function fetchScopes(): Function {
   return async (dispatch: Function, getState: Function) => {
-    let hasUrl = false; // whether permissions are for a specific url
     try {
       const { devxApi, permissionsPanelOpen, profile, sampleQuery: query }: IRootState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
@@ -70,7 +69,6 @@ export function fetchScopes(): Function {
 
         // eslint-disable-next-line max-len
         permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scopeType}`;
-        hasUrl = true;
       }
 
       if (devxApi.parameters) {
@@ -91,11 +89,9 @@ export function fetchScopes(): Function {
         const scopes = await response.json();
 
         return permissionsPanelOpen ? dispatch(fetchFullScopesSuccess({
-          hasUrl: false,
           scopes: { panelPermissions: scopes }
         })) :
           dispatch(fetchUrlScopesSuccess({
-            hasUrl: true,
             scopes: { tabPermissions: scopes }
           }));
       }
@@ -104,7 +100,6 @@ export function fetchScopes(): Function {
     } catch (error) {
       return dispatch(
         fetchScopesError({
-          hasUrl,
           error
         })
       );
