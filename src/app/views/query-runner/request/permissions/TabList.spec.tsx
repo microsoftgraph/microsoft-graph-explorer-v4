@@ -53,20 +53,36 @@ jest.mock('react-redux', () => {
         consentedScopes: ['profile.read', 'profile.write', 'mail.read', 'mail.write'],
         scopes: {
           pending: false,
-          data: [
-            {
-              value: 'profile.read',
-              isAdmin: false,
-              consentDescription: 'Read your profile',
-              consented: true
-            },
-            {
-              value: 'profile.write',
-              isAdmin: false,
-              consentDescription: 'Write your profile',
-              consented: true
-            }
-          ]
+          data: {
+            tabPermissions: [
+              {
+                value: 'profile.read',
+                isAdmin: false,
+                consentDescription: 'Read your profile',
+                consented: true
+              },
+              {
+                value: 'profile.write',
+                isAdmin: false,
+                consentDescription: 'Write your profile',
+                consented: true
+              }
+            ],
+            panelPermissions: [
+              {
+                value: 'profile.read',
+                isAdmin: false,
+                consentDescription: 'Read your profile',
+                consented: true
+              },
+              {
+                value: 'profile.write',
+                isAdmin: false,
+                consentDescription: 'Write your profile',
+                consented: true
+              }
+            ]
+          }
         },
         authToken: {
           pending: false,
@@ -84,6 +100,6 @@ console.warn = jest.fn()
 describe('Renders permissions tab', () => {
   it('Renders Modify Permissions Tab without crasing', () => {
     const { getByText } = renderTabList();
-    getByText(/Permissions for the query are missing on this tab/)
+    getByText(/One of the following permissions is required to run the query/)
   })
 })

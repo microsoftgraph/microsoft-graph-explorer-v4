@@ -1,7 +1,8 @@
 import { scopes } from '../../../app/services/reducers/permissions-reducer';
 import {
   FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING,
-  FETCH_FULL_SCOPES_SUCCESS
+  FETCH_FULL_SCOPES_SUCCESS,
+  FETCH_URL_SCOPES_SUCCESS
 } from '../../../app/services/redux-constants';
 
 const initialState = {
@@ -15,18 +16,24 @@ const initialState = {
 };
 
 describe('Permissions reducer', () => {
-  it('should handle FETCH_SCOPES_SUCCESS', () => {
+  it('should handle FETCH_FULL_SCOPES_SUCCESS', () => {
     const action = {
       type: FETCH_FULL_SCOPES_SUCCESS,
       response: {
         hasUrl: false,
-        scopes: ['profile.read', 'profile.write', 'email.read', 'email.write']
+        scopes: {
+          tabPermissions: [],
+          panelPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write']
+        }
       }
     }
 
     const expectedState = {
       pending: false,
-      data: ['profile.read', 'profile.write', 'email.read', 'email.write'],
+      data: {
+        panelPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write'],
+        tabPermissions: []
+      },
       hasUrl: false,
       error: null
     }
@@ -35,6 +42,32 @@ describe('Permissions reducer', () => {
     expect(newState).toEqual(expectedState);
   });
 
+  it('should handle FETCH_URL_SCOPES_SUCCESS', () => {
+    const action = {
+      type: FETCH_URL_SCOPES_SUCCESS,
+      response: {
+        hasUrl: true,
+        scopes: {
+          tabPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write'],
+          panelPermissions: []
+        }
+      }
+    }
+
+    const expectedState = {
+      pending: false,
+      data: {
+        panelPermissions: [],
+        tabPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write']
+      },
+      hasUrl: true,
+      error: null
+    }
+
+    const newState = scopes(initialState, action);
+    expect(newState).toEqual(expectedState);
+  })
+
   it('should handle FETCH_SCOPES_ERROR', () => {
     const action = {
       type: FETCH_SCOPES_ERROR,
@@ -42,7 +75,7 @@ describe('Permissions reducer', () => {
     }
     const expectedState = {
       pending: false,
-      data: [],
+      data: {},
       hasUrl: false,
       error: 'error'
     }
@@ -59,7 +92,10 @@ describe('Permissions reducer', () => {
 
     const expectedState = {
       pending: true,
-      data: [],
+      data: {
+        panelPermissions: [],
+        tabPermissions: []
+      },
       hasUrl: false,
       error: null
     }
