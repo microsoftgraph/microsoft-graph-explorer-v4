@@ -8,7 +8,7 @@ on:
 
 jobs:
   cut-release:
-    name: Creates release branch and PRs into dev/master
+    name: Creates release branch and PRs into master
     runs-on: ubuntu-latest
     steps:
       - name: Exit if release type argument is invalid
@@ -59,30 +59,14 @@ jobs:
 
           # Use --depth to get commits to add to rev-list
           git fetch origin master --depth 100
-          git fetch origin dev --depth 100
+          prBody=$(git rev-list --oneline $branchName ^origin/master)
 
-          masterPrBody=$(git rev-list --oneline $branchName ^origin/master)
-          devPrBody=$(git rev-list --oneline $branchName ^origin/dev)
-
-          echo 'masterPrBody<<END_OF_OUTPUT' >> $GITHUB_ENV
-          echo "$masterPrBody" >> $GITHUB_ENV
-          echo 'END_OF_OUTPUT' >> $GITHUB_ENV
-
-          echo 'devPrBody<<END_OF_OUTPUT' >> $GITHUB_ENV
-          echo "$devPrBody" >> $GITHUB_ENV
+          echo 'prBody<<END_OF_OUTPUT' >> $GITHUB_ENV
+          echo "$prBody" >> $GITHUB_ENV
           echo 'END_OF_OUTPUT' >> $GITHUB_ENV
 
           echo "NEW_VERSION=${newVersion}" >> $GITHUB_ENV
           echo "::set-output name=branchName::$branchName"
-
-      - name: Create pull request into dev
-        uses: repo-sync/pull-request@v2
-        with:
-          source_branch: ${{ steps.create-release.outputs.branchName }}
-          destination_branch: "dev"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_title: "Chore: Update to ${{ env.NEW_VERSION }}"
-          pr_body: ${{ env.devPrBody }}
 
       - name: Create pull request into master
         uses: repo-sync/pull-request@v2
@@ -91,4 +75,4 @@ jobs:
           destination_branch: "master"
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pr_title: "Chore (release): ${{ env.NEW_VERSION }}"
-          pr_body: ${{ env.masterPrBody }}
+          pr_body: ${{ env.prBody }}
