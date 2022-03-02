@@ -1,0 +1,94 @@
+name: Cut Release
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: Release type (major/minor/patch)
+        required: true
+
+jobs:
+  cut-release:
+    name: Creates release branch and PRs into dev/master
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exit if release type argument is invalid
+        run: exit 1
+        if: ${{ github.event.inputs.release-type != 'major' && github.event.inputs.release-type != 'minor' && github.event.inputs.release-type != 'patch' }}
+
+      - name: Checkout dev for ${{ github.event.inputs.release-type }} release
+        uses: actions/checkout@v2
+        if: ${{ github.event.inputs.release-type == 'major' || github.event.inputs.release-type == 'minor' }}
+        with:
+          ref: dev
+
+      - name: Checkout master for ${{ github.event.inputs.release-type }} release
+        uses: actions/checkout@v2
+        if: ${{ github.event.inputs.release-type == 'patch' }}
+        with:
+          ref: master
+
+      - uses: actions/checkout@v2
+      - name: Create release branch and generate PR body
+        id: create-release
+        env:
+          RELEASE_TYPE: ${{ github.event.inputs.release-type }}
+        run: |
+          git pull --force
+
+          currentVersion=$( jq -r '.version' < package.json )
+          echo "Current version is $currentVersion"
+
+          npm version $RELEASE_TYPE --git-tag-version false
+          newVersion=$(jq -r .version package.json)
+          git reset --hard
+
+          branchName="release/${newVersion}"
+
+          echo "New version is $newVersion"
+          echo "New branch name is $branchName"
+
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          git checkout -b "$branchName"
+
+          npm version $RELEASE_TYPE --git-tag-version false
+
+          git commit -a -m "Bump version to ${newVersion}"
+          git push --set-upstream origin "$branchName"
+
+          # Use --depth to get commits to add to rev-list
+          git fetch origin master --depth 100
+          git fetch origin dev --depth 100
+
+          masterPrBody=$(git rev-list --oneline $branchName ^origin/master)
+          devPrBody=$(git rev-list --oneline $branchName ^origin/dev)
+
+          echo 'masterPrBody<<END_OF_OUTPUT' >> $GITHUB_ENV
+          echo "$masterPrBody" >> $GITHUB_ENV
+          echo 'END_OF_OUTPUT' >> $GITHUB_ENV
+
+          echo 'devPrBody<<END_OF_OUTPUT' >> $GITHUB_ENV
+          echo "$devPrBody" >> $GITHUB_ENV
+          echo 'END_OF_OUTPUT' >> $GITHUB_ENV
+
+          echo "NEW_VERSION=${newVersion}" >> $GITHUB_ENV
+          echo "::set-output name=branchName::$branchName"
+
+      - name: Create pull request into dev
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: ${{ steps.create-release.outputs.branchName }}
+          destination_branch: "dev"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_title: "Chore: Update to ${{ env.NEW_VERSION }}"
+          pr_body: ${{ env.devPrBody }}
+
+      - name: Create pull request into master
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: ${{ steps.create-release.outputs.branchName }}
+          destination_branch: "master"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_title: "Chore (release): ${{ env.NEW_VERSION }}"
+          pr_body: ${{ env.masterPrBody }}
