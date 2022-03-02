@@ -268,7 +268,6 @@ class App extends Component<IAppProps, IAppState> {
   };
 
   public displayToggleButton = (mediaQueryList: any) => {
-    const { graphExplorerMode } = this.props;
     const mobileScreen = mediaQueryList.matches;
     let showSidebar = true;
     if (mobileScreen) {
@@ -301,9 +300,9 @@ class App extends Component<IAppProps, IAppState> {
           <Authentication />
         </div>
         {minimised &&
-        <div className={minimised ? '' : 'col-2'} style={{position:'relative', left: '-9px'}}>
-          <FeedbackButton />
-        </div>
+          <div className={minimised ? '' : 'col-2'} style={{ position: 'relative', left: '-9px' }}>
+            <FeedbackButton />
+          </div>
         }
         <div className={minimised ? '' : 'col-2'}>
           <Settings />
@@ -345,6 +344,27 @@ class App extends Component<IAppProps, IAppState> {
     return width;
   }
 
+  private shouldDisplayContent(parameters: any) {
+    const { graphExplorerMode, mobileScreen, showSidebar } = parameters;
+    return !(graphExplorerMode === Mode.Complete && mobileScreen && showSidebar);
+  }
+
+  private removeFlexBasisProperty() {
+    /*
+    flex-basis style property is added automatically when the window resizes
+    and is set to 100% leading to a distortion of the page when these exact steps are followed.
+    https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1433#issuecomment-1036135231
+    Removing the property altogether helps maintain the layout of the page.
+    */
+
+    const collection = document.getElementsByClassName('layout');
+    if (collection?.length === 0) {
+      return;
+    }
+    const element: any = collection[0];
+    element.style.removeProperty('flex-basis');
+  }
+
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, minimised, sampleQuery,
@@ -361,7 +381,10 @@ class App extends Component<IAppProps, IAppState> {
     const query = createShareLink(sampleQuery, authenticated);
     const { mobileScreen, showSidebar } = sidebarProperties;
 
-    const displayContent = shouldDisplayContent();
+    const displayContent = this.shouldDisplayContent({
+      graphExplorerMode,
+      mobileScreen, showSidebar
+    });
 
     const stackTokens: IStackTokens = {
       childrenGap: 10,
@@ -379,7 +402,7 @@ class App extends Component<IAppProps, IAppState> {
       sidebarWidth = classes.sidebarMini;
     }
 
-    removeFlexBasisProperty();
+    this.removeFlexBasisProperty();
 
     return (
       // @ts-ignore
@@ -471,27 +494,6 @@ class App extends Component<IAppProps, IAppState> {
         </div>
       </ThemeContext.Provider>
     );
-
-    function shouldDisplayContent() {
-      return !(graphExplorerMode === Mode.Complete && mobileScreen && showSidebar);
-    }
-
-    function removeFlexBasisProperty() {
-      /*
-      flex-basis style property is added automatically when the window resizes
-      and is set to 100% leading to a distortion of the page when these exact steps are followed.
-      https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1433#issuecomment-1036135231
-
-      Removing the property altogether helps maintain the layout of the page.
-      */
-
-      const collection = document.getElementsByClassName('layout');
-      if (collection?.length === 0) {
-        return;
-      }
-      const element: any = collection[0];
-      element.style.removeProperty('flex-basis');
-    }
   }
 }
 
