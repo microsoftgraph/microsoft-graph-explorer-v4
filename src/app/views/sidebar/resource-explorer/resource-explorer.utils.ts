@@ -192,7 +192,7 @@ export function getResourcesSupportedByVersion(
   version: string,
   searchText?: string
 ): IResource[] {
-  let versionedResources: IResource[] = [];
+  const versionedResources: IResource[] = [];
   const resourcesList = JSON.parse(JSON.stringify(resources)); // deep copy
   resourcesList.forEach((resource: IResource) => {
     if (versionExists(resource, version)) {
