@@ -113,7 +113,9 @@ function createAuthenticatedRequest(
 export function makeGraphRequest(scopes: string[]): Function {
   return async (query: IQuery) => {
     let response;
-
+    let sampleUrl = query.sampleUrl;
+    sampleUrl = sampleUrl.replace(/\+/g, '%2b');
+    query.sampleUrl = sampleUrl;
     const graphRequest = createAuthenticatedRequest(scopes, query);
 
     switch (query.selectedVerb) {
