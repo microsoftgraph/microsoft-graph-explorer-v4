@@ -51,8 +51,12 @@ export function createResourcesList(
   ): IResourceLink[] {
     const { segment, children } = parent;
     const links: IResourceLink[] = [];
+    const childPaths = [...paths, segment];
     if (methods.length > 1) {
-      if (!searchText || (searchText && segment.contains(searchText))) {
+      if (
+        !searchText ||
+        (searchText && childPaths.some((path) => path.contains(searchText)))
+      ) {
         methods.forEach((method) => {
           links.push(
             createNavLink(
@@ -62,7 +66,7 @@ export function createResourcesList(
                 children: []
               },
               segment,
-              [...paths, segment],
+              childPaths,
               method.toUpperCase()
             )
           );
@@ -75,9 +79,7 @@ export function createResourcesList(
       children
         .filter((child) => versionExists(child, version))
         .forEach((versionedChild) => {
-          links.push(
-            createNavLink(versionedChild, segment, [...paths, segment])
-          );
+          links.push(createNavLink(versionedChild, segment, childPaths));
         });
 
     return links;
@@ -124,7 +126,10 @@ export function createResourcesList(
 
     // if segment name does not contain search text, then found text is in child, so expand this link
     const isExpanded =
-      searchText && !segment.contains(searchText) ? true : false;
+      searchText &&
+      ![...paths, segment].some((path) => path.contains(searchText))
+        ? true
+        : false;
 
     return {
       key,
