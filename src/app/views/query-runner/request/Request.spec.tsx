@@ -4,9 +4,9 @@ import { IntlProvider } from 'react-intl';
 
 import { Request } from '../../../../app/views/query-runner/request/Request';
 import { geLocale } from '../../../../appLocale';
-import { messages_ } from '../../../../tests/utils/get-messages';
 import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
+import { messages_ } from '../../../utils/get-messages';
 
 afterEach(cleanup);
 const renderRequest = (): any => {
