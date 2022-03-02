@@ -5,8 +5,8 @@ import userEvent from '@testing-library/user-event';
 
 import { Settings } from '.';
 import { geLocale } from '../../../appLocale';
-import { messages_ } from '../../../tests/utils/get-messages';
 import { ISettingsProps } from '../../../types/settings';
+import { messages_ } from '../../utils/get-messages';
 
 afterEach(cleanup);
 const renderSettings = (args?: any) => {

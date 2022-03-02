@@ -3,9 +3,9 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 
 import { geLocale } from '../../../../appLocale';
-import { messages_ } from '../../../../tests/utils/get-messages';
 import { IHistoryProps } from '../../../../types/history';
 import { History } from './History';
+import { messages_ } from '../../../utils/get-messages';
 
 interface IExtendedHistory extends IHistoryProps {
   intl: object;

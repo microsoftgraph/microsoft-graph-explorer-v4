@@ -8,6 +8,13 @@ export const queryRunnerStyles = () => {
       caretDown: {
         color: '#ffffff !important'
       }
+    },
+    iconButton: {
+      root: {
+        float: 'right',
+        border: '1px solid',
+        width: '100%'
+      }
     }
   };
 };
