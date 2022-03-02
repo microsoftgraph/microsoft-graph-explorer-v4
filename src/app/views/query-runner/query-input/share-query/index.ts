@@ -1,0 +1,1 @@
+export { ShareQuery } from './ShareQuery';

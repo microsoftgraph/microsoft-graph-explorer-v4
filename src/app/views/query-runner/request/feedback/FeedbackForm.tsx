@@ -2,7 +2,7 @@ import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import { AuthenticationType } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 import { OfficeBrowserFeedback } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window';
 import { getTheme, MessageBarType } from '@fluentui/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../../../appLocale';
@@ -15,7 +15,7 @@ import { getVersion } from '../../../../utils/version';
 import CampaignDefinitions from './campaignDefinitions';
 import { uiStringMap } from './uiStrings';
 
-export default function FeedbackForm({ activated, dismissSurvey }: any) {
+export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurvey }: any) {
   const dispatch = useDispatch();
   const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
   const currentTheme = getTheme();
@@ -33,7 +33,9 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
     });
   }
 
-  initializeFeedback();
+  useEffect(() => {
+    initializeFeedback();
+  }, []);
 
   const showCustomSurvey = () => {
     const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
@@ -55,10 +57,13 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
       surveyType: 2,
       title: translateMessage('title')
     }
-
-    officeBrowserFeedback.floodgate.showCustomSurvey(customSurvey).catch(
-      (error: any) => { throw error; }
-    );
+    if(officeBrowserFeedback){
+      officeBrowserFeedback.floodgate.showCustomSurvey(customSurvey).catch(
+        (error: any) => {
+          onDisableSurvey();
+          throw error; }
+      );
+    }
   }
 
   if (activated) {
@@ -107,7 +112,7 @@ export default function FeedbackForm({ activated, dismissSurvey }: any) {
           }));
 
         }
-        dismissSurvey();
+        onDismissSurvey();
       },
       uIStringGetter: (str: string): any => { return uiStringMap[str]; }
     };

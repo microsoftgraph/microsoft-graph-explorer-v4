@@ -66,6 +66,15 @@ export const appStyles = (theme: ITheme) => {
       '&:hover': {
         borderRight: '3px solid silver'
       }
+    },
+    feedbackButtonFullScreenDisplay: {
+      position: 'relative',
+      top: '5px'
+    },
+    feedbackButtonMobileDisplay: {
+      position: 'absolute',
+      top: '-1px',
+      right: '15px'
     }
   };
 };

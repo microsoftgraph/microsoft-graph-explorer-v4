@@ -86,36 +86,43 @@ const SuffixRenderer = () => {
   const hintsAvailable = hints.length > 0;
   const infoIcon: IIconProps = {iconName: 'Info'};
 
-  if (hintsAvailable) {
-    return (
-      <>
+
+  return (
+    <>
+      <TooltipHost
+        content={translateMessage('More info')}
+        id={getId()}
+        calloutProps={calloutProps}
+        styles={hostStyles}
+      >
         <IconButton
           iconProps={infoIcon}
           className={styles.iconButton}
           onClick={toggleCallout}
           id={buttonId}
           ariaLabel={translateMessage('More Info')}
+          disabled={!hintsAvailable}
         />
-        {isCalloutVisible && (
-          <Callout
-            className={styles.callout}
-            ariaLabelledBy={labelId}
-            ariaDescribedBy={descriptionId}
-            role='alertdialog'
-            gapSpace={0}
-            target={`#${buttonId}`}
-            onDismiss={toggleCallout}
-            setInitialFocus
-          >
-            <Text block variant='xLarge' className={styles.title} id={labelId}>
+      </TooltipHost>
+      {isCalloutVisible && (
+        <Callout
+          className={styles.callout}
+          ariaLabelledBy={labelId}
+          ariaDescribedBy={descriptionId}
+          role='alertdialog'
+          gapSpace={0}
+          target={`#${buttonId}`}
+          onDismiss={toggleCallout}
+          setInitialFocus
+        >
+          <Text block variant='xLarge' className={styles.title} id={labelId}>
               /{requestUrl}
-            </Text>
-            <HintList hints={hints} />
-          </Callout>
-        )}
-      </>);
-  }
-  return null;
+          </Text>
+          <HintList hints={hints} />
+        </Callout>
+      )}
+    </>
+  );
 }
 
 export default SuffixRenderer;
