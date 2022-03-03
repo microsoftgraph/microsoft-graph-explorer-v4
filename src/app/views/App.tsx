@@ -452,13 +452,15 @@ class App extends Component<IAppProps, IAppState> {
               >
                 <div style={{ marginBottom: 8 }}>
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
+                    <TermsOfUseMessage />
+                  </div>
                 </div>
-                <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}
-                >
-                  <TermsOfUseMessage />
-                  <StatusMessages />
-                </div>
+
                 <div>
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
+                    <StatusMessages />
+                  </div>
                   <QueryResponse verb={this.state.selectedVerb} />
                 </div>
               </Resizable>
