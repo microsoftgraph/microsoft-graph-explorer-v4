@@ -260,7 +260,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     });
   }
 
-  private sortSuggestions(suggestions: string[]): string[]{
+  private sortSuggestions(suggestions: string[]): string[] {
     return suggestions.sort(dynamicSort(null, SortOrder.ASC));
   }
 
