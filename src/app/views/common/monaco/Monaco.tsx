@@ -45,7 +45,8 @@ export function Monaco(props: IMonaco) {
               foldingStrategy: 'indentation',
               showFoldingControls: 'always',
               renderLineHighlight: 'none',
-              scrollBeyondLastLine: false
+              scrollBeyondLastLine: false,
+              overviewRulerBorder: false
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
