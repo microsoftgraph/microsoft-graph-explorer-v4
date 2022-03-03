@@ -1,16 +1,16 @@
 import {
-  Breadcrumb, ChoiceGroup, DefaultButton,
-  IBreadcrumbItem, IChoiceGroupOption, INavLink, INavLinkGroup, Label, Nav, SearchBox, Spinner, SpinnerSize,
-  Stack, styled
+  Breadcrumb, DefaultButton,
+  IBreadcrumbItem, INavLink, INavLinkGroup, Label, Nav,
+  SearchBox, Spinner, SpinnerSize,
+  Stack, styled, Toggle
 } from '@fluentui/react';
+import debouce from 'lodash.debounce';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import  debouce  from 'lodash.debounce';
 
-import { telemetry, eventTypes, componentNames } from '../../../../telemetry';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
-
 import { IResource, IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
 import { IRootState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
@@ -76,9 +76,8 @@ const unstyledResourceExplorer = (props: any) => {
     dispatch(addResourcePaths(getResourcePaths(item, version)));
   }
 
-  const changeVersion = (ev: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
-    option: IChoiceGroupOption | undefined): void => {
-    const selectedVersion = option!.key;
+  const changeVersion = (_event: React.MouseEvent<HTMLElement>, checked?: boolean | undefined): void => {
+    const selectedVersion = checked ? versions[0].key : versions[1].key;
     setVersion(selectedVersion);
   }
 
@@ -131,7 +130,7 @@ const unstyledResourceExplorer = (props: any) => {
     setItems(createResourcesList(filtered, version));
   }
 
-  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item? : INavLink) => {
+  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
     ev!.preventDefault();
     item!.isExpanded = !item!.isExpanded;
     setQuery(item!);
@@ -189,10 +188,10 @@ const unstyledResourceExplorer = (props: any) => {
         />
         <hr />
         <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
-          <ChoiceGroup
-            label={translateMessage('Select version')}
-            defaultSelectedKey={version}
-            options={versions}
+          <Toggle label={`${translateMessage('Select version')}: v1.0 / beta`}
+            defaultChecked
+            onText={versions[0].text}
+            offText={versions[1].text}
             onChange={changeVersion}
           />
         </Stack>
