@@ -7,6 +7,7 @@ export const appStyles = (theme: ITheme) => {
       color: theme.semanticColors.bodyText,
       paddingTop: theme.spacing.s1,
       width: '100%',
+      height: '100%',
       paddingRight: '15px',
       paddingLeft: '15px',
       marginLeft: 'auto',

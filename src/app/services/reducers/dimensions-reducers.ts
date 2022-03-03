@@ -5,7 +5,7 @@ import { RESIZE_SUCCESS } from '../redux-constants';
 const initialState: IDimensions = {
   request: {
     width: '100%',
-    height: '35%'
+    height: '40%'
   },
   response: {
     width: '100%',
@@ -13,11 +13,11 @@ const initialState: IDimensions = {
   },
   sidebar: {
     width: '26%',
-    height: '100%'
+    height: ''
   },
   content: {
     width: '74%',
-    height: '100%'
+    height: ''
   }
 };
 
