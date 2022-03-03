@@ -42,9 +42,13 @@ export async function anonymousRequest(
     .then((response) => { return response; });
 }
 
+function encodePlusSign(isAuthenticated: boolean, url: string) {
+  return isAuthenticated ? url.replace(/\+/g, '%2b') : url.replace(/%2B/g, '%252b');
+}
+
 export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRunnerStatus: IStatus) {
   let escapedUrl = encodeURIComponent(query.sampleUrl);
-  escapedUrl = escapedUrl.replace(/%2B/g, '%252b');
+  escapedUrl = encodePlusSign(false, escapedUrl);
   const graphUrl = `${proxyUrl}?url=${escapedUrl}`;
   const sampleHeaders: any = {};
 
@@ -114,7 +118,7 @@ export function makeGraphRequest(scopes: string[]): Function {
   return async (query: IQuery) => {
     let response;
     let sampleUrl = query.sampleUrl;
-    sampleUrl = sampleUrl.replace(/\+/g, '%2b');
+    sampleUrl = encodePlusSign(true, sampleUrl);
     query.sampleUrl = sampleUrl;
     const graphRequest = createAuthenticatedRequest(scopes, query);
 
