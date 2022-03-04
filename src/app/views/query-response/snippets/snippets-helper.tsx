@@ -11,13 +11,19 @@ import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimens
 import { IRootState } from '../../../../types/root';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { CopyButton } from '../../common/copy/CopyButton';
+import { translateMessage } from '../../../utils/translate-messages';
 
 interface ISnippetProps {
   language: string;
+  sdkLink: string;
 }
 
-export function renderSnippets(supportedLanguages: string[]) {
-  return supportedLanguages.map((language: string) => (
+interface ISupportedLanguages{
+  [key: string]: string;
+}
+
+export function renderSnippets(supportedLanguages: ISupportedLanguages) {
+  return Object.keys(supportedLanguages).map((language: string) => (
     <PivotItem
       key={language}
       headerText={language}
@@ -25,13 +31,14 @@ export function renderSnippets(supportedLanguages: string[]) {
         'aria-controls': `${language}-tab`
       }}
     >
-      <Snippet language={language} />
+      <Snippet language={language} sdkLink={supportedLanguages[language]} />
     </PivotItem>
   ));
 }
 
 function Snippet(props: ISnippetProps) {
   let { language } = props;
+  const { sdkLink } = props;
 
   /**
    * Converting language lowercase so that we won't have to call toLowerCase() in multiple places.
@@ -59,6 +66,17 @@ function Snippet(props: ISnippetProps) {
     dispatch(getSnippet(language));
   }, [sampleQuery.sampleUrl]);
 
+  const setCommentSymbol = (): string => {
+    console.log(language)
+    return language.trim() === 'powershell' ? '#' : '//';
+  }
+
+  const setSnippetText = (): string => {
+    // eslint-disable-next-line max-len
+    return (`${setCommentSymbol()} ${translateMessage('Leverage our libraries')} ${language} ${translateMessage('Client library')}${sdkLink}\r
+${setCommentSymbol()} ${translateMessage('SDKs documentation')}\r\r${snippet}`);
+  }
+
   return (
     <div style={{ display: 'block' }} id={`${language}-tab`}>
       {loadingState &&
@@ -70,7 +88,7 @@ function Snippet(props: ISnippetProps) {
         <>
           <CopyButton isIconButton={true} style={{ float: 'right', zIndex: 1 }} handleOnClick={handleCopy} />
           <Monaco
-            body={snippet}
+            body={setSnippetText()}
             language={language}
             readOnly={true}
             height={height}
