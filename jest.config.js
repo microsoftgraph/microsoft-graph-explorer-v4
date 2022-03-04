@@ -53,6 +53,5 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname'
   ],
-  testResultsProcessor: 'jest-sonar-reporter',
-  testPathIgnorePatterns: ['<rootDir>/src/tests/accessibility/']
+  testResultsProcessor: 'jest-sonar-reporter'
 };
