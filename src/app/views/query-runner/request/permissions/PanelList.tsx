@@ -34,9 +34,13 @@ const PanelList = ({ messages,
   columns, classes, selection,
   renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) => {
 
+  const sortedPermissions = (permissionsToSort: IPermission[]) : IPermission[] => {
+    return permissionsToSort.sort(dynamicSort('value', SortOrder.ASC));
+  }
+
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
   const { panelPermissions } = scopes.data;
-  const [permissions, setPermissions] = useState(panelPermissions.sort(dynamicSort('value', SortOrder.ASC)));
+  const [permissions, setPermissions] = useState(sortedPermissions(panelPermissions));
   const permissionsList: any[] = [];
   const tokenPresent = !!authToken.token;
 
@@ -66,7 +70,7 @@ const PanelList = ({ messages,
   const groups = generateGroupsFromList(permissionsList, 'groupName');
 
 
-  const _onRenderGroupHeader = (props: any): any => {
+  const onRenderGroupHeader = (props: any): any => {
     if (props) {
       return (
         <GroupHeader  {...props} onRenderGroupHeaderCheckbox={renderCustomCheckbox} />
@@ -102,7 +106,7 @@ const PanelList = ({ messages,
         compact={true}
         groupProps={{
           showEmptyGroups: false,
-          onRenderHeader: _onRenderGroupHeader
+          onRenderHeader: onRenderGroupHeader
         }}
         ariaLabelForSelectionColumn={messages['Toggle selection'] || 'Toggle selection'}
         ariaLabelForSelectAllCheckbox={messages['Toggle selection for all items'] || 'Toggle selection for all items'}
