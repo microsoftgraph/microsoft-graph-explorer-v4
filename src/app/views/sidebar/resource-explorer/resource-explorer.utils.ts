@@ -6,28 +6,11 @@ import {
   IResourceLink,
   ResourceLinkType
 } from '../../../../types/resources';
-
-import {
-  getScreenResolution,
-  textOverflowWidthRange
-} from '../../common/screen-resolution/screen-resolution';
 interface ITreeFilter {
   paths: string[];
   level: number;
   resourceItems: IResource[];
   version: string;
-}
-
-interface IOverflowWidthRange {
-  minimumOverflowWidth: number;
-  maximumOverflowWidth: number;
-}
-
-interface IOverflowProps {
-  currentScreenWidth: number;
-  lowestDeviceWidth: number;
-  highestDeviceWidth: number;
-  overflowRange: IOverflowWidthRange;
 }
 
 export function createResourcesList(
@@ -127,7 +110,7 @@ export function createResourcesList(
     // if segment name does not contain search text, then found text is in child, so expand this link
     const isExpanded =
       searchText &&
-      ![...paths, segment].some((path) => path.contains(searchText))
+        ![...paths, segment].some((path) => path.contains(searchText))
         ? true
         : false;
 
@@ -281,108 +264,4 @@ function flatten(content: IResourceLink[]): IResourceLink[] {
   return result;
 }
 
-export function getOverflowWidthRange(resolution: string): IOverflowWidthRange {
-  const overFlowRange = textOverflowWidthRange.find(
-    (k) => k.key === resolution
-  );
-  if (!overFlowRange) {
-    return {
-      minimumOverflowWidth: 1000,
-      maximumOverflowWidth: 2000
-    };
-  }
-  return {
-    minimumOverflowWidth: overFlowRange.range.minimumOverflowWidth || 0,
-    maximumOverflowWidth: overFlowRange.range.maximumOverflowWidth || 0
-  };
-}
 
-// Adjusts overflow width based on screen resolution
-export function updateOverflowWidth(overflowProps: IOverflowProps) {
-  const {
-    currentScreenWidth,
-    lowestDeviceWidth,
-    highestDeviceWidth,
-    overflowRange
-  } = overflowProps;
-  const { minimumOverflowWidth, maximumOverflowWidth } = overflowRange;
-
-  return (
-    ((currentScreenWidth - lowestDeviceWidth) *
-      (maximumOverflowWidth - minimumOverflowWidth)) /
-      (highestDeviceWidth - lowestDeviceWidth) +
-    minimumOverflowWidth
-  );
-}
-
-// adjusts overflow width for each resource link level
-export function compensateForLinkIndent(
-  resourceLevelOnIsolation: number,
-  linkLevel: number,
-  method: string
-) {
-  const levelCompensation = new Map([
-    [1, -20],
-    [2, 10],
-    [3, 20],
-    [4, 30],
-    [5, 40],
-    [6, 60],
-    [7, 70],
-    [8, 80],
-    [9, 110],
-    [10, 120],
-    [11, 130],
-    [12, 140],
-    [13, 150],
-    [14, 160]
-  ]);
-  const currentLevel: number =
-    resourceLevelOnIsolation === -1
-      ? linkLevel
-      : linkLevel - resourceLevelOnIsolation;
-
-  if (currentLevel >= 16) {
-    return 170;
-  }
-  let compensation;
-  compensation = levelCompensation.get(currentLevel);
-
-  if (method) {
-    compensation = compensation! + 50;
-  }
-  return compensation ? compensation : 0;
-}
-
-export function setMaximumOverflowWidth(widthProps: any): string {
-  const { resourceLevelOnIsolation, level, method } = widthProps;
-  const {
-    device: resolution,
-    width,
-    currentScreenWidth
-  } = getScreenResolution();
-  const compensation = compensateForLinkIndent(
-    resourceLevelOnIsolation,
-    level,
-    method
-  );
-  const { minimumOverflowWidth, maximumOverflowWidth } =
-    getOverflowWidthRange(resolution);
-
-  const overflowProps = {
-    currentScreenWidth,
-    lowestDeviceWidth: width.minimumWidth,
-    highestDeviceWidth: width.maximumWidth,
-    overflowRange: {
-      minimumOverflowWidth,
-      maximumOverflowWidth
-    }
-  };
-
-  const overflow = updateOverflowWidth(overflowProps) - compensation;
-  if (overflow < 0) {
-    return '0px';
-  }
-
-  return `${overflow}px`;
-}

@@ -2,13 +2,12 @@ import {
   ContextualMenuItemType, getId, IconButton,
   IContextualMenuItem, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useState, CSSProperties } from 'react';
+import React, { CSSProperties } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
+import { ResourceLinkType, ResourceOptions } from '../../../../types/resources';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
-import { setMaximumOverflowWidth} from './resource-explorer.utils';
 interface IResourceLinkProps {
   link: any;
   isolateTree: Function;
@@ -19,15 +18,10 @@ interface IResourceLinkProps {
 
 const ResourceLink = (props: IResourceLinkProps) => {
   const { link: resourceLink, classes } = props;
-  const [resourceLevelOnIsolation, setResourceLevelOnIsolation] = useState(-1);
-  const [isolationFlag, setIsolationFlag] = useState(false);
-
-  useEffect(() => {
-    setResourceLevelOnIsolation(props.linkLevel);
-  },  [isolationFlag]);
 
   const tooltipId = getId('tooltip');
   const buttonId = getId('targetButton');
+
 
   const iconButtonStyles = {
     root: { paddingBottom:10, marginTop: -5, marginRight: 2 },
@@ -43,17 +37,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   const items = getMenuItems();
 
-  const overflowProps = {
-    resourceLevelOnIsolation,
-    level: resourceLink.level,
-    method: resourceLink.method
-  }
-
-  const isolateResourceLink = (resourceLink_: IResourceLink) => {
-    setIsolationFlag(true);
-    props.isolateTree(resourceLink_);
-  }
-
   return <span className={linkStyle.link}>
     {resourceLink.method &&
     <span
@@ -62,18 +45,12 @@ const ResourceLink = (props: IResourceLinkProps) => {
     >
       {resourceLink.method}
     </span>}
-    <span
-      style={{
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        maxWidth: setMaximumOverflowWidth(overflowProps)
-      }}>
 
-      {resourceLink.name}
-
+    <span className={linkStyle.resourceLinkNameContainer}>
+      <span className={linkStyle.resourceLinkText}>
+        {resourceLink.name}
+      </span>
     </span>
-
 
     {items.length > 0 &&
       <TooltipHost
@@ -93,7 +70,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
           role='button'
           id={buttonId}
           aria-describedby={tooltipId}
-          className={linkStyle.button}
           styles={iconButtonStyles}
           menuIconProps={{ iconName: 'MoreVertical' }}
           title={translateMessage('More actions')}
@@ -118,7 +94,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
             key: 'isolate',
             text: translateMessage('Isolate'),
             itemType: ContextualMenuItemType.Normal,
-            onClick: () => isolateResourceLink(resourceLink)
+            onClick: () => props.isolateTree(resourceLink)
           });
       }
 
@@ -136,8 +112,9 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
 const linkStyle = mergeStyleSets(
   {
-    link: { display: 'flex', lineHeight: 'normal' },
-    button: { float: 'right', position: 'absolute', right: 0 }
+    link: { display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden' },
+    resourceLinkNameContainer: { textAlign: 'left', flex: '1', overflow:'hidden', display: 'flex' },
+    resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }
   }
 );
 
