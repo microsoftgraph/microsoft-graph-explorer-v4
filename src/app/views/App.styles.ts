@@ -15,7 +15,7 @@ export const appStyles = (theme: ITheme) => {
     },
     appRow: {
       display: 'flex',
-      flexWrap: 'wrap'
+      flexWrap: 'no-wrap'
     },
     tryItMessage: {
       marginBottom: theme.spacing.s1

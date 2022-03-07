@@ -416,7 +416,7 @@ class App extends Component<IAppProps, IAppState> {
                 : translateMessage('Sidebar maximized')
             }
           />
-          <div className={ `ms-Grid-row ${classes.appRow}`}>
+          <div className={ `ms-Grid-row ${classes.appRow}`} style={{flexWrap: mobileScreen ? 'wrap' : 'nowrap'}}>
             {graphExplorerMode === Mode.Complete && (
               <Resizable
                 onResize={(e: any, direction: any, ref: any) => {
@@ -474,6 +474,7 @@ class App extends Component<IAppProps, IAppState> {
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
                   height: contentHeight
                 }}
+                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px'} : {}}
               >
                 <div style={{ marginBottom: 8 }}>
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
