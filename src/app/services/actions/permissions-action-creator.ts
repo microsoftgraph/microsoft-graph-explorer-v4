@@ -89,10 +89,10 @@ export function fetchScopes(): Function {
         const scopes = await response.json();
 
         return permissionsPanelOpen ? dispatch(fetchFullScopesSuccess({
-          scopes: { panelPermissions: scopes }
+          scopes: { fullPermissions: scopes }
         })) :
           dispatch(fetchUrlScopesSuccess({
-            scopes: { tabPermissions: scopes }
+            scopes: { specificPermissions: scopes }
           }));
       }
 

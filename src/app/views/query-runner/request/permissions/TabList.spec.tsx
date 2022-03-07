@@ -54,7 +54,7 @@ jest.mock('react-redux', () => {
         scopes: {
           pending: false,
           data: {
-            tabPermissions: [
+            specificPermissions: [
               {
                 value: 'profile.read',
                 isAdmin: false,
@@ -68,7 +68,7 @@ jest.mock('react-redux', () => {
                 consented: true
               }
             ],
-            panelPermissions: [
+            fullPermissions: [
               {
                 value: 'profile.read',
                 isAdmin: false,

@@ -67,7 +67,7 @@ const renderPermission = (args?: any) => {
 
   const permissionState: IPermissionState = {
     permissions: {
-      tabPermissions: [
+      specificPermissions: [
         {
           value: 'profile.read',
           isAdmin: false,
@@ -81,7 +81,7 @@ const renderPermission = (args?: any) => {
           consented: true
         }
       ],
-      panelPermissions: [
+      fullPermissions: [
         {
           value: 'profile.read',
           isAdmin: false,

@@ -39,8 +39,8 @@ const PanelList = ({ messages,
   }
 
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
-  const { panelPermissions } = scopes.data;
-  const [permissions, setPermissions] = useState(sortedPermissions(panelPermissions));
+  const { fullPermissions } = scopes.data;
+  const [permissions, setPermissions] = useState(sortedPermissions(fullPermissions));
   const permissionsList: any[] = [];
   const tokenPresent = !!authToken.token;
 
@@ -55,11 +55,11 @@ const PanelList = ({ messages,
   });
 
   const searchValueChanged = (event: any, value?: string): void => {
-    let filteredPermissions = scopes.data.panelPermissions;
+    let filteredPermissions = scopes.data.fullPermissions;
     if (value) {
       const keyword = value.toLowerCase();
 
-      filteredPermissions = panelPermissions.filter((permission: IPermission) => {
+      filteredPermissions = fullPermissions.filter((permission: IPermission) => {
         const name = permission.value.toLowerCase();
         return name.includes(keyword);
       });

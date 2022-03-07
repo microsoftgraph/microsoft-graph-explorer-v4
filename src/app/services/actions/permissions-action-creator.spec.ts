@@ -60,8 +60,8 @@ const mockState: IRootState = {
   scopes: {
     pending: false,
     data: {
-      panelPermissions: [],
-      tabPermissions: []
+      fullPermissions: [],
+      specificPermissions: []
     },
     error: null
   },
@@ -136,8 +136,8 @@ describe('tests permissions action creators', () => {
     // Arrange
     const response: IPermissionsResponse = {
       scopes: {
-        panelPermissions: [],
-        tabPermissions: []
+        fullPermissions: [],
+        specificPermissions: []
       }
     }
 

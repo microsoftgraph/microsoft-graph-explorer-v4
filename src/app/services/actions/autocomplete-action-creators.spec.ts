@@ -57,8 +57,8 @@ const mockState: IRootState = {
   scopes: {
     pending: false,
     data: {
-      panelPermissions: [],
-      tabPermissions: []
+      fullPermissions: [],
+      specificPermissions: []
     },
     error: null
   },

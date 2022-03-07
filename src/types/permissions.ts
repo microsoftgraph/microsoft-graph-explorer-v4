@@ -28,23 +28,23 @@ export interface IPermissionProps {
 
 export interface IPermissionState {
   permissions: {
-    tabPermissions: IPermission[];
-    panelPermissions: IPermission[];
+    specificPermissions: IPermission[];
+    fullPermissions: IPermission[];
   };
 }
 
 export interface IPermissionsResponse {
   scopes: {
-    tabPermissions: IPermission[];
-    panelPermissions: IPermission[];
+    specificPermissions: IPermission[];
+    fullPermissions: IPermission[];
   }
 }
 
 export interface IScopes {
   pending: boolean;
   data: {
-    tabPermissions: IPermission[];
-    panelPermissions: IPermission[];
+    specificPermissions: IPermission[];
+    fullPermissions: IPermission[];
   };
   error: any | null;
 }

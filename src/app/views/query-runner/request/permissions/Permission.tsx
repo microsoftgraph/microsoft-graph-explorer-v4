@@ -32,8 +32,8 @@ export class Permission extends Component<IPermissionProps, IPermissionState> {
     super(props);
     this.state = {
       permissions: {
-        tabPermissions: [],
-        panelPermissions: []
+        specificPermissions: [],
+        fullPermissions: []
       }
     };
   }

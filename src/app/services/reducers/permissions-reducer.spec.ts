@@ -8,8 +8,8 @@ import {
 const initialState = {
   pending: false,
   data: {
-    panelPermissions: [],
-    tabPermissions: []
+    fullPermissions: [],
+    specificPermissions: []
   },
   error: null
 };
@@ -20,8 +20,8 @@ describe('Permissions reducer', () => {
       type: FETCH_FULL_SCOPES_SUCCESS,
       response: {
         scopes: {
-          tabPermissions: [],
-          panelPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write']
+          specificPermissions: [],
+          fullPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write']
         }
       }
     }
@@ -29,8 +29,8 @@ describe('Permissions reducer', () => {
     const expectedState = {
       pending: false,
       data: {
-        panelPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write'],
-        tabPermissions: []
+        fullPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write'],
+        specificPermissions: []
       },
       error: null
     }
@@ -44,8 +44,8 @@ describe('Permissions reducer', () => {
       type: FETCH_URL_SCOPES_SUCCESS,
       response: {
         scopes: {
-          tabPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write'],
-          panelPermissions: []
+          specificPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write'],
+          fullPermissions: []
         }
       }
     }
@@ -53,8 +53,8 @@ describe('Permissions reducer', () => {
     const expectedState = {
       pending: false,
       data: {
-        panelPermissions: [],
-        tabPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write']
+        fullPermissions: [],
+        specificPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write']
       },
       error: null
     }
@@ -87,8 +87,8 @@ describe('Permissions reducer', () => {
     const expectedState = {
       pending: true,
       data: {
-        panelPermissions: [],
-        tabPermissions: []
+        fullPermissions: [],
+        specificPermissions: []
       },
       error: null
     }

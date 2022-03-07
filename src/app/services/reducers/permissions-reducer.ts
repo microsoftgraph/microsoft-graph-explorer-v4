@@ -8,8 +8,8 @@ import {
 const initialState: IScopes = {
   pending: false,
   data: {
-    tabPermissions: [],
-    panelPermissions: []
+    specificPermissions: [],
+    fullPermissions: []
   },
   error: null
 };
@@ -20,14 +20,14 @@ export function scopes(state: IScopes = initialState, action: IAction): any {
       let response: IPermissionsResponse = { ...action.response as IPermissionsResponse };
       return {
         pending: false,
-        data: { ...state.data, panelPermissions: response.scopes.panelPermissions },
+        data: { ...state.data, fullPermissions: response.scopes.fullPermissions },
         error: null
       };
     case FETCH_URL_SCOPES_SUCCESS:
       response = { ...action.response as IPermissionsResponse };
       return {
         pending: false,
-        data: { ...state.data, tabPermissions: response.scopes.tabPermissions },
+        data: { ...state.data, specificPermissions: response.scopes.specificPermissions },
         error: null
       }
     case FETCH_SCOPES_ERROR:
