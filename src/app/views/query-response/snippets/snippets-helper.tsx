@@ -67,7 +67,6 @@ function Snippet(props: ISnippetProps) {
   }, [sampleQuery.sampleUrl]);
 
   const setCommentSymbol = (): string => {
-    console.log(language)
     return language.trim() === 'powershell' ? '#' : '//';
   }
 
