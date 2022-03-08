@@ -15,11 +15,14 @@ import { translateMessage } from '../../../utils/translate-messages';
 
 interface ISnippetProps {
   language: string;
-  sdkLink: string;
+  snippetInfo: ISupportedLanguages;
 }
 
 interface ISupportedLanguages{
-  [key: string]: string;
+  [language: string]: {
+    sdkDownloadLink: string;
+    sdkDocLink: string;
+  };
 }
 
 export function renderSnippets(supportedLanguages: ISupportedLanguages) {
@@ -31,14 +34,14 @@ export function renderSnippets(supportedLanguages: ISupportedLanguages) {
         'aria-controls': `${language}-tab`
       }}
     >
-      <Snippet language={language} sdkLink={supportedLanguages[language]} />
+      <Snippet language={language} snippetInfo={supportedLanguages} />
     </PivotItem>
   ));
 }
 
 function Snippet(props: ISnippetProps) {
   let { language } = props;
-  const { sdkLink } = props;
+  const { sdkDownloadLink, sdkDocLink } = props.snippetInfo[language];
 
   /**
    * Converting language lowercase so that we won't have to call toLowerCase() in multiple places.
@@ -72,8 +75,8 @@ function Snippet(props: ISnippetProps) {
 
   const setSnippetText = (): string => {
     // eslint-disable-next-line max-len
-    return (`${setCommentSymbol()} ${translateMessage('Leverage our libraries')} ${language} ${translateMessage('Client library')}${sdkLink}\r
-${setCommentSymbol()} ${translateMessage('SDKs documentation')}\r\r${snippet}`);
+    return (`${setCommentSymbol()} ${translateMessage('Leverage our libraries')} ${language} ${translateMessage('Client library')}${sdkDownloadLink}\r
+${setCommentSymbol()} ${translateMessage('SDKs documentation')} ${sdkDocLink}\r\r${snippet}`);
   }
 
   return (

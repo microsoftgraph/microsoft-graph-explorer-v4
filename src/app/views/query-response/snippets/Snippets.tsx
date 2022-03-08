@@ -6,12 +6,30 @@ import { renderSnippets } from './snippets-helper';
 
 function GetSnippets() {
   const supportedLanguages = {
-    'CSharp': 'https://aka.ms/csharpsdk',
-    'JavaScript': 'https://aka.ms/graphjssdk',
-    'Java': 'https://aka.ms/graphjavasdk',
-    'Objective-C': 'https://aka.ms/objective-c-sdk',
-    'Go': 'https://aka.ms/graphgosdk',
-    'PowerShell': 'https://aka.ms/pshellsdk'
+    'CSharp': {
+      sdkDownloadLink: 'https://aka.ms/csharpsdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'JavaScript': {
+      sdkDownloadLink: 'https://aka.ms/graphjssdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'Java': {
+      sdkDownloadLink: 'https://aka.ms/graphjavasdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'Objective-C': {
+      sdkDownloadLink: 'https://aka.ms/objective-c-sdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'Go': {
+      sdkDownloadLink: 'https://aka.ms/graphgosdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'PowerShell': {
+      sdkDownloadLink: 'https://aka.ms/pshellsdk',
+      sdkDocLink: 'https://aka.ms/pshellsdkdocs'
+    }
   };
 
   return <Pivot>{renderSnippets(supportedLanguages)}</Pivot>;
