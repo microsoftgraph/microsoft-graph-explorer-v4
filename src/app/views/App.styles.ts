@@ -9,7 +9,7 @@ export const appStyles = (theme: ITheme) => {
       width: '100%',
       height: '100%',
       paddingRight: '15px',
-      paddingLeft: '15px',
+      paddingLeft: '4px',
       marginLeft: 'auto',
       marginRight: 'auto'
     },
@@ -22,7 +22,6 @@ export const appStyles = (theme: ITheme) => {
     },
     sidebar: {
       background: theme.palette.neutralLighter,
-      paddingLeft: 10,
       paddingRight: 10,
       marginRight: 10
     },
