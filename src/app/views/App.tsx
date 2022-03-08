@@ -408,7 +408,7 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        <div className={`ms-Grid ${classes.app}`}>
+        <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft : mobileScreen && '15px'}}>
           <Announced
             message={
               !showSidebar
@@ -416,7 +416,10 @@ class App extends Component<IAppProps, IAppState> {
                 : translateMessage('Sidebar maximized')
             }
           />
-          <div className={ `ms-Grid-row ${classes.appRow}`} style={{flexWrap: mobileScreen ? 'wrap' : 'nowrap'}}>
+          <div className={ `ms-Grid-row ${classes.appRow}`} style={{
+            flexWrap: mobileScreen && 'wrap',
+            marginRight: showSidebar && '-20px' }}>
+
             {graphExplorerMode === Mode.Complete && (
               <Resizable
                 onResize={(e: any, direction: any, ref: any) => {
