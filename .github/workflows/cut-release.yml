@@ -77,6 +77,7 @@ jobs:
 
       - name: Create pull request into dev
         uses: repo-sync/pull-request@v2
+        if: ${{ github.event.inputs.release-type == 'major' || github.event.inputs.release-type == 'minor' }}
         with:
           source_branch: ${{ steps.create-release.outputs.branchName }}
           destination_branch: "dev"
