@@ -83,8 +83,8 @@ export const appStyles = (theme: ITheme) => {
     },
     feedbackButtonMobileDisplay: {
       position: 'absolute',
-      top: '-1px',
-      right: '15px'
+      top: '13px',
+      right: '10px'
     }
   };
 };
