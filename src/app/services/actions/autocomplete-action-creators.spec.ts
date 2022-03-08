@@ -56,8 +56,10 @@ const mockState: IRootState = {
   },
   scopes: {
     pending: false,
-    data: [],
-    hasUrl: false,
+    data: {
+      fullPermissions: [],
+      specificPermissions: []
+    },
     error: null
   },
   history: [],
