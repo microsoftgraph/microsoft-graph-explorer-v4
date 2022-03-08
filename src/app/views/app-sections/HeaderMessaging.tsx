@@ -10,7 +10,7 @@ export function headerMessaging(classes: any, query: string): React.ReactNode {
   const loginType = getLoginType();
 
   return (
-    <div style={{ marginBottom: 8 }}>
+    <div style={{ marginBottom: 8, paddingLeft: 10 }}>
       {loginType === LoginType.Popup && <>
         <MessageBar messageBarType={MessageBarType.info} isMultiline={true}>
           <p>
