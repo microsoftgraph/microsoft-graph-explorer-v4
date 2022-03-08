@@ -134,8 +134,8 @@ IQueryRunnerState
   public render() {
     return (
       <>
-        <div className='row'>
-          <div className='col-sm-12 col-lg-12'>
+        <div className='ms-Grid-row'>
+          <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
             {
               // @ts-ignore
               <QueryInput
@@ -147,8 +147,8 @@ IQueryRunnerState
             }
           </div>
         </div>
-        <div className='row' style={{ marginTop: 10 }}>
-          <div className='col-sm-12 col-lg-12'>
+        <div className='ms-Grid-row' style={{ marginTop: 10 }}>
+          <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
             {
               // @ts-ignore
               <Request
