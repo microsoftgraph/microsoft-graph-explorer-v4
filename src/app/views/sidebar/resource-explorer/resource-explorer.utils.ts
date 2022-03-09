@@ -248,6 +248,7 @@ export function getResourcePaths(
     content.forEach((element: IResourceLink) => {
       element.version = version;
       element.url = `${getUrlFromLink(element)}`;
+      element.key = element.key?.includes(version) ? element.key : `${element.key}-${element.version}`
     });
   }
   return content;

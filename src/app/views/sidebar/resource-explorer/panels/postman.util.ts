@@ -37,7 +37,7 @@ function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
     path.unshift(version!);
 
     const item: Item = {
-      name,
+      name: `${name}-${version}`,
       request: {
         method: method!,
         url: {
