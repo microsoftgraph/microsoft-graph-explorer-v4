@@ -1,33 +1,67 @@
 import { scopes } from '../../../app/services/reducers/permissions-reducer';
-import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../../../app/services/redux-constants';
+import {
+  FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING,
+  FETCH_FULL_SCOPES_SUCCESS,
+  FETCH_URL_SCOPES_SUCCESS
+} from '../../../app/services/redux-constants';
 
 const initialState = {
   pending: false,
-  data: [],
-  hasUrl: false,
+  data: {
+    fullPermissions: [],
+    specificPermissions: []
+  },
   error: null
 };
 
 describe('Permissions reducer', () => {
-  it('should handle FETCH_SCOPES_SUCCESS', () => {
+  it('should handle FETCH_FULL_SCOPES_SUCCESS', () => {
     const action = {
-      type: FETCH_SCOPES_SUCCESS,
+      type: FETCH_FULL_SCOPES_SUCCESS,
       response: {
-        hasUrl: false,
-        scopes: ['profile.read', 'profile.write', 'email.read', 'email.write']
+        scopes: {
+          specificPermissions: [],
+          fullPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write']
+        }
       }
     }
 
     const expectedState = {
       pending: false,
-      data: ['profile.read', 'profile.write', 'email.read', 'email.write'],
-      hasUrl: false,
+      data: {
+        fullPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write'],
+        specificPermissions: []
+      },
       error: null
     }
 
     const newState = scopes(initialState, action);
     expect(newState).toEqual(expectedState);
   });
+
+  it('should handle FETCH_URL_SCOPES_SUCCESS', () => {
+    const action = {
+      type: FETCH_URL_SCOPES_SUCCESS,
+      response: {
+        scopes: {
+          specificPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write'],
+          fullPermissions: []
+        }
+      }
+    }
+
+    const expectedState = {
+      pending: false,
+      data: {
+        fullPermissions: [],
+        specificPermissions: ['profile.read', 'profile.write', 'email.read', 'email.write']
+      },
+      error: null
+    }
+
+    const newState = scopes(initialState, action);
+    expect(newState).toEqual(expectedState);
+  })
 
   it('should handle FETCH_SCOPES_ERROR', () => {
     const action = {
@@ -36,8 +70,7 @@ describe('Permissions reducer', () => {
     }
     const expectedState = {
       pending: false,
-      data: [],
-      hasUrl: false,
+      data: {},
       error: 'error'
     }
 
@@ -53,8 +86,10 @@ describe('Permissions reducer', () => {
 
     const expectedState = {
       pending: true,
-      data: [],
-      hasUrl: false,
+      data: {
+        fullPermissions: [],
+        specificPermissions: []
+      },
       error: null
     }
 

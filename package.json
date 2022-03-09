@@ -41,6 +41,7 @@
         "mini-css-extract-plugin": "1.6.2",
         "monaco-editor": "0.25.2",
         "monaco-editor-webpack-plugin": "4.2.0",
+        "office-ui-fabric-core": "11.0.0",
         "postcss-flexbugs-fixes": "5.0.2",
         "postcss-loader": "4.3.0",
         "postcss-preset-env": "7.3.0",
@@ -116,7 +117,6 @@
         "redux-logger": "3.0.6",
         "redux-mock-store": "1.5.3",
         "selenium-webdriver": "4.1.1",
-        "standard-version": "9.3.2",
         "start-server-and-test": "1.11.7",
         "ts-jest": "27.0.7"
     },

@@ -377,6 +377,7 @@ class App extends Component<IAppProps, IAppState> {
     let sideHeight = sidebar.height;
     let maxWidth = '50%';
     let contentWidth = content.width;
+    const contentHeight = content.height;
 
     const query = createShareLink(sampleQuery, authenticated);
     const { mobileScreen, showSidebar } = sidebarProperties;
@@ -392,9 +393,9 @@ class App extends Component<IAppProps, IAppState> {
     };
 
     if (mobileScreen) {
-      layout = sidebarWidth = 'col-xs-12 col-sm-12';
+      layout = sidebarWidth = 'ms-Grid-col ms-sm12';
       sideWidth = '100%';
-      sideHeight = '150px';
+      sideHeight = '100%';
       maxWidth = '100%';
       contentWidth = '100%';
       layout += ' layout';
@@ -407,7 +408,7 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        <div className={`container-fluid ${classes.app}`}>
+        <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft : mobileScreen && '15px'}}>
           <Announced
             message={
               !showSidebar
@@ -415,7 +416,10 @@ class App extends Component<IAppProps, IAppState> {
                 : translateMessage('Sidebar maximized')
             }
           />
-          <div className='row'>
+          <div className={ `ms-Grid-row ${classes.appRow}`} style={{
+            flexWrap: mobileScreen && 'wrap',
+            marginRight: showSidebar && '-20px' }}>
+
             {graphExplorerMode === Mode.Complete && (
               <Resizable
                 onResize={(e: any, direction: any, ref: any) => {
@@ -423,8 +427,8 @@ class App extends Component<IAppProps, IAppState> {
                     this.resizeSideBar(ref.style.width);
                   }
                 }}
-                className={sidebarWidth}
-                minWidth={'4vw'}
+                className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth}`}
+                minWidth={'4'}
                 maxWidth={maxWidth}
                 enable={{
                   right: true
@@ -465,29 +469,29 @@ class App extends Component<IAppProps, IAppState> {
             {displayContent && (
               <Resizable
                 bounds={'window'}
-                className={layout}
-                style={{
-                  marginLeft: 10
-                }}
+                className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${layout}`}
                 enable={{
                   right: false
                 }}
                 size={{
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
-                  height: '98vh'
+                  height: contentHeight
                 }}
+                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px'} : {}}
               >
                 <div style={{ marginBottom: 8 }}>
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
+                    <TermsOfUseMessage />
+                  </div>
                 </div>
-                <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
-                  <TermsOfUseMessage />
-                  <StatusMessages />
-                </div>
-                {
-                  // @ts-ignore
+
+                <div>
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
+                    <StatusMessages />
+                  </div>
                   <QueryResponse verb={this.state.selectedVerb} />
-                }
+                </div>
               </Resizable>
             )}
           </div>
