@@ -5,7 +5,7 @@ import { IHint } from './suffix-util';
 import { styles } from './suffix.styles';
 
 export const HintList = ({ hints }: any) => {
-  const listItems = hints.map((hint: IHint, index: any) => <div key={index}>
+  return hints.map((hint: IHint, index: any) => <div key={index}>
     {hint.description && <Text block variant='medium' id={'description' + index}>
       {hint.description}
     </Text>}
@@ -19,5 +19,4 @@ export const HintList = ({ hints }: any) => {
     <Separator />
   </div>
   );
-  return listItems;
 };

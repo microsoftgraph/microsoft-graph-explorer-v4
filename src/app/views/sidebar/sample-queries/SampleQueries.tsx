@@ -30,6 +30,7 @@ import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { isJsonString } from './sample-query-utils';
+import { searchBoxStyles } from '../../../utils/searchbox.styles';
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
   constructor(props: ISampleQueriesProps) {
@@ -181,7 +182,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
               >
                 {item.method}
               </span>
-              ;
             </TooltipHost>
           );
 
@@ -410,7 +410,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
           className={classes.searchBox}
           placeholder={messages['Search sample queries']}
           onChange={this.searchValueChanged}
-          styles={{ field: { paddingLeft: 10 } }}
+          styles={searchBoxStyles}
           aria-label={'Search'}
         />
         <hr />

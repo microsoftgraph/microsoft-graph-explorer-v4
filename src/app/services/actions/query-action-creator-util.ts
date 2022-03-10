@@ -12,7 +12,9 @@ import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { IStatus } from '../../../types/status';
+import { ClientError } from '../../utils/ClientError';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
+import { translateMessage } from '../../utils/translate-messages';
 import { authProvider, GraphClient } from '../graph-client';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
@@ -33,7 +35,11 @@ export async function anonymousRequest(
   const { proxyUrl, queryRunnerStatus } = getState();
   const { graphUrl, options } = createAnonymousRequest(query, proxyUrl, queryRunnerStatus);
   dispatch(queryRunningStatus(true));
-  return fetch(graphUrl, options);
+  return fetch(graphUrl, options)
+    .catch(() => {
+      throw new ClientError({ error: translateMessage('Could not connect to the sandbox') });
+    })
+    .then((response) => { return response; });
 }
 
 export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRunnerStatus: IStatus) {

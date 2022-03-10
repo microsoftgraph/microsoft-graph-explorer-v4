@@ -11,7 +11,7 @@ export class GraphAuthenticationProvider implements AuthenticationProvider {
       const authResult = await authenticationWrapper.getToken();
       return authResult.accessToken;
     } catch (error) {
-      throw error;
+      return '';
     }
   }
 }

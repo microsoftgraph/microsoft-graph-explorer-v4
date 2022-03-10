@@ -392,7 +392,7 @@
   "Resources available": "Ressourcen verfügbar",
   "Selected Resources": "Ausgewählte Ressourcen",
   "A documentation link for this URL exists. Click learn more to access it": "Ein Dokumentationslink für diese URL ist vorhanden. Klicken Sie auf \"Weitere Informationen\", um darauf zuzugreifen.",
-  "Feedback": "Haben Sie Feedback?",
+  "Feedback": "Möchten Sie bei der Verbesserung des Graph-Explorers helfen?",
   "Comment question": "Erzählen Sie uns mehr von Ihren Erfahrungen",
   "Prompt question": "Wir freuen uns über Ihr Feedback!",
   "No": "Nein",
@@ -423,10 +423,13 @@
   "Query parameters": "Abfrageparameter",
   "Preview collection": "Vorschau der Sammlung",
   "Download postman collection": "Postman-Sammlung herunterladen",
-  "Export list as a Postman collection message": "Sie können die gesamte Liste als Postman-Sammlung exportieren. Wenn die Liste Elemente enthält, die Sie nicht benötigen, wählen Sie diese aus, um sie zu entfernen.",
+  "Export list as a Postman collection message": "Sie können die gesamte Liste als Postman-Sammlung exportieren. Wenn die Liste Elemente enthält, die darin nicht enthalten sein sollen, wählen Sie diese aus, um sie zu entfernen.",
   "Copied": "Kopiert",
   "Invalid whitespace in URL": "Ungültige Leerzeichen in URL",
   "Response content not available due to CORS policy": "Der Antwortinhalt ist im Graph-Tester aufgrund der CORS-Richtlinie nicht verfügbar. Sie können diese Anforderung in einem API-Client wie Postman ausführen. Erfahren Sie mehr über CORS, und lernen Sie, wie es funktioniert",
   "here": "hier",
-  "Invalid version in URL": "Ungültige Version in URL"
+  "Invalid version in URL": "Ungültige Version in der URL",
+  "More info": "Weitere Informationen",
+  "Could not connect to the sandbox": "Fehler beim Verbinden mit der Sandbox",
+  "Failed to get profile information": "Fehler beim Abrufen der Profilinformationen"
 }

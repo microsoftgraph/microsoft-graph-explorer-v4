@@ -68,8 +68,11 @@ export const getPivotItems = () => {
       headerText={translateMessage('Response Preview')}
       title={translateMessage('Response Preview')}
       onRenderItemLink={renderItemLink}
+      headerButtonProps={{
+        'aria-controls': 'response-tab'
+      }}
     >
-      <Response />
+      <div id={'response-tab'}><Response /></div>
     </PivotItem>,
     <PivotItem
       key='response-headers'
@@ -79,8 +82,11 @@ export const getPivotItems = () => {
       itemKey='response-headers'
       title={translateMessage('Response Headers')}
       onRenderItemLink={renderItemLink}
+      headerButtonProps={{
+        'aria-controls': 'response-headers-tab'
+      }}
     >
-      <ResponseHeaders />
+      <div id={'response-headers-tab'}><ResponseHeaders/></div>
     </PivotItem>
   ];
 
@@ -94,8 +100,11 @@ export const getPivotItems = () => {
         itemIcon='PasteAsCode'
         itemKey='code-snippets'
         onRenderItemLink={renderItemLink}
+        headerButtonProps={{
+          'aria-controls': 'code-snippets-tab'
+        }}
       >
-        <Snippets />
+        <div id={'code-snippets-tab'}><Snippets /></div>
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'
@@ -105,8 +114,11 @@ export const getPivotItems = () => {
         headerText={translateMessage('Graph toolkit')}
         title={translateMessage('Graph toolkit')}
         onRenderItemLink={renderItemLink}
+        headerButtonProps={{
+          'aria-controls': 'toolkit-tab'
+        }}
       >
-        <GraphToolkit />
+        <div id={'toolkit-tab'}><GraphToolkit /></div>
       </PivotItem>,
       <PivotItem
         key='adaptive-cards'
@@ -116,14 +128,19 @@ export const getPivotItems = () => {
         itemIcon='ContactCard'
         itemKey='adaptive-cards'
         onRenderItemLink={renderItemLink}
+        headerButtonProps={{
+          'aria-controls': 'adaptive-cards-tab'
+        }}
       >
         <ThemeContext.Consumer >
           {(theme) => (
             // @ts-ignore
-            <AdaptiveCard
-              body={body}
-              hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
-            />
+            <div id={'adaptive-cards-tab'}>
+              <AdaptiveCard
+                body={body}
+                hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
+              />
+            </div>
           )}
         </ThemeContext.Consumer>
       </PivotItem>

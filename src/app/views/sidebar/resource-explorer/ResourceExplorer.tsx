@@ -14,10 +14,11 @@ import { IRootState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { addResourcePaths } from '../../../services/actions/resource-explorer-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
+import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import CommandOptions from './CommandOptions';
+import CommandOptions from './command-options/CommandOptions';
 import {
   createResourcesList, getCurrentTree,
   getResourcePaths,
@@ -143,7 +144,7 @@ const unstyledResourceExplorer = (props: any) => {
     setItems(createResourcesList(filtered.children, version));
   }
 
-  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item? : INavLink) => {
+  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
     ev!.preventDefault();
     item!.isExpanded = !item!.isExpanded;
     setQuery(item!);
@@ -197,7 +198,7 @@ const unstyledResourceExplorer = (props: any) => {
           placeholder={translateMessage('Search resources')}
           onChange={changeSearchValue}
           disabled={!!isolated}
-          styles={{ field: { paddingLeft: 10 } }}
+          styles={searchBoxStyles}
         />
         <hr />
         <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>

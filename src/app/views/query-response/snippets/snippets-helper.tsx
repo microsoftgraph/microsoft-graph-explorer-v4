@@ -7,7 +7,7 @@ import { getSnippet } from '../../../services/actions/snippet-action-creator';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 
-import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
+import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { IRootState } from '../../../../types/root';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { CopyButton } from '../../common/copy/CopyButton';
@@ -21,6 +21,9 @@ export function renderSnippets(supportedLanguages: string[]) {
     <PivotItem
       key={language}
       headerText={language}
+      headerButtonProps={{
+        'aria-controls': `${language}-tab`
+      }}
     >
       <Snippet language={language} />
     </PivotItem>
@@ -49,7 +52,7 @@ function Snippet(props: ISnippetProps) {
   const dispatch = useDispatch();
 
   const handleCopy = async () => {
-    trackedGenericCopy(snippet, CODE_SNIPPETS_COPY_BUTTON, sampleQuery,{ Language: language });
+    trackedGenericCopy(snippet, CODE_SNIPPETS_COPY_BUTTON, sampleQuery, { Language: language });
   }
 
   useEffect(() => {
@@ -57,7 +60,7 @@ function Snippet(props: ISnippetProps) {
   }, [sampleQuery.sampleUrl]);
 
   return (
-    <div style={{ display: 'block' }}>
+    <div style={{ display: 'block' }} id={`${language}-tab`}>
       {loadingState &&
         <Label style={{ padding: 10 }}>
           <FormattedMessage id='Fetching code snippet' />...

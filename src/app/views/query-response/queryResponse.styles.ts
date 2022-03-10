@@ -27,6 +27,18 @@ export const queryResponseStyles = (theme: ITheme) => {
     copyIcon: {
       float: 'right',
       zIndex: 1
+    },
+    toolkitText: {
+      root: {
+        padding: '20px',
+        width: '100%',
+        margin: 'auto',
+        display: 'inline-block',
+        position: 'relative',
+        top: '160px',
+        lineHeight: '1.5',
+        textAlign: 'justify'
+      }
     }
   };
 };
