@@ -17,7 +17,7 @@ export async function readHistoryData(): Promise<IHistoryItem[]> {
     if (historyItemHasExpired(creationTime)) {
       historyStorage.removeItem(creationTime);
     } else {
-      const historyItem: IHistoryItem = await historyStorage.getItem(creationTime);
+      const historyItem: IHistoryItem = await historyStorage.getItem(creationTime)!;
       historyData = [...historyData, historyItem];
     }
   }
