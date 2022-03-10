@@ -41,10 +41,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   public async logIn(sessionId = ''): Promise<AuthenticationResult> {
     this.consentingToNewScopes = false;
+    // eslint-disable-next-line no-useless-catch
     try {
       return await this.getAuthResult([], sessionId);
     } catch (error) {
-      throw new Error(`${error}`);
+      throw error;
     }
   }
 
@@ -65,11 +66,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
    */
   public async consentToScopes(scopes: string[] = []): Promise<AuthenticationResult> {
     this.consentingToNewScopes = true;
+    // eslint-disable-next-line no-useless-catch
     try {
-      const authResult = await this.loginWithInteraction(scopes);
-      return authResult;
+      return await this.loginWithInteraction(scopes);
     } catch (error) {
-      throw new Error(`${error}`);
+      throw error;
     }
   }
 
@@ -142,10 +143,12 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
 
       } else if (signInAuthError(error)) {
+        console.log('Throwing the error at this point')
         this.deleteHomeAccountId();
         throw error;
       }
       else {
+        console.log('Hitting this')
         throw error;
       }
     }
