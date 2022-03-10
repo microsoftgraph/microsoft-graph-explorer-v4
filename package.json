@@ -22,7 +22,7 @@
                 "bootstrap": "4.3.1",
                 "case-sensitive-paths-webpack-plugin": "2.4.0",
                 "css-loader": "6.5.1",
-                "dotenv": "6.0.0",
+                "dotenv": "16.0.0",
                 "dotenv-expand": "4.2.0",
                 "eslint-config-react-app": "7.0.0",
                 "eslint-plugin-react": "7.28.0",
