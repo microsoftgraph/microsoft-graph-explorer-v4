@@ -36,7 +36,7 @@
                 "jest": "27.3.1",
                 "jest-sonar-reporter": "2.0.0",
                 "jest-watch-typeahead": "1.0.0",
-                "localforage": "1.7.3",
+                "localforage": "1.10.0",
                 "mini-css-extract-plugin": "1.6.2",
                 "monaco-editor": "0.25.2",
                 "monaco-editor-webpack-plugin": "4.2.0",
