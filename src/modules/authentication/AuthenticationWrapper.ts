@@ -143,12 +143,10 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
 
       } else if (signInAuthError(error)) {
-        console.log('Throwing the error at this point')
         this.deleteHomeAccountId();
         throw error;
       }
       else {
-        console.log('Hitting this')
         throw error;
       }
     }
