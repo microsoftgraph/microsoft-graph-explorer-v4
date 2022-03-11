@@ -8,7 +8,8 @@
 
 name: $(date:yyyyMMdd)$(rev:.r)
 
-pool: MsGraphBuildAgentsWindowsGE
+pool:
+  vmImage: 'windows-latest'
 
 pr:
   branches:
