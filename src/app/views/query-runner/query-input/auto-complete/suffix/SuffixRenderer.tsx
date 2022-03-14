@@ -84,7 +84,7 @@ const SuffixRenderer = () => {
   }
   const hints = getHints();
   const hintsAvailable = hints.length > 0;
-  const infoIcon: IIconProps = {iconName: 'Info'};
+  const infoIcon: IIconProps = { iconName: 'Info' };
 
 
   return (
@@ -116,7 +116,7 @@ const SuffixRenderer = () => {
           setInitialFocus
         >
           <Text block variant='xLarge' className={styles.title} id={labelId}>
-              /{requestUrl}
+            /{requestUrl}
           </Text>
           <HintList hints={hints} />
         </Callout>

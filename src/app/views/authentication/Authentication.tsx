@@ -68,12 +68,7 @@ const Authentication = (props: any) => {
   };
 
   const removeUnderScore = (statusString: string): string => {
-    if (statusString === '') {
-      return statusString;
-    }
-    else {
-      return statusString.replace(/_/g, ' ');
-    }
+    return statusString ? statusString.replace(/_/g, ' ') : statusString;
   }
 
   const showProgressSpinner = (): React.ReactNode => {

@@ -15,7 +15,7 @@ export function getSignInAuthErrorHint(error: string): string {
 }
 
 export function signInAuthError(error: string): boolean {
-  return authErrorList.includes(error.trim());
+  return error ? authErrorList.includes(error) : false;
 }
 
 export function getConsentAuthErrorHint(error: string): string {
@@ -25,7 +25,7 @@ export function getConsentAuthErrorHint(error: string): string {
 }
 
 export function scopeAuthError(error: string): boolean {
-  return scopeErrorList.includes(error);
+  return error ? scopeErrorList.includes(error) : false;
 }
 
 function getHint(error: string): string {
