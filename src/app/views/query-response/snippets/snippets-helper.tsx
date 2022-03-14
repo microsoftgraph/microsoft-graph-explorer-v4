@@ -12,13 +12,14 @@ import { IRootState } from '../../../../types/root';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { CopyButton } from '../../common/copy/CopyButton';
 import { translateMessage } from '../../../utils/translate-messages';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 
 interface ISnippetProps {
   language: string;
   snippetInfo: ISupportedLanguages;
 }
 
-interface ISupportedLanguages{
+interface ISupportedLanguages {
   [language: string]: {
     sdkDownloadLink: string;
     sdkDocLink: string;
@@ -73,10 +74,32 @@ function Snippet(props: ISnippetProps) {
     return language.trim() === 'powershell' ? '#' : '//';
   }
 
-  const setSnippetText = (): string => {
-    // eslint-disable-next-line max-len
-    return (`${setCommentSymbol()} ${translateMessage('Leverage our libraries')} ${language} ${translateMessage('Client library')}${sdkDownloadLink}\r
-${setCommentSymbol()} ${translateMessage('SDKs documentation')} ${sdkDocLink}\r\r${snippet}`);
+  const trackLinkClickedEvent = (link: string, e:any) => {
+    const isDocumentationLink : boolean = link.includes('doc')
+    const componentName = isDocumentationLink ? componentNames.CODE_SNIPPET_DOCUMENTATION_LINK :
+      componentNames.CODE_SNIPPET_SDK_LIBRARY_LINK
+    telemetry.trackLinkClickEvent(e.currentTarget.href, componentName);
+  }
+
+  const extraSnippetInformation = () : JSX.Element => {
+    return (
+      <div style={{marginLeft: '24px', color: '#608b4e',
+        fontFamily: 'Consolas, monospace', font: '14px', lineHeight: '1.5'}}>
+
+        {setCommentSymbol()} {translateMessage('Leverage libraries')} {language} {translateMessage('Client library')}
+
+        <a style={{color: '#608b4e'}} href={sdkDownloadLink}
+          onClick={(e) => trackLinkClickedEvent(sdkDownloadLink, e)} target={'_blank'}
+          rel={'noreferrer'}>{sdkDownloadLink}</a>
+        <br />
+
+        {setCommentSymbol()} {translateMessage('SDKs documentation')}
+
+        <a style={{color: '#608b4e'}} href={sdkDocLink}
+          onClick={(e) => trackLinkClickedEvent(sdkDocLink, e)} target={'_blank'} rel="noreferrer" >{sdkDocLink}</a>
+
+      </div>
+    )
   }
 
   return (
@@ -90,10 +113,11 @@ ${setCommentSymbol()} ${translateMessage('SDKs documentation')} ${sdkDocLink}\r\
         <>
           <CopyButton isIconButton={true} style={{ float: 'right', zIndex: 1 }} handleOnClick={handleCopy} />
           <Monaco
-            body={setSnippetText()}
+            body={snippet}
             language={language}
             readOnly={true}
             height={height}
+            extraInfoElement={extraSnippetInformation()}
           />
         </>
       }
