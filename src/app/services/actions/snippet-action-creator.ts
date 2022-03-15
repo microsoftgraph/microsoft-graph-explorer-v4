@@ -61,8 +61,8 @@ export function getSnippet(language: string): Function {
           ? JSON.stringify(sampleQuery.sampleBody)
           : '';
 
-      const body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search}
-      HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${requestBody}`;
+      const body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl +
+        search} HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${requestBody}`;
       const options: IRequestOptions = { method, headers, body };
       const obj: any = {};
 
