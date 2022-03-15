@@ -90,13 +90,17 @@ function Snippet(props: ISnippetProps) {
 
         <a style={{color: '#608b4e'}} href={sdkDownloadLink}
           onClick={(e) => trackLinkClickedEvent(sdkDownloadLink, e)} target={'_blank'}
-          rel={'noreferrer'}>{sdkDownloadLink}</a>
+          rel='noreferrer noopener'>
+          {sdkDownloadLink}
+        </a>
         <br />
 
         {setCommentSymbol()} {translateMessage('SDKs documentation')}
 
         <a style={{color: '#608b4e'}} href={sdkDocLink}
-          onClick={(e) => trackLinkClickedEvent(sdkDocLink, e)} target={'_blank'} rel="noreferrer" >{sdkDocLink}</a>
+          onClick={(e) => trackLinkClickedEvent(sdkDocLink, e)} target={'_blank'} rel='noreferrer noopener' >
+          {sdkDocLink}
+        </a>
 
       </div>
     )
