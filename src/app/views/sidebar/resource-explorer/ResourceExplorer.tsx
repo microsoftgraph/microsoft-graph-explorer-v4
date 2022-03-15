@@ -77,7 +77,7 @@ const unstyledResourceExplorer = (props: any) => {
   }
 
   const changeVersion = (_event: React.MouseEvent<HTMLElement>, checked?: boolean | undefined): void => {
-    const selectedVersion = checked ? versions[0].key : versions[1].key;
+    const selectedVersion = checked ? versions[1].key : versions[0].key;
     setVersion(selectedVersion);
   }
 
@@ -188,11 +188,11 @@ const unstyledResourceExplorer = (props: any) => {
         />
         <hr />
         <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
-          <Toggle label={`${translateMessage('Select version')}: v1.0 / beta`}
-            defaultChecked
-            onText={versions[0].text}
-            offText={versions[1].text}
+          <Toggle label={`${translateMessage('Switch to beta')}`}
             onChange={changeVersion}
+            onText={translateMessage('On')}
+            offText={translateMessage('Off')}
+            inlineLabel
           />
         </Stack>
       </>}
