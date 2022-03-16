@@ -58,8 +58,8 @@ export const FeedbackButton = () => {
           />
         </TooltipHost>
 
-        {enableSurvey && <FeedbackForm onDismissSurvey={toggleSurvey}
-          activated={enableSurvey} onDisableSurvey={disableSurvey} />}
+        <FeedbackForm onDismissSurvey={toggleSurvey}
+          activated={enableSurvey} onDisableSurvey={disableSurvey} />
       </div>
       }
     </div>
