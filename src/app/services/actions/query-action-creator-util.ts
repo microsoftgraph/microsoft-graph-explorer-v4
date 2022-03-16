@@ -3,9 +3,6 @@ import {
   GraphRequest,
   ResponseType
 } from '@microsoft/microsoft-graph-client';
-import {
-  MSALAuthenticationProviderOptions
-} from '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
 
 import { IAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
@@ -95,10 +92,13 @@ function createAuthenticatedRequest(
     });
   }
 
-  const msalAuthOptions = new MSALAuthenticationProviderOptions(scopes);
+  // const msalAuthOptions:AuthCodeMSALBrowserAuthenticationProviderOptions = {
+  //   account: authenticationWrapper.getAccount()!, // the AccountInfo instance to acquire the token for.
+  //   interactionType: InteractionType.Popup , // msal-browser InteractionType
+  //   scopes // example of the scopes to be passed
+  // }
   const middlewareOptions = new AuthenticationHandlerOptions(
-    authProvider,
-    msalAuthOptions
+    authProvider
   );
   const graphRequest = GraphClient.getInstance()
     .api(encodeHashCharacters(query))
