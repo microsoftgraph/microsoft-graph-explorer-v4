@@ -12,7 +12,7 @@ import { IRootState } from '../../../../types/root';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { CopyButton } from '../../common/copy/CopyButton';
 import { translateMessage } from '../../../utils/translate-messages';
-import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
+import { componentNames, telemetry } from '../../../../telemetry';
 
 interface ISnippetProps {
   language: string;
