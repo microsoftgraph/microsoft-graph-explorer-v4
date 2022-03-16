@@ -121,7 +121,6 @@ export function makeGraphRequest(scopes: string[]): Function {
     switch (query.selectedVerb) {
       case 'GET':
         response = await graphRequest.get();
-        console.log(response);
         break;
       case 'POST':
         response = await graphRequest.post(query.sampleBody);
