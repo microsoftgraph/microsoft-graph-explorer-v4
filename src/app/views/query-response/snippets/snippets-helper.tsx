@@ -83,12 +83,12 @@ function Snippet(props: ISnippetProps) {
 
   const extraSnippetInformation = () : JSX.Element => {
     return (
-      <div style={{marginLeft: '24px', color: '#608b4e',
-        fontFamily: 'Consolas, monospace', font: '14px', lineHeight: '1.5'}}>
+      <div style={{marginLeft: '28px', color: '#008000',
+        fontFamily: 'Consolas, monospace', font: '11px', lineHeight: '1.5'}}>
 
         {setCommentSymbol()} {translateMessage('Leverage libraries')} {language} {translateMessage('Client library')}
 
-        <a style={{color: '#608b4e'}} href={sdkDownloadLink}
+        <a style={{color: '#008000'}} href={sdkDownloadLink}
           onClick={(e) => trackLinkClickedEvent(sdkDownloadLink, e)} target={'_blank'}
           rel='noreferrer noopener'>
           {sdkDownloadLink}
@@ -97,7 +97,7 @@ function Snippet(props: ISnippetProps) {
 
         {setCommentSymbol()} {translateMessage('SDKs documentation')}
 
-        <a style={{color: '#608b4e'}} href={sdkDocLink}
+        <a style={{color: '#008000'}} href={sdkDocLink}
           onClick={(e) => trackLinkClickedEvent(sdkDocLink, e)} target={'_blank'} rel='noreferrer noopener' >
           {sdkDocLink}
         </a>
