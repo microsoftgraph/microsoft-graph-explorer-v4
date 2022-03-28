@@ -53,20 +53,19 @@ const StatusMessages = () => {
   if (queryRunnerStatus) {
     const { messageType, statusText, status, duration, hint } = queryRunnerStatus;
     let urls: any = {};
-    let message = statusText;
-    const extractedUrls = extractUrl(statusText);
+    let message = status.toString();
+    const extractedUrls = extractUrl(status.toString());
     if (extractedUrls) {
-      message = replaceLinks(statusText);
+      message = replaceLinks(status.toString());
       urls = convertArrayToObject(extractedUrls);
     }
-
 
     return <MessageBar messageBarType={messageType}
       isMultiline={true}
       onDismiss={() => dispatch(clearQueryStatus())}
       dismissButtonAriaLabel='Close'
       aria-live={'assertive'}>
-      {`${status} - `}{displayStatusMessage(message, urls)}
+      {`${statusText} - `}{displayStatusMessage(message, urls)}
 
       {duration && <>
         {` - ${duration}`}<FormattedMessage id='milliseconds' />
