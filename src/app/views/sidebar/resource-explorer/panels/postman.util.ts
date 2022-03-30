@@ -51,32 +51,8 @@ function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
           path
         }
       }
-    })
-    .filter((value, i, arr) => arr.indexOf(value) === i) // selects distinct folder names
-    .sort();
-
-  const folderItems: any = folderNames.map((folder) => {
-    const items = resources
-      .filter((resource) => resource.url.match(`^/${folder}/?`))
-      .map((resource) => {
-        const { method, url, version, paths: path } = resource;
-        path.shift();
-        path.unshift(version!);
-        const item: Item = {
-          name: url,
-          request: {
-            method: method!,
-            url: {
-              raw: `${GRAPH_URL}/${version}${url}`,
-              protocol: 'https',
-              host: ['graph', 'microsoft', 'com'],
-              path
-            }
-          }
-        };
-        return item;
-      });
-    return { name: folder, item: items };
+    }
+    list.push(item);
   });
-  return folderItems;
+  return list;
 }
