@@ -30,6 +30,7 @@ const CommandOptions = (props: ICommandOptions) => {
     {
       key: 'preview',
       text: translateMessage('Preview collection'),
+      ariaLabel: translateMessage('Preview collection'),
       iconProps: { iconName: 'View' },
       onClick: () => toggleSelectedResourcesPreview()
     }
@@ -42,6 +43,7 @@ const CommandOptions = (props: ICommandOptions) => {
       style: {
         marginLeft: 30
       },
+      ariaLabel: translateMessage('Delete'),
       onClick: () => toggleIsDialogHidden()
     }
   ]
