@@ -34,8 +34,13 @@ const PanelList = ({ messages,
   columns, classes, selection,
   renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) => {
 
+  const sortPermissions = (permissionsToSort: IPermission[]) : IPermission[] => {
+    return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
+  }
+
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
-  const [permissions, setPermissions] = useState(scopes.data.sort(dynamicSort('value', SortOrder.ASC)));
+  const { fullPermissions } = scopes.data;
+  const [permissions, setPermissions] = useState(sortPermissions(fullPermissions));
   const permissionsList: any[] = [];
   const tokenPresent = !!authToken.token;
 
@@ -50,11 +55,11 @@ const PanelList = ({ messages,
   });
 
   const searchValueChanged = (event: any, value?: string): void => {
-    let filteredPermissions = scopes.data;
+    let filteredPermissions = scopes.data.fullPermissions;
     if (value) {
       const keyword = value.toLowerCase();
 
-      filteredPermissions = scopes.data.filter((permission: IPermission) => {
+      filteredPermissions = fullPermissions.filter((permission: IPermission) => {
         const name = permission.value.toLowerCase();
         return name.includes(keyword);
       });
@@ -65,7 +70,7 @@ const PanelList = ({ messages,
   const groups = generateGroupsFromList(permissionsList, 'groupName');
 
 
-  const _onRenderGroupHeader = (props: any): any => {
+  const onRenderGroupHeader = (props: any): any => {
     if (props) {
       return (
         <GroupHeader  {...props} onRenderGroupHeaderCheckbox={renderCustomCheckbox} />
@@ -101,7 +106,7 @@ const PanelList = ({ messages,
         compact={true}
         groupProps={{
           showEmptyGroups: false,
-          onRenderHeader: _onRenderGroupHeader
+          onRenderHeader: onRenderGroupHeader
         }}
         ariaLabelForSelectionColumn={messages['Toggle selection'] || 'Toggle selection'}
         ariaLabelForSelectAllCheckbox={messages['Toggle selection for all items'] || 'Toggle selection for all items'}

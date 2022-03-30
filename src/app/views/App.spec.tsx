@@ -100,7 +100,6 @@ describe('It should render the main GE site', () => {
     getByText('Toolkit component');
     getByText('Adaptive cards');
     getByText('Expand');
-    getByText('Share');
     getByText('Authentication');
     getByText('Sample queries');
     getByText('History');

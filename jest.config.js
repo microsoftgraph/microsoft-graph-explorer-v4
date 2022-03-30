@@ -13,7 +13,10 @@ module.exports = {
   resolver: 'jest-pnp-resolver',
   setupFiles: ['react-app-polyfill/jsdom'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
-  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+  testMatch: [
+    '**/__tests__/**/*.[jt]s?(x)',
+    '**/?(*.)+(spec|test).[jt]s'
+  ],
   globals: {
     crypto: require('crypto')
   },
@@ -22,7 +25,7 @@ module.exports = {
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
     '^.+\\.css$': '<rootDir>/config/jest/cssTransform.js',
-    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)':'ts-jest',
+    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': 'ts-jest',
     [`(${esModules}).+\\.js$`]: 'ts-jest'
   },
   transformIgnorePatterns: [
@@ -50,6 +53,5 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname'
   ],
-  testResultsProcessor: 'jest-sonar-reporter',
-  testPathIgnorePatterns: ['<rootDir>/src/tests/accessibility/']
+  testResultsProcessor: 'jest-sonar-reporter'
 };

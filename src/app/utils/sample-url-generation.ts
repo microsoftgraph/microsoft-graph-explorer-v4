@@ -81,7 +81,9 @@ export function removeExtraSlashesFromUrl(url: string): string {
 }
 
 export function hasWhiteSpace(url: string): boolean {
-  const parts = url.split('?');
   const whitespaceChars = [' ', '\t', '\n', '%20'];
-  return whitespaceChars.some((char) => parts[0].includes(char));
+  const parts = url.split('?');
+  return parts.length > 1 ? whitespaceChars.some((char) => parts[0].trimStart().includes(char)) :
+    whitespaceChars.some((char) => parts[0].trim().includes(char));
+
 }

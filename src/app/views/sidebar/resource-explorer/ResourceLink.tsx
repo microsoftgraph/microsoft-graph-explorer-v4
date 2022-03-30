@@ -8,11 +8,11 @@ import { FormattedMessage } from 'react-intl';
 import { ResourceLinkType, ResourceOptions } from '../../../../types/resources';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
-
 interface IResourceLinkProps {
   link: any;
   isolateTree: Function;
   resourceOptionSelected: Function;
+  linkLevel: number;
   classes: any;
 }
 
@@ -22,9 +22,10 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const tooltipId = getId('tooltip');
   const buttonId = getId('targetButton');
 
+
   const iconButtonStyles = {
-    root: { paddingBottom: 10 },
-    menuIcon: { fontSize: 20, padding: 10 }
+    root: { paddingBottom:10, marginTop: -5, marginRight: 2 },
+    menuIcon: { fontSize: 20, padding: 5 }
   };
 
   const methodButtonStyles: CSSProperties = {
@@ -44,8 +45,12 @@ const ResourceLink = (props: IResourceLinkProps) => {
     >
       {resourceLink.method}
     </span>}
-    {resourceLink.name}
 
+    <span className={linkStyle.resourceLinkNameContainer}>
+      <span className={linkStyle.resourceLinkText}>
+        {resourceLink.name}
+      </span>
+    </span>
 
     {items.length > 0 &&
       <TooltipHost
@@ -65,7 +70,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
           role='button'
           id={buttonId}
           aria-describedby={tooltipId}
-          className={linkStyle.button}
           styles={iconButtonStyles}
           menuIconProps={{ iconName: 'MoreVertical' }}
           title={translateMessage('More actions')}
@@ -77,7 +81,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         />
       </TooltipHost>
     }
-  </span>;
+  </span>
 
   function getMenuItems() {
     const menuItems: IContextualMenuItem[] = [];
@@ -108,8 +112,9 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
 const linkStyle = mergeStyleSets(
   {
-    link: { display: 'flex', lineHeight: 'normal' },
-    button: { float: 'right', position: 'absolute', right: 0 }
+    link: { display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden' },
+    resourceLinkNameContainer: { textAlign: 'left', flex: '1', overflow:'hidden', display: 'flex' },
+    resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }
   }
 );
 

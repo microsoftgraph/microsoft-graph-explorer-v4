@@ -16,11 +16,11 @@ import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
 import { IRootState } from '../../../../types/root';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
+import { ACCOUNT_TYPE } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
-import FeedbackForm from './feedback/FeedbackForm';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
@@ -42,6 +42,7 @@ export class Request extends Component<IRequestComponent, any> {
     const {
       handleOnEditorChange,
       mode,
+      profile,
       intl: { messages }
     }: any = this.props;
 
@@ -209,9 +210,6 @@ export class Request extends Component<IRequestComponent, any> {
             </Pivot>
           </div>
         </Resizable>
-        <div id={'feedback-tab'}>
-          <FeedbackForm activated={this.state.enableShowSurvey} dismissSurvey={this.toggleCustomSurvey} />
-        </div>
       </>
     );
   }

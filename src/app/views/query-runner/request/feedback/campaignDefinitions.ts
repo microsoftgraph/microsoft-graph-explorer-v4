@@ -37,7 +37,7 @@ const CampaignDefinitions: object[] = [{
                 [{
                   'Type': 0,
                   'Activity': 'AppUsageTime',
-                  'Count': 60,
+                  'Count': (NODE_ENV === 'development') ? 60 : process.env.REACT_APP_USAGE_TIME, //in seconds
                   'IsAggregate': true
                 },
                 {
