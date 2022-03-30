@@ -55,6 +55,14 @@ export const MICROSOFT_PRIVACY_STATEMENT_LINK = 'Microsoft privacy statement lin
 export const MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK = 'Microsoft graph API reference docs link';
 export const CODE_SNIPPET_DOCUMENTATION_LINK = 'Code snippet documentation link';
 export const CODE_SNIPPET_SDK_LIBRARY_LINK = 'Code snippet SDK library link';
+export const CODE_SNIPPET_LANGUAGES = {
+  CSharp: 'C Sharp sdk link',
+  JavaScript: 'Javascript sdk link',
+  Java: 'Java snippet sdk link',
+  Go: 'Go sdk link',
+  'Objective-C': 'Objective-C sdk link',
+  Powershell: 'Powershell sdk link'
+}
 
 // Actions
 export const GET_SNIPPET_ACTION = 'Get snippet action';

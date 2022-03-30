@@ -27,7 +27,7 @@ export function Monaco(props: IMonaco) {
   const itemHeight = height ? height : '300px';
 
   return (
-    <FocusZone disabled={true}>
+    <FocusZone disabled={props.extraInfoElement ? false : true}>
       <div className='monaco-editor'>
         {props.extraInfoElement}
         <ThemeContext.Consumer >

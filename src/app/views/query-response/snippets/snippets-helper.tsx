@@ -1,4 +1,4 @@
-import { Label, PivotItem } from '@fluentui/react';
+import { getTheme, ITheme, Label, Link, PivotItem } from '@fluentui/react';
 import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
@@ -13,7 +13,7 @@ import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names
 import { CopyButton } from '../../common/copy/CopyButton';
 import { translateMessage } from '../../../utils/translate-messages';
 import { componentNames, telemetry } from '../../../../telemetry';
-
+import { getSnippetStyles } from './Snippets.styles';
 interface ISnippetProps {
   language: string;
   snippetInfo: ISupportedLanguages;
@@ -77,33 +77,38 @@ function Snippet(props: ISnippetProps) {
   const trackLinkClickedEvent = (link: string, e:any) => {
     const isDocumentationLink : boolean = link.includes('doc')
     const componentName = isDocumentationLink ? componentNames.CODE_SNIPPET_DOCUMENTATION_LINK :
-      componentNames.CODE_SNIPPET_SDK_LIBRARY_LINK
+      getLanguageComponentName();
     telemetry.trackLinkClickEvent(e.currentTarget.href, componentName);
   }
+  const getLanguageComponentName = () : string => {
+    return Object.entries(componentNames.CODE_SNIPPET_LANGUAGES).find(
+      ([key]) => language.toLowerCase() === key.toLowerCase() )?.[1] ||
+      componentNames.CODE_SNIPPET_SDK_LIBRARY_LINK;
+  }
 
-  const extraSnippetInformation = () : JSX.Element => {
+  const addExtraSnippetInformation = () : JSX.Element => {
+    const currentTheme: ITheme = getTheme();
+    const snippetLinkStyles = getSnippetStyles(currentTheme);
+    const snippetCommentStyles = getSnippetStyles(currentTheme).snippetComments;
     return (
-      <div style={{marginLeft: '28px', color: '#008000',
-        fontFamily: 'Consolas, monospace', font: '11px', lineHeight: '1.5'}}>
+      <div style={snippetCommentStyles}>
 
         {setCommentSymbol()} {translateMessage('Leverage libraries')} {language} {translateMessage('Client library')}
 
-        <a style={{color: '#008000'}} href={sdkDownloadLink}
-          onClick={(e) => trackLinkClickedEvent(sdkDownloadLink, e)} target={'_blank'}
-          rel='noreferrer noopener'>
+        <Link  href={sdkDownloadLink} underline={true} styles={snippetLinkStyles}
+          onClick={(e) => trackLinkClickedEvent(sdkDownloadLink, e)} target={'_blank'} rel='noreferrer noopener'>
           {sdkDownloadLink}
-        </a>
+        </Link>
         <br />
 
         {setCommentSymbol()} {translateMessage('SDKs documentation')}
 
-        <a style={{color: '#008000'}} href={sdkDocLink}
-          onClick={(e) => trackLinkClickedEvent(sdkDocLink, e)} target={'_blank'} rel='noreferrer noopener' >
+        <Link href={sdkDocLink} underline={true} styles={snippetLinkStyles}
+          onClick={(e) => trackLinkClickedEvent(sdkDocLink, e)} target={'_blank'} rel='noreferrer noopener'>
           {sdkDocLink}
-        </a>
-
+        </Link>
       </div>
-    )
+    );
   }
 
   return (
@@ -121,7 +126,7 @@ function Snippet(props: ISnippetProps) {
             language={language}
             readOnly={true}
             height={height}
-            extraInfoElement={extraSnippetInformation()}
+            extraInfoElement={addExtraSnippetInformation()}
           />
         </>
       }
