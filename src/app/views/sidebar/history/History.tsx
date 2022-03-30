@@ -216,7 +216,7 @@ export class History extends Component<IHistoryProps, any> {
                   shouldFocusOnMount: true,
                   items: buttonActions
                 }}
-                styles={{root: {paddingBottom: 10, marginLeft: -1.2}}}
+                styles={{root: {paddingBottom: 10, marginLeft: 1}}}
               />
             </TooltipHost>
           );
@@ -281,6 +281,7 @@ export class History extends Component<IHistoryProps, any> {
                 }}
                 ariaLabel={collapseButtonLabel}
                 onClick={() => this.onToggleCollapse(props)}
+                styles={{icon: {marginTop: '15px'}}}
               />
             </TooltipHost>
             <div className={classes.groupTitle}>
