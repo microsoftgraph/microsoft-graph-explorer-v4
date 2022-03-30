@@ -6,7 +6,6 @@ import {
   IResourceLink,
   ResourceLinkType
 } from '../../../../types/resources';
-
 interface ITreeFilter {
   paths: string[];
   level: number;
@@ -16,7 +15,8 @@ interface ITreeFilter {
 
 export function createResourcesList(
   source: IResource[],
-  version: string
+  version: string,
+  searchText?: string
 ): INavLinkGroup[] {
   function getLinkType({ segment, links }: any): ResourceLinkType {
     const isGraphFunction = segment.startsWith('microsoft.graph');
@@ -34,21 +34,27 @@ export function createResourcesList(
   ): IResourceLink[] {
     const { segment, children } = parent;
     const links: IResourceLink[] = [];
+    const childPaths = [...paths, segment];
     if (methods.length > 1) {
-      methods.forEach((method) => {
-        links.push(
-          createNavLink(
-            {
+      if (
+        !searchText ||
+        (searchText && childPaths.some((path) => path.contains(searchText)))
+      ) {
+        methods.forEach((method) => {
+          links.push(
+            createNavLink(
+              {
+                segment,
+                labels: [],
+                children: []
+              },
               segment,
-              labels: [],
-              children: []
-            },
-            segment,
-            [...paths, segment],
-            method.toUpperCase()
-          )
-        );
-      });
+              childPaths,
+              method.toUpperCase()
+            )
+          );
+        });
+      }
     }
 
     // versioned children
@@ -56,19 +62,17 @@ export function createResourcesList(
       children
         .filter((child) => versionExists(child, version))
         .forEach((versionedChild) => {
-          links.push(
-            createNavLink(versionedChild, segment, [...paths, segment])
-          );
+          links.push(createNavLink(versionedChild, segment, childPaths));
         });
 
     return links;
   }
 
   function sortResourceLinks(a: IResourceLink, b: IResourceLink): number {
-    if (a.links.length === 0 && a.links.length < b.links.length) {
+    if (a.links.length === 0 && b.links.length > 0) {
       return -1;
     }
-    if (b.links.length === 0 && a.links.length > b.links.length) {
+    if (b.links.length === 0 && a.links.length > 0) {
       return 1;
     }
     return 0;
@@ -103,12 +107,19 @@ export function createResourcesList(
         ? ` (${versionedChildren.length})`
         : '';
 
+    // if segment name does not contain search text, then found text is in child, so expand this link
+    const isExpanded =
+      searchText &&
+        ![...paths, segment].some((path) => path.contains(searchText))
+        ? true
+        : false;
+
     return {
       key,
       url: key,
       name: `${segment}${enclosedCounter}`,
       labels,
-      isExpanded: false,
+      isExpanded,
       parent,
       level,
       paths,
@@ -160,23 +171,46 @@ export function removeCounter(title: string): string {
 }
 
 export function getResourcesSupportedByVersion(
-  content: IResource,
-  version: string
-): IResource {
-  const resources: IResource = { ...content };
-  const children: IResource[] = [];
-
-  resources.children.forEach((child: IResource) => {
-    if (versionExists(child, version)) {
-      children.push(child);
+  resources: IResource[],
+  version: string,
+  searchText?: string
+): IResource[] {
+  const versionedResources: IResource[] = [];
+  const resourcesList = JSON.parse(JSON.stringify(resources)); // deep copy
+  resourcesList.forEach((resource: IResource) => {
+    if (versionExists(resource, version)) {
+      resource.children = getResourcesSupportedByVersion(
+        resource.children || [],
+        version
+      );
+      versionedResources.push(resource);
     }
   });
-  resources.children = children;
-  return resources;
+  return searchText
+    ? searchResources(versionedResources, searchText)
+    : versionedResources;
 }
 
-export function versionExists(child: IResource, version: string): boolean {
-  return !!child.labels.find((k) => k.name === version);
+function searchResources(haystack: IResource[], needle: string): IResource[] {
+  const foundResources: IResource[] = [];
+  haystack.forEach((resource: IResource) => {
+    if (resource.segment.contains(needle)) {
+      foundResources.push(resource);
+      return;
+    }
+    if (resource.children) {
+      const foundChildResources = searchResources(resource.children, needle);
+      if (foundChildResources.length > 0) {
+        resource.children = foundChildResources;
+        foundResources.push(resource);
+      }
+    }
+  });
+  return foundResources;
+}
+
+export function versionExists(resource: IResource, version: string): boolean {
+  return resource.labels.some((k) => k.name === version);
 }
 
 export function getAvailableMethods(
@@ -214,6 +248,7 @@ export function getResourcePaths(
     content.forEach((element: IResourceLink) => {
       element.version = version;
       element.url = `${getUrlFromLink(element)}`;
+      element.key = element.key?.includes(version) ? element.key : `${element.key}-${element.version}`
     });
   }
   return content;
@@ -229,3 +264,5 @@ function flatten(content: IResourceLink[]): IResourceLink[] {
   });
   return result;
 }
+
+
