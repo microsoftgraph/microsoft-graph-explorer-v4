@@ -11,7 +11,6 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import PathsReview from '../panels/PathsReview';
 import { resourceExplorerStyles } from '../resources.styles';
 
-
 interface ICommandOptions {
   version: string;
 }
