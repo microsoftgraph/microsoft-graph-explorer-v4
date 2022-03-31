@@ -1,6 +1,4 @@
 // Theme generated from https://developer.microsoft.com/en-us/fabric#/styles/themegenerator
-// eslint-disable-next-line prefer-const
-export let num = [1, 2, 3];
 
 export const dark = {
   palette: {
