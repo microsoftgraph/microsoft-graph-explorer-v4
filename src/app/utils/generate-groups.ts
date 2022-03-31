@@ -7,6 +7,7 @@ export function generateGroupsFromList(list: any[], property: string) {
   let isCollapsed = false;
   let previousCount = 0;
   let count = 0;
+  const toggleCollapse: string = isCollapsed ? 'collapsed ': 'expanded '
 
   if (!list || list.length === 0 || list.some(e => !e[property])) {
     return groups;
@@ -16,13 +17,11 @@ export function generateGroupsFromList(list: any[], property: string) {
     if (!map.has(listItem[property])) {
       map.set(listItem[property], true);
       count = list.filter(item => item[property] === listItem[property]).length;
-      const collapsed: string = isCollapsed? 'collapsed': 'expanded'
-      const ariaLabel: string = listItem[property] + ' has ' + count + ' results' + map.size + 'of 28' + collapsed
+      const ariaLabel: string = listItem[property] + ' has ' + count + ' results ' + toggleCollapse;
       if (groups.length > 0) {
         isCollapsed = true;
       }
       groups.push({
-        ...listItem,
         name: listItem[property],
         key: listItem[property],
         startIndex: previousCount,
@@ -33,5 +32,10 @@ export function generateGroupsFromList(list: any[], property: string) {
       previousCount += count;
     }
   }
+  let i = 1;
+  groups.forEach(function (group){
+    group.ariaLabel += `${i} of ${groups.length}`;
+    i++;
+  });
   return groups;
 }
