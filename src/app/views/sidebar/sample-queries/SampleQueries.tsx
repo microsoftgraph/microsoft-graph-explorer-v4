@@ -4,9 +4,9 @@ import {
   GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
@@ -31,43 +31,38 @@ import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
 import { columns, isJsonString, performSearch } from './sample-query-utils';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
+import { fetchSamples } from '../../../services/actions/samples-action-creators';
+import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
+import { runQuery } from '../../../services/actions/query-action-creators';
+import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 
-export class SampleQueries extends Component<ISampleQueriesProps, any> {
-  constructor(props: ISampleQueriesProps) {
-    super(props);
-    this.state = {
-      sampleQueries: [],
-      selectedQuery: null
-    };
-  }
+function SampleQueries() {
 
-  public componentDidMount = () => {
-    const { queries } = this.props.samples;
-    if (queries && queries.length > 0) {
-      this.setState({ sampleQueries: queries });
-    } else {
-      this.props.actions!.fetchSamples();
+  const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
+  const { authToken, profile, samples, theme } =
+    useSelector((state: IRootState) => state);
+  const tokenPresent = !!authToken;
+  const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(samples.queries);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if(samples.queries.length === 0){
+      dispatch(fetchSamples());
     }
+  }, [])
+
+  const searchValueChanged = (event: any, value?: string): void => {
+    const { queries } = samples;
+    const filteredQueries = value ? performSearch(queries, value): queries;
+    setSampleQueries(filteredQueries);
   };
 
-  public componentDidUpdate = (prevProps: ISampleQueriesProps) => {
-    if (prevProps.samples.queries !== this.props.samples.queries) {
-      this.setState({ sampleQueries: this.props.samples.queries });
-    }
-  };
-
-  public searchValueChanged = (event: any, value?: string): void => {
-    const { queries } = this.props.samples;
-    const sampleQueries = value ? performSearch(queries, value): queries;
-    this.setState({ sampleQueries });
-  };
-
-  public onDocumentationLinkClicked = (item: ISampleQuery) => {
+  const onDocumentationLinkClicked = (item: ISampleQuery) => {
     window.open(item.docLink, '_blank');
-    this.trackDocumentLinkClickedEvent(item);
+    trackDocumentLinkClickedEvent(item);
   };
 
-  private async trackDocumentLinkClickedEvent(item: ISampleQuery): Promise<void> {
+  const trackDocumentLinkClickedEvent = async (item: ISampleQuery): Promise<void> => {
     const properties: { [key: string]: any } = {
       ComponentName: componentNames.DOCUMENTATION_LINK,
       SampleId: item.id,
@@ -79,6 +74,146 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
     // Check if link throws error
     validateExternalLink(item.docLink || '', componentNames.DOCUMENTATION_LINK, item.id);
+  }
+
+  const querySelected = (query: ISampleQuery) => {
+    if (!query) {
+      return;
+    }
+
+    const queryVersion = query.requestUrl.substring(1, 5);
+    const sampleQuery: IQuery = {
+      sampleUrl: GRAPH_URL + query.requestUrl,
+      selectedVerb: query.method,
+      sampleBody:  query.postBody,
+      sampleHeaders: query.headers || [],
+      selectedVersion: queryVersion
+    };
+    substituteTokens(sampleQuery, profile!);
+    sampleQuery.sampleBody = getSampleBody(sampleQuery);
+
+    if (query.tip) {
+      displayTipMessage(query);
+    }
+
+    if (shouldRunQuery(query)) {
+      dispatch(runQuery(sampleQuery));
+    }
+
+    trackSampleQueryClickEvent(query);
+    dispatch(setSampleQuery(sampleQuery));
+  };
+
+  const getSampleBody = (query : IQuery) => {
+    return query.sampleBody ? (isJsonString(query.sampleBody)
+      ? JSON.parse(query.sampleBody)
+      : query.sampleBody) : undefined;
+  }
+
+  const displayTipMessage = (query: ISampleQuery) => {
+    dispatch(setQueryResponseStatus({
+      messageType: MessageBarType.warning,
+      statusText: 'Tip',
+      status: query.tip
+    }));
+  }
+
+  const shouldRunQuery = (query: ISampleQuery) => {
+    if(query.tip && tokenPresent) {
+      return false;
+    }
+    if(!tokenPresent || query.method === 'GET'){
+      return true;
+    }
+    return false;
+  }
+
+  const trackSampleQueryClickEvent = (query: ISampleQuery) => {
+    const sanitizedUrl = sanitizeQueryUrl(GRAPH_URL + query.requestUrl);
+    telemetry.trackEvent(
+      eventTypes.LISTITEM_CLICK_EVENT,
+      {
+        ComponentName: componentNames.SAMPLE_QUERY_LIST_ITEM,
+        SampleId: query.id,
+        SampleName: query.humanName,
+        SampleCategory: query.category,
+        QuerySignature: `${query.method} ${sanitizedUrl}`
+      });
+  }
+
+  return (
+    <div>
+      <SearchBox
+        className={classes.searchBox}
+        placeholder={messages['Search sample queries']}
+        onChange={this.searchValueChanged}
+        styles={searchBoxStyles}
+        aria-label={'Search'}
+      />
+      <hr />
+      {error && (
+        <MessageBar
+          messageBarType={MessageBarType.warning}
+          isMultiline={true}
+          dismissButtonAriaLabel='Close'
+        >
+          <FormattedMessage id='viewing a cached set' />
+        </MessageBar>
+      )}
+      <MessageBar
+        messageBarType={MessageBarType.info}
+        isMultiline={true}
+        dismissButtonAriaLabel='Close'
+      >
+        <FormattedMessage id='see more queries' />
+        <a
+          target='_blank'
+          rel="noopener noreferrer"
+          className={classes.links}
+          onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href,
+            componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
+          href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
+        >
+          <FormattedMessage id='Microsoft Graph API Reference docs' />
+        </a>
+      </MessageBar>
+      <Announced
+        message={`${sampleQueries.length} search results available.`}
+      />
+      <div role="navigation">
+        <DetailsList
+          className={classes.queryList}
+          cellStyleProps={{
+            cellRightPadding: 0,
+            cellExtraRightPadding: 0,
+            cellLeftPadding: 0
+          }}
+          onRenderItemColumn={this.renderItemColumn}
+          items={sampleQueries}
+          selectionMode={SelectionMode.none}
+          columns={columns}
+          groups={groups}
+          groupProps={{
+            showEmptyGroups: true,
+            onRenderHeader: this.renderGroupHeader
+          }}
+          onRenderRow={this.renderRow}
+          onRenderDetailsHeader={this.renderDetailsHeader}
+          onItemInvoked={this.querySelected}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default SampleQueries
+export class SampleQueriess extends Component<ISampleQueriesProps, any> {
+  constructor(props: ISampleQueriesProps) {
+    super(props);
+    this.state = {
+      sampleQueries: [],
+      selectedQuery: null
+    };
   }
 
   public renderItemColumn = (
@@ -240,65 +375,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     }
   };
 
-  private querySelected = (query: any) => {
-    const { actions, profile } = this.props;
-    const selectedQuery = query;
-    if (!selectedQuery) {
-      return;
-    }
-
-    const queryVersion = selectedQuery.requestUrl.substring(1, 5);
-    const sampleQuery: IQuery = {
-      sampleUrl: GRAPH_URL + selectedQuery.requestUrl,
-      selectedVerb: selectedQuery.method,
-      sampleBody:  selectedQuery.postBody,
-      sampleHeaders: selectedQuery.headers || [],
-      selectedVersion: queryVersion
-    };
-    substituteTokens(sampleQuery, profile);
-    sampleQuery.sampleBody =this.getSampleBody(sampleQuery);
-
-    if (selectedQuery.tip) {
-      displayTipMessage(actions, selectedQuery);
-    }
-
-    if (this.shouldRunQuery(selectedQuery)) {
-      actions!.runQuery(sampleQuery);
-    }
-
-    this.trackSampleQueryClickEvent(selectedQuery);
-    actions!.setSampleQuery(sampleQuery);
-  };
-
-  private shouldRunQuery(selectedQuery:ISampleQuery) {
-    const { tokenPresent  } = this.props;
-    if(selectedQuery.tip && tokenPresent) {
-      return false;
-    }
-    if(!tokenPresent || selectedQuery.method === 'GET'){
-      return true;
-    }
-    return false;
-  }
-  private getSampleBody(sampleQuery: IQuery) {
-    return sampleQuery.sampleBody ? (isJsonString(sampleQuery.sampleBody)
-      ? JSON.parse(sampleQuery.sampleBody)
-      : sampleQuery.sampleBody) : undefined;
-  }
-
-  private trackSampleQueryClickEvent(selectedQuery: ISampleQuery) {
-    const sanitizedUrl = sanitizeQueryUrl(GRAPH_URL + selectedQuery.requestUrl);
-    telemetry.trackEvent(
-      eventTypes.LISTITEM_CLICK_EVENT,
-      {
-        ComponentName: componentNames.SAMPLE_QUERY_LIST_ITEM,
-        SampleId: selectedQuery.id,
-        SampleName: selectedQuery.humanName,
-        SampleCategory: selectedQuery.category,
-        QuerySignature: `${selectedQuery.method} ${sanitizedUrl}`
-      });
-  }
-
   public renderGroupHeader = (props: any): any => {
     const onToggleSelectGroup = () => {
       props.onToggleCollapse(props.group);
@@ -354,70 +430,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         />
       );
     }
-
-    return (
-      <div>
-        <SearchBox
-          className={classes.searchBox}
-          placeholder={messages['Search sample queries']}
-          onChange={this.searchValueChanged}
-          styles={searchBoxStyles}
-          aria-label={'Search'}
-        />
-        <hr />
-        {error && (
-          <MessageBar
-            messageBarType={MessageBarType.warning}
-            isMultiline={true}
-            dismissButtonAriaLabel='Close'
-          >
-            <FormattedMessage id='viewing a cached set' />
-          </MessageBar>
-        )}
-        <MessageBar
-          messageBarType={MessageBarType.info}
-          isMultiline={true}
-          dismissButtonAriaLabel='Close'
-        >
-          <FormattedMessage id='see more queries' />
-          <a
-            target='_blank'
-            rel="noopener noreferrer"
-            className={classes.links}
-            onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href,
-              componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
-            href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
-          >
-            <FormattedMessage id='Microsoft Graph API Reference docs' />
-          </a>
-        </MessageBar>
-        <Announced
-          message={`${sampleQueries.length} search results available.`}
-        />
-        <div role="navigation">
-          <DetailsList
-            className={classes.queryList}
-            cellStyleProps={{
-              cellRightPadding: 0,
-              cellExtraRightPadding: 0,
-              cellLeftPadding: 0
-            }}
-            onRenderItemColumn={this.renderItemColumn}
-            items={sampleQueries}
-            selectionMode={SelectionMode.none}
-            columns={columns}
-            groups={groups}
-            groupProps={{
-              showEmptyGroups: true,
-              onRenderHeader: this.renderGroupHeader
-            }}
-            onRenderRow={this.renderRow}
-            onRenderDetailsHeader={this.renderDetailsHeader}
-            onItemInvoked={this.querySelected}
-          />
-        </div>
-      </div>
-    );
   }
 }
 
