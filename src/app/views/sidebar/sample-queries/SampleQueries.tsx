@@ -29,7 +29,7 @@ import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import { isJsonString } from './sample-query-utils';
+import { isJsonString, performSearch } from './sample-query-utils';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
@@ -58,15 +58,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
 
   public searchValueChanged = (event: any, value?: string): void => {
     const { queries } = this.props.samples;
-    let sampleQueries = queries;
-    if (value) {
-      const keyword = value.toLowerCase();
-      sampleQueries = queries.filter((sample: any) => {
-        const name = sample.humanName.toLowerCase();
-        const category = sample.category.toLowerCase();
-        return name.includes(keyword) || category.includes(keyword);
-      });
-    }
+    const sampleQueries = value ? performSearch(queries, value): queries;
     this.setState({ sampleQueries });
   };
 
