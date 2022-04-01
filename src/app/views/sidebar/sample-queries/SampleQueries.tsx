@@ -29,7 +29,7 @@ import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
 import { sidebarStyles } from '../Sidebar.styles';
-import { isJsonString, performSearch } from './sample-query-utils';
+import { columns, isJsonString, performSearch } from './sample-query-utils';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 
 export class SampleQueries extends Component<ISampleQueriesProps, any> {
@@ -354,48 +354,6 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
         />
       );
     }
-
-    let maxWidthOfHumanName = 180;
-    if (window.innerWidth > 1280) {
-      maxWidthOfHumanName = 200;
-    }
-
-    window.onresize = () => {
-      if (window.innerWidth > 1280) {
-        maxWidthOfHumanName = 200;
-      }
-    };
-
-    const columns: IColumn[] = [
-      {
-        key: 'button',
-        name: '',
-        fieldName: 'button',
-        minWidth: 15,
-        maxWidth: 25
-      },
-      {
-        key: 'authRequiredIcon',
-        name: '',
-        fieldName: 'authRequiredIcon',
-        minWidth: 20,
-        maxWidth: 20
-      },
-      {
-        key: 'method',
-        name: '',
-        fieldName: 'method',
-        minWidth: 20,
-        maxWidth: 50
-      },
-      {
-        key: 'humanName',
-        name: '',
-        fieldName: 'humanName',
-        minWidth: 100,
-        maxWidth: maxWidthOfHumanName
-      }
-    ];
 
     return (
       <div>
