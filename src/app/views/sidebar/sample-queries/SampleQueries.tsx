@@ -241,7 +241,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   };
 
   private querySelected = (query: any) => {
-    const { actions, tokenPresent, profile } = this.props;
+    const { actions, profile } = this.props;
     const selectedQuery = query;
     if (!selectedQuery) {
       return;
@@ -251,42 +251,40 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     const sampleQuery: IQuery = {
       sampleUrl: GRAPH_URL + selectedQuery.requestUrl,
       selectedVerb: selectedQuery.method,
-      sampleBody: selectedQuery.postBody,
+      sampleBody:  selectedQuery.postBody,
       sampleHeaders: selectedQuery.headers || [],
       selectedVersion: queryVersion
     };
-
     substituteTokens(sampleQuery, profile);
+    sampleQuery.sampleBody =this.getSampleBody(sampleQuery);
 
-    if (actions) {
-      if (sampleQuery.selectedVerb === 'GET') {
-        sampleQuery.sampleBody = JSON.parse('{}');
-        if (tokenPresent) {
-          if (selectedQuery.tip) {
-            displayTipMessage(actions, selectedQuery);
-          } else {
-            actions.runQuery(sampleQuery);
-          }
-        } else {
-          actions.runQuery(sampleQuery);
-        }
-        this.trackSampleQueryClickEvent(selectedQuery);
-      } else {
-        if (sampleQuery.sampleBody) {
-          sampleQuery.sampleBody = isJsonString(sampleQuery.sampleBody)
-            ? JSON.parse(sampleQuery.sampleBody)
-            : sampleQuery.sampleBody;
-        } else {
-          sampleQuery.sampleBody = undefined;
-        }
-
-        if (selectedQuery.tip) {
-          displayTipMessage(actions, selectedQuery);
-        }
-      }
-      actions.setSampleQuery(sampleQuery);
+    if (selectedQuery.tip) {
+      displayTipMessage(actions, selectedQuery);
     }
+
+    if (this.shouldRunQuery(selectedQuery)) {
+      actions!.runQuery(sampleQuery);
+    }
+
+    this.trackSampleQueryClickEvent(selectedQuery);
+    actions!.setSampleQuery(sampleQuery);
   };
+
+  private shouldRunQuery(selectedQuery:ISampleQuery) {
+    const { tokenPresent  } = this.props;
+    if(selectedQuery.tip && tokenPresent) {
+      return false;
+    }
+    if(!tokenPresent || selectedQuery.method === 'GET'){
+      return true;
+    }
+    return false;
+  }
+  private getSampleBody(sampleQuery: IQuery) {
+    return sampleQuery.sampleBody ? (isJsonString(sampleQuery.sampleBody)
+      ? JSON.parse(sampleQuery.sampleBody)
+      : sampleQuery.sampleBody) : undefined;
+  }
 
   private trackSampleQueryClickEvent(selectedQuery: ISampleQuery) {
     const sanitizedUrl = sanitizeQueryUrl(GRAPH_URL + selectedQuery.requestUrl);
