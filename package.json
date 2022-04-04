@@ -87,7 +87,7 @@
         ],
         "devDependencies": {
                 "@testing-library/react": "12.1.2",
-                "@testing-library/user-event": "13.5.0",
+                "@testing-library/user-event": "14.0.4",
                 "@types/chromedriver": "2.38.0",
                 "@types/enzyme": "3.10.10",
                 "@types/enzyme-adapter-react-16": "1.0.5",
