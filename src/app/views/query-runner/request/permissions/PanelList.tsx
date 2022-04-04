@@ -34,7 +34,7 @@ const PanelList = ({ messages,
   columns, classes, selection,
   renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) => {
 
-  const sortPermissions = (permissionsToSort: IPermission[]) : IPermission[] => {
+  const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
     return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
   }
 
