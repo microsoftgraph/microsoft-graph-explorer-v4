@@ -419,7 +419,7 @@ class App extends Component<IAppProps, IAppState> {
           <div className={ `ms-Grid-row ${classes.appRow}`} style={{
             flexWrap: mobileScreen && 'wrap',
             marginRight: showSidebar && '-20px',
-            height: !mobileScreen ? '100vh' : '100%' }}>
+            height: mobileScreen ? '100%' : '100vh' }}>
 
             {graphExplorerMode === Mode.Complete && (
               <Resizable
