@@ -480,7 +480,8 @@ class App extends Component<IAppProps, IAppState> {
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
                   height: contentHeight
                 }}
-                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px'} : this.contentStyle }
+                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px', overflow: 'hidden'}
+                  : this.contentStyle }
               >
                 <div style={{ marginBottom: 8 }} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
