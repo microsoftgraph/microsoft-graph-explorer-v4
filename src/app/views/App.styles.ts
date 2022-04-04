@@ -86,6 +86,17 @@ export const appStyles = (theme: ITheme) => {
       position: 'absolute',
       top: '13px',
       right: '10px'
+    },
+    mainContent: {
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column' as 'column'
+    },
+    queryResponse: {
+      display: 'flex',
+      flexDirection: 'column' as 'column',
+      height: '100%',
+      overflow: 'hidden'
     }
   };
 };

@@ -72,6 +72,8 @@ class App extends Component<IAppProps, IAppState> {
   private currentTheme: ITheme = getTheme();
   private statusAreaMobileStyle = appStyles(this.currentTheme).statusAreaMobileScreen;
   private statusAreaFullScreenStyle = appStyles(this.currentTheme).statusAreaFullScreen;
+  private contentStyle = appStyles(this.currentTheme).mainContent;
+  private queryResponseStyle = appStyles(this.currentTheme).queryResponse;
 
   constructor(props: IAppProps) {
     super(props);
@@ -478,11 +480,7 @@ class App extends Component<IAppProps, IAppState> {
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
                   height: contentHeight
                 }}
-                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px'} : {
-                  overflow: 'hidden',
-                  display: 'flex',
-                  flexDirection: 'column'
-                }}
+                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px'} : this.contentStyle }
               >
                 <div style={{ marginBottom: 8 }} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
@@ -491,11 +489,11 @@ class App extends Component<IAppProps, IAppState> {
                   </div>
                 </div>
 
-                <div style={{display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden'}}>
+                <div style={this.queryResponseStyle}>
                   <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                     <StatusMessages />
                   </div>
-                  <div style={{flexGrow:'1', flexShrink: '1', display:'flex'}}>
+                  <div style={{ display:'flex', flexGrow:'1', flexShrink: '1'}}>
                     <QueryResponse verb={this.state.selectedVerb} />
                   </div>
                 </div>
