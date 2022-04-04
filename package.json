@@ -62,7 +62,7 @@
                 "webpack": "5.67.0",
                 "webpack-dev-server": "4.7.4",
                 "webpack-manifest-plugin": "4.1.1",
-                "workbox-webpack-plugin": "6.4.2"
+                "workbox-webpack-plugin": "6.5.2"
         },
         "scripts": {
                 "start": "node scripts/start.js",
