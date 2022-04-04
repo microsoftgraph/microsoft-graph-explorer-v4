@@ -431,5 +431,7 @@
   "Invalid version in URL": "Недопустимая версия в URL-адресе",
   "More info": "Дополнительные сведения",
   "Could not connect to the sandbox": "Не удалось подключиться к песочнице",
-  "Failed to get profile information": "Не удалось получить сведения о профиле"
+  "Failed to get profile information": "Не удалось получить сведения о профиле",
+  "Do you want to remove all the items you have added to the collection?": "Вы хотите удалить все элементы, добавленные в коллекцию?",
+  "Delete collection": "Удалить коллекцию"
 }
