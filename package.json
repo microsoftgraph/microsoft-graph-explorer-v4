@@ -4,7 +4,7 @@
         "private": true,
         "dependencies": {
                 "@augloop/types-core": "file:packages/types-core-2.16.189.tgz",
-                "@axe-core/webdriverjs": "4.4.0",
+                "@axe-core/webdriverjs": "4.4.2",
                 "@azure/msal-browser": "2.19.0",
                 "@babel/core": "7.16.12",
                 "@babel/runtime": "7.5.1",
