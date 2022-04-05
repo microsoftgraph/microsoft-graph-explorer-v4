@@ -431,5 +431,7 @@
   "Invalid version in URL": "Version non valide dans l’URL",
   "More info": "En savoir plus",
   "Could not connect to the sandbox": "Impossible de se connecter au bac à sable",
-  "Failed to get profile information": "Échec de la récupération des informations de profil"
+  "Failed to get profile information": "Impossible d’obtenir les informations de profil",
+  "Do you want to remove all the items you have added to the collection?": "Voulez-vous supprimer tous les éléments que vous avez ajoutés à la collection ?",
+  "Delete collection": "Supprimer la collection"
 }
