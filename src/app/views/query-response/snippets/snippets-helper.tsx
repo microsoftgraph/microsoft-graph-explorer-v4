@@ -82,8 +82,7 @@ function Snippet(props: ISnippetProps) {
   }
   const getLanguageComponentName = (languageComponentNames : object) : string => {
     return Object.entries(languageComponentNames).find(
-      ([key]) => language.toLowerCase() === key.toLowerCase() )?.[1] ||
-      componentNames.CODE_SNIPPET_SDK_LIBRARY_LINK;
+      ([key]) => language.toLowerCase() === key.toLowerCase() )?.[1] || '';
   }
 
   const addExtraSnippetInformation = () : JSX.Element => {

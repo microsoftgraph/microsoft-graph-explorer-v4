@@ -53,8 +53,6 @@ export const GRAPH_TOOLKIT_PLAYGROUND_LINK = 'Graph toolkit playground link';
 export const MICROSOFT_APIS_TERMS_OF_USE_LINK = 'Microsoft APIs terms of use link';
 export const MICROSOFT_PRIVACY_STATEMENT_LINK = 'Microsoft privacy statement link';
 export const MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK = 'Microsoft graph API reference docs link';
-export const CODE_SNIPPET_DOCUMENTATION_LINK = 'Code snippet documentation link';
-export const CODE_SNIPPET_SDK_LIBRARY_LINK = 'Code snippet SDK library link';
 export const CODE_SNIPPET_LANGUAGES = {
   CSharp: 'C Sharp sdk link',
   JavaScript: 'Javascript sdk link',
