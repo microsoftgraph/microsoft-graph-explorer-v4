@@ -1,8 +1,14 @@
+import { InteractionType } from '@azure/msal-browser';
 import {
   AuthenticationHandlerOptions,
   GraphRequest,
   ResponseType
 } from '@microsoft/microsoft-graph-client';
+import { authenticationWrapper } from '../../../modules/authentication';
+import {
+  AuthCodeMSALBrowserAuthenticationProviderOptions
+} from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
+
 
 import { IAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
@@ -92,7 +98,15 @@ function createAuthenticatedRequest(
     });
   }
 
-  const middlewareOptions = new AuthenticationHandlerOptions(authProvider);
+  const msalAuthOptions:AuthCodeMSALBrowserAuthenticationProviderOptions = {
+    account: authenticationWrapper.getAccount()!, // the AccountInfo instance to acquire the token for.
+    interactionType: InteractionType.Popup , // msal-browser InteractionType
+    scopes// example of the scopes to be passed
+  }
+  const middlewareOptions = new AuthenticationHandlerOptions(
+    authProvider,
+    msalAuthOptions
+  )
   const graphRequest = GraphClient.getInstance()
     .api(encodeHashCharacters(query))
     .middlewareOptions([middlewareOptions])
