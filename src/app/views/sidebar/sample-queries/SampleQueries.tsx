@@ -90,7 +90,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
   }
 
   public renderItemColumn = (
-    item: any,
+    item: ISampleQuery,
     index: number | undefined,
     column: IColumn | undefined
   ) => {
@@ -101,7 +101,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     }: any = this.props;
 
     if (column) {
-      const queryContent = item[column.fieldName as keyof any] as string;
+      const queryContent = item[column.fieldName as keyof ISampleQuery] as string;
       const signInText = messages['Sign In to try this sample'];
 
       switch (column.key) {
@@ -143,7 +143,10 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
             <TooltipHost
               tooltipProps={{
                 onRenderContent: () => (
-                  <div style={{ paddingBottom: 3 }}>{item.docLink}</div>
+                  <div
+                    style={{ paddingBottom: 3 }}>
+                    {item.docLink}
+                  </div>
                 )
               }}
               id={getId()}
@@ -373,7 +376,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
       }
     };
 
-    const columns = [
+    const columns: IColumn[] = [
       {
         key: 'button',
         name: '',

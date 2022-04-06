@@ -4,7 +4,7 @@ import {
   Modal, Pivot, PivotItem, TooltipHost
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
@@ -16,7 +16,6 @@ import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { expandResponseArea } from '../../services/actions/response-expanded-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
 import { copy } from '../common/copy';
-import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
 import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 import { IRootState } from '../../../types/root';
@@ -29,16 +28,11 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [showShareQueryDialog, setShareQuaryDialogStatus] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [query] = useState('');
-  const [responseHeight, setResponseHeight] = useState('610px');
-  const { dimensions, sampleQuery } = useSelector((state: IRootState) => state);
+  const { sampleQuery } = useSelector((state: IRootState) => state);
 
   const {
     intl: { messages }
   }: any = props;
-
-  useEffect(() => {
-    setResponseHeight(convertVhToPx(dimensions.response.height, 50));
-  }, [dimensions]);
 
   const toggleShareQueryDialogState = () => {
     setShareQuaryDialogStatus(!showShareQueryDialog);
@@ -96,13 +90,13 @@ const QueryResponse = (props: IQueryResponseProps) => {
       <Resizable
         style={{
           marginBottom: 10,
-          marginTop: 10
+          marginTop: 10,
+          flexGrow: 1,
+          flexShrink:1
         }}
-        maxHeight={800}
-        minHeight={350}
-        bounds={'window'}
+        bounds={'parent'}
         size={{
-          height: responseHeight,
+          height: '100%',
           width: '100%'
         }}
         enable={{
@@ -111,7 +105,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
       >
         <div className='query-response' style={{
           minHeight: 350,
-          height: responseHeight
+          height: '100%'
         }}>
 
           <Pivot overflowBehavior="menu" onLinkClick={handlePivotItemClick}

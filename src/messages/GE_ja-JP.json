@@ -431,5 +431,7 @@
   "Invalid version in URL": "URL 内のバージョンが無効です。",
   "More info": "詳細情報",
   "Could not connect to the sandbox": "サンドボックスに接続できませんでした",
-  "Failed to get profile information": "プロファイル情報を取得できませんでした"
+  "Failed to get profile information": "プロファイル情報を取得できませんでした",
+  "Do you want to remove all the items you have added to the collection?": "コレクションに追加したすべてのアイテムを削除しますか?",
+  "Delete collection": "コレクションの削除"
 }

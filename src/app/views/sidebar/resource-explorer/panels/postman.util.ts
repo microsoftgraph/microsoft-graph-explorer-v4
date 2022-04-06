@@ -23,37 +23,36 @@ export function generatePostmanCollection(
 }
 
 function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
-  const folderNames = resources
-    .map((resource) => {
-      if (resource.paths.length > 1) {
-        return resource.paths[1];
-      }
-    })
-    .filter((value, i, arr) => arr.indexOf(value) === i) // selects distinct folder names
-    .sort();
+  const list: Item[] = [];
+  resources.forEach(resource => {
+    const {
+      method,
+      name,
+      url,
+      version,
+      paths: path
+    } = resource;
 
-  const folderItems: any = folderNames.map((folder) => {
-    const items = resources
-      .filter((resource) => resource.url.match(`^/${folder}/?`))
-      .map((resource) => {
-        const { method, url, version, paths: path } = resource;
-        path.shift();
-        path.unshift(version!);
-        const item: Item = {
-          name: url,
-          request: {
-            method: method!,
-            url: {
-              raw: `${GRAPH_URL}/${version}${url}`,
-              protocol: 'https',
-              host: ['graph', 'microsoft', 'com'],
-              path
-            }
-          }
-        };
-        return item;
-      });
-    return { name: folder, item: items };
+    path.shift();
+    path.unshift(version!);
+
+    const item: Item = {
+      name: `${name}-${version}`,
+      request: {
+        method: method!,
+        url: {
+          raw: `${GRAPH_URL}/${version}${url}`,
+          protocol: 'https',
+          host: [
+            'graph',
+            'microsoft',
+            'com'
+          ],
+          path
+        }
+      }
+    }
+    list.push(item);
   });
-  return folderItems;
+  return list;
 }

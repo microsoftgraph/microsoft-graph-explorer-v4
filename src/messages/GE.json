@@ -431,5 +431,7 @@
   "Invalid version in URL": "Invalid version in URL",
   "More info": "More info",
   "Could not connect to the sandbox": "Could not connect to the sandbox",
-  "Failed to get profile information": "Failed to get profile information"
+  "Failed to get profile information": "Failed to get profile information",
+  "Do you want to remove all the items you have added to the collection?": "Do you want to remove all the items you have added to the collection?",
+  "Delete collection": "Delete collection"
 }
