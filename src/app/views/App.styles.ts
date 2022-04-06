@@ -11,7 +11,8 @@ export const appStyles = (theme: ITheme) => {
       paddingRight: '15px',
       paddingLeft: '4px',
       marginLeft: 'auto',
-      marginRight: 'auto'
+      marginRight: 'auto',
+      borderBottom: '1px solid black'
     },
     appRow: {
       display: 'flex',
@@ -67,7 +68,7 @@ export const appStyles = (theme: ITheme) => {
     statusAreaMobileScreen: {
       marginTop: 5
     },
-    statusAreaLaptopScreen: {
+    statusAreaFullScreen: {
       marginTop: 0
     },
     vResizeHandle: {
@@ -85,6 +86,17 @@ export const appStyles = (theme: ITheme) => {
       position: 'absolute',
       top: '13px',
       right: '10px'
+    },
+    mainContent: {
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column' as 'column'
+    },
+    queryResponse: {
+      display: 'flex',
+      flexDirection: 'column' as 'column',
+      height: '100%',
+      overflow: 'hidden'
     }
   };
 };
