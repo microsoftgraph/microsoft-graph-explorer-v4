@@ -63,9 +63,6 @@ IQueryRunnerState
 
   private handleOnEditorChange = (body?: string) => {
     this.setState({ sampleBody: body });
-    const query = { ...this.props.sampleQuery };
-    query.sampleBody = body;
-    this.props.actions!.setSampleQuery(query);
   };
 
   private handleOnRunQuery = () => {
