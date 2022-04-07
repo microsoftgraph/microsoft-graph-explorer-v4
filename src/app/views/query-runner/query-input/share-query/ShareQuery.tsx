@@ -63,6 +63,8 @@ export const ShareQuery = () => {
           iconProps={iconProps}
           styles={shareButtonStyles}
           role={'button'}
+          ariaLabel={translateMessage('Share Query')}
+          title={translateMessage('Share Query')}
         />
       </TooltipHost>
       <Dialog
