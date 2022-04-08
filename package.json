@@ -105,7 +105,7 @@
                 "@types/react-dom": "17.0.11",
                 "@types/react-intl": "3.0.0",
                 "@types/react-redux": "7.1.20",
-                "@types/redux-logger": "3.0.7",
+                "@types/redux-logger": "3.0.9",
                 "@types/redux-mock-store": "1.0.0",
                 "@types/selenium-webdriver": "4.0.16",
                 "@typescript-eslint/eslint-plugin": "5.18.0",
