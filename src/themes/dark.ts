@@ -1,4 +1,5 @@
 // Theme generated from https://developer.microsoft.com/en-us/fabric#/styles/themegenerator
+
 export const dark = {
   palette: {
     themePrimary: '#2196f0',
@@ -23,7 +24,8 @@ export const dark = {
     neutralDark: '#fefefe',
     black: '#ffffff',
     white: '#070707',
-    blueMid: '#6cb8f6'
+    blueMid: '#6cb8f6',
+    green: '#00a100'
   },
   semanticColors: {
     messageText: '#f3f2f1',

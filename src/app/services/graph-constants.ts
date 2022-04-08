@@ -43,5 +43,6 @@ export const CORS_ERROR_QUERIES = new Map([
   ['reports/getYammerGroupsActivityDetail(period=<value>)', WORKLOAD.O365REPORTING],
   ['reports/getTeamsDeviceUsageUserCounts(period=<value>)', WORKLOAD.O365REPORTING],
   ['reports/getSharePointSiteUsageDetail(period=<value>)',WORKLOAD.O365REPORTING],
-  ['reports/getOneDriveUsageFileCounts(period=<value>)', WORKLOAD.O365REPORTING]
+  ['reports/getOneDriveUsageFileCounts(period=<value>)', WORKLOAD.O365REPORTING],
+  ['reports/getEmailActivityUserCounts(period=<value>)', WORKLOAD.O365REPORTING]
 ]);

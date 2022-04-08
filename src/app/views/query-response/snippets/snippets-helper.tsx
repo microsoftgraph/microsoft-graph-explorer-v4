@@ -1,4 +1,4 @@
-import { Label, PivotItem } from '@fluentui/react';
+import { getTheme, ITheme, Label, Link, PivotItem } from '@fluentui/react';
 import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
@@ -11,13 +11,23 @@ import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimens
 import { IRootState } from '../../../../types/root';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { CopyButton } from '../../common/copy/CopyButton';
-
+import { translateMessage } from '../../../utils/translate-messages';
+import { componentNames, telemetry } from '../../../../telemetry';
+import { getSnippetStyles } from './Snippets.styles';
 interface ISnippetProps {
   language: string;
+  snippetInfo: ISupportedLanguages;
 }
 
-export function renderSnippets(supportedLanguages: string[]) {
-  return supportedLanguages.map((language: string) => (
+interface ISupportedLanguages {
+  [language: string]: {
+    sdkDownloadLink: string;
+    sdkDocLink: string;
+  };
+}
+
+export function renderSnippets(supportedLanguages: ISupportedLanguages) {
+  return Object.keys(supportedLanguages).map((language: string) => (
     <PivotItem
       key={language}
       headerText={language}
@@ -25,13 +35,14 @@ export function renderSnippets(supportedLanguages: string[]) {
         'aria-controls': `${language}-tab`
       }}
     >
-      <Snippet language={language} />
+      <Snippet language={language} snippetInfo={supportedLanguages} />
     </PivotItem>
   ));
 }
 
 function Snippet(props: ISnippetProps) {
   let { language } = props;
+  const { sdkDownloadLink, sdkDocLink } = props.snippetInfo[language];
 
   /**
    * Converting language lowercase so that we won't have to call toLowerCase() in multiple places.
@@ -59,6 +70,46 @@ function Snippet(props: ISnippetProps) {
     dispatch(getSnippet(language));
   }, [sampleQuery.sampleUrl]);
 
+  const setCommentSymbol = (): string => {
+    return language.trim() === 'powershell' ? '#' : '//';
+  }
+
+  const trackLinkClickedEvent = (link: string, e:any) => {
+    const isDocumentationLink : boolean = link.includes('doc')
+    const componentName = isDocumentationLink ? getLanguageComponentName(componentNames.CODE_SNIPPET_DOCS_LINKS) :
+      getLanguageComponentName(componentNames.CODE_SNIPPET_LANGUAGES);
+    telemetry.trackLinkClickEvent(e.currentTarget.href, componentName);
+  }
+  const getLanguageComponentName = (languageComponentNames : object) : string => {
+    return Object.entries(languageComponentNames).find(
+      ([key]) => language.toLowerCase() === key.toLowerCase() )?.[1] || '';
+  }
+
+  const addExtraSnippetInformation = () : JSX.Element => {
+    const currentTheme: ITheme = getTheme();
+    const snippetLinkStyles = getSnippetStyles(currentTheme);
+    const snippetCommentStyles = getSnippetStyles(currentTheme).snippetComments;
+    return (
+      <div style={snippetCommentStyles}>
+
+        {setCommentSymbol()} {translateMessage('Leverage libraries')} {language} {translateMessage('Client library')}
+
+        <Link  href={sdkDownloadLink} underline={true} styles={snippetLinkStyles}
+          onClick={(e) => trackLinkClickedEvent(sdkDownloadLink, e)} target={'_blank'} rel='noreferrer noopener'>
+          {sdkDownloadLink}
+        </Link>
+        <br />
+
+        {setCommentSymbol()} {translateMessage('SDKs documentation')}
+
+        <Link href={sdkDocLink} underline={true} styles={snippetLinkStyles}
+          onClick={(e) => trackLinkClickedEvent(sdkDocLink, e)} target={'_blank'} rel='noreferrer noopener'>
+          {sdkDocLink}
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div style={{ display: 'block' }} id={`${language}-tab`}>
       {loadingState &&
@@ -74,6 +125,7 @@ function Snippet(props: ISnippetProps) {
             language={language}
             readOnly={true}
             height={height}
+            extraInfoElement={addExtraSnippetInformation()}
           />
         </>
       }
