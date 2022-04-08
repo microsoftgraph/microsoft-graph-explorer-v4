@@ -93,7 +93,7 @@
                 "not op_mini all"
         ],
         "devDependencies": {
-                "@testing-library/react": "12.1.2",
+                "@testing-library/react": "12.1.4",
                 "@testing-library/user-event": "14.0.4",
                 "@types/chromedriver": "2.38.0",
                 "@types/enzyme": "3.10.11",
