@@ -136,6 +136,75 @@ const AdaptiveCard = (props: any) => {
       const handleCopy = async () => {
         trackedGenericCopy(JSON.stringify(cardContent!.data?.template, null, 4),
           componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
+        }
+        return (
+          <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
+            <PivotItem
+              itemKey='card'
+              ariaLabel={translateMessage('card')}
+              headerText={translateMessage('card')}
+              className={classes.card}
+              headerButtonProps={{
+                'aria-controls': 'card-tab'
+              }}
+            >
+              <div id={'card-tab'}
+                ref={(n) => {
+                  if (n && !n.firstChild) {
+                    n.appendChild(renderedCard as HTMLElement);
+                  } else {
+                    if (n && n.firstChild) {
+                      n.replaceChild(renderedCard as HTMLElement, n.firstChild);
+                    }
+                  }
+                }}
+              />
+            </PivotItem>
+            <PivotItem
+              itemKey='JSON-schema'
+              ariaLabel={translateMessage('JSON Schema')}
+              headerText={translateMessage('JSON Schema')}
+              headerButtonProps={{
+                'aria-controls': 'json-schema-tab'
+              }}
+            >
+              <div id={'json-schema-tab'}>
+                <MessageBar messageBarType={MessageBarType.info}>
+                  <FormattedMessage id='Get started with adaptive cards on' />
+                  <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    tabIndex={0}
+                    className={classes.link}
+                  >
+                    <FormattedMessage id='Adaptive Cards Templating SDK' />
+                  </a>
+                  <FormattedMessage id='and experiment on' />
+                  <a href={'https://adaptivecards.io/designer/'}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    tabIndex={0}
+                    className={classes.link}
+                  >
+                    <FormattedMessage id='Adaptive Cards designer' />
+                  </a>
+                </MessageBar>
+                <CopyButton
+                  className={classes.copyIcon}
+                  handleOnClick={handleCopy}
+                  isIconButton={true}
+                />
+                <Monaco
+                  language='json'
+                  body={data.template}
+                  height={'800px'}
+                />
+              </div>
+            </PivotItem>
+          </Pivot>
+        );
+      } catch (err : any) {
+        return <div style={{ color: 'red' }}>{err.message}</div>;
       }
 
       return (
