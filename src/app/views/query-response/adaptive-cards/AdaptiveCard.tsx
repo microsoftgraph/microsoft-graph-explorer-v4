@@ -116,10 +116,10 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               <div id={'card-tab'}
                 ref={(n) => {
                   if (n && !n.firstChild) {
-                    n.appendChild(renderedCard);
+                    n.appendChild(renderedCard as HTMLElement);
                   } else {
                     if (n && n.firstChild) {
-                      n.replaceChild(renderedCard, n.firstChild);
+                      n.replaceChild(renderedCard as HTMLElement, n.firstChild);
                     }
                   }
                 }}
