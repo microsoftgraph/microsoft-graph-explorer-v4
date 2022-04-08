@@ -316,4 +316,5 @@ const styledPermissions = styled(Permission, permissionStyles as any);
 const IntlPermission = injectIntl(styledPermissions);
 // @ts-ignore
 const trackedComponent = telemetry.trackReactComponent(IntlPermission, componentNames.MODIFY_PERMISSIONS_TAB);
+// @ts-ignore
 export default connect(mapStateToProps, mapDispatchToProps)(trackedComponent);
