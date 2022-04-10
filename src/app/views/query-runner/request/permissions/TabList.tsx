@@ -45,7 +45,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     </Label>)
   }
 
-  if (!tokenPresent) {
+  if (!tokenPresent && permissions.length === 0) {
     return displayNotSignedInMessage();
   }
 
