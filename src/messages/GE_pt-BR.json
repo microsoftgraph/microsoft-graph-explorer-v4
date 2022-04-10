@@ -433,5 +433,8 @@
   "Could not connect to the sandbox": "Não foi possível conectar ao sandbox",
   "Failed to get profile information": "Falha ao obter informações do perfil",
   "Do you want to remove all the items you have added to the collection?": "Você quer remover todos os itens que você adicionou à coleção?",
-  "Delete collection": "Excluir coleção"
+  "Delete collection": "Excluir coleção",
+  "Leverage libraries": "Aproveite o poder das nossas bibliotecas de clientes. Baixe o",
+  "Client library": "a biblioteca do cliente aqui ",
+  "SDKs documentation": "Para saber mais sobre nossos SDKs, acesse a página de documentação em "
 }
