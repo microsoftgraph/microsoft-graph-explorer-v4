@@ -421,7 +421,6 @@ class App extends Component<IAppProps, IAppState> {
           <div className={ `ms-Grid-row ${classes.appRow}`} style={{
             flexWrap: mobileScreen && 'wrap',
             marginRight: showSidebar || (graphExplorerMode === Mode.TryIt)  && '-20px',
-            height: mobileScreen ? '100%' : '100vh',
             flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row' }}>
 
             {graphExplorerMode === Mode.Complete && (
@@ -472,7 +471,7 @@ class App extends Component<IAppProps, IAppState> {
 
             {displayContent && (
               <Resizable
-                bounds={'parent'}
+                bounds={'window'}
                 className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${layout}`}
                 enable={{
                   right: false
@@ -481,8 +480,8 @@ class App extends Component<IAppProps, IAppState> {
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
                   height: contentHeight
                 }}
-                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px', overflow: 'hidden'}
-                  : this.contentStyle }
+                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px'}
+                  : {} }
               >
                 <div style={{ marginBottom: 8 }} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
@@ -491,11 +490,11 @@ class App extends Component<IAppProps, IAppState> {
                   </div>
                 </div>
 
-                <div style={this.queryResponseStyle}>
+                <div style={{}}>
                   <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                     <StatusMessages />
                   </div>
-                  <div style={{ display:'flex', flexGrow:'1', flexShrink: '1'}}>
+                  <div style={{}}>
                     <QueryResponse verb={this.state.selectedVerb} />
                   </div>
                 </div>

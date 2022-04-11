@@ -69,7 +69,7 @@ export const appStyles = (theme: ITheme) => {
       marginTop: 5
     },
     statusAreaFullScreen: {
-      marginTop: 0
+      marginTop: 10
     },
     vResizeHandle: {
       zIndex: 1,
@@ -88,15 +88,8 @@ export const appStyles = (theme: ITheme) => {
       right: '10px'
     },
     mainContent: {
-      overflow: 'hidden',
-      display: 'flex',
-      flexDirection: 'column' as 'column'
     },
     queryResponse: {
-      display: 'flex',
-      flexDirection: 'column' as 'column',
-      height: '100%',
-      overflow: 'hidden'
     }
   };
 };
