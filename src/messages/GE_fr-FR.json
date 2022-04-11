@@ -392,8 +392,8 @@
   "Resources available": "Ressources disponibles",
   "Selected Resources": "Ressources sélectionnées",
   "A documentation link for this URL exists. Click learn more to access it": "Il existe un lien de documentation pour cette URL. Cliquez sur « En savoir plus » pour y accéder.",
-  "Feedback": "Avez-vous des commentaires?",
-  "Comment question": "Donnez-nous plus d’informations sur votre expérience",
+  "Feedback": "Voulez-vous aider à améliorer Graph Explorer ?",
+  "Comment question": "Donnez-nous plus d’informations sur votre expérience.",
   "Prompt question": "Nous aimerions connaître votre avis",
   "No": "Non",
   "Yes": "Oui",
@@ -429,5 +429,12 @@
   "Response content not available due to CORS policy": "Le contenu de la réponse n'est pas disponible dans l’afficheur Graph en raison de la politique CORS. Vous pouvez exécuter cette requête dans un client API, comme Postman. En savoir plus sur CORS et comprendre son fonctionnement",
   "here": "ici",
   "Invalid version in URL": "Version non valide dans l’URL",
-  "More info": "En savoir plus"
+  "More info": "En savoir plus",
+  "Could not connect to the sandbox": "Impossible de se connecter au bac à sable",
+  "Failed to get profile information": "Impossible d’obtenir les informations de profil",
+  "Do you want to remove all the items you have added to the collection?": "Voulez-vous supprimer tous les éléments que vous avez ajoutés à la collection ?",
+  "Delete collection": "Supprimer la collection",
+  "Leverage libraries": "Tirez parti de la puissance de nos bibliothèques clientes. Téléchargez la",
+  "Client library": "bibliothèque cliente ici ",
+  "SDKs documentation": "Pour en savoir plus sur nos kits de développement logiciel (SDK), accédez à la page de documentation sur "
 }

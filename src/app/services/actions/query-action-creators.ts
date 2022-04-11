@@ -5,11 +5,8 @@ import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
 import { ClientError } from '../../utils/ClientError';
-import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
-import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { setStatusMessage } from '../../utils/status-message';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
-import { CORS_ERROR_QUERIES } from '../graph-constants';
 import {
   anonymousRequest,
   authenticatedRequest,
@@ -17,7 +14,8 @@ import {
   isFileResponse,
   isImageResponse,
   parseResponse,
-  queryResponse
+  queryResponse,
+  queryResultsInCorsError
 } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
@@ -31,26 +29,18 @@ export function runQuery(query: IQuery): Function {
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query)
         .then(async (response: Response) => {
-          await processResponse(
-            response,
-            respHeaders,
-            dispatch,
-            createdAt,
-          );
+          await processResponse(response, respHeaders, dispatch, createdAt);
+        })
+        .catch(async (error: any) => {
+          return handleError(dispatch, error);
         });
     }
 
     return anonymousRequest(dispatch, query, getState)
-      .then(
-        async (response: Response) => {
-          await processResponse(
-            response,
-            respHeaders,
-            dispatch,
-            createdAt,
-          );
-        }
-      ).catch(async (error: any) => {
+      .then(async (response: Response) => {
+        await processResponse(response, respHeaders, dispatch, createdAt);
+      })
+      .catch(async (error: any) => {
         return handleError(dispatch, error);
       });
   };
@@ -59,7 +49,7 @@ export function runQuery(query: IQuery): Function {
     response: Response,
     respHeaders: any,
     dispatch: Function,
-    createdAt: any,
+    createdAt: any
   ) {
     let result = await parseResponse(response, respHeaders);
     const duration = new Date().getTime() - new Date(createdAt).getTime();
@@ -93,8 +83,6 @@ export function runQuery(query: IQuery): Function {
       status.ok = true;
       status.messageType = MessageBarType.success;
 
-      dispatch(setQueryResponseStatus(status));
-
       if (isFileResponse(respHeaders)) {
         const contentDownloadUrl = await generateResponseDownloadUrl(
           response,
@@ -106,59 +94,49 @@ export function runQuery(query: IQuery): Function {
           };
         }
       }
-
-      return dispatch(
-        queryResponse({
-          body: result,
-          headers: respHeaders
-        })
-      );
-    } else {
-      const { requestUrl } = parseSampleUrl(sanitizeQueryUrl(query.sampleUrl));
-      // check if this is one of the queries that result in a CORS error
-      if (response.status === 0 && CORS_ERROR_QUERIES.has(requestUrl)) {
-        result = {
-          throwsCorsError: true,
-          workload: CORS_ERROR_QUERIES.get(requestUrl)
-        };
-      }
-
-      dispatch(
-        queryResponse({
-          body: result,
-          headers: respHeaders
-        })
-      );
-      return dispatch(setQueryResponseStatus(status));
     }
-  }
-}
 
-function handleError(dispatch: Function, error: any) {
-  dispatch(
-    queryResponse({
-      body: error,
-      headers: null
-    })
-  );
-  if (error instanceof ClientError) {
+    dispatch(setQueryResponseStatus(status));
+
     return dispatch(
-      setQueryResponseStatus({
-        messageType: MessageBarType.error,
-        ok: false,
-        status: 0,
-        statusText: error
+      queryResponse({
+        body: result,
+        headers: respHeaders
       })
     );
   }
-  return dispatch(
-    setQueryResponseStatus({
+
+  function handleError(dispatch: Function, error: any) {
+    let body = error;
+    const status: IStatus = {
       messageType: MessageBarType.error,
       ok: false,
       status: 400,
       statusText: 'Bad Request'
-    })
-  );
+    };
+
+    if (error instanceof ClientError) {
+      status.status = 0;
+      status.statusText = `${error.name}: ${error.message}`;
+    }
+
+    if (queryResultsInCorsError(query.sampleUrl)) {
+      status.status = 0;
+      status.statusText = 'CORS error';
+      body = {
+        throwsCorsError: true
+      };
+    }
+
+    dispatch(
+      queryResponse({
+        body,
+        headers: null
+      })
+    );
+
+    return dispatch(setQueryResponseStatus(status));
+  }
 }
 
 async function createHistory(

@@ -13,6 +13,7 @@ interface IMonaco {
   language?: string;
   readOnly?: boolean;
   height?: string;
+  extraInfoElement?: JSX.Element;
 }
 
 export function Monaco(props: IMonaco) {
@@ -26,8 +27,9 @@ export function Monaco(props: IMonaco) {
   const itemHeight = height ? height : '300px';
 
   return (
-    <FocusZone disabled={true}>
+    <FocusZone disabled={props.extraInfoElement ? false : true}>
       <div className='monaco-editor'>
+        {props.extraInfoElement}
         <ThemeContext.Consumer >
           {(theme) => (<Editor
             width='800 !important'
@@ -40,15 +42,13 @@ export function Monaco(props: IMonaco) {
               automaticLayout: true,
               minimap: { enabled: false },
               readOnly,
-              scrollbar: {
-                horizontalHasArrows: true,
-                horizontal: 'visible',
-                horizontalScrollbarSize: 17
-              },
               wordWrap: 'on',
               folding: true,
               foldingStrategy: 'indentation',
-              showFoldingControls: 'always'
+              showFoldingControls: 'always',
+              renderLineHighlight: 'none',
+              scrollBeyondLastLine: false,
+              overviewRulerBorder: false
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}

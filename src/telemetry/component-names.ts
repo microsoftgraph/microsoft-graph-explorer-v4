@@ -17,6 +17,7 @@ export const DELETE_HISTORY_ITEM_BUTTON = 'Delete history item button';
 export const RESPONSE_HEADERS_COPY_BUTTON = 'Response headers copy button';
 export const DOWNLOAD_POSTMAN_COLLECTION_BUTTON = 'Download postman collection button';
 export const REMOVE_RESOURCE_FROM_COLLECTION_BUTTON = 'Remove resource from collection button';
+export const QUERY_COPY_BUTTON = 'Query copy button';
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
@@ -52,6 +53,22 @@ export const GRAPH_TOOLKIT_PLAYGROUND_LINK = 'Graph toolkit playground link';
 export const MICROSOFT_APIS_TERMS_OF_USE_LINK = 'Microsoft APIs terms of use link';
 export const MICROSOFT_PRIVACY_STATEMENT_LINK = 'Microsoft privacy statement link';
 export const MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK = 'Microsoft graph API reference docs link';
+export const CODE_SNIPPET_LANGUAGES = {
+  CSharp: 'C Sharp sdk link',
+  JavaScript: 'Javascript sdk link',
+  Java: 'Java snippet sdk link',
+  Go: 'Go sdk link',
+  'Objective-C': 'Objective-C sdk link',
+  Powershell: 'Powershell sdk link'
+}
+export const CODE_SNIPPET_DOCS_LINKS = {
+  CSharp: 'C# snippet docs link',
+  JavaScript: 'JavaScript snippet docs link',
+  Java: 'Java snippet docs link',
+  Go: 'Go snippet docs link',
+  'Objective-C': 'Objective-C snippet docs link',
+  Powershell: 'Powershell snippet docs link'
+}
 
 // Actions
 export const GET_SNIPPET_ACTION = 'Get snippet action';

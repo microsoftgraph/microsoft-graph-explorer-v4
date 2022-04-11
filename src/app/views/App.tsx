@@ -1,7 +1,7 @@
 import { Announced, getTheme, IStackTokens, ITheme, styled } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { Component } from 'react';
-import { InjectedIntl, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -39,11 +39,12 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
+import { FeedbackButton } from './app-sections/FeedbackButton';
 
 interface IAppProps {
   theme?: ITheme;
   styles?: object;
-  intl: InjectedIntl;
+  intl: any;
   profile: object;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
@@ -70,7 +71,9 @@ class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
   private currentTheme: ITheme = getTheme();
   private statusAreaMobileStyle = appStyles(this.currentTheme).statusAreaMobileScreen;
-  private statusAreaLaptopStyle = appStyles(this.currentTheme).statusAreaLaptopScreen;
+  private statusAreaFullScreenStyle = appStyles(this.currentTheme).statusAreaFullScreen;
+  private contentStyle = appStyles(this.currentTheme).mainContent;
+  private queryResponseStyle = appStyles(this.currentTheme).queryResponse;
 
   constructor(props: IAppProps) {
     super(props);
@@ -280,6 +283,7 @@ class App extends Component<IAppProps, IAppState> {
     if (showSidebar) {
       this.changeDimensions('26%');
     }
+
     // @ts-ignore
     this.props.actions!.toggleSidebar(properties);
 
@@ -294,9 +298,14 @@ class App extends Component<IAppProps, IAppState> {
           alignItems: minimised ? '' : 'center',
           marginLeft: minimised ? '' : '-0.9em'
         }}>
-        <div className={minimised ? '' : 'col-10'}>
+        <div className={minimised ? '' : 'col-9'}>
           <Authentication />
         </div>
+        {minimised &&
+          <div className={minimised ? '' : 'col-2'} style={{ position: 'relative', left: '-9px' }}>
+            <FeedbackButton />
+          </div>
+        }
         <div className={minimised ? '' : 'col-2'}>
           <Settings />
         </div>
@@ -337,6 +346,27 @@ class App extends Component<IAppProps, IAppState> {
     return width;
   }
 
+  private shouldDisplayContent(parameters: any) {
+    const { graphExplorerMode, mobileScreen, showSidebar } = parameters;
+    return !(graphExplorerMode === Mode.Complete && mobileScreen && showSidebar);
+  }
+
+  private removeFlexBasisProperty() {
+    /*
+    flex-basis style property is added automatically when the window resizes
+    and is set to 100% leading to a distortion of the page when these exact steps are followed.
+    https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1433#issuecomment-1036135231
+    Removing the property altogether helps maintain the layout of the page.
+    */
+
+    const collection = document.getElementsByClassName('layout');
+    if (collection?.length === 0) {
+      return;
+    }
+    const element: any = collection[0];
+    element.style.removeProperty('flex-basis');
+  }
+
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, minimised, sampleQuery,
@@ -349,11 +379,15 @@ class App extends Component<IAppProps, IAppState> {
     let sideHeight = sidebar.height;
     let maxWidth = '50%';
     let contentWidth = content.width;
+    const contentHeight = content.height;
 
     const query = createShareLink(sampleQuery, authenticated);
     const { mobileScreen, showSidebar } = sidebarProperties;
 
-    const displayContent = shouldDisplayContent();
+    const displayContent = this.shouldDisplayContent({
+      graphExplorerMode,
+      mobileScreen, showSidebar
+    });
 
     const stackTokens: IStackTokens = {
       childrenGap: 10,
@@ -361,9 +395,9 @@ class App extends Component<IAppProps, IAppState> {
     };
 
     if (mobileScreen) {
-      layout = sidebarWidth = 'col-xs-12 col-sm-12';
+      layout = sidebarWidth = 'ms-Grid-col ms-sm12';
       sideWidth = '100%';
-      sideHeight = '150px';
+      sideHeight = '100%';
       maxWidth = '100%';
       contentWidth = '100%';
       layout += ' layout';
@@ -371,12 +405,12 @@ class App extends Component<IAppProps, IAppState> {
       sidebarWidth = classes.sidebarMini;
     }
 
-    removeFlexBasisProperty();
+    this.removeFlexBasisProperty();
 
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        <div className={`container-fluid ${classes.app}`}>
+        <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft : mobileScreen && '15px'}}>
           <Announced
             message={
               !showSidebar
@@ -384,16 +418,21 @@ class App extends Component<IAppProps, IAppState> {
                 : translateMessage('Sidebar maximized')
             }
           />
-          <div className='row'>
+          <div className={ `ms-Grid-row ${classes.appRow}`} style={{
+            flexWrap: mobileScreen && 'wrap',
+            marginRight: showSidebar || (graphExplorerMode === Mode.TryIt)  && '-20px',
+            height: mobileScreen ? '100%' : '100vh',
+            flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row' }}>
+
             {graphExplorerMode === Mode.Complete && (
               <Resizable
-                onResize={(e: any, direction: any, ref: any, d: any) => {
+                onResize={(e: any, direction: any, ref: any) => {
                   if (ref?.style?.width) {
                     this.resizeSideBar(ref.style.width);
                   }
                 }}
-                className={sidebarWidth}
-                minWidth={'4vw'}
+                className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth}`}
+                minWidth={'4'}
                 maxWidth={maxWidth}
                 enable={{
                   right: true
@@ -433,57 +472,39 @@ class App extends Component<IAppProps, IAppState> {
 
             {displayContent && (
               <Resizable
-                bounds={'window'}
-                className={layout}
-                style={{
-                  marginLeft: 10
-                }}
+                bounds={'parent'}
+                className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${layout}`}
                 enable={{
                   right: false
                 }}
                 size={{
-                  width: contentWidth,
-                  height: '98vh'
+                  width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
+                  height: contentHeight
                 }}
+                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px', overflow: 'hidden'}
+                  : this.contentStyle }
               >
-                <div style={{ marginBottom: 8 }}>
+                <div style={{ marginBottom: 8 }} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
+                    <TermsOfUseMessage />
+                  </div>
                 </div>
-                <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
-                  <TermsOfUseMessage />
-                  <StatusMessages />
+
+                <div style={this.queryResponseStyle}>
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
+                    <StatusMessages />
+                  </div>
+                  <div style={{ display:'flex', flexGrow:'1', flexShrink: '1'}}>
+                    <QueryResponse verb={this.state.selectedVerb} />
+                  </div>
                 </div>
-                {
-                  // @ts-ignore
-                  <QueryResponse verb={this.state.selectedVerb} />
-                }
               </Resizable>
             )}
           </div>
         </div>
       </ThemeContext.Provider>
     );
-
-    function shouldDisplayContent() {
-      return !(graphExplorerMode === Mode.Complete && mobileScreen && showSidebar);
-    }
-
-    function removeFlexBasisProperty() {
-      /*
-      flex-basis style property is added automatically when the window resizes
-      and is set to 100% leading to a distortion of the page when these exact steps are followed.
-      https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1433#issuecomment-1036135231
-
-      Removing the property altogether helps maintain the layout of the page.
-      */
-
-      const collection = document.getElementsByClassName('layout');
-      if (collection?.length === 0) {
-        return;
-      }
-      const element: any = collection[0];
-      element.style.removeProperty('flex-basis');
-    }
   }
 }
 
