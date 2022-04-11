@@ -5,14 +5,32 @@ import { componentNames, telemetry } from '../../../../telemetry';
 import { renderSnippets } from './snippets-helper';
 
 function GetSnippets() {
-  const supportedLanguages = [
-    'CSharp',
-    'JavaScript',
-    'Java',
-    'Objective-C',
-    'Go',
-    'PowerShell'
-  ];
+  const supportedLanguages = {
+    'CSharp': {
+      sdkDownloadLink: 'https://aka.ms/csharpsdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'JavaScript': {
+      sdkDownloadLink: 'https://aka.ms/graphjssdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'Java': {
+      sdkDownloadLink: 'https://aka.ms/graphjavasdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'Objective-C': {
+      sdkDownloadLink: 'https://aka.ms/objective-c-sdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'Go': {
+      sdkDownloadLink: 'https://aka.ms/graphgosdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'PowerShell': {
+      sdkDownloadLink: 'https://aka.ms/pshellsdk',
+      sdkDocLink: 'https://aka.ms/pshellsdkdocs'
+    }
+  };
 
   return <Pivot>{renderSnippets(supportedLanguages)}</Pivot>;
 }

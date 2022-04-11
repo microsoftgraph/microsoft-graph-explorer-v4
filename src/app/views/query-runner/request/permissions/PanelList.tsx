@@ -34,13 +34,13 @@ const PanelList = ({ messages,
   columns, classes, selection,
   renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) => {
 
-  const sortedPermissions = (permissionsToSort: IPermission[]) : IPermission[] => {
-    return permissionsToSort.sort(dynamicSort('value', SortOrder.ASC));
+  const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
+    return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
   }
 
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
   const { fullPermissions } = scopes.data;
-  const [permissions, setPermissions] = useState(sortedPermissions(fullPermissions));
+  const [permissions, setPermissions] = useState(sortPermissions(fullPermissions));
   const permissionsList: any[] = [];
   const tokenPresent = !!authToken.token;
 

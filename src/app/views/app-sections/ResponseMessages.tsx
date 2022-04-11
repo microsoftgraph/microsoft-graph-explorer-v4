@@ -6,11 +6,7 @@ import { IGraphResponse } from '../../../types/query-response';
 import { IQuery } from '../../../types/query-runner';
 import { runQuery } from '../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
-import {
-  MOZILLA_CORS_DOCUMENTATION_LINK,
-  ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK,
-  WORKLOAD
-} from '../../services/graph-constants';
+import { MOZILLA_CORS_DOCUMENTATION_LINK } from '../../services/graph-constants';
 
 interface ODataLink {
   link: string;
@@ -73,14 +69,11 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
 
   // Show CORS compliance message
   if (body?.throwsCorsError) {
-    const documentationLink = body?.workload === WORKLOAD.ONEDRIVE
-      ? ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK
-      : MOZILLA_CORS_DOCUMENTATION_LINK;
     return (
       <div>
         <MessageBar messageBarType={MessageBarType.warning}>
           <FormattedMessage id={'Response content not available due to CORS policy'} />
-          <Link href={documentationLink}>
+          <Link target='_blank' href={MOZILLA_CORS_DOCUMENTATION_LINK}>
             <FormattedMessage id={'here'} />
           </Link>.
         </MessageBar>

@@ -20,10 +20,14 @@ export const resourceExplorerStyles = (theme: ITheme) => {
 export const navStyles: any = (properties: any) => ({
   chevronIcon: [
     properties.isExpanded && {
-      transform: 'rotate(0deg)'
+      transform: 'rotate(0deg)',
+      position: 'relative',
+      top: '-3px'
     },
     !properties.isExpanded && {
-      transform: 'rotate(-90deg)'
+      transform: 'rotate(-90deg)',
+      position: 'relative',
+      top: '-3px'
     }
   ],
   chevronButton: [

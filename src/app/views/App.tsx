@@ -71,7 +71,9 @@ class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
   private currentTheme: ITheme = getTheme();
   private statusAreaMobileStyle = appStyles(this.currentTheme).statusAreaMobileScreen;
-  private statusAreaLaptopStyle = appStyles(this.currentTheme).statusAreaLaptopScreen;
+  private statusAreaFullScreenStyle = appStyles(this.currentTheme).statusAreaFullScreen;
+  private contentStyle = appStyles(this.currentTheme).mainContent;
+  private queryResponseStyle = appStyles(this.currentTheme).queryResponse;
 
   constructor(props: IAppProps) {
     super(props);
@@ -418,7 +420,9 @@ class App extends Component<IAppProps, IAppState> {
           />
           <div className={ `ms-Grid-row ${classes.appRow}`} style={{
             flexWrap: mobileScreen && 'wrap',
-            marginRight: showSidebar && '-20px' }}>
+            marginRight: showSidebar || (graphExplorerMode === Mode.TryIt)  && '-20px',
+            height: mobileScreen ? '100%' : '100vh',
+            flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row' }}>
 
             {graphExplorerMode === Mode.Complete && (
               <Resizable
@@ -468,7 +472,7 @@ class App extends Component<IAppProps, IAppState> {
 
             {displayContent && (
               <Resizable
-                bounds={'window'}
+                bounds={'parent'}
                 className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${layout}`}
                 enable={{
                   right: false
@@ -477,20 +481,23 @@ class App extends Component<IAppProps, IAppState> {
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
                   height: contentHeight
                 }}
-                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px'} : {}}
+                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px', overflow: 'hidden'}
+                  : this.contentStyle }
               >
-                <div style={{ marginBottom: 8 }}>
+                <div style={{ marginBottom: 8 }} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                     <TermsOfUseMessage />
                   </div>
                 </div>
 
-                <div>
-                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
+                <div style={this.queryResponseStyle}>
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                     <StatusMessages />
                   </div>
-                  <QueryResponse verb={this.state.selectedVerb} />
+                  <div style={{ display:'flex', flexGrow:'1', flexShrink: '1'}}>
+                    <QueryResponse verb={this.state.selectedVerb} />
+                  </div>
                 </div>
               </Resizable>
             )}
