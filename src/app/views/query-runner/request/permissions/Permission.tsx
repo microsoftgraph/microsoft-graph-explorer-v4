@@ -27,9 +27,11 @@ import messages from '../../../../../messages';
 
 export const Permission = ( permissionProps?: IPermissionProps ) => {
 
-  const { sampleQuery, scopes, dimensions, permissionsPanelOpen } = useSelector( (state: IRootState) => state
+  const { sampleQuery, scopes, dimensions, permissionsPanelOpen, authToken } = useSelector( (state: IRootState) => state
   );
   const { pending: loading } = scopes;
+  const tokenPresent = !!authToken.token;
+  const panel = permissionsPanelOpen;
 
   const dispatch = useDispatch();
 
@@ -58,13 +60,9 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
     getPermissions();
   }, [permissionsPanelOpen, sampleQuery]);
 
-  const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+  const renderItemColumn = (item: any, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
     const consented = !!item.consented;
-
-    const {
-      panel
-    }: any = permissionProps;
 
     if (column) {
       const content = item[column.fieldName as keyof any] as string;
@@ -150,11 +148,6 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
   }
 
   const getColumns = () => {
-    const {
-      tokenPresent,
-      panel
-    }: any = permissionProps;
-
     const columns: IColumn[] = [
       {
         key: 'value',
@@ -219,7 +212,9 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
           permissionsToConsent.push(option.value);
         });
       }
-      permissionProps!.setPermissions(permissionsToConsent);
+      if(permissionProps!.setPermissions){
+        permissionProps!.setPermissions(permissionsToConsent);
+      }
     }
   });
 
@@ -231,7 +226,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
         selection={selection}
         columns={getColumns()}
         renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
-          renderItemColumn(item, index, column)}
+          renderItemColumn(item, column)}
         renderDetailsHeader={renderDetailsHeader}
         renderCustomCheckbox={renderCustomCheckbox}
       />
@@ -243,7 +238,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
       columns={getColumns()}
       maxHeight={tabHeight}
       renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
-        renderItemColumn(item, index, column)}
+        renderItemColumn(item, column)}
       renderDetailsHeader={renderDetailsHeader}
       classes={classes}
     />;
@@ -257,7 +252,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
 
   return(
     <>
-      {permissionProps!.panel ? displayPermissionsPanel() : displayPermissionsAsTab()}
+      {panel ? displayPermissionsPanel() : displayPermissionsAsTab()}
     </>
   )
 }

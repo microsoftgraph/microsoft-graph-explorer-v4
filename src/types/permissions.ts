@@ -12,18 +12,9 @@ export interface IPermission {
 export interface IPermissionProps {
   theme?: ITheme;
   styles?: object;
-  dimensions: IDimensions;
-  scopes: IScopes;
-  panel: boolean;
-  sample: IQuery[];
-  tokenPresent: boolean;
-  permissionsPanelOpen: boolean;
-  consentedScopes: string[];
-  setPermissions: Function;
-  actions?: {
-    fetchScopes: Function;
-    consentToScopes: Function;
-  }
+  dimensions?: IDimensions;
+  permissionsPanelOpen?: boolean;
+  setPermissions?: Function;
 }
 
 export interface IPermissionState {
