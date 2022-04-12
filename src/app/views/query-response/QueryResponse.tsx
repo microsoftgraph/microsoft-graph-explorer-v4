@@ -25,10 +25,10 @@ import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
 
 const QueryResponse = (props: IQueryResponseProps) => {
   const dispatch = useDispatch();
-  const [responseHeight, setResponseHeight] = useState('610px');
   const [showShareQueryDialog, setShareQuaryDialogStatus] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [query] = useState('');
+  const [responseHeight, setResponseHeight] = useState('610px');
   const { sampleQuery, dimensions } = useSelector((state: IRootState) => state);
 
   useEffect(() => {
@@ -94,9 +94,12 @@ const QueryResponse = (props: IQueryResponseProps) => {
     <>
       <Resizable
         style={{
-          marginBottom: 10
+          marginBottom: 10,
+          marginTop: 10
         }}
-        bounds={'parent'}
+        bounds={'window'}
+        maxHeight={800}
+        minHeight={350}
         size={{
           height: responseHeight,
           width: '100%'

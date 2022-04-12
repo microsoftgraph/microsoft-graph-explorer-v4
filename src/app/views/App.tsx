@@ -404,6 +404,9 @@ class App extends Component<IAppProps, IAppState> {
     } else if (minimised) {
       sidebarWidth = classes.sidebarMini;
     }
+    else{
+      sideHeight = ''
+    }
 
     this.removeFlexBasisProperty();
 
@@ -480,8 +483,7 @@ class App extends Component<IAppProps, IAppState> {
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
                   height: contentHeight
                 }}
-                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px'}
-                  : {} }
+                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px'} : {} }
               >
                 <div style={{ marginBottom: 8 }} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
@@ -494,9 +496,7 @@ class App extends Component<IAppProps, IAppState> {
                   <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                     <StatusMessages />
                   </div>
-                  <div style={{}}>
-                    <QueryResponse verb={this.state.selectedVerb} />
-                  </div>
+                  <QueryResponse verb={this.state.selectedVerb} />
                 </div>
               </Resizable>
             )}

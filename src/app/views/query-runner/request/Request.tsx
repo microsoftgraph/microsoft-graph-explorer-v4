@@ -178,7 +178,8 @@ export class Request extends Component<IRequestComponent, any> {
       <>
         <Resizable
           style={{
-            border: 'solid 1px #ddd'
+            border: 'solid 1px #ddd',
+            marginBottom: 10
           }}
           onResizeStop={(e: any, direction: any, ref: any) => {
             if (ref && ref.style && ref.style.height) {

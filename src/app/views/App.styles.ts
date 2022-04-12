@@ -11,12 +11,12 @@ export const appStyles = (theme: ITheme) => {
       paddingRight: '15px',
       paddingLeft: '4px',
       marginLeft: 'auto',
-      marginRight: 'auto',
-      borderBottom: '1px solid black'
+      marginRight: 'auto'
     },
     appRow: {
       display: 'flex',
-      flexWrap: 'no-wrap'
+      flexWrap: 'no-wrap',
+      alignItems: 'stretch'
     },
     tryItMessage: {
       marginBottom: theme.spacing.s1
