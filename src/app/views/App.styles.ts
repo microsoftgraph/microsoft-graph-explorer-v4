@@ -86,10 +86,6 @@ export const appStyles = (theme: ITheme) => {
       position: 'absolute',
       top: '13px',
       right: '10px'
-    },
-    mainContent: {
-    },
-    queryResponse: {
     }
   };
 };

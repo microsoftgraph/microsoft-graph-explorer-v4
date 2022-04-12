@@ -110,7 +110,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
       >
         <div className='query-response' style={{
           minHeight: 350,
-          height: responseHeight
+          height: '100%'
         }}>
 
           <Pivot overflowBehavior="menu" onLinkClick={handlePivotItemClick}

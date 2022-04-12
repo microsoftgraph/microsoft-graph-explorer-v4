@@ -72,8 +72,6 @@ class App extends Component<IAppProps, IAppState> {
   private currentTheme: ITheme = getTheme();
   private statusAreaMobileStyle = appStyles(this.currentTheme).statusAreaMobileScreen;
   private statusAreaFullScreenStyle = appStyles(this.currentTheme).statusAreaFullScreen;
-  private contentStyle = appStyles(this.currentTheme).mainContent;
-  private queryResponseStyle = appStyles(this.currentTheme).queryResponse;
 
   constructor(props: IAppProps) {
     super(props);
@@ -367,6 +365,21 @@ class App extends Component<IAppProps, IAppState> {
     element.style.removeProperty('flex-basis');
   }
 
+  private removeSidebarHeightProperty(){
+    /*
+    height style property is added automatically on the sidebar when the window resizes
+    and is set to 100% leading to a distortion of the page when these exact steps are followed.
+    https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1602#:~:text=Zoom
+    Removing the property altogether helps maintain the layout of the page.
+    */
+    const collection = document.getElementsByClassName('resizable-sidebar');
+    if (collection?.length === 0) {
+      return;
+    }
+    const element: any = collection[0];
+    element.style.removeProperty('height');
+  }
+
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, minimised, sampleQuery,
@@ -376,7 +389,7 @@ class App extends Component<IAppProps, IAppState> {
     let sidebarWidth = classes.sidebar;
     let layout = '';
     let sideWidth = sidebar.width;
-    let sideHeight = sidebar.height;
+    const sideHeight = '';
     let maxWidth = '50%';
     let contentWidth = content.width;
     const contentHeight = content.height;
@@ -397,18 +410,15 @@ class App extends Component<IAppProps, IAppState> {
     if (mobileScreen) {
       layout = sidebarWidth = 'ms-Grid-col ms-sm12';
       sideWidth = '100%';
-      sideHeight = '100%';
       maxWidth = '100%';
       contentWidth = '100%';
       layout += ' layout';
     } else if (minimised) {
       sidebarWidth = classes.sidebarMini;
     }
-    else{
-      sideHeight = ''
-    }
 
     this.removeFlexBasisProperty();
+    this.removeSidebarHeightProperty();
 
     return (
       // @ts-ignore
@@ -433,7 +443,7 @@ class App extends Component<IAppProps, IAppState> {
                     this.resizeSideBar(ref.style.width);
                   }
                 }}
-                className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth}`}
+                className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth} resizable-sidebar`}
                 minWidth={'4'}
                 maxWidth={maxWidth}
                 enable={{
