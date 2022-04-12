@@ -1,7 +1,7 @@
 import { ITheme } from '@fluentui/react';
 
 export const autoCompleteStyles = (theme: ITheme) => {
-  const controlWidth = '95.5%';
+  const controlWidth = '40%';
 
   return {
     input: {
@@ -14,7 +14,6 @@ export const autoCompleteStyles = (theme: ITheme) => {
     },
     suggestions: {
       maxHeight: '250px',
-      overflowY: 'auto',
       paddingLeft: 0,
       position: 'absolute',
       backgroundColor: theme.palette.neutralLighter,
