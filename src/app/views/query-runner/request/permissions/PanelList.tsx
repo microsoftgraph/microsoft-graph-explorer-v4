@@ -6,7 +6,9 @@ import {
   IColumn,
   Label,
   SearchBox,
-  SelectionMode
+  SelectionMode,
+  Spinner,
+  SpinnerSize
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
