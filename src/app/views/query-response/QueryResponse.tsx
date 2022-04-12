@@ -4,7 +4,7 @@ import {
   Modal, Pivot, PivotItem, TooltipHost
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
@@ -20,15 +20,20 @@ import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 import { IRootState } from '../../../types/root';
 import { CopyButton } from '../common/copy/CopyButton';
+import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
 
 
 const QueryResponse = (props: IQueryResponseProps) => {
   const dispatch = useDispatch();
-
   const [showShareQueryDialog, setShareQuaryDialogStatus] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [query] = useState('');
-  const { sampleQuery } = useSelector((state: IRootState) => state);
+  const [responseHeight, setResponseHeight] = useState('610px');
+  const { sampleQuery, dimensions } = useSelector((state: IRootState) => state);
+
+  useEffect(() => {
+    setResponseHeight(convertVhToPx(dimensions.response.height, 50));
+  }, [dimensions]);
 
   const {
     intl: { messages }
@@ -90,13 +95,13 @@ const QueryResponse = (props: IQueryResponseProps) => {
       <Resizable
         style={{
           marginBottom: 10,
-          marginTop: 10,
-          flexGrow: 1,
-          flexShrink:1
+          marginTop: 10
         }}
-        bounds={'parent'}
+        bounds={'window'}
+        maxHeight={800}
+        minHeight={350}
         size={{
-          height: '100%',
+          height: responseHeight,
           width: '100%'
         }}
         enable={{
