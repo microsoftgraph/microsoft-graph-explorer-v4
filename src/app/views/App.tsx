@@ -389,7 +389,6 @@ class App extends Component<IAppProps, IAppState> {
     let sidebarWidth = classes.sidebar;
     let layout = '';
     let sideWidth = sidebar.width;
-    const sideHeight = '';
     let maxWidth = '50%';
     let contentWidth = content.width;
     const contentHeight = content.height;
@@ -455,7 +454,7 @@ class App extends Component<IAppProps, IAppState> {
                 bounds={'window'}
                 size={{
                   width: sideWidth,
-                  height: sideHeight
+                  height: ''
                 }}
               >
 
@@ -502,7 +501,7 @@ class App extends Component<IAppProps, IAppState> {
                   </div>
                 </div>
 
-                <div style={{}}>
+                <div>
                   <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                     <StatusMessages />
                   </div>
