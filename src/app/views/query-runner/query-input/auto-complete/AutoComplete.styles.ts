@@ -14,6 +14,7 @@ export const autoCompleteStyles = (theme: ITheme) => {
     },
     suggestions: {
       maxHeight: '250px',
+      overflowY: 'auto',
       paddingLeft: 0,
       position: 'absolute',
       backgroundColor: theme.palette.neutralLighter,
