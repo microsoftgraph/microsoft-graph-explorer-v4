@@ -16,7 +16,7 @@ interface ITabList {
   maxHeight: string;
 }
 
-const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) => {
+const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) : JSX.Element => {
   const dispatch = useDispatch();
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
   const permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
@@ -29,7 +29,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     dispatch(togglePermissionsPanel(true));
   }
 
-  const displayNoPermissionsFoundMessage = () => {
+  const displayNoPermissionsFoundMessage = () : JSX.Element => {
     return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='permissions not found in permissions tab' />
       <Link onClick={openPermissionsPanel}>
@@ -39,7 +39,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     </Label>);
   }
 
-  const displayNotSignedInMessage = () => {
+  const displayNotSignedInMessage = () : JSX.Element => {
     return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='sign in to view a list of all permissions' />
     </Label>)
@@ -47,6 +47,10 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
 
   if (!tokenPresent && permissions.length === 0) {
     return displayNotSignedInMessage();
+  }
+
+  if(permissions.length === 0){
+    return displayNoPermissionsFoundMessage();
   }
 
 
@@ -71,9 +75,6 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
       </div>
-      {permissions.length === 0 &&
-        displayNoPermissionsFoundMessage()
-      }
     </>
   );
 };

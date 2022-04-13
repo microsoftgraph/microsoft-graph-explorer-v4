@@ -1,6 +1,5 @@
 import { ITheme } from '@fluentui/react';
 import { IDimensions } from './dimensions';
-import { IQuery } from './query-runner';
 
 export interface IPermission {
   value: string;
