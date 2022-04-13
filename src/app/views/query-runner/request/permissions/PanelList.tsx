@@ -80,20 +80,6 @@ const PanelList = ({ messages,
     return null;
   };
 
-  if( permissions && permissions.length === 0 ){
-    return (
-      <Label style={{
-        display: 'flex',
-        width: '100%',
-        minHeight: '200px',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-        <FormattedMessage id='permissions not found' />
-      </Label>
-    )
-  }
-
   return (
     <>
       <Label className={classes.permissionText}>
