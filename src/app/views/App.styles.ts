@@ -6,10 +6,10 @@ export const appStyles = (theme: ITheme) => {
       background: theme.semanticColors.bodyBackground,
       color: theme.semanticColors.bodyText,
       paddingTop: theme.spacing.s1,
-      width: '100%',
       height: '100%',
       paddingRight: '15px',
       paddingLeft: '4px',
+      paddingBottom: '5px',
       marginLeft: 'auto',
       marginRight: 'auto'
     },

@@ -496,9 +496,6 @@ class App extends Component<IAppProps, IAppState> {
               >
                 <div style={{ marginBottom: 8 }} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                    <TermsOfUseMessage />
-                  </div>
                 </div>
 
                 <div>
@@ -509,6 +506,9 @@ class App extends Component<IAppProps, IAppState> {
                 </div>
               </Resizable>
             )}
+          </div>
+          <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
+            <TermsOfUseMessage />
           </div>
         </div>
       </ThemeContext.Provider>
