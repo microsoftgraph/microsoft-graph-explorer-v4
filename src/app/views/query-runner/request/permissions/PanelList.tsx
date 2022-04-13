@@ -47,7 +47,7 @@ const PanelList = ({ messages,
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
-  permissions.forEach((perm: any) => {
+  permissions.forEach((perm: IPermission) => {
     const permission: any = { ...perm };
     const permissionValue = permission.value;
     const groupName = permissionValue.split('.')[0];
@@ -71,7 +71,7 @@ const PanelList = ({ messages,
   const groups = generateGroupsFromList(permissionsList, 'groupName');
 
 
-  const onRenderGroupHeader = (props: any): any => {
+  const onRenderGroupHeader = (props: any): JSX.Element | null => {
     if (props) {
       return (
         <GroupHeader  {...props} onRenderGroupHeaderCheckbox={renderCustomCheckbox} />
@@ -79,6 +79,20 @@ const PanelList = ({ messages,
     }
     return null;
   };
+
+  if( permissions && permissions.length === 0 ){
+    return (
+      <Label style={{
+        display: 'flex',
+        width: '100%',
+        minHeight: '200px',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <FormattedMessage id='permissions not found' />
+      </Label>
+    )
+  }
 
   return (
     <>

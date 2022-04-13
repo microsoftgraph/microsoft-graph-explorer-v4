@@ -271,7 +271,7 @@ function Settings(props: ISettingsProps) {
           isFooterAtBottom={true}
           closeButtonAriaLabel='Close'
         >
-          <Permission setPermissions={setPermissions} />
+          <Permission panel={true} setPermissions={setPermissions} />
         </Panel>
       </div>
     </div>

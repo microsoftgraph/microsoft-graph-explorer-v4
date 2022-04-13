@@ -26,14 +26,14 @@ import { permissionStyles } from './Permission.styles';
 import TabList from './TabList';
 import messages from '../../../../../messages';
 
-export const Permission = ( permissionProps?: IPermissionProps ) => {
+export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
 
-  const { sampleQuery, scopes, dimensions, permissionsPanelOpen, authToken } = useSelector( (state: IRootState) => state
-  );
+  const { sampleQuery, scopes, dimensions, authToken } =
+  useSelector( (state: IRootState) => state );
   const { pending: loading } = scopes;
   const tokenPresent = !!authToken.token;
-  const panel = permissionsPanelOpen;
   const dispatch = useDispatch();
+  const panel = permissionProps!.panel;
 
   const classProps = {
     styles: permissionProps!.styles,
@@ -46,15 +46,15 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
 
-  const getPermissions = () => {
+  const getPermissions = () : void => {
     dispatch(permissionActionCreators.fetchScopes());
   }
 
   useEffect(() => {
     getPermissions();
-  }, [permissionsPanelOpen, sampleQuery]);
+  },[sampleQuery, panel]);
 
-  const handleConsent = async (permission: IPermission) => {
+  const handleConsent = async (permission: IPermission) : Promise<void> => {
     const consentScopes = [permission.value];
     dispatch(permissionActionCreators.consentToScopes(consentScopes));
   };
@@ -146,7 +146,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
     )
   }
 
-  const getColumns = () => {
+  const getColumns = () : IColumn[] => {
     const columns: IColumn[] = [
       {
         key: 'value',
