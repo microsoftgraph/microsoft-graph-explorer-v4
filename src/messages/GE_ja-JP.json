@@ -431,5 +431,10 @@
   "Invalid version in URL": "URL 内のバージョンが無効です。",
   "More info": "詳細情報",
   "Could not connect to the sandbox": "サンドボックスに接続できませんでした",
-  "Failed to get profile information": "プロファイル情報を取得できませんでした"
+  "Failed to get profile information": "プロファイル情報を取得できませんでした",
+  "Do you want to remove all the items you have added to the collection?": "コレクションに追加したすべてのアイテムを削除しますか?",
+  "Delete collection": "コレクションを削除する",
+  "Leverage libraries": "クライアント ライブラリの力を活用します。次をダウンロード:",
+  "Client library": "クライアント ライブラリはこちら ",
+  "SDKs documentation": "SDK の詳細については、 のドキュメント ページを参照してください "
 }

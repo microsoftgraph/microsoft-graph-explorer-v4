@@ -13,6 +13,7 @@ interface IMonaco {
   language?: string;
   readOnly?: boolean;
   height?: string;
+  extraInfoElement?: JSX.Element;
 }
 
 export function Monaco(props: IMonaco) {
@@ -26,8 +27,9 @@ export function Monaco(props: IMonaco) {
   const itemHeight = height ? height : '300px';
 
   return (
-    <FocusZone disabled={true}>
+    <FocusZone disabled={props.extraInfoElement ? false : true}>
       <div className='monaco-editor'>
+        {props.extraInfoElement}
         <ThemeContext.Consumer >
           {(theme) => (<Editor
             width='800 !important'

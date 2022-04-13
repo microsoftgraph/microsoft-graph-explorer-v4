@@ -15,7 +15,8 @@ export const appStyles = (theme: ITheme) => {
     },
     appRow: {
       display: 'flex',
-      flexWrap: 'no-wrap'
+      flexWrap: 'no-wrap',
+      alignItems: 'stretch'
     },
     tryItMessage: {
       marginBottom: theme.spacing.s1
@@ -67,8 +68,8 @@ export const appStyles = (theme: ITheme) => {
     statusAreaMobileScreen: {
       marginTop: 5
     },
-    statusAreaLaptopScreen: {
-      marginTop: 0
+    statusAreaFullScreen: {
+      marginTop: 10
     },
     vResizeHandle: {
       zIndex: 1,

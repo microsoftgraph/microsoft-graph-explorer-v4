@@ -79,7 +79,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       return undefined;
     }
 
-    const allAccounts = msalApplication.getAllAccounts();
+    const allAccounts: AccountInfo[] = msalApplication.getAllAccounts();
     if (!allAccounts || allAccounts.length === 0) {
       return undefined;
     }
