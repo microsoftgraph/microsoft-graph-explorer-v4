@@ -4,11 +4,10 @@ import {
   DetailsListLayoutMode,
   GroupHeader,
   IColumn,
+  IDetailsListCheckboxProps,
   Label,
   SearchBox,
-  SelectionMode,
-  Spinner,
-  SpinnerSize
+  SelectionMode
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -34,7 +33,7 @@ interface IPanelList {
 
 const PanelList = ({ messages,
   columns, classes, selection,
-  renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) => {
+  renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) : JSX.Element => {
 
   const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
     return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
@@ -114,7 +113,7 @@ const PanelList = ({ messages,
         ariaLabelForSelectAllCheckbox={messages['Toggle selection for all items'] || 'Toggle selection for all items'}
         checkButtonAriaLabel={messages['Row checkbox'] || 'Row checkbox'}
         onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)}
-        onRenderCheckbox={(props: any) => renderCustomCheckbox(props)}
+        onRenderCheckbox={(props?: IDetailsListCheckboxProps) => renderCustomCheckbox(props)}
       />
       {permissions && permissions.length === 0 &&
         <Label style={{

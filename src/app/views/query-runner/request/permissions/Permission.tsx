@@ -5,6 +5,7 @@ import {
   getTheme,
   IColumn,
   Icon,
+  IDetailsListCheckboxProps,
   Label,
   PrimaryButton,
   Selection,
@@ -32,16 +33,14 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
   const { pending: loading } = scopes;
   const tokenPresent = !!authToken.token;
   const panel = permissionsPanelOpen;
-
   const dispatch = useDispatch();
-
 
   const classProps = {
     styles: permissionProps!.styles,
     theme: permissionProps!.theme
   };
-  const classes = classNames(classProps);
 
+  const classes = classNames(classProps);
   const theme = getTheme();
   const panelStyles = permissionStyles(theme).panelContainer;
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
@@ -51,14 +50,14 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
     dispatch(permissionActionCreators.fetchScopes());
   }
 
+  useEffect(() => {
+    getPermissions();
+  }, [permissionsPanelOpen, sampleQuery]);
+
   const handleConsent = async (permission: IPermission) => {
     const consentScopes = [permission.value];
     dispatch(permissionActionCreators.consentToScopes(consentScopes));
   };
-
-  useEffect(() => {
-    getPermissions();
-  }, [permissionsPanelOpen, sampleQuery]);
 
   const renderItemColumn = (item: any, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
@@ -139,7 +138,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
     });
   }
 
-  const renderCustomCheckbox = (props: any): any => {
+  const renderCustomCheckbox = (props: IDetailsListCheckboxProps): JSX.Element => {
     return (
       <div style={{ pointerEvents: 'none' }} >
         <Checkbox checked={props ? props.checked : undefined} />
@@ -218,7 +217,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
     }
   });
 
-  const displayPermissionsPanel = () => {
+  const displayPermissionsPanel = () : JSX.Element => {
     return <div data-is-scrollable={true} style={panelStyles}>
       <PanelList
         classes={classes}
@@ -233,7 +232,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
     </div>
   };
 
-  const displayPermissionsAsTab = () => {
+  const displayPermissionsAsTab = () : JSX.Element => {
     return <TabList
       columns={getColumns()}
       maxHeight={tabHeight}
@@ -254,5 +253,5 @@ export const Permission = ( permissionProps?: IPermissionProps ) => {
     <>
       {panel ? displayPermissionsPanel() : displayPermissionsAsTab()}
     </>
-  )
+  );
 }
