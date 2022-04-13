@@ -14,8 +14,6 @@ interface ISidebar {
 export const Sidebar = (props: ISidebar) => {
 
   const onPivotItemClick = (item?: PivotItem) => {
-    console.log('This one was clicked', props);
-
     if (!item) { return; }
     const key = item.props.itemKey;
     if (key) {
@@ -23,7 +21,6 @@ export const Sidebar = (props: ISidebar) => {
       telemetry.trackTabClickEvent(key);
     }
   }
-
 
   return (
     <div>
