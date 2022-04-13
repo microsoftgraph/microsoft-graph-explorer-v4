@@ -65,6 +65,7 @@ interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
   hideDialog: boolean;
+  sidebarTabSelection: string;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -78,8 +79,15 @@ class App extends Component<IAppProps, IAppState> {
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false,
-      hideDialog: true
+      hideDialog: true,
+      sidebarTabSelection: 'sample-queries'
     };
+  }
+
+  private setSidebarTabSelection = (tabKey : string) => {
+    this.setState({
+      sidebarTabSelection: tabKey
+    });
   }
 
   public componentDidMount = async () => {
@@ -383,7 +391,7 @@ class App extends Component<IAppProps, IAppState> {
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, minimised, sampleQuery,
-      sidebarProperties, dimensions }: any = this.props;
+      sidebarProperties, dimensions, sidebarTabSelection }: any = this.props;
     const { sidebar, content } = dimensions;
 
     let sidebarWidth = classes.sidebar;
@@ -475,7 +483,8 @@ class App extends Component<IAppProps, IAppState> {
                 {this.displayAuthenticationSection(minimised)}
                 <hr className={classes.separator} />
 
-                {showSidebar && (<Sidebar />)}
+                {showSidebar && (<Sidebar currentTab={this.state.sidebarTabSelection}
+                  setSidebarTabSelection={this.setSidebarTabSelection}/>)}
               </Resizable>
             )}
             {graphExplorerMode === Mode.TryIt &&
