@@ -84,9 +84,9 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
-  private setSidebarTabSelection = (tabKey : string) => {
+  private setSidebarTabSelection = (selectedTab : string) => {
     this.setState({
-      sidebarTabSelection: tabKey
+      sidebarTabSelection: selectedTab
     });
   }
 
@@ -391,7 +391,7 @@ class App extends Component<IAppProps, IAppState> {
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, minimised, sampleQuery,
-      sidebarProperties, dimensions, sidebarTabSelection }: any = this.props;
+      sidebarProperties, dimensions }: any = this.props;
     const { sidebar, content } = dimensions;
 
     let sidebarWidth = classes.sidebar;
@@ -483,8 +483,8 @@ class App extends Component<IAppProps, IAppState> {
                 {this.displayAuthenticationSection(minimised)}
                 <hr className={classes.separator} />
 
-                {showSidebar && (<Sidebar currentTab={this.state.sidebarTabSelection}
-                  setSidebarTabSelection={this.setSidebarTabSelection}/>)}
+                {showSidebar && ( <Sidebar currentTab = { this.state.sidebarTabSelection }
+                  setSidebarTabSelection = { this.setSidebarTabSelection } /> ) }
               </Resizable>
             )}
             {graphExplorerMode === Mode.TryIt &&
