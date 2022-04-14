@@ -97,9 +97,9 @@ function createAuthenticatedRequest(
     });
   }
 
-  const msalAuthOptions:AuthCodeMSALBrowserAuthenticationProviderOptions = {
+  const msalAuthOptions: AuthCodeMSALBrowserAuthenticationProviderOptions = {
     account: authenticationWrapper.getAccount()!,
-    interactionType: InteractionType.Popup ,
+    interactionType: InteractionType.Popup,
     scopes
   }
   const middlewareOptions = new AuthenticationHandlerOptions(

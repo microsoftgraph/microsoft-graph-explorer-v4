@@ -67,7 +67,7 @@ export function getSnippet(language: string): Function {
 
       // eslint-disable-next-line max-len
       let body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search} ${httpVersion}\r\n${host}\r\n${sampleHeaders}\r\n\r\n`;
-      if(sampleQuery.selectedVerb !== 'GET'){
+      if (sampleQuery.selectedVerb !== 'GET') {
         body += `${requestBody}`;
       }
 
