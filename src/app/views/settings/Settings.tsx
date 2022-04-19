@@ -6,7 +6,9 @@ import {
   DialogType,
   DropdownMenuItemType,
   getId,
+  getTheme,
   IconButton,
+  ITheme,
   Label,
   Panel,
   PanelType,
@@ -41,6 +43,7 @@ function Settings(props: ISettingsProps) {
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
+  const theme: ITheme = getTheme();
 
   const {
     intl: { messages }
@@ -270,6 +273,7 @@ function Settings(props: ISettingsProps) {
           onRenderFooterContent={onRenderFooterContent}
           isFooterAtBottom={true}
           closeButtonAriaLabel='Close'
+          styles={{footer : {backgroundColor:theme.palette.white}}}
         >
           <Permission panel={true} setPermissions={setPermissions} />
         </Panel>
