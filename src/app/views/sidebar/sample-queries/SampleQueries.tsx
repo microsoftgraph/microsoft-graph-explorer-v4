@@ -54,8 +54,10 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps) : JSX.Element 
   useEffect(() => {
     if(samples.queries.length === 0){
       dispatch(fetchSamples());
+    } else {
+      setSampleQueries(samples.queries)
     }
-  }, [])
+  }, [samples.queries, tokenPresent])
 
   const searchValueChanged = (event: any, value?: string): void => {
     const { queries } = samples;
