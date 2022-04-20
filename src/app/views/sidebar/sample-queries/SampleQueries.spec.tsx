@@ -5,7 +5,7 @@ import { IntlProvider } from 'react-intl';
 
 import { geLocale } from '../../../../appLocale';
 import { ISampleQueriesProps } from '../../../../types/query-runner';
-import { SampleQueries } from './SampleQueries';
+import SampleQueries from './SampleQueries';
 import { messages_ } from '../../../utils/get-messages';
 
 afterEach(cleanup);
@@ -37,9 +37,6 @@ const renderSampleQueries = () => {
       error: {
         message: ''
       }
-    },
-    intl: {
-      message: messages
     }
   }
 

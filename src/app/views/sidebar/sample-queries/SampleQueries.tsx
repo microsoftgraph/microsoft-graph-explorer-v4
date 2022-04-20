@@ -2,7 +2,7 @@ import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
   getTheme,
   GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
-  SelectionMode, Spinner, SpinnerSize, TooltipHost
+  SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -24,6 +24,7 @@ import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
 import { columns, isJsonString, performSearch } from './sample-query-utils';
+import { sidebarStyles } from '../Sidebar.styles';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { fetchSamples } from '../../../services/actions/samples-action-creators';
 import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
@@ -31,18 +32,24 @@ import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
 
-export const SampleQueries = (props: ISampleQueriesProps) => {
+const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps) : JSX.Element => {
 
   const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
-  const { authToken, profile, samples, theme } =
+  const { authToken, profile, samples } =
     useSelector((state: IRootState) => state);
   const tokenPresent = !!authToken;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(samples.queries);
   const dispatch = useDispatch();
   const currentTheme = getTheme();
 
-  const { error, pending } = props.samples;
+  const { error, pending } = samples;
   const groups = generateGroupsFromList(sampleQueries, 'category');
+
+  const classProps = {
+    styles: sampleProps!.styles,
+    theme: sampleProps!.theme
+  };
+  const classes = classNames(classProps);
 
   useEffect(() => {
     if(samples.queries.length === 0){
@@ -140,14 +147,11 @@ export const SampleQueries = (props: ISampleQueriesProps) => {
       });
   }
 
-
   const renderItemColumn = (
     item: ISampleQuery,
     index: number | undefined,
-    column: IColumn | undefined,
-    props:any
+    column: IColumn | undefined
   ) => {
-    const classes = classNames(props);
     if (column) {
       const queryContent = item[column.fieldName as keyof ISampleQuery] as string;
       const signInText = translateMessage('Sign In to try this sample');
@@ -259,7 +263,6 @@ export const SampleQueries = (props: ISampleQueriesProps) => {
   }
 
   const renderRow = (props:any): any => {
-    const classes = classNames(props);
     let selectionDisabled = false;
     const customStyles: Partial<IDetailsRowStyles> = {};
     if (selectedQuery?.id === props.item.id) {
@@ -405,3 +408,7 @@ export const SampleQueries = (props: ISampleQueriesProps) => {
     </div>
   );
 }
+
+// @ts-ignore
+const SampleQueries = styled(unstyledSampleQueries, sidebarStyles);
+export default SampleQueries;
