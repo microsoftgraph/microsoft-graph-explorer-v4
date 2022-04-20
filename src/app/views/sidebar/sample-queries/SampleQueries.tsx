@@ -2,12 +2,11 @@ import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
   getTheme,
   GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
-  SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
+  SelectionMode, Spinner, SpinnerSize, TooltipHost
 } from '@fluentui/react';
-import React, { Component, useEffect, useState } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
@@ -17,10 +16,6 @@ import {
   ISampleQuery
 } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
-import * as queryActionCreators from '../../../services/actions/query-action-creators';
-import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
-import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
-import * as samplesActionCreators from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { validateExternalLink } from '../../../utils/external-link-validation';
@@ -28,15 +23,15 @@ import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
-import { sidebarStyles } from '../Sidebar.styles';
 import { columns, isJsonString, performSearch } from './sample-query-utils';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { fetchSamples } from '../../../services/actions/samples-action-creators';
 import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
 import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { translateMessage } from '../../../utils/translate-messages';
 
-function SampleQueries() {
+export const SampleQueries = (props: ISampleQueriesProps) => {
 
   const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
   const { authToken, profile, samples, theme } =
@@ -44,6 +39,10 @@ function SampleQueries() {
   const tokenPresent = !!authToken;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(samples.queries);
   const dispatch = useDispatch();
+  const currentTheme = getTheme();
+
+  const { error, pending } = props.samples;
+  const groups = generateGroupsFromList(sampleQueries, 'category');
 
   useEffect(() => {
     if(samples.queries.length === 0){
@@ -141,95 +140,17 @@ function SampleQueries() {
       });
   }
 
-  return (
-    <div>
-      <SearchBox
-        className={classes.searchBox}
-        placeholder={messages['Search sample queries']}
-        onChange={this.searchValueChanged}
-        styles={searchBoxStyles}
-        aria-label={'Search'}
-      />
-      <hr />
-      {error && (
-        <MessageBar
-          messageBarType={MessageBarType.warning}
-          isMultiline={true}
-          dismissButtonAriaLabel='Close'
-        >
-          <FormattedMessage id='viewing a cached set' />
-        </MessageBar>
-      )}
-      <MessageBar
-        messageBarType={MessageBarType.info}
-        isMultiline={true}
-        dismissButtonAriaLabel='Close'
-      >
-        <FormattedMessage id='see more queries' />
-        <a
-          target='_blank'
-          rel="noopener noreferrer"
-          className={classes.links}
-          onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href,
-            componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
-          href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
-        >
-          <FormattedMessage id='Microsoft Graph API Reference docs' />
-        </a>
-      </MessageBar>
-      <Announced
-        message={`${sampleQueries.length} search results available.`}
-      />
-      <div role="navigation">
-        <DetailsList
-          className={classes.queryList}
-          cellStyleProps={{
-            cellRightPadding: 0,
-            cellExtraRightPadding: 0,
-            cellLeftPadding: 0
-          }}
-          onRenderItemColumn={this.renderItemColumn}
-          items={sampleQueries}
-          selectionMode={SelectionMode.none}
-          columns={columns}
-          groups={groups}
-          groupProps={{
-            showEmptyGroups: true,
-            onRenderHeader: this.renderGroupHeader
-          }}
-          onRenderRow={this.renderRow}
-          onRenderDetailsHeader={this.renderDetailsHeader}
-          onItemInvoked={this.querySelected}
-        />
-      </div>
-    </div>
-  );
-}
 
-export default SampleQueries
-export class SampleQueriess extends Component<ISampleQueriesProps, any> {
-  constructor(props: ISampleQueriesProps) {
-    super(props);
-    this.state = {
-      sampleQueries: [],
-      selectedQuery: null
-    };
-  }
-
-  public renderItemColumn = (
+  const renderItemColumn = (
     item: ISampleQuery,
     index: number | undefined,
-    column: IColumn | undefined
+    column: IColumn | undefined,
+    props:any
   ) => {
-    const classes = classNames(this.props);
-    const {
-      tokenPresent,
-      intl: { messages }
-    }: any = this.props;
-
+    const classes = classNames(props);
     if (column) {
       const queryContent = item[column.fieldName as keyof ISampleQuery] as string;
-      const signInText = messages['Sign In to try this sample'];
+      const signInText = translateMessage('Sign In to try this sample');
 
       switch (column.key) {
         case 'authRequiredIcon':
@@ -281,7 +202,7 @@ export class SampleQueriess extends Component<ISampleQueriesProps, any> {
             >
               <Icon
                 iconName='TextDocument'
-                onClick={() => this.onDocumentationLinkClicked(item)}
+                onClick={() => onDocumentationLinkClicked(item)}
                 className={classes.docLink}
                 style={{
                   marginRight: '45%',
@@ -335,15 +256,13 @@ export class SampleQueriess extends Component<ISampleQueriesProps, any> {
           );
       }
     }
-  };
+  }
 
-  public renderRow = (props: any): any => {
-    const currentTheme = getTheme();
-    const { tokenPresent } = this.props;
-    const classes = classNames(this.props);
+  const renderRow = (props:any): any => {
+    const classes = classNames(props);
     let selectionDisabled = false;
     const customStyles: Partial<IDetailsRowStyles> = {};
-    if (this.state.selectedQuery?.id === props.item.id) {
+    if (selectedQuery?.id === props.item.id) {
       customStyles.root = { backgroundColor: currentTheme.palette.neutralLight };
     }
 
@@ -358,9 +277,9 @@ export class SampleQueriess extends Component<ISampleQueriesProps, any> {
             styles={customStyles}
             onClick={() => {
               if (!selectionDisabled) {
-                this.querySelected(props.item);
+                querySelected(props.item);
               }
-              this.setState({ selectedQuery: props.item })
+              setSelectedQuery(props.item)
             }}
             className={
               classes.queryRow +
@@ -375,7 +294,7 @@ export class SampleQueriess extends Component<ISampleQueriesProps, any> {
     }
   };
 
-  public renderGroupHeader = (props: any): any => {
+  const renderGroupHeader = (props:any): any => {
     const onToggleSelectGroup = () => {
       props.onToggleCollapse(props.group);
     };
@@ -399,74 +318,90 @@ export class SampleQueriess extends Component<ISampleQueriesProps, any> {
     );
   };
 
-  private renderDetailsHeader() {
+  const renderDetailsHeader = () => {
     return <div />;
   }
 
-  public render() {
-    const { error, pending } = this.props.samples;
-    const {
-      intl: { messages }
-    }: any = this.props;
-
-    const { sampleQueries } = this.state;
-    const classes = classNames(this.props);
-    const groups = generateGroupsFromList(sampleQueries, 'category');
-    if (this.state.selectedQuery) {
-      const index = groups.findIndex(k => k.key === this.state.selectedQuery.category);
-      if (index !== -1) {
-        groups[index].isCollapsed = false;
-      }
-    }
-
-    if (pending) {
-      return (
-        <Spinner
-          className={classes.spinner}
-          size={SpinnerSize.large}
-          label={`${messages['loading samples']} ...`}
-          ariaLive='assertive'
-          labelPosition='top'
-        />
-      );
+  if (selectedQuery) {
+    const index = groups.findIndex(k => k.key === selectedQuery.category);
+    if (index !== -1) {
+      groups[index].isCollapsed = false;
     }
   }
-}
 
-function displayTipMessage(actions: any, selectedQuery: ISampleQuery) {
-  actions.setQueryResponseStatus({
-    messageType: MessageBarType.warning,
-    statusText: 'Tip',
-    status: selectedQuery.tip
-  });
-}
+  if (pending) {
+    return (
+      <Spinner
+        className={classes.spinner}
+        size={SpinnerSize.large}
+        label={`${translateMessage('loading samples')} ...`}
+        ariaLive='assertive'
+        labelPosition='top'
+      />
+    );
+  }
 
-function mapStateToProps({ authToken, profile, samples, theme }: IRootState) {
-  return {
-    tokenPresent: !!authToken.token,
-    profile,
-    samples,
-    appTheme: theme
-  };
+  return (
+    <div>
+      <SearchBox
+        className={classes.searchBox}
+        placeholder={translateMessage('Search sample queries')}
+        onChange={searchValueChanged}
+        styles={searchBoxStyles}
+        aria-label={'Search'}
+      />
+      <hr />
+      {error && (
+        <MessageBar
+          messageBarType={MessageBarType.warning}
+          isMultiline={true}
+          dismissButtonAriaLabel='Close'
+        >
+          <FormattedMessage id='viewing a cached set' />
+        </MessageBar>
+      )}
+      <MessageBar
+        messageBarType={MessageBarType.info}
+        isMultiline={true}
+        dismissButtonAriaLabel='Close'
+      >
+        <FormattedMessage id='see more queries' />
+        <a
+          target='_blank'
+          rel="noopener noreferrer"
+          className={classes.links}
+          onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href,
+            componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
+          href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
+        >
+          <FormattedMessage id='Microsoft Graph API Reference docs' />
+        </a>
+      </MessageBar>
+      <Announced
+        message={`${sampleQueries.length} search results available.`}
+      />
+      <div role="navigation">
+        <DetailsList
+          className={classes.queryList}
+          cellStyleProps={{
+            cellRightPadding: 0,
+            cellExtraRightPadding: 0,
+            cellLeftPadding: 0
+          }}
+          onRenderItemColumn={renderItemColumn}
+          items={sampleQueries}
+          selectionMode={SelectionMode.none}
+          columns={columns}
+          groups={groups}
+          groupProps={{
+            showEmptyGroups: true,
+            onRenderHeader: renderGroupHeader
+          }}
+          onRenderRow={renderRow}
+          onRenderDetailsHeader={renderDetailsHeader}
+          onItemInvoked={querySelected}
+        />
+      </div>
+    </div>
+  );
 }
-
-function mapDispatchToProps(dispatch: Dispatch): object {
-  return {
-    actions: bindActionCreators(
-      {
-        ...queryActionCreators,
-        ...queryInputActionCreators,
-        ...samplesActionCreators,
-        ...queryStatusActionCreators
-      },
-      dispatch
-    )
-  };
-}
-
-// @ts-ignore
-const styledSampleQueries = styled(SampleQueries, sidebarStyles);
-// @ts-ignore
-const IntlSampleQueries = injectIntl(styledSampleQueries);
-// @ts-ignore
-export default connect(mapStateToProps, mapDispatchToProps)(IntlSampleQueries);
