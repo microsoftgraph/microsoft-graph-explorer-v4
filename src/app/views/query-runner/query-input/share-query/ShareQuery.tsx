@@ -1,5 +1,7 @@
-import { DefaultButton, Dialog, DialogFooter, DialogType, DirectionalHint, FontSizes,
-  IconButton, IIconProps, TooltipHost } from '@fluentui/react';
+import {
+  DefaultButton, Dialog, DialogFooter, DialogType, DirectionalHint, FontSizes,
+  IconButton, IIconProps, TooltipHost
+} from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -40,13 +42,13 @@ export const ShareQuery = () => {
       });
   }
 
-  const iconProps : IIconProps = {
+  const iconProps: IIconProps = {
     iconName: 'Share'
   }
 
   const shareButtonStyles = shareQueryStyles().iconButton;
 
-  const content = <div style={{padding:'3px'}}>{translateMessage('Share Query')}</div>
+  const content = <div style={{ padding: '3px' }}>{translateMessage('Share Query')}</div>
   const calloutProps = {
     gapSpace: 0
   };
@@ -63,6 +65,8 @@ export const ShareQuery = () => {
           iconProps={iconProps}
           styles={shareButtonStyles}
           role={'button'}
+          ariaLabel={translateMessage('Share Query')}
+          title={translateMessage('Share Query')}
         />
       </TooltipHost>
       <Dialog

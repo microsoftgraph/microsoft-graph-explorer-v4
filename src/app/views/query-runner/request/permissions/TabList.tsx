@@ -19,7 +19,7 @@ interface ITabList {
 const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) => {
   const dispatch = useDispatch();
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
-  const permissions: IPermission[] =  scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
+  const permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
   const tokenPresent = !!authToken.token;
   const [isHoverOverPermissionsList, setIsHoverOverPermissionsList] = useState(false);
 
@@ -45,7 +45,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     </Label>)
   }
 
-  if (!tokenPresent) {
+  if (!tokenPresent && permissions.length === 0) {
     return displayNotSignedInMessage();
   }
 

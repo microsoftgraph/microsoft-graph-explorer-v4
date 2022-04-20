@@ -17,7 +17,7 @@ const initialState: IDimensions = {
   },
   content: {
     width: '74%',
-    height: ''
+    height: '100%'
   }
 };
 

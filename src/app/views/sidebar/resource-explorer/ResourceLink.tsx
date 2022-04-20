@@ -24,7 +24,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
 
   const iconButtonStyles = {
-    root: { paddingBottom:10, marginTop: -5, marginRight: 2 },
+    root: { paddingBottom: 10, marginTop: -5, marginRight: 2 },
     menuIcon: { fontSize: 20, padding: 5 }
   };
 
@@ -39,18 +39,19 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   return <span className={linkStyle.link}>
     {resourceLink.method &&
-    <span
-      className={classes.badge}
-      style={methodButtonStyles}
-    >
-      {resourceLink.method}
-    </span>}
+      <span
+        className={classes.badge}
+        style={methodButtonStyles}
+      >
+        {resourceLink.method}
+      </span>}
 
     <span className={linkStyle.resourceLinkNameContainer}>
       <span className={linkStyle.resourceLinkText}>
         {resourceLink.name}
       </span>
     </span>
+
 
     {items.length > 0 &&
       <TooltipHost
@@ -86,8 +87,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
   function getMenuItems() {
     const menuItems: IContextualMenuItem[] = [];
 
-    if (resourceLink)
-    {
+    if (resourceLink) {
       if (resourceLink.type === ResourceLinkType.NODE) {
         menuItems.push(
           {
@@ -113,7 +113,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
 const linkStyle = mergeStyleSets(
   {
     link: { display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden' },
-    resourceLinkNameContainer: { textAlign: 'left', flex: '1', overflow:'hidden', display: 'flex' },
+    resourceLinkNameContainer: { textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex' },
     resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }
   }
 );

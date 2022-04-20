@@ -65,21 +65,29 @@ interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
   hideDialog: boolean;
+  sidebarTabSelection: string;
 }
 
 class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
   private currentTheme: ITheme = getTheme();
   private statusAreaMobileStyle = appStyles(this.currentTheme).statusAreaMobileScreen;
-  private statusAreaLaptopStyle = appStyles(this.currentTheme).statusAreaLaptopScreen;
+  private statusAreaFullScreenStyle = appStyles(this.currentTheme).statusAreaFullScreen;
 
   constructor(props: IAppProps) {
     super(props);
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false,
-      hideDialog: true
+      hideDialog: true,
+      sidebarTabSelection: 'sample-queries'
     };
+  }
+
+  private setSidebarTabSelection = (selectedTab : string) => {
+    this.setState({
+      sidebarTabSelection: selectedTab
+    });
   }
 
   public componentDidMount = async () => {
@@ -365,6 +373,21 @@ class App extends Component<IAppProps, IAppState> {
     element.style.removeProperty('flex-basis');
   }
 
+  private removeSidebarHeightProperty() {
+    /*
+    height style property is added automatically on the sidebar when the window resizes
+    and is set to 100% leading to a distortion of the page when these exact steps are followed.
+    https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1602#:~:text=Zoom
+    Removing the property altogether helps maintain the layout of the page.
+    */
+    const collection = document.getElementsByClassName('resizable-sidebar');
+    if (collection?.length === 0) {
+      return;
+    }
+    const element: any = collection[0];
+    element.style.removeProperty('height');
+  }
+
   public render() {
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, minimised, sampleQuery,
@@ -374,7 +397,6 @@ class App extends Component<IAppProps, IAppState> {
     let sidebarWidth = classes.sidebar;
     let layout = '';
     let sideWidth = sidebar.width;
-    let sideHeight = sidebar.height;
     let maxWidth = '50%';
     let contentWidth = content.width;
     const contentHeight = content.height;
@@ -395,7 +417,6 @@ class App extends Component<IAppProps, IAppState> {
     if (mobileScreen) {
       layout = sidebarWidth = 'ms-Grid-col ms-sm12';
       sideWidth = '100%';
-      sideHeight = '100%';
       maxWidth = '100%';
       contentWidth = '100%';
       layout += ' layout';
@@ -404,11 +425,12 @@ class App extends Component<IAppProps, IAppState> {
     }
 
     this.removeFlexBasisProperty();
+    this.removeSidebarHeightProperty();
 
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft : mobileScreen && '15px'}}>
+        <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
           <Announced
             message={
               !showSidebar
@@ -416,9 +438,11 @@ class App extends Component<IAppProps, IAppState> {
                 : translateMessage('Sidebar maximized')
             }
           />
-          <div className={ `ms-Grid-row ${classes.appRow}`} style={{
+          <div className={`ms-Grid-row ${classes.appRow}`} style={{
             flexWrap: mobileScreen && 'wrap',
-            marginRight: showSidebar && '-20px' }}>
+            marginRight: showSidebar || (graphExplorerMode === Mode.TryIt) && '-20px',
+            flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row'
+          }}>
 
             {graphExplorerMode === Mode.Complete && (
               <Resizable
@@ -427,7 +451,7 @@ class App extends Component<IAppProps, IAppState> {
                     this.resizeSideBar(ref.style.width);
                   }
                 }}
-                className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth}`}
+                className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth} resizable-sidebar`}
                 minWidth={'4'}
                 maxWidth={maxWidth}
                 enable={{
@@ -439,7 +463,7 @@ class App extends Component<IAppProps, IAppState> {
                 bounds={'window'}
                 size={{
                   width: sideWidth,
-                  height: sideHeight
+                  height: ''
                 }}
               >
 
@@ -460,7 +484,8 @@ class App extends Component<IAppProps, IAppState> {
                 {this.displayAuthenticationSection(minimised)}
                 <hr className={classes.separator} />
 
-                {showSidebar && (<Sidebar />)}
+                {showSidebar && ( <Sidebar currentTab = { this.state.sidebarTabSelection }
+                  setSidebarTabSelection = { this.setSidebarTabSelection } /> ) }
               </Resizable>
             )}
             {graphExplorerMode === Mode.TryIt &&
@@ -477,17 +502,17 @@ class App extends Component<IAppProps, IAppState> {
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
                   height: contentHeight
                 }}
-                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px'} : {}}
+                style={!sidebarProperties.showSidebar && !mobileScreen ? { marginLeft: '8px' } : {}}
               >
-                <div style={{ marginBottom: 8 }}>
+                <div style={{ marginBottom: 8 }} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                     <TermsOfUseMessage />
                   </div>
                 </div>
 
                 <div>
-                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaLaptopStyle}>
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                     <StatusMessages />
                   </div>
                   <QueryResponse verb={this.state.selectedVerb} />

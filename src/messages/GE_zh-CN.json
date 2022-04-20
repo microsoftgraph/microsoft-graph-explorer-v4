@@ -431,5 +431,10 @@
   "Invalid version in URL": "URL 中的版本无效",
   "More info": "详细信息",
   "Could not connect to the sandbox": "无法连接到沙盒",
-  "Failed to get profile information": "未能获取用户配置文件信息"
+  "Failed to get profile information": "未能获取用户配置文件信息",
+  "Do you want to remove all the items you have added to the collection?": "是否要删除已添加到集合中的所有项？",
+  "Delete collection": "删除集合",
+  "Leverage libraries": "充分利用客户端库的力量。立即下载",
+  "Client library": "在此处的客户端库 ",
+  "SDKs documentation": "若要了解更多有关我们的 SDK 的信息，请转到文档页 "
 }
