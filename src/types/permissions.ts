@@ -12,7 +12,6 @@ export interface IPermissionProps {
   theme?: ITheme;
   styles?: object;
   dimensions?: IDimensions;
-  permissionsPanelOpen?: boolean;
   setPermissions?: Function;
   panel?: boolean;
 }
@@ -32,7 +31,10 @@ export interface IPermissionsResponse {
 }
 
 export interface IScopes {
-  pending: boolean;
+  pending: {
+    isSpecificPermissions: boolean;
+    isFullPermissions: boolean;
+  };
   data: {
     specificPermissions: IPermission[];
     fullPermissions: IPermission[];

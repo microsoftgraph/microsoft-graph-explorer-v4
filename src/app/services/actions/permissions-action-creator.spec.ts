@@ -1,12 +1,12 @@
 import {
   FETCH_SCOPES_ERROR,
-  FETCH_SCOPES_PENDING,
+  FETCH_FULL_SCOPES_PENDING,
   QUERY_GRAPH_STATUS,
   FETCH_FULL_SCOPES_SUCCESS
 } from '../../../app/services/redux-constants';
 
 import {
-  fetchFullScopesSuccess, fetchScopesPending, fetchScopesError, getPermissionsScopeType, fetchScopes,
+  fetchFullScopesSuccess, fetchFullScopesPending, fetchScopesError, getPermissionsScopeType, fetchScopes,
   consentToScopes
 } from
   './permissions-action-creator';
@@ -58,7 +58,7 @@ const mockState: IRootState = {
     error: null
   },
   scopes: {
-    pending: false,
+    pending: { isSpecificPermissions: false, isFullPermissions: false },
     data: {
       fullPermissions: [],
       specificPermissions: []
@@ -174,11 +174,11 @@ describe('tests permissions action creators', () => {
   it('Tests if FETCH_SCOPES_PENDING is dispatched when fetchScopes pending is called', () => {
     // Arrange
     const expectedAction = {
-      type: FETCH_SCOPES_PENDING
+      type: FETCH_FULL_SCOPES_PENDING
     }
 
     // Act
-    const action = fetchScopesPending();
+    const action = fetchFullScopesPending();
 
     // Assert
     expect(action).toEqual(expectedAction);

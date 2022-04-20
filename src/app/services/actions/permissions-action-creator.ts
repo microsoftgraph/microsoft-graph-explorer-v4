@@ -13,7 +13,8 @@ import { getConsentAuthErrorHint } from '../../../modules/authentication/authent
 import { ACCOUNT_TYPE, PERMS_SCOPE } from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
-  FETCH_SCOPES_PENDING,
+  FETCH_FULL_SCOPES_PENDING,
+  FETCH_URL_SCOPES_PENDING,
   FETCH_FULL_SCOPES_SUCCESS,
   FETCH_URL_SCOPES_SUCCESS
 } from '../redux-constants';
@@ -38,10 +39,16 @@ export function fetchUrlScopesSuccess(response: Object): IAction {
   }
 }
 
-export function fetchScopesPending(): any {
+export function fetchUrlScopesPending(): any {
   return {
-    type: FETCH_SCOPES_PENDING
+    type: FETCH_URL_SCOPES_PENDING
   };
+}
+
+export function fetchFullScopesPending(): any {
+  return {
+    type: FETCH_FULL_SCOPES_PENDING
+  }
 }
 
 export function fetchScopesError(response: object): IAction {
@@ -82,7 +89,7 @@ export function fetchScopes(): Function {
 
       const options: IRequestOptions = { headers };
 
-      dispatch(fetchScopesPending());
+      dispatch(permissionsPanelOpen ? fetchFullScopesPending() : fetchUrlScopesPending());
 
       const response = await fetch(permissionsUrl, options);
       if (response.ok) {

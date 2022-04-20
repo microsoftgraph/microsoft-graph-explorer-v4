@@ -11,7 +11,7 @@ import {
   Selection,
   TooltipHost
 } from '@fluentui/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -28,12 +28,12 @@ import messages from '../../../../../messages';
 
 export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
 
-  const { sampleQuery, scopes, dimensions, authToken } =
+  const { sampleQuery, scopes, dimensions, authToken, permissionsPanelOpen} =
   useSelector( (state: IRootState) => state );
   const { pending: loading } = scopes;
   const tokenPresent = !!authToken.token;
   const dispatch = useDispatch();
-  const panel = permissionProps!.panel;
+  const panel = useMemo(() => permissionProps?.panel, [permissionsPanelOpen]);
 
   const classProps = {
     styles: permissionProps!.styles,
@@ -52,7 +52,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
 
   useEffect(() => {
     getPermissions();
-  },[sampleQuery, panel]);
+  },[sampleQuery]);
 
   const handleConsent = async (permission: IPermission) : Promise<void> => {
     const consentScopes = [permission.value];
@@ -218,6 +218,10 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
   });
 
   const displayPermissionsPanel = () : JSX.Element => {
+    if (loading.isFullPermissions) {
+      return displayLoadingPermissionsText();
+    }
+
     return <div data-is-scrollable={true} style={panelStyles}>
       <PanelList
         classes={classes}
@@ -233,6 +237,10 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
   };
 
   const displayPermissionsAsTab = () : JSX.Element => {
+    if (loading.isSpecificPermissions) {
+      return displayLoadingPermissionsText();
+    }
+
     return <TabList
       columns={getColumns()}
       maxHeight={tabHeight}
@@ -243,10 +251,12 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     />;
   };
 
-  if (loading) {
-    return <Label>
-      <FormattedMessage id={'Fetching permissions'} />...
-    </Label>;
+  const displayLoadingPermissionsText = () => {
+    return (
+      <Label>
+        <FormattedMessage id={'Fetching permissions'} />...
+      </Label>
+    );
   }
 
   return(
