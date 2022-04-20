@@ -11,7 +11,7 @@ import {
   Selection,
   TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -28,12 +28,12 @@ import messages from '../../../../../messages';
 
 export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
 
-  const { sampleQuery, scopes, dimensions, authToken, permissionsPanelOpen} =
+  const { sampleQuery, scopes, dimensions, authToken } =
   useSelector( (state: IRootState) => state );
   const { pending: loading } = scopes;
   const tokenPresent = !!authToken.token;
   const dispatch = useDispatch();
-  const panel = useMemo(() => permissionProps?.panel, [permissionsPanelOpen]);
+  const panel = permissionProps?.panel;
 
   const classProps = {
     styles: permissionProps!.styles,
