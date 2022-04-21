@@ -6,6 +6,7 @@ import {
   DialogType,
   DropdownMenuItemType,
   getId,
+  getTheme,
   IconButton,
   Label,
   Panel,
@@ -41,6 +42,7 @@ function Settings(props: ISettingsProps) {
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
+  const colorTheme = getTheme();
 
   const {
     intl: { messages }
@@ -184,7 +186,7 @@ function Settings(props: ISettingsProps) {
         <PrimaryButton
           disabled={selectedPermissions.length === 0}
           onClick={() => handleConsent()}
-          style={{ marginRight: 10 }}
+          style={{ marginRight: 10, backgroundColor: colorTheme.palette.themeSecondary }}
         >
           <FormattedMessage id='Consent' />
         </PrimaryButton>
