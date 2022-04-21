@@ -39,16 +39,8 @@ export function fetchUrlScopesSuccess(response: Object): IAction {
   }
 }
 
-export function fetchUrlScopesPending(): any {
-  return {
-    type: FETCH_URL_SCOPES_PENDING
-  };
-}
-
-export function fetchFullScopesPending(): any {
-  return {
-    type: FETCH_FULL_SCOPES_PENDING
-  }
+export function fetchScopesPending(type: string): any {
+  return { type };
 }
 
 export function fetchScopesError(response: object): IAction {
@@ -89,7 +81,7 @@ export function fetchScopes(): Function {
 
       const options: IRequestOptions = { headers };
 
-      dispatch(permissionsPanelOpen ? fetchFullScopesPending() : fetchUrlScopesPending());
+      dispatch(fetchScopesPending(permissionsPanelOpen ? FETCH_FULL_SCOPES_PENDING : FETCH_URL_SCOPES_PENDING));
 
       const response = await fetch(permissionsUrl, options);
       if (response.ok) {

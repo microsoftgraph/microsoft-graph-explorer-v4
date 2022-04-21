@@ -2,11 +2,12 @@ import {
   FETCH_SCOPES_ERROR,
   FETCH_FULL_SCOPES_PENDING,
   QUERY_GRAPH_STATUS,
-  FETCH_FULL_SCOPES_SUCCESS
+  FETCH_FULL_SCOPES_SUCCESS,
+  FETCH_URL_SCOPES_PENDING
 } from '../../../app/services/redux-constants';
 
 import {
-  fetchFullScopesSuccess, fetchFullScopesPending, fetchScopesError, getPermissionsScopeType, fetchScopes,
+  fetchFullScopesSuccess, fetchScopesPending, fetchScopesError, getPermissionsScopeType, fetchScopes,
   consentToScopes
 } from
   './permissions-action-creator';
@@ -173,15 +174,21 @@ describe('tests permissions action creators', () => {
 
   it('Tests if FETCH_SCOPES_PENDING is dispatched when fetchScopes pending is called', () => {
     // Arrange
-    const expectedAction = {
+    const expectedFullScopesAction = {
       type: FETCH_FULL_SCOPES_PENDING
     }
 
+    const expectedUrlScopesAction = {
+      type: FETCH_URL_SCOPES_PENDING
+    }
+
     // Act
-    const action = fetchFullScopesPending();
+    const fullScopesAction = fetchScopesPending(FETCH_FULL_SCOPES_PENDING);
+    const urlScopesAction = fetchScopesPending(FETCH_URL_SCOPES_PENDING)
 
     // Assert
-    expect(action).toEqual(expectedAction);
+    expect(fullScopesAction).toEqual(expectedFullScopesAction);
+    expect(urlScopesAction).toEqual(expectedUrlScopesAction)
   })
 
   it('returns valid scope type given a user profile or with null', () => {
