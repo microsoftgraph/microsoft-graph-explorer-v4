@@ -40,8 +40,9 @@ import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
 import { FeedbackButton } from './app-sections/FeedbackButton';
+import { MainHeader } from './main-header/MainHeader';
 
-interface IAppProps {
+export interface IAppProps {
   theme?: ITheme;
   styles?: object;
   intl: any;
@@ -431,6 +432,7 @@ class App extends Component<IAppProps, IAppState> {
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
+          <MainHeader />
           <Announced
             message={
               !showSidebar
@@ -443,7 +445,6 @@ class App extends Component<IAppProps, IAppState> {
             marginRight: showSidebar || (graphExplorerMode === Mode.TryIt) && '-20px',
             flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row'
           }}>
-
             {graphExplorerMode === Mode.Complete && (
               <Resizable
                 onResize={(e: any, direction: any, ref: any) => {
@@ -473,11 +474,7 @@ class App extends Component<IAppProps, IAppState> {
                   this.toggleSidebar
                 )}
 
-                {!mobileScreen && appTitleDisplayOnFullScreen(
-                  classes,
-                  minimised,
-                  this.toggleSidebar
-                )}
+                {/* {!mobileScreen && appTitleDisplayOnFullScreen(classes)} */}
 
                 <hr className={classes.separator} />
 
