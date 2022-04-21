@@ -65,6 +65,7 @@ interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
   hideDialog: boolean;
+  sidebarTabSelection: string;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -78,8 +79,15 @@ class App extends Component<IAppProps, IAppState> {
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false,
-      hideDialog: true
+      hideDialog: true,
+      sidebarTabSelection: 'sample-queries'
     };
+  }
+
+  private setSidebarTabSelection = (selectedTab : string) => {
+    this.setState({
+      sidebarTabSelection: selectedTab
+    });
   }
 
   public componentDidMount = async () => {
@@ -365,7 +373,7 @@ class App extends Component<IAppProps, IAppState> {
     element.style.removeProperty('flex-basis');
   }
 
-  private removeSidebarHeightProperty(){
+  private removeSidebarHeightProperty() {
     /*
     height style property is added automatically on the sidebar when the window resizes
     and is set to 100% leading to a distortion of the page when these exact steps are followed.
@@ -422,7 +430,7 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft : mobileScreen && '15px'}}>
+        <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
           <Announced
             message={
               !showSidebar
@@ -430,10 +438,11 @@ class App extends Component<IAppProps, IAppState> {
                 : translateMessage('Sidebar maximized')
             }
           />
-          <div className={ `ms-Grid-row ${classes.appRow}`} style={{
+          <div className={`ms-Grid-row ${classes.appRow}`} style={{
             flexWrap: mobileScreen && 'wrap',
-            marginRight: showSidebar || (graphExplorerMode === Mode.TryIt)  && '-20px',
-            flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row' }}>
+            marginRight: showSidebar || (graphExplorerMode === Mode.TryIt) && '-20px',
+            flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row'
+          }}>
 
             {graphExplorerMode === Mode.Complete && (
               <Resizable
@@ -475,7 +484,8 @@ class App extends Component<IAppProps, IAppState> {
                 {this.displayAuthenticationSection(minimised)}
                 <hr className={classes.separator} />
 
-                {showSidebar && (<Sidebar />)}
+                {showSidebar && ( <Sidebar currentTab = { this.state.sidebarTabSelection }
+                  setSidebarTabSelection = { this.setSidebarTabSelection } /> ) }
               </Resizable>
             )}
             {graphExplorerMode === Mode.TryIt &&
@@ -492,7 +502,7 @@ class App extends Component<IAppProps, IAppState> {
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
                   height: contentHeight
                 }}
-                style={!sidebarProperties.showSidebar && !mobileScreen ? {marginLeft: '8px'} : {} }
+                style={!sidebarProperties.showSidebar && !mobileScreen ? { marginLeft: '8px' } : {}}
               >
                 <div style={{ marginBottom: 8 }} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />

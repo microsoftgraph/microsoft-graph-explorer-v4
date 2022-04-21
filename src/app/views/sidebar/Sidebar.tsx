@@ -6,10 +6,25 @@ import { translateMessage } from '../../utils/translate-messages';
 import History from './history/History';
 import { ResourceExplorer } from './resource-explorer';
 import SampleQueries from './sample-queries/SampleQueries';
-export const Sidebar = () => {
+
+interface ISidebar {
+  currentTab: string;
+  setSidebarTabSelection: Function;
+}
+export const Sidebar = (props: ISidebar) => {
+
+  const onPivotItemClick = (item?: PivotItem) => {
+    if (!item) { return; }
+    const key = item.props.itemKey;
+    if (key) {
+      props.setSidebarTabSelection(key);
+      telemetry.trackTabClickEvent(key);
+    }
+  }
+
   return (
     <div>
-      <Pivot onLinkClick={onPivotItemClick} overflowBehavior='menu'>
+      <Pivot onLinkClick={onPivotItemClick} overflowBehavior='menu' defaultSelectedKey={props.currentTab}>
         <PivotItem
           headerText={translateMessage('Sample Queries')}
           itemIcon='Rocket'
@@ -45,10 +60,4 @@ export const Sidebar = () => {
   );
 };
 
-function onPivotItemClick(item?: PivotItem) {
-  if (!item) { return; }
-  const key = item.props.itemKey;
-  if (key) {
-    telemetry.trackTabClickEvent(key);
-  }
-}
+
