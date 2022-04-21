@@ -59,7 +59,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     dispatch(permissionActionCreators.consentToScopes(consentScopes));
   };
 
-  const renderItemColumn = (item: any, column: IColumn | undefined) => {
+  const renderItemColumn = (item: any, index: any, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
     const consented = !!item.consented;
 
@@ -229,7 +229,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
         selection={selection}
         columns={getColumns()}
         renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
-          renderItemColumn(item, column)}
+          renderItemColumn(item, index, column)}
         renderDetailsHeader={renderDetailsHeader}
         renderCustomCheckbox={renderCustomCheckbox}
       />
@@ -245,7 +245,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
       columns={getColumns()}
       maxHeight={tabHeight}
       renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
-        renderItemColumn(item, column)}
+        renderItemColumn(item, index, column)}
       renderDetailsHeader={renderDetailsHeader}
       classes={classes}
     />;
