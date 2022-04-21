@@ -29,6 +29,7 @@ import { consentToScopes } from '../../services/actions/permissions-action-creat
 import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { Permission } from '../query-runner/request/permissions';
+import { translateMessage } from '../../utils/translate-messages';
 
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
@@ -204,18 +205,18 @@ function Settings(props: ISettingsProps) {
   return (
     <div>
       <TooltipHost
-        content={messages['More actions']}
+        content={translateMessage('Settings')}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}
       >
         <IconButton
-          ariaLabel={messages['More actions']}
+          ariaLabel={translateMessage('Settings')}
           role='button'
           styles={{
             label: { marginBottom: -20 },
             menuIcon: { fontSize: 20 }
           }}
-          menuIconProps={{ iconName: 'More' }}
+          menuIconProps={{ iconName: 'Settings' }}
           menuProps={menuProperties}
         />
       </TooltipHost>
