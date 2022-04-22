@@ -5,6 +5,7 @@ import {
 
 import { Settings } from '../settings';
 import { FeedbackButton } from '../app-sections/FeedbackButton';
+import { Authentication } from '../authentication';
 
 const currentTheme = getTheme();
 const itemAlignmentsStackTokens: IStackTokens = {
@@ -42,6 +43,7 @@ export const MainHeader: React.FunctionComponent = () => {
         <span style={itemStyles}>
           <FeedbackButton />
           <Settings />
+          <Authentication />
         </span>
         <span style={itemStyles}></span>
       </Stack>

@@ -89,11 +89,6 @@ const Authentication = (props: any) => {
   const showUnAuthenticatedText = (): React.ReactNode => {
     return (
       <>
-        <Label className={classes.authenticationLabel}>
-          <Icon iconName='Permissions' className={classes.keyIcon} />
-          <FormattedMessage id='Authentication' />
-        </Label>
-
         <br />
         <MessageBar messageBarType={MessageBarType.warning} isMultiline={true}>
           <FormattedMessage id='Using demo tenant' />{' '}
