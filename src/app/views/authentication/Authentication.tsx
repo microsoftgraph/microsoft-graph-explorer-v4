@@ -86,18 +86,6 @@ const Authentication = (props: any) => {
     );
   };
 
-  const showUnAuthenticatedText = (): React.ReactNode => {
-    return (
-      <>
-        <br />
-        <MessageBar messageBarType={MessageBarType.warning} isMultiline={true}>
-          <FormattedMessage id='Using demo tenant' />{' '}
-          <FormattedMessage id='To access your own data:' />
-        </MessageBar>
-      </>
-    );
-  };
-
   if (logoutInProgress) {
     return showProgressSpinner();
   }
@@ -110,10 +98,6 @@ const Authentication = (props: any) => {
         showSignInButtonOrProfile(tokenPresent, mobileScreen, signIn, minimised)
       ) : (
         <>
-          {!tokenPresent &&
-            graphExplorerMode === Mode.Complete &&
-            !minimised &&
-            showUnAuthenticatedText()}
           <br />
           {showSignInButtonOrProfile(
             tokenPresent,
