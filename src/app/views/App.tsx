@@ -296,30 +296,6 @@ class App extends Component<IAppProps, IAppState> {
 
   };
 
-  public displayAuthenticationSection = (minimised: boolean) => {
-    return (
-      <div
-        style={{
-          display: minimised ? 'block' : 'flex',
-          justifyContent: minimised ? '' : 'center',
-          alignItems: minimised ? '' : 'center',
-          marginLeft: minimised ? '' : '-0.9em'
-        }}>
-        <div className={minimised ? '' : 'col-9'}>
-          <Authentication />
-        </div>
-        {minimised &&
-          <div className={minimised ? '' : 'col-2'} style={{ position: 'relative', left: '-9px' }}>
-            <FeedbackButton />
-          </div>
-        }
-        <div className={minimised ? '' : 'col-2'}>
-          <Settings />
-        </div>
-      </div>
-    );
-  };
-
   private setSidebarProperties() {
     const { sidebarProperties } = this.props;
     const properties = { ...sidebarProperties };
@@ -475,11 +451,6 @@ class App extends Component<IAppProps, IAppState> {
                 )}
 
                 {/* {!mobileScreen && appTitleDisplayOnFullScreen(classes)} */}
-
-                <hr className={classes.separator} />
-
-                {this.displayAuthenticationSection(minimised)}
-                <hr className={classes.separator} />
 
                 {showSidebar && ( <Sidebar currentTab = { this.state.sidebarTabSelection }
                   setSidebarTabSelection = { this.setSidebarTabSelection } /> ) }
