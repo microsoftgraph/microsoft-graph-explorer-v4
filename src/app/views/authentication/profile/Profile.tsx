@@ -1,4 +1,12 @@
-import { ActionButton, IPersonaSharedProps, Persona, PersonaSize, Spinner, SpinnerSize, styled } from '@fluentui/react';
+import {
+  ActionButton,
+  IPersonaSharedProps,
+  Persona,
+  PersonaSize,
+  Spinner,
+  SpinnerSize,
+  styled
+} from '@fluentui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
