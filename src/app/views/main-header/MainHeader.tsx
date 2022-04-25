@@ -36,7 +36,8 @@ const itemAlignmentsStackTokens: IStackTokens = {
 const itemAlignmentsStackStyles: IStackStyles = {
   root: {
     background: currentTheme.palette.neutralLight,
-    height: 50
+    height: 50,
+    marginBottom: '-9px'
   }
 };
 const itemStyles: React.CSSProperties = {
@@ -58,6 +59,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         horizontalAlign="space-between"
         styles={itemAlignmentsStackStyles}
         tokens={itemAlignmentsStackTokens}>
+
         <Stack horizontal>
           <TooltipHost
             content={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
@@ -77,12 +79,12 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               onClick={() => props.toggleSidebar()} />
           </TooltipHost>
           <Label
-            style={{fontSize: FontSizes.xLarge,
-              fontWeight: 600}}>
-          Graph Explorer
+            style={{ fontSize: FontSizes.xLarge, fontWeight: 600 }}>
+            Graph Explorer
           </Label>
           <FeedbackButton />
         </Stack>
+
         <Stack >
           <span style={itemStyles}>
             <Settings />
@@ -90,8 +92,9 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           </span>
           <span style={itemStyles}></span>
         </Stack>
+
       </Stack>
-      <Stack style={{marginBottom:'10px'}}>
+      <Stack style={{marginBottom:'7px'}}>
         {!tokenPresent &&
             graphExplorerMode === Mode.Complete &&
             showUnAuthenticatedText()}
