@@ -19,7 +19,8 @@ export const FeedbackButton = () => {
   const feedbackIconStyles = {
     root:{
       height: '50px',
-      width: '50px'
+      width: '50px',
+      marginTop: '-8px'
     }
   }
   const calloutProps = {
