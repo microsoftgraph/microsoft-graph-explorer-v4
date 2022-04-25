@@ -94,14 +94,6 @@ function Settings(props: ISettingsProps) {
           },
           onClick: () => changePanelState()
         },
-        {
-          key: 'sign-out',
-          text: messages['sign out'],
-          iconProps: {
-            iconName: 'SignOut'
-          },
-          onClick: () => handleSignOut()
-        },
       );
     }
     setItems(menuItems);
@@ -114,10 +106,6 @@ function Settings(props: ISettingsProps) {
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.THEME_CHANGE_BUTTON
     });
-  };
-
-  const handleSignOut = () => {
-    dispatch(signOut());
   };
 
   const handleChangeTheme = (selectedTheme: any) => {
