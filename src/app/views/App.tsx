@@ -25,21 +25,17 @@ import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
 import {
-  appTitleDisplayOnFullScreen,
   appTitleDisplayOnMobileScreen
 } from './app-sections/AppTitle';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { StatusMessages, TermsOfUseMessage } from './app-sections';
 import { appStyles } from './App.styles';
-import { Authentication } from './authentication';
 import { classNames } from './classnames';
 import { createShareLink } from './common/share';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
-import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
-import { FeedbackButton } from './app-sections/FeedbackButton';
 import { MainHeader } from './main-header/MainHeader';
 
 export interface IAppProps {
@@ -408,7 +404,7 @@ class App extends Component<IAppProps, IAppState> {
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
-          <MainHeader />
+          <MainHeader minimised={minimised} toggleSidebar={this.toggleSidebar}/>
           <Announced
             message={
               !showSidebar
