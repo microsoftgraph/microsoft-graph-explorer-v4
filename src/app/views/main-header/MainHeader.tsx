@@ -21,7 +21,7 @@ const itemAlignmentsStackTokens: IStackTokens = {
 };
 const itemAlignmentsStackStyles: IStackStyles = {
   root: {
-    background: currentTheme.palette.themeTertiary,
+    background: currentTheme.palette.neutralLight,
     height: 50
   }
 };
@@ -44,16 +44,16 @@ export const MainHeader: React.FunctionComponent = () => {
         horizontalAlign="space-between"
         styles={itemAlignmentsStackStyles}
         tokens={itemAlignmentsStackTokens}>
-        <Stack>
+        <Stack horizontal>
           <Label
             style={{fontSize: FontSizes.xLarge,
               fontWeight: 600}}>
           Graph Explorer
           </Label>
+          <FeedbackButton />
         </Stack>
         <Stack >
           <span style={itemStyles}>
-            <FeedbackButton />
             <Settings />
             <Authentication />
           </span>

@@ -95,15 +95,14 @@ const Authentication = (props: any) => {
       {loginInProgress ? (
         showProgressSpinner()
       ) : mobileScreen ? (
-        showSignInButtonOrProfile(tokenPresent, mobileScreen, signIn, minimised)
+        showSignInButtonOrProfile(tokenPresent, mobileScreen, signIn)
       ) : (
         <>
           <br />
           {showSignInButtonOrProfile(
             tokenPresent,
             mobileScreen,
-            signIn,
-            minimised
+            signIn
           )}
           <br />
         </>
