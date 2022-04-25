@@ -433,10 +433,13 @@ class App extends Component<IAppProps, IAppState> {
                 handleClasses={{
                   right: classes.vResizeHandle
                 }}
-                bounds={'window'}
+                bounds={'parent'}
                 size={{
                   width: sideWidth,
                   height: ''
+                }}
+                style={{
+                  flex: 1
                 }}
               >
 
