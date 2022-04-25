@@ -1,11 +1,10 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
-import { Icon, Label, MessageBar, MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
+import { Label, MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { componentNames, errorTypes, telemetry } from '../../../telemetry';
-import { Mode } from '../../../types/enums';
 import { IRootState } from '../../../types/root';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../services/actions/auth-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
@@ -17,7 +16,7 @@ import { getSignInAuthErrorHint, signInAuthError } from '../../../modules/authen
 const Authentication = (props: any) => {
   const dispatch = useDispatch();
   const [loginInProgress, setLoginInProgress] = useState(false);
-  const { sidebarProperties, authToken, graphExplorerMode } = useSelector(
+  const { sidebarProperties, authToken } = useSelector(
     (state: IRootState) => state
   );
   const mobileScreen = !!sidebarProperties.mobileScreen;
