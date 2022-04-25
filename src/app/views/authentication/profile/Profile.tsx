@@ -58,10 +58,19 @@ const Profile = (props: any) => {
 
   const classes = classNames(props);
 
-  const menuProperties = {
-    shouldFocusOnMount: true,
-    alignTargetEdge: true,
-    items: [
+  const items: any = [
+    {
+      key: 'sign-out',
+      text: translateMessage('sign out'),
+      onClick: () => handleSignOut(),
+      iconProps: {
+        iconName: 'SignOut'
+      }
+    }
+  ];
+
+  if(graphExplorerMode === Mode.TryIt){
+    items.push(
       {
         key: 'office-dev-program',
         text: translateMessage('Office Dev Program'),
@@ -70,16 +79,14 @@ const Profile = (props: any) => {
         iconProps: {
           iconName: 'CommandPrompt'
         }
-      },
-      {
-        key: 'sign-out',
-        text: translateMessage('sign out'),
-        onClick: () => handleSignOut(),
-        iconProps: {
-          iconName: 'SignOut'
-        }
       }
-    ]
+    )
+  }
+
+  const menuProperties = {
+    shouldFocusOnMount: true,
+    alignTargetEdge: true,
+    items
   };
 
   const personaStyleToken: any = {
@@ -93,7 +100,7 @@ const Profile = (props: any) => {
     }
   };
 
-  const defaultSize = minimised ? PersonaSize.size32 : PersonaSize.size48;
+  const defaultSize = PersonaSize.size40;
 
   const profileProperties = {
     persona,
@@ -116,13 +123,10 @@ function showProfileComponent(profileProperties: any, graphExplorerMode: Mode, m
     styles={profileProperties.styles}
     hidePersonaDetails={profileProperties.hidePersonaDetails} />;
 
-  if (graphExplorerMode === Mode.TryIt) {
-    return <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-      {persona}
-    </ActionButton>;
-  }
+  return <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
+    {persona}
+  </ActionButton>;
 
-  return persona;
 }
 
 // @ts-ignore
