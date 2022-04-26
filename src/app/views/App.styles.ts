@@ -69,7 +69,9 @@ export const appStyles = (theme: ITheme) => {
       marginTop: 5
     },
     statusAreaFullScreen: {
-      marginTop: 10
+      marginTop: 6,
+      position: 'relative',
+      bottom: 0
     },
     vResizeHandle: {
       zIndex: 1,
