@@ -6,6 +6,7 @@ import {
   IconButton,
   IStackStyles,
   IStackTokens,
+  ITheme,
   Label,
   MessageBar,
   MessageBarType,
@@ -20,29 +21,18 @@ import { Authentication } from '../authentication';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../types/root';
 import { Mode } from '../../../types/enums';
+import { mainHeaderStyles } from './MainHeader.styles';
 
 
 interface MainHeaderProps {
   minimised: boolean;
   toggleSidebar: Function;
 }
-const currentTheme = getTheme();
 const sectionStackTokens: IStackTokens = {
   childrenGap: 0 };
 const itemAlignmentsStackTokens: IStackTokens = {
   childrenGap: 10,
   padding: 10
-};
-const itemAlignmentsStackStyles: IStackStyles = {
-  root: {
-    background: currentTheme.palette.neutralLight,
-    height: 50,
-    marginBottom: '-9px'
-  }
-};
-const itemStyles: React.CSSProperties = {
-  alignItems: 'center',
-  display: 'flex'
 };
 
 export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: MainHeaderProps) => {
@@ -51,13 +41,16 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   );
   const tokenPresent = !!authToken.token;
   const minimised = props.minimised;
+  const currentTheme = getTheme();
+  const itemAlignmentStackStyles = mainHeaderStyles(currentTheme).rootStyles;
+  const itemStyles = mainHeaderStyles(currentTheme).authenticationItemStyles;
 
   return (
     <Stack tokens={sectionStackTokens}>
       <Stack
         horizontal
         horizontalAlign="space-between"
-        styles={itemAlignmentsStackStyles}
+        styles={itemAlignmentStackStyles}
         tokens={itemAlignmentsStackTokens}>
 
         <Stack horizontal>
