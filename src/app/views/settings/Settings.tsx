@@ -6,15 +6,11 @@ import {
   DialogType,
   getId,
   IconButton,
-  Label,
-  Panel,
-  PanelType,
-  PrimaryButton,
   registerIcons,
   TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { GitHubLogoIcon } from '@fluentui/react-icons-mdl2';
 
@@ -24,10 +20,7 @@ import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
 import { IRootState } from '../../../types/root';
 import { ISettingsProps } from '../../../types/settings';
-import { consentToScopes } from '../../services/actions/permissions-action-creator';
-import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
-import { Permission } from '../query-runner/request/permissions';
 import { translateMessage } from '../../utils/translate-messages';
 
 function Settings(props: ISettingsProps) {
