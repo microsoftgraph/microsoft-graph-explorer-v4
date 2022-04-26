@@ -1,8 +1,13 @@
 import {
   ActionButton,
+  Callout,
   DefaultButton,
+  FontWeights,
+  IContextualMenuItem,
   IPersonaSharedProps,
   Label,
+  Link,
+  mergeStyleSets,
   Panel,
   PanelType,
   Persona,
@@ -10,11 +15,13 @@ import {
   PrimaryButton,
   Spinner,
   SpinnerSize,
-  styled
+  Stack,
+  styled,
+  Text
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { useId } from '@fluentui/react-hooks';
 
 import { geLocale } from '../../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
@@ -48,6 +55,11 @@ const Profile = (props: any) => {
   const minimised = !mobileScreen && !showSidebar;
   const authenticated = authToken.token;
   const [selectedPermissions, setSelectedPermissions] = useState([]);
+  const [isCalloutVisible, setIsCalloutVisible] = useState(false);
+  const toggleIsCalloutVisible = () => {setIsCalloutVisible(!isCalloutVisible)};
+  const buttonId = useId('callout-button');
+  const labelId = useId('callout-label');
+  const descriptionId = useId('callout-description');
 
   useEffect(() => {
     if (authenticated && !profile) {
@@ -143,7 +155,7 @@ const Profile = (props: any) => {
 
   const classes = classNames(props);
 
-  const items: any = [
+  const items: IContextualMenuItem[] = [
     {
       key: 'office-dev-program',
       text: translateMessage('Office Dev Program'),
@@ -177,7 +189,6 @@ const Profile = (props: any) => {
     );
   }
 
-
   const menuProperties = {
     shouldFocusOnMount: true,
     alignTargetEdge: true,
@@ -195,18 +206,74 @@ const Profile = (props: any) => {
     }
   };
 
-  const defaultSize = PersonaSize.size40;
+  const defaultSize = PersonaSize.size32;
 
   const profileProperties = {
     persona,
     styles: personaStyleToken,
-    hidePersonaDetails: minimised,
-    size: graphExplorerMode === Mode.TryIt ? PersonaSize.size40 : defaultSize
+    hidePersonaDetails: !isCalloutVisible,
+    size: isCalloutVisible ? PersonaSize.size40 : defaultSize
   };
+
+  const showProfileComponent = (profileProperties: any ): React.ReactNode => {
+
+    const persona = <Persona
+      {...profileProperties.persona}
+      size={profileProperties.size}
+      styles={profileProperties.styles}
+      hidePersonaDetails={profileProperties.hidePersonaDetails} />;
+
+    return( <>
+      <ActionButton ariaLabel='profile'
+        id={buttonId}
+        onClick={toggleIsCalloutVisible}
+        role='button'
+      //menuProps={menuProperties}
+      >
+        {persona}
+      </ActionButton>
+
+      {isCalloutVisible &&  (
+        <Callout
+          className={styles.callout}
+          ariaLabelledBy={labelId}
+          ariaDescribedBy={descriptionId}
+          role="dialog"
+          gapSpace={0}
+          target={`#${buttonId}`}
+          isBeakVisible={true}
+          beakWidth={10}
+          onDismiss={toggleIsCalloutVisible}
+          setInitialFocus
+        >
+          {persona}
+          <hr/>
+          <Stack>
+            <Link
+              key= 'office-dev-program'
+              href={`https://developer.microsoft.com/${geLocale}/office/dev-program`}
+              target="_blank"
+              className={styles.link}
+              onClick={() => trackOfficeDevProgramLinkClickEvent()}
+            >
+              {translateMessage('Office Dev Program')}
+            </Link>
+            <ActionButton key={'view-all-permissions'} onClick={() => changePanelState()}>
+              {translateMessage('view all permissions')}
+            </ActionButton>
+            <ActionButton key={'sign-out'} onClick={() => handleSignOut()}>
+              {translateMessage('sign out')}
+            </ActionButton>
+          </Stack>
+        </Callout>
+      )}
+    </>
+    )
+  }
 
   return (
     <div className={classes.profile}>
-      {showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
+      {showProfileComponent(profileProperties)}
       <Panel
         isOpen={permissionsPanelOpen}
         onDismiss={() => changePanelState()}
@@ -223,17 +290,27 @@ const Profile = (props: any) => {
   );
 }
 
-function showProfileComponent(profileProperties: any, graphExplorerMode: Mode, menuProperties: any): React.ReactNode {
-  const persona = <Persona
-    {...profileProperties.persona}
-    size={profileProperties.size}
-    styles={profileProperties.styles}
-    hidePersonaDetails={profileProperties.hidePersonaDetails} />;
+// eslint-disable-next-line max-len
 
-  return <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
-    {persona}
-  </ActionButton>
-}
+
+const styles = mergeStyleSets({
+  button: {
+    width: 300
+  },
+  callout: {
+    width: 320,
+    maxWidth: '90%',
+    padding: '20px 24px'
+  },
+  title: {
+    marginBottom: 12,
+    fontWeight: FontWeights.semilight
+  },
+  link: {
+    display: 'block',
+    marginTop: 20
+  }
+});
 
 // @ts-ignore
 const styledProfile = styled(Profile, authenticationStyles);
