@@ -3,7 +3,6 @@ import {
   Callout,
   DefaultButton,
   FontWeights,
-  IContextualMenuItem,
   IPersonaSharedProps,
   Label,
   Link,
@@ -16,8 +15,7 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
-  styled,
-  Text
+  styled
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,7 +23,6 @@ import { useId } from '@fluentui/react-hooks';
 
 import { geLocale } from '../../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { Mode } from '../../../../types/enums';
 import { IRootState } from '../../../../types/root';
 import { signOut } from '../../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../../services/actions/permissions-action-creator';
@@ -44,15 +41,10 @@ const trackOfficeDevProgramLinkClickEvent = () => {
 const Profile = (props: any) => {
   const dispatch = useDispatch();
   const {
-    sidebarProperties,
     profile,
     authToken,
-    permissionsPanelOpen,
-    graphExplorerMode
+    permissionsPanelOpen
   } = useSelector((state: IRootState) => state);
-  const mobileScreen = !!sidebarProperties.mobileScreen;
-  const showSidebar = !!sidebarProperties.showSidebar;
-  const minimised = !mobileScreen && !showSidebar;
   const authenticated = authToken.token;
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [isCalloutVisible, setIsCalloutVisible] = useState(false);
@@ -155,46 +147,6 @@ const Profile = (props: any) => {
 
   const classes = classNames(props);
 
-  const items: IContextualMenuItem[] = [
-    {
-      key: 'office-dev-program',
-      text: translateMessage('Office Dev Program'),
-      href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
-      target: '_blank',
-      iconProps: {
-        iconName: 'CommandPrompt'
-      },
-      onClick: () => trackOfficeDevProgramLinkClickEvent()
-    }
-  ];
-
-  if (authenticated) {
-    items.push(
-      {
-        key: 'view-all-permissions',
-        text: translateMessage('view all permissions'),
-        iconProps: {
-          iconName: 'AzureKeyVault'
-        },
-        onClick: () => changePanelState()
-      },
-      {
-        key: 'sign-out',
-        text: translateMessage('sign out'),
-        onClick: () => handleSignOut(),
-        iconProps: {
-          iconName: 'SignOut'
-        }
-      }
-    );
-  }
-
-  const menuProperties = {
-    shouldFocusOnMount: true,
-    alignTargetEdge: true,
-    items
-  };
-
   const personaStyleToken: any = {
     primaryText: {
       paddingBottom: 5
@@ -208,7 +160,7 @@ const Profile = (props: any) => {
 
   const defaultSize = PersonaSize.size32;
 
-  const profileProperties = {
+  const userProfileProperties = {
     persona,
     styles: personaStyleToken,
     hidePersonaDetails: !isCalloutVisible,
@@ -217,7 +169,7 @@ const Profile = (props: any) => {
 
   const showProfileComponent = (profileProperties: any ): React.ReactNode => {
 
-    const persona = <Persona
+    const userPersona = <Persona
       {...profileProperties.persona}
       size={profileProperties.size}
       styles={profileProperties.styles}
@@ -230,7 +182,7 @@ const Profile = (props: any) => {
         role='button'
       //menuProps={menuProperties}
       >
-        {persona}
+        {userPersona}
       </ActionButton>
 
       {isCalloutVisible &&  (
@@ -246,7 +198,7 @@ const Profile = (props: any) => {
           onDismiss={toggleIsCalloutVisible}
           setInitialFocus
         >
-          {persona}
+          {userPersona}
           <hr/>
           <Stack>
             <Link
@@ -273,7 +225,7 @@ const Profile = (props: any) => {
 
   return (
     <div className={classes.profile}>
-      {showProfileComponent(profileProperties)}
+      {showProfileComponent(userProfileProperties)}
       <Panel
         isOpen={permissionsPanelOpen}
         onDismiss={() => changePanelState()}
@@ -289,9 +241,6 @@ const Profile = (props: any) => {
     </div>
   );
 }
-
-// eslint-disable-next-line max-len
-
 
 const styles = mergeStyleSets({
   button: {
