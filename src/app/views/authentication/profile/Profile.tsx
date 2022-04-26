@@ -1,23 +1,32 @@
 import {
   ActionButton,
+  DefaultButton,
   IPersonaSharedProps,
+  Label,
+  Panel,
+  PanelType,
   Persona,
   PersonaSize,
+  PrimaryButton,
   Spinner,
   SpinnerSize,
   styled
 } from '@fluentui/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 
 import { geLocale } from '../../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
 import { IRootState } from '../../../../types/root';
 import { signOut } from '../../../services/actions/auth-action-creators';
+import { consentToScopes } from '../../../services/actions/permissions-action-creator';
+import { togglePermissionsPanel } from '../../../services/actions/permissions-panel-action-creator';
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
+import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
 
 const trackOfficeDevProgramLinkClickEvent = () => {
@@ -27,11 +36,18 @@ const trackOfficeDevProgramLinkClickEvent = () => {
 };
 const Profile = (props: any) => {
   const dispatch = useDispatch();
-  const { sidebarProperties, profile, authToken, graphExplorerMode } = useSelector((state: IRootState) => state);
+  const {
+    sidebarProperties,
+    profile,
+    authToken,
+    permissionsPanelOpen,
+    graphExplorerMode
+  } = useSelector((state: IRootState) => state);
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
   const minimised = !mobileScreen && !showSidebar;
   const authenticated = authToken.token;
+  const [selectedPermissions, setSelectedPermissions] = useState([]);
 
   useEffect(() => {
     if (authenticated && !profile) {
@@ -63,11 +79,66 @@ const Profile = (props: any) => {
   const handleSignOut = () => {
     dispatch(signOut());
   }
+
   const persona: IPersonaSharedProps = {
     imageUrl: profile.profileImageUrl,
     imageInitials: getInitials(profile.displayName),
     text: profile.displayName,
     secondaryText: profile.emailAddress
+  };
+
+  const changePanelState = () => {
+    let open = !!permissionsPanelOpen;
+    open = !open;
+    dispatch(togglePermissionsPanel(open));
+    setSelectedPermissions([]);
+    trackSelectPermissionsButtonClickEvent();
+  };
+
+  const trackSelectPermissionsButtonClickEvent = () => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
+    });
+  };
+
+  const setPermissions = (permissions: []) => {
+    setSelectedPermissions(permissions);
+  };
+
+  const handleConsent = () => {
+    dispatch(consentToScopes(selectedPermissions));
+    setSelectedPermissions([]);
+  };
+
+  const getSelectionDetails = () => {
+    const selectionCount = selectedPermissions.length;
+
+    switch (selectionCount) {
+      case 0:
+        return '';
+      case 1:
+        return `1 ${translateMessage('selected')}: ` + selectedPermissions[0];
+      default:
+        return `${selectionCount} ${translateMessage('selected')}`;
+    }
+  };
+
+  const onRenderFooterContent = () => {
+    return (
+      <div>
+        <Label>{getSelectionDetails()}</Label>
+        <PrimaryButton
+          disabled={selectedPermissions.length === 0}
+          onClick={() => handleConsent()}
+          style={{ marginRight: 10 }}
+        >
+          {translateMessage('Consent')}
+        </PrimaryButton>
+        <DefaultButton onClick={() => changePanelState()}>
+          {translateMessage('Cancel')}
+        </DefaultButton>
+      </div>
+    );
   };
 
   const classes = classNames(props);
@@ -82,16 +153,30 @@ const Profile = (props: any) => {
         iconName: 'CommandPrompt'
       },
       onClick: () => trackOfficeDevProgramLinkClickEvent()
-    },
-    {
-      key: 'sign-out',
-      text: translateMessage('sign out'),
-      onClick: () => handleSignOut(),
-      iconProps: {
-        iconName: 'SignOut'
-      }
     }
   ];
+
+  if (authenticated) {
+    items.push(
+      {
+        key: 'view-all-permissions',
+        text: translateMessage('view all permissions'),
+        iconProps: {
+          iconName: 'AzureKeyVault'
+        },
+        onClick: () => changePanelState()
+      },
+      {
+        key: 'sign-out',
+        text: translateMessage('sign out'),
+        onClick: () => handleSignOut(),
+        iconProps: {
+          iconName: 'SignOut'
+        }
+      }
+    );
+  }
+
 
   const menuProperties = {
     shouldFocusOnMount: true,
@@ -122,6 +207,18 @@ const Profile = (props: any) => {
   return (
     <div className={classes.profile}>
       {showProfileComponent(profileProperties, graphExplorerMode, menuProperties)}
+      <Panel
+        isOpen={permissionsPanelOpen}
+        onDismiss={() => changePanelState()}
+        type={PanelType.medium}
+        hasCloseButton={true}
+        headerText={translateMessage('Permissions')}
+        onRenderFooterContent={onRenderFooterContent}
+        isFooterAtBottom={true}
+        closeButtonAriaLabel='Close'
+      >
+        <Permission panel={true} setPermissions={setPermissions} />
+      </Panel>
     </div>
   );
 }
@@ -135,8 +232,7 @@ function showProfileComponent(profileProperties: any, graphExplorerMode: Mode, m
 
   return <ActionButton ariaLabel='profile' role='button' menuProps={menuProperties}>
     {persona}
-  </ActionButton>;
-
+  </ActionButton>
 }
 
 // @ts-ignore

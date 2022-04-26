@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogFooter,
   DialogType,
-  DropdownMenuItemType,
   getId,
   IconButton,
   Label,
@@ -20,13 +19,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GitHubLogoIcon } from '@fluentui/react-icons-mdl2';
 
 import '../../utils/string-operations';
-import { geLocale } from '../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
 import { IRootState } from '../../../types/root';
 import { ISettingsProps } from '../../../types/settings';
-import { signOut } from '../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../services/actions/permissions-panel-action-creator';
 import { changeTheme } from '../../services/actions/theme-action-creator';
@@ -36,14 +33,12 @@ import { translateMessage } from '../../utils/translate-messages';
 function Settings(props: ISettingsProps) {
   const dispatch = useDispatch();
   const {
-    permissionsPanelOpen,
     authToken,
     theme: appTheme
   } = useSelector((state: IRootState) => state);
   const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
-  const [selectedPermissions, setSelectedPermissions] = useState([]);
 
   const {
     intl: { messages }
@@ -96,19 +91,6 @@ function Settings(props: ISettingsProps) {
         onClick: () => trackGithubLinkClickEvent()
       }
     ];
-
-    if (authenticated) {
-      menuItems.push(
-        {
-          key: 'view-all-permissions',
-          text: messages['view all permissions'],
-          iconProps: {
-            iconName: 'AzureKeyVault'
-          },
-          onClick: () => changePanelState()
-        },
-      );
-    }
     setItems(menuItems);
   }, [authenticated]);
 
@@ -131,33 +113,10 @@ function Settings(props: ISettingsProps) {
     });
   };
 
-  const changePanelState = () => {
-    let open = !!permissionsPanelOpen;
-    open = !open;
-    dispatch(togglePermissionsPanel(open));
-    setSelectedPermissions([]);
-    trackSelectPermissionsButtonClickEvent();
-  };
-
-  const trackSelectPermissionsButtonClickEvent = () => {
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
-    });
-  };
-
   const trackReportAnIssueLinkClickEvent = () => {
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
       ComponentName: componentNames.REPORT_AN_ISSUE_LINK
     });
-  };
-
-  const setPermissions = (permissions: []) => {
-    setSelectedPermissions(permissions);
-  };
-
-  const handleConsent = () => {
-    dispatch(consentToScopes(selectedPermissions));
-    setSelectedPermissions([]);
   };
 
   const trackDocumentationLinkClickEvent = () => {
@@ -170,37 +129,6 @@ function Settings(props: ISettingsProps) {
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
       ComponentName: componentNames.GITHUB_LINK
     });
-  };
-
-  const getSelectionDetails = () => {
-    const selectionCount = selectedPermissions.length;
-
-    switch (selectionCount) {
-      case 0:
-        return '';
-      case 1:
-        return `1 ${messages.selected}: ` + selectedPermissions[0];
-      default:
-        return `${selectionCount} ${messages.selected}`;
-    }
-  };
-
-  const onRenderFooterContent = () => {
-    return (
-      <div>
-        <Label>{getSelectionDetails()}</Label>
-        <PrimaryButton
-          disabled={selectedPermissions.length === 0}
-          onClick={() => handleConsent()}
-          style={{ marginRight: 10 }}
-        >
-          <FormattedMessage id='Consent' />
-        </PrimaryButton>
-        <DefaultButton onClick={() => changePanelState()}>
-          <FormattedMessage id='Cancel' />
-        </DefaultButton>
-      </div>
-    );
   };
 
   const menuProperties = {
@@ -268,19 +196,6 @@ function Settings(props: ISettingsProps) {
             />
           </DialogFooter>
         </Dialog>
-
-        <Panel
-          isOpen={permissionsPanelOpen}
-          onDismiss={() => changePanelState()}
-          type={PanelType.medium}
-          hasCloseButton={true}
-          headerText={messages.Permissions}
-          onRenderFooterContent={onRenderFooterContent}
-          isFooterAtBottom={true}
-          closeButtonAriaLabel='Close'
-        >
-          <Permission panel={true} setPermissions={setPermissions} />
-        </Panel>
       </div>
     </div>
   );
