@@ -11,6 +11,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
 import { IRootState } from '../../../../types/root';
 import { signOut } from '../../../services/actions/auth-action-creators';
@@ -19,6 +20,11 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 
+const trackOfficeDevProgramLinkClickEvent = () => {
+  telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
+    ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
+  });
+};
 const Profile = (props: any) => {
   const dispatch = useDispatch();
   const { sidebarProperties, profile, authToken, graphExplorerMode } = useSelector((state: IRootState) => state);
@@ -68,6 +74,16 @@ const Profile = (props: any) => {
 
   const items: any = [
     {
+      key: 'office-dev-program',
+      text: translateMessage('Office Dev Program'),
+      href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
+      target: '_blank',
+      iconProps: {
+        iconName: 'CommandPrompt'
+      },
+      onClick: () => trackOfficeDevProgramLinkClickEvent()
+    },
+    {
       key: 'sign-out',
       text: translateMessage('sign out'),
       onClick: () => handleSignOut(),
@@ -76,20 +92,6 @@ const Profile = (props: any) => {
       }
     }
   ];
-
-  if(graphExplorerMode === Mode.TryIt){
-    items.push(
-      {
-        key: 'office-dev-program',
-        text: translateMessage('Office Dev Program'),
-        href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
-        target: '_blank',
-        iconProps: {
-          iconName: 'CommandPrompt'
-        }
-      }
-    )
-  }
 
   const menuProperties = {
     shouldFocusOnMount: true,

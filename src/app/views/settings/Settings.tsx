@@ -11,11 +11,13 @@ import {
   Panel,
   PanelType,
   PrimaryButton,
+  registerIcons,
   TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import { GitHubLogoIcon } from '@fluentui/react-icons-mdl2';
 
 import '../../utils/string-operations';
 import { geLocale } from '../../../appLocale';
@@ -47,21 +49,17 @@ function Settings(props: ISettingsProps) {
     intl: { messages }
   }: any = props;
 
+  registerIcons({
+    icons: {
+      GitHubLogo: <GitHubLogoIcon />
+    }
+  });
+
   useEffect(() => {
     const menuItems: any = [
       {
-        key: 'office-dev-program',
-        text: messages['Office Dev Program'],
-        href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
-        target: '_blank',
-        iconProps: {
-          iconName: 'CommandPrompt'
-        },
-        onClick: () => trackOfficeDevProgramLinkClickEvent()
-      },
-      {
         key: 'report-issue',
-        text: messages['Report an Issue'],
+        text: translateMessage('Report an Issue'),
         href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
         target: '_blank',
         iconProps: {
@@ -70,17 +68,32 @@ function Settings(props: ISettingsProps) {
         onClick: () => trackReportAnIssueLinkClickEvent()
       },
       {
-        key: 'divider',
-        text: '-',
-        itemType: DropdownMenuItemType.Divider
-      },
-      {
         key: 'change-theme',
         text: messages['Change theme'],
         iconProps: {
           iconName: 'Color'
         },
         onClick: () => toggleThemeChooserDialogState()
+      },
+      {
+        key: 'ge-documentation',
+        text: translateMessage('Documentation'),
+        href: ' https://docs.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0',
+        target: '_blank',
+        iconProps: {
+          iconName: 'Documentation'
+        },
+        onClick: () => trackDocumentationLinkClickEvent()
+      },
+      {
+        key: 'github',
+        text: translateMessage('Github'),
+        href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4',
+        target: '_blank',
+        iconProps: {
+          iconName: 'GitHubLogo'
+        },
+        onClick: () => trackGithubLinkClickEvent()
       }
     ];
 
@@ -147,9 +160,15 @@ function Settings(props: ISettingsProps) {
     setSelectedPermissions([]);
   };
 
-  const trackOfficeDevProgramLinkClickEvent = () => {
+  const trackDocumentationLinkClickEvent = () => {
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
+      ComponentName: componentNames.GE_DOCUMENTATION_LINK
+    });
+  };
+
+  const trackGithubLinkClickEvent = () => {
+    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
+      ComponentName: componentNames.GITHUB_LINK
     });
   };
 

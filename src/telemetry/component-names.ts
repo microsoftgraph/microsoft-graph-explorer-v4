@@ -60,7 +60,7 @@ export const CODE_SNIPPET_LANGUAGES = {
   Go: 'Go sdk link',
   'Objective-C': 'Objective-C sdk link',
   Powershell: 'Powershell sdk link'
-}
+};
 export const CODE_SNIPPET_DOCS_LINKS = {
   CSharp: 'C# snippet docs link',
   JavaScript: 'JavaScript snippet docs link',
@@ -68,7 +68,9 @@ export const CODE_SNIPPET_DOCS_LINKS = {
   Go: 'Go snippet docs link',
   'Objective-C': 'Objective-C snippet docs link',
   Powershell: 'Powershell snippet docs link'
-}
+};
+export const GE_DOCUMENTATION_LINK = 'GE documentation link';
+export const GITHUB_LINK = 'Github link';
 
 // Actions
 export const GET_SNIPPET_ACTION = 'Get snippet action';
