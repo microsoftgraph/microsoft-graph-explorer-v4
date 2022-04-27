@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   FontSizes,
+  FontWeights,
   getId,
   getTheme,
   IconButton,
@@ -69,7 +70,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               onClick={() => props.toggleSidebar()} />
           </TooltipHost>
           <Label
-            style={{ fontSize: FontSizes.xLarge, fontWeight: 600 }}>
+            style={{ fontSize: FontSizes.xLarge, fontWeight: FontWeights.semibold }}>
             Graph Explorer
           </Label>
           <FeedbackButton />
