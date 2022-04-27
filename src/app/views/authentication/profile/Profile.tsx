@@ -3,6 +3,7 @@ import {
   Callout,
   DefaultButton,
   FontWeights,
+  getTheme,
   IContextualMenuItem,
   IPersonaSharedProps,
   Label,
@@ -35,6 +36,8 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
+import { hover } from '@testing-library/user-event/dist/types/convenience';
+import { profileStyles } from './Profile.styles';
 
 const trackOfficeDevProgramLinkClickEvent = () => {
   telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
@@ -60,6 +63,10 @@ const Profile = (props: any) => {
   const buttonId = useId('callout-button');
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
+  const theme = getTheme();
+  const linkStyles = profileStyles(theme).linkStyles
+  const personaStyleToken = profileStyles(theme).personaStyleToken;
+
 
   useEffect(() => {
     if (authenticated && !profile) {
@@ -195,16 +202,6 @@ const Profile = (props: any) => {
     items
   };
 
-  const personaStyleToken: any = {
-    primaryText: {
-      paddingBottom: 5
-    },
-    secondaryText:
-    {
-      paddingBottom: 10,
-      textTransform: 'lowercase'
-    }
-  };
 
   const defaultSize = PersonaSize.size32;
 
@@ -253,8 +250,8 @@ const Profile = (props: any) => {
               key= 'office-dev-program'
               href={`https://developer.microsoft.com/${geLocale}/office/dev-program`}
               target="_blank"
-              className={styles.link}
               onClick={() => trackOfficeDevProgramLinkClickEvent()}
+              styles={linkStyles}
             >
               {translateMessage('Office Dev Program')}
             </Link>
