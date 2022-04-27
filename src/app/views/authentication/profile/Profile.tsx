@@ -2,7 +2,6 @@ import {
   ActionButton,
   Callout,
   DefaultButton,
-  FontWeights,
   IPersonaSharedProps,
   Label,
   Link,
@@ -158,22 +157,19 @@ const Profile = (props: any) => {
     }
   };
 
-  const defaultSize = PersonaSize.size32;
+  const showProfileComponent = (userPersona: any ): React.ReactNode => {
 
-  const userProfileProperties = {
-    persona,
-    styles: personaStyleToken,
-    hidePersonaDetails: !isCalloutVisible,
-    size: isCalloutVisible ? PersonaSize.size40 : defaultSize
-  };
+    const smallPersona = <Persona
+      { ...userPersona}
+      size={PersonaSize.size32}
+      styles={personaStyleToken}
+      hidePersonaDetails={true} />;
 
-  const showProfileComponent = (profileProperties: any ): React.ReactNode => {
-
-    const userPersona = <Persona
-      {...profileProperties.persona}
-      size={profileProperties.size}
-      styles={profileProperties.styles}
-      hidePersonaDetails={profileProperties.hidePersonaDetails} />;
+    const fullPersona = <Persona
+      {...userPersona}
+      size={PersonaSize.size40}
+      hidePersonaDetails={false}
+      styles={personaStyleToken} />
 
     return( <>
       <ActionButton ariaLabel='profile'
@@ -182,7 +178,7 @@ const Profile = (props: any) => {
         role='button'
       //menuProps={menuProperties}
       >
-        {userPersona}
+        {smallPersona}
       </ActionButton>
 
       {isCalloutVisible &&  (
@@ -198,7 +194,7 @@ const Profile = (props: any) => {
           onDismiss={toggleIsCalloutVisible}
           setInitialFocus
         >
-          {userPersona}
+          {fullPersona}
           <hr/>
           <Stack>
             <Link
@@ -225,7 +221,7 @@ const Profile = (props: any) => {
 
   return (
     <div className={classes.profile}>
-      {showProfileComponent(userProfileProperties)}
+      {showProfileComponent(persona)}
       <Panel
         isOpen={permissionsPanelOpen}
         onDismiss={() => changePanelState()}
@@ -250,10 +246,6 @@ const styles = mergeStyleSets({
     width: 320,
     maxWidth: '90%',
     padding: '20px 24px'
-  },
-  title: {
-    marginBottom: 12,
-    fontWeight: FontWeights.semilight
   },
   link: {
     display: 'block',
