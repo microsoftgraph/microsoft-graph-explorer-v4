@@ -4,7 +4,7 @@ export const mainHeaderStyles = (theme: ITheme) => {
   return {
     rootStyles: {
       root: {
-        background: theme.semanticColors.bodyBackground,
+        background: theme.palette.neutralLighter,
         height: 50,
         marginBottom: '-9px'
       }
