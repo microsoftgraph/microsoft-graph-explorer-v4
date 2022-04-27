@@ -1,5 +1,6 @@
 import {
   ChoiceGroup,
+  ContextualMenuItemType,
   DefaultButton,
   Dialog,
   DialogFooter,
@@ -46,6 +47,14 @@ function Settings(props: ISettingsProps) {
   useEffect(() => {
     const menuItems: any = [
       {
+        key: 'change-theme',
+        text: translateMessage('Change theme'),
+        iconProps: {
+          iconName: 'Color'
+        },
+        onClick: () => toggleThemeChooserDialogState()
+      },
+      {
         key: 'report-issue',
         text: translateMessage('Report an Issue'),
         href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
@@ -55,14 +64,7 @@ function Settings(props: ISettingsProps) {
         },
         onClick: () => trackReportAnIssueLinkClickEvent()
       },
-      {
-        key: 'change-theme',
-        text: messages['Change theme'],
-        iconProps: {
-          iconName: 'Color'
-        },
-        onClick: () => toggleThemeChooserDialogState()
-      },
+      { key: 'divider_1', itemType: ContextualMenuItemType.Divider },
       {
         key: 'ge-documentation',
         text: translateMessage('Documentation'),

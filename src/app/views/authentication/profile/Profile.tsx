@@ -2,7 +2,6 @@ import {
   ActionButton,
   Callout,
   DefaultButton,
-  FontWeights,
   getTheme,
   IContextualMenuItem,
   IPersonaSharedProps,
@@ -17,8 +16,7 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
-  styled,
-  Text
+  styled
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,7 +24,6 @@ import { useId } from '@fluentui/react-hooks';
 
 import { geLocale } from '../../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { Mode } from '../../../../types/enums';
 import { IRootState } from '../../../../types/root';
 import { signOut } from '../../../services/actions/auth-action-creators';
 import { consentToScopes } from '../../../services/actions/permissions-action-creator';
@@ -36,7 +33,6 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
-import { hover } from '@testing-library/user-event/dist/types/convenience';
 import { profileStyles } from './Profile.styles';
 
 const trackOfficeDevProgramLinkClickEvent = () => {
@@ -47,15 +43,10 @@ const trackOfficeDevProgramLinkClickEvent = () => {
 const Profile = (props: any) => {
   const dispatch = useDispatch();
   const {
-    sidebarProperties,
     profile,
     authToken,
-    permissionsPanelOpen,
-    graphExplorerMode
+    permissionsPanelOpen
   } = useSelector((state: IRootState) => state);
-  const mobileScreen = !!sidebarProperties.mobileScreen;
-  const showSidebar = !!sidebarProperties.showSidebar;
-  const minimised = !mobileScreen && !showSidebar;
   const authenticated = authToken.token;
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [isCalloutVisible, setIsCalloutVisible] = useState(false);
@@ -203,22 +194,19 @@ const Profile = (props: any) => {
   };
 
 
-  const defaultSize = PersonaSize.size32;
+  const showProfileComponent = (userPersona: any ): React.ReactNode => {
 
-  const profileProperties = {
-    persona,
-    styles: personaStyleToken,
-    hidePersonaDetails: !isCalloutVisible,
-    size: isCalloutVisible ? PersonaSize.size40 : defaultSize
-  };
+    const smallPersona = <Persona
+      { ...userPersona}
+      size={PersonaSize.size32}
+      styles={personaStyleToken}
+      hidePersonaDetails={true} />;
 
-  const showProfileComponent = (profileProperties: any ): React.ReactNode => {
-
-    const persona = <Persona
-      {...profileProperties.persona}
-      size={profileProperties.size}
-      styles={profileProperties.styles}
-      hidePersonaDetails={profileProperties.hidePersonaDetails} />;
+    const fullPersona = <Persona
+      {...userPersona}
+      size={PersonaSize.size40}
+      hidePersonaDetails={false}
+      styles={personaStyleToken} />
 
     return( <>
       <ActionButton ariaLabel='profile'
@@ -227,7 +215,7 @@ const Profile = (props: any) => {
         role='button'
       //menuProps={menuProperties}
       >
-        {persona}
+        {smallPersona}
       </ActionButton>
 
       {isCalloutVisible &&  (
@@ -243,7 +231,7 @@ const Profile = (props: any) => {
           onDismiss={toggleIsCalloutVisible}
           setInitialFocus
         >
-          {persona}
+          {fullPersona}
           <hr/>
           <Stack>
             <Link
@@ -270,7 +258,7 @@ const Profile = (props: any) => {
 
   return (
     <div className={classes.profile}>
-      {showProfileComponent(profileProperties)}
+      {showProfileComponent(persona)}
       <Panel
         isOpen={permissionsPanelOpen}
         onDismiss={() => changePanelState()}
@@ -287,9 +275,6 @@ const Profile = (props: any) => {
   );
 }
 
-// eslint-disable-next-line max-len
-
-
 const styles = mergeStyleSets({
   button: {
     width: 300
@@ -298,10 +283,6 @@ const styles = mergeStyleSets({
     width: 320,
     maxWidth: '90%',
     padding: '20px 24px'
-  },
-  title: {
-    marginBottom: 12,
-    fontWeight: FontWeights.semilight
   },
   link: {
     display: 'block',
