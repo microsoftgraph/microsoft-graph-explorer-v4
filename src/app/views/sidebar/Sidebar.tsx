@@ -1,4 +1,5 @@
-import { Pivot, PivotItem } from '@fluentui/react';
+import { ActionButton, DefaultButton, getId, IconButton, Nav, Pivot, PivotItem, Stack } from '@fluentui/react';
+import { useId } from '@fluentui/react-hooks';
 import React from 'react';
 
 import { telemetry } from '../../../telemetry';
@@ -10,8 +11,12 @@ import SampleQueries from './sample-queries/SampleQueries';
 interface ISidebar {
   currentTab: string;
   setSidebarTabSelection: Function;
+  showSidebar: Boolean;
+  toggleSidebar: Function;
 }
-export const Sidebar = (props: ISidebar) => {
+export const Sidebar = (props: ISidebar) =>{
+  const showSidebar = props.showSidebar;
+
 
   const onPivotItemClick = (item?: PivotItem) => {
     if (!item) { return; }
@@ -21,9 +26,14 @@ export const Sidebar = (props: ISidebar) => {
       telemetry.trackTabClickEvent(key);
     }
   }
+  const openComponent = (key: string) => {
+    props.toggleSidebar();
+    props.setSidebarTabSelection(key);
+  }
 
   return (
     <div>
+      {showSidebar &&
       <Pivot onLinkClick={onPivotItemClick} overflowBehavior='menu' defaultSelectedKey={props.currentTab}>
         <PivotItem
           headerText={translateMessage('Sample Queries')}
@@ -56,6 +66,29 @@ export const Sidebar = (props: ISidebar) => {
           <div id={'history-tab'}><History /></div>
         </PivotItem>
       </Pivot>
+      }
+      { !showSidebar &&(
+        <Stack tokens={{childrenGap: 10, padding: 10}}>
+          <IconButton
+            iconProps={{iconName: 'Rocket'}}
+            title={translateMessage('Sample Queries')}
+            ariaLabel={translateMessage('Sample Queries')}
+            onClick={() => openComponent('sample-queries')}
+          />
+          <IconButton
+            iconProps={{iconName: 'ExploreData'}}
+            title={translateMessage('Resources')}
+            ariaLabel={translateMessage('Resources')}
+            onClick={() => openComponent('resources')}
+          />
+          <IconButton
+            iconProps={{iconName: 'History'}}
+            title={translateMessage('History')}
+            ariaLabel={translateMessage('History')}
+            onClick={() => openComponent('history')}
+          />
+        </Stack>)
+      }
     </div>
   );
 };

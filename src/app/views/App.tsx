@@ -441,8 +441,9 @@ class App extends Component<IAppProps, IAppState> {
               >
                 {/* {!mobileScreen && appTitleDisplayOnFullScreen(classes)} */}
 
-                {showSidebar && ( <Sidebar currentTab = { this.state.sidebarTabSelection }
-                  setSidebarTabSelection = { this.setSidebarTabSelection } /> ) }
+                <Sidebar currentTab = { this.state.sidebarTabSelection }
+                  setSidebarTabSelection = { this.setSidebarTabSelection } showSidebar={showSidebar}
+                  toggleSidebar={this.toggleSidebar}/>
               </Resizable>
             )}
             {graphExplorerMode === Mode.TryIt &&
