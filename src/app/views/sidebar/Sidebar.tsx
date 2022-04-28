@@ -12,10 +12,11 @@ interface ISidebar {
   setSidebarTabSelection: Function;
   showSidebar: Boolean;
   toggleSidebar: Function;
+  mobileScreen: Boolean;
 }
 export const Sidebar = (props: ISidebar) =>{
   const showSidebar = props.showSidebar;
-
+  const mobileScreen = props.mobileScreen;
 
   const onPivotItemClick = (item?: PivotItem) => {
     if (!item) { return; }
@@ -66,7 +67,7 @@ export const Sidebar = (props: ISidebar) =>{
         </PivotItem>
       </Pivot>
       }
-      { !showSidebar &&(
+      { !showSidebar && !mobileScreen && (
         <Stack tokens={{childrenGap: 10, padding: 10}}>
           <IconButton
             iconProps={{iconName: 'Rocket'}}
