@@ -1,4 +1,4 @@
-import { Announced, getTheme, IStackTokens, ITheme, styled } from '@fluentui/react';
+import { Announced, getTheme, ITheme, styled } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -24,9 +24,6 @@ import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
-import {
-  appTitleDisplayOnMobileScreen
-} from './app-sections/AppTitle';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { StatusMessages, TermsOfUseMessage } from './app-sections';
 import { appStyles } from './App.styles';
@@ -382,11 +379,6 @@ class App extends Component<IAppProps, IAppState> {
       mobileScreen, showSidebar
     });
 
-    const stackTokens: IStackTokens = {
-      childrenGap: 10,
-      padding: 10
-    };
-
     if (mobileScreen) {
       layout = sidebarWidth = 'ms-Grid-col ms-sm12';
       sideWidth = '100%';
@@ -439,8 +431,6 @@ class App extends Component<IAppProps, IAppState> {
                   height: ''
                 }}
               >
-                {/* {!mobileScreen && appTitleDisplayOnFullScreen(classes)} */}
-
                 <Sidebar currentTab = { this.state.sidebarTabSelection }
                   setSidebarTabSelection = { this.setSidebarTabSelection } showSidebar={showSidebar}
                   toggleSidebar={this.toggleSidebar}/>

@@ -1,6 +1,5 @@
-import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from '@fluentui/react';
+import { IconButton, IStackTokens, Label, Stack } from '@fluentui/react';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import { FeedbackButton } from './FeedbackButton';
 
 export function appTitleDisplayOnFullScreen(

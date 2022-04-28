@@ -1,5 +1,4 @@
-import { ActionButton, DefaultButton, getId, IconButton, Nav, Pivot, PivotItem, Stack } from '@fluentui/react';
-import { useId } from '@fluentui/react-hooks';
+import { IconButton, Pivot, PivotItem, Stack } from '@fluentui/react';
 import React from 'react';
 
 import { telemetry } from '../../../telemetry';
