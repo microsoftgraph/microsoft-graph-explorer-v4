@@ -2,6 +2,8 @@ import {
   ActionButton,
   Callout,
   DefaultButton,
+  getTheme,
+  IContextualMenuItem,
   IPersonaSharedProps,
   Label,
   Link,
@@ -31,6 +33,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
+import { profileStyles } from './Profile.styles';
 
 const trackOfficeDevProgramLinkClickEvent = () => {
   telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
@@ -51,6 +54,10 @@ const Profile = (props: any) => {
   const buttonId = useId('callout-button');
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
+  const theme = getTheme();
+  const linkStyles = profileStyles(theme).linkStyles
+  const personaStyleToken = profileStyles(theme).personaStyleToken;
+
 
   useEffect(() => {
     if (authenticated && !profile) {
@@ -146,16 +153,46 @@ const Profile = (props: any) => {
 
   const classes = classNames(props);
 
-  const personaStyleToken: any = {
-    primaryText: {
-      paddingBottom: 5
-    },
-    secondaryText:
+  const items: IContextualMenuItem[] = [
     {
-      paddingBottom: 10,
-      textTransform: 'lowercase'
+      key: 'office-dev-program',
+      text: translateMessage('Office Dev Program'),
+      href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
+      target: '_blank',
+      iconProps: {
+        iconName: 'CommandPrompt'
+      },
+      onClick: () => trackOfficeDevProgramLinkClickEvent()
     }
+  ];
+
+  if (authenticated) {
+    items.push(
+      {
+        key: 'view-all-permissions',
+        text: translateMessage('view all permissions'),
+        iconProps: {
+          iconName: 'AzureKeyVault'
+        },
+        onClick: () => changePanelState()
+      },
+      {
+        key: 'sign-out',
+        text: translateMessage('sign out'),
+        onClick: () => handleSignOut(),
+        iconProps: {
+          iconName: 'SignOut'
+        }
+      }
+    );
+  }
+
+  const menuProperties = {
+    shouldFocusOnMount: true,
+    alignTargetEdge: true,
+    items
   };
+
 
   const showProfileComponent = (userPersona: any ): React.ReactNode => {
 
@@ -201,8 +238,8 @@ const Profile = (props: any) => {
               key= 'office-dev-program'
               href={`https://developer.microsoft.com/${geLocale}/office/dev-program`}
               target="_blank"
-              className={styles.link}
               onClick={() => trackOfficeDevProgramLinkClickEvent()}
+              styles={linkStyles}
             >
               {translateMessage('Office Dev Program')}
             </Link>
