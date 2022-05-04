@@ -8,6 +8,7 @@ import {
   getId,
   getTheme,
   IconButton,
+  ITheme,
   Label,
   Panel,
   PanelType,
@@ -42,7 +43,7 @@ function Settings(props: ISettingsProps) {
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
-  const colorTheme = getTheme();
+  const theme: ITheme = getTheme();
 
   const {
     intl: { messages }
@@ -187,8 +188,8 @@ function Settings(props: ISettingsProps) {
           disabled={selectedPermissions.length === 0}
           onClick={() => handleConsent()}
           style={{ marginRight: 10,
-            backgroundColor: (selectedPermissions.length === 0) ? colorTheme.palette.themeDarker :
-              colorTheme.palette.themeSecondary }}
+            backgroundColor: (selectedPermissions.length === 0) ? theme.palette.themeDarker :
+              theme.palette.themeSecondary }}
         >
           <FormattedMessage id='Consent' />
         </PrimaryButton>
@@ -274,6 +275,7 @@ function Settings(props: ISettingsProps) {
           onRenderFooterContent={onRenderFooterContent}
           isFooterAtBottom={true}
           closeButtonAriaLabel='Close'
+          styles={{footer : {backgroundColor:theme.palette.white}}}
         >
           <Permission panel={true} setPermissions={setPermissions} />
         </Panel>
