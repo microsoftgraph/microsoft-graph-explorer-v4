@@ -187,7 +187,9 @@ function Settings(props: ISettingsProps) {
         <PrimaryButton
           disabled={selectedPermissions.length === 0}
           onClick={() => handleConsent()}
-          style={{ marginRight: 10 }}
+          style={{ marginRight: 10,
+            backgroundColor: (selectedPermissions.length === 0) ? theme.palette.themeDarker :
+              theme.palette.themeSecondary }}
         >
           <FormattedMessage id='Consent' />
         </PrimaryButton>
