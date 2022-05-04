@@ -433,5 +433,8 @@
   "Could not connect to the sandbox": "Не удалось подключиться к песочнице",
   "Failed to get profile information": "Не удалось получить сведения о профиле",
   "Do you want to remove all the items you have added to the collection?": "Вы хотите удалить все элементы, добавленные в коллекцию?",
-  "Delete collection": "Удалить коллекцию"
+  "Delete collection": "Удалить коллекцию",
+  "Leverage libraries": "Используйте возможности наших клиентских библиотек. Скачать",
+  "Client library": "клиентская библиотека здесь ",
+  "SDKs documentation": "Чтобы узнать больше о наших SDK, посетите страницу документации "
 }

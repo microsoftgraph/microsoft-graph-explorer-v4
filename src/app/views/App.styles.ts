@@ -11,12 +11,12 @@ export const appStyles = (theme: ITheme) => {
       paddingRight: '15px',
       paddingLeft: '4px',
       marginLeft: 'auto',
-      marginRight: 'auto',
-      borderBottom: '1px solid black'
+      marginRight: 'auto'
     },
     appRow: {
       display: 'flex',
-      flexWrap: 'no-wrap'
+      flexWrap: 'no-wrap',
+      alignItems: 'stretch'
     },
     tryItMessage: {
       marginBottom: theme.spacing.s1
@@ -69,7 +69,7 @@ export const appStyles = (theme: ITheme) => {
       marginTop: 5
     },
     statusAreaFullScreen: {
-      marginTop: 0
+      marginTop: 10
     },
     vResizeHandle: {
       zIndex: 1,
@@ -86,17 +86,6 @@ export const appStyles = (theme: ITheme) => {
       position: 'absolute',
       top: '13px',
       right: '10px'
-    },
-    mainContent: {
-      overflow: 'hidden',
-      display: 'flex',
-      flexDirection: 'column' as 'column'
-    },
-    queryResponse: {
-      display: 'flex',
-      flexDirection: 'column' as 'column',
-      height: '100%',
-      overflow: 'hidden'
     }
   };
 };
