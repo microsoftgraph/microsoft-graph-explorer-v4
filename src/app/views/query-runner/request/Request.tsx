@@ -181,7 +181,7 @@ export class Request extends Component<IRequestComponent, any> {
             border: 'solid 1px #ddd',
             marginBottom: 10
           }}
-          onResizeStop={(e: any, direction: any, ref: any) => {
+          onResize={(e: any, direction: any, ref: any) => {
             if (ref && ref.style && ref.style.height) {
               this.setRequestAndResponseHeights(ref.style.height);
             }

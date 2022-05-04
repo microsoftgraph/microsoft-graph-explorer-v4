@@ -6,6 +6,7 @@ import {
   DialogFooter,
   DialogType,
   getId,
+  getTheme,
   IconButton,
   registerIcons,
   TooltipHost
