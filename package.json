@@ -10,7 +10,7 @@
                 "@babel/runtime": "7.17.9",
                 "@fluentui/react": "8.67.2",
                 "@microsoft/applicationinsights-react-js": "3.2.4",
-                "@microsoft/applicationinsights-web": "2.7.4",
+                "@microsoft/applicationinsights-web": "2.7.6",
                 "@microsoft/microsoft-graph-client": "3.0.2",
                 "@monaco-editor/react": "4.4.1",
                 "@ms-ofb/officebrowserfeedbacknpm": "file:packages/officebrowserfeedbacknpm-1.6.6.tgz",
@@ -62,7 +62,7 @@
                 "webpack": "5.72.0",
                 "webpack-dev-server": "4.8.1",
                 "webpack-manifest-plugin": "5.0.0",
-                "workbox-webpack-plugin": "6.5.2"
+                "workbox-webpack-plugin": "6.5.3"
         },
         "scripts": {
                 "start": "node scripts/start.js",
