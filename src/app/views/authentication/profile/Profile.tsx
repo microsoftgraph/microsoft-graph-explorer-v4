@@ -3,7 +3,6 @@ import {
   Callout,
   DefaultButton,
   getTheme,
-  IContextualMenuItem,
   IPersonaSharedProps,
   Label,
   Link,
@@ -34,12 +33,30 @@ import { classNames } from '../../classnames';
 import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
+import { authenticationWrapper } from '../../../../modules/authentication';
 
 const trackOfficeDevProgramLinkClickEvent = () => {
   telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
     ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
   });
 };
+
+const getInitials = (name: string) => {
+  let initials = '';
+  if (name && name !== '') {
+    const n = name.indexOf('(');
+    name = name.substring(0, n !== -1 ? n : name.length);
+    const parts = name.split(' ');
+    for (const part of parts) {
+      if (part.length > 0 && part !== '') {
+        initials += part[0];
+      }
+    }
+    initials = initials.substring(0, 2);
+  }
+  return initials;
+};
+
 const Profile = (props: any) => {
   const dispatch = useDispatch();
   const {
@@ -60,7 +77,7 @@ const Profile = (props: any) => {
 
 
   useEffect(() => {
-    if (authenticated && !profile) {
+    if (authenticated) {
       dispatch(getProfileInfo());
     }
   }, [authenticated]);
@@ -70,24 +87,14 @@ const Profile = (props: any) => {
     return (<Spinner size={SpinnerSize.medium} />);
   }
 
-  const getInitials = (name: string) => {
-    let initials = '';
-    if (name && name !== '') {
-      const n = name.indexOf('(');
-      name = name.substring(0, n !== -1 ? n : name.length);
-      const parts = name.split(' ');
-      for (const part of parts) {
-        if (part.length > 0 && part !== '') {
-          initials += part[0];
-        }
-      }
-      initials = initials.substring(0, 2);
-    }
-    return initials;
-  };
-
   const handleSignOut = () => {
     dispatch(signOut());
+  }
+
+  const handleSignInOther = async () => {
+    authenticationWrapper.clearSession();
+    authenticationWrapper.clearCache();
+    props.signIn();
   }
 
   const persona: IPersonaSharedProps = {
@@ -153,47 +160,6 @@ const Profile = (props: any) => {
 
   const classes = classNames(props);
 
-  const items: IContextualMenuItem[] = [
-    {
-      key: 'office-dev-program',
-      text: translateMessage('Office Dev Program'),
-      href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
-      target: '_blank',
-      iconProps: {
-        iconName: 'CommandPrompt'
-      },
-      onClick: () => trackOfficeDevProgramLinkClickEvent()
-    }
-  ];
-
-  if (authenticated) {
-    items.push(
-      {
-        key: 'view-all-permissions',
-        text: translateMessage('view all permissions'),
-        iconProps: {
-          iconName: 'AzureKeyVault'
-        },
-        onClick: () => changePanelState()
-      },
-      {
-        key: 'sign-out',
-        text: translateMessage('sign out'),
-        onClick: () => handleSignOut(),
-        iconProps: {
-          iconName: 'SignOut'
-        }
-      }
-    );
-  }
-
-  const menuProperties = {
-    shouldFocusOnMount: true,
-    alignTargetEdge: true,
-    items
-  };
-
-
   const showProfileComponent = (userPersona: any ): React.ReactNode => {
 
     const smallPersona = <Persona
@@ -213,7 +179,6 @@ const Profile = (props: any) => {
         id={buttonId}
         onClick={toggleIsCalloutVisible}
         role='button'
-      //menuProps={menuProperties}
       >
         {smallPersona}
       </ActionButton>
@@ -223,7 +188,7 @@ const Profile = (props: any) => {
           className={styles.callout}
           ariaLabelledBy={labelId}
           ariaDescribedBy={descriptionId}
-          role="dialog"
+          role='dialog'
           gapSpace={0}
           target={`#${buttonId}`}
           isBeakVisible={true}
@@ -248,6 +213,9 @@ const Profile = (props: any) => {
             </ActionButton>
             <ActionButton key={'sign-out'} onClick={() => handleSignOut()}>
               {translateMessage('sign out')}
+            </ActionButton>
+            <ActionButton key={'sign-other-account'} onClick={() => handleSignInOther()}>
+              {translateMessage('sign in other account')}
             </ActionButton>
           </Stack>
         </Callout>
