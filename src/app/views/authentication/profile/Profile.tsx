@@ -4,6 +4,7 @@ import {
   DefaultButton,
   getTheme,
   IContextualMenuItem,
+  IOverlayProps,
   IPersonaSharedProps,
   Label,
   Link,
@@ -193,6 +194,10 @@ const Profile = (props: any) => {
     items
   };
 
+  const panelOverlayProps : IOverlayProps = {
+    isDarkThemed: true
+  }
+
 
   const showProfileComponent = (userPersona: any ): React.ReactNode => {
 
@@ -268,6 +273,7 @@ const Profile = (props: any) => {
         onRenderFooterContent={onRenderFooterContent}
         isFooterAtBottom={true}
         closeButtonAriaLabel='Close'
+        overlayProps={panelOverlayProps}
       >
         <Permission panel={true} setPermissions={setPermissions} />
       </Panel>
