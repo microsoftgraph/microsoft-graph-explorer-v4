@@ -22,7 +22,7 @@ export function showSignInButtonOrProfile(
   return (
     <div>
       {!tokenPresent && signInButton}
-      {tokenPresent && <Profile />}
+      {tokenPresent && <Profile signIn={signIn}/>}
     </div>
   );
 }

@@ -65,7 +65,6 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
             }}>
             <IconButton
               iconProps={{ iconName: 'GlobalNavButton' }}
-              //className={classes.sidebarToggle}
               ariaLabel={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
               onClick={() => props.toggleSidebar()} />
           </TooltipHost>
