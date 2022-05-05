@@ -93,7 +93,6 @@ const Profile = (props: any) => {
 
   const handleSignInOther = async () => {
     authenticationWrapper.clearSession();
-    authenticationWrapper.clearCache();
     props.signIn();
   }
 
