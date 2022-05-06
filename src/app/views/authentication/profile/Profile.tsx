@@ -69,7 +69,7 @@ const Profile = (props: any) => {
   const authenticated = authToken.token;
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [isCalloutVisible, setIsCalloutVisible] = useState(false);
-  const toggleIsCalloutVisible = () => {setIsCalloutVisible(!isCalloutVisible)};
+  const toggleIsCalloutVisible = () => { setIsCalloutVisible(!isCalloutVisible) };
   const buttonId = useId('callout-button');
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
@@ -196,21 +196,15 @@ const Profile = (props: any) => {
     );
   }
 
-  const menuProperties = {
-    shouldFocusOnMount: true,
-    alignTargetEdge: true,
-    items
-  };
-
-  const panelOverlayProps : IOverlayProps = {
+  const panelOverlayProps: IOverlayProps = {
     isDarkThemed: true
   }
 
 
-  const showProfileComponent = (userPersona: any ): React.ReactNode => {
+  const showProfileComponent = (userPersona: any): React.ReactNode => {
 
     const smallPersona = <Persona
-      { ...userPersona}
+      {...userPersona}
       size={PersonaSize.size32}
       styles={personaStyleToken}
       hidePersonaDetails={true} />;
@@ -221,7 +215,7 @@ const Profile = (props: any) => {
       hidePersonaDetails={false}
       styles={personaStyleToken} />
 
-    return( <>
+    return (<>
       <ActionButton ariaLabel='profile'
         id={buttonId}
         onClick={toggleIsCalloutVisible}
@@ -230,7 +224,7 @@ const Profile = (props: any) => {
         {smallPersona}
       </ActionButton>
 
-      {isCalloutVisible &&  (
+      {isCalloutVisible && (
         <Callout
           className={styles.callout}
           ariaLabelledBy={labelId}
@@ -244,10 +238,10 @@ const Profile = (props: any) => {
           setInitialFocus
         >
           {fullPersona}
-          <hr/>
+          <hr />
           <Stack>
             <Link
-              key= 'office-dev-program'
+              key='office-dev-program'
               href={`https://developer.microsoft.com/${geLocale}/office/dev-program`}
               target="_blank"
               onClick={() => trackOfficeDevProgramLinkClickEvent()}
