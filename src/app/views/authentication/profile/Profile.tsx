@@ -3,6 +3,8 @@ import {
   Callout,
   DefaultButton,
   getTheme,
+  IContextualMenuItem,
+  IOverlayProps,
   IPersonaSharedProps,
   Label,
   Link,
@@ -67,7 +69,7 @@ const Profile = (props: any) => {
   const authenticated = authToken.token;
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [isCalloutVisible, setIsCalloutVisible] = useState(false);
-  const toggleIsCalloutVisible = () => {setIsCalloutVisible(!isCalloutVisible)};
+  const toggleIsCalloutVisible = () => { setIsCalloutVisible(!isCalloutVisible) };
   const buttonId = useId('callout-button');
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
@@ -159,10 +161,49 @@ const Profile = (props: any) => {
 
   const classes = classNames(props);
 
-  const showProfileComponent = (userPersona: any ): React.ReactNode => {
+  const items: IContextualMenuItem[] = [
+    {
+      key: 'office-dev-program',
+      text: translateMessage('Office Dev Program'),
+      href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
+      target: '_blank',
+      iconProps: {
+        iconName: 'CommandPrompt'
+      },
+      onClick: () => trackOfficeDevProgramLinkClickEvent()
+    }
+  ];
+
+  if (authenticated) {
+    items.push(
+      {
+        key: 'view-all-permissions',
+        text: translateMessage('view all permissions'),
+        iconProps: {
+          iconName: 'AzureKeyVault'
+        },
+        onClick: () => changePanelState()
+      },
+      {
+        key: 'sign-out',
+        text: translateMessage('sign out'),
+        onClick: () => handleSignOut(),
+        iconProps: {
+          iconName: 'SignOut'
+        }
+      }
+    );
+  }
+
+  const panelOverlayProps: IOverlayProps = {
+    isDarkThemed: true
+  }
+
+
+  const showProfileComponent = (userPersona: any): React.ReactNode => {
 
     const smallPersona = <Persona
-      { ...userPersona}
+      {...userPersona}
       size={PersonaSize.size32}
       styles={personaStyleToken}
       hidePersonaDetails={true} />;
@@ -173,7 +214,7 @@ const Profile = (props: any) => {
       hidePersonaDetails={false}
       styles={personaStyleToken} />
 
-    return( <>
+    return (<>
       <ActionButton ariaLabel='profile'
         id={buttonId}
         onClick={toggleIsCalloutVisible}
@@ -182,7 +223,7 @@ const Profile = (props: any) => {
         {smallPersona}
       </ActionButton>
 
-      {isCalloutVisible &&  (
+      {isCalloutVisible && (
         <Callout
           className={styles.callout}
           ariaLabelledBy={labelId}
@@ -196,10 +237,10 @@ const Profile = (props: any) => {
           setInitialFocus
         >
           {fullPersona}
-          <hr/>
+          <hr />
           <Stack>
             <Link
-              key= 'office-dev-program'
+              key='office-dev-program'
               href={`https://developer.microsoft.com/${geLocale}/office/dev-program`}
               target="_blank"
               onClick={() => trackOfficeDevProgramLinkClickEvent()}
@@ -235,6 +276,7 @@ const Profile = (props: any) => {
         onRenderFooterContent={onRenderFooterContent}
         isFooterAtBottom={true}
         closeButtonAriaLabel='Close'
+        overlayProps={panelOverlayProps}
       >
         <Permission panel={true} setPermissions={setPermissions} />
       </Panel>

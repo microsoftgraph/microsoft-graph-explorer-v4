@@ -44,7 +44,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   const tokenPresent = !!authToken.token;
   const minimised = props.minimised;
   const currentTheme = getTheme();
-  const itemAlignmentStackStyles = mainHeaderStyles(currentTheme).rootStyles;
+  const itemAlignmentStackStyles = mainHeaderStyles(currentTheme, authToken).rootStyles;
   const itemStyles = mainHeaderStyles(currentTheme).authenticationItemStyles;
 
   const showUnAuthenticatedText = (): React.ReactNode => {
