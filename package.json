@@ -44,7 +44,7 @@
                 "postcss-flexbugs-fixes": "5.0.2",
                 "postcss-loader": "6.2.1",
                 "postcss-preset-env": "7.4.3",
-                "re-resizable": "6.9.5",
+                "re-resizable": "6.9.9",
                 "react": "16.14.0",
                 "react-app-polyfill": "3.0.0",
                 "react-dom": "16.14.0",
