@@ -47,7 +47,7 @@
                 "re-resizable": "6.9.5",
                 "react": "16.14.0",
                 "react-app-polyfill": "3.0.0",
-                "react-dom": "16.8.2",
+                "react-dom": "16.14.0",
                 "react-intl": "2.8.0",
                 "react-redux": "7.2.8",
                 "redux": "4.1.2",
