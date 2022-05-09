@@ -37,7 +37,7 @@ const itemAlignmentsStackTokens: IStackTokens = {
 };
 
 export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: MainHeaderProps) => {
-  const { authToken, graphExplorerMode } = useSelector(
+  const { authToken, graphExplorerMode, profile } = useSelector(
     (state: IRootState) => state
   );
   const [displayMessage, setDisplayMessage] = useState(true);
@@ -92,11 +92,12 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
             style={{ fontSize: FontSizes.xLarge, fontWeight: FontWeights.semibold }}>
             Graph Explorer
           </Label>
-          <FeedbackButton />
         </Stack>
 
         <Stack >
           <span style={itemStyles}>
+            <Label>{profile?.tenant}</Label>
+            <FeedbackButton />
             <Settings />
             <Authentication />
           </span>

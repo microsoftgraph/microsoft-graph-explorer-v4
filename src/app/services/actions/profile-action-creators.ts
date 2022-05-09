@@ -1,12 +1,15 @@
 import { AgeGroup } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
+import { authenticationWrapper } from '../../../modules/authentication';
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
+import { IRequestOptions } from '../../../types/request';
 import { translateMessage } from '../../utils/translate-messages';
 import {
   ACCOUNT_TYPE,
   BETA_USER_INFO_URL,
   DEFAULT_USER_SCOPES,
   USER_INFO_URL,
+  USER_ORGANIZATION_URL,
   USER_PICTURE_URL
 } from '../graph-constants';
 import {
@@ -61,6 +64,7 @@ export function getProfileInfo(): Function {
       profile.profileType = profileType;
       profile.ageGroup = ageGroup;
       profile.profileImageUrl = await getProfileImage();
+      profile.tenant= await getTenantInfo(profileType);
       dispatch(profileRequestSuccess(profile));
     } catch (error) {
       dispatch(profileRequestError({ error }));
@@ -75,7 +79,8 @@ export async function getProfileInformation(): Promise<IUser> {
     emailAddress: '',
     profileImageUrl: '',
     profileType: ACCOUNT_TYPE.UNDEFINED,
-    ageGroup: 0
+    ageGroup: 0,
+    tenant: ''
   };
   try {
     query.sampleUrl = USER_INFO_URL;
@@ -147,4 +152,31 @@ export async function getProfileResponse(): Promise<IProfileResponse> {
     userInfo,
     response
   };
+}
+
+export async function getTenantInfo(profileType: ACCOUNT_TYPE) {
+  if(profileType===ACCOUNT_TYPE.AAD) {
+    try{
+      const organizationUrl = USER_ORGANIZATION_URL;
+      const token = (await authenticationWrapper.getToken()).accessToken;
+
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+
+      };
+      const options: IRequestOptions = { headers, method: 'GET' };
+
+      const response = await fetch(organizationUrl, options);
+      if (!response.ok) {
+        throw response;
+      }
+      const res = await response.json();
+      const tenant = res.value[0]?.displayName;
+      return tenant;
+    } catch (error: any) {
+      return {error};
+    }
+  }
+  return 'Personal';
 }
