@@ -81,7 +81,13 @@ function Settings(props: ISettingsProps) {
         href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4',
         target: '_blank',
         iconProps: {
-          iconName: 'GitHubLogo'
+          iconName: 'GitHubLogo',
+          styles: {
+            root: {
+              position: 'relative',
+              top: '-2px'
+            }
+          }
         },
         onClick: () => trackGithubLinkClickEvent()
       }
@@ -126,10 +132,17 @@ function Settings(props: ISettingsProps) {
     });
   };
 
+  const calloutStyles: React.CSSProperties = {
+    overflowY: 'hidden'
+  }
+
   const menuProperties = {
     shouldFocusOnMount: true,
     alignTargetEdge: true,
-    items
+    items,
+    calloutProps: {
+      style: calloutStyles
+    }
   };
 
   return (
