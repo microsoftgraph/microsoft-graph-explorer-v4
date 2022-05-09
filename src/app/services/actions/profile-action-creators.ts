@@ -172,10 +172,9 @@ export async function getTenantInfo(profileType: ACCOUNT_TYPE) {
         throw response;
       }
       const res = await response.json();
-      const tenant = res.value[0]?.displayName;
-      return tenant;
+      return  res.value[0]?.displayName;
     } catch (error: any) {
-      return {error};
+      return '';
     }
   }
   return 'Personal';

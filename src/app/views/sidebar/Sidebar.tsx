@@ -10,9 +10,9 @@ import SampleQueries from './sample-queries/SampleQueries';
 interface ISidebar {
   currentTab: string;
   setSidebarTabSelection: Function;
-  showSidebar: Boolean;
+  showSidebar: boolean;
   toggleSidebar: Function;
-  mobileScreen: Boolean;
+  mobileScreen: boolean;
 }
 export const Sidebar = (props: ISidebar) =>{
   const showSidebar = props.showSidebar;

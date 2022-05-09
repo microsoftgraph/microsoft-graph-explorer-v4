@@ -161,44 +161,9 @@ const Profile = (props: any) => {
 
   const classes = classNames(props);
 
-  const items: IContextualMenuItem[] = [
-    {
-      key: 'office-dev-program',
-      text: translateMessage('Office Dev Program'),
-      href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
-      target: '_blank',
-      iconProps: {
-        iconName: 'CommandPrompt'
-      },
-      onClick: () => trackOfficeDevProgramLinkClickEvent()
-    }
-  ];
-
-  if (authenticated) {
-    items.push(
-      {
-        key: 'view-all-permissions',
-        text: translateMessage('view all permissions'),
-        iconProps: {
-          iconName: 'AzureKeyVault'
-        },
-        onClick: () => changePanelState()
-      },
-      {
-        key: 'sign-out',
-        text: translateMessage('sign out'),
-        onClick: () => handleSignOut(),
-        iconProps: {
-          iconName: 'SignOut'
-        }
-      }
-    );
-  }
-
   const panelOverlayProps: IOverlayProps = {
     isDarkThemed: true
   }
-
 
   const showProfileComponent = (userPersona: any): React.ReactNode => {
 
