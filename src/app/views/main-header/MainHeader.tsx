@@ -45,7 +45,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   const minimised = props.minimised;
   const currentTheme = getTheme();
   const itemAlignmentStackStyles = mainHeaderStyles(currentTheme, authToken).rootStyles;
-  const itemStyles = mainHeaderStyles(currentTheme).authenticationItemStyles;
+  const personaItemsStyles = mainHeaderStyles(currentTheme).authenticationItemStyles;
+  const feedbackAdjustmentStyles = mainHeaderStyles(currentTheme).feedbackIconAdjustmentStyles;
 
   const showUnAuthenticatedText = (): React.ReactNode => {
     return (
@@ -94,14 +95,11 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           </Label>
         </Stack>
 
-        <Stack >
-          <span style={itemStyles}>
-            <Label>{profile?.tenant}</Label>
-            <FeedbackButton />
-            <Settings />
-            <Authentication />
-          </span>
-          <span style={itemStyles}></span>
+        <Stack horizontal styles={personaItemsStyles}>
+          <Label> {profile?.tenant} </Label>
+          <span style={feedbackAdjustmentStyles}><FeedbackButton /></span>
+          <Settings />
+          <Authentication />
         </Stack>
 
       </Stack>

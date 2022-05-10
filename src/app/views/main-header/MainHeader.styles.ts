@@ -10,8 +10,14 @@ export const mainHeaderStyles = (theme: ITheme, props?: any) => {
       }
     },
     authenticationItemStyles: {
-      alignItems: 'center',
-      display: 'flex'
+      root: {
+        alignItems: 'center'
+      }
+    },
+    feedbackIconAdjustmentStyles: {
+      position: 'relative' as 'relative',
+      right: '-6px',
+      top: '4px'
     }
   }
 }

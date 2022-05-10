@@ -19,6 +19,12 @@ export const profileStyles = (theme: ITheme) => {
         paddingBottom: 10,
         textTransform: 'lowercase'
       }
+    },
+    profileSpinnerStyles: {
+      root: {
+        position: 'relative' as 'relative',
+        top: '2px'
+      }
     }
   }
 }
