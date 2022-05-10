@@ -8,8 +8,6 @@ import {
   IconButton,
   IStackTokens,
   Label,
-  MessageBar,
-  MessageBarType,
   Stack,
   TooltipHost
 } from '@fluentui/react';
@@ -20,9 +18,7 @@ import { FeedbackButton } from '../app-sections/FeedbackButton';
 import { Authentication } from '../authentication';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../types/root';
-import { Mode } from '../../../types/enums';
 import { mainHeaderStyles } from './MainHeader.styles';
-import { useState } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 
 
@@ -38,32 +34,13 @@ const itemAlignmentsStackTokens: IStackTokens = {
 };
 
 export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: MainHeaderProps) => {
-  const { authToken, graphExplorerMode, profile } = useSelector(
+  const { authToken, profile } = useSelector(
     (state: IRootState) => state
   );
-  const [displayMessage, setDisplayMessage] = useState(true);
-  const tokenPresent = !!authToken.token;
   const minimised = props.minimised;
   const currentTheme = getTheme();
   const itemAlignmentStackStyles = mainHeaderStyles(currentTheme, authToken).rootStyles;
   const itemStyles = mainHeaderStyles(currentTheme).authenticationItemStyles;
-
-  const showUnAuthenticatedText = (): React.ReactNode => {
-    return (
-      <>
-        <br />
-        <MessageBar
-          messageBarType={MessageBarType.warning}
-          isMultiline={true}
-          onDismiss={() => setDisplayMessage(false)}
-          dismissButtonAriaLabel={translateMessage('Close')}
-        >
-          <FormattedMessage id='Using demo tenant' />{' '}
-          <FormattedMessage id='To access your own data:' />
-        </MessageBar>
-      </>
-    );
-  };
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -121,11 +98,11 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         </Stack>
 
       </Stack>
-      <Stack style={{marginBottom:'7px'}}>
+      {/* <Stack style={{marginBottom:'7px'}}>
         {!tokenPresent && displayMessage &&
             graphExplorerMode === Mode.Complete &&
             showUnAuthenticatedText()}
-      </Stack>
+      </Stack> */}
     </Stack>
   );
 };

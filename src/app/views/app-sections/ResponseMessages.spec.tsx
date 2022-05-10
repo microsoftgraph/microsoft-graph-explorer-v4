@@ -2,6 +2,7 @@ import React from 'react';
 import { cleanup, render } from '@testing-library/react';
 
 import { responseMessages } from './ResponseMessages';
+import { Mode } from '../../../types/enums';
 
 afterEach(cleanup);
 const renderResponseMessages = (): any => {
@@ -21,11 +22,14 @@ const renderResponseMessages = (): any => {
     sampleHeaders: []
   };
 
+  const authToken = {pending: false, token: false };
+  const graphExplorerMode = Mode.Complete
+
   const dispatch = jest.fn();
 
   return render(
     <div>
-      {responseMessages(graphResponse, sampleQuery, dispatch)}
+      {responseMessages(graphResponse, sampleQuery, authToken, graphExplorerMode, dispatch)}
     </div>
   )
 }

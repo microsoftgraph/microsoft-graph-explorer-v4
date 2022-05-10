@@ -3,7 +3,6 @@ import {
   Callout,
   DefaultButton,
   getTheme,
-  IContextualMenuItem,
   IOverlayProps,
   IPersonaSharedProps,
   Label,

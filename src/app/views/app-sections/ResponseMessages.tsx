@@ -1,19 +1,27 @@
 import { Link, MessageBar, MessageBarType } from '@fluentui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { IAuthenticateResult } from '../../../types/authentication';
+import { Mode } from '../../../types/enums';
 import { IGraphResponse } from '../../../types/query-response';
 
 import { IQuery } from '../../../types/query-runner';
 import { runQuery } from '../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { MOZILLA_CORS_DOCUMENTATION_LINK } from '../../services/graph-constants';
+import { translateMessage } from '../../utils/translate-messages';
 
 interface ODataLink {
   link: string;
   name: string;
 }
 
-export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQuery, dispatch: Function) {
+export function responseMessages(
+  graphResponse: IGraphResponse,
+  sampleQuery: IQuery,
+  authToken: IAuthenticateResult,
+  graphExplorerMode: Mode,
+  dispatch: Function) {
 
   function getOdataLinkFromResponseBody(responseBody: any): ODataLink | null {
     const odataLinks = ['nextLink', 'deltaLink'];
@@ -30,7 +38,8 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
     }
     return data;
   }
-
+  const [displayMessage, setDisplayMessage] = useState(true);
+  const tokenPresent = !!authToken.token;
   const { body } = graphResponse;
   const odataLink = getOdataLinkFromResponseBody(body);
 
@@ -78,6 +87,23 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
           </Link>.
         </MessageBar>
       </div>
+    );
+  }
+
+  if(body && !tokenPresent && displayMessage && graphExplorerMode === Mode.Complete) {
+    return (
+      <>
+        <br />
+        <MessageBar
+          messageBarType={MessageBarType.warning}
+          isMultiline={true}
+          onDismiss={() => setDisplayMessage(false)}
+          dismissButtonAriaLabel={translateMessage('Close')}
+        >
+          <FormattedMessage id='Using demo tenant' />{' '}
+          <FormattedMessage id='To access your own data:' />
+        </MessageBar>
+      </>
     );
   }
 }
