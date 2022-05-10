@@ -41,7 +41,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
     const customSurvey: OfficeBrowserFeedback.ICustomSurvey = {
       campaignId: getCampaignId().toString(),
       commentQuestion: translateMessage('Comment question'),
-      isZeroBased: true,
+      isZeroBased: false,
       promptQuestion: translateMessage('Prompt question'),
       promptNoButtonText: translateMessage('No'),
       promptYesButtonText: translateMessage('Yes'),

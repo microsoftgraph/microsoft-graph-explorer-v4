@@ -56,6 +56,7 @@ const CampaignDefinitions: object[] = [{
         NoLabel: 'Prompt_NoLabel'
       },
       Rating: {
+        IsZeroBased: true,
         Question: 'Graph_Explorer_Rating_Question',
         RatingValuesAscending: [
           'Rating_Values_0',
