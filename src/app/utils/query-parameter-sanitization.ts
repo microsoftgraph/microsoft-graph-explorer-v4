@@ -6,7 +6,8 @@ const QUERY_FUNCTIONS = [
   'contains',
   'substring',
   'indexof',
-  'concat'
+  'concat',
+  'isof'
 ];
 const ARITHMETIC_OPERATORS = ['add', 'sub', 'mul', 'div', 'divby', 'mod'];
 const COMPARISON_OPERATORS = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'];
@@ -22,8 +23,7 @@ const MEDIA_TYPE_REGEX = /^(([a-z]+\/)?\w[\w+-.]*)$/i;
 // Matches the format key=value
 const KEY_VALUE_REGEX = /^[a-z]+=[a-z]+$/i;
 // Matches property name patterns e.g. displayName or from/emailAddress/address or microsoft.graph.itemAttachment/item
-const PROPERTY_NAME_REGEX =
-  /^((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)$/i;
+const PROPERTY_NAME_REGEX = /^[a-z]+(.[a-z]+)*[a-z]+(\/[a-z]+)*$/i;
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const QUOTED_TEXT_REGEX = /^["']([^"]*)['"]$/;
 // Matches segments of $filter query option values e.g. isRead eq false will match isRead, eq, false
@@ -54,7 +54,7 @@ function isKeyValuePair(str: string): boolean {
   return KEY_VALUE_REGEX.test(str);
 }
 
-function isPropertyName(str: string): boolean {
+export function isPropertyName(str: string): boolean {
   return PROPERTY_NAME_REGEX.test(str);
 }
 
@@ -222,7 +222,7 @@ function sanitizeOrderByQueryOptionValue(queryOptionValue: string): string {
 
     // Check if sort direction has been included
     if (expressionParts.length > 1) {
-      let sortDirection = expressionParts[1].trim();
+      let sortDirection = expressionParts[1].trim().toLowerCase();
       if (sortDirection) {
         if (sortDirection !== 'asc' && sortDirection !== 'desc') {
           sortDirection = '<unexpected-value>';
@@ -384,7 +384,7 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
     if (LAMBDA_OPERATORS.includes(lambdaOperator)) {
       propertyName = propertyName.substring(0, propertyName.length - 4);
       if (!isPropertyName(propertyName)) {
-        propertyName = '<property-name>';
+        propertyName = '<property>';
       }
       let textWithinBrackets = segment
         .substring(openingBracketIndex + 1, segment.length - 1)

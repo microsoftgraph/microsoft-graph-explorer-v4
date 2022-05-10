@@ -1,4 +1,8 @@
-import { isAllAlpha, sanitizeQueryParameter } from './query-parameter-sanitization';
+import {
+  isAllAlpha,
+  isPropertyName,
+  sanitizeQueryParameter
+} from './query-parameter-sanitization';
 
 describe('isAllAlpha should ', () => {
   const list = [
@@ -8,10 +12,38 @@ describe('isAllAlpha should ', () => {
     { key: '1a1', isAllAlphabetic: false }
   ];
 
-  list.forEach(element => {
+  list.forEach((element) => {
     it(`return ${element.isAllAlphabetic} for ${element.key}`, () => {
       const key = isAllAlpha(element.key);
       expect(key).toBe(element.isAllAlphabetic);
+    });
+  });
+});
+
+describe('isPropertyOrEntityName should', () => {
+  const list = [
+    { key: 'userPrincipalName', isPropertyOrEntityName: true },
+    { key: 'microsoft.graph.user', isPropertyOrEntityName: true },
+    {
+      key: 'microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry',
+      isPropertyOrEntityName: true
+    },
+    {
+      key: 'microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable',
+      isPropertyOrEntityName: true
+    },
+    {
+      key: 'from/emailAddress/address',
+      isPropertyOrEntityName: true
+    },
+    { key: '1234surname', isPropertyOrEntityName: false },
+    { key: 'from/', isPropertyOrEntityName: false }
+  ];
+
+  list.forEach((element) => {
+    it(`return ${element.isPropertyOrEntityName} for ${element.key}`, () => {
+      const key = isPropertyName(element.key);
+      expect(key).toBe(element.isPropertyOrEntityName);
     });
   });
 });
