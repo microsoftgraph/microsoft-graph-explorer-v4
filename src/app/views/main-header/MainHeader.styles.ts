@@ -1,12 +1,12 @@
 import { ITheme } from '@fluentui/react';
 
-export const mainHeaderStyles = (theme: ITheme, props?: any) => {
+export const mainHeaderStyles = (theme: ITheme) => {
   return {
     rootStyles: {
       root: {
         background: theme.palette.neutralLighter,
         height: 50,
-        marginBottom: props && props.token ? '0px' : '-9px'
+        marginBottom: '9px'
       }
     },
     authenticationItemStyles: {

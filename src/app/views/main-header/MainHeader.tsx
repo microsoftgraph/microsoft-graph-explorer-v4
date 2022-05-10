@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  DefaultButton,
   FontSizes,
   FontWeights,
   getId,
@@ -7,8 +8,6 @@ import {
   IconButton,
   IStackTokens,
   Label,
-  MessageBar,
-  MessageBarType,
   Stack,
   TooltipHost
 } from '@fluentui/react';
@@ -19,11 +18,8 @@ import { FeedbackButton } from '../app-sections/FeedbackButton';
 import { Authentication } from '../authentication';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../types/root';
-import { Mode } from '../../../types/enums';
 import { mainHeaderStyles } from './MainHeader.styles';
-import { useState } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
-
 
 interface MainHeaderProps {
   minimised: boolean;
@@ -37,33 +33,14 @@ const itemAlignmentsStackTokens: IStackTokens = {
 };
 
 export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: MainHeaderProps) => {
-  const { authToken, graphExplorerMode, profile } = useSelector(
+  const { profile } = useSelector(
     (state: IRootState) => state
   );
-  const [displayMessage, setDisplayMessage] = useState(true);
-  const tokenPresent = !!authToken.token;
   const minimised = props.minimised;
   const currentTheme = getTheme();
-  const itemAlignmentStackStyles = mainHeaderStyles(currentTheme, authToken).rootStyles;
+  const itemAlignmentStackStyles = mainHeaderStyles(currentTheme).rootStyles;
   const personaItemsStyles = mainHeaderStyles(currentTheme).authenticationItemStyles;
   const feedbackAdjustmentStyles = mainHeaderStyles(currentTheme).feedbackIconAdjustmentStyles;
-
-  const showUnAuthenticatedText = (): React.ReactNode => {
-    return (
-      <>
-        <br />
-        <MessageBar
-          messageBarType={MessageBarType.warning}
-          isMultiline={true}
-          onDismiss={() => setDisplayMessage(false)}
-          dismissButtonAriaLabel={translateMessage('Close')}
-        >
-          <FormattedMessage id='Using demo tenant' />{' '}
-          <FormattedMessage id='To access your own data:' />
-        </MessageBar>
-      </>
-    );
-  };
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -96,19 +73,28 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         </Stack>
 
         <Stack horizontal styles={personaItemsStyles}>
-          <Label> {profile?.tenant} </Label>
-          <span style={feedbackAdjustmentStyles}><FeedbackButton /></span>
+          {!profile &&
+            <TooltipHost
+              content={
+                <>
+                  <FormattedMessage id='Using demo tenant' />{' '}
+                  <FormattedMessage id='To access your own data:' />
+                </>}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+            >
+              <DefaultButton text={translateMessage('Sample Tenant')} checked={true} style={{border: 'none'}}/>
+            </TooltipHost>
+          }
+          {profile &&
+            <DefaultButton text={`${profile.tenant} Tenant`} checked={true} style={{border: 'none', cursor: 'default'}}
+            />
+          }
+          <span style={feedbackAdjustmentStyles}> <FeedbackButton /> </span>
           <Settings />
           <Authentication />
         </Stack>
-
-      </Stack>
-      <Stack style={{marginBottom:'7px'}}>
-        {!tokenPresent && displayMessage &&
-            graphExplorerMode === Mode.Complete &&
-            showUnAuthenticatedText()}
       </Stack>
     </Stack>
   );
 };
-

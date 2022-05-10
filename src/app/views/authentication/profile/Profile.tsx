@@ -3,7 +3,6 @@ import {
   Callout,
   DefaultButton,
   getTheme,
-  IContextualMenuItem,
   IOverlayProps,
   IPersonaSharedProps,
   Label,
@@ -217,11 +216,11 @@ const Profile = (props: any) => {
             <ActionButton key={'view-all-permissions'} onClick={() => changePanelState()}>
               {translateMessage('view all permissions')}
             </ActionButton>
-            <ActionButton key={'sign-out'} onClick={() => handleSignOut()}>
-              {translateMessage('sign out')}
-            </ActionButton>
             <ActionButton key={'sign-other-account'} onClick={() => handleSignInOther()}>
               {translateMessage('sign in other account')}
+            </ActionButton>
+            <ActionButton key={'sign-out'} onClick={() => handleSignOut()}>
+              {translateMessage('sign out')}
             </ActionButton>
           </Stack>
         </Callout>

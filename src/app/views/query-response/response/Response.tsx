@@ -9,7 +9,7 @@ import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimens
 import ResponseDisplay from './ResponseDisplay';
 
 const Response = () => {
-  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } =
+  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery, authToken, graphExplorerMode } =
     useSelector((state: IRootState) => state);
   const { body, headers } = graphResponse;
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const Response = () => {
   const contentType = getContentType(headers);
   return (
     <div style={{ display: 'block' }}>
-      {responseMessages(graphResponse, sampleQuery, dispatch)}
+      {responseMessages(graphResponse, sampleQuery, authToken, graphExplorerMode, dispatch)}
       {!contentDownloadUrl && !throwsCorsError && headers &&
         <ResponseDisplay
           contentType={contentType}
