@@ -21,7 +21,6 @@ import { IRootState } from '../../../types/root';
 import { mainHeaderStyles } from './MainHeader.styles';
 import { translateMessage } from '../../utils/translate-messages';
 
-
 interface MainHeaderProps {
   minimised: boolean;
   toggleSidebar: Function;
@@ -88,7 +87,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
             </TooltipHost>
             }
             {profile &&
-            <DefaultButton text={`${profile.tenant} Tenant`} checked={true} style={{border: 'none'}}/>
+            <DefaultButton text={`${profile.tenant} Tenant`} checked={true} style={{border: 'none', cursor: 'default'}}
+            />
             }
             <FeedbackButton />
             <Settings />
@@ -96,13 +96,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           </span>
           <span style={itemStyles}></span>
         </Stack>
-
       </Stack>
-      {/* <Stack style={{marginBottom:'7px'}}>
-        {!tokenPresent && displayMessage &&
-            graphExplorerMode === Mode.Complete &&
-            showUnAuthenticatedText()}
-      </Stack> */}
     </Stack>
   );
 };
