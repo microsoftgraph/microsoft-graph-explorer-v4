@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  DefaultButton,
   FontSizes,
   FontWeights,
   getId,
@@ -96,7 +97,22 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
 
         <Stack >
           <span style={itemStyles}>
-            <Label>{profile?.tenant}</Label>
+            {!profile &&
+            <TooltipHost
+              content={
+                <>
+                  <FormattedMessage id='Using demo tenant' />{' '}
+                  <FormattedMessage id='To access your own data:' />
+                </>}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+            >
+              <DefaultButton text={translateMessage('Sample Tenant')} checked={true} style={{border: 'none'}}/>
+            </TooltipHost>
+            }
+            {profile &&
+            <DefaultButton text={`${profile.tenant} Tenant`} checked={true} style={{border: 'none'}}/>
+            }
             <FeedbackButton />
             <Settings />
             <Authentication />
