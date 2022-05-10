@@ -453,7 +453,7 @@ class App extends Component<IAppProps, IAppState> {
                 }}
                 style={!sidebarProperties.showSidebar && !mobileScreen ? { marginLeft: '8px', flex: 1 } : {flex: 1}}
               >
-                <div style={{ marginBottom: 8 }} >
+                <div style={{ marginBottom: 8, marginTop: 10 }} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
 

@@ -92,8 +92,7 @@ export function responseMessages(
 
   if(body && !tokenPresent && displayMessage && graphExplorerMode === Mode.Complete) {
     return (
-      <>
-        <br />
+      <div>
         <MessageBar
           messageBarType={MessageBarType.warning}
           isMultiline={true}
@@ -103,7 +102,7 @@ export function responseMessages(
           <FormattedMessage id='Using demo tenant' />{' '}
           <FormattedMessage id='To access your own data:' />
         </MessageBar>
-      </>
+      </div>
     );
   }
 }
