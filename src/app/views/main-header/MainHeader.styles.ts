@@ -9,7 +9,7 @@ export const mainHeaderStyles = (theme: ITheme) => {
         marginBottom: '9px'
       }
     },
-    authenticationItemStyles: {
+    rightItemsStyles: {
       root: {
         alignItems: 'center'
       }

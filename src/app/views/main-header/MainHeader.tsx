@@ -39,8 +39,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   const minimised = props.minimised;
   const currentTheme = getTheme();
   const itemAlignmentStackStyles = mainHeaderStyles(currentTheme).rootStyles;
-  const personaItemsStyles = mainHeaderStyles(currentTheme).authenticationItemStyles;
-  const feedbackAdjustmentStyles = mainHeaderStyles(currentTheme).feedbackIconAdjustmentStyles;
+  const rightItemsStyles = mainHeaderStyles(currentTheme).rightItemsStyles;
+  const feedbackIconAdjustmentStyles = mainHeaderStyles(currentTheme).feedbackIconAdjustmentStyles;
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -72,7 +72,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           </Label>
         </Stack>
 
-        <Stack horizontal styles={personaItemsStyles}>
+        <Stack horizontal styles={rightItemsStyles}>
           {!profile &&
             <TooltipHost
               content={
@@ -90,7 +90,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
             <DefaultButton text={`${profile.tenant} Tenant`} checked={true} style={{border: 'none', cursor: 'default'}}
             />
           }
-          <span style={feedbackAdjustmentStyles}> <FeedbackButton /> </span>
+          <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
           <Settings />
           <Authentication />
         </Stack>
