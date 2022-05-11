@@ -18,6 +18,11 @@ export const mainHeaderStyles = (theme: ITheme) => {
       position: 'relative' as 'relative',
       right: '-6px',
       top: '4px'
+    },
+    tenantStyles: {
+      height: 50,
+      border: 'none',
+      cursor: 'default'
     }
   }
 }

@@ -6,7 +6,6 @@ import {
   IOverlayProps,
   IPersonaSharedProps,
   Label,
-  Link,
   mergeStyleSets,
   Panel,
   PanelType,
@@ -22,7 +21,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useId } from '@fluentui/react-hooks';
 
-import { geLocale } from '../../../../appLocale';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IRootState } from '../../../../types/root';
 import { signOut } from '../../../services/actions/auth-action-creators';
@@ -35,12 +33,6 @@ import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
 import { authenticationWrapper } from '../../../../modules/authentication';
-
-const trackOfficeDevProgramLinkClickEvent = () => {
-  telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-    ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
-  });
-};
 
 const getInitials = (name: string) => {
   let initials = '';
@@ -73,7 +65,6 @@ const Profile = (props: any) => {
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
   const theme = getTheme();
-  const linkStyles = profileStyles(theme).linkStyles
   const personaStyleToken = profileStyles(theme).personaStyleToken;
   const profileSpinnerStyles = profileStyles(theme).profileSpinnerStyles;
 
@@ -204,15 +195,6 @@ const Profile = (props: any) => {
           {fullPersona}
           <hr />
           <Stack>
-            <Link
-              key='office-dev-program'
-              href={`https://developer.microsoft.com/${geLocale}/office/dev-program`}
-              target="_blank"
-              onClick={() => trackOfficeDevProgramLinkClickEvent()}
-              styles={linkStyles}
-            >
-              {translateMessage('Office Dev Program')}
-            </Link>
             <ActionButton key={'view-all-permissions'} onClick={() => changePanelState()}>
               {translateMessage('view all permissions')}
             </ActionButton>

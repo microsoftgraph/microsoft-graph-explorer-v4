@@ -16,6 +16,7 @@ import { FormattedMessage } from 'react-intl';
 import { Settings } from '../settings';
 import { FeedbackButton } from '../app-sections/FeedbackButton';
 import { Authentication } from '../authentication';
+import {ThemeSetting} from './ThemeSetting';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../types/root';
 import { mainHeaderStyles } from './MainHeader.styles';
@@ -39,7 +40,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   const minimised = props.minimised;
   const currentTheme = getTheme();
   const { rootStyles : itemAlignmentStackStyles, rightItemsStyles,
-    feedbackIconAdjustmentStyles } = mainHeaderStyles(currentTheme);
+    feedbackIconAdjustmentStyles, tenantStyles } = mainHeaderStyles(currentTheme);
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -82,13 +83,16 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               id={getId()}
               calloutProps={{ gapSpace: 0 }}
             >
-              <DefaultButton text={translateMessage('Sample Tenant')} checked={true} style={{border: 'none'}}/>
+              <DefaultButton text={translateMessage('Tenant: Sample')} checked={true}
+                style={tenantStyles}/>
             </TooltipHost>
           }
           {profile &&
-            <DefaultButton text={`${profile.tenant} Tenant`} checked={true} style={{border: 'none', cursor: 'default'}}
+            <DefaultButton text={`Tenant: ${profile.tenant}`} checked={true}
+              style={tenantStyles}
             />
           }
+          <ThemeSetting />
           <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
           <Settings />
           <Authentication />
