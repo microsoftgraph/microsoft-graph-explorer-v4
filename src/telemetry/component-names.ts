@@ -54,18 +54,21 @@ export const MICROSOFT_APIS_TERMS_OF_USE_LINK = 'Microsoft APIs terms of use lin
 export const MICROSOFT_PRIVACY_STATEMENT_LINK = 'Microsoft privacy statement link';
 export const MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK = 'Microsoft graph API reference docs link';
 export const CODE_SNIPPET_LANGUAGES = {
-  CSharp: 'C# SDK link',
-  JavaScript: 'JavaScript SDK link',
-  Java: 'Java snippet SDK link',
-  Go: 'Go SDK link',
-  Powershell: 'PowerShell SDK link'
-}
-export const CODE_SNIPPET_DOCS_LINKS = {
-  CSharp: 'C# snippet docs link',
-  JavaScript: 'JavaScript snippet docs link',
-  Java: 'Java snippet docs link',
-  Go: 'Go snippet docs link',
-  Powershell: 'PowerShell snippet docs link'
+  CSharp: {
+    sdk: 'C# SDK link', doc: 'C# snippet docs link'
+  },
+  JavaScript: {
+    sdk: 'JavaScript SDK link', doc: 'JavaScript snippet docs link'
+  },
+  Java: {
+    sdk: 'Java snippet SDK link', doc: 'Java snippet docs link'
+  },
+  Go: {
+    sdk: 'Go snippet SDK link', doc: 'Go snippet docs link'
+  },
+  Powershell: {
+    sdk: 'PowerShell snippet SDK link', doc: 'PowerShell snippet docs link'
+  }
 }
 
 // Actions
