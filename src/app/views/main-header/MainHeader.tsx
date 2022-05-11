@@ -33,13 +33,13 @@ const itemAlignmentsStackTokens: IStackTokens = {
 };
 
 export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: MainHeaderProps) => {
-  const { authToken, profile } = useSelector(
+  const { profile } = useSelector(
     (state: IRootState) => state
   );
   const minimised = props.minimised;
   const currentTheme = getTheme();
-  const itemAlignmentStackStyles = mainHeaderStyles(currentTheme, authToken).rootStyles;
-  const itemStyles = mainHeaderStyles(currentTheme).authenticationItemStyles;
+  const { rootStyles : itemAlignmentStackStyles, rightItemsStyles,
+    feedbackIconAdjustmentStyles } = mainHeaderStyles(currentTheme);
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -71,9 +71,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           </Label>
         </Stack>
 
-        <Stack >
-          <span style={itemStyles}>
-            {!profile &&
+        <Stack horizontal styles={rightItemsStyles}>
+          {!profile &&
             <TooltipHost
               content={
                 <>
@@ -85,19 +84,16 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
             >
               <DefaultButton text={translateMessage('Sample Tenant')} checked={true} style={{border: 'none'}}/>
             </TooltipHost>
-            }
-            {profile &&
+          }
+          {profile &&
             <DefaultButton text={`${profile.tenant} Tenant`} checked={true} style={{border: 'none', cursor: 'default'}}
             />
-            }
-            <FeedbackButton />
-            <Settings />
-            <Authentication />
-          </span>
-          <span style={itemStyles}></span>
+          }
+          <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
+          <Settings />
+          <Authentication />
         </Stack>
       </Stack>
     </Stack>
   );
 };
-

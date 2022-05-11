@@ -75,7 +75,7 @@ const Authentication = (props: any) => {
       <div className={classes.spinnerContainer}>
         <Spinner className={classes.spinner} size={SpinnerSize.medium} />
         {!minimised && (
-          <Label>
+          <Label styles={{ root: { position: 'relative', top: '8px'}}} >
             <FormattedMessage
               id={`Signing you ${loginInProgress ? 'in' : 'out'}...`}
             />
