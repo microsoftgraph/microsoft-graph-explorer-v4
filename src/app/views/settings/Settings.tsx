@@ -134,7 +134,7 @@ function Settings(props: ISettingsProps) {
           role='button'
           styles={{
             label: { marginBottom: -20 },
-            menuIcon: { fontSize: 20 }
+            menuIcon: { fontSize: 15 }
           }}
           menuIconProps={{ iconName: 'Help' }}
           menuProps={menuProperties}

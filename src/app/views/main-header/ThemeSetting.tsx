@@ -35,8 +35,8 @@ export const ThemeSetting: React.FunctionComponent = () => {
       <ActionButton
         ariaLabel={translateMessage('change theme')}
         key= 'change-theme'
-        iconProps= {{iconName: 'Brightness', style:{fontSize: 20}}}
-        text={'Theme'}
+        iconProps= {{iconName: 'Brightness', style:{fontSize:15 }}}
+        //text={'Theme'}
         onClick={ () => toggleThemeChooserDialogState()}
       />
       <div>

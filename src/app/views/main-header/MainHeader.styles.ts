@@ -11,8 +11,7 @@ export const mainHeaderStyles = (theme: ITheme) => {
     },
     rightItemsStyles: {
       root: {
-        alignItems: 'center',
-        paddingLeft: '5px'
+        alignItems: 'center'
       }
     },
     feedbackIconAdjustmentStyles: {
@@ -23,7 +22,8 @@ export const mainHeaderStyles = (theme: ITheme) => {
     tenantStyles: {
       height: 50,
       border: 'none',
-      cursor: 'default'
+      cursor: 'default',
+      background: theme.palette.neutralLighter
     }
   }
 }

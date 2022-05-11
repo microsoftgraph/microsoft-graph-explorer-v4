@@ -73,7 +73,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           </Label>
         </Stack>
 
-        <Stack horizontal styles={rightItemsStyles} tokens={itemAlignmentsStackTokens}>
+        <Stack horizontal styles={rightItemsStyles} >
           <ThemeSetting />
           <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
           <Settings />
@@ -87,7 +87,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               id={getId()}
               calloutProps={{ gapSpace: 0 }}
             >
-              <DefaultButton text={translateMessage('Tenant: Sample')} checked={true}
+              <DefaultButton text={translateMessage('Tenant: Sample')}
                 style={tenantStyles}/>
             </TooltipHost>
           }
