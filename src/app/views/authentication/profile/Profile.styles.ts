@@ -6,7 +6,7 @@ export const profileStyles = (theme: ITheme) => {
       root: {
         marginLeft: '9px',
         height: '24px',
-        color: `${theme.palette.whiteTranslucent40} !important`,
+        color: `${theme.palette.black} !important`,
         '&:hover': { textDecoration: 'none', color: `${theme.palette.themeDarkAlt} !important` }
       }
     },

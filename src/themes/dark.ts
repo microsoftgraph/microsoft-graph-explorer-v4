@@ -24,7 +24,6 @@ export const dark = {
     neutralDark: '#fefefe',
     black: '#ffffff',
     white: '#070707',
-    whiteTranslucent40: '#f1f1f1',
     blueMid: '#6cb8f6',
     green: '#00a100'
   },
