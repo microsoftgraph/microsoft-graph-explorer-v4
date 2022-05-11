@@ -38,9 +38,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   );
   const minimised = props.minimised;
   const currentTheme = getTheme();
-  const itemAlignmentStackStyles = mainHeaderStyles(currentTheme).rootStyles;
-  const rightItemsStyles = mainHeaderStyles(currentTheme).rightItemsStyles;
-  const feedbackIconAdjustmentStyles = mainHeaderStyles(currentTheme).feedbackIconAdjustmentStyles;
+  const { rootStyles : itemAlignmentStackStyles, rightItemsStyles,
+    feedbackIconAdjustmentStyles } = mainHeaderStyles(currentTheme);
 
   return (
     <Stack tokens={sectionStackTokens}>
