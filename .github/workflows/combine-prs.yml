@@ -19,6 +19,21 @@ on:
 
 jobs:
   # This workflow contains a single job called "combine-prs"
+  merge-dev-dependabot-upgrades:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: Set Git config
+          run: |
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+
+        - name: Merge dev to dependabot-upgrades
+          run: |
+            git fetch --all
+            git pull
+            git merge origin/main --allow-unrelated-histories -m "Auto-merge main to dependabot-upgrades"
+            git push
   combine-prs:
     runs-on: ubuntu-latest
     steps:
@@ -86,7 +101,7 @@ jobs:
           git branch $COMBINE_BRANCH_NAME $basebranch
           git checkout $COMBINE_BRANCH_NAME
           git pull origin $sourcebranches --no-edit
-          git push origin $COMBINE_BRANCH_NAME
+          git push -f origin $COMBINE_BRANCH_NAME
       # Creates a PR with the new combined branch
       - uses: actions/github-script@v3
         name: Create Combined Pull Request
