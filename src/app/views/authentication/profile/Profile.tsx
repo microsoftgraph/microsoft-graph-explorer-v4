@@ -75,6 +75,7 @@ const Profile = (props: any) => {
   const theme = getTheme();
   const linkStyles = profileStyles(theme).linkStyles
   const personaStyleToken = profileStyles(theme).personaStyleToken;
+  const profileSpinnerStyles = profileStyles(theme).profileSpinnerStyles;
 
 
   useEffect(() => {
@@ -85,7 +86,7 @@ const Profile = (props: any) => {
 
 
   if (!profile) {
-    return (<Spinner size={SpinnerSize.medium} />);
+    return (<Spinner size={SpinnerSize.medium} styles={profileSpinnerStyles} />);
   }
 
   const handleSignOut = () => {
