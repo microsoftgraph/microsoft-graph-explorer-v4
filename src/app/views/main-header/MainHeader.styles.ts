@@ -11,7 +11,8 @@ export const mainHeaderStyles = (theme: ITheme) => {
     },
     rightItemsStyles: {
       root: {
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingLeft: '5px'
       }
     },
     feedbackIconAdjustmentStyles: {

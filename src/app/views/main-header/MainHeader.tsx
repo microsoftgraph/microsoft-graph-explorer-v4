@@ -50,7 +50,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         styles={itemAlignmentStackStyles}
         tokens={itemAlignmentsStackTokens}>
 
-        <Stack horizontal>
+        <Stack horizontal tokens={{childrenGap:5}}>
           <TooltipHost
             content={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
             id={getId()}
@@ -62,7 +62,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               }
             }}>
             <IconButton
-              iconProps={{ iconName: 'GlobalNavButton' }}
+              iconProps={{ iconName: !minimised ? 'ClosePaneMirrored': 'OpenPaneMirrored',
+                style: { fontSize: '20px'} }}
               ariaLabel={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
               onClick={() => props.toggleSidebar()} />
           </TooltipHost>
@@ -72,7 +73,10 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           </Label>
         </Stack>
 
-        <Stack horizontal styles={rightItemsStyles}>
+        <Stack horizontal styles={rightItemsStyles} tokens={itemAlignmentsStackTokens}>
+          <ThemeSetting />
+          <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
+          <Settings />
           {!profile &&
             <TooltipHost
               content={
@@ -92,9 +96,6 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               style={tenantStyles}
             />
           }
-          <ThemeSetting />
-          <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
-          <Settings />
           <Authentication />
         </Stack>
       </Stack>
