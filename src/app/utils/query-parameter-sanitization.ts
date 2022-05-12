@@ -23,13 +23,14 @@ const MEDIA_TYPE_REGEX = /^(([a-z]+\/)?\w[\w+-.]*)$/i;
 // Matches the format key=value
 const KEY_VALUE_REGEX = /^[a-z]+=[a-z]+$/i;
 // Matches property name patterns e.g. displayName or from/emailAddress/address or microsoft.graph.itemAttachment/item
-const PROPERTY_NAME_REGEX = /^[a-z]+(.[a-z]+)*[a-z]+(\/[a-z]+)*$/i;
+const PROPERTY_NAME_REGEX =
+  /^(?=([a-z]+))\1((?=(.[a-z]+))\3)*((?=(\/[a-z]+))\5)*$/i;
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const QUOTED_TEXT_REGEX = /^["']([^"]*)['"]$/;
 // Matches segments of $filter query option values e.g. isRead eq false will match isRead, eq, false
 // eslint-disable-next-line max-len
 const FILTER_SEGMENT_REGEX =
-  /(((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)\(.*?\))|("[^\"]+")|('[^\']+')|\(.*?\)|\S+/g;
+  /(((((?=([a-z]+))\5((?=(.[a-z]+))\7)*)(\/?\b[a-z]+\b)+)|[a-z]+)\(.*?\))|("[^\"]+")|('[^\']+')|\(.*?\)|[^\s]+/gi;
 // Matches segments of $search query option e.g.
 // "description:One" AND ("displayName:Video" OR "displayName:Drive") will match
 // "description:One", AND, ("displayName:Video" OR "displayName:Drive")
@@ -424,8 +425,8 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
           commaIndex > 0
             ? commaIndex
             : closingBracketIndex > 0
-            ? closingBracketIndex
-            : segment.length;
+              ? closingBracketIndex
+              : segment.length;
         propertyName = segment
           .substring(openingBracketIndex + 1, endIndex)
           .trim();

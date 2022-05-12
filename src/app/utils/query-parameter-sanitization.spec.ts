@@ -1,8 +1,4 @@
-import {
-  isAllAlpha,
-  isPropertyName,
-  sanitizeQueryParameter
-} from './query-parameter-sanitization';
+import { isAllAlpha, isPropertyName, sanitizeQueryParameter } from './query-parameter-sanitization';
 
 describe('isAllAlpha should ', () => {
   const list = [
