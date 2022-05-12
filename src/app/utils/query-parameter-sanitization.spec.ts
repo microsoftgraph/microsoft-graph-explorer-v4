@@ -29,6 +29,10 @@ describe('isPropertyOrEntityName should', () => {
       isPropertyOrEntityName: true
     },
     {
+      key: 'microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable/',
+      isPropertyOrEntityName: false
+    },
+    {
       key: 'from/emailAddress/address',
       isPropertyOrEntityName: true
     },
@@ -224,6 +228,11 @@ describe('Sanitize Query Parameters should', () => {
       check: 'returns sanitized value with complex `all` collection operator for $filter query option',
       queryParam: '$filter=rooms/all(room: room/from/address eq \'street\'  and room/baseRate lt 100.0)',
       sanitizedQueryParam: '$filter=rooms/all(room: room/from/address eq <value> and room/baseRate lt <value>)'
+    },
+    {
+      check: 'returns sanitized value for complex $filter query option value with potential catastrophic backtracking',
+      queryParam: '$filter=isof(\'microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry\') and microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable eq true',
+      sanitizedQueryParam: '$filter=isof(<property>) and microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable eq <value>'
     },
 
     // $expand
