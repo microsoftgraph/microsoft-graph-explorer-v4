@@ -39,11 +39,6 @@ export function fetchUrlScopesSuccess(response: Object): IAction {
     response
   }
 }
-  return {
-    type: FETCH_URL_SCOPES_SUCCESS,
-    response
-  }
-}
 
 export function fetchScopesPending(type: string): any {
   return { type };

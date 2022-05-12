@@ -79,7 +79,7 @@ function Snippet(props: ISnippetProps) {
     const componentName = getLanguageComponentName(isDocumentationLink, componentNames.CODE_SNIPPET_LANGUAGES);
     telemetry.trackLinkClickEvent(e.currentTarget.href, componentName);
   }
-  
+
   const getLanguageComponentName = (isDocumentationLink: boolean, snippetComponentNames: object) : string => {
     const snippetComponentEntries = Object.entries(snippetComponentNames);
     const snippetLanguageEntry = snippetComponentEntries.find(
