@@ -4,6 +4,7 @@ import {
   QUERY_GRAPH_STATUS,
   FETCH_FULL_SCOPES_SUCCESS,
   FETCH_URL_SCOPES_PENDING
+
 } from '../../../app/services/redux-constants';
 
 import {
@@ -189,6 +190,7 @@ describe('tests permissions action creators', () => {
     // Assert
     expect(fullScopesAction).toEqual(expectedFullScopesAction);
     expect(urlScopesAction).toEqual(expectedUrlScopesAction)
+
   })
 
   it('returns valid scope type given a user profile or with null', () => {

@@ -15,6 +15,7 @@ import {
   FETCH_SCOPES_ERROR,
   FETCH_FULL_SCOPES_PENDING,
   FETCH_URL_SCOPES_PENDING,
+
   FETCH_FULL_SCOPES_SUCCESS,
   FETCH_URL_SCOPES_SUCCESS
 } from '../redux-constants';
@@ -33,6 +34,11 @@ export function fetchFullScopesSuccess(response: object): IAction {
 }
 
 export function fetchUrlScopesSuccess(response: Object): IAction {
+  return {
+    type: FETCH_URL_SCOPES_SUCCESS,
+    response
+  }
+}
   return {
     type: FETCH_URL_SCOPES_SUCCESS,
     response

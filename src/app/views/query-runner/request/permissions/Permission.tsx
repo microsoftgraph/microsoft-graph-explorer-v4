@@ -34,7 +34,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
   const tokenPresent = !!authToken.token;
   const dispatch = useDispatch();
   const panel = permissionProps?.panel;
-
+                             
   const classProps = {
     styles: permissionProps!.styles,
     theme: permissionProps!.theme
