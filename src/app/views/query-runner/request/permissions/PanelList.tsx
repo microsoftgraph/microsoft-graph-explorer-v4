@@ -70,7 +70,6 @@ const PanelList = ({ messages,
 
   const groups = generateGroupsFromList(permissionsList, 'groupName');
 
-
   const onRenderGroupHeader = (props: any): JSX.Element | null => {
     if (props) {
       return (
