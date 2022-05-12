@@ -39,10 +39,6 @@ const PanelList = ({ messages,
     return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
   }
 
-  const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
-    return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
-  }
-
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
   const { fullPermissions } = scopes.data;
   const [permissions, setPermissions] = useState(sortPermissions(fullPermissions));
