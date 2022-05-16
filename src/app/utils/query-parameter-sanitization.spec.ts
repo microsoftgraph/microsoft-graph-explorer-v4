@@ -231,8 +231,11 @@ describe('Sanitize Query Parameters should', () => {
     },
     {
       check: 'returns sanitized value for complex $filter query option value with potential catastrophic backtracking',
-      queryParam: '$filter=isof(\'microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry\') and microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable eq true',
-      sanitizedQueryParam: '$filter=isof(<property>) and microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable eq <value>'
+      queryParam:
+        `$filter=isof('microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry')
+          and microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable eq true`,
+      sanitizedQueryParam:
+       '$filter=isof(<property>) and microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable eq <value>'
     },
 
     // $expand
