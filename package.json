@@ -74,7 +74,8 @@
                 "test-ci": "node scripts/test.js --no-watch -- -f \"src/tests/accessibility/accessibility.spec.ts\" -t \"Graph Explorer accessibility\"",
                 "prebuild:prod": "standard-version",
                 "build:prod": "npm run build",
-                "bump": "standard-version --skip.tag --skip.changelog"
+                "bump": "standard-version --skip.tag --skip.changelog",
+                "preinstall": "npx npm-force-resolutions"
         },
         "eslintConfig": {
                 "extends": "react-app"
@@ -123,5 +124,8 @@
                 "reportPath": "reports",
                 "reportFile": "test-report.xml",
                 "indent": 4
+        },
+        "resolutions": {
+                "@types/react": "17.0.30"
         }
 }
