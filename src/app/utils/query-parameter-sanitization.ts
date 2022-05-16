@@ -22,9 +22,9 @@ const POSITIVE_INTEGER_REGEX = /^[1-9]\d*$/;
 const MEDIA_TYPE_REGEX = /^(([a-z]+\/)?\w[\w+-.]*)$/i;
 // Matches the format key=value
 const KEY_VALUE_REGEX = /^[a-z]+=[a-z]+$/i;
-// Matches property name patterns e.g. displayName or from/emailAddress/address or microsoft.graph.itemAttachment/item
-const PROPERTY_NAME_REGEX =
-  /^(?=([a-z]+))\1((?=(.[a-z]+))\3)*((?=(\/[a-z]+))\5)*$/i;
+// Matches property name patterns e.g. displayName or from/emailAddress/address
+// or microsoft.graph.itemAttachment or microsoft.graph.itemAttachment/item
+const PROPERTY_NAME_REGEX = /^[a-z]+((?=(\.[a-z]+))\2)*((?=(\/[a-z]+))\4)*$/i;
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const QUOTED_TEXT_REGEX = /^["']([^"]*)['"]$/;
 // Matches segments of $filter query option values e.g. isRead eq false will match isRead, eq, false
