@@ -1,6 +1,5 @@
 import { ITheme } from '@fluentui/react';
 import { IDimensions } from './dimensions';
-import { IQuery } from './query-runner';
 
 export interface IPermission {
   value: string;
@@ -12,18 +11,9 @@ export interface IPermission {
 export interface IPermissionProps {
   theme?: ITheme;
   styles?: object;
-  dimensions: IDimensions;
-  scopes: IScopes;
-  panel: boolean;
-  sample: IQuery[];
-  tokenPresent: boolean;
-  permissionsPanelOpen: boolean;
-  consentedScopes: string[];
-  setPermissions: Function;
-  actions?: {
-    fetchScopes: Function;
-    consentToScopes: Function;
-  }
+  dimensions?: IDimensions;
+  setPermissions?: Function;
+  panel?: boolean;
 }
 
 export interface IPermissionState {
@@ -41,7 +31,10 @@ export interface IPermissionsResponse {
 }
 
 export interface IScopes {
-  pending: boolean;
+  pending: {
+    isSpecificPermissions: boolean;
+    isFullPermissions: boolean;
+  };
   data: {
     specificPermissions: IPermission[];
     fullPermissions: IPermission[];

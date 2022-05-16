@@ -4,6 +4,7 @@ import {
   DetailsListLayoutMode,
   GroupHeader,
   IColumn,
+  IDetailsListCheckboxProps,
   Label,
   SearchBox,
   SelectionMode
@@ -32,7 +33,7 @@ interface IPanelList {
 
 const PanelList = ({ messages,
   columns, classes, selection,
-  renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) => {
+  renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) : JSX.Element => {
 
   const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
     return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
@@ -46,7 +47,7 @@ const PanelList = ({ messages,
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
-  permissions.forEach((perm: any) => {
+  permissions.forEach((perm: IPermission) => {
     const permission: any = { ...perm };
     const permissionValue = permission.value;
     const groupName = permissionValue.split('.')[0];
@@ -70,7 +71,7 @@ const PanelList = ({ messages,
   const groups = generateGroupsFromList(permissionsList, 'groupName');
 
 
-  const onRenderGroupHeader = (props: any): any => {
+  const onRenderGroupHeader = (props: any): JSX.Element | null => {
     if (props) {
       return (
         <GroupHeader  {...props} onRenderGroupHeaderCheckbox={renderCustomCheckbox} />
@@ -112,7 +113,7 @@ const PanelList = ({ messages,
         ariaLabelForSelectAllCheckbox={messages['Toggle selection for all items'] || 'Toggle selection for all items'}
         checkButtonAriaLabel={messages['Row checkbox'] || 'Row checkbox'}
         onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)}
-        onRenderCheckbox={(props: any) => renderCustomCheckbox(props)}
+        onRenderCheckbox={(props?: IDetailsListCheckboxProps) => renderCustomCheckbox(props)}
       />
       {permissions && permissions.length === 0 &&
         <Label style={{
