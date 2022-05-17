@@ -24,13 +24,13 @@ const MEDIA_TYPE_REGEX = /^(([a-z]+\/)?\w[\w+-.]*)$/i;
 const KEY_VALUE_REGEX = /^[a-z]+=[a-z]+$/i;
 // Matches property name patterns e.g. displayName or from/emailAddress/address
 // or microsoft.graph.itemAttachment or microsoft.graph.itemAttachment/item
-const PROPERTY_NAME_REGEX = /^[a-z]+((?=(\.[a-z]+))\2)*((?=(\/[a-z]+))\4)*$/i;
+const PROPERTY_NAME_REGEX = /^[a-z]+([\.|\/](?=([a-z]+))\2)*$/i;
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const QUOTED_TEXT_REGEX = /^["']([^"]*)['"]$/;
 // Matches segments of $filter query option values e.g. isRead eq false will match isRead, eq, false
 // eslint-disable-next-line max-len
 const FILTER_SEGMENT_REGEX =
-  /(((((?=([a-z]+))\5((?=(.[a-z]+))\7)*)(\/?\b[a-z]+\b)+)|[a-z]+)\(.*?\))|("[^\"]+")|('[^\']+')|\(.*?\)|[^\s]+/gi;
+  /[a-z]+([\/|\.](?=([a-z]+))\2)*\(.*?\)|\(.*?\)|[\S]+/gi;
 // Matches segments of $search query option e.g.
 // "description:One" AND ("displayName:Video" OR "displayName:Drive") will match
 // "description:One", AND, ("displayName:Video" OR "displayName:Drive")

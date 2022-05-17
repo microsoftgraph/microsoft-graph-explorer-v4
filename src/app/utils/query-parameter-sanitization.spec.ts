@@ -221,7 +221,7 @@ describe('Sanitize Query Parameters should', () => {
     },
     {
       check: 'returns sanitized value with `all` collection operator for $filter query option',
-      queryParam: '$filter=ratings/all(r: r ge 3 and r le 5)',
+      queryParam: '$filter=ratings/all(r:r ge 3 and r le 5)',
       sanitizedQueryParam: '$filter=ratings/all(r: r ge <value> and r le <value>)'
     },
     {
