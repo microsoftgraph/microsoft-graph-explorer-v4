@@ -1,4 +1,4 @@
-name: Lint and Build
+name: Lint, Build and Test
 
 on:
   workflow_dispatch:
@@ -13,37 +13,143 @@ env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
 jobs:
-  code-linting:
+  install:
+    name: Install node modules
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '12.x'
+
+      - name: Cache npm
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci --no-audit
+
+  code-linting:
+    name: Lint
+    needs: install
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of results
 
-    - name: Install Nodejs
-      uses: actions/setup-node@v2
+    - name: Set up Node
+      uses: actions/setup-node@v3
       with:
         node-version: '12.x'
 
-    - name: Install dependencies
-      run: npm install
+    - name: Cache node_modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          node_modules
+          packages/*/node_modules
+        key: modules-${{ hashFiles('package-lock.json') }}
 
-    - name: Run linter
+    - name: Lint
       run: npm run lint
 
-    - name: Build
-      run: npm run build
+  build:
+    name: Build packages
+    needs: install
+    runs-on: ubuntu-latest
 
-    - name: Run the tests
-      run: npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Fix code coverage paths
-      run: |
-        sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
-        sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '12.x'
 
-    - name: Run sonar cloud analysis
-      uses: SonarSource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Build
+        run: npm run build
+
+  test:
+    name: Test (${{ matrix.shard }})
+    needs: install
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ["1/2", "2/2"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '12.x'
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Test
+        run: npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter --maxWorkers 2 --shard ${{ matrix.shard }}
+
+  sonar-cloud:
+    name: Sonar cloud analysis
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '12.x'
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Run sonar cloud analysis
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
