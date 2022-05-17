@@ -123,11 +123,6 @@ jobs:
       - name: Test
         run: npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
 
-      - name: Fix code coverage paths
-        run: |
-          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
-          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
-
   sonar-cloud:
     name: Sonar cloud analysis
     needs: install
@@ -148,6 +143,11 @@ jobs:
             node_modules
             packages/*/node_modules
           key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Fix code coverage paths
+        run: |
+          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
+          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
 
       - name: Run sonar cloud analysis
         uses: SonarSource/sonarcloud-github-action@master
