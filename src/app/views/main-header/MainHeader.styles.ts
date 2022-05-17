@@ -31,7 +31,7 @@ export const mainHeaderStyles = (theme: ITheme) => {
         height: '50px',
         width: '50px',
         ':hover': {
-          background: `${theme.palette.neutralQuaternaryAlt} !important`
+          background: `${theme.palette.neutralLight} !important`
         }
       }
     }

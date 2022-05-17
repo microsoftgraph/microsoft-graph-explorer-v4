@@ -29,8 +29,8 @@ interface MainHeaderProps {
 const sectionStackTokens: IStackTokens = {
   childrenGap: 0 };
 const itemAlignmentsStackTokens: IStackTokens = {
-  childrenGap: 10,
-  padding: 10
+  childrenGap: 10
+
 };
 
 export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: MainHeaderProps) => {
@@ -50,7 +50,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         styles={itemAlignmentStackStyles}
         tokens={itemAlignmentsStackTokens}>
 
-        <Stack horizontal tokens={{childrenGap:5}}>
+        <Stack horizontal tokens={{childrenGap:5,padding: 10 }}>
           <TooltipHost
             content={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
             id={getId()}
@@ -74,9 +74,6 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         </Stack>
 
         <Stack horizontal styles={rightItemsStyles} >
-          <Settings />
-          <Help />
-          <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
           {!profile &&
             <TooltipHost
               content={
@@ -96,6 +93,9 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               style={tenantStyles}
             />
           }
+          <Settings />
+          <Help />
+          <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
           <Authentication />
         </Stack>
       </Stack>

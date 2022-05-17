@@ -23,7 +23,7 @@ export const FeedbackButton = () => {
       width: '50px',
       marginTop: '-8px',
       ':hover': {
-        background: `${currentTheme.palette.neutralQuaternaryAlt} !important`
+        background: `${currentTheme.palette.neutralLight} !important`
       }
     }
   }
@@ -51,7 +51,6 @@ export const FeedbackButton = () => {
           content={content}
           calloutProps={calloutProps}
           styles={hostStyles}
-          directionalHint={DirectionalHint.leftCenter}
         >
           <IconButton onClick={toggleSurvey}
             iconProps={feedbackIcon}
