@@ -99,13 +99,9 @@ jobs:
         run: npm run build
 
   test:
-    name: Test (${{ matrix.shard }})
+    name: Test
     needs: install
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        shard: ["1/2", "2/2"]
 
     steps:
       - name: Checkout repository
@@ -125,11 +121,11 @@ jobs:
           key: modules-${{ hashFiles('package-lock.json') }}
 
       - name: Test
-        run: npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter --maxWorkers 2 --shard ${{ matrix.shard }}
+        run: npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
 
   sonar-cloud:
     name: Sonar cloud analysis
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

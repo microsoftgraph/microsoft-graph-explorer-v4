@@ -21,9 +21,7 @@ module.exports = {
     crypto: require('crypto')
   },
   testEnvironment: 'jsdom',
-  testEnvironmentOptions: {
-    url: 'http://localhost'
-  },
+  testURL: 'http://localhost',
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
     '^.+\\.css$': '<rootDir>/config/jest/cssTransform.js',
