@@ -422,9 +422,6 @@ class App extends Component<IAppProps, IAppState> {
                 enable={{
                   right: true
                 }}
-                handleClasses={{
-                  right: classes.vResizeHandle
-                }}
                 bounds={'parent'}
                 size={{
                   width: sideWidth,
