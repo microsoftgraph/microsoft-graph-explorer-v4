@@ -13,12 +13,8 @@ const renderSettings = (args?: any) => {
   const messages = (messages_ as { [key: string]: object })['en-US'];
   const settingsProps: ISettingsProps = {
     actions: {
-      signOut: jest.fn(),
       changeTheme: jest.fn(),
       consentToScopes: jest.fn()
-    },
-    intl: {
-      message: messages
     }
   }
 

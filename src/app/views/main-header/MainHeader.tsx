@@ -16,7 +16,7 @@ import { FormattedMessage } from 'react-intl';
 import { Settings } from '../settings';
 import { FeedbackButton } from '../app-sections/FeedbackButton';
 import { Authentication } from '../authentication';
-import {ThemeSetting} from './ThemeSetting';
+import { Help } from './Help';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../types/root';
 import { mainHeaderStyles } from './MainHeader.styles';
@@ -74,9 +74,9 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         </Stack>
 
         <Stack horizontal styles={rightItemsStyles} >
-          <ThemeSetting />
-          <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
           <Settings />
+          <Help />
+          <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
           {!profile &&
             <TooltipHost
               content={

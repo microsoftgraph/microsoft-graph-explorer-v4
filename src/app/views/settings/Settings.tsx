@@ -1,13 +1,16 @@
 import {
-  ContextualMenuItemType,
+  ChoiceGroup,
+  DefaultButton,
+  Dialog,
+  DialogFooter,
+  DialogType,
   getId,
   IconButton,
   registerIcons,
   TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
-import { injectIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { GitHubLogoIcon } from '@fluentui/react-icons-mdl2';
 
 import '../../utils/string-operations';
@@ -16,15 +19,16 @@ import { IRootState } from '../../../types/root';
 import { ISettingsProps } from '../../../types/settings';
 import { translateMessage } from '../../utils/translate-messages';
 import { geLocale } from '../../../appLocale';
+import { changeTheme } from '../../services/actions/theme-action-creator';
+import { loadGETheme } from '../../../themes';
+import { AppTheme } from '../../../types/enums';
 
-function Settings(props: ISettingsProps) {
-  const { authToken } = useSelector((state: IRootState) => state);
+export const Settings: React.FunctionComponent<ISettingsProps> = (props: ISettingsProps) => {
+  const dispatch = useDispatch();
+  const { authToken, theme: appTheme } = useSelector((state: IRootState) => state);
   const authenticated = authToken.token;
+  const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
-
-  const {
-    intl: { messages }
-  }: any = props;
 
   registerIcons({
     icons: {
@@ -35,77 +39,49 @@ function Settings(props: ISettingsProps) {
   useEffect(() => {
     const menuItems: any = [
       {
+        key: 'change-theme',
+        text: translateMessage('Change theme'),
+        iconProps: {
+          iconName: 'Color'
+        },
+        onClick: () => toggleThemeChooserDialogState()
+      },
+      {
         key: 'office-dev-program',
-        text: messages['Office Dev Program'],
+        text: translateMessage('Office Dev Program'),
         href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
         target: '_blank',
         iconProps: {
           iconName: 'CommandPrompt'
         },
         onClick: () => trackOfficeDevProgramLinkClickEvent()
-      },
-      {
-        key: 'report-issue',
-        text: translateMessage('Report an Issue'),
-        href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
-        target: '_blank',
-        iconProps: {
-          iconName: 'ReportWarning'
-        },
-        onClick: () => trackReportAnIssueLinkClickEvent()
-      },
-      { key: 'divider_1', itemType: ContextualMenuItemType.Divider },
-      {
-        key: 'ge-documentation',
-        text: translateMessage('Documentation'),
-        href: ' https://docs.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0',
-        target: '_blank',
-        iconProps: {
-          iconName: 'Documentation'
-        },
-        onClick: () => trackDocumentationLinkClickEvent()
-      },
-      {
-        key: 'github',
-        text: translateMessage('Github'),
-        href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4',
-        target: '_blank',
-        iconProps: {
-          iconName: 'GitHubLogo',
-          styles: {
-            root: {
-              position: 'relative',
-              top: '-2px'
-            }
-          }
-        },
-        onClick: () => trackGithubLinkClickEvent()
       }
     ];
     setItems(menuItems);
   }, [authenticated]);
 
+  const toggleThemeChooserDialogState = () => {
+    let hidden = themeChooserDialogHidden;
+    hidden = !hidden;
+    hideThemeChooserDialog(hidden);
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.THEME_CHANGE_BUTTON
+    });
+  };
+
+  const handleChangeTheme = (selectedTheme: any) => {
+    const newTheme: string = selectedTheme.key;
+    dispatch(changeTheme(newTheme));
+    loadGETheme(newTheme);
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.SELECT_THEME_BUTTON,
+      SelectedTheme: selectedTheme.key.replace('-', ' ').toSentenceCase()
+    });
+  };
+
   const trackOfficeDevProgramLinkClickEvent = () => {
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
       ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
-    });
-  };
-
-  const trackReportAnIssueLinkClickEvent = () => {
-    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.REPORT_AN_ISSUE_LINK
-    });
-  };
-
-  const trackDocumentationLinkClickEvent = () => {
-    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.GE_DOCUMENTATION_LINK
-    });
-  };
-
-  const trackGithubLinkClickEvent = () => {
-    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.GITHUB_LINK
     });
   };
 
@@ -125,24 +101,65 @@ function Settings(props: ISettingsProps) {
   return (
     <div>
       <TooltipHost
-        content={translateMessage('Help')}
+        content={translateMessage('Settings')}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}
       >
         <IconButton
-          ariaLabel={translateMessage('Help')}
+          ariaLabel={translateMessage('Settings')}
           role='button'
           styles={{
             label: { marginBottom: -20 },
             menuIcon: { fontSize: 15 }
           }}
-          menuIconProps={{ iconName: 'Help' }}
+          menuIconProps={{ iconName: 'Settings' }}
           menuProps={menuProperties}
         />
       </TooltipHost>
+      <div>
+        <Dialog
+          hidden={themeChooserDialogHidden}
+          onDismiss={() => toggleThemeChooserDialogState()}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: translateMessage('Change theme'),
+            isMultiline: false
+          }}
+        >
+          <ChoiceGroup
+            defaultSelectedKey={appTheme}
+            styles={{ flexContainer: { flexWrap: 'nowrap'  }} }
+            options={[
+              {
+                key: AppTheme.Light,
+                iconProps: { iconName: 'Light' },
+                text:translateMessage('Light')
+              },
+              {
+                key: AppTheme.Dark,
+                iconProps: { iconName: 'CircleFill' },
+                text: translateMessage('Dark')
+              },
+              {
+                key: AppTheme.HighContrast,
+                iconProps: { iconName: 'Contrast' },
+                text: translateMessage('High Contrast')
+              }
+            ]}
+            onChange={(event, selectedTheme) =>
+              handleChangeTheme(selectedTheme)
+            }
+          />
+          <DialogFooter>
+            <DefaultButton
+              text={translateMessage('Close')}
+              onClick={() => toggleThemeChooserDialogState()}
+            />
+          </DialogFooter>
+        </Dialog>
+      </div>
     </div>
   );
 }
 
-export default injectIntl(Settings);
 
