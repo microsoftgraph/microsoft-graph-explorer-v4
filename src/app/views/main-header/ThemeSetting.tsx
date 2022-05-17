@@ -30,7 +30,8 @@ export const ThemeSetting: React.FunctionComponent = () => {
       SelectedTheme: selectedTheme.key.replace('-', ' ').toSentenceCase()
     });
   };
-  return(
+
+  return (
     <div>
       <ActionButton
         ariaLabel={translateMessage('change theme')}
@@ -52,6 +53,7 @@ export const ThemeSetting: React.FunctionComponent = () => {
           <ChoiceGroup
             label='Pick one theme'
             defaultSelectedKey={appTheme}
+            styles={{ flexContainer: { flexWrap: 'nowrap'  }} }
             options={[
               {
                 key: AppTheme.Light,
