@@ -263,7 +263,7 @@ export function queryResultsInCorsError(sampleUrl: string): boolean {
   if (
     (['/drive/', '/drives/', '/driveItem/'].some((x) =>
       sampleUrl.includes(x)) && sampleUrl.endsWith('/content')) ||
-    (sampleUrl.includes('/reports/') && sampleUrl.includes('$format=text/csv'))
+    sampleUrl.includes('/reports/')
   ) {
     return true;
   }
