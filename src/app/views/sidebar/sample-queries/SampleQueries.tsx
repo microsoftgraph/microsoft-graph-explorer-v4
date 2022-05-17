@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
-import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
+import { componentNames, telemetry } from '../../../../telemetry';
 import {
   IQuery,
   ISampleQueriesProps,
@@ -18,12 +18,13 @@ import {
 import { IRootState } from '../../../../types/root';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
-import { validateExternalLink } from '../../../utils/external-link-validation';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
-import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { classNames } from '../../classnames';
-import { columns, isJsonString, performSearch } from './sample-query-utils';
+import {
+  columns, isJsonString, performSearch, trackDocumentLinkClickedEvent,
+  trackSampleQueryClickEvent
+} from './sample-query-utils';
 import { sidebarStyles } from '../Sidebar.styles';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { fetchSamples } from '../../../services/actions/samples-action-creators';
@@ -70,25 +71,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     trackDocumentLinkClickedEvent(item);
   };
 
-  const trackDocumentLinkClickedEvent = async (item: ISampleQuery): Promise<void> => {
-    const properties: { [key: string]: any } = {
-      ComponentName: componentNames.DOCUMENTATION_LINK,
-      SampleId: item.id,
-      SampleName: item.humanName,
-      SampleCategory: item.category,
-      Link: item.docLink
-    };
-    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, properties);
-
-    // Check if link throws error
-    validateExternalLink(item.docLink || '', componentNames.DOCUMENTATION_LINK, item.id);
-  }
-
   const querySelected = (query: ISampleQuery) => {
-    if (!query) {
-      return;
-    }
-
     const queryVersion = query.requestUrl.substring(1, 5);
     const sampleQuery: IQuery = {
       sampleUrl: GRAPH_URL + query.requestUrl,
@@ -140,18 +123,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     return false;
   }
 
-  const trackSampleQueryClickEvent = (query: ISampleQuery) => {
-    const sanitizedUrl = sanitizeQueryUrl(GRAPH_URL + query.requestUrl);
-    telemetry.trackEvent(
-      eventTypes.LISTITEM_CLICK_EVENT,
-      {
-        ComponentName: componentNames.SAMPLE_QUERY_LIST_ITEM,
-        SampleId: query.id,
-        SampleName: query.humanName,
-        SampleCategory: query.category,
-        QuerySignature: `${query.method} ${sanitizedUrl}`
-      });
-  }
 
   const renderItemColumn = (
     item: ISampleQuery,
@@ -286,7 +257,8 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             styles={customStyles}
             onClick={() => {
               if (!selectionDisabled) {
-                querySelected(props.item);
+                const query: ISampleQuery = props.item!;
+                querySelected(query);
               }
               setSelectedQuery(props.item)
             }}
