@@ -11,7 +11,6 @@ on:
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  NODE_VERSION: '12.x'
 
 jobs:
   install:
@@ -25,7 +24,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: $NODE_VERSION
+          node-version: '12.x'
 
       - name: Cache npm
         uses: actions/cache@v3
@@ -61,7 +60,7 @@ jobs:
     - name: Set up Node
       uses: actions/setup-node@v3
       with:
-        node-version: $NODE_VERSION
+        node-version: '12.x'
 
     - name: Cache node_modules
       uses: actions/cache@v3
@@ -86,7 +85,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: $NODE_VERSION
+          node-version: '12.x'
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -111,7 +110,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: $NODE_VERSION
+          node-version: '12.x'
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -133,7 +132,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: $SONAR_TOKEN
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   publish-preview-site:
     name: Static preview site creation
