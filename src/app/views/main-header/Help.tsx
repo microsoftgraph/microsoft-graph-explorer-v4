@@ -1,6 +1,7 @@
 import {
   ContextualMenuItemType,
   getId,
+  getTheme,
   IconButton,
   registerIcons,
   TooltipHost
@@ -13,11 +14,13 @@ import '../../utils/string-operations';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { IRootState } from '../../../types/root';
 import { translateMessage } from '../../utils/translate-messages';
+import { mainHeaderStyles } from './MainHeader.styles';
 
 export const Help = () => {
   const { authToken } = useSelector((state: IRootState) => state);
   const authenticated = authToken.token;
   const [items, setItems] = useState([]);
+  const currentTheme = getTheme();
 
   registerIcons({
     icons: {
@@ -89,6 +92,7 @@ export const Help = () => {
   const calloutStyles: React.CSSProperties = {
     overflowY: 'hidden'
   }
+  const helpButtonStyles = mainHeaderStyles(currentTheme).iconButton;
 
   const menuProperties = {
     shouldFocusOnMount: true,
@@ -108,11 +112,8 @@ export const Help = () => {
       >
         <IconButton
           ariaLabel={translateMessage('Help')}
-          role='button'
-          styles={{
-            label: { marginBottom: -20 },
-            menuIcon: { fontSize: 15 }
-          }}
+          role={'button'}
+          styles={helpButtonStyles}
           menuIconProps={{ iconName: 'Help' }}
           menuProps={menuProperties}
         />

@@ -24,6 +24,16 @@ export const mainHeaderStyles = (theme: ITheme) => {
       border: 'none',
       cursor: 'default',
       background: theme.palette.neutralLighter
+    },
+    iconButton: {
+      menuIcon: { fontSize: 15 },
+      root: {
+        height: '50px',
+        width: '50px',
+        ':hover': {
+          background: `${theme.palette.neutralQuaternaryAlt} !important`
+        }
+      }
     }
   }
 }

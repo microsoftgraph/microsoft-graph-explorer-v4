@@ -1,4 +1,4 @@
-import { DirectionalHint, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
+import { DirectionalHint, getTheme, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
 import React, { useState } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import { ACCOUNT_TYPE } from '../../services/graph-constants';
 export const FeedbackButton = () => {
   const [enableSurvey, setEnableSurvey] = useState(false);
   const { profile } = useSelector( (state: IRootState) => state );
+  const currentTheme = getTheme();
 
   const feedbackIcon : IIconProps = {
     iconName : 'Feedback'
@@ -20,7 +21,10 @@ export const FeedbackButton = () => {
     root:{
       height: '50px',
       width: '50px',
-      marginTop: '-8px'
+      marginTop: '-8px',
+      ':hover': {
+        background: `${currentTheme.palette.neutralQuaternaryAlt} !important`
+      }
     }
   }
   const calloutProps = {

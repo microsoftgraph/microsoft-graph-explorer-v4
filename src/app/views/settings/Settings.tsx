@@ -5,6 +5,7 @@ import {
   DialogFooter,
   DialogType,
   getId,
+  getTheme,
   IconButton,
   registerIcons,
   TooltipHost
@@ -22,13 +23,15 @@ import { geLocale } from '../../../appLocale';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
+import { mainHeaderStyles } from '../main-header/MainHeader.styles';
 
-export const Settings: React.FunctionComponent<ISettingsProps> = (props: ISettingsProps) => {
+export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   const dispatch = useDispatch();
   const { authToken, theme: appTheme } = useSelector((state: IRootState) => state);
   const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
+  const currentTheme = getTheme();
 
   registerIcons({
     icons: {
@@ -89,6 +92,8 @@ export const Settings: React.FunctionComponent<ISettingsProps> = (props: ISettin
     overflowY: 'hidden'
   }
 
+  const settingsButtonStyles = mainHeaderStyles(currentTheme).iconButton
+
   const menuProperties = {
     shouldFocusOnMount: true,
     alignTargetEdge: true,
@@ -108,10 +113,7 @@ export const Settings: React.FunctionComponent<ISettingsProps> = (props: ISettin
         <IconButton
           ariaLabel={translateMessage('Settings')}
           role='button'
-          styles={{
-            label: { marginBottom: -20 },
-            menuIcon: { fontSize: 15 }
-          }}
+          styles={settingsButtonStyles}
           menuIconProps={{ iconName: 'Settings' }}
           menuProps={menuProperties}
         />
