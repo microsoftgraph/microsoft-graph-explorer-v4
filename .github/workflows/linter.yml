@@ -130,7 +130,7 @@ jobs:
 
   sonar-cloud:
     name: Sonar cloud analysis
-    needs: build
+    needs: install
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
