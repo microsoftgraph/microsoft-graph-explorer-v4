@@ -123,27 +123,6 @@ jobs:
       - name: Test
         run: npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
 
-  sonar-cloud:
-    name: Sonar cloud analysis
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '12.x'
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: |
-            node_modules
-            packages/*/node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
-
       - name: Fix code coverage paths
         run: |
           sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
