@@ -33,7 +33,7 @@
                 "fs-extra": "10.1.0",
                 "guid-typescript": "1.0.9",
                 "isomorphic-fetch": "3.0.0",
-                "jest": "27.5.1",
+                "jest": "28.1.0",
                 "jest-sonar-reporter": "2.0.0",
                 "jest-watch-typeahead": "1.0.0",
                 "localforage": "1.10.0",

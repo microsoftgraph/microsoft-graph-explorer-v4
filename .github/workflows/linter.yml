@@ -7,7 +7,7 @@ on:
       - master
       - dev
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, closed]
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -153,3 +153,43 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  publish-preview-site:
+    name: Static preview site creation
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build And Deploy
+        env:
+          REACT_APP_CLIENT_ID: ${{ secrets.REACT_APP_CLIENT_ID }}
+          REACT_APP_FEEDBACK_CAMPAIGN_ID: ${{ secrets.REACT_APP_FEEDBACK_CAMPAIGN_ID }},
+          REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: ${{secrets.REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID}}
+          REACT_APP_INSTRUMENTATION_KEY: ${{ secrets.REACT_APP_STAGING_INSTRUMENTATION_KEY }}
+          REACT_APP_NOMINATION_PERIOD: ${{secrets.REACT_APP_NOMINATION_PERIOD}}
+          REACT_APP_COOLDOWN_PERIOD: ${{secrets.REACT_APP_COOLDOWN_PERIOD}}
+          REACT_APP_USAGE_TIME: ${{secrets.REACT_APP_USAGE_TIME}}
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v0.0.1-preview
+        with:
+          skip_deploy_on_missing_secrets: true
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_SAND_0AC78C710 }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          action: "upload"
+          app_location: "/" # App source code path
+          app_artifact_location: "build" # Built app content directory - optional
+
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request Job
+    steps:
+      - name: Close Pull Request
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v0.0.1-preview
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_SAND_0AC78C710 }}
+          action: "close"
