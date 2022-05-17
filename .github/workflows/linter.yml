@@ -129,7 +129,7 @@ jobs:
 
   sonar-cloud:
     name: Sonar cloud analysis
-    needs: install
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -156,7 +156,7 @@ jobs:
 
   publish-preview-site:
     name: Static preview site creation
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     steps:
