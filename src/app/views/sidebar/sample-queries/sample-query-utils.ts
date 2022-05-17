@@ -42,10 +42,9 @@ export function isJsonString(str: string): boolean {
 
 export function performSearch(queries: ISampleQuery[], value: string): ISampleQuery[] {
   const keyword = value.toLowerCase();
-  const filteredQueries = queries.filter((sample: any) => {
+  return queries.filter((sample: any) => {
     const name = sample.humanName.toLowerCase();
     const category = sample.category.toLowerCase();
     return name.includes(keyword) || category.includes(keyword);
   });
-  return filteredQueries;
 }

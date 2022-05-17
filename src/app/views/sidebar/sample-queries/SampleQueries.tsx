@@ -32,7 +32,7 @@ import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
 
-const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps) : JSX.Element => {
+const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
 
   const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
   const { authToken, profile, samples } =
@@ -52,16 +52,16 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps) : JSX.Element 
   const classes = classNames(classProps);
 
   useEffect(() => {
-    if(samples.queries.length === 0){
+    if (samples.queries.length === 0) {
       dispatch(fetchSamples());
     } else {
       setSampleQueries(samples.queries)
     }
   }, [samples.queries, tokenPresent])
 
-  const searchValueChanged = (event: any, value?: string): void => {
+  const searchValueChanged = (_event: any, value?: string): void => {
     const { queries } = samples;
-    const filteredQueries = value ? performSearch(queries, value): queries;
+    const filteredQueries = value ? performSearch(queries, value) : queries;
     setSampleQueries(filteredQueries);
   };
 
@@ -93,7 +93,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps) : JSX.Element 
     const sampleQuery: IQuery = {
       sampleUrl: GRAPH_URL + query.requestUrl,
       selectedVerb: query.method,
-      sampleBody:  query.postBody,
+      sampleBody: query.postBody,
       sampleHeaders: query.headers || [],
       selectedVersion: queryVersion
     };
@@ -112,10 +112,14 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps) : JSX.Element 
     dispatch(setSampleQuery(sampleQuery));
   };
 
-  const getSampleBody = (query : IQuery) => {
-    return query.sampleBody ? (isJsonString(query.sampleBody)
-      ? JSON.parse(query.sampleBody)
-      : query.sampleBody) : undefined;
+  const getSampleBody = (query: IQuery) => {
+    return query.sampleBody ? parseSampleBody() : undefined;
+
+    function parseSampleBody() {
+      return isJsonString(query.sampleBody!)
+        ? JSON.parse(query.sampleBody!)
+        : query.sampleBody;
+    }
   }
 
   const displayTipMessage = (query: ISampleQuery) => {
@@ -127,10 +131,10 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps) : JSX.Element 
   }
 
   const shouldRunQuery = (query: ISampleQuery) => {
-    if(query.tip && tokenPresent) {
+    if (query.tip && tokenPresent) {
       return false;
     }
-    if(!tokenPresent || query.method === 'GET'){
+    if (!tokenPresent || query.method === 'GET') {
       return true;
     }
     return false;
@@ -264,7 +268,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps) : JSX.Element 
     }
   }
 
-  const renderRow = (props:any): any => {
+  const renderRow = (props: any): any => {
     let selectionDisabled = false;
     const customStyles: Partial<IDetailsRowStyles> = {};
     if (selectedQuery?.id === props.item.id) {
@@ -299,7 +303,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps) : JSX.Element 
     }
   };
 
-  const renderGroupHeader = (props:any): any => {
+  const renderGroupHeader = (props: any): any => {
     const onToggleSelectGroup = () => {
       props.onToggleCollapse(props.group);
     };
