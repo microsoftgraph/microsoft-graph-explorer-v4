@@ -108,7 +108,7 @@ const unstyledResourceExplorer = (props: any) => {
   const isolateTree = (navLink: any): void => {
     const tree = [
       {
-        isExpanded: false,
+        isExpanded: true,
         links: navLink.links
       }
     ];
