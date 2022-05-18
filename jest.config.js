@@ -21,7 +21,7 @@ module.exports = {
     crypto: require('crypto')
   },
   testEnvironmentOptions: {
-    url: 'http://localhost',
+    url: 'http://localhost'
   },
   testEnvironment: 'jsdom',
   transform: {
