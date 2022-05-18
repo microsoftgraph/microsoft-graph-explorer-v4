@@ -235,17 +235,10 @@ const Profile = (props: any) => {
 }
 
 const styles = mergeStyleSets({
-  button: {
-    width: 300
-  },
   callout: {
     width: 320,
     maxWidth: '90%',
     padding: '20px 24px'
-  },
-  link: {
-    display: 'block',
-    marginTop: 20
   }
 });
 

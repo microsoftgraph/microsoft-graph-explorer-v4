@@ -10,7 +10,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { GitHubLogoIcon } from '@fluentui/react-icons-mdl2';
 
-import '../../utils/string-operations';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { IRootState } from '../../../types/root';
 import { translateMessage } from '../../utils/translate-messages';
