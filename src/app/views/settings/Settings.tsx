@@ -92,7 +92,7 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
     overflowY: 'hidden'
   }
 
-  const settingsButtonStyles = mainHeaderStyles(currentTheme).iconButton
+  const settingsButtonStyles = mainHeaderStyles(currentTheme).iconButton;
 
   const menuProperties = {
     shouldFocusOnMount: true,

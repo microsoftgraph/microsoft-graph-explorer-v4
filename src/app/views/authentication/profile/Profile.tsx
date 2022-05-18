@@ -175,6 +175,9 @@ const Profile = (props: any) => {
         id={buttonId}
         onClick={toggleIsCalloutVisible}
         role='button'
+        styles={{root: {':hover': {
+          background: `${theme.palette.neutralLight} !important`
+        }}}}
       >
         {smallPersona}
       </ActionButton>
