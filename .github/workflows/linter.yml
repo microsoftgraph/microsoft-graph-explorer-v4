@@ -102,6 +102,9 @@ jobs:
     name: Test
     needs: install
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4]
 
     steps:
       - name: Checkout repository
@@ -121,7 +124,7 @@ jobs:
           key: modules-${{ hashFiles('package-lock.json') }}
 
       - name: Test
-        run: npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
+        run: npm run test -- --shard=${{ matrix.shard }}/${{ strategy.job-total }} --coverage --testResultsProcessor=jest-sonar-reporter
 
       - name: Fix code coverage paths
         run: |
