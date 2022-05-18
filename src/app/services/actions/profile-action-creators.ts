@@ -157,7 +157,6 @@ export async function getProfileResponse(): Promise<IProfileResponse> {
 export async function getTenantInfo(profileType: ACCOUNT_TYPE) {
   if(profileType===ACCOUNT_TYPE.AAD) {
     try{
-      const organizationUrl = USER_ORGANIZATION_URL;
       const token = (await authenticationWrapper.getToken()).accessToken;
 
       const headers = {
@@ -167,12 +166,12 @@ export async function getTenantInfo(profileType: ACCOUNT_TYPE) {
       };
       const options: IRequestOptions = { headers, method: 'GET' };
 
-      const response = await fetch(organizationUrl, options);
+      const response = await fetch(USER_ORGANIZATION_URL, options);
       if (!response.ok) {
         throw response;
       }
-      const res = await response.json();
-      return  res.value[0]?.displayName;
+      const tenant = await response.json();
+      return  tenant.value[0]?.displayName;
     } catch (error: any) {
       return '';
     }

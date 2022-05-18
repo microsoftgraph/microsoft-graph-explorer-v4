@@ -12,7 +12,7 @@ export const highContrast = {
     neutralLighterAlt: '#000000',
     neutralLighter: '#000000',
     neutralLight: '#000000',
-    neutralQuaternaryAlt: '#353535',
+    neutralQuaternaryAlt: '#000000',
     neutralQuaternary: '#000000',
     neutralTertiaryAlt: '#000000',
     neutralTertiary: '#c8c8c8',
