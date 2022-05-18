@@ -37,9 +37,6 @@ const renderSampleQueries = () => {
       error: {
         message: ''
       }
-    },
-    intl: {
-      message: messages
     }
   }
 
