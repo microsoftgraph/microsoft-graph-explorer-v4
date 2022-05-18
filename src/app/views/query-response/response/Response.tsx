@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { IRootState } from '../../../../types/root';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
-import { responseMessages } from '../../app-sections/ResponseMessages';
+import { responseMessages } from '../ResponseMessages';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import ResponseDisplay from './ResponseDisplay';
 

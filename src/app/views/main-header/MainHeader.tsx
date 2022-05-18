@@ -13,8 +13,8 @@ import {
 } from '@fluentui/react';
 import { FormattedMessage } from 'react-intl';
 
-import { Settings } from '../settings';
-import { FeedbackButton } from '../app-sections/FeedbackButton';
+import { Settings} from './settings/Settings';
+import { FeedbackButton } from './FeedbackButton';
 import { Authentication } from '../authentication';
 import { Help } from './Help';
 import { useSelector } from 'react-redux';

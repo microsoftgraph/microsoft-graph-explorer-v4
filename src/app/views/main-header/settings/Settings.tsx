@@ -14,16 +14,16 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { GitHubLogoIcon } from '@fluentui/react-icons-mdl2';
 
-import '../../utils/string-operations';
-import { componentNames, eventTypes, telemetry } from '../../../telemetry';
-import { IRootState } from '../../../types/root';
-import { ISettingsProps } from '../../../types/settings';
-import { translateMessage } from '../../utils/translate-messages';
-import { geLocale } from '../../../appLocale';
-import { changeTheme } from '../../services/actions/theme-action-creator';
-import { loadGETheme } from '../../../themes';
-import { AppTheme } from '../../../types/enums';
-import { mainHeaderStyles } from '../main-header/MainHeader.styles';
+import '../../../utils/string-operations';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
+import { IRootState } from '../../../../types/root';
+import { ISettingsProps } from '../../../../types/settings';
+import { translateMessage } from '../../../utils/translate-messages';
+import { geLocale } from '../../../../appLocale';
+import { changeTheme } from '../../../services/actions/theme-action-creator';
+import { loadGETheme } from '../../../../themes';
+import { AppTheme } from '../../../../types/enums';
+import { mainHeaderStyles } from '../MainHeader.styles';
 
 export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   const dispatch = useDispatch();
