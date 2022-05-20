@@ -3,6 +3,9 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
 import {
+  getTheme,
+  IStyle,
+  ITheme,
   Label,
   MessageBar,
   MessageBarType,
@@ -19,6 +22,9 @@ class GraphToolkit extends Component<any> {
   constructor(props: any) {
     super(props);
   }
+
+  currentTheme: ITheme = getTheme();
+  textStyle = queryResponseStyles(this.currentTheme).toolkitText.root as IStyle
 
   public render() {
     const { sampleQuery } = this.props;
@@ -45,7 +51,7 @@ class GraphToolkit extends Component<any> {
     }
 
     return (
-      <Label className={classes.emptyStateLabel}>
+      <Label styles={{root: this.textStyle}}>
         <FormattedMessage id='We did not find a Graph toolkit for this query' />
         &nbsp;
         <a
@@ -58,6 +64,7 @@ class GraphToolkit extends Component<any> {
           <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />
           .
         </a>
+
       </Label>
     );
   }

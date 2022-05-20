@@ -17,10 +17,9 @@ import { IRequestComponent } from '../../../../types/request';
 import { IRootState } from '../../../../types/root';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
-import { convertPxToVh, convertVhToPx } from '../../common/dimensions-adjustment';
+import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { Auth } from './auth';
 import { RequestBody } from './body';
-import FeedbackForm from './feedback/FeedbackForm';
 import { RequestHeaders } from './headers';
 import { Permission } from './permissions';
 import './request.scss';
@@ -49,6 +48,7 @@ export class Request extends Component<IRequestComponent, any> {
     const containerStyle: CSSProperties = {
       height: convertVhToPx(height, heightAdjustment),
       overflowY: 'hidden',
+      overflowX: 'hidden',
       borderBottom: '1px solid #ddd'
     };
 
@@ -61,8 +61,11 @@ export class Request extends Component<IRequestComponent, any> {
         ariaLabel={messages['request body']}
         title={messages['request body']}
         headerText={messages['request body']}
+        headerButtonProps={{
+          'aria-controls': 'request-body-tab'
+        }}
       >
-        <div style={containerStyle}>
+        <div style={containerStyle} id={'request-body-tab'}>
           <RequestBody handleOnEditorChange={handleOnEditorChange} />
         </div>
       </PivotItem>,
@@ -74,8 +77,11 @@ export class Request extends Component<IRequestComponent, any> {
         ariaLabel={messages['request header']}
         title={messages['request header']}
         headerText={messages['request header']}
+        headerButtonProps={{
+          'aria-controls': 'request-header-tab'
+        }}
       >
-        <div style={containerStyle}>
+        <div style={containerStyle} id={'request-header-tab'}>
           <RequestHeaders />
         </div>
       </PivotItem>,
@@ -84,26 +90,18 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='AzureKeyVault'
         itemKey='modify-permissions'
         onRenderItemLink={this.getTooltipDisplay}
-        ariaLabel={translateMessage('permissions preview')}
+        ariaLabel={translateMessage('modify permissions')}
         title={translateMessage('permissions preview')}
         headerText={messages['modify permissions']}
+        headerButtonProps={{
+          'aria-controls': 'permission-tab'
+        }}
       >
-        <div style={containerStyle}>
+        <div style={containerStyle} id={'permission-tab'}>
           <Permission />
         </div>
-      </PivotItem>,
-      <PivotItem
-        key='feedback'
-        itemIcon='HeartFill'
-        itemKey='feedback'
-        onRenderItemLink={this.getTooltipDisplay}
-        ariaLabel={translateMessage('Feedback')}
-        title={translateMessage('Feedback')}
-        headerText={translateMessage('Feedback')}
-      >
       </PivotItem>
     ];
-
     if (mode === Mode.Complete) {
       pivotItems.push(
         <PivotItem
@@ -113,13 +111,17 @@ export class Request extends Component<IRequestComponent, any> {
           onRenderItemLink={this.getTooltipDisplay}
           ariaLabel={translateMessage('Access Token')}
           title={translateMessage('Access Token')}
-          headerText={translateMessage('Access Token')}>
-          <div style={containerStyle}>
+          headerText={translateMessage('Access Token')}
+          headerButtonProps={{
+            'aria-controls': 'access-token-tab'
+          }}>
+          <div style={containerStyle} id={'access-token-tab'}>
             <Auth />
           </div>
         </PivotItem>,
       );
     }
+
     return pivotItems;
   }
 
@@ -141,17 +143,7 @@ export class Request extends Component<IRequestComponent, any> {
       return;
     }
     this.onPivotItemClick(pivotItem);
-    this.toggleFeedback(pivotItem);
-  }
-
-  private toggleFeedback = (event: any) => {
-    const { key } = event;
-    if (key && key.includes('feedback')) {
-      this.toggleCustomSurvey(true);
-      this.setState({ selectedPivot: 'request-body' })
-    } else {
-      this.setState({ selectedPivot: key })
-    }
+    this.setState({ selectedPivot: pivotItem.props.itemKey });
   }
 
   private onPivotItemClick = (item?: PivotItem) => {
@@ -216,20 +208,20 @@ export class Request extends Component<IRequestComponent, any> {
             </Pivot>
           </div>
         </Resizable>
-        <FeedbackForm activated={this.state.enableShowSurvey} dismissSurvey={this.toggleCustomSurvey} />
       </>
     );
   }
 }
 
 function mapStateToProps(
-  { graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions }: IRootState) {
+  { graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions, profile }: IRootState) {
   return {
     mode: graphExplorerMode,
     sampleBody: sampleQuery.sampleBody,
     theme,
     mobileScreen: !!sidebarProperties.mobileScreen,
-    dimensions
+    dimensions,
+    profile: profile?.profileType
   };
 }
 

@@ -17,10 +17,10 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "jsx": "react-jsx"
-
   },
   "include": [
     "src",
-    "src/tests"
+    "src/tests",
+    "typings.d.ts"
   ]
 }

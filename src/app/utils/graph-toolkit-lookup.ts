@@ -8,7 +8,7 @@ export function lookupToolkitUrl(sampleQuery: IQuery) {
     const { requestUrl, search } = parseSampleUrl(sampleQuery.sampleUrl);
     const query = '/' + requestUrl + search;
     for (const templateMapKey in templates) {
-      if (templates.hasOwnProperty(templateMapKey)) {
+      if (Object.prototype.hasOwnProperty.call(templates, templateMapKey)) {
         const isMatch = new RegExp(templateMapKey + '$', 'i').test(query);
         if (isMatch) {
           const url: string = (templates as any)[templateMapKey];

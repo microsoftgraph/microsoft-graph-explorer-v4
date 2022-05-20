@@ -21,8 +21,8 @@ export interface IProfileState {
   user: IUser;
 }
 
-
 export interface IUser {
+  id: string;
   displayName: string;
   emailAddress: string;
   profileImageUrl: string;

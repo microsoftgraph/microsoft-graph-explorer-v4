@@ -102,9 +102,6 @@ export interface ISampleQueriesProps {
     fetchSamples: Function;
     setQueryResponseStatus: Function;
   };
-  intl: {
-    message: object;
-  };
 }
 
 export const httpMethods: IDropdownOption[] = [

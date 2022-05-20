@@ -25,7 +25,7 @@ export interface Request {
 
 export interface Item {
   name: string;
-  request: Request;
+  request?: Request;
   response?: any[];
 }
 

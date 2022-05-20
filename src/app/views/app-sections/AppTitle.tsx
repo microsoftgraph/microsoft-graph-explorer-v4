@@ -1,12 +1,13 @@
 import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { FeedbackButton } from './FeedbackButton';
 
 export function appTitleDisplayOnFullScreen(
   classes: any,
   minimised: any,
   toggleSidebar: Function,
-): React.ReactNode {
+): React.ReactNode{
 
   return <div style={{ display: 'flex', width: '100%' }}>
     <TooltipHost
@@ -23,6 +24,7 @@ export function appTitleDisplayOnFullScreen(
         iconProps={{ iconName: 'GlobalNavButton' }}
         className={classes.sidebarToggle}
         ariaLabel={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
+        styles={{root: { position:'relative', top: '3px'}}}
         onClick={() => toggleSidebar()} />
     </TooltipHost>
     <div className={classes.graphExplorerLabelContainer} role={'heading'} aria-level={1}>
@@ -30,6 +32,13 @@ export function appTitleDisplayOnFullScreen(
         <>
           {displayGraphLabel(classes)}
         </>}
+    </div>
+    <div>
+      {!minimised &&
+      <div className={classes.feedbackButtonFullScreenDisplay}>
+        <FeedbackButton/>
+      </div>
+      }
     </div>
   </div>;
 }
@@ -50,6 +59,9 @@ export function appTitleDisplayOnMobileScreen(
       />
       <div style={{ padding: 10 }} role={'heading'} aria-level={1}>
         {displayGraphLabel(classes)}
+      </div>
+      <div className={classes.feedbackButtonMobileDisplay}>
+        <FeedbackButton/>
       </div>
     </>
   </Stack>;

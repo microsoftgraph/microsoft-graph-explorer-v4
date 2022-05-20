@@ -6,7 +6,7 @@ import { IGraphResponse } from '../../../types/query-response';
 import { IQuery } from '../../../types/query-runner';
 import { runQuery } from '../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
-import { ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK } from '../../services/graph-constants';
+import { MOZILLA_CORS_DOCUMENTATION_LINK } from '../../services/graph-constants';
 
 interface ODataLink {
   link: string;
@@ -15,14 +15,14 @@ interface ODataLink {
 
 export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQuery, dispatch: Function) {
 
-  function getOdataLinkFromResponseBody(body: any): ODataLink | null {
+  function getOdataLinkFromResponseBody(responseBody: any): ODataLink | null {
     const odataLinks = ['nextLink', 'deltaLink'];
     let data = null;
-    if (body) {
+    if (responseBody) {
       odataLinks.forEach(link => {
-        if (body[`@odata.${link}`]) {
+        if (responseBody[`@odata.${link}`]) {
           data = {
-            link: body[`@odata.${link}`],
+            link: responseBody[`@odata.${link}`],
             name: link
           };
         }
@@ -45,7 +45,7 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
   if (odataLink) {
     return (
       <MessageBar messageBarType={MessageBarType.info}>
-        <FormattedMessage id={'This response contains an @odata property'} />: @odata.{odataLink!.name}
+        <FormattedMessage id={'This response contains an @odata property.'} />: @odata.{odataLink!.name}
         <Link onClick={() => setQuery()}>
           &nbsp;<FormattedMessage id='Click here to follow the link' />
         </Link>
@@ -53,32 +53,30 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
     );
   }
 
-  // Display link to downlod file response
+  // Display link to download file response
   if (body?.contentDownloadUrl) {
     return (
       <div>
-        <MessageBar messageBarType={MessageBarType.info}>
+        <MessageBar messageBarType={MessageBarType.warning}>
           <FormattedMessage id={'This response contains unviewable content'} />
           <Link href={body?.contentDownloadUrl} download>
             <FormattedMessage id={'Click to download file'} />
           </Link>&nbsp;
         </MessageBar>
-        {body?.isWorkaround &&
-          <MessageBar messageBarType={MessageBarType.warning}>
-            <FormattedMessage id={'Response is result of workaround'} />
-            {!body?.isOriginalFormat &&
-              <span>
-                &nbsp;
-                <FormattedMessage id={'File response is available in original format only'} />
-              </span>
-            }
-            &nbsp;
-            <FormattedMessage id={'For more information'} />
-            <Link href={ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK} target='_blank'>
-              <FormattedMessage id={'documentation'} />.
-            </Link>
-          </MessageBar>
-        }
+      </div>
+    );
+  }
+
+  // Show CORS compliance message
+  if (body?.throwsCorsError) {
+    return (
+      <div>
+        <MessageBar messageBarType={MessageBarType.warning}>
+          <FormattedMessage id={'Response content not available due to CORS policy'} />
+          <Link target='_blank' href={MOZILLA_CORS_DOCUMENTATION_LINK}>
+            <FormattedMessage id={'here'} />
+          </Link>.
+        </MessageBar>
       </div>
     );
   }

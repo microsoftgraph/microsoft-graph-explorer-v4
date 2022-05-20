@@ -13,21 +13,27 @@ export function parseSampleUrl(url: string, version?: string): IParsedSample {
 
   if (url !== '') {
     try {
-      queryVersion = (version) ? version : getGraphVersion(url);
+      url = removeExtraSlashesFromUrl(url);
+      queryVersion = version ? version : getGraphVersion(url);
       requestUrl = getRequestUrl(url, queryVersion);
       search = generateSearchParameters(url, search);
       sampleUrl = generateSampleUrl(url, queryVersion, requestUrl, search);
     } catch (error: any) {
       if (error.message === 'Failed to construct \'URL\': Invalid URL') {
         return {
-          queryVersion, requestUrl, sampleUrl, search
+          queryVersion,
+          requestUrl,
+          sampleUrl,
+          search
         };
       }
     }
   }
-
   return {
-    queryVersion, requestUrl, sampleUrl, search
+    queryVersion,
+    requestUrl,
+    sampleUrl,
+    search
   };
 }
 
@@ -49,14 +55,24 @@ function generateSearchParameters(url: string, search: string) {
   if (searchParameters) {
     try {
       search = decodeURI(searchParameters);
-    }
-    catch (error: any) {
+    } catch (error: any) {
       if (error.message === 'URI malformed') {
         search = searchParameters;
       }
     }
   }
-  return search;
+  return search.replace(/\s/g, '+');
+}
+
+export function removeExtraSlashesFromUrl(url: string): string {
+  return url.replace(/([^:]\/)\/+/g, '$1');
+}
+
+export function hasWhiteSpace(url: string): boolean {
+  const whitespaceChars = [' ', '\t', '\n', '%20'];
+  const parts = url.split('?');
+  return parts.length > 1 ? whitespaceChars.some((char) => parts[0].trimStart().includes(char)) :
+    whitespaceChars.some((char) => parts[0].trim().includes(char));
 }
 
 function generateSampleUrl(url: string, queryVersion: string, requestUrl: string, search: string): string {

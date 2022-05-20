@@ -1,16 +1,25 @@
 import { Link, MessageBar } from '@fluentui/react';
 import React, { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { replaceBaseUrl } from '../../../modules/sovereign-clouds';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { replaceBaseUrl } from '../../../modules/sovereign-clouds';
 import { IQuery } from '../../../types/query-runner';
+import { IRootState } from '../../../types/root';
+import { setSampleQuery } from '../../services/actions/query-input-action-creators';
+import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
 import { GRAPH_URL } from '../../services/graph-constants';
 import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
 
-export function statusMessages(queryState: any, sampleQuery: IQuery, actions: any) {
+
+const StatusMessages = () => {
+  const dispatch = useDispatch();
+  const { queryRunnerStatus, sampleQuery } =
+    useSelector((state: IRootState) => state);
+
   function displayStatusMessage(message: string, urls: any) {
     const { matches, parts } = getMatchesAndParts(message);
 
@@ -40,41 +49,43 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
   function setQuery(link: string) {
     const query: IQuery = { ...sampleQuery };
     query.sampleUrl = replaceBaseUrl(link);
-    actions.setSampleQuery(query);
+    dispatch(setSampleQuery(query));
   }
 
-  if (queryState) {
-    const { messageType, statusText, status, duration, hint } = queryState;
+  if (queryRunnerStatus) {
+    const { messageType, statusText, status, duration, hint } = queryRunnerStatus;
     let urls: any = {};
-    let message = status;
-    const extractedUrls = extractUrl(status);
+    let message = status.toString();
+    const extractedUrls = extractUrl(status.toString());
     if (extractedUrls) {
-      message = replaceLinks(status);
+      message = replaceLinks(status.toString());
       urls = convertArrayToObject(extractedUrls);
     }
 
-    return (
-      <MessageBar messageBarType={messageType}
-        isMultiline={true}
-        onDismiss={actions.clearQueryStatus}
-        dismissButtonAriaLabel='Close'
-        aria-live={'assertive'}>
-        {`${statusText} - `}{displayStatusMessage(message, urls)}
+    return <MessageBar messageBarType={messageType}
+      isMultiline={true}
+      onDismiss={() => dispatch(clearQueryStatus())}
+      dismissButtonAriaLabel='Close'
+      aria-live={'assertive'}>
+      {`${statusText} - `}{displayStatusMessage(message, urls)}
 
-        {duration && <>
-          {` - ${duration}`}<FormattedMessage id='milliseconds' />
-        </>}
+      {duration && <>
+        {` - ${duration}`}<FormattedMessage id='milliseconds' />
+      </>}
 
-        {status === 403 && <>.
-          <FormattedMessage id='consent to scopes' />
-          <span style={{ fontWeight: 600 }}>
-            <FormattedMessage id='modify permissions' />
-          </span>
-          <FormattedMessage id='tab' />
-        </>}
+      {status === 403 && <>.
+        <FormattedMessage id='consent to scopes' />
+        <span style={{ fontWeight: 600 }}>
+          <FormattedMessage id='modify permissions' />
+        </span>
+        <FormattedMessage id='tab' />
+      </>}
 
-        {hint && <div>{hint}</div>}
+      {hint && <div>{hint}</div>}
 
-      </MessageBar>);
+    </MessageBar>;
   }
+  return <div />;
 }
+
+export default StatusMessages;

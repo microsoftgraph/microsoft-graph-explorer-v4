@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { geLocale } from '../../../../appLocale';
 import { Mode } from '../../../../types/enums';
 import { IRootState } from '../../../../types/root';
-import { getPolicies } from '../../../services/actions/ocps-action-creators';
+import { signOut } from '../../../services/actions/auth-action-creators';
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
@@ -22,7 +22,6 @@ const Profile = (props: any) => {
   useEffect(() => {
     if (authenticated && !profile) {
       dispatch(getProfileInfo());
-      dispatch(getPolicies());
     }
   }, [authenticated]);
 
@@ -48,11 +47,7 @@ const Profile = (props: any) => {
   };
 
   const handleSignOut = () => {
-    const { actions } = props;
-
-    if (actions) {
-      actions.signOut();
-    }
+    dispatch(signOut());
   }
   const persona: IPersonaSharedProps = {
     imageUrl: profile.profileImageUrl,

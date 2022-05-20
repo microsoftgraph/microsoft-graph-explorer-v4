@@ -7,7 +7,7 @@ export function lookupTemplate(sampleQuery: IQuery): string {
     const query = requestUrl + search;
     // find if the url of the request has a template mapped to it
     for (const templateMapKey in templateMap) {
-      if (templateMap.hasOwnProperty(templateMapKey)) {
+      if (Object.prototype.hasOwnProperty.call(templateMap, templateMapKey)) {
         // check if the template matches a specific pattern while ignoring case
         const isMatch = new RegExp(templateMapKey + '$', 'i').test('/' + query);
         if (isMatch) {

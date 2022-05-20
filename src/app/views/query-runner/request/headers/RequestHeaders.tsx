@@ -4,7 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
-import { convertVhToPx } from '../../../common/dimensions-adjustment';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { headerStyles } from './Headers.styles';
@@ -33,14 +33,14 @@ const RequestHeaders = (props: any) => {
   const onSetFocus = () => textfieldRef.current!.focus();
 
   const handleOnHeaderNameChange =
-   (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, name?: string) => {
-     setHeaderName(name || '');
-   };
+    (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, name?: string) => {
+      setHeaderName(name || '');
+    };
 
   const handleOnHeaderValueChange =
-  (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, value?: string) => {
-    setHeaderValue(value || '');
-  };
+    (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, value?: string) => {
+      setHeaderValue(value || '');
+    };
 
   const handleOnHeaderDelete = (header: IHeader) => {
     let headers = [...sampleQuery.sampleHeaders];

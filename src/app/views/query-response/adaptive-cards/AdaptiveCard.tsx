@@ -1,5 +1,5 @@
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { IconButton, Label, MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
+import { Label, MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -15,6 +15,7 @@ import { classNames } from '../../classnames';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 import { queryResponseStyles } from './../queryResponse.styles';
+import { CopyButton } from '../../common/copy/CopyButton';
 
 class AdaptiveCard extends Component<IAdaptiveCardProps> {
   private adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null;
@@ -48,12 +49,11 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 
   public shouldComponentUpdate(nextProps: IAdaptiveCardProps) {
+
     if (JSON.stringify(this.props.body) !== JSON.stringify(nextProps.body)) {
       return true; // body has changed so card will too
     }
-    if (
-      JSON.stringify(nextProps.card.data) === JSON.stringify(this.props.card.data)
-    ) {
+    if (JSON.stringify(nextProps.card.data) === JSON.stringify(this.props.card.data) ) {
       return false; // card still the same no need to re-render
     }
     return true;
@@ -99,6 +99,9 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
       try {
         this.adaptiveCard!.parse(data.card);
         const renderedCard = this.adaptiveCard!.render();
+        const handleCopy = async () =>{ trackedGenericCopy(JSON.stringify(data.template, null, 4),
+          componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
+        }
         return (
           <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
             <PivotItem
@@ -106,14 +109,17 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               ariaLabel={translateMessage('card')}
               headerText={translateMessage('card')}
               className={classes.card}
+              headerButtonProps={{
+                'aria-controls': 'card-tab'
+              }}
             >
-              <div
+              <div id={'card-tab'}
                 ref={(n) => {
                   if (n && !n.firstChild) {
-                    n.appendChild(renderedCard);
+                    n.appendChild(renderedCard as HTMLElement);
                   } else {
                     if (n && n.firstChild) {
-                      n.replaceChild(renderedCard, n.firstChild);
+                      n.replaceChild(renderedCard as HTMLElement, n.firstChild);
                     }
                   }
                 }}
@@ -123,47 +129,46 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               itemKey='JSON-schema'
               ariaLabel={translateMessage('JSON Schema')}
               headerText={translateMessage('JSON Schema')}
+              headerButtonProps={{
+                'aria-controls': 'json-schema-tab'
+              }}
             >
-              <MessageBar messageBarType={MessageBarType.info}>
-                <FormattedMessage id='Get started with adaptive cards on' />
-                <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  tabIndex={0}
-                  className={classes.link}
-                >
-                  <FormattedMessage id='Adaptive Cards Templating SDK' />
-                </a>
-                <FormattedMessage id='and experiment on' />
-                <a href={'https://adaptivecards.io/designer/'}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  tabIndex={0}
-                  className={classes.link}
-                >
-                  <FormattedMessage id='Adaptive Cards designer' />
-                </a>
-              </MessageBar>
-              <IconButton className={classes.copyIcon}
-                ariaLabel={translateMessage('Copy')}
-                iconProps={{
-                  iconName: 'copy'
-                }}
-                onClick={async () =>
-                  trackedGenericCopy(
-                    JSON.stringify(data.template, null, 4),
-                    componentNames.JSON_SCHEMA_COPY_BUTTON,
-                    sampleQuery)}
-              />
-              <Monaco
-                language='json'
-                body={data.template}
-                height={'800px'}
-              />
+              <div id={'json-schema-tab'}>
+                <MessageBar messageBarType={MessageBarType.info}>
+                  <FormattedMessage id='Get started with adaptive cards on' />
+                  <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    tabIndex={0}
+                    className={classes.link}
+                  >
+                    <FormattedMessage id='Adaptive Cards Templating SDK' />
+                  </a>
+                  <FormattedMessage id='and experiment on' />
+                  <a href={'https://adaptivecards.io/designer/'}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    tabIndex={0}
+                    className={classes.link}
+                  >
+                    <FormattedMessage id='Adaptive Cards designer' />
+                  </a>
+                </MessageBar>
+                <CopyButton
+                  className={classes.copyIcon}
+                  handleOnClick={handleCopy}
+                  isIconButton={true}
+                />
+                <Monaco
+                  language='json'
+                  body={data.template}
+                  height={'800px'}
+                />
+              </div>
             </PivotItem>
           </Pivot>
         );
-      } catch (err) {
+      } catch (err : any) {
         return <div style={{ color: 'red' }}>{err.message}</div>;
       }
     }

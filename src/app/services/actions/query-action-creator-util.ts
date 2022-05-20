@@ -1,16 +1,22 @@
+import { InteractionType } from '@azure/msal-browser';
 import {
   AuthenticationHandlerOptions,
   GraphRequest,
   ResponseType
 } from '@microsoft/microsoft-graph-client';
-import { MSALAuthenticationProviderOptions } from
-  '@microsoft/microsoft-graph-client/lib/src/MSALAuthenticationProviderOptions';
+import {
+  AuthCodeMSALBrowserAuthenticationProviderOptions
+} from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
 
+import { authenticationWrapper } from '../../../modules/authentication';
 import { IAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
+import { IStatus } from '../../../types/status';
+import { ClientError } from '../../utils/ClientError';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
+import { translateMessage } from '../../utils/translate-messages';
 import { authProvider, GraphClient } from '../graph-client';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
@@ -28,13 +34,17 @@ export async function anonymousRequest(
   query: IQuery,
   getState: Function
 ) {
+  const { proxyUrl, queryRunnerStatus } = getState();
+  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl, queryRunnerStatus);
   dispatch(queryRunningStatus(true));
-  const { proxyUrl } = getState();
-  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl);
-  return fetch(graphUrl, options);
+  return fetch(graphUrl, options)
+    .catch(() => {
+      throw new ClientError({ error: translateMessage('Could not connect to the sandbox') });
+    })
+    .then((response) => { return response; });
 }
 
-export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
+export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRunnerStatus: IStatus) {
   const escapedUrl = encodeURIComponent(query.sampleUrl);
   const graphUrl = `${proxyUrl}?url=${escapedUrl}`;
   const sampleHeaders: any = {};
@@ -46,12 +56,17 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string) {
   }
 
   const authToken = '{token:https://graph.microsoft.com/}';
-  const headers = {
+  let headers = {
     Authorization: `Bearer ${authToken}`,
     'Content-Type': 'application/json',
     SdkVersion: 'GraphExplorer/4.0',
     ...sampleHeaders
   };
+
+  if (queryRunnerStatus && !queryRunnerStatus.ok) {
+    const updatedHeaders = { ...headers, 'cache-control': 'no-cache', pragma: 'no-cache' }
+    headers = updatedHeaders;
+  }
 
   const options: IRequestOptions = {
     method: query.selectedVerb,
@@ -82,11 +97,15 @@ function createAuthenticatedRequest(
     });
   }
 
-  const msalAuthOptions = new MSALAuthenticationProviderOptions(scopes);
+  const msalAuthOptions: AuthCodeMSALBrowserAuthenticationProviderOptions = {
+    account: authenticationWrapper.getAccount()!,
+    interactionType: InteractionType.Popup,
+    scopes
+  }
   const middlewareOptions = new AuthenticationHandlerOptions(
     authProvider,
     msalAuthOptions
-  );
+  )
   const graphRequest = GraphClient.getInstance()
     .api(encodeHashCharacters(query))
     .middlewareOptions([middlewareOptions])
@@ -227,7 +246,26 @@ export function parseResponse(
   return response;
 }
 
-export function queryResultsInCorsError(sampleQuery: IQuery) {
-  const requestUrl = new URL(sampleQuery.sampleUrl);
-  return requestUrl.pathname.match(/\/content(\/)*$/i) != null;
+/**
+ * Check if query attempts to download from OneDrive's /content API or reporting API
+ * Examples:
+ *  /drive/items/{item-id}/content
+ *  /shares/{shareIdOrEncodedSharingUrl}/driveItem/content
+ *  /me/drive/items/{item-id}/thumbnails/{thumb-id}/{size}/content
+ *  /sites/{site-id}/drive/items/{item-id}/versions/{version-id}/content
+ *  /reports/getOffice365ActivationCounts?$format=text/csv
+ *  /reports/getEmailActivityUserCounts(period='D7')?$format=text/csv
+ * @param query
+ * @returns true if query calls the OneDrive or reporting API, otherwise false
+ */
+export function queryResultsInCorsError(sampleUrl: string): boolean {
+  sampleUrl = sampleUrl.toLowerCase();
+  if (
+    (['/drive/', '/drives/', '/driveItem/'].some((x) =>
+      sampleUrl.includes(x)) && sampleUrl.endsWith('/content')) ||
+    sampleUrl.includes('/reports/')
+  ) {
+    return true;
+  }
+  return false;
 }

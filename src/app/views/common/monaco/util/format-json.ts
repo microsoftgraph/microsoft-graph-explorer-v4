@@ -1,8 +1,14 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 
-import { componentNames, errorTypes, telemetry } from '../../../../../telemetry';
+import {
+  componentNames,
+  errorTypes,
+  telemetry
+} from '../../../../../telemetry';
 
-export function formatJsonStringForAllBrowsers(body: string | object | undefined) {
+export function formatJsonStringForAllBrowsers(
+  body: string | object | undefined
+) {
   /**
    * 1. Remove whitespace, tabs or raw string (Safari related issue)
    * 2. Convert back to javascript object
@@ -16,7 +22,7 @@ export function formatJsonStringForAllBrowsers(body: string | object | undefined
       new Error(errorTypes.OPERATIONAL_ERROR),
       SeverityLevel.Error,
       {
-        ComponentName: componentNames.MONACO_EDITOR,
+        ComponentName: componentNames.MONACO_EDITOR_FORMAT_JSON_ACTION,
         Message: `${error}`
       }
     );

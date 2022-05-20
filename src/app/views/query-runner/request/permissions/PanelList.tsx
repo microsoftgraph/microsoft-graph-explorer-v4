@@ -4,6 +4,7 @@ import {
   DetailsListLayoutMode,
   GroupHeader,
   IColumn,
+  IDetailsListCheckboxProps,
   Label,
   SearchBox,
   SelectionMode
@@ -17,6 +18,7 @@ import { IPermission } from '../../../../../types/permissions';
 import { IRootState } from '../../../../../types/root';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';
+import { searchBoxStyles } from '../../../../utils/searchbox.styles';
 import { setConsentedStatus } from './util';
 
 interface IPanelList {
@@ -31,16 +33,21 @@ interface IPanelList {
 
 const PanelList = ({ messages,
   columns, classes, selection,
-  renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) => {
+  renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) : JSX.Element => {
+
+  const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
+    return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
+  }
 
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
-  const [permissions, setPermissions] = useState(scopes.data.sort(dynamicSort('value', SortOrder.ASC)));
+  const { fullPermissions } = scopes.data;
+  const [permissions, setPermissions] = useState(sortPermissions(fullPermissions));
   const permissionsList: any[] = [];
   const tokenPresent = !!authToken.token;
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
-  permissions.forEach((perm: any) => {
+  permissions.forEach((perm: IPermission) => {
     const permission: any = { ...perm };
     const permissionValue = permission.value;
     const groupName = permissionValue.split('.')[0];
@@ -49,11 +56,11 @@ const PanelList = ({ messages,
   });
 
   const searchValueChanged = (event: any, value?: string): void => {
-    let filteredPermissions = scopes.data;
+    let filteredPermissions = scopes.data.fullPermissions;
     if (value) {
       const keyword = value.toLowerCase();
 
-      filteredPermissions = scopes.data.filter((permission: IPermission) => {
+      filteredPermissions = fullPermissions.filter((permission: IPermission) => {
         const name = permission.value.toLowerCase();
         return name.includes(keyword);
       });
@@ -64,7 +71,7 @@ const PanelList = ({ messages,
   const groups = generateGroupsFromList(permissionsList, 'groupName');
 
 
-  const _onRenderGroupHeader = (props: any): any => {
+  const onRenderGroupHeader = (props: any): JSX.Element | null => {
     if (props) {
       return (
         <GroupHeader  {...props} onRenderGroupHeaderCheckbox={renderCustomCheckbox} />
@@ -84,7 +91,7 @@ const PanelList = ({ messages,
         placeholder={messages['Search permissions']}
         onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
           searchValueChanged(event, newValue)}
-        styles={{ field: { paddingLeft: 10 } }}
+        styles={searchBoxStyles}
       />
       <Announced message={`${permissions.length} search results available.`} />
       <hr />
@@ -100,13 +107,13 @@ const PanelList = ({ messages,
         compact={true}
         groupProps={{
           showEmptyGroups: false,
-          onRenderHeader: _onRenderGroupHeader
+          onRenderHeader: onRenderGroupHeader
         }}
         ariaLabelForSelectionColumn={messages['Toggle selection'] || 'Toggle selection'}
         ariaLabelForSelectAllCheckbox={messages['Toggle selection for all items'] || 'Toggle selection for all items'}
         checkButtonAriaLabel={messages['Row checkbox'] || 'Row checkbox'}
         onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)}
-        onRenderCheckbox={(props: any) => renderCustomCheckbox(props)}
+        onRenderCheckbox={(props?: IDetailsListCheckboxProps) => renderCustomCheckbox(props)}
       />
       {permissions && permissions.length === 0 &&
         <Label style={{

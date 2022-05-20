@@ -4,6 +4,7 @@ import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
+import { ClientError } from '../../utils/ClientError';
 import { setStatusMessage } from '../../utils/status-message';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
 import {
@@ -28,51 +29,27 @@ export function runQuery(query: IQuery): Function {
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query)
         .then(async (response: Response) => {
-          await processResponse(
-            response,
-            respHeaders,
-            dispatch,
-            createdAt,
-            tokenPresent
-          );
+          await processResponse(response, respHeaders, dispatch, createdAt);
         })
         .catch(async (error: any) => {
-          dispatch(
-            queryResponse({
-              body: error,
-              headers: null
-            })
-          );
-          return dispatch(
-            setQueryResponseStatus({
-              messageType: MessageBarType.error,
-              ok: false,
-              status: 400,
-              statusText: 'Bad Request'
-            })
-          );
+          return handleError(dispatch, error);
         });
     }
 
-    return anonymousRequest(dispatch, query, getState).then(
-      async (response: Response) => {
-        await processResponse(
-          response,
-          respHeaders,
-          dispatch,
-          createdAt,
-          tokenPresent
-        );
-      }
-    );
+    return anonymousRequest(dispatch, query, getState)
+      .then(async (response: Response) => {
+        await processResponse(response, respHeaders, dispatch, createdAt);
+      })
+      .catch(async (error: any) => {
+        return handleError(dispatch, error);
+      });
   };
 
   async function processResponse(
     response: Response,
     respHeaders: any,
     dispatch: Function,
-    createdAt: any,
-    tokenPresent: boolean
+    createdAt: any
   ) {
     let result = await parseResponse(response, respHeaders);
     const duration = new Date().getTime() - new Date(createdAt).getTime();
@@ -96,14 +73,15 @@ export function runQuery(query: IQuery): Function {
 
     if (response) {
       status.status = response.status;
-      status.statusText = response.statusText === '' ? setStatusMessage(response.status) : response.statusText;
+      status.statusText =
+        response.statusText === ''
+          ? setStatusMessage(response.status)
+          : response.statusText;
     }
 
     if (response && response.ok) {
       status.ok = true;
       status.messageType = MessageBarType.success;
-
-      dispatch(setQueryResponseStatus(status));
 
       if (isFileResponse(respHeaders)) {
         const contentDownloadUrl = await generateResponseDownloadUrl(
@@ -116,100 +94,49 @@ export function runQuery(query: IQuery): Function {
           };
         }
       }
-
-      return dispatch(
-        queryResponse({
-          body: result,
-          headers: respHeaders
-        })
-      );
-    } else {
-      if (
-        response.status === 0 &&
-        tokenPresent &&
-        queryResultsInCorsError(query)
-      ) {
-        fetchContentDownloadUrl(query, dispatch);
-      } else {
-        dispatch(
-          queryResponse({
-            body: result,
-            headers: respHeaders
-          })
-        );
-        return dispatch(setQueryResponseStatus(status));
-      }
     }
+
+    dispatch(setQueryResponseStatus(status));
+
+    return dispatch(
+      queryResponse({
+        body: result,
+        headers: respHeaders
+      })
+    );
   }
-}
 
-async function fetchContentDownloadUrl(
-  sampleQuery: IQuery,
-  dispatch: Function
-) {
-  const requestUrl = new URL(sampleQuery.sampleUrl);
-  const isOriginalFormat = !requestUrl.searchParams.has('format');
+  function handleError(dispatch: Function, error: any) {
+    let body = error;
+    const status: IStatus = {
+      messageType: MessageBarType.error,
+      ok: false,
+      status: 400,
+      statusText: 'Bad Request'
+    };
 
-  // drop any search params from query URL
-  requestUrl.search = '';
+    if (error instanceof ClientError) {
+      status.status = 0;
+      status.statusText = `${error.name}: ${error.message}`;
+    }
 
-  // remove /content from path
-  requestUrl.pathname = requestUrl.pathname.replace(/\/content(\/)*$/i, '');
+    if (queryResultsInCorsError(query.sampleUrl)) {
+      status.status = 0;
+      status.statusText = 'CORS error';
+      body = {
+        throwsCorsError: true
+      };
+    }
 
-  // set new sampleUrl for fetching download URL
-  const query: IQuery = { ...sampleQuery };
-  query.sampleUrl = requestUrl.toString();
+    dispatch(
+      queryResponse({
+        body,
+        headers: null
+      })
+    );
 
-  const status: IStatus = {
-    messageType: MessageBarType.error,
-    ok: false,
-    status: 400,
-    statusText: ''
-  };
-
-  authenticatedRequest(dispatch, query)
-    .then(async (response: Response) => {
-      if (response) {
-        status.status = response.status;
-        status.statusText = response.statusText;
-        status.ok = response.ok;
-
-        if (response.ok) {
-          status.messageType = MessageBarType.success;
-
-          const result = await parseResponse(response);
-          const downloadUrl = result['@microsoft.graph.downloadUrl'];
-
-          dispatch(
-            queryResponse({
-              body: {
-                contentDownloadUrl: downloadUrl,
-                isOriginalFormat,
-                isWorkaround: true
-              },
-              headers: null
-            })
-          );
-        }
-      } else {
-        dispatch(
-          queryResponse({
-            body: null,
-            headers: null
-          })
-        );
-      }
-      return dispatch(setQueryResponseStatus(status));
-    })
-    .catch(async (error: any) => {
-      dispatch(
-        queryResponse({
-          body: error,
-          headers: null
-        })
-      );
-      return dispatch(setQueryResponseStatus(status));
-    });
+    return dispatch(setQueryResponseStatus(status));
+  }
 }
 
 async function createHistory(
@@ -222,7 +149,7 @@ async function createHistory(
   duration: number
 ) {
   const status = response.status;
-  const statusText = response.statusText;
+  const statusText = response.statusText === '' ? setStatusMessage(status) : response.statusText;
   const responseHeaders = { ...respHeaders };
   const contentType = respHeaders['content-type'];
 

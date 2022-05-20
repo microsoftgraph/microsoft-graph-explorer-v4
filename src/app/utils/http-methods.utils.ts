@@ -2,7 +2,7 @@ import { getTheme } from '@fluentui/react';
 
 export function getStyleFor(method: string) {
   const currentTheme = getTheme();
-  method = method.toUpperCase();
+  method = method?.toUpperCase();
 
   switch (method) {
     case 'GET':
@@ -24,4 +24,3 @@ export function getStyleFor(method: string) {
       return currentTheme.palette.orangeLight;
   }
 }
-

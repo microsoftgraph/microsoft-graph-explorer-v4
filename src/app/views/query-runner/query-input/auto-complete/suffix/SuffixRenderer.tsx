@@ -1,5 +1,5 @@
 import {
-  Callout, getId, Icon, ITooltipHostStyles,
+  Callout, getId, IconButton, IIconProps, ITooltipHostStyles,
   Spinner, Text, TooltipHost
 } from '@fluentui/react';
 import React, { useState } from 'react';
@@ -84,36 +84,45 @@ const SuffixRenderer = () => {
   }
   const hints = getHints();
   const hintsAvailable = hints.length > 0;
+  const infoIcon: IIconProps = { iconName: 'Info' };
 
-  if (hintsAvailable) {
-    return (
-      <>
-        <Icon
-          iconName='Info'
+
+  return (
+    <>
+      <TooltipHost
+        content={translateMessage('More info')}
+        id={getId()}
+        calloutProps={calloutProps}
+        styles={hostStyles}
+      >
+        <IconButton
+          iconProps={infoIcon}
           className={styles.iconButton}
           onClick={toggleCallout}
           id={buttonId}
+          ariaLabel={translateMessage('More Info')}
+          disabled={!hintsAvailable}
         />
-        {isCalloutVisible && (
-          <Callout
-            className={styles.callout}
-            ariaLabelledBy={labelId}
-            ariaDescribedBy={descriptionId}
-            role='alertdialog'
-            gapSpace={0}
-            target={`#${buttonId}`}
-            onDismiss={toggleCallout}
-            setInitialFocus
-          >
-            <Text block variant='xLarge' className={styles.title} id={labelId}>
-              /{requestUrl}
-            </Text>
-            <HintList hints={hints} />
-          </Callout>
-        )}
-      </>);
-  }
-  return null;
+      </TooltipHost>
+      {isCalloutVisible && (
+        <Callout
+          className={styles.callout}
+          ariaLabelledBy={labelId}
+          ariaDescribedBy={descriptionId}
+          role='alertdialog'
+          gapSpace={0}
+          target={`#${buttonId}`}
+          onDismiss={toggleCallout}
+          setInitialFocus
+        >
+          <Text block variant='xLarge' className={styles.title} id={labelId}>
+            /{requestUrl}
+          </Text>
+          <HintList hints={hints} />
+        </Callout>
+      )}
+    </>
+  );
 }
 
 export default SuffixRenderer;

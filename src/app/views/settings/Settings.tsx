@@ -1,8 +1,7 @@
-
 import { DropdownMenuItemType, getId, IconButton, TooltipHost } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
 import { globalCloud, storeCloudValue } from '../../../modules/sovereign-clouds';
@@ -184,12 +183,14 @@ function Settings(props: ISettingsProps) {
           toggleThemeChooserDialogState={toggleThemeChooserDialogState}
         />
         <PermissionsPanel changePanelState={changePanelState} />
-        {cloudSelectorOpen && <SovereignClouds
-          cloudSelectorOpen={cloudSelectorOpen}
-          toggleCloudSelector={toggleCloudSelector}
-        />}
-      </div>
-    </div>
+        {
+          cloudSelectorOpen && <SovereignClouds
+            cloudSelectorOpen={cloudSelectorOpen}
+            toggleCloudSelector={toggleCloudSelector}
+          />
+        }
+      </div >
+    </div >
   );
 }
 

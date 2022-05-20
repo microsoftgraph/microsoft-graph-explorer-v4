@@ -1,15 +1,21 @@
 import { Guid } from 'guid-typescript';
 
-import { IPostmanCollection, Item } from '../../../../../types/postman-collection';
+import {
+  IPostmanCollection,
+  Item
+} from '../../../../../types/postman-collection';
 import { IResourceLink } from '../../../../../types/resources';
 import { GRAPH_URL } from '../../../../services/graph-constants';
 
-export function generatePostmanCollection(paths: IResourceLink[]): IPostmanCollection {
+export function generatePostmanCollection(
+  paths: IResourceLink[]
+): IPostmanCollection {
   const collection: IPostmanCollection = {
     info: {
       _postman_id: Guid.create().toString(),
       name: 'Graph-Collection',
-      schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
+      schema:
+        'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
     },
     item: generateItemsFromPaths(paths)
   };
@@ -24,13 +30,16 @@ function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
       name,
       url,
       version,
-      path
+      paths: path
     } = resource;
 
+    path.shift();
+    path.unshift(version!);
+
     const item: Item = {
-      name,
+      name: `${name}-${version}`,
       request: {
-        method,
+        method: method!,
         url: {
           raw: `${GRAPH_URL}/${version}${url}`,
           protocol: 'https',

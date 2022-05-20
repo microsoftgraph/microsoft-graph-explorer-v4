@@ -6,13 +6,25 @@ export const appStyles = (theme: ITheme) => {
       background: theme.semanticColors.bodyBackground,
       color: theme.semanticColors.bodyText,
       paddingTop: theme.spacing.s1,
-      width: '100%'
+      width: '100%',
+      height: '100%',
+      paddingRight: '15px',
+      paddingLeft: '4px',
+      marginLeft: 'auto',
+      marginRight: 'auto'
+    },
+    appRow: {
+      display: 'flex',
+      flexWrap: 'no-wrap',
+      alignItems: 'stretch'
     },
     tryItMessage: {
       marginBottom: theme.spacing.s1
     },
     sidebar: {
-      background: theme.palette.neutralLighter
+      background: theme.palette.neutralLighter,
+      paddingRight: 10,
+      marginRight: 10
     },
     sidebarMini: {
       background: theme.palette.neutralLighter,
@@ -56,8 +68,24 @@ export const appStyles = (theme: ITheme) => {
     statusAreaMobileScreen: {
       marginTop: 5
     },
-    statusAreaLaptopScreen: {
-      marginTop: 0
+    statusAreaFullScreen: {
+      marginTop: 10
+    },
+    vResizeHandle: {
+      zIndex: 1,
+      borderRight: '1px solid silver',
+      '&:hover': {
+        borderRight: '3px solid silver'
+      }
+    },
+    feedbackButtonFullScreenDisplay: {
+      position: 'relative',
+      top: '5px'
+    },
+    feedbackButtonMobileDisplay: {
+      position: 'absolute',
+      top: '13px',
+      right: '10px'
     }
   };
 };

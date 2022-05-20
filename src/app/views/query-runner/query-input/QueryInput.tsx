@@ -1,5 +1,4 @@
-import { IDropdownOption } from '@fluentui/react';
-import { Dropdown } from '@fluentui/react';
+import { IDropdownOption, Dropdown } from '@fluentui/react';
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,12 +6,15 @@ import { httpMethods, IQueryInputProps } from '../../../../types/query-runner';
 
 import { IRootState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { GRAPH_API_VERSIONS } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
 import SubmitButton from '../../../views/common/submit-button/SubmitButton';
 import { queryRunnerStyles } from '../QueryRunner.styles';
 import { AutoComplete } from './auto-complete';
+import { ShareQuery } from './share-query';
+
 
 const QueryInput = (props: IQueryInputProps) => {
   const {
@@ -23,11 +25,13 @@ const QueryInput = (props: IQueryInputProps) => {
 
   const dispatch = useDispatch();
 
-
-  const urlVersions: IDropdownOption[] = [
-    { key: 'v1.0', text: 'v1.0' },
-    { key: 'beta', text: 'beta' }
-  ];
+  const urlVersions: IDropdownOption[] = [];
+  GRAPH_API_VERSIONS.forEach(version => {
+    urlVersions.push({
+      key: version,
+      text: version
+    })
+  });
 
   const { sampleQuery, authToken,
     isLoadingData: submitting } = useSelector((state: IRootState) => state);
@@ -72,43 +76,49 @@ const QueryInput = (props: IQueryInputProps) => {
   };
 
   return (
-    <div className='row'>
-      <div className='col-xs-12 col-lg-2'>
-        <Dropdown
-          ariaLabel={translateMessage('HTTP request method option')}
-          selectedKey={sampleQuery.selectedVerb}
-          options={httpMethods}
-          styles={verbSelector}
-          errorMessage={showError ? translateMessage('Sign in to use this method') : undefined}
-          onChange={(event, method) => handleOnMethodChange(method)}
-        />
+    <>
+      <div className='row' >
+        <div className='col-xs-12 col-lg-2'>
+          <Dropdown
+            ariaLabel={translateMessage('HTTP request method option')}
+            selectedKey={sampleQuery.selectedVerb}
+            options={httpMethods}
+            styles={verbSelector}
+            errorMessage={showError ? translateMessage('Sign in to use this method') : undefined}
+            onChange={(event, method) => handleOnMethodChange(method)}
+          />
+        </div>
+        <div className='col-xs-12 col-lg-2'>
+          <Dropdown
+            ariaLabel={translateMessage('Microsoft Graph API Version option')}
+            selectedKey={sampleQuery.selectedVersion || 'v1.0'}
+            options={urlVersions}
+            onChange={(event, method) => handleOnVersionChange(method)}
+          />
+        </div>
+        <div className='col-xs-12 col-lg-5'>
+          <AutoComplete
+            contentChanged={contentChanged}
+            runQuery={runQuery}
+          />
+        </div>
+        <div className='col-lg-2 col-sm-10 col-xs-10'>
+          <SubmitButton
+            className='run-query-button'
+            text={translateMessage('Run Query')}
+            disabled={showError || !sampleQuery.sampleUrl}
+            role='button'
+            handleOnClick={() => runQuery()}
+            submitting={submitting}
+            allowDisabledFocus={true}
+          />
+        </div>
+        <div className='col-lg-1 col-sm-2 col-xs-2'>
+          <ShareQuery/>
+        </div>
       </div>
-      <div className='col-xs-12 col-lg-2'>
-        <Dropdown
-          ariaLabel={translateMessage('Microsoft Graph API Version option')}
-          selectedKey={sampleQuery.selectedVersion || 'v1.0'}
-          options={urlVersions}
-          onChange={(event, method) => handleOnVersionChange(method)}
-        />
-      </div>
-      <div className='col-xs-12 col-lg-6'>
-        <AutoComplete
-          contentChanged={contentChanged}
-          runQuery={runQuery}
-        />
-      </div>
-      <div className='col-xs-12 col-lg-2'>
-        <SubmitButton
-          className='run-query-button'
-          text={translateMessage('Run Query')}
-          disabled={showError || !sampleQuery.sampleUrl}
-          role='button'
-          handleOnClick={() => runQuery()}
-          submitting={submitting}
-          allowDisabledFocus={true}
-        />
-      </div>
-    </div>)
+    </>
+  )
 }
 
 // @ts-ignore

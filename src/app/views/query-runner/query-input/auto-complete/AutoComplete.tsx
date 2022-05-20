@@ -8,9 +8,10 @@ import { IAutoCompleteProps, IAutoCompleteState } from '../../../../../types/aut
 import { SortOrder } from '../../../../../types/enums';
 import { IRootState } from '../../../../../types/root';
 import * as autoCompleteActionCreators from '../../../../services/actions/autocomplete-action-creators';
+import { GRAPH_API_VERSIONS } from '../../../../services/graph-constants';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
-import { parseSampleUrl } from '../../../../utils/sample-url-generation';
+import { hasWhiteSpace, parseSampleUrl, removeExtraSlashesFromUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
 import {
@@ -19,7 +20,7 @@ import {
   getParametersWithVerb
 } from './auto-complete.util';
 import SuffixRenderer from './suffix/SuffixRenderer';
-import SuggestionsList from './SuggestionsList';
+import SuggestionsList from './suggestion-list/SuggestionsList';
 
 class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private autoCompleteRef: React.RefObject<ITextField>;
@@ -106,10 +107,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   };
 
   private initialiseAutoComplete = (url: string) => {
-    const isSlashPreceed = url.substring(url.length - 1, url.length - 2);
-    if (isSlashPreceed === '/') {
-      return;
-    }
+    url = removeExtraSlashesFromUrl(url);
     switch (getLastCharacterOf(url)) {
       case '/':
       case '?':
@@ -147,6 +145,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           const selected = filteredSuggestions[activeSuggestion];
           this.appendSuggestionToUrl(selected);
         } else {
+          event.preventDefault();
           this.props.contentChanged(queryUrl);
           this.props.runQuery();
         }
@@ -252,13 +251,17 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   }
 
   private setSuggestions(suggestions: string[], compare?: string) {
-    const sortedSuggestions = suggestions.sort(dynamicSort(null, SortOrder.ASC));
+    const sortedSuggestions = this.sortSuggestions(suggestions);
     this.setState({
       filteredSuggestions: sortedSuggestions,
       suggestions: sortedSuggestions,
       showSuggestions: (suggestions.length > 0),
       compare: compare || ''
     });
+  }
+
+  private sortSuggestions(suggestions: string[]): string[] {
+    return suggestions.sort(dynamicSort(null, SortOrder.ASC));
   }
 
   public componentDidUpdate = (prevProps: IAutoCompleteProps) => {
@@ -284,7 +287,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
   private requestForAutocompleteOptions(url: string) {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
-    if (queryVersion) {
+    if (GRAPH_API_VERSIONS.includes(queryVersion.toLowerCase())) {
       if (!requestUrl) {
         this.props.actions!.fetchAutoCompleteOptions('', queryVersion);
       } else {
@@ -389,7 +392,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
             onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
             ariaLabel={translateMessage('Query Sample Input')}
             role='textbox'
-            errorMessage={!queryUrl ? translateMessage('Missing url') : ''}
+            errorMessage={getErrorMessage()}
           />
         </div>
         {showSuggestions && userInput && filteredSuggestions.length > 0 &&
@@ -399,6 +402,20 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
             onClick={(e: any) => this.selectSuggestion(e)} />}
       </div>
     );
+
+    function getErrorMessage(): string | JSX.Element | undefined {
+      if (!queryUrl) {
+        return translateMessage('Missing url');
+      }
+      if (hasWhiteSpace(queryUrl)) {
+        return translateMessage('Invalid whitespace in URL');
+      }
+      const { queryVersion } = parseSampleUrl(queryUrl)
+      if (!GRAPH_API_VERSIONS.includes(queryVersion)) {
+        return translateMessage('Invalid version in URL');
+      }
+      return '';
+    }
   }
 }
 

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../../../types/root';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
 import { responseMessages } from '../../app-sections/ResponseMessages';
-import { convertVhToPx, getResponseHeight } from '../../common/dimensions-adjustment';
+import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import ResponseDisplay from './ResponseDisplay';
 
 const Response = () => {
@@ -17,14 +17,15 @@ const Response = () => {
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
 
   const contentDownloadUrl = body?.contentDownloadUrl;
+  const throwsCorsError = body?.throwsCorsError;
   const contentType = getContentType(headers);
   return (
     <div style={{ display: 'block' }}>
       {responseMessages(graphResponse, sampleQuery, dispatch)}
-      {headers &&
+      {!contentDownloadUrl && !throwsCorsError && headers &&
         <ResponseDisplay
           contentType={contentType}
-          body={!contentDownloadUrl && body}
+          body={body}
           height={height}
         />}
     </div>

@@ -11,7 +11,7 @@ import {
   DEFAULT_USER_SCOPES,
   HOME_ACCOUNT_KEY
 } from '../../app/services/graph-constants';
-import { signInAuthError } from '../../app/views/authentication/AuthenticationErrorsHints';
+import { signInAuthError } from './authentication-error-hints';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './IAuthenticationWrapper';
@@ -41,6 +41,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   public async logIn(sessionId = ''): Promise<AuthenticationResult> {
     this.consentingToNewScopes = false;
+    // eslint-disable-next-line no-useless-catch
     try {
       return await this.getAuthResult([], sessionId);
     } catch (error) {
@@ -68,9 +69,9 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
    */
   public async consentToScopes(scopes: string[] = []): Promise<AuthenticationResult> {
     this.consentingToNewScopes = true;
+    // eslint-disable-next-line no-useless-catch
     try {
-      const authResult = await this.loginWithInteraction(scopes);
-      return authResult;
+      return await this.loginWithInteraction(scopes);
     } catch (error) {
       throw error;
     }
@@ -81,7 +82,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       return undefined;
     }
 
-    const allAccounts = msalApplication.getAllAccounts();
+    const allAccounts: AccountInfo[] = msalApplication.getAllAccounts();
     if (!allAccounts || allAccounts.length === 0) {
       return undefined;
     }
@@ -101,12 +102,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       scopes: defaultScopes, authority: this.getAuthority(),
       account: this.getAccount(), redirectUri: getCurrentUri()
     };
-    try {
-      const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
-      return response;
-    } catch (error) {
-      throw error;
-    }
+    const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
+    return response;
   }
 
   public async getOcpsToken() {
