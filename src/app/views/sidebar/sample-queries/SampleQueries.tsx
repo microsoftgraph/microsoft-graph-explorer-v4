@@ -279,7 +279,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     return (
       <GroupHeader
         {...props}
-        compact={true}
+        //compact={true}
         styles={{
           check: { display: 'none' },
           title: {
@@ -300,8 +300,9 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
   if (selectedQuery) {
     const index = groups.findIndex(k => k.key === selectedQuery.category);
-    if (index !== -1) {
+    if (index !== -1 && index !== 0 ) {
       groups[index].isCollapsed = false;
+      groups[0].isCollapsed = true;
     }
   }
 
