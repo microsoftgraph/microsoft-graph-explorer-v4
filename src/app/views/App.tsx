@@ -425,7 +425,7 @@ class App extends Component<IAppProps, IAppState> {
                 bounds={'parent'}
                 size={{
                   width: sideWidth,
-                  height: ''
+                  height: 'auto'
                 }}
               >
                 <Sidebar currentTab = { this.state.sidebarTabSelection }
@@ -446,7 +446,7 @@ class App extends Component<IAppProps, IAppState> {
                 }}
                 size={{
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
-                  height: contentHeight
+                  height: 'auto'
                 }}
                 style={!sidebarProperties.showSidebar && !mobileScreen ? { marginLeft: '8px', flex: 1 } : {flex: 1}}
               >
