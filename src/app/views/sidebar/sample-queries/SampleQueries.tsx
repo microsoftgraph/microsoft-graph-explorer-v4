@@ -1,7 +1,7 @@
 import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
   getTheme,
-  GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
+  GroupHeader, IColumn, Icon, IDetailsRowStyles, IGroup, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
@@ -44,7 +44,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   const currentTheme = getTheme();
 
   const { error, pending } = samples;
-  const groups = generateGroupsFromList(sampleQueries, 'category');
+  const groups: IGroup[] = generateGroupsFromList(sampleQueries, 'category');
 
   const classProps = {
     styles: sampleProps!.styles,
@@ -276,12 +276,9 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   };
 
   const renderGroupHeader = (props: any): any => {
-    const onToggleSelectGroup = () => {
-      props.onToggleCollapse(props.group);
-    };
-
     return (
       <GroupHeader
+        {...props}
         compact={true}
         styles={{
           check: { display: 'none' },
@@ -293,8 +290,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             fontSize: FontSizes.small
           }
         }}
-        {...props}
-        onToggleSelectGroup={onToggleSelectGroup}
       />
     );
   };
