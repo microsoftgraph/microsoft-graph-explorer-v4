@@ -9,7 +9,7 @@ const initialState: IDimensions = {
   },
   response: {
     width: '100%',
-    height: '60%'
+    height: '45%'
   },
   sidebar: {
     width: '26%',

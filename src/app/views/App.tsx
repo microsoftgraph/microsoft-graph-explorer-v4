@@ -425,7 +425,7 @@ class App extends Component<IAppProps, IAppState> {
                 bounds={'parent'}
                 size={{
                   width: sideWidth,
-                  height: 'auto'
+                  height: ''
                 }}
               >
                 <Sidebar currentTab = { this.state.sidebarTabSelection }
@@ -446,11 +446,11 @@ class App extends Component<IAppProps, IAppState> {
                 }}
                 size={{
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
-                  height: 'auto'
+                  height: contentHeight
                 }}
                 style={!sidebarProperties.showSidebar && !mobileScreen ? { marginLeft: '8px', flex: 1 } : {flex: 1}}
               >
-                <div style={{ marginBottom: 8, marginTop: 10 }} >
+                <div style={{ marginBottom: 8}} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
 
