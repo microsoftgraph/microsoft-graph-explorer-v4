@@ -19,7 +19,7 @@ import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/a
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
-import { addHistoryItem } from './app/services/actions/request-history-action-creators';
+import { bulkAddHistoryItems } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
@@ -35,7 +35,6 @@ import { loadGETheme } from './themes';
 import { readTheme } from './themes/theme-utils';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
-import { IHistoryItem } from './types/history';
 import { changeTheme } from './app/services/actions/theme-action-creator';
 import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
 
@@ -140,9 +139,7 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
 
 readHistoryData().then((data: any) => {
   if (data.length > 0) {
-    data.forEach((element: IHistoryItem) => {
-      appStore.dispatch(addHistoryItem(element));
-    });
+    appStore.dispatch(bulkAddHistoryItems(data));
   }
 });
 

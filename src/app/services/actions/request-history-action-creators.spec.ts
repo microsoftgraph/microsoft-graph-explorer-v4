@@ -3,12 +3,14 @@ import thunk from 'redux-thunk';
 
 import {
   addHistoryItem, viewHistoryItem, removeHistoryItem,
-  bulkRemoveHistoryItems
+  bulkRemoveHistoryItems,
+  bulkAddHistoryItems
 } from './request-history-action-creators';
 import {
   ADD_HISTORY_ITEM_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS,
   REMOVE_HISTORY_ITEM_SUCCESS,
-  REMOVE_ALL_HISTORY_ITEMS_SUCCESS
+  REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
+  BULK_ADD_HISTORY_ITEMS_SUCCESS
 } from '../redux-constants';
 import { IHistoryItem } from '../../../types/history';
 
@@ -134,8 +136,46 @@ describe('Request History Action Creators', () => {
       .then(() => {
         expect(store.getActions()).toEqual([expectedAction]);
       })
+  });
+
+  it('dispatches BULK_ADD_HISTORY_ITEMS_SUCCESS when bulkAddHistoryItems is called', () => {
+    // Arrange
+    const historyItems = [
+      {
+        index: 0,
+        statusText: 'Something worked!',
+        responseHeaders: [],
+        result: {},
+        url: 'https://graph.microsoft.com/v1.0/me',
+        method: 'GET',
+        headers: [],
+        createdAt: '12345',
+        status: 200,
+        duration: 200
+      },
+      {
+        index: 1,
+        statusText: 'Another history item!',
+        responseHeaders: [],
+        result: {},
+        url: 'https://graph.microsoft.com/v1.0/me/events',
+        method: 'GET',
+        headers: [],
+        createdAt: '12345',
+        status: 200,
+        duration: 200
+      }
+    ]
+
+    const expectedAction = {
+      type: BULK_ADD_HISTORY_ITEMS_SUCCESS,
+      response: historyItems
+    }
+
+    const store = mockStore([]);
+
+    // Act and Assert
+    store.dispatch(bulkAddHistoryItems(historyItems));
+    expect(store.getActions()).toEqual([expectedAction]);
   })
 });
-
-//Add tests for the async functions
-
