@@ -102,6 +102,9 @@ jobs:
     name: Test
     needs: install
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6]
 
     steps:
       - name: Checkout repository
@@ -121,12 +124,31 @@ jobs:
           key: modules-${{ hashFiles('package-lock.json') }}
 
       - name: Test
-        run: npm run test -- --maxWorkers=7 --coverage --testResultsProcessor=jest-sonar-reporter
+        run: npm run test -- --verbose --shard=${{ matrix.shard }}/${{ strategy.job-total }} --coverage --testResultsProcessor=jest-sonar-reporter
 
       - name: Fix code coverage paths
         run: |
           sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
           sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
+
+      - run: mv coverage/lcov.info coverage/${{matrix.shard}}.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-artifacts
+          path: coverage/
+
+  sonar-cloud:
+    name: Sonar Cloud analysis
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage-artifacts
+          path: coverage
+
+      - name: Merge Code Coverage
+        run: npx nyc merge coverage/ merged-output/merged-coverage.json
 
       - name: Run sonar cloud analysis
         uses: SonarSource/sonarcloud-github-action@master
