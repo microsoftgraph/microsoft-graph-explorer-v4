@@ -1,7 +1,7 @@
 import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
   getTheme,
-  GroupHeader, IColumn, Icon, IDetailsRowStyles, IGroup, MessageBar, MessageBarType, SearchBox,
+  GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
@@ -44,7 +44,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   const currentTheme = getTheme();
 
   const { error, pending } = samples;
-  const groups: IGroup[] = generateGroupsFromList(sampleQueries, 'category');
+  const groups = generateGroupsFromList(sampleQueries, 'category');
 
   const classProps = {
     styles: sampleProps!.styles,
@@ -279,7 +279,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     return (
       <GroupHeader
         {...props}
-        //compact={true}
         styles={{
           check: { display: 'none' },
           title: {
@@ -300,7 +299,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
   if (selectedQuery) {
     const index = groups.findIndex(k => k.key === selectedQuery.category);
-    if (index !== -1 && index !== 0 ) {
+    if (index > 0 ) {
       groups[index].isCollapsed = false;
       groups[0].isCollapsed = true;
     }
