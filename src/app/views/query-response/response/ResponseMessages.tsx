@@ -1,15 +1,15 @@
 import { Link, MessageBar, MessageBarType } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { IAuthenticateResult } from '../../../types/authentication';
-import { Mode } from '../../../types/enums';
-import { IGraphResponse } from '../../../types/query-response';
+import { IAuthenticateResult } from '../../../../types/authentication';
+import { Mode } from '../../../../types/enums';
+import { IGraphResponse } from '../../../../types/query-response';
 
-import { IQuery } from '../../../types/query-runner';
-import { runQuery } from '../../services/actions/query-action-creators';
-import { setSampleQuery } from '../../services/actions/query-input-action-creators';
-import { MOZILLA_CORS_DOCUMENTATION_LINK } from '../../services/graph-constants';
-import { translateMessage } from '../../utils/translate-messages';
+import { IQuery } from '../../../../types/query-runner';
+import { runQuery } from '../../../services/actions/query-action-creators';
+import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { MOZILLA_CORS_DOCUMENTATION_LINK } from '../../../services/graph-constants';
+import { translateMessage } from '../../../utils/translate-messages';
 
 interface ODataLink {
   link: string;
