@@ -4,7 +4,7 @@ export const profileStyles = (theme: ITheme) => {
   return {
     linkStyles: {
       root: {
-        marginLeft: '9px',
+        marginRight: '50px',
         height: '24px',
         color: `${theme.palette.black} !important`,
         '&:hover': { textDecoration: 'none', color: `${theme.palette.themeDarkAlt} !important` }
