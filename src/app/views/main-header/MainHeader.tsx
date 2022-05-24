@@ -43,7 +43,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   const mobileScreen = props.mobileScreen;
   const currentTheme = getTheme();
   const { rootStyles : itemAlignmentStackStyles, rightItemsStyles,
-    feedbackIconAdjustmentStyles, tenantStyles } = mainHeaderStyles(currentTheme);
+    feedbackIconAdjustmentStyles, tenantStyles, moreInformationStyles } = mainHeaderStyles(currentTheme);
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -98,9 +98,9 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               style={tenantStyles}
             />
           }
-          <span style={{ flexGrow: 1, flexBasis: '60px'}}><Settings /></span>
-          <span style={{ flexGrow: 1, flexBasis: '60px' }}><Help /></span>
-          <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
+          <span style={ moreInformationStyles }> <Settings /> </span>
+          <span style={ moreInformationStyles }> <Help /> </span>
+          <span style={ feedbackIconAdjustmentStyles }> <FeedbackButton /> </span>
           <Authentication />
         </Stack>
       </Stack>

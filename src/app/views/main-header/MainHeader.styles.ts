@@ -34,6 +34,22 @@ export const mainHeaderStyles = (theme: ITheme) => {
         },
         flexGrow: '1'
       }
+    },
+    moreInformationStyles: {
+      flexGrow: 1,
+      flexShrink: 1,
+      flexBasis: '60px'
+    },
+    settingsContainerStyles: {
+      display: 'flex',
+      alignItems: 'stretch'
+    },
+    tooltipStyles: {
+      root: {
+        flexGrow: 1,
+        display: 'flex',
+        alignItems: 'stretch'
+      }
     }
   }
 }

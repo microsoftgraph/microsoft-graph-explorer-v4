@@ -92,7 +92,8 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
     overflowY: 'hidden'
   }
 
-  const settingsButtonStyles = mainHeaderStyles(currentTheme).iconButton;
+  const { iconButton : settingsButtonStyles, settingsContainerStyles,
+    tooltipStyles} = mainHeaderStyles(currentTheme);
 
   const menuProperties = {
     shouldFocusOnMount: true,
@@ -104,12 +105,12 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   };
 
   return (
-    <div style={{display: 'flex', alignItems: 'stretch'}}>
+    <div style={ settingsContainerStyles }>
       <TooltipHost
         content={translateMessage('Settings')}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}
-        styles={{ root: {flexGrow: '1', display: 'flex', alignItems: 'stretch' }}}
+        styles={ tooltipStyles }
       >
         <IconButton
           ariaLabel={translateMessage('Settings')}

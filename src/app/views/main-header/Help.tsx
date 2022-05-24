@@ -91,7 +91,7 @@ export const Help = () => {
   const calloutStyles: React.CSSProperties = {
     overflowY: 'hidden'
   }
-  const helpButtonStyles = mainHeaderStyles(currentTheme).iconButton;
+  const { iconButton: helpButtonStyles, tooltipStyles } = mainHeaderStyles(currentTheme);
 
   const menuProperties = {
     shouldFocusOnMount: true,
@@ -108,7 +108,7 @@ export const Help = () => {
         content={translateMessage('Help')}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}
-        styles={{ root: {flexGrow: '1', display: 'flex', alignItems: 'stretch' }}}
+        styles={ tooltipStyles }
       >
         <IconButton
           ariaLabel={translateMessage('Help')}
