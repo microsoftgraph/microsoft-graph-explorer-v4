@@ -146,8 +146,10 @@ function sanitizePathSegment(previousSegment: string, segment: string): string {
  * @param queryString
  */
 function sanitizeQueryParameters(queryString: string): string {
-  // remove leading ? from query string
-  queryString = queryString.substring(1);
+  // remove leading ? from query string and decode
+  queryString = decodeURIComponent(
+    queryString.substring(1).replace(/\+/g, ' ')
+  );
   return queryString.split('&').map(sanitizeQueryParameter).join('&');
 }
 

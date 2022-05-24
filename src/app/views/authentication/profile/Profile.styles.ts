@@ -25,6 +25,15 @@ export const profileStyles = (theme: ITheme) => {
         position: 'relative' as 'relative',
         top: '2px'
       }
+    },
+    permissionsLabelStyles: {
+      root: {
+        position: 'relative' as 'relative',
+        bottom: '25px',
+        left: '79px',
+        textDecoration: 'underline',
+        color: `${theme.palette.themePrimary} !important`
+      }
     }
   }
 }
