@@ -1,8 +1,6 @@
 import { AgeGroup } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
-import { authenticationWrapper } from '../../../modules/authentication';
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
-import { IRequestOptions } from '../../../types/request';
 import { translateMessage } from '../../utils/translate-messages';
 import {
   ACCOUNT_TYPE,
@@ -157,20 +155,8 @@ export async function getProfileResponse(): Promise<IProfileResponse> {
 export async function getTenantInfo(profileType: ACCOUNT_TYPE) {
   if(profileType===ACCOUNT_TYPE.AAD) {
     try{
-      const token = (await authenticationWrapper.getToken()).accessToken;
-
-      const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-
-      };
-      const options: IRequestOptions = { headers, method: 'GET' };
-
-      const response = await fetch(USER_ORGANIZATION_URL, options);
-      if (!response.ok) {
-        throw response;
-      }
-      const tenant = await response.json();
+      query.sampleUrl = USER_ORGANIZATION_URL;
+      const { userInfo: tenant } = await getProfileResponse();
       return  tenant.value[0]?.displayName;
     } catch (error: any) {
       return '';
