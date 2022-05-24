@@ -124,14 +124,6 @@ store.getState = () => {
   }
 }
 
-jest.mock('../../../app/services/actions/autocomplete-action-creators.ts', () => {
-  const autocomplete_ = jest.requireActual('../../../app/services/actions/autocomplete-action-creators.ts');
-  return {
-    ...autocomplete_,
-    getPermissionsScopeType: jest.fn(() => 'DelegatedWork')
-  }
-})
-
 describe('tests permissions action creators', () => {
   it('Tests if FETCH_SCOPES_SUCCESS is dispatched when fetchScopesSuccess is called', () => {
     // Arrange

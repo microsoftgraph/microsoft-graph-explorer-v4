@@ -55,7 +55,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of results
+        fetch-depth: 0
 
     - name: Set up Node
       uses: actions/setup-node@v3
@@ -126,18 +126,26 @@ jobs:
       - name: Test
         run: npm run test -- --shard=${{ matrix.shard }}/${{ strategy.job-total }} --coverage --testResultsProcessor=jest-sonar-reporter
 
-      - name: Fix code coverage paths
-        run: |
-          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
-          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
+      - run: mv coverage/coverage-final.json coverage/${{matrix.shard}}.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-artifacts
+          path: coverage/
+
+      # - name: Fix code coverage paths
+      #   run: |
+      #     sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
+      #     sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
 
   sonar-cloud:
     name: Sonar Cloud analysis
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v3
@@ -151,6 +159,9 @@ jobs:
             node_modules
             packages/*/node_modules
           key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Merge Code Coverage
+        run: npx nyc merge coverage/ merged-output/merged-coverage.json
 
       - name: Run sonar cloud analysis
         uses: SonarSource/sonarcloud-github-action@master
