@@ -2,8 +2,10 @@ import {
   ActionButton,
   Callout,
   DefaultButton,
+  FontSizes,
   getTheme,
   IOverlayProps,
+  IPersonaProps,
   IPersonaSharedProps,
   Label,
   mergeStyleSets,
@@ -155,6 +157,13 @@ const Profile = (props: any) => {
   const panelOverlayProps: IOverlayProps = {
     isDarkThemed: true
   }
+  const onRenderSecondaryText = (prop: IPersonaProps): JSX.Element => {
+    return (
+      <span style={{fontSize: FontSizes.small}}>
+        {prop.secondaryText}
+      </span>
+    );
+  }
 
   const showProfileComponent = (userPersona: any): React.ReactNode => {
 
@@ -166,8 +175,9 @@ const Profile = (props: any) => {
 
     const fullPersona = <Persona
       {...userPersona}
-      size={PersonaSize.size40}
+      size={PersonaSize.size72}
       hidePersonaDetails={false}
+      onRenderSecondaryText={onRenderSecondaryText}
       styles={personaStyleToken} />
 
     return (<>
@@ -195,18 +205,24 @@ const Profile = (props: any) => {
           onDismiss={toggleIsCalloutVisible}
           setInitialFocus
         >
-          {fullPersona}
-          <hr />
-          <Stack>
-            <ActionButton key={'view-all-permissions'} onClick={() => changePanelState()}>
-              {translateMessage('view all permissions')}
-            </ActionButton>
-            <ActionButton key={'sign-other-account'} onClick={() => handleSignInOther()}>
-              {translateMessage('sign in other account')}
-            </ActionButton>
+          <Stack horizontal horizontalAlign='space-between' styles={{root:{ paddingBottom: 15}}}>
+            {profile &&
+            <ActionButton text={`${profile.tenant}`} disabled={true}/>
+            }
             <ActionButton key={'sign-out'} onClick={() => handleSignOut()}>
               {translateMessage('sign out')}
             </ActionButton>
+          </Stack>
+          {fullPersona}
+          <ActionButton key={'view-all-permissions'} onClick={() => changePanelState()}>
+            {translateMessage('view all permissions')}
+          </ActionButton>
+          <Stack styles={{root:{ background: theme.palette.neutralLighter}}}>
+            <ActionButton key={'sign-other-account'} onClick={() => handleSignInOther()}
+            >
+              {translateMessage('sign in other account')}
+            </ActionButton>
+
           </Stack>
         </Callout>
       )}
@@ -237,8 +253,8 @@ const Profile = (props: any) => {
 const styles = mergeStyleSets({
   callout: {
     width: 320,
-    maxWidth: '90%',
-    padding: '20px 24px'
+    maxWidth: '90%'
+    // padding: '20px 24px'
   }
 });
 
