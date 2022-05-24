@@ -115,6 +115,15 @@ export const sidebarStyles = (theme: ITheme) => {
     },
     links: {
       color: `${theme.palette.blueMid} !important`
+    },
+    sidebarButtons: {
+      root:{
+        height: 50,
+        width: 50,
+        ':hover': {
+          background: `${theme.palette.neutralLight} !important`
+        }
+      }
     }
   };
 };

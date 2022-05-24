@@ -259,7 +259,8 @@ export class History extends Component<IHistoryProps, any> {
         style={{
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          paddingRight: 10
         }}
       >
         <div className={'col-md-8'}>

@@ -24,15 +24,15 @@ export const appStyles = (theme: ITheme) => {
     sidebar: {
       background: theme.palette.neutralLighter,
       paddingRight: 10,
+      paddingLeft: 10,
       marginRight: 10,
-      border: '1px solid silver'
+      marginBottom: 9
     },
     sidebarMini: {
       background: theme.palette.neutralLighter,
       maxWidth: '65px',
       minWidth: '55px',
-      padding: 10,
-      border: '1px solid silver'
+      padding: 10
     },
     layoutExtra: {
       minWidth: '95%',
