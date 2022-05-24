@@ -1,4 +1,4 @@
-import { IconButton, Pivot, PivotItem, Stack } from '@fluentui/react';
+import { getTheme, IconButton, Pivot, PivotItem, Stack } from '@fluentui/react';
 import React from 'react';
 
 import { telemetry } from '../../../telemetry';
@@ -6,6 +6,7 @@ import { translateMessage } from '../../utils/translate-messages';
 import History from './history/History';
 import { ResourceExplorer } from './resource-explorer';
 import SampleQueries from './sample-queries/SampleQueries';
+import { sidebarStyles } from './Sidebar.styles';
 
 interface ISidebar {
   currentTab: string;
@@ -17,6 +18,8 @@ interface ISidebar {
 export const Sidebar = (props: ISidebar) =>{
   const showSidebar = props.showSidebar;
   const mobileScreen = props.mobileScreen;
+  const theme = getTheme();
+  const styles = sidebarStyles(theme).sidebarButtons;
 
   const onPivotItemClick = (item?: PivotItem) => {
     if (!item) { return; }
@@ -68,24 +71,27 @@ export const Sidebar = (props: ISidebar) =>{
       </Pivot>
       }
       { !showSidebar && !mobileScreen && (
-        <Stack tokens={{childrenGap: 10, padding: 10}}>
+        <Stack tokens={{childrenGap: 10}}>
           <IconButton
             iconProps={{iconName: 'Rocket'}}
             title={translateMessage('Sample Queries')}
             ariaLabel={translateMessage('Sample Queries')}
             onClick={() => openComponent('sample-queries')}
+            styles={styles}
           />
           <IconButton
             iconProps={{iconName: 'ExploreData'}}
             title={translateMessage('Resources')}
             ariaLabel={translateMessage('Resources')}
             onClick={() => openComponent('resources')}
+            styles={styles}
           />
           <IconButton
             iconProps={{iconName: 'History'}}
             title={translateMessage('History')}
             ariaLabel={translateMessage('History')}
             onClick={() => openComponent('history')}
+            styles={styles}
           />
         </Stack>)
       }

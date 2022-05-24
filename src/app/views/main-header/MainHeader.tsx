@@ -21,6 +21,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../types/root';
 import { mainHeaderStyles } from './MainHeader.styles';
 import { translateMessage } from '../../utils/translate-messages';
+import TenantIcon from './tenantIcon';
 
 interface MainHeaderProps {
   minimised: boolean;
@@ -77,6 +78,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         </Stack>
 
         <Stack horizontal styles={rightItemsStyles} >
+          <TenantIcon />
           {!profile &&
             <TooltipHost
               content={
