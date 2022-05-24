@@ -2,7 +2,8 @@ import React from 'react';
 import { cleanup, render } from '@testing-library/react';
 
 import { responseMessages } from './ResponseMessages';
-import { Mode } from '../../../types/enums';
+import { Mode } from '../../../../types/enums';
+
 
 afterEach(cleanup);
 const renderResponseMessages = (): any => {
