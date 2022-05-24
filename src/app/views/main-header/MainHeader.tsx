@@ -96,8 +96,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               style={tenantStyles}
             />
           }
-          <Settings />
-          <Help />
+          <span style={{ flexGrow: 1, flexBasis: '60px'}}><Settings /></span>
+          <span style={{ flexGrow: 1, flexBasis: '60px' }}><Help /></span>
           <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
           <Authentication />
         </Stack>

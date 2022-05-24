@@ -108,6 +108,7 @@ export const Help = () => {
         content={translateMessage('Help')}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}
+        styles={{ root: {flexGrow: '1', display: 'flex', alignItems: 'stretch' }}}
       >
         <IconButton
           ariaLabel={translateMessage('Help')}

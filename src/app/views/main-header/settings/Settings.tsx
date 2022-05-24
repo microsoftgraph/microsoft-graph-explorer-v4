@@ -104,11 +104,12 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   };
 
   return (
-    <div>
+    <div style={{display: 'flex', alignItems: 'stretch'}}>
       <TooltipHost
         content={translateMessage('Settings')}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}
+        styles={{ root: {flexGrow: '1', display: 'flex', alignItems: 'stretch' }}}
       >
         <IconButton
           ariaLabel={translateMessage('Settings')}
