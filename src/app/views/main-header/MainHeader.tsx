@@ -25,6 +25,7 @@ import { translateMessage } from '../../utils/translate-messages';
 interface MainHeaderProps {
   minimised: boolean;
   toggleSidebar: Function;
+  mobileScreen: boolean;
 }
 const sectionStackTokens: IStackTokens = {
   childrenGap: 0 };
@@ -38,6 +39,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
     (state: IRootState) => state
   );
   const minimised = props.minimised;
+  const mobileScreen = props.mobileScreen;
   const currentTheme = getTheme();
   const { rootStyles : itemAlignmentStackStyles, rightItemsStyles,
     feedbackIconAdjustmentStyles, tenantStyles } = mainHeaderStyles(currentTheme);
@@ -68,7 +70,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               onClick={() => props.toggleSidebar()} />
           </TooltipHost>
           <Label
-            style={{ fontSize: FontSizes.xLarge, fontWeight: FontWeights.semibold }}>
+            style={{ fontSize: mobileScreen ? FontSizes.medium : FontSizes.xLarge,
+              fontWeight: FontWeights.semibold }}>
             Graph Explorer
           </Label>
         </Stack>

@@ -396,7 +396,7 @@ class App extends Component<IAppProps, IAppState> {
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
-          <MainHeader minimised={minimised} toggleSidebar={this.toggleSidebar}/>
+          <MainHeader minimised={minimised} toggleSidebar={this.toggleSidebar} mobileScreen={mobileScreen}/>
           <Announced
             message={
               !showSidebar
@@ -450,7 +450,7 @@ class App extends Component<IAppProps, IAppState> {
                 }}
                 style={!sidebarProperties.showSidebar && !mobileScreen ? { marginLeft: '8px', flex: 1 } : {flex: 1}}
               >
-                <div style={{ marginBottom: 8, marginTop: 10 }} >
+                <div style={{ marginBottom: 8}} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
 

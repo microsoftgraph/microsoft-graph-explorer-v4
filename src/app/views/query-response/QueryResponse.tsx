@@ -98,7 +98,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           marginTop: 10
         }}
         bounds={'window'}
-        maxHeight={800}
+        maxHeight={810}
         minHeight={350}
         size={{
           height: responseHeight,
