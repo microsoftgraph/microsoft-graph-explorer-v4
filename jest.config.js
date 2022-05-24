@@ -10,7 +10,7 @@ module.exports = {
     '!src/app/middleware/telemetryMiddleware.ts',
     '!src/telemetry/telemetry.ts'
   ],
-  resolver: 'jest-pnp-resolver',
+  resolver: `${__dirname}/src/tests/common/resolver.js`,
   setupFiles: ['react-app-polyfill/jsdom'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testMatch: [
