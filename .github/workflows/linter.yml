@@ -131,7 +131,7 @@ jobs:
           sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
           sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
 
-      - run: mv coverage/lcov.info coverage/${{matrix.shard}}.json
+      - run: mv coverage/lcov.info coverage/${{matrix.shard}}.lcov.info
       - uses: actions/upload-artifact@v3
         with:
           name: coverage-artifacts
@@ -142,6 +142,11 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - uses: actions/download-artifact@v3
         with:
           name: coverage-artifacts
