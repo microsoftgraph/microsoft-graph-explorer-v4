@@ -30,7 +30,7 @@ export const profileStyles = (theme: ITheme) => {
       root: {
         position: 'relative' as 'relative',
         bottom: '25px',
-        left: '79px',
+        left: '87px',
         textDecoration: 'underline',
         color: `${theme.palette.themePrimary} !important`
       }

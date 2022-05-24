@@ -211,12 +211,13 @@ const Profile = (props: any) => {
               {translateMessage('sign out')}
             </ActionButton>
           </Stack>
-          {fullPersona}
+          <Stack styles={{root:{ paddingLeft: 10 }}}>{fullPersona}</Stack>
           <ActionButton key={'view-all-permissions'} onClick={() => changePanelState()} styles={permissionsLabelStyles}>
             {translateMessage('view all permissions')}
           </ActionButton>
-          <Stack styles={{root:{ background: theme.palette.neutralLighter}}}>
+          <Stack styles={{root:{ background: theme.palette.neutralLighter, padding:10}}}>
             <ActionButton key={'sign-other-account'} onClick={() => handleSignInOther()}
+              iconProps={{iconName: 'AddFriend'}}
             >
               {translateMessage('sign in other account')}
             </ActionButton>
