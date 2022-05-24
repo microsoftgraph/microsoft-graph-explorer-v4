@@ -67,9 +67,7 @@ const Profile = (props: any) => {
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
   const theme = getTheme();
-  const personaStyleToken = profileStyles(theme).personaStyleToken;
-  const profileSpinnerStyles = profileStyles(theme).profileSpinnerStyles;
-
+  const { personaStyleToken , profileSpinnerStyles, permissionsLabelStyles } = profileStyles(theme);
 
   useEffect(() => {
     if (authenticated) {
@@ -214,7 +212,7 @@ const Profile = (props: any) => {
             </ActionButton>
           </Stack>
           {fullPersona}
-          <ActionButton key={'view-all-permissions'} onClick={() => changePanelState()}>
+          <ActionButton key={'view-all-permissions'} onClick={() => changePanelState()} styles={permissionsLabelStyles}>
             {translateMessage('view all permissions')}
           </ActionButton>
           <Stack styles={{root:{ background: theme.palette.neutralLighter}}}>
