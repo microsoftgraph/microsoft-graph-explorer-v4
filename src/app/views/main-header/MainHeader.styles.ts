@@ -16,7 +16,6 @@ export const mainHeaderStyles = (theme: ITheme) => {
     },
     feedbackIconAdjustmentStyles: {
       position: 'relative' as 'relative',
-      right: '-6px',
       top: '4px'
     },
     tenantStyles: {
@@ -32,7 +31,24 @@ export const mainHeaderStyles = (theme: ITheme) => {
         width: '50px',
         ':hover': {
           background: `${theme.palette.neutralLight} !important`
-        }
+        },
+        flexGrow: '1'
+      }
+    },
+    moreInformationStyles: {
+      flexGrow: 1,
+      flexShrink: 1,
+      flexBasis: '60px'
+    },
+    settingsContainerStyles: {
+      display: 'flex',
+      alignItems: 'stretch'
+    },
+    tooltipStyles: {
+      root: {
+        flexGrow: 1,
+        display: 'flex',
+        alignItems: 'stretch'
       }
     }
   }
