@@ -396,7 +396,7 @@ class App extends Component<IAppProps, IAppState> {
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
-          <MainHeader minimised={minimised} toggleSidebar={this.toggleSidebar}/>
+          <MainHeader minimised={minimised} toggleSidebar={this.toggleSidebar} mobileScreen={mobileScreen}/>
           <Announced
             message={
               !showSidebar
