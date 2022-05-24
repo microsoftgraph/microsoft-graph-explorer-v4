@@ -222,7 +222,7 @@ const unstyledResourceExplorer = (props: any) => {
         </>
       }
 
-      <Label>
+      <Label styles={{ root: { position: 'relative', left: '10px'}}}>
         <FormattedMessage id='Resources available' />
       </Label>
       <Nav
