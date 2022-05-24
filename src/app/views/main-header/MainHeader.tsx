@@ -78,8 +78,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         </Stack>
 
         <Stack horizontal styles={rightItemsStyles} >
-          <TenantIcon />
-          {!profile &&
+          {!mobileScreen && <TenantIcon />}
+          {!profile && !mobileScreen &&
             <TooltipHost
               content={
                 <>
@@ -93,7 +93,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
                 style={tenantStyles}/>
             </TooltipHost>
           }
-          {profile &&
+          {profile && !mobileScreen &&
             <DefaultButton text={`Tenant: ${profile.tenant}`} checked={true}
               style={tenantStyles}
             />
