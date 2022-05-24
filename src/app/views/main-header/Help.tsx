@@ -52,7 +52,7 @@ export const Help = () => {
       },
       {
         key: 'github',
-        text: translateMessage('GitHub'),
+        text: 'GitHub',
         href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4',
         target: '_blank',
         iconProps: {
