@@ -126,7 +126,7 @@ jobs:
       - name: Test
         run: npm run test -- --verbose --shard=${{ matrix.shard }}/${{ strategy.job-total }} --coverage  --testResultsProcessor=jest-sonar-reporter
 
-      - run: mv coverage/coverage-final.json coverage/${{matrix.shard}}.json
+      - run: mv coverage/coverage-final.xml coverage/${{matrix.shard}}.xml
       - uses: actions/upload-artifact@v3
         with:
           name: coverage-artifacts
@@ -148,9 +148,9 @@ jobs:
           path: coverage
 
       - name: Merge Code Coverage
-        run: npx nyc merge coverage/ coverage/coverage.json
+        run: npx nyc merge coverage/ coverage/coverage.xml
 
-      - run: mv coverage/coverage.json coverage/coverage-final.json
+      - run: mv coverage/coverage.xml coverage/coverage-final.xml
       - uses: actions/upload-artifact@v3
         with:
           name: merged-artifacts
