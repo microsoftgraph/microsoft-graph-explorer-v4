@@ -150,7 +150,7 @@ jobs:
       - name: Merge Code Coverage
         run: npx nyc merge coverage/ coverage/coverage.xml
 
-      - run: mv coverage/coverage.xml reports/test-report.xml
+      - run: mv coverage/coverage.xml coverage/test-report.xml
       - uses: actions/upload-artifact@v3
         with:
           name: merged-artifacts
