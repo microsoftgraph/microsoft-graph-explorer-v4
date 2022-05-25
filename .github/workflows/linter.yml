@@ -126,7 +126,7 @@ jobs:
       - name: Test
         run: npm run test -- --verbose --shard=${{ matrix.shard }}/${{ strategy.job-total }} --coverage --testResultsProcessor=jest-sonar-reporter
 
-      - run: mv coverage/lcov.info coverage/${{matrix.shard}}.lcov.info
+      - run: mv coverage/coverage-final.json coverage/${{matrix.shard}}.json
       - uses: actions/upload-artifact@v3
         with:
           name: coverage-artifacts
@@ -160,6 +160,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Upload merged Code Coverage
+      - uses: actions/upload-artifact@v3
+        with:
+          name: merged-coverage-artifacts
+          path: merged-coverage/
 
   publish-preview-site:
     name: Static preview site creation
