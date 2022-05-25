@@ -42,7 +42,6 @@ jobs:
         sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
         sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
 
-    - name: Export test results
     - run: |
         mv coverage/* upload/
         mv reports/* upload/reports/
