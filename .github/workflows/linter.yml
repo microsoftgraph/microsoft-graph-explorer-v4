@@ -42,13 +42,6 @@ jobs:
         sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
         sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
 
-    - run: mv reports/* coverage/
-
-    - uses: actions/upload-artifact@v3
-      with:
-        name: uploadded-artifacts
-        path: coverage/
-
     - name: Run sonar cloud analysis
       uses: SonarSource/sonarcloud-github-action@master
       env:
