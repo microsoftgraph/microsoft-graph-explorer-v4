@@ -167,7 +167,7 @@ jobs:
 
   publish-preview-site:
     name: Static preview site creation
-    needs: build
+    needs: install
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     steps:
