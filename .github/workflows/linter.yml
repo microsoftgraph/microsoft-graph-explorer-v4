@@ -153,16 +153,6 @@ jobs:
           name: coverage-artifacts
           path: coverage
 
-      - name: Merge Code Coverage
-        run: npx nyc merge coverage/ coverage/coverage.xml
-
-      - run: mv coverage/coverage.xml coverage/test-report.xml
-      - uses: actions/upload-artifact@v3
-        with:
-          name: merged-artifacts
-          path: coverage/
-
-
       - name: Run sonar cloud analysis
         uses: SonarSource/sonarcloud-github-action@master
         env:
