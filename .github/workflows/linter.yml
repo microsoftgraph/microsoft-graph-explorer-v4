@@ -126,7 +126,7 @@ jobs:
       - name: Test
         run: npm run test -- --verbose --shard=${{ matrix.shard }}/${{ strategy.job-total }} --coverage  --testResultsProcessor=jest-sonar-reporter
 
-      - run: mv coverage/coverage-final.xml coverage/${{matrix.shard}}.xml
+      - run: mv coverage/clover.xml coverage/${{matrix.shard}}.xml
       - uses: actions/upload-artifact@v3
         with:
           name: coverage-artifacts
