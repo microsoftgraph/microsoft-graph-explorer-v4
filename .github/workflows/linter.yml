@@ -47,7 +47,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: uploadded-artifacts
-        path: upload/
+        path: coverage/
 
     - name: Run sonar cloud analysis
       uses: SonarSource/sonarcloud-github-action@master
