@@ -124,7 +124,7 @@ jobs:
           key: modules-${{ hashFiles('package-lock.json') }}
 
       - name: Test
-        run: npm run test -- --verbose --shard=${{ matrix.shard }}/${{ strategy.job-total }} --coverage
+        run: npm run test -- --verbose --shard=${{ matrix.shard }}/${{ strategy.job-total }} --coverage  --testResultsProcessor=jest-sonar-reporter
 
       - run: mv coverage/coverage-final.json coverage/${{matrix.shard}}.json
       - uses: actions/upload-artifact@v3
@@ -150,11 +150,20 @@ jobs:
       - name: Merge Code Coverage
         run: npx nyc merge coverage/ coverage/coverage.json
 
+      - run: mv coverage/coverage.json coverage/coverage-final.json
+      - uses: actions/upload-artifact@v3
+        with:
+          name: merged-artifacts
+          path: coverage/
+
+
       - name: Run sonar cloud analysis
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+
 
   publish-preview-site:
     name: Static preview site creation
