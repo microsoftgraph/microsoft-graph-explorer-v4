@@ -161,12 +161,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Upload merged Code Coverage
-      - uses: actions/upload-artifact@v3
-        with:
-          name: merged-coverage-artifacts
-          path: merged-coverage/
-
   publish-preview-site:
     name: Static preview site creation
     needs: build
