@@ -35,6 +35,7 @@ const unstyledResourceExplorer = (props: any) => {
     (state: IRootState) => state
   );
   const classes = classNames(props);
+  console.log('Classes ', classes.toggleLabel);
   const { data, pending, paths: selectedLinks } = resources;
 
   const versions: any[] = [
@@ -194,6 +195,7 @@ const unstyledResourceExplorer = (props: any) => {
             onText={translateMessage('On')}
             offText={translateMessage('Off')}
             inlineLabel
+            styles={{ text: {position: 'relative', top:'4px' }}}
           />
         </Stack>
       </>}
