@@ -126,11 +126,6 @@ jobs:
       - name: Test
         run: npm run test -- --verbose --shard=${{ matrix.shard }}/${{ strategy.job-total }} --coverage --testResultsProcessor=jest-sonar-reporter
 
-      - name: Fix code coverage paths
-        run: |
-          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
-          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
-
       - run: mv coverage/lcov.info coverage/${{matrix.shard}}.lcov.info
       - uses: actions/upload-artifact@v3
         with:
@@ -154,6 +149,11 @@ jobs:
 
       - name: Merge Code Coverage
         run: npx nyc merge coverage/ merged-output/merged-coverage.json
+
+      - name: Fix code coverage paths
+        run: |
+          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
+          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
 
       - name: Run sonar cloud analysis
         uses: SonarSource/sonarcloud-github-action@master
