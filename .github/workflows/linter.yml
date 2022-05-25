@@ -123,7 +123,7 @@ jobs:
             packages/*/node_modules
           key: modules-${{ hashFiles('package-lock.json') }}
 
-      - name: Test
+      - name: Test ${{ matrix.shard }} of 6
         run: npm run test -- --verbose --shard=${{ matrix.shard }}/${{ strategy.job-total }} --coverage  --testResultsProcessor=jest-sonar-reporter
 
       - name: Fix code coverage paths
