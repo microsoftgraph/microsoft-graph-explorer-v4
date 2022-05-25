@@ -162,5 +162,8 @@ export async function getTenantInfo(profileType: ACCOUNT_TYPE) {
       return '';
     }
   }
-  return 'Personal';
+  if(profileType===ACCOUNT_TYPE.MSA) {
+    return 'Personal';
+  }
+  return '';
 }
