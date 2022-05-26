@@ -7,12 +7,10 @@ import {
   getId,
   getTheme,
   IconButton,
-  registerIcons,
   TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { GitHubLogoIcon } from '@fluentui/react-icons-mdl2';
 
 import '../../../utils/string-operations';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
@@ -32,12 +30,6 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const currentTheme = getTheme();
-
-  registerIcons({
-    icons: {
-      GitHubLogo: <GitHubLogoIcon />
-    }
-  });
 
   useEffect(() => {
     const menuItems: any = [

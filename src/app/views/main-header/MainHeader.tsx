@@ -8,6 +8,7 @@ import {
   IconButton,
   IStackTokens,
   Label,
+  registerIcons,
   Stack,
   TooltipHost
 } from '@fluentui/react';
@@ -32,9 +33,13 @@ const sectionStackTokens: IStackTokens = {
   childrenGap: 0 };
 const itemAlignmentsStackTokens: IStackTokens = {
   childrenGap: 10
-
 };
 
+registerIcons({
+  icons: {
+    tenantIcon: <TenantIcon />
+  }
+});
 export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: MainHeaderProps) => {
   const { profile } = useSelector(
     (state: IRootState) => state
@@ -78,7 +83,6 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         </Stack>
 
         <Stack horizontal styles={rightItemsStyles} >
-          {!mobileScreen && <TenantIcon />}
           {!profile && !mobileScreen &&
             <TooltipHost
               content={
@@ -89,12 +93,12 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               id={getId()}
               calloutProps={{ gapSpace: 0 }}
             >
-              <DefaultButton text={translateMessage('Tenant: Sample')}
+              <DefaultButton iconProps={{ iconName: 'tenantIcon'}} text={translateMessage('Tenant: Sample')}
                 style={tenantStyles}/>
             </TooltipHost>
           }
           {profile && !mobileScreen &&
-            <DefaultButton text={`Tenant: ${profile.tenant}`} checked={true}
+            <DefaultButton  iconProps={{ iconName: 'tenantIcon'}} text={`Tenant: ${profile.tenant}`} checked={true}
               style={tenantStyles}
             />
           }
