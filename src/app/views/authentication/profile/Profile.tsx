@@ -67,7 +67,8 @@ const Profile = (props: any) => {
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
   const theme = getTheme();
-  const { personaStyleToken , profileSpinnerStyles, permissionsLabelStyles } = profileStyles(theme);
+  const { personaStyleToken , profileSpinnerStyles, permissionsLabelStyles,
+    personaButtonStyles, profileContainerStyles } = profileStyles(theme);
 
   useEffect(() => {
     if (authenticated) {
@@ -183,9 +184,7 @@ const Profile = (props: any) => {
         id={buttonId}
         onClick={toggleIsCalloutVisible}
         role='button'
-        styles={{root: {':hover': {
-          background: `${theme.palette.neutralLight} !important`
-        }}}}
+        styles={personaButtonStyles}
       >
         {smallPersona}
       </ActionButton>
@@ -203,7 +202,7 @@ const Profile = (props: any) => {
           onDismiss={toggleIsCalloutVisible}
           setInitialFocus
         >
-          <Stack horizontal horizontalAlign='space-between' styles={{root:{ paddingBottom: 15}}}>
+          <Stack horizontal horizontalAlign='space-between' styles={{root:{ paddingBottom: 0}}}>
             {profile &&
             <ActionButton text={`${profile.tenant}`} disabled={true}/>
             }
@@ -230,7 +229,7 @@ const Profile = (props: any) => {
   }
 
   return (
-    <div className={classes.profile}>
+    <div className={classes.profile} style={profileContainerStyles}>
       {showProfileComponent(persona)}
       <Panel
         isOpen={permissionsPanelOpen}

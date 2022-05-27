@@ -28,9 +28,9 @@ export function showSignInButtonOrProfile(
   </ActionButton>;
 
   return (
-    <div>
+    <>
       {!tokenPresent && signInButton}
       {tokenPresent && <Profile signIn={signIn}/>}
-    </div>
+    </>
   );
 }
