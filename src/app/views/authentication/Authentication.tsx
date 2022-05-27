@@ -97,13 +97,11 @@ const Authentication = (props: any) => {
         showSignInButtonOrProfile(tokenPresent, mobileScreen, signIn)
       ) : (
         <>
-          <br />
           {showSignInButtonOrProfile(
             tokenPresent,
             mobileScreen,
             signIn
           )}
-          <br />
         </>
       )}
     </>
