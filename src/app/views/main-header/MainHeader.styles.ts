@@ -1,6 +1,6 @@
-import { ITheme } from '@fluentui/react';
+import { FontSizes, FontWeights, ITheme } from '@fluentui/react';
 
-export const mainHeaderStyles = (theme: ITheme) => {
+export const mainHeaderStyles = (theme: ITheme, mobileScreen?: boolean) => {
   return {
     rootStyles: {
       root: {
@@ -11,7 +11,8 @@ export const mainHeaderStyles = (theme: ITheme) => {
     },
     rightItemsStyles: {
       root: {
-        alignItems: 'center'
+        alignItems: 'center',
+        flexBasis: mobileScreen ? '137px' : ''
       }
     },
     feedbackIconAdjustmentStyles: {
@@ -50,6 +51,12 @@ export const mainHeaderStyles = (theme: ITheme) => {
         display: 'flex',
         alignItems: 'stretch'
       }
+    },
+    graphExplorerLabelStyles: {
+      fontSize: mobileScreen ? FontSizes.medium : FontSizes.xLarge,
+      fontWeight: FontWeights.semibold,
+      position: mobileScreen ? 'relative' as 'relative' : 'static' as 'static',
+      top: '3px'
     }
   }
 }
