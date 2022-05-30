@@ -16,7 +16,7 @@ export const sidebarStyles = (theme: ITheme) => {
     queryList: {
       marginBottom: theme.spacing.s1,
       cursor: 'pointer',
-      maxHeight: '72vh',
+      maxHeight: '67vh',
       minHeight: pageHeightInVh,
       overflow: 'hidden',
       fontSize: FontSizes.medium,
