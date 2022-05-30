@@ -1,6 +1,6 @@
 import { ITheme } from '@fluentui/react'
 
-export const utilComponentStyles = (theme: ITheme) => {
+export const profileButtonStyles = (theme: ITheme) => {
   return {
     actionButtonStyles: {
       root: {

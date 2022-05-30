@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { translateMessage } from '../../../utils/translate-messages';
 import Profile from '../profile/Profile';
-import { utilComponentStyles } from './UtilComponents.styles';
+import { profileButtonStyles } from './ProfileButton.styles';
 
 export function showSignInButtonOrProfile(
   tokenPresent: boolean,
@@ -12,7 +12,7 @@ export function showSignInButtonOrProfile(
 ) {
 
   const currentTheme = getTheme();
-  const { actionButtonStyles } = utilComponentStyles(currentTheme);
+  const { actionButtonStyles } = profileButtonStyles(currentTheme);
   const signInButton = <ActionButton
     ariaLabel={translateMessage('sign in')}
     role='button'
