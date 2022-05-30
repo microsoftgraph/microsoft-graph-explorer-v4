@@ -47,8 +47,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   const minimised = props.minimised;
   const mobileScreen = props.mobileScreen;
   const currentTheme = getTheme();
-  const { rootStyles : itemAlignmentStackStyles, rightItemsStyles,
-    feedbackIconAdjustmentStyles, tenantStyles, moreInformationStyles } = mainHeaderStyles(currentTheme);
+  const { rootStyles : itemAlignmentStackStyles, rightItemsStyles, graphExplorerLabelStyles,
+    feedbackIconAdjustmentStyles, tenantStyles, moreInformationStyles } = mainHeaderStyles(currentTheme, mobileScreen);
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -76,8 +76,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               onClick={() => props.toggleSidebar()} />
           </TooltipHost>
           <Label
-            style={{ fontSize: mobileScreen ? FontSizes.medium : FontSizes.xLarge,
-              fontWeight: FontWeights.semibold }}>
+            style={graphExplorerLabelStyles}>
             Graph Explorer
           </Label>
         </Stack>

@@ -276,13 +276,9 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   };
 
   const renderGroupHeader = (props: any): any => {
-    const onToggleSelectGroup = () => {
-      props.onToggleCollapse(props.group);
-    };
-
     return (
       <GroupHeader
-        compact={true}
+        {...props}
         styles={{
           check: { display: 'none' },
           title: {
@@ -293,8 +289,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             fontSize: FontSizes.small
           }
         }}
-        {...props}
-        onToggleSelectGroup={onToggleSelectGroup}
       />
     );
   };
@@ -305,8 +299,9 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
   if (selectedQuery) {
     const index = groups.findIndex(k => k.key === selectedQuery.category);
-    if (index !== -1) {
+    if (index > 0 ) {
       groups[index].isCollapsed = false;
+      groups[0].isCollapsed = true;
     }
   }
 

@@ -67,8 +67,8 @@ const Profile = (props: any) => {
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
   const theme = getTheme();
-  const { personaStyleToken , profileSpinnerStyles, permissionsLabelStyles,
-    personaButtonStyles, profileContainerStyles } = profileStyles(theme);
+  const { personaStyleToken , profileSpinnerStyles, permissionsLabelStyles, inactiveConsentStyles,
+    personaButtonStyles, profileContainerStyles, permissionPanelStyles, activeConsentStyles } = profileStyles(theme);
 
   useEffect(() => {
     if (authenticated) {
@@ -140,7 +140,7 @@ const Profile = (props: any) => {
         <PrimaryButton
           disabled={selectedPermissions.length === 0}
           onClick={() => handleConsent()}
-          style={{ marginRight: 10 }}
+          style={(selectedPermissions.length === 0) ? activeConsentStyles: inactiveConsentStyles}
         >
           {translateMessage('Consent')}
         </PrimaryButton>
@@ -241,6 +241,7 @@ const Profile = (props: any) => {
         isFooterAtBottom={true}
         closeButtonAriaLabel='Close'
         overlayProps={panelOverlayProps}
+        styles={permissionPanelStyles}
       >
         <Permission panel={true} setPermissions={setPermissions} />
       </Panel>

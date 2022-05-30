@@ -55,6 +55,22 @@ export const profileStyles = (theme: ITheme) => {
       alignItems: 'stretch',
       flex: 1,
       height: '100%'
+    },
+    permissionPanelStyles: {
+      footer: {
+        backgroundColor: theme.palette.white
+      },
+      commands: {
+        backgroundColor: theme.palette.white
+      }
+    },
+    inactiveConsentStyles: {
+      marginRight: 10,
+      backgroundColor: theme.palette.themeSecondary
+    },
+    activeConsentStyles: {
+      marginRight: 10,
+      backgroundColor: theme.palette.themeDarker
     }
   }
 }
