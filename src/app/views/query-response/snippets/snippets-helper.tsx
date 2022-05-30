@@ -76,13 +76,16 @@ function Snippet(props: ISnippetProps) {
 
   const trackLinkClickedEvent = (link: string, e:any) => {
     const isDocumentationLink : boolean = link.includes('doc')
-    const componentName = isDocumentationLink ? getLanguageComponentName(componentNames.CODE_SNIPPET_DOCS_LINKS) :
-      getLanguageComponentName(componentNames.CODE_SNIPPET_LANGUAGES);
+    const componentName = getLanguageComponentName(isDocumentationLink, componentNames.CODE_SNIPPET_LANGUAGES);
     telemetry.trackLinkClickEvent(e.currentTarget.href, componentName);
   }
-  const getLanguageComponentName = (languageComponentNames : object) : string => {
-    return Object.entries(languageComponentNames).find(
-      ([key]) => language.toLowerCase() === key.toLowerCase() )?.[1] || '';
+  const getLanguageComponentName = (isDocumentationLink: boolean, snippetComponentNames: object) : string => {
+    const snippetComponentEntries = Object.entries(snippetComponentNames);
+    const snippetLanguageEntry = snippetComponentEntries.find(
+      ([key]) => language.toLocaleLowerCase() === key.toLocaleLowerCase()
+    );
+    const componentName = isDocumentationLink ? snippetLanguageEntry?.[1].doc : snippetLanguageEntry?.[1].sdk;
+    return componentName || '' ;
   }
 
   const addExtraSnippetInformation = () : JSX.Element => {

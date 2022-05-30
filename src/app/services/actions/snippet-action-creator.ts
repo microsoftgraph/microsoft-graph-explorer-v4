@@ -30,6 +30,7 @@ export function getSnippetPending(): any {
 export function getSnippet(language: string): Function {
   return async (dispatch: Function, getState: Function) => {
     const { devxApi, sampleQuery } = getState();
+
     try {
       let snippetsUrl = `${devxApi.baseUrl}/api/graphexplorersnippets`;
 
@@ -56,13 +57,19 @@ export function getSnippet(language: string): Function {
 
       const requestBody =
         sampleQuery.sampleBody &&
-          Object.keys(sampleQuery.sampleBody).length !== 0 && // check if empty object
-          sampleQuery.sampleBody.trim() !== ''
+          Object.keys(sampleQuery.sampleBody).length !== 0
           ? JSON.stringify(sampleQuery.sampleBody)
           : '';
 
+      const httpVersion = 'HTTP/1.1';
+      const host = 'Host: graph.microsoft.com';
+      const sampleHeaders = 'Content-Type: application/json';
+
       // eslint-disable-next-line max-len
-      const body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search} HTTP/1.1\r\nHost: graph.microsoft.com\r\nContent-Type: application/json\r\n\r\n${requestBody}`;
+      let body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search} ${httpVersion}\r\n${host}\r\n${sampleHeaders}\r\n\r\n`;
+      if (sampleQuery.selectedVerb !== 'GET') {
+        body += `${requestBody}`;
+      }
 
       const options: IRequestOptions = { method, headers, body };
       const obj: any = {};

@@ -24,7 +24,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
 
   const iconButtonStyles = {
-    root: { paddingBottom: 10, marginTop: -5, marginRight: 2 },
+    root: { marginTop: -5, marginRight: 2 },
     menuIcon: { fontSize: 20, padding: 5 }
   };
 

@@ -97,9 +97,9 @@ function createAuthenticatedRequest(
     });
   }
 
-  const msalAuthOptions:AuthCodeMSALBrowserAuthenticationProviderOptions = {
+  const msalAuthOptions: AuthCodeMSALBrowserAuthenticationProviderOptions = {
     account: authenticationWrapper.getAccount()!,
-    interactionType: InteractionType.Popup ,
+    interactionType: InteractionType.Popup,
     scopes
   }
   const middlewareOptions = new AuthenticationHandlerOptions(
@@ -263,7 +263,7 @@ export function queryResultsInCorsError(sampleUrl: string): boolean {
   if (
     (['/drive/', '/drives/', '/driveItem/'].some((x) =>
       sampleUrl.includes(x)) && sampleUrl.endsWith('/content')) ||
-    (sampleUrl.includes('/reports/') && sampleUrl.includes('$format=text/csv'))
+    sampleUrl.includes('/reports/')
   ) {
     return true;
   }

@@ -13,7 +13,7 @@ const initialState: IDimensions = {
   },
   sidebar: {
     width: '26%',
-    height: '100%'
+    height: ''
   },
   content: {
     width: '74%',
