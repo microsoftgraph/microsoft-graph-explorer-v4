@@ -201,6 +201,7 @@ const Profile = (props: any) => {
           beakWidth={10}
           onDismiss={toggleIsCalloutVisible}
           setInitialFocus
+          styles={{root: {border: '1px solid' + theme.palette.neutralTertiary}}}
         >
           <Stack horizontal horizontalAlign='space-between' styles={{root:{ paddingBottom: 0}}}>
             {profile &&

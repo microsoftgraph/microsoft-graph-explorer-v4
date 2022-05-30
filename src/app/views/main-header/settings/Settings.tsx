@@ -93,7 +93,8 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
     items,
     calloutProps: {
       style: calloutStyles
-    }
+    },
+    styles:{container: {border: '1px solid' + currentTheme.palette.neutralTertiary}}
   };
 
   return (

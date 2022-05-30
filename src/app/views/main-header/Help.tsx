@@ -99,7 +99,8 @@ export const Help = () => {
     items,
     calloutProps: {
       style: calloutStyles
-    }
+    },
+    styles:{container: {border: '1px solid' + currentTheme.palette.neutralTertiary}}
   };
 
   return (
