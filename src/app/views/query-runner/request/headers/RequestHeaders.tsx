@@ -78,6 +78,17 @@ const RequestHeaders = (props: any) => {
     }
   };
 
+  const handleOnHeaderEdit = (header: IHeader) => {
+    let headers = [...sampleQuery.sampleHeaders];
+    headers = headers.filter(head => head.name !== header.name);
+    const query = { ...sampleQuery };
+    query.sampleHeaders = headers;
+    dispatch(queryInputActionCreators.setSampleQuery(query));
+    setHeaderName(header.name);
+    setHeaderValue(header.value);
+    onSetFocus();
+  }
+
   return (
     <div
       onMouseEnter={() => setIsHoverOverHeadersList(true)}
@@ -116,6 +127,7 @@ const RequestHeaders = (props: any) => {
         messages={messages}
         handleOnHeaderDelete={(event: any, header: IHeader) => handleOnHeaderDelete(header)}
         headers={sampleQueryHeaders}
+        handleOnHeaderEdit={(event: any, header: IHeader) => handleOnHeaderEdit(header)}
       />
     </div>
   );
