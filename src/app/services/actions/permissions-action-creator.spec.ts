@@ -202,42 +202,4 @@ describe('tests permissions action creators', () => {
     expect(result).toEqual(expectedResult);
 
   });
-
-  it('Tests the fetchScopes function', () => {
-    // Arrange
-    const api_response = {
-      scopes: [],
-      ok: true
-    }
-    fetch.mockResponseOnce(JSON.stringify(api_response));
-
-    try {
-      // Act
-      // @ts-ignore
-      store.dispatch(fetchScopes())
-        // @ts-ignore
-        .then((response_: any) => {
-          expect(response_.scopes).toBe(undefined);
-        })
-        .catch((e: any) => { throw e })
-    }
-    catch (e) {
-      //
-    }
-  })
-
-  // Revisit this test
-  it('Tests consenting to scopes function', () => {
-    // Arrange
-    const store_ = mockStore({});
-    fetch.mockResponseOnce(JSON.stringify({}));
-
-    // Act and Assert
-    // @ts-ignore
-    store_.dispatch(consentToScopes([]))
-      .then(() => {
-        expect(store_.getActions()[0].type).toEqual(QUERY_GRAPH_STATUS);
-      })
-      .catch((e: any) => { throw e })
-  })
 })
