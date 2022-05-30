@@ -22,6 +22,7 @@ const RequestHeaders = (props: any) => {
   const [headerValue, setHeaderValue] = useState('');
   const [announcedMessage, setAnnouncedMessage] = useState('');
   const [isHoverOverHeadersList, setIsHoverOverHeadersList] = useState(false);
+  const [isUpdatingHeader, setIsUpdatingHeader] = useState<boolean>(false);
 
   const { intl: { messages } } = props;
   const sampleQueryHeaders = sampleQuery.sampleHeaders;
@@ -71,6 +72,7 @@ const RequestHeaders = (props: any) => {
       setHeaderName('');
       setHeaderValue('');
       setAnnouncedMessage(translateMessage('Request Header added'));
+      setIsUpdatingHeader(false);
 
       const query = { ...sampleQuery };
       query.sampleHeaders = newHeaders;
@@ -79,14 +81,22 @@ const RequestHeaders = (props: any) => {
   };
 
   const handleOnHeaderEdit = (header: IHeader) => {
+    if(headerName !== '' || headerValue !== ''){
+      return;
+    }
+    removeHeaderFromSampleQuery(header);
+    setIsUpdatingHeader(true);
+    setHeaderName(header.name);
+    setHeaderValue(header.value);
+    onSetFocus();
+  }
+
+  const removeHeaderFromSampleQuery = (header: IHeader) => {
     let headers = [...sampleQuery.sampleHeaders];
     headers = headers.filter(head => head.name !== header.name);
     const query = { ...sampleQuery };
     query.sampleHeaders = headers;
     dispatch(queryInputActionCreators.setSampleQuery(query));
-    setHeaderName(header.name);
-    setHeaderValue(header.value);
-    onSetFocus();
   }
 
   return (
@@ -118,7 +128,7 @@ const RequestHeaders = (props: any) => {
           <PrimaryButton
             style={{ width: '100%' }}
             onClick={handleOnHeaderAdd}>
-            <FormattedMessage id='Add' />
+            <FormattedMessage id= {isUpdatingHeader ? 'Update' : 'Add'} />
           </PrimaryButton>
         </div>
       </div>

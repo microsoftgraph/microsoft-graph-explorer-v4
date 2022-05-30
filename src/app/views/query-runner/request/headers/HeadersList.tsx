@@ -27,8 +27,8 @@ const HeadersList = ({
             <span style={{fontSize: 'large', position: 'relative', bottom: '3px'}}>|</span>
             <IconButton
               iconProps={{ iconName: 'Edit' }}
-              title="Edit header"
-              ariaLabel='Edit header'
+              title="Edit request header"
+              ariaLabel='Edit request header'
               onClick={(event) => handleOnHeaderEdit(event, item)}
             />
           </div>;
