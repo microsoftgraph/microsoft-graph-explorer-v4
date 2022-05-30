@@ -1,4 +1,3 @@
-import { IAutoCompleteProps } from '../../../../../types/auto-complete';
 import {
   cleanUpSelectedSuggestion,
   getParametersWithVerb, getLastCharacterOf,
@@ -23,7 +22,7 @@ describe('Tests autocomplete utils', () => {
   });
 
   it('Tests getParametersWithVerb', () => {
-    const properties: IAutoCompleteProps = {
+    const properties = {
       autoCompleteOptions: {
         parameters: [
           {
@@ -46,14 +45,12 @@ describe('Tests autocomplete utils', () => {
         sampleUrl: 'https://graph.microsoft.com/v1.0/me',
         selectedVersion: 'v1.0',
         sampleHeaders: []
-      },
-      fetchingSuggestions: false,
-      autoCompleteError: false,
-      contentChanged: jest.fn(),
-      runQuery: jest.fn(),
-      suggestions: []
+      }
     };
-    const result = getParametersWithVerb(properties);
+    const result = getParametersWithVerb({
+      options: properties.autoCompleteOptions,
+      sampleQuery: properties.sampleQuery
+    });
     expect(result).toEqual({
       verb: 'get'
     });

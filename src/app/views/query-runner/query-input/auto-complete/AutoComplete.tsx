@@ -1,13 +1,12 @@
-import { getTheme, ITextField, KeyCodes, TextField } from '@fluentui/react';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { getTheme, KeyCodes, TextField } from '@fluentui/react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
-import { IAutoCompleteProps, IAutoCompleteState } from '../../../../../types/auto-complete';
+import { IAutoCompleteProps } from '../../../../../types/auto-complete';
 import { SortOrder } from '../../../../../types/enums';
 import { IRootState } from '../../../../../types/root';
-import * as autoCompleteActionCreators from '../../../../services/actions/autocomplete-action-creators';
+import { fetchAutoCompleteOptions } from '../../../../services/actions/autocomplete-action-creators';
 import { GRAPH_API_VERSIONS } from '../../../../services/graph-constants';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
@@ -16,51 +15,63 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
 import {
   cleanUpSelectedSuggestion, getFilteredSuggestions, getLastCharacterOf,
-  getLastSymbolInUrl,
-  getParametersWithVerb
+  getLastSymbolInUrl, getParametersWithVerb
 } from './auto-complete.util';
 import SuffixRenderer from './suffix/SuffixRenderer';
 import SuggestionsList from './suggestion-list/SuggestionsList';
 
-class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
-  private autoCompleteRef: React.RefObject<ITextField>;
-  private element: HTMLDivElement | null | undefined;
+const AutoComplete = (props: IAutoCompleteProps) => {
 
-  constructor(props: IAutoCompleteProps) {
-    super(props);
+  const dispatch = useDispatch();
+  const focusRef = useRef<any>(null);
 
-    this.autoCompleteRef = React.createRef();
+  let element: HTMLDivElement | null | undefined = null;
 
-    this.state = {
-      activeSuggestion: 0,
-      filteredSuggestions: [],
-      suggestions: [],
-      showSuggestions: false,
-      userInput: this.props.sampleQuery.sampleUrl,
-      queryUrl: this.props.sampleQuery.sampleUrl,
-      compare: '',
-      multiline: false
-    };
+  const { sampleQuery, autoComplete: { data: autoCompleteOptions } } = useSelector(
+    (state: IRootState) => state
+  );
+
+  const [isMultiline, setIsMultiline] = useState(false);
+  const [activeSuggestion, setActiveSuggestion] = useState(0);
+  const [suggestions, addSuggestions] = useState<string[]>([]);
+  const [compare, setCompare] = useState('');
+  const [userInput, setUserInput] = useState(sampleQuery.sampleUrl);
+  const [queryUrl, setQueryUrl] = useState(sampleQuery.sampleUrl);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (autoCompleteOptions) {
+      performLocalSearch(userInput);
+    }
+    setIsMultiline(isOverflowing(userInput))
+  }, [autoCompleteOptions, userInput]);
+
+  const setFocus = () => {
+    focusRef?.current?.focus();
   }
 
-  private getRef(): ITextField | null {
-    return this.autoCompleteRef.current;
-  }
-
-  public setFocus() {
-    this.getRef()!.blur();
-    // Gives the chance for the focus to take effect
-    setTimeout(() => {
-      this.getRef()!.focus();
-    }, 10);
-  }
-
-  public updateUrlContent = (e: any) => {
-    const userInput = e.target.value;
-    this.props.contentChanged(userInput);
+  const updateUrlContent = (e: any) => {
+    props.contentChanged(e.target.value);
   };
 
-  public isOverflowing = (input: string) => {
+  const onChange = (e: any) => {
+    const previousUserInput = userInput;
+    const targetValue = e.target.value;
+    setIsMultiline(isOverflowing(targetValue));
+    setUserInput(targetValue);
+    setQueryUrl(targetValue);
+
+    if (showSuggestions && suggestions.length) {
+      let compareString = targetValue.replace(previousUserInput, '');
+      compareString = (compare) ? compare + compareString : compareString;
+      setFilteredSuggestions(getFilteredSuggestions(compareString, suggestions));
+      setCompare(compareString);
+    }
+    initialiseAutoComplete(targetValue);
+  };
+
+  const isOverflowing = (input: string) => {
 
     function getTextWidth(text: string) {
       const canvas = document.createElement('canvas');
@@ -72,62 +83,37 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
 
       context.font = getComputedStyle(document.body).font;
       return context.measureText(text).width + 5;
-
     }
 
-    return !!this.element
-      && getTextWidth(input) > this.element.scrollWidth;
-
+    return !!element && getTextWidth(input) > element!.scrollWidth;
   }
 
-  public onChange = (e: any) => {
-    const { suggestions, showSuggestions, userInput: previousUserInput, compare } = this.state;
-    const userInput = e.target.value;
-
-    this.setState({
-      userInput,
-      queryUrl: userInput,
-      multiline: this.isOverflowing(userInput)
-    });
-
-    if (showSuggestions && suggestions.length) {
-      let compareString = userInput.replace(previousUserInput, '');
-      compareString = (compare) ? compare + compareString : compareString;
-      this.setState({
-        filteredSuggestions: getFilteredSuggestions(compareString, suggestions),
-        compare: compareString
-      });
-    }
-    this.initialiseAutoComplete(userInput);
+  const selectSuggestion = (e: any) => {
+    appendSuggestionToUrl(e.currentTarget.innerText);
   };
 
-  public selectSuggestion = (e: any) => {
-    const selected = e.currentTarget.innerText;
-    this.appendSuggestionToUrl(selected);
-  };
-
-  private initialiseAutoComplete = (url: string) => {
+  const initialiseAutoComplete = (url: string) => {
     url = removeExtraSlashesFromUrl(url);
     switch (getLastCharacterOf(url)) {
       case '/':
       case '?':
-        this.requestForAutocompleteOptions(url);
+        requestForAutocompleteOptions(url);
         break;
 
       case '=':
 
         if (url.includes('?$')) {
-          this.getParameterEnums(url);
+          getParameterEnums(url);
         }
 
         break;
 
       case ',':
-        this.getParameterEnums(url);
+        getParameterEnums(url);
         break;
 
       case '&':
-        this.getQueryParameters();
+        getQueryParameters();
         break;
 
       default:
@@ -135,19 +121,16 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }
   }
 
-  public onKeyDown = (event: any) => {
-    const { activeSuggestion, filteredSuggestions,
-      showSuggestions, queryUrl, suggestions } = this.state;
-
+  const onKeyDown = (event: any) => {
     switch (event.keyCode) {
       case KeyCodes.enter:
         if (showSuggestions) {
           const selected = filteredSuggestions[activeSuggestion];
-          this.appendSuggestionToUrl(selected);
+          appendSuggestionToUrl(selected);
         } else {
           event.preventDefault();
-          this.props.contentChanged(queryUrl);
-          this.props.runQuery();
+          props.contentChanged(queryUrl);
+          props.runQuery();
         }
         break;
 
@@ -155,7 +138,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
         if (showSuggestions) {
           event.preventDefault();
           const selected = filteredSuggestions[activeSuggestion];
-          this.appendSuggestionToUrl(selected);
+          appendSuggestionToUrl(selected);
         }
         break;
 
@@ -166,7 +149,7 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           if (activeSuggestion === 0) {
             active = filteredSuggestions.length - 1;
           }
-          this.setState({ activeSuggestion: active });
+          setActiveSuggestion(active);
         }
         break;
 
@@ -177,13 +160,13 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
           if (activeSuggestion === filteredSuggestions.length - 1) {
             active = 0;
           }
-          this.setState({ activeSuggestion: active });
+          setActiveSuggestion(active);
         }
         break;
 
       case KeyCodes.escape:
         if (showSuggestions) {
-          this.setState({ showSuggestions: false });
+          setShowSuggestions(false);
         }
         break;
 
@@ -194,49 +177,45 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     const controlSpace = event.ctrlKey && event.keyCode === KeyCodes.space;
     const controlPeriod = event.ctrlKey && event.keyCode === KeyCodes.period;
     if (controlSpace || controlPeriod) {
-      const userInput = event.target.value;
-      const lastSymbol = getLastSymbolInUrl(userInput);
-      const previousUserInput = userInput.substring(0, lastSymbol.value + 1);
+      const targetValue = event.target.value;
+      const lastSymbol = getLastSymbolInUrl(targetValue);
+      const previousUserInput = targetValue.substring(0, lastSymbol.value + 1);
       if (lastSymbol.key === '/' || lastSymbol.key === '?') {
-        const compare = userInput.replace(previousUserInput, '');
-        this.setState({
-          compare,
-          userInput: previousUserInput
-        });
-        this.requestForAutocompleteOptions(previousUserInput);
+        setCompare(targetValue.replace(previousUserInput, ''));
+        setUserInput(previousUserInput);
+        requestForAutocompleteOptions(previousUserInput);
       } else {
         const filtered = getFilteredSuggestions('', suggestions);
-        this.setSuggestions(filtered, userInput.replace(previousUserInput, ''));
+        setSuggestions(filtered, targetValue.replace(previousUserInput, ''));
       }
     }
   };
 
-  public displayLinkOptions = () => {
-    const parametersWithVerb = getParametersWithVerb(this.props);
+  const displayLinkOptions = () => {
+    const parametersWithVerb = getParametersWithVerb({ options: autoCompleteOptions!, sampleQuery });
     if (!parametersWithVerb) {
       return;
     }
 
-    this.setSuggestions(parametersWithVerb.links);
+    setSuggestions(parametersWithVerb.links);
   }
 
-  public getQueryParameters = () => {
-    const { compare } = this.state;
-    const parametersWithVerb = getParametersWithVerb(this.props);
+  const getQueryParameters = () => {
+    const parametersWithVerb = getParametersWithVerb({ options: autoCompleteOptions!, sampleQuery });
     if (!parametersWithVerb) {
       return;
     }
 
-    let filteredSuggestions = parametersWithVerb.values.map((value: { name: any; }) => value.name);
+    let filtered = parametersWithVerb.values.map((value: { name: any; }) => value.name);
     if (compare) {
-      filteredSuggestions = getFilteredSuggestions(compare, filteredSuggestions);
+      filtered = getFilteredSuggestions(compare, filtered);
     }
 
-    this.setSuggestions(filteredSuggestions);
+    setSuggestions(filtered);
   }
 
-  private getParameterEnums = (url: string) => {
-    const parametersWithVerb = getParametersWithVerb(this.props);
+  const getParameterEnums = (url: string) => {
+    const parametersWithVerb = getParametersWithVerb({ options: autoCompleteOptions!, sampleQuery });
     if (!parametersWithVerb) {
       return;
     }
@@ -246,68 +225,47 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     });
 
     if (section && section.items && section.items.length > 0) {
-      this.setSuggestions(section.items);
+      setSuggestions(section.items);
     }
   }
 
-  private setSuggestions(suggestions: string[], compare?: string) {
-    const sortedSuggestions = this.sortSuggestions(suggestions);
-    this.setState({
-      filteredSuggestions: sortedSuggestions,
-      suggestions: sortedSuggestions,
-      showSuggestions: (suggestions.length > 0),
-      compare: compare || ''
-    });
+  const setSuggestions = (suggestionList: string[], compareString?: string) => {
+    const sortedSuggestions = sortSuggestions(suggestionList);
+    const shouldShowSuggestions = suggestionList.length > 0;
+    setFilteredSuggestions(sortedSuggestions);
+    addSuggestions(sortedSuggestions);
+    setShowSuggestions(shouldShowSuggestions);
+    setCompare(compareString || '');
   }
 
-  private sortSuggestions(suggestions: string[]): string[] {
-    return suggestions.sort(dynamicSort(null, SortOrder.ASC));
+  const sortSuggestions = (suggestionList: string[]): string[] => {
+    return suggestionList.sort(dynamicSort(null, SortOrder.ASC));
   }
 
-  public componentDidUpdate = (prevProps: IAutoCompleteProps) => {
-    if (prevProps.autoCompleteOptions !== this.props.autoCompleteOptions) {
-      if (this.props.autoCompleteOptions) {
-        this.performLocalSearch(this.state.userInput);
-      }
-    }
-
-    const newUrl = this.props.sampleQuery.sampleUrl;
-    if ((this.state.queryUrl === prevProps.sampleQuery.sampleUrl) && newUrl !== this.state.queryUrl) {
-      if (newUrl !== this.state.queryUrl) {
-        this.setState({
-          queryUrl: newUrl,
-          userInput: newUrl,
-          multiline: this.isOverflowing(newUrl)
-        });
-      }
-    }
-  }
-
-
-  private requestForAutocompleteOptions(url: string) {
+  const requestForAutocompleteOptions = (url: string) => {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
     if (GRAPH_API_VERSIONS.includes(queryVersion.toLowerCase())) {
       if (!requestUrl) {
-        this.props.actions!.fetchAutoCompleteOptions('', queryVersion);
+        dispatch(fetchAutoCompleteOptions('', queryVersion));
       } else {
-        if (!this.props.autoCompleteOptions || `${requestUrl}` !== this.props.autoCompleteOptions.url) {
-          this.props.actions!.fetchAutoCompleteOptions(requestUrl, queryVersion);
+        if (!autoCompleteOptions || `${requestUrl}` !== autoCompleteOptions.url) {
+          dispatch(fetchAutoCompleteOptions(requestUrl, queryVersion));
         } else {
-          this.performLocalSearch(url);
+          performLocalSearch(url);
         }
       }
     }
   }
 
-  private performLocalSearch(url: string) {
+  const performLocalSearch = (url: string) => {
     switch (getLastCharacterOf(url)) {
       case '/':
-        this.displayLinkOptions();
+        displayLinkOptions();
         break;
 
       case '?':
-        this.getQueryParameters();
+        getQueryParameters();
         break;
 
       default:
@@ -315,130 +273,93 @@ class AutoComplete extends Component<IAutoCompleteProps, IAutoCompleteState> {
     }
   }
 
-  public trackSuggestionSelectionEvent = (suggestion: string) => {
+  const trackSuggestionSelectionEvent = (suggestion: string) => {
     telemetry.trackEvent(eventTypes.DROPDOWN_CHANGE_EVENT,
       {
         ComponentName: componentNames.QUERY_URL_AUTOCOMPLETE_DROPDOWN,
-        QuerySignature: sanitizeQueryUrl(this.state.queryUrl),
+        QuerySignature: sanitizeQueryUrl(queryUrl),
         SelectedSuggestion: suggestion
       });
   }
 
-  private appendSuggestionToUrl(selected: string) {
+  const appendSuggestionToUrl = (selected: string) => {
     if (!selected) { return; }
-    const { userInput, compare } = this.state;
     if (selected.startsWith('$')) {
       selected += '=';
     }
     const selectedSuggestion = cleanUpSelectedSuggestion(compare, userInput, selected);
-    this.setState({
-      activeSuggestion: 0,
-      filteredSuggestions: [],
-      showSuggestions: false,
-      userInput: selectedSuggestion,
-      compare: '',
-      queryUrl: selectedSuggestion,
-      multiline: this.isOverflowing(selectedSuggestion)
-    });
-    this.props.contentChanged(selectedSuggestion);
-    this.setFocus();
-    this.initialiseAutoComplete(selectedSuggestion);
-    this.trackSuggestionSelectionEvent(selected);
+    setActiveSuggestion(0);
+    setFilteredSuggestions([]);
+    setShowSuggestions(false);
+    setUserInput(selectedSuggestion);
+    setCompare('');
+    setQueryUrl(selectedSuggestion);
+    setIsMultiline(isOverflowing(selectedSuggestion))
+    props.contentChanged(selectedSuggestion);
+    setFocus();
+    initialiseAutoComplete(selectedSuggestion);
+    trackSuggestionSelectionEvent(selected);
   }
 
-  private renderSuffix = () => {
+  const renderSuffix = () => {
     return <SuffixRenderer />;
   }
 
-  closeSuggestionDialog = (event: any) => {
+  const closeSuggestionDialog = (event: any) => {
     const { currentTarget, relatedTarget } = event;
-    if (!currentTarget.contains(relatedTarget as Node) && this.state.showSuggestions) {
-      this.setState({
-        showSuggestions: false
-      })
+    if (!currentTarget.contains(relatedTarget as Node) && showSuggestions) {
+      setShowSuggestions(false);
     }
   }
 
-  public render() {
-    const {
-      activeSuggestion,
-      filteredSuggestions,
-      showSuggestions,
-      userInput,
-      queryUrl,
-      multiline
-    } = this.state;
+  const getErrorMessage = (): string | JSX.Element | undefined => {
+    if (!queryUrl) {
+      return translateMessage('Missing url');
+    }
+    if (hasWhiteSpace(queryUrl)) {
+      return translateMessage('Invalid whitespace in URL');
+    }
+    const { queryVersion } = parseSampleUrl(queryUrl)
+    if (!GRAPH_API_VERSIONS.includes(queryVersion)) {
+      return translateMessage('Invalid version in URL');
+    }
+    return '';
+  }
 
-    const currentTheme = getTheme();
-    const {
-      input: autoInput
-    }: any = queryInputStyles(currentTheme).autoComplete;
+  const currentTheme = getTheme();
+  const {
+    input: autoInput
+  }: any = queryInputStyles(currentTheme).autoComplete;
 
-    return (
-      <div onBlur={this.closeSuggestionDialog}>
-        <div ref={(el) => { this.element = el }}>
-          <TextField
-            className={autoInput}
-            multiline={multiline}
-            autoAdjustHeight
-            resizable={false}
-            type='text'
-            autoComplete='off'
-            onChange={this.onChange}
-            onBlur={this.updateUrlContent}
-            onKeyDown={this.onKeyDown}
-            value={queryUrl}
-            componentRef={this.autoCompleteRef}
-            onRenderSuffix={(this.renderSuffix()) ? this.renderSuffix : undefined}
-            ariaLabel={translateMessage('Query Sample Input')}
-            role='textbox'
-            errorMessage={getErrorMessage()}
-          />
-        </div>
-        {showSuggestions && userInput && filteredSuggestions.length > 0 &&
-          <SuggestionsList
-            filteredSuggestions={filteredSuggestions}
-            activeSuggestion={activeSuggestion}
-            onClick={(e: any) => this.selectSuggestion(e)} />}
+
+  return (
+    <div onBlur={closeSuggestionDialog}>
+      <div ref={(el) => { element = el }}>
+        <TextField
+          className={autoInput}
+          multiline={isMultiline}
+          autoAdjustHeight
+          resizable={false}
+          type='text'
+          autoComplete='off'
+          onChange={onChange}
+          onBlur={updateUrlContent}
+          onKeyDown={onKeyDown}
+          value={queryUrl}
+          componentRef={focusRef!}
+          onRenderSuffix={(renderSuffix()) ? renderSuffix : undefined}
+          ariaLabel={translateMessage('Query Sample Input')}
+          role='textbox'
+          errorMessage={getErrorMessage()}
+        />
       </div>
-    );
-
-    function getErrorMessage(): string | JSX.Element | undefined {
-      if (!queryUrl) {
-        return translateMessage('Missing url');
-      }
-      if (hasWhiteSpace(queryUrl)) {
-        return translateMessage('Invalid whitespace in URL');
-      }
-      const { queryVersion } = parseSampleUrl(queryUrl)
-      if (!GRAPH_API_VERSIONS.includes(queryVersion)) {
-        return translateMessage('Invalid version in URL');
-      }
-      return '';
-    }
-  }
+      {showSuggestions && userInput && filteredSuggestions.length > 0 &&
+        <SuggestionsList
+          filteredSuggestions={filteredSuggestions}
+          activeSuggestion={activeSuggestion}
+          onClick={(e: any) => selectSuggestion(e)} />}
+    </div>
+  );
 }
 
-function mapStateToProps({ sampleQuery, theme, autoComplete }: IRootState) {
-  return {
-    sampleQuery,
-    appTheme: theme,
-    autoCompleteOptions: autoComplete.data,
-    fetchingSuggestions: autoComplete.pending,
-    autoCompleteError: autoComplete.error
-  };
-}
-
-function mapDispatchToProps(dispatch: Dispatch): object {
-  return {
-    actions: bindActionCreators(
-      {
-        ...autoCompleteActionCreators
-      },
-      dispatch
-    )
-  };
-}
-
-// @ts-ignore
-export default connect(mapStateToProps, mapDispatchToProps)(AutoComplete);
+export default AutoComplete;
