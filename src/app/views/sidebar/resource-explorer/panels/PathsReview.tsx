@@ -56,7 +56,7 @@ const PathsReview = (props: IPathsReview) => {
   const options: ICommandBarItemProps[] = [
     {
       key: 'remove',
-      text: translateMessage('Remove'),
+      text: translateMessage('remove'),
       iconProps: { iconName: 'Delete' },
       disabled: selectedItems.length === 0,
       onClick: () => removeSelectedItems()
