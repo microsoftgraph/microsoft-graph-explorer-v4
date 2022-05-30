@@ -1,4 +1,11 @@
-import { getTheme, IconButton, Pivot, PivotItem, Stack } from '@fluentui/react';
+import { DirectionalHint,
+  getTheme,
+  IconButton,
+  Pivot,
+  PivotItem,
+  Stack,
+  TooltipDelay,
+  TooltipHost } from '@fluentui/react';
 import React from 'react';
 
 import { telemetry } from '../../../telemetry';
@@ -72,27 +79,57 @@ export const Sidebar = (props: ISidebar) =>{
       }
       { !showSidebar && !mobileScreen && (
         <Stack tokens={{childrenGap: 10}}>
-          <IconButton
-            iconProps={{iconName: 'Rocket'}}
-            title={translateMessage('Sample Queries')}
-            ariaLabel={translateMessage('Sample Queries')}
-            onClick={() => openComponent('sample-queries')}
-            styles={styles}
-          />
-          <IconButton
-            iconProps={{iconName: 'ExploreData'}}
-            title={translateMessage('Resources')}
-            ariaLabel={translateMessage('Resources')}
-            onClick={() => openComponent('resources')}
-            styles={styles}
-          />
-          <IconButton
-            iconProps={{iconName: 'History'}}
-            title={translateMessage('History')}
-            ariaLabel={translateMessage('History')}
-            onClick={() => openComponent('history')}
-            styles={styles}
-          />
+          <TooltipHost
+            content={
+              <div style={{padding:'3px'}}>
+                {translateMessage('Sample Queries')}
+              </div>}
+            calloutProps={{gapSpace: 0}}
+            directionalHint={DirectionalHint.bottomCenter}
+            styles={{root: { display: 'inline-block'}}}
+            delay={TooltipDelay.zero}
+          >
+            <IconButton
+              iconProps={{iconName: 'Rocket'}}
+              ariaLabel={translateMessage('Sample Queries')}
+              onClick={() => openComponent('sample-queries')}
+              styles={styles}
+            />
+          </TooltipHost>
+          <TooltipHost
+            content={
+              <div style={{padding:'3px'}}>
+                {translateMessage('Resources')}
+              </div>}
+            calloutProps={{gapSpace: 0}}
+            directionalHint={DirectionalHint.bottomCenter}
+            styles={{root: { display: 'inline-block'}}}
+            delay={TooltipDelay.zero}
+          >
+            <IconButton
+              iconProps={{iconName: 'ExploreData'}}
+              ariaLabel={translateMessage('Resources')}
+              onClick={() => openComponent('resources')}
+              styles={styles}
+            />
+          </TooltipHost>
+          <TooltipHost
+            content={
+              <div style={{padding:'3px'}}>
+                {translateMessage('History')}
+              </div>}
+            calloutProps={{gapSpace: 0}}
+            directionalHint={DirectionalHint.bottomCenter}
+            styles={{root: { display: 'inline-block'}}}
+            delay={TooltipDelay.zero}
+          >
+            <IconButton
+              iconProps={{iconName: 'History'}}
+              ariaLabel={translateMessage('History')}
+              onClick={() => openComponent('history')}
+              styles={styles}
+            />
+          </TooltipHost>
         </Stack>)
       }
     </div>
