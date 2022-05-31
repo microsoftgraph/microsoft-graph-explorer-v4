@@ -18,6 +18,7 @@ const middleware = [thunk];
 const mockStore = configureMockStore(middleware);
 
 jest.mock('../../../../src/store/index');
+window.fetch = jest.fn();
 
 const mockState: IRootState = {
   devxApi: {
@@ -242,6 +243,4 @@ describe('Test autocomplete action creators', () => {
       expect(response).toBe(undefined);
     })
   })
-
-
 })

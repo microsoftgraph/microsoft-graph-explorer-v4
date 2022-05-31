@@ -62,6 +62,7 @@ const renderApp = (args?: any) : any => {
       </IntlProvider>
     </Provider> );
 }
+window.fetch = jest.fn();
 
 jest.mock('@microsoft/applicationinsights-react-js', () => ({
   // eslint-disable-next-line react/display-name

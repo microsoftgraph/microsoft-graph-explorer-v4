@@ -22,6 +22,7 @@ const middleware = [thunk];
 const mockStore = configureMockStore(middleware);
 
 window.open = jest.fn();
+window.fetch = jest.fn();
 
 const mockState: IRootState = {
   devxApi: {
