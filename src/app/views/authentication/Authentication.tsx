@@ -1,7 +1,7 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
-import { Label, MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
+import { MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
 import React, { useState } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { componentNames, errorTypes, telemetry } from '../../../telemetry';
@@ -16,14 +16,11 @@ import { getSignInAuthErrorHint, signInAuthError } from '../../../modules/authen
 const Authentication = (props: any) => {
   const dispatch = useDispatch();
   const [loginInProgress, setLoginInProgress] = useState(false);
-  const { sidebarProperties, authToken } = useSelector(
+  const { authToken } = useSelector(
     (state: IRootState) => state
   );
-  const mobileScreen = !!sidebarProperties.mobileScreen;
-  const showSidebar = !!sidebarProperties.showSidebar;
   const tokenPresent = !!authToken.token;
   const logoutInProgress = !!authToken.pending;
-  const minimised = !mobileScreen && !showSidebar;
 
   const classes = classNames(props);
 
@@ -66,6 +63,21 @@ const Authentication = (props: any) => {
     }
   };
 
+  const signInWithOther = async (): Promise<void> => {
+    setLoginInProgress(true);
+    try{
+      const authResponse = await authenticationWrapper.logInWithOther();
+      if (authResponse) {
+        setLoginInProgress(false);
+        dispatch(getAuthTokenSuccess(!!authResponse.accessToken));
+        dispatch(getConsentedScopesSuccess(authResponse.scopes));
+      }
+    } catch(error: any) {
+      setLoginInProgress(false);
+    }
+  }
+
+
   const removeUnderScore = (statusString: string): string => {
     return statusString ? statusString.replace(/_/g, ' ') : statusString;
   }
@@ -73,18 +85,7 @@ const Authentication = (props: any) => {
   const showProgressSpinner = (): React.ReactNode => {
     return (
       <div className={classes.spinnerContainer}>
-        <span
-          style={{position: 'relative', top: loginInProgress && !tokenPresent ? '2px' : '3px'}}
-        >
-          <Spinner className={classes.spinner} size={SpinnerSize.medium} />
-        </span>
-        {!minimised && (
-          <Label styles={{ root: { position: 'relative', top: '6px'}}} >
-            <FormattedMessage
-              id={`Signing you ${loginInProgress ? 'in' : 'out'}...`}
-            />
-          </Label>
-        )}
+        <Spinner className={classes.spinner} size={SpinnerSize.medium} />
       </div>
     );
   };
@@ -97,14 +98,12 @@ const Authentication = (props: any) => {
     <>
       {loginInProgress ? (
         showProgressSpinner()
-      ) : mobileScreen ? (
-        showSignInButtonOrProfile(tokenPresent, mobileScreen, signIn)
       ) : (
         <>
           {showSignInButtonOrProfile(
             tokenPresent,
-            mobileScreen,
-            signIn
+            signIn,
+            signInWithOther
           )}
         </>
       )}

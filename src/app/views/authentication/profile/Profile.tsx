@@ -34,7 +34,6 @@ import { classNames } from '../../classnames';
 import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
-import { authenticationWrapper } from '../../../../modules/authentication';
 
 const getInitials = (name: string) => {
   let initials = '';
@@ -86,8 +85,7 @@ const Profile = (props: any) => {
   }
 
   const handleSignInOther = async () => {
-    authenticationWrapper.clearSession();
-    props.signIn();
+    props.signInWithOther();
   }
 
   const persona: IPersonaSharedProps = {

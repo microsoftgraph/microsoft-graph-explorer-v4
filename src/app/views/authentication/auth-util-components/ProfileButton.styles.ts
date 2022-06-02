@@ -5,13 +5,10 @@ export const profileButtonStyles = (theme: ITheme) => {
     actionButtonStyles: {
       root: {
         height: 50,
-        width: 80,
+        width: 50,
         ':hover': {
           background: `${theme.palette.neutralLight} !important`
-        },
-        whiteSpace: 'nowrap',
-        paddingLeft: '10px',
-        flexBasis: '60px'
+        }
       }
     }
   }

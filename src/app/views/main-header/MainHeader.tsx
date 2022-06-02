@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   DefaultButton,
+  FontIcon,
   getId,
   getTheme,
   IconButton,
@@ -19,7 +20,6 @@ import { Help } from './Help';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../types/root';
 import { mainHeaderStyles } from './MainHeader.styles';
-import { translateMessage } from '../../utils/translate-messages';
 import TenantIcon from './tenantIcon';
 import { useEllipsisDetector } from '../../custom-hooks/ellipsis-detector';
 
@@ -48,9 +48,10 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   const theme = getTheme();
   const showTooltipContent : boolean = useEllipsisDetector('tenantLabel');
 
+
   const { rootStyles : itemAlignmentStackStyles, rightItemsStyles, graphExplorerLabelStyles,
-    feedbackIconAdjustmentStyles, tenantStyles, moreInformationStyles } =
-    mainHeaderStyles({theme, mobileScreen, showTooltipContent});
+    feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles,
+    tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles({theme, mobileScreen, showTooltipContent});
 
   const renderLabel = (tenantLabel: string): JSX.Element => {
     return (
@@ -63,7 +64,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
       key={tenantLabel}
       >
         {`Tenant: ${tenantLabel}`}
-      </span>)
+      </span>
+    )
   }
 
   return (
@@ -97,33 +99,31 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           </Label>
         </Stack>
 
-        <Stack horizontal styles={rightItemsStyles} >
+        <Stack horizontal styles={rightItemsStyles}
+          tokens={{childrenGap:mobileScreen? 0: 10}}
+        >
+          {!mobileScreen && <FontIcon aria-label='tenant icon' iconName='tenantIcon' style={tenantIconStyles} />}
           {!profile && !mobileScreen &&
-            <TooltipHost
-              content={
-                <>
-                  <FormattedMessage id='Using demo tenant' />{' '}
-                  <FormattedMessage id='To access your own data:' />
-                </>}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
-            >
-              <DefaultButton iconProps={{ iconName: 'tenantIcon'}} text={translateMessage('Tenant: Sample')}
-                style={tenantStyles}/>
-            </TooltipHost>
+            <div style={tenantContainerStyle}>
+              <TooltipHost
+                content={
+                  <>
+                    <FormattedMessage id='Using demo tenant' />{' '}
+                    <FormattedMessage id='To access your own data:' />
+                  </>}
+                id={getId()}
+                calloutProps={{ gapSpace: 0 }}
+              >
+                <Label style={tenantLabelStyle}> Tenant</Label>
+                <Label>Sample</Label>
+              </TooltipHost>
+            </div>
           }
           {profile && !mobileScreen &&
-          <TooltipHost
-            id={getId()}
-            calloutProps={{ gapSpace: 0 }}
-            content={showTooltipContent ? profile.tenant : ''}
-          >
-            <DefaultButton  iconProps={{ iconName: 'tenantIcon'}}
-              onRenderText={() => renderLabel(profile.tenant)}
-              checked={true}
-              style={tenantStyles}
-            />
-          </TooltipHost>
+          <div style={tenantContainerStyle}>
+            <Label style={tenantLabelStyle}>Tenant</Label>
+            <Label>{profile.tenant}</Label>
+          </div>
           }
           <span style={ moreInformationStyles }> <Settings /> </span>
           <span style={ moreInformationStyles }> <Help /> </span>

@@ -113,7 +113,9 @@ const QueryResponse = (props: IQueryResponseProps) => {
           height: '100%'
         }}>
 
-          <Pivot overflowBehavior="menu" onLinkClick={handlePivotItemClick}
+          <Pivot overflowBehavior='menu'
+            overflowAriaLabel={translateMessage('More items')}
+            onLinkClick={handlePivotItemClick}
             className={'pivot-response'} >
             {getPivotItems()}
             <PivotItem

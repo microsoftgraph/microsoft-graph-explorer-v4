@@ -49,6 +49,18 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
   }
 
+  public async logInWithOther() {
+    const popUpRequest: PopupRequest = { scopes: defaultScopes}
+    // eslint-disable-next-line no-useless-catch
+    try {
+      const result = await msalApplication.loginPopup(popUpRequest);
+      this.storeHomeAccountId(result.account!);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   public logOut() {
     this.deleteHomeAccountId();
     msalApplication.logoutRedirect();
