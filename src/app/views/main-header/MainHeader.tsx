@@ -62,7 +62,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
       className='tenantLabel'
       key={tenantLabel}
       >
-        {`Tenant: ${'Verylooooooooooooooooooooooooooooooooooooooong'}`}
+        {`Tenant: ${tenantLabel}`}
       </span>)
   }
 
@@ -116,7 +116,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           <TooltipHost
             id={getId()}
             calloutProps={{ gapSpace: 0 }}
-            content={showTooltipContent ? 'Verylooooooooooooooooooooooooooooooooooooooong' : ''}
+            content={showTooltipContent ? profile.tenant : ''}
           >
             <DefaultButton  iconProps={{ iconName: 'tenantIcon'}}
               onRenderText={() => renderLabel(profile.tenant)}
