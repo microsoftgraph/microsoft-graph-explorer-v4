@@ -44,7 +44,10 @@ export const Sidebar = (props: ISidebar) =>{
   return (
     <div>
       {showSidebar &&
-      <Pivot onLinkClick={onPivotItemClick} overflowBehavior='menu' defaultSelectedKey={props.currentTab}>
+      <Pivot onLinkClick={onPivotItemClick}
+        overflowBehavior='menu'
+        overflowAriaLabel={translateMessage('More items')}
+        defaultSelectedKey={props.currentTab}>
         <PivotItem
           headerText={translateMessage('Sample Queries')}
           itemIcon='Rocket'
