@@ -38,9 +38,10 @@ const unstyledResourceExplorer = (props: any) => {
   const { data, pending, paths: selectedLinks } = resources;
 
   const versions: any[] = [
-    { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
-    { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
+    { key: 'v1.0', text: 'v1.0' },
+    { key: 'beta', text: 'beta' }
   ];
+
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');
   const filteredPayload = getResourcesSupportedByVersion(data.children, version, searchText);
@@ -193,6 +194,7 @@ const unstyledResourceExplorer = (props: any) => {
             onText={translateMessage('On')}
             offText={translateMessage('Off')}
             inlineLabel
+            styles={{ text: { position: 'relative', top: '4px' } }}
           />
         </Stack>
       </>}
@@ -221,7 +223,7 @@ const unstyledResourceExplorer = (props: any) => {
         </>
       }
 
-      <Label>
+      <Label styles={{ root: { position: 'relative', left: '10px' } }}>
         <FormattedMessage id='Resources available' />
       </Label>
       <Nav
