@@ -1,7 +1,7 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
-import { Label, MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
+import { MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
 import React, { useState } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { componentNames, errorTypes, telemetry } from '../../../telemetry';
@@ -20,10 +20,8 @@ const Authentication = (props: any) => {
     (state: IRootState) => state
   );
   const mobileScreen = !!sidebarProperties.mobileScreen;
-  const showSidebar = !!sidebarProperties.showSidebar;
   const tokenPresent = !!authToken.token;
   const logoutInProgress = !!authToken.pending;
-  const minimised = !mobileScreen && !showSidebar;
 
   const classes = classNames(props);
 
@@ -74,13 +72,6 @@ const Authentication = (props: any) => {
     return (
       <div className={classes.spinnerContainer}>
         <Spinner className={classes.spinner} size={SpinnerSize.medium} />
-        {!minimised && (
-          <Label styles={{ root: { position: 'relative', top: '8px'}}} >
-            <FormattedMessage
-              id={`Signing you ${loginInProgress ? 'in' : 'out'}...`}
-            />
-          </Label>
-        )}
       </div>
     );
   };
@@ -94,12 +85,11 @@ const Authentication = (props: any) => {
       {loginInProgress ? (
         showProgressSpinner()
       ) : mobileScreen ? (
-        showSignInButtonOrProfile(tokenPresent, mobileScreen, signIn)
+        showSignInButtonOrProfile(tokenPresent, signIn)
       ) : (
         <>
           {showSignInButtonOrProfile(
             tokenPresent,
-            mobileScreen,
             signIn
           )}
         </>
