@@ -21,7 +21,7 @@ import { IRootState } from '../../../types/root';
 import { mainHeaderStyles } from './MainHeader.styles';
 import { translateMessage } from '../../utils/translate-messages';
 import TenantIcon from './tenantIcon';
-import { useEllipsisDetector } from '../../custom-hooks';
+import { useEllipsisDetector } from '../../custom-hooks/ellipsis-detector';
 
 interface MainHeaderProps {
   minimised: boolean;
@@ -62,7 +62,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
       className='tenantLabel'
       key={tenantLabel}
       >
-        {`Tenant: ${tenantLabel}`}
+        {`Tenant: ${'Verylooooooooooooooooooooooooooooooooooooooong'}`}
       </span>)
   }
 
@@ -116,7 +116,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           <TooltipHost
             id={getId()}
             calloutProps={{ gapSpace: 0 }}
-            content={showTooltipContent ? profile.tenant : ''}
+            content={showTooltipContent ? 'Verylooooooooooooooooooooooooooooooooooooooong' : ''}
           >
             <DefaultButton  iconProps={{ iconName: 'tenantIcon'}}
               onRenderText={() => renderLabel(profile.tenant)}
