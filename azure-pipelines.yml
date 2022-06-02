@@ -8,8 +8,7 @@
 
 name: $(date:yyyyMMdd)$(rev:.r)
 
-pool:
-  vmImage: 'windows-latest'
+pool: 1es-windows-latest
 
 pr:
   branches:
