@@ -12,14 +12,14 @@ class Suggestions implements ISuggestions {
     const key = `${version}/${url}`;
     const localOptions = await getSuggestionsFromCache(key);
     if (localOptions) {
-      return getSuggestionsFromCache(key);
+      return localOptions;
     }
 
     return this.fetchSuggestionsFromNetwork(url, api, version);
   }
 
-  private async fetchSuggestionsFromNetwork(url: string, api: string, version: string):
-  Promise<IParsedOpenApiResponse | null> {
+  private async fetchSuggestionsFromNetwork(
+    url: string, api: string, version: string): Promise<IParsedOpenApiResponse | null> {
     const headers = {
       'Accept': 'application/json'
     };
