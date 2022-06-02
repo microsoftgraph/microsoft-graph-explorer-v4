@@ -131,7 +131,7 @@ const RequestHeaders = (props: any) => {
         messages={messages}
         handleOnHeaderDelete={(event: any, headerToDelete: IHeader) => handleOnHeaderDelete(headerToDelete)}
         headers={sampleQueryHeaders}
-        handleOnHeaderEdit={(event: any, headerToEdit: IHeader) => handleOnHeaderEdit(headerToEdit)}
+        handleOnHeaderEdit={(headerToEdit: IHeader) => handleOnHeaderEdit(headerToEdit)}
       />
     </div>
   );

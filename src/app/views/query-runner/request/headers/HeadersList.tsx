@@ -22,14 +22,14 @@ const HeadersList = ({
               iconProps={{ iconName: 'Delete' }}
               title='Remove request header'
               ariaLabel='Remove request header'
-              onClick={(event) => handleOnHeaderDelete(event, item)}
+              onClick={() => handleOnHeaderDelete(item)}
             />
             <span style={{fontSize: 'large', position: 'relative', bottom: '3px'}}>|</span>
             <IconButton
               iconProps={{ iconName: 'Edit' }}
               title="Edit request header"
               ariaLabel='Edit request header'
-              onClick={(event) => handleOnHeaderEdit(event, item)}
+              onClick={() => handleOnHeaderEdit(item)}
             />
           </div>;
 
