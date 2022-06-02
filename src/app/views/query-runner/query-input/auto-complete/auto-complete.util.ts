@@ -1,5 +1,8 @@
 import { AutoCompleteOption } from '../../../../../types/auto-complete';
 import { IQuery } from '../../../../../types/query-runner';
+import { GRAPH_API_VERSIONS } from '../../../../services/graph-constants';
+import { hasWhiteSpace, parseSampleUrl } from '../../../../utils/sample-url-generation';
+import { translateMessage } from '../../../../utils/translate-messages';
 
 export function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
   let finalSelectedSuggestion = `${userInput + selected}`;
@@ -70,4 +73,18 @@ export function getFilteredSuggestions(compareString: string, suggestions: strin
   return suggestions.filter((suggestion: string) => {
     return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
   });
+}
+
+export function getErrorMessage(queryUrl: string) {
+  if (!queryUrl) {
+    return translateMessage('Missing url');
+  }
+  if (hasWhiteSpace(queryUrl)) {
+    return translateMessage('Invalid whitespace in URL');
+  }
+  const { queryVersion } = parseSampleUrl(queryUrl);
+  if (!GRAPH_API_VERSIONS.includes(queryVersion)) {
+    return translateMessage('Invalid version in URL');
+  }
+  return '';
 }

@@ -10,15 +10,24 @@ import { fetchAutoCompleteOptions } from '../../../../services/actions/autocompl
 import { GRAPH_API_VERSIONS } from '../../../../services/graph-constants';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
-import { hasWhiteSpace, parseSampleUrl, removeExtraSlashesFromUrl } from '../../../../utils/sample-url-generation';
+import { parseSampleUrl, removeExtraSlashesFromUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
 import {
-  cleanUpSelectedSuggestion, getFilteredSuggestions, getLastCharacterOf,
+  cleanUpSelectedSuggestion, getErrorMessage, getFilteredSuggestions, getLastCharacterOf,
   getLastSymbolInUrl, getParametersWithVerb
 } from './auto-complete.util';
 import SuffixRenderer from './suffix/SuffixRenderer';
 import SuggestionsList from './suggestion-list/SuggestionsList';
+
+const signs = {
+  SLASH: '/',
+  QUESTION_MARK: '?',
+  EQUALS: '=',
+  COMMA: ',',
+  AMPERSAND: '&',
+  DOLLAR: '$'
+}
 
 const AutoComplete = (props: IAutoCompleteProps) => {
 
@@ -31,13 +40,13 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     (state: IRootState) => state
   );
 
-  const [isMultiline, setIsMultiline] = useState(false);
-  const [activeSuggestion, setActiveSuggestion] = useState(0);
+  const [isMultiline, setIsMultiline] = useState<boolean>(false);
+  const [activeSuggestion, setActiveSuggestion] = useState<number>(0);
   const [suggestions, addSuggestions] = useState<string[]>([]);
-  const [compare, setCompare] = useState('');
-  const [userInput, setUserInput] = useState(sampleQuery.sampleUrl);
-  const [queryUrl, setQueryUrl] = useState(sampleQuery.sampleUrl);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [compare, setCompare] = useState<string>('');
+  const [userInput, setUserInput] = useState<string>(sampleQuery.sampleUrl);
+  const [queryUrl, setQueryUrl] = useState<string>(sampleQuery.sampleUrl);
+  const [shouldShowSuggestions, setShouldShowSuggestions] = useState<boolean>(false);
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
@@ -47,7 +56,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   useEffect(() => {
     if (autoCompleteOptions) {
-      performLocalSearch(userInput);
+      displayAutoCompleteSuggestions(userInput);
     }
     setIsMultiline(isOverflowing(userInput));
   }, [autoCompleteOptions, userInput]);
@@ -67,7 +76,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     setUserInput(targetValue);
     setQueryUrl(targetValue);
 
-    if (showSuggestions && suggestions.length) {
+    if (shouldShowSuggestions && suggestions.length) {
       let compareString = targetValue.replace(previousUserInput, '');
       compareString = (compare) ? compare + compareString : compareString;
       setFilteredSuggestions(getFilteredSuggestions(compareString, suggestions));
@@ -100,25 +109,25 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const initialiseAutoComplete = (url: string) => {
     url = removeExtraSlashesFromUrl(url);
     switch (getLastCharacterOf(url)) {
-      case '/':
-      case '?':
+      case `${signs.SLASH}`:
+      case `${signs.QUESTION_MARK}`:
         requestForAutocompleteOptions(url);
         break;
 
-      case '=':
+      case `${signs.EQUALS}`:
 
-        if (url.includes('?$')) {
+        if (url.includes(`${signs.QUESTION_MARK}${signs.DOLLAR}`)) {
           getParameterEnums(url);
         }
 
         break;
 
-      case ',':
+      case `${signs.COMMA}`:
         getParameterEnums(url);
         break;
 
-      case '&':
-        getQueryParameters();
+      case `${signs.AMPERSAND}`:
+        displayQueryParameters();
         break;
 
       default:
@@ -129,7 +138,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const onKeyDown = (event: any) => {
     switch (event.keyCode) {
       case KeyCodes.enter:
-        if (showSuggestions) {
+        if (shouldShowSuggestions) {
           const selected = filteredSuggestions[activeSuggestion];
           appendSuggestionToUrl(selected);
         } else {
@@ -140,7 +149,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
         break;
 
       case KeyCodes.tab:
-        if (showSuggestions) {
+        if (shouldShowSuggestions) {
           event.preventDefault();
           const selected = filteredSuggestions[activeSuggestion];
           appendSuggestionToUrl(selected);
@@ -149,7 +158,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
       case KeyCodes.up:
         event.preventDefault();
-        if (showSuggestions) {
+        if (shouldShowSuggestions) {
           let active = activeSuggestion - 1;
           if (activeSuggestion === 0) {
             active = filteredSuggestions.length - 1;
@@ -160,7 +169,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
       case KeyCodes.down:
         event.preventDefault();
-        if (showSuggestions) {
+        if (shouldShowSuggestions) {
           let active = activeSuggestion + 1;
           if (activeSuggestion === filteredSuggestions.length - 1) {
             active = 0;
@@ -170,8 +179,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
         break;
 
       case KeyCodes.escape:
-        if (showSuggestions) {
-          setShowSuggestions(false);
+        if (shouldShowSuggestions) {
+          setShouldShowSuggestions(false);
         }
         break;
 
@@ -185,13 +194,13 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       const targetValue = event.target.value;
       const lastSymbol = getLastSymbolInUrl(targetValue);
       const previousUserInput = targetValue.substring(0, lastSymbol.value + 1);
-      if (lastSymbol.key === '/' || lastSymbol.key === '?') {
+      if (lastSymbol.key === signs.SLASH || lastSymbol.key === signs.QUESTION_MARK) {
         setCompare(targetValue.replace(previousUserInput, ''));
         setUserInput(previousUserInput);
         requestForAutocompleteOptions(previousUserInput);
       } else {
         const filtered = getFilteredSuggestions('', suggestions);
-        setSuggestions(filtered, targetValue.replace(previousUserInput, ''));
+        displaySuggestions(filtered, targetValue.replace(previousUserInput, ''));
       }
     }
   };
@@ -202,10 +211,10 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       return;
     }
 
-    setSuggestions(parametersWithVerb.links);
+    displaySuggestions(parametersWithVerb.links);
   }
 
-  const getQueryParameters = () => {
+  const displayQueryParameters = () => {
     const parametersWithVerb = getParametersWithVerb({ options: autoCompleteOptions!, sampleQuery });
     if (!parametersWithVerb) {
       return;
@@ -216,7 +225,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       filtered = getFilteredSuggestions(compare, filtered);
     }
 
-    setSuggestions(filtered);
+    displaySuggestions(filtered);
   }
 
   const getParameterEnums = (url: string) => {
@@ -224,57 +233,51 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     if (!parametersWithVerb) {
       return;
     }
-    const param = url.split('$').pop()!.split('=')[0];
+    const param = url.split(signs.DOLLAR).pop()!.split(signs.EQUALS)[0];
     const section = parametersWithVerb.values.find((k: { name: string; }) => {
-      return k.name === `$${param}`;
+      return k.name === `${signs.DOLLAR}${param}`;
     });
 
     if (section && section.items && section.items.length > 0) {
-      setSuggestions(section.items);
+      displaySuggestions(section.items);
     }
   }
 
-  const setSuggestions = (suggestionList: string[], compareString?: string) => {
-    const sortedSuggestions = sortSuggestions(suggestionList);
-    const shouldShowSuggestions = suggestionList.length > 0;
-    setFilteredSuggestions(sortedSuggestions);
-    addSuggestions(sortedSuggestions);
-    setShowSuggestions(shouldShowSuggestions);
+  const displaySuggestions = (suggestionList: string[], compareString?: string) => {
+    suggestionList.sort(dynamicSort(null, SortOrder.ASC));
+    setFilteredSuggestions(suggestionList);
+    addSuggestions(suggestionList);
+    setShouldShowSuggestions(suggestionList.length > 0);
     setCompare(compareString || '');
-  }
-
-  const sortSuggestions = (suggestionList: string[]): string[] => {
-    return suggestionList.sort(dynamicSort(null, SortOrder.ASC));
   }
 
   const requestForAutocompleteOptions = (url: string) => {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
-    if (GRAPH_API_VERSIONS.includes(queryVersion.toLowerCase())) {
-      if (!requestUrl) {
-        dispatch(fetchAutoCompleteOptions('', queryVersion));
-      } else {
-        if (!autoCompleteOptions || `${requestUrl}` !== autoCompleteOptions.url) {
-          dispatch(fetchAutoCompleteOptions(requestUrl, queryVersion));
-        } else {
-          performLocalSearch(url);
-        }
-      }
+    if (!GRAPH_API_VERSIONS.includes(queryVersion.toLowerCase())) {
+      return;
     }
+
+    if (!requestUrl) {
+      dispatch(fetchAutoCompleteOptions('', queryVersion));
+      return;
+    }
+
+    const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url;
+    if (urlExistsInStore) {
+      displayAutoCompleteSuggestions(url)
+    }
+    dispatch(fetchAutoCompleteOptions(requestUrl, queryVersion));
   }
 
-  const performLocalSearch = (url: string) => {
-    switch (getLastCharacterOf(url)) {
-      case '/':
-        displayLinkOptions();
-        break;
+  const displayAutoCompleteSuggestions = (url: string) => {
+    const lastUrlCharacter = getLastCharacterOf(url);
+    if (lastUrlCharacter === signs.SLASH) {
+      displayLinkOptions();
+    }
 
-      case '?':
-        getQueryParameters();
-        break;
-
-      default:
-        break;
+    if (lastUrlCharacter === signs.QUESTION_MARK) {
+      displayQueryParameters();
     }
   }
 
@@ -289,13 +292,13 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const appendSuggestionToUrl = (selected: string) => {
     if (!selected) { return; }
-    if (selected.startsWith('$')) {
-      selected += '=';
+    if (selected.startsWith(signs.DOLLAR)) {
+      selected += signs.EQUALS;
     }
     const selectedSuggestion = cleanUpSelectedSuggestion(compare, userInput, selected);
     setActiveSuggestion(0);
     setFilteredSuggestions([]);
-    setShowSuggestions(false);
+    setShouldShowSuggestions(false);
     setUserInput(selectedSuggestion);
     setCompare('');
     setQueryUrl(selectedSuggestion);
@@ -312,23 +315,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const closeSuggestionDialog = (event: any) => {
     const { currentTarget, relatedTarget } = event;
-    if (!currentTarget.contains(relatedTarget as Node) && showSuggestions) {
-      setShowSuggestions(false);
+    if (!currentTarget.contains(relatedTarget as Node) && shouldShowSuggestions) {
+      setShouldShowSuggestions(false);
     }
-  }
-
-  const getErrorMessage = (): string | JSX.Element | undefined => {
-    if (!queryUrl) {
-      return translateMessage('Missing url');
-    }
-    if (hasWhiteSpace(queryUrl)) {
-      return translateMessage('Invalid whitespace in URL');
-    }
-    const { queryVersion } = parseSampleUrl(queryUrl)
-    if (!GRAPH_API_VERSIONS.includes(queryVersion)) {
-      return translateMessage('Invalid version in URL');
-    }
-    return '';
   }
 
   const currentTheme = getTheme();
@@ -355,10 +344,10 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           onRenderSuffix={(renderSuffix()) ? renderSuffix : undefined}
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
-          errorMessage={getErrorMessage()}
+          errorMessage={getErrorMessage(queryUrl)}
         />
       </div>
-      {showSuggestions && userInput && filteredSuggestions.length > 0 &&
+      {shouldShowSuggestions && userInput && filteredSuggestions.length > 0 &&
         <SuggestionsList
           filteredSuggestions={filteredSuggestions}
           activeSuggestion={activeSuggestion}
