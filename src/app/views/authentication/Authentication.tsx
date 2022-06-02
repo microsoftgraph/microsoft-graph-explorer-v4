@@ -73,9 +73,13 @@ const Authentication = (props: any) => {
   const showProgressSpinner = (): React.ReactNode => {
     return (
       <div className={classes.spinnerContainer}>
-        <Spinner className={classes.spinner} size={SpinnerSize.medium} />
+        <span
+          style={{position: 'relative', top: loginInProgress && !tokenPresent ? '2px' : '3px'}}
+        >
+          <Spinner className={classes.spinner} size={SpinnerSize.medium} />
+        </span>
         {!minimised && (
-          <Label styles={{ root: { position: 'relative', top: '8px'}}} >
+          <Label styles={{ root: { position: 'relative', top: '6px'}}} >
             <FormattedMessage
               id={`Signing you ${loginInProgress ? 'in' : 'out'}...`}
             />

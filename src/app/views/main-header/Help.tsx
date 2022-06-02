@@ -91,7 +91,7 @@ export const Help = () => {
   const calloutStyles: React.CSSProperties = {
     overflowY: 'hidden'
   }
-  const { iconButton: helpButtonStyles, tooltipStyles } = mainHeaderStyles(currentTheme);
+  const { iconButton: helpButtonStyles, tooltipStyles } = mainHeaderStyles({theme: currentTheme});
 
   const menuProperties = {
     shouldFocusOnMount: true,

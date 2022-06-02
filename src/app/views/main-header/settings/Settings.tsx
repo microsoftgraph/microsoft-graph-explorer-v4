@@ -85,7 +85,7 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   }
 
   const { iconButton : settingsButtonStyles, settingsContainerStyles,
-    tooltipStyles} = mainHeaderStyles(currentTheme);
+    tooltipStyles} = mainHeaderStyles({theme: currentTheme});
 
   const menuProperties = {
     shouldFocusOnMount: true,

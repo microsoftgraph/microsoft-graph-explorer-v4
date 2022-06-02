@@ -1,8 +1,6 @@
 import * as React from 'react';
 import {
   DefaultButton,
-  FontSizes,
-  FontWeights,
   getId,
   getTheme,
   IconButton,
@@ -23,6 +21,7 @@ import { IRootState } from '../../../types/root';
 import { mainHeaderStyles } from './MainHeader.styles';
 import { translateMessage } from '../../utils/translate-messages';
 import TenantIcon from './tenantIcon';
+import { useEllipsisDetector } from '../../custom-hooks';
 
 interface MainHeaderProps {
   minimised: boolean;
@@ -46,9 +45,26 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   );
   const minimised = props.minimised;
   const mobileScreen = props.mobileScreen;
-  const currentTheme = getTheme();
+  const theme = getTheme();
+  const showTooltipContent : boolean = useEllipsisDetector('tenantLabel');
+
   const { rootStyles : itemAlignmentStackStyles, rightItemsStyles, graphExplorerLabelStyles,
-    feedbackIconAdjustmentStyles, tenantStyles, moreInformationStyles } = mainHeaderStyles(currentTheme, mobileScreen);
+    feedbackIconAdjustmentStyles, tenantStyles, moreInformationStyles } =
+    mainHeaderStyles({theme, mobileScreen, showTooltipContent});
+
+  const renderLabel = (tenantLabel: string): JSX.Element => {
+    return (
+      <span style={{
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        maxWidth: '150px'
+      }}
+      className='tenantLabel'
+      key={tenantLabel}
+      >
+        {`Tenant: ${tenantLabel}`}
+      </span>)
+  }
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -97,9 +113,17 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
             </TooltipHost>
           }
           {profile && !mobileScreen &&
-            <DefaultButton  iconProps={{ iconName: 'tenantIcon'}} text={`Tenant: ${profile.tenant}`} checked={true}
+          <TooltipHost
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+            content={showTooltipContent ? profile.tenant : ''}
+          >
+            <DefaultButton  iconProps={{ iconName: 'tenantIcon'}}
+              onRenderText={() => renderLabel(profile.tenant)}
+              checked={true}
               style={tenantStyles}
             />
+          </TooltipHost>
           }
           <span style={ moreInformationStyles }> <Settings /> </span>
           <span style={ moreInformationStyles }> <Help /> </span>
