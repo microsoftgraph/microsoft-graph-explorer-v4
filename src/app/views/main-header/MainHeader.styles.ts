@@ -1,11 +1,6 @@
 import { FontSizes, FontWeights, ITheme } from '@fluentui/react';
-interface IMainHeaderStyleProps {
-  theme: ITheme;
-  mobileScreen?: boolean;
-  showTooltipContent?: boolean
-}
-export const mainHeaderStyles = (headerProps: IMainHeaderStyleProps) => {
-  const { mobileScreen, theme, showTooltipContent } = headerProps;
+
+export const mainHeaderStyles = (theme: ITheme, mobileScreen?: boolean) => {
   return {
     rootStyles: {
       root: {
@@ -16,8 +11,7 @@ export const mainHeaderStyles = (headerProps: IMainHeaderStyleProps) => {
     },
     rightItemsStyles: {
       root: {
-        alignItems: 'center',
-        flexBasis: mobileScreen ? '137px' : showTooltipContent && !mobileScreen ? '350px' : ''
+        alignItems: 'center'
       }
     },
     feedbackIconAdjustmentStyles: {
@@ -33,6 +27,12 @@ export const mainHeaderStyles = (headerProps: IMainHeaderStyleProps) => {
     },
     tenantContainerStyle: {
       margin: '0px 10px'
+    },
+    tenantNameStyle: {
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      maxWidth: '100px',
+      whiteSpace: 'nowrap' as 'nowrap'
     },
     iconButton: {
       menuIcon: { fontSize: 15 },

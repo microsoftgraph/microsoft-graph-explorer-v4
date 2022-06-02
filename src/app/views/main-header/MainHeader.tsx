@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  DefaultButton,
   FontIcon,
   getId,
   getTheme,
@@ -45,28 +44,13 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   );
   const minimised = props.minimised;
   const mobileScreen = props.mobileScreen;
-  const theme = getTheme();
+  const currentTheme = getTheme();
   const showTooltipContent : boolean = useEllipsisDetector('tenantLabel');
 
 
   const { rootStyles : itemAlignmentStackStyles, rightItemsStyles, graphExplorerLabelStyles,
-    feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles,
-    tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles({theme, mobileScreen, showTooltipContent});
-
-  const renderLabel = (tenantLabel: string): JSX.Element => {
-    return (
-      <span style={{
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        maxWidth: '150px'
-      }}
-      className='tenantLabel'
-      key={tenantLabel}
-      >
-        {`Tenant: ${tenantLabel}`}
-      </span>
-    )
-  }
+    feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles, tenantNameStyle,
+    tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles(currentTheme, mobileScreen);
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -100,7 +84,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         </Stack>
 
         <Stack horizontal styles={rightItemsStyles}
-          tokens={{childrenGap:mobileScreen? 0: 10}}
+          tokens={{childrenGap: mobileScreen ? 0: 10}}
         >
           {!mobileScreen && <FontIcon aria-label='tenant icon' iconName='tenantIcon' style={tenantIconStyles} />}
           {!profile && !mobileScreen &&
@@ -122,7 +106,13 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           {profile && !mobileScreen &&
           <div style={tenantContainerStyle}>
             <Label style={tenantLabelStyle}>Tenant</Label>
-            <Label>{profile.tenant}</Label>
+            <TooltipHost
+              content={showTooltipContent ? profile.tenant : ''}
+              id= { getId() }
+              calloutProps={{ gapSpace: 0 }}
+            >
+              <Label className='tenantLabel' style={tenantNameStyle}> {profile.tenant} </Label>
+            </TooltipHost>
           </div>
           }
           <span style={ moreInformationStyles }> <Settings /> </span>

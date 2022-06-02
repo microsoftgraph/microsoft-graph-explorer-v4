@@ -3,6 +3,7 @@ import {
   Callout,
   DefaultButton,
   FontSizes,
+  getId,
   getTheme,
   IOverlayProps,
   IPersonaProps,
@@ -17,7 +18,8 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
-  styled
+  styled,
+  TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,6 +36,7 @@ import { classNames } from '../../classnames';
 import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
+import { useEllipsisDetector } from '../../../custom-hooks/ellipsis-detector';
 
 const getInitials = (name: string) => {
   let initials = '';
@@ -68,13 +71,13 @@ const Profile = (props: any) => {
   const theme = getTheme();
   const { personaStyleToken , profileSpinnerStyles, permissionsLabelStyles, inactiveConsentStyles,
     personaButtonStyles, profileContainerStyles, permissionPanelStyles, activeConsentStyles } = profileStyles(theme);
+  const showTooltipContent : boolean = useEllipsisDetector('ms-Persona-secondaryText');
 
   useEffect(() => {
     if (authenticated) {
       dispatch(getProfileInfo());
     }
-  }, [authenticated]);
-
+  }, [authenticated, isCalloutVisible]);
 
   if (!profile) {
     return (<Spinner size={SpinnerSize.medium} styles={profileSpinnerStyles} />);
@@ -156,9 +159,13 @@ const Profile = (props: any) => {
   }
   const onRenderSecondaryText = (prop: IPersonaProps): JSX.Element => {
     return (
-      <span style={{fontSize: FontSizes.small}}>
+      <TooltipHost
+        content={showTooltipContent ? prop.secondaryText : ''}
+        id= {getId()}
+        calloutProps={{ gapSpace: 0 }}
+      >
         {prop.secondaryText}
-      </span>
+      </TooltipHost>
     );
   }
 
@@ -175,7 +182,8 @@ const Profile = (props: any) => {
       size={PersonaSize.size72}
       hidePersonaDetails={false}
       onRenderSecondaryText={onRenderSecondaryText}
-      styles={personaStyleToken} />
+      styles={personaStyleToken}
+      className='personaEmailLabel' />
 
     return (<>
       <ActionButton ariaLabel='profile'
