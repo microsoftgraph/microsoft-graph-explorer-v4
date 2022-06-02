@@ -41,10 +41,15 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
+    setUserInput(sampleQuery.sampleUrl);
+    setQueryUrl(sampleQuery.sampleUrl);
+  }, [sampleQuery])
+
+  useEffect(() => {
     if (autoCompleteOptions) {
       performLocalSearch(userInput);
     }
-    setIsMultiline(isOverflowing(userInput))
+    setIsMultiline(isOverflowing(userInput));
   }, [autoCompleteOptions, userInput]);
 
   const setFocus = () => {
