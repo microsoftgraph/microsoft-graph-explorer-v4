@@ -19,11 +19,15 @@ export const mainHeaderStyles = (theme: ITheme, mobileScreen?: boolean) => {
       position: 'relative' as 'relative',
       top: '4px'
     },
-    tenantStyles: {
-      height: 50,
-      border: 'none',
-      cursor: 'default',
-      background: theme.palette.neutralLighter
+    tenantIconStyles: {
+      paddingRight: 3
+    },
+    tenantLabelStyle: {
+      fontSize: FontSizes.size12,
+      height: 16
+    },
+    tenantContainerStyle: {
+      margin: '0px 10px'
     },
     iconButton: {
       menuIcon: { fontSize: 15 },
@@ -43,7 +47,13 @@ export const mainHeaderStyles = (theme: ITheme, mobileScreen?: boolean) => {
     },
     settingsContainerStyles: {
       display: 'flex',
-      alignItems: 'stretch'
+      alignItems: 'stretch',
+      height: 50,
+      width: 50
+    },
+    helpContainerStyles: {
+      height: 50,
+      width: 50
     },
     tooltipStyles: {
       root: {

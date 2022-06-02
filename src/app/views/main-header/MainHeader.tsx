@@ -1,8 +1,6 @@
 import * as React from 'react';
 import {
-  DefaultButton,
-  FontSizes,
-  FontWeights,
+  FontIcon,
   getId,
   getTheme,
   IconButton,
@@ -21,7 +19,6 @@ import { Help } from './Help';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../types/root';
 import { mainHeaderStyles } from './MainHeader.styles';
-import { translateMessage } from '../../utils/translate-messages';
 import TenantIcon from './tenantIcon';
 
 interface MainHeaderProps {
@@ -48,7 +45,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   const mobileScreen = props.mobileScreen;
   const currentTheme = getTheme();
   const { rootStyles : itemAlignmentStackStyles, rightItemsStyles, graphExplorerLabelStyles,
-    feedbackIconAdjustmentStyles, tenantStyles, moreInformationStyles } = mainHeaderStyles(currentTheme, mobileScreen);
+    feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles,
+    tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles(currentTheme, mobileScreen);
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -81,25 +79,31 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           </Label>
         </Stack>
 
-        <Stack horizontal styles={rightItemsStyles} >
+        <Stack horizontal styles={rightItemsStyles}
+          tokens={{childrenGap:mobileScreen? 0: 10}}
+        >
+          {!mobileScreen && <FontIcon aria-label='tenant icon' iconName='tenantIcon' style={tenantIconStyles} />}
           {!profile && !mobileScreen &&
-            <TooltipHost
-              content={
-                <>
-                  <FormattedMessage id='Using demo tenant' />{' '}
-                  <FormattedMessage id='To access your own data:' />
-                </>}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
-            >
-              <DefaultButton iconProps={{ iconName: 'tenantIcon'}} text={translateMessage('Tenant: Sample')}
-                style={tenantStyles}/>
-            </TooltipHost>
+            <div style={tenantContainerStyle}>
+              <TooltipHost
+                content={
+                  <>
+                    <FormattedMessage id='Using demo tenant' />{' '}
+                    <FormattedMessage id='To access your own data:' />
+                  </>}
+                id={getId()}
+                calloutProps={{ gapSpace: 0 }}
+              >
+                <Label style={tenantLabelStyle}> Tenant</Label>
+                <Label>Sample</Label>
+              </TooltipHost>
+            </div>
           }
           {profile && !mobileScreen &&
-            <DefaultButton  iconProps={{ iconName: 'tenantIcon'}} text={`Tenant: ${profile.tenant}`} checked={true}
-              style={tenantStyles}
-            />
+          <div style={tenantContainerStyle}>
+            <Label style={tenantLabelStyle}>Tenant</Label>
+            <Label>{profile.tenant}</Label>
+          </div>
           }
           <span style={ moreInformationStyles }> <Settings /> </span>
           <span style={ moreInformationStyles }> <Help /> </span>
