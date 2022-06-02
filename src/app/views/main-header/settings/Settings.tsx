@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogFooter,
   DialogType,
+  DirectionalHint,
   getId,
   getTheme,
   IconButton,
@@ -91,6 +92,7 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
     shouldFocusOnMount: true,
     alignTargetEdge: true,
     items,
+    directionalHint: DirectionalHint.bottomLeftEdge,
     calloutProps: {
       style: calloutStyles
     },
@@ -100,7 +102,11 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   return (
     <div style={ settingsContainerStyles }>
       <TooltipHost
-        content={translateMessage('Settings')}
+        content={
+          <div style={{padding:'3px'}}>
+            {translateMessage('Settings')}
+          </div>
+        }
         id={getId()}
         calloutProps={{ gapSpace: 0 }}
         styles={ tooltipStyles }
