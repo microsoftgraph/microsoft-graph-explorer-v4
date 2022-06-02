@@ -6,7 +6,8 @@ import { profileButtonStyles } from './ProfileButton.styles';
 
 export function showSignInButtonOrProfile(
   tokenPresent: boolean,
-  signIn: Function
+  signIn: Function,
+  signInWithOther: Function
 ) {
 
   const currentTheme = getTheme();
@@ -32,7 +33,7 @@ export function showSignInButtonOrProfile(
   return (
     <>
       {!tokenPresent && signInButton}
-      {tokenPresent && <Profile signIn={signIn}/>}
+      {tokenPresent && <Profile signInWithOther={signInWithOther}/>}
     </>
   );
 }

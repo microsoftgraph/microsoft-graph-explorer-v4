@@ -16,10 +16,9 @@ import { getSignInAuthErrorHint, signInAuthError } from '../../../modules/authen
 const Authentication = (props: any) => {
   const dispatch = useDispatch();
   const [loginInProgress, setLoginInProgress] = useState(false);
-  const { sidebarProperties, authToken } = useSelector(
+  const { authToken } = useSelector(
     (state: IRootState) => state
   );
-  const mobileScreen = !!sidebarProperties.mobileScreen;
   const tokenPresent = !!authToken.token;
   const logoutInProgress = !!authToken.pending;
 
@@ -64,6 +63,21 @@ const Authentication = (props: any) => {
     }
   };
 
+  const signInWithOther = async (): Promise<void> => {
+    setLoginInProgress(true);
+    try{
+      const authResponse = await authenticationWrapper.logInWithOther();
+      if (authResponse) {
+        setLoginInProgress(false);
+        dispatch(getAuthTokenSuccess(!!authResponse.accessToken));
+        dispatch(getConsentedScopesSuccess(authResponse.scopes));
+      }
+    } catch(error: any) {
+      setLoginInProgress(false);
+    }
+  }
+
+
   const removeUnderScore = (statusString: string): string => {
     return statusString ? statusString.replace(/_/g, ' ') : statusString;
   }
@@ -84,13 +98,12 @@ const Authentication = (props: any) => {
     <>
       {loginInProgress ? (
         showProgressSpinner()
-      ) : mobileScreen ? (
-        showSignInButtonOrProfile(tokenPresent, signIn)
       ) : (
         <>
           {showSignInButtonOrProfile(
             tokenPresent,
-            signIn
+            signIn,
+            signInWithOther
           )}
         </>
       )}
