@@ -76,6 +76,10 @@ export const profileStyles = (theme: ITheme) => {
     activeConsentStyles: {
       marginRight: 10,
       backgroundColor: theme.palette.themeDarker
+    },
+    tooltipContentStyle: {
+      dusplay: 'inline-block',
+      height: '15px'
     }
   }
 }

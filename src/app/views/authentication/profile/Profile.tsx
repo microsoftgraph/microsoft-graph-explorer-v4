@@ -8,6 +8,7 @@ import {
   IOverlayProps,
   IPersonaProps,
   IPersonaSharedProps,
+  ITooltipHostStyles,
   Label,
   mergeStyleSets,
   Panel,
@@ -69,7 +70,7 @@ const Profile = (props: any) => {
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
   const theme = getTheme();
-  const { personaStyleToken , profileSpinnerStyles, permissionsLabelStyles, inactiveConsentStyles,
+  const { personaStyleToken , profileSpinnerStyles, permissionsLabelStyles, inactiveConsentStyles, tooltipContentStyle,
     personaButtonStyles, profileContainerStyles, permissionPanelStyles, activeConsentStyles } = profileStyles(theme);
   const showTooltipContent : boolean = useEllipsisDetector('ms-Persona-secondaryText');
 
@@ -157,16 +158,26 @@ const Profile = (props: any) => {
   const panelOverlayProps: IOverlayProps = {
     isDarkThemed: true
   }
+
   const onRenderSecondaryText = (prop: IPersonaProps): JSX.Element => {
     return (
       <TooltipHost
         content={showTooltipContent ? prop.secondaryText : ''}
         id= {getId()}
-        calloutProps={{ gapSpace: 0 }}
+        calloutProps={{ gapSpace: 0}}
+        tooltipProps={{onRenderContent: () => renderTooltipContent(prop.secondaryText!)}}
       >
         {prop.secondaryText}
       </TooltipHost>
     );
+  }
+
+  const renderTooltipContent = (tooltipText: string) : JSX.Element => {
+    return (
+      <div style={tooltipContentStyle}>
+        {tooltipText}
+      </div>
+    )
   }
 
   const showProfileComponent = (userPersona: any): React.ReactNode => {
