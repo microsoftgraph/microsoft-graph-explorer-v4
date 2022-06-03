@@ -82,7 +82,6 @@ const RequestHeaders = (props: any) => {
     setHeader({...headerToEdit});
     onSetFocus();
   }
-  //
 
   const removeHeaderFromSampleQuery = (headerToRemove: IHeader) => {
     let headers = [...sampleQuery.sampleHeaders];
