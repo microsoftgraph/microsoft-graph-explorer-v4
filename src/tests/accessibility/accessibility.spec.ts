@@ -42,7 +42,6 @@ describe('Graph Explorer accessibility', () => {
         'document-title',
         'html-has-lang',
         'page-has-heading-one',
-        'button-name',
         'landmark-unique'
       ])
       .analyze();

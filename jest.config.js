@@ -10,7 +10,7 @@ module.exports = {
     '!src/app/middleware/telemetryMiddleware.ts',
     '!src/telemetry/telemetry.ts'
   ],
-  resolver: 'jest-pnp-resolver',
+  resolver: `${__dirname}/src/tests/common/resolver.js`,
   setupFiles: ['react-app-polyfill/jsdom'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testMatch: [
@@ -20,8 +20,10 @@ module.exports = {
   globals: {
     crypto: require('crypto')
   },
+  testEnvironmentOptions: {
+    url: 'http://localhost'
+  },
   testEnvironment: 'jsdom',
-  testURL: 'http://localhost',
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
     '^.+\\.css$': '<rootDir>/config/jest/cssTransform.js',
