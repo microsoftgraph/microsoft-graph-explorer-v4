@@ -43,7 +43,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const [isMultiline, setIsMultiline] = useState<boolean>(false);
   const [activeSuggestion, setActiveSuggestion] = useState<number>(0);
   const [suggestions, addSuggestions] = useState<string[]>([]);
-  const [compare, setCompare] = useState<string>('');
+  const [searchText, setSearchText] = useState<string>('');
   const [userInput, setUserInput] = useState<string>(sampleQuery.sampleUrl);
   const [queryUrl, setQueryUrl] = useState<string>(sampleQuery.sampleUrl);
   const [shouldShowSuggestions, setShouldShowSuggestions] = useState<boolean>(false);
@@ -78,9 +78,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
     if (shouldShowSuggestions && suggestions.length) {
       let compareString = targetValue.replace(previousUserInput, '');
-      compareString = (compare) ? compare + compareString : compareString;
+      compareString = (searchText) ? searchText + compareString : compareString;
       setFilteredSuggestions(getFilteredSuggestions(compareString, suggestions));
-      setCompare(compareString);
+      setSearchText(compareString);
     }
     initialiseAutoComplete(targetValue);
   };
@@ -131,6 +131,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
         break;
 
       default:
+
         break;
     }
   }
@@ -195,7 +196,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       const lastSymbol = getLastSymbolInUrl(targetValue);
       const previousUserInput = targetValue.substring(0, lastSymbol.value + 1);
       if (lastSymbol.key === signs.SLASH || lastSymbol.key === signs.QUESTION_MARK) {
-        setCompare(targetValue.replace(previousUserInput, ''));
+        setSearchText(targetValue.replace(previousUserInput, ''));
         setUserInput(previousUserInput);
         requestForAutocompleteOptions(previousUserInput);
       } else {
@@ -221,8 +222,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
 
     let filtered = parametersWithVerb.values.map((value: { name: any; }) => value.name);
-    if (compare) {
-      filtered = getFilteredSuggestions(compare, filtered);
+    if (searchText) {
+      filtered = getFilteredSuggestions(searchText, filtered);
     }
 
     displaySuggestions(filtered);
@@ -248,7 +249,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     setFilteredSuggestions(suggestionList);
     addSuggestions(suggestionList);
     setShouldShowSuggestions(suggestionList.length > 0);
-    setCompare(compareString || '');
+    setSearchText(compareString || '');
   }
 
   const requestForAutocompleteOptions = (url: string) => {
@@ -295,12 +296,12 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     if (selected.startsWith(signs.DOLLAR)) {
       selected += signs.EQUALS;
     }
-    const selectedSuggestion = cleanUpSelectedSuggestion(compare, userInput, selected);
+    const selectedSuggestion = cleanUpSelectedSuggestion(searchText, userInput, selected);
     setActiveSuggestion(0);
     setFilteredSuggestions([]);
     setShouldShowSuggestions(false);
     setUserInput(selectedSuggestion);
-    setCompare('');
+    setSearchText('');
     setQueryUrl(selectedSuggestion);
     setIsMultiline(isOverflowing(selectedSuggestion))
     props.contentChanged(selectedSuggestion);
