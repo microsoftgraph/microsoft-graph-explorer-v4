@@ -4,7 +4,7 @@ import { GRAPH_API_VERSIONS } from '../../../../services/graph-constants';
 import { hasWhiteSpace, parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 
-export function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
+function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
   let finalSelectedSuggestion = `${userInput + selected}`;
   if (compare) {
     /**
@@ -17,7 +17,7 @@ export function cleanUpSelectedSuggestion(compare: string, userInput: string, se
   return finalSelectedSuggestion;
 }
 
-export function getParametersWithVerb(properties: { options: AutoCompleteOption, sampleQuery: IQuery }) {
+function getParametersWithVerb(properties: { options: AutoCompleteOption, sampleQuery: IQuery }) {
   const { options, sampleQuery: { selectedVerb } } = properties;
   if (!options) {
     return;
@@ -29,53 +29,18 @@ export function getParametersWithVerb(properties: { options: AutoCompleteOption,
   return parameters.find(parameter => parameter.verb === selectedVerb.toLowerCase());
 }
 
-export function getLastCharacterOf(content: string) {
+function getLastCharacterOf(content: string) {
   return content.slice(-1);
 }
 
-export function getLastSymbolInUrl(url: string) {
-  const availableSymbols = [
-    {
-      key: '/',
-      value: 0
-    },
-    {
-      key: ',',
-      value: 0
-    },
-    {
-      key: '$',
-      value: 0
-    },
-    {
-      key: '=',
-      value: 0
-    },
-    {
-      key: '&',
-      value: 0
-    },
-    {
-      key: '?',
-      value: 0
-    }
-  ];
-
-  availableSymbols.forEach(element => {
-    element.value = url.lastIndexOf(element.key);
-  });
-  const max = availableSymbols.reduce((prev, current) => (prev.value > current.value) ? prev : current);
-  return max;
-}
-
 // Filter out suggestions that don't contain the user's input
-export function getFilteredSuggestions(compareString: string, suggestions: string[]) {
+function getFilteredSuggestions(compareString: string, suggestions: string[]) {
   return suggestions.filter((suggestion: string) => {
     return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
   });
 }
 
-export function getErrorMessage(queryUrl: string) {
+function getErrorMessage(queryUrl: string) {
   if (!queryUrl) {
     return translateMessage('Missing url');
   }
@@ -87,4 +52,12 @@ export function getErrorMessage(queryUrl: string) {
     return translateMessage('Invalid version in URL');
   }
   return '';
+}
+
+export {
+  getErrorMessage,
+  getFilteredSuggestions,
+  getParametersWithVerb,
+  cleanUpSelectedSuggestion,
+  getLastCharacterOf
 }

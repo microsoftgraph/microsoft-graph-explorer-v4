@@ -15,19 +15,11 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
 import {
   cleanUpSelectedSuggestion, getErrorMessage, getFilteredSuggestions, getLastCharacterOf,
-  getLastSymbolInUrl, getParametersWithVerb
+  getParametersWithVerb
 } from './auto-complete.util';
+import { getLastDelimiterInUrl, delimiters } from './utilities/delimiters';
 import SuffixRenderer from './suffix/SuffixRenderer';
 import SuggestionsList from './suggestion-list/SuggestionsList';
-
-const signs = {
-  SLASH: '/',
-  QUESTION_MARK: '?',
-  EQUALS: '=',
-  COMMA: ',',
-  AMPERSAND: '&',
-  DOLLAR: '$'
-}
 
 const AutoComplete = (props: IAutoCompleteProps) => {
 
@@ -109,24 +101,24 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const initialiseAutoComplete = (url: string) => {
     url = removeExtraSlashesFromUrl(url);
     switch (getLastCharacterOf(url)) {
-      case `${signs.SLASH}`:
-      case `${signs.QUESTION_MARK}`:
+      case `${delimiters.SLASH.symbol}`:
+      case `${delimiters.QUESTION_MARK.symbol}`:
         requestForAutocompleteOptions(url);
         break;
 
-      case `${signs.EQUALS}`:
+      case `${delimiters.EQUALS.symbol}`:
 
-        if (url.includes(`${signs.QUESTION_MARK}${signs.DOLLAR}`)) {
+        if (url.includes(`${delimiters.QUESTION_MARK.symbol}${delimiters.DOLLAR.symbol}`)) {
           getParameterEnums(url);
         }
 
         break;
 
-      case `${signs.COMMA}`:
+      case `${delimiters.COMMA.symbol}`:
         getParameterEnums(url);
         break;
 
-      case `${signs.AMPERSAND}`:
+      case `${delimiters.AMPERSAND.symbol}`:
         displayQueryParameters();
         break;
 
@@ -192,16 +184,16 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     const controlSpace = event.ctrlKey && event.keyCode === KeyCodes.space;
     const controlPeriod = event.ctrlKey && event.keyCode === KeyCodes.period;
     if (controlSpace || controlPeriod) {
-      const targetValue = event.target.value;
-      const lastSymbol = getLastSymbolInUrl(targetValue);
-      const previousUserInput = targetValue.substring(0, lastSymbol.value + 1);
-      if (lastSymbol.key === signs.SLASH || lastSymbol.key === signs.QUESTION_MARK) {
-        setSearchText(targetValue.replace(previousUserInput, ''));
+      const currentInputValue = event.target.value;
+      const lastSymbol = getLastDelimiterInUrl(currentInputValue);
+      const previousUserInput = currentInputValue.substring(0, lastSymbol.index! + 1);
+      if (lastSymbol.symbol === delimiters.SLASH.symbol || lastSymbol.symbol === delimiters.QUESTION_MARK.symbol) {
+        setSearchText(currentInputValue.replace(previousUserInput, ''));
         setUserInput(previousUserInput);
         requestForAutocompleteOptions(previousUserInput);
       } else {
         const filtered = getFilteredSuggestions('', suggestions);
-        displaySuggestions(filtered, targetValue.replace(previousUserInput, ''));
+        displaySuggestions(filtered, currentInputValue.replace(previousUserInput, ''));
       }
     }
   };
@@ -234,9 +226,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     if (!parametersWithVerb) {
       return;
     }
-    const param = url.split(signs.DOLLAR).pop()!.split(signs.EQUALS)[0];
+    const param = url.split(delimiters.DOLLAR.symbol).pop()!.split(delimiters.EQUALS.symbol)[0];
     const section = parametersWithVerb.values.find((k: { name: string; }) => {
-      return k.name === `${signs.DOLLAR}${param}`;
+      return k.name === `${delimiters.DOLLAR.symbol}${param}`;
     });
 
     if (section && section.items && section.items.length > 0) {
@@ -273,11 +265,11 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const displayAutoCompleteSuggestions = (url: string) => {
     const lastUrlCharacter = getLastCharacterOf(url);
-    if (lastUrlCharacter === signs.SLASH) {
+    if (lastUrlCharacter === delimiters.SLASH.symbol) {
       displayLinkOptions();
     }
 
-    if (lastUrlCharacter === signs.QUESTION_MARK) {
+    if (lastUrlCharacter === delimiters.QUESTION_MARK.symbol) {
       displayQueryParameters();
     }
   }
@@ -293,8 +285,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const appendSuggestionToUrl = (selected: string) => {
     if (!selected) { return; }
-    if (selected.startsWith(signs.DOLLAR)) {
-      selected += signs.EQUALS;
+    if (selected.startsWith(delimiters.DOLLAR.symbol)) {
+      selected += delimiters.EQUALS.symbol;
     }
     const selectedSuggestion = cleanUpSelectedSuggestion(searchText, userInput, selected);
     setActiveSuggestion(0);
