@@ -52,7 +52,7 @@ const RequestHeaders = (props: any) => {
   };
 
   const handleOnHeaderAdd = () => {
-    if (header.name) {
+    if (header.name && header.value) {
       let { sampleHeaders } = sampleQuery;
 
       if (!sampleHeaders) {
@@ -74,7 +74,7 @@ const RequestHeaders = (props: any) => {
   };
 
   const handleOnHeaderEdit = (headerToEdit: IHeader) => {
-    if(header.name !== '' ){
+    if(header.name !== ''){
       return;
     }
     removeHeaderFromSampleQuery(headerToEdit);

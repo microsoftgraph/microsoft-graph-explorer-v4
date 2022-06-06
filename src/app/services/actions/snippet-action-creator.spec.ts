@@ -4,9 +4,11 @@ import thunk from 'redux-thunk';
 import {
   getSnippetSuccess, getSnippetError,
   getSnippetPending,
-  getSnippet
+  getSnippet,
+  constructHeaderString
 } from './snippet-action-creator';
 import { GET_SNIPPET_SUCCESS, GET_SNIPPET_ERROR, GET_SNIPPET_PENDING } from '../redux-constants';
+import { Header } from '../../../types/query-runner';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -91,5 +93,22 @@ describe('snippet actions', () => {
       })
       .catch((e: Error) => { throw e });
 
+  });
+
+  it('Constructs headers string to be sent on the wire', () => {
+    // Arrange
+    const headers: Header[] = [
+      { name: 'ConsistencyLevel', value: 'eventual' },
+      { name: 'Content-type', value: 'application/json' },
+      { name: 'x-ms-version', value: '1.0' }
+    ];
+    // eslint-disable-next-line max-len
+    const expectedString = 'ConsistencyLevel: eventual\r\nContent-type: application/json\r\nx-ms-version: 1.0\r\n';
+
+    // Act
+    const headersString = constructHeaderString(headers);
+
+    // Assert
+    expect(headersString).toEqual(expectedString);
   })
 });

@@ -1,4 +1,5 @@
 import { IAction } from '../../../types/action';
+import { Header } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import {
@@ -63,7 +64,7 @@ export function getSnippet(language: string): Function {
 
       const httpVersion = 'HTTP/1.1';
       const host = 'Host: graph.microsoft.com';
-      const sampleHeaders = 'Content-Type: application/json';
+      const sampleHeaders = constructHeaderString(sampleQuery.sampleHeaders);
 
       // eslint-disable-next-line max-len
       let body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search} ${httpVersion}\r\n${host}\r\n${sampleHeaders}\r\n\r\n`;
@@ -85,4 +86,14 @@ export function getSnippet(language: string): Function {
       return dispatch(getSnippetError({ error, language }));
     }
   };
+}
+
+export function constructHeaderString(sampleHeaders: Header[]): string {
+  let headers = '';
+  if (sampleHeaders && sampleHeaders.length > 0) {
+    sampleHeaders.forEach(header => {
+      headers += `${header.name}: ${header.value}\r\n`;
+    });
+  }
+  return headers;
 }
