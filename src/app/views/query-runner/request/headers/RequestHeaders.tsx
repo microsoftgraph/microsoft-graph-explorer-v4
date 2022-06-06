@@ -18,10 +18,12 @@ interface IHeader {
 
 const RequestHeaders = (props: any) => {
   const { sampleQuery, dimensions: { request: { height } } } = useSelector((state: IRootState) => state);
-  const [headerName, setHeaderName] = useState('');
-  const [headerValue, setHeaderValue] = useState('');
   const [announcedMessage, setAnnouncedMessage] = useState('');
   const [isHoverOverHeadersList, setIsHoverOverHeadersList] = useState(false);
+  const [isUpdatingHeader, setIsUpdatingHeader] = useState<boolean>(false);
+
+  const emptyHeader = { name: '', value: '' };
+  const [header, setHeader] = useState(emptyHeader);
 
   const { intl: { messages } } = props;
   const sampleQueryHeaders = sampleQuery.sampleHeaders;
@@ -32,19 +34,14 @@ const RequestHeaders = (props: any) => {
   const textfieldRef = React.createRef<ITextField>();
   const onSetFocus = () => textfieldRef.current!.focus();
 
-  const handleOnHeaderNameChange =
-    (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, name?: string) => {
-      setHeaderName(name || '');
+  const changeHeaderProperties =
+    (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setHeader({...header, [event.currentTarget.name]: event.currentTarget.value});
     };
 
-  const handleOnHeaderValueChange =
-    (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, value?: string) => {
-      setHeaderValue(value || '');
-    };
-
-  const handleOnHeaderDelete = (header: IHeader) => {
+  const handleOnHeaderDelete = (headerToDelete: IHeader) => {
     let headers = [...sampleQuery.sampleHeaders];
-    headers = headers.filter(head => head.name !== header.name);
+    headers = headers.filter(head => head.name !== headerToDelete.name);
 
     const query = { ...sampleQuery };
     query.sampleHeaders = headers;
@@ -55,9 +52,8 @@ const RequestHeaders = (props: any) => {
   };
 
   const handleOnHeaderAdd = () => {
-    if (headerName) {
+    if (header.name) {
       let { sampleHeaders } = sampleQuery;
-      const header = { name: headerName, value: headerValue };
 
       if (!sampleHeaders) {
         sampleHeaders = [{
@@ -67,16 +63,33 @@ const RequestHeaders = (props: any) => {
       }
 
       const newHeaders = [header, ...sampleHeaders];
-
-      setHeaderName('');
-      setHeaderValue('');
+      setHeader(emptyHeader);
       setAnnouncedMessage(translateMessage('Request Header added'));
+      setIsUpdatingHeader(false);
 
       const query = { ...sampleQuery };
       query.sampleHeaders = newHeaders;
       dispatch(queryInputActionCreators.setSampleQuery(query));
     }
   };
+
+  const handleOnHeaderEdit = (headerToEdit: IHeader) => {
+    if(header.name !== '' ){
+      return;
+    }
+    removeHeaderFromSampleQuery(headerToEdit);
+    setIsUpdatingHeader(true);
+    setHeader({...headerToEdit});
+    onSetFocus();
+  }
+
+  const removeHeaderFromSampleQuery = (headerToRemove: IHeader) => {
+    let headers = [...sampleQuery.sampleHeaders];
+    headers = headers.filter(head => head.name !== headerToRemove.name);
+    const query = { ...sampleQuery };
+    query.sampleHeaders = headers;
+    dispatch(queryInputActionCreators.setSampleQuery(query));
+  }
 
   return (
     <div
@@ -90,32 +103,35 @@ const RequestHeaders = (props: any) => {
         <div className='col-sm-5'>
           <TextField className='header-input'
             placeholder={messages.Key}
-            value={headerName}
-            onChange={handleOnHeaderNameChange}
+            value={header.name}
+            onChange={changeHeaderProperties}
             componentRef={textfieldRef}
+            name='name'
           />
         </div>
         <div className='col-sm-5'>
           <TextField
             className='header-input'
             placeholder={messages.Value}
-            value={headerValue}
-            onChange={handleOnHeaderValueChange}
+            value={header.value}
+            onChange={changeHeaderProperties}
+            name='value'
           />
         </div>
         <div className='col-sm-2 col-md-2'>
           <PrimaryButton
             style={{ width: '100%' }}
             onClick={handleOnHeaderAdd}>
-            <FormattedMessage id='Add' />
+            <FormattedMessage id= {isUpdatingHeader ? 'Update' : 'Add'} />
           </PrimaryButton>
         </div>
       </div>
       <hr />
       <HeadersList
         messages={messages}
-        handleOnHeaderDelete={(event: any, header: IHeader) => handleOnHeaderDelete(header)}
+        handleOnHeaderDelete={(headerToDelete: IHeader) => handleOnHeaderDelete(headerToDelete)}
         headers={sampleQueryHeaders}
+        handleOnHeaderEdit={(headerToEdit: IHeader) => handleOnHeaderEdit(headerToEdit)}
       />
     </div>
   );
