@@ -9,7 +9,7 @@
                 "@babel/core": "7.17.9",
                 "@babel/runtime": "7.17.9",
                 "@fluentui/react": "8.72.1",
-                "@microsoft/applicationinsights-react-js": "3.2.4",
+                "@microsoft/applicationinsights-react-js": "3.3.4",
                 "@microsoft/applicationinsights-web": "2.7.6",
                 "@microsoft/microsoft-graph-client": "3.0.2",
                 "@monaco-editor/react": "4.4.1",
