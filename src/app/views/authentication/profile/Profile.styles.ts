@@ -78,7 +78,7 @@ export const profileStyles = (theme: ITheme) => {
       backgroundColor: theme.palette.themeDarker
     },
     tooltipContentStyle: {
-      dusplay: 'inline-block',
+      display: 'inline-block',
       height: '15px'
     }
   }
