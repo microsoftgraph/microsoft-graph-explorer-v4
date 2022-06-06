@@ -200,6 +200,7 @@ export class Request extends Component<IRequestComponent, any> {
           <div className='query-request'>
             <Pivot
               overflowBehavior='menu'
+              overflowAriaLabel={translateMessage('More items')}
               onLinkClick={this.handlePivotItemClick}
               className='pivot-request'
               selectedKey={pivot}

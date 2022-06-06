@@ -5,13 +5,21 @@ import {
   ADD_HISTORY_ITEM_SUCCESS,
   REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
   REMOVE_HISTORY_ITEM_SUCCESS,
-  VIEW_HISTORY_ITEM_SUCCESS
+  VIEW_HISTORY_ITEM_SUCCESS,
+  BULK_ADD_HISTORY_ITEMS_SUCCESS
 } from '../redux-constants';
 
 export function addHistoryItem(historyItem: IHistoryItem): any {
   return {
     type: ADD_HISTORY_ITEM_SUCCESS,
     response: historyItem
+  };
+}
+
+export function bulkAddHistoryItems(historyItems: IHistoryItem[]): any {
+  return {
+    type: BULK_ADD_HISTORY_ITEMS_SUCCESS,
+    response: historyItems
   };
 }
 
