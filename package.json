@@ -12,7 +12,7 @@
                 "@microsoft/applicationinsights-react-js": "3.3.4",
                 "@microsoft/applicationinsights-web": "2.7.6",
                 "@microsoft/microsoft-graph-client": "3.0.2",
-                "@monaco-editor/react": "4.4.1",
+                "@monaco-editor/react": "4.4.5",
                 "@ms-ofb/officebrowserfeedbacknpm": "file:packages/officebrowserfeedbacknpm-1.6.6.tgz",
                 "adaptivecards": "2.10.0",
                 "adaptivecards-templating": "1.4.0",
