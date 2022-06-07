@@ -8,7 +8,7 @@ import {
   constructHeaderString
 } from './snippet-action-creator';
 import { GET_SNIPPET_SUCCESS, GET_SNIPPET_ERROR, GET_SNIPPET_PENDING } from '../redux-constants';
-import { Header, IQuery, ISampleQuery } from '../../../types/query-runner';
+import { Header, IQuery } from '../../../types/query-runner';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
