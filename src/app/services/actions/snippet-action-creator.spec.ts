@@ -116,7 +116,6 @@ describe('snippet actions', () => {
 
     // Act
     const headerStringWithoutContentType = constructHeaderString(headersWithoutContentType);
-    console.log(headerStringWithoutContentType);
     const headerStringWithContentType = constructHeaderString(headersWithContentType);
 
     // Assert
