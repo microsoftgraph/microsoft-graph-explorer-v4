@@ -13,9 +13,9 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
 import {
   cleanUpSelectedSuggestion, getErrorMessage, getFilteredSuggestions,
-  getSearchText, getSuggestions
+  getSearchText
 } from './auto-complete.util';
-import { getLastDelimiterInUrl, delimiters } from './utilities/delimiters';
+import { getLastDelimiterInUrl, delimiters, getSuggestions } from './utilities';
 import SuffixRenderer from './suffix/SuffixRenderer';
 import SuggestionsList from './suggestion-list/SuggestionsList';
 
@@ -168,7 +168,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const displayAutoCompleteSuggestions = () => {
     const theSuggestions = getSuggestions(userInput, autoCompleteOptions!);
-    if (theSuggestions) {
+    if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
       if (filtered[0] !== searchText) {
         setSuggestions(filtered);
