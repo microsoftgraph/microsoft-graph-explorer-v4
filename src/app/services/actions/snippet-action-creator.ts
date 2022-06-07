@@ -90,10 +90,17 @@ export function getSnippet(language: string): Function {
 
 export function constructHeaderString(sampleHeaders: Header[]): string {
   let headers = '';
+  let isContentTypeJson: boolean = false;
   if (sampleHeaders && sampleHeaders.length > 0) {
-    sampleHeaders.forEach(header => {
+    sampleHeaders.forEach((header: Header) => {
+      isContentTypeJson = isContentTypeJson ? isContentTypeJson : checkIfContentTypeIsJson(header);
       headers += `${header.name}: ${header.value}\r\n`;
     });
   }
+  headers += !isContentTypeJson ? 'Content-Type: application/json\r\n' : '';
   return headers;
+}
+
+function checkIfContentTypeIsJson(header: Header): boolean {
+  return header.name.toLowerCase() === 'content-type' && header.value.toLowerCase() === 'application/json';
 }

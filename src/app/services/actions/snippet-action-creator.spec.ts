@@ -97,18 +97,30 @@ describe('snippet actions', () => {
 
   it('Constructs headers string to be sent on the wire', () => {
     // Arrange
-    const headers: Header[] = [
+    const headersWithoutContentType: Header[] = [
       { name: 'ConsistencyLevel', value: 'eventual' },
-      { name: 'Content-type', value: 'application/json' },
       { name: 'x-ms-version', value: '1.0' }
     ];
+
+    const headersWithContentType: Header[] = [
+      { name: 'ConsistencyLevel', value: 'eventual' },
+      { name: 'Content-Type', value: 'application/json' },
+      { name: 'x-ms-version', value: '1.0' }
+
+    ];
     // eslint-disable-next-line max-len
-    const expectedString = 'ConsistencyLevel: eventual\r\nContent-type: application/json\r\nx-ms-version: 1.0\r\n';
+    const expectedStringwithContentType = 'ConsistencyLevel: eventual\r\nContent-Type: application/json\r\nx-ms-version: 1.0\r\n';
+
+    // eslint-disable-next-line max-len
+    const expectedStringWithoutContentType = 'ConsistencyLevel: eventual\r\nx-ms-version: 1.0\r\nContent-Type: application/json\r\n';
 
     // Act
-    const headersString = constructHeaderString(headers);
+    const headerStringWithoutContentType = constructHeaderString(headersWithoutContentType);
+    console.log(headerStringWithoutContentType);
+    const headerStringWithContentType = constructHeaderString(headersWithContentType);
 
     // Assert
-    expect(headersString).toEqual(expectedString);
+    expect(headerStringWithContentType).toEqual(expectedStringwithContentType);
+    expect(headerStringWithoutContentType).toEqual(expectedStringWithoutContentType);
   })
 });
