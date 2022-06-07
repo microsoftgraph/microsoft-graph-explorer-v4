@@ -1,6 +1,6 @@
 import {
   cleanUpSelectedSuggestion,
-  getParametersWithVerb, getLastCharacterOf,
+  getLastCharacterOf,
   getFilteredSuggestions
 } from './auto-complete.util';
 import { getLastDelimiterInUrl } from './utilities/delimiters';
@@ -21,42 +21,6 @@ describe('Tests autocomplete utils', () => {
     const result = cleanUpSelectedSuggestion(compare, userInput, selected);
     expect(result).toEqual('testtest');
   });
-
-  it('Tests getParametersWithVerb', () => {
-    const properties = {
-      autoCompleteOptions: {
-        parameters: [
-          {
-            verb: 'get'
-          },
-          {
-            verb: 'post'
-          },
-          {
-            verb: 'put'
-          },
-          {
-            verb: 'delete'
-          }
-        ],
-        url: 'https://graph.microsoft.com/'
-      },
-      sampleQuery: {
-        selectedVerb: 'GET',
-        sampleUrl: 'https://graph.microsoft.com/v1.0/me',
-        selectedVersion: 'v1.0',
-        sampleHeaders: []
-      }
-    };
-    const result = getParametersWithVerb({
-      options: properties.autoCompleteOptions,
-      sampleQuery: properties.sampleQuery
-    });
-    expect(result).toEqual({
-      verb: 'get'
-    });
-  });
-
 
   it('Tests getLastCharacterOf', () => {
     const url = 'https://graph.microsoft.com/v1.0/me';

@@ -1,8 +1,8 @@
-type SignCategory = 'paths' | 'properties' | 'parameters';
+export type SignContext = 'paths' | 'properties' | 'parameters';
 
 interface Delimiter {
   symbol: string;
-  category: SignCategory;
+  context: SignContext;
   index?: number;
 }
 
@@ -16,12 +16,12 @@ interface Delimiters {
 }
 
 const delimiters: Delimiters = {
-  SLASH: { symbol: '/', category: 'paths' },
-  QUESTION_MARK: { symbol: '?', category: 'parameters' },
-  EQUALS: { symbol: '=', category: 'properties' },
-  COMMA: { symbol: ',', category: 'properties' },
-  AMPERSAND: { symbol: '&', category: 'parameters' },
-  DOLLAR: { symbol: '$', category: 'parameters' }
+  SLASH: { symbol: '/', context: 'paths' },
+  QUESTION_MARK: { symbol: '?', context: 'parameters' },
+  EQUALS: { symbol: '=', context: 'properties' },
+  COMMA: { symbol: ',', context: 'properties' },
+  AMPERSAND: { symbol: '&', context: 'parameters' },
+  DOLLAR: { symbol: '$', context: 'parameters' }
 };
 
 function getLastDelimiterInUrl(url: string): Delimiter {
