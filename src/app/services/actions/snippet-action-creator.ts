@@ -1,5 +1,5 @@
 import { IAction } from '../../../types/action';
-import { Header } from '../../../types/query-runner';
+import { Header, IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import {
@@ -7,6 +7,11 @@ import {
   GET_SNIPPET_PENDING,
   GET_SNIPPET_SUCCESS
 } from '../redux-constants';
+
+interface IHeaderStringProperties {
+  constructedHeader: string;
+  isContentTypeAvailable: boolean
+}
 
 export function getSnippetSuccess(response: string): IAction {
   return {
@@ -64,7 +69,7 @@ export function getSnippet(language: string): Function {
 
       const httpVersion = 'HTTP/1.1';
       const host = 'Host: graph.microsoft.com';
-      const sampleHeaders = constructHeaderString(sampleQuery.sampleHeaders);
+      const sampleHeaders = constructHeaderString(sampleQuery);
 
       // eslint-disable-next-line max-len
       let body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search} ${httpVersion}\r\n${host}\r\n${sampleHeaders}\r\n\r\n`;
@@ -88,19 +93,31 @@ export function getSnippet(language: string): Function {
   };
 }
 
-export function constructHeaderString(sampleHeaders: Header[]): string {
-  let headers = '';
-  let isContentTypeJson: boolean = false;
+export function constructHeaderString(sampleQuery: IQuery): string {
+  const { sampleHeaders, selectedVerb } = sampleQuery;
+  let headersString = '';
+  let isContentTypeInHeaders: boolean = false;
   if (sampleHeaders && sampleHeaders.length > 0) {
-    sampleHeaders.forEach((header: Header) => {
-      isContentTypeJson = isContentTypeJson ? isContentTypeJson : checkIfContentTypeIsJson(header);
-      headers += `${header.name}: ${header.value}\r\n`;
-    });
+    const { constructedHeader, isContentTypeAvailable } = getHeaderStringProperties(sampleHeaders);
+    headersString = constructedHeader;
+    isContentTypeInHeaders = isContentTypeAvailable;
   }
-  headers += !isContentTypeJson ? 'Content-Type: application/json\r\n' : '';
-  return headers;
+
+  headersString += !isContentTypeInHeaders && selectedVerb !== 'GET' ? 'Content-Type: application/json\r\n' : '';
+  return headersString;
 }
 
-function checkIfContentTypeIsJson(header: Header): boolean {
-  return header.name.toLowerCase() === 'content-type' && header.value.toLowerCase() === 'application/json';
+function getHeaderStringProperties(sampleHeaders: Header[]): IHeaderStringProperties {
+  let constructedHeader = ''
+  let isContentTypeAvailable: boolean = false;
+  sampleHeaders.forEach((header: Header) => {
+    isContentTypeAvailable = isContentTypeAvailable ? isContentTypeAvailable : checkIfContentTypeAvailable(header);
+
+    constructedHeader += `${header.name}: ${header.value}\r\n`;
+  });
+  return { constructedHeader, isContentTypeAvailable };
+}
+
+function checkIfContentTypeAvailable(header: Header): boolean {
+  return header.name.toLowerCase() === 'content-type';
 }

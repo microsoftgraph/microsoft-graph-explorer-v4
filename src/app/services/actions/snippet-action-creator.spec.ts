@@ -8,7 +8,7 @@ import {
   constructHeaderString
 } from './snippet-action-creator';
 import { GET_SNIPPET_SUCCESS, GET_SNIPPET_ERROR, GET_SNIPPET_PENDING } from '../redux-constants';
-import { Header } from '../../../types/query-runner';
+import { Header, IQuery, ISampleQuery } from '../../../types/query-runner';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -106,8 +106,19 @@ describe('snippet actions', () => {
       { name: 'ConsistencyLevel', value: 'eventual' },
       { name: 'Content-Type', value: 'application/json' },
       { name: 'x-ms-version', value: '1.0' }
-
     ];
+
+    const sampleQuery: IQuery = {
+      selectedVerb: 'POST',
+      selectedVersion: 'v1.0',
+      sampleUrl: 'https://graph.microsoft.com/v1.0/me/',
+      sampleBody: '',
+      sampleHeaders: []
+    }
+
+    const sampleWithNoContentType = { ...sampleQuery, sampleHeaders: headersWithoutContentType };
+    const sampleWithContentType = { ...sampleQuery, sampleHeaders: headersWithContentType };
+
     // eslint-disable-next-line max-len
     const expectedStringwithContentType = 'ConsistencyLevel: eventual\r\nContent-Type: application/json\r\nx-ms-version: 1.0\r\n';
 
@@ -115,8 +126,8 @@ describe('snippet actions', () => {
     const expectedStringWithoutContentType = 'ConsistencyLevel: eventual\r\nx-ms-version: 1.0\r\nContent-Type: application/json\r\n';
 
     // Act
-    const headerStringWithoutContentType = constructHeaderString(headersWithoutContentType);
-    const headerStringWithContentType = constructHeaderString(headersWithContentType);
+    const headerStringWithoutContentType = constructHeaderString(sampleWithNoContentType);
+    const headerStringWithContentType = constructHeaderString(sampleWithContentType);
 
     // Assert
     expect(headerStringWithContentType).toEqual(expectedStringwithContentType);
