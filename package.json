@@ -46,7 +46,7 @@
                 "react-app-polyfill": "3.0.0",
                 "react-dom": "16.14.0",
                 "react-intl": "2.8.0",
-                "react-redux": "7.2.8",
+                "react-redux": "8.0.2",
                 "redux": "4.2.0",
                 "redux-thunk": "2.4.1",
                 "resolve": "1.22.0",
