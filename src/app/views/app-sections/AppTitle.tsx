@@ -21,6 +21,7 @@ export function appTitleDisplayOnFullScreen(
         }
       }}>
       <IconButton
+        name='Minimize sidebar'
         iconProps={{ iconName: 'GlobalNavButton' }}
         className={classes.sidebarToggle}
         ariaLabel={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}

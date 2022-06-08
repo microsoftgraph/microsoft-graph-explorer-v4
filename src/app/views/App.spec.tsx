@@ -1,5 +1,6 @@
 import React from 'react';
-import { cleanup, render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event'
 
 import App from '../../app/views/App';
 import { Mode } from '../../types/enums';
@@ -8,15 +9,16 @@ import { Provider } from 'react-redux';
 import { store } from '../../store';
 import { geLocale } from '../../appLocale';
 import messages from '../../messages';
+import { initializeIcons } from '@fluentui/react';
 
-afterEach(cleanup)
 const renderApp = (args?: any) : any => {
+  initializeIcons();
   const defaultProps = {
     profile: null,
     queryState: null,
     termsOfUse: true,
-    graphExplorerMode: Mode.Complete,
-    sidebarProperties: {mobileScreen: args?.mobileScreen, showSidebar: true},
+    graphExplorerMode: args.mode || Mode.Complete,
+    sidebarProperties: {mobileScreen: args?.mobileScreen, showSidebar: args?.showSidebar},
     sampleQuery: {
       selectedVerb: 'GET',
       selectedVersion: 'v1',
@@ -83,32 +85,58 @@ jest.mock('@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptio
 }))
 
 // eslint-disable-next-line no-console
-console.warn = jest.fn()
 
 describe('It should render the main GE site', () => {
-  it('Should confirm that all the major sections are rendered', () => {
-    const { getByText } = renderApp({mobileScreen: false});
-    getByText('Run query');
-    getByText('Sign in to Graph Explorer');
-    getByText('Request body');
-    getByText('Request headers');
-    getByText('Modify permissions (Preview)');
-    getByText('Access token');
-    getByText(/Help Improve/);
-    getByText('Response preview');
-    getByText('Response headers');
-    getByText('Code snippets');
-    getByText('Toolkit component');
-    getByText('Adaptive cards');
-    getByText('Expand');
-    getByText('Authentication');
-    getByText('Sample queries');
-    getByText('History');
+  it('Should confirm that all the major sections are rendered', async () => {
+    const user = userEvent.setup()
+    renderApp({mobileScreen: false, showSidebar: true});
+    screen.getByRole('heading', { name: /graph explorer/i });
+    screen.getByRole('button', { name: /sign in to graph explorer/i });
+    screen.getByRole('button', { name: /more actions/i });
+    screen.getByRole('button', { name: /help improve graph explorer/i });
+
+    // confirm that sidebar items are rendered
+    screen.getByRole('tab', { name: /sample queries/i} );
+    screen.getByRole('tab', { name: /history/i} );
+    screen.getByRole('tab', { name: /resources/i} );
+
+    screen.getByRole('combobox', { name: /http request method option/i })
+    screen.getByRole('combobox', { name: /microsoft graph api version option/i });
+    screen.getByRole('textbox');
+    screen.getByRole('button', { name: /more info/i });
+    screen.getByRole('button', { name: /run query/i });
+    screen.getByRole('button', { name: /share query/i });
+
+    screen.getByRole('tab', { name: /request body/i } );
+    screen.getByRole('tab', { name: /request headers/i} );
+    screen.getByRole('tab', { name: /modify permissions/i});
+    screen.getByRole('tab', {name: /access token/i });
+
+    // confirm that response section items are rendered
+    screen.getByRole('tab', { name: /response preview/i });
+    screen.getByRole('tab', { name: /response headers/i} );
+    screen.getByRole('tab', { name: /code snippets/i });
+    screen.getByRole('tab', { name: /toolkit component/i});
+    screen.getByRole('tab', { name: /adaptive cards/i});
+    screen.getByRole('tab', { name: /expand/i} );
+
+    // Confirm that header section is rendered
+
+    // screen.debug(undefined, 30000000000000000000000000000);
+
+    screen.logTestingPlaygroundURL();
   });
 
   it('Should render the main app with a mobile screen view', ()=> {
-    const { getByText } = renderApp({mobileScreen: true});
-    getByText(/Run query/);
-    getByText(/Authentication/);
+    // renderApp({mobileScreen: true, showSidebar: false});
+    // screen.logTestingPlaygroundURL()
+    expect(1).toBe(1);
   });
+
+  it('Should test the try-it UI', () => {
+    // renderApp({mobileScreen: false, showSidebar: true, mode: Mode.TryIt});
+    // screen.debug();
+    // screen.logTestingPlaygroundURL();
+    expect(1).toBe(1);
+  })
 })

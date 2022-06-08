@@ -15,7 +15,7 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testMatch: [
     '**/__tests__/**/*.[jt]s?(x)',
-    '**/?(*.)+(spec|test).[jt]s?(x)?(x)'
+    '**/?(*.)+(spec|test).[jt]s?(x)'
   ],
   globals: {
     crypto: require('crypto')
