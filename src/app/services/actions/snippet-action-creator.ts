@@ -8,11 +8,6 @@ import {
   GET_SNIPPET_SUCCESS
 } from '../redux-constants';
 
-interface IHeaderStringProperties {
-  constructedHeader: string;
-  isContentTypeAvailable: boolean
-}
-
 export function getSnippetSuccess(response: string): IAction {
   return {
     type: GET_SNIPPET_SUCCESS,
@@ -96,28 +91,22 @@ export function getSnippet(language: string): Function {
 export function constructHeaderString(sampleQuery: IQuery): string {
   const { sampleHeaders, selectedVerb } = sampleQuery;
   let headersString = '';
-  let isContentTypeInHeaders: boolean = false;
+
+  const isContentTypeInHeaders: boolean = !!(sampleHeaders.find(header =>
+    header.name.toLocaleLowerCase() === 'content-type'));
+
   if (sampleHeaders && sampleHeaders.length > 0) {
-    const { constructedHeader, isContentTypeAvailable } = getHeaderStringProperties(sampleHeaders);
-    headersString = constructedHeader;
-    isContentTypeInHeaders = isContentTypeAvailable;
+    headersString = getHeaderStringProperties(sampleHeaders);
   }
 
   headersString += !isContentTypeInHeaders && selectedVerb !== 'GET' ? 'Content-Type: application/json\r\n' : '';
   return headersString;
 }
 
-function getHeaderStringProperties(sampleHeaders: Header[]): IHeaderStringProperties {
+function getHeaderStringProperties(sampleHeaders: Header[]): string {
   let constructedHeader = ''
-  let isContentTypeAvailable: boolean = false;
   sampleHeaders.forEach((header: Header) => {
-    isContentTypeAvailable = isContentTypeAvailable ? isContentTypeAvailable : checkIfContentTypeAvailable(header);
-
     constructedHeader += `${header.name}: ${header.value}\r\n`;
   });
-  return { constructedHeader, isContentTypeAvailable };
-}
-
-function checkIfContentTypeAvailable(header: Header): boolean {
-  return header.name.toLowerCase() === 'content-type';
+  return constructedHeader;
 }
