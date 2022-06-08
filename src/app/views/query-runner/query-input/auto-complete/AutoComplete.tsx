@@ -6,7 +6,7 @@ import { componentNames, eventTypes, telemetry } from '../../../../../telemetry'
 import { IAutoCompleteProps } from '../../../../../types/auto-complete';
 import { IRootState } from '../../../../../types/root';
 import { fetchAutoCompleteOptions } from '../../../../services/actions/autocomplete-action-creators';
-import { GRAPH_API_VERSIONS } from '../../../../services/graph-constants';
+import { GRAPH_API_VERSIONS, GRAPH_URL } from '../../../../services/graph-constants';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -33,13 +33,11 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const [isMultiline, setIsMultiline] = useState<boolean>(false);
   const [activeSuggestion, setActiveSuggestion] = useState<number>(0);
   const [searchText, setSearchText] = useState<string>('');
-  const [userInput, setUserInput] = useState<string>(sampleQuery.sampleUrl);
   const [queryUrl, setQueryUrl] = useState<string>(sampleQuery.sampleUrl);
   const [shouldShowSuggestions, setShouldShowSuggestions] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
-    setUserInput(sampleQuery.sampleUrl);
     setQueryUrl(sampleQuery.sampleUrl);
   }, [sampleQuery]);
 
@@ -47,8 +45,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     if (autoCompleteOptions) {
       displayAutoCompleteSuggestions();
     }
-    setIsMultiline(isOverflowing(userInput));
-  }, [autoCompleteOptions, userInput]);
+    setIsMultiline(isOverflowing(queryUrl));
+  }, [autoCompleteOptions, queryUrl]);
 
   const setFocus = () => {
     focusRef?.current?.focus();
@@ -62,12 +60,15 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     const currentValue = e.target.value;
 
     const { index } = getLastDelimiterInUrl(currentValue);
-    const { searchText: searchWith, previous } = getSearchText(currentValue, index!);
+    const { searchText: searchWith, previous: preceedingText } = getSearchText(currentValue, index!);
     setSearchText(searchWith);
-    setUserInput(currentValue);
     setQueryUrl(currentValue);
-
-    requestForAutocompleteOptions(previous);
+    if (preceedingText === GRAPH_URL + '/') {
+      setSuggestions(GRAPH_API_VERSIONS);
+      setShouldShowSuggestions(true);
+      return;
+    }
+    requestForAutocompleteOptions(preceedingText);
   };
 
   const isOverflowing = (input: string) => {
@@ -167,7 +168,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   }
 
   const displayAutoCompleteSuggestions = () => {
-    const theSuggestions = getSuggestions(userInput, autoCompleteOptions!);
+    const theSuggestions = getSuggestions(queryUrl, autoCompleteOptions!);
     if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
       if (filtered[0] !== searchText) {
@@ -196,8 +197,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
     setSearchText(query);
 
-    const selectedSuggestion = cleanUpSelectedSuggestion(searchText, userInput, selected);
-    setUserInput(selectedSuggestion);
+    const selectedSuggestion = cleanUpSelectedSuggestion(searchText, queryUrl, selected);
     setQueryUrl(selectedSuggestion);
     props.contentChanged(selectedSuggestion);
 
@@ -247,7 +247,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           errorMessage={getErrorMessage(queryUrl)}
         />
       </div>
-      {shouldShowSuggestions && userInput && suggestions.length > 0 &&
+      {shouldShowSuggestions && queryUrl && suggestions.length > 0 &&
         <SuggestionsList
           filteredSuggestions={suggestions}
           activeSuggestion={activeSuggestion}

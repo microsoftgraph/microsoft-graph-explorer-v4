@@ -1,5 +1,4 @@
-import { GRAPH_API_VERSIONS } from '../../../../services/graph-constants';
-import { hasWhiteSpace, parseSampleUrl } from '../../../../utils/sample-url-generation';
+import { hasWhiteSpace } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 
 function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
@@ -32,10 +31,6 @@ function getErrorMessage(queryUrl: string) {
   }
   if (hasWhiteSpace(queryUrl)) {
     return translateMessage('Invalid whitespace in URL');
-  }
-  const { queryVersion } = parseSampleUrl(queryUrl);
-  if (!GRAPH_API_VERSIONS.includes(queryVersion)) {
-    return translateMessage('Invalid version in URL');
   }
   return '';
 }
