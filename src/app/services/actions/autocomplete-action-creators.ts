@@ -33,12 +33,14 @@ export function fetchAutoCompleteOptions(
 ): Function {
   return async (dispatch: Function, getState: Function) => {
     const devxApiUrl = getState().devxApi.baseUrl;
+    const resources = getState().resources.data;
     dispatch(fetchAutocompletePending());
     const autoOptions = await suggestions.getSuggestions(
       url,
       devxApiUrl,
       version,
-      context
+      context,
+      resources
     );
     if (autoOptions) {
       return dispatch(fetchAutocompleteSuccess(autoOptions));

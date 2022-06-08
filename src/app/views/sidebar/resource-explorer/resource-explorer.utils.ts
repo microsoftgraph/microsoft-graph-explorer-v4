@@ -191,7 +191,7 @@ export function getResourcesSupportedByVersion(
     : versionedResources;
 }
 
-function searchResources(haystack: IResource[], needle: string): IResource[] {
+export function searchResources(haystack: IResource[], needle: string): IResource[] {
   const foundResources: IResource[] = [];
   haystack.forEach((resource: IResource) => {
     if (resource.segment.contains(needle)) {
