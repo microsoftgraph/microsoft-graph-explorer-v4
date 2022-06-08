@@ -9,9 +9,6 @@ export const profileButtonStyles = (theme: ITheme) => {
         ':hover': {
           background: `${theme.palette.neutralLight} !important`
         }
-      },
-      icon: {
-        flex: 1
       }
     }
   }

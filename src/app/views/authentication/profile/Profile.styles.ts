@@ -1,4 +1,4 @@
-import { FontSizes, ITheme } from '@fluentui/react'
+import { ITheme } from '@fluentui/react'
 
 export const profileStyles = (theme: ITheme) => {
   return {
@@ -17,12 +17,7 @@ export const profileStyles = (theme: ITheme) => {
       secondaryText:
       {
         paddingBottom: 10,
-        textTransform: 'lowercase',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap' as 'nowrap',
-        fontSize: FontSizes.small,
-        maxWidth: '165px'
+        textTransform: 'lowercase'
       },
       root: {
         height: '100%',
@@ -76,10 +71,6 @@ export const profileStyles = (theme: ITheme) => {
     activeConsentStyles: {
       marginRight: 10,
       backgroundColor: theme.palette.themeDarker
-    },
-    tooltipContentStyle: {
-      display: 'inline-block',
-      height: '15px'
     }
   }
 }

@@ -2,7 +2,7 @@ import {
   ActionButton,
   Callout,
   DefaultButton,
-  getId,
+  FontSizes,
   getTheme,
   IOverlayProps,
   IPersonaProps,
@@ -17,8 +17,7 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
-  styled,
-  TooltipHost
+  styled
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,7 +34,6 @@ import { classNames } from '../../classnames';
 import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
-import { useEllipsisDetector } from '../../../custom-hooks/ellipsis-detector';
 
 const getInitials = (name: string) => {
   let initials = '';
@@ -68,15 +66,15 @@ const Profile = (props: any) => {
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
   const theme = getTheme();
-  const { personaStyleToken , profileSpinnerStyles, permissionsLabelStyles, inactiveConsentStyles, tooltipContentStyle,
+  const { personaStyleToken , profileSpinnerStyles, permissionsLabelStyles, inactiveConsentStyles,
     personaButtonStyles, profileContainerStyles, permissionPanelStyles, activeConsentStyles } = profileStyles(theme);
-  const showTooltipContent : boolean = useEllipsisDetector('ms-Persona-secondaryText');
 
   useEffect(() => {
     if (authenticated) {
       dispatch(getProfileInfo());
     }
-  }, [authenticated, isCalloutVisible]);
+  }, [authenticated]);
+
 
   if (!profile) {
     return (<Spinner size={SpinnerSize.medium} styles={profileSpinnerStyles} />);
@@ -156,26 +154,12 @@ const Profile = (props: any) => {
   const panelOverlayProps: IOverlayProps = {
     isDarkThemed: true
   }
-
   const onRenderSecondaryText = (prop: IPersonaProps): JSX.Element => {
     return (
-      <TooltipHost
-        content={showTooltipContent ? prop.secondaryText : ''}
-        id= {getId()}
-        calloutProps={{ gapSpace: 0}}
-        tooltipProps={{onRenderContent: () => renderTooltipContent(prop.secondaryText!)}}
-      >
+      <span style={{fontSize: FontSizes.small}}>
         {prop.secondaryText}
-      </TooltipHost>
+      </span>
     );
-  }
-
-  const renderTooltipContent = (tooltipText: string) : JSX.Element => {
-    return (
-      <div style={tooltipContentStyle}>
-        {tooltipText}
-      </div>
-    )
   }
 
   const showProfileComponent = (userPersona: any): React.ReactNode => {
@@ -191,8 +175,7 @@ const Profile = (props: any) => {
       size={PersonaSize.size72}
       hidePersonaDetails={false}
       onRenderSecondaryText={onRenderSecondaryText}
-      styles={personaStyleToken}
-      className='personaEmailLabel' />
+      styles={personaStyleToken} />
 
     return (<>
       <ActionButton ariaLabel='profile'
