@@ -261,7 +261,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public toggleSidebar = (): void => {
     const shouldShowSidebar = this.setSidebarProperties();
-    this.changeDimensions(shouldShowSidebar ? '26%' : '1%');
+    this.changeDimensions(shouldShowSidebar ? '26%' : '4%');
     telemetry.trackEvent(
       eventTypes.BUTTON_CLICK_EVENT,
       {
@@ -417,7 +417,7 @@ class App extends Component<IAppProps, IAppState> {
                   }
                 }}
                 className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth} resizable-sidebar`}
-                minWidth={71}
+                minWidth={'71'}
                 maxWidth={maxWidth}
                 enable={{
                   right: true
