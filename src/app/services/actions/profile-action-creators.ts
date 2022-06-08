@@ -55,7 +55,6 @@ const query: IQuery = {
 
 export function getProfileInfo(): Function {
   return async (dispatch: Function) => {
-    dispatch(queryRunningStatus(true));
     try {
       const profile: IUser = await getProfileInformation();
       const { profileType, ageGroup } = await getBetaProfile();
