@@ -1,6 +1,8 @@
 import { ISuggestions, SignContext } from '.';
 import { parseOpenApiResponse } from '../../app/utils/open-api-parser';
-import { getResourcesSupportedByVersion } from '../../app/views/sidebar/resource-explorer/resource-explorer.utils';
+import {
+  getResourcesSupportedByVersion
+} from '../../app/utils/resources/resources-filter';
 import { IOpenApiParseContent, IOpenApiResponse, IParsedOpenApiResponse } from '../../types/open-api';
 import { IRequestOptions } from '../../types/request';
 import { IResource } from '../../types/resources';
