@@ -29,8 +29,7 @@ function getLastDelimiterInUrl(url: string): Delimiter {
   symbols.forEach(key => {
     key.index = url.lastIndexOf(key.symbol);
   });
-  const lastUsedDelimiter = symbols.reduce((prev, current) => (prev.index > current.index) ? prev : current);
-  return lastUsedDelimiter;
+  return symbols.reduce((prev, current) => (prev.index > current.index) ? prev : current);
 }
 
 export { delimiters, getLastDelimiterInUrl }

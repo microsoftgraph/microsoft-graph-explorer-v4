@@ -85,7 +85,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       return context.measureText(text).width + 5;
     }
 
-    return !!element && getTextWidth(input) > element!.scrollWidth;
+    return !!element && getTextWidth(input) > element.scrollWidth;
   }
 
   const selectSuggestion = (e: any) => {
@@ -168,7 +168,10 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   }
 
   const displayAutoCompleteSuggestions = () => {
-    const theSuggestions = getSuggestions(queryUrl, autoCompleteOptions!);
+    if (!autoCompleteOptions) {
+      return;
+    }
+    const theSuggestions = getSuggestions(queryUrl, autoCompleteOptions);
     if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
       if (filtered[0] !== searchText) {
@@ -240,7 +243,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           onBlur={updateUrlContent}
           onKeyDown={onKeyDown}
           value={queryUrl}
-          componentRef={focusRef!}
+          componentRef={focusRef}
           onRenderSuffix={(renderSuffix()) ? renderSuffix : undefined}
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
