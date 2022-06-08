@@ -1,14 +1,14 @@
-import { AutoCompleteOption } from '../../../../../../types/auto-complete';
+import { AutoCompleteOption } from '../../../types/auto-complete';
 import { delimiters, getLastDelimiterInUrl } from './delimiters';
 
 function getParametersWithVerb(properties: { options: AutoCompleteOption; }) {
   const { options } = properties;
   if (!options) {
-    return [];
+    return null;
   }
   const parameters = options.parameters;
   if (!parameters) {
-    return [];
+    return null;
   }
   return parameters.find(parameter => parameter.verb === 'get');
 }
@@ -62,4 +62,5 @@ function getSuggestions(url: string, autoCompleteOptions: AutoCompleteOption): s
 
 export {
   getSuggestions
-}
+};
+

@@ -1,4 +1,4 @@
-import { suggestions } from '../../../modules/suggestions';
+import { SignContext, suggestions } from '../../../modules/suggestions';
 import { IAction } from '../../../types/action';
 import {
   AUTOCOMPLETE_FETCH_ERROR,
@@ -28,7 +28,8 @@ export function fetchAutocompletePending(): any {
 
 export function fetchAutoCompleteOptions(
   url: string,
-  version: string
+  version: string,
+  context: SignContext = 'paths'
 ): Function {
   return async (dispatch: Function, getState: Function) => {
     const devxApiUrl = getState().devxApi.baseUrl;
@@ -36,7 +37,8 @@ export function fetchAutoCompleteOptions(
     const autoOptions = await suggestions.getSuggestions(
       url,
       devxApiUrl,
-      version
+      version,
+      context
     );
     if (autoOptions) {
       return dispatch(fetchAutocompleteSuccess(autoOptions));

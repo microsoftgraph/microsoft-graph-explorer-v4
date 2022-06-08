@@ -1,9 +1,6 @@
 import {
-  cleanUpSelectedSuggestion,
-  getLastCharacterOf,
-  getFilteredSuggestions
+  cleanUpSelectedSuggestion, getFilteredSuggestions, getLastCharacterOf
 } from './auto-complete.util';
-import { getLastDelimiterInUrl } from './utilities/delimiters';
 
 describe('Tests autocomplete utils', () => {
   it('Tests cleanUpSelectedSuggestion', () => {
@@ -35,12 +32,6 @@ describe('Tests autocomplete utils', () => {
     expect(result).toEqual(['test', 'test2', 'test3']);
   })
 
-  it('Tests getLastDelimiterInUrl', () => {
-    const url = 'https://graph.microsoft.com/v1.0/me';
-    const result = getLastDelimiterInUrl(url);
-    const { symbol } = result;
-    expect(symbol).toEqual('/');
-  })
 })
 
 describe('Query input util should', () => {

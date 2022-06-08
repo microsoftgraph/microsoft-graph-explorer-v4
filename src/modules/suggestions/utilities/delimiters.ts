@@ -1,4 +1,4 @@
-export type SignContext = 'paths' | 'properties' | 'parameters';
+import { SignContext } from '..';
 
 interface Delimiter {
   symbol: string;

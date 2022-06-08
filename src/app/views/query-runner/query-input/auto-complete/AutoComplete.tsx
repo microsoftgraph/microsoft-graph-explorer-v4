@@ -2,6 +2,7 @@ import { getTheme, KeyCodes, TextField } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IAutoCompleteProps } from '../../../../../types/auto-complete';
 import { IRootState } from '../../../../../types/root';
@@ -15,7 +16,6 @@ import {
   cleanUpSelectedSuggestion, getErrorMessage, getFilteredSuggestions,
   getSearchText
 } from './auto-complete.util';
-import { getLastDelimiterInUrl, delimiters, getSuggestions } from './utilities';
 import SuffixRenderer from './suffix/SuffixRenderer';
 import SuggestionsList from './suggestion-list/SuggestionsList';
 
@@ -59,7 +59,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const onChange = (e: any) => {
     const currentValue = e.target.value;
 
-    const { index } = getLastDelimiterInUrl(currentValue);
+    const { index, context } = getLastDelimiterInUrl(currentValue);
     const { searchText: searchWith, previous: preceedingText } = getSearchText(currentValue, index!);
     setSearchText(searchWith);
     setQueryUrl(currentValue);
@@ -68,7 +68,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       setShouldShowSuggestions(true);
       return;
     }
-    requestForAutocompleteOptions(preceedingText);
+    requestForAutocompleteOptions(preceedingText, context);
   };
 
   const isOverflowing = (input: string) => {
@@ -147,7 +147,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   };
 
 
-  const requestForAutocompleteOptions = (url: string) => {
+  const requestForAutocompleteOptions = (url: string, context: SignContext) => {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
     if (!GRAPH_API_VERSIONS.includes(queryVersion.toLowerCase())) {
@@ -164,7 +164,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       displayAutoCompleteSuggestions();
       return;
     }
-    dispatch(fetchAutoCompleteOptions(requestUrl, queryVersion));
+    dispatch(fetchAutoCompleteOptions(requestUrl, queryVersion, context));
   }
 
   const displayAutoCompleteSuggestions = () => {
