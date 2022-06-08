@@ -38,7 +38,7 @@ export const Help = () => {
         iconProps: {
           iconName: 'ReportWarning'
         },
-        onClick: () => trackReportAnIssueLinkClickEvent()
+        onClick: () => trackLinkClickEvents(componentNames.REPORT_AN_ISSUE_LINK)
       },
       { key: 'divider_1', itemType: ContextualMenuItemType.Divider },
       {
@@ -49,7 +49,7 @@ export const Help = () => {
         iconProps: {
           iconName: 'TextDocument'
         },
-        onClick: () => trackDocumentationLinkClickEvent()
+        onClick: () => trackLinkClickEvents(componentNames.GE_DOCUMENTATION_LINK)
       },
       {
         key: 'graph-documentation',
@@ -59,7 +59,7 @@ export const Help = () => {
         iconProps: {
           iconName: 'Documentation'
         },
-        onClick: () => trackGraphDocumentationLinkClickEvent()
+        onClick: () => trackLinkClickEvents(componentNames.GRAPH_DOCUMENTATION_LINK)
       },
       {
         key: 'github',
@@ -75,33 +75,15 @@ export const Help = () => {
             }
           }
         },
-        onClick: () => trackGithubLinkClickEvent()
+        onClick: () => trackLinkClickEvents(componentNames.GITHUB_LINK)
       }
     ];
     setItems(menuItems);
   }, [authenticated]);
 
-  const trackReportAnIssueLinkClickEvent = () => {
+  const trackLinkClickEvents = (componentName: string) => {
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.REPORT_AN_ISSUE_LINK
-    });
-  };
-
-  const trackDocumentationLinkClickEvent = () => {
-    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.GE_DOCUMENTATION_LINK
-    });
-  };
-
-  const trackGraphDocumentationLinkClickEvent = () => {
-    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.GRAPH_DOCUMENTATION_LINK
-    });
-  }
-
-  const trackGithubLinkClickEvent = () => {
-    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.GITHUB_LINK
+      ComponentName: componentName
     });
   };
 
