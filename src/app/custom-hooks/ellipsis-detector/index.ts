@@ -1,1 +1,0 @@
-export { useEllipsisDetector } from './useEllipsisDetector';

@@ -11,7 +11,8 @@ export const mainHeaderStyles = (theme: ITheme, mobileScreen?: boolean) => {
     },
     rightItemsStyles: {
       root: {
-        alignItems: 'center'
+        alignItems: 'center',
+        flexBasis: mobileScreen ? '137px' : ''
       }
     },
     feedbackIconAdjustmentStyles: {
@@ -27,12 +28,6 @@ export const mainHeaderStyles = (theme: ITheme, mobileScreen?: boolean) => {
     },
     tenantContainerStyle: {
       margin: '0px 10px'
-    },
-    tenantNameStyle: {
-      textOverflow: 'ellipsis',
-      overflow: 'hidden',
-      maxWidth: '100px',
-      whiteSpace: 'nowrap' as 'nowrap'
     },
     iconButton: {
       menuIcon: { fontSize: 15 },

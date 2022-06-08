@@ -20,7 +20,6 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../types/root';
 import { mainHeaderStyles } from './MainHeader.styles';
 import TenantIcon from './tenantIcon';
-import { useEllipsisDetector } from '../../custom-hooks/ellipsis-detector';
 
 interface MainHeaderProps {
   minimised: boolean;
@@ -45,11 +44,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   const minimised = props.minimised;
   const mobileScreen = props.mobileScreen;
   const currentTheme = getTheme();
-  const showTooltipContent : boolean = useEllipsisDetector('tenantLabel');
-
-
   const { rootStyles : itemAlignmentStackStyles, rightItemsStyles, graphExplorerLabelStyles,
-    feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles, tenantNameStyle,
+    feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles,
     tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles(currentTheme, mobileScreen);
 
   return (
@@ -84,7 +80,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         </Stack>
 
         <Stack horizontal styles={rightItemsStyles}
-          tokens={{childrenGap: mobileScreen ? 0: 10}}
+          tokens={{childrenGap:mobileScreen? 0: 10}}
         >
           {!mobileScreen && <FontIcon aria-label='tenant icon' iconName='tenantIcon' style={tenantIconStyles} />}
           {!profile && !mobileScreen &&
@@ -106,13 +102,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           {profile && !mobileScreen &&
           <div style={tenantContainerStyle}>
             <Label style={tenantLabelStyle}>Tenant</Label>
-            <TooltipHost
-              content={showTooltipContent ? profile.tenant : ''}
-              id= { getId() }
-              calloutProps={{ gapSpace: 0 }}
-            >
-              <Label className='tenantLabel' style={tenantNameStyle}> {profile.tenant} </Label>
-            </TooltipHost>
+            <Label>{profile.tenant}</Label>
           </div>
           }
           <span style={ moreInformationStyles }> <Settings /> </span>
