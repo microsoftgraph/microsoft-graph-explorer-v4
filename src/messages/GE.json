@@ -301,7 +301,7 @@
   "Microsoft Graph API Reference docs": "Microsoft Graph API Reference docs.",
   "Fetching permissions": "Fetching permissions",
   "Authentication failed": "Authentication failed",
-  "view all permissions": "Select permissions",
+  "view all permissions": "Consent permissions",
   "Fetching code snippet": "Fetching code snippet",
   "Snippet not available": "Snippet not available",
   "Select different permissions": "To try out different Microsoft Graph API endpoints, choose the permissions, and then click Consent.",
