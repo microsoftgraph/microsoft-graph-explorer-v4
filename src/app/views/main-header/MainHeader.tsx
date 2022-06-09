@@ -71,8 +71,10 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               }
             }}>
             <IconButton
-              iconProps={{ iconName: !minimised ? 'ClosePaneMirrored': 'OpenPaneMirrored',
-                style: { fontSize: '20px'} }}
+              iconProps={{ iconName:
+                !minimised && !mobileScreen ? 'ClosePaneMirrored' :
+                  mobileScreen ? 'GlobalNavButton': 'OpenPaneMirrored',
+              style: { fontSize: '20px'} }}
               ariaLabel={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
               onClick={() => props.toggleSidebar()} />
           </TooltipHost>
