@@ -20,15 +20,15 @@ const HeadersList = ({
           return <div>
             <IconButton
               iconProps={{ iconName: 'Delete' }}
-              title='Remove request header'
-              ariaLabel='Remove request header'
+              title={translateMessage('Remove request header')}
+              ariaLabel={translateMessage('Remove request header')}
               onClick={() => handleOnHeaderDelete(item)}
             />
             <span style={{fontSize: 'large', position: 'relative', bottom: '3px'}}>|</span>
             <IconButton
               iconProps={{ iconName: 'Edit' }}
-              title="Edit request header"
-              ariaLabel='Edit request header'
+              title={translateMessage('Edit request header')}
+              ariaLabel={translateMessage('Edit request header')}
               onClick={() => handleOnHeaderEdit(item)}
             />
           </div>;
