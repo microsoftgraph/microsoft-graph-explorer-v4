@@ -23,8 +23,6 @@ interface ISidebar {
   mobileScreen: boolean;
 }
 export const Sidebar = (props: ISidebar) =>{
-  const showSidebar = props.showSidebar;
-  const mobileScreen = props.mobileScreen;
   const theme = getTheme();
   const styles = sidebarStyles(theme).sidebarButtons;
 
@@ -43,7 +41,7 @@ export const Sidebar = (props: ISidebar) =>{
 
   return (
     <div>
-      {showSidebar &&
+      {props.showSidebar &&
       <Pivot onLinkClick={onPivotItemClick}
         overflowBehavior='menu'
         overflowAriaLabel={translateMessage('More items')}
@@ -80,7 +78,7 @@ export const Sidebar = (props: ISidebar) =>{
         </PivotItem>
       </Pivot>
       }
-      { !showSidebar && !mobileScreen && (
+      { !props.showSidebar && !props.mobileScreen && (
         <Stack tokens={{childrenGap: 10}}>
           <TooltipHost
             content={
