@@ -15,7 +15,6 @@ import {
   PROFILE_REQUEST_SUCCESS
 } from '../redux-constants';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
-import { queryRunningStatus } from './query-loading-action-creators';
 
 interface IBetaProfile {
   ageGroup: number;

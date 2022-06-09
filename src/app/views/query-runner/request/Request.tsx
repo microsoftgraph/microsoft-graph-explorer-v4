@@ -28,13 +28,8 @@ export class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {
     super(props);
     this.state = {
-      enableShowSurvey: false,
       selectedPivot: 'request-body'
     }
-  }
-
-  private toggleCustomSurvey = (show: boolean = false) => {
-    this.setState({ enableShowSurvey: show });
   }
 
   private getPivotItems = (height: string) => {
