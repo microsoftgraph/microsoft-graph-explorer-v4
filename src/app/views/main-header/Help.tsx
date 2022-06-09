@@ -4,6 +4,7 @@ import {
   getId,
   getTheme,
   IconButton,
+  IContextualMenuProps,
   registerIcons,
   TooltipHost
 } from '@fluentui/react';
@@ -92,7 +93,7 @@ export const Help = () => {
   }
   const { iconButton: helpButtonStyles, tooltipStyles, helpContainerStyles } = mainHeaderStyles(currentTheme);
 
-  const menuProperties = {
+  const menuProperties: IContextualMenuProps = {
     shouldFocusOnMount: true,
     alignTargetEdge: true,
     items,

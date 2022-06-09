@@ -8,6 +8,7 @@ import {
   getId,
   getTheme,
   IconButton,
+  IContextualMenuProps,
   TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
@@ -88,11 +89,12 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   const { iconButton : settingsButtonStyles, settingsContainerStyles,
     tooltipStyles} = mainHeaderStyles(currentTheme);
 
-  const menuProperties = {
+  const menuProperties: IContextualMenuProps = {
     shouldFocusOnMount: true,
     alignTargetEdge: true,
     items,
     directionalHint: DirectionalHint.bottomLeftEdge,
+    directionalHintFixed: true,
     calloutProps: {
       style: calloutStyles
     },
