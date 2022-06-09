@@ -436,6 +436,9 @@
   "Delete collection": "Supprimer la collection",
   "Leverage libraries": "Tirez parti de la puissance de nos bibliothèques clientes. Téléchargez la",
   "Client library": "bibliothèque cliente ici ",
-  "SDKs documentation": "Pour en savoir plus sur nos kits de développement logiciel (SDK), accédez à la page de documentation sur ",
+  "SDKs documentation": "Pour en savoir plus sur nos Kits de développement logiciel (SDK), accédez à la page de documentation sur ",
+  "Add to collection": "Ajouter à une collection",
+  "Switch to beta": "Basculer vers l’élément bêta",
+  "Resources": "Ressources",
   "More items": "Éléments supplémentaires"
 }
