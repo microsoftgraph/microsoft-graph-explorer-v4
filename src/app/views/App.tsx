@@ -286,7 +286,6 @@ class App extends Component<IAppProps, IAppState> {
 
     // @ts-ignore
     this.props.actions!.toggleSidebar(properties);
-
   };
 
   private setSidebarProperties() {

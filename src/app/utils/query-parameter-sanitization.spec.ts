@@ -1,4 +1,8 @@
+<<<<<<< HEAD:src/app/utils/query-parameter-sanitization.spec.ts
 import { isAllAlpha, isPropertyName, sanitizeQueryParameter } from './query-parameter-sanitization';
+=======
+import { isAllAlpha, sanitizeQueryParameter } from './query-parameter-sanitization';
+>>>>>>> origin/master:src/tests/utils/sanitize-query-parameter-sanitization.spec.tsx
 
 describe('isAllAlpha should ', () => {
   const list = [
@@ -8,13 +12,18 @@ describe('isAllAlpha should ', () => {
     { key: '1a1', isAllAlphabetic: false }
   ];
 
+<<<<<<< HEAD:src/app/utils/query-parameter-sanitization.spec.ts
   list.forEach((element) => {
+=======
+  list.forEach(element => {
+>>>>>>> origin/master:src/tests/utils/sanitize-query-parameter-sanitization.spec.tsx
     it(`return ${element.isAllAlphabetic} for ${element.key}`, () => {
       const key = isAllAlpha(element.key);
       expect(key).toBe(element.isAllAlphabetic);
     });
   });
 });
+<<<<<<< HEAD:src/app/utils/query-parameter-sanitization.spec.ts
 
 describe('isPropertyOrEntityName should', () => {
   const list = [
@@ -47,6 +56,8 @@ describe('isPropertyOrEntityName should', () => {
     });
   });
 });
+=======
+>>>>>>> origin/master:src/tests/utils/sanitize-query-parameter-sanitization.spec.tsx
 
 describe('Sanitize Query Parameters should', () => {
   const list = [
