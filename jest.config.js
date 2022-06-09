@@ -18,7 +18,10 @@ module.exports = {
     '**/?(*.)+(spec|test).[jt]s?(x)'
   ],
   globals: {
-    crypto: require('crypto')
+    crypto: require('crypto'),
+    'ts-jest': {
+      isolatedModules: true
+    }
   },
   testEnvironmentOptions: {
     url: 'http://localhost'
