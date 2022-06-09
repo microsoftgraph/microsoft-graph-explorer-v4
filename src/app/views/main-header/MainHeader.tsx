@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../types/root';
 import { mainHeaderStyles } from './MainHeader.styles';
 import TenantIcon from './tenantIcon';
+import { Mode } from '../../../types/enums';
 
 interface MainHeaderProps {
   minimised: boolean;
@@ -38,7 +39,7 @@ registerIcons({
   }
 });
 export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: MainHeaderProps) => {
-  const { profile } = useSelector(
+  const { profile, graphExplorerMode } = useSelector(
     (state: IRootState) => state
   );
   const minimised = props.minimised;
@@ -57,6 +58,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
         tokens={itemAlignmentsStackTokens}>
 
         <Stack horizontal tokens={{childrenGap:5,padding: 10 }}>
+          {graphExplorerMode === Mode.Complete &&
+
           <TooltipHost
             content={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
             id={getId()}
@@ -73,6 +76,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               ariaLabel={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
               onClick={() => props.toggleSidebar()} />
           </TooltipHost>
+          }
           <Label
             style={graphExplorerLabelStyles}>
             Graph Explorer

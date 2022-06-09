@@ -34,6 +34,7 @@ import { classNames } from '../../classnames';
 import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
+import { Mode } from '../../../../types/enums';
 
 const getInitials = (name: string) => {
   let initials = '';
@@ -56,7 +57,8 @@ const Profile = (props: any) => {
   const {
     profile,
     authToken,
-    permissionsPanelOpen
+    permissionsPanelOpen,
+    graphExplorerMode
   } = useSelector((state: IRootState) => state);
   const authenticated = authToken.token;
   const [selectedPermissions, setSelectedPermissions] = useState([]);
@@ -210,9 +212,11 @@ const Profile = (props: any) => {
             </ActionButton>
           </Stack>
           <Stack styles={{root:{ paddingLeft: 10 }}}>{fullPersona}</Stack>
+          {graphExplorerMode === Mode.Complete &&
           <ActionButton key={'view-all-permissions'} onClick={() => changePanelState()} styles={permissionsLabelStyles}>
             {translateMessage('view all permissions')}
           </ActionButton>
+          }
           <Stack styles={{root:{ background: theme.palette.neutralLighter, padding:10}}}>
             <ActionButton key={'sign-other-account'} onClick={() => handleSignInOther()}
               iconProps={{iconName: 'AddFriend'}}
