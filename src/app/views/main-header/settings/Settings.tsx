@@ -151,7 +151,7 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
                 text: translateMessage('High Contrast')
               }
             ]}
-            onChange={(event, selectedTheme) =>
+            onChange={(_event, selectedTheme) =>
               handleChangeTheme(selectedTheme)
             }
           />
