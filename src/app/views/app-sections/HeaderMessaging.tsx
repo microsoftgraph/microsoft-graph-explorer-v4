@@ -4,13 +4,12 @@ import { FormattedMessage } from 'react-intl';
 
 import { getLoginType } from '../../../modules/authentication/authUtils';
 import { LoginType } from '../../../types/enums';
-import { Authentication } from '../authentication';
 
 export function headerMessaging(classes: any, query: string): React.ReactNode {
   const loginType = getLoginType();
 
   return (
-    <div style={{ marginBottom: 8, paddingLeft: 10 }}>
+    <div style={{ marginBottom: 8 }}>
       {loginType === LoginType.Popup && <>
         <MessageBar messageBarType={MessageBarType.info} isMultiline={true}>
           <p>
@@ -24,7 +23,6 @@ export function headerMessaging(classes: any, query: string): React.ReactNode {
           </p>
         </MessageBar>
 
-        <Authentication />
       </>}
       {loginType === LoginType.Redirect && <MessageBar messageBarType={MessageBarType.warning} isMultiline={true}>
         <p>

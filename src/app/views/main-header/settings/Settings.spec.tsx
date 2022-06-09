@@ -3,22 +3,18 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import userEvent from '@testing-library/user-event';
 
-import { Settings } from '.';
-import { geLocale } from '../../../appLocale';
-import { ISettingsProps } from '../../../types/settings';
-import { messages_ } from '../../utils/get-messages';
+import { Settings } from './Settings';
+import { geLocale } from '../../../../appLocale';
+import { ISettingsProps } from '../../../../types/settings';
+import { messages_ } from '../../../utils/get-messages';
 
 afterEach(cleanup);
 const renderSettings = (args?: any) => {
   const messages = (messages_ as { [key: string]: object })['en-US'];
   const settingsProps: ISettingsProps = {
     actions: {
-      signOut: jest.fn(),
       changeTheme: jest.fn(),
       consentToScopes: jest.fn()
-    },
-    intl: {
-      message: messages
     }
   }
 
