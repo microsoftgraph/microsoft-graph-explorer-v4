@@ -62,7 +62,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const result = await msalApplication.loginPopup(popUpRequest);
       this.storeHomeAccountId(result.account!);
       return result;
-    } catch (error) {
+    } catch (error: any) {
+      const {errorCode} = error;
+      if (errorCode === 'interaction_in_progress') {
+        this.eraseInteractionInProgressCookie();
+      }
       throw error;
     }
   }
