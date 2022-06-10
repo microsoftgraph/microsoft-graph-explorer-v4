@@ -66,33 +66,24 @@ const renderApp = (args?: any) : any => {
 }
 window.fetch = jest.fn();
 
+// eslint-disable-next-line react/display-name
+jest.mock('../../app/views/query-runner/request/feedback/FeedbackForm.tsx', () => () => {
+  return <div />;
+});
+
 jest.mock('@microsoft/applicationinsights-react-js', () => ({
   // eslint-disable-next-line react/display-name
   withAITracking: () => React.Component,
   ReactPlugin: Object
-}))
-
-jest.mock('@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window', () => ({
-  OfficeBrowserFeedback: Object
-}))
-
-jest.mock('@ms-ofb/officebrowserfeedbacknpm/Floodgate', () => ({
-  makeFloodgate: Object
-}))
-
-jest.mock('@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions', () => ({
-  AuthenticationType: 0
-}))
-
-// eslint-disable-next-line no-console
+}));
 
 describe('It should render the main GE site', () => {
   it('Should confirm that all the major sections are rendered', async () => {
-    const user = userEvent.setup()
+    // const user = userEvent
     renderApp({mobileScreen: false, showSidebar: true});
-    screen.getByRole('heading', { name: /graph explorer/i });
-    screen.getByRole('button', { name: /sign in to graph explorer/i });
-    screen.getByRole('button', { name: /more actions/i });
+    screen.getByRole('button', { name: /sign in/i });
+    screen.getByRole('button', { name: /settings/i });
+    screen.getByText(/tenant/i);
     screen.getByRole('button', { name: /help improve graph explorer/i });
 
     // confirm that sidebar items are rendered
