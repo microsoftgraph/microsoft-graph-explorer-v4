@@ -441,5 +441,7 @@
   "Switch to beta": "Switch to beta",
   "Resources": "Resources",
   "More items": "More items",
-  "Update": "Update"
+  "Update": "Update",
+  "Edit request header": "Edit request header",
+  "Remove request header": "Remove request header"
 }
