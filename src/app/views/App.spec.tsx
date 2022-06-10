@@ -115,7 +115,7 @@ describe('It should render the main GE site', () => {
 
     // screen.debug(undefined, 30000000000000000000000000000);
 
-    screen.logTestingPlaygroundURL();
+    // screen.logTestingPlaygroundURL();
   });
 
   it('Should render the main app with a mobile screen view', ()=> {

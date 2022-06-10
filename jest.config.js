@@ -35,7 +35,8 @@ module.exports = {
   },
   transformIgnorePatterns: [
     '^.+\\.module\\.(css|sass|scss)$',
-    '/node_modules/(?!@fluentui)'
+    '/node_modules/(?!@fluentui)',
+    '/node_modules/'
   ],
   moduleNameMapper: {
     '^react-native$': 'react-native-web',

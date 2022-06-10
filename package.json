@@ -65,7 +65,7 @@
         "scripts": {
                 "start": "node scripts/start.js",
                 "build": "node scripts/build.js && node versioned-build.js",
-                "test": "node scripts/test.js --no-watch --testPathIgnorePatterns=src/tests/accessibility /scripts/ --max-old-space-size=8192",
+                "test": "node scripts/test.js --no-watch --testPathIgnorePatterns=src/tests/accessibility /scripts/ --max-old-space-size=8192 --runInBand",
                 "lint": "eslint . \"**/*.{js,ts,tsx}\"",
                 "start-server": "npm start",
                 "ci": "start-server-and-test start-server http://localhost:3000 test-ci",
@@ -74,7 +74,7 @@
                 "build:prod": "npm run build",
                 "bump": "standard-version --skip.tag --skip.changelog",
                 "preinstall": "npx npm-force-resolutions",
-                "test:app": "jest App.spec.tsx"
+                "test:app": "jest PathsReview.spec.tsx"
         },
         "eslintConfig": {
                 "extends": "react-app"
