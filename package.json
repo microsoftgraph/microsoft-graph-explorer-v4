@@ -65,7 +65,7 @@
         "scripts": {
                 "start": "node scripts/start.js",
                 "build": "node scripts/build.js && node versioned-build.js",
-                "test": "node scripts/test.js --no-watch --testPathIgnorePatterns=src/tests/accessibility /scripts/ --max-old-space-size=8192 --runInBand",
+                "test": "node scripts/test.js --no-watch --testPathIgnorePatterns=src/tests/accessibility /scripts/ --max-old-space-size=8192",
                 "lint": "eslint . \"**/*.{js,ts,tsx}\"",
                 "start-server": "npm start",
                 "ci": "start-server-and-test start-server http://localhost:3000 test-ci",
@@ -86,7 +86,7 @@
                 "not op_mini all"
         ],
         "devDependencies": {
-                "@testing-library/react": "^12.1.5",
+                "@testing-library/react": "12.1.5",
                 "@testing-library/user-event": "14.1.1",
                 "@types/chromedriver": "81.0.1",
                 "@types/enzyme": "3.10.11",

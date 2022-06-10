@@ -80,7 +80,7 @@ describe('Resources Reducer', () => {
     expect(state).toEqual(newState);
   });
 
-  it.skip('should handle FETCH_RESOURCES_ERROR', () => {
+  it('should handle FETCH_RESOURCES_ERROR', () => {
 
     const mockResponse = new Error('400');
 
