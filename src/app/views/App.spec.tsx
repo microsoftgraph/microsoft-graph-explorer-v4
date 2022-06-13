@@ -79,7 +79,6 @@ jest.mock('@microsoft/applicationinsights-react-js', () => ({
 
 describe('It should render the main GE site', () => {
   it('Should confirm that all the major sections are rendered', async () => {
-    // const user = userEvent
     renderApp({mobileScreen: false, showSidebar: true});
     screen.getByRole('button', { name: /sign in/i });
     screen.getByRole('button', { name: /settings/i });
@@ -110,24 +109,66 @@ describe('It should render the main GE site', () => {
     screen.getByRole('tab', { name: /toolkit component/i});
     screen.getByRole('tab', { name: /adaptive cards/i});
     screen.getByRole('tab', { name: /expand/i} );
-
-    // Confirm that header section is rendered
-
-    // screen.debug(undefined, 30000000000000000000000000000);
-
-    // screen.logTestingPlaygroundURL();
   });
 
-  it('Should render the main app with a mobile screen view', ()=> {
-    // renderApp({mobileScreen: true, showSidebar: false});
-    // screen.logTestingPlaygroundURL()
-    expect(1).toBe(1);
+  it('Should test settings button', async ()=> {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const settingsButton = screen.getByRole('button', { name: /settings/i });
+    await user.click(settingsButton);
+    expect(screen.getByText(/change theme/i)).toBeDefined();
+    expect(screen.getByText(/get a sandbox with sample data/i)).toBeDefined();
   });
 
-  it('Should test the try-it UI', () => {
-    // renderApp({mobileScreen: false, showSidebar: true, mode: Mode.TryIt});
-    // screen.debug();
-    // screen.logTestingPlaygroundURL();
-    expect(1).toBe(1);
+  it('should test samples tab', async () => {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const samplesTab = screen.getByRole('tab', { name: /sample queries/i} );
+    await user.click(samplesTab);
+    expect(screen.getByRole('searchbox')).toBeDefined();
+    expect(screen.getByText(/You are viewing a cached set of samples/i)).toBeDefined();
+    expect(screen.getByText(/See more queries in/i)).toBeDefined();
   })
+
+  it('should test the resources tab', async () => {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const resourcesButton = screen.getByRole('tab', { name: /resources/i });
+    await user.click(resourcesButton);
+    expect(screen.getByRole('switch', { name: /switch to beta/i})).toBeDefined();
+    expect(screen.getByText(/Switch to beta/i)).toBeDefined();
+    expect(screen.getByRole('searchbox')).toBeDefined();
+    expect(screen.getByText(/resources available/i)).toBeDefined();
+    expect(screen.getByText(/off/i)).toBeDefined();
+  });
+
+  it('should test Request headers tab', async () => {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const requestHeadersTab = screen.getByRole('tab', { name: /request headers/i});
+    await user.click(requestHeadersTab);
+    screen.getByPlaceholderText(/key/i);
+    screen.getByPlaceholderText(/value/i);
+    screen.getByRole('button', { name: /add/i});
+    screen.getByRole('columnheader', { name: /key/i});
+    screen.getByRole('columnheader', { name: /value/i});
+    screen.getByRole('columnheader', { name: /actions/i});
+  });
+
+  it('should test the Modify Permissions tab', async () => {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const modifyPermissionsTab = screen.getByRole('tab', { name: /modify permissions \(preview\)/i});
+    await user.click(modifyPermissionsTab);
+    expect(screen.getByText(/Permissions for the query are missing on this tab/i)).toBeDefined();
+  });
+
+  it('should test expanding response area', async () => {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const modifyPermissionsTab = screen.getByRole('tab', { name: /expand response/i});
+    await user.click(modifyPermissionsTab);
+    expect(screen.getByText(/response area expanded/i)).toBeDefined();
+    screen.logTestingPlaygroundURL();
+  });
 })

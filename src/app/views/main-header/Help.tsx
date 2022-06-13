@@ -117,7 +117,7 @@ export const Help = () => {
       >
         <IconButton
           ariaLabel={translateMessage('Help')}
-          role={'button'}
+          role='button'
           styles={helpButtonStyles}
           menuIconProps={{ iconName: 'Help' }}
           menuProps={menuProperties}
