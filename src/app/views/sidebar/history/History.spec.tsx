@@ -43,7 +43,6 @@ const renderHistoryTab = (args?: any) => {
 
 // eslint-disable-next-line no-console
 console.warn = jest.fn();
-console.error = jest.fn();
 
 jest.mock('@microsoft/applicationinsights-react-js', () => ({
   // eslint-disable-next-line react/display-name
@@ -59,6 +58,5 @@ describe('Tests History Tab', () => {
     screen.getByRole('button', { name: /collapse older/i});
     screen.getByRole('button', { name: /export older queries/i});
     screen.getByRole('button', { name: /delete older queries/i});
-    // screen.logTestingPlaygroundURL();
   })
 })

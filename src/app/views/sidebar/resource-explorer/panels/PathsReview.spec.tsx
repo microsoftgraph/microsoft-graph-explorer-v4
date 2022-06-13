@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { geLocale } from '../../../../../appLocale';
 import messages from '../../../../../messages';
@@ -60,8 +60,12 @@ jest.mock('react-redux', () => {
 })
 
 describe('Tests postman collections panel', () => {
-  it('Renders the path review section of resource explorer', () => {
-    const { getByText } = renderPathsReview();
-    getByText(/Selected resources/i);
+  it('Renders the path review panel of resource explorer', () => {
+    renderPathsReview();
+    expect(screen.getByText(/Selected resources preview/i)).toBeDefined();
+    expect(screen.getByRole('button', { name: /close/i})).toBeDefined();
+    expect(screen.getByText(/you can export the entire list as a postman collection/i));
+    expect(screen.getByRole('button', { name: /download postman collection/i})).toBeDefined();
+    screen.logTestingPlaygroundURL();
   })
 })
