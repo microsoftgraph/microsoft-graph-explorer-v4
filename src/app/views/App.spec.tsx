@@ -65,6 +65,8 @@ const renderApp = (args?: any) : any => {
     </Provider> );
 }
 window.fetch = jest.fn();
+window.open = jest.fn();
+
 
 // eslint-disable-next-line react/display-name
 jest.mock('../../app/views/query-runner/request/feedback/FeedbackForm.tsx', () => () => {
@@ -81,7 +83,7 @@ jest.mock('@microsoft/applicationinsights-react-js', () => ({
 console.error = jest.fn();
 
 describe('It should render the main GE site', () => {
-  it.skip('Should confirm that all the major sections are rendered', async () => {
+  it('Should confirm that all the major sections are rendered', async () => {
     renderApp({mobileScreen: false, showSidebar: true});
     screen.getByRole('button', { name: /sign in/i });
     screen.getByRole('button', { name: /settings/i });
@@ -114,6 +116,14 @@ describe('It should render the main GE site', () => {
     screen.getByRole('tab', { name: /expand/i} );
   });
 
+  it('Tests the minimize sidebar button', async () => {
+    const user = userEvent.setup();
+    renderApp({ mobileScreen: false, showSidebar: true });
+    const minimizeButton = screen.getByRole('button', { name: /minimize sidebar/i });
+    await user.click(minimizeButton);
+    expect(screen.getByText(/sidebar minimized/i)).toBeDefined();
+  })
+
   it('Tests http version options ', async () => {
     const user = userEvent.setup();
     renderApp({mobileScreen: false, showSidebar: true});
@@ -134,7 +144,16 @@ describe('It should render the main GE site', () => {
     expect(screen.getAllByText(/beta/i)).toBeDefined();
   });
 
-  it.skip('Testst settings button', async ()=> {
+  it('Tests the share query button and popup', async () => {
+    const user = userEvent.setup();
+    renderApp({ mobileScreen: false, showSidebar: true });
+    const shareQueryButton = screen.getByRole('button', { name: /share query/i });
+    await user.click(shareQueryButton);
+    expect(screen.findByText(/share query/i)).toBeDefined();
+    expect(screen.findByText(/share this link to let people try your current/i)).toBeDefined();
+  })
+
+  it('Testst settings button', async ()=> {
     const user = userEvent.setup();
     renderApp({mobileScreen: false, showSidebar: true});
     const settingsButton = screen.getByRole('button', { name: /settings/i });
@@ -143,7 +162,16 @@ describe('It should render the main GE site', () => {
     expect(screen.getByText(/get a sandbox with sample data/i)).toBeDefined();
   });
 
-  it.skip('Tests samples tab', async () => {
+  it('Tests sign in popup', async () => {
+    const user = userEvent.setup();
+    renderApp({ mobileScreen: false, showSidebar: true });
+    const signInButton = screen.getByRole('button', { name: /sign in/i});
+    await user.click(signInButton);
+    expect(window.open).toHaveBeenCalled();
+    expect(window.open).toHaveBeenCalledTimes(1);
+  })
+
+  it('Tests samples tab', async () => {
     const user = userEvent.setup();
     renderApp({mobileScreen: false, showSidebar: true});
     const samplesTab = screen.getByRole('tab', { name: /sample queries/i} );
@@ -153,7 +181,7 @@ describe('It should render the main GE site', () => {
     expect(screen.getByText(/See more queries in/i)).toBeDefined();
   })
 
-  it.skip('Tests the resources tab', async () => {
+  it('Tests the resources tab', async () => {
     const user = userEvent.setup();
     renderApp({mobileScreen: false, showSidebar: true});
     const resourcesButton = screen.getByRole('tab', { name: /resources/i });
@@ -165,7 +193,7 @@ describe('It should render the main GE site', () => {
     expect(screen.getByText(/off/i)).toBeDefined();
   });
 
-  it.skip('Tests Request headers tab', async () => {
+  it('Tests Request headers tab', async () => {
     const user = userEvent.setup();
     renderApp({mobileScreen: false, showSidebar: true});
     const requestHeadersTab = screen.getByRole('tab', { name: /request headers/i});
@@ -178,7 +206,7 @@ describe('It should render the main GE site', () => {
     screen.getByRole('columnheader', { name: /actions/i});
   });
 
-  it.skip('Tests the Modify Permissions tab', async () => {
+  it('Tests the Modify Permissions tab', async () => {
     const user = userEvent.setup();
     renderApp({mobileScreen: false, showSidebar: true});
     const modifyPermissionsTab = screen.getByRole('tab', { name: /modify permissions \(preview\)/i});
@@ -186,12 +214,20 @@ describe('It should render the main GE site', () => {
     expect(screen.getByText(/Permissions for the query are missing on this tab/i)).toBeDefined();
   });
 
-  it.skip('Tests expanding response area', async () => {
+  it('Tests expanding response area', async () => {
     const user = userEvent.setup();
     renderApp({mobileScreen: false, showSidebar: true});
     const modifyPermissionsTab = screen.getByRole('tab', { name: /expand response/i});
     await user.click(modifyPermissionsTab);
     expect(screen.getByText(/response area expanded/i)).toBeDefined();
-    screen.logTestingPlaygroundURL();
   });
+
+  it('Tests the run query button', async () => {
+    const user = userEvent.setup();
+    renderApp({ mobileScreen: false, showSidebar: true });
+    const runQueryButton = screen.getByRole('button', { name: /run query/i });
+    await user.click(runQueryButton);
+    expect(screen.findByText(/ok - 200/i)).toBeDefined();
+    expect(screen.getByText(/you are currently using a sample account/i)).toBeDefined();
+  })
 })
