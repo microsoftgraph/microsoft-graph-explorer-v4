@@ -33,6 +33,7 @@ class Suggestions implements ISuggestions {
 
   private async getSuggestionsFromResources(url: string, version: string,
     resources: IResource): Promise<IParsedOpenApiResponse | null> {
+    if (!resources || !resources.children || resources.children.length === 0) { return null; }
     const versionedResources = getResourcesSupportedByVersion(resources.children, version);
     if (!url) {
       return this.createOpenApiResponse(versionedResources, url);
