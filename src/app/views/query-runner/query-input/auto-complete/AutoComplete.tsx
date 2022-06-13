@@ -42,9 +42,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   }, [sampleQuery]);
 
   useEffect(() => {
-    if (autoCompleteOptions) {
-      displayAutoCompleteSuggestions();
-    }
+    displayAutoCompleteSuggestions(queryUrl);
     setIsMultiline(isOverflowing(queryUrl));
   }, [autoCompleteOptions, queryUrl]);
 
@@ -58,16 +56,10 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const onChange = (e: any) => {
     const currentValue = e.target.value;
-
     const { index, context } = getLastDelimiterInUrl(currentValue);
     const { searchText: searchWith, previous: preceedingText } = getSearchText(currentValue, index!);
     setSearchText(searchWith);
     setQueryUrl(currentValue);
-    if (preceedingText === GRAPH_URL + '/') {
-      setSuggestions(GRAPH_API_VERSIONS);
-      setShouldShowSuggestions(true);
-      return;
-    }
     requestForAutocompleteOptions(preceedingText, context);
   };
 
@@ -161,17 +153,19 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
     const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url;
     if (urlExistsInStore) {
-      displayAutoCompleteSuggestions();
+      displayAutoCompleteSuggestions(autoCompleteOptions.url);
       return;
     }
     dispatch(fetchAutoCompleteOptions(requestUrl, queryVersion, context));
   }
 
-  const displayAutoCompleteSuggestions = () => {
-    if (!autoCompleteOptions) {
-      return;
-    }
-    const theSuggestions = getSuggestions(queryUrl, autoCompleteOptions);
+  const displayAutoCompleteSuggestions = (url: string) => {
+
+    const { index } = getLastDelimiterInUrl(url);
+    const { previous: preceedingText } = getSearchText(url, index!);
+    const shouldSuggestVersions = preceedingText === GRAPH_URL + '/';
+
+    const theSuggestions = (shouldSuggestVersions) ? GRAPH_API_VERSIONS : getSuggestions(url, autoCompleteOptions!);
     if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
       if (filtered[0] !== searchText) {
