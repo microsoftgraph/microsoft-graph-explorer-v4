@@ -153,6 +153,19 @@ describe('It should render the main GE site', () => {
     expect(screen.getAllByText(/beta/i)).toBeDefined();
   });
 
+  it('Tests query textbox and error handling', async () => {
+    // eslint-disable-next-line no-console
+    console.error = jest.fn();
+    const user = userEvent.setup();
+    renderApp({ mobileScreen: false, showSidebar: true });
+    const queryTextbox = screen.getByRole('textbox');
+    await user.clear(queryTextbox);
+
+    // invalid url should trigger the invalid whitespace error
+    await user.type(queryTextbox, 'graph .microsoft');
+    expect(screen.getByText(/invalid whitespace in URL/i)).toBeDefined();
+  })
+
   it('Tests the share query button and popup', async () => {
     const user = userEvent.setup();
     renderApp({ mobileScreen: false, showSidebar: true });
