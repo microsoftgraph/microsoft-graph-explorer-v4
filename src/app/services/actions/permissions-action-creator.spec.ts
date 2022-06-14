@@ -80,20 +80,20 @@ const mockState: IRootState = {
   responseAreaExpanded: false,
   dimensions: {
     request: {
-      width: '100px',
-      height: '100px'
+      width: '100',
+      height: '100'
     },
     response: {
-      width: '100px',
-      height: '100px'
+      width: '100',
+      height: '100'
     },
     sidebar: {
-      width: '100px',
-      height: '100px'
+      width: '100',
+      height: '100'
     },
     content: {
-      width: '100px',
-      height: '100px'
+      width: '100',
+      height: '100'
     }
   },
   autoComplete: {

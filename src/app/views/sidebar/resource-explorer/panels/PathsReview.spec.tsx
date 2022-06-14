@@ -66,6 +66,5 @@ describe('Tests postman collections panel', () => {
     expect(screen.getByRole('button', { name: /close/i})).toBeDefined();
     expect(screen.getByText(/you can export the entire list as a postman collection/i));
     expect(screen.getByRole('button', { name: /download postman collection/i})).toBeDefined();
-    screen.logTestingPlaygroundURL();
   })
 })
