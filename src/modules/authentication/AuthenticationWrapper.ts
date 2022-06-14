@@ -71,9 +71,15 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
   }
 
-  public logOut() {
-    this.deleteHomeAccountId();
-    msalApplication.logoutRedirect();
+  public async logOut() {
+    const homeAccountId = this.getHomeAccountId();
+    if( homeAccountId) {
+      const currentAccount = msalApplication.getAccountByHomeId(homeAccountId);
+      await msalApplication.logoutRedirect({account: currentAccount});
+    } else {
+      this.deleteHomeAccountId();
+      await msalApplication.logoutRedirect();
+    }
   }
 
   public async logOutPopUp() {
@@ -102,6 +108,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
 
     const allAccounts: AccountInfo[] = msalApplication.getAllAccounts();
+    console.log(allAccounts);
     if (!allAccounts || allAccounts.length === 0) {
       return undefined;
     }
@@ -161,7 +168,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       return result;
     } catch (error: any) {
       if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
-
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
 
       } else if (signInAuthError(error)) {
@@ -207,9 +213,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
     try {
       const result = await msalApplication.loginPopup(popUpRequest);
+      console.log(result);
       this.storeHomeAccountId(result.account!);
       return result;
     } catch (error: any) {
+      //    console.log(error);
       const { errorCode } = error;
       if (signInAuthError(errorCode) && !this.consentingToNewScopes) {
         this.clearSession();
