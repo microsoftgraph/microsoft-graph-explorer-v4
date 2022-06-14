@@ -237,6 +237,7 @@ describe('It should render the main GE site', () => {
     renderApp({ mobileScreen: false, showSidebar: true });
     const runQueryButton = screen.getByRole('button', { name: /run query/i });
     await user.click(runQueryButton);
+    expect(screen.queryByText(/ok - 200/i)).toBeDefined();
     expect(screen.getByText(/you are currently using a sample account/i)).toBeDefined();
   })
 })
