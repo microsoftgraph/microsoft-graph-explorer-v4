@@ -24,7 +24,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: "14.x"
 
       - name: Cache npm
         uses: actions/cache@v3
@@ -52,26 +52,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - name: Set up Node
-      uses: actions/setup-node@v3
-      with:
-        node-version: '14.x'
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
 
-    - name: Cache node_modules
-      uses: actions/cache@v3
-      with:
-        path: |
-          node_modules
-          packages/*/node_modules
-        key: modules-${{ hashFiles('package-lock.json') }}
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
 
-    - name: Lint
-      run: npm run lint
+      - name: Lint
+        run: npm run lint
 
   build:
     name: Build packages
@@ -85,7 +85,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: "14.x"
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -113,7 +113,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: "14.x"
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -156,10 +156,8 @@ jobs:
       - name: Run sonar cloud analysis
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-
 
   publish-preview-site:
     name: Static preview site creation
