@@ -24,7 +24,7 @@ Where `REACT_APP_CLIENT_ID` is the `Application (client) ID` from the Azure port
 
 ## Other commands
 * `npm test` to run tests from the command line for scenarios like parsing metadata and functional explorer tests.
-* `npm run test:accessibility` to run accessibility tests from the command line
+* `npm run ci` to run accessibility tests from the command line
 * `npm run lint` linting your files
 
 ## Contributing

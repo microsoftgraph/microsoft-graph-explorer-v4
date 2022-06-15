@@ -87,7 +87,7 @@ jobs:
         displayName: "Runs Unit tests"
 
       - script: |
-          npm run test:accessibility
+          npm run ci
         displayName: "Runs Accessibility tests"
 
       - task: PublishTestResults@2
