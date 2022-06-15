@@ -75,7 +75,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     const homeAccountId = this.getHomeAccountId();
     if( homeAccountId) {
       const currentAccount = msalApplication.getAccountByHomeId(homeAccountId);
-      await msalApplication.logoutRedirect({account: currentAccount});
+      const logoutHint = currentAccount!.idTokenClaims?.login_hint;
+      await msalApplication.logoutPopup({ logoutHint });
     } else {
       this.deleteHomeAccountId();
       await msalApplication.logoutRedirect();
@@ -108,7 +109,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
 
     const allAccounts: AccountInfo[] = msalApplication.getAllAccounts();
-    console.log(allAccounts);
     if (!allAccounts || allAccounts.length === 0) {
       return undefined;
     }
@@ -213,11 +213,9 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
     try {
       const result = await msalApplication.loginPopup(popUpRequest);
-      console.log(result);
       this.storeHomeAccountId(result.account!);
       return result;
     } catch (error: any) {
-      //    console.log(error);
       const { errorCode } = error;
       if (signInAuthError(errorCode) && !this.consentingToNewScopes) {
         this.clearSession();
