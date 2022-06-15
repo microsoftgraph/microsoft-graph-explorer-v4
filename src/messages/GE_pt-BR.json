@@ -422,8 +422,8 @@
   "Set Query": "Definir a consulta",
   "Query parameters": "Parâmetros de consulta",
   "Preview collection": "Visualizar a coleção",
-  "Download postman collection": "Baixar a coleção de carteiros",
-  "Export list as a Postman collection message": "Você pode exportar a lista inteira como uma Coleção do Postman. Se houver itens na lista que você não deseja, selecione-os para removê-los.",
+  "Download postman collection": "Baixar a coleção do Postman",
+  "Export list as a Postman collection message": "Você pode exportar a lista inteira como uma coleção do Postman. Se houver itens na lista que você não deseja, selecione-os para removê-los.",
   "Copied": "Copiado",
   "Invalid whitespace in URL": "Espaço em branco inválido na URL",
   "Response content not available due to CORS policy": "O conteúdo da resposta não está disponível no Graph Explorer devido à política CORS. Você pode executar essa solicitação em um cliente de API, como o Postman. Leia mais sobre o CORS e entenda como ele funciona",
@@ -437,5 +437,9 @@
   "Leverage libraries": "Aproveite o poder das nossas bibliotecas de clientes. Baixe o",
   "Client library": "a biblioteca do cliente aqui ",
   "SDKs documentation": "Para ler mais sobre nossos SDKs, acesse a página de documentação em ",
-  "More items": "Mais itens"
+  "Add to collection": "Adicionar à coleção",
+  "Switch to beta": "Alternar para beta",
+  "Resources": "Recursos",
+  "More items": "Mais itens",
+  "Update": "Atualização"
 }
