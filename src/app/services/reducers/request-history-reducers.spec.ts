@@ -1,6 +1,6 @@
 import { history } from './request-history-reducers';
 import {
-  ADD_HISTORY_ITEM_SUCCESS, REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
+  ADD_HISTORY_ITEM_SUCCESS, BULK_ADD_HISTORY_ITEMS_SUCCESS, REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
   REMOVE_HISTORY_ITEM_SUCCESS
 } from '../redux-constants';
 
@@ -65,6 +65,22 @@ describe('Request History Reducer', () => {
 
     const newState = history(initialState, action);
     expect(newState).toEqual(expectedState);
+  });
+
+  it('should handle BULK_ADD_HISTORY_ITEMS_SUCCESS', () => {
+    const initialState: any = [];
+    const dummy = [
+      { query: 'query', createdAt: new Date().toISOString() },
+      { query: 'query2', createdAt: new Date().toISOString() }
+    ];
+    const queryAction = {
+      type: BULK_ADD_HISTORY_ITEMS_SUCCESS,
+      response: dummy
+    };
+
+    const newState = history(initialState, queryAction);
+
+    expect(newState).toEqual(dummy);
   })
 
 });

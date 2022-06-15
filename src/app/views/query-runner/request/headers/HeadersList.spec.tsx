@@ -16,7 +16,7 @@ const renderHeadersList = () => {
     }
   ]
   return render(
-    <HeadersList handleOnHeaderDelete={jest.fn()} headers={headers} messages={''} />
+    <HeadersList handleOnHeaderDelete={jest.fn()} headers={headers} messages={''} handleOnHeaderEdit={jest.fn()} />
   )
 }
 

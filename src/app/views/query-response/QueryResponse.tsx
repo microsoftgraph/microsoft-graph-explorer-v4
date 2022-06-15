@@ -98,7 +98,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           marginTop: 10
         }}
         bounds={'window'}
-        maxHeight={800}
+        maxHeight={810}
         minHeight={350}
         size={{
           height: responseHeight,
@@ -113,7 +113,9 @@ const QueryResponse = (props: IQueryResponseProps) => {
           height: '100%'
         }}>
 
-          <Pivot overflowBehavior="menu" onLinkClick={handlePivotItemClick}
+          <Pivot overflowBehavior='menu'
+            overflowAriaLabel={translateMessage('More items')}
+            onLinkClick={handlePivotItemClick}
             className={'pivot-response'} >
             {getPivotItems()}
             <PivotItem

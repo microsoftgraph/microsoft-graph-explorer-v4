@@ -1,4 +1,4 @@
-import { Announced, getTheme, IStackTokens, ITheme, styled } from '@fluentui/react';
+import { Announced, getTheme, ITheme, styled } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -24,24 +24,18 @@ import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
-import {
-  appTitleDisplayOnFullScreen,
-  appTitleDisplayOnMobileScreen
-} from './app-sections/AppTitle';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { StatusMessages, TermsOfUseMessage } from './app-sections';
 import { appStyles } from './App.styles';
-import { Authentication } from './authentication';
 import { classNames } from './classnames';
 import { createShareLink } from './common/share';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
-import { Settings } from './settings';
 import { Sidebar } from './sidebar/Sidebar';
-import { FeedbackButton } from './app-sections/FeedbackButton';
+import { MainHeader } from './main-header/MainHeader';
 
-interface IAppProps {
+export interface IAppProps {
   theme?: ITheme;
   styles?: object;
   intl: any;
@@ -295,30 +289,6 @@ class App extends Component<IAppProps, IAppState> {
 
   };
 
-  public displayAuthenticationSection = (minimised: boolean) => {
-    return (
-      <div
-        style={{
-          display: minimised ? 'block' : 'flex',
-          justifyContent: minimised ? '' : 'center',
-          alignItems: minimised ? '' : 'center',
-          marginLeft: minimised ? '' : '-0.9em'
-        }}>
-        <div className={minimised ? '' : 'col-9'}>
-          <Authentication />
-        </div>
-        {minimised &&
-          <div className={minimised ? '' : 'col-2'} style={{ position: 'relative', left: '-9px' }}>
-            <FeedbackButton />
-          </div>
-        }
-        <div className={minimised ? '' : 'col-2'}>
-          <Settings />
-        </div>
-      </div>
-    );
-  };
-
   private setSidebarProperties() {
     const { sidebarProperties } = this.props;
     const properties = { ...sidebarProperties };
@@ -409,11 +379,6 @@ class App extends Component<IAppProps, IAppState> {
       mobileScreen, showSidebar
     });
 
-    const stackTokens: IStackTokens = {
-      childrenGap: 10,
-      padding: 10
-    };
-
     if (mobileScreen) {
       layout = sidebarWidth = 'ms-Grid-col ms-sm12';
       sideWidth = '100%';
@@ -431,6 +396,11 @@ class App extends Component<IAppProps, IAppState> {
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
+          <MainHeader
+            minimised={minimised}
+            toggleSidebar={this.toggleSidebar}
+            mobileScreen={mobileScreen}
+          />
           <Announced
             message={
               !showSidebar
@@ -443,7 +413,6 @@ class App extends Component<IAppProps, IAppState> {
             marginRight: showSidebar || (graphExplorerMode === Mode.TryIt) && '-20px',
             flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row'
           }}>
-
             {graphExplorerMode === Mode.Complete && (
               <Resizable
                 onResize={(e: any, direction: any, ref: any) => {
@@ -452,7 +421,7 @@ class App extends Component<IAppProps, IAppState> {
                   }
                 }}
                 className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth} resizable-sidebar`}
-                minWidth={'4'}
+                minWidth={'71'}
                 maxWidth={maxWidth}
                 enable={{
                   right: true
@@ -460,32 +429,16 @@ class App extends Component<IAppProps, IAppState> {
                 handleClasses={{
                   right: classes.vResizeHandle
                 }}
-                bounds={'window'}
+                bounds={'parent'}
                 size={{
                   width: sideWidth,
                   height: ''
                 }}
               >
-
-                {mobileScreen && appTitleDisplayOnMobileScreen(
-                  stackTokens,
-                  classes,
-                  this.toggleSidebar
-                )}
-
-                {!mobileScreen && appTitleDisplayOnFullScreen(
-                  classes,
-                  minimised,
-                  this.toggleSidebar
-                )}
-
-                <hr className={classes.separator} />
-
-                {this.displayAuthenticationSection(minimised)}
-                <hr className={classes.separator} />
-
-                {showSidebar && ( <Sidebar currentTab = { this.state.sidebarTabSelection }
-                  setSidebarTabSelection = { this.setSidebarTabSelection } /> ) }
+                <Sidebar currentTab = { this.state.sidebarTabSelection }
+                  setSidebarTabSelection = { this.setSidebarTabSelection } showSidebar={showSidebar}
+                  toggleSidebar={this.toggleSidebar}
+                  mobileScreen={mobileScreen}/>
               </Resizable>
             )}
             {graphExplorerMode === Mode.TryIt &&
@@ -502,13 +455,10 @@ class App extends Component<IAppProps, IAppState> {
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
                   height: contentHeight
                 }}
-                style={!sidebarProperties.showSidebar && !mobileScreen ? { marginLeft: '8px' } : {}}
+                style={!sidebarProperties.showSidebar && !mobileScreen ? { marginLeft: '8px', flex: 1 } : {flex: 1}}
               >
-                <div style={{ marginBottom: 8 }} >
+                <div style={{ marginBottom: 8}} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                    <TermsOfUseMessage />
-                  </div>
                 </div>
 
                 <div>
@@ -519,6 +469,9 @@ class App extends Component<IAppProps, IAppState> {
                 </div>
               </Resizable>
             )}
+          </div>
+          <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
+            <TermsOfUseMessage />
           </div>
         </div>
       </ThemeContext.Provider>

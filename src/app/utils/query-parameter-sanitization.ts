@@ -6,7 +6,8 @@ const QUERY_FUNCTIONS = [
   'contains',
   'substring',
   'indexof',
-  'concat'
+  'concat',
+  'isof'
 ];
 const ARITHMETIC_OPERATORS = ['add', 'sub', 'mul', 'div', 'divby', 'mod'];
 const COMPARISON_OPERATORS = ['eq', 'ne', 'gt', 'ge', 'lt', 'le'];
@@ -21,19 +22,18 @@ const POSITIVE_INTEGER_REGEX = /^[1-9]\d*$/;
 const MEDIA_TYPE_REGEX = /^(([a-z]+\/)?\w[\w+-.]*)$/i;
 // Matches the format key=value
 const KEY_VALUE_REGEX = /^[a-z]+=[a-z]+$/i;
-// Matches property name patterns e.g. displayName or from/emailAddress/address or microsoft.graph.itemAttachment/item
-const PROPERTY_NAME_REGEX =
-  /^((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)$/i;
+// Matches property name patterns e.g. displayName or from/emailAddress/address
+// or microsoft.graph.itemAttachment or microsoft.graph.itemAttachment/item
+const PROPERTY_NAME_REGEX = /^[a-z]+([\.\/](?=([a-z]+))\2)*$/i;
 // Matches pattterns within quotes e.g "displayName: Gupta"
 const QUOTED_TEXT_REGEX = /^["']([^"]*)['"]$/;
 // Matches segments of $filter query option values e.g. isRead eq false will match isRead, eq, false
 // eslint-disable-next-line max-len
-const FILTER_SEGMENT_REGEX =
-  /(((((microsoft.graph(.[a-z]+)+)|[a-z]+)(\/?\b[a-z]+\b)+)|[a-z]+)\(.*?\))|("[^\"]+")|('[^\']+')|\(.*?\)|[^\s]+/gi;
+const FILTER_SEGMENT_REGEX = /\S+\(.*\)|\(.*?\)|\S+/gi;
 // Matches segments of $search query option e.g.
 // "description:One" AND ("displayName:Video" OR "displayName:Drive") will match
 // "description:One", AND, ("displayName:Video" OR "displayName:Drive")
-const SEARCH_SEGMENT_REGEX = /\(.*\)|(['"][\w\s]+['"])|[^\s]+/g;
+const SEARCH_SEGMENT_REGEX = /\(.*\)|(['"][\w\s]+['"])|\S+/g;
 // Matches comma separating segments of $expand query option  e.g. children($select=id,name),customer
 // will match comma between children($select=id,name) and customer
 const EXPAND_SEGMENT_REGEX = /,(?![^()]*\))/g;
@@ -54,7 +54,7 @@ function isKeyValuePair(str: string): boolean {
   return KEY_VALUE_REGEX.test(str);
 }
 
-function isPropertyName(str: string): boolean {
+export function isPropertyName(str: string): boolean {
   return PROPERTY_NAME_REGEX.test(str);
 }
 
@@ -222,7 +222,7 @@ function sanitizeOrderByQueryOptionValue(queryOptionValue: string): string {
 
     // Check if sort direction has been included
     if (expressionParts.length > 1) {
-      let sortDirection = expressionParts[1].trim();
+      let sortDirection = expressionParts[1].trim().toLowerCase();
       if (sortDirection) {
         if (sortDirection !== 'asc' && sortDirection !== 'desc') {
           sortDirection = '<unexpected-value>';
@@ -384,7 +384,7 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
     if (LAMBDA_OPERATORS.includes(lambdaOperator)) {
       propertyName = propertyName.substring(0, propertyName.length - 4);
       if (!isPropertyName(propertyName)) {
-        propertyName = '<property-name>';
+        propertyName = '<property>';
       }
       let textWithinBrackets = segment
         .substring(openingBracketIndex + 1, segment.length - 1)
