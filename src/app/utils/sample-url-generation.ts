@@ -87,3 +87,8 @@ export function hasWhiteSpace(url: string): boolean {
     whitespaceChars.some((char) => parts[0].trim().includes(char));
 }
 
+export function hasPlaceHolder(url: string): boolean {
+  const placeHolderChars = ['{', '}'];
+  return placeHolderChars.length > 1 && placeHolderChars.some((char) => url.includes(char));
+}
+

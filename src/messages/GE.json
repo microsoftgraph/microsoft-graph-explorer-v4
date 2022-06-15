@@ -440,5 +440,7 @@
   "Add to collection": "Add to collection",
   "Switch to beta": "Switch to beta",
   "Resources": "Resources",
-  "More items": "More items"
+  "More items": "More items",
+  "These placeholders require values": "These placeholders require values",
+  "This placeholder requires a value": "This placeholder requires a value"
 }
