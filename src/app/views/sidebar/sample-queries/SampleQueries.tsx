@@ -151,7 +151,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
               >
                 <Icon
                   iconName='Lock'
-                  title={signInText}
                   style={{
                     fontSize: 15,
                     height: 10,
