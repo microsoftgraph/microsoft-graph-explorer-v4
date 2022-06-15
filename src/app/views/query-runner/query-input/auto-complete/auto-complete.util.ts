@@ -33,7 +33,7 @@ function getErrorMessage(queryUrl: string) {
     return translateMessage('Invalid whitespace in URL');
   }
   if (hasPlaceHolder(queryUrl)) {
-    const matches = queryUrl.toString().match(/[^{\}]+(?=})/g)!;
+    const matches = queryUrl.toString().match(/[^{\\}]+(?=})/g)!;
     if (matches.length === 1) {
       return translateMessage('This placeholder requires a value') + ': {' + matches[0] + '}';
     }
