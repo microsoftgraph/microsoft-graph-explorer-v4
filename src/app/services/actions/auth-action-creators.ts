@@ -42,8 +42,8 @@ export function signOut() {
       authenticationWrapper.logOut();
     } else {
       authenticationWrapper.logOutPopUp();
-      dispatch(signOutSuccess(false));
     }
+    dispatch(signOutSuccess(true));
   };
 }
 
