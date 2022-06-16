@@ -1,4 +1,4 @@
-import { hasPlaceHolder, hasWhiteSpace } from '../../../../utils/sample-url-generation';
+import { hasWhiteSpace } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 
 function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
@@ -31,18 +31,6 @@ function getErrorMessage(queryUrl: string) {
   }
   if (hasWhiteSpace(queryUrl)) {
     return translateMessage('Invalid whitespace in URL');
-  }
-  if (hasPlaceHolder(queryUrl)) {
-    const matches = queryUrl.toString().match(/[^{\\}]+(?=})/g)!;
-    if (matches.length === 1) {
-      return translateMessage('This placeholder requires a value') + ': {' + matches[0] + '}';
-    }
-
-    let toCorrect = ': ';
-    matches.forEach(element => {
-      toCorrect += '{' + element + '} ';
-    });
-    return translateMessage('These placeholders require values') + toCorrect;
   }
   return '';
 }
