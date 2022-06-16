@@ -421,7 +421,7 @@
   "Show methods": "Mostrar métodos",
   "Set Query": "Establecer consulta",
   "Query parameters": "Parámetros de consulta",
-  "Preview collection": "Vista previa de la colección",
+  "Preview collection": "Previsualizar colección",
   "Download postman collection": "Descargar colección Postman",
   "Export list as a Postman collection message": "Se puede exportar toda la lista como una colección de Postman. Si hay elementos en la lista que no desea, selecciónelos para quitarlos.",
   "Copied": "Copiado",
@@ -436,5 +436,9 @@
   "Delete collection": "Eliminar colección",
   "Leverage libraries": "Aproveche la eficacia de nuestras bibliotecas de cliente. Descargar el",
   "Client library": "biblioteca de cliente aquí ",
-  "SDKs documentation": "Para obtener más información sobre nuestros SDK, vaya a la página de documentación en "
+  "SDKs documentation": "Para obtener más información sobre nuestros SDK, vaya a la página de documentación en ",
+  "Add to collection": "Agregar a la colección",
+  "Switch to beta": "Cambiar a beta",
+  "Resources": "Recursos",
+  "More items": "Más elementos"
 }

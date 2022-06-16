@@ -422,7 +422,7 @@
   "Set Query": "设置查询",
   "Query parameters": "查询参数",
   "Preview collection": "预览集合",
-  "Download postman collection": "下载 postman 集合",
+  "Download postman collection": "下载 Postman 集合",
   "Export list as a Postman collection message": "可以将整个列表导出为 Postman 集合。如果列表中存在你不想要的项目，请选择要删除的项。",
   "Copied": "已复制",
   "Invalid whitespace in URL": "URL 中的无效空白",
@@ -436,5 +436,9 @@
   "Delete collection": "删除集合",
   "Leverage libraries": "充分利用客户端库的力量。立即下载",
   "Client library": "在此处的客户端库 ",
-  "SDKs documentation": "若要了解更多有关我们的 SDK 的信息，请转到文档页 "
+  "SDKs documentation": "若要阅读更多有关我们 SDK 的信息，请转到文档页： ",
+  "Add to collection": "添加到集合",
+  "Switch to beta": "切换到 beta 版",
+  "Resources": "资源",
+  "More items": "更多项目"
 }

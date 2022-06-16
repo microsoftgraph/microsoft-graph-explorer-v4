@@ -18,10 +18,6 @@ function GetSnippets() {
       sdkDownloadLink: 'https://aka.ms/graphjavasdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     },
-    'Objective-C': {
-      sdkDownloadLink: 'https://aka.ms/objective-c-sdk',
-      sdkDocLink: 'https://aka.ms/sdk-doc'
-    },
     'Go': {
       sdkDownloadLink: 'https://aka.ms/graphgosdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
