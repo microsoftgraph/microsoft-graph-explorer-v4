@@ -21,6 +21,8 @@ export const ShareQuery = () => {
   const [shareLink, setShareLink] = useState(() => createShareLink(sampleQuery));
 
   useEffect(() => {
+    const sanitizedQueryUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+    sampleQuery.sampleUrl = sanitizedQueryUrl;
     setShareLink(createShareLink(sampleQuery));
   }, [sampleQuery]);
 
@@ -66,7 +68,6 @@ export const ShareQuery = () => {
           styles={shareButtonStyles}
           role={'button'}
           ariaLabel={translateMessage('Share Query')}
-          title={translateMessage('Share Query')}
         />
       </TooltipHost>
       <Dialog

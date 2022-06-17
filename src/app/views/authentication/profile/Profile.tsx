@@ -197,7 +197,7 @@ const Profile = (props: any) => {
           role='dialog'
           gapSpace={0}
           target={`#${buttonId}`}
-          isBeakVisible={true}
+          isBeakVisible={false}
           beakWidth={10}
           onDismiss={toggleIsCalloutVisible}
           setInitialFocus

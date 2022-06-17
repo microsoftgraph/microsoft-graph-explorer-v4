@@ -118,8 +118,8 @@ export const sidebarStyles = (theme: ITheme) => {
     },
     sidebarButtons: {
       root:{
-        height: 50,
-        width: 50,
+        height: 40,
+        width: 40,
         ':hover': {
           background: `${theme.palette.neutralLight} !important`
         }
