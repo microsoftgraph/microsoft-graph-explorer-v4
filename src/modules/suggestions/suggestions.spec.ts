@@ -1,11 +1,11 @@
 import { suggestions } from '.';
 
-describe('Tests suggestions fetching ', () => {
+describe('Suggestions should ', () => {
   beforeEach(() => {
     // eslint-disable-next-line no-undef
     fetchMock.resetMocks();
   });
-  it('Returns null when getSuggestions fails', () => {
+  it('return null when getSuggestions fails', () => {
     const url = 'https://api.github.com/search/users?q=tom';
     const api = 'https://api.github.com';
     const version = 'v1';
@@ -16,7 +16,7 @@ describe('Tests suggestions fetching ', () => {
       .catch((e: Error) => { throw e });
   })
 
-  it('Returns defined data when correct response is received', () => {
+  it('return defined data when correct response is received', () => {
     fetchMock.mockResponse(JSON.stringify({
       ok: true,
       status: 200,

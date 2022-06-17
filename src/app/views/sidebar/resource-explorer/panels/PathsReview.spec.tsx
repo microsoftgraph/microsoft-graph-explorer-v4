@@ -59,12 +59,12 @@ jest.mock('react-redux', () => {
   }
 })
 
-describe('Tests postman collections panel', () => {
-  it('Renders the path review panel of resource explorer', () => {
+describe('Paths review panel rendering', () => {
+  it('should render the paths review panel of resource explorer with selected resources', () => {
     renderPathsReview();
     expect(screen.getByText(/Selected resources preview/i)).toBeDefined();
     expect(screen.getByRole('button', { name: /close/i})).toBeDefined();
     expect(screen.getByText(/you can export the entire list as a postman collection/i));
     expect(screen.getByRole('button', { name: /download postman collection/i})).toBeDefined();
-  })
+  });
 })

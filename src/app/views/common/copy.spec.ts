@@ -1,7 +1,7 @@
 import { genericCopy } from './copy';
 
-describe('Tests copy.ts', () => {
-  it('Tests generic copy which resolves to an empty object ', () => {
+describe('Tests generic copy.ts', () => {
+  it('should resolve to \'copied\' when genericCopy is called with a string', () => {
     document.execCommand = jest.fn();
     genericCopy('dummy text')
       .then((response: any) => {

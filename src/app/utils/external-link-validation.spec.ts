@@ -23,7 +23,7 @@ describe('External link', () => {
     });
   });
 
-  it('Tests validateExternal link which throws an error for a failed fetch operation', () => {
+  it('should resolve to undefined when validateExternalLink api fetch errors out', () => {
     const url = 'https://someurl';
     const componentName = 'TestComponent';
     const sampleId = '2345';

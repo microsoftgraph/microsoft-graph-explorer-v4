@@ -50,8 +50,8 @@ jest.mock('@microsoft/applicationinsights-react-js', () => ({
   ReactPlugin: Object
 }))
 
-describe('Tests History Tab', () => {
-  it('Renders history tab without crashing', () => {
+describe('History tab rendering', () => {
+  it('should render history tab and its children without crashing', () => {
     renderHistoryTab();
     expect(screen.getByRole('searchbox')).toBeDefined();
     screen.getByRole('button', { name: /actions menu/i});

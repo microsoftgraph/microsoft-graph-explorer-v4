@@ -121,13 +121,13 @@ store.getState = () => {
     ...currentState
   }
 }
-describe('Test autocomplete action creators', () => {
+describe('Autocomplete action creators', () => {
   beforeEach(() => {
     // eslint-disable-next-line no-undef
     fetchMock.resetMocks();
   });
 
-  it('Tests autocomplete error', () => {
+  it('should dispatch AUTOCOMPLETE_FETCH_ERROR with error payload when fetchAutocompleteError() is called', () => {
     // Arrange
     const errorObject = {};
     const expectedAction = {
@@ -142,7 +142,8 @@ describe('Test autocomplete action creators', () => {
     expect(action).toEqual(expectedAction)
   })
 
-  it('Tests autocomplete fetch success', () => {
+  // eslint-disable-next-line max-len
+  it('should dispatch AUTOCOMPLETE_FETCH_SUCCESS with autocomplete options when fetchAutocompleteSuccess is called', () => {
     // Arrange
     const response = {
       url: 'https://graph.microsoft.com/v1.0/',
@@ -165,7 +166,7 @@ describe('Test autocomplete action creators', () => {
     expect(action).toEqual(expectedAction);
   })
 
-  it('Tests autocomplete fetch pending', () => {
+  it('should dispatch AUTOCOMPLETE_FETCH_PENDING when fetchAutocompletePending() is called', () => {
     // Arrange
     const expectedAction = {
       type: AUTOCOMPLETE_FETCH_PENDING
@@ -195,7 +196,7 @@ describe('Test autocomplete action creators', () => {
     }
   })
 
-  describe('Load autocomplete suggestions thunk', () => {
+  describe('Autocomplete suggestions thunk', () => {
     it('Should begin the api call and pull autocomplete suggestions, but fail and return an empty array ', () => {
       // Arrange
       const expectedResponse = {
@@ -219,7 +220,7 @@ describe('Test autocomplete action creators', () => {
       expect(store_.getActions()).toEqual([]);
     });
 
-    it('Dispatches autocomplete_fetch_error when fetch fails', () => {
+    it('should dispatch AUTOCOMPLETE_FETCH_ERROR when fetch does not return autoOptions', () => {
       // Arrange
       const expectedAction = {
         type: AUTOCOMPLETE_FETCH_ERROR,
@@ -229,18 +230,12 @@ describe('Test autocomplete action creators', () => {
 
       // Act
       // @ts-ignore
-      store_.dispatch(fetchAutoCompleteOptions('https://graph.microsoft.com/v1.0/', 'v1.0'))
+      store_.dispatch(fetchAutoCompleteOptions('https://graph.microsoft.com/v1.0/me?', 'v1.0'))
         .then(() => {
           // Assert
           expect(store_.getActions()).toEqual([expectedAction]);
         })
 
-    })
-
-    it('Fetches autocomplete options', () => {
-      // @ts-ignore
-      const response = store.dispatch(fetchAutoCompleteOptions('https://graph.microsoft.com/v1.0/', 'v1.0'));
-      expect(response).toBe(undefined);
     })
   })
 })
