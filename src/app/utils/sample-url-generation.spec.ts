@@ -1,4 +1,4 @@
-import { hasWhiteSpace, parseSampleUrl } from './sample-url-generation';
+import { hasPlaceHolders, hasWhiteSpace, parseSampleUrl } from './sample-url-generation';
 
 describe('Sample Url Generation', () => {
 
@@ -79,14 +79,14 @@ describe('Sample Url Generation', () => {
 
   it('replaces whitespace with + sign', () => {
     const search = '?filter=displayName eq \'All Company\'';
-    const parsedSearch= '?filter=displayName+eq+\'All+Company\'';
+    const parsedSearch = '?filter=displayName+eq+\'All+Company\'';
 
     const url = `https://graph.microsoft.com/v1.0/groups${search}`;
 
     const expectedUrl = {
       requestUrl: 'groups',
       queryVersion: 'v1.0',
-      sampleUrl:`https://graph.microsoft.com/v1.0/groups${parsedSearch}` ,
+      sampleUrl: `https://graph.microsoft.com/v1.0/groups${parsedSearch}`,
       search: parsedSearch
     };
 
@@ -117,4 +117,21 @@ describe('hasWhiteSpaces should', () => {
     });
   });
 });
+
+describe('hasPlaceHolders should', () => {
+  const urls = [
+    { url: ' https://graph.microsoft.com/v1.0/me/messages/{message-id}', output: true },
+    { url: ' https://graph.microsoft.com/v1.0/me/messages/{message-id', output: false },
+    {
+      url: ' https://graph.microsoft.com/v1.0/sites/{site-id}/drive/items/{item-id}/versions/{version-id}/content',
+      output: true
+    }
+  ];
+  urls.forEach(invalidUrl => {
+    it(`validate placeholders in the url: ${invalidUrl.url}`, () => {
+      expect(hasPlaceHolders(invalidUrl.url)).toBe(invalidUrl.output);
+    });
+  });
+});
+
 

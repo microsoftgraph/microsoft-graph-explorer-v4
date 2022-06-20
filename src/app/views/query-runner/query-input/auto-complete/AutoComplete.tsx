@@ -87,19 +87,19 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const onKeyDown = (event: any) => {
     switch (event.keyCode) {
       case KeyCodes.enter:
+        event.preventDefault();
         if (shouldShowSuggestions) {
           const selected = suggestions[activeSuggestion];
           appendSuggestionToUrl(selected);
         } else {
-          event.preventDefault();
           props.contentChanged(queryUrl);
           props.runQuery();
         }
         break;
 
       case KeyCodes.tab:
+        event.preventDefault();
         if (shouldShowSuggestions) {
-          event.preventDefault();
           const selected = suggestions[activeSuggestion];
           appendSuggestionToUrl(selected);
         }

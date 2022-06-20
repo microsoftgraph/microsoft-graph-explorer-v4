@@ -448,6 +448,5 @@
   "sign in other account": "Sign in with a different account",
   "Help": "Help",
   "Documentation": "Documentation",
-  "These placeholders require values": "These placeholders require values",
-  "This placeholder requires a value": "This placeholder requires a value"
+  "Parts between {} need to be replaced with real values": "Parts between {} need to be replaced with real values"
 }

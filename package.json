@@ -69,7 +69,7 @@
                 "lint": "eslint . \"**/*.{js,ts,tsx}\"",
                 "start-server": "npm start",
                 "ci": "start-server-and-test start-server http://localhost:3000 test-ci",
-                "test-ci": "node scripts/test.js --no-watch -- -f \"src/tests/accessibility/accessibility.spec.ts\" -t \"Graph Explorer accessibility\"",
+                "test-ci": "node scripts/test.js --no-watch accessibility.spec.ts",
                 "prebuild:prod": "standard-version",
                 "build:prod": "npm run build",
                 "bump": "standard-version --skip.tag --skip.changelog",

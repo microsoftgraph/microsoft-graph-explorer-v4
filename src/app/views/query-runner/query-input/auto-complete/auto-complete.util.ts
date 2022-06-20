@@ -1,4 +1,4 @@
-import { hasWhiteSpace } from '../../../../utils/sample-url-generation';
+import { hasPlaceHolders, hasWhiteSpace } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 
 function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
@@ -31,6 +31,9 @@ function getErrorMessage(queryUrl: string) {
   }
   if (hasWhiteSpace(queryUrl)) {
     return translateMessage('Invalid whitespace in URL');
+  }
+  if (hasPlaceHolders(queryUrl)) {
+    return translateMessage('Parts between {} need to be replaced with real values');
   }
   return '';
 }
