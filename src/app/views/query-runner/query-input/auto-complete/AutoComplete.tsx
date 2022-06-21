@@ -98,8 +98,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
         break;
 
       case KeyCodes.tab:
-        event.preventDefault();
         if (shouldShowSuggestions) {
+          event.preventDefault();
           const selected = suggestions[activeSuggestion];
           appendSuggestionToUrl(selected);
         }
