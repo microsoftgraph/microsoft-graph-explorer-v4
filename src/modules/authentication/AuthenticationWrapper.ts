@@ -71,9 +71,16 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
   }
 
-  public logOut() {
-    this.deleteHomeAccountId();
-    msalApplication.logoutRedirect();
+  public async logOut() {
+    const homeAccountId = this.getHomeAccountId();
+    if( homeAccountId) {
+      const currentAccount = msalApplication.getAccountByHomeId(homeAccountId);
+      const logoutHint = currentAccount!.idTokenClaims?.login_hint;
+      await msalApplication.logoutPopup({ logoutHint });
+    } else {
+      this.deleteHomeAccountId();
+      await msalApplication.logoutRedirect();
+    }
   }
 
   public async logOutPopUp() {
@@ -161,7 +168,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       return result;
     } catch (error: any) {
       if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
-
         return this.loginWithInteraction(silentRequest.scopes, sessionId);
 
       } else if (signInAuthError(error)) {

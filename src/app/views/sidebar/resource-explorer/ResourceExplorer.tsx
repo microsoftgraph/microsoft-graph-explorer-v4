@@ -180,7 +180,7 @@ const unstyledResourceExplorer = (props: any) => {
   }
 
   return (
-    <section>
+    <section style = {{marginTop: '8px'}}>
       {!isolated && <>
         <SearchBox
           placeholder={translateMessage('Search resources')}

@@ -21,6 +21,8 @@ export const ShareQuery = () => {
   const [shareLink, setShareLink] = useState(() => createShareLink(sampleQuery));
 
   useEffect(() => {
+    const sanitizedQueryUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+    sampleQuery.sampleUrl = sanitizedQueryUrl;
     setShareLink(createShareLink(sampleQuery));
   }, [sampleQuery]);
 

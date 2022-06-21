@@ -1,6 +1,6 @@
 import { IAction } from '../../../types/action';
 import { CLEAR_QUERY_STATUS,
-  GET_CONSENT_ERROR, QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS,
+  GET_CONSENT_ERROR, LOGOUT_SUCCESS, QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS,
   VIEW_HISTORY_ITEM_SUCCESS } from '../redux-constants';
 
 export function queryRunnerStatus(state = {}, action: IAction): any {
@@ -14,6 +14,8 @@ export function queryRunnerStatus(state = {}, action: IAction): any {
     case CLEAR_QUERY_STATUS:
       return null;
     case VIEW_HISTORY_ITEM_SUCCESS:
+      return null;
+    case LOGOUT_SUCCESS:
       return null;
     default:
       return state;
