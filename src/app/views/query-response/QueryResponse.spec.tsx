@@ -33,7 +33,8 @@ const renderQueryResponse = () => {
     actions: {
       getConsent: jest.fn()
     },
-    mobileScreen: false
+    mobileScreen: false,
+    setTabSelection: jest.fn()
   }
 
   return render(
