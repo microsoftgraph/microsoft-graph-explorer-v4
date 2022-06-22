@@ -465,7 +465,7 @@ class App extends Component<IAppProps, IAppState> {
                   <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                     <StatusMessages />
                   </div>
-                  <QueryResponse verb={this.state.selectedVerb}/>
+                  <QueryResponse verb={this.state.selectedVerb} />
                 </div>
               </Resizable>
             )}
