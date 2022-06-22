@@ -16,8 +16,6 @@ export interface IQueryResponseProps {
     getConsent: Function;
   };
   mobileScreen: boolean;
-  currentTab?: string;
-  setTabSelection: Function;
 }
 
 export interface IQueryResponseState {

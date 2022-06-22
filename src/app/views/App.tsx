@@ -60,7 +60,6 @@ interface IAppState {
   mobileScreen: boolean;
   hideDialog: boolean;
   sidebarTabSelection: string;
-  responseTabSelection: string;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -75,20 +74,13 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: 'GET',
       mobileScreen: false,
       hideDialog: true,
-      sidebarTabSelection: 'sample-queries',
-      responseTabSelection: 'response-preview'
+      sidebarTabSelection: 'sample-queries'
     };
   }
 
   private setSidebarTabSelection = (selectedTab : string) => {
     this.setState({
       sidebarTabSelection: selectedTab
-    });
-  }
-
-  private setTabSelection = (selectedTab: string) => {
-    this.setState({
-      responseTabSelection: selectedTab
     });
   }
 
@@ -473,8 +465,7 @@ class App extends Component<IAppProps, IAppState> {
                   <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                     <StatusMessages />
                   </div>
-                  <QueryResponse verb={this.state.selectedVerb} currentTab={this.state.responseTabSelection}
-                    setTabSelection={this.setTabSelection}/>
+                  <QueryResponse verb={this.state.selectedVerb}/>
                 </div>
               </Resizable>
             )}

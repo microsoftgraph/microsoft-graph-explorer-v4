@@ -30,15 +30,11 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [query] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
   const { sampleQuery, dimensions } = useSelector((state: IRootState) => state);
-  const currentTab = props.currentTab;
-  console.log('Key to be set is ', currentTab);
+  const [currentTab, setCurrentTab] = useState<string>('response-preview');
 
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
   }, [dimensions]);
-  useEffect(() => {
-    console.log('Rerendering')
-  }, [currentTab, showModal]);
 
   const {
     intl: { messages }
@@ -49,7 +45,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
   };
 
   const toggleExpandResponse = () => {
-    if(showModal){ console.log('Turning it off'); props.setTabSelection(currentTab); }
     setShowModal(!showModal);
     dispatch(expandResponseArea(!showModal));
   };
@@ -73,9 +68,9 @@ const QueryResponse = (props: IQueryResponseProps) => {
       return;
     }
     onPivotItemClick(sampleQuery, pivotItem);
-    console.log('Item key is', pivotItem.props.itemKey);
-    props.setTabSelection(pivotItem.props.itemKey);
-
+    if(pivotItem.props.itemKey !== 'expand-response') {
+      setCurrentTab(pivotItem.props.itemKey!);
+    }
     toggleModal(pivotItem);
   };
 
@@ -90,9 +85,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
     console.log('I was clicked')
     if(!pivotItem){ return ;}
     console.log('New pivot item is ', pivotItem.props.itemKey);
-    props.setTabSelection(pivotItem.props.itemKey);
-    // setCurrentTab(pivotItem.props.itemKey === 'expand-response' ? 'response-preview' :
-    //   pivotItem.props.itemKey!);
+    setCurrentTab(pivotItem.props.itemKey!);
     onPivotItemClick(sampleQuery, pivotItem)
   }
 
@@ -136,7 +129,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
             overflowAriaLabel={translateMessage('More items')}
             onLinkClick={handlePivotItemClick}
             className={'pivot-response'}
-            defaultSelectedKey={'response-headers'}
+            selectedKey={currentTab}
           >
             {getPivotItems()}
             <PivotItem
@@ -171,7 +164,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
             onClick={toggleExpandResponse}
           />
           <Pivot className='pivot-response' onLinkClick={(pivotItem) => onModalPivotItemClicked(pivotItem)}
-            defaultSelectedKey={'response-headers'}>
+            selectedKey={currentTab}>
             {getPivotItems()}
           </Pivot>
         </Modal>
