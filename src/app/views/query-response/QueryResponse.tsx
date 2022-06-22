@@ -82,11 +82,9 @@ const QueryResponse = (props: IQueryResponseProps) => {
   };
 
   const onModalPivotItemClicked = (pivotItem? : PivotItem) => {
-    console.log('I was clicked')
     if(!pivotItem){ return ;}
-    console.log('New pivot item is ', pivotItem.props.itemKey);
     setCurrentTab(pivotItem.props.itemKey!);
-    onPivotItemClick(sampleQuery, pivotItem)
+    onPivotItemClick(sampleQuery, pivotItem);
   }
 
   const renderItemLink = (link: any) => {
@@ -163,7 +161,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
             ariaLabel={translateMessage('Close expanded response area')}
             onClick={toggleExpandResponse}
           />
-          <Pivot className='pivot-response' onLinkClick={(pivotItem) => onModalPivotItemClicked(pivotItem)}
+          <Pivot className='pivot-response'
+            onLinkClick={(pivotItem) => onModalPivotItemClicked(pivotItem)}
             selectedKey={currentTab}>
             {getPivotItems()}
           </Pivot>
