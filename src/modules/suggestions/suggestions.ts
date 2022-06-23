@@ -80,6 +80,9 @@ class Suggestions implements ISuggestions {
     const openApiUrl = `${api}/openapi?url=/${url}&style=geautocomplete&graphVersion=${version}`;
     const options: IRequestOptions = { headers };
     try {
+      if (hasBannedPaths()) {
+        throw new Error('this call will not get good info');
+      }
       const response = await fetch(openApiUrl, options);
       if (response.ok) {
         const openApiResponse: IOpenApiResponse = await response.json();
@@ -94,6 +97,11 @@ class Suggestions implements ISuggestions {
       throw new Error(response.statusText);
     } catch (error) {
       return null;
+    }
+
+    function hasBannedPaths() {
+      const banned = ['undefined', 'unknown'];
+      return banned.some((char) => url.includes(char));
     }
   }
 }
