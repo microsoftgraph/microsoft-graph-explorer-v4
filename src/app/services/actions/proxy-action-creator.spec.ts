@@ -9,7 +9,7 @@ describe('Tests Proxy-Action-Creators', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
-  it('dispatches SET_GRAPH_PROXY_URL when setGraphProxyUrl is called', () => {
+  it('should dispatch SET_GRAPH_PROXY_URL when setGraphProxyUrl is called', () => {
     // Arrange
     const response: string = 'https://proxy.apisandbox.msdn.microsoft.com/svc';
     const expectedAction = {
@@ -24,7 +24,7 @@ describe('Tests Proxy-Action-Creators', () => {
     expect(action).toEqual(expectedAction);
   })
 
-  it('Throws an error and dispatches SET_GRAPH_PROXY_URL', () => {
+  it('should dispatch SET_GRAPH_PROXY_URL when getGraphProxyUrl() is called', () => {
     // Arrange
     fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
     const expectedAction = {
@@ -41,7 +41,6 @@ describe('Tests Proxy-Action-Creators', () => {
     store.dispatch(getGraphProxyUrl()).then(() => {
       expect(store.getActions()).toEqual([expectedAction]);
     })
-      .catch((e: Error) => { throw e })
-
+      .catch((e: Error) => { throw e });
   })
 })

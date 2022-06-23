@@ -2,8 +2,8 @@ import { setDevxApiUrl } from '../../../app/services/actions/devxApi-action-crea
 import { SET_DEVX_API_URL_SUCCESS } from '../../../app/services/redux-constants';
 import { IDevxAPI } from '../../../types/devx-api';
 
-describe('Set devx api url', () => {
-  it('Changes theme to dark', () => {
+describe('Devx api url', () => {
+  it('should dispatch SET_DEVX_API_URL_SUCCESS when setDevcApiUrl({IDevxAPI object}) is called', () => {
 
     // Arrange
     const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
