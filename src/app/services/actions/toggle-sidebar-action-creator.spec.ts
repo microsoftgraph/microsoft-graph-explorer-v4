@@ -8,7 +8,7 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('Toggle Sidebar Action Creators', () => {
-  it('Sets sidebar toggle to visible', () => {
+  it('should dispatch TOGGLE_SIDEBAR_SUCCESS and  set sidebar toggle to visible when toggleSidebar() is called', () => {
     const expectedActions = [
       {
         type: TOGGLE_SIDEBAR_SUCCESS,

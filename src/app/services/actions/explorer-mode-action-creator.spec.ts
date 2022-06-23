@@ -9,7 +9,7 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('Graph Explorer Mode Action Creators', () => {
-  it('Sets Graph Explorer Mode to TryIt', () => {
+  it('should dispatch SET_GRAPH_EXPLORER_MODE_SUCCESS when setGraphExplorerMode() is called', () => {
     const expectedActions = [
       {
         type: SET_GRAPH_EXPLORER_MODE_SUCCESS,

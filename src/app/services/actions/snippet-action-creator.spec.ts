@@ -13,8 +13,8 @@ import { Header, IQuery } from '../../../types/query-runner';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('snippet actions', () => {
-  it('dispatches GET_SNIPPET_SUCCESS when getSnippetSuccess is called', () => {
+describe('Snippet actions creators', () => {
+  it('should dispatch GET_SNIPPET_SUCCESS when getSnippetSuccess() is called', () => {
     const snippet = 'GraphServiceClient graphClient = new GraphServiceClient( authProvider );';
 
     const expectedAction = [{
@@ -34,7 +34,7 @@ describe('snippet actions', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('dispatches GET_SNIPPET_PENDING when getSnippetPending is called', () => {
+  it('should dispatch GET_SNIPPET_PENDING when getSnippetPending() is called', () => {
     const expectedAction = {
       type: GET_SNIPPET_PENDING
     };
@@ -44,7 +44,7 @@ describe('snippet actions', () => {
     expect(action).toEqual(expectedAction);
   })
 
-  it('dispatches GET_SNIPPET_ERROR when getSnippetError is called', () => {
+  it('should dispatch GET_SNIPPET_ERROR when getSnippetError() is called', () => {
     const response = {};
     const expectedAction = {
       type: GET_SNIPPET_ERROR,
@@ -56,7 +56,7 @@ describe('snippet actions', () => {
     expect(action).toEqual(expectedAction);
   })
 
-  it('dispatches GET_SNIPPET_ERROR when getSnippet function fails', () => {
+  it('should dispatch GET_SNIPPET_ERROR when getSnippet() api call errors out', () => {
     // Arrange
     const expectedActions = [
       {
@@ -95,7 +95,7 @@ describe('snippet actions', () => {
 
   });
 
-  it('Constructs headers string to be sent on the wire', () => {
+  it('should construct headers string to be sent with the request for obtaining code snippets', () => {
     // Arrange
     const headersWithoutContentType: Header[] = [
       { name: 'ConsistencyLevel', value: 'eventual' },
