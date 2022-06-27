@@ -22,7 +22,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
   const currentTheme = getTheme();
   const { NODE_ENV } = process.env;
   const { profile, policies } = useSelector((state: IRootState) => state);
-  let popupTimerInterval : ReturnType<typeof setTimeout>;
+  let popupTimerInterval : number;
 
   function surveyActivated(launcher: any, surveyItem: any) {
     return surveyItem;
@@ -149,7 +149,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
           floodgateObject.floodgate.getEngine().getActivityListener().logActivityStartTime('AppUsageTime');
 
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          popupTimerInterval = setInterval(() => {
+          popupTimerInterval = window.setInterval(() => {
             trackLaunchedSurvey(floodgateObject.floodgate.getEngine().launchedSurveys,
               floodgateObject.floodgate.getEngine().previousSurveyEventActivityStats);
           }, 1000);
