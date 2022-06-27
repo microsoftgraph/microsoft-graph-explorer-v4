@@ -2,7 +2,7 @@ import { hasWhiteSpace, parseSampleUrl } from './sample-url-generation';
 
 describe('Sample Url Generation', () => {
 
-  it('destructures sample url', () => {
+  it('should destructure sample url', () => {
     const url = 'https://graph.microsoft.com/v1.0/me/messages';
 
     const expectedUrl = {
@@ -16,7 +16,7 @@ describe('Sample Url Generation', () => {
     expect(parsedUrl).toEqual(expectedUrl);
   });
 
-  it('destructures sample url with search parameters', () => {
+  it('should destructure sample url with search parameters', () => {
     const search = '?$select=subject';
     const url = `https://graph.microsoft.com/v1.0/me/messages${search}`;
 
@@ -31,7 +31,7 @@ describe('Sample Url Generation', () => {
     expect(parsedUrl).toEqual(expectedUrl);
   });
 
-  it('destructures sample url with % sign', () => {
+  it('should destructure sample url with % sign', () => {
     const name = 'DiegoS%40m365x214355.onmicrosoft.com';
     const search = `?$select=displayName,mail&$filter=mail eq '${name}'`;
     const parsedSearch = `?$select=displayName,mail&$filter=mail+eq+'${name}'`;
@@ -49,7 +49,7 @@ describe('Sample Url Generation', () => {
     expect(parsedUrl).toEqual(expectedUrl);
   });
 
-  it('returns empty properties when url is empty', () => {
+  it('should return empty properties when url is empty', () => {
     const url = '';
 
     const expectedUrl = {
@@ -63,7 +63,7 @@ describe('Sample Url Generation', () => {
     expect(parsedUrl).toEqual(expectedUrl);
   });
 
-  it('returns empty properties when url is invalid', () => {
+  it('should return empty properties when url is invalid', () => {
     const url = 'I am an invalid url';
 
     const expectedUrl = {
@@ -77,16 +77,16 @@ describe('Sample Url Generation', () => {
     expect(parsedUrl).toEqual(expectedUrl);
   });
 
-  it('replaces whitespace with + sign', () => {
+  it('should replace whitespace with + sign', () => {
     const search = '?filter=displayName eq \'All Company\'';
-    const parsedSearch= '?filter=displayName+eq+\'All+Company\'';
+    const parsedSearch = '?filter=displayName+eq+\'All+Company\'';
 
     const url = `https://graph.microsoft.com/v1.0/groups${search}`;
 
     const expectedUrl = {
       requestUrl: 'groups',
       queryVersion: 'v1.0',
-      sampleUrl:`https://graph.microsoft.com/v1.0/groups${parsedSearch}` ,
+      sampleUrl: `https://graph.microsoft.com/v1.0/groups${parsedSearch}`,
       search: parsedSearch
     };
 

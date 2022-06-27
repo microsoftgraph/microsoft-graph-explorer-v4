@@ -1,7 +1,7 @@
 import { lookupToolkitUrl } from './graph-toolkit-lookup';
 
 describe('Tests lookToolkitUrl', () => {
-  it('Returns valid toolkit url depending on sampleQuery passed', () => {
+  it('should return a valid toolkit url depending on sampleQuery passed', () => {
     // Arrange
     const sampleQuery = {
       selectedVerb: 'GET',
@@ -18,7 +18,7 @@ describe('Tests lookToolkitUrl', () => {
       toBe('https://mgt.dev/iframe.html?id=components-mgt-person-card--person-card&source=ge');
   });
 
-  it('Returns null in toolkiturl property when toolkit url is unavailable', () => {
+  it('should return null in toolkiturl property when toolkit url is unavailable', () => {
     // Arrange
     const sampleQuery = {
       selectedVerb: 'GET',
