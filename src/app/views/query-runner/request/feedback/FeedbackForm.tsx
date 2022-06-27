@@ -22,7 +22,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
   const currentTheme = getTheme();
   const { NODE_ENV } = process.env;
   const { profile, policies } = useSelector((state: IRootState) => state);
-  let popupTimerInterval : any;
+  let popupTimerInterval : ReturnType<typeof setTimeout>;
 
   function surveyActivated(launcher: any, surveyItem: any) {
     return surveyItem;
