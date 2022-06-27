@@ -77,6 +77,20 @@ describe('Sample Url Generation', () => {
     expect(parsedUrl).toEqual(expectedUrl);
   });
 
+  it('returns empty properties when url is incomplete', () => {
+    const url = 'https://graph.microsoft.com/beta';
+
+    const expectedUrl = {
+      requestUrl: '',
+      queryVersion: 'beta',
+      sampleUrl: 'https://graph.microsoft.com/beta/',
+      search: ''
+    };
+
+    const parsedUrl = parseSampleUrl(url);
+    expect(parsedUrl).toEqual(expectedUrl);
+  });
+
   it('replaces whitespace with + sign', () => {
     const search = '?filter=displayName eq \'All Company\'';
     const parsedSearch = '?filter=displayName+eq+\'All+Company\'';
