@@ -51,7 +51,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   }
 
   const updateUrlContent = (e: any) => {
-    props.contentChanged(e.target.value);
+    const targetValue = e.target.value;
+    setQueryUrl(targetValue);
+    props.contentChanged(targetValue);
   };
 
   const onChange = (e: any) => {
