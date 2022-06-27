@@ -1,27 +1,20 @@
 import {
   FETCH_SCOPES_ERROR,
   FETCH_FULL_SCOPES_PENDING,
-  QUERY_GRAPH_STATUS,
   FETCH_FULL_SCOPES_SUCCESS,
   FETCH_URL_SCOPES_PENDING
 } from '../../../app/services/redux-constants';
 
 import {
-  fetchFullScopesSuccess, fetchScopesPending, fetchScopesError, getPermissionsScopeType, fetchScopes,
-  consentToScopes
-} from
-  './permissions-action-creator';
+  fetchFullScopesSuccess, fetchScopesPending, fetchScopesError, getPermissionsScopeType
+} from './permissions-action-creator';
 import { IPermissionsResponse } from '../../../types/permissions';
-import thunk from 'redux-thunk';
-import configureMockStore from 'redux-mock-store';
-import fetch from 'jest-fetch-mock';
 import { store } from '../../../store/index';
 import { IRootState } from '../../../types/root';
 import { Mode } from '../../../types/enums';
-const middleware = [thunk];
-const mockStore = configureMockStore(middleware);
 
 window.open = jest.fn();
+window.fetch = jest.fn();
 
 const mockState: IRootState = {
   devxApi: {
@@ -79,20 +72,20 @@ const mockState: IRootState = {
   responseAreaExpanded: false,
   dimensions: {
     request: {
-      width: '100px',
-      height: '100px'
+      width: '100',
+      height: '100'
     },
     response: {
-      width: '100px',
-      height: '100px'
+      width: '100',
+      height: '100'
     },
     sidebar: {
-      width: '100px',
-      height: '100px'
+      width: '100',
+      height: '100'
     },
     content: {
-      width: '100px',
-      height: '100px'
+      width: '100',
+      height: '100'
     }
   },
   autoComplete: {
@@ -124,8 +117,8 @@ store.getState = () => {
   }
 }
 
-describe('tests permissions action creators', () => {
-  it('Tests if FETCH_SCOPES_SUCCESS is dispatched when fetchScopesSuccess is called', () => {
+describe('Permissions action creators', () => {
+  it('should dispatch FETCH_SCOPES_SUCCESS when fetchFullScopesSuccess() is called', () => {
     // Arrange
     const response: IPermissionsResponse = {
       scopes: {
@@ -144,9 +137,9 @@ describe('tests permissions action creators', () => {
 
     // Assert
     expect(action).toEqual(expectedAction);
-  })
+  });
 
-  it('Tests if FETCH_SCOPES_ERROR is dispatched when fetchScopesError is called', () => {
+  it('should dispatch FETCH_SCOPES_ERROR when fetchScopesError() is called', () => {
     // Arrange
     const response = {
       error: {}
@@ -162,9 +155,10 @@ describe('tests permissions action creators', () => {
 
     // Assert
     expect(action).toEqual(expectedAction);
-  })
+  });
 
-  it('Tests if FETCH_SCOPES_PENDING is dispatched when fetchScopes pending is called', () => {
+  // eslint-disable-next-line max-len
+  it('should dispatch FETCH_FULL_SCOPES_PENDING or FETCH_URL_SCOPES_PENDING depending on type passed to fetchScopesPending', () => {
     // Arrange
     const expectedFullScopesAction = {
       type: FETCH_FULL_SCOPES_PENDING
@@ -181,9 +175,9 @@ describe('tests permissions action creators', () => {
     // Assert
     expect(fullScopesAction).toEqual(expectedFullScopesAction);
     expect(urlScopesAction).toEqual(expectedUrlScopesAction)
-  })
+  });
 
-  it('returns valid scope type given a user profile or with null', () => {
+  it('should return a valid scope type when getPermissionsScopeType() is called with a user profile or null', () => {
     // Arrange
     const expectedResult = 'DelegatedWork';
 
@@ -194,42 +188,4 @@ describe('tests permissions action creators', () => {
     expect(result).toEqual(expectedResult);
 
   });
-
-  it('Tests the fetchScopes function', () => {
-    // Arrange
-    const api_response = {
-      scopes: [],
-      ok: true
-    }
-    fetch.mockResponseOnce(JSON.stringify(api_response));
-
-    try {
-      // Act
-      // @ts-ignore
-      store.dispatch(fetchScopes())
-        // @ts-ignore
-        .then((response_: any) => {
-          expect(response_.scopes).toBe(undefined);
-        })
-        .catch((e: any) => { throw e })
-    }
-    catch (e) {
-      //
-    }
-  })
-
-  // Revisit this test
-  it('Tests consenting to scopes function', () => {
-    // Arrange
-    const store_ = mockStore({});
-    fetch.mockResponseOnce(JSON.stringify({}));
-
-    // Act and Assert
-    // @ts-ignore
-    store_.dispatch(consentToScopes([]))
-      .then(() => {
-        expect(store_.getActions()[0].type).toEqual(QUERY_GRAPH_STATUS);
-      })
-      .catch((e: any) => { throw e })
-  })
 })
