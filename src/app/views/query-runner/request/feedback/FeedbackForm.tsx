@@ -14,6 +14,7 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { getVersion } from '../../../../utils/version';
 import CampaignDefinitions from './campaignDefinitions';
 import { uiStringMap } from './uiStrings';
+import { componentNames, telemetry } from '../../../../../telemetry';
 
 export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurvey }: any) {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
   const currentTheme = getTheme();
   const { NODE_ENV } = process.env;
   const { profile, policies } = useSelector((state: IRootState) => state);
+  let timerInterval : any;
 
   function surveyActivated(launcher: any, surveyItem: any) {
     return surveyItem;
@@ -146,6 +148,11 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
           floodgateObject.floodgate.getEngine().getActivityListener().logActivity('OnPageLoad');
           floodgateObject.floodgate.getEngine().getActivityListener().logActivityStartTime('AppUsageTime');
 
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          timerInterval = setInterval(() => {
+            trackLaunchedSurvey(floodgateObject.floodgate.getEngine().launchedSurveys,
+              floodgateObject.floodgate.getEngine().previousSurveyEventActivityStats);
+          }, 1000);
         }
       }
       window.onfocus = function () {
@@ -169,6 +176,27 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
         }
       }
     }
+  }
+
+  const trackLaunchedSurvey = (launchedSurveys: any, previousSurveyEventActivityStats: any) => {
+    let count = process.env.REACT_APP_USAGE_TIME;
+    if(Object.keys(launchedSurveys).length > 0){
+      clearInterval(timerInterval);
+      count = getLatestCount(previousSurveyEventActivityStats);
+      const feedbackPopupProperties = {
+        timeBeforePopup: count
+      }
+      telemetry.trackWindowOpenEvent(componentNames.LAUNCH_FEEDBACK_POPUP_ACTION, feedbackPopupProperties);
+    }
+  }
+
+  const getLatestCount = (previousSurveyEventActivityStats: any) : string => {
+    let latestCount : number = 0;
+    if (Object.keys(previousSurveyEventActivityStats.Surveys).length > 0) {
+      const surveyStats: any = Object.values(previousSurveyEventActivityStats.Surveys);
+      latestCount = surveyStats[0].Counts;
+    }
+    return latestCount.toString();
   }
 
 

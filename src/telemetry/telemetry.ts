@@ -16,7 +16,8 @@ import { IQuery } from '../types/query-runner';
 import {
   BUTTON_CLICK_EVENT,
   LINK_CLICK_EVENT,
-  TAB_CLICK_EVENT
+  TAB_CLICK_EVENT,
+  WINDOW_OPEN_EVENT
 } from './event-types';
 import {
   addCommonTelemetryItemProperties,
@@ -109,6 +110,12 @@ class Telemetry implements ITelemetry {
       properties.QuerySignature = `${sampleQuery.selectedVerb} ${sanitizedUrl}`;
     }
     telemetry.trackEvent(BUTTON_CLICK_EVENT, properties);
+  }
+
+  public trackWindowOpenEvent(windowEvent: string, properties?: any) {
+    properties = properties || {};
+    properties.windowEventName = windowEvent;
+    telemetry.trackEvent(WINDOW_OPEN_EVENT, properties);
   }
 
   private getInstrumentationKey() {
