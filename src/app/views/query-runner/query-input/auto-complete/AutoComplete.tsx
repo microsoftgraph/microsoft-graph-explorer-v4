@@ -58,11 +58,14 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const onChange = (e: any) => {
     const currentValue = e.target.value;
-    const { index, context } = getLastDelimiterInUrl(currentValue);
-    const { searchText: searchWith, previous: preceedingText } = getSearchText(currentValue, index!);
-    setSearchText(searchWith);
     setQueryUrl(currentValue);
-    requestForAutocompleteOptions(preceedingText, context);
+
+    if (currentValue.includes(GRAPH_URL)) {
+      const { index, context } = getLastDelimiterInUrl(currentValue);
+      const { searchText: searchWith, previous: preceedingText } = getSearchText(currentValue, index!);
+      setSearchText(searchWith);
+      requestForAutocompleteOptions(preceedingText, context);
+    }
   };
 
   const isOverflowing = (input: string) => {
