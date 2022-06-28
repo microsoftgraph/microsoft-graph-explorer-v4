@@ -42,9 +42,9 @@ export const appStyles = (theme: ITheme) => {
     separator: {
       borderBottom: '1px solid ' + theme.palette.neutralLight
     },
-    links: {
-      color: `${theme.palette.blueMid} !important`
-    },
+    // links: {
+    //   color: `${theme.palette.blueMid} !important`
+    // },
     sidebarToggle: {
       marginBottom: theme.spacing.s1,
       marginTop: theme.spacing.s1

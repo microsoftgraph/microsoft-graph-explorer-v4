@@ -27,14 +27,14 @@ const styledTermsOfUseMessage = (props: any) => {
       <a
         onClick={(e) =>
           telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.MICROSOFT_APIS_TERMS_OF_USE_LINK)}
-        className={classes.links} href={'https://docs.microsoft.com/' + geLocale +
+        className={'ms-Link'} href={'https://docs.microsoft.com/' + geLocale +
           '/legal/microsoft-apis/terms-of-use?context=graph/context'} target='_blank' rel='noopener noreferrer'>
         <FormattedMessage id='Terms of use' /></a>.
       <FormattedMessage id='View the' />
       <a
         onClick={(e) =>
           telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.MICROSOFT_PRIVACY_STATEMENT_LINK)}
-        className={classes.links} href={'https://privacy.microsoft.com/' + geLocale + '/privacystatement'}
+        className={'ms-Link'} href={'https://privacy.microsoft.com/' + geLocale + '/privacystatement'}
         target='_blank' rel='noopener noreferrer'>
         <FormattedMessage id='Microsoft Privacy Statement' /></a>.
     </MessageBar>;
