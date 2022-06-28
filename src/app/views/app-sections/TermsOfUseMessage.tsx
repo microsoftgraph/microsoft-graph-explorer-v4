@@ -7,15 +7,13 @@ import { geLocale } from '../../../appLocale';
 import { componentNames, telemetry } from '../../../telemetry';
 import { IRootState } from '../../../types/root';
 import { clearTermsOfUse } from '../../services/actions/terms-of-use-action-creator';
-import { classNames } from '../classnames';
 import { appStyles } from '../App.styles';
 
-const styledTermsOfUseMessage = (props: any) => {
+const styledTermsOfUseMessage = () => {
 
   const { termsOfUse } =
     useSelector((state: IRootState) => state);
 
-  const classes = classNames(props);
   const dispatch = useDispatch();
   if (termsOfUse) {
     return <MessageBar messageBarType={MessageBarType.info}
