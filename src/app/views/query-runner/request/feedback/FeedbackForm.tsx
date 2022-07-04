@@ -22,7 +22,6 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
   const currentTheme = getTheme();
   const { NODE_ENV } = process.env;
   const { profile, policies } = useSelector((state: IRootState) => state);
-  let popupTimerInterval : number;
 
   function surveyActivated(launcher: any, surveyItem: any) {
     return surveyItem;
@@ -72,6 +71,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
     showCustomSurvey();
   }
 
+
   async function loadAndInitialize(
     floodgateObject: any,
     // eslint-disable-next-line no-unused-vars
@@ -105,6 +105,8 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
       showEmailAddress: (policies?.data?.email !== 2),
       surveyEnabled: (profile?.profileType !== ACCOUNT_TYPE.AAD),
       onDismiss: (campaignId: string, submitted: boolean) => {
+        const count = getLatestCount(floodgateObject.floodgate.getEngine().previousSurveyEventActivityStats);
+        const telemetryData = { count, isSubmitted: false, campaignId };
         if (submitted) {
           dispatch(setQueryResponseStatus({
             status: translateMessage('Submitted Successfully'),
@@ -112,7 +114,10 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
             ok: true,
             messageType: MessageBarType.success
           }));
-
+          trackSurveyPopup({...telemetryData, isSubmitted: true});
+        }
+        else{
+          trackSurveyPopup(telemetryData);
         }
         onDismissSurvey();
       },
@@ -147,12 +152,6 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
           floodgateObject.floodgate.start();
           floodgateObject.floodgate.getEngine().getActivityListener().logActivity('OnPageLoad');
           floodgateObject.floodgate.getEngine().getActivityListener().logActivityStartTime('AppUsageTime');
-
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          popupTimerInterval = window.setInterval(() => {
-            trackLaunchedSurvey(floodgateObject.floodgate.getEngine().launchedSurveys,
-              floodgateObject.floodgate.getEngine().previousSurveyEventActivityStats);
-          }, 1000);
         }
       }
       window.onfocus = function () {
@@ -178,15 +177,10 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
     }
   }
 
-  const trackLaunchedSurvey = (launchedSurveys: any, previousSurveyEventActivityStats: any) => {
-    let count = process.env.REACT_APP_USAGE_TIME;
-    if(Object.keys(launchedSurveys).length > 0){
-      clearInterval(popupTimerInterval);
-      count = getLatestCount(previousSurveyEventActivityStats);
-      const feedbackPopupProperties = {
-        timeBeforePopup: count
-      }
-      telemetry.trackWindowOpenEvent(componentNames.LAUNCH_FEEDBACK_POPUP_ACTION, feedbackPopupProperties);
+  const trackSurveyPopup = (telemetryData: any) => {
+    const { campaignId } = telemetryData;
+    if(campaignId === process.env.REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID){
+      telemetry.trackWindowOpenEvent(componentNames.LAUNCH_FEEDBACK_POPUP_ACTION, telemetryData);
     }
   }
 
@@ -198,7 +192,6 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
     }
     return latestCount.toString();
   }
-
 
   function getCampaignId(): string {
     return process.env.REACT_APP_FEEDBACK_CAMPAIGN_ID || '';
