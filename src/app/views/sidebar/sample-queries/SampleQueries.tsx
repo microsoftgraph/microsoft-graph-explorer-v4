@@ -315,7 +315,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
       />
     );
   }
-  console.log('Here aer the samples ', sampleQueries);
 
   return (
     <div>
