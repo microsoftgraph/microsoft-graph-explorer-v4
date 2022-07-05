@@ -170,7 +170,14 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     const { previous: preceedingText } = getSearchText(url, index!);
     const shouldSuggestVersions = preceedingText === GRAPH_URL + '/';
 
-    const theSuggestions = (shouldSuggestVersions) ? GRAPH_API_VERSIONS : getSuggestions(url, autoCompleteOptions!);
+    let theSuggestions: string[] = [];
+    if (shouldSuggestVersions) {
+      theSuggestions = GRAPH_API_VERSIONS;
+    }
+    else if (autoCompleteOptions) {
+      theSuggestions = getSuggestions(url, autoCompleteOptions);
+    }
+
     if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
       if (filtered[0] !== searchText) {
