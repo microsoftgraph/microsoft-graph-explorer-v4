@@ -163,7 +163,6 @@ const unstyledResourceExplorer = (props: any) => {
     });
   }
 
-
   const breadCrumbs = generateBreadCrumbs();
 
   if (pending) {
@@ -226,20 +225,35 @@ const unstyledResourceExplorer = (props: any) => {
       <Label styles={{ root: { position: 'relative', left: '10px' } }}>
         <FormattedMessage id='Resources available' />
       </Label>
-      <Nav
-        groups={items}
-        styles={navStyles}
-        onRenderLink={(link) => {
-          return <ResourceLink
-            link={link}
-            isolateTree={isolateTree}
-            resourceOptionSelected={(activity: string, context: unknown) => resourceOptionSelected(activity, context)}
-            linkLevel={linkLevel}
-            classes={classes}
-          />
-        }}
-        onLinkClick={clickLink}
-        className={classes.queryList} />
+      {
+        items[0].links.length === 0 ?
+          (
+            <Label styles={{ root:
+            { paddingLeft: '5px', paddingBottom: '50px',
+              display: 'flex', justifyContent: 'center',
+              alignItems: 'center', minHeight: '60vh'
+            }}}>
+              <FormattedMessage id='No resources found' />
+            </Label>
+          )
+          :
+          (<Nav
+            groups={items}
+            styles={navStyles}
+            onRenderLink={(link) => {
+              return <ResourceLink
+                link={link}
+                isolateTree={isolateTree}
+                resourceOptionSelected={(activity: string, context: unknown) =>
+                  resourceOptionSelected(activity, context)}
+                linkLevel={linkLevel}
+                classes={classes}
+              />
+            }}
+            onLinkClick={clickLink}
+            className={classes.queryList} />
+          )
+      }
     </section >
   );
 }

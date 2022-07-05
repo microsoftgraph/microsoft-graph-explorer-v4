@@ -1,7 +1,7 @@
 import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
   getTheme,
-  GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
+  GroupHeader, IColumn, Icon, IDetailsRowStyles, Label, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
@@ -315,6 +315,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
       />
     );
   }
+  console.log('Here aer the samples ', sampleQueries);
 
   return (
     <div>
@@ -355,28 +356,42 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
       <Announced
         message={`${sampleQueries.length} search results available.`}
       />
-      <div role="navigation">
-        <DetailsList
-          className={classes.queryList}
-          cellStyleProps={{
-            cellRightPadding: 0,
-            cellExtraRightPadding: 0,
-            cellLeftPadding: 0
-          }}
-          onRenderItemColumn={renderItemColumn}
-          items={sampleQueries}
-          selectionMode={SelectionMode.none}
-          columns={columns}
-          groups={groups}
-          groupProps={{
-            showEmptyGroups: true,
-            onRenderHeader: renderGroupHeader
-          }}
-          onRenderRow={renderRow}
-          onRenderDetailsHeader={renderDetailsHeader}
-          onItemInvoked={querySelected}
-        />
-      </div>
+      { sampleQueries.length === 0 ? (
+        <Label
+          styles={{root: {
+            paddingLeft: '5px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '60vh'
+          }}}
+        >
+          <FormattedMessage id='No samples found' />
+        </Label>
+      ) :
+        <div role="navigation">
+          <DetailsList
+            className={classes.queryList}
+            cellStyleProps={{
+              cellRightPadding: 0,
+              cellExtraRightPadding: 0,
+              cellLeftPadding: 0
+            }}
+            onRenderItemColumn={renderItemColumn}
+            items={sampleQueries}
+            selectionMode={SelectionMode.none}
+            columns={columns}
+            groups={groups}
+            groupProps={{
+              showEmptyGroups: true,
+              onRenderHeader: renderGroupHeader
+            }}
+            onRenderRow={renderRow}
+            onRenderDetailsHeader={renderDetailsHeader}
+            onItemInvoked={querySelected}
+          />
+        </div>
+      }
     </div>
   );
 }

@@ -447,5 +447,7 @@
   "Settings": "Settings",
   "sign in other account": "Sign in with a different account",
   "Help": "Help",
-  "Documentation": "Documentation"
+  "Documentation": "Documentation",
+  "No resources found": "We did not find any resource items",
+  "No samples found": "We did not find any sample queries"
 }
