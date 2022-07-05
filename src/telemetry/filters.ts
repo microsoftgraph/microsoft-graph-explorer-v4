@@ -6,7 +6,8 @@ import {
   GRAPH_API_SANDBOX_URL,
   GRAPH_TOOOLKIT_EXAMPLE_URL,
   GRAPH_URL,
-  HOME_ACCOUNT_KEY
+  HOME_ACCOUNT_KEY,
+  NPS_FEEDBACK_URL
 } from '../app/services/graph-constants';
 import {
   sanitizeGraphAPISandboxUrl,
@@ -40,7 +41,8 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
       GRAPH_API_SANDBOX_URL,
       new URL(graphProxyUrl).origin,
       new URL(ADAPTIVE_CARD_URL).origin,
-      new URL(GRAPH_TOOOLKIT_EXAMPLE_URL).origin
+      new URL(GRAPH_TOOOLKIT_EXAMPLE_URL).origin,
+      NPS_FEEDBACK_URL
     ];
     if (!targetsToInclude.includes(urlObject.origin)) {
       return false;

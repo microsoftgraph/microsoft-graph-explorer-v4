@@ -114,7 +114,7 @@ class Telemetry implements ITelemetry {
 
   public trackWindowOpenEvent(windowEvent: string, properties?: any) {
     properties = properties || {};
-    properties.windowEventName = windowEvent;
+    properties.ComponentName = windowEvent;
     telemetry.trackEvent(WINDOW_OPEN_EVENT, properties);
   }
 
