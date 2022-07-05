@@ -65,7 +65,7 @@
   "Key": "Key",
   "Value": "Value",
   "Login to try this request": "Login to try this request",
-  "modify permissions": "Modify permissions (Preview)",
+  "modify permissions": "Modify permissions (preview)",
   "Save changes": "Save changes",
   "To change permissions, you will need to log-in again.": "To change permissions, you will need to log-in again.",
   "all the items in my drive": "all the items in my drive",
@@ -447,5 +447,6 @@
   "Settings": "Settings",
   "sign in other account": "Sign in with a different account",
   "Help": "Help",
-  "Documentation": "Documentation"
+  "Documentation": "Documentation",
+  "Graph Documentation": "Microsoft Graph API Reference"
 }
