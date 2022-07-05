@@ -41,10 +41,6 @@ export const FeedbackButton = () => {
     trackFeedbackButtonEvent();
   }
 
-  const dismissSurvey = () => {
-    setEnableSurvey(false);
-  }
-
   const disableSurvey = () => {
     setEnableSurvey(false);
   }
@@ -74,7 +70,7 @@ export const FeedbackButton = () => {
           />
         </TooltipHost>
 
-        <FeedbackForm onDismissSurvey={dismissSurvey}
+        <FeedbackForm onDismissSurvey={disableSurvey}
           activated={enableSurvey} onDisableSurvey={disableSurvey} />
       </div>
       }
