@@ -39,10 +39,14 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   useEffect(() => {
     setQueryUrl(sampleQuery.sampleUrl);
-  }, [sampleQuery]);
+  }, [sampleQuery.sampleUrl]);
 
   useEffect(() => {
-    displayAutoCompleteSuggestions(queryUrl);
+    const { requestUrl } = parseSampleUrl(queryUrl);
+    const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url;
+    if (urlExistsInStore) {
+      displayAutoCompleteSuggestions(queryUrl);
+    }
     setIsMultiline(isOverflowing(queryUrl));
   }, [autoCompleteOptions, queryUrl]);
 
@@ -178,13 +182,18 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       theSuggestions = getSuggestions(url, autoCompleteOptions);
     }
 
+    console.table({ url, preceedingText, autoCompleteOptionsurl: autoCompleteOptions?.url, searchText });
+
     if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
       if (filtered[0] !== searchText) {
         setSuggestions(filtered);
         setShouldShowSuggestions(true);
       }
+    } else {
+      setShouldShowSuggestions(false);
     }
+
   }
 
   const trackSuggestionSelectionEvent = (suggestion: string) => {
@@ -226,6 +235,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     const { currentTarget, relatedTarget } = event;
     if (!currentTarget.contains(relatedTarget as Node) && shouldShowSuggestions) {
       setShouldShowSuggestions(false);
+      console.log('closeSuggestionDialog')
     }
   }
 
