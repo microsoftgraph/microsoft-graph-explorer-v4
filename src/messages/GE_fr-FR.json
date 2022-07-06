@@ -446,5 +446,6 @@
   "Remove request header": "Supprimer l’en-tête de demande",
   "Settings": "Paramètres",
   "sign in other account": "Connectez-vous avec un autre compte",
-  "Help": "Aide"
+  "Help": "Aide",
+  "Documentation": "Documentation"
 }
