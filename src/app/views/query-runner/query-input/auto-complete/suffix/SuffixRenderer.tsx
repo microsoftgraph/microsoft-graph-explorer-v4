@@ -4,6 +4,7 @@ import {
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { telemetry, eventTypes, componentNames } from '../../../../../../telemetry';
 
 import { ISampleQuery } from '../../../../../../types/query-runner';
 import { IRootState } from '../../../../../../types/root';
@@ -52,6 +53,17 @@ const SuffixRenderer = () => {
     let visible = isCalloutVisible;
     visible = !visible;
     setCalloutVisibility(visible);
+    if (visible) {
+      trackToggleEvent()
+    }
+  }
+
+  const trackToggleEvent = () => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
+      {
+        ComponentName: componentNames.QUERY_MORE_INFO_BUTTON,
+        QuerySignature: `/${queryVersion}/${requestUrl}`
+      });
   }
 
   const calloutProps = { gapSpace: 0 };
