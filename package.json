@@ -120,7 +120,7 @@
                 "redux-mock-store": "1.5.4",
                 "selenium-webdriver": "4.2.0",
                 "start-server-and-test": "1.14.0",
-                "ts-jest": "28.0.1"
+                "ts-jest": "28.0.5"
         },
         "jestSonar": {
                 "reportPath": "reports",
