@@ -20,8 +20,6 @@ class Suggestions implements ISuggestions {
       }
     }
 
-    // checks locally whether options for the url are already available
-    // and returns them
     const key = `${version}/${url}`;
     const localOptions = await getSuggestionsFromCache(key);
     if (localOptions) {
