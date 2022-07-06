@@ -1,4 +1,5 @@
 import { IAction } from '../../../types/action';
+import { Header, IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import {
@@ -63,7 +64,7 @@ export function getSnippet(language: string): Function {
 
       const httpVersion = 'HTTP/1.1';
       const host = 'Host: graph.microsoft.com';
-      const sampleHeaders = 'Content-Type: application/json';
+      const sampleHeaders = constructHeaderString(sampleQuery);
 
       // eslint-disable-next-line max-len
       let body = `${sampleQuery.selectedVerb} /${queryVersion}/${requestUrl + search} ${httpVersion}\r\n${host}\r\n${sampleHeaders}\r\n\r\n`;
@@ -85,4 +86,27 @@ export function getSnippet(language: string): Function {
       return dispatch(getSnippetError({ error, language }));
     }
   };
+}
+
+export function constructHeaderString(sampleQuery: IQuery): string {
+  const { sampleHeaders, selectedVerb } = sampleQuery;
+  let headersString = '';
+
+  const isContentTypeInHeaders: boolean = !!(sampleHeaders.find(header =>
+    header.name.toLocaleLowerCase() === 'content-type'));
+
+  if (sampleHeaders && sampleHeaders.length > 0) {
+    headersString = getHeaderStringProperties(sampleHeaders);
+  }
+
+  headersString += !isContentTypeInHeaders && selectedVerb !== 'GET' ? 'Content-Type: application/json\r\n' : '';
+  return headersString;
+}
+
+function getHeaderStringProperties(sampleHeaders: Header[]): string {
+  let constructedHeader = ''
+  sampleHeaders.forEach((header: Header) => {
+    constructedHeader += `${header.name}: ${header.value}\r\n`;
+  });
+  return constructedHeader;
 }

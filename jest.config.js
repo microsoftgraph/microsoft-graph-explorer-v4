@@ -15,10 +15,13 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testMatch: [
     '**/__tests__/**/*.[jt]s?(x)',
-    '**/?(*.)+(spec|test).[jt]s'
+    '**/?(*.)+(spec|test).[jt]s?(x)'
   ],
   globals: {
-    crypto: require('crypto')
+    crypto: require('crypto'),
+    'ts-jest': {
+      isolatedModules: true
+    }
   },
   testEnvironmentOptions: {
     url: 'http://localhost'
@@ -32,7 +35,8 @@ module.exports = {
   },
   transformIgnorePatterns: [
     '^.+\\.module\\.(css|sass|scss)$',
-    '/node_modules/(?!@fluentui)'
+    '/node_modules/(?!@fluentui)',
+    '/node_modules/'
   ],
   moduleNameMapper: {
     '^react-native$': 'react-native-web',

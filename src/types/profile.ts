@@ -25,4 +25,5 @@ export interface IUser {
   profileImageUrl: string;
   profileType: ACCOUNT_TYPE;
   ageGroup: number;
+  tenant: string;
 }

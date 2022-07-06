@@ -12,31 +12,31 @@ const mockStore = configureMockStore(middlewares);
 
 authenticationWrapper.getOcpsToken = jest.fn(() => Promise.resolve('token'));
 
-describe('Tests OCPS action creators', () => {
+describe('OCPS action creators', () => {
   beforeEach(() => {
     // eslint-disable-next-line no-undef
     fetchMock.resetMocks();
   });
-  it('tests response with valid policies object ', () => {
+  it('should dispatch GET_POLICY_SUCCESS when getPoliciesSuccess(policyObject) is called', () => {
     // Arrange
-    const response = {
+    const policyObject = {
       email: 1,
       screenshot: 1,
       feedback: 20
     }
     const expectedAction = {
       type: GET_POLICY_SUCCESS,
-      response
+      response: policyObject
     }
 
     // Act
-    const action = getPoliciesSuccess(response);
+    const action = getPoliciesSuccess(policyObject);
 
     // Assert
     expect(action).toEqual(expectedAction);
   })
 
-  it('tests the error object response when policies fetch fails', () => {
+  it('should dispatch GET_POLICY_ERROR when getPoliciesError() is called', () => {
     // Arrange
     const error = {};
     const expectedAction = {
@@ -51,7 +51,7 @@ describe('Tests OCPS action creators', () => {
     expect(action).toEqual(expectedAction);
   })
 
-  it('tests get policies pending', () => {
+  it('should dispatch GET_POLICY_PENDING when getPoliciesPending() is called', () => {
     // Arrange
     const expectedAction = {
       type: GET_POLICY_PENDING
@@ -64,7 +64,7 @@ describe('Tests OCPS action creators', () => {
     expect(action).toEqual(expectedAction);
   })
 
-  it('Tests getPolicies() and returns an empty array', () => {
+  it('should dispatch GET_POLICY_PENDING and GET_POLICY_SUCCESS when getPolicies() is called', () => {
     // Arrange
     const store = mockStore({});
     const expectedActions = [
@@ -95,7 +95,7 @@ describe('Tests OCPS action creators', () => {
       .catch((e: Error) => { throw e });
   });
 
-  it('Tests getPolicy which returns policy values', () => {
+  it('should return policy values when getPolicy()', () => {
     // Arrange
     const response = {
       email: 0,
@@ -118,14 +118,13 @@ describe('Tests OCPS action creators', () => {
     expect(policyValues.email).toEqual(0);
     expect(policyValues.screenshot).toEqual(0);
     expect(policyValues.feedback).toEqual(0);
+  });
 
-  })
-
-  it('Tests policy url generation', () => {
+  it('should return a policy url when getPolicyUrl() is called', () => {
     // Arrange
     const url = getPolicyUrl();
 
     // Assert
     expect(url).toBeTruthy();
-  })
+  });
 })

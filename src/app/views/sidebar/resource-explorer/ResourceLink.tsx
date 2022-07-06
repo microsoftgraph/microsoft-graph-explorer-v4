@@ -73,7 +73,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
           aria-describedby={tooltipId}
           styles={iconButtonStyles}
           menuIconProps={{ iconName: 'MoreVertical' }}
-          title={translateMessage('More actions')}
           menuProps={{
             shouldFocusOnMount: true,
             alignTargetEdge: true,
