@@ -446,5 +446,7 @@
   "Remove request header": "Удалить заголовок запроса",
   "Settings": "Параметры",
   "sign in other account": "Войдите в другую учетную запись",
-  "Help": "Справка"
+  "Help": "Справка",
+  "Documentation": "Документация",
+  "Parts between {} need to be replaced with real values": "Части между {} нужно заменить реальными значениями"
 }
