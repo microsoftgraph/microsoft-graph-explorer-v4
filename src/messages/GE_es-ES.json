@@ -447,6 +447,7 @@
   "Settings": "Configuración",
   "sign in other account": "Inicie sesión con una cuenta diferente",
   "Help": "Ayuda",
-  "Documentation": "Documentación",
-  "Parts between {} need to be replaced with real values": "Las partes entre {} deben reemplazarse por valores reales"
+  "Graph Documentation": "Referencia de la API de Microsoft Graph",
+  "Parts between {} need to be replaced with real values": "Las partes entre {} deben reemplazarse por valores reales",
+  "Get started with Graph Explorer": "Introducción a Probador de Graph"
 }
