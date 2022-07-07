@@ -447,5 +447,6 @@
   "Settings": "设置",
   "sign in other account": "使用其他帐户登录",
   "Help": "帮助",
-  "Documentation": "文档"
+  "Documentation": "文档",
+  "Parts between {} need to be replaced with real values": "{} 之间的部分需要替换为实数值"
 }
