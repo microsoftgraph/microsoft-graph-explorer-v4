@@ -442,7 +442,7 @@ class App extends Component<IAppProps, IAppState> {
               </Resizable>
             )}
             {graphExplorerMode === Mode.TryIt &&
-              headerMessaging(classes, query)}
+              headerMessaging(query)}
 
             {displayContent && (
               <Resizable

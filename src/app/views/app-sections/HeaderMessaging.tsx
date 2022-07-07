@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { getLoginType } from '../../../modules/authentication/authUtils';
 import { LoginType } from '../../../types/enums';
 
-export function headerMessaging(classes: any, query: string): React.ReactNode {
+export function headerMessaging(query: string): React.ReactNode {
   const loginType = getLoginType();
 
   return (
