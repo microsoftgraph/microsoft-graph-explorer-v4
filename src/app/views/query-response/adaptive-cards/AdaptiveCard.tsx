@@ -140,7 +140,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                     target='_blank'
                     rel='noopener noreferrer'
                     tabIndex={0}
-                    className={classes.link}
+                    className={'ms-Link'}
                   >
                     <FormattedMessage id='Adaptive Cards Templating SDK' />
                   </a>
@@ -149,7 +149,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                     target='_blank'
                     rel='noopener noreferrer'
                     tabIndex={0}
-                    className={classes.link}
+                    className={'ms-Link'}
                   >
                     <FormattedMessage id='Adaptive Cards designer' />
                   </a>

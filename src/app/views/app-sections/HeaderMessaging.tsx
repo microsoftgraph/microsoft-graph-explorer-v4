@@ -14,7 +14,7 @@ export function headerMessaging(classes: any, query: string): React.ReactNode {
         <MessageBar messageBarType={MessageBarType.info} isMultiline={true}>
           <p>
             <FormattedMessage id='To try the full features' />,
-            <a className={classes.links} tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
+            <a className={'ms-Link'} tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
               <FormattedMessage id='full Graph Explorer' />.
             </a>
           </p>
@@ -28,7 +28,7 @@ export function headerMessaging(classes: any, query: string): React.ReactNode {
         <p>
           <FormattedMessage id='To try operations other than GET' />,
 
-          <a className={classes.links} tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
+          <a className={'ms-Link'} tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
             <FormattedMessage id='sign in' />.
           </a>
         </p>

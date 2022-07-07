@@ -344,7 +344,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
         <a
           target='_blank'
           rel="noopener noreferrer"
-          className={classes.links}
+          className={'ms-Link'}
           onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href,
             componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
           href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
