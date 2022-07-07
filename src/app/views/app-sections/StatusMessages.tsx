@@ -31,9 +31,9 @@ const StatusMessages = () => {
         const link = urls[part];
         if (link) {
           if (link.includes(GRAPH_URL)) {
-            return <Link onClick={() => setQuery(link)}>{link}</Link>;
+            return <Link className={'ms-Link'} onClick={() => setQuery(link)}>{link}</Link>;
           }
-          return <Link target="_blank" href={link}>{link}</Link>;
+          return <Link className={'ms-Link'} target="_blank" href={link}>{link}</Link>;
         }
       };
       return (
