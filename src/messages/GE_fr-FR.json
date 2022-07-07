@@ -447,6 +447,7 @@
   "Settings": "Paramètres",
   "sign in other account": "Connectez-vous avec un autre compte",
   "Help": "Aide",
-  "Documentation": "Documentation",
-  "Parts between {} need to be replaced with real values": "Les parties entre crochets ({}) doivent être remplacées par des valeurs réelles"
+  "Graph Documentation": "Référence de l’API Microsoft Graph",
+  "Parts between {} need to be replaced with real values": "Les parties entre crochets ({}) doivent être remplacées par des valeurs réelles",
+  "Get started with Graph Explorer": "Prise en main de Microsoft Graph"
 }
