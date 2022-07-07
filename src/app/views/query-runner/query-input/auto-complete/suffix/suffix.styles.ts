@@ -2,7 +2,8 @@ import { FontWeights, mergeStyleSets } from '@fluentui/react';
 
 export const styles = mergeStyleSets({
   iconButton: {
-    cursor: 'pointer'
+    cursor: 'pointer',
+    height: 20
   },
   callout: {
     width: 320,

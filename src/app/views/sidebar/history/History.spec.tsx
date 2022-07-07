@@ -43,7 +43,6 @@ const renderHistoryTab = (args?: any) => {
 
 // eslint-disable-next-line no-console
 console.warn = jest.fn();
-console.error = jest.fn();
 
 jest.mock('@microsoft/applicationinsights-react-js', () => ({
   // eslint-disable-next-line react/display-name
@@ -51,10 +50,13 @@ jest.mock('@microsoft/applicationinsights-react-js', () => ({
   ReactPlugin: Object
 }))
 
-describe('Tests History Tab', () => {
-  it('Renders history tab without crashing', () => {
+describe('History tab rendering', () => {
+  it('should render history tab and its children without crashing', () => {
     renderHistoryTab();
     expect(screen.getByRole('searchbox')).toBeDefined();
-    screen.getByText(/Older/);
+    screen.getByRole('button', { name: /actions menu/i});
+    screen.getByRole('button', { name: /collapse older/i});
+    screen.getByRole('button', { name: /export older queries/i});
+    screen.getByRole('button', { name: /delete older queries/i});
   })
 })

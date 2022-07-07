@@ -8,7 +8,7 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('Terms of Use Action Creators', () => {
-  it('Sets terms of use flag to false', () => {
+  it('should set terms of use flag to false', () => {
     const expectedAction = [
       {
         type: CLEAR_TERMS_OF_USE

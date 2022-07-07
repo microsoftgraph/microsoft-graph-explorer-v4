@@ -1,4 +1,4 @@
-import { IDropdownOption, Dropdown } from '@fluentui/react';
+import { Dropdown, IDropdownOption } from '@fluentui/react';
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,24 +45,21 @@ const QueryInput = (props: IQueryInputProps) => {
   };
 
   const contentChanged = (value: string) => {
-    const query = { ...sampleQuery, ...{ sampleUrl: value } };
-    changeUrlVersion(value);
-    dispatch(setSampleQuery(query));
+    const updatedQuery = getChangedQueryContent(value);
+    dispatch(setSampleQuery(updatedQuery));
   };
 
-  const changeUrlVersion = (newUrl: string) => {
+  const getChangedQueryContent = (newUrl: string) => {
+
     const query = { ...sampleQuery };
     const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);
-    const { queryVersion: oldQueryVersion } = parseSampleUrl(query.sampleUrl);
 
-    if (newQueryVersion !== oldQueryVersion) {
-      if (newQueryVersion === 'v1.0' || newQueryVersion === 'beta') {
-        const sampleQueryToSet = { ...query };
-        sampleQueryToSet.selectedVersion = newQueryVersion;
-        sampleQueryToSet.sampleUrl = newUrl;
-        dispatch(setSampleQuery(sampleQueryToSet));
-      }
+    if (GRAPH_API_VERSIONS.includes(newQueryVersion)) {
+      query.selectedVersion = newQueryVersion;
+      query.sampleUrl = newUrl;
     }
+
+    return query;
   }
 
   const runQuery = () => {
@@ -91,7 +88,7 @@ const QueryInput = (props: IQueryInputProps) => {
         <div className='col-xs-12 col-lg-2'>
           <Dropdown
             ariaLabel={translateMessage('Microsoft Graph API Version option')}
-            selectedKey={sampleQuery.selectedVersion || 'v1.0'}
+            selectedKey={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
             options={urlVersions}
             onChange={(event, method) => handleOnVersionChange(method)}
           />
@@ -114,7 +111,7 @@ const QueryInput = (props: IQueryInputProps) => {
           />
         </div>
         <div className='col-lg-1 col-sm-2 col-xs-2'>
-          <ShareQuery/>
+          <ShareQuery />
         </div>
       </div>
     </>
