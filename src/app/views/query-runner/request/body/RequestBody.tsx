@@ -1,4 +1,4 @@
-import { FocusZone, FocusZoneTabbableElements } from '@fluentui/react';
+import { FocusZone } from '@fluentui/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
