@@ -19,6 +19,7 @@ import { GRAPH_URL } from '../../../services/graph-constants';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
+import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import CommandOptions from './command-options/CommandOptions';
 import {
@@ -226,17 +227,7 @@ const unstyledResourceExplorer = (props: any) => {
         <FormattedMessage id='Resources available' />
       </Label>
       {
-        items[0].links.length === 0 ?
-          (
-            <Label styles={{ root:
-            { paddingLeft: '5px', paddingBottom: '50px',
-              display: 'flex', justifyContent: 'center',
-              alignItems: 'center', minHeight: '60vh'
-            }}}>
-              <FormattedMessage id='No resources found' />
-            </Label>
-          )
-          :
+        items[0].links.length === 0 ? NoResultsFound('No resources found', {paddingBottom: '60px'}):
           (<Nav
             groups={items}
             styles={navStyles}

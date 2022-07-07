@@ -32,6 +32,7 @@ import { setQueryResponseStatus } from '../../../services/actions/query-status-a
 import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
+import { NoResultsFound } from '../sidebar-utils/SearchResult';
 
 const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
 
@@ -355,19 +356,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
       <Announced
         message={`${sampleQueries.length} search results available.`}
       />
-      { sampleQueries.length === 0 ? (
-        <Label
-          styles={{root: {
-            paddingLeft: '5px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '60vh'
-          }}}
-        >
-          <FormattedMessage id='No samples found' />
-        </Label>
-      ) :
+      { sampleQueries.length === 0 ? NoResultsFound('No samples found') :
         <div role="navigation">
           <DetailsList
             className={classes.queryList}
