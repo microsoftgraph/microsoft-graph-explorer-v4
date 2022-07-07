@@ -447,5 +447,6 @@
   "Settings": "Einstellungen",
   "sign in other account": "Mit einem anderen Konto anmelden",
   "Help": "Hilfe",
-  "Documentation": "Dokumentation"
+  "Documentation": "Dokumentation",
+  "Parts between {} need to be replaced with real values": "Teile zwischen {} müssen durch echte Werte ersetzt werden"
 }
