@@ -16,6 +16,7 @@ import { IRootState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { addResourcePaths } from '../../../services/actions/resource-explorer-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
+import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
@@ -25,7 +26,7 @@ import CommandOptions from './command-options/CommandOptions';
 import {
   createResourcesList, getCurrentTree,
   getResourcePaths,
-  getResourcesSupportedByVersion, getUrlFromLink, removeCounter
+  getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
