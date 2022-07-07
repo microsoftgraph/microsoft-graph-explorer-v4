@@ -446,5 +446,7 @@
   "Remove request header": "Eliminar el encabezado de la solicitud",
   "Settings": "Configuración",
   "sign in other account": "Inicie sesión con una cuenta diferente",
-  "Help": "Ayuda"
+  "Help": "Ayuda",
+  "Documentation": "Documentación",
+  "Parts between {} need to be replaced with real values": "Las partes entre {} deben reemplazarse por valores reales"
 }
