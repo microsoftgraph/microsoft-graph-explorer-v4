@@ -447,5 +447,6 @@
   "Settings": "Параметры",
   "sign in other account": "Войдите в другую учетную запись",
   "Help": "Справка",
-  "Documentation": "Документация"
+  "Documentation": "Документация",
+  "Parts between {} need to be replaced with real values": "Части между {} нужно заменить реальными значениями"
 }

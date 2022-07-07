@@ -42,8 +42,12 @@ function getRequestUrl(url: string, version: string): string {
   const versionToReplace = pathname.startsWith(`/${version}`)
     ? version
     : getGraphVersion(url);
-  const requestContent = pathname.split(versionToReplace + '/').pop()!;
-  return decodeURIComponent(requestContent?.replace(/\/$/, ''));
+  const requestContent = pathname.split(versionToReplace).pop()!;
+  return removeLeadingSlash(decodeURIComponent(requestContent?.replace(/\/$/, '')));
+}
+
+function removeLeadingSlash(url: string): string {
+  return (url.charAt(0) === '/') ? url.substring(1) : url;
 }
 
 function getGraphVersion(url: string): string {
@@ -73,7 +77,7 @@ function generateSampleUrl(
   search: string
 ): string {
   const { origin } = new URL(url);
-  return `${origin}/${queryVersion}/${requestUrl + search}`;
+  return removeExtraSlashesFromUrl(`${origin}/${queryVersion}/${requestUrl + search}`);
 }
 
 export function removeExtraSlashesFromUrl(url: string): string {
@@ -85,5 +89,10 @@ export function hasWhiteSpace(url: string): boolean {
   const parts = url.split('?');
   return parts.length > 1 ? whitespaceChars.some((char) => parts[0].trimStart().includes(char)) :
     whitespaceChars.some((char) => parts[0].trim().includes(char));
+}
+
+export function hasPlaceHolders(url: string): boolean {
+  const placeHolderChars = ['{', '}'];
+  return placeHolderChars.length > 1 && placeHolderChars.every((char) => url.includes(char));
 }
 
