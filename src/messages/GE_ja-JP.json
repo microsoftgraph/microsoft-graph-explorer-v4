@@ -447,5 +447,6 @@
   "Settings": "設定",
   "sign in other account": "別のアカウントでサインインする",
   "Help": "ヘルプ",
-  "Documentation": "ドキュメント"
+  "Documentation": "ドキュメント",
+  "Parts between {} need to be replaced with real values": "{} 間の部分は実際の値に置き換える必要があります"
 }

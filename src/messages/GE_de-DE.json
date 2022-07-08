@@ -447,5 +447,7 @@
   "Settings": "Einstellungen",
   "sign in other account": "Mit einem anderen Konto anmelden",
   "Help": "Hilfe",
-  "Documentation": "Dokumentation"
+  "Graph Documentation": "Microsoft Graph-API Referenz",
+  "Parts between {} need to be replaced with real values": "Teile zwischen {} müssen durch echte Werte ersetzt werden",
+  "Get started with Graph Explorer": "Mit Graph-Explorer loslegen"
 }
