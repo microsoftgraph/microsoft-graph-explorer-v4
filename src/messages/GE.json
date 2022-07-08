@@ -449,5 +449,7 @@
   "Help": "Help",
   "Graph Documentation": "Microsoft Graph API Reference",
   "Parts between {} need to be replaced with real values": "Parts between {} need to be replaced with real values",
-  "Get started with Graph Explorer": "Get started with Graph Explorer"
+  "Get started with Graph Explorer": "Get started with Graph Explorer",
+  "No resources found": "We did not find any resource items",
+  "No samples found": "We did not find any sample queries"
 }

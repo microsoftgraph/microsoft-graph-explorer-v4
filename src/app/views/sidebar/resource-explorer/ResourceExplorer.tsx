@@ -20,6 +20,7 @@ import { getResourcesSupportedByVersion } from '../../../utils/resources/resourc
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
+import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import CommandOptions from './command-options/CommandOptions';
 import {
@@ -164,7 +165,6 @@ const unstyledResourceExplorer = (props: any) => {
     });
   }
 
-
   const breadCrumbs = generateBreadCrumbs();
 
   if (pending) {
@@ -227,20 +227,25 @@ const unstyledResourceExplorer = (props: any) => {
       <Label styles={{ root: { position: 'relative', left: '10px' } }}>
         <FormattedMessage id='Resources available' />
       </Label>
-      <Nav
-        groups={items}
-        styles={navStyles}
-        onRenderLink={(link) => {
-          return <ResourceLink
-            link={link}
-            isolateTree={isolateTree}
-            resourceOptionSelected={(activity: string, context: unknown) => resourceOptionSelected(activity, context)}
-            linkLevel={linkLevel}
-            classes={classes}
-          />
-        }}
-        onLinkClick={clickLink}
-        className={classes.queryList} />
+      {
+        items[0].links.length === 0 ? NoResultsFound('No resources found', {paddingBottom: '60px'}):
+          (<Nav
+            groups={items}
+            styles={navStyles}
+            onRenderLink={(link) => {
+              return <ResourceLink
+                link={link}
+                isolateTree={isolateTree}
+                resourceOptionSelected={(activity: string, context: unknown) =>
+                  resourceOptionSelected(activity, context)}
+                linkLevel={linkLevel}
+                classes={classes}
+              />
+            }}
+            onLinkClick={clickLink}
+            className={classes.queryList} />
+          )
+      }
     </section >
   );
 }
