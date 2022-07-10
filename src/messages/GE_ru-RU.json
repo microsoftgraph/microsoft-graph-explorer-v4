@@ -449,5 +449,7 @@
   "Help": "Справка",
   "Graph Documentation": "Справочник по API Microsoft Graph",
   "Parts between {} need to be replaced with real values": "Части между {} необходимо заменить реальными значениями",
-  "Get started with Graph Explorer": "Начало работы с песочницей Graph"
+  "Get started with Graph Explorer": "Начало работы с песочницей Graph",
+  "No resources found": "Не удалось найти элементы ресурсов",
+  "No samples found": "Не удалось найти примеры запросов"
 }
