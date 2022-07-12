@@ -446,5 +446,10 @@
   "Remove request header": "Anforderungsheader entfernen",
   "Settings": "Einstellungen",
   "sign in other account": "Mit einem anderen Konto anmelden",
-  "Help": "Hilfe"
+  "Help": "Hilfe",
+  "Graph Documentation": "Microsoft Graph-API Referenz",
+  "Parts between {} need to be replaced with real values": "Teile zwischen {} müssen durch echte Werte ersetzt werden",
+  "Get started with Graph Explorer": "Erste Schritte mit Graph-Explorer",
+  "No resources found": "Wir haben keine Ressourcen gefunden",
+  "No samples found": "Wir haben keine Musterabfragen gefunden"
 }
