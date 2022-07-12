@@ -42,7 +42,7 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
       new URL(graphProxyUrl).origin,
       new URL(ADAPTIVE_CARD_URL).origin,
       new URL(GRAPH_TOOOLKIT_EXAMPLE_URL).origin,
-      NPS_FEEDBACK_URL
+      new URL(NPS_FEEDBACK_URL).origin
     ];
     if (!targetsToInclude.includes(urlObject.origin)) {
       return false;

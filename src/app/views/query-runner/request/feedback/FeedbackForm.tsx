@@ -105,8 +105,9 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
       showEmailAddress: (policies?.data?.email !== 2),
       surveyEnabled: (profile?.profileType !== ACCOUNT_TYPE.AAD),
       onDismiss: (campaignId: string, submitted: boolean) => {
-        const count = getLatestCount(floodgateObject.floodgate.getEngine().previousSurveyEventActivityStats);
-        const telemetryData = { count, isSubmitted: false, campaignId };
+        const SecondsBeforePopup = getSecondsBeforePopup(floodgateObject.floodgate.getEngine()
+          .previousSurveyEventActivityStats);
+        const telemetryData = { SecondsBeforePopup, IsSubmitted: false };
         if (submitted) {
           dispatch(setQueryResponseStatus({
             status: translateMessage('Submitted Successfully'),
@@ -114,10 +115,10 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
             ok: true,
             messageType: MessageBarType.success
           }));
-          trackSurveyPopup({...telemetryData, isSubmitted: true});
+          trackSurveyPopup({...telemetryData, IsSubmitted: true}, campaignId);
         }
         else{
-          trackSurveyPopup(telemetryData);
+          trackSurveyPopup(telemetryData, campaignId);
         }
         onDismissSurvey();
       },
@@ -177,14 +178,13 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
     }
   }
 
-  const trackSurveyPopup = (telemetryData: any) => {
-    const { campaignId } = telemetryData;
+  const trackSurveyPopup = (telemetryData: any, campaignId: string) => {
     if(campaignId === process.env.REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID){
       telemetry.trackWindowOpenEvent(componentNames.LAUNCH_FEEDBACK_POPUP_ACTION, telemetryData);
     }
   }
 
-  const getLatestCount = (previousSurveyEventActivityStats: any) : string => {
+  const getSecondsBeforePopup = (previousSurveyEventActivityStats: any) : string => {
     let latestCount : number = 0;
     if (Object.keys(previousSurveyEventActivityStats.Surveys).length > 0) {
       const surveyStats: any = Object.values(previousSurveyEventActivityStats.Surveys);
