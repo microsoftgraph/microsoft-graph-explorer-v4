@@ -449,5 +449,7 @@
   "Help": "ヘルプ",
   "Graph Documentation": "Microsoft Graph API リファレンス",
   "Parts between {} need to be replaced with real values": "{} 間の部分は実際の値に置き換える必要があります",
-  "Get started with Graph Explorer": "Microsoft Graph エクスプローラーの使用を開始する"
+  "Get started with Graph Explorer": "Microsoft Graph エクスプローラーの使用を開始する",
+  "No resources found": "リソース項目が見つかりませんでした",
+  "No samples found": "サンプル クエリが見つかりませんでした"
 }
