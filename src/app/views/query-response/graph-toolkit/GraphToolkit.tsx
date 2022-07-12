@@ -13,7 +13,6 @@ import {
 } from '@fluentui/react';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { componentNames, telemetry } from '../../../../telemetry';
-import { classNames } from '../../classnames';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { IRootState } from '../../../../types/root';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -29,7 +28,6 @@ class GraphToolkit extends Component<any> {
   public render() {
     const { sampleQuery } = this.props;
     const { toolkitUrl, exampleUrl } = lookupToolkitUrl(sampleQuery);
-    const classes = classNames(this.props);
 
     if (toolkitUrl && exampleUrl) {
       return (
@@ -40,7 +38,7 @@ class GraphToolkit extends Component<any> {
               onClick={(e) =>
                 telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK)}
               tabIndex={0} href={exampleUrl} target='_blank' rel='noopener noreferrer'
-              className={classes.link}>
+              className={'ms-Link'}>
               <FormattedMessage id='graph toolkit playground' />
             </a>
             .
@@ -55,7 +53,7 @@ class GraphToolkit extends Component<any> {
         <FormattedMessage id='We did not find a Graph toolkit for this query' />
         &nbsp;
         <a
-          className={classes.link}
+          className={'ms-Link'}
           tabIndex={0}
           href='https://aka.ms/mgt'
           rel='noopener noreferrer'

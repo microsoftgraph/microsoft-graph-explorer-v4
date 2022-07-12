@@ -182,8 +182,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       theSuggestions = getSuggestions(url, autoCompleteOptions);
     }
 
-    console.table({ url, preceedingText, autoCompleteOptionsurl: autoCompleteOptions?.url, searchText });
-
     if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
       if (filtered[0] !== searchText) {
@@ -235,7 +233,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     const { currentTarget, relatedTarget } = event;
     if (!currentTarget.contains(relatedTarget as Node) && shouldShowSuggestions) {
       setShouldShowSuggestions(false);
-      console.log('closeSuggestionDialog')
     }
   }
 

@@ -16,7 +16,8 @@ import { IQuery } from '../types/query-runner';
 import {
   BUTTON_CLICK_EVENT,
   LINK_CLICK_EVENT,
-  TAB_CLICK_EVENT
+  TAB_CLICK_EVENT,
+  WINDOW_OPEN_EVENT
 } from './event-types';
 import {
   addCommonTelemetryItemProperties,
@@ -39,7 +40,7 @@ class Telemetry implements ITelemetry {
     this.config = {
       instrumentationKey: this.getInstrumentationKey(),
       disableExceptionTracking: false, // Enables autocollection of uncaught exceptions. Used with `sanitizeStackTrace` telemetry initializer to remove any data that might be PII.
-      disableAjaxTracking: true,
+      disableAjaxTracking: false,
       disableFetchTracking: false, // Enables capturing of telemetry data for outgoing requests. Used with `filterRemoteDependencyData` telemetry initializer to sanitize captured data to prevent inadvertent capture of PII.
       disableTelemetry: this.getInstrumentationKey() ? false : true,
       extensions: [this.reactPlugin]
@@ -109,6 +110,12 @@ class Telemetry implements ITelemetry {
       properties.QuerySignature = `${sampleQuery.selectedVerb} ${sanitizedUrl}`;
     }
     telemetry.trackEvent(BUTTON_CLICK_EVENT, properties);
+  }
+
+  public trackWindowOpenEvent(windowEvent: string, properties?: any) {
+    properties = properties || {};
+    properties.ComponentName = windowEvent;
+    telemetry.trackEvent(WINDOW_OPEN_EVENT, properties);
   }
 
   private getInstrumentationKey() {
