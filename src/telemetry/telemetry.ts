@@ -40,7 +40,7 @@ class Telemetry implements ITelemetry {
     this.config = {
       instrumentationKey: this.getInstrumentationKey(),
       disableExceptionTracking: false, // Enables autocollection of uncaught exceptions. Used with `sanitizeStackTrace` telemetry initializer to remove any data that might be PII.
-      disableAjaxTracking: true,
+      disableAjaxTracking: false,
       disableFetchTracking: false, // Enables capturing of telemetry data for outgoing requests. Used with `filterRemoteDependencyData` telemetry initializer to sanitize captured data to prevent inadvertent capture of PII.
       disableTelemetry: this.getInstrumentationKey() ? false : true,
       extensions: [this.reactPlugin]
