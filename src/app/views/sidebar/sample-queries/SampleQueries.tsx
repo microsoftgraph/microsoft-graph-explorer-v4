@@ -32,6 +32,7 @@ import { setQueryResponseStatus } from '../../../services/actions/query-status-a
 import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
+import { NoResultsFound } from '../sidebar-utils/SearchResult';
 
 const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
 
@@ -355,28 +356,30 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
       <Announced
         message={`${sampleQueries.length} search results available.`}
       />
-      <div role="navigation">
-        <DetailsList
-          className={classes.queryList}
-          cellStyleProps={{
-            cellRightPadding: 0,
-            cellExtraRightPadding: 0,
-            cellLeftPadding: 0
-          }}
-          onRenderItemColumn={renderItemColumn}
-          items={sampleQueries}
-          selectionMode={SelectionMode.none}
-          columns={columns}
-          groups={groups}
-          groupProps={{
-            showEmptyGroups: true,
-            onRenderHeader: renderGroupHeader
-          }}
-          onRenderRow={renderRow}
-          onRenderDetailsHeader={renderDetailsHeader}
-          onItemInvoked={querySelected}
-        />
-      </div>
+      { sampleQueries.length === 0 ? NoResultsFound('No samples found') :
+        <div role="navigation">
+          <DetailsList
+            className={classes.queryList}
+            cellStyleProps={{
+              cellRightPadding: 0,
+              cellExtraRightPadding: 0,
+              cellLeftPadding: 0
+            }}
+            onRenderItemColumn={renderItemColumn}
+            items={sampleQueries}
+            selectionMode={SelectionMode.none}
+            columns={columns}
+            groups={groups}
+            groupProps={{
+              showEmptyGroups: true,
+              onRenderHeader: renderGroupHeader
+            }}
+            onRenderRow={renderRow}
+            onRenderDetailsHeader={renderDetailsHeader}
+            onItemInvoked={querySelected}
+          />
+        </div>
+      }
     </div>
   );
 }
