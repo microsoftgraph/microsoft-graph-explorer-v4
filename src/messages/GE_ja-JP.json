@@ -447,6 +447,9 @@
   "Settings": "設定",
   "sign in other account": "別のアカウントでサインインする",
   "Help": "ヘルプ",
-  "Documentation": "ドキュメント",
-  "Parts between {} need to be replaced with real values": "{} 間の部分は実際の値に置き換える必要があります"
+  "Graph Documentation": "Microsoft Graph API リファレンス",
+  "Parts between {} need to be replaced with real values": "{} 間の部分は実際の値に置き換える必要があります",
+  "Get started with Graph Explorer": "Graph エクスプローラーの使用を開始",
+  "No resources found": "リソース項目が見つかりませんでした",
+  "No samples found": "サンプル クエリが見つかりませんでした"
 }
