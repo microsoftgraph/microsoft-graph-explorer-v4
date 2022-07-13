@@ -149,7 +149,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
 
   const requestForAutocompleteOptions = (url: string, context: SignContext) => {
-    const signature = url;//sanitizeQueryUrl(url);
+    const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
     if (!GRAPH_API_VERSIONS.includes(queryVersion.toLowerCase())) {
       return;

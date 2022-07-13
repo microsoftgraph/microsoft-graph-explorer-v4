@@ -7,11 +7,7 @@ import { IRootState } from '../../../types/root';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 
-interface IFeedback {
-  feedbackRef: any;
-  onSetFocus: Function
-}
-export const FeedbackButton = (props: IFeedback) => {
+export const FeedbackButton = () => {
   const [enableSurvey, setEnableSurvey] = useState(false);
   const { profile } = useSelector( (state: IRootState) => state );
   const currentTheme = getTheme();
@@ -70,7 +66,6 @@ export const FeedbackButton = (props: IFeedback) => {
             styles={feedbackIconStyles}
             role={'button'}
             disabled={enableSurvey}
-            componentRef = {props.feedbackRef}
           />
         </TooltipHost>
 
