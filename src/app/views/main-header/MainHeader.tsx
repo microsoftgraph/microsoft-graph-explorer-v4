@@ -3,6 +3,7 @@ import {
   FontIcon,
   getId,
   getTheme,
+  IButton,
   IconButton,
   IStackTokens,
   Label,
@@ -48,6 +49,11 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   const { rootStyles : itemAlignmentStackStyles, rightItemsStyles, graphExplorerLabelStyles,
     feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles,
     tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles(currentTheme, mobileScreen);
+
+  const feedbackRef = React.createRef<IButton>();
+  const onSetFocus = () => {
+    feedbackRef.current!.focus();
+  }
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -113,7 +119,8 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           }
           <span style={ moreInformationStyles }> <Settings /> </span>
           <span style={ moreInformationStyles }> <Help /> </span>
-          <span style={ feedbackIconAdjustmentStyles }> <FeedbackButton /> </span>
+          <span style={ feedbackIconAdjustmentStyles }> <FeedbackButton onSetFocus={onSetFocus}
+            feedbackRef={feedbackRef}/> </span>
           <Authentication />
         </Stack>
       </Stack>
