@@ -6,11 +6,14 @@ import FeedbackForm from '../query-runner/request/feedback/FeedbackForm';
 import { IRootState } from '../../../types/root';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 
-export const FeedbackButton = () => {
+interface IFeedback {
+  feedbackRef: any;
+  onSetFocus: Function
+}
+export const FeedbackButton = (props: IFeedback) => {
   const [enableSurvey, setEnableSurvey] = useState(false);
   const { profile } = useSelector( (state: IRootState) => state );
   const currentTheme = getTheme();
-
   const feedbackIcon : IIconProps = {
     iconName : 'Feedback'
   }
@@ -36,6 +39,7 @@ export const FeedbackButton = () => {
   };
 
   const toggleSurvey = () => {
+    props.onSetFocus();
     setEnableSurvey(prevState => !prevState);
   }
 
@@ -59,6 +63,7 @@ export const FeedbackButton = () => {
             styles={feedbackIconStyles}
             role={'button'}
             disabled={enableSurvey}
+            componentRef = {props.feedbackRef}
           />
         </TooltipHost>
 
