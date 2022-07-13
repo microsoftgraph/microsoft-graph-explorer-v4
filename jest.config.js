@@ -26,9 +26,6 @@ module.exports = {
   testEnvironmentOptions: {
     url: 'http://localhost'
   },
-  testEnvironmentOptions: {
-    url: 'http://localhost'
-  },
   testEnvironment: 'jsdom',
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
