@@ -2,7 +2,7 @@ import { Dropdown, IDropdownOption } from '@fluentui/react';
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { httpMethods, IQueryInputProps } from '../../../../types/query-runner';
+import { httpMethods, IQuery, IQueryInputProps } from '../../../../types/query-runner';
 
 import { IRootState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
@@ -49,7 +49,7 @@ const QueryInput = (props: IQueryInputProps) => {
     dispatch(setSampleQuery(updatedQuery));
   };
 
-  const getChangedQueryContent = (newUrl: string) => {
+  const getChangedQueryContent = (newUrl: string) : IQuery => {
 
     const query = { ...sampleQuery };
     const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);
@@ -58,7 +58,6 @@ const QueryInput = (props: IQueryInputProps) => {
       query.selectedVersion = newQueryVersion;
       query.sampleUrl = newUrl;
     }
-
     return query;
   }
 
