@@ -54,6 +54,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
   const setFocus = () => {
     feedbackButtonRef.current?.focus();
   }
+
   return (
     <Stack tokens={sectionStackTokens}>
       <Stack
