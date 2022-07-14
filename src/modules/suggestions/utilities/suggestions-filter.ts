@@ -1,4 +1,6 @@
+import { dynamicSort } from '../../../app/utils/dynamic-sort';
 import { AutoCompleteOption } from '../../../types/auto-complete';
+import { SortOrder } from '../../../types/enums';
 import { delimiters, getLastDelimiterInUrl } from './delimiters';
 
 function getParametersWithVerb(properties: { options: AutoCompleteOption; }) {
@@ -48,16 +50,24 @@ const getQueryProperties = (url: string, options: AutoCompleteOption): string[] 
 
 function getSuggestions(url: string, autoCompleteOptions: AutoCompleteOption): string[] {
   const { context } = getLastDelimiterInUrl(url);
+  let suggestions: string[] = [];
   if (context === 'parameters') {
-    return getQueryParameters(autoCompleteOptions);
+    suggestions = getQueryParameters(autoCompleteOptions);
   }
+
   if (context === 'paths') {
-    return getPathOptions(autoCompleteOptions);
+    suggestions = getPathOptions(autoCompleteOptions);
   }
+
   if (context === 'properties') {
-    return getQueryProperties(url, autoCompleteOptions);
+    suggestions = getQueryProperties(url, autoCompleteOptions);
   }
-  return [];
+
+  if (suggestions.length > 0) {
+    suggestions = suggestions.sort(dynamicSort(null, SortOrder.ASC))
+  }
+
+  return suggestions;
 }
 
 export {
