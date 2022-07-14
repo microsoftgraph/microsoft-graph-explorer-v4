@@ -1,4 +1,4 @@
-import { getTheme, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
+import { getTheme, IButton, IconButton, IIconProps, IRefObject, TooltipHost } from '@fluentui/react';
 import React, { useState } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { useSelector } from 'react-redux';
@@ -7,7 +7,11 @@ import { IRootState } from '../../../types/root';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 
-export const FeedbackButton = () => {
+interface IFeedbackButton {
+  feedbackButtonRef: IRefObject<IButton>;
+  setFocus: Function;
+}
+export const FeedbackButton = (props: IFeedbackButton) => {
   const [enableSurvey, setEnableSurvey] = useState(false);
   const { profile } = useSelector( (state: IRootState) => state );
   const currentTheme = getTheme();
@@ -41,6 +45,7 @@ export const FeedbackButton = () => {
   }
 
   const disableSurvey = () => {
+    props.setFocus();
     setEnableSurvey(false);
   }
 
@@ -66,6 +71,7 @@ export const FeedbackButton = () => {
             styles={feedbackIconStyles}
             role={'button'}
             disabled={enableSurvey}
+            componentRef = {props.feedbackButtonRef}
           />
         </TooltipHost>
 
