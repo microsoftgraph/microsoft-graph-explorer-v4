@@ -63,10 +63,6 @@ function getSuggestions(url: string, autoCompleteOptions: AutoCompleteOption): s
     suggestions = getQueryProperties(url, autoCompleteOptions);
   }
 
-  if (suggestions.length > 0) {
-    suggestions = suggestions.sort(dynamicSort(null, SortOrder.ASC))
-  }
-
   return suggestions;
 }
 
