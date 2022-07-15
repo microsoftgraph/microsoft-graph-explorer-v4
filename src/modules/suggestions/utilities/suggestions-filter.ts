@@ -1,6 +1,4 @@
-import { dynamicSort } from '../../../app/utils/dynamic-sort';
 import { AutoCompleteOption } from '../../../types/auto-complete';
-import { SortOrder } from '../../../types/enums';
 import { delimiters, getLastDelimiterInUrl } from './delimiters';
 
 function getParametersWithVerb(properties: { options: AutoCompleteOption; }) {
