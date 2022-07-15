@@ -1,7 +1,7 @@
 import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
   getTheme,
-  GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
+  GroupHeader, IColumn, Icon, IDetailsRowStyles, Link, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
@@ -32,6 +32,7 @@ import { setQueryResponseStatus } from '../../../services/actions/query-status-a
 import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
+import { NoResultsFound } from '../sidebar-utils/SearchResult';
 
 const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
 
@@ -341,42 +342,43 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
         dismissButtonAriaLabel='Close'
       >
         <FormattedMessage id='see more queries' />
-        <a
+        <Link
           target='_blank'
           rel="noopener noreferrer"
-          className={classes.links}
-          onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href,
+          onClick={(e) => telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
             componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
           href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
         >
           <FormattedMessage id='Microsoft Graph API Reference docs' />
-        </a>
+        </Link>
       </MessageBar>
       <Announced
         message={`${sampleQueries.length} search results available.`}
       />
-      <div role="navigation">
-        <DetailsList
-          className={classes.queryList}
-          cellStyleProps={{
-            cellRightPadding: 0,
-            cellExtraRightPadding: 0,
-            cellLeftPadding: 0
-          }}
-          onRenderItemColumn={renderItemColumn}
-          items={sampleQueries}
-          selectionMode={SelectionMode.none}
-          columns={columns}
-          groups={groups}
-          groupProps={{
-            showEmptyGroups: true,
-            onRenderHeader: renderGroupHeader
-          }}
-          onRenderRow={renderRow}
-          onRenderDetailsHeader={renderDetailsHeader}
-          onItemInvoked={querySelected}
-        />
-      </div>
+      { sampleQueries.length === 0 ? NoResultsFound('No samples found') :
+        <div role="navigation">
+          <DetailsList
+            className={classes.queryList}
+            cellStyleProps={{
+              cellRightPadding: 0,
+              cellExtraRightPadding: 0,
+              cellLeftPadding: 0
+            }}
+            onRenderItemColumn={renderItemColumn}
+            items={sampleQueries}
+            selectionMode={SelectionMode.none}
+            columns={columns}
+            groups={groups}
+            groupProps={{
+              showEmptyGroups: true,
+              onRenderHeader: renderGroupHeader
+            }}
+            onRenderRow={renderRow}
+            onRenderDetailsHeader={renderDetailsHeader}
+            onItemInvoked={querySelected}
+          />
+        </div>
+      }
     </div>
   );
 }

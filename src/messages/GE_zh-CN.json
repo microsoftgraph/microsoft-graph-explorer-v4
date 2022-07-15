@@ -447,5 +447,9 @@
   "Settings": "设置",
   "sign in other account": "使用其他帐户登录",
   "Help": "帮助",
-  "Documentation": "文档"
+  "Graph Documentation": "Microsoft Graph API 参考",
+  "Parts between {} need to be replaced with real values": "{} 之间的部分需要替换为实数值",
+  "Get started with Graph Explorer": "Graph 浏览器入门",
+  "No resources found": "找不到任何资源项",
+  "No samples found": "找不到任何示例查询"
 }

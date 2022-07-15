@@ -1,8 +1,8 @@
 import { PERMISSIONS_PANEL_OPEN } from '../redux-constants';
 import { togglePermissionsPanel } from './permissions-panel-action-creator';
 
-describe('Tests permissions panel action creator', () => {
-  it('tests permissions panel action creator', () => {
+describe('Permissions panel action creator', () => {
+  it('should dispatch PERMISSIONS_PANEL_OPEN when togglePermissionsPanel({true/false}) is called', () => {
     // Arrange
     const response: boolean = true;
     const expectedAction = {

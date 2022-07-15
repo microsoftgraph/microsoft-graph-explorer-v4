@@ -1,5 +1,6 @@
 import React from 'react';
-import { cleanup, render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event'
 
 import App from '../../app/views/App';
 import { Mode } from '../../types/enums';
@@ -8,15 +9,16 @@ import { Provider } from 'react-redux';
 import { store } from '../../store';
 import { geLocale } from '../../appLocale';
 import messages from '../../messages';
+import { initializeIcons } from '@fluentui/react';
 
-afterEach(cleanup)
 const renderApp = (args?: any) : any => {
+  initializeIcons();
   const defaultProps = {
     profile: null,
     queryState: null,
     termsOfUse: true,
-    graphExplorerMode: Mode.Complete,
-    sidebarProperties: {mobileScreen: args?.mobileScreen, showSidebar: true},
+    graphExplorerMode: args.mode || Mode.Complete,
+    sidebarProperties: {mobileScreen: args?.mobileScreen, showSidebar: args?.showSidebar},
     sampleQuery: {
       selectedVerb: 'GET',
       selectedVersion: 'v1',
@@ -62,52 +64,185 @@ const renderApp = (args?: any) : any => {
       </IntlProvider>
     </Provider> );
 }
+window.fetch = jest.fn();
+window.open = jest.fn();
+
+
+// eslint-disable-next-line react/display-name
+jest.mock('../../app/views/query-runner/request/feedback/FeedbackForm.tsx', () => () => {
+  return <div />;
+});
 
 jest.mock('@microsoft/applicationinsights-react-js', () => ({
   // eslint-disable-next-line react/display-name
   withAITracking: () => React.Component,
   ReactPlugin: Object
-}))
-
-jest.mock('@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window', () => ({
-  OfficeBrowserFeedback: Object
-}))
-
-jest.mock('@ms-ofb/officebrowserfeedbacknpm/Floodgate', () => ({
-  makeFloodgate: Object
-}))
-
-jest.mock('@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions', () => ({
-  AuthenticationType: 0
-}))
+}));
 
 // eslint-disable-next-line no-console
-console.warn = jest.fn()
+console.warn = jest.fn();
 
-describe('It should render the main GE site', () => {
-  it('Should confirm that all the major sections are rendered', () => {
-    const { getByText } = renderApp({mobileScreen: false});
-    getByText('Run query');
-    getByText('Sign in to Graph Explorer');
-    getByText('Request body');
-    getByText('Request headers');
-    getByText('Modify permissions (Preview)');
-    getByText('Access token');
-    getByText(/Help Improve/);
-    getByText('Response preview');
-    getByText('Response headers');
-    getByText('Code snippets');
-    getByText('Toolkit component');
-    getByText('Adaptive cards');
-    getByText('Expand');
-    getByText('Authentication');
-    getByText('Sample queries');
-    getByText('History');
+describe('App rendering', () => {
+  it('should confirm that all the major sections of the app are rendered', async () => {
+    renderApp({mobileScreen: false, showSidebar: true});
+    expect(screen.getByRole('button', { name: /sign in/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /settings/i })).toBeDefined();
+    expect(screen.getByText(/tenant/i)).toBeDefined();
+    expect(screen.getByRole('button', { name: /help improve graph explorer/i })).toBeDefined();
+
+    // confirm that sidebar items are rendered
+    expect(screen.getByRole('tab', { name: /sample queries/i} )).toBeDefined();
+    expect(screen.getByRole('tab', { name: /history/i} )).toBeDefined();
+    expect(screen.getByRole('tab', { name: /resources/i} )).toBeDefined();
+
+    expect(screen.getByRole('combobox', { name: /http request method option/i })).toBeDefined()
+    expect(screen.getByRole('combobox', { name: /microsoft graph api version option/i })).toBeDefined();
+    expect(screen.getByRole('textbox')).toBeDefined();
+    expect(screen.getByRole('button', { name: /more info/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /run query/i })).toBeDefined();
+    expect(screen.getByRole('button', { name: /share query/i })).toBeDefined();
+
+    expect(screen.getByRole('tab', { name: /request body/i } )).toBeDefined();
+    expect(screen.getByRole('tab', { name: /request headers/i} )).toBeDefined();
+    expect(screen.getByRole('tab', { name: /modify permissions/i})).toBeDefined();
+    expect(screen.getByRole('tab', {name: /access token/i })).toBeDefined();
+
+    // confirm that response section items are rendered
+    expect(screen.getByRole('tab', { name: /response preview/i })).toBeDefined();
+    expect(screen.getByRole('tab', { name: /response headers/i} )).toBeDefined();
+    expect(screen.getByRole('tab', { name: /code snippets/i })).toBeDefined();
+    expect(screen.getByRole('tab', { name: /toolkit component/i})).toBeDefined();
+    expect(screen.getByRole('tab', { name: /adaptive cards/i})).toBeDefined();
+    expect(screen.getByRole('tab', { name: /expand/i} )).toBeDefined();
   });
 
-  it('Should render the main app with a mobile screen view', ()=> {
-    const { getByText } = renderApp({mobileScreen: true});
-    getByText(/Run query/);
-    getByText(/Authentication/);
+  it('should hide the sidebar when \'minimize sidebar button\' is clicked', async () => {
+    const user = userEvent.setup();
+    renderApp({ mobileScreen: false, showSidebar: true });
+    const minimizeButton = screen.getByRole('button', { name: /minimize sidebar/i });
+    await user.click(minimizeButton);
+    expect(screen.getByText(/sidebar minimized/i)).toBeDefined();
+
+    // resources, samples and history tabs are now buttons on the sidebar
+    const samplesButton = screen.getByRole('button', { name: /sample queries/i});
+    expect(screen.getByRole('button', { name: /resources/i})).toBeDefined();
+    expect(screen.getByRole('button', { name: /history/i})).toBeDefined();
+
+    await user.click(samplesButton);
+    expect(screen.getByText(/sidebar maximized/i)).toBeDefined();
+    expect(screen.getByRole('tab',{ name: /sample queries/i}));
+  })
+
+  it('should render http methods dropdown when the \'request method button\' is clicked', async () => {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const methodButton = screen.getByRole('combobox', { name: /http request method option/i });
+    await user.click(methodButton);
+    expect(screen.getByText(/post/i)).toBeDefined();
+    expect(screen.getByText(/put/i)).toBeDefined();
+    expect(screen.getByText(/delete/i)).toBeDefined();
+    expect(screen.getByText(/patch/i)).toBeDefined();
+  });
+
+  it('should render the graph versions when the \'api versions button\' is clicked', async () => {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const versionButton = screen.getByRole('combobox', { name: /microsoft graph api version option/i });
+    await user.click(versionButton);
+    expect(screen.getAllByText(/v1.0/i)).toBeDefined();
+    expect(screen.getAllByText(/beta/i)).toBeDefined();
+  });
+
+  it('should confirm that the query textbox is rendered', async () => {
+    // eslint-disable-next-line no-console
+    console.error = jest.fn();
+    renderApp({ mobileScreen: false, showSidebar: true });
+    expect(screen.getByRole('textbox')).toBeDefined();
+  })
+
+  it('should render the \'share query dialog box\' when the \'share query button\' is clicked', async () => {
+    const user = userEvent.setup();
+    renderApp({ mobileScreen: false, showSidebar: true });
+    const shareQueryButton = screen.getByRole('button', { name: /share query/i });
+    await user.click(shareQueryButton);
+    expect(screen.getAllByText(/share query/i)).toBeDefined();
+  })
+
+  it('should render a dropdown of buttons when the \'settings button\' is clicked', async ()=> {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const settingsButton = screen.getByRole('button', { name: /settings/i });
+    await user.click(settingsButton);
+    expect(screen.getByText(/change theme/i)).toBeDefined();
+    expect(screen.getByText(/get a sandbox with sample data/i)).toBeDefined();
+  });
+
+  it('should confirm that a popup appears when the \'sign in button\' is clicked', async () => {
+    const user = userEvent.setup();
+    renderApp({ mobileScreen: false, showSidebar: true });
+    const signInButton = screen.getByRole('button', { name: /sign in/i});
+    await user.click(signInButton);
+    expect(window.open).toHaveBeenCalled();
+    expect(window.open).toHaveBeenCalledTimes(1);
+  })
+
+  it('should render samples tab and its children', async () => {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const samplesTab = screen.getByRole('tab', { name: /sample queries/i} );
+    await user.click(samplesTab);
+    expect(screen.getByRole('searchbox')).toBeDefined();
+    expect(screen.getByText(/You are viewing a cached set of samples/i)).toBeDefined();
+    expect(screen.getByText(/See more queries in/i)).toBeDefined();
+  })
+
+  it('should render resources tab and its children', async () => {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const resourcesButton = screen.getByRole('tab', { name: /resources/i });
+    await user.click(resourcesButton);
+    expect(screen.getByRole('switch', { name: /switch to beta/i})).toBeDefined();
+    expect(screen.getByText(/Switch to beta/i)).toBeDefined();
+    expect(screen.getByRole('searchbox')).toBeDefined();
+    expect(screen.getByText(/resources available/i)).toBeDefined();
+    expect(screen.getByText(/off/i)).toBeDefined();
+  });
+
+  it('should render the request headers tab and its children when request headers tab is clicked', async () => {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const requestHeadersTab = screen.getByRole('tab', { name: /request headers/i});
+    await user.click(requestHeadersTab);
+    expect(screen.getByPlaceholderText(/key/i)).toBeDefined();
+    expect(screen.getByPlaceholderText(/value/i)).toBeDefined();
+    expect(screen.getByRole('button', { name: /add/i})).toBeDefined();
+    expect(screen.getByRole('columnheader', { name: /key/i})).toBeDefined();
+    expect(screen.getByRole('columnheader', { name: /value/i})).toBeDefined();
+    expect(screen.getByRole('columnheader', { name: /actions/i})).toBeDefined();
+  });
+
+  it('should render the permissions tab and its children when the modify permissions tab is clicked', async () => {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const modifyPermissionsTab = screen.getByRole('tab', { name: /modify permissions \(preview\)/i});
+    await user.click(modifyPermissionsTab);
+    expect(screen.getByText(/Permissions for the query are missing on this tab/i)).toBeDefined();
+  });
+
+  it('should render an expanded query response when expand pivot item is clicked', async () => {
+    const user = userEvent.setup();
+    renderApp({mobileScreen: false, showSidebar: true});
+    const modifyPermissionsTab = screen.getByRole('tab', { name: /expand response/i});
+    await user.click(modifyPermissionsTab);
+    expect(screen.getByText(/response area expanded/i)).toBeDefined();
+  });
+
+  it('should run a query and display a status message on the status bar and a hint on the response body', async () => {
+    const user = userEvent.setup();
+    renderApp({ mobileScreen: false, showSidebar: true });
+    const runQueryButton = screen.getByRole('button', { name: /run query/i });
+    await user.click(runQueryButton);
+    expect(screen.queryByText(/ok - 200/i)).toBeDefined();
+    expect(screen.getByText(/you are currently using a sample account/i)).toBeDefined();
   });
 })

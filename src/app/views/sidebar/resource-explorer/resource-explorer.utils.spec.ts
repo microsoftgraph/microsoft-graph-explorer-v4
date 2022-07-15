@@ -1,9 +1,8 @@
 import { IResource } from '../../../../types/resources';
+import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
 import content from '../../../utils/resources/resources.json';
 import {
-  getResourcesSupportedByVersion, createResourcesList,
-  getCurrentTree, getAvailableMethods, removeCounter,
-  getUrlFromLink, getResourcePaths
+  createResourcesList, getAvailableMethods, getCurrentTree, getResourcePaths, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 
 const resource = JSON.parse(JSON.stringify(content)) as IResource;

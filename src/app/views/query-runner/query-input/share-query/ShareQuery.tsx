@@ -2,7 +2,7 @@ import {
   DefaultButton, Dialog, DialogFooter, DialogType, DirectionalHint, FontSizes,
   IconButton, IIconProps, TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
@@ -18,11 +18,11 @@ import { shareQueryStyles } from './ShareQuery.styles';
 export const ShareQuery = () => {
   const { sampleQuery } = useSelector((state: IRootState) => state);
   const [showShareQueryDialog, setShareQuaryDialogStatus] = useState(true);
-  const [shareLink, setShareLink] = useState(() => createShareLink(sampleQuery));
 
-  useEffect(() => {
-    setShareLink(createShareLink(sampleQuery));
-  }, [sampleQuery]);
+  const query = { ...sampleQuery };
+  const sanitizedQueryUrl = sanitizeQueryUrl(query.sampleUrl);
+  query.sampleUrl = sanitizedQueryUrl;
+  const shareLink = createShareLink(query);
 
   const toggleShareQueryDialogState = () => {
     setShareQuaryDialogStatus(prevState => !prevState);
@@ -34,11 +34,10 @@ export const ShareQuery = () => {
   }
 
   const trackCopyEvent = () => {
-    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
       {
         ComponentName: componentNames.SHARE_QUERY_COPY_BUTTON,
-        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
+        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedQueryUrl}`
       });
   }
 

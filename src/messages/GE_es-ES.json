@@ -447,5 +447,9 @@
   "Settings": "Configuración",
   "sign in other account": "Inicie sesión con una cuenta diferente",
   "Help": "Ayuda",
-  "Documentation": "Documentación"
+  "Graph Documentation": "Referencia de la API de Microsoft Graph",
+  "Parts between {} need to be replaced with real values": "Las partes entre {} deben reemplazarse por valores reales",
+  "Get started with Graph Explorer": "Introducción a Probador de Graph",
+  "No resources found": "No hemos encontrado elementos de recursos",
+  "No samples found": "No hemos encontrado consultas de ejemplo"
 }

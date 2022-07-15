@@ -27,6 +27,7 @@ import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
+import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarPayload, exportQuery, generateHar } from './har-utils';
 
@@ -498,11 +499,7 @@ export class History extends Component<IHistoryProps, any> {
     ];
 
     if (!historyItems) {
-      return (
-        <Label className={classes.spinner}>
-          <FormattedMessage id='We did not find any history items' />
-        </Label>
-      );
+      return NoResultsFound('We did not find any history items');
     }
 
     const items = this.getItems(historyItems);

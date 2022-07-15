@@ -1,3 +1,4 @@
+import { FocusZone } from '@fluentui/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -9,10 +10,13 @@ const RequestBody = ({ handleOnEditorChange }: any) => {
   const { dimensions: { request: { height } }, sampleQuery } = useSelector((state: IRootState) => state);
 
   return (
-    <Monaco
-      body={sampleQuery.sampleBody}
-      height={convertVhToPx(height, 60)}
-      onChange={(value) => handleOnEditorChange(value)} />
+    <FocusZone>
+      <Monaco
+        body={sampleQuery.sampleBody}
+        height={convertVhToPx(height, 60)}
+        onChange={(value) => handleOnEditorChange(value)} />
+    </FocusZone>
+
   );
 };
 

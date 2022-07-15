@@ -1,13 +1,13 @@
 import React from 'react';
-import { cleanup, render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-
 import { geLocale } from '../../../../../appLocale';
 import messages from '../../../../../messages';
 import PathsReview from './PathsReview';
+import { initializeIcons } from '@fluentui/react';
 
-afterEach(cleanup);
 const renderPathsReview = () => {
+  initializeIcons();
   return render(
     <IntlProvider locale={geLocale}
       messages={(messages as { [key: string]: object })[geLocale]}>
@@ -59,12 +59,12 @@ jest.mock('react-redux', () => {
   }
 })
 
-// eslint-disable-next-line no-console
-console.warn = jest.fn()
-
-describe('Tests postman collections panel', () => {
-  it('Renders the path review section of resource explorer', () => {
-    const { getByText } = renderPathsReview();
-    getByText(/Download postman collection/);
-  })
+describe('Paths review panel rendering', () => {
+  it('should render the paths review panel of resource explorer with selected resources', () => {
+    renderPathsReview();
+    expect(screen.getByText(/Selected resources preview/i)).toBeDefined();
+    expect(screen.getByRole('button', { name: /close/i})).toBeDefined();
+    expect(screen.getByText(/you can export the entire list as a postman collection/i));
+    expect(screen.getByRole('button', { name: /download postman collection/i})).toBeDefined();
+  });
 })

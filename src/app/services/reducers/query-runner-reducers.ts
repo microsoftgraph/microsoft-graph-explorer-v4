@@ -2,6 +2,7 @@ import { IAction } from '../../../types/action';
 import { IGraphResponse } from '../../../types/query-response';
 import {
   CLEAR_RESPONSE,
+  LOGOUT_SUCCESS,
   QUERY_GRAPH_RUNNING,
   QUERY_GRAPH_SUCCESS,
   VIEW_HISTORY_ITEM_SUCCESS
@@ -24,6 +25,8 @@ export function graphResponse(
     case QUERY_GRAPH_RUNNING:
       return initialState;
     case CLEAR_RESPONSE:
+      return initialState;
+    case LOGOUT_SUCCESS:
       return initialState;
     default:
       return state;

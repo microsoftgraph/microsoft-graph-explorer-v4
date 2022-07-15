@@ -1,5 +1,5 @@
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { Label, MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
+import { Label, Link, MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -83,7 +83,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
           <Label className={classes.emptyStateLabel}>
             <FormattedMessage id='The Adaptive Card for this response is not available' />
             &nbsp;
-            <a
+            <Link
               className={classes.link}
               href={'https://adaptivecards.io/designer/'}
               tabIndex={0}
@@ -91,7 +91,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               rel='noopener noreferrer'
             >
               <FormattedMessage id='Adaptive Cards designer' />
-            </a>
+            </Link>
           </Label>
         );
       }
@@ -136,23 +136,21 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               <div id={'json-schema-tab'}>
                 <MessageBar messageBarType={MessageBarType.info}>
                   <FormattedMessage id='Get started with adaptive cards on' />
-                  <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
+                  <Link href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
                     target='_blank'
                     rel='noopener noreferrer'
                     tabIndex={0}
-                    className={classes.link}
                   >
                     <FormattedMessage id='Adaptive Cards Templating SDK' />
-                  </a>
+                  </Link>
                   <FormattedMessage id='and experiment on' />
-                  <a href={'https://adaptivecards.io/designer/'}
+                  <Link href={'https://adaptivecards.io/designer/'}
                     target='_blank'
                     rel='noopener noreferrer'
                     tabIndex={0}
-                    className={classes.link}
                   >
                     <FormattedMessage id='Adaptive Cards designer' />
-                  </a>
+                  </Link>
                 </MessageBar>
                 <CopyButton
                   className={classes.copyIcon}

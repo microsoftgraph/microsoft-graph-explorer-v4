@@ -5,12 +5,12 @@ import { useSelector } from 'react-redux';
 import FeedbackForm from '../query-runner/request/feedback/FeedbackForm';
 import { IRootState } from '../../../types/root';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 
 export const FeedbackButton = () => {
   const [enableSurvey, setEnableSurvey] = useState(false);
   const { profile } = useSelector( (state: IRootState) => state );
   const currentTheme = getTheme();
-
   const feedbackIcon : IIconProps = {
     iconName : 'Feedback'
   }
@@ -35,12 +35,19 @@ export const FeedbackButton = () => {
   }
   };
 
-  const toggleSurvey = () => {
-    setEnableSurvey(prevState => !prevState);
+  const activateSurvey = () => {
+    setEnableSurvey(true);
+    trackFeedbackButtonEvent();
   }
 
   const disableSurvey = () => {
     setEnableSurvey(false);
+  }
+
+  const trackFeedbackButtonEvent = () => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.FEEDBACK_BUTTON
+    });
   }
 
   return (
@@ -52,7 +59,7 @@ export const FeedbackButton = () => {
           calloutProps={calloutProps}
           styles={hostStyles}
         >
-          <IconButton onClick={toggleSurvey}
+          <IconButton onClick={activateSurvey}
             iconProps={feedbackIcon}
             ariaDescription={feedbackTitle}
             ariaLabel={feedbackTitle}
@@ -62,7 +69,7 @@ export const FeedbackButton = () => {
           />
         </TooltipHost>
 
-        <FeedbackForm onDismissSurvey={toggleSurvey}
+        <FeedbackForm onDismissSurvey={disableSurvey}
           activated={enableSurvey} onDisableSurvey={disableSurvey} />
       </div>
       }

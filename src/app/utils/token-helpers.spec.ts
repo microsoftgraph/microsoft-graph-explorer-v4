@@ -16,14 +16,14 @@ describe('Tests token helper utils', () => {
       name: 'userName'
     }
   };
-  it('Returns the value of the token', () => {
+  it('should return the value of the token', () => {
     const value = getTokenSubstituteValue(token, isAuthenticated);
     expect(value).toBeUndefined();
 
     const unAuthenticatedValue = getTokenSubstituteValue(token, false);
     expect(unAuthenticatedValue).toBeUndefined();
   });
-  it('Substitutes the token with the correct value', () => {
+  it('should substitute the token with the correct value', () => {
     const query: IQuery = {
       selectedVerb: 'GET',
       sampleUrl: '/v1.0/me',

@@ -1,23 +1,17 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import {
-  getProfileInfo, profileRequestError, getProfileInformation,
-  profileRequestSuccess, getBetaProfile, getProfileType,
-  getProfileImage, getProfileResponse
-} from './profile-action-creators';
-import {
-  PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS
-} from '../redux-constants';
+import { getProfileInfo, profileRequestError, profileRequestSuccess } from './profile-action-creators';
+import { PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS } from '../redux-constants';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('actions', () => {
+describe('Profile action creators', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  it('creates PROFILE_REQUEST_SUCCESS when profileRequestSuccess is called', () => {
+  it('should dispatch PROFILE_REQUEST_SUCCESS when profileRequestSuccess() is called', () => {
 
     const response = fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
     const expectedAction = {
@@ -29,7 +23,7 @@ describe('actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
-  it('dispatches PROFILE_REQUEST_ERROR for failed requests', () => {
+  it('should dispatch PROFILE_REQUEST_ERROR when getProfileInfo() request fails', () => {
     fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
     const store = mockStore({});
     // @ts-ignore
@@ -41,7 +35,7 @@ describe('actions', () => {
       .catch((e: Error) => { throw e })
   });
 
-  it('dispatches PROFILE_REQUEST_ERROR if profile request fails', () => {
+  it('should dispatch PROFILE_REQUEST_ERROR when profileRequestError() is called', () => {
     // Arrange
     const response = {};
     const expectedAction = {
@@ -55,30 +49,4 @@ describe('actions', () => {
     // Assert
     expect(action).toEqual(expectedAction);
   });
-
-  it('throws on getProfileInformation', () => {
-    fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
-    expect(getProfileInformation()).toBeDefined();
-  });
-
-  it('throws on getProfileInformation', () => {
-    fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
-    expect(getBetaProfile()).toBeDefined();
-  });
-
-  it('throws on getProfileInformation', () => {
-    fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
-    expect(getProfileImage()).toBeDefined();
-  });
-
-  it('throws on getProfileInformation', () => {
-    fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
-    expect(getProfileResponse()).toBeDefined();
-  });
-
-  it('throws on getProfileInformation', () => {
-    fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
-    expect(getProfileType({})).toBeDefined();
-  });
-
 });
