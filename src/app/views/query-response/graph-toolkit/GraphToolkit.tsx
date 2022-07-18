@@ -7,6 +7,7 @@ import {
   IStyle,
   ITheme,
   Label,
+  Link,
   MessageBar,
   MessageBarType,
   styled
@@ -34,13 +35,14 @@ class GraphToolkit extends Component<any> {
         <>
           <MessageBar messageBarType={MessageBarType.info}>
             <FormattedMessage id='Open this example in' />
-            <a
-              onClick={(e) =>
-                telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK)}
+            <Link
               tabIndex={0} href={exampleUrl} target='_blank' rel='noopener noreferrer'
-              className={'ms-Link'}>
+              onClick={(e) =>
+                telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
+                  componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK)}
+            >
               <FormattedMessage id='graph toolkit playground' />
-            </a>
+            </Link>
             .
           </MessageBar>
           <iframe width='100%' height='470px' src={toolkitUrl} title={translateMessage('Graph toolkit')} />
@@ -52,8 +54,7 @@ class GraphToolkit extends Component<any> {
       <Label styles={{root: this.textStyle}}>
         <FormattedMessage id='We did not find a Graph toolkit for this query' />
         &nbsp;
-        <a
-          className={'ms-Link'}
+        <Link
           tabIndex={0}
           href='https://aka.ms/mgt'
           rel='noopener noreferrer'
@@ -61,7 +62,7 @@ class GraphToolkit extends Component<any> {
         >
           <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />
           .
-        </a>
+        </Link>
 
       </Label>
     );

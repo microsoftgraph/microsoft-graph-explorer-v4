@@ -1,7 +1,7 @@
 import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
   getTheme,
-  GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
+  GroupHeader, IColumn, Icon, IDetailsRowStyles, Link, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
@@ -209,7 +209,9 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
                 className={classes.badge}
                 style={{
                   background: getStyleFor(item.method),
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  position: 'relative',
+                  right: '5px'
                 }}
               >
                 {item.method}
@@ -342,16 +344,15 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
         dismissButtonAriaLabel='Close'
       >
         <FormattedMessage id='see more queries' />
-        <a
+        <Link
           target='_blank'
           rel="noopener noreferrer"
-          className={'ms-Link'}
-          onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href,
+          onClick={(e) => telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
             componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
           href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
         >
           <FormattedMessage id='Microsoft Graph API Reference docs' />
-        </a>
+        </Link>
       </MessageBar>
       <Announced
         message={`${sampleQueries.length} search results available.`}

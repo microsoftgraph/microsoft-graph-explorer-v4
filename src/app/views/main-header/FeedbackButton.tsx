@@ -11,7 +11,6 @@ export const FeedbackButton = () => {
   const [enableSurvey, setEnableSurvey] = useState(false);
   const { profile } = useSelector( (state: IRootState) => state );
   const currentTheme = getTheme();
-
   const feedbackIcon : IIconProps = {
     iconName : 'Feedback'
   }
