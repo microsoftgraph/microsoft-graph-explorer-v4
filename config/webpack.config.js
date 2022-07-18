@@ -417,7 +417,7 @@ module.exports = function (webpackEnv) {
         maxChunks: 1
       }),
       new MonacoWebpackPlugin({
-        languages: ['json', 'javascript', 'java', 'csharp', 'html', 'powershell', 'go']
+        languages: ['json', 'javascript', 'java', 'csharp', 'html', 'powershell', 'go', 'php']
       }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
