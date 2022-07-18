@@ -29,7 +29,6 @@ export const FeedbackButton = () => {
     }
   },[enableSurvey])
 
-
   const feedbackIconStyles = {
     root:{
       height: '50px',

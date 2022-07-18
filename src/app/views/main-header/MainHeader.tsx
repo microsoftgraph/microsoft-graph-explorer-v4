@@ -115,9 +115,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
           }
           <span style={ moreInformationStyles }> <Settings /> </span>
           <span style={ moreInformationStyles }> <Help /> </span>
-          <span style={ feedbackIconAdjustmentStyles } >
-            <FeedbackButton />
-          </span>
+          <span style={ feedbackIconAdjustmentStyles }> <FeedbackButton /> </span>
           <Authentication />
         </Stack>
       </Stack>
