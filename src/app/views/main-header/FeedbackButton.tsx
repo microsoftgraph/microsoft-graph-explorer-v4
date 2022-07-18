@@ -1,4 +1,4 @@
-import { getTheme, IButton, IconButton, IIconProps, IRefObject, TooltipHost } from '@fluentui/react';
+import { getTheme, IButton, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
 import React, { useState, useEffect } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { useSelector } from 'react-redux';
@@ -63,9 +63,9 @@ export const FeedbackButton = () => {
   }
 
   return (
-    <div >
+    <div>
       {profile?.profileType !== ACCOUNT_TYPE.AAD &&
-      <div >
+      <div>
         <TooltipHost
           content={content}
           calloutProps={calloutProps}

@@ -21,7 +21,6 @@ import { IRootState } from '../../../types/root';
 import { mainHeaderStyles } from './MainHeader.styles';
 import TenantIcon from './tenantIcon';
 import { Mode } from '../../../types/enums';
-import { useRef } from 'react';
 
 interface MainHeaderProps {
   minimised: boolean;
