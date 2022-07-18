@@ -1,5 +1,5 @@
 import { getTheme, IButton, IconButton, IIconProps, IRefObject, TooltipHost } from '@fluentui/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { useSelector } from 'react-redux';
 import FeedbackForm from '../query-runner/request/feedback/FeedbackForm';
@@ -7,11 +7,7 @@ import { IRootState } from '../../../types/root';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 
-interface IFeedbackButton {
-  feedbackButtonRef: IRefObject<IButton>;
-  setFocus: Function;
-}
-export const FeedbackButton = (props: IFeedbackButton) => {
+export const FeedbackButton = () => {
   const [enableSurvey, setEnableSurvey] = useState(false);
   const { profile } = useSelector( (state: IRootState) => state );
   const currentTheme = getTheme();
@@ -20,6 +16,19 @@ export const FeedbackButton = (props: IFeedbackButton) => {
   }
   const feedbackTitle = translateMessage('Feedback');
   const content = <div style={{padding:'3px'}}>{translateMessage('Feedback')}</div>
+
+  const feedbackButtonRef = React.useRef<IButton>(null)
+  const isFirstRender = React.useRef(true);
+  useEffect( () => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if(!enableSurvey){
+      feedbackButtonRef.current?.focus();
+    }
+  },[enableSurvey])
+
 
   const feedbackIconStyles = {
     root:{
@@ -45,7 +54,6 @@ export const FeedbackButton = (props: IFeedbackButton) => {
   }
 
   const disableSurvey = () => {
-    props.setFocus();
     setEnableSurvey(false);
   }
 
@@ -56,9 +64,9 @@ export const FeedbackButton = (props: IFeedbackButton) => {
   }
 
   return (
-    <div>
+    <div >
       {profile?.profileType !== ACCOUNT_TYPE.AAD &&
-      <div>
+      <div >
         <TooltipHost
           content={content}
           calloutProps={calloutProps}
@@ -71,7 +79,7 @@ export const FeedbackButton = (props: IFeedbackButton) => {
             styles={feedbackIconStyles}
             role={'button'}
             disabled={enableSurvey}
-            componentRef = {props.feedbackButtonRef}
+            componentRef={feedbackButtonRef}
           />
         </TooltipHost>
 
