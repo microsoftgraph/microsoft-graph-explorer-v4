@@ -1,4 +1,4 @@
-import { MessageBar, MessageBarType } from '@fluentui/react';
+import { Link, MessageBar, MessageBarType } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -14,9 +14,9 @@ export function headerMessaging(query: string): React.ReactNode {
         <MessageBar messageBarType={MessageBarType.info} isMultiline={true}>
           <p>
             <FormattedMessage id='To try the full features' />,
-            <a className={'ms-Link'} tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
+            <Link tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
               <FormattedMessage id='full Graph Explorer' />.
-            </a>
+            </Link>
           </p>
           <p>
             <FormattedMessage id='running the query' />.
@@ -28,9 +28,9 @@ export function headerMessaging(query: string): React.ReactNode {
         <p>
           <FormattedMessage id='To try operations other than GET' />,
 
-          <a className={'ms-Link'} tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
+          <Link tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
             <FormattedMessage id='sign in' />.
-          </a>
+          </Link>
         </p>
       </MessageBar>}
     </div>);

@@ -8,7 +8,7 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('Change theme action creator', () => {
-  it('should dispatch CHANGE_THEME_SUCCESS when changeThemeSuccess is called with the preferred theme', () => {
+  it('Changes theme to dark', () => {
     const expectedActions = [
       {
         type: CHANGE_THEME_SUCCESS,
@@ -21,9 +21,9 @@ describe('Change theme action creator', () => {
     // @ts-ignore
     store.dispatch(changeThemeSuccess('dark'));
     expect(store.getActions()).toEqual(expectedActions);
-  });
+  })
 
-  it('should dispatch CHANGE_THEME_SUCCESS when changeTheme() is called with the preferred theme', () => {
+  it('dispatches an action that changes the theme ', () => {
     const expectedActions = [
       {
         type: CHANGE_THEME_SUCCESS,
