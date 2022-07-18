@@ -209,7 +209,10 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
                 className={classes.badge}
                 style={{
                   background: getStyleFor(item.method),
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  backgroundColor: 'red',
+                  position: 'relative',
+                  right: '5px'
                 }}
               >
                 {item.method}
