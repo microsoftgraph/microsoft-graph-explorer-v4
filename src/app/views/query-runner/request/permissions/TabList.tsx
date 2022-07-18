@@ -32,7 +32,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   const displayNoPermissionsFoundMessage = () : JSX.Element => {
     return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='permissions not found in permissions tab' />
-      <Link className={'ms-Link'} onClick={openPermissionsPanel}>
+      <Link onClick={openPermissionsPanel}>
         <FormattedMessage id='open permissions panel' />
       </Link>
       <FormattedMessage id='permissions list' />

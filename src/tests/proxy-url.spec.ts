@@ -6,7 +6,7 @@ import { isValidHttpsUrl } from '../app/utils/external-link-validation';
 import { IQuery } from '../types/query-runner';
 import { IStatus } from '../types/status';
 
-describe('Sandbox api fetch should', () => {
+describe.skip('Sandbox api fetch should', () => {
 
   test('return valid url', async () => {
     const res = await fetch(GRAPH_API_SANDBOX_ENDPOINT_URL);
