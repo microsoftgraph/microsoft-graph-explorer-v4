@@ -18,6 +18,7 @@ import {
 } from './auto-complete.util';
 import SuffixRenderer from './suffix/SuffixRenderer';
 import SuggestionsList from './suggestion-list/SuggestionsList';
+import { usePrevious } from './use-previous';
 
 const AutoComplete = (props: IAutoCompleteProps) => {
 
@@ -30,6 +31,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     (state: IRootState) => state
   );
 
+  const previousQuery = usePrevious(sampleQuery.sampleUrl);
   const [isMultiline, setIsMultiline] = useState<boolean>(false);
   const [activeSuggestion, setActiveSuggestion] = useState<number>(0);
   const [searchText, setSearchText] = useState<string>('');
@@ -38,15 +40,13 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
-    setQueryUrl(sampleQuery.sampleUrl);
+    if (previousQuery) {
+      initialiseAutoComplete(sampleQuery.sampleUrl)
+    }
   }, [sampleQuery.sampleUrl]);
 
   useEffect(() => {
-    const { requestUrl } = parseSampleUrl(queryUrl);
-    const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url;
-    if (urlExistsInStore) {
-      displayAutoCompleteSuggestions(queryUrl);
-    }
+    displayAutoCompleteSuggestions(queryUrl);
     setIsMultiline(isOverflowing(queryUrl));
   }, [autoCompleteOptions, queryUrl]);
 
@@ -60,8 +60,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     props.contentChanged(targetValue);
   };
 
-  const onChange = (e: any) => {
-    const currentValue = e.target.value;
+  const initialiseAutoComplete = (currentValue: string) => {
     setQueryUrl(currentValue);
 
     if (currentValue.includes(GRAPH_URL)) {
@@ -70,6 +69,11 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       setSearchText(searchWith);
       requestForAutocompleteOptions(preceedingText, context);
     }
+  }
+
+  const onChange = (e: any) => {
+    const currentValue = e.target.value;
+    initialiseAutoComplete(currentValue);
   };
 
   const isOverflowing = (input: string) => {
@@ -182,8 +186,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       theSuggestions = getSuggestions(url, autoCompleteOptions);
     }
 
-    console.table({ url, preceedingText, autoCompleteOptionsurl: autoCompleteOptions?.url, searchText });
-
     if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
       if (filtered[0] !== searchText) {
@@ -235,7 +237,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     const { currentTarget, relatedTarget } = event;
     if (!currentTarget.contains(relatedTarget as Node) && shouldShowSuggestions) {
       setShouldShowSuggestions(false);
-      console.log('closeSuggestionDialog')
     }
   }
 

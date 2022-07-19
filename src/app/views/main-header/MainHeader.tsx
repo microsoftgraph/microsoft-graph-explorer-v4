@@ -49,6 +49,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
     feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles,
     tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles(currentTheme, mobileScreen);
 
+
   return (
     <Stack tokens={sectionStackTokens}>
       <Stack
@@ -79,10 +80,10 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
               onClick={() => props.toggleSidebar()} />
           </TooltipHost>
           }
-          <Label
+          <h1><Label
             style={graphExplorerLabelStyles}>
             Graph Explorer
-          </Label>
+          </Label></h1>
         </Stack>
 
         <Stack horizontal styles={rightItemsStyles}

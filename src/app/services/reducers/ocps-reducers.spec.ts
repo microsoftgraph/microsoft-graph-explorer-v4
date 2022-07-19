@@ -1,5 +1,5 @@
-import { policies } from '../../../app/services/reducers/ocps-reducers';
-import { GET_POLICY_ERROR, GET_POLICY_PENDING, GET_POLICY_SUCCESS } from '../../../app/services/redux-constants';
+import { policies } from './ocps-reducers';
+import { GET_POLICY_ERROR, GET_POLICY_PENDING, GET_POLICY_SUCCESS } from '../redux-constants';
 
 const initialState = {
   pending: false,

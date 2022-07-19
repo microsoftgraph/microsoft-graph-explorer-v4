@@ -1,5 +1,5 @@
 import { IHistoryItem } from '../../../../types/history';
-import { writeHistoryData, readHistoryData, removeHistoryData, bulkRemoveHistoryData } from './history-utils';
+import { writeHistoryData, readHistoryData, removeHistoryData } from './history-utils';
 
 
 let historyItems: IHistoryItem[] = [];

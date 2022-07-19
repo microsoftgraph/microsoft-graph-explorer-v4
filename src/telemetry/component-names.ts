@@ -1,9 +1,11 @@
 // Names of instrumented components
 
 // Buttons
+export const FEEDBACK_BUTTON = 'Feedback button'
 export const RUN_QUERY_BUTTON = 'Run query button';
 export const THEME_CHANGE_BUTTON = 'Theme change button';
 export const SELECT_THEME_BUTTON = 'Select theme button';
+export const QUERY_MORE_INFO_BUTTON = 'Query more info button';
 export const JSON_SCHEMA_COPY_BUTTON = 'JSON schema copy button';
 export const RUN_HISTORY_ITEM_BUTTON = 'Run history item button';
 export const SHARE_QUERY_COPY_BUTTON = 'Share query copy button';
@@ -18,8 +20,6 @@ export const RESPONSE_HEADERS_COPY_BUTTON = 'Response headers copy button';
 export const DOWNLOAD_POSTMAN_COLLECTION_BUTTON = 'Download postman collection button';
 export const REMOVE_RESOURCE_FROM_COLLECTION_BUTTON = 'Remove resource from collection button';
 export const QUERY_COPY_BUTTON = 'Query copy button';
-export const QUERY_MORE_INFO_BUTTON = 'Query more info button';
-
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
@@ -83,3 +83,4 @@ export const AUTHENTICATION_ACTION = 'Authentication action';
 export const GET_ADAPTIVE_CARD_ACTION = 'Get adaptive card action';
 export const FETCH_PERMISSIONS_ACTION = 'Fetch permissions action';
 export const MONACO_EDITOR_FORMAT_JSON_ACTION = 'Monaco editor format JSON action';
+export const LAUNCH_FEEDBACK_POPUP_ACTION = 'Launch feedback popup action';

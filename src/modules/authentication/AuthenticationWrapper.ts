@@ -63,7 +63,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       this.storeHomeAccountId(result.account!);
       return result;
     } catch (error: any) {
-      const {errorCode} = error;
+      const { errorCode } = error;
       if (errorCode === 'interaction_in_progress') {
         this.eraseInteractionInProgressCookie();
       }
@@ -73,7 +73,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   public async logOut() {
     const homeAccountId = this.getHomeAccountId();
-    if( homeAccountId) {
+    if (homeAccountId) {
       const currentAccount = msalApplication.getAccountByHomeId(homeAccountId);
       const logoutHint = currentAccount!.idTokenClaims?.login_hint;
       await msalApplication.logoutPopup({ logoutHint });
