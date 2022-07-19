@@ -49,6 +49,7 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
     feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles,
     tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles(currentTheme, mobileScreen);
 
+
   return (
     <Stack tokens={sectionStackTokens}>
       <Stack
