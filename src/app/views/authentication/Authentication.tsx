@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { authenticationWrapper } from '../../../modules/authentication';
-import { componentNames, errorTypes, telemetry } from '../../../telemetry';
+import { componentNames, errorTypes, eventTypes, telemetry } from '../../../telemetry';
 import { IRootState } from '../../../types/root';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../services/actions/auth-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
@@ -29,6 +29,9 @@ const Authentication = (props: any) => {
   }: any = props;
   const signIn = async (): Promise<void> => {
     setLoginInProgress(true);
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.SIGN_IN_BUTTON
+    });
 
     try {
       const authResponse = await authenticationWrapper.logIn();
@@ -65,6 +68,9 @@ const Authentication = (props: any) => {
 
   const signInWithOther = async (): Promise<void> => {
     setLoginInProgress(true);
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.SIGN_IN_WITH_OTHER_BUTTON
+    });
     try{
       const authResponse = await authenticationWrapper.logInWithOther();
       if (authResponse) {
