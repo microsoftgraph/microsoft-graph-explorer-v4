@@ -88,6 +88,12 @@ export const Help = () => {
     });
   };
 
+  const trackHelpClickEvent = () => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.HELP_BUTTON
+    });
+  }
+
   const calloutStyles: React.CSSProperties = {
     overflowY: 'hidden'
   }
@@ -121,6 +127,7 @@ export const Help = () => {
           styles={helpButtonStyles}
           menuIconProps={{ iconName: 'Help' }}
           menuProps={menuProperties}
+          onClick={() => trackHelpClickEvent()}
         />
       </TooltipHost>
     </div>

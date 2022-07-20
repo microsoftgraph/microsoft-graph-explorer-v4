@@ -1,7 +1,7 @@
 // Names of instrumented components
 
 // Buttons
-export const FEEDBACK_BUTTON = 'Feedback button'
+export const FEEDBACK_BUTTON = 'Feedback button';
 export const RUN_QUERY_BUTTON = 'Run query button';
 export const THEME_CHANGE_BUTTON = 'Theme change button';
 export const SELECT_THEME_BUTTON = 'Select theme button';
@@ -20,6 +20,10 @@ export const RESPONSE_HEADERS_COPY_BUTTON = 'Response headers copy button';
 export const DOWNLOAD_POSTMAN_COLLECTION_BUTTON = 'Download postman collection button';
 export const REMOVE_RESOURCE_FROM_COLLECTION_BUTTON = 'Remove resource from collection button';
 export const QUERY_COPY_BUTTON = 'Query copy button';
+export const SETTINGS_BUTTON = 'Settings button';
+export const HELP_BUTTON = 'Help button';
+export const SIGN_IN_BUTTON = 'Sign in button';
+export const SIGN_IN_WITH_OTHER_BUTTON = 'Sign in with other button';
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
