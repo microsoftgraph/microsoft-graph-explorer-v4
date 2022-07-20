@@ -39,7 +39,7 @@ export const Help = () => {
         iconProps: {
           iconName: 'ReportWarning'
         },
-        onClick: () => trackLinkClickEvents(componentNames.REPORT_AN_ISSUE_LINK)
+        onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.REPORT_AN_ISSUE_LINK)
       },
       { key: 'divider_1', itemType: ContextualMenuItemType.Divider },
       {
@@ -50,7 +50,7 @@ export const Help = () => {
         iconProps: {
           iconName: 'TextDocument'
         },
-        onClick: () => trackLinkClickEvents(componentNames.GE_DOCUMENTATION_LINK)
+        onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GE_DOCUMENTATION_LINK)
       },
       {
         key: 'graph-documentation',
@@ -60,7 +60,7 @@ export const Help = () => {
         iconProps: {
           iconName: 'Documentation'
         },
-        onClick: () => trackLinkClickEvents(componentNames.GRAPH_DOCUMENTATION_LINK)
+        onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GRAPH_DOCUMENTATION_LINK)
       },
       {
         key: 'github',
@@ -76,19 +76,13 @@ export const Help = () => {
             }
           }
         },
-        onClick: () => trackLinkClickEvents(componentNames.GITHUB_LINK)
+        onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GITHUB_LINK)
       }
     ];
     setItems(menuItems);
   }, [authenticated]);
 
-  const trackLinkClickEvents = (componentName: string) => {
-    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentName
-    });
-  };
-
-  const trackHelpClickEvent = () => {
+  const trackHelpButtonClickEvent = () => {
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.HELP_BUTTON
     });
@@ -127,7 +121,7 @@ export const Help = () => {
           styles={helpButtonStyles}
           menuIconProps={{ iconName: 'Help' }}
           menuProps={menuProperties}
-          onClick={() => trackHelpClickEvent()}
+          onMenuClick={trackHelpButtonClickEvent}
         />
       </TooltipHost>
     </div>
