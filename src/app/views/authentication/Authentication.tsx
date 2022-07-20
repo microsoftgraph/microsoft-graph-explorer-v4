@@ -69,7 +69,7 @@ const Authentication = (props: any) => {
   const signInWithOther = async (): Promise<void> => {
     setLoginInProgress(true);
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.SIGN_IN_WITH_OTHER_BUTTON
+      ComponentName: componentNames.SIGN_IN_WITH_OTHER_ACCOUNT_BUTTON
     });
     try{
       const authResponse = await authenticationWrapper.logInWithOther();

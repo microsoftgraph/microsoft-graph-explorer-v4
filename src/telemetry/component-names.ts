@@ -23,7 +23,7 @@ export const QUERY_COPY_BUTTON = 'Query copy button';
 export const SETTINGS_BUTTON = 'Settings button';
 export const HELP_BUTTON = 'Help button';
 export const SIGN_IN_BUTTON = 'Sign in button';
-export const SIGN_IN_WITH_OTHER_BUTTON = 'Sign in with other button';
+export const SIGN_IN_WITH_OTHER_ACCOUNT_BUTTON = 'Sign in with other account button';
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
