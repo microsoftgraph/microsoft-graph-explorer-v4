@@ -82,7 +82,7 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
     });
   };
 
-  const trackSettingsClickEvent = () => {
+  const trackSettingsButtonClickEvent = () => {
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.SETTINGS_BUTTON
     });
@@ -125,7 +125,7 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
           styles={settingsButtonStyles}
           menuIconProps={{ iconName: 'Settings' }}
           menuProps={menuProperties}
-          onClick={() => trackSettingsClickEvent()}
+          onMenuClick={trackSettingsButtonClickEvent}
         />
       </TooltipHost>
       <div>
