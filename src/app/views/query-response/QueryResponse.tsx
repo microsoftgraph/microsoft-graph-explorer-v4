@@ -127,9 +127,9 @@ const QueryResponse = (props: IQueryResponseProps) => {
       >
         <div className='query-response' style={{
           minHeight: 350,
-          height: '100%',
-          overflowY: 'hidden'
-        }} onScroll={onScroll}>
+          height: '100%'
+        }}
+        onScroll={onScroll}>
 
           <Pivot overflowBehavior='menu'
             overflowAriaLabel={translateMessage('More items')}

@@ -30,10 +30,9 @@ export const queryResponseStyles = (theme: ITheme) => {
     },
     toolkitText: {
       root: {
-        display: 'flex',
-        justifyContent: 'center',
-        minHeight: '36vh',
-        alignItems: 'center'
+        display: 'inline-block',
+        marginTop: '13%',
+        marginLeft: '16%'
       }
     }
   };
