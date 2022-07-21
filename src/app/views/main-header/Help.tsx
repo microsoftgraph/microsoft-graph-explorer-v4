@@ -61,8 +61,8 @@ export const Help = () => {
           iconName: 'Documentation'
         },
         onClick: (e: any) => telemetry.trackLinkClickEvent(
-            e.currentTarget.href,
-            componentNames.GRAPH_DOCUMENTATION_LINK)
+          e.currentTarget.href,
+          componentNames.GRAPH_DOCUMENTATION_LINK)
       },
       {
         key: 'github',
