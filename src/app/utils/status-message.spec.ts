@@ -41,7 +41,7 @@ describe('status message should', () => {
     expect(matches?.includes('$0')).toBe(true);
   });
 
-  it('should return a status message given a status code', () => {
+  it('return a status message given a status code', () => {
     const statusCode: number = 200;
     const statusMessage = setStatusMessage(statusCode);
     expect(statusMessage).toBe('OK');

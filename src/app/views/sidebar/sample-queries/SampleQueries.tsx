@@ -1,7 +1,7 @@
 import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
   getTheme,
-  GroupHeader, IColumn, Icon, IDetailsRowStyles, MessageBar, MessageBarType, SearchBox,
+  GroupHeader, IColumn, Icon, IDetailsRowStyles, Link, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
@@ -34,6 +34,7 @@ import { setSampleQuery } from '../../../services/actions/query-input-action-cre
 import { translateMessage } from '../../../utils/translate-messages';
 import { replaceBaseUrl } from '../../../../modules/sovereign-clouds';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
+import { NoResultsFound } from '../sidebar-utils/SearchResult';
 
 const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
 
@@ -154,7 +155,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
               >
                 <Icon
                   iconName='Lock'
-                  title={signInText}
                   style={{
                     fontSize: 15,
                     height: 10,
@@ -212,7 +212,9 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
                 className={classes.badge}
                 style={{
                   background: getStyleFor(item.method),
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  position: 'relative',
+                  right: '5px'
                 }}
               >
                 {item.method}
@@ -279,13 +281,9 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   };
 
   const renderGroupHeader = (props: any): any => {
-    const onToggleSelectGroup = () => {
-      props.onToggleCollapse(props.group);
-    };
-
     return (
       <GroupHeader
-        compact={true}
+        {...props}
         styles={{
           check: { display: 'none' },
           title: {
@@ -296,8 +294,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             fontSize: FontSizes.small
           }
         }}
-        {...props}
-        onToggleSelectGroup={onToggleSelectGroup}
       />
     );
   };
@@ -308,8 +304,9 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
   if (selectedQuery) {
     const index = groups.findIndex(k => k.key === selectedQuery.category);
-    if (index !== -1) {
+    if (index > 0) {
       groups[index].isCollapsed = false;
+      groups[0].isCollapsed = true;
     }
   }
 
@@ -350,42 +347,43 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
         dismissButtonAriaLabel='Close'
       >
         <FormattedMessage id='see more queries' />
-        <a
+        <Link
           target='_blank'
           rel="noopener noreferrer"
-          className={classes.links}
-          onClick={(e) => telemetry.trackLinkClickEvent(e.currentTarget.href,
+          onClick={(e) => telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
             componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
           href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
         >
           <FormattedMessage id='Microsoft Graph API Reference docs' />
-        </a>
+        </Link>
       </MessageBar>
       <Announced
         message={`${sampleQueries.length} search results available.`}
       />
-      <div role="navigation">
-        <DetailsList
-          className={classes.queryList}
-          cellStyleProps={{
-            cellRightPadding: 0,
-            cellExtraRightPadding: 0,
-            cellLeftPadding: 0
-          }}
-          onRenderItemColumn={renderItemColumn}
-          items={sampleQueries}
-          selectionMode={SelectionMode.none}
-          columns={columns}
-          groups={groups}
-          groupProps={{
-            showEmptyGroups: true,
-            onRenderHeader: renderGroupHeader
-          }}
-          onRenderRow={renderRow}
-          onRenderDetailsHeader={renderDetailsHeader}
-          onItemInvoked={querySelected}
-        />
-      </div>
+      {sampleQueries.length === 0 ? NoResultsFound('No samples found') :
+        <div role="navigation">
+          <DetailsList
+            className={classes.queryList}
+            cellStyleProps={{
+              cellRightPadding: 0,
+              cellExtraRightPadding: 0,
+              cellLeftPadding: 0
+            }}
+            onRenderItemColumn={renderItemColumn}
+            items={sampleQueries}
+            selectionMode={SelectionMode.none}
+            columns={columns}
+            groups={groups}
+            groupProps={{
+              showEmptyGroups: true,
+              onRenderHeader: renderGroupHeader
+            }}
+            onRenderRow={renderRow}
+            onRenderDetailsHeader={renderDetailsHeader}
+            onItemInvoked={querySelected}
+          />
+        </div>
+      }
     </div>
   );
 }

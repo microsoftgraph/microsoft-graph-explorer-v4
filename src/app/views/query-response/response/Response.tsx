@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { IRootState } from '../../../../types/root';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
-import { responseMessages } from '../../app-sections/ResponseMessages';
+import { responseMessages } from './ResponseMessages';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import ResponseDisplay from './ResponseDisplay';
 
 const Response = () => {
-  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } =
+  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery, authToken, graphExplorerMode } =
     useSelector((state: IRootState) => state);
   const { body, headers } = graphResponse;
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const Response = () => {
   const contentType = getContentType(headers);
   return (
     <div style={{ display: 'block' }}>
-      {responseMessages(graphResponse, sampleQuery, dispatch)}
+      {responseMessages(graphResponse, sampleQuery, authToken, graphExplorerMode, dispatch)}
       {!contentDownloadUrl && !throwsCorsError && headers &&
         <ResponseDisplay
           contentType={contentType}

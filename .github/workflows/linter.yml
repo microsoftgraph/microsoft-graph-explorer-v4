@@ -1,4 +1,4 @@
-name: Lint and Build
+name: Lint, Build, Test and Deploy
 
 on:
   workflow_dispatch:
@@ -7,43 +7,194 @@ on:
       - master
       - dev
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, closed]
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
 jobs:
+  install:
+    name: Install node modules
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+
+      - name: Cache npm
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci --no-audit
+
   code-linting:
+    name: Lint
+    needs: install
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Lint
+        run: npm run lint
+
+  build:
+    name: Build packages
+    needs: install
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Build
+        run: npm run build
+
+  test:
+    name: Test
+    needs: install
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Test
+        run: npm run test -- --verbose --shard=${{ matrix.shard }}/${{ strategy.job-total }} --coverage  --testResultsProcessor=jest-sonar-reporter
+
+      - name: Fix code coverage paths
+        run: |
+          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
+          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
+
+      - run: cp reports/test-report.xml coverage/${{matrix.shard}}.xml
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage-artifacts
+          path: coverage/
+
+  sonar-cloud:
+    name: Sonar Cloud analysis
+    needs: test
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of results
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - name: Install Nodejs
-      uses: actions/setup-node@v2
-      with:
-        node-version: '12.x'
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage-artifacts
+          path: coverage
 
-    - name: Install dependencies
-      run: npm install
+      - name: Run sonar cloud analysis
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-    - name: Run linter
-      run: npm run lint
+  publish-preview-site:
+    name: Static preview site creation
+    needs: install
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Build
-      run: npm run build
+      - name: Build And Deploy
+        env:
+          REACT_APP_CLIENT_ID: ${{ secrets.REACT_APP_CLIENT_ID }}
+          REACT_APP_FEEDBACK_CAMPAIGN_ID: ${{ secrets.REACT_APP_FEEDBACK_CAMPAIGN_ID }},
+          REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: ${{secrets.REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID}}
+          REACT_APP_INSTRUMENTATION_KEY: ${{ secrets.REACT_APP_STAGING_INSTRUMENTATION_KEY }}
+          REACT_APP_NOMINATION_PERIOD: ${{secrets.REACT_APP_NOMINATION_PERIOD}}
+          REACT_APP_COOLDOWN_PERIOD: ${{secrets.REACT_APP_COOLDOWN_PERIOD}}
+          REACT_APP_USAGE_TIME: ${{secrets.REACT_APP_USAGE_TIME}}
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v0.0.1-preview
+        with:
+          skip_deploy_on_missing_secrets: true
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_SAND_0AC78C710 }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          action: "upload"
+          app_location: "/" # App source code path
+          app_artifact_location: "build" # Built app content directory - optional
 
-    - name: Run the tests
-      run: npm run test -- --coverage --watchAll=false --testResultsProcessor=jest-sonar-reporter
-
-    - name: Fix code coverage paths
-      run: |
-        sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
-        sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
-
-    - name: Run sonar cloud analysis
-      uses: SonarSource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request Job
+    steps:
+      - name: Close Pull Request
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v0.0.1-preview
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_SAND_0AC78C710 }}
+          action: "close"

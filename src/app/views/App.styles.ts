@@ -6,10 +6,10 @@ export const appStyles = (theme: ITheme) => {
       background: theme.semanticColors.bodyBackground,
       color: theme.semanticColors.bodyText,
       paddingTop: theme.spacing.s1,
-      width: '100%',
       height: '100%',
       paddingRight: '15px',
       paddingLeft: '4px',
+      paddingBottom: '5px',
       marginLeft: 'auto',
       marginRight: 'auto'
     },
@@ -24,13 +24,16 @@ export const appStyles = (theme: ITheme) => {
     sidebar: {
       background: theme.palette.neutralLighter,
       paddingRight: 10,
-      marginRight: 10
+      paddingLeft: 10,
+      marginRight: 10,
+      marginBottom: 9
     },
     sidebarMini: {
       background: theme.palette.neutralLighter,
       maxWidth: '65px',
       minWidth: '55px',
-      padding: 10
+      padding: 10,
+      marginBottom: 9
     },
     layoutExtra: {
       minWidth: '95%',
@@ -38,9 +41,6 @@ export const appStyles = (theme: ITheme) => {
     },
     separator: {
       borderBottom: '1px solid ' + theme.palette.neutralLight
-    },
-    links: {
-      color: `${theme.palette.blueMid} !important`
     },
     sidebarToggle: {
       marginBottom: theme.spacing.s1,
@@ -69,7 +69,9 @@ export const appStyles = (theme: ITheme) => {
       marginTop: 5
     },
     statusAreaFullScreen: {
-      marginTop: 10
+      marginTop: 6,
+      position: 'relative',
+      bottom: 0
     },
     vResizeHandle: {
       zIndex: 1,

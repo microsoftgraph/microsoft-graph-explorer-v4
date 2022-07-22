@@ -1,8 +1,5 @@
-import { IAutoCompleteProps } from '../../../../../types/auto-complete';
 import {
-  cleanUpSelectedSuggestion,
-  getParametersWithVerb, getLastCharacterOf,
-  getFilteredSuggestions, getLastSymbolInUrl
+  cleanUpSelectedSuggestion, getFilteredSuggestions, getLastCharacterOf
 } from './auto-complete.util';
 
 describe('Tests autocomplete utils', () => {
@@ -22,44 +19,6 @@ describe('Tests autocomplete utils', () => {
     expect(result).toEqual('testtest');
   });
 
-  it('Tests getParametersWithVerb', () => {
-    const properties: IAutoCompleteProps = {
-      autoCompleteOptions: {
-        parameters: [
-          {
-            verb: 'get'
-          },
-          {
-            verb: 'post'
-          },
-          {
-            verb: 'put'
-          },
-          {
-            verb: 'delete'
-          }
-        ],
-        url: 'https://graph.microsoft.com/'
-      },
-      sampleQuery: {
-        selectedVerb: 'GET',
-        sampleUrl: 'https://graph.microsoft.com/v1.0/me',
-        selectedVersion: 'v1.0',
-        sampleHeaders: []
-      },
-      fetchingSuggestions: false,
-      autoCompleteError: false,
-      contentChanged: jest.fn(),
-      runQuery: jest.fn(),
-      suggestions: []
-    };
-    const result = getParametersWithVerb(properties);
-    expect(result).toEqual({
-      verb: 'get'
-    });
-  });
-
-
   it('Tests getLastCharacterOf', () => {
     const url = 'https://graph.microsoft.com/v1.0/me';
     const result = getLastCharacterOf(url);
@@ -73,11 +32,6 @@ describe('Tests autocomplete utils', () => {
     expect(result).toEqual(['test', 'test2', 'test3']);
   })
 
-  it('Tests getLastSymbolInUrl', () => {
-    const url = 'https://graph.microsoft.com/v1.0/me';
-    const result = getLastSymbolInUrl(url);
-    expect(result).toEqual({ key: '/', value: 32 });
-  })
 })
 
 describe('Query input util should', () => {

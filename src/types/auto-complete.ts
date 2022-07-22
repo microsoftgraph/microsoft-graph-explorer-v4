@@ -1,21 +1,14 @@
 import { IApiResponse } from './action';
 import { IParsedOpenApiResponse } from './open-api';
-import { IQuery } from './query-runner';
+
+export interface AutoCompleteOption {
+  url: string;
+  parameters: any[];
+}
 
 export interface IAutoCompleteProps {
-  suggestions: string[];
   contentChanged: Function;
   runQuery: Function;
-  sampleQuery: IQuery;
-  fetchingSuggestions: boolean;
-  autoCompleteError: any;
-  autoCompleteOptions: {
-    url: string;
-    parameters: any[];
-  };
-  actions?: {
-    fetchAutoCompleteOptions: Function;
-  };
 }
 
 export interface IAutoCompleteState {

@@ -3,17 +3,17 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import { runQuery } from './query-action-creators';
-import { QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS, QUERY_GRAPH_SUCCESS } from '../redux-constants';
+import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('query actions', () => {
+describe('Query action creators', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  it('creates QUERY_GRAPH_SUCCESS when runQuery is called', () => {
+  it('should dispatch QUERY_GRAPH_SUCCESS when runQuery() is called', () => {
     const createdAt = new Date().toISOString();
     const sampleUrl = 'https://graph.microsoft.com/v1.0/me/';
 
@@ -71,53 +71,31 @@ describe('query actions', () => {
       .catch((e: Error) => { throw e });
   });
 
-  it('dispatches QUERY_GRAPH_STATUS for failed requests', () => {
-    const createdAt = new Date().toISOString();
+  it('should dispatch QUERY_GRAPH_SUCCESS, ADD_HISTORY_ITEM_SUCCESS and QUERY_GRAPH_STATUS when runQuery is called', () => {
     const sampleUrl = 'https://graph.microsoft.com/v1.0/m/';
     setTimeout(() => { // delays request time by 1 second so that the createdAt dates match
       fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
     }, 1000);
 
-    const expectedActions = [
-      {
-        response: true,
-        type: QUERY_GRAPH_RUNNING
-      },
-      {
-        response:
-        {
-          body: undefined,
-          createdAt,
-          duration: undefined,
-          har: '{"log":{"version":"2.0","creator":{"name":"Graph Explorer","version":"2.0"},"entries":[{"startedDateTime":"' +
-            createdAt + '","request":{"url":"' + sampleUrl +
-            '","httpVersion":"HTTP/1.1","cookies":[],' +
-            '"queryString":[{"name":"","value":""}],"headersSize":-1,"bodySize":-1},' +
-            '"response":{"status":200,"statusText":"OK","httpVersion":"HTTP/1.1","cookies":[],"headers":{},' +
-            '"content":{"text":"{\\"ok\\":false}","size":12,"mimeType":"application/json"},"redirectURL":"",' +
-            '"headersSize":-1,"bodySize":-1},"cache":{},"timings":{"send":0,"wait":0,"receive":0},"connection":""}]}}',
-          headers: undefined,
-          method: undefined,
-          responseHeaders:
-            {},
-          result:
-          {
-            ok: false
-          },
-          status: 200,
-          statusText: 'OK',
-          url: sampleUrl
-        },
-        type: 'ADD_HISTORY_ITEM_SUCCESS'
-      },
-      {
-        response: {
-          body: { ok: false },
-          headers: {}
-        },
-        type: QUERY_GRAPH_STATUS
+    const expectedActions = ['QUERY_GRAPH_SUCCESS', 'ADD_HISTORY_ITEM_SUCCESS', 'QUERY_GRAPH_STATUS'];
+
+    const getDispatchedTypes = (actions: any) => {
+      const types_: string[] = [];
+      for (const action of actions) {
+        types_.push(action.type);
       }
-    ];
+      return types_;
+    }
+
+    const compareReceivedAndExpectedTypes = (receivedTypes: string[], expectedTypes: string[]) => {
+      expectedTypes.forEach(expectedType => {
+        const actionIsAvailable = receivedTypes.includes(expectedType);
+        if (!actionIsAvailable) {
+          return false;
+        }
+      });
+      return true;
+    }
 
     const store = mockStore({ graphResponse: '' });
     const query = { sampleUrl };
@@ -125,7 +103,8 @@ describe('query actions', () => {
     // @ts-ignore
     return store.dispatch(runQuery(query))
       .then(() => {
-        expect(store.getActions()[0]).toEqual(expectedActions[0]);
+        const dispatchedActions = getDispatchedTypes(store.getActions());
+        expect(compareReceivedAndExpectedTypes(dispatchedActions, expectedActions)).toBe(true)
       })
       .catch((e: Error) => { throw e });
   });

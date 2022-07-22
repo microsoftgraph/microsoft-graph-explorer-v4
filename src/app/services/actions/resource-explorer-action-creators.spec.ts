@@ -147,7 +147,7 @@ describe('Resource Explorer actions', () => {
     fetchMock.resetMocks();
   });
 
-  it('creates FETCH_RESOURCES_SUCCESS when fetchResourcesSuccess is called', () => {
+  it('should dispatch FETCH_RESOURCES_SUCCESS when fetchResourcesSuccess() is called', () => {
 
     const response = fetchMock.mockResponseOnce(JSON.stringify({ ok: true }));
     const expectedAction = {
@@ -159,7 +159,7 @@ describe('Resource Explorer actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
-  it('Adds resource paths to state', () => {
+  it('should dispatch RESOURCEPATHS_ADD_SUCCESS when addResourcePaths() is called with valid paths', () => {
 
     const expectedActions = [
       {
@@ -178,7 +178,7 @@ describe('Resource Explorer actions', () => {
     expect(store_.getActions()).toEqual(expectedActions);
   });
 
-  it('dispatches RESOURCEPATHS_DELETE_SUCCESS when removeResourcePaths is dispatched', () => {
+  it('should dispatch RESOURCEPATHS_DELETE_SUCCESS when removeResourcePaths() is dispatched', () => {
 
     const expectedActions = [
       {
@@ -197,7 +197,7 @@ describe('Resource Explorer actions', () => {
     expect(store_.getActions()).toEqual(expectedActions);
   })
 
-  it('creates FETCH_RESOURCES_ERROR when fetchResourcesError is called', () => {
+  it('should dispatch FETCH_RESOURCES_ERROR when fetchResourcesError() is called', () => {
     // Arrange
     const response = {};
     const expectedAction = {
@@ -212,7 +212,7 @@ describe('Resource Explorer actions', () => {
     expect(action).toEqual(expectedAction);
   })
 
-  it('crates FETCH_RESOURCES_PENDING when resources are being fetched', () => {
+  it('should dispatch FETCH_RESOURCES_PENDING when fetchResourcesPending() is called', () => {
     // Arrange
     const expectedAction = {
       type: FETCH_RESOURCES_PENDING
@@ -225,7 +225,7 @@ describe('Resource Explorer actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
-  it('fetches resource paths and dispatches FETCH_RESOURCES_SUCCESS', () => {
+  it('should dispatch FETCH_RESOURCES_PENDING and FETCH_RESOURCES_SUCCESS when fetchResources() is called', () => {
     // Arrange
     const expectedAction = [
       { type: FETCH_RESOURCES_PENDING },
@@ -245,6 +245,5 @@ describe('Resource Explorer actions', () => {
         expect(store.getActions()).toEqual(expectedAction);
       })
       .catch((e: Error) => { throw e })
-  })
-
+  });
 });

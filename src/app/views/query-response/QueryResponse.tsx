@@ -30,6 +30,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [query] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
   const { sampleQuery, dimensions } = useSelector((state: IRootState) => state);
+  const [currentTab, setCurrentTab] = useState<string>('response-preview');
 
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
@@ -67,6 +68,9 @@ const QueryResponse = (props: IQueryResponseProps) => {
       return;
     }
     onPivotItemClick(sampleQuery, pivotItem);
+    if(pivotItem.props.itemKey !== 'expand-response') {
+      setCurrentTab(pivotItem.props.itemKey!);
+    }
     toggleModal(pivotItem);
   };
 
@@ -76,6 +80,12 @@ const QueryResponse = (props: IQueryResponseProps) => {
       toggleExpandResponse();
     }
   };
+
+  const onModalPivotItemClicked = (pivotItem? : PivotItem) => {
+    if(!pivotItem){ return ;}
+    setCurrentTab(pivotItem.props.itemKey!);
+    onPivotItemClick(sampleQuery, pivotItem);
+  }
 
   const renderItemLink = (link: any) => {
     return (
@@ -98,7 +108,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           marginTop: 10
         }}
         bounds={'window'}
-        maxHeight={800}
+        maxHeight={810}
         minHeight={350}
         size={{
           height: responseHeight,
@@ -113,8 +123,12 @@ const QueryResponse = (props: IQueryResponseProps) => {
           height: '100%'
         }}>
 
-          <Pivot overflowBehavior="menu" onLinkClick={handlePivotItemClick}
-            className={'pivot-response'} >
+          <Pivot overflowBehavior='menu'
+            overflowAriaLabel={translateMessage('More items')}
+            onLinkClick={handlePivotItemClick}
+            className={'pivot-response'}
+            selectedKey={currentTab}
+          >
             {getPivotItems()}
             <PivotItem
               headerText='Expand'
@@ -147,7 +161,9 @@ const QueryResponse = (props: IQueryResponseProps) => {
             ariaLabel={translateMessage('Close expanded response area')}
             onClick={toggleExpandResponse}
           />
-          <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
+          <Pivot className='pivot-response'
+            onLinkClick={(pivotItem) => onModalPivotItemClicked(pivotItem)}
+            selectedKey={currentTab}>
             {getPivotItems()}
           </Pivot>
         </Modal>

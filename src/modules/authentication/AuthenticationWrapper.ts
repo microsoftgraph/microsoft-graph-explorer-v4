@@ -49,12 +49,38 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
   }
 
-  public logOut() {
-    this.deleteHomeAccountId();
-    msalApplication.logout({
-      authority: this.getAuthority()
-    });
-    // msalApplication.logoutRedirect();
+  public async logInWithOther() {
+    const popUpRequest: PopupRequest = {
+      scopes: defaultScopes,
+      authority: this.getAuthority(),
+      prompt: 'select_account',
+      redirectUri: getCurrentUri(),
+      extraQueryParameters: { mkt: geLocale }
+    };
+    // eslint-disable-next-line no-useless-catch
+    try {
+      const result = await msalApplication.loginPopup(popUpRequest);
+      this.storeHomeAccountId(result.account!);
+      return result;
+    } catch (error: any) {
+      const { errorCode } = error;
+      if (errorCode === 'interaction_in_progress') {
+        this.eraseInteractionInProgressCookie();
+      }
+      throw error;
+    }
+  }
+
+  public async logOut() {
+    const homeAccountId = this.getHomeAccountId();
+    if (homeAccountId) {
+      const currentAccount = msalApplication.getAccountByHomeId(homeAccountId);
+      const logoutHint = currentAccount!.idTokenClaims?.login_hint;
+      await msalApplication.logoutPopup({ logoutHint });
+    } else {
+      this.deleteHomeAccountId();
+      await msalApplication.logoutRedirect();
+    }
   }
 
   public async logOutPopUp() {

@@ -39,9 +39,15 @@ export function parseSampleUrl(url: string, version?: string): IParsedSample {
 
 function getRequestUrl(url: string, version: string): string {
   const { pathname } = new URL(url);
-  const versionToReplace = (pathname.startsWith(`/${version}`)) ? version : getGraphVersion(url);
-  const requestContent = pathname.split(versionToReplace + '/').pop()!;
-  return decodeURIComponent(requestContent?.replace(/\/$/, ''));
+  const versionToReplace = pathname.startsWith(`/${version}`)
+    ? version
+    : getGraphVersion(url);
+  const requestContent = pathname.split(versionToReplace).pop()!;
+  return removeLeadingSlash(decodeURIComponent(requestContent?.replace(/\/$/, '')));
+}
+
+function removeLeadingSlash(url: string): string {
+  return (url.charAt(0) === '/') ? url.substring(1) : url;
 }
 
 function getGraphVersion(url: string): string {
@@ -64,6 +70,16 @@ function generateSearchParameters(url: string, search: string) {
   return search.replace(/\s/g, '+');
 }
 
+function generateSampleUrl(
+  url: string,
+  queryVersion: string,
+  requestUrl: string,
+  search: string
+): string {
+  const { origin } = new URL(url);
+  return removeExtraSlashesFromUrl(`${origin}/${queryVersion}/${requestUrl + search}`);
+}
+
 export function removeExtraSlashesFromUrl(url: string): string {
   return url.replace(/([^:]\/)\/+/g, '$1');
 }
@@ -75,7 +91,8 @@ export function hasWhiteSpace(url: string): boolean {
     whitespaceChars.some((char) => parts[0].trim().includes(char));
 }
 
-function generateSampleUrl(url: string, queryVersion: string, requestUrl: string, search: string): string {
-  const { origin } = new URL(url);
-  return `${origin}/${queryVersion}/${requestUrl + search}`;
+export function hasPlaceHolders(url: string): boolean {
+  const placeHolderChars = ['{', '}'];
+  return placeHolderChars.length > 1 && placeHolderChars.every((char) => url.includes(char));
 }
+

@@ -28,13 +28,8 @@ export class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {
     super(props);
     this.state = {
-      enableShowSurvey: false,
       selectedPivot: 'request-body'
     }
-  }
-
-  private toggleCustomSurvey = (show: boolean = false) => {
-    this.setState({ enableShowSurvey: show });
   }
 
   private getPivotItems = (height: string) => {
@@ -178,8 +173,7 @@ export class Request extends Component<IRequestComponent, any> {
       <>
         <Resizable
           style={{
-            border: 'solid 1px #ddd',
-            marginBottom: 10
+            border: 'solid 1px #ddd'
           }}
           onResize={(e: any, direction: any, ref: any) => {
             if (ref && ref.style && ref.style.height) {
@@ -200,6 +194,7 @@ export class Request extends Component<IRequestComponent, any> {
           <div className='query-request'>
             <Pivot
               overflowBehavior='menu'
+              overflowAriaLabel={translateMessage('More items')}
               onLinkClick={this.handlePivotItemClick}
               className='pivot-request'
               selectedKey={pivot}

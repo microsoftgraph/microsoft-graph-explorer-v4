@@ -9,7 +9,7 @@ describe('isAllAlpha should ', () => {
   ];
 
   list.forEach((element) => {
-    it(`return ${element.isAllAlphabetic} for ${element.key}`, () => {
+    it(`should return ${element.isAllAlphabetic} for ${element.key}`, () => {
       const key = isAllAlpha(element.key);
       expect(key).toBe(element.isAllAlphabetic);
     });
@@ -41,7 +41,7 @@ describe('isPropertyOrEntityName should', () => {
   ];
 
   list.forEach((element) => {
-    it(`return ${element.isPropertyOrEntityName} for ${element.key}`, () => {
+    it(`should return ${element.isPropertyOrEntityName} for ${element.key}`, () => {
       const key = isPropertyName(element.key);
       expect(key).toBe(element.isPropertyOrEntityName);
     });
@@ -235,7 +235,7 @@ describe('Sanitize Query Parameters should', () => {
         `$filter=isof('microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry')
           and microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable eq true`,
       sanitizedQueryParam:
-       '$filter=isof(<property>) and microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable eq <value>'
+        '$filter=isof(<property>) and microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable eq <value>'
     },
 
     // $expand
@@ -285,7 +285,7 @@ describe('Sanitize Query Parameters should', () => {
   ];
 
   list.forEach(element => {
-    it(`${element.check}`, () => {
+    it(`should validate ${element.check}`, () => {
       const sanitizedQueryParam = sanitizeQueryParameter(element.queryParam);
       expect(sanitizedQueryParam).toEqual(element.sanitizedQueryParam);
     });
