@@ -1,9 +1,6 @@
 import {
-  getId,
-  Icon,
   Pivot,
-  PivotItem,
-  TooltipHost
+  PivotItem
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { Component, CSSProperties } from 'react';
@@ -52,7 +49,6 @@ export class Request extends Component<IRequestComponent, any> {
         key='request-body'
         itemIcon='Send'
         itemKey='request-body' // To be used to construct component name for telemetry data
-        onRenderItemLink={this.getTooltipDisplay}
         ariaLabel={messages['request body']}
         title={messages['request body']}
         headerText={messages['request body']}
@@ -68,7 +64,6 @@ export class Request extends Component<IRequestComponent, any> {
         key='request-headers'
         itemIcon='FileComment'
         itemKey='request-headers'
-        onRenderItemLink={this.getTooltipDisplay}
         ariaLabel={messages['request header']}
         title={messages['request header']}
         headerText={messages['request header']}
@@ -84,7 +79,6 @@ export class Request extends Component<IRequestComponent, any> {
         key='modify-permissions'
         itemIcon='AzureKeyVault'
         itemKey='modify-permissions'
-        onRenderItemLink={this.getTooltipDisplay}
         ariaLabel={translateMessage('modify permissions')}
         title={translateMessage('permissions preview')}
         headerText={messages['modify permissions']}
@@ -103,7 +97,6 @@ export class Request extends Component<IRequestComponent, any> {
           key='access-token'
           itemIcon='AuthenticatorApp'
           itemKey='access-token'
-          onRenderItemLink={this.getTooltipDisplay}
           ariaLabel={translateMessage('Access Token')}
           title={translateMessage('Access Token')}
           headerText={translateMessage('Access Token')}
@@ -118,19 +111,6 @@ export class Request extends Component<IRequestComponent, any> {
     }
 
     return pivotItems;
-  }
-
-  private getTooltipDisplay(link: any) {
-    return (
-      <TooltipHost
-        content={link.title}
-        id={getId()}
-        calloutProps={{ gapSpace: 0 }}
-      >
-        <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
-        {link.headerText}
-      </TooltipHost>
-    );
   }
 
   private handlePivotItemClick = (pivotItem?: PivotItem) => {
