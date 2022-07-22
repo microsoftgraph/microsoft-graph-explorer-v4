@@ -49,13 +49,14 @@ export const getPivotItems = () => {
 
   function renderItemLink(link: any) {
     return (
-      <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}>
+      <>
         <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
         {link.headerText}
 
         {link.itemKey === 'adaptive-cards' && showDotIfAdaptiveCardPresent()}
         {link.itemKey === 'toolkit-component' && showDotIfGraphToolkitPresent()}
-      </TooltipHost>
+      </>
+
     );
   }
 

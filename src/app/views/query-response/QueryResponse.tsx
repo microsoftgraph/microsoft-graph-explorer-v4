@@ -85,19 +85,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
     if(!pivotItem){ return ;}
     setCurrentTab(pivotItem.props.itemKey!);
     onPivotItemClick(sampleQuery, pivotItem);
-  }
-
-  const renderItemLink = (link: any) => {
-    return (
-      <TooltipHost
-        content={link.title}
-        id={getId()}
-        calloutProps={{ gapSpace: 0 }}
-      >
-        <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
-        {link.headerText}
-      </TooltipHost>
-    );
   };
 
   return (
@@ -137,7 +124,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
               itemKey='expand-response'
               ariaLabel={translateMessage('Expand response')}
               title={translateMessage('Expand response')}
-              onRenderItemLink={renderItemLink}
             />
           </Pivot>
         </div>
