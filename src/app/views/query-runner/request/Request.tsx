@@ -1,9 +1,6 @@
 import {
-  getId,
-  Icon,
   Pivot,
-  PivotItem,
-  TooltipHost
+  PivotItem
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { Component, CSSProperties } from 'react';

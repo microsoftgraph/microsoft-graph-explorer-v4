@@ -1,4 +1,4 @@
-import { getId, getTheme, Icon, ITheme, PivotItem, TooltipHost } from '@fluentui/react';
+import { getTheme, Icon, ITheme, PivotItem } from '@fluentui/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
 

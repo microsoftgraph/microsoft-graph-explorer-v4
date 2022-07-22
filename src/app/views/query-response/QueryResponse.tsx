@@ -1,7 +1,7 @@
 import {
   Announced, Dialog, DialogFooter, DialogType,
-  DefaultButton, FontSizes, getId, Icon, IconButton,
-  Modal, Pivot, PivotItem, TooltipHost
+  DefaultButton, FontSizes, IconButton,
+  Modal, Pivot, PivotItem
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { useState, useEffect } from 'react';
