@@ -87,6 +87,13 @@ const QueryResponse = (props: IQueryResponseProps) => {
     onPivotItemClick(sampleQuery, pivotItem);
   };
 
+  const onScroll = () => {
+    const queryResponseElements = document.getElementsByClassName('query-response');
+    if(queryResponseElements && queryResponseElements.length > 0){
+      queryResponseElements[0].scrollTop = 0;
+    }
+  }
+
   return (
     <>
       <Resizable
@@ -108,7 +115,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
         <div className='query-response' style={{
           minHeight: 350,
           height: '100%'
-        }}>
+        }}
+        onScroll={onScroll}>
 
           <Pivot overflowBehavior='menu'
             overflowAriaLabel={translateMessage('More items')}
