@@ -7,7 +7,6 @@ export function generateGroupsFromList(list: any[], property: string) : IGroup[]
   let isCollapsed = false;
   let previousCount = 0;
   let count = 0;
-  const toggleCollapse: string = isCollapsed ? 'collapsed ': 'expanded '
 
   if (!list || list.length === 0 || list.some(e => !e[property])) {
     return groups;
@@ -17,7 +16,7 @@ export function generateGroupsFromList(list: any[], property: string) : IGroup[]
     if (!map.has(listItem[property])) {
       map.set(listItem[property], true);
       count = list.filter(item => item[property] === listItem[property]).length;
-      const ariaLabel: string = listItem[property] + ' has ' + count + ' results ' + toggleCollapse;
+      const ariaLabel: string = listItem[property] + ' has ' + count + ' results ';
       if (groups.length > 0) {
         isCollapsed = true;
       }

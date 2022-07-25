@@ -1,7 +1,7 @@
 import {
   Announced, Dialog, DialogFooter, DialogType,
-  DefaultButton, FontSizes, getId, Icon, IconButton,
-  Modal, Pivot, PivotItem, TooltipHost
+  DefaultButton, FontSizes, IconButton,
+  Modal, Pivot, PivotItem
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { useState, useEffect } from 'react';
@@ -85,19 +85,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
     if(!pivotItem){ return ;}
     setCurrentTab(pivotItem.props.itemKey!);
     onPivotItemClick(sampleQuery, pivotItem);
-  }
-
-  const renderItemLink = (link: any) => {
-    return (
-      <TooltipHost
-        content={link.title}
-        id={getId()}
-        calloutProps={{ gapSpace: 0 }}
-      >
-        <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
-        {link.headerText}
-      </TooltipHost>
-    );
   };
 
   const onScroll = () => {
@@ -145,7 +132,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
               itemKey='expand-response'
               ariaLabel={translateMessage('Expand response')}
               title={translateMessage('Expand response')}
-              onRenderItemLink={renderItemLink}
             />
           </Pivot>
         </div>
