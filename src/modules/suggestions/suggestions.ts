@@ -26,6 +26,12 @@ class Suggestions implements ISuggestions {
       return localOptions;
     }
 
+    /*
+    * blocks calls to the API for path segments
+    * uses resource explorer and cache as source of truth
+    */
+    if (context === 'paths') { return null; }
+
     return this.fetchSuggestionsFromNetwork(url, api, version);
   }
 
