@@ -1,5 +1,5 @@
 import { getTheme, ITheme, Label, Link, PivotItem } from '@fluentui/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { FormattedMessage } from 'react-intl';
@@ -34,6 +34,7 @@ export function renderSnippets(supportedLanguages: ISupportedLanguages) {
       headerButtonProps={{
         'aria-controls': `${language}-tab`
       }}
+      itemKey={language}
     >
       <Snippet language={language} snippetInfo={supportedLanguages} />
     </PivotItem>

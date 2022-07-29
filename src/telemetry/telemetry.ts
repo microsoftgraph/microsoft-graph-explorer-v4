@@ -75,9 +75,9 @@ class Telemetry implements ITelemetry {
   }
 
   public trackReactComponent(
-    ComponentToTrack: ComponentType,
+    ComponentToTrack: any,
     componentName?: string
-  ): ComponentType {
+  ): any {
     return withAITracking(this.reactPlugin, ComponentToTrack, componentName);
   }
 

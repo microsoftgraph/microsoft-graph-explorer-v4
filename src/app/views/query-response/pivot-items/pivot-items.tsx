@@ -19,7 +19,8 @@ import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
 import { Snippets } from '../snippets';
 
-export const getPivotItems = () => {
+export const getPivotItems = (snippetTab? : string, setTab?: Function) => {
+  console.log('Loading this rught now');
 
   const { graphExplorerMode: mode, sampleQuery, graphResponse: { body } } = useSelector((state: IRootState) => state);
 
@@ -105,7 +106,7 @@ export const getPivotItems = () => {
           'aria-controls': 'code-snippets-tab'
         }}
       >
-        <div id={'code-snippets-tab'}><Snippets /></div>
+        <div id={'code-snippets-tab'}><Snippets currentTab={snippetTab} setCurrentTab={setTab}/></div>
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'
