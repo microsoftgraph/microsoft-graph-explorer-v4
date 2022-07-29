@@ -30,9 +30,11 @@ class Suggestions implements ISuggestions {
     * blocks calls to the API for path segments
     * uses resource explorer and cache as source of truth
     */
-    if (context === 'paths') { return null; }
+    if (context === 'parameters') {
+      return this.fetchSuggestionsFromNetwork(url, api, version);
+    }
 
-    return this.fetchSuggestionsFromNetwork(url, api, version);
+    return null;
   }
 
   private async getSuggestionsFromResources(url: string, version: string,
