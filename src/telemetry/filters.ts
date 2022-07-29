@@ -9,11 +9,11 @@ import {
   HOME_ACCOUNT_KEY,
   NPS_FEEDBACK_URL
 } from '../app/services/graph-constants';
-import { clouds } from '../modules/sovereign-clouds';
 import {
   sanitizeGraphAPISandboxUrl,
   sanitizeQueryUrl
 } from '../app/utils/query-url-sanitization';
+import { clouds } from '../modules/sovereign-clouds';
 import { store } from '../store';
 
 export function filterTelemetryTypes(envelope: ITelemetryItem) {
@@ -32,7 +32,8 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
   if (envelope.baseType === 'RemoteDependencyData') {
     const baseData = envelope.baseData || {};
 
-    const { origin } = new URL(baseData.target || '');
+    const urlObject = new URL(baseData.target || '');
+
     const graphProxyUrl = store.getState()?.proxyUrl;
 
     const targetsToInclude = [
@@ -44,27 +45,26 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
       new URL(GRAPH_TOOOLKIT_EXAMPLE_URL).origin,
       new URL(NPS_FEEDBACK_URL).origin
     ];
-
-    if (!targetsToInclude.includes(origin)) {
+    if (!targetsToInclude.includes(urlObject.origin)) {
       return false;
     }
 
     const target = baseData.target || '';
-    switch (origin) {
+    if (getCloudUrls().includes(urlObject.origin)) {
+      baseData.name = sanitizeQueryUrl(target);
+    }
+
+    switch (urlObject.origin) {
       case GRAPH_URL:
         baseData.name = sanitizeQueryUrl(target);
         break;
       case GRAPH_API_SANDBOX_URL:
         baseData.name = sanitizeGraphAPISandboxUrl(target);
       default:
-        if (getCloudUrls().includes(origin)) {
-          baseData.name = sanitizeQueryUrl(target);
-        }
         break;
     }
-    return true;
   }
-  return false;
+  return true;
 }
 
 function getCloudUrls() {
