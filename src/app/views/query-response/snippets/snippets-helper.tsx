@@ -1,5 +1,5 @@
 import { getTheme, ITheme, Label, Link, PivotItem } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { FormattedMessage } from 'react-intl';
