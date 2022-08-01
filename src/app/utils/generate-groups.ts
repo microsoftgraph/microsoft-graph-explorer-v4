@@ -7,6 +7,7 @@ export function generateGroupsFromList(list: any[], property: string) : IGroup[]
   let isCollapsed = false;
   let previousCount = 0;
   let count = 0;
+  const toggleCollapse: string = isCollapsed ? 'collapsed ': 'expanded '
 
   if (!list || list.length === 0 || list.some(e => !e[property])) {
     return groups;
