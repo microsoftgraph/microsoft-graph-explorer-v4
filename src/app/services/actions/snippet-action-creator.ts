@@ -5,7 +5,8 @@ import { parseSampleUrl } from '../../utils/sample-url-generation';
 import {
   GET_SNIPPET_ERROR,
   GET_SNIPPET_PENDING,
-  GET_SNIPPET_SUCCESS
+  GET_SNIPPET_SUCCESS,
+  SET_SNIPPET_TAB_SUCCESS
 } from '../redux-constants';
 
 export function getSnippetSuccess(response: string): IAction {
@@ -26,6 +27,13 @@ export function getSnippetPending(): any {
   return {
     type: GET_SNIPPET_PENDING
   };
+}
+
+export function setSnippetTabSuccess(response: string): any {
+  return {
+    type: SET_SNIPPET_TAB_SUCCESS,
+    response
+  }
 }
 
 export function getSnippet(language: string): Function {

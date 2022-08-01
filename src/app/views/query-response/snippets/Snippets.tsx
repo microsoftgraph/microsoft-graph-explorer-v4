@@ -1,15 +1,15 @@
 import { Pivot, PivotItem } from '@fluentui/react';
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { componentNames, telemetry } from '../../../../telemetry';
+import { IRootState } from '../../../../types/root';
+import { setSnippetTabSuccess } from '../../../services/actions/snippet-action-creator';
 import { renderSnippets } from './snippets-helper';
 
-interface ISnippetProps {
-  currentTab: string;
-  setCurrentTab: Function;
-}
-
-function GetSnippets(props?: ISnippetProps) {
+function GetSnippets() {
+  const dispatch = useDispatch();
+  const { snippets } =  useSelector((state: IRootState) => state);
   const supportedLanguages = {
     'CSharp': {
       sdkDownloadLink: 'https://aka.ms/csharpsdk',
@@ -37,23 +37,16 @@ function GetSnippets(props?: ISnippetProps) {
     }
   };
 
-  // const currentTab = React.useRef<string>('CSharp');
-  // const [currentTab, setCur/rentTab] = useState<string>('CSharp');
-  console.log('Here is the current tab ', props!.currentTab);
-
   const handlePivotItemClick = (pivotItem?: PivotItem) => {
-    //
     if (!pivotItem) {
       return;
     }
-    console.log(pivotItem.props.itemKey);
-    // currentTab.current = pivotItem.props.itemKey!;
-    props!.setCurrentTab(pivotItem.props.itemKey!);
+    dispatch(setSnippetTabSuccess(pivotItem.props.itemKey!))
   }
 
   return <Pivot
     className={'pivot-response'}
-    selectedKey={props!.currentTab}
+    selectedKey={snippets.snippetTab}
     onLinkClick={handlePivotItemClick}
   >
     {renderSnippets(supportedLanguages)}

@@ -31,7 +31,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [responseHeight, setResponseHeight] = useState('610px');
   const { sampleQuery, dimensions } = useSelector((state: IRootState) => state);
   const [currentTab, setCurrentTab] = useState<string>('response-preview');
-  const [snippetTab, setSnippetTab] = useState<string>('csharp')
 
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
@@ -125,7 +124,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
             className={'pivot-response'}
             selectedKey={currentTab}
           >
-            {getPivotItems(snippetTab, setSnippetTab)}
+            {getPivotItems()}
             <PivotItem
               headerText='Expand'
               key='expand'
@@ -159,7 +158,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           <Pivot className='pivot-response'
             onLinkClick={(pivotItem) => onModalPivotItemClicked(pivotItem)}
             selectedKey={currentTab}>
-            {getPivotItems(snippetTab, setSnippetTab)}
+            {getPivotItems()}
           </Pivot>
         </Modal>
       }
