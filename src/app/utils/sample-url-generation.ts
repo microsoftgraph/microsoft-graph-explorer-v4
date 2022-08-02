@@ -100,7 +100,7 @@ export function hasPlaceHolders(url: string): boolean {
 }
 
 export function hasAllowableWhiteSpace(url: string) : boolean {
-  // Matches urls with folder names that have spaces e.g /root:/Folder Name/...
+  // regexList[0] matches urls with folder names that have spaces e.g /root:/Folder Name/...
   const regexList = [/(?:\/)\w+:(\w+ ?|.+)+.+/g];
   return regexList.some(regex => regex.test(url));
 }
