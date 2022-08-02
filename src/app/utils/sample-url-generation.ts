@@ -86,13 +86,22 @@ export function removeExtraSlashesFromUrl(url: string): string {
 
 export function hasWhiteSpace(url: string): boolean {
   const whitespaceChars = [' ', '\t', '\n', '%20'];
-  const parts = url.split('?');
-  return parts.length > 1 ? whitespaceChars.some((char) => parts[0].trimStart().includes(char)) :
-    whitespaceChars.some((char) => parts[0].trim().includes(char));
+  const urlParts = url.split('?');
+  if (hasAllowableWhiteSpace(urlParts[0])) {
+    return false
+  }
+  return urlParts.length > 1 ? whitespaceChars.some((spaceChar) => urlParts[0].trimStart().includes(spaceChar)) :
+    whitespaceChars.some((char) => urlParts[0].trim().includes(char));
 }
 
 export function hasPlaceHolders(url: string): boolean {
   const placeHolderChars = ['{', '}'];
   return placeHolderChars.length > 1 && placeHolderChars.every((char) => url.includes(char));
+}
+
+export function hasAllowableWhiteSpace(url: string) : boolean {
+  // Matches urls with folder names that have spaces e.g /root:/Folder Name/...
+  const regexList = [/(?:\/)\w+:(\w+ ?|.+)+.+/g];
+  return regexList.some(regex => regex.test(url));
 }
 
