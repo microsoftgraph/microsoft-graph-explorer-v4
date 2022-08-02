@@ -25,10 +25,6 @@ function GetSnippets() {
     'PowerShell': {
       sdkDownloadLink: 'https://aka.ms/pshellsdk',
       sdkDocLink: 'https://aka.ms/pshellsdkdocs'
-    },
-    'PHP': {
-      sdkDownloadLink: 'https://aka.ms/graphphpsdk',
-      sdkDocLink: 'https://aka.ms/sdk-doc'
     }
   };
 
