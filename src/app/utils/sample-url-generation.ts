@@ -100,8 +100,14 @@ export function hasPlaceHolders(url: string): boolean {
 }
 
 export function hasAllowableWhiteSpace(url: string) : boolean {
-  // regexList[0] matches urls with folder names that have spaces e.g /root:/Folder Name/...
   const regexList = [/(?:\/)\w+:(\w+ ?|.+)+.+/g];
+  const partsSeparatedByColon = url.split(':');
+  if (spaceInPartsBeforeColon(partsSeparatedByColon[1])) {
+    return false;
+  }
   return regexList.some(regex => regex.test(url));
 }
 
+function spaceInPartsBeforeColon(partBeforeColon : string) : boolean {
+  return [' ', '\t', '\n', '%20'].some((char) => partBeforeColon.includes(char));
+}
