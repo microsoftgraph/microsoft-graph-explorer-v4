@@ -98,7 +98,7 @@ export async function getBetaProfile(): Promise<IBetaProfile> {
     const profileType = getProfileType(userInfo);
     return { ageGroup, profileType };
   } catch (error) {
-    return { ageGroup: 0, profileType: ACCOUNT_TYPE.MSA };
+    return { ageGroup: 0, profileType: ACCOUNT_TYPE.UNDEFINED };
   }
 }
 
