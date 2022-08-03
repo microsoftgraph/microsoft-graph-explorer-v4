@@ -21,8 +21,7 @@ export const ShareQuery = () => {
 
   const query = { ...sampleQuery };
   const sanitizedQueryUrl = sanitizeQueryUrl(query.sampleUrl);
-  query.sampleUrl = sanitizedQueryUrl;
-  const shareLink = createShareLink(query);
+  const shareLink = createShareLink(sampleQuery);
 
   const toggleShareQueryDialogState = () => {
     setShareQuaryDialogStatus(prevState => !prevState);
@@ -37,7 +36,7 @@ export const ShareQuery = () => {
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
       {
         ComponentName: componentNames.SHARE_QUERY_COPY_BUTTON,
-        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedQueryUrl}`
+        QuerySignature: `${query.selectedVerb} ${sanitizedQueryUrl}`
       });
   }
 
