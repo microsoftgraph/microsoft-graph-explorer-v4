@@ -33,7 +33,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const { sampleQuery, dimensions } = useSelector((state: IRootState) => state);
   const [currentTab, setCurrentTab] = useState<string>('response-preview');
   const currentTheme: ITheme = getTheme();
-  const { modalStyles } = queryResponseStyles(currentTheme);
+  const { modalStyles, modalPivotStyles } = queryResponseStyles(currentTheme);
 
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
@@ -161,7 +161,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           <Pivot className='pivot-response'
             onLinkClick={(pivotItem) => onModalPivotItemClicked(pivotItem)}
             selectedKey={currentTab}
-            styles={{root: {overflow: 'hidden'}}}
+            styles={modalPivotStyles}
           >
             {getPivotItems()}
           </Pivot>

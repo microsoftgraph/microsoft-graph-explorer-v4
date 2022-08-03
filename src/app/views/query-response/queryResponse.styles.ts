@@ -44,6 +44,11 @@ export const queryResponseStyles = (theme: ITheme) => {
         height: '90%',
         overflow: 'hidden' as 'hidden'
       }
+    },
+    modalPivotStyles: {
+      root: {
+        overflow: 'hidden' as 'hidden'
+      }
     }
   };
 };
