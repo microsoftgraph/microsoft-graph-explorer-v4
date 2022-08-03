@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IRootState } from '../../../../../types/root';
-import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { copy } from '../../../common/copy';
 import { CopyButton } from '../../../common/copy/CopyButton';
@@ -19,10 +18,7 @@ export const ShareQuery = () => {
   const { sampleQuery } = useSelector((state: IRootState) => state);
   const [showShareQueryDialog, setShareQuaryDialogStatus] = useState(true);
 
-  const query = { ...sampleQuery };
-  const sanitizedQueryUrl = sanitizeQueryUrl(query.sampleUrl);
-  query.sampleUrl = sanitizedQueryUrl;
-  const shareLink = createShareLink(query);
+  const shareLink = createShareLink(sampleQuery);
 
   const toggleShareQueryDialogState = () => {
     setShareQuaryDialogStatus(prevState => !prevState);
@@ -37,7 +33,7 @@ export const ShareQuery = () => {
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
       {
         ComponentName: componentNames.SHARE_QUERY_COPY_BUTTON,
-        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedQueryUrl}`
+        QuerySignature: `${sampleQuery.selectedVerb} ${sampleQuery}`
       });
   }
 
