@@ -34,6 +34,16 @@ export const queryResponseStyles = (theme: ITheme) => {
         marginTop: '13%',
         marginLeft: '16%'
       }
+    },
+    modalStyles: {
+      scrollableContent: {
+        overflow: 'hidden' as 'hidden'
+      },
+      main: {
+        width: '80%',
+        height: '90%',
+        overflow: 'hidden' as 'hidden'
+      }
     }
   };
 };
