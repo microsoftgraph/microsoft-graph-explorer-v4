@@ -1,5 +1,5 @@
-import { getTheme, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
-import React, { useState } from 'react';
+import { getTheme, IButton, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
+import React, { useState, useEffect } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { useSelector } from 'react-redux';
 import FeedbackForm from '../query-runner/request/feedback/FeedbackForm';
@@ -16,6 +16,18 @@ export const FeedbackButton = () => {
   }
   const feedbackTitle = translateMessage('Feedback');
   const content = <div style={{padding:'3px'}}>{translateMessage('Feedback')}</div>
+
+  const feedbackButtonRef = React.useRef<IButton>(null)
+  const isFirstRender = React.useRef(true);
+  useEffect( () => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if(!enableSurvey){
+      feedbackButtonRef.current?.focus();
+    }
+  },[enableSurvey])
 
   const feedbackIconStyles = {
     root:{
@@ -66,6 +78,7 @@ export const FeedbackButton = () => {
             styles={feedbackIconStyles}
             role={'button'}
             disabled={enableSurvey}
+            componentRef={feedbackButtonRef}
           />
         </TooltipHost>
 
