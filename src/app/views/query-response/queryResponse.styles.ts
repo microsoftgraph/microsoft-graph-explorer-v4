@@ -30,14 +30,9 @@ export const queryResponseStyles = (theme: ITheme) => {
     },
     toolkitText: {
       root: {
-        padding: '20px',
-        width: '100%',
-        margin: 'auto',
         display: 'inline-block',
-        position: 'relative',
-        top: '160px',
-        lineHeight: '1.5',
-        textAlign: 'justify'
+        marginTop: '13%',
+        marginLeft: '16%'
       }
     }
   };
