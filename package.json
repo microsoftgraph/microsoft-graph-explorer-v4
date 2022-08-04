@@ -7,7 +7,7 @@
                 "@axe-core/webdriverjs": "4.4.3",
                 "@azure/msal-browser": "2.27.0",
                 "@babel/core": "7.18.10",
-                "@babel/runtime": "7.18.6",
+                "@babel/runtime": "7.18.9",
                 "@fluentui/react": "8.72.1",
                 "@microsoft/applicationinsights-react-js": "3.3.4",
                 "@microsoft/applicationinsights-web": "2.8.4",
