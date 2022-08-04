@@ -42,7 +42,7 @@
                 "monaco-editor-webpack-plugin": "7.0.1",
                 "office-ui-fabric-core": "11.0.1",
                 "postcss-flexbugs-fixes": "5.0.2",
-                "postcss-loader": "7.0.0",
+                "postcss-loader": "7.0.1",
                 "postcss-preset-env": "7.7.2",
                 "re-resizable": "6.9.9",
                 "react": "16.14.0",
