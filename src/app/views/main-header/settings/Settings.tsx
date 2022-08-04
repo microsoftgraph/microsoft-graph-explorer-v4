@@ -82,6 +82,12 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
     });
   };
 
+  const trackSettingsButtonClickEvent = () => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.SETTINGS_BUTTON
+    });
+  }
+
   const calloutStyles: React.CSSProperties = {
     overflowY: 'hidden'
   }
@@ -119,6 +125,7 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
           styles={settingsButtonStyles}
           menuIconProps={{ iconName: 'Settings' }}
           menuProps={menuProperties}
+          onMenuClick={trackSettingsButtonClickEvent}
         />
       </TooltipHost>
       <div>
