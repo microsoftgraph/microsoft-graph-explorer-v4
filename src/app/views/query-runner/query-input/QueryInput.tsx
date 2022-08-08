@@ -1,4 +1,4 @@
-import { Dropdown, IDropdownOption } from '@fluentui/react';
+import { Dropdown, IDropdownOption, IStackTokens, Stack } from '@fluentui/react';
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,11 +34,12 @@ const QueryInput = (props: IQueryInputProps) => {
   });
 
   const { sampleQuery, authToken,
-    isLoadingData: submitting } = useSelector((state: IRootState) => state);
+    isLoadingData: submitting, sidebarProperties } = useSelector((state: IRootState) => state);
   const authenticated = !!authToken.token;
+  const { mobileScreen } = sidebarProperties;
 
   const showError = !authenticated && sampleQuery.selectedVerb !== 'GET';
-  const verbSelector: any = queryRunnerStyles().verbSelector;
+  const { queryButtonStyles, verbSelector } = queryRunnerStyles();
   verbSelector.title = {
     ...verbSelector.title,
     background: getStyleFor(sampleQuery.selectedVerb)
@@ -56,8 +57,8 @@ const QueryInput = (props: IQueryInputProps) => {
 
     if (GRAPH_API_VERSIONS.includes(newQueryVersion)) {
       query.selectedVersion = newQueryVersion;
-      query.sampleUrl = newUrl;
     }
+    query.sampleUrl = newUrl;
     return query;
   }
 
@@ -71,10 +72,14 @@ const QueryInput = (props: IQueryInputProps) => {
     }, 500);
   };
 
+  const queryInputStackTokens: IStackTokens = {
+    childrenGap: 7
+  };
+
   return (
     <>
-      <div className='row' >
-        <div className='col-xs-12 col-lg-2'>
+      <Stack horizontal={mobileScreen ? false : true} tokens={queryInputStackTokens}>
+        <Stack.Item styles={!mobileScreen ? queryButtonStyles : {}}>
           <Dropdown
             ariaLabel={translateMessage('HTTP request method option')}
             selectedKey={sampleQuery.selectedVerb}
@@ -83,22 +88,22 @@ const QueryInput = (props: IQueryInputProps) => {
             errorMessage={showError ? translateMessage('Sign in to use this method') : undefined}
             onChange={(event, method) => handleOnMethodChange(method)}
           />
-        </div>
-        <div className='col-xs-12 col-lg-2'>
+        </Stack.Item>
+        <Stack.Item >
           <Dropdown
             ariaLabel={translateMessage('Microsoft Graph API Version option')}
             selectedKey={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
             options={urlVersions}
             onChange={(event, method) => handleOnVersionChange(method)}
           />
-        </div>
-        <div className='col-xs-12 col-lg-5'>
+        </Stack.Item>
+        <Stack.Item grow disableShrink>
           <AutoComplete
             contentChanged={contentChanged}
             runQuery={runQuery}
           />
-        </div>
-        <div className='col-lg-2 col-sm-10 col-xs-10'>
+        </Stack.Item>
+        <Stack.Item shrink>
           <SubmitButton
             className='run-query-button'
             text={translateMessage('Run Query')}
@@ -108,11 +113,11 @@ const QueryInput = (props: IQueryInputProps) => {
             submitting={submitting}
             allowDisabledFocus={true}
           />
-        </div>
-        <div className='col-lg-1 col-sm-2 col-xs-2'>
+        </Stack.Item>
+        <Stack.Item shrink styles={!mobileScreen ? queryButtonStyles : {}}>
           <ShareQuery />
-        </div>
-      </div>
+        </Stack.Item>
+      </Stack>
     </>
   )
 }

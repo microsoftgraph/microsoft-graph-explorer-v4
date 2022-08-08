@@ -19,7 +19,7 @@ import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
 import { Snippets } from '../snippets';
 
-export const getPivotItems = () => {
+export const GetPivotItems = () => {
 
   const { graphExplorerMode: mode, sampleQuery, graphResponse: { body } } = useSelector((state: IRootState) => state);
 
@@ -90,7 +90,6 @@ export const getPivotItems = () => {
       <div id={'response-headers-tab'}><ResponseHeaders/></div>
     </PivotItem>
   ];
-
   if (mode === Mode.Complete) {
     pivotItems.push(
       <PivotItem
