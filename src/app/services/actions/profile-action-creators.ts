@@ -98,7 +98,7 @@ export async function getBetaProfile(): Promise<IBetaProfile> {
     const profileType = getProfileType(userInfo);
     return { ageGroup, profileType };
   } catch (error) {
-    return { ageGroup: 0, profileType: ACCOUNT_TYPE.MSA };
+    return { ageGroup: 0, profileType: ACCOUNT_TYPE.UNDEFINED };
   }
 }
 
@@ -151,17 +151,14 @@ export async function getProfileResponse(): Promise<IProfileResponse> {
 }
 
 export async function getTenantInfo(profileType: ACCOUNT_TYPE) {
-  if(profileType===ACCOUNT_TYPE.AAD) {
-    try{
-      query.sampleUrl = USER_ORGANIZATION_URL;
-      const { userInfo: tenant } = await getProfileResponse();
-      return  tenant.value[0]?.displayName;
-    } catch (error: any) {
-      return '';
-    }
-  }
   if(profileType===ACCOUNT_TYPE.MSA) {
     return 'Personal';
   }
-  return '';
+  try{
+    query.sampleUrl = USER_ORGANIZATION_URL;
+    const { userInfo: tenant } = await getProfileResponse();
+    return  tenant.value[0]?.displayName;
+  } catch (error: any) {
+    return '';
+  }
 }
