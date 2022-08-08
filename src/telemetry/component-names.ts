@@ -74,6 +74,9 @@ export const CODE_SNIPPET_LANGUAGES = {
   },
   Powershell: {
     sdk: 'PowerShell snippet SDK link', doc: 'PowerShell snippet docs link'
+  },
+  PHP: {
+    sdk: 'PHP snippet SDK link', doc: 'PHP snippet docs link'
   }
 }
 export const GE_DOCUMENTATION_LINK = 'GE documentation link';

@@ -5,7 +5,8 @@ import { parseSampleUrl } from '../../utils/sample-url-generation';
 import {
   GET_SNIPPET_ERROR,
   GET_SNIPPET_PENDING,
-  GET_SNIPPET_SUCCESS
+  GET_SNIPPET_SUCCESS,
+  SET_SNIPPET_TAB_SUCCESS
 } from '../redux-constants';
 
 export function getSnippetSuccess(response: string): IAction {
@@ -28,6 +29,13 @@ export function getSnippetPending(): any {
   };
 }
 
+export function setSnippetTabSuccess(response: string): any {
+  return {
+    type: SET_SNIPPET_TAB_SUCCESS,
+    response
+  }
+}
+
 export function getSnippet(language: string): Function {
   return async (dispatch: Function, getState: Function) => {
     const { devxApi, sampleQuery } = getState();
@@ -44,7 +52,7 @@ export function getSnippet(language: string): Function {
       if (language !== 'csharp') {
         snippetsUrl += `?lang=${language}`;
       }
-      const openApiSnippets: string[] = ['go', 'powershell', 'php'];
+      const openApiSnippets: string[] = ['go', 'powershell'];
       if (openApiSnippets.includes(language)) {
         snippetsUrl += '&generation=openapi';
       }
