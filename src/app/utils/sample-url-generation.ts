@@ -99,15 +99,37 @@ export function hasPlaceHolders(url: string): boolean {
   return placeHolderChars.length > 1 && placeHolderChars.every((char) => url.includes(char));
 }
 
-export function hasAllowableWhiteSpace(url: string) : boolean {
+export function hasAllowableWhiteSpace(url: string): boolean {
   const regexList = [/(?:\/)\w+:(\w+ ?|.+)+.+/g];
   const partsSeparatedByColon = url.split(':');
-  if (spaceInPartsBeforeColon(partsSeparatedByColon[1])) {
+  const partsToSearch = partsSeparatedByColon[0].concat(partsSeparatedByColon[1]);
+  const partsSeparatedBySlash = url.split('/');
+  if (hasSpaceAtEndsOfParts(partsSeparatedBySlash)) {
+    return false;
+  }
+
+  if (hasSpaceInPartsBeforeColon(partsToSearch)) {
     return false;
   }
   return regexList.some(regex => regex.test(url));
 }
 
-function spaceInPartsBeforeColon(partBeforeColon : string) : boolean {
+function hasSpaceInPartsBeforeColon(partBeforeColon: string): boolean {
   return [' ', '\t', '\n', '%20'].some((char) => partBeforeColon.includes(char));
+}
+
+function hasSpaceAtEndsOfParts(partsWithSlash: string[]) {
+  if(partsWithSlash && partsWithSlash.length === 0){ return false}
+  const lastPart = partsWithSlash.pop();
+
+  for (const partWithSlash of partsWithSlash) {
+    const trimmedPart = partWithSlash.trim();
+    if (trimmedPart !== partWithSlash) {
+      return true;
+    }
+  }
+  const trimmedLastPart = lastPart!.trimStart();
+  if (trimmedLastPart !== lastPart) {
+    return true;
+  }
 }
