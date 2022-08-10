@@ -106,13 +106,11 @@ function createAuthenticatedRequest(
     authProvider,
     msalAuthOptions
   )
-  const graphRequest = GraphClient.getInstance()
+  return GraphClient.getInstance()
     .api(encodeHashCharacters(query))
     .middlewareOptions([middlewareOptions])
     .headers(sampleHeaders)
     .responseType(ResponseType.RAW);
-
-  return graphRequest;
 }
 
 export function makeGraphRequest(scopes: string[]): Function {
@@ -212,8 +210,7 @@ export async function generateResponseDownloadUrl(
     if (fileContents) {
       const buffer = await response.arrayBuffer();
       const blob = new Blob([buffer], { type: contentType });
-      const downloadUrl = URL.createObjectURL(blob);
-      return downloadUrl;
+      return URL.createObjectURL(blob);
     }
   } catch (error) {
     return null;
