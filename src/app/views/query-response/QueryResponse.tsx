@@ -16,7 +16,7 @@ import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { expandResponseArea } from '../../services/actions/response-expanded-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
 import { copy } from '../common/copy';
-import { getPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
+import { GetPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 import { IRootState } from '../../../types/root';
 import { CopyButton } from '../common/copy/CopyButton';
@@ -124,7 +124,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
             className={'pivot-response'}
             selectedKey={currentTab}
           >
-            {getPivotItems()}
+            {GetPivotItems()}
             <PivotItem
               headerText='Expand'
               key='expand'
@@ -158,7 +158,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           <Pivot className='pivot-response'
             onLinkClick={(pivotItem) => onModalPivotItemClicked(pivotItem)}
             selectedKey={currentTab}>
-            {getPivotItems()}
+            {GetPivotItems()}
           </Pivot>
         </Modal>
       }

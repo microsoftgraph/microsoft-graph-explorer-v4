@@ -57,8 +57,8 @@ const QueryInput = (props: IQueryInputProps) => {
 
     if (GRAPH_API_VERSIONS.includes(newQueryVersion)) {
       query.selectedVersion = newQueryVersion;
-      query.sampleUrl = newUrl;
     }
+    query.sampleUrl = newUrl;
     return query;
   }
 
