@@ -84,7 +84,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     if (body && !pending) {
       if (!data || (queryStatus && !queryStatus.ok)) {
         return (
-          <Label className={classes.emptyStateLabel} styles={{root: this.textStyle}}>
+          <Label styles={{root: this.textStyle}}>
             <FormattedMessage id='The Adaptive Card for this response is not available' />
             &nbsp;
             <Link
