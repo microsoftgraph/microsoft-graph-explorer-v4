@@ -24,7 +24,7 @@ class GraphToolkit extends Component<any> {
   }
 
   currentTheme: ITheme = getTheme();
-  textStyle = queryResponseStyles(this.currentTheme).toolkitText.root as IStyle
+  textStyle = queryResponseStyles(this.currentTheme).queryResponseText.root as IStyle
 
   public render() {
     const { sampleQuery } = this.props;
