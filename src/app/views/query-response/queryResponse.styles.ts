@@ -33,6 +33,21 @@ export const queryResponseStyles = (theme: ITheme) => {
         display: 'inline-block',
         marginLeft: '2%'
       }
+    },
+    modalStyles: {
+      scrollableContent: {
+        overflow: 'hidden' as 'hidden'
+      },
+      main: {
+        width: '80%',
+        height: '90%',
+        overflow: 'hidden' as 'hidden'
+      }
+    },
+    modalPivotStyles: {
+      root: {
+        overflow: 'hidden' as 'hidden'
+      }
     }
   };
 };
