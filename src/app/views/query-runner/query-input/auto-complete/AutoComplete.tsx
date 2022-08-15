@@ -40,7 +40,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
-    setQueryUrl(sampleQuery.sampleUrl);
+    if (previousQuery) {
+      initialiseAutoComplete(sampleQuery.sampleUrl)
+    }
   }, [sampleQuery.sampleUrl]);
 
   useEffect(() => {
@@ -59,16 +61,11 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   };
 
   const initialiseAutoComplete = (currentValue: string) => {
-    console.log('Here is the query url ', currentValue)
     setQueryUrl(currentValue);
 
     if (currentValue.includes(GRAPH_URL)) {
       const { index, context } = getLastDelimiterInUrl(currentValue);
-      console.log('Here is the index ', index, ' and the context ', context);
-
-      // If url is https://graph.microsoft.com/me --> searchText=/me and prev is everything else
       const { searchText: searchWith, previous: preceedingText } = getSearchText(currentValue, index!);
-      console.log('Here is the search text ', searchWith, ' and the preceeding text ', preceedingText);
       setSearchText(searchWith);
       requestForAutocompleteOptions(preceedingText, context);
     }
@@ -155,7 +152,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   };
 
 
-  // url here is the preceeding text: https://graph.microsoft.com/v1/me
   const requestForAutocompleteOptions = (url: string, context: SignContext) => {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
@@ -169,7 +165,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
 
     const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url;
-    if (urlExistsInStore && shouldShowSuggestions) {
+    if (urlExistsInStore) {
       displayAutoCompleteSuggestions(autoCompleteOptions.url);
       return;
     }
@@ -187,7 +183,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       theSuggestions = GRAPH_API_VERSIONS;
     }
     else if (autoCompleteOptions) {
-      console.log('Here are the autocomplete options ', autoCompleteOptions);
       theSuggestions = getSuggestions(url, autoCompleteOptions);
     }
 
