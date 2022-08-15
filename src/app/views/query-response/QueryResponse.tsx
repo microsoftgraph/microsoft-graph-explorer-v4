@@ -1,7 +1,7 @@
 import {
   Announced, Dialog, DialogFooter, DialogType,
   DefaultButton, FontSizes, IconButton,
-  Modal, Pivot, PivotItem
+  Modal, Pivot, PivotItem, ITheme, getTheme
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { useState, useEffect } from 'react';
@@ -21,6 +21,7 @@ import './query-response.scss';
 import { IRootState } from '../../../types/root';
 import { CopyButton } from '../common/copy/CopyButton';
 import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
+import { queryResponseStyles } from './queryResponse.styles';
 
 
 const QueryResponse = (props: IQueryResponseProps) => {
@@ -31,6 +32,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
   const [responseHeight, setResponseHeight] = useState('610px');
   const { sampleQuery, dimensions } = useSelector((state: IRootState) => state);
   const [currentTab, setCurrentTab] = useState<string>('response-preview');
+  const currentTheme: ITheme = getTheme();
+  const { modalStyles, modalPivotStyles } = queryResponseStyles(currentTheme);
 
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
@@ -142,7 +145,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
         <Modal
           isOpen={showModal}
           onDismiss={toggleExpandResponse}
-          styles={{ main: { width: '80%', height: '90%' } }}
+          styles={ modalStyles }
         >
           <IconButton
             styles={{
@@ -157,7 +160,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
           />
           <Pivot className='pivot-response'
             onLinkClick={(pivotItem) => onModalPivotItemClicked(pivotItem)}
-            selectedKey={currentTab}>
+            selectedKey={currentTab}
+            styles={modalPivotStyles}>
             {GetPivotItems()}
           </Pivot>
         </Modal>

@@ -21,7 +21,7 @@ function getLastCharacterOf(content: string) {
 // Filter out suggestions that don't contain the user's input
 function getFilteredSuggestions(compareString: string, suggestions: string[]) {
   return suggestions.filter((suggestion: string) => {
-    return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
+    return suggestion.toLowerCase().startsWith(compareString.toLocaleLowerCase());
   });
 }
 

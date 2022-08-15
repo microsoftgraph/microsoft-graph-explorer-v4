@@ -28,11 +28,25 @@ export const queryResponseStyles = (theme: ITheme) => {
       float: 'right',
       zIndex: 1
     },
-    toolkitText: {
+    queryResponseText: {
       root: {
         display: 'inline-block',
-        marginTop: '13%',
-        marginLeft: '16%'
+        marginLeft: '2%'
+      }
+    },
+    modalStyles: {
+      scrollableContent: {
+        overflow: 'hidden' as 'hidden'
+      },
+      main: {
+        width: '80%',
+        height: '90%',
+        overflow: 'hidden' as 'hidden'
+      }
+    },
+    modalPivotStyles: {
+      root: {
+        overflow: 'hidden' as 'hidden'
       }
     }
   };
