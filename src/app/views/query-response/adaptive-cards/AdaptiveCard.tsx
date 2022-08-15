@@ -29,6 +29,9 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   currentTheme: ITheme = getTheme();
   textStyle = queryResponseStyles(this.currentTheme).queryResponseText.root as IStyle
 
+  currentTheme: ITheme = getTheme();
+  textStyle = queryResponseStyles(this.currentTheme).queryResponseText.root as IStyle
+
   public componentDidMount() {
     const { body, sampleQuery, hostConfig } = this.props;
     this.props.actions!.getAdaptiveCard(body, sampleQuery);
