@@ -1,16 +1,6 @@
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import {
-  getTheme,
-  IStyle,
-  ITheme,
-  Label,
-  Link,
-  MessageBar,
-  MessageBarType,
-  Pivot,
-  PivotItem,
-  styled
-} from '@fluentui/react';
+import { getTheme, IStyle, ITheme, Label, Link,
+  MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -37,8 +27,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 
   currentTheme: ITheme = getTheme();
-  textStyle = queryResponseStyles(this.currentTheme).queryResponseText
-    .root as IStyle;
+  textStyle = queryResponseStyles(this.currentTheme).queryResponseText.root as IStyle
 
   public componentDidMount() {
     const { body, sampleQuery, hostConfig } = this.props;
@@ -64,13 +53,11 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
   }
 
   public shouldComponentUpdate(nextProps: IAdaptiveCardProps) {
+
     if (JSON.stringify(this.props.body) !== JSON.stringify(nextProps.body)) {
       return true; // body has changed so card will too
     }
-    if (
-      JSON.stringify(nextProps.card.data) ===
-      JSON.stringify(this.props.card.data)
-    ) {
+    if (JSON.stringify(nextProps.card.data) === JSON.stringify(this.props.card.data) ) {
       return false; // card still the same no need to re-render
     }
     return true;
@@ -97,7 +84,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     if (body && !pending) {
       if (!data || (queryStatus && !queryStatus.ok)) {
         return (
-          <Label styles={{ root: this.textStyle }}>
+          <Label styles={{root: this.textStyle}}>
             <FormattedMessage id='The Adaptive Card for this response is not available' />
             &nbsp;
             <Link
@@ -115,20 +102,11 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
       try {
         this.adaptiveCard!.parse(data.card);
         const renderedCard = this.adaptiveCard!.render();
-        const handleCopy = async () => {
-          trackedGenericCopy(
-            JSON.stringify(data.template, null, 4),
-            componentNames.JSON_SCHEMA_COPY_BUTTON,
-            sampleQuery
-          );
-        };
+        const handleCopy = async () =>{ trackedGenericCopy(JSON.stringify(data.template, null, 4),
+          componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
+        }
         return (
-          <Pivot
-            className='pivot-response'
-            onLinkClick={(pivotItem) =>
-              onPivotItemClick(sampleQuery, pivotItem)
-            }
-          >
+          <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
             <PivotItem
               itemKey='card'
               ariaLabel={translateMessage('card')}
@@ -138,8 +116,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                 'aria-controls': 'card-tab'
               }}
             >
-              <div
-                id={'card-tab'}
+              <div id={'card-tab'}
                 ref={(n) => {
                   if (n && !n.firstChild) {
                     n.appendChild(renderedCard as HTMLElement);
@@ -162,10 +139,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               <div id={'json-schema-tab'}>
                 <MessageBar messageBarType={MessageBarType.info}>
                   <FormattedMessage id='Get started with adaptive cards on' />
-                  <Link
-                    href={
-                      'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'
-                    }
+                  <Link href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
                     target='_blank'
                     rel='noopener noreferrer'
                     tabIndex={0}
@@ -173,8 +147,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                     <FormattedMessage id='Adaptive Cards Templating SDK' />
                   </Link>
                   <FormattedMessage id='and experiment on' />
-                  <Link
-                    href={'https://adaptivecards.io/designer/'}
+                  <Link href={'https://adaptivecards.io/designer/'}
                     target='_blank'
                     rel='noopener noreferrer'
                     tabIndex={0}
@@ -187,12 +160,16 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                   handleOnClick={handleCopy}
                   isIconButton={true}
                 />
-                <Monaco language='json' body={data.template} height={'800px'} />
+                <Monaco
+                  language='json'
+                  body={data.template}
+                  height={'800px'}
+                />
               </div>
             </PivotItem>
           </Pivot>
         );
-      } catch (err: any) {
+      } catch (err : any) {
         return <div style={{ color: 'red' }}>{err.message}</div>;
       }
     }
@@ -200,20 +177,14 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
 }
 
 function onPivotItemClick(query: IQuery | undefined, item?: PivotItem) {
-  if (!item) {
-    return;
-  }
+  if (!item) { return; }
   const key = item.props.itemKey;
   if (key) {
     telemetry.trackTabClickEvent(key, query);
   }
 }
 
-function mapStateToProps({
-  adaptiveCard,
-  sampleQuery,
-  queryRunnerStatus
-}: IRootState) {
+function mapStateToProps({ adaptiveCard, sampleQuery, queryRunnerStatus }: IRootState) {
   return {
     card: adaptiveCard,
     sampleQuery,
@@ -233,10 +204,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
 }
 // @ts-ignore
 const styledAdaptiveCard = styled(AdaptiveCard, queryResponseStyles as any);
-const trackedComponent = telemetry.trackReactComponent(
-  styledAdaptiveCard,
-  componentNames.ADAPTIVE_CARDS_TAB
-);
+const trackedComponent = telemetry.trackReactComponent(styledAdaptiveCard, componentNames.ADAPTIVE_CARDS_TAB);
 // @ts-ignore
 const IntlAdaptiveCard = injectIntl(trackedComponent);
 export default connect(mapStateToProps, mapDispatchToProps)(IntlAdaptiveCard);
