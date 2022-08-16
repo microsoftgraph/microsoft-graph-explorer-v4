@@ -19,6 +19,7 @@ import {
 import SuffixRenderer from './suffix/SuffixRenderer';
 import SuggestionsList from './suggestion-list/SuggestionsList';
 import { usePrevious } from './use-previous';
+import debounce from 'lodash.debounce';
 
 const AutoComplete = (props: IAutoCompleteProps) => {
 
@@ -50,6 +51,18 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     setIsMultiline(isOverflowing(queryUrl));
   }, [autoCompleteOptions, queryUrl]);
 
+  const debouncedSearch = useRef(
+    debounce((currentValue: string) => {
+      initialiseAutoComplete(currentValue);
+    }, 200)
+  ).current
+
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
   const setFocus = () => {
     focusRef?.current?.focus();
   }
@@ -62,7 +75,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const initialiseAutoComplete = (currentValue: string) => {
     setQueryUrl(currentValue);
-
     if (currentValue.includes(GRAPH_URL)) {
       const { index, context } = getLastDelimiterInUrl(currentValue);
       const { searchText: searchWith, previous: preceedingText } = getSearchText(currentValue, index!);
@@ -73,7 +85,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const onChange = (e: any) => {
     const currentValue = e.target.value;
-    initialiseAutoComplete(currentValue);
+    setQueryUrl(currentValue);
+    debouncedSearch(currentValue);
   };
 
   const isOverflowing = (input: string) => {
@@ -155,9 +168,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const requestForAutocompleteOptions = (url: string, context: SignContext) => {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
-    if (!GRAPH_API_VERSIONS.includes(queryVersion.toLowerCase())) {
-      return;
-    }
 
     if (!requestUrl) {
       dispatch(fetchAutoCompleteOptions('', queryVersion));
@@ -173,7 +183,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   }
 
   const displayAutoCompleteSuggestions = (url: string) => {
-
     const { index } = getLastDelimiterInUrl(url);
     const { previous: preceedingText } = getSearchText(url, index!);
     const shouldSuggestVersions = preceedingText === GRAPH_URL + '/';
