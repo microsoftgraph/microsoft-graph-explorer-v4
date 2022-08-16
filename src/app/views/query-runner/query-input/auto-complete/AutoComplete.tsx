@@ -183,6 +183,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   }
 
   const displayAutoCompleteSuggestions = (url: string) => {
+
     const { index } = getLastDelimiterInUrl(url);
     const { previous: preceedingText } = getSearchText(url, index!);
     const shouldSuggestVersions = preceedingText === GRAPH_URL + '/';
