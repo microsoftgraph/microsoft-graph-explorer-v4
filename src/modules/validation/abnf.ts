@@ -1,6 +1,20 @@
 import { apgApi, apgLib } from 'apg-js';
 import { rules } from './definition';
 
+interface ValidationResult {
+  inputLength: number;
+  length: number;
+  matched: number;
+  maxMatched: number;
+  maxTreeDepth: number;
+  nodeHits: number;
+  state: number;
+  subBegin: number;
+  subEnd: number;
+  subLength: number;
+  success: boolean;
+}
+
 export class ValidatedUrl {
 
   private parser;
@@ -15,14 +29,13 @@ export class ValidatedUrl {
     grammar.generate();
 
     if (grammar.errors.length) {
-      throw new Error('ABNF grammar has errors');
+      throw Error('ABNF grammar has errors');
     }
     return grammar.toObject();
   }
 
-  public validate() {
-    const graphUrl = 'https://graph.microsoft.com/beta/groups';
+  public validate(graphUrl: string): ValidationResult {
     const result = this.parser.parse(this.grammarObject, this.grammarObject?.rules![0].name, graphUrl);
-    return result.success;
+    return result;
   }
 }
