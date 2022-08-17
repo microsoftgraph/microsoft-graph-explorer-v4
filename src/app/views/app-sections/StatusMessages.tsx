@@ -47,7 +47,6 @@ const StatusMessages = () => {
   function setQuery(link: string) {
     const query: IQuery = { ...sampleQuery };
     query.sampleUrl = link;
-    query.selectedVerb = 'GET';
     dispatch(setSampleQuery(query));
   }
 
