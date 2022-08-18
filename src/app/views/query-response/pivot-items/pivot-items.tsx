@@ -68,7 +68,6 @@ export const GetPivotItems = () => {
       itemKey='response-preview' // To be used to construct component name for telemetry data
       headerText={translateMessage('Response Preview')}
       title={translateMessage('Response Preview')}
-      onRenderItemLink={renderItemLink}
       headerButtonProps={{
         'aria-controls': 'response-tab'
       }}
@@ -82,7 +81,6 @@ export const GetPivotItems = () => {
       itemIcon='FileComment'
       itemKey='response-headers'
       title={translateMessage('Response Headers')}
-      onRenderItemLink={renderItemLink}
       headerButtonProps={{
         'aria-controls': 'response-headers-tab'
       }}
@@ -99,7 +97,6 @@ export const GetPivotItems = () => {
         headerText={translateMessage('Snippets')}
         itemIcon='PasteAsCode'
         itemKey='code-snippets'
-        onRenderItemLink={renderItemLink}
         headerButtonProps={{
           'aria-controls': 'code-snippets-tab'
         }}
