@@ -49,13 +49,13 @@ export const GetPivotItems = () => {
 
   function renderItemLink(link: any) {
     return (
-      <>
+      <span>
         <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
         {link.headerText}
 
         {link.itemKey === 'adaptive-cards' && showDotIfAdaptiveCardPresent()}
         {link.itemKey === 'toolkit-component' && showDotIfGraphToolkitPresent()}
-      </>
+      </span>
 
     );
   }
