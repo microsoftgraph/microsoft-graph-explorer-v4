@@ -84,9 +84,47 @@ class App extends Component<IAppProps, IAppState> {
     });
   }
 
+  private collectDeviceCharacteristicsTelemetry = () => {
+    const deviceWidth = screen.width;
+    const deviceHeight = screen.height;
+    let deviceScreenSize = '';
+    const deviceProperties = {
+      deviceHeight: 0,
+      deviceWidth: 0,
+      screenWidth: ''
+    };
+
+    if(deviceWidth >= 1920){
+      deviceScreenSize = 'xxxl';
+    }
+    else if(deviceWidth >= 1366 && deviceWidth <= 1919){
+      deviceScreenSize = 'xxl';
+    }
+    else if(deviceWidth >= 1365 && deviceWidth <= 1024){
+      deviceScreenSize = 'xl';
+    }
+    else if(deviceWidth >= 640 && deviceWidth <= 1023){
+      deviceScreenSize = 'l';
+    }
+    else if(deviceWidth >= 480 && deviceWidth <= 639){
+      deviceScreenSize = 'm';
+    }
+    else{
+      deviceScreenSize = 's';
+    }
+
+    deviceProperties.deviceHeight = deviceHeight;
+    deviceProperties.deviceWidth = deviceWidth;
+    deviceProperties.screenWidth = deviceScreenSize;
+
+    telemetry.trackDeviceCharacteristics(deviceProperties);
+  }
+
   public componentDidMount = async () => {
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
+
+    this.collectDeviceCharacteristicsTelemetry();
 
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('sid');

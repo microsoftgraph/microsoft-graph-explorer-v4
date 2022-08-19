@@ -118,6 +118,11 @@ class Telemetry implements ITelemetry {
     telemetry.trackEvent(WINDOW_OPEN_EVENT, properties);
   }
 
+  public trackDeviceCharacteristics(properties?: any){
+    properties = properties || {}
+    telemetry.trackEvent('device-characteristics', properties);
+  }
+
   private getInstrumentationKey() {
     return (
       (window as any).InstrumentationKey ||
