@@ -54,7 +54,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const debouncedSearch = useRef(
     debounce((currentValue: string) => {
       initialiseAutoComplete(currentValue);
-    }, 200)
+    }, 50)
   ).current
 
   useEffect(() => {
@@ -199,7 +199,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
       if (filtered[0] !== searchText) {
-        setSuggestions(filtered);
+        setSuggestions(filtered as string[]);
         setShouldShowSuggestions(true);
       }
     } else {

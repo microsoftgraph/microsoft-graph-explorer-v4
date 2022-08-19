@@ -32,6 +32,7 @@
                 "file-loader": "6.2.0",
                 "fork-ts-checker-webpack-plugin": "7.2.13",
                 "fs-extra": "10.1.0",
+                "fuzzysort": "2.0.1",
                 "guid-typescript": "1.0.9",
                 "isomorphic-fetch": "3.0.0",
                 "localforage": "1.10.0",
