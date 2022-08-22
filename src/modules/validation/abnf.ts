@@ -15,6 +15,12 @@ interface ValidationResult {
   success: boolean;
 }
 
+interface Validation {
+  rule: string;
+  result: ValidationResult;
+  success: boolean;
+}
+
 export class ValidatedUrl {
 
   private parser;
@@ -34,8 +40,14 @@ export class ValidatedUrl {
     return grammar.toObject();
   }
 
-  public validate(graphUrl: string): ValidationResult {
-    const result = this.parser.parse(this.grammarObject, this.grammarObject?.rules![0].name, graphUrl);
-    return result;
+
+  public validate(graphUrl: string, validations: string[]): Validation[] {
+
+    const list: Validation[] = [];
+    for (const rule of validations) {
+      const result = this.parser.parse(this.grammarObject, rule, graphUrl);
+      list.push({ rule, result, success: result.success })
+    }
+    return list;
   }
 }
