@@ -19,7 +19,6 @@ import {
 import SuffixRenderer from './suffix/SuffixRenderer';
 import SuggestionsList from './suggestion-list/SuggestionsList';
 import { usePrevious } from './use-previous';
-import debounce from 'lodash.debounce';
 
 const AutoComplete = (props: IAutoCompleteProps) => {
 
@@ -51,18 +50,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     setIsMultiline(isOverflowing(queryUrl));
   }, [autoCompleteOptions, queryUrl]);
 
-  const debouncedSearch = useRef(
-    debounce((currentValue: string) => {
-      initialiseAutoComplete(currentValue);
-    }, 50)
-  ).current
-
-  useEffect(() => {
-    return () => {
-      debouncedSearch.cancel();
-    };
-  }, [debouncedSearch]);
-
   const setFocus = () => {
     focusRef?.current?.focus();
   }
@@ -86,7 +73,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const onChange = (e: any) => {
     const currentValue = e.target.value;
     setQueryUrl(currentValue);
-    debouncedSearch(currentValue);
+    initialiseAutoComplete(currentValue)
   };
 
   const isOverflowing = (input: string) => {
@@ -168,17 +155,17 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const requestForAutocompleteOptions = (url: string, context: SignContext) => {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
+    const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url;
+    if (urlExistsInStore) {
+      displayAutoCompleteSuggestions(autoCompleteOptions.url);
+      return;
+    }
 
     if (!requestUrl) {
       dispatch(fetchAutoCompleteOptions('', queryVersion));
       return;
     }
 
-    const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url;
-    if (urlExistsInStore) {
-      displayAutoCompleteSuggestions(autoCompleteOptions.url);
-      return;
-    }
     dispatch(fetchAutoCompleteOptions(requestUrl, queryVersion, context));
   }
 

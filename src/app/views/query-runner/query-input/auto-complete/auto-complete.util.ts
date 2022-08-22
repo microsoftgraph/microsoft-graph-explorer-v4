@@ -21,8 +21,8 @@ function getLastCharacterOf(content: string) {
 
 // Filter out suggestions that don't contain the user's input
 function getFilteredSuggestions(compareString: string, suggestions: string[]) {
-  const fuzzyObject = fuzzysort.go(compareString, suggestions, { limit: 100 });
-  return fuzzyObject.map(item => item.target);
+  const fuzzyResults = fuzzysort.go(compareString, suggestions, { limit: 100 });
+  return fuzzyResults.map(fuzzyResult => fuzzyResult.target);
 }
 
 function getErrorMessage(queryUrl: string) {
