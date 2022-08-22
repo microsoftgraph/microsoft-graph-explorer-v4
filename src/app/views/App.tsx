@@ -124,7 +124,12 @@ class App extends Component<IAppProps, IAppState> {
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
 
-    this.collectDeviceCharacteristicsTelemetry();
+    const hasTelemetryBeenCollected = localStorage.getItem('hasTelemetryBeenCollected');
+
+    if(!hasTelemetryBeenCollected){
+      this.collectDeviceCharacteristicsTelemetry();
+      localStorage.setItem('hasTelemetryBeenCollected', 'true');
+    }
 
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('sid');
