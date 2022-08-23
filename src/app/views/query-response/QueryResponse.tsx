@@ -129,7 +129,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           >
             {GetPivotItems()}
             <PivotItem
-              headerText='Expand'
+              headerText={translateMessage('Expand')}
               key='expand'
               itemIcon='MiniExpandMirrored'
               itemKey='expand-response'
