@@ -84,34 +84,37 @@ class App extends Component<IAppProps, IAppState> {
     });
   }
 
-  private collectDeviceCharacteristicsTelemetry = () => {
+  private getDeviceScreenSize(deviceWidth: number){
+    if(deviceWidth >= 1920){
+      return 'xxxl';
+    }
+    else if(deviceWidth >= 1366 && deviceWidth <= 1919){
+      return 'xxl';
+    }
+    else if(deviceWidth >= 1365 && deviceWidth <= 1024){
+      return 'xl';
+    }
+    else if(deviceWidth >= 640 && deviceWidth <= 1023){
+      return 'l';
+    }
+    else if(deviceWidth >= 480 && deviceWidth <= 639){
+      return 'm';
+    }
+    else{
+      return 's';
+    }
+  }
+
+  private collectDeviceCharacteristicsTelemetry() {
     const deviceWidth = screen.width;
     const deviceHeight = screen.height;
-    let deviceScreenSize = '';
     const deviceProperties = {
       deviceHeight: 0,
       deviceWidth: 0,
       screenWidth: ''
     };
 
-    if(deviceWidth >= 1920){
-      deviceScreenSize = 'xxxl';
-    }
-    else if(deviceWidth >= 1366 && deviceWidth <= 1919){
-      deviceScreenSize = 'xxl';
-    }
-    else if(deviceWidth >= 1365 && deviceWidth <= 1024){
-      deviceScreenSize = 'xl';
-    }
-    else if(deviceWidth >= 640 && deviceWidth <= 1023){
-      deviceScreenSize = 'l';
-    }
-    else if(deviceWidth >= 480 && deviceWidth <= 639){
-      deviceScreenSize = 'm';
-    }
-    else{
-      deviceScreenSize = 's';
-    }
+    const deviceScreenSize = this.getDeviceScreenSize(deviceWidth);
 
     deviceProperties.deviceHeight = deviceHeight;
     deviceProperties.deviceWidth = deviceWidth;
