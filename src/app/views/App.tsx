@@ -88,37 +88,28 @@ class App extends Component<IAppProps, IAppState> {
     if(deviceWidth >= 1920){
       return 'xxxl';
     }
-    else if(deviceWidth >= 1366 && deviceWidth <= 1919){
+    else if(deviceWidth >= 1366){
       return 'xxl';
     }
-    else if(deviceWidth >= 1365 && deviceWidth <= 1024){
+    else if(deviceWidth >= 1365){
       return 'xl';
     }
-    else if(deviceWidth >= 640 && deviceWidth <= 1023){
+    else if(deviceWidth >= 640){
       return 'l';
     }
-    else if(deviceWidth >= 480 && deviceWidth <= 639){
+    else if(deviceWidth >= 480){
       return 'm';
     }
-    else{
-      return 's';
-    }
+
+    return 's';
   }
 
   private collectDeviceCharacteristicsTelemetry() {
-    const deviceWidth = screen.width;
-    const deviceHeight = screen.height;
     const deviceProperties = {
-      deviceHeight: 0,
-      deviceWidth: 0,
-      screenWidth: ''
+      deviceHeight: screen.height,
+      deviceWidth: screen.width,
+      screenWidth: this.getDeviceScreenSize(screen.width)
     };
-
-    const deviceScreenSize = this.getDeviceScreenSize(deviceWidth);
-
-    deviceProperties.deviceHeight = deviceHeight;
-    deviceProperties.deviceWidth = deviceWidth;
-    deviceProperties.screenWidth = deviceScreenSize;
 
     telemetry.trackDeviceCharacteristics(deviceProperties);
   }
