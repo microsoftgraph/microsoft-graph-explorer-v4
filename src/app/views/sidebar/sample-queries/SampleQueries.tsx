@@ -29,7 +29,6 @@ import { sidebarStyles } from '../Sidebar.styles';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { fetchSamples } from '../../../services/actions/samples-action-creators';
 import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
-import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
