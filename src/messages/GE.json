@@ -1,6 +1,5 @@
 {
   "add graph community call": "add graph community call",
-  "Consented": "Consented",
   "Security": "Security",
   "alerts": "alerts",
   "alerts with 'High' severity": "alerts with 'High' severity",
@@ -292,6 +291,7 @@
   "Status": "Status",
   "Admin consent required": "Admin consent required",
   "Consent": "Consent",
+  "Unconsent": "Unconsent",
   "permissions required to run the query": "One of the following permissions is required to run the query. Select a permission and click Consent.",
   "tab": " tab",
   "View the": " View the",

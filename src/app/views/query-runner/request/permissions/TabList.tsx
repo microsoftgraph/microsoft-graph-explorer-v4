@@ -21,7 +21,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
   const permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
   const tokenPresent = !!authToken.token;
-  const [isHoverOverPermissionsList, setIsHoverOverPermissionsList] = useState(false);
+  const [isScreenSizeReduced, setIsScreenSizeReduced] = useState(false);
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
@@ -39,6 +39,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     </Label>);
   }
 
+
   const displayNotSignedInMessage = () : JSX.Element => {
     return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='sign in to view a list of all permissions' />
@@ -55,18 +56,27 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
 
   return (
     <>
-      <Label className={classes.permissionLength}>
-        <FormattedMessage id='Permissions' />&nbsp;({permissions.length})
+      <Label className={classes.permissionLength} style={{marginLeft: '12px'}}>
+        <FormattedMessage id='Permissions' />
       </Label>
-      <Label className={classes.permissionText}>
+      <Label className={classes.permissionText} style={{marginLeft: '12px'}}>
         {!tokenPresent && <FormattedMessage id='sign in to consent to permissions' />}
-        {tokenPresent && <FormattedMessage id='permissions required to run the query' />}
+        {tokenPresent && <FormattedMessage id='permissions required to run the query'/>}
       </Label>
       <div
-        onMouseEnter={() => setIsHoverOverPermissionsList(true)}
-        onMouseLeave={() => setIsHoverOverPermissionsList(false)}>
+        onMouseEnter={() => {
+          // Check if the device width is less than 1260px
+          // OR if the browser width is less than 1290 ie. the browser is resized
+
+          if(screen.width < 1260 || window.innerWidth < 1290){
+            setIsScreenSizeReduced(true);
+          }
+        }
+        }
+        onMouseLeave={() => setIsScreenSizeReduced(false)}>
         <DetailsList
-          styles={isHoverOverPermissionsList ? { root: { maxHeight } } : { root: { maxHeight, overflow: 'hidden' } }}
+          styles={!isScreenSizeReduced ? { root:
+            { maxHeight, overflowX: 'hidden' } } : { root: { maxHeight} }}
           items={permissions}
           columns={columns}
           onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}

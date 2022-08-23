@@ -4,7 +4,6 @@ import {
   getId,
   getTheme,
   IColumn,
-  Icon,
   IDetailsListCheckboxProps,
   Label,
   PrimaryButton,
@@ -59,6 +58,11 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     dispatch(permissionActionCreators.consentToScopes(consentScopes));
   };
 
+  const handleUnconsent = async (permission: IPermission) : Promise<void> => {
+    const consentScopes = [permission.value];
+    dispatch(permissionActionCreators.consentToScopes(consentScopes));
+  };
+
   const renderItemColumn = (item: any, index: any, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
     const consented = !!item.consented;
@@ -71,23 +75,22 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
         case 'isAdmin':
           if (item.isAdmin) {
             return <div style={{ textAlign: 'center' }}>
-              <Icon iconName='checkmark' className={classes.checkIcon}
-                aria-label={translateMessage('Admin consent required')} />
+              <Label><FormattedMessage id='Yes' /></Label>
             </div>;
           } else {
             return <div style={{ textAlign: 'center' }}>
-              <Icon iconName='StatusCircleErrorX' className={classes.checkIcon}
-                aria-label={translateMessage('Admin consent not required')} />
+              <Label><FormattedMessage id='No' /></Label>
             </div>;
           }
 
         case 'consented':
           if (consented) {
-            return <Label className={classes.consented}
-            ><FormattedMessage id='Consented' /></Label>;
+            return <PrimaryButton onClick={() => handleUnconsent(item)} style={{width: '80px'}}>
+              <FormattedMessage id='Unconsent' />
+            </PrimaryButton>;
           } else {
             if (!panel) {
-              return <PrimaryButton onClick={() => handleConsent(item)}>
+              return <PrimaryButton onClick={() => handleConsent(item)} style={{width: '80px'}}>
                 <FormattedMessage id='Consent' />
               </PrimaryButton>;
             }
@@ -253,7 +256,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
 
   const displayLoadingPermissionsText = () => {
     return (
-      <Label>
+      <Label style={{marginLeft: '12px'}}>
         <FormattedMessage id={'Fetching permissions'} />...
       </Label>
     );
