@@ -68,7 +68,7 @@ describe('Abnf parser should', () => {
     {
       isValid: true,
       // eslint-disable-next-line max-len
-      url: 'https://graph.microsoft.com/beta/items/getActivitiesByInterval(startDateTime=\'2017-01-01\',endDateTime=\'2017- 01-03\',interval=\'day\')'
+      url: 'https://graph.microsoft.com/beta/items/getActivitiesByInterval(startDateTime=\'2017-01-01\',endDateTime=\'2017-01-03\',interval=\'day\')'
       // eslint-disable-next-line max-len
     },
     {
@@ -88,8 +88,13 @@ describe('Abnf parser should', () => {
   const validator = new ValidatedUrl();
   urls.forEach((sample) => {
     it(`validate the url: ${sample.url} to be ${sample.isValid} `, () => {
-      const validation = validator.validate(sample.url);
-      expect(validation.success).toBe(sample.isValid);
+      const url = sample.url;
+      const validation = validator.validate(url);
+      let error = '';
+      if (!validation.success) {
+        error = url.substring(validation.matched, validation.maxMatched)
+      }
+      expect(error).toBe('');
     });
   });
 
