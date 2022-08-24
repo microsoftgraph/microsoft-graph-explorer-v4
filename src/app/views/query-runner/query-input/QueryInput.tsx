@@ -39,7 +39,7 @@ const QueryInput = (props: IQueryInputProps) => {
   const { mobileScreen } = sidebarProperties;
 
   const showError = !authenticated && sampleQuery.selectedVerb !== 'GET';
-  const { queryButtonStyles, verbSelector } = queryRunnerStyles();
+  const { queryButtonStyles, verbSelector, shareQueryButtonStyles } = queryRunnerStyles();
   verbSelector.title = {
     ...verbSelector.title,
     background: getStyleFor(sampleQuery.selectedVerb)
@@ -114,7 +114,7 @@ const QueryInput = (props: IQueryInputProps) => {
             allowDisabledFocus={true}
           />
         </Stack.Item>
-        <Stack.Item shrink styles={!mobileScreen ? queryButtonStyles : {}}>
+        <Stack.Item shrink styles={!mobileScreen ? shareQueryButtonStyles : {}}>
           <ShareQuery />
         </Stack.Item>
       </Stack>
