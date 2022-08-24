@@ -41,13 +41,8 @@ export class ValidatedUrl {
   }
 
 
-  public validate(graphUrl: string, validations: string[]): Validation[] {
-
-    const list: Validation[] = [];
-    for (const rule of validations) {
-      const result = this.parser.parse(this.grammarObject, rule, graphUrl);
-      list.push({ rule, result, success: result.success })
-    }
-    return list;
+  public validate(graphUrl: string): ValidationResult {
+    const result = this.parser.parse(this.grammarObject, 'odataUri', graphUrl);
+    return result;
   }
 }

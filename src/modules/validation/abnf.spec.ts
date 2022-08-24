@@ -3,8 +3,8 @@ import { ValidatedUrl } from './abnf';
 
 describe('Abnf parser should', () => {
   const urls = [
-    { url: 'https://graph.microsoft.com/me', isValid: true },
     { url: 'https://graph.microsoft.com/v1.0/me/events', isValid: true },
+    { url: 'https://graph.microsoft.com/me', isValid: true },
     {
       url:
         // eslint-disable-next-line max-len
@@ -85,15 +85,11 @@ describe('Abnf parser should', () => {
     }
 
   ];
-  urls.forEach((url, key) => {
-    const rules = [
-      'odataUri'
-    ];
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    it(`validate the url: ${url.url} to be ${url.isValid} `, () => {
-      const validator = new ValidatedUrl();
-      const validation = validator.validate(url.url, rules);
-      expect(validation[key].success).toBe(url.isValid);
+  const validator = new ValidatedUrl();
+  urls.forEach((sample) => {
+    it(`validate the url: ${sample.url} to be ${sample.isValid} `, () => {
+      const validation = validator.validate(sample.url);
+      expect(validation.success).toBe(sample.isValid);
     });
   });
 
