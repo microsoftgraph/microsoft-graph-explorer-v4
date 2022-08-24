@@ -34,6 +34,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
 import { MainHeader } from './main-header/MainHeader';
+import { getDeviceScreenSize } from '../utils/device-screen-size';
 
 export interface IAppProps {
   theme?: ITheme;
@@ -84,31 +85,11 @@ class App extends Component<IAppProps, IAppState> {
     });
   }
 
-  private getDeviceScreenSize(deviceWidth: number){
-    if(deviceWidth >= 1920){
-      return 'xxxl';
-    }
-    else if(deviceWidth >= 1366){
-      return 'xxl';
-    }
-    else if(deviceWidth >= 1365){
-      return 'xl';
-    }
-    else if(deviceWidth >= 640){
-      return 'l';
-    }
-    else if(deviceWidth >= 480){
-      return 'm';
-    }
-
-    return 's';
-  }
-
   private collectDeviceCharacteristicsTelemetry() {
     const deviceProperties = {
       deviceHeight: screen.height,
       deviceWidth: screen.width,
-      screenWidth: this.getDeviceScreenSize(screen.width)
+      screenWidth: getDeviceScreenSize(screen.width)
     };
 
     telemetry.trackDeviceCharacteristics(deviceProperties);
