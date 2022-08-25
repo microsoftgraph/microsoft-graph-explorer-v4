@@ -1,6 +1,5 @@
 import { hasPlaceHolders, hasWhiteSpace } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
-import fuzzysort from 'fuzzysort';
 
 function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
   let finalSelectedSuggestion = `${userInput + selected}`;
@@ -21,8 +20,21 @@ function getLastCharacterOf(content: string) {
 
 // Filter out suggestions that don't contain the user's input
 function getFilteredSuggestions(compareString: string, suggestions: string[]) {
-  const fuzzyResults = fuzzysort.go(compareString, suggestions, { limit: 100 });
-  return fuzzyResults.map(fuzzyResult => fuzzyResult.target);
+
+  function getStartsWith() {
+    return suggestions.filter((suggestion: string) => {
+      return suggestion.toLowerCase().startsWith(compareString.toLocaleLowerCase());
+    });
+  }
+
+  function getIncludes() {
+    return suggestions.filter((suggestion: string) => {
+      return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
+    });
+  }
+
+  const filteredSuggestions = getStartsWith().concat(getIncludes());
+  return Array.from(new Set(filteredSuggestions));
 }
 
 function getErrorMessage(queryUrl: string) {
