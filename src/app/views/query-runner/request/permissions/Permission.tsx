@@ -59,8 +59,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
   };
 
   const handleUnconsent = async (permission: IPermission) : Promise<void> => {
-    const consentScopes = [permission.value];
-    dispatch(permissionActionCreators.consentToScopes(consentScopes));
+    dispatch(permissionActionCreators.unconsentToScopes(permission.value));
   };
 
   const renderItemColumn = (item: any, index: any, column: IColumn | undefined) => {
