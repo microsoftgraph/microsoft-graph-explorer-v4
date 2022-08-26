@@ -147,19 +147,28 @@ export function consentToScopes(scopes: string[]): Function {
 export function unconsentToScopes(permissionToDelete: string): Function {
   return async (dispatch: Function, getState: Function) => {
     const { consentedScopes } = getState();
-    const newScopes = (consentedScopes.filter((scope: string) => scope !== permissionToDelete))
-      .join(' ');
+    let newScopes = consentedScopes;
+    if (newScopes && newScopes.length > 0) {
+      console.log('Here are the consented scopes ', consentedScopes);
+      newScopes = (consentedScopes.filter((scope: string) => scope !== permissionToDelete))
+        .join(' ');
+      // newScopes = '\'' + newScopes + '\'';
+      console.log('New scopes aaaaaaaaaaaaare ', newScopes);
 
-    // newScopes = '\'' + newScopes + '\'';
-    console.log('New scopes aaaaaaaaaaaaare ', newScopes);
+      const servicePrincipalAppId = await getCurrentAppId();
+      const scopeId = await getScopeId(servicePrincipalAppId);
 
-    const servicePrincipalAppId = await getCurrentAppId();
-    const scopeId = await getScopeId(servicePrincipalAppId);
+      const revokedPermission = await revokePermission(scopeId, newScopes);
+      console.log('Revooooked ', revokedPermission);
+      const updatedScope = await getUpdatedScope(servicePrincipalAppId);
+      dispatch(getConsentedScopesSuccess(updatedScope));
 
-    const revokedPermission = await revokePermission(scopeId, newScopes);
-    console.log('Revooooked ', revokedPermission);
-    const updatedScope = await getUpdatedScope(servicePrincipalAppId);
-    dispatch(getConsentedScopesSuccess(updatedScope));
+      // We should also get a new token 'I think'
+    }
+    else {
+      //display message telling users they can't unconsent
+      console.log('Unable to dissent');
+    }
   }
 }
 
@@ -178,6 +187,9 @@ const getCurrentAppId = async () => {
 
 const getScopeId = async (servicePrincipalAppId: string) => {
   const graphClient = GraphClient.getInstance();
+
+  // we need to further filter by principalId in cases where there are more than one value in returned array
+  // to get principalId, run /me and get the id returned. That is the principalId of the signed in user
 
   try {
     const response = await graphClient.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
@@ -211,9 +223,12 @@ const getUpdatedScope = async (servicePrincipalAppId: string) => {
   try {
     const response = await graphClient.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
       .get();
-    console.log('Scope id is ', response.value[0].id);
-    return response.value[0].scope;
+    console.log('Scope id is ', response.value[0].scope); //convert this to array
+    const returnedScopes = response.value[0].scope.split(' ');
+    console.log('Here are the returned scopes ', returnedScopes)
+    return returnedScopes;
   } catch (error) {
     console.log('Error: ', error);
+    // set status saying the user should consent to directory.read and user.read
   }
 }
