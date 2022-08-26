@@ -144,18 +144,22 @@ export function consentToScopes(scopes: string[]): Function {
   };
 }
 
-export function unconsentToScopes(permissionToDelete: string): Function{
+export function unconsentToScopes(permissionToDelete: string): Function {
   return async (dispatch: Function, getState: Function) => {
     const { consentedScopes } = getState();
     const newScopes = (consentedScopes.filter((scope: string) => scope !== permissionToDelete))
       .join(' ');
 
-    // newScopes = '"' + newScopes + '"';
+    // newScopes = '\'' + newScopes + '\'';
+    console.log('New scopes aaaaaaaaaaaaare ', newScopes);
 
     const servicePrincipalAppId = await getCurrentAppId();
     const scopeId = await getScopeId(servicePrincipalAppId);
 
     const revokedPermission = await revokePermission(scopeId, newScopes);
+    console.log('Revooooked ', revokedPermission);
+    const updatedScope = await getUpdatedScope(servicePrincipalAppId);
+    dispatch(getConsentedScopesSuccess(updatedScope));
   }
 }
 
@@ -163,10 +167,11 @@ const getCurrentAppId = async () => {
   const currentAppId = process.env.REACT_APP_CLIENT_ID;
   const graphClient = GraphClient.getInstance();
 
-  try{
+  try {
     const response = await graphClient.api(`/servicePrincipals?$filter=appId eq '${currentAppId}'`).get();
+    console.log('Service peincipal id is ', response.value[0].id);
     return response.value[0].id;
-  }catch(error){
+  } catch (error) {
     console.log('Error: ', error);
   }
 }
@@ -174,11 +179,12 @@ const getCurrentAppId = async () => {
 const getScopeId = async (servicePrincipalAppId: string) => {
   const graphClient = GraphClient.getInstance();
 
-  try{
+  try {
     const response = await graphClient.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
       .get();
+    console.log('Scope id is ', response.value[0].id);
     return response.value[0].id;
-  }catch(error){
+  } catch (error) {
     console.log('Error: ', error);
   }
 }
@@ -186,11 +192,28 @@ const getScopeId = async (servicePrincipalAppId: string) => {
 const revokePermission = async (scopeId: string, newScopes: string) => {
   const graphClient = GraphClient.getInstance();
 
-  const requestBody = {scope: newScopes};
-  try{
+  // const requestBody = { scope: newScopes };
+  const oAuth2PermissionGrant = {
+    scope: newScopes
+  };
+  try {
     const response = await graphClient.api(`/oauth2PermissionGrants/${scopeId}`)
-      .patch(requestBody, (resp) => console.log('Returned by patch: ', resp));
-  }catch(error){
+      .update(oAuth2PermissionGrant);
+    console.log('Here is the response after patch ', response);
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+}
+
+const getUpdatedScope = async (servicePrincipalAppId: string) => {
+  const graphClient = GraphClient.getInstance();
+
+  try {
+    const response = await graphClient.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
+      .get();
+    console.log('Scope id is ', response.value[0].id);
+    return response.value[0].scope;
+  } catch (error) {
     console.log('Error: ', error);
   }
 }

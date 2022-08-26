@@ -59,6 +59,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
   };
 
   const handleUnconsent = async (permission: IPermission) : Promise<void> => {
+    permission.consented = false;
     dispatch(permissionActionCreators.unconsentToScopes(permission.value));
   };
 
