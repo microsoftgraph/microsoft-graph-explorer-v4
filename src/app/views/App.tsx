@@ -34,7 +34,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
 import { MainHeader } from './main-header/MainHeader';
-import { getDeviceScreenSize } from '../utils/device-screen-size';
+import { getDeviceScreenScale, getDeviceScreenSize } from '../utils/device-screen-size';
 
 export interface IAppProps {
   theme?: ITheme;
@@ -77,6 +77,8 @@ class App extends Component<IAppProps, IAppState> {
       hideDialog: true,
       sidebarTabSelection: 'sample-queries'
     };
+
+    this.collectDeviceCharacteristicsTelemetry();
   }
 
   private setSidebarTabSelection = (selectedTab : string) => {
@@ -89,8 +91,13 @@ class App extends Component<IAppProps, IAppState> {
     const deviceProperties = {
       deviceHeight: screen.height,
       deviceWidth: screen.width,
-      screenWidth: getDeviceScreenSize(screen.width)
+      deviceScreenSize: getDeviceScreenSize(screen.width),
+      browserHeight: window.innerHeight,
+      browserWidth: window.innerWidth,
+      scale: getDeviceScreenScale()
     };
+
+    console.log('telemetry collected', ' ', deviceProperties.scale);
 
     telemetry.trackDeviceCharacteristics(deviceProperties);
   }
@@ -99,11 +106,8 @@ class App extends Component<IAppProps, IAppState> {
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
 
-    const hasTelemetryBeenCollected = localStorage.getItem('hasTelemetryBeenCollected');
-
-    if(!hasTelemetryBeenCollected){
+    onresize = () => {
       this.collectDeviceCharacteristicsTelemetry();
-      localStorage.setItem('hasTelemetryBeenCollected', 'true');
     }
 
     const urlParams = new URLSearchParams(window.location.search);
