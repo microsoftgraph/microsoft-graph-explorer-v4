@@ -29,7 +29,7 @@ describe('Tests autocomplete utils', () => {
     const suggestions = ['test', 'test2', 'test3'];
     const userInput = 'test';
     const result = getFilteredSuggestions(userInput, suggestions);
-    expect(result).toEqual(['test', 'test3', 'test2']);
+    expect(result).toEqual(['test', 'test2', 'test3']);
   })
 
 })
