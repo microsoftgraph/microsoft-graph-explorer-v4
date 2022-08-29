@@ -16,7 +16,10 @@ import {
   FETCH_FULL_SCOPES_PENDING,
   FETCH_URL_SCOPES_PENDING,
   FETCH_FULL_SCOPES_SUCCESS,
-  FETCH_URL_SCOPES_SUCCESS
+  FETCH_URL_SCOPES_SUCCESS,
+  REVOKE_PERMISSION_PENDING,
+  REVOKE_PERMISSION_SUCCESS,
+  REVOKE_PERMISSION_ERROR
 } from '../redux-constants';
 import {
   getAuthTokenSuccess,
@@ -49,6 +52,27 @@ export function fetchScopesError(response: object): IAction {
     type: FETCH_SCOPES_ERROR,
     response
   };
+}
+
+export function revokePermissionPending(response: boolean): any {
+  return {
+    type: REVOKE_PERMISSION_PENDING,
+    response
+  }
+}
+
+export function revokePermissionSuccess(response: boolean): any {
+  return {
+    type: REVOKE_PERMISSION_SUCCESS,
+    response
+  }
+}
+
+export function revokePermissionError(response: object): any {
+  return {
+    type: REVOKE_PERMISSION_ERROR,
+    response
+  }
 }
 
 export function fetchScopes(): Function {
@@ -146,27 +170,30 @@ export function consentToScopes(scopes: string[]): Function {
 
 export function unconsentToScopes(permissionToDelete: string): Function {
   return async (dispatch: Function, getState: Function) => {
-    const { consentedScopes } = getState();
+    dispatch(revokePermissionPending(true));
+    const { consentedScopes, profile } = getState();
     let newScopes = consentedScopes;
-    if (newScopes && newScopes.length > 0) {
-      console.log('Here are the consented scopes ', consentedScopes);
-      newScopes = (consentedScopes.filter((scope: string) => scope !== permissionToDelete))
-        .join(' ');
-      // newScopes = '\'' + newScopes + '\'';
-      console.log('New scopes aaaaaaaaaaaaare ', newScopes);
+    try {
+      if (newScopes && newScopes.length > 0) {
+        newScopes = (newScopes.filter((scope: string) => scope !== permissionToDelete))
+          .join(' ');
+        const servicePrincipalAppId = await getCurrentAppId();
+        const scopeId = await getScopeId(servicePrincipalAppId, profile.id);
 
-      const servicePrincipalAppId = await getCurrentAppId();
-      const scopeId = await getScopeId(servicePrincipalAppId);
+        // more than one person may have consented to the app and we might have the same principal id more than once.
+        // so we need to filter by principal id
 
-      const revokedPermission = await revokePermission(scopeId, newScopes);
-      console.log('Revooooked ', revokedPermission);
-      const updatedScope = await getUpdatedScope(servicePrincipalAppId);
-      dispatch(getConsentedScopesSuccess(updatedScope));
-
-      // We should also get a new token 'I think'
+        await revokePermission(scopeId, newScopes);
+        const updatedScope = await getUpdatedScope(servicePrincipalAppId);
+        dispatch(getConsentedScopesSuccess(updatedScope));
+        dispatch(revokePermissionSuccess(true));
+        authenticationWrapper.consentToScopes(updatedScope).then(response => {
+          console.log('Here is the response', response);
+        });
+      }
     }
-    else {
-      //display message telling users they can't unconsent
+    catch (error: any) {
+      dispatch(revokePermissionError(error))
       console.log('Unable to dissent');
     }
   }
@@ -182,10 +209,11 @@ const getCurrentAppId = async () => {
     return response.value[0].id;
   } catch (error) {
     console.log('Error: ', error);
+    throw error;
   }
 }
 
-const getScopeId = async (servicePrincipalAppId: string) => {
+const getScopeId = async (servicePrincipalAppId: string, principalid: string) => {
   const graphClient = GraphClient.getInstance();
 
   // we need to further filter by principalId in cases where there are more than one value in returned array
@@ -195,9 +223,15 @@ const getScopeId = async (servicePrincipalAppId: string) => {
     const response = await graphClient.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
       .get();
     console.log('Scope id is ', response.value[0].id);
+    if (response && response.length > 0) {
+      // filter by principalId
+      const filteredResponse = response.filter((scope: any) => scope.principalId === principalid);
+      return filteredResponse[0].id;
+    }
     return response.value[0].id;
   } catch (error) {
     console.log('Error: ', error);
+    throw error;
   }
 }
 
@@ -214,6 +248,7 @@ const revokePermission = async (scopeId: string, newScopes: string) => {
     console.log('Here is the response after patch ', response);
   } catch (error) {
     console.log('Error: ', error);
+    throw error;
   }
 }
 
@@ -229,6 +264,7 @@ const getUpdatedScope = async (servicePrincipalAppId: string) => {
     return returnedScopes;
   } catch (error) {
     console.log('Error: ', error);
+    throw error;
     // set status saying the user should consent to directory.read and user.read
   }
 }
