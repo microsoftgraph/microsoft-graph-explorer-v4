@@ -15,12 +15,6 @@ interface ValidationResult {
   success: boolean;
 }
 
-interface Validation {
-  rule: string;
-  result: ValidationResult;
-  success: boolean;
-}
-
 export class ValidatedUrl {
 
   private parser;
