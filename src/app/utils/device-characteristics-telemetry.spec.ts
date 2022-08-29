@@ -1,4 +1,4 @@
-import { getDeviceScreenScale, getDeviceScreenSize } from './device-characteristics-telemetry'
+import { getDeviceScreenScale, getBrowserScreenSize } from './device-characteristics-telemetry'
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -21,7 +21,7 @@ describe('Device Telemetry', () => {
   it('should get device screen size', () => {
     const deviceWidth = 1367;
     const expectedScreenSize = 'xxl';
-    expect(getDeviceScreenSize(deviceWidth)).toBe(expectedScreenSize);
+    expect(getBrowserScreenSize(deviceWidth)).toBe(expectedScreenSize);
   });
 })
 
