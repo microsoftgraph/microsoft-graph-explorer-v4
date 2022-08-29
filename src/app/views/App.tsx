@@ -97,8 +97,6 @@ class App extends Component<IAppProps, IAppState> {
       scale: getDeviceScreenScale()
     };
 
-    console.log('resized');
-
     telemetry.trackDeviceCharacteristics(deviceProperties);
   }
 
