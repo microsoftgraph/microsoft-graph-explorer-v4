@@ -97,18 +97,19 @@ class App extends Component<IAppProps, IAppState> {
       scale: getDeviceScreenScale()
     };
 
-    console.log('telemetry collected', ' ', deviceProperties.scale);
 
     telemetry.trackDeviceCharacteristics(deviceProperties);
+  }
+
+  private handleWindowResize(){
+    this.collectDeviceCharacteristicsTelemetry();
   }
 
   public componentDidMount = async () => {
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
 
-    onresize = () => {
-      this.collectDeviceCharacteristicsTelemetry();
-    }
+    window.addEventListener('resize', this.handleWindowResize);
 
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('sid');
