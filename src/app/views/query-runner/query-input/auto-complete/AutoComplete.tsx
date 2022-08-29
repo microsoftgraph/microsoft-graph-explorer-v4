@@ -186,7 +186,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
       if (filtered[0] !== searchText) {
-        setSuggestions(filtered as string[]);
+        setSuggestions(filtered);
         setShouldShowSuggestions(true);
       }
     } else {
