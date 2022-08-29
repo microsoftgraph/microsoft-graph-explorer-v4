@@ -3,8 +3,8 @@ import { ValidatedUrl } from './abnf';
 
 describe('Abnf parser should', () => {
   const urls = [
-    { url: 'https://graph.microsoft.com/v1.0/me/events/', isValid: true },
-    { url: 'https://graph.microsoft.com/me/', isValid: true },
+    { url: 'https://graph.microsoft.com/v1.0/me/events', isValid: true },
+    { url: 'https://graph.microsoft.com/me', isValid: true },
     {
       url:
         // eslint-disable-next-line max-len
@@ -13,24 +13,24 @@ describe('Abnf parser should', () => {
     },
     {
       isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/planner/tasks/oIx3zN98jEmVOM-4mUJzSGUANeje/'
+      url: 'https://graph.microsoft.com/v1.0/planner/tasks/oIx3zN98jEmVOM-4mUJzSGUANeje'
     },
     {
       isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/users/MiriamG@M365x214355.onmicrosoft.com/'
+      url: 'https://graph.microsoft.com/v1.0/users/MiriamG@M365x214355.onmicrosoft.com'
     },
     {
       isValid: true,
       // eslint-disable-next-line max-len
-      url: 'https://graph.microsoft.com/v1.0/me/messages/AAMkAGVmMDEzMTM4LTZmYWUtNDdkNC1hMDZiLTU1OGY5OTZhYmY4OABGAAAAAAAiQ8W967B7TKBjgx9rVEURBwAiIsqMbYjsT5e-T7KzowPTAAAAAAEMAAAiIsqMbYjsT5e-T7KzowPTAAMCzwJpAAA=/'
+      url: 'https://graph.microsoft.com/v1.0/me/messages/AAMkAGVmMDEzMTM4LTZmYWUtNDdkNC1hMDZiLTU1OGY5OTZhYmY4OABGAAAAAAAiQ8W967B7TKBjgx9rVEURBwAiIsqMbYjsT5e-T7KzowPTAAAAAAEMAAAiIsqMbYjsT5e-T7KzowPTAAMCzwJpAAA='
     },
     {
       isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/me/extensions/com.contoso.roamingSettings/'
+      url: 'https://graph.microsoft.com/v1.0/me/extensions/com.contoso.roamingSettings'
     },
     {
       isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/planner/plans/CONGZUWfGUu4msTgNP66e2UAAySi/'
+      url: 'https://graph.microsoft.com/v1.0/planner/plans/CONGZUWfGUu4msTgNP66e2UAAySi'
     },
     {
       isValid: true,
@@ -39,11 +39,11 @@ describe('Abnf parser should', () => {
     {
       isValid: true,
       // eslint-disable-next-line max-len
-      url: 'https://graph.microsoft.com/v1.0/teams/02bd9fd6-8f93-4758-87c3-1fb73740a315/channels/19:09fc54a3141a45d0bc769cf506d2e079@thread.skype/'
+      url: 'https://graph.microsoft.com/v1.0/teams/02bd9fd6-8f93-4758-87c3-1fb73740a315/channels/19:09fc54a3141a45d0bc769cf506d2e079@thread.skype'
     },
     {
       isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/applications_v2/02bd9fd6-8f93-4758-87c3-1fb73740a315/'
+      url: 'https://graph.microsoft.com/v1.0/applications_v2/02bd9fd6-8f93-4758-87c3-1fb73740a315'
     },
     {
       isValid: true,
@@ -51,15 +51,15 @@ describe('Abnf parser should', () => {
     },
     {
       isValid: true,
-      url: 'https://graph.microsoft.com/beta/groups/02bd9fd6-8f93-4758-87c3-1fb73740a315/owners/$ref/'
+      url: 'https://graph.microsoft.com/beta/groups/02bd9fd6-8f93-4758-87c3-1fb73740a315/owners/$ref'
     },
     {
       isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/me/photo/$value/'
+      url: 'https://graph.microsoft.com/v1.0/me/photo/$value'
     },
     {
       isValid: true,
-      url: 'https://graph.microsoft.com/beta/devices/$count/'
+      url: 'https://graph.microsoft.com/beta/devices/$count'
     },
     {
       isValid: true,
@@ -73,7 +73,7 @@ describe('Abnf parser should', () => {
     },
     {
       isValid: true,
-      url: 'https://graph.microsoft.com/beta/directory/deleteditems/microsoft.graph.group/'
+      url: 'https://graph.microsoft.com/beta/directory/deleteditems/microsoft.graph.group'
     },
     {
       isValid: true,
@@ -81,7 +81,7 @@ describe('Abnf parser should', () => {
     },
     {
       isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/me/drive/root:/book1.xlsx/'
+      url: 'https://graph.microsoft.com/v1.0/me/drive/root:/book1.xlsx'
     }
 
   ];
