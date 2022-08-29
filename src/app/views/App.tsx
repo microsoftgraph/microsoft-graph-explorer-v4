@@ -34,7 +34,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
 import { MainHeader } from './main-header/MainHeader';
-import { getDeviceScreenScale, getDeviceScreenSize } from '../utils/device-screen-size';
+import { getDeviceScreenScale, getDeviceScreenSize } from '../utils/device-characteristics-telemetry';
 
 export interface IAppProps {
   theme?: ITheme;
