@@ -173,19 +173,21 @@ export function unconsentToScopes(permissionToDelete: string): Function {
   return async (dispatch: Function, getState: Function) => {
     dispatch(revokePermissionPending(true));
     const { consentedScopes, profile } = getState();
-    const newScopes = consentedScopes;
+    const requiredPermissions = ['Directory.ReadWrite.All', 'DelegatedPermissionGrant.ReadWrite.All']; //fix this
     const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
-    const requiredPermissions = ['Directory.Read.All', 'DelegatedPermissionGrant.ReadWrite.All'];
-
-    if (userDoesNotHaveRequiredPermissions(requiredPermissions, consentedScopes, dispatch)) {
-      dispatch(revokePermissionPending(false));
-      return;
-    }
 
     if (userUnconsentingToDefaultScopes(defaultScopes, permissionToDelete, dispatch)) {
+      console.log('Dude dissneting to default scopes')
       dispatch(revokePermissionPending(false));
       return;
     }
+
+    // if (!userHasRequiredPermissions(requiredPermissions, consentedScopes, dispatch)) {
+    //   console.log('Required permissions missing')
+    //   dispatch(revokePermissionPending(false));
+    //   return;
+    // }
+    const newScopes = consentedScopes;
 
     try {
       if (newScopes && newScopes.length > 0) {
@@ -196,19 +198,25 @@ export function unconsentToScopes(permissionToDelete: string): Function {
         const servicePrincipalAppId = await getCurrentAppId();
         const scopeId = await getScopeId(servicePrincipalAppId, profile.id);
         await revokePermission(scopeId, newScopesString);
-        dispatch(getConsentedScopesSuccess(newScopesArray));
-        authenticationWrapper.getSilentToken(newScopesArray).then((response) => {
+        authenticationWrapper.consentToScopes(newScopesArray).then((response) => {
           console.log('Response is ', response)
         });
+        const updatedScopes = await getUpdatedScope(servicePrincipalAppId, profile.id)
+        console.log('Updated scopes are ', updatedScopes)
+        dispatch(getConsentedScopesSuccess(updatedScopes));
         dispatch(revokePermissionSuccess(true));
       }
     }
     catch (error: any) {
+      // we can first check if the user has the permissions to delete the permission
+      const { errorCode } = error;
+      console.log('Here is the error code ', errorCode)
       dispatch(revokePermissionError(error));
       dispatch(
         setQueryResponseStatus({
           statusText: translateMessage('Unable to dissent'),
-          status: '',
+          // eslint-disable-next-line max-len
+          status: translateMessage('An error was encountered when dissenting. Confirm that you have the right permissions'),
           ok: false,
           messageType: MessageBarType.error
         })
@@ -218,21 +226,13 @@ export function unconsentToScopes(permissionToDelete: string): Function {
   }
 }
 
-const userDoesNotHaveRequiredPermissions = (requiredPermissions: string[],
+const userHasRequiredPermissions = (requiredPermissions: string[],
   consentedScopes: string[], dispatch: Function) => {
-  const permissionsAvailable = requiredPermissions.every((permission) => consentedScopes.includes(permission));
-  console.log('Required Permissions are available ', permissionsAvailable)
-  if (!permissionsAvailable) {
-    dispatch(
-      setQueryResponseStatus({
-        statusText: translateMessage('You require the following permissions to unconsent'),
-        status: '',
-        ok: false,
-        messageType: MessageBarType.error
-      })
-    );
-    return true;
-  }
+  console.log('Here are the current scopes ', consentedScopes);
+  const isAnyRequiredAvailable = consentedScopes.includes('Directory.Read.All') ||
+    consentedScopes.includes('Directory.ReadWrite.All');
+  const isRequiredPermissionAvailable = consentedScopes.includes('DelegatedPermissionGrant.ReadWrite.All')
+  console.log('Required Permissions are available ', isAnyRequiredAvailable)
   return false;
 }
 
@@ -241,8 +241,8 @@ const userUnconsentingToDefaultScopes = (currentScopes: string[], permissionToDe
   if (unconsentingToDefaultScopes) {
     dispatch(
       setQueryResponseStatus({
-        statusText: translateMessage('Cannot delete default scope'),
-        status: '',
+        statusText: translateMessage('Default scope'),
+        status: translateMessage('Cannot delete default scope'),
         ok: false,
         messageType: MessageBarType.error
       })
@@ -258,9 +258,22 @@ const getCurrentAppId = async () => {
 
   try {
     const response = await graphClient.api(`/servicePrincipals?$filter=appId eq '${currentAppId}'`).get();
-    console.log('Service peincipal id is ', response.value[0].id);
     return response.value[0].id;
-  } catch (error) {
+  } catch (error : any) {
+    console.log('Error: ', error);
+    throw error;
+  }
+}
+const revokePermission = async (scopeId: string, newScopes: string) => {
+  const graphClient = GraphClient.getInstance();
+
+  const oAuth2PermissionGrant = {
+    scope: newScopes
+  };
+  try {
+    await graphClient.api(`/oauth2PermissionGrants/${scopeId}`)
+      .update(oAuth2PermissionGrant);
+  } catch (error : any) {
     console.log('Error: ', error);
     throw error;
   }
@@ -275,47 +288,35 @@ const getScopeId = async (servicePrincipalAppId: string, principalid: string) =>
   try {
     const response = await graphClient.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
       .get();
-    console.log('Scope id is ', response.value[0].id);
     if (response && response.length > 0) {
-      // filter by principalId
       const filteredResponse = response.filter((scope: any) => scope.principalId === principalid);
-      console.log('Scope id in here iiiiiiiiiiiiiiiis ', response.value[0].id);
       return filteredResponse[0].id;
     }
     return response.value[0].id;
-  } catch (error) {
+  } catch (error : any) {
     console.log('Error: ', error);
     throw error;
   }
 }
 
-const revokePermission = async (scopeId: string, newScopes: string) => {
-  const graphClient = GraphClient.getInstance();
-  console.log('Here are the new scopes we are trying ', newScopes)
 
-  const oAuth2PermissionGrant = {
-    scope: newScopes
-  };
-  try {
-    const response = await graphClient.api(`/oauth2PermissionGrants/${scopeId}`)
-      .update(oAuth2PermissionGrant);
-    console.log('Here is the response after patch ', response);
-  } catch (error) {
-    console.log('Error: ', error);
-    throw error;
-  }
-}
 
-const getUpdatedScope = async (servicePrincipalAppId: string) => {
+// We could also have a case of two users. Filter by principal Id. Make sure to test this
+const getUpdatedScope = async (servicePrincipalAppId: string, principalid: string) => {
   const graphClient = GraphClient.getInstance();
 
   try {
     const response = await graphClient.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
       .get();
-    console.log('Scope id is ', response.value[0].scope); //convert this to array
-    const returnedScopes = response.value[0].scope.split(' ');
-    console.log('Here are the returned scopes ', returnedScopes)
-    return returnedScopes;
+
+    if (response && response.length > 0) {
+      const filteredResponse = response.filter((scope: any) => scope.principalId === principalid);
+      return filteredResponse[0].scope.split(' ');
+    }
+    else {
+      const returnedScopes = response.value[0].scope.split(' ');
+      return returnedScopes;
+    }
   } catch (error) {
     console.log('Error: ', error);
     throw error;

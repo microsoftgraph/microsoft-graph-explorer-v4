@@ -67,7 +67,7 @@ export function unconsentingScopes(state: IUnconsent = unconsentInitialState, ac
   switch (action.type) {
     case REVOKE_PERMISSION_PENDING:
       return {
-        pending: true,
+        pending: action.response,
         error: null,
         data: []
       }
