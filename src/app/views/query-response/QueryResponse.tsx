@@ -1,10 +1,10 @@
 import {
   Announced, Dialog, DialogFooter, DialogType,
   DefaultButton, FontSizes, IconButton,
-  Modal, Pivot, PivotItem, ITheme, getTheme
+  Modal, Pivot, PivotItem, getTheme, ITheme
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, CSSProperties } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
@@ -43,6 +43,13 @@ const QueryResponse = (props: IQueryResponseProps) => {
     intl: { messages }
   }: any = props;
 
+  const flexQueryElement: CSSProperties = {
+    display:'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    flex: 1,
+    marginTop: -13
+  }
   const toggleShareQueryDialogState = () => {
     setShareQuaryDialogStatus(!showShareQueryDialog);
   };
@@ -98,14 +105,14 @@ const QueryResponse = (props: IQueryResponseProps) => {
   }
 
   return (
-    <>
+    <div style={flexQueryElement} >
       <Resizable
         style={{
-          marginBottom: 10,
-          marginTop: 10
+          marginBottom: 20,
+          marginTop: 10,
+          flex: 1
         }}
         bounds={'window'}
-        maxHeight={810}
         minHeight={350}
         size={{
           height: responseHeight,
@@ -117,7 +124,8 @@ const QueryResponse = (props: IQueryResponseProps) => {
       >
         <div className='query-response' style={{
           minHeight: 350,
-          height: '100%'
+          height: '100%',
+          flex: 1
         }}
         onScroll={onScroll}>
 
@@ -200,7 +208,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           />
         </DialogFooter>
       </Dialog>
-    </>
+    </div>
   );
 };
 
