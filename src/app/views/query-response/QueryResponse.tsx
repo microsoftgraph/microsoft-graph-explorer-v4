@@ -174,40 +174,6 @@ const QueryResponse = (props: IQueryResponseProps) => {
           </Pivot>
         </Modal>
       }
-      <Dialog
-        hidden={showShareQueryDialog}
-        onDismiss={toggleShareQueryDialogState}
-        dialogContentProps={{
-          type: DialogType.normal,
-          title: 'Share Query',
-          isMultiline: true,
-          subText: messages['Share Query Message']
-        }}
-      >
-        <textarea
-          style={{
-            wordWrap: 'break-word',
-            fontFamily: 'monospace',
-            fontSize: FontSizes.xSmall,
-            width: '100%',
-            height: 63,
-            overflowY: 'scroll',
-            resize: 'none',
-            color: 'black'
-          }}
-          id='share-query-text'
-          className='share-query-params'
-          defaultValue={query}
-          aria-label={translateMessage('Share Query')}
-        />
-        <DialogFooter>
-          <CopyButton handleOnClick={handleCopy} isIconButton={false} />
-          <DefaultButton
-            text={messages.Close}
-            onClick={toggleShareQueryDialogState}
-          />
-        </DialogFooter>
-      </Dialog>
     </div>
   );
 };
