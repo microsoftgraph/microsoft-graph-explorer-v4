@@ -8,7 +8,7 @@ import { dimensions } from './dimensions-reducers';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
 import { policies } from './ocps-reducers';
 import { permissionsPanelOpen } from './permissions-panel-reducer';
-import { scopes } from './permissions-reducer';
+import { scopes, unconsentingScopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
 import { proxyUrl } from './proxy-url-reducer';
 import { sampleQuery } from './query-input-reducers';
@@ -45,6 +45,7 @@ export default combineReducers({
   sampleQuery,
   samples,
   scopes,
+  unconsentingScopes,
   sidebarProperties,
   snippets,
   termsOfUse,

@@ -169,27 +169,25 @@ export function consentToScopes(scopes: string[]): Function {
 }
 
 export function unconsentToScopes(permissionToDelete: string): Function {
+  console.log('The permission to delete isss ', permissionToDelete);
   return async (dispatch: Function, getState: Function) => {
     dispatch(revokePermissionPending(true));
     const { consentedScopes, profile } = getState();
-    let newScopes = consentedScopes;
+    const newScopes = consentedScopes;
     try {
       if (newScopes && newScopes.length > 0) {
-        newScopes = (newScopes.filter((scope: string) => scope !== permissionToDelete))
-          .join(' ');
+        console.log('We are here with scopes before filter as ', newScopes);
+        const newScopesArray: string[] = (newScopes.filter((scope: string) => scope !== permissionToDelete));
+        const newScopesString = newScopesArray.join(' ');
+        console.log('Scopes after filter is  ', newScopesString);
         const servicePrincipalAppId = await getCurrentAppId();
         const scopeId = await getScopeId(servicePrincipalAppId, profile.id);
-
-        // more than one person may have consented to the app and we might have the same principal id more than once.
-        // so we need to filter by principal id
-
-        await revokePermission(scopeId, newScopes);
-        const updatedScope = await getUpdatedScope(servicePrincipalAppId);
-        dispatch(getConsentedScopesSuccess(updatedScope));
-        dispatch(revokePermissionSuccess(true));
-        authenticationWrapper.consentToScopes(updatedScope).then(response => {
-          console.log('Here is the response', response);
+        await revokePermission(scopeId, newScopesString);
+        dispatch(getConsentedScopesSuccess(newScopesArray));
+        authenticationWrapper.getSilentToken(newScopesArray).then((response) => {
+          console.log('Response is ', response)
         });
+        dispatch(revokePermissionSuccess(true));
       }
     }
     catch (error: any) {
@@ -226,6 +224,7 @@ const getScopeId = async (servicePrincipalAppId: string, principalid: string) =>
     if (response && response.length > 0) {
       // filter by principalId
       const filteredResponse = response.filter((scope: any) => scope.principalId === principalid);
+      console.log('Scope id in here iiiiiiiiiiiiiiiis ', response.value[0].id);
       return filteredResponse[0].id;
     }
     return response.value[0].id;
@@ -237,8 +236,8 @@ const getScopeId = async (servicePrincipalAppId: string, principalid: string) =>
 
 const revokePermission = async (scopeId: string, newScopes: string) => {
   const graphClient = GraphClient.getInstance();
+  console.log('Here are the new scopes we are trying ', newScopes)
 
-  // const requestBody = { scope: newScopes };
   const oAuth2PermissionGrant = {
     scope: newScopes
   };

@@ -132,6 +132,25 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return response;
   }
 
+  public async getSilentToken(scopesToConsent: string[]){
+    console.log('Here are the scopes to consent to ', scopesToConsent);
+    const silentRequest: SilentRequest = {
+      scopes: scopesToConsent, authority: this.getAuthority(),
+      account: this.getAccount(), redirectUri: getCurrentUri()
+    };
+    try{
+      const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
+      return response;
+    }
+    catch(error : any){
+      const { errorCode } = error;
+      console.log('Here is the error ', errorCode)
+      if (errorCode === 'invalid_grant') {
+        this.consentToScopes(scopesToConsent);
+      }
+    }
+  }
+
   public async getOcpsToken() {
     const resourceId = 'https://clients.config.office.net/';
     const ocpsAccessTokenRequest = {

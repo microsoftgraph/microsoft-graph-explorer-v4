@@ -8,6 +8,7 @@ import {
   Label,
   PrimaryButton,
   Selection,
+  Spinner,
   TooltipHost
 } from '@fluentui/react';
 import React, { useEffect } from 'react';
@@ -27,9 +28,10 @@ import messages from '../../../../../messages';
 
 export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
 
-  const { sampleQuery, scopes, dimensions, authToken } =
+  const { sampleQuery, scopes, dimensions, authToken, unconsentingScopes } =
   useSelector( (state: IRootState) => state );
   const { pending: loading } = scopes;
+  const { pending: unconsentPending } = unconsentingScopes;
   const tokenPresent = !!authToken.token;
   const dispatch = useDispatch();
   const panel = permissionProps?.panel;
@@ -84,6 +86,9 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
 
         case 'consented':
           if (consented) {
+            if(unconsentPending){
+              return <Spinner/>
+            }
             return <PrimaryButton onClick={() => handleUnconsent(item)} style={{width: '80px'}}>
               <FormattedMessage id='Unconsent' />
             </PrimaryButton>;

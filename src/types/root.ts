@@ -6,7 +6,7 @@ import { IDimensions } from './dimensions';
 import { Mode } from './enums';
 import { IHistoryItem } from './history';
 import { IPolicies } from './ocps-api';
-import { IScopes } from './permissions';
+import { IScopes, IUnconsent } from './permissions';
 import { IUser } from './profile';
 import { IGraphResponse } from './query-response';
 import { IQuery, ISampleQuery } from './query-runner';
@@ -32,6 +32,7 @@ export interface IRootState {
   };
   consentedScopes: string[];
   scopes: IScopes;
+  unconsentingScopes: IUnconsent;
   history: IHistoryItem[];
   graphResponse: IGraphResponse;
   permissionsPanelOpen: boolean;
