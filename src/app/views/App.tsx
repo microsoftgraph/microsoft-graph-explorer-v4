@@ -34,7 +34,6 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
 import { MainHeader } from './main-header/MainHeader';
-import { getDeviceScreenScale, getBrowserScreenSize } from '../utils/device-characteristics-telemetry';
 
 export interface IAppProps {
   theme?: ITheme;
@@ -77,8 +76,6 @@ class App extends Component<IAppProps, IAppState> {
       hideDialog: true,
       sidebarTabSelection: 'sample-queries'
     };
-
-    this.collectDeviceCharacteristicsTelemetry();
   }
 
   private setSidebarTabSelection = (selectedTab : string) => {
@@ -87,24 +84,9 @@ class App extends Component<IAppProps, IAppState> {
     });
   }
 
-  private collectDeviceCharacteristicsTelemetry() {
-    const deviceProperties = {
-      deviceHeight: screen.height,
-      deviceWidth: screen.width,
-      browserScreenSize: getBrowserScreenSize(window.innerWidth),
-      browserHeight: window.innerHeight,
-      browserWidth: window.innerWidth,
-      scale: getDeviceScreenScale()
-    };
-
-    telemetry.trackDeviceCharacteristics(deviceProperties);
-  }
-
   public componentDidMount = async () => {
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
-
-    window.addEventListener('resize', this.collectDeviceCharacteristicsTelemetry);
 
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('sid');

@@ -15,7 +15,8 @@ Object.defineProperty(window, 'matchMedia', {
 });
 describe('Device Telemetry', () => {
   it('should get device screen scale', () => {
-    expect(getDeviceScreenScale()).toBeTruthy();
+    const percentage = '%';
+    expect(getDeviceScreenScale()).toContain(percentage);
   });
 
   it('should get device screen size', () => {
