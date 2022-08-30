@@ -17,6 +17,7 @@ import { IStatus } from '../../../types/status';
 import { ClientError } from '../../utils/ClientError';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { translateMessage } from '../../utils/translate-messages';
+import { isJsonString } from '../../views/sidebar/sample-queries/sample-query-utils';
 import { authProvider, GraphClient } from '../graph-client';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
@@ -35,7 +36,7 @@ export async function anonymousRequest(
   getState: Function
 ) {
   const { proxyUrl, queryRunnerStatus } = getState();
-  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl, queryRunnerStatus);
+  const { graphUrl, options } =  createAnonymousRequest(query, proxyUrl, queryRunnerStatus);
   dispatch(queryRunningStatus(true));
   return fetch(graphUrl, options)
     .catch(() => {
@@ -229,8 +230,7 @@ export function parseResponse(
     const contentType = getContentType(response.headers);
     switch (contentType) {
       case ContentType.Json:
-        return response.json();
-
+        return isJsonString(response) ? response.json() : response;
       case ContentType.XML:
       case ContentType.HTML:
       case ContentType.TextPlain:
