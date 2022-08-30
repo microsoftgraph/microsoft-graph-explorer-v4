@@ -89,9 +89,11 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
             if(unconsentPending){
               return <Spinner/>
             }
-            return <PrimaryButton onClick={() => handleUnconsent(item)} style={{width: '80px'}}>
-              <FormattedMessage id='Unconsent' />
-            </PrimaryButton>;
+            else{
+              return <PrimaryButton onClick={() => handleUnconsent(item)} style={{width: '80px'}}>
+                <FormattedMessage id='Unconsent' />
+              </PrimaryButton>;
+            }
           } else {
             if (!panel) {
               return <PrimaryButton onClick={() => handleConsent(item)} style={{width: '80px'}}>

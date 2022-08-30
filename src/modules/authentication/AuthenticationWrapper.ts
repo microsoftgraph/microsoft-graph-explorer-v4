@@ -132,25 +132,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return response;
   }
 
-  public async getSilentToken(scopesToConsent: string[]){
-    console.log('Here are the scopes to consent to ', scopesToConsent);
-    const silentRequest: SilentRequest = {
-      scopes: scopesToConsent, authority: this.getAuthority(),
-      account: this.getAccount(), redirectUri: getCurrentUri()
-    };
-    try{
-      const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
-      return response;
-    }
-    catch(error : any){
-      const { errorCode } = error;
-      console.log('Here is the error ', errorCode)
-      if (errorCode === 'invalid_grant') {
-        this.consentToScopes(scopesToConsent);
-      }
-    }
-  }
-
   public async getOcpsToken() {
     const resourceId = 'https://clients.config.office.net/';
     const ocpsAccessTokenRequest = {
@@ -211,7 +192,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return `${AUTH_URL}/${tenant}/`;
   }
 
-  private async loginWithInteraction(userScopes: string[], sessionId?: string) {
+  public async loginWithInteraction(userScopes: string[], sessionId?: string) {
     const popUpRequest: PopupRequest = {
       scopes: userScopes,
       authority: this.getAuthority(),
@@ -282,7 +263,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     });
   }
 
-  private eraseInteractionInProgressCookie(): void {
+  public eraseInteractionInProgressCookie(): void {
     const keyValuePairs = document.cookie.split(';');
     let cookieValue = '';
     let cookieKey = '';

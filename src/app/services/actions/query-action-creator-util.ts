@@ -97,6 +97,7 @@ function createAuthenticatedRequest(
       sampleHeaders[header.name] = header.value;
     });
   }
+  const updatedHeaders = { ...sampleHeaders, 'cache-control': 'no-cache', pragma: 'no-cache' }
 
   const msalAuthOptions: AuthCodeMSALBrowserAuthenticationProviderOptions = {
     account: authenticationWrapper.getAccount()!,
@@ -110,7 +111,7 @@ function createAuthenticatedRequest(
   return GraphClient.getInstance()
     .api(encodeHashCharacters(query))
     .middlewareOptions([middlewareOptions])
-    .headers(sampleHeaders)
+    .headers(updatedHeaders)
     .responseType(ResponseType.RAW);
 }
 
