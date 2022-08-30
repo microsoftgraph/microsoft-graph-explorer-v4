@@ -163,7 +163,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                 <Monaco
                   language='json'
                   body={data.template}
-                  height={'35vh'}
+                  height={'800px'}
                 />
               </div>
             </PivotItem>
