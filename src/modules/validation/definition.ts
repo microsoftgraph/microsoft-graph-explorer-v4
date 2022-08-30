@@ -5,7 +5,7 @@ odataUri = serviceRoot [ odataRelativeUri ]
 
 serviceRoot = ( "https" / "http" )                    ; Note: case-insensitive
               "://" host [ ":" port ]
-              "/" *( segment-nz )
+              "/" *( segment-nz "/")
 
 ; Note: dollar-prefixed path segments are case-sensitive!
 odataRelativeUri = '$batch'  [ "?" batchOptions ]
