@@ -195,28 +195,45 @@ export function unconsentToScopes(permissionToDelete: string): Function {
         const newScopesArray: string[] = (newScopes.filter((scope: string) => scope !== permissionToDelete));
         const newScopesString = newScopesArray.join(' ');
         console.log('Scopes after filter is  ', newScopesString);
+
         const servicePrincipalAppId = await getCurrentAppId();
+
         const scopeId = await getScopeId(servicePrincipalAppId, profile.id);
+
         await revokePermission(scopeId, newScopesString);
-        authenticationWrapper.consentToScopes(newScopesArray).then((response) => {
-          console.log('Response is ', response)
-        });
+
+
         const updatedScopes = await getUpdatedScope(servicePrincipalAppId, profile.id)
         console.log('Updated scopes are ', updatedScopes)
-        dispatch(getConsentedScopesSuccess(updatedScopes));
-        dispatch(revokePermissionSuccess(true));
+
+        if (updatedScopes.length === newScopesArray.length) {
+          console.log('Was successful so we are here')
+          //log user out
+          await authenticationWrapper.loginWithInteraction(updatedScopes); // logOut()
+          dispatch(getConsentedScopesSuccess(updatedScopes));
+          dispatch(revokePermissionSuccess(true));
+
+        }
+        else {
+          //show an error
+        }
+        window.location.reload();
       }
     }
     catch (error: any) {
       // we can first check if the user has the permissions to delete the permission
       const { errorCode } = error;
       console.log('Here is the error code ', errorCode)
+      if (errorCode === 'interaction_in_progress') {
+        //delete this cookie
+        authenticationWrapper.eraseInteractionInProgressCookie();
+      }
       dispatch(revokePermissionError(error));
       dispatch(
         setQueryResponseStatus({
           statusText: translateMessage('Unable to dissent'),
           // eslint-disable-next-line max-len
-          status: translateMessage('An error was encountered when dissenting. Confirm that you have the right permissions'),
+          status: errorCode ? errorCode : translateMessage('An error was encountered when dissenting. Confirm that you have the right permissions'),
           ok: false,
           messageType: MessageBarType.error
         })
@@ -259,7 +276,7 @@ const getCurrentAppId = async () => {
   try {
     const response = await graphClient.api(`/servicePrincipals?$filter=appId eq '${currentAppId}'`).get();
     return response.value[0].id;
-  } catch (error : any) {
+  } catch (error: any) {
     console.log('Error: ', error);
     throw error;
   }
@@ -273,7 +290,7 @@ const revokePermission = async (scopeId: string, newScopes: string) => {
   try {
     await graphClient.api(`/oauth2PermissionGrants/${scopeId}`)
       .update(oAuth2PermissionGrant);
-  } catch (error : any) {
+  } catch (error: any) {
     console.log('Error: ', error);
     throw error;
   }
@@ -293,12 +310,11 @@ const getScopeId = async (servicePrincipalAppId: string, principalid: string) =>
       return filteredResponse[0].id;
     }
     return response.value[0].id;
-  } catch (error : any) {
+  } catch (error: any) {
     console.log('Error: ', error);
     throw error;
   }
 }
-
 
 
 // We could also have a case of two users. Filter by principal Id. Make sure to test this
