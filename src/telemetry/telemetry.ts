@@ -129,10 +129,9 @@ class Telemetry implements ITelemetry {
       browserWidth: window.innerWidth,
       scale: getDeviceScreenScale()
     };
-    properties = properties || deviceProperties;
+    properties = Object.assign(properties || {}, deviceProperties);
 
     telemetry.trackEvent(DEVICE_CHARACTERISTICS_EVENT, properties);
-    console.log('telemetry collected');
   }
 
   private getInstrumentationKey() {
