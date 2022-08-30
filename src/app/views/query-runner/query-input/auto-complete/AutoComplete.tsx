@@ -62,7 +62,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const initialiseAutoComplete = (currentValue: string) => {
     setQueryUrl(currentValue);
-
     if (currentValue.includes(GRAPH_URL)) {
       const { index, context } = getLastDelimiterInUrl(currentValue);
       const { searchText: searchWith, previous: preceedingText } = getSearchText(currentValue, index!);
@@ -73,7 +72,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const onChange = (e: any) => {
     const currentValue = e.target.value;
-    initialiseAutoComplete(currentValue);
+    setQueryUrl(currentValue);
+    initialiseAutoComplete(currentValue)
   };
 
   const isOverflowing = (input: string) => {
@@ -155,7 +155,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const requestForAutocompleteOptions = (url: string, context: SignContext) => {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
-    if (!GRAPH_API_VERSIONS.includes(queryVersion.toLowerCase())) {
+    const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url;
+    if (urlExistsInStore) {
+      displayAutoCompleteSuggestions(autoCompleteOptions.url);
       return;
     }
 
@@ -164,11 +166,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       return;
     }
 
-    const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url;
-    if (urlExistsInStore) {
-      displayAutoCompleteSuggestions(autoCompleteOptions.url);
-      return;
-    }
     dispatch(fetchAutoCompleteOptions(requestUrl, queryVersion, context));
   }
 
@@ -188,7 +185,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
     if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
-      if (filtered[0] !== searchText) {
+      if (filtered.length > 0) {
         setSuggestions(filtered);
         setShouldShowSuggestions(true);
       }
