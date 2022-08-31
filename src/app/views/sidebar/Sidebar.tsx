@@ -1,4 +1,5 @@
 import { DirectionalHint,
+  FontSizes,
   getTheme,
   IconButton,
   Pivot,
@@ -45,7 +46,8 @@ export const Sidebar = (props: ISidebar) =>{
       <Pivot onLinkClick={onPivotItemClick}
         overflowBehavior='menu'
         overflowAriaLabel={translateMessage('More items')}
-        defaultSelectedKey={props.currentTab}>
+        defaultSelectedKey={props.currentTab}
+        styles={{text: {fontSize: FontSizes.size14}}}>
         <PivotItem
           headerText={translateMessage('Sample Queries')}
           itemIcon='Rocket'
