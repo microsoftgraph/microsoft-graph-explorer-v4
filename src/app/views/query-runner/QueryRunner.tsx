@@ -99,6 +99,8 @@ IQueryRunnerState
           SelectedVersion: sampleQuery.selectedVersion,
           QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
         });
+
+      telemetry.trackDeviceCharacteristicsTelemetry();
     }
     this.setState({ sampleBody: '' });
   };
