@@ -28,3 +28,4 @@ export const MOZILLA_CORS_DOCUMENTATION_LINK =
   'https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS';
 export const USER_ORGANIZATION_URL = `${GRAPH_URL}/v1.0/organization`;
 export const NPS_FEEDBACK_URL = 'https://petrol.office.microsoft.com/v1/feedback';
+export const UNCONSENTING_PERMISSIONS_REQUIRED_SCOPES = 'Directory.Read.All DelegatedPermissionGrant.ReadWrite.All'

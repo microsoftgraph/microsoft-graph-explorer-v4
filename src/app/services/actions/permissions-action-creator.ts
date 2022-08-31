@@ -10,7 +10,8 @@ import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
 import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
-import { ACCOUNT_TYPE, DEFAULT_USER_SCOPES, PERMS_SCOPE } from '../graph-constants';
+import { ACCOUNT_TYPE, DEFAULT_USER_SCOPES, PERMS_SCOPE,
+  UNCONSENTING_PERMISSIONS_REQUIRED_SCOPES } from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
   FETCH_FULL_SCOPES_PENDING,
@@ -173,11 +174,11 @@ export function unconsentToScopes(permissionToDelete: string): Function {
   return async (dispatch: Function, getState: Function) => {
     dispatch(revokePermissionPending(true));
     const { consentedScopes, profile } = getState();
-    const requiredPermissions = ['Directory.ReadWrite.All', 'DelegatedPermissionGrant.ReadWrite.All']; //fix this
+    const requiredPermissions = UNCONSENTING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
     const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 
     if (userUnconsentingToDefaultScopes(defaultScopes, permissionToDelete, dispatch)) {
-      console.log('Dude dissneting to default scopes')
+      console.log('Dude dissenting to default scopes')
       dispatch(revokePermissionPending(false));
       return;
     }
@@ -305,7 +306,7 @@ const getScopeId = async (servicePrincipalAppId: string, principalid: string) =>
   try {
     const response = await graphClient.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
       .get();
-    if (response && response.length > 0) {
+    if (response && response.length > 1) {
       const filteredResponse = response.filter((scope: any) => scope.principalId === principalid);
       return filteredResponse[0].id;
     }
@@ -325,7 +326,7 @@ const getUpdatedScope = async (servicePrincipalAppId: string, principalid: strin
     const response = await graphClient.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
       .get();
 
-    if (response && response.length > 0) {
+    if (response && response.length > 1) {
       const filteredResponse = response.filter((scope: any) => scope.principalId === principalid);
       return filteredResponse[0].scope.split(' ');
     }
