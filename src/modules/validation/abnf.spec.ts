@@ -3,96 +3,41 @@ import { ValidatedUrl } from './abnf';
 
 describe('Abnf parser should', () => {
   const urls = [
-    { url: 'https://graph.microsoft.com/v1.0/me/events', isValid: true },
-    { url: 'https://graph.microsoft.com/me', isValid: true },
-    {
-      url:
-        'https://graph.microsoft.com/v1.0/security/alerts?$filter=Category eq \'ransomware\'&$top=5',
-      isValid: true
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/planner/tasks/oIx3zN98jEmVOM-4mUJzSGUANeje/'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/users/MiriamG@M365x214355.onmicrosoft.com/'
-    },
-    {
-      isValid: true,
-      // eslint-disable-next-line max-len
-      url: 'https://graph.microsoft.com/v1.0/me/messages/AAMkAGVmMDEzMTM4LTZmYWUtNDdkNC1hMDZiLTU1OGY5OTZhYmY4OABGAAAAAAAiQ8W967B7TKBjgx9rVEURBwAiIsqMbYjsT5e-T7KzowPTAAAAAAEMAAAiIsqMbYjsT5e-T7KzowPTAAMCzwJpAAA=/'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/me/extensions/com.contoso.roamingSettings/'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/planner/plans/CONGZUWfGUu4msTgNP66e2UAAySi'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/me/onenote/sections/1f7ff346-c174-45e5-af38-294e51d9969a/pages'
-    },
-    {
-      isValid: true,
-      // eslint-disable-next-line max-len
-      url: 'https://graph.microsoft.com/v1.0/teams/02bd9fd6-8f93-4758-87c3-1fb73740a315/channels/19:09fc54a3141a45d0bc769cf506d2e079@thread.skype/'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/applications_v2/02bd9fd6-8f93-4758-87c3-1fb73740a315/'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/users(\'48d31887-5fad-4d73-a9f5-3c356e68a038\')'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/beta/groups/02bd9fd6-8f93-4758-87c3-1fb73740a315/owners/$ref/'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/me/photo/$value/'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/admin/serviceAnnouncement/healthOverviews/$count/'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/beta/me/drive/root/delta(token=\'1230919asd190410jlka\')'
-    },
-    {
-      isValid: true,
-      // eslint-disable-next-line max-len
-      url: 'https://graph.microsoft.com/beta/items/getActivitiesByInterval(startDateTime=\'2017-01-01\',endDateTime=\'2017-01-03\',interval=\'day\')'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/beta/directory/deleteditems/microsoft.graph.group/'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/beta/me/drive/root:/FolderA/FileB.txt:/content'
-    },
-    {
-      isValid: true,
-      url: 'https://graph.microsoft.com/v1.0/me/drive/root:/book1.xlsx/'
-    }
-
+    'https://graph.microsoft.com/v1.0/me/events',
+    'https://graph.microsoft.com/me',
+    'https://graph.microsoft.com/v1.0/security/alerts?$filter=Category eq \'ransomware\'&$top=5',
+    'https://graph.microsoft.com/v1.0/planner/tasks/oIx3zN98jEmVOM-4mUJzSGUANeje/',
+    'https://graph.microsoft.com/v1.0/users/MiriamG@M365x214355.onmicrosoft.com/',
+    // eslint-disable-next-line max-len
+    'https://graph.microsoft.com/v1.0/me/messages/AAMkAGVmMDEzMTM4LTZmYWUtNDdkNC1hMDZiLTU1OGY5OTZhYmY4OABGAAAAAAAiQ8W967B7TKBjgx9rVEURBwAiIsqMbYjsT5e-T7KzowPTAAAAAAEMAAAiIsqMbYjsT5e-T7KzowPTAAMCzwJpAAA=/',
+    'https://graph.microsoft.com/v1.0/me/extensions/com.contoso.roamingSettings/',
+    'https://graph.microsoft.com/v1.0/planner/plans/CONGZUWfGUu4msTgNP66e2UAAySi',
+    'https://graph.microsoft.com/v1.0/me/onenote/sections/1f7ff346-c174-45e5-af38-294e51d9969a/pages',
+    // eslint-disable-next-line max-len
+    'https://graph.microsoft.com/v1.0/teams/02bd9fd6-8f93-4758-87c3-1fb73740a315/channels/19:09fc54a3141a45d0bc769cf506d2e079@thread.skype/',
+    'https://graph.microsoft.com/v1.0/applications_v2/02bd9fd6-8f93-4758-87c3-1fb73740a315/',
+    'https://graph.microsoft.com/v1.0/users(\'48d31887-5fad-4d73-a9f5-3c356e68a038\')',
+    'https://graph.microsoft.com/beta/groups/02bd9fd6-8f93-4758-87c3-1fb73740a315/owners/$ref/',
+    'https://graph.microsoft.com/v1.0/me/photo/$value/',
+    'https://graph.microsoft.com/v1.0/admin/serviceAnnouncement/healthOverviews/$count/',
+    'https://graph.microsoft.com/beta/me/drive/root/delta(token=\'1230919asd190410jlka\')',
+    // eslint-disable-next-line max-len
+    'https://graph.microsoft.com/beta/items/getActivitiesByInterval(startDateTime=\'2017-01-01\',endDateTime=\'2017-01-03\',interval=\'day\')',
+    'https://graph.microsoft.com/beta/directory/deleteditems/microsoft.graph.group/',
+    'https://graph.microsoft.com/beta/me/drive/root:/FolderA/FileB.txt:/content',
+    'https://graph.microsoft.com/v1.0/me/drive/root:/book1.xlsx/',
+    'https://graph.microsoft.com/v1.0/me/drive/root:/Test Folder',
+    'https://graph.microsoft.com/v1.0/me/drive/root:/Encoded%20URL'
   ];
   const validator = new ValidatedUrl();
   urls.forEach((sample) => {
-    it(`validate the url: ${sample.url} to be ${sample.isValid} `, () => {
-      const url = sample.url;
-      const validation = validator.validate(url);
+    it(`validate url: ${sample} `, () => {
+      const validation = validator.validate(sample);
       let error = '';
       if (!validation.success) {
-        error = url.substring(validation.matched, validation.maxMatched)
+        error = sample.substring(validation.matched, validation.maxMatched)
       }
-      expect(error).toBe('');
+      expect(error).toBeFalsy();
     });
   });
 

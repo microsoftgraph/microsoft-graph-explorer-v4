@@ -36,7 +36,7 @@ export class ValidatedUrl {
 
 
   public validate(graphUrl: string): ValidationResult {
-    const result = this.parser.parse(this.grammarObject, 'odataUri', graphUrl);
+    const result = this.parser.parse(this.grammarObject, 'odataUri', decodeURI(graphUrl));
     return result;
   }
 }
