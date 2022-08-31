@@ -1,6 +1,6 @@
 import { FocusZone } from '@fluentui/react';
-import Editor, { OnChange } from '@monaco-editor/react';
-import React from 'react';
+import Editor, { OnChange, useMonaco } from '@monaco-editor/react';
+import React, { useEffect } from 'react';
 
 import { ThemeContext } from '../../../../themes/theme-context';
 import './monaco.scss';
@@ -25,6 +25,19 @@ export function Monaco(props: IMonaco) {
     body = formatJsonStringForAllBrowsers(body);
   }
   const itemHeight = height ? height : '300px';
+
+  const monaco = useMonaco();
+  useEffect(() => {
+    if (monaco) {
+      monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+        validate: true,
+        allowComments: false,
+        schemas: [],
+        enableSchemaRequest: true,
+        schemaRequest: 'ignore'
+      });
+    }
+  }, [monaco]);
 
   return (
     <FocusZone disabled={props.extraInfoElement ? false : true}>
