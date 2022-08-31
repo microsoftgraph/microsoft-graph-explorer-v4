@@ -28,12 +28,12 @@ import messages from '../../../../../messages';
 
 export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
 
-  const { sampleQuery, scopes, dimensions, authToken } =
+  const { sampleQuery, scopes, dimensions, authToken, permissionsPanelOpen } =
   useSelector( (state: IRootState) => state );
   const { pending: loading } = scopes;
   const tokenPresent = !!authToken.token;
   const dispatch = useDispatch();
-  const panel = permissionProps?.panel;
+  const panel = permissionsPanelOpen
 
   const classProps = {
     styles: permissionProps!.styles,
@@ -202,31 +202,11 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     return columns;
   }
 
-  const selection = new Selection({
-    onSelectionChanged: () => {
-      const selected = selection.getSelection() as any;
-      const permissionsToConsent: string[] = [];
-      if (selected.length > 0) {
-        selected.forEach((option: IPermission) => {
-          permissionsToConsent.push(option.value);
-        });
-      }
-      if(permissionProps!.setPermissions){
-        permissionProps!.setPermissions(permissionsToConsent);
-      }
-    }
-  });
-
   const displayPermissionsPanel = () : JSX.Element => {
-    if (loading.isFullPermissions) {
-      return displayLoadingPermissionsText();
-    }
-
     return <div data-is-scrollable={true} style={panelStyles}>
       <PanelList
         classes={classes}
         messages={messages}
-        selection={selection}
         columns={getColumns()}
         renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
           renderItemColumn(item, index, column)}
@@ -261,7 +241,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
 
   return(
     <>
-      {panel ? displayPermissionsPanel() : displayPermissionsAsTab()}
+      {permissionsPanelOpen ? displayPermissionsPanel() : displayPermissionsAsTab()}
     </>
   );
 }

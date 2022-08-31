@@ -14,6 +14,7 @@ export interface IPermissionProps {
   dimensions?: IDimensions;
   setPermissions?: Function;
   panel?: boolean;
+  permissionsRef?: any
 }
 
 export interface IPermissionState {
