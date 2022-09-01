@@ -91,5 +91,5 @@ jobs:
           source_branch: ${{ steps.create-release.outputs.branchName }}
           destination_branch: "master"
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_title: "Chore (release): ${{ env.NEW_VERSION }}"
+          pr_title: "Chore: Release ${{ env.NEW_VERSION }}"
           pr_body: ${{ env.masterPrBody }}
