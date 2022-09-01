@@ -285,7 +285,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
   if (selectedQuery) {
     const index = groups.findIndex(k => k.key === selectedQuery.category);
-    if (index > 0 ) {
+    if (index > 0) {
       groups[index].isCollapsed = false;
       groups[0].isCollapsed = true;
     }
@@ -341,7 +341,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
       <Announced
         message={`${sampleQueries.length} search results available.`}
       />
-      { sampleQueries.length === 0 ? NoResultsFound('No samples found') :
+      {sampleQueries.length === 0 ? NoResultsFound('No samples found') :
         <div role="navigation">
           <DetailsList
             className={classes.queryList}

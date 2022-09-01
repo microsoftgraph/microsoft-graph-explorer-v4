@@ -120,7 +120,7 @@ class Telemetry implements ITelemetry {
     telemetry.trackEvent(WINDOW_OPEN_EVENT, properties);
   }
 
-  public trackDeviceCharacteristicsTelemetry(properties?: any){
+  public trackDeviceCharacteristicsTelemetry(properties?: any) {
     const deviceProperties = {
       deviceHeight: screen.height,
       deviceWidth: screen.width,

@@ -6,7 +6,11 @@ import {
   getTheme,
   IStyle,
   ITheme,
+  getTheme,
+  IStyle,
+  ITheme,
   Label,
+  Link,
   Link,
   MessageBar,
   MessageBarType,
@@ -51,7 +55,7 @@ class GraphToolkit extends Component<any> {
     }
 
     return (
-      <Label styles={{root: this.textStyle}}>
+      <Label styles={{ root: this.textStyle }}>
         <FormattedMessage id='We did not find a Graph toolkit for this query' />
         &nbsp;
         <Link
