@@ -183,11 +183,11 @@ export function unconsentToScopes(permissionToDelete: string): Function {
       return;
     }
 
-    // if (!userHasRequiredPermissions(requiredPermissions, consentedScopes, dispatch)) {
-    //   console.log('Required permissions missing')
-    //   dispatch(revokePermissionPending(false));
-    //   return;
-    // }
+    if (!userHasRequiredPermissions(requiredPermissions, consentedScopes, dispatch)) {
+      console.log('Required permissions missing')
+      dispatch(revokePermissionPending(false));
+      return;
+    }
     const newScopes = consentedScopes;
 
     try {
@@ -203,32 +203,59 @@ export function unconsentToScopes(permissionToDelete: string): Function {
 
         await revokePermission(scopeId, newScopesString);
 
-
         const updatedScopes = await getUpdatedScope(servicePrincipalAppId, profile.id)
         console.log('Updated scopes are ', updatedScopes)
 
         if (updatedScopes.length === newScopesArray.length) {
-          console.log('Was successful so we are here')
-          //log user out
-          await authenticationWrapper.loginWithInteraction(updatedScopes); // logOut()
-          dispatch(getConsentedScopesSuccess(updatedScopes));
-          dispatch(revokePermissionSuccess(true));
+          console.log('Yaaaay!! Was successful so we are here...')
+          try {
+            // authenticate with updated scopes
+            const authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
+            if (authResponse && authResponse.accessToken) {
+              dispatch(getAuthTokenSuccess(true));
+              console.log('Auth Responseeeee: ', authResponse);
+              // dispatch(getConsentedScopesSuccess(authResponse.scopes));
+              dispatch(getConsentedScopesSuccess(updatedScopes));
+              dispatch(revokePermissionSuccess(true));
+              dispatch(
+                setQueryResponseStatus({
+                  statusText: translateMessage('Success'),
+                  status: translateMessage('Permission unconsented'),
+                  ok: true,
+                  messageType: MessageBarType.success
+                })
+              );
+              if (
+                authResponse.account &&
+              authResponse.account.localAccountId !== profile?.id
+              ) {
+                dispatch(getProfileInfo());
+              }
+            }
+          } catch (error: any) {
+            console.log('Something went wrong on authentication: ', error);
+            // dispatch(
+            //   setQueryResponseStatus({
+            //     statusText: translateMessage(''),
+            //     status: error,
+            //     ok: false,
+            //     messageType: MessageBarType.error
+            //   })
+            // );
+          }
+          // await authenticationWrapper.loginWithInteraction(updatedScopes);
+          // dispatch(getConsentedScopesSuccess(updatedScopes));
 
         }
         else {
           //show an error
         }
-        window.location.reload();
       }
     }
     catch (error: any) {
       // we can first check if the user has the permissions to delete the permission
       const { errorCode } = error;
       console.log('Here is the error code ', errorCode)
-      if (errorCode === 'interaction_in_progress') {
-        //delete this cookie
-        authenticationWrapper.eraseInteractionInProgressCookie();
-      }
       dispatch(revokePermissionError(error));
       dispatch(
         setQueryResponseStatus({
@@ -247,11 +274,27 @@ export function unconsentToScopes(permissionToDelete: string): Function {
 const userHasRequiredPermissions = (requiredPermissions: string[],
   consentedScopes: string[], dispatch: Function) => {
   console.log('Here are the current scopes ', consentedScopes);
+
   const isAnyRequiredAvailable = consentedScopes.includes('Directory.Read.All') ||
     consentedScopes.includes('Directory.ReadWrite.All');
-  const isRequiredPermissionAvailable = consentedScopes.includes('DelegatedPermissionGrant.ReadWrite.All')
-  console.log('Required Permissions are available ', isAnyRequiredAvailable)
-  return false;
+  const isRequiredPermissionsAvailable = consentedScopes.every(scope => requiredPermissions.includes(scope))
+  // const isRequiredPermissionAvailable = consentedScopes.includes('DelegatedPermissionGrant.ReadWrite.All');
+
+  if(!isRequiredPermissionsAvailable && !isAnyRequiredAvailable){
+    console.log('Required Permissions are available ', isRequiredPermissionsAvailable)
+
+    dispatch(
+      setQueryResponseStatus({
+        statusText: translateMessage('Unable to dissent'),
+        status: translateMessage('You require the following permissions to unconsent'),
+        ok: false,
+        messageType: MessageBarType.error
+      })
+    );
+    return false;
+  }
+
+  return true;
 }
 
 const userUnconsentingToDefaultScopes = (currentScopes: string[], permissionToDelete: string, dispatch: Function) => {

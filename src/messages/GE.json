@@ -452,5 +452,6 @@
   "No resources found": "We did not find any resource items",
   "No samples found": "We did not find any sample queries",
   "You require the following permissions to unconsent": "You require Directory.Read.All and DelegatedPermissionGrant.ReadWrite.All to be able to unconsent",
-  "Cannot delete default scope": "Graph Explorer requires this permission by default to make basic calls on your behalf"
+  "Cannot delete default scope": "Graph Explorer requires this permission by default to make basic calls on your behalf",
+  "Permission unconsented": "Permission unconsented successfully"
 }

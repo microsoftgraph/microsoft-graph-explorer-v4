@@ -85,15 +85,17 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           }
 
         case 'consented':
+          if(consented && unconsentPending){
+            return <Spinner/>
+          }
           if (consented) {
-            if(unconsentPending){
-              return <Spinner/>
+            if(panel){
+              return <Label className={classes.consented}
+              ><FormattedMessage id='Consented' /></Label>;
             }
-            else{
-              return <PrimaryButton onClick={() => handleUnconsent(item)} style={{width: '80px'}}>
-                <FormattedMessage id='Unconsent' />
-              </PrimaryButton>;
-            }
+            return <PrimaryButton onClick={() => handleUnconsent(item)} style={{width: '80px'}}>
+              <FormattedMessage id='Unconsent' />
+            </PrimaryButton>;
           } else {
             if (!panel) {
               return <PrimaryButton onClick={() => handleConsent(item)} style={{width: '80px'}}>

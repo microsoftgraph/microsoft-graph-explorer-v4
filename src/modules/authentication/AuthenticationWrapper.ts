@@ -192,7 +192,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return `${AUTH_URL}/${tenant}/`;
   }
 
-  public async loginWithInteraction(userScopes: string[], sessionId?: string) {
+  private async loginWithInteraction(userScopes: string[], sessionId?: string) {
     const popUpRequest: PopupRequest = {
       scopes: userScopes,
       authority: this.getAuthority(),
@@ -263,7 +263,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     });
   }
 
-  public eraseInteractionInProgressCookie(): void {
+  private eraseInteractionInProgressCookie(): void {
     const keyValuePairs = document.cookie.split(';');
     let cookieValue = '';
     let cookieKey = '';
