@@ -17,7 +17,6 @@ import { IStatus } from '../../../types/status';
 import { ClientError } from '../../utils/ClientError';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { translateMessage } from '../../utils/translate-messages';
-import { isJsonString } from '../../views/sidebar/sample-queries/sample-query-utils';
 import { authProvider, GraphClient } from '../graph-client';
 import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
@@ -230,7 +229,7 @@ export function parseResponse(
     const contentType = getContentType(response.headers);
     switch (contentType) {
       case ContentType.Json:
-        return isJsonString(response) ? response.json() : response;
+        return response.json();
       case ContentType.XML:
       case ContentType.HTML:
       case ContentType.TextPlain:

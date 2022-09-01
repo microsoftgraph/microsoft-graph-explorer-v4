@@ -40,13 +40,13 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
-    if (previousQuery) {
-      initialiseAutoComplete(sampleQuery.sampleUrl)
-    }
+    setQueryUrl(sampleQuery.sampleUrl);
   }, [sampleQuery.sampleUrl]);
 
   useEffect(() => {
-    displayAutoCompleteSuggestions(queryUrl);
+    if (queryUrl !== previousQuery) {
+      displayAutoCompleteSuggestions(queryUrl);
+    }
     setIsMultiline(isOverflowing(queryUrl));
   }, [autoCompleteOptions, queryUrl]);
 
@@ -61,7 +61,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   };
 
   const initialiseAutoComplete = (currentValue: string) => {
-    setQueryUrl(currentValue);
     if (currentValue.includes(GRAPH_URL)) {
       const { index, context } = getLastDelimiterInUrl(currentValue);
       const { searchText: searchWith, previous: preceedingText } = getSearchText(currentValue, index!);
@@ -175,6 +174,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     const { previous: preceedingText } = getSearchText(url, index!);
     const shouldSuggestVersions = preceedingText === GRAPH_URL + '/';
 
+    setShouldShowSuggestions(false);
+
     let theSuggestions: string[] = [];
     if (shouldSuggestVersions) {
       theSuggestions = GRAPH_API_VERSIONS;
@@ -185,14 +186,11 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
     if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
-      if (filtered && filtered.length > 0) {
+      if (filtered.length > 0) {
         setSuggestions(filtered);
         setShouldShowSuggestions(true);
       }
-    } else {
-      setShouldShowSuggestions(false);
     }
-
   }
 
   const trackSuggestionSelectionEvent = (suggestion: string) => {
