@@ -1,4 +1,4 @@
-import { getTheme, Icon, ITheme, PivotItem } from '@fluentui/react';
+import { getTheme, IPivotItemProps, ITheme, PivotItem } from '@fluentui/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -46,17 +46,20 @@ export const GetPivotItems = () => {
     }
     return null;
   }
+  function renderItemLink(
+    link?: IPivotItemProps,
+    defaultRenderer?: (link?: IPivotItemProps) => JSX.Element | null,
+  ): JSX.Element | null {
+    if (!link || !defaultRenderer) {
+      return null;
+    }
 
-  function renderItemLink(link: any) {
     return (
       <span>
-        <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
-        {link.headerText}
-
+        {defaultRenderer({ ...link, itemKey: 'adaptive-cards' })}
         {link.itemKey === 'adaptive-cards' && showDotIfAdaptiveCardPresent()}
         {link.itemKey === 'toolkit-component' && showDotIfGraphToolkitPresent()}
       </span>
-
     );
   }
 

@@ -1,5 +1,5 @@
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { getTheme, IStyle, ITheme, Label, Link,
+import { FontSizes, getTheme, IStyle, ITheme, Label, Link,
   MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -106,7 +106,9 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
           componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
         }
         return (
-          <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
+          <Pivot className='pivot-response'
+            onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}
+            styles={{text: {fontSize: FontSizes.size14}}}>
             <PivotItem
               itemKey='card'
               ariaLabel={translateMessage('card')}
