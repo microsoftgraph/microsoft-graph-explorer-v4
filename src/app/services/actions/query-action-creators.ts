@@ -67,7 +67,7 @@ export function runQuery(query: IQuery): Function {
       messageType: MessageBarType.error,
       ok: false,
       duration,
-      status: 400,
+      status: response.status || 400,
       statusText: ''
     };
 
