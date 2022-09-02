@@ -3,24 +3,14 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
 import {
-  getTheme,
-  IStyle,
-  ITheme,
-  getTheme,
-  IStyle,
-  ITheme,
-  Label,
-  Link,
-  Link,
-  MessageBar,
-  MessageBarType,
-  styled
+  getTheme, IStyle, ITheme, Label, Link,
+  MessageBar, MessageBarType, styled
 } from '@fluentui/react';
-import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { componentNames, telemetry } from '../../../../telemetry';
-import { queryResponseStyles } from '../queryResponse.styles';
 import { IRootState } from '../../../../types/root';
+import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
+import { queryResponseStyles } from '../queryResponse.styles';
 
 class GraphToolkit extends Component<any> {
   constructor(props: any) {
