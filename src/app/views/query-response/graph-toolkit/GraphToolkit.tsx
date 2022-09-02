@@ -1,17 +1,13 @@
-import {
-  getTheme, IStyle, ITheme, Label, Link,
-  MessageBar, MessageBarType, styled
-} from '@fluentui/react';
+import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 
+import { getTheme, IStyle, ITheme, Label, Link, MessageBar, MessageBarType, styled } from '@fluentui/react';
 import { componentNames, telemetry } from '../../../../telemetry';
+import { IRootState } from '../../../../types/root';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
 import { queryResponseStyles } from '../queryResponse.styles';
-import { useAppSelector } from '../../../../store';
-import {
-  convertVhToPx, getResponseEditorHeight,
-  getResponseHeight
-} from '../../common/dimensions/dimensions-adjustment';
 
 const GraphToolkit = () => {
   const { sampleQuery, dimensions: { response }, responseAreaExpanded } = useAppSelector((state) => state);
