@@ -31,7 +31,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
   const { sampleQuery, scopes, dimensions, authToken, unconsentingScopes } =
   useSelector( (state: IRootState) => state );
   const { pending: loading } = scopes;
-  const { pending: unconsentPending } = unconsentingScopes;
+  // const { pending: unconsentPending } = unconsentingScopes;
   const tokenPresent = !!authToken.token;
   const dispatch = useDispatch();
   const panel = permissionProps?.panel;
@@ -85,9 +85,9 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           }
 
         case 'consented':
-          if(consented && unconsentPending){
-            return <Spinner/>
-          }
+          // if(consented && unconsentPending){
+          //   return <Spinner/>
+          // }
           if (consented) {
             if(panel){
               return <Label className={classes.consented}

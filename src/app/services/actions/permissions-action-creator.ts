@@ -170,30 +170,30 @@ export function consentToScopes(scopes: string[]): Function {
 }
 
 export function unconsentToScopes(permissionToDelete: string): Function {
-  console.log('The permission to delete isss ', permissionToDelete);
+  // console.log('The permission to delete isss ', permissionToDelete);
   return async (dispatch: Function, getState: Function) => {
-    dispatch(revokePermissionPending(true));
+    // dispatch(revokePermissionPending(true));
     const { consentedScopes, profile } = getState();
+    // console.log('Scopes before....! ', consentedScopes);
     const requiredPermissions = UNCONSENTING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
     const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 
     if (userUnconsentingToDefaultScopes(defaultScopes, permissionToDelete, dispatch)) {
-      console.log('Dude dissenting to default scopes')
+      // console.log('Dude dissenting to default scopes')
       dispatch(revokePermissionPending(false));
       return;
     }
 
     if (!userHasRequiredPermissions(requiredPermissions, consentedScopes, dispatch)) {
-      console.log('Required permissions missing')
+      // console.log('Required permissions missing')
       dispatch(revokePermissionPending(false));
       return;
     }
-    const newScopes = consentedScopes;
 
     try {
-      if (newScopes && newScopes.length > 0) {
-        console.log('We are here with scopes before filter as ', newScopes);
-        const newScopesArray: string[] = (newScopes.filter((scope: string) => scope !== permissionToDelete));
+      if (consentedScopes && consentedScopes.length > 0) {
+        console.log('We are here with scopes before filter as ', consentedScopes);
+        const newScopesArray: string[] = (consentedScopes.filter((scope: string) => scope !== permissionToDelete));
         const newScopesString = newScopesArray.join(' ');
         console.log('Scopes after filter is  ', newScopesString);
 
@@ -203,7 +203,7 @@ export function unconsentToScopes(permissionToDelete: string): Function {
 
         await revokePermission(scopeId, newScopesString);
 
-        const updatedScopes = await getUpdatedScope(servicePrincipalAppId, profile.id)
+        const updatedScopes = await getUpdatedScopes(servicePrincipalAppId, profile.id)
         console.log('Updated scopes are ', updatedScopes)
 
         if (updatedScopes.length === newScopesArray.length) {
@@ -211,27 +211,34 @@ export function unconsentToScopes(permissionToDelete: string): Function {
           try {
             // authenticate with updated scopes
             const authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
-            if (authResponse && authResponse.accessToken) {
-              dispatch(getAuthTokenSuccess(true));
-              console.log('Auth Responseeeee: ', authResponse);
-              // dispatch(getConsentedScopesSuccess(authResponse.scopes));
-              dispatch(getConsentedScopesSuccess(updatedScopes));
-              dispatch(revokePermissionSuccess(true));
-              dispatch(
-                setQueryResponseStatus({
-                  statusText: translateMessage('Success'),
-                  status: translateMessage('Permission unconsented'),
-                  ok: true,
-                  messageType: MessageBarType.success
-                })
-              );
-              if (
-                authResponse.account &&
+
+            // do...while still WIP
+            do{
+              const authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
+              console.log('Auth scopessssss', authResponse.scopes);
+
+              if (authResponse && authResponse.accessToken) {
+                dispatch(getAuthTokenSuccess(true));
+                // dispatch(getConsentedScopesSuccess(authResponse.scopes));
+                dispatch(getConsentedScopesSuccess(updatedScopes));
+                dispatch(revokePermissionSuccess(true));
+                dispatch(
+                  setQueryResponseStatus({
+                    statusText: translateMessage('Success'),
+                    status: translateMessage('Permission unconsented'),
+                    ok: true,
+                    messageType: MessageBarType.success
+                  })
+                );
+                if (
+                  authResponse.account &&
               authResponse.account.localAccountId !== profile?.id
-              ) {
-                dispatch(getProfileInfo());
+                ) {
+                  dispatch(getProfileInfo());
+                }
               }
-            }
+            }while(authResponse.scopes.length === updatedScopes.length);
+
           } catch (error: any) {
             console.log('Something went wrong on authentication: ', error);
             // dispatch(
@@ -248,7 +255,14 @@ export function unconsentToScopes(permissionToDelete: string): Function {
 
         }
         else {
-          //show an error
+          // dispatch(
+          //   setQueryResponseStatus({
+          //     statusText: translateMessage(''),
+          //     status: error,
+          //     ok: false,
+          //     messageType: MessageBarType.error
+          //   })
+          // );
         }
       }
     }
@@ -362,7 +376,7 @@ const getScopeId = async (servicePrincipalAppId: string, principalid: string) =>
 
 
 // We could also have a case of two users. Filter by principal Id. Make sure to test this
-const getUpdatedScope = async (servicePrincipalAppId: string, principalid: string) => {
+const getUpdatedScopes = async (servicePrincipalAppId: string, principalid: string) => {
   const graphClient = GraphClient.getInstance();
 
   try {
