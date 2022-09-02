@@ -40,13 +40,13 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
-    if (previousQuery) {
-      initialiseAutoComplete(sampleQuery.sampleUrl)
-    }
+    setQueryUrl(sampleQuery.sampleUrl);
   }, [sampleQuery.sampleUrl]);
 
   useEffect(() => {
-    displayAutoCompleteSuggestions(queryUrl);
+    if (queryUrl !== previousQuery) {
+      displayAutoCompleteSuggestions(queryUrl);
+    }
     setIsMultiline(isOverflowing(queryUrl));
   }, [autoCompleteOptions, queryUrl]);
 
@@ -61,8 +61,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   };
 
   const initialiseAutoComplete = (currentValue: string) => {
-    setQueryUrl(currentValue);
-
     if (currentValue.includes(GRAPH_URL)) {
       const { index, context } = getLastDelimiterInUrl(currentValue);
       const { searchText: searchWith, previous: preceedingText } = getSearchText(currentValue, index!);
@@ -73,7 +71,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const onChange = (e: any) => {
     const currentValue = e.target.value;
-    initialiseAutoComplete(currentValue);
+    setQueryUrl(currentValue);
+    initialiseAutoComplete(currentValue)
   };
 
   const isOverflowing = (input: string) => {
@@ -155,7 +154,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const requestForAutocompleteOptions = (url: string, context: SignContext) => {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
-    if (!GRAPH_API_VERSIONS.includes(queryVersion.toLowerCase())) {
+    const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url;
+    if (urlExistsInStore) {
+      displayAutoCompleteSuggestions(autoCompleteOptions.url);
       return;
     }
 
@@ -164,11 +165,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       return;
     }
 
-    const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url;
-    if (urlExistsInStore) {
-      displayAutoCompleteSuggestions(autoCompleteOptions.url);
-      return;
-    }
     dispatch(fetchAutoCompleteOptions(requestUrl, queryVersion, context));
   }
 
@@ -177,6 +173,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     const { index } = getLastDelimiterInUrl(url);
     const { previous: preceedingText } = getSearchText(url, index!);
     const shouldSuggestVersions = preceedingText === GRAPH_URL + '/';
+
+    setShouldShowSuggestions(false);
 
     let theSuggestions: string[] = [];
     if (shouldSuggestVersions) {
@@ -188,14 +186,11 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
     if (theSuggestions.length > 0) {
       const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
-      if (filtered[0] !== searchText) {
+      if (filtered.length > 0) {
         setSuggestions(filtered);
         setShouldShowSuggestions(true);
       }
-    } else {
-      setShouldShowSuggestions(false);
     }
-
   }
 
   const trackSuggestionSelectionEvent = (suggestion: string) => {

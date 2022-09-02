@@ -29,7 +29,6 @@ import { sidebarStyles } from '../Sidebar.styles';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { fetchSamples } from '../../../services/actions/samples-action-creators';
 import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
-import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
@@ -88,10 +87,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
       displayTipMessage(query);
     }
 
-    if (shouldRunQuery(query)) {
-      dispatch(runQuery(sampleQuery));
-    }
-
     trackSampleQueryClickEvent(query);
     dispatch(setSampleQuery(sampleQuery));
   };
@@ -113,17 +108,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
       status: query.tip
     }));
   }
-
-  const shouldRunQuery = (query: ISampleQuery) => {
-    if (query.tip && tokenPresent) {
-      return false;
-    }
-    if (!tokenPresent || query.method === 'GET') {
-      return true;
-    }
-    return false;
-  }
-
 
   const renderItemColumn = (
     item: ISampleQuery,
