@@ -64,31 +64,3 @@ export {
   getLastCharacterOf,
   getSearchText
 }
-
-function getErrorMessage(queryUrl: string) {
-  if (!queryUrl) {
-    return translateMessage('Missing url');
-  }
-  if (hasWhiteSpace(queryUrl)) {
-    return translateMessage('Invalid whitespace in URL');
-  }
-  if (hasPlaceHolders(queryUrl)) {
-    return translateMessage('Parts between {} need to be replaced with real values');
-  }
-  return '';
-}
-
-function getSearchText(input: string, index: number) {
-  const stringPosition = index + 1;
-  const previous = input.substring(0, stringPosition);
-  const searchText = input.replace(previous, '');
-  return { previous, searchText };
-}
-
-export {
-  getErrorMessage,
-  getFilteredSuggestions,
-  cleanUpSelectedSuggestion,
-  getLastCharacterOf,
-  getSearchText
-}

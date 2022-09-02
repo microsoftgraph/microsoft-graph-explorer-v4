@@ -95,9 +95,7 @@ const QueryResponse = () => {
           minHeight: 350,
           height: '100%',
           flex: 1
-        }}
-          onScroll={onScroll}>
-
+        }} onScroll={onScroll}>
           <Pivot overflowBehavior='menu'
             overflowAriaLabel={translateMessage('More items')}
             onLinkClick={handlePivotItemClick}

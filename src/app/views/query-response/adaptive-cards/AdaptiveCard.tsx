@@ -120,11 +120,8 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               headerButtonProps={{
                 'aria-controls': 'card-tab'
               }}
-              headerButtonProps={{
-                'aria-controls': 'card-tab'
-              }}
             >
-              <div id={'card-tab'} id={'card-tab'}
+              <div id={'card-tab'}
                 ref={(n) => {
                   if (n && !n.firstChild) {
                     n.appendChild(renderedCard as HTMLElement as HTMLElement);
@@ -140,9 +137,6 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               itemKey='JSON-schema'
               ariaLabel={translateMessage('JSON Schema')}
               headerText={translateMessage('JSON Schema')}
-              headerButtonProps={{
-                'aria-controls': 'json-schema-tab'
-              }}
               headerButtonProps={{
                 'aria-controls': 'json-schema-tab'
               }}
