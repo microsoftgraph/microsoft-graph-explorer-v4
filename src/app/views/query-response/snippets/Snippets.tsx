@@ -1,15 +1,10 @@
 import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IRootState } from '../../../../types/root';
 import { setSnippetTabSuccess } from '../../../services/actions/snippet-action-creator';
-import { IRootState } from '../../../../types/root';
-import { setSnippetTabSuccess } from '../../../services/actions/snippet-action-creator';
 import { renderSnippets } from './snippets-helper';
-
 function GetSnippets() {
   const dispatch = useDispatch();
   const { snippets } = useSelector((state: IRootState) => state);
