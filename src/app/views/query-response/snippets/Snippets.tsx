@@ -1,10 +1,15 @@
-import { Pivot } from '@fluentui/react';
+import { Pivot, PivotItem } from '@fluentui/react';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { componentNames, telemetry } from '../../../../telemetry';
+import { IRootState } from '../../../../types/root';
+import { setSnippetTabSuccess } from '../../../services/actions/snippet-action-creator';
 import { renderSnippets } from './snippets-helper';
 
 function GetSnippets() {
+  const dispatch = useDispatch();
+  const { snippets } =  useSelector((state: IRootState) => state);
   const supportedLanguages = {
     'CSharp': {
       sdkDownloadLink: 'https://aka.ms/csharpsdk',
@@ -18,10 +23,6 @@ function GetSnippets() {
       sdkDownloadLink: 'https://aka.ms/graphjavasdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     },
-    'Objective-C': {
-      sdkDownloadLink: 'https://aka.ms/objective-c-sdk',
-      sdkDocLink: 'https://aka.ms/sdk-doc'
-    },
     'Go': {
       sdkDownloadLink: 'https://aka.ms/graphgosdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
@@ -32,7 +33,20 @@ function GetSnippets() {
     }
   };
 
-  return <Pivot>{renderSnippets(supportedLanguages)}</Pivot>;
+  const handlePivotItemClick = (pivotItem?: PivotItem) => {
+    if (!pivotItem) {
+      return;
+    }
+    dispatch(setSnippetTabSuccess(pivotItem.props.itemKey!))
+  }
+
+  return <Pivot
+    className={'pivot-response'}
+    selectedKey={snippets.snippetTab}
+    onLinkClick={handlePivotItemClick}
+  >
+    {renderSnippets(supportedLanguages)}
+  </Pivot>;
 }
 export const Snippets = telemetry.trackReactComponent(
   GetSnippets,

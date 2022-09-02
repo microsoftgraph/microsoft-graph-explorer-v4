@@ -1,23 +1,27 @@
 import { Link, MessageBar, MessageBarType } from '@fluentui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { IGraphResponse } from '../../../types/query-response';
+import { IAuthenticateResult } from '../../../../types/authentication';
+import { Mode } from '../../../../types/enums';
+import { IGraphResponse } from '../../../../types/query-response';
 
-import { IQuery } from '../../../types/query-runner';
-import { runQuery } from '../../services/actions/query-action-creators';
-import { setSampleQuery } from '../../services/actions/query-input-action-creators';
-import {
-  MOZILLA_CORS_DOCUMENTATION_LINK,
-  ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK,
-  WORKLOAD
-} from '../../services/graph-constants';
+import { IQuery } from '../../../../types/query-runner';
+import { runQuery } from '../../../services/actions/query-action-creators';
+import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { MOZILLA_CORS_DOCUMENTATION_LINK } from '../../../services/graph-constants';
+import { translateMessage } from '../../../utils/translate-messages';
 
 interface ODataLink {
   link: string;
   name: string;
 }
 
-export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQuery, dispatch: Function) {
+export function responseMessages(
+  graphResponse: IGraphResponse,
+  sampleQuery: IQuery,
+  authToken: IAuthenticateResult,
+  graphExplorerMode: Mode,
+  dispatch: Function) {
 
   function getOdataLinkFromResponseBody(responseBody: any): ODataLink | null {
     const odataLinks = ['nextLink', 'deltaLink'];
@@ -34,7 +38,8 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
     }
     return data;
   }
-
+  const [displayMessage, setDisplayMessage] = useState(true);
+  const tokenPresent = !!authToken.token;
   const { body } = graphResponse;
   const odataLink = getOdataLinkFromResponseBody(body);
 
@@ -49,7 +54,7 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
   if (odataLink) {
     return (
       <MessageBar messageBarType={MessageBarType.info}>
-        <FormattedMessage id={'This response contains an @odata property.'} />: @odata.{odataLink!.name}
+        <FormattedMessage id={'This response contains an @odata property.'} />: @odata.{odataLink.name}
         <Link onClick={() => setQuery()}>
           &nbsp;<FormattedMessage id='Click here to follow the link' />
         </Link>
@@ -73,16 +78,29 @@ export function responseMessages(graphResponse: IGraphResponse, sampleQuery: IQu
 
   // Show CORS compliance message
   if (body?.throwsCorsError) {
-    const documentationLink = body?.workload === WORKLOAD.ONEDRIVE
-      ? ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK
-      : MOZILLA_CORS_DOCUMENTATION_LINK;
     return (
       <div>
         <MessageBar messageBarType={MessageBarType.warning}>
           <FormattedMessage id={'Response content not available due to CORS policy'} />
-          <Link href={documentationLink}>
+          <Link target='_blank' href={MOZILLA_CORS_DOCUMENTATION_LINK}>
             <FormattedMessage id={'here'} />
           </Link>.
+        </MessageBar>
+      </div>
+    );
+  }
+
+  if(body && !tokenPresent && displayMessage && graphExplorerMode === Mode.Complete) {
+    return (
+      <div>
+        <MessageBar
+          messageBarType={MessageBarType.warning}
+          isMultiline={true}
+          onDismiss={() => setDisplayMessage(false)}
+          dismissButtonAriaLabel={translateMessage('Close')}
+        >
+          <FormattedMessage id='Using demo tenant' />{' '}
+          <FormattedMessage id='To access your own data:' />
         </MessageBar>
       </div>
     );

@@ -1,4 +1,11 @@
-import { Pivot, PivotItem } from '@fluentui/react';
+import { DirectionalHint,
+  getTheme,
+  IconButton,
+  Pivot,
+  PivotItem,
+  Stack,
+  TooltipDelay,
+  TooltipHost } from '@fluentui/react';
 import React from 'react';
 
 import { telemetry } from '../../../telemetry';
@@ -6,10 +13,39 @@ import { translateMessage } from '../../utils/translate-messages';
 import History from './history/History';
 import { ResourceExplorer } from './resource-explorer';
 import SampleQueries from './sample-queries/SampleQueries';
-export const Sidebar = () => {
+import { sidebarStyles } from './Sidebar.styles';
+
+interface ISidebar {
+  currentTab: string;
+  setSidebarTabSelection: Function;
+  showSidebar: boolean;
+  toggleSidebar: Function;
+  mobileScreen: boolean;
+}
+export const Sidebar = (props: ISidebar) =>{
+  const theme = getTheme();
+  const styles = sidebarStyles(theme).sidebarButtons;
+
+  const onPivotItemClick = (item?: PivotItem) => {
+    if (!item) { return; }
+    const key = item.props.itemKey;
+    if (key) {
+      props.setSidebarTabSelection(key);
+      telemetry.trackTabClickEvent(key);
+    }
+  }
+  const openComponent = (key: string) => {
+    props.toggleSidebar();
+    props.setSidebarTabSelection(key);
+  }
+
   return (
     <div>
-      <Pivot onLinkClick={onPivotItemClick} overflowBehavior='menu'>
+      {props.showSidebar &&
+      <Pivot onLinkClick={onPivotItemClick}
+        overflowBehavior='menu'
+        overflowAriaLabel={translateMessage('More items')}
+        defaultSelectedKey={props.currentTab}>
         <PivotItem
           headerText={translateMessage('Sample Queries')}
           itemIcon='Rocket'
@@ -41,14 +77,64 @@ export const Sidebar = () => {
           <div id={'history-tab'}><History /></div>
         </PivotItem>
       </Pivot>
+      }
+      { !props.showSidebar && !props.mobileScreen && (
+        <Stack tokens={{childrenGap: 10}}>
+          <TooltipHost
+            content={
+              <div style={{padding:'3px'}}>
+                {translateMessage('Sample Queries')}
+              </div>}
+            calloutProps={{gapSpace: 0}}
+            directionalHint={DirectionalHint.bottomCenter}
+            styles={{root: { display: 'inline-block'}}}
+            delay={TooltipDelay.zero}
+          >
+            <IconButton
+              iconProps={{iconName: 'Rocket'}}
+              ariaLabel={translateMessage('Sample Queries')}
+              onClick={() => openComponent('sample-queries')}
+              styles={styles}
+            />
+          </TooltipHost>
+          <TooltipHost
+            content={
+              <div style={{padding:'3px'}}>
+                {translateMessage('Resources')}
+              </div>}
+            calloutProps={{gapSpace: 0}}
+            directionalHint={DirectionalHint.bottomCenter}
+            styles={{root: { display: 'inline-block'}}}
+            delay={TooltipDelay.zero}
+          >
+            <IconButton
+              iconProps={{iconName: 'ExploreData'}}
+              ariaLabel={translateMessage('Resources')}
+              onClick={() => openComponent('resources')}
+              styles={styles}
+            />
+          </TooltipHost>
+          <TooltipHost
+            content={
+              <div style={{padding:'3px'}}>
+                {translateMessage('History')}
+              </div>}
+            calloutProps={{gapSpace: 0}}
+            directionalHint={DirectionalHint.bottomCenter}
+            styles={{root: { display: 'inline-block'}}}
+            delay={TooltipDelay.zero}
+          >
+            <IconButton
+              iconProps={{iconName: 'History'}}
+              ariaLabel={translateMessage('History')}
+              onClick={() => openComponent('history')}
+              styles={styles}
+            />
+          </TooltipHost>
+        </Stack>)
+      }
     </div>
   );
 };
 
-function onPivotItemClick(item?: PivotItem) {
-  if (!item) { return; }
-  const key = item.props.itemKey;
-  if (key) {
-    telemetry.trackTabClickEvent(key);
-  }
-}
+

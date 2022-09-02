@@ -16,7 +16,7 @@ export const sidebarStyles = (theme: ITheme) => {
     queryList: {
       marginBottom: theme.spacing.s1,
       cursor: 'pointer',
-      maxHeight: pageHeightInVh,
+      maxHeight: '72vh',
       minHeight: pageHeightInVh,
       overflow: 'hidden',
       fontSize: FontSizes.medium,
@@ -115,6 +115,15 @@ export const sidebarStyles = (theme: ITheme) => {
     },
     links: {
       color: `${theme.palette.blueMid} !important`
+    },
+    sidebarButtons: {
+      root:{
+        height: 40,
+        width: 40,
+        ':hover': {
+          background: `${theme.palette.neutralLight} !important`
+        }
+      }
     }
   };
 };

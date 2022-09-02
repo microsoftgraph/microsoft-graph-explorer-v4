@@ -97,22 +97,20 @@ function createAuthenticatedRequest(
     });
   }
 
-  const msalAuthOptions:AuthCodeMSALBrowserAuthenticationProviderOptions = {
+  const msalAuthOptions: AuthCodeMSALBrowserAuthenticationProviderOptions = {
     account: authenticationWrapper.getAccount()!,
-    interactionType: InteractionType.Popup ,
+    interactionType: InteractionType.Popup,
     scopes
   }
   const middlewareOptions = new AuthenticationHandlerOptions(
     authProvider,
     msalAuthOptions
   )
-  const graphRequest = GraphClient.getInstance()
+  return GraphClient.getInstance()
     .api(encodeHashCharacters(query))
     .middlewareOptions([middlewareOptions])
     .headers(sampleHeaders)
     .responseType(ResponseType.RAW);
-
-  return graphRequest;
 }
 
 export function makeGraphRequest(scopes: string[]): Function {
@@ -212,8 +210,7 @@ export async function generateResponseDownloadUrl(
     if (fileContents) {
       const buffer = await response.arrayBuffer();
       const blob = new Blob([buffer], { type: contentType });
-      const downloadUrl = URL.createObjectURL(blob);
-      return downloadUrl;
+      return URL.createObjectURL(blob);
     }
   } catch (error) {
     return null;
@@ -244,4 +241,28 @@ export function parseResponse(
     }
   }
   return response;
+}
+
+/**
+ * Check if query attempts to download from OneDrive's /content API or reporting API
+ * Examples:
+ *  /drive/items/{item-id}/content
+ *  /shares/{shareIdOrEncodedSharingUrl}/driveItem/content
+ *  /me/drive/items/{item-id}/thumbnails/{thumb-id}/{size}/content
+ *  /sites/{site-id}/drive/items/{item-id}/versions/{version-id}/content
+ *  /reports/getOffice365ActivationCounts?$format=text/csv
+ *  /reports/getEmailActivityUserCounts(period='D7')?$format=text/csv
+ * @param query
+ * @returns true if query calls the OneDrive or reporting API, otherwise false
+ */
+export function queryResultsInCorsError(sampleUrl: string): boolean {
+  sampleUrl = sampleUrl.toLowerCase();
+  if (
+    (['/drive/', '/drives/', '/driveItem/'].some((x) =>
+      sampleUrl.includes(x)) && sampleUrl.endsWith('/content')) ||
+    sampleUrl.includes('/reports/')
+  ) {
+    return true;
+  }
+  return false;
 }

@@ -14,11 +14,12 @@ export const autoCompleteStyles = (theme: ITheme) => {
     },
     suggestions: {
       maxHeight: '250px',
-      overflowY: 'auto',
+      overflow: 'auto',
       paddingLeft: 0,
       position: 'absolute',
       backgroundColor: theme.palette.neutralLighter,
-      minWidth: controlWidth,
+      minWidth: '40%',
+      maxWidth: '50%',
       zIndex: 1,
       cursor: 'pointer',
       color: theme.palette.black

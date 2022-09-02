@@ -1,9 +1,11 @@
 // Names of instrumented components
 
 // Buttons
+export const FEEDBACK_BUTTON = 'Feedback button';
 export const RUN_QUERY_BUTTON = 'Run query button';
 export const THEME_CHANGE_BUTTON = 'Theme change button';
 export const SELECT_THEME_BUTTON = 'Select theme button';
+export const QUERY_MORE_INFO_BUTTON = 'Query more info button';
 export const JSON_SCHEMA_COPY_BUTTON = 'JSON schema copy button';
 export const RUN_HISTORY_ITEM_BUTTON = 'Run history item button';
 export const SHARE_QUERY_COPY_BUTTON = 'Share query copy button';
@@ -18,6 +20,10 @@ export const RESPONSE_HEADERS_COPY_BUTTON = 'Response headers copy button';
 export const DOWNLOAD_POSTMAN_COLLECTION_BUTTON = 'Download postman collection button';
 export const REMOVE_RESOURCE_FROM_COLLECTION_BUTTON = 'Remove resource from collection button';
 export const QUERY_COPY_BUTTON = 'Query copy button';
+export const SETTINGS_BUTTON = 'Settings button';
+export const HELP_BUTTON = 'Help button';
+export const SIGN_IN_BUTTON = 'Sign in button';
+export const SIGN_IN_WITH_OTHER_ACCOUNT_BUTTON = 'Sign in with other account button';
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
@@ -54,21 +60,28 @@ export const MICROSOFT_APIS_TERMS_OF_USE_LINK = 'Microsoft APIs terms of use lin
 export const MICROSOFT_PRIVACY_STATEMENT_LINK = 'Microsoft privacy statement link';
 export const MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK = 'Microsoft graph API reference docs link';
 export const CODE_SNIPPET_LANGUAGES = {
-  CSharp: 'C Sharp sdk link',
-  JavaScript: 'Javascript sdk link',
-  Java: 'Java snippet sdk link',
-  Go: 'Go sdk link',
-  'Objective-C': 'Objective-C sdk link',
-  Powershell: 'Powershell sdk link'
+  CSharp: {
+    sdk: 'C# SDK link', doc: 'C# snippet docs link'
+  },
+  JavaScript: {
+    sdk: 'JavaScript SDK link', doc: 'JavaScript snippet docs link'
+  },
+  Java: {
+    sdk: 'Java snippet SDK link', doc: 'Java snippet docs link'
+  },
+  Go: {
+    sdk: 'Go snippet SDK link', doc: 'Go snippet docs link'
+  },
+  Powershell: {
+    sdk: 'PowerShell snippet SDK link', doc: 'PowerShell snippet docs link'
+  },
+  PHP: {
+    sdk: 'PHP snippet SDK link', doc: 'PHP snippet docs link'
+  }
 }
-export const CODE_SNIPPET_DOCS_LINKS = {
-  CSharp: 'C# snippet docs link',
-  JavaScript: 'JavaScript snippet docs link',
-  Java: 'Java snippet docs link',
-  Go: 'Go snippet docs link',
-  'Objective-C': 'Objective-C snippet docs link',
-  Powershell: 'Powershell snippet docs link'
-}
+export const GE_DOCUMENTATION_LINK = 'GE documentation link';
+export const GITHUB_LINK = 'Github link';
+export const GRAPH_DOCUMENTATION_LINK = 'Graph documentation link'
 
 // Actions
 export const GET_SNIPPET_ACTION = 'Get snippet action';
@@ -77,3 +90,4 @@ export const AUTHENTICATION_ACTION = 'Authentication action';
 export const GET_ADAPTIVE_CARD_ACTION = 'Get adaptive card action';
 export const FETCH_PERMISSIONS_ACTION = 'Fetch permissions action';
 export const MONACO_EDITOR_FORMAT_JSON_ACTION = 'Monaco editor format JSON action';
+export const LAUNCH_FEEDBACK_POPUP_ACTION = 'Launch feedback popup action';

@@ -14,8 +14,8 @@ export const permissionStyles = (theme: ITheme) => {
     },
     panelContainer: {
       padding: 10,
-      overflowY: 'auto',
-      overflowX: 'auto'
+      overflowY: 'auto' as 'auto',
+      overflowX: 'auto' as 'auto'
     },
     consented: {
       fontSize: FontSizes.small,

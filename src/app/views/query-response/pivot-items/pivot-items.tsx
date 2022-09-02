@@ -1,4 +1,4 @@
-import { getId, getTheme, Icon, ITheme, PivotItem, TooltipHost } from '@fluentui/react';
+import { getTheme, Icon, ITheme, PivotItem } from '@fluentui/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -19,7 +19,7 @@ import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
 import { Snippets } from '../snippets';
 
-export const getPivotItems = () => {
+export const GetPivotItems = () => {
 
   const { graphExplorerMode: mode, sampleQuery, graphResponse: { body } } = useSelector((state: IRootState) => state);
 
@@ -49,13 +49,14 @@ export const getPivotItems = () => {
 
   function renderItemLink(link: any) {
     return (
-      <TooltipHost content={link.title} id={getId()} calloutProps={{ gapSpace: 0 }}>
+      <>
         <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
         {link.headerText}
 
         {link.itemKey === 'adaptive-cards' && showDotIfAdaptiveCardPresent()}
         {link.itemKey === 'toolkit-component' && showDotIfGraphToolkitPresent()}
-      </TooltipHost>
+      </>
+
     );
   }
 
@@ -89,7 +90,6 @@ export const getPivotItems = () => {
       <div id={'response-headers-tab'}><ResponseHeaders/></div>
     </PivotItem>
   ];
-
   if (mode === Mode.Complete) {
     pivotItems.push(
       <PivotItem

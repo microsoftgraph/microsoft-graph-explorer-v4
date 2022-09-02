@@ -1,5 +1,6 @@
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { Label, MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
+import { getTheme, IStyle, ITheme, Label, Link,
+  MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -24,6 +25,9 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     super(props);
     this.adaptiveCard = new AdaptiveCardsAPI.AdaptiveCard();
   }
+
+  currentTheme: ITheme = getTheme();
+  textStyle = queryResponseStyles(this.currentTheme).queryResponseText.root as IStyle
 
   public componentDidMount() {
     const { body, sampleQuery, hostConfig } = this.props;
@@ -80,18 +84,17 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     if (body && !pending) {
       if (!data || (queryStatus && !queryStatus.ok)) {
         return (
-          <Label className={classes.emptyStateLabel}>
+          <Label styles={{root: this.textStyle}}>
             <FormattedMessage id='The Adaptive Card for this response is not available' />
             &nbsp;
-            <a
-              className={classes.link}
+            <Link
               href={'https://adaptivecards.io/designer/'}
               tabIndex={0}
               target='_blank'
               rel='noopener noreferrer'
             >
               <FormattedMessage id='Adaptive Cards designer' />
-            </a>
+            </Link>
           </Label>
         );
       }
@@ -136,23 +139,21 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               <div id={'json-schema-tab'}>
                 <MessageBar messageBarType={MessageBarType.info}>
                   <FormattedMessage id='Get started with adaptive cards on' />
-                  <a href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
+                  <Link href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
                     target='_blank'
                     rel='noopener noreferrer'
                     tabIndex={0}
-                    className={classes.link}
                   >
                     <FormattedMessage id='Adaptive Cards Templating SDK' />
-                  </a>
+                  </Link>
                   <FormattedMessage id='and experiment on' />
-                  <a href={'https://adaptivecards.io/designer/'}
+                  <Link href={'https://adaptivecards.io/designer/'}
                     target='_blank'
                     rel='noopener noreferrer'
                     tabIndex={0}
-                    className={classes.link}
                   >
                     <FormattedMessage id='Adaptive Cards designer' />
-                  </a>
+                  </Link>
                 </MessageBar>
                 <CopyButton
                   className={classes.copyIcon}

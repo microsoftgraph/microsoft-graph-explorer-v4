@@ -1,8 +1,9 @@
 import { IParsedOpenApiResponse } from '../../types/open-api';
 import { storeSuggestionsInCache, getSuggestionsFromCache } from './cache-provider';
 
-describe('Tests cache provider utils for suggestions', () => {
-  it('Returns options from local storage which is null because suggestions are expired', async () => {
+describe('Cache provider should', () => {
+  // eslint-disable-next-line max-len
+  it('return options from local storage which is null because suggestions are expired when getSuggestionsFromCache is called', async () => {
     const content_ = {
       url: 'https://api.github.com/search/users?q=tom',
       createdAt: '2020-04-01T00:00:00.000Z',

@@ -1,4 +1,4 @@
-import { isAllAlpha, sanitizeQueryParameter } from './query-parameter-sanitization';
+import { isAllAlpha, isPropertyName, sanitizeQueryParameter } from './query-parameter-sanitization';
 
 describe('isAllAlpha should ', () => {
   const list = [
@@ -8,10 +8,42 @@ describe('isAllAlpha should ', () => {
     { key: '1a1', isAllAlphabetic: false }
   ];
 
-  list.forEach(element => {
-    it(`return ${element.isAllAlphabetic} for ${element.key}`, () => {
+  list.forEach((element) => {
+    it(`should return ${element.isAllAlphabetic} for ${element.key}`, () => {
       const key = isAllAlpha(element.key);
       expect(key).toBe(element.isAllAlphabetic);
+    });
+  });
+});
+
+describe('isPropertyOrEntityName should', () => {
+  const list = [
+    { key: 'userPrincipalName', isPropertyOrEntityName: true },
+    { key: 'microsoft.graph.user', isPropertyOrEntityName: true },
+    {
+      key: 'microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry',
+      isPropertyOrEntityName: true
+    },
+    {
+      key: 'microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable',
+      isPropertyOrEntityName: true
+    },
+    {
+      key: 'microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable/',
+      isPropertyOrEntityName: false
+    },
+    {
+      key: 'from/emailAddress/address',
+      isPropertyOrEntityName: true
+    },
+    { key: '1234surname', isPropertyOrEntityName: false },
+    { key: 'from/', isPropertyOrEntityName: false }
+  ];
+
+  list.forEach((element) => {
+    it(`should return ${element.isPropertyOrEntityName} for ${element.key}`, () => {
+      const key = isPropertyName(element.key);
+      expect(key).toBe(element.isPropertyOrEntityName);
     });
   });
 });
@@ -189,13 +221,21 @@ describe('Sanitize Query Parameters should', () => {
     },
     {
       check: 'returns sanitized value with `all` collection operator for $filter query option',
-      queryParam: '$filter=ratings/all(r: r ge 3 and r le 5)',
+      queryParam: '$filter=ratings/all(r:r ge 3 and r le 5)',
       sanitizedQueryParam: '$filter=ratings/all(r: r ge <value> and r le <value>)'
     },
     {
       check: 'returns sanitized value with complex `all` collection operator for $filter query option',
       queryParam: '$filter=rooms/all(room: room/from/address eq \'street\'  and room/baseRate lt 100.0)',
       sanitizedQueryParam: '$filter=rooms/all(room: room/from/address eq <value> and room/baseRate lt <value>)'
+    },
+    {
+      check: 'returns sanitized value for complex $filter query option value with potential catastrophic backtracking',
+      queryParam:
+        `$filter=isof('microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry')
+          and microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable eq true`,
+      sanitizedQueryParam:
+        '$filter=isof(<property>) and microsoft.graph.windowsUpdates.qualityUpdateCatalogEntry/isExpeditable eq <value>'
     },
 
     // $expand
@@ -245,7 +285,7 @@ describe('Sanitize Query Parameters should', () => {
   ];
 
   list.forEach(element => {
-    it(`${element.check}`, () => {
+    it(`should validate ${element.check}`, () => {
       const sanitizedQueryParam = sanitizeQueryParameter(element.queryParam);
       expect(sanitizedQueryParam).toEqual(element.sanitizedQueryParam);
     });

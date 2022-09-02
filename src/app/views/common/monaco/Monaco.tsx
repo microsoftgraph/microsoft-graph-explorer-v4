@@ -47,7 +47,7 @@ export function Monaco(props: IMonaco) {
               foldingStrategy: 'indentation',
               showFoldingControls: 'always',
               renderLineHighlight: 'none',
-              scrollBeyondLastLine: false,
+              scrollBeyondLastLine: true,
               overviewRulerBorder: false
             }}
             onChange={onChange}

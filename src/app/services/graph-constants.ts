@@ -1,5 +1,5 @@
 export const GRAPH_URL = 'https://graph.microsoft.com';
-export const GRAPH_API_VERSIONS = ['v1.0','beta'];
+export const GRAPH_API_VERSIONS = ['v1.0', 'beta'];
 export const USER_INFO_URL = `${GRAPH_URL}/v1.0/me`;
 export const BETA_USER_INFO_URL = `${GRAPH_URL}/beta/me/profile`;
 export const USER_PICTURE_URL = `${GRAPH_URL}/beta/me/photo/$value`;
@@ -21,28 +21,10 @@ export enum PERMS_SCOPE {
   APPLICATION = 'Application',
   PERSONAL = 'DelegatedPersonal'
 }
-export enum WORKLOAD {
-  ONEDRIVE = 'OneDrive',
-  O365REPORTING = 'O365Reporting'
-}
 export const ADAPTIVE_CARD_URL =
   'https://templates.adaptivecards.io/graph.microsoft.com';
 export const GRAPH_TOOOLKIT_EXAMPLE_URL = 'https://mgt.dev/?path=/story';
 export const MOZILLA_CORS_DOCUMENTATION_LINK =
   'https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS';
-export const ONE_DRIVE_CONTENT_DOWNLOAD_DOCUMENTATION_LINK =
-  'https://docs.microsoft.com/en-us/graph/api/driveitem-get-content?view=graph-rest-1.0&tabs=http';
-export const CORS_ERROR_QUERIES = new Map([
-  ['groups/{groups-id}/drive/items/{items-id}/content', WORKLOAD.ONEDRIVE],
-  ['sites/{sites-id}/drive/items/{items-id}/content', WORKLOAD.ONEDRIVE],
-  ['users/{users-id}/drive/items/{items-id}/content', WORKLOAD.ONEDRIVE],
-  ['drives/{drives-id}/items/{items-id}/content', WORKLOAD.ONEDRIVE],
-  ['shares/{shares-id}/driveItem/content', WORKLOAD.ONEDRIVE],
-  ['me/drive/items/{items-id}/content', WORKLOAD.ONEDRIVE],
-  ['me/drive/root:<value>/content', WORKLOAD.ONEDRIVE],
-  ['reports/getYammerGroupsActivityDetail(period=<value>)', WORKLOAD.O365REPORTING],
-  ['reports/getTeamsDeviceUsageUserCounts(period=<value>)', WORKLOAD.O365REPORTING],
-  ['reports/getSharePointSiteUsageDetail(period=<value>)',WORKLOAD.O365REPORTING],
-  ['reports/getOneDriveUsageFileCounts(period=<value>)', WORKLOAD.O365REPORTING],
-  ['reports/getEmailActivityUserCounts(period=<value>)', WORKLOAD.O365REPORTING]
-]);
+export const USER_ORGANIZATION_URL = `${GRAPH_URL}/v1.0/organization`;
+export const NPS_FEEDBACK_URL = 'https://petrol.office.microsoft.com/v1/feedback';

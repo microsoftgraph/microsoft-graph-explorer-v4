@@ -2,8 +2,8 @@ import { setDimensions } from '../../../app/services/actions/dimensions-action-c
 import { RESIZE_SUCCESS } from '../../../app/services/redux-constants';
 import { IDimensions } from '../../../types/dimensions';
 
-describe('Sets dimensions on GE', () => {
-  it('Sets dimensions', () => {
+describe('Dimensions setting on GE', () => {
+  it('should dispatch RESIZE_SUCCESS when setDimensions is called with new dimensions', () => {
     // Arrange
     const dimensions: IDimensions = {
       request: {

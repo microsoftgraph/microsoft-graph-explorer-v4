@@ -1,6 +1,7 @@
-import { IAutoCompleteProps } from '../../../../../types/auto-complete';
+import { hasPlaceHolders, hasWhiteSpace } from '../../../../utils/sample-url-generation';
+import { translateMessage } from '../../../../utils/translate-messages';
 
-export function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
+function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
   let finalSelectedSuggestion = `${userInput + selected}`;
   if (compare) {
     /**
@@ -13,60 +14,41 @@ export function cleanUpSelectedSuggestion(compare: string, userInput: string, se
   return finalSelectedSuggestion;
 }
 
-export function getParametersWithVerb(properties: IAutoCompleteProps) {
-  const { autoCompleteOptions, sampleQuery: { selectedVerb } } = properties;
-  if (!autoCompleteOptions) {
-    return;
-  }
-  const parameters = autoCompleteOptions.parameters;
-  if (!parameters) {
-    return;
-  }
-  return parameters.find(parameter => parameter.verb === selectedVerb.toLowerCase());
-}
-
-export function getLastCharacterOf(content: string) {
+function getLastCharacterOf(content: string) {
   return content.slice(-1);
 }
 
-export function getLastSymbolInUrl(url: string) {
-  const availableSymbols = [
-    {
-      key: '/',
-      value: 0
-    },
-    {
-      key: ',',
-      value: 0
-    },
-    {
-      key: '$',
-      value: 0
-    },
-    {
-      key: '=',
-      value: 0
-    },
-    {
-      key: '&',
-      value: 0
-    },
-    {
-      key: '?',
-      value: 0
-    }
-  ];
-
-  availableSymbols.forEach(element => {
-    element.value = url.lastIndexOf(element.key);
+// Filter out suggestions that don't contain the user's input
+function getFilteredSuggestions(compareString: string, suggestions: string[]) {
+  return suggestions.filter((suggestion: string) => {
+    return suggestion.toLowerCase().startsWith(compareString.toLocaleLowerCase());
   });
-  const max = availableSymbols.reduce((prev, current) => (prev.value > current.value) ? prev : current);
-  return max;
 }
 
-// Filter out suggestions that don't contain the user's input
-export function getFilteredSuggestions(compareString: string, suggestions: string[]) {
-  return suggestions.filter((suggestion: string) => {
-    return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
-  });
+function getErrorMessage(queryUrl: string) {
+  if (!queryUrl) {
+    return translateMessage('Missing url');
+  }
+  if (hasWhiteSpace(queryUrl)) {
+    return translateMessage('Invalid whitespace in URL');
+  }
+  if (hasPlaceHolders(queryUrl)) {
+    return translateMessage('Parts between {} need to be replaced with real values');
+  }
+  return '';
+}
+
+function getSearchText(input: string, index: number) {
+  const stringPosition = index + 1;
+  const previous = input.substring(0, stringPosition);
+  const searchText = input.replace(previous, '');
+  return { previous, searchText };
+}
+
+export {
+  getErrorMessage,
+  getFilteredSuggestions,
+  cleanUpSelectedSuggestion,
+  getLastCharacterOf,
+  getSearchText
 }

@@ -7,6 +7,7 @@ import {
   BETA_USER_INFO_URL,
   DEFAULT_USER_SCOPES,
   USER_INFO_URL,
+  USER_ORGANIZATION_URL,
   USER_PICTURE_URL
 } from '../graph-constants';
 import {
@@ -14,7 +15,6 @@ import {
   PROFILE_REQUEST_SUCCESS
 } from '../redux-constants';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
-import { queryRunningStatus } from './query-loading-action-creators';
 
 interface IBetaProfile {
   ageGroup: number;
@@ -54,13 +54,13 @@ const query: IQuery = {
 
 export function getProfileInfo(): Function {
   return async (dispatch: Function) => {
-    dispatch(queryRunningStatus(true));
     try {
       const profile: IUser = await getProfileInformation();
       const { profileType, ageGroup } = await getBetaProfile();
       profile.profileType = profileType;
       profile.ageGroup = ageGroup;
       profile.profileImageUrl = await getProfileImage();
+      profile.tenant= await getTenantInfo(profileType);
       dispatch(profileRequestSuccess(profile));
     } catch (error) {
       dispatch(profileRequestError({ error }));
@@ -75,7 +75,8 @@ export async function getProfileInformation(): Promise<IUser> {
     emailAddress: '',
     profileImageUrl: '',
     profileType: ACCOUNT_TYPE.UNDEFINED,
-    ageGroup: 0
+    ageGroup: 0,
+    tenant: ''
   };
   try {
     query.sampleUrl = USER_INFO_URL;
@@ -97,7 +98,7 @@ export async function getBetaProfile(): Promise<IBetaProfile> {
     const profileType = getProfileType(userInfo);
     return { ageGroup, profileType };
   } catch (error) {
-    return { ageGroup: 0, profileType: ACCOUNT_TYPE.MSA };
+    return { ageGroup: 0, profileType: ACCOUNT_TYPE.UNDEFINED };
   }
 }
 
@@ -147,4 +148,17 @@ export async function getProfileResponse(): Promise<IProfileResponse> {
     userInfo,
     response
   };
+}
+
+export async function getTenantInfo(profileType: ACCOUNT_TYPE) {
+  if(profileType===ACCOUNT_TYPE.MSA) {
+    return 'Personal';
+  }
+  try{
+    query.sampleUrl = USER_ORGANIZATION_URL;
+    const { userInfo: tenant } = await getProfileResponse();
+    return  tenant.value[0]?.displayName;
+  } catch (error: any) {
+    return '';
+  }
 }

@@ -6,6 +6,7 @@ export interface IHeadersListControl {
   handleOnHeaderDelete: Function;
   headers?: Header[];
   messages: any;
+  handleOnHeaderEdit: Function;
 }
 
 export interface IRequestHeadersProps {

@@ -16,15 +16,17 @@ import { IRootState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { addResourcePaths } from '../../../services/actions/resource-explorer-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
+import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
+import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import CommandOptions from './command-options/CommandOptions';
 import {
   createResourcesList, getCurrentTree,
   getResourcePaths,
-  getResourcesSupportedByVersion, getUrlFromLink, removeCounter
+  getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
@@ -38,9 +40,10 @@ const unstyledResourceExplorer = (props: any) => {
   const { data, pending, paths: selectedLinks } = resources;
 
   const versions: any[] = [
-    { key: 'v1.0', text: 'v1.0', iconProps: { iconName: 'CloudWeather' } },
-    { key: 'beta', text: 'beta', iconProps: { iconName: 'PartlyCloudyNight' } }
+    { key: 'v1.0', text: 'v1.0' },
+    { key: 'beta', text: 'beta' }
   ];
+
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');
   const filteredPayload = getResourcesSupportedByVersion(data.children, version, searchText);
@@ -108,7 +111,7 @@ const unstyledResourceExplorer = (props: any) => {
   const isolateTree = (navLink: any): void => {
     const tree = [
       {
-        isExpanded: false,
+        isExpanded: true,
         links: navLink.links
       }
     ];
@@ -162,7 +165,6 @@ const unstyledResourceExplorer = (props: any) => {
     });
   }
 
-
   const breadCrumbs = generateBreadCrumbs();
 
   if (pending) {
@@ -178,7 +180,7 @@ const unstyledResourceExplorer = (props: any) => {
   }
 
   return (
-    <section>
+    <section style = {{marginTop: '8px'}}>
       {!isolated && <>
         <SearchBox
           placeholder={translateMessage('Search resources')}
@@ -193,6 +195,7 @@ const unstyledResourceExplorer = (props: any) => {
             onText={translateMessage('On')}
             offText={translateMessage('Off')}
             inlineLabel
+            styles={{ text: { position: 'relative', top: '4px' } }}
           />
         </Stack>
       </>}
@@ -221,23 +224,28 @@ const unstyledResourceExplorer = (props: any) => {
         </>
       }
 
-      <Label>
+      <Label styles={{ root: { position: 'relative', left: '10px' } }}>
         <FormattedMessage id='Resources available' />
       </Label>
-      <Nav
-        groups={items}
-        styles={navStyles}
-        onRenderLink={(link) => {
-          return <ResourceLink
-            link={link}
-            isolateTree={isolateTree}
-            resourceOptionSelected={(activity: string, context: unknown) => resourceOptionSelected(activity, context)}
-            linkLevel={linkLevel}
-            classes={classes}
-          />
-        }}
-        onLinkClick={clickLink}
-        className={classes.queryList} />
+      {
+        items[0].links.length === 0 ? NoResultsFound('No resources found', {paddingBottom: '60px'}):
+          (<Nav
+            groups={items}
+            styles={navStyles}
+            onRenderLink={(link) => {
+              return <ResourceLink
+                link={link}
+                isolateTree={isolateTree}
+                resourceOptionSelected={(activity: string, context: unknown) =>
+                  resourceOptionSelected(activity, context)}
+                linkLevel={linkLevel}
+                classes={classes}
+              />
+            }}
+            onLinkClick={clickLink}
+            className={classes.queryList} />
+          )
+      }
     </section >
   );
 }

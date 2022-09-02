@@ -1,72 +1,89 @@
 import { IHistoryItem } from '../../../../types/history';
-import { writeHistoryData, readHistoryData, removeHistoryData, bulkRemoveHistoryData } from './history-utils';
+import { writeHistoryData, readHistoryData, removeHistoryData } from './history-utils';
 
-describe('Tests history utils', () => {
-  it('Returns history data', async () => {
+
+let historyItems: IHistoryItem[] = [];
+jest.mock('localforage', () => {
+  return {
+    createInstance: jest.fn(() => {
+      return {
+        setItem: jest.fn((item: IHistoryItem) => {
+          historyItems.push(item);
+        }),
+        getItem: jest.fn((creationTime: string) => {
+          return historyItems.find(item => item.createdAt === creationTime);
+        }),
+        removeItem: jest.fn((creationTime: string) => {
+          historyItems.splice(historyItems.findIndex(item => item.createdAt === creationTime), 1);
+        }),
+        iterate: jest.fn(() => {
+          return Promise.resolve();
+        }),
+        keys: jest.fn(() => {
+          return historyItems.map(item => item.createdAt)
+        })
+      }
+    })
+  }
+});
+
+
+describe('History utils should', () => {
+  it('return history data after new history data is added', async () => {
     const historyItem: IHistoryItem = {
       index: 0,
       statusText: 'OK',
       responseHeaders: [],
       result: {},
       url: 'https://api.github.com/search/users?q=tom',
-      createdAt: '2020-04-01T00:00:00.000Z',
+      createdAt: new Date().toUTCString(),
       method: 'GET',
       headers: [],
       duration: 200,
       status: 200
     }
+    expect(historyItems.length).toBe(0);
     await writeHistoryData(historyItem);
     const historyData = await readHistoryData();
-    expect(historyData).toBeDefined();
+    expect(historyData.length).toBe(1);
   });
 
-  it('Removes history data', async () => {
+  it('remove history item from list of history items and return new list', async () => {
     const historyItem: IHistoryItem = {
-      index: 0,
+      index: 1,
       statusText: 'OK',
       responseHeaders: [],
       result: {},
       url: 'https://api.github.com/search/users?q=tom',
-      createdAt: '2020-04-01T00:00:00.000Z',
+      createdAt: new Date().toString(),
       method: 'GET',
       headers: [],
       duration: 200,
       status: 200
     }
     await writeHistoryData(historyItem);
-    const result = await removeHistoryData(historyItem);
-    expect(result).toBeTruthy();
+    expect(historyItems.length).toBe(2);
+    await removeHistoryData(historyItem);
+    expect(historyItems.length).toBe(1);
   });
 
-  it('Removes bulk of history data and returns undefined because history data is unavailable', async () => {
-    const historyData = [
-      {
-        index: -1,
-        statusText: 'OK',
-        responseHeaders: [],
-        result: {},
-        url: 'https://api.github.com/search/users?q=tom',
-        createdAt: '2020-04-01T00:00:00.000Z',
-        method: 'GET',
-        headers: [],
-        duration: 200,
-        status: 200
-      },
-      {
-        index: -1,
-        statusText: 'OK',
-        responseHeaders: [],
-        result: {},
-        url: 'https://api.github.com/search/users?q=tom',
-        createdAt: '2020-04-01T00:00:00.000Z',
-        method: 'GET',
-        headers: [],
-        duration: 200,
-        status: 200
-      }
-    ]
-    const listOfKeys = historyData.map(item => item.createdAt);
-    const result = await bulkRemoveHistoryData(listOfKeys);
-    expect(result).toBeUndefined();
+  it('should return unexpired history items', async () => {
+    historyItems = []
+    const historyItem: IHistoryItem = {
+      index: 4,
+      statusText: 'OK',
+      responseHeaders: [],
+      result: {},
+      url: 'https://api.github.com/search/users?q=tom',
+      createdAt: '2019-06-22T08:09:06.852Z',
+      method: 'GET',
+      headers: [],
+      duration: 200,
+      status: 200
+    }
+    historyItems.push(historyItem);
+    expect(historyItems.length).toBe(1);
+    const historyData = await readHistoryData();
+    expect(historyData.length).toBe(0);
   });
 })

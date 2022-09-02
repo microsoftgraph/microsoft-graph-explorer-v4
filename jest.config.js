@@ -10,18 +10,23 @@ module.exports = {
     '!src/app/middleware/telemetryMiddleware.ts',
     '!src/telemetry/telemetry.ts'
   ],
-  resolver: 'jest-pnp-resolver',
+  resolver: `${__dirname}/src/tests/common/resolver.js`,
   setupFiles: ['react-app-polyfill/jsdom'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testMatch: [
     '**/__tests__/**/*.[jt]s?(x)',
-    '**/?(*.)+(spec|test).[jt]s'
+    '**/?(*.)+(spec|test).[jt]s?(x)'
   ],
   globals: {
-    crypto: require('crypto')
+    crypto: require('crypto'),
+    'ts-jest': {
+      isolatedModules: true
+    }
+  },
+  testEnvironmentOptions: {
+    url: 'http://localhost'
   },
   testEnvironment: 'jsdom',
-  testURL: 'http://localhost',
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
     '^.+\\.css$': '<rootDir>/config/jest/cssTransform.js',
@@ -30,7 +35,8 @@ module.exports = {
   },
   transformIgnorePatterns: [
     '^.+\\.module\\.(css|sass|scss)$',
-    '/node_modules/(?!@fluentui)'
+    '/node_modules/(?!@fluentui)',
+    '/node_modules/'
   ],
   moduleNameMapper: {
     '^react-native$': 'react-native-web',

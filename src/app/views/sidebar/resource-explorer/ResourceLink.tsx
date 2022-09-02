@@ -24,7 +24,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
 
   const iconButtonStyles = {
-    root: { paddingBottom: 10, marginTop: -5, marginRight: 2 },
+    root: { marginTop: -5, marginRight: 2 },
     menuIcon: { fontSize: 20, padding: 5 }
   };
 
@@ -73,7 +73,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
           aria-describedby={tooltipId}
           styles={iconButtonStyles}
           menuIconProps={{ iconName: 'MoreVertical' }}
-          title={translateMessage('More actions')}
           menuProps={{
             shouldFocusOnMount: true,
             alignTargetEdge: true,
