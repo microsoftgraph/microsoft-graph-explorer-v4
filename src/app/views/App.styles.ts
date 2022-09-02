@@ -6,7 +6,7 @@ export const appStyles = (theme: ITheme) => {
       background: theme.semanticColors.bodyBackground,
       color: theme.semanticColors.bodyText,
       paddingTop: theme.spacing.s1,
-      height: '100vh',
+      height: '100%',
       paddingRight: '15px',
       paddingLeft: '4px',
       paddingBottom: '5px',
@@ -16,7 +16,6 @@ export const appStyles = (theme: ITheme) => {
     appRow: {
       display: 'flex',
       flexWrap: 'no-wrap',
-      height: '90vh',
       alignItems: 'stretch'
     },
     tryItMessage: {
