@@ -230,7 +230,6 @@ export function parseResponse(
     switch (contentType) {
       case ContentType.Json:
         return response.json();
-
       case ContentType.XML:
       case ContentType.HTML:
       case ContentType.TextPlain:

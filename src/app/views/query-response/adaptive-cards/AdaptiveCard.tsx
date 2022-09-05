@@ -1,5 +1,8 @@
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { Label, Link, MessageBar, MessageBarType, Pivot, PivotItem, styled } from '@fluentui/react';
+import {
+  FontSizes, getTheme, IStyle, ITheme, Label, Link,
+  MessageBar, MessageBarType, Pivot, PivotItem, styled
+} from '@fluentui/react';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -24,6 +27,9 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     super(props);
     this.adaptiveCard = new AdaptiveCardsAPI.AdaptiveCard();
   }
+
+  currentTheme: ITheme = getTheme();
+  textStyle = queryResponseStyles(this.currentTheme).queryResponseText.root as IStyle
 
   public componentDidMount() {
     const { body, sampleQuery, hostConfig } = this.props;
@@ -53,7 +59,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     if (JSON.stringify(this.props.body) !== JSON.stringify(nextProps.body)) {
       return true; // body has changed so card will too
     }
-    if (JSON.stringify(nextProps.card.data) === JSON.stringify(this.props.card.data) ) {
+    if (JSON.stringify(nextProps.card.data) === JSON.stringify(this.props.card.data)) {
       return false; // card still the same no need to re-render
     }
     return true;
@@ -80,11 +86,10 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
     if (body && !pending) {
       if (!data || (queryStatus && !queryStatus.ok)) {
         return (
-          <Label className={classes.emptyStateLabel}>
+          <Label styles={{ root: this.textStyle }}>
             <FormattedMessage id='The Adaptive Card for this response is not available' />
             &nbsp;
             <Link
-              className={classes.link}
               href={'https://adaptivecards.io/designer/'}
               tabIndex={0}
               target='_blank'
@@ -99,11 +104,14 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
       try {
         this.adaptiveCard!.parse(data.card);
         const renderedCard = this.adaptiveCard!.render();
-        const handleCopy = async () =>{ trackedGenericCopy(JSON.stringify(data.template, null, 4),
-          componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
+        const handleCopy = async () => {
+          trackedGenericCopy(JSON.stringify(data.template, null, 4),
+            componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
         }
         return (
-          <Pivot className='pivot-response' onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}>
+          <Pivot className='pivot-response'
+            onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}
+            styles={{ text: { fontSize: FontSizes.size14 } }}>
             <PivotItem
               itemKey='card'
               ariaLabel={translateMessage('card')}
@@ -116,10 +124,10 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               <div id={'card-tab'}
                 ref={(n) => {
                   if (n && !n.firstChild) {
-                    n.appendChild(renderedCard as HTMLElement);
+                    n.appendChild(renderedCard as HTMLElement as HTMLElement);
                   } else {
                     if (n && n.firstChild) {
-                      n.replaceChild(renderedCard as HTMLElement, n.firstChild);
+                      n.replaceChild(renderedCard as HTMLElement as HTMLElement, n.firstChild);
                     }
                   }
                 }}
@@ -166,7 +174,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             </PivotItem>
           </Pivot>
         );
-      } catch (err : any) {
+      } catch (err: any) {
         return <div style={{ color: 'red' }}>{err.message}</div>;
       }
     }

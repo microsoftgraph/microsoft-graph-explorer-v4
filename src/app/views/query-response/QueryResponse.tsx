@@ -1,34 +1,24 @@
 import {
-  Announced, Dialog, DialogFooter, DialogType,
-  DefaultButton, FontSizes, IconButton,
-  Modal, Pivot, PivotItem, ITheme, getTheme
+  Announced, FontSizes, IconButton,
+  Modal, Pivot, PivotItem, getTheme, ITheme
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, CSSProperties } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 
-import {
-  IQueryResponseProps
-} from '../../../types/query-response';
-import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { expandResponseArea } from '../../services/actions/response-expanded-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
-import { copy } from '../common/copy';
 import { GetPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
 import { IRootState } from '../../../types/root';
-import { CopyButton } from '../common/copy/CopyButton';
 import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
 import { queryResponseStyles } from './queryResponse.styles';
 
 
-const QueryResponse = (props: IQueryResponseProps) => {
+const QueryResponse = () => {
   const dispatch = useDispatch();
-  const [showShareQueryDialog, setShareQuaryDialogStatus] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [query] = useState('');
   const [responseHeight, setResponseHeight] = useState('610px');
   const { sampleQuery, dimensions } = useSelector((state: IRootState) => state);
   const [currentTab, setCurrentTab] = useState<string>('response-preview');
@@ -39,39 +29,25 @@ const QueryResponse = (props: IQueryResponseProps) => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 50));
   }, [dimensions]);
 
-  const {
-    intl: { messages }
-  }: any = props;
-
-  const toggleShareQueryDialogState = () => {
-    setShareQuaryDialogStatus(!showShareQueryDialog);
-  };
+  const flexQueryElement: CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    flex: 1,
+    marginTop: -13
+  }
 
   const toggleExpandResponse = () => {
     setShowModal(!showModal);
     dispatch(expandResponseArea(!showModal));
   };
 
-  const handleCopy = () => {
-    copy('share-query-text');
-    trackCopyEvent();
-  };
-
-  const trackCopyEvent = () => {
-    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.SHARE_QUERY_COPY_BUTTON,
-        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
-      });
-  }
-
   const handlePivotItemClick = (pivotItem?: PivotItem) => {
     if (!pivotItem) {
       return;
     }
     onPivotItemClick(sampleQuery, pivotItem);
-    if(pivotItem.props.itemKey !== 'expand-response') {
+    if (pivotItem.props.itemKey !== 'expand-response') {
       setCurrentTab(pivotItem.props.itemKey!);
     }
     toggleModal(pivotItem);
@@ -84,28 +60,28 @@ const QueryResponse = (props: IQueryResponseProps) => {
     }
   };
 
-  const onModalPivotItemClicked = (pivotItem? : PivotItem) => {
-    if(!pivotItem){ return ;}
+  const onModalPivotItemClicked = (pivotItem?: PivotItem) => {
+    if (!pivotItem) { return; }
     setCurrentTab(pivotItem.props.itemKey!);
     onPivotItemClick(sampleQuery, pivotItem);
   };
 
   const onScroll = () => {
     const queryResponseElements = document.getElementsByClassName('query-response');
-    if(queryResponseElements && queryResponseElements.length > 0){
+    if (queryResponseElements && queryResponseElements.length > 0) {
       queryResponseElements[0].scrollTop = 0;
     }
   }
 
   return (
-    <>
+    <div style={flexQueryElement} >
       <Resizable
         style={{
-          marginBottom: 10,
-          marginTop: 10
+          marginBottom: 20,
+          marginTop: 10,
+          flex: 1
         }}
         bounds={'window'}
-        maxHeight={810}
         minHeight={350}
         size={{
           height: responseHeight,
@@ -117,19 +93,19 @@ const QueryResponse = (props: IQueryResponseProps) => {
       >
         <div className='query-response' style={{
           minHeight: 350,
-          height: '100%'
-        }}
-        onScroll={onScroll}>
-
+          height: '100%',
+          flex: 1
+        }} onScroll={onScroll}>
           <Pivot overflowBehavior='menu'
             overflowAriaLabel={translateMessage('More items')}
             onLinkClick={handlePivotItemClick}
             className={'pivot-response'}
             selectedKey={currentTab}
+            styles={{ text: { fontSize: FontSizes.size14 } }}
           >
             {GetPivotItems()}
             <PivotItem
-              headerText='Expand'
+              headerText={translateMessage('Expand')}
               key='expand'
               itemIcon='MiniExpandMirrored'
               itemKey='expand-response'
@@ -145,7 +121,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
         <Modal
           isOpen={showModal}
           onDismiss={toggleExpandResponse}
-          styles={ modalStyles }
+          styles={modalStyles}
         >
           <IconButton
             styles={{
@@ -166,41 +142,7 @@ const QueryResponse = (props: IQueryResponseProps) => {
           </Pivot>
         </Modal>
       }
-      <Dialog
-        hidden={showShareQueryDialog}
-        onDismiss={toggleShareQueryDialogState}
-        dialogContentProps={{
-          type: DialogType.normal,
-          title: 'Share Query',
-          isMultiline: true,
-          subText: messages['Share Query Message']
-        }}
-      >
-        <textarea
-          style={{
-            wordWrap: 'break-word',
-            fontFamily: 'monospace',
-            fontSize: FontSizes.xSmall,
-            width: '100%',
-            height: 63,
-            overflowY: 'scroll',
-            resize: 'none',
-            color: 'black'
-          }}
-          id='share-query-text'
-          className='share-query-params'
-          defaultValue={query}
-          aria-label={translateMessage('Share Query')}
-        />
-        <DialogFooter>
-          <CopyButton handleOnClick={handleCopy} isIconButton={false} />
-          <DefaultButton
-            text={messages.Close}
-            onClick={toggleShareQueryDialogState}
-          />
-        </DialogFooter>
-      </Dialog>
-    </>
+    </div>
   );
 };
 

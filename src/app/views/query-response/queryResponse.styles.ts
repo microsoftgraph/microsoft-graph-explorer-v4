@@ -28,11 +28,10 @@ export const queryResponseStyles = (theme: ITheme) => {
       float: 'right',
       zIndex: 1
     },
-    toolkitText: {
+    queryResponseText: {
       root: {
         display: 'inline-block',
-        marginTop: '13%',
-        marginLeft: '16%'
+        marginLeft: '2%'
       }
     },
     modalStyles: {

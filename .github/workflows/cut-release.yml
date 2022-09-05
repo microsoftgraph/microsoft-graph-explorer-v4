@@ -61,8 +61,8 @@ jobs:
           git fetch origin master --depth 100
           git fetch origin dev --depth 100
 
-          masterPrBody=$(git rev-list v$currentVersion.. --oneline $branchName ^origin/master)
-          devPrBody=$(git rev-list v$currentVersion.. --oneline $branchName ^origin/dev)
+          masterPrBody=$(git rev-list --oneline $branchName ^origin/master)
+          devPrBody=$(git rev-list --oneline $branchName ^origin/dev)
 
           echo 'masterPrBody<<END_OF_OUTPUT' >> $GITHUB_ENV
           echo "$masterPrBody" >> $GITHUB_ENV
@@ -91,5 +91,5 @@ jobs:
           source_branch: ${{ steps.create-release.outputs.branchName }}
           destination_branch: "master"
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_title: "Chore (release): ${{ env.NEW_VERSION }}"
+          pr_title: "Chore: Release ${{ env.NEW_VERSION }}"
           pr_body: ${{ env.masterPrBody }}

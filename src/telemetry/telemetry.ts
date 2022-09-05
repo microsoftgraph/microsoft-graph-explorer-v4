@@ -15,6 +15,7 @@ import { sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
 import { IQuery } from '../types/query-runner';
 import {
   BUTTON_CLICK_EVENT,
+  DEVICE_CHARACTERISTICS_EVENT,
   LINK_CLICK_EVENT,
   TAB_CLICK_EVENT,
   WINDOW_OPEN_EVENT
@@ -28,6 +29,7 @@ import {
 } from './filters';
 import ITelemetry from './ITelemetry';
 import { getVersion } from '../app/utils/version';
+import { getBrowserScreenSize, getDeviceScreenScale } from '../app/utils/device-characteristics-telemetry';
 
 class Telemetry implements ITelemetry {
   private appInsights: ApplicationInsights;
@@ -116,6 +118,20 @@ class Telemetry implements ITelemetry {
     properties = properties || {};
     properties.ComponentName = windowEvent;
     telemetry.trackEvent(WINDOW_OPEN_EVENT, properties);
+  }
+
+  public trackDeviceCharacteristicsTelemetry(properties?: any) {
+    const deviceProperties = {
+      deviceHeight: screen.height,
+      deviceWidth: screen.width,
+      browserScreenSize: getBrowserScreenSize(window.innerWidth),
+      browserHeight: window.innerHeight,
+      browserWidth: window.innerWidth,
+      scale: getDeviceScreenScale()
+    };
+    properties = Object.assign(properties || {}, deviceProperties);
+
+    telemetry.trackEvent(DEVICE_CHARACTERISTICS_EVENT, properties);
   }
 
   private getInstrumentationKey() {
