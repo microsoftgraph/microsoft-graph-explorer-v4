@@ -10,7 +10,7 @@ import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
 import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
-import { ACCOUNT_TYPE, DEFAULT_USER_SCOPES, PERMS_SCOPE,
+import { ACCOUNT_TYPE, DEFAULT_USER_SCOPES, GRAPH_URL, PERMS_SCOPE,
   UNCONSENTING_PERMISSIONS_REQUIRED_SCOPES } from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
@@ -29,6 +29,8 @@ import {
 import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { GraphClient } from '../graph-client';
+import { IQuery } from '../../../types/query-runner';
+import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 
 const GRAPH_CLIENT = GraphClient.getInstance();
 
@@ -172,226 +174,164 @@ export function consentToScopes(scopes: string[]): Function {
 }
 
 export function unconsentToScopes(permissionToDelete: string): Function {
-  // console.log('The permission to delete isss ', permissionToDelete);
   return async (dispatch: Function, getState: Function) => {
-    // dispatch(revokePermissionPending(true));
     const { consentedScopes, profile } = getState();
-    // console.log('Scopes before....! ', consentedScopes);
     const requiredPermissions = UNCONSENTING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
     const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
+    let response = null;
 
-    if (userUnconsentingToDefaultScopes(defaultScopes, permissionToDelete, dispatch)) {
-      // console.log('Dude dissenting to default scopes')
+    if (userUnconsentingToDefaultScopes(defaultScopes, permissionToDelete)) {
       dispatch(revokePermissionPending(false));
+      dispatch(
+        setQueryResponseStatus({
+          statusText: translateMessage('Default scope'),
+          status: translateMessage('Cannot delete default scope'),
+          ok: false,
+          messageType: MessageBarType.error
+        })
+      );
       return;
     }
 
-    if (!userHasRequiredPermissions(requiredPermissions, consentedScopes, dispatch)) {
-      // console.log('Required permissions missing')
+    if (!userHasRequiredPermissions(requiredPermissions, consentedScopes)) {
       dispatch(revokePermissionPending(false));
+      dispatch(
+        setQueryResponseStatus({
+          statusText: translateMessage('Unable to dissent'),
+          status: translateMessage('You require the following permissions to unconsent'),
+          ok: false,
+          messageType: MessageBarType.error
+        })
+      );
       return;
     }
 
     try {
-      if (consentedScopes && consentedScopes.length > 0) {
-        console.log('We are here with scopes before filter as ', consentedScopes);
-        const newScopesArray: string[] = (consentedScopes.filter((scope: string) => scope !== permissionToDelete));
-        const newScopesString = newScopesArray.join(' ');
-        console.log('Scopes after filter is  ', newScopesString);
+      if (!consentedScopes && consentedScopes.length < 1) {
+        return;
+      }
 
-        const servicePrincipalAppId = await getCurrentAppId();
+      const newScopesArray: string[] = (consentedScopes.filter((scope: string) => scope !== permissionToDelete));
+      const newScopesString = newScopesArray.join(' ');
 
-        const permissionGrantId = await getPermissionGrantId(servicePrincipalAppId, profile.id);
+      const servicePrincipalAppId = await getCurrentAppId(consentedScopes);
+      response = await getPermissionGrant(consentedScopes, servicePrincipalAppId, profile.id);
+      const permissionGrantId = response.id;
 
-        await revokePermission(permissionGrantId, newScopesString);
+      await revokePermission(consentedScopes, permissionGrantId, newScopesString);
 
-        const updatedScopes = await getUpdatedScopes(servicePrincipalAppId, profile.id)
-        console.log('Updated scopes are ', updatedScopes)
+      response = await getPermissionGrant(consentedScopes, servicePrincipalAppId, profile.id);
+      const updatedScopes = response.scope.split(' ');
 
-        if (updatedScopes.length === newScopesArray.length) {
-          console.log('Yaaaay!! Was successful so we are here...')
-          try {
-            // authenticate with updated scopes
-            const authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
+      if (updatedScopes.length !== newScopesArray.length) {
+        return;
+      }
 
-            // do...while still WIP
-            do{
-              const authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
-              console.log('Auth scopessssss', authResponse.scopes);
+      const authResponse = await getAuthResponse(updatedScopes);
 
-              if (authResponse && authResponse.accessToken) {
-                dispatch(getAuthTokenSuccess(true));
-                // dispatch(getConsentedScopesSuccess(authResponse.scopes));
-                dispatch(getConsentedScopesSuccess(updatedScopes));
-                dispatch(revokePermissionSuccess(true));
-                dispatch(
-                  setQueryResponseStatus({
-                    statusText: translateMessage('Success'),
-                    status: translateMessage('Permission unconsented'),
-                    ok: true,
-                    messageType: MessageBarType.success
-                  })
-                );
-                if (
-                  authResponse.account &&
-              authResponse.account.localAccountId !== profile?.id
-                ) {
-                  dispatch(getProfileInfo());
-                }
-              }
-            }while(authResponse.scopes.length === updatedScopes.length);
-
-          } catch (error: any) {
-            console.log('Something went wrong on authentication: ', error);
-            // dispatch(
-            //   setQueryResponseStatus({
-            //     statusText: translateMessage(''),
-            //     status: error,
-            //     ok: false,
-            //     messageType: MessageBarType.error
-            //   })
-            // );
-          }
-          // await authenticationWrapper.loginWithInteraction(updatedScopes);
-          // dispatch(getConsentedScopesSuccess(updatedScopes));
-
-        }
-        else {
-          // dispatch(
-          //   setQueryResponseStatus({
-          //     statusText: translateMessage(''),
-          //     status: error,
-          //     ok: false,
-          //     messageType: MessageBarType.error
-          //   })
-          // );
+      if (authResponse && authResponse.accessToken) {
+        dispatch(getAuthTokenSuccess(true));
+        dispatch(getConsentedScopesSuccess(authResponse.scopes));
+        dispatch(revokePermissionSuccess(true));
+        dispatch(
+          setQueryResponseStatus({
+            statusText: translateMessage('Success'),
+            status: translateMessage('Permission unconsented'),
+            ok: true,
+            messageType: MessageBarType.success
+          })
+        );
+        if (authResponse.account &&authResponse.account.localAccountId !== profile?.id) {
+          dispatch(getProfileInfo());
         }
       }
+
     }
     catch (error: any) {
-      // we can first check if the user has the permissions to delete the permission
-      const { errorCode } = error;
-      console.log('Here is the error code ', errorCode)
       dispatch(revokePermissionError(error));
       dispatch(
         setQueryResponseStatus({
           statusText: translateMessage('Unable to dissent'),
           // eslint-disable-next-line max-len
-          status: errorCode ? errorCode : translateMessage('An error was encountered when dissenting. Confirm that you have the right permissions'),
+          status: error ? error : translateMessage('An error was encountered when dissenting. Confirm that you have the right permissions'),
           ok: false,
           messageType: MessageBarType.error
         })
       );
-      console.log('Unable to dissent');
     }
   }
 }
+
+const getQuery: IQuery = {
+  selectedVerb: 'GET',
+  sampleHeaders: [
+    {
+      name: 'Cache-Control',
+      value: 'no-cache'
+    }
+  ],
+  selectedVersion: '',
+  sampleUrl: ''
+};
+
+const patchQuery: IQuery = {
+  selectedVerb: 'PATCH',
+  sampleHeaders: [
+    {
+      name: 'Cache-Control',
+      value: 'no-cache'
+    }
+  ],
+  selectedVersion: '',
+  sampleUrl: ''
+};
 
 const userHasRequiredPermissions = (requiredPermissions: string[],
-  consentedScopes: string[], dispatch: Function) => {
-  console.log('Here are the current scopes ', consentedScopes);
-
-  const isAnyRequiredAvailable = consentedScopes.includes('Directory.Read.All') ||
-    consentedScopes.includes('Directory.ReadWrite.All');
-  const isRequiredPermissionsAvailable = consentedScopes.every(scope => requiredPermissions.includes(scope))
-  // const isRequiredPermissionAvailable = consentedScopes.includes('DelegatedPermissionGrant.ReadWrite.All');
-
-  if(!isRequiredPermissionsAvailable && !isAnyRequiredAvailable){
-    console.log('Required Permissions are available ', isRequiredPermissionsAvailable)
-
-    dispatch(
-      setQueryResponseStatus({
-        statusText: translateMessage('Unable to dissent'),
-        status: translateMessage('You require the following permissions to unconsent'),
-        ok: false,
-        messageType: MessageBarType.error
-      })
-    );
-    return false;
-  }
-
-  return true;
+  consentedScopes: string[]) => {
+  return requiredPermissions.every(scope => consentedScopes.includes(scope));
 }
 
-const userUnconsentingToDefaultScopes = (currentScopes: string[], permissionToDelete: string, dispatch: Function) => {
-  const unconsentingToDefaultScopes = currentScopes.includes(permissionToDelete);
-  if (unconsentingToDefaultScopes) {
-    dispatch(
-      setQueryResponseStatus({
-        statusText: translateMessage('Default scope'),
-        status: translateMessage('Cannot delete default scope'),
-        ok: false,
-        messageType: MessageBarType.error
-      })
-    );
-    return true;
-  }
-  return false;
+const userUnconsentingToDefaultScopes = (currentScopes: string[], permissionToDelete: string) => {
+  return currentScopes.includes(permissionToDelete);
 }
 
-const getCurrentAppId = async () => {
+const getCurrentAppId = async (scopes: string[]) => {
   const currentAppId = process.env.REACT_APP_CLIENT_ID;
-
-  try {
-    const response = await GRAPH_CLIENT.api(`/servicePrincipals?$filter=appId eq '${currentAppId}'`).get();
-    return response.value[0].id;
-  } catch (error: any) {
-    console.log('Error: ', error);
-    throw error;
-  }
+  getQuery.sampleUrl = `${GRAPH_URL}/v1.0/servicePrincipals?$filter=appId eq '${currentAppId}'`;
+  const response = await getPermissionResponse(scopes, getQuery);
+  return response.value[0].id;
 }
-const revokePermission = async (permissionGrantId: string, newScopes: string) => {
-
-  const oAuth2PermissionGrant = {
+const revokePermission = async (oldScopes: string[], permissionGrantId: string, newScopes: string) => {
+  patchQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants/${permissionGrantId}`;
+  patchQuery.sampleBody = JSON.stringify({
     scope: newScopes
-  };
-  try {
-    await GRAPH_CLIENT.api(`/oauth2PermissionGrants/${permissionGrantId}`)
-      .update(oAuth2PermissionGrant);
-  } catch (error: any) {
-    console.log('Error: ', error);
-    throw error;
-  }
+  });
+  await getPermissionResponse(oldScopes, patchQuery);
 }
 
-const getPermissionGrantId = async (servicePrincipalAppId: string, principalid: string) => {
+const getPermissionGrant = async (scopes: string[], servicePrincipalAppId: string, principalid: string) => {
+  getQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
+  const response = await getPermissionResponse(scopes, getQuery);
 
-  // we need to further filter by principalId in cases where there are more than one value in returned array
-  // to get principalId, run /me and get the id returned. That is the principalId of the signed in user
-
-  try {
-    const response = await GRAPH_CLIENT.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
-      .get();
-    if (response && response.length > 1) {
-      const filteredResponse = response.filter((permissionGrant: any) => permissionGrant.principalId === principalid);
-      return filteredResponse[0].id;
-    }
-    return response.value[0].id;
-  } catch (error: any) {
-    console.log('Error: ', error);
-    throw error;
+  if (response && response.length > 1) {
+    const filteredResponse = response.filter((permissionGrant: any) => permissionGrant.principalId === principalid);
+    return filteredResponse[0];
   }
+  return response.value[0];
 }
 
+const getPermissionResponse = async (scopes: string[], query: IQuery) => {
+  const respHeaders: any = {};
+  const response = await makeGraphRequest(scopes)(query);
+  return await parseResponse(response, respHeaders);
+}
 
-// We could also have a case of two users. Filter by principal Id. Make sure to test this
-const getUpdatedScopes = async (servicePrincipalAppId: string, principalid: string) => {
+const getAuthResponse = async (updatedScopes: string[]) => {
+  let authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
 
-  try {
-    const response = await GRAPH_CLIENT.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
-      .get();
-
-    if (response && response.length > 1) {
-      const filteredResponse = response.filter((scope: any) => scope.principalId === principalid);
-      return filteredResponse[0].scope.split(' ');
-    }
-    else {
-      const returnedScopes = response.value[0].scope.split(' ');
-      return returnedScopes;
-    }
-  } catch (error) {
-    console.log('Error: ', error);
-    throw error;
-    // set status saying the user should consent to directory.read and user.read
+  while(authResponse.scopes.length !== updatedScopes.length){
+    authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
   }
+
+  return parseResponse(authResponse);
 }
