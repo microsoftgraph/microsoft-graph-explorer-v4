@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable */
 export const rules =
   `
 odataUri = serviceRoot [ odataRelativeUri ]
