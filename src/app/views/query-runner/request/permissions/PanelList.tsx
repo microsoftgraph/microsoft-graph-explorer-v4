@@ -14,9 +14,10 @@ import {
   PrimaryButton,
   SearchBox,
   SelectionMode,
-  Selection
+  Selection,
+  IGroup
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
@@ -52,6 +53,8 @@ const PanelList = ({ messages,
   const { consentedScopes, scopes, authToken, permissionsPanelOpen } = useSelector((state: IRootState) => state);
   const { fullPermissions } = scopes.data;
   const [permissions, setPermissions] = useState<any []>([]);
+  const [groups, setGroups] = useState<IGroup[]>([]);
+  const [searchStarted, setSearchStarted] = useState(false);
   const permissionsList: any[] = [];
   const tokenPresent = !!authToken.token;
   const [selectedPermissions, setSelectedPermissions] = useState<string []>([]);
@@ -63,6 +66,18 @@ const PanelList = ({ messages,
   useEffect(() => {
     setPermissions(sortPermissions(fullPermissions));
   }, [permissionsPanelOpen, scopes.data]);
+
+  const isFirstRender = useRef(true)
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      if(permissionsList.length === 0){ return }
+      setGroups(generateGroupsFromList(permissionsList, 'groupName'));
+      if(groups.length > 0) {
+        isFirstRender.current = false;
+      }
+    }
+  }, [permissions, searchStarted])
 
 
   const dispatch = useDispatch();
@@ -78,6 +93,8 @@ const PanelList = ({ messages,
   });
 
   const searchValueChanged = (event: any, value?: string): void => {
+    isFirstRender.current = true;
+    setSearchStarted((search) => !search);
     let filteredPermissions = scopes.data.fullPermissions;
     if (value) {
       const keyword = value.toLowerCase();
@@ -89,8 +106,6 @@ const PanelList = ({ messages,
     }
     setPermissions(filteredPermissions);
   };
-
-  const groups = generateGroupsFromList(permissionsList, 'groupName');
 
 
   const onRenderGroupHeader = (props: any): JSX.Element | null => {
