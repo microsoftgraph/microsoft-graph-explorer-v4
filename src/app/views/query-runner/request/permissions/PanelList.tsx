@@ -213,7 +213,7 @@ const PanelList = ({ messages,
         overlayProps={panelOverlayProps}
         styles={permissionPanelStyles}
       >
-        {loading || fullPermissions.length === 0 ? displayLoadingPermissionsText() :
+        {loading || groups && groups.length === 0 ? displayLoadingPermissionsText() :
           <>
             <Label className={classes.permissionText}>
               <FormattedMessage id='Select different permissions' />
