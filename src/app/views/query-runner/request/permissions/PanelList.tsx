@@ -73,7 +73,7 @@ const PanelList = ({ messages,
     if (shouldGenerateGroups.current) {
       if(permissionsList.length === 0){ return }
       setGroups(generateGroupsFromList(permissionsList, 'groupName'));
-      if(groups.length > 0) {
+      if(groups && groups.length > 0) {
         shouldGenerateGroups.current = false;
       }
     }
