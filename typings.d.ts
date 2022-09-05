@@ -7,3 +7,4 @@ declare module 'react-intl/locale-data/fr';
 declare module 'react-intl/locale-data/es';
 declare module 'react-intl/locale-data/en';
 declare module 'react-intl/locale-data/de';
+declare module 'apg-js';
