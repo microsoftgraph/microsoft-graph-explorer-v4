@@ -4,7 +4,7 @@ import {
   GroupHeader, IColumn, Icon, IDetailsRowStyles, IGroup, Link, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -53,6 +53,8 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   };
   const classes = classNames(classProps);
 
+  const renderGroups = useRef(true);
+
   useEffect(() => {
     if (samples.queries.length === 0) {
       dispatch(fetchSamples());
@@ -62,12 +64,17 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   }, [samples.queries, tokenPresent])
 
   useEffect(() => {
-    if (groups && groups.length === 0) {
+    if (renderGroups.current) {
+      console.log('Regenerating list')
       setGroups(generateGroupsFromList(sampleQueries, 'category'));
+      if(groups.length > 0){
+        renderGroups.current = false;
+      }
     }
   }, [sampleQueries, searchStarted]);
 
   const searchValueChanged = (_event: any, value?: string): void => {
+    renderGroups.current = true;
     setSearchStarted(searchStatus => !searchStatus);
     const { queries } = samples;
     const filteredQueries = value ? performSearch(queries, value) : queries;
