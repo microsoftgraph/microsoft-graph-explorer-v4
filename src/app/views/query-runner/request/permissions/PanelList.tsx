@@ -31,7 +31,7 @@ import { generateGroupsFromList } from '../../../../utils/generate-groups';
 import { searchBoxStyles } from '../../../../utils/searchbox.styles';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { profileStyles } from '../../../authentication/profile/Profile.styles';
-import { setConsentedStatus } from './util';
+import { setConsentedStatus, setSelectedStatus } from './util';
 
 interface IPanelList {
   messages: any;
@@ -54,7 +54,7 @@ const PanelList = ({ messages,
   const [permissions, setPermissions] = useState<any []>([]);
   const permissionsList: any[] = [];
   const tokenPresent = !!authToken.token;
-  const selectedPermissions = React.useRef<string []>([])
+  const [selectedPermissions, setSelectedPermissions] = useState<string []>([]);
   const loading = scopes.pending.isFullPermissions;
 
   const theme = getTheme();
@@ -107,7 +107,7 @@ const PanelList = ({ messages,
     let open = !!permissionsPanelOpen;
     open = !open;
     dispatch(togglePermissionsPanel(open));
-    selectedPermissions.current = [];
+    selectedPermissions.length = 0;
     trackSelectPermissionsButtonClickEvent();
   };
 
@@ -118,11 +118,8 @@ const PanelList = ({ messages,
   };
 
   const handleConsent = () => {
-    const scopesToConsent = selectedPermissions.current[selectedPermissions.current.length - 1] as unknown as string [];
-    dispatch(consentToScopes(scopesToConsent));
-    selectedPermissions.current.length = 0;
-    selection.setItems(permissionsList, true);
-    selection.setAllSelected(false);
+    dispatch(consentToScopes(selectedPermissions));
+    setSelectedPermissions([]);
   };
 
 
@@ -130,8 +127,9 @@ const PanelList = ({ messages,
     return (
       <div>
         <PrimaryButton
+          disabled = {selectedPermissions.length === 0}
           onClick={() => handleConsent()}
-          style={(selectedPermissions.current.length > 0) ? activeConsentStyles: inactiveConsentStyles}
+          style={(selectedPermissions.length > 0) ? activeConsentStyles: inactiveConsentStyles}
         >
           {translateMessage('Consent')}
         </PrimaryButton>
@@ -162,14 +160,15 @@ const PanelList = ({ messages,
 
   const selection = new Selection({
     onSelectionChanged: () => {
-      const selected = selection.getSelection() as any;
-      const permissionsToConsent: any = [];
+      const selected = selection.getSelection() as IPermission[];
+      const permissionsToConsent: string[] = [];
       if (selected.length > 0) {
+        setSelectedStatus(selected[selected.length-1], false);
         selected.forEach((option: IPermission) => {
           permissionsToConsent.push(option.value);
         });
       }
-      selectedPermissions.current.push(permissionsToConsent);
+      setSelectedPermissions(permissionsToConsent);
     }
   });
 

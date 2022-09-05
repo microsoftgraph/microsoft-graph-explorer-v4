@@ -34,7 +34,10 @@ export function generateGroupsFromList(list: any[], property: string) : IGroup[]
   let i = 1;
   groups.forEach(function (group){
     group.ariaLabel += `${i} of ${groups.length}`;
+    const selected = list.some(item => item[property] === group.name && item.selected);
+    group.isCollapsed = !selected;
     i++;
   });
+  groups[0].isCollapsed = false;
   return groups;
 }
