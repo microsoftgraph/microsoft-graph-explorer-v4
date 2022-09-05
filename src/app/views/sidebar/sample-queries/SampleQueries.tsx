@@ -53,7 +53,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   };
   const classes = classNames(classProps);
 
-  const renderGroups = useRef(true);
+  const shouldGenerateGroups = useRef(true);
 
   useEffect(() => {
     if (samples.queries.length === 0) {
@@ -64,17 +64,16 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   }, [samples.queries, tokenPresent])
 
   useEffect(() => {
-    if (renderGroups.current) {
-      console.log('Regenerating list')
+    if (shouldGenerateGroups.current) {
       setGroups(generateGroupsFromList(sampleQueries, 'category'));
-      if(groups.length > 0){
-        renderGroups.current = false;
+      if(groups && groups.length > 0){
+        shouldGenerateGroups.current = false;
       }
     }
   }, [sampleQueries, searchStarted]);
 
   const searchValueChanged = (_event: any, value?: string): void => {
-    renderGroups.current = true;
+    shouldGenerateGroups.current = true;
     setSearchStarted(searchStatus => !searchStatus);
     const { queries } = samples;
     const filteredQueries = value ? performSearch(queries, value) : queries;
