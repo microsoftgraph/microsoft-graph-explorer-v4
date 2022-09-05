@@ -177,17 +177,30 @@ export function unconsentToScopes(permissionToDelete: string): Function {
     // dispatch(revokePermissionPending(true));
     const { consentedScopes, profile } = getState();
     // console.log('Scopes before....! ', consentedScopes);
-    const requiredPermissions = UNCONSENTING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
     const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 
-    if (userUnconsentingToDefaultScopes(defaultScopes, permissionToDelete, dispatch)) {
-      // console.log('Dude dissenting to default scopes')
+    if (userUnconsentingToDefaultScopes(defaultScopes, permissionToDelete)) {
+      dispatch(
+        setQueryResponseStatus({
+          statusText: translateMessage('Default scope'),
+          status: translateMessage('Cannot delete default scope'),
+          ok: false,
+          messageType: MessageBarType.error
+        })
+      );
       dispatch(revokePermissionPending(false));
       return;
     }
 
-    if (!userHasRequiredPermissions(requiredPermissions, consentedScopes, dispatch)) {
-      // console.log('Required permissions missing')
+    if (!userHasRequiredPermissions(consentedScopes)) {
+      dispatch(
+        setQueryResponseStatus({
+          statusText: translateMessage('Unable to dissent'),
+          status: translateMessage('You require the following permissions to unconsent'),
+          ok: false,
+          messageType: MessageBarType.error
+        })
+      );
       dispatch(revokePermissionPending(false));
       return;
     }
@@ -287,46 +300,13 @@ export function unconsentToScopes(permissionToDelete: string): Function {
   }
 }
 
-const userHasRequiredPermissions = (requiredPermissions: string[],
-  consentedScopes: string[], dispatch: Function) => {
-  console.log('Here are the current scopes ', consentedScopes);
-
-  const isAnyRequiredAvailable = consentedScopes.includes('Directory.Read.All') ||
-    consentedScopes.includes('Directory.ReadWrite.All');
-  const isRequiredPermissionsAvailable = consentedScopes.every(scope => requiredPermissions.includes(scope))
-  // const isRequiredPermissionAvailable = consentedScopes.includes('DelegatedPermissionGrant.ReadWrite.All');
-
-  if(!isRequiredPermissionsAvailable && !isAnyRequiredAvailable){
-    console.log('Required Permissions are available ', isRequiredPermissionsAvailable)
-
-    dispatch(
-      setQueryResponseStatus({
-        statusText: translateMessage('Unable to dissent'),
-        status: translateMessage('You require the following permissions to unconsent'),
-        ok: false,
-        messageType: MessageBarType.error
-      })
-    );
-    return false;
-  }
-
-  return true;
+const userHasRequiredPermissions = (consentedScopes: string[]) => {
+  const requiredPermissions = UNCONSENTING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
+  return requiredPermissions.every(scope => consentedScopes.includes(scope));
 }
 
-const userUnconsentingToDefaultScopes = (currentScopes: string[], permissionToDelete: string, dispatch: Function) => {
-  const unconsentingToDefaultScopes = currentScopes.includes(permissionToDelete);
-  if (unconsentingToDefaultScopes) {
-    dispatch(
-      setQueryResponseStatus({
-        statusText: translateMessage('Default scope'),
-        status: translateMessage('Cannot delete default scope'),
-        ok: false,
-        messageType: MessageBarType.error
-      })
-    );
-    return true;
-  }
-  return false;
+const userUnconsentingToDefaultScopes = (currentScopes: string[], permissionToDelete: string) => {
+  return currentScopes.includes(permissionToDelete);
 }
 
 const getCurrentAppId = async () => {
@@ -395,3 +375,4 @@ const getUpdatedScopes = async (servicePrincipalAppId: string, principalid: stri
     // set status saying the user should consent to directory.read and user.read
   }
 }
+
