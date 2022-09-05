@@ -30,6 +30,8 @@ import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { GraphClient } from '../graph-client';
 
+const GRAPH_CLIENT = GraphClient.getInstance();
+
 export function fetchFullScopesSuccess(response: object): IAction {
   return {
     type: FETCH_FULL_SCOPES_SUCCESS,
@@ -199,9 +201,9 @@ export function unconsentToScopes(permissionToDelete: string): Function {
 
         const servicePrincipalAppId = await getCurrentAppId();
 
-        const scopeId = await getScopeId(servicePrincipalAppId, profile.id);
+        const permissionGrantId = await getPermissionGrantId(servicePrincipalAppId, profile.id);
 
-        await revokePermission(scopeId, newScopesString);
+        await revokePermission(permissionGrantId, newScopesString);
 
         const updatedScopes = await getUpdatedScopes(servicePrincipalAppId, profile.id)
         console.log('Updated scopes are ', updatedScopes)
@@ -329,24 +331,22 @@ const userUnconsentingToDefaultScopes = (currentScopes: string[], permissionToDe
 
 const getCurrentAppId = async () => {
   const currentAppId = process.env.REACT_APP_CLIENT_ID;
-  const graphClient = GraphClient.getInstance();
 
   try {
-    const response = await graphClient.api(`/servicePrincipals?$filter=appId eq '${currentAppId}'`).get();
+    const response = await GRAPH_CLIENT.api(`/servicePrincipals?$filter=appId eq '${currentAppId}'`).get();
     return response.value[0].id;
   } catch (error: any) {
     console.log('Error: ', error);
     throw error;
   }
 }
-const revokePermission = async (scopeId: string, newScopes: string) => {
-  const graphClient = GraphClient.getInstance();
+const revokePermission = async (permissionGrantId: string, newScopes: string) => {
 
   const oAuth2PermissionGrant = {
     scope: newScopes
   };
   try {
-    await graphClient.api(`/oauth2PermissionGrants/${scopeId}`)
+    await GRAPH_CLIENT.api(`/oauth2PermissionGrants/${permissionGrantId}`)
       .update(oAuth2PermissionGrant);
   } catch (error: any) {
     console.log('Error: ', error);
@@ -354,17 +354,16 @@ const revokePermission = async (scopeId: string, newScopes: string) => {
   }
 }
 
-const getScopeId = async (servicePrincipalAppId: string, principalid: string) => {
-  const graphClient = GraphClient.getInstance();
+const getPermissionGrantId = async (servicePrincipalAppId: string, principalid: string) => {
 
   // we need to further filter by principalId in cases where there are more than one value in returned array
   // to get principalId, run /me and get the id returned. That is the principalId of the signed in user
 
   try {
-    const response = await graphClient.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
+    const response = await GRAPH_CLIENT.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
       .get();
     if (response && response.length > 1) {
-      const filteredResponse = response.filter((scope: any) => scope.principalId === principalid);
+      const filteredResponse = response.filter((permissionGrant: any) => permissionGrant.principalId === principalid);
       return filteredResponse[0].id;
     }
     return response.value[0].id;
@@ -377,10 +376,9 @@ const getScopeId = async (servicePrincipalAppId: string, principalid: string) =>
 
 // We could also have a case of two users. Filter by principal Id. Make sure to test this
 const getUpdatedScopes = async (servicePrincipalAppId: string, principalid: string) => {
-  const graphClient = GraphClient.getInstance();
 
   try {
-    const response = await graphClient.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
+    const response = await GRAPH_CLIENT.api(`/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`)
       .get();
 
     if (response && response.length > 1) {
