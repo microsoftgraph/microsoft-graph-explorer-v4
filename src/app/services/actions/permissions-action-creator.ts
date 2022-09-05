@@ -32,8 +32,6 @@ import { GraphClient } from '../graph-client';
 import { IQuery } from '../../../types/query-runner';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 
-const GRAPH_CLIENT = GraphClient.getInstance();
-
 export function fetchFullScopesSuccess(response: object): IAction {
   return {
     type: FETCH_FULL_SCOPES_SUCCESS,
@@ -335,3 +333,4 @@ const getAuthResponse = async (updatedScopes: string[]) => {
 
   return parseResponse(authResponse);
 }
+
