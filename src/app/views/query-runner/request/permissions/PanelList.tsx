@@ -67,14 +67,14 @@ const PanelList = ({ messages,
     setPermissions(sortPermissions(fullPermissions));
   }, [permissionsPanelOpen, scopes.data]);
 
-  const isFirstRender = useRef(true)
+  const shouldGenerateGroups = useRef(true)
 
   useEffect(() => {
-    if (isFirstRender.current) {
+    if (shouldGenerateGroups.current) {
       if(permissionsList.length === 0){ return }
       setGroups(generateGroupsFromList(permissionsList, 'groupName'));
       if(groups.length > 0) {
-        isFirstRender.current = false;
+        shouldGenerateGroups.current = false;
       }
     }
   }, [permissions, searchStarted])
@@ -93,7 +93,7 @@ const PanelList = ({ messages,
   });
 
   const searchValueChanged = (event: any, value?: string): void => {
-    isFirstRender.current = true;
+    shouldGenerateGroups.current = true;
     setSearchStarted((search) => !search);
     let filteredPermissions = scopes.data.fullPermissions;
     if (value) {
