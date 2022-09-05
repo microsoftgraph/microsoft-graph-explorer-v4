@@ -20,9 +20,21 @@ function getLastCharacterOf(content: string) {
 
 // Filter out suggestions that don't contain the user's input
 function getFilteredSuggestions(compareString: string, suggestions: string[]) {
-  return suggestions.filter((suggestion: string) => {
-    return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
-  });
+
+  function getStartsWith() {
+    return suggestions.filter((suggestion: string) => {
+      return suggestion.toLowerCase().startsWith(compareString.toLocaleLowerCase());
+    });
+  }
+
+  function getIncludes() {
+    return suggestions.filter((suggestion: string) => {
+      return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
+    });
+  }
+
+  const filteredSuggestions = getStartsWith().concat(getIncludes());
+  return Array.from(new Set(filteredSuggestions));
 }
 
 function getErrorMessage(queryUrl: string) {

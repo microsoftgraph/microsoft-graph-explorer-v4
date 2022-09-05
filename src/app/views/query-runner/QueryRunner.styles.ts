@@ -21,6 +21,11 @@ export const queryRunnerStyles = () => {
       root: {
         flexBasis: '75px'
       }
+    },
+    shareQueryButtonStyles: {
+      root: {
+        flexBasis: '40px'
+      }
     }
   };
 };

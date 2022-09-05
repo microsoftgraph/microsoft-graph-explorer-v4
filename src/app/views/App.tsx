@@ -78,7 +78,7 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
-  private setSidebarTabSelection = (selectedTab : string) => {
+  private setSidebarTabSelection = (selectedTab: string) => {
     this.setState({
       sidebarTabSelection: selectedTab
     });
@@ -369,7 +369,6 @@ class App extends Component<IAppProps, IAppState> {
     let sideWidth = sidebar.width;
     let maxWidth = '50%';
     let contentWidth = content.width;
-    const contentHeight = content.height;
 
     const query = createShareLink(sampleQuery, authenticated);
     const { mobileScreen, showSidebar } = sidebarProperties;
@@ -435,10 +434,10 @@ class App extends Component<IAppProps, IAppState> {
                   height: ''
                 }}
               >
-                <Sidebar currentTab = { this.state.sidebarTabSelection }
-                  setSidebarTabSelection = { this.setSidebarTabSelection } showSidebar={showSidebar}
+                <Sidebar currentTab={this.state.sidebarTabSelection}
+                  setSidebarTabSelection={this.setSidebarTabSelection} showSidebar={showSidebar}
                   toggleSidebar={this.toggleSidebar}
-                  mobileScreen={mobileScreen}/>
+                  mobileScreen={mobileScreen} />
               </Resizable>
             )}
             {graphExplorerMode === Mode.TryIt &&
@@ -453,15 +452,21 @@ class App extends Component<IAppProps, IAppState> {
                 }}
                 size={{
                   width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
-                  height: contentHeight
+                  height: ''
                 }}
-                style={!sidebarProperties.showSidebar && !mobileScreen ? { marginLeft: '8px', flex: 1 } : {flex: 1}}
+                style={!sidebarProperties.showSidebar && !mobileScreen ? {
+                  marginLeft: '8px', display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+                } : {
+                  display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+                }}
               >
-                <div style={{ marginBottom: 8}} >
+                <div style={{ marginBottom: 2 }} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
 
-                <div>
+                <div style={{
+                  display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+                }}>
                   <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                     <StatusMessages />
                   </div>

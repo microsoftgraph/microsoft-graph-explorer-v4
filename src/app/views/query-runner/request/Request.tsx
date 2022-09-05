@@ -1,4 +1,5 @@
 import {
+  FontSizes,
   Pivot,
   PivotItem
 } from '@fluentui/react';
@@ -178,6 +179,7 @@ export class Request extends Component<IRequestComponent, any> {
               onLinkClick={this.handlePivotItemClick}
               className='pivot-request'
               selectedKey={pivot}
+              styles={{ text: { fontSize: FontSizes.size14 } }}
             >
               {requestPivotItems}
             </Pivot>
