@@ -11,13 +11,3 @@ export function setConsentedStatus(tokenPresent: any, permissions: IPermission[]
     }
   }
 }
-
-export function setSelectedStatus(permissionSelected: IPermission, deselectionStatus: boolean) {
-  if (permissionSelected) {
-    if(permissionSelected.selected && deselectionStatus) {
-      permissionSelected.selected = false;
-      return;
-    }
-    permissionSelected.selected = true;
-  }
-}

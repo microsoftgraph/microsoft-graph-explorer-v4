@@ -32,7 +32,7 @@ export function generateGroupsFromList(list: any[], property: string) : IGroup[]
     }
   }
   let i = 1;
-  groups.forEach(function (group) {
+  groups.forEach(function (group){
     group.ariaLabel += `${i} of ${groups.length}`;
     i++;
   });

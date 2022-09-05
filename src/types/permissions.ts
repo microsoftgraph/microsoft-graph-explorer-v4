@@ -6,7 +6,6 @@ export interface IPermission {
   consentDescription: string;
   isAdmin: boolean;
   consented: boolean;
-  selected?: boolean;
 }
 
 export interface IPermissionProps {

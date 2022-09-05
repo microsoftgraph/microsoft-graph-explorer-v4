@@ -1,19 +1,13 @@
 import {
   ActionButton,
   Callout,
-  DefaultButton,
   FontSizes,
   getTheme,
-  IOverlayProps,
   IPersonaProps,
   IPersonaSharedProps,
-  Label,
   mergeStyleSets,
-  Panel,
-  PanelType,
   Persona,
   PersonaSize,
-  PrimaryButton,
   Spinner,
   SpinnerSize,
   Stack,
@@ -23,10 +17,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useId } from '@fluentui/react-hooks';
 
-import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IRootState } from '../../../../types/root';
 import { signOut } from '../../../services/actions/auth-action-creators';
-import { consentToScopes } from '../../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../../services/actions/permissions-panel-action-creator';
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -97,7 +89,6 @@ const Profile = (props: any) => {
   };
 
   const changePanelState = () => {
-    console.log('Dispatching this')
     let open = !!permissionsPanelOpen;
     open = !open;
     dispatch(togglePermissionsPanel(open));

@@ -8,7 +8,6 @@ import {
   IDetailsListCheckboxProps,
   Label,
   PrimaryButton,
-  Selection,
   TooltipHost
 } from '@fluentui/react';
 import React, { useEffect } from 'react';
@@ -25,7 +24,6 @@ import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
 import TabList from './TabList';
 import messages from '../../../../../messages';
-import { setSelectedStatus } from './util';
 
 export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
 

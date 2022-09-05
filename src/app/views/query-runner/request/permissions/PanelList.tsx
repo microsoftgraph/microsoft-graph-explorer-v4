@@ -32,7 +32,7 @@ import { generateGroupsFromList } from '../../../../utils/generate-groups';
 import { searchBoxStyles } from '../../../../utils/searchbox.styles';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { profileStyles } from '../../../authentication/profile/Profile.styles';
-import { setConsentedStatus, setSelectedStatus } from './util';
+import { setConsentedStatus } from './util';
 
 interface IPanelList {
   messages: any;
@@ -178,7 +178,6 @@ const PanelList = ({ messages,
       const selected = selection.getSelection() as IPermission[];
       const permissionsToConsent: string[] = [];
       if (selected.length > 0) {
-        setSelectedStatus(selected[selected.length-1], false);
         selected.forEach((option: IPermission) => {
           permissionsToConsent.push(option.value);
         });
