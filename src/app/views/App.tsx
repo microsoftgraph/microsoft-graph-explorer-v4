@@ -78,7 +78,7 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
-  private setSidebarTabSelection = (selectedTab : string) => {
+  private setSidebarTabSelection = (selectedTab: string) => {
     this.setState({
       sidebarTabSelection: selectedTab
     });
@@ -434,10 +434,10 @@ class App extends Component<IAppProps, IAppState> {
                   height: ''
                 }}
               >
-                <Sidebar currentTab = { this.state.sidebarTabSelection }
-                  setSidebarTabSelection = { this.setSidebarTabSelection } showSidebar={showSidebar}
+                <Sidebar currentTab={this.state.sidebarTabSelection}
+                  setSidebarTabSelection={this.setSidebarTabSelection} showSidebar={showSidebar}
                   toggleSidebar={this.toggleSidebar}
-                  mobileScreen={mobileScreen}/>
+                  mobileScreen={mobileScreen} />
               </Resizable>
             )}
             {graphExplorerMode === Mode.TryIt &&
@@ -455,17 +455,17 @@ class App extends Component<IAppProps, IAppState> {
                   height: ''
                 }}
                 style={!sidebarProperties.showSidebar && !mobileScreen ? {
-                  marginLeft: '8px', display:'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+                  marginLeft: '8px', display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                 } : {
-                  display:'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+                  display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                 }}
               >
-                <div style={{ marginBottom: 2}} >
+                <div style={{ marginBottom: 2 }} >
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
 
                 <div style={{
-                  display:'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+                  display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                 }}>
                   <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                     <StatusMessages />

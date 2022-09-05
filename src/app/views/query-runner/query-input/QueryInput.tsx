@@ -50,7 +50,7 @@ const QueryInput = (props: IQueryInputProps) => {
     dispatch(setSampleQuery(updatedQuery));
   };
 
-  const getChangedQueryContent = (newUrl: string) : IQuery => {
+  const getChangedQueryContent = (newUrl: string): IQuery => {
 
     const query = { ...sampleQuery };
     const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);

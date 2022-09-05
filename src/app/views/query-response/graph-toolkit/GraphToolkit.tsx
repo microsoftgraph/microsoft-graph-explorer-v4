@@ -3,20 +3,14 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
 import {
-  getTheme,
-  IStyle,
-  ITheme,
-  Label,
-  Link,
-  MessageBar,
-  MessageBarType,
-  styled
+  getTheme, IStyle, ITheme, Label, Link,
+  MessageBar, MessageBarType, styled
 } from '@fluentui/react';
-import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { componentNames, telemetry } from '../../../../telemetry';
-import { queryResponseStyles } from '../queryResponse.styles';
 import { IRootState } from '../../../../types/root';
+import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
+import { queryResponseStyles } from '../queryResponse.styles';
 
 class GraphToolkit extends Component<any> {
   constructor(props: any) {
@@ -51,7 +45,7 @@ class GraphToolkit extends Component<any> {
     }
 
     return (
-      <Label styles={{root: this.textStyle}}>
+      <Label styles={{ root: this.textStyle }}>
         <FormattedMessage id='We did not find a Graph toolkit for this query' />
         &nbsp;
         <Link

@@ -88,7 +88,7 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-headers-tab'
       }}
     >
-      <div id={'response-headers-tab'}><ResponseHeaders/></div>
+      <div id={'response-headers-tab'}><ResponseHeaders /></div>
     </PivotItem>
   ];
   if (mode === Mode.Complete) {

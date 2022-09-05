@@ -30,7 +30,7 @@ const QueryResponse = () => {
   }, [dimensions]);
 
   const flexQueryElement: CSSProperties = {
-    display:'flex',
+    display: 'flex',
     flexDirection: 'column',
     alignItems: 'stretch',
     flex: 1,
@@ -47,7 +47,7 @@ const QueryResponse = () => {
       return;
     }
     onPivotItemClick(sampleQuery, pivotItem);
-    if(pivotItem.props.itemKey !== 'expand-response') {
+    if (pivotItem.props.itemKey !== 'expand-response') {
       setCurrentTab(pivotItem.props.itemKey!);
     }
     toggleModal(pivotItem);
@@ -60,15 +60,15 @@ const QueryResponse = () => {
     }
   };
 
-  const onModalPivotItemClicked = (pivotItem? : PivotItem) => {
-    if(!pivotItem){ return ;}
+  const onModalPivotItemClicked = (pivotItem?: PivotItem) => {
+    if (!pivotItem) { return; }
     setCurrentTab(pivotItem.props.itemKey!);
     onPivotItemClick(sampleQuery, pivotItem);
   };
 
   const onScroll = () => {
     const queryResponseElements = document.getElementsByClassName('query-response');
-    if(queryResponseElements && queryResponseElements.length > 0){
+    if (queryResponseElements && queryResponseElements.length > 0) {
       queryResponseElements[0].scrollTop = 0;
     }
   }
@@ -95,15 +95,13 @@ const QueryResponse = () => {
           minHeight: 350,
           height: '100%',
           flex: 1
-        }}
-        onScroll={onScroll}>
-
+        }} onScroll={onScroll}>
           <Pivot overflowBehavior='menu'
             overflowAriaLabel={translateMessage('More items')}
             onLinkClick={handlePivotItemClick}
             className={'pivot-response'}
             selectedKey={currentTab}
-            styles={{text: {fontSize: FontSizes.size14}}}
+            styles={{ text: { fontSize: FontSizes.size14 } }}
           >
             {GetPivotItems()}
             <PivotItem
@@ -123,7 +121,7 @@ const QueryResponse = () => {
         <Modal
           isOpen={showModal}
           onDismiss={toggleExpandResponse}
-          styles={ modalStyles }
+          styles={modalStyles}
         >
           <IconButton
             styles={{
