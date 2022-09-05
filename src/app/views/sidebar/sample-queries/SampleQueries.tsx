@@ -1,10 +1,10 @@
 import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
   getTheme,
-  GroupHeader, IColumn, Icon, IDetailsRowStyles, Link, MessageBar, MessageBarType, SearchBox,
+  GroupHeader, IColumn, Icon, IDetailsRowStyles, IGroup, Link, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -40,11 +40,12 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     useSelector((state: IRootState) => state);
   const tokenPresent = authToken.token;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(samples.queries);
+  const [groups, setGroups] = useState<IGroup[]>([]);
+  const [searchStarted, setSearchStarted] = useState<boolean>(false);
   const dispatch = useDispatch();
   const currentTheme = getTheme();
 
   const { error, pending } = samples;
-  const groups = generateGroupsFromList(sampleQueries, 'category');
 
   const classProps = {
     styles: sampleProps!.styles,
@@ -60,7 +61,14 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     }
   }, [samples.queries, tokenPresent])
 
+  useEffect(() => {
+    if (groups && groups.length === 0) {
+      setGroups(generateGroupsFromList(sampleQueries, 'category'));
+    }
+  }, [sampleQueries, searchStarted]);
+
   const searchValueChanged = (_event: any, value?: string): void => {
+    setSearchStarted(searchStatus => !searchStatus);
     const { queries } = samples;
     const filteredQueries = value ? performSearch(queries, value) : queries;
     setSampleQueries(filteredQueries);
@@ -283,15 +291,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     return <div />;
   }
 
-  if (selectedQuery) {
-    const index = groups.findIndex(k => k.key === selectedQuery.category);
-    if (index > 0) {
-      groups[index].isCollapsed = false;
-      groups[0].isCollapsed = true;
-    }
-  }
-
-  if (pending) {
+  if (pending && groups.length === 0) {
     return (
       <Spinner
         className={classes.spinner}
