@@ -1,4 +1,4 @@
-import { Pivot, PivotItem } from '@fluentui/react';
+import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -44,6 +44,7 @@ function GetSnippets() {
     className={'pivot-response'}
     selectedKey={snippets.snippetTab}
     onLinkClick={handlePivotItemClick}
+    styles={{text: {fontSize: FontSizes.size14}}}
   >
     {renderSnippets(supportedLanguages)}
   </Pivot>;
