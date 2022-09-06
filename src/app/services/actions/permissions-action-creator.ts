@@ -10,8 +10,10 @@ import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
 import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
-import { ACCOUNT_TYPE, DEFAULT_USER_SCOPES, GRAPH_URL, PERMS_SCOPE,
-  UNCONSENTING_PERMISSIONS_REQUIRED_SCOPES } from '../graph-constants';
+import {
+  ACCOUNT_TYPE, DEFAULT_USER_SCOPES, GRAPH_URL, PERMS_SCOPE,
+  UNCONSENTING_PERMISSIONS_REQUIRED_SCOPES
+} from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
   FETCH_FULL_SCOPES_PENDING,
@@ -179,7 +181,6 @@ export function unconsentToScopes(permissionToDelete: string): Function {
     let response = null;
 
     if (userUnconsentingToDefaultScopes(defaultScopes, permissionToDelete)) {
-      dispatch(revokePermissionPending(false));
       dispatch(
         setQueryResponseStatus({
           statusText: translateMessage('Default scope'),
@@ -192,7 +193,6 @@ export function unconsentToScopes(permissionToDelete: string): Function {
     }
 
     if (!userHasRequiredPermissions(requiredPermissions, consentedScopes)) {
-      dispatch(revokePermissionPending(false));
       dispatch(
         setQueryResponseStatus({
           statusText: translateMessage('Unable to dissent'),
@@ -225,9 +225,11 @@ export function unconsentToScopes(permissionToDelete: string): Function {
         return;
       }
 
-      const authResponse = await getAuthResponse(updatedScopes);
+      const authResponse = await getNewAuthObject(updatedScopes);
+      console.log('We have the authentication response. Now going back')
 
       if (authResponse && authResponse.accessToken) {
+        console.log('We are here now after getting the auth results')
         dispatch(getAuthTokenSuccess(true));
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
         dispatch(revokePermissionSuccess(true));
@@ -239,9 +241,9 @@ export function unconsentToScopes(permissionToDelete: string): Function {
             messageType: MessageBarType.success
           })
         );
-        if (authResponse.account &&authResponse.account.localAccountId !== profile?.id) {
-          dispatch(getProfileInfo());
-        }
+        // if (authResponse.account && authResponse.account.localAccountId !== profile?.id) {
+        //   dispatch(getProfileInfo());
+        // }
       }
 
     }
@@ -311,8 +313,9 @@ const getPermissionGrant = async (scopes: string[], servicePrincipalAppId: strin
   getQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
   const response = await getPermissionResponse(scopes, getQuery);
 
-  if (response && response.length > 1) {
-    const filteredResponse = response.filter((permissionGrant: any) => permissionGrant.principalId === principalid);
+  if (response && response.value.length > 1) {
+    const filteredResponse = response.value.filter((permissionGrant: any) =>
+      permissionGrant.principalId === principalid);
     return filteredResponse[0];
   }
   return response.value[0];
@@ -321,16 +324,18 @@ const getPermissionGrant = async (scopes: string[], servicePrincipalAppId: strin
 const getPermissionResponse = async (scopes: string[], query: IQuery) => {
   const respHeaders: any = {};
   const response = await makeGraphRequest(scopes)(query);
-  return await parseResponse(response, respHeaders);
+  return parseResponse(response, respHeaders);
 }
 
-const getAuthResponse = async (updatedScopes: string[]) => {
+const getNewAuthObject = async (updatedScopes: string[]) => {
   let authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
+  let count = 4;
 
-  while(authResponse.scopes.length !== updatedScopes.length){
+  while ((authResponse.scopes.length !== updatedScopes.length) && count > 0) {
     authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
+    count--;
   }
 
-  return parseResponse(authResponse);
+  return authResponse;
 }
 
