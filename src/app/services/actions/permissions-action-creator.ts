@@ -33,6 +33,7 @@ import { setQueryResponseStatus } from './query-status-action-creator';
 import { GraphClient } from '../graph-client';
 import { IQuery } from '../../../types/query-runner';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
+import { setStatusMessage } from '../../utils/status-message';
 
 export function fetchFullScopesSuccess(response: object): IAction {
   return {
@@ -226,10 +227,8 @@ export function unconsentToScopes(permissionToDelete: string): Function {
       }
 
       const authResponse = await getNewAuthObject(updatedScopes);
-      console.log('We have the authentication response. Now going back')
 
       if (authResponse && authResponse.accessToken) {
-        console.log('We are here now after getting the auth results')
         dispatch(getAuthTokenSuccess(true));
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
         dispatch(revokePermissionSuccess(true));
@@ -241,9 +240,9 @@ export function unconsentToScopes(permissionToDelete: string): Function {
             messageType: MessageBarType.success
           })
         );
-        // if (authResponse.account && authResponse.account.localAccountId !== profile?.id) {
-        //   dispatch(getProfileInfo());
-        // }
+        if (authResponse.account && authResponse.account.localAccountId !== profile?.id) {
+          dispatch(getProfileInfo());
+        }
       }
 
     }
@@ -253,7 +252,7 @@ export function unconsentToScopes(permissionToDelete: string): Function {
         setQueryResponseStatus({
           statusText: translateMessage('Unable to dissent'),
           // eslint-disable-next-line max-len
-          status: error ? error : translateMessage('An error was encountered when dissenting. Confirm that you have the right permissions'),
+          status: error ? error.message : translateMessage('An error occurred when dissenting'),
           ok: false,
           messageType: MessageBarType.error
         })
@@ -264,18 +263,6 @@ export function unconsentToScopes(permissionToDelete: string): Function {
 
 const getQuery: IQuery = {
   selectedVerb: 'GET',
-  sampleHeaders: [
-    {
-      name: 'Cache-Control',
-      value: 'no-cache'
-    }
-  ],
-  selectedVersion: '',
-  sampleUrl: ''
-};
-
-const patchQuery: IQuery = {
-  selectedVerb: 'PATCH',
   sampleHeaders: [
     {
       name: 'Cache-Control',
@@ -302,11 +289,13 @@ const getCurrentAppId = async (scopes: string[]) => {
   return response.value[0].id;
 }
 const revokePermission = async (oldScopes: string[], permissionGrantId: string, newScopes: string) => {
-  patchQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants/${permissionGrantId}`;
-  patchQuery.sampleBody = JSON.stringify({
+  const oAuth2PermissionGrant = {
     scope: newScopes
-  });
-  await getPermissionResponse(oldScopes, patchQuery);
+  };
+  const graphClient = GraphClient.getInstance();
+
+  return await graphClient.api(`/oauth2PermissionGrantss/${permissionGrantId}`)
+    .update(oAuth2PermissionGrant);
 }
 
 const getPermissionGrant = async (scopes: string[], servicePrincipalAppId: string, principalid: string) => {
@@ -328,14 +317,7 @@ const getPermissionResponse = async (scopes: string[], query: IQuery) => {
 }
 
 const getNewAuthObject = async (updatedScopes: string[]) => {
-  let authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
-  let count = 4;
-
-  while ((authResponse.scopes.length !== updatedScopes.length) && count > 0) {
-    authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
-    count--;
-  }
-
-  return authResponse;
+  await authenticationWrapper.logOut();
+  return await authenticationWrapper.consentToScopes(updatedScopes);
 }
 

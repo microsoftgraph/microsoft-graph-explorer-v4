@@ -65,8 +65,6 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
       </Label>
       <div
         onMouseEnter={() => {
-          // Check if the device width is less than 1260px
-          // OR if the browser width is less than 1290 ie. the browser is resized
 
           if(screen.width < 1260 || window.innerWidth < 1290){
             setIsScreenSizeReduced(true);
