@@ -107,11 +107,6 @@ const mockState: IRootState = {
     pending: false,
     data: {},
     error: null
-  },
-  unconsentingScopes: {
-    pending: false,
-    data: [],
-    error: null
   }
 }
 const currentState = store.getState();

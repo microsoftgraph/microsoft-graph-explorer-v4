@@ -32,7 +32,6 @@ export interface IRootState {
   };
   consentedScopes: string[];
   scopes: IScopes;
-  unconsentingScopes: IUnconsent;
   history: IHistoryItem[];
   graphResponse: IGraphResponse;
   permissionsPanelOpen: boolean;
