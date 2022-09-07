@@ -317,6 +317,19 @@ const getPermissionResponse = async (scopes: string[], query: IQuery) => {
 }
 
 const getNewAuthObject = async (updatedScopes: string[]) => {
+  let retries = 2;
   await authenticationWrapper.logOut();
-  return await authenticationWrapper.consentToScopes(updatedScopes);
+  let authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
+
+  if (authResponse && authResponse.scopes.length === updatedScopes.length) {
+    return authResponse;
+  }
+  else{
+    while(retries > 0 && authResponse && authResponse.scopes.length !== updatedScopes.length){
+      await authenticationWrapper.logOut();
+      authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
+      retries --;
+    }
+  }
+  return authResponse;
 }
