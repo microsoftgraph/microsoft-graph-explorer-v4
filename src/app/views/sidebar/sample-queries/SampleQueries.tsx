@@ -33,7 +33,7 @@ import { setSampleQuery } from '../../../services/actions/query-input-action-cre
 import { translateMessage } from '../../../utils/translate-messages';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 
-const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
+const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
 
   const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
   const { authToken, profile, samples } =
@@ -376,5 +376,5 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 }
 
 // @ts-ignore
-const SampleQueries = styled(unstyledSampleQueries, sidebarStyles);
+const SampleQueries = styled(UnstyledSampleQueries, sidebarStyles);
 export default SampleQueries;
