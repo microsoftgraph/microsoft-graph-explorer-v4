@@ -247,11 +247,11 @@ export function unconsentToScopes(permissionToDelete: string): Function {
 
     }
     catch (error: any) {
+      const { statusCode, code } = error;
       dispatch(revokePermissionError(error));
       dispatch(
         setQueryResponseStatus({
-          statusText: translateMessage('Unable to dissent'),
-          // eslint-disable-next-line max-len
+          statusText: statusCode && code ? (statusCode + ' ' + code) : translateMessage('Unable to dissent'),
           status: error ? error.message : translateMessage('An error occurred when dissenting'),
           ok: false,
           messageType: MessageBarType.error
@@ -294,7 +294,7 @@ const revokePermission = async (oldScopes: string[], permissionGrantId: string, 
   };
   const graphClient = GraphClient.getInstance();
 
-  return await graphClient.api(`/oauth2PermissionGrantss/${permissionGrantId}`)
+  await graphClient.api(`/oauth2PermissionGrants/${permissionGrantId}`)
     .update(oAuth2PermissionGrant);
 }
 
@@ -320,4 +320,3 @@ const getNewAuthObject = async (updatedScopes: string[]) => {
   await authenticationWrapper.logOut();
   return await authenticationWrapper.consentToScopes(updatedScopes);
 }
-
