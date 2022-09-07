@@ -4,11 +4,8 @@ export function setConsentedStatus(tokenPresent: any, permissions: IPermission[]
   if (tokenPresent) {
     if (permissions && permissions.length > 0) {
       permissions.forEach((permission: IPermission) => {
-        if (consentedScopes && consentedScopes.length > 0 && consentedScopes.indexOf(permission.value) !== -1) {
-          permission.consented = true;
-        }else{
-          permission.consented = false;
-        }
+        permission.consented = (consentedScopes && consentedScopes.length > 0 &&
+          consentedScopes.indexOf(permission.value) !== -1);
       });
     }
   }

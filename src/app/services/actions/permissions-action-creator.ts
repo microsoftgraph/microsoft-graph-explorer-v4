@@ -19,10 +19,7 @@ import {
   FETCH_FULL_SCOPES_PENDING,
   FETCH_URL_SCOPES_PENDING,
   FETCH_FULL_SCOPES_SUCCESS,
-  FETCH_URL_SCOPES_SUCCESS,
-  REVOKE_PERMISSION_PENDING,
-  REVOKE_PERMISSION_SUCCESS,
-  REVOKE_PERMISSION_ERROR
+  FETCH_URL_SCOPES_SUCCESS
 } from '../redux-constants';
 import {
   getAuthTokenSuccess,
@@ -33,7 +30,6 @@ import { setQueryResponseStatus } from './query-status-action-creator';
 import { GraphClient } from '../graph-client';
 import { IQuery } from '../../../types/query-runner';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
-import { setStatusMessage } from '../../utils/status-message';
 
 export function fetchFullScopesSuccess(response: object): IAction {
   return {
@@ -58,27 +54,6 @@ export function fetchScopesError(response: object): IAction {
     type: FETCH_SCOPES_ERROR,
     response
   };
-}
-
-export function revokePermissionPending(response: boolean): any {
-  return {
-    type: REVOKE_PERMISSION_PENDING,
-    response
-  }
-}
-
-export function revokePermissionSuccess(response: boolean): any {
-  return {
-    type: REVOKE_PERMISSION_SUCCESS,
-    response
-  }
-}
-
-export function revokePermissionError(response: object): any {
-  return {
-    type: REVOKE_PERMISSION_ERROR,
-    response
-  }
 }
 
 export function fetchScopes(): Function {
@@ -231,7 +206,6 @@ export function unconsentToScopes(permissionToDelete: string): Function {
       if (authResponse && authResponse.accessToken) {
         dispatch(getAuthTokenSuccess(true));
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
-        dispatch(revokePermissionSuccess(true));
         dispatch(
           setQueryResponseStatus({
             statusText: translateMessage('Success'),
@@ -248,7 +222,6 @@ export function unconsentToScopes(permissionToDelete: string): Function {
     }
     catch (error: any) {
       const { statusCode, code } = error;
-      dispatch(revokePermissionError(error));
       dispatch(
         setQueryResponseStatus({
           statusText: statusCode && code ? (statusCode + ' ' + code) : translateMessage('Unable to dissent'),
