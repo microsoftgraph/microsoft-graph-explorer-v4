@@ -294,15 +294,11 @@ const getNewAuthObject = async (updatedScopes: string[]) => {
   await authenticationWrapper.logOut();
   let authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
 
-  if (authResponse && authResponse.scopes.length === updatedScopes.length) {
-    return authResponse;
+  while(retries > 0 && authResponse && authResponse.scopes.length !== updatedScopes.length){
+    await authenticationWrapper.logOut();
+    authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
+    retries --;
   }
-  else{
-    while(retries > 0 && authResponse && authResponse.scopes.length !== updatedScopes.length){
-      await authenticationWrapper.logOut();
-      authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
-      retries --;
-    }
-  }
+
   return authResponse;
 }

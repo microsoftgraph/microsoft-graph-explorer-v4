@@ -28,10 +28,9 @@ import messages from '../../../../../messages';
 
 export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
 
-  const { sampleQuery, scopes, dimensions, authToken, unconsentingScopes } =
+  const { sampleQuery, scopes, dimensions, authToken } =
   useSelector( (state: IRootState) => state );
   const { pending: loading } = scopes;
-  // const { pending: unconsentPending } = unconsentingScopes;
   const tokenPresent = !!authToken.token;
   const dispatch = useDispatch();
   const panel = permissionProps?.panel;
