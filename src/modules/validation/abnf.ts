@@ -16,27 +16,29 @@ interface ValidationResult {
 }
 
 export class ValidatedUrl {
+  private static grammar: any;
+  private static parser = new apgLib.parser();
 
-  private parser;
-  private grammarObject = this.generateGrammarObject();
 
-  constructor() {
-    this.parser = new apgLib.parser();
+  public static getGrammar() {
+    if (!ValidatedUrl.grammar) {
+      ValidatedUrl.grammar = this.generateGrammarObject();
+    }
+    return ValidatedUrl.grammar;
   }
 
-  private generateGrammarObject() {
-    const grammar = new apgApi(rules);
-    grammar.generate();
+  private static generateGrammarObject() {
+    const api = new apgApi(rules);
+    api.generate();
 
-    if (grammar.errors.length) {
+    if (api.errors.length) {
       throw Error('ABNF grammar has errors');
     }
-    return grammar.toObject();
+    return api.toObject();
   }
 
-
   public validate(graphUrl: string): ValidationResult {
-    const result = this.parser.parse(this.grammarObject, 'odataUri', decodeURI(graphUrl));
+    const result = ValidatedUrl.parser.parse(ValidatedUrl.getGrammar(), 'odataUri', decodeURI(graphUrl));
     return result;
   }
 }
