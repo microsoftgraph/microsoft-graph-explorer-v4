@@ -35,7 +35,7 @@ export async function anonymousRequest(
   getState: Function
 ) {
   const { proxyUrl, queryRunnerStatus } = getState();
-  const { graphUrl, options } =  createAnonymousRequest(query, proxyUrl, queryRunnerStatus);
+  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl, queryRunnerStatus);
   dispatch(queryRunningStatus(true));
   return fetch(graphUrl, options)
     .catch(() => {
