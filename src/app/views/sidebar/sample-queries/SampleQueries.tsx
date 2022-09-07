@@ -1,10 +1,10 @@
 import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
   getTheme,
-  GroupHeader, IColumn, Icon, IDetailsRowStyles, Link, MessageBar, MessageBarType, SearchBox,
+  GroupHeader, IColumn, Icon, IDetailsRowStyles, IGroup, Link, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -33,24 +33,27 @@ import { setSampleQuery } from '../../../services/actions/query-input-action-cre
 import { translateMessage } from '../../../utils/translate-messages';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 
-const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
+const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
 
   const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
   const { authToken, profile, samples } =
     useSelector((state: IRootState) => state);
   const tokenPresent = authToken.token;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(samples.queries);
+  const [groups, setGroups] = useState<IGroup[]>([]);
+  const [searchStarted, setSearchStarted] = useState<boolean>(false);
   const dispatch = useDispatch();
   const currentTheme = getTheme();
 
   const { error, pending } = samples;
-  const groups = generateGroupsFromList(sampleQueries, 'category');
 
   const classProps = {
     styles: sampleProps!.styles,
     theme: sampleProps!.theme
   };
   const classes = classNames(classProps);
+
+  const shouldGenerateGroups = useRef(true);
 
   useEffect(() => {
     if (samples.queries.length === 0) {
@@ -60,7 +63,18 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     }
   }, [samples.queries, tokenPresent])
 
+  useEffect(() => {
+    if (shouldGenerateGroups.current) {
+      setGroups(generateGroupsFromList(sampleQueries, 'category'));
+      if(groups && groups.length > 0){
+        shouldGenerateGroups.current = false;
+      }
+    }
+  }, [sampleQueries, searchStarted]);
+
   const searchValueChanged = (_event: any, value?: string): void => {
+    shouldGenerateGroups.current = true;
+    setSearchStarted(searchStatus => !searchStatus);
     const { queries } = samples;
     const filteredQueries = value ? performSearch(queries, value) : queries;
     setSampleQueries(filteredQueries);
@@ -283,15 +297,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     return <div />;
   }
 
-  if (selectedQuery) {
-    const index = groups.findIndex(k => k.key === selectedQuery.category);
-    if (index > 0 ) {
-      groups[index].isCollapsed = false;
-      groups[0].isCollapsed = true;
-    }
-  }
-
-  if (pending) {
+  if (pending && groups.length === 0) {
     return (
       <Spinner
         className={classes.spinner}
@@ -341,7 +347,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
       <Announced
         message={`${sampleQueries.length} search results available.`}
       />
-      { sampleQueries.length === 0 ? NoResultsFound('No samples found') :
+      {sampleQueries.length === 0 ? NoResultsFound('No samples found') :
         <div role="navigation">
           <DetailsList
             className={classes.queryList}
@@ -370,5 +376,5 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 }
 
 // @ts-ignore
-const SampleQueries = styled(unstyledSampleQueries, sidebarStyles);
+const SampleQueries = styled(UnstyledSampleQueries, sidebarStyles);
 export default SampleQueries;

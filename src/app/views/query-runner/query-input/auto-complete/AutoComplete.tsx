@@ -190,7 +190,10 @@ const AutoComplete = (props: IAutoCompleteProps) => {
         setSuggestions(filtered);
         setShouldShowSuggestions(true);
       }
+    } else {
+      setShouldShowSuggestions(false);
     }
+
   }
 
   const trackSuggestionSelectionEvent = (suggestion: string) => {

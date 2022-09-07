@@ -14,7 +14,10 @@
 
   @media screen and (min-width: 1320px) {
     .pivot-response button:nth-last-child(2) {
-      float: right !important;
+      float: right;
+    }
+    .unstyled-pivot button:nth-last-child(2) {
+      float: none;
     }
   }
 
@@ -25,13 +28,6 @@
     font-size: 50px;
     justify-content: center;
     align-items: center;
-  }
-
-  .share-query-btn {
-    float: right;
-    margin-top: 10px;
-    padding: 0px;
-    z-index: 1;
   }
 }
 

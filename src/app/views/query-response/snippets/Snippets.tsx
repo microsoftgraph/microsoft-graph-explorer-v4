@@ -1,15 +1,14 @@
 import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IRootState } from '../../../../types/root';
 import { setSnippetTabSuccess } from '../../../services/actions/snippet-action-creator';
 import { renderSnippets } from './snippets-helper';
-
 function GetSnippets() {
   const dispatch = useDispatch();
-  const { snippets } =  useSelector((state: IRootState) => state);
+  const { snippets } = useSelector((state: IRootState) => state);
   const supportedLanguages = {
     'CSharp': {
       sdkDownloadLink: 'https://aka.ms/csharpsdk',
@@ -41,10 +40,10 @@ function GetSnippets() {
   }
 
   return <Pivot
-    className={'pivot-response'}
+    className={'unstyled-pivot'}
     selectedKey={snippets.snippetTab}
     onLinkClick={handlePivotItemClick}
-    styles={{text: {fontSize: FontSizes.size14}}}
+    styles={{ text: { fontSize: FontSizes.size14 } }}
   >
     {renderSnippets(supportedLanguages)}
   </Pivot>;

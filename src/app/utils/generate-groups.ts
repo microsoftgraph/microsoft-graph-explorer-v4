@@ -1,6 +1,6 @@
 import { IGroup } from '@fluentui/react';
 
-export function generateGroupsFromList(list: any[], property: string) : IGroup[]{
+export function generateGroupsFromList(list: any[], property: string) : IGroup[] {
   const map = new Map();
   const groups: IGroup[] = [];
 
