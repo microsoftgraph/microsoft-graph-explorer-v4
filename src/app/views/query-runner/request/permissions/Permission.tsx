@@ -58,8 +58,8 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     dispatch(permissionActionCreators.consentToScopes(consentScopes));
   };
 
-  const handleUnconsent = async (permission: IPermission) : Promise<void> => {
-    dispatch(permissionActionCreators.unconsentToScopes(permission.value));
+  const handleRevoke = async (permission: IPermission) : Promise<void> => {
+    dispatch(permissionActionCreators.revokeScopes(permission.value));
   };
 
   const renderItemColumn = (item: any, index: any, column: IColumn | undefined) => {
@@ -83,16 +83,13 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           }
 
         case 'consented':
-          // if(consented && unconsentPending){
-          //   return <Spinner/>
-          // }
           if (consented) {
             if(panel){
               return <Label className={classes.consented}
               ><FormattedMessage id='Consented' /></Label>;
             }
-            return <PrimaryButton onClick={() => handleUnconsent(item)} style={{width: '80px'}}>
-              <FormattedMessage id='Unconsent' />
+            return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '80px'}}>
+              <FormattedMessage id='Revoke' />
             </PrimaryButton>;
           } else {
             if (!panel) {

@@ -42,9 +42,3 @@ export interface IScopes {
   };
   error: any | null;
 }
-
-export interface IUnconsent {
-  pending: boolean;
-  error: any | null;
-  data: string[];
-}

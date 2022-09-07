@@ -12,7 +12,7 @@ import { translateMessage } from '../../utils/translate-messages';
 import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
 import {
   ACCOUNT_TYPE, DEFAULT_USER_SCOPES, GRAPH_URL, PERMS_SCOPE,
-  UNCONSENTING_PERMISSIONS_REQUIRED_SCOPES
+  REVOKING_PERMISSIONS_REQUIRED_SCOPES
 } from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
@@ -149,14 +149,14 @@ export function consentToScopes(scopes: string[]): Function {
   };
 }
 
-export function unconsentToScopes(permissionToDelete: string): Function {
+export function revokeScopes(permissionToDelete: string): Function {
   return async (dispatch: Function, getState: Function) => {
     const { consentedScopes, profile } = getState();
-    const requiredPermissions = UNCONSENTING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
+    const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
     const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
     let response = null;
 
-    if (userUnconsentingToDefaultScopes(defaultScopes, permissionToDelete)) {
+    if (userRevokingDefaultScopes(defaultScopes, permissionToDelete)) {
       dispatch(
         setQueryResponseStatus({
           statusText: translateMessage('Default scope'),
@@ -172,7 +172,7 @@ export function unconsentToScopes(permissionToDelete: string): Function {
       dispatch(
         setQueryResponseStatus({
           statusText: translateMessage('Unable to dissent'),
-          status: translateMessage('You require the following permissions to unconsent'),
+          status: translateMessage('You require the following permissions to revoke'),
           ok: false,
           messageType: MessageBarType.error
         })
@@ -209,7 +209,7 @@ export function unconsentToScopes(permissionToDelete: string): Function {
         dispatch(
           setQueryResponseStatus({
             statusText: translateMessage('Success'),
-            status: translateMessage('Permission unconsented'),
+            status: translateMessage('Permission revoked'),
             ok: true,
             messageType: MessageBarType.success
           })
@@ -251,7 +251,7 @@ const userHasRequiredPermissions = (requiredPermissions: string[],
   return requiredPermissions.every(scope => consentedScopes.includes(scope));
 }
 
-const userUnconsentingToDefaultScopes = (currentScopes: string[], permissionToDelete: string) => {
+const userRevokingDefaultScopes = (currentScopes: string[], permissionToDelete: string) => {
   return currentScopes.includes(permissionToDelete);
 }
 
