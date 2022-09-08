@@ -1,4 +1,5 @@
-import { hasPlaceHolders, hasWhiteSpace } from '../../../../utils/sample-url-generation';
+import { ValidatedUrl } from '../../../../../modules/validation/abnf';
+import { hasPlaceHolders } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 
 function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
@@ -41,13 +42,26 @@ function getErrorMessage(queryUrl: string) {
   if (!queryUrl) {
     return translateMessage('Missing url');
   }
-  if (hasWhiteSpace(queryUrl)) {
-    return translateMessage('Invalid whitespace in URL');
-  }
+
+
   if (hasPlaceHolders(queryUrl)) {
     return translateMessage('Parts between {} need to be replaced with real values');
   }
+
+  const error = getValidationError(queryUrl);
+  if (error) {
+    return `${translateMessage('error found in URL at')} + ${error}`;
+  }
   return '';
+}
+
+function getValidationError(queryUrl: string): string | null {
+  const validator = new ValidatedUrl();
+  const validation = validator.validate(queryUrl);
+  if (!validation.success) {
+    return queryUrl.substring(validation.matched, validation.maxMatched);
+  }
+  return null;
 }
 
 function getSearchText(input: string, index: number) {
