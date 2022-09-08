@@ -7,7 +7,6 @@ import {
   IDetailsListCheckboxProps,
   Label,
   PrimaryButton,
-  Selection,
   TooltipHost
 } from '@fluentui/react';
 import React, { useEffect } from 'react';
