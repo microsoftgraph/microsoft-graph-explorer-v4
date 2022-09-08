@@ -1,4 +1,4 @@
-import { apgApi, apgLib } from 'apg-js/dist/apg-api-bundle.js';
+import 'apg-js/dist/apg-api-bundle';
 import { rules } from './definition';
 
 interface ValidationResult {
@@ -15,10 +15,10 @@ interface ValidationResult {
   success: boolean;
 }
 
+const { apgLib, apgApi } = globalThis as any;
 export class ValidatedUrl {
   private static grammar: any;
   private static parser = new apgLib.parser();
-
 
   public static getGrammar() {
     if (!ValidatedUrl.grammar) {
@@ -38,7 +38,11 @@ export class ValidatedUrl {
   }
 
   public validate(graphUrl: string): ValidationResult {
-    const result = ValidatedUrl.parser.parse(ValidatedUrl.getGrammar(), 'odataUri', decodeURI(graphUrl));
+    const result = ValidatedUrl.parser.parse(
+      ValidatedUrl.getGrammar(),
+      'odataUri',
+      decodeURI(graphUrl)
+    );
     return result;
   }
 }
