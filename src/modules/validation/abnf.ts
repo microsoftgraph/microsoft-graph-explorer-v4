@@ -1,4 +1,4 @@
-import { apgApi, apgLib } from 'apg-js';
+import { apgApi, apgLib } from 'apg-js/dist/apg-api-bundle.js';
 import { rules } from './definition';
 
 interface ValidationResult {
