@@ -7,7 +7,7 @@ const historyStorage = localforage.createInstance({
 });
 
 export async function writeHistoryData(historyItem: IHistoryItem) {
-  // historyStorage.setItem(historyItem.createdAt, historyItem);
+  historyStorage.setItem(historyItem.createdAt, historyItem);
 }
 
 export async function readHistoryData(): Promise<IHistoryItem[]> {
