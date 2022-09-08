@@ -26,12 +26,12 @@ import messages from '../../../../../messages';
 
 export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
 
-  const { sampleQuery, scopes, dimensions, authToken, permissionsPanelOpen } =
+  const { sampleQuery, scopes, dimensions, authToken } =
   useSelector( (state: IRootState) => state );
   const { pending: loading } = scopes;
   const tokenPresent = !!authToken.token;
   const dispatch = useDispatch();
-  const panel = permissionsPanelOpen
+  const panel = permissionProps?.panel;
 
   const classProps = {
     styles: permissionProps!.styles,
@@ -246,7 +246,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
 
   return(
     <>
-      {permissionsPanelOpen ? displayPermissionsPanel() : displayPermissionsAsTab()}
+      {panel ? displayPermissionsPanel() : displayPermissionsAsTab()}
     </>
   );
 }
