@@ -63,7 +63,7 @@ export function Monaco(props: IMonaco) {
               scrollBeyondLastLine: true,
               overviewRulerBorder: false,
               // eslint-disable-next-line no-useless-escape
-              wordSeparators:'`~!#$%^&*()=+[{]}\|;:\'",<>/?'
+              wordSeparators:'"'
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
