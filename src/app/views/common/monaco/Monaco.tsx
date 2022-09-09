@@ -61,10 +61,13 @@ export function Monaco(props: IMonaco) {
               showFoldingControls: 'always',
               renderLineHighlight: 'none',
               scrollBeyondLastLine: true,
-              overviewRulerBorder: false
+              overviewRulerBorder: false,
+              // eslint-disable-next-line no-useless-escape
+              wordSeparators:'`~!#$%^&*()=+[{]}\|;:\'",<>/?'
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
+            smartSelect={{selectLeadingAndTrailingWhitespace: true}}
           />)}
         </ThemeContext.Consumer>
       </div>
