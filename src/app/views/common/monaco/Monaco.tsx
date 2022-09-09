@@ -67,7 +67,6 @@ export function Monaco(props: IMonaco) {
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
-            smartSelect={{selectLeadingAndTrailingWhitespace: true}}
           />)}
         </ThemeContext.Consumer>
       </div>
