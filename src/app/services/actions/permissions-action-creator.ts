@@ -27,7 +27,6 @@ import {
 } from './auth-action-creators';
 import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
-import { GraphClient } from '../graph-client';
 import { IQuery } from '../../../types/query-runner';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 
