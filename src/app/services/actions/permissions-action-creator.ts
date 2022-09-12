@@ -265,7 +265,7 @@ const userRevokingDefaultScopes = (currentScopes: string[], permissionToDelete: 
 const getCurrentAppId = async (scopes: string[]) => {
   const currentAppId = process.env.REACT_APP_CLIENT_ID;
   getQuery.sampleUrl = `${GRAPH_URL}/v1.0/servicePrincipals?$filter=appId eq '${currentAppId}'`;
-  const response = await getPermissionResponse(scopes, getQuery);
+  const response = await makePermissionsRequest(scopes, getQuery);
   return response.value[0].id;
 }
 const revokePermission = async (oldScopes: string[], permissionGrantId: string, newScopes: string) => {
@@ -278,7 +278,7 @@ const revokePermission = async (oldScopes: string[], permissionGrantId: string, 
   let response;
   // eslint-disable-next-line no-useless-catch
   try{
-    response = await getPermissionResponse([], patchQuery);
+    response = await makePermissionsRequest([], patchQuery);
     const { error }= response;
     if(error){
       throw error;
@@ -291,7 +291,7 @@ const revokePermission = async (oldScopes: string[], permissionGrantId: string, 
 
 const getPermissionGrant = async (scopes: string[], servicePrincipalAppId: string, principalid: string) => {
   getQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
-  const response = await getPermissionResponse(scopes, getQuery);
+  const response = await makePermissionsRequest(scopes, getQuery);
 
   if (response && response.value.length > 1) {
     const filteredResponse = response.value.filter((permissionGrant: any) =>
@@ -301,7 +301,7 @@ const getPermissionGrant = async (scopes: string[], servicePrincipalAppId: strin
   return response.value[0];
 }
 
-const getPermissionResponse = async (scopes: string[], query: IQuery) => {
+const makePermissionsRequest = async (scopes: string[], query: IQuery) => {
   const respHeaders: any = {};
   const response = await makeGraphRequest(scopes)(query);
   return parseResponse(response, respHeaders);
