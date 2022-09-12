@@ -56,10 +56,10 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
 
   return (
     <>
-      <Label className={classes.permissionLength} style={{marginLeft: '12px'}}>
+      <Label className={classes.permissionLength} style={{paddingLeft: '12px'}}>
         <FormattedMessage id='Permissions' />
       </Label>
-      <Label className={classes.permissionText} style={{marginLeft: '12px'}}>
+      <Label className={classes.permissionText} style={{paddingLeft: '12px'}}>
         {!tokenPresent && <FormattedMessage id='sign in to consent to permissions' />}
         {tokenPresent && <FormattedMessage id='permissions required to run the query'/>}
       </Label>
