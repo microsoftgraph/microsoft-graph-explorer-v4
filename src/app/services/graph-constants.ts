@@ -29,4 +29,4 @@ export const MOZILLA_CORS_DOCUMENTATION_LINK =
 export const USER_ORGANIZATION_URL = `${GRAPH_URL}/v1.0/organization`;
 export const NPS_FEEDBACK_URL = 'https://petrol.office.microsoft.com/v1/feedback';
 // eslint-disable-next-line max-len
-export const REVOKING_PERMISSIONS_REQUIRED_SCOPES = 'DelegatedPermissionGrant.ReadWrite.All Directory.ReadWrite.All';
+export const REVOKING_PERMISSIONS_REQUIRED_SCOPES = 'DelegatedPermissionGrant.ReadWrite.All Directory.Read.All';

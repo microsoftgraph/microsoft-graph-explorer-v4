@@ -246,6 +246,13 @@ const getQuery: IQuery = {
   sampleUrl: ''
 };
 
+const patchQuery: IQuery = {
+  selectedVerb: 'PATCH',
+  sampleHeaders: [],
+  selectedVersion: 'v1.0',
+  sampleUrl: ''
+}
+
 const userHasRequiredPermissions = (requiredPermissions: string[],
   consentedScopes: string[]) => {
   return requiredPermissions.every(scope => consentedScopes.includes(scope));
@@ -265,10 +272,21 @@ const revokePermission = async (oldScopes: string[], permissionGrantId: string, 
   const oAuth2PermissionGrant = {
     scope: newScopes
   };
-  const graphClient = GraphClient.getInstance();
 
-  await graphClient.api(`/oauth2PermissionGrants/${permissionGrantId}`)
-    .update(oAuth2PermissionGrant);
+  patchQuery.sampleBody = JSON.stringify(oAuth2PermissionGrant);
+  patchQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants/${permissionGrantId}`;
+  let response;
+  // eslint-disable-next-line no-useless-catch
+  try{
+    response = await getPermissionResponse([], patchQuery);
+    const { error }= response;
+    if(error){
+      throw error;
+    }
+  }
+  catch(error: any){
+    throw error;
+  }
 }
 
 const getPermissionGrant = async (scopes: string[], servicePrincipalAppId: string, principalid: string) => {
