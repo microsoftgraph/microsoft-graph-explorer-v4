@@ -109,7 +109,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
             componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
         }
         return (
-          <Pivot className='pivot-response'
+          <Pivot className='adaptive-pivot'
             onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}
             styles={{ text: { fontSize: FontSizes.size14 } }}>
             <PivotItem

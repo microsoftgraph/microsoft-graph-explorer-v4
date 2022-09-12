@@ -62,7 +62,6 @@ export function Monaco(props: IMonaco) {
               renderLineHighlight: 'none',
               scrollBeyondLastLine: true,
               overviewRulerBorder: false,
-              // eslint-disable-next-line no-useless-escape
               wordSeparators:'"'
             }}
             onChange={onChange}
