@@ -1,11 +1,12 @@
-import { getTheme, IButton, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
-import React, { useState, useEffect } from 'react';
+import { getTheme, IButton, IconButton, IIconProps, Spinner, TooltipHost } from '@fluentui/react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { useSelector } from 'react-redux';
-import FeedbackForm from '../query-runner/request/feedback/FeedbackForm';
 import { IRootState } from '../../../types/root';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
+
+const FeedbackForm = lazy(() => import('../query-runner/request/feedback/FeedbackForm'))
 
 export const FeedbackButton = () => {
   const [enableSurvey, setEnableSurvey] = useState(false);
@@ -81,9 +82,10 @@ export const FeedbackButton = () => {
             componentRef={feedbackButtonRef}
           />
         </TooltipHost>
-
-        <FeedbackForm onDismissSurvey={disableSurvey}
-          activated={enableSurvey} onDisableSurvey={disableSurvey} />
+        <Suspense fallback={<Spinner/>}>
+          <FeedbackForm onDismissSurvey={disableSurvey}
+            activated={enableSurvey} onDisableSurvey={disableSurvey} />
+        </Suspense>
       </div>
       }
     </div>

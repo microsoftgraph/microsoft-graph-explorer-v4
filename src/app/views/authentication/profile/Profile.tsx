@@ -13,7 +13,7 @@ import {
   Stack,
   styled
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useId } from '@fluentui/react-hooks';
 
@@ -23,10 +23,11 @@ import { togglePermissionsPanel } from '../../../services/actions/permissions-pa
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
-import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
 import { Mode } from '../../../../types/enums';
+
+const Permission = lazy(() => import('../../query-runner/request/permissions'))
 
 const getInitials = (name: string) => {
   let initials = '';
@@ -175,7 +176,11 @@ const Profile = (props: any) => {
   return (
     <div className={classes.profile} style={profileContainerStyles}>
       {showProfileComponent(persona)}
-      {permissionsPanelOpen && <Permission/>}
+      {permissionsPanelOpen &&
+      <Suspense fallback={<Spinner size={SpinnerSize.medium} />}>
+        <Permission/>
+      </Suspense>
+      }
     </div>
   );
 }

@@ -1,6 +1,6 @@
-import { Announced, getTheme, ITheme, styled } from '@fluentui/react';
+import { Announced, getTheme, ITheme, Spinner, styled } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import React, { Component } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -25,7 +25,7 @@ import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
 import { headerMessaging } from './app-sections/HeaderMessaging';
-import { StatusMessages, TermsOfUseMessage } from './app-sections';
+import { TermsOfUseMessage } from './app-sections';
 import { appStyles } from './App.styles';
 import { classNames } from './classnames';
 import { createShareLink } from './common/share';
@@ -61,6 +61,8 @@ interface IAppState {
   hideDialog: boolean;
   sidebarTabSelection: string;
 }
+
+const StatusMessages = lazy(() => import('./app-sections/StatusMessages'));
 
 class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
@@ -467,9 +469,11 @@ class App extends Component<IAppProps, IAppState> {
                 <div style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                 }}>
-                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                    <StatusMessages />
-                  </div>
+                  <Suspense fallback={<Spinner/>}>
+                    <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
+                      <StatusMessages />
+                    </div>
+                  </Suspense>
                   <QueryResponse verb={this.state.selectedVerb} />
                 </div>
               </Resizable>

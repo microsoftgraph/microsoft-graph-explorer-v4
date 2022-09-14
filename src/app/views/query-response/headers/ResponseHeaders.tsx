@@ -7,7 +7,7 @@ import { IRootState } from '../../../../types/root';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
-import { CopyButton } from '../../common/copy/CopyButton';
+import { CopyButton } from '../../common/copy-button/CopyButton';
 
 const ResponseHeaders = () => {
   const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } =

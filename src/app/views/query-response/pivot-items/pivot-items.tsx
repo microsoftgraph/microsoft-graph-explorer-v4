@@ -1,5 +1,5 @@
-import { getTheme, IPivotItemProps, ITheme, PivotItem } from '@fluentui/react';
-import React from 'react';
+import { getTheme, IPivotItemProps, ITheme, PivotItem, Spinner } from '@fluentui/react';
+import React, { lazy, Suspense} from 'react';
 import { useSelector } from 'react-redux';
 
 import { componentNames, telemetry } from '../../../../telemetry';
@@ -11,13 +11,14 @@ import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
-import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
-import GraphToolkit from '../graph-toolkit/GraphToolkit';
-import { ResponseHeaders } from '../headers';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
-import { Snippets } from '../snippets';
+
+const AdaptiveCard = lazy(() => import('../adaptive-cards/AdaptiveCard'));
+const GraphToolkit = lazy(() => import('../graph-toolkit/GraphToolkit'));
+const ResponseHeaders = lazy(() => import('../headers'));
+const Snippets = lazy(() => import('../snippets'));
 
 export const GetPivotItems = () => {
 
@@ -88,7 +89,9 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-headers-tab'
       }}
     >
-      <div id={'response-headers-tab'}><ResponseHeaders /></div>
+      <Suspense fallback={<Spinner/>}>
+        <div id={'response-headers-tab'}><ResponseHeaders /></div>
+      </Suspense>
     </PivotItem>
   ];
   if (mode === Mode.Complete) {
@@ -104,7 +107,9 @@ export const GetPivotItems = () => {
           'aria-controls': 'code-snippets-tab'
         }}
       >
-        <div id={'code-snippets-tab'}><Snippets /></div>
+        <Suspense fallback={<Spinner/>}>
+          <div id={'code-snippets-tab'}><Snippets /></div>
+        </Suspense>
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'
@@ -118,7 +123,9 @@ export const GetPivotItems = () => {
           'aria-controls': 'toolkit-tab'
         }}
       >
-        <div id={'toolkit-tab'}><GraphToolkit /></div>
+        <Suspense fallback={<Spinner/>}>
+          <div id={'toolkit-tab'}><GraphToolkit /></div>
+        </Suspense>
       </PivotItem>,
       <PivotItem
         key='adaptive-cards'
@@ -132,17 +139,19 @@ export const GetPivotItems = () => {
           'aria-controls': 'adaptive-cards-tab'
         }}
       >
-        <ThemeContext.Consumer >
-          {(theme) => (
+        <Suspense fallback={<Spinner/>}>
+          <ThemeContext.Consumer >
+            {(theme) => (
             // @ts-ignore
-            <div id={'adaptive-cards-tab'}>
-              <AdaptiveCard
-                body={body}
-                hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
-              />
-            </div>
-          )}
-        </ThemeContext.Consumer>
+              <div id={'adaptive-cards-tab'}>
+                <AdaptiveCard
+                  body={body}
+                  hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
+                />
+              </div>
+            )}
+          </ThemeContext.Consumer>
+        </Suspense>
       </PivotItem>
     );
   }

@@ -5,16 +5,15 @@ import {
   IconButton,
   Pivot,
   PivotItem,
+  Spinner,
   Stack,
   TooltipDelay,
   TooltipHost
 } from '@fluentui/react';
-import React from 'react';
+import React, { lazy, Suspense} from 'react';
 
 import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';
-import History from './history/History';
-import { ResourceExplorer } from './resource-explorer';
 import SampleQueries from './sample-queries/SampleQueries';
 import { sidebarStyles } from './Sidebar.styles';
 
@@ -25,6 +24,9 @@ interface ISidebar {
   toggleSidebar: Function;
   mobileScreen: boolean;
 }
+
+const History = lazy(() => import('./history/History'));
+const ResourceExplorer = lazy(() => import('./resource-explorer'));
 export const Sidebar = (props: ISidebar) => {
   const theme = getTheme();
   const styles = sidebarStyles(theme).sidebarButtons;
@@ -68,7 +70,9 @@ export const Sidebar = (props: ISidebar) => {
               'aria-controls': 'resources-tab'
             }}
           >
-            <div id={'resources-tab'}><ResourceExplorer /></div>
+            <Suspense fallback={<Spinner/>}>
+              <div id={'resources-tab'}><ResourceExplorer /></div>
+            </Suspense>
           </PivotItem>
           <PivotItem
             headerText={translateMessage('History')}
@@ -78,7 +82,9 @@ export const Sidebar = (props: ISidebar) => {
               'aria-controls': 'history-tab'
             }}
           >
-            <div id={'history-tab'}><History /></div>
+            <Suspense fallback={<Spinner/>}>
+              <div id={'history-tab'}><History /></div>
+            </Suspense>
           </PivotItem>
         </Pivot>
       }

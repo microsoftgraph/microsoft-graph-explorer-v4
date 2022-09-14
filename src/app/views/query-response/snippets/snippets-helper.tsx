@@ -10,7 +10,7 @@ import { trackedGenericCopy } from '../../common/copy';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { IRootState } from '../../../../types/root';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
-import { CopyButton } from '../../common/copy/CopyButton';
+import { CopyButton } from '../../common/copy-button/CopyButton';
 import { translateMessage } from '../../../utils/translate-messages';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { getSnippetStyles } from './Snippets.styles';

@@ -18,7 +18,7 @@ import { classNames } from '../../classnames';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 import { queryResponseStyles } from './../queryResponse.styles';
-import { CopyButton } from '../../common/copy/CopyButton';
+import { CopyButton } from '../../common/copy-button/CopyButton';
 
 class AdaptiveCard extends Component<IAdaptiveCardProps> {
   private adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null;

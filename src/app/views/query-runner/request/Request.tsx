@@ -1,10 +1,11 @@
 import {
   FontSizes,
   Pivot,
-  PivotItem
+  PivotItem,
+  Spinner
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import React, { Component, CSSProperties } from 'react';
+import React, { Component, CSSProperties, lazy, Suspense } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -16,11 +17,12 @@ import { IRootState } from '../../../../types/root';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
-import { Auth } from './auth';
 import { RequestBody } from './body';
-import { RequestHeaders } from './headers';
-import { Permission } from './permissions';
 import './request.scss';
+
+const Permission = lazy(() => import('./permissions'));
+const Auth = lazy(() => import('./auth'));
+const RequestHeaders = lazy(() => import('./headers'));
 
 export class Request extends Component<IRequestComponent, any> {
   constructor(props: IRequestComponent) {
@@ -72,9 +74,11 @@ export class Request extends Component<IRequestComponent, any> {
           'aria-controls': 'request-header-tab'
         }}
       >
-        <div style={containerStyle} id={'request-header-tab'}>
-          <RequestHeaders />
-        </div>
+        <Suspense fallback={<Spinner/>}>
+          <div style={containerStyle} id={'request-header-tab'}>
+            <RequestHeaders />
+          </div>
+        </Suspense>
       </PivotItem>,
       <PivotItem
         key='modify-permissions'
@@ -87,9 +91,11 @@ export class Request extends Component<IRequestComponent, any> {
           'aria-controls': 'permission-tab'
         }}
       >
-        <div style={containerStyle} id={'permission-tab'}>
-          <Permission />
-        </div>
+        <Suspense fallback={<Spinner/>}>
+          <div style={containerStyle} id={'permission-tab'}>
+            <Permission />
+          </div>
+        </Suspense>
       </PivotItem>
     ];
     if (mode === Mode.Complete) {
@@ -104,9 +110,11 @@ export class Request extends Component<IRequestComponent, any> {
           headerButtonProps={{
             'aria-controls': 'access-token-tab'
           }}>
-          <div style={containerStyle} id={'access-token-tab'}>
-            <Auth />
-          </div>
+          <Suspense fallback={<Spinner/>}>
+            <div style={containerStyle} id={'access-token-tab'}>
+              <Auth />
+            </div>
+          </Suspense>
         </PivotItem>,
       );
     }

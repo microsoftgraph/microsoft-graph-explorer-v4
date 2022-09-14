@@ -10,7 +10,7 @@ import { IRootState } from '../../../../../types/root';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { trackedGenericCopy } from '../../../common/copy';
-import { CopyButton } from '../../../common/copy/CopyButton';
+import { CopyButton } from '../../../common/copy-button/CopyButton';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { authStyles } from './Auth.styles';
 
