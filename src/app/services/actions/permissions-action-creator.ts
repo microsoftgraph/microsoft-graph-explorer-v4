@@ -29,6 +29,7 @@ import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { IQuery } from '../../../types/query-runner';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 
 export function fetchFullScopesSuccess(response: object): IAction {
   return {
@@ -148,99 +149,9 @@ export function consentToScopes(scopes: string[]): Function {
   };
 }
 
-export function revokeScopes(permissionToDelete: string): Function {
-  return async (dispatch: Function, getState: Function) => {
-    const { consentedScopes, profile } = getState();
-    const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
-    const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
-    let response = null;
-
-    if (userRevokingDefaultScopes(defaultScopes, permissionToDelete)) {
-      dispatch(
-        setQueryResponseStatus({
-          statusText: translateMessage('Default scope'),
-          status: translateMessage('Cannot delete default scope'),
-          ok: false,
-          messageType: MessageBarType.error
-        })
-      );
-      return;
-    }
-
-    if (!userHasRequiredPermissions(requiredPermissions, consentedScopes)) {
-      dispatch(
-        setQueryResponseStatus({
-          statusText: translateMessage('Unable to dissent'),
-          status: translateMessage('You require the following permissions to revoke'),
-          ok: false,
-          messageType: MessageBarType.error
-        })
-      );
-      return;
-    }
-
-    try {
-      if (!consentedScopes && consentedScopes.length < 1) {
-        return;
-      }
-
-      const newScopesArray: string[] = (consentedScopes.filter((scope: string) => scope !== permissionToDelete));
-      const newScopesString = newScopesArray.join(' ');
-
-      const servicePrincipalAppId = await getCurrentAppId(consentedScopes);
-      response = await getPermissionGrant(consentedScopes, servicePrincipalAppId, profile.id);
-      const permissionGrantId = response.id;
-
-      await revokePermission(consentedScopes, permissionGrantId, newScopesString);
-
-      response = await getPermissionGrant(consentedScopes, servicePrincipalAppId, profile.id);
-      const updatedScopes = response.scope.split(' ');
-
-      if (updatedScopes.length !== newScopesArray.length) {
-        return;
-      }
-
-      const authResponse = await getNewAuthObject(updatedScopes);
-
-      if (authResponse && authResponse.accessToken) {
-        dispatch(getAuthTokenSuccess(true));
-        dispatch(getConsentedScopesSuccess(authResponse.scopes));
-        dispatch(
-          setQueryResponseStatus({
-            statusText: translateMessage('Success'),
-            status: translateMessage('Permission revoked'),
-            ok: true,
-            messageType: MessageBarType.success
-          })
-        );
-        if (authResponse.account && authResponse.account.localAccountId !== profile?.id) {
-          dispatch(getProfileInfo());
-        }
-      }
-
-    }
-    catch (error: any) {
-      const { statusCode, code } = error;
-      dispatch(
-        setQueryResponseStatus({
-          statusText: statusCode && code ? (statusCode + ' ' + code) : translateMessage('Unable to dissent'),
-          status: error ? error.message : translateMessage('An error occurred when dissenting'),
-          ok: false,
-          messageType: MessageBarType.error
-        })
-      );
-    }
-  }
-}
-
 const getQuery: IQuery = {
   selectedVerb: 'GET',
-  sampleHeaders: [
-    {
-      name: 'Cache-Control',
-      value: 'no-cache'
-    }
-  ],
+  sampleHeaders: [],
   selectedVersion: '',
   sampleUrl: ''
 };
@@ -252,6 +163,94 @@ const patchQuery: IQuery = {
   sampleUrl: ''
 }
 
+interface IPreliminaryChecksObject {
+  defaultUserScopes: string[];
+  requiredPermissions: string[];
+  consentedScopes: string[];
+  permissionToRevoke: string;
+
+}
+
+enum REVOKE_STATUS {
+  success = 'success',
+  failure = 'failure',
+  preliminaryChecksFail = 'preliminaryChecksFail'
+}
+
+export function revokeScopes(permissionToRevoke: string): Function {
+  return async (dispatch: Function, getState: Function) => {
+    const { consentedScopes, profile } = getState();
+    const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
+    const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
+
+    if (!consentedScopes && consentedScopes.length === 0) {
+      trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
+      return;
+    }
+    const newScopesArray: string[] = (consentedScopes.filter((scope: string) => scope !== permissionToRevoke));
+    const newScopesString: string = newScopesArray.join(' ');
+
+    const preliminaryChecksObject: IPreliminaryChecksObject = {
+      defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke
+    }
+
+    if (!preliminaryChecksSuccess(dispatch, preliminaryChecksObject)) {
+      trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
+      return;
+    }
+    try {
+      const updatedScopes = await updatePermissionGrant(consentedScopes, profile, newScopesString);
+      if (updatedScopes.length !== newScopesArray.length) {
+        return;
+      }
+      const authResponse = await getNewAuthObject(updatedScopes);
+      if (authResponse && authResponse.accessToken) {
+        dispatchAuthResponseStatus(dispatch, authResponse, profile);
+      }
+      trackRevokeConsentEvent(REVOKE_STATUS.success, permissionToRevoke);
+    }
+    catch (error: any) {
+      const { statusCode, code } = error;
+      dispatchErrorStatus(dispatch, statusCode, code, error);
+      const permissionObject = {
+        permissionToRevoke,
+        statusCode,
+        code
+      }
+      trackRevokeConsentEvent(REVOKE_STATUS.failure, permissionObject);
+    }
+  }
+}
+
+const preliminaryChecksSuccess = (dispatch: Function, preliminaryChecksObject: IPreliminaryChecksObject) => {
+  const { defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke } = preliminaryChecksObject
+  if (userRevokingDefaultScopes(defaultUserScopes, permissionToRevoke)) {
+    dispatch(
+      setQueryResponseStatus({
+        statusText: translateMessage('Default scope'),
+        status: translateMessage('Cannot delete default scope'),
+        ok: false,
+        messageType: MessageBarType.error
+      })
+    );
+    return false;
+  }
+
+  if (!userHasRequiredPermissions(requiredPermissions, consentedScopes)) {
+    dispatch(
+      setQueryResponseStatus({
+        statusText: translateMessage('Unable to dissent'),
+        status: translateMessage('You require the following permissions to revoke'),
+        ok: false,
+        messageType: MessageBarType.error
+      })
+    );
+    return false;
+  }
+  return true;
+}
+
+
 const userHasRequiredPermissions = (requiredPermissions: string[],
   consentedScopes: string[]) => {
   return requiredPermissions.every(scope => consentedScopes.includes(scope));
@@ -261,44 +260,6 @@ const userRevokingDefaultScopes = (currentScopes: string[], permissionToDelete: 
   return currentScopes.includes(permissionToDelete);
 }
 
-const getCurrentAppId = async (scopes: string[]) => {
-  const currentAppId = process.env.REACT_APP_CLIENT_ID;
-  getQuery.sampleUrl = `${GRAPH_URL}/v1.0/servicePrincipals?$filter=appId eq '${currentAppId}'`;
-  const response = await makePermissionsRequest(scopes, getQuery);
-  return response.value[0].id;
-}
-const revokePermission = async (oldScopes: string[], permissionGrantId: string, newScopes: string) => {
-  const oAuth2PermissionGrant = {
-    scope: newScopes
-  };
-
-  patchQuery.sampleBody = JSON.stringify(oAuth2PermissionGrant);
-  patchQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants/${permissionGrantId}`;
-  let response;
-  // eslint-disable-next-line no-useless-catch
-  try{
-    response = await makePermissionsRequest([], patchQuery);
-    const { error }= response;
-    if(error){
-      throw error;
-    }
-  }
-  catch(error: any){
-    throw error;
-  }
-}
-
-const getPermissionGrant = async (scopes: string[], servicePrincipalAppId: string, principalid: string) => {
-  getQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
-  const response = await makePermissionsRequest(scopes, getQuery);
-
-  if (response && response.value.length > 1) {
-    const filteredResponse = response.value.filter((permissionGrant: any) =>
-      permissionGrant.principalId === principalid);
-    return filteredResponse[0];
-  }
-  return response.value[0];
-}
 
 const makePermissionsRequest = async (scopes: string[], query: IQuery) => {
   const respHeaders: any = {};
@@ -311,11 +272,94 @@ const getNewAuthObject = async (updatedScopes: string[]) => {
   await authenticationWrapper.logOut();
   let authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
 
-  while(retries > 0 && authResponse && authResponse.scopes.length !== updatedScopes.length){
+  while (retries > 0 && authResponse && authResponse.scopes.length !== updatedScopes.length) {
     await authenticationWrapper.logOut();
     authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
-    retries --;
+    retries--;
   }
 
   return authResponse;
+}
+
+const updatePermissionGrant = async (consentedScopes: string[], profile: any, newScopesString: string) => {
+  const servicePrincipalAppId = await getCurrentAppId(consentedScopes);
+  let response = await getPermissionGrant(consentedScopes, servicePrincipalAppId, profile.id);
+  const permissionGrantId = response.id;
+  await revokePermission(permissionGrantId, newScopesString);
+  response = await getPermissionGrant(consentedScopes, servicePrincipalAppId, profile.id);
+  const updatedScopes = response.scope.split(' ');
+  return updatedScopes;
+}
+
+const getCurrentAppId = async (scopes: string[]) => {
+  const currentAppId = process.env.REACT_APP_CLIENT_ID;
+  getQuery.sampleUrl = `${GRAPH_URL}/v1.0/servicePrincipals?$filter=appId eq '${currentAppId}'`;
+  const response = await makePermissionsRequest(scopes, getQuery);
+  return response.value[0].id;
+}
+
+const revokePermission = async (permissionGrantId: string, newScopes: string) => {
+  const oAuth2PermissionGrant = {
+    scope: newScopes
+  };
+  patchQuery.sampleBody = JSON.stringify(oAuth2PermissionGrant);
+  patchQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants/${permissionGrantId}`;
+  // eslint-disable-next-line no-useless-catch
+  try {
+    const response = await makePermissionsRequest([], patchQuery);
+    const { error } = response;
+    if (error) {
+      throw error;
+    }
+  }
+  catch (error: any) {
+    throw error;
+  }
+}
+
+const getPermissionGrant = async (scopes: string[], servicePrincipalAppId: string, principalid: string) => {
+  getQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
+  const response = await makePermissionsRequest(scopes, getQuery);
+
+  if (response && response.value.length > 1) {
+    const filteredResponse = response.value.find((permissionGrant: any) =>
+      permissionGrant.principalId === principalid);
+    return filteredResponse;
+  }
+  return response.value[0];
+}
+
+const dispatchErrorStatus = (dispatch: Function, statusCode: string, code: string, error: any) => {
+  dispatch(
+    setQueryResponseStatus({
+      statusText: statusCode && code ? (statusCode + ' ' + code) : translateMessage('Unable to dissent'),
+      status: error ? error.message : translateMessage('An error occurred when dissenting'),
+      ok: false,
+      messageType: MessageBarType.error
+    })
+  );
+}
+
+const dispatchAuthResponseStatus = (dispatch: Function, authResponse: any, profile: any) => {
+  if (authResponse.account && authResponse.account.localAccountId !== profile?.id) {
+    dispatch(getProfileInfo());
+  }
+  dispatch(getAuthTokenSuccess(true));
+  dispatch(getConsentedScopesSuccess(authResponse.scopes));
+  dispatch(
+    setQueryResponseStatus({
+      statusText: translateMessage('Success'),
+      status: translateMessage('Permission revoked'),
+      ok: true,
+      messageType: MessageBarType.success
+    })
+  );
+}
+
+const trackRevokeConsentEvent = (status: string, permissionObject: any) => {
+  telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+    componentName: componentNames.REVOKE_PERMISSION_CONSENT_BUTTON,
+    permissionObject,
+    status
+  });
 }
