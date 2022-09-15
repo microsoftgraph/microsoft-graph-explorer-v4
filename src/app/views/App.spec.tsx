@@ -224,7 +224,7 @@ describe('App rendering', () => {
   it('should render the permissions tab and its children when the modify permissions tab is clicked', async () => {
     const user = userEvent.setup();
     renderApp({mobileScreen: false, showSidebar: true});
-    const modifyPermissionsTab = screen.getByRole('tab', { name: /modify permissions \(preview\)/i});
+    const modifyPermissionsTab = screen.getByRole('tab', { name: /modify permissions/i});
     await user.click(modifyPermissionsTab);
     expect(screen.getByText(/Permissions for the query are missing on this tab/i)).toBeDefined();
   });
