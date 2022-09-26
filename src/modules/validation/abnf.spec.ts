@@ -15,7 +15,7 @@ const validUrls = [
   'https://graph.microsoft.com/beta/items/getActivitiesByInterval(startDateTime=\'2017-01-01\',endDateTime=\'2017-01-03\',interval=\'day\')',
   'https://graph.microsoft.com/beta/me/drive/root:/FolderA/FileB.txt:/content',
   'https://graph.microsoft.com/v1.0/me/drive/root:/Test Folder',
-  'https://graph.microsoft.com/v1.0/me/drive/root:/Encoded%20URL',
+  'https://graph.microsoft.com/v1.0/me/drive/root:/Encoded%20URL'
 ];
 
 const invalidUrls = [
@@ -38,7 +38,7 @@ const forcedTrailingSlashes = [
   'https://graph.microsoft.com/v1.0/applications_v2/02bd9fd6-8f93-4758-87c3-1fb73740a315/',
   'https://graph.microsoft.com/beta/groups/02bd9fd6-8f93-4758-87c3-1fb73740a315/owners/$ref/',
   // eslint-disable-next-line max-len
-  'https://graph.microsoft.com/v1.0/teams/02bd9fd6-8f93-4758-87c3-1fb73740a315/channels/19:09fc54a3141a45d0bc769cf506d2e079@thread.skype/',
+  'https://graph.microsoft.com/v1.0/teams/02bd9fd6-8f93-4758-87c3-1fb73740a315/channels/19:09fc54a3141a45d0bc769cf506d2e079@thread.skype/'
 
 ]
 describe('Abnf parser should', () => {
