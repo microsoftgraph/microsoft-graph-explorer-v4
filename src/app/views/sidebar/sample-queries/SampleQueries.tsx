@@ -126,7 +126,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   const columns: IColumn[] = [
     {
       key: 'button',
-      name: 'doc',
+      name: '',
       fieldName: 'button',
       minWidth: 15,
       maxWidth: 25,
