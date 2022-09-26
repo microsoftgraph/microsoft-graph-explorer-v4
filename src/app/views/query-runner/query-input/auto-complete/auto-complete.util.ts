@@ -49,7 +49,7 @@ function getErrorMessage(queryUrl: string) {
 
   const error = getValidationError(queryUrl);
   if (error) {
-    return `${translateMessage('Possible error found in URL at')} + ${error}`;
+    return `${translateMessage('Possible error found in URL near')}: ${error}`;
   }
   return '';
 }

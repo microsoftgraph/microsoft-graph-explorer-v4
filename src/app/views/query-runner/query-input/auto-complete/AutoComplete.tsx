@@ -27,7 +27,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   let element: HTMLDivElement | null | undefined = null;
 
-  const { sampleQuery, autoComplete: { data: autoCompleteOptions } } = useSelector(
+  const { sampleQuery, autoComplete: { data: autoCompleteOptions, pending: autoCompletePending } } = useSelector(
     (state: IRootState) => state
   );
 
@@ -244,7 +244,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   }: any = queryInputStyles(currentTheme).autoComplete;
 
   const onRenderDescription = (properties: any): any => {
-    if (!shouldShowSuggestions) {
+    if (!shouldShowSuggestions && !autoCompletePending) {
       return (
         <Text variant="small" >
           {properties.description}
