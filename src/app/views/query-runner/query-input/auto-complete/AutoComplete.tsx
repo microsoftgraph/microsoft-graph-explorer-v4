@@ -1,4 +1,4 @@
-import { getTheme, KeyCodes, TextField } from '@fluentui/react';
+import { getTheme, KeyCodes, TextField, Text, ITextFieldProps } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -243,6 +243,16 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     input: autoInput
   }: any = queryInputStyles(currentTheme).autoComplete;
 
+  const onRenderDescription = (properties: any): any => {
+    if (!shouldShowSuggestions) {
+      return (
+        <Text variant="small" >
+          {properties.description}
+        </Text>
+      );
+    }
+  };
+
 
   return (
     <div onBlur={closeSuggestionDialog}>
@@ -262,7 +272,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           onRenderSuffix={(renderSuffix()) ? renderSuffix : undefined}
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
-          errorMessage={getErrorMessage(queryUrl)}
+          onRenderDescription={onRenderDescription}
+          description={getErrorMessage(queryUrl)}
         />
       </div>
       {shouldShowSuggestions && queryUrl && suggestions.length > 0 &&

@@ -43,14 +43,13 @@ function getErrorMessage(queryUrl: string) {
     return translateMessage('Missing url');
   }
 
-
   if (hasPlaceHolders(queryUrl)) {
     return translateMessage('Parts between {} need to be replaced with real values');
   }
 
   const error = getValidationError(queryUrl);
   if (error) {
-    return `${translateMessage('error found in URL at')} + ${error}`;
+    return `${translateMessage('Possible error found in URL at')} + ${error}`;
   }
   return '';
 }
