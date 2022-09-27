@@ -80,10 +80,6 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     setSampleQueries(filteredQueries);
   };
 
-  const onDocumentationLinkClicked = (item: ISampleQuery) => {
-    window.open(item.docLink, '_blank');
-    trackDocumentLinkClickedEvent(item);
-  };
 
   const querySelected = (query: ISampleQuery) => {
     const queryVersion = query.requestUrl.substring(1, 5);
@@ -146,15 +142,20 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             id={getId()}
             calloutProps={{ gapSpace: 0 }}
           >
-            <Icon
-              iconName='TextDocument'
-              className={classes.docLink}
-              style={{
-                marginRight: '45%',
-                width: 10
-              }}
-              onClick={() => onDocumentationLinkClicked(item)}
-            />
+            <Link
+              target="_blank"
+              href={item.docLink}
+              onClick={() => trackDocumentLinkClickedEvent(item)}
+            >
+              <Icon
+                className={classes.docLink}
+                iconName='TextDocument'
+                style={{
+                  marginRight: '45%',
+                  width: 10
+                }}
+              />
+            </Link>
           </TooltipHost>
         );
       }
