@@ -80,7 +80,6 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     setSampleQueries(filteredQueries);
   };
 
-
   const querySelected = (query: ISampleQuery) => {
     const queryVersion = query.requestUrl.substring(1, 5);
     const sampleQuery: IQuery = {
@@ -171,7 +170,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
         const signInText = translateMessage('Sign In to try this sample');
 
         if (item.method === 'GET' || tokenPresent) {
-          return null;
+          return <div aria-hidden='true' />;
         }
 
         return (
