@@ -4,7 +4,7 @@ import {
   GroupHeader, IColumn, Icon, IDetailsRowStyles, IGroup, Link, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -16,22 +16,22 @@ import {
   ISampleQuery
 } from '../../../../types/query-runner';
 import { IRootState } from '../../../../types/root';
+import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
+import { fetchSamples } from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
-import { getStyleFor } from '../../../utils/http-methods.utils';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
+import { getStyleFor } from '../../../utils/http-methods.utils';
+import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { substituteTokens } from '../../../utils/token-helpers';
+import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
+import { NoResultsFound } from '../sidebar-utils/SearchResult';
+import { sidebarStyles } from '../Sidebar.styles';
 import {
-  columns, isJsonString, performSearch, trackDocumentLinkClickedEvent,
+  isJsonString, performSearch, trackDocumentLinkClickedEvent,
   trackSampleQueryClickEvent
 } from './sample-query-utils';
-import { sidebarStyles } from '../Sidebar.styles';
-import { searchBoxStyles } from '../../../utils/searchbox.styles';
-import { fetchSamples } from '../../../services/actions/samples-action-creators';
-import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
-import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { translateMessage } from '../../../utils/translate-messages';
-import { NoResultsFound } from '../sidebar-utils/SearchResult';
 
 const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
 
@@ -66,7 +66,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   useEffect(() => {
     if (shouldGenerateGroups.current) {
       setGroups(generateGroupsFromList(sampleQueries, 'category'));
-      if(groups && groups.length > 0){
+      if (groups && groups.length > 0) {
         shouldGenerateGroups.current = false;
       }
     }
@@ -78,11 +78,6 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     const { queries } = samples;
     const filteredQueries = value ? performSearch(queries, value) : queries;
     setSampleQueries(filteredQueries);
-  };
-
-  const onDocumentationLinkClicked = (item: ISampleQuery) => {
-    window.open(item.docLink, '_blank');
-    trackDocumentLinkClickedEvent(item);
   };
 
   const querySelected = (query: ISampleQuery) => {
@@ -123,121 +118,151 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     }));
   }
 
-  const renderItemColumn = (
-    item: ISampleQuery,
-    index: number | undefined,
-    column: IColumn | undefined
-  ) => {
-    if (column) {
-      const queryContent = item[column.fieldName as keyof ISampleQuery] as string;
-      const signInText = translateMessage('Sign In to try this sample');
+  const columns: IColumn[] = [
+    {
+      key: 'button',
+      name: '',
+      fieldName: 'button',
+      minWidth: 15,
+      maxWidth: 25,
+      isIconOnly: true,
 
-      switch (column.key) {
-        case 'authRequiredIcon':
-          if (item.method !== 'GET' && !tokenPresent) {
-            return (
-              <TooltipHost
-                tooltipProps={{
-                  onRenderContent: () => (
-                    <div style={{ paddingBottom: 3 }}>
-                      <FormattedMessage id={signInText} />
-                    </div>
-                  )
-                }}
-                id={getId()}
-                calloutProps={{ gapSpace: 0 }}
-                styles={{ root: { display: 'inline-block' } }}
-              >
-                <Icon
-                  iconName='Lock'
-                  style={{
-                    fontSize: 15,
-                    height: 10,
-                    width: 10,
-                    verticalAlign: 'center',
-                    paddingTop: 2,
-                    paddingRight: 1
-                  }}
-                />
-              </TooltipHost>
-            );
-          } else {
-            return null;
-          }
-
-        case 'button':
-          return (
-            <TooltipHost
-              tooltipProps={{
-                onRenderContent: () => (
-                  <div
-                    style={{ paddingBottom: 3 }}>
-                    {item.docLink}
-                  </div>
-                )
-              }}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
+      onRender: (item: ISampleQuery) => {
+        return (
+          <TooltipHost
+            tooltipProps={{
+              onRenderContent: () => (
+                <div
+                  style={{ paddingBottom: 3 }}>
+                  {item.docLink}
+                </div>
+              )
+            }}
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+          >
+            <Link
+              target="_blank"
+              href={item.docLink}
+              onClick={() => trackDocumentLinkClickedEvent(item)}
             >
               <Icon
-                iconName='TextDocument'
-                onClick={() => onDocumentationLinkClicked(item)}
                 className={classes.docLink}
+                iconName='TextDocument'
                 style={{
                   marginRight: '45%',
                   width: 10
                 }}
               />
-            </TooltipHost>
-          );
+            </Link>
+          </TooltipHost>
+        );
+      }
+    },
+    {
+      key: 'authRequiredIcon',
+      name: '',
+      fieldName: 'authRequiredIcon',
+      minWidth: 20,
+      maxWidth: 20,
+      isIconOnly: true,
+      onRender: (item: ISampleQuery) => {
+        const signInText = translateMessage('Sign In to try this sample');
 
-        case 'method':
-          return (
-            <TooltipHost
-              tooltipProps={{
-                onRenderContent: () => (
-                  <div style={{ paddingBottom: 3 }}>{queryContent}</div>
-                )
-              }}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
-              styles={{ root: { display: 'inline-block' } }}
-            >
-              <span
-                className={classes.badge}
-                style={{
-                  background: getStyleFor(item.method),
-                  textAlign: 'center',
-                  position: 'relative',
-                  right: '5px'
-                }}
-              >
-                {item.method}
-              </span>
-            </TooltipHost>
-          );
+        if (item.method === 'GET' || tokenPresent) {
+          return <div aria-hidden='true' />;
+        }
 
-        default:
-          return (
-            <TooltipHost
-              tooltipProps={{
-                onRenderContent: () => (
-                  <div style={{ paddingBottom: 3 }}>
-                    {item.method} {queryContent}{' '}
-                  </div>
-                )
+        return (
+          <TooltipHost
+            tooltipProps={{
+              onRenderContent: () => (
+                <div style={{ paddingBottom: 3 }}>
+                  <FormattedMessage id={signInText} />
+                </div>
+              )
+            }}
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+            styles={{ root: { display: 'inline-block' } }}
+          >
+            <Icon
+              iconName='Lock'
+              style={{
+                fontSize: 15,
+                height: 10,
+                width: 10,
+                verticalAlign: 'center',
+                paddingTop: 2,
+                paddingRight: 1
               }}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
+            />
+          </TooltipHost>
+        );
+      }
+    },
+    {
+      key: 'method',
+      name: '',
+      fieldName: 'method',
+      minWidth: 20,
+      maxWidth: 50,
+      onRender: (item: ISampleQuery) => {
+
+        return (
+          <TooltipHost
+            tooltipProps={{
+              onRenderContent: () => (
+                <div style={{ paddingBottom: 3 }}>{item.method}</div>
+              )
+            }}
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+            styles={{ root: { display: 'inline-block' } }}
+          >
+            <span
+              className={classes.badge}
+              style={{
+                background: getStyleFor(item.method),
+                textAlign: 'center',
+                position: 'relative',
+                right: '5px'
+              }}
             >
-              <span aria-label={queryContent} className={classes.queryContent}>
-                {queryContent}
-              </span>
-            </TooltipHost>
-          );
+              {item.method}
+            </span>
+          </TooltipHost>
+        );
+      }
+    },
+    {
+      key: 'humanName',
+      name: '',
+      fieldName: 'humanName',
+      minWidth: 100,
+      maxWidth: 200,
+      onRender: (item: ISampleQuery) => {
+        const queryContent = item.humanName;
+        return (
+          <TooltipHost
+            tooltipProps={{
+              onRenderContent: () => (
+                <div style={{ paddingBottom: 3 }}>
+                  {item.method} {queryContent}{' '}
+                </div>
+              )
+            }}
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+          >
+            <span aria-label={queryContent} className={classes.queryContent}>
+              {queryContent}
+            </span>
+          </TooltipHost>
+        );
       }
     }
-  }
+  ];
 
   const renderRow = (props: any): any => {
     let selectionDisabled = false;
@@ -356,7 +381,6 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
               cellExtraRightPadding: 0,
               cellLeftPadding: 0
             }}
-            onRenderItemColumn={renderItemColumn}
             items={sampleQueries}
             selectionMode={SelectionMode.none}
             columns={columns}
