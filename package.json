@@ -114,7 +114,9 @@
                 "eslint": "8.23.0",
                 "html-webpack-plugin": "5.5.0",
                 "jest": "28.1.0",
-                "jest-environment-jsdom": "29.0.2",
+                "jest-environment-jsdom": "29.1.2",
+                "jest-canvas-mock": "2.4.0",
+
                 "jest-fetch-mock": "3.0.3",
                 "jest-sonar-reporter": "2.0.0",
                 "jest-watch-typeahead": "2.1.1",
