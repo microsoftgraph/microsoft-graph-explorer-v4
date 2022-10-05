@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-require('dotenv');
+require('dotenv').config();
 
 const PLAYWRIGHT_TESTS_USERNAME = process.env.PLAYWRIGHT_TESTS_USERNAME;
 const PLAYWRIGHT_TESTS_PASSWORD = process.env.PLAYWRIGHT_TESTS_PASSWORD;
