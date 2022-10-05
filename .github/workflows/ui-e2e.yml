@@ -1,0 +1,42 @@
+name: Run Automated UI Tests
+on:
+  workflow_dispatch:
+    inputs:
+      base-url:
+        description: Live Graph Explorer link
+        required: true
+
+jobs:
+  run_tests:
+    name: Install node modules
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+
+      - name: Cache npm
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: |
+          npm ci --no-audit
+          npx playwright install-deps
+          npx playwright install
+
+      - name: Run Playwright Tests
+        continue-on-error: false
+        env:
+          PLAYWRIGHT_TESTS_BASE_URL: ${{ github.event.inputs.base-url }}
+        run: |
+          npx playwright test

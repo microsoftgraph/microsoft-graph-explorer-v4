@@ -1,13 +1,13 @@
 import { test, expect } from '@playwright/test';
 
-test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+test.beforeEach(async ({ page, baseURL }) => {
+  await page.goto(baseURL!);
   await expect(page).toHaveTitle(/Graph Explorer/);
 });
 
 test.describe('Sample Queries', () => {
 
-  test('Documentation link icons are visible and clicking on them opens a new tab', async ({ page }) => {
+  test.skip('Documentation link icons are visible and clicking on them opens a new tab', async ({ page }) => {
 
     const [newPage] = await Promise.all([
       page.waitForEvent('popup'),

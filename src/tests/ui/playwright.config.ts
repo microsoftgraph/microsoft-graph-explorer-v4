@@ -1,7 +1,8 @@
+require('dotenv');
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
+const baseURL = process.env.PLAYWRIGHT_TESTS_BASE_URL!;
 
-const baseURL = 'http://localhost:3000';
 const config: PlaywrightTestConfig = {
   use: {
     baseURL
