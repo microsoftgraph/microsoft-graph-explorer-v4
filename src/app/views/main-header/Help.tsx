@@ -45,7 +45,7 @@ export const Help = () => {
       {
         key: 'ge-documentation',
         text: translateMessage('Get started with Graph Explorer'),
-        href: 'https://docs.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview?view=graph-rest-1.0',
+        href: 'https://learn.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview?view=graph-rest-1.0',
         target: '_blank',
         iconProps: {
           iconName: 'TextDocument'
@@ -55,7 +55,7 @@ export const Help = () => {
       {
         key: 'graph-documentation',
         text: translateMessage('Graph Documentation'),
-        href: ' https://docs.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0',
+        href: ' https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0',
         target: '_blank',
         iconProps: {
           iconName: 'Documentation'
