@@ -26,7 +26,7 @@ const styledTermsOfUseMessage = () => {
         onClick={(e) =>
           telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
             componentNames.MICROSOFT_APIS_TERMS_OF_USE_LINK)}
-        href={'https://docs.microsoft.com/' + geLocale +
+        href={'https://learn.microsoft.com/' + geLocale +
           '/legal/microsoft-apis/terms-of-use?context=graph/context'} target='_blank' rel='noopener noreferrer'>
         <FormattedMessage id='Terms of use' /></Link>.
       <FormattedMessage id='View the' />
