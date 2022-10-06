@@ -102,9 +102,9 @@ class App extends Component<IAppProps, IAppState> {
     }
 
     const whiteListedDomains = [
-      'https://docs.microsoft.com',
-      'https://review.docs.microsoft.com',
-      'https://ppe.docs.microsoft.com',
+      'https://learn.microsoft.com',
+      'https://review.learn.microsoft.com',
+      'https://dev.learn.microsoft.com',
       'https://docs.azure.cn'
     ];
 

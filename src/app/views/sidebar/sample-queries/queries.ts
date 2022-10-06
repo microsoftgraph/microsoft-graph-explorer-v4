@@ -7,7 +7,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my profile',
     requestUrl: '/v1.0/me',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-get',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-get',
     skipTest: false
   },
   {
@@ -15,7 +15,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my profile (beta)',
     requestUrl: '/beta/me/profile',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/profile-get?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/profile-get?view=graph-rest-beta&tabs=http',
     skipTest: false
   },
   {
@@ -23,7 +23,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my photo',
     requestUrl: '/v1.0/me/photo/$value',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/profilephoto-get?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/profilephoto-get?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -31,7 +31,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my mail',
     requestUrl: '/v1.0/me/messages',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -39,7 +39,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'all the items in my drive',
     requestUrl: '/v1.0/me/drive/root/children',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/driveitem-list-children?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/driveitem-list-children?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -47,7 +47,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'items trending around me',
     requestUrl: '/beta/me/insights/trending',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/insights-list-trending?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/insights-list-trending?view=graph-rest-beta',
     skipTest: false
   },
   {
@@ -55,7 +55,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my manager',
     requestUrl: '/v1.0/me/manager',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-manager?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-manager?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -64,7 +64,7 @@ export const queries: ISampleQuery[] = [
     humanName: 'my To Do task lists',
     requestUrl: '/v1.0/me/todo/lists',
     tip: 'This query requires the Tasks.ReadWrite permission',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/todo-list-lists?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/todo-list-lists?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -78,7 +78,7 @@ export const queries: ISampleQuery[] = [
         'value': 'eventual'
       }
     ],
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list?view=graph-rest-beta&tabs=http#example-6-get-only-a-count-of-users',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list?view=graph-rest-beta&tabs=http#example-6-get-only-a-count-of-users',
     tip: 'You are using the advanced query capabilities for Directory Objects, please send us feedback here: https://aka.ms/aadmgs',
     skipTest: false
   },
@@ -87,7 +87,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my direct reports',
     requestUrl: '/v1.0/me/directReports',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-directreports?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-directreports?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -95,7 +95,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'all users in the organization',
     requestUrl: '/v1.0/users',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/users?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/users?view=graph-rest-1.0',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/UsersAPIFeedback',
     skipTest: false
   },
@@ -104,7 +104,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'all guest users in the organization',
     requestUrl: '/v1.0/users/?$filter=userType eq \'guest\'',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/users?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/users?view=graph-rest-1.0',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/UsersAPIFeedback',
     skipTest: false
   },
@@ -113,7 +113,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'count the guest users in your organization',
     requestUrl: '/v1.0/users/$count?$filter=userType eq \'guest\'',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list?view=graph-rest-beta&tabs=http#example-6-get-only-a-count-of-users',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list?view=graph-rest-beta&tabs=http#example-6-get-only-a-count-of-users',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/UsersAPIFeedback',
     skipTest: false
   },
@@ -128,7 +128,7 @@ export const queries: ISampleQuery[] = [
         'value': 'eventual'
       }
     ],
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/users?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/users?view=graph-rest-1.0',
     tip: 'You are using the advanced query capabilities for Directory Objects, please send us feedback here: https://aka.ms/aadmgs',
     skipTest: false
   },
@@ -143,7 +143,7 @@ export const queries: ISampleQuery[] = [
         'value': 'eventual'
       }
     ],
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/users?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/users?view=graph-rest-1.0',
     tip: 'You are using the advanced query capabilities for Directory Objects, please send us feedback here: https://aka.ms/aadmgs',
     skipTest: false
   },
@@ -152,7 +152,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'me',
     requestUrl: '/v1.0/me',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/UsersAPIFeedback',
     skipTest: false
   },
@@ -161,7 +161,7 @@ export const queries: ISampleQuery[] = [
     method: 'PATCH',
     humanName: 'me',
     requestUrl: '/v1.0/me',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-update?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-update?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -177,7 +177,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my skills',
     requestUrl: '/v1.0/me/?$select=displayName,skills',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -185,7 +185,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'user by email',
     requestUrl: '/v1.0/users/{user-mail}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/UsersAPIFeedback',
     skipTest: false
   },
@@ -194,7 +194,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'user identities',
     requestUrl: '/v1.0/users/{id}/identities',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/UsersAPIFeedback. You can also use \'userPrincipalName\' in place of \'id\'',
     skipTest: false
   },
@@ -203,7 +203,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'all my Planner tasks',
     requestUrl: '/beta/me/planner/tasks',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/planner-overview?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/planner-overview?view=graph-rest-beta',
     skipTest: false
   },
   {
@@ -211,7 +211,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create user',
     requestUrl: '/v1.0/users',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-post-users?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-post-users?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -227,7 +227,7 @@ export const queries: ISampleQuery[] = [
     method: 'PATCH',
     humanName: 'update user',
     requestUrl: '/v1.0/users/{id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-update?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-update?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -243,7 +243,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'track user changes',
     requestUrl: '/v1.0/users/delta?$select=displayName,givenName,surname',
-    docLink: 'https://docs.microsoft.com/en-us/graph/delta-query-users',
+    docLink: 'https://learn.microsoft.com/en-us/graph/delta-query-users',
     skipTest: false
   },
   {
@@ -251,7 +251,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get my presence ',
     requestUrl: '/beta/me/presence',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/presence-get?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/presence-get?view=graph-rest-beta&tabs=http',
     tip: 'This query requires Presence.Read permissions',
     skipTest: false
   },
@@ -260,7 +260,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get a user\'s presence ',
     requestUrl: '/beta/users/{user-id}/presence',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/cloudcommunications-getpresencesbyuserid?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/cloudcommunications-getpresencesbyuserid?view=graph-rest-beta&tabs=http',
     tip: 'This query requires a user ID and the Presence.Read.All permission. Use the following call to get a user ID:  GET https://graph.microsoft.com/v1.0/users',
     skipTest: false
   },
@@ -269,7 +269,7 @@ export const queries: ISampleQuery[] = [
     method: 'DELETE',
     humanName: 'delete user',
     requestUrl: '/v1.0/users/{id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-delete?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-delete?view=graph-rest-1.0',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/UsersAPIFeedback. You can also use \'userPrincipalName\' in place of \'id\'',
     skipTest: false
   },
@@ -278,7 +278,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list all groups in my organization',
     requestUrl: '/v1.0/groups',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/group-list?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/group-list?view=graph-rest-1.0&tabs=http',
     tip: 'Please provide us with feedback on the groups API here: https://aka.ms/GroupsAPIFeedback',
     skipTest: false
   },
@@ -287,7 +287,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get properties and relationships of group',
     requestUrl: '/v1.0/groups/{group-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/group-get?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/group-get?view=graph-rest-1.0&tabs=http',
     tip: 'Please provide us with feedback on the groups API here: https://aka.ms/GroupsAPIFeedback. To get group-id run https://graph.microsoft.com/v1.0/groups/',
     skipTest: false
   },
@@ -296,7 +296,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create a new group',
     requestUrl: '/v1.0/groups',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/group-post-groups?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/group-post-groups?view=graph-rest-1.0&tabs=http',
     headers: [
       {
         'name': 'Content-type',
@@ -312,7 +312,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'add member to group',
     requestUrl: '/v1.0/groups/{group-id}/members/$ref',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/group-post-members?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/group-post-members?view=graph-rest-1.0&tabs=http',
     headers: [
       {
         'name': 'Content-type',
@@ -328,7 +328,7 @@ export const queries: ISampleQuery[] = [
     method: 'DELETE',
     humanName: 'remove member from group',
     requestUrl: '/v1.0/groups/{group-id}/members/{member-id}/$ref',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/group-delete-members?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/group-delete-members?view=graph-rest-1.0&tabs=http',
     tip: 'Please provide us with feedback on the groups API here: https://aka.ms/GroupsAPIFeedback. To get group-id run https://graph.microsoft.com/v1.0/groups/. To get member-id https://graph.microsoft.com/v1.0/groups/{id}/members',
     skipTest: false
   },
@@ -337,7 +337,7 @@ export const queries: ISampleQuery[] = [
     method: 'DELETE',
     humanName: 'delete group',
     requestUrl: '/v1.0/groups/{group-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/group-delete?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/group-delete?view=graph-rest-1.0&tabs=http',
     tip: 'Please provide us with feedback on the groups API here: https://aka.ms/GroupsAPIFeedback. To get group-id run https://graph.microsoft.com/v1.0/groups/',
     skipTest: false
   },
@@ -352,7 +352,7 @@ export const queries: ISampleQuery[] = [
         'value': 'eventual'
       }
     ],
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-memberof?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-memberof?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -366,7 +366,7 @@ export const queries: ISampleQuery[] = [
         'value': 'eventual'
       }
     ],
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/group-list-members?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/group-list-members?view=graph-rest-1.0',
     tip: 'This query requires a group id.  To find the ID of a group you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/memberOf',
     skipTest: false
   },
@@ -375,7 +375,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'group\'s conversations',
     requestUrl: '/v1.0/groups/{group-id}/conversations',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/group-list-conversations?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/group-list-conversations?view=graph-rest-1.0',
     tip: 'This query requires a group id.  To find the ID of a group you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/memberOf',
     skipTest: false
   },
@@ -384,7 +384,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'group\'s events',
     requestUrl: '/v1.0/groups/{group-id}/events',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/group-list-events?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/group-list-events?view=graph-rest-1.0',
     tip: 'This query requires a group id.  To find the ID of a group you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/memberOf',
     skipTest: false
   },
@@ -393,7 +393,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'add favorite group',
     requestUrl: '/v1.0/groups/{group-id}/addFavorite',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/group-addfavorite?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/group-addfavorite?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -408,7 +408,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'items in a group drive',
     requestUrl: '/v1.0/groups/{group-id}/drive/items/root/children',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/driveitem-list-children?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/driveitem-list-children?view=graph-rest-1.0&tabs=http',
     tip: 'This query requires a group id.  To find the ID of a group you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/memberOf',
     skipTest: false
   },
@@ -417,7 +417,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'track group changes',
     requestUrl: '/v1.0/groups/delta?$select=displayName,description',
-    docLink: 'https://docs.microsoft.com/en-us/graph/delta-query-groups',
+    docLink: 'https://learn.microsoft.com/en-us/graph/delta-query-groups',
     skipTest: false
   },
   {
@@ -425,7 +425,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my high important mail',
     requestUrl: '/v1.0/me/messages?$filter=importance eq \'high\'',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -433,7 +433,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my mails from an address',
     requestUrl: '/v1.0/me/messages?$filter=(from/emailAddress/address) eq \'{user-mail}\'',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -441,7 +441,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my mail that has \'Hello World\'',
     requestUrl: '/v1.0/me/messages?$search="hello world"',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -449,7 +449,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'send an email',
     requestUrl: '/v1.0/me/sendMail',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -465,7 +465,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'forward mail',
     requestUrl: '/v1.0/me/messages/{message-id}/forward',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/message-forward?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/message-forward?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -481,7 +481,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'track email changes',
     requestUrl: '/v1.0/me/mailFolders/Inbox/messages/delta',
-    docLink: 'https://docs.microsoft.com/en-us/graph/delta-query-messages',
+    docLink: 'https://learn.microsoft.com/en-us/graph/delta-query-messages',
     skipTest: false
   },
   {
@@ -489,7 +489,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my inbox rules',
     requestUrl: '/beta/me/mailFolders/inbox/messagerules',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/messagerule?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/messagerule?view=graph-rest-beta',
     skipTest: false
   },
   {
@@ -497,7 +497,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my outlook categories',
     requestUrl: '/beta/me/outlook/masterCategories',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/outlookuser-list-mastercategories?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/outlookuser-list-mastercategories?view=graph-rest-beta',
     skipTest: false
   },
   {
@@ -505,7 +505,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get email headers',
     requestUrl: '/beta/me/messages?$select=internetMessageHeaders&$top=1',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-beta',
     skipTest: false
   },
   {
@@ -513,7 +513,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list conference rooms',
     requestUrl: '/beta/me/findRooms',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-findrooms?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-findrooms?view=graph-rest-beta',
     skipTest: false
   },
   {
@@ -521,7 +521,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'email I\'m @ mentioned',
     requestUrl: '/beta/me/messages?$filter=mentionsPreview/isMentioned eq true&$select=subject,sender,receivedDateTime',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-messages?view=graph-rest-beta',
     skipTest: false
   },
   {
@@ -529,7 +529,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my events for the next week',
     requestUrl: '/v1.0/me/calendarview?startdatetime={today}&enddatetime={next-week}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-calendarview?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-calendarview?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -537,7 +537,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'all events in my calendar',
     requestUrl: '/v1.0/me/events?$select=subject,body,bodyPreview,organizer,attendees,start,end,location',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-events?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-events?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -545,7 +545,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'all my calendars',
     requestUrl: '/v1.0/me/calendars',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-calendars?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-calendars?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -553,7 +553,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'find meeting time',
     requestUrl: '/v1.0/me/findMeetingTimes',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-findmeetingtimes?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-findmeetingtimes?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -569,7 +569,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'schedule a meeting',
     requestUrl: '/v1.0/me/events',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-post-events?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-post-events?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -585,7 +585,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'add graph community call',
     requestUrl: '/v1.0/me/events',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-post-events?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-post-events?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -601,7 +601,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'track changes on my events for the next week',
     requestUrl: '/v1.0/me/calendarView/delta?startDateTime={today}&endDateTime={next-week}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/delta-query-events',
+    docLink: 'https://learn.microsoft.com/en-us/graph/delta-query-events',
     tip: 'This query uses date and time parameters. Use an ISO 8601 format. For example, "2017-04-30T19:00:00.0000000".',
     skipTest: false
   },
@@ -610,7 +610,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my contacts',
     requestUrl: '/v1.0/me/contacts',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-contacts?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-contacts?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -618,7 +618,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'add contact',
     requestUrl: '/v1.0/me/contacts',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-post-contacts?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-post-contacts?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -634,7 +634,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'all the items in my drive',
     requestUrl: '/v1.0/me/drive/root/children',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/driveitem-list-children?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/driveitem-list-children?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -642,7 +642,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my recent files',
     requestUrl: '/v1.0/me/drive/recent',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/drive-recent?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/drive-recent?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -650,7 +650,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'files shared with me',
     requestUrl: '/v1.0/me/drive/sharedWithMe',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/drive-sharedwithme?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/drive-sharedwithme?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -658,7 +658,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'search my OneDrive',
     requestUrl: '/v1.0/me/drive/root/search(q=\'finance\')?select=name,id,webUrl',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/driveitem-search?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/driveitem-search?view=graph-rest-1.0&tabs=http',
     skipTest: false
   },
   {
@@ -666,7 +666,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create a folder',
     requestUrl: '/v1.0/me/drive/root/children',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/driveitem-post-children?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/driveitem-post-children?view=graph-rest-1.0&tabs=http',
     headers: [
       {
         'name': 'Content-type',
@@ -682,7 +682,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create session',
     requestUrl: '/v1.0/me/drive/items/{drive-item-id}/workbook/createSession',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/excel?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -698,7 +698,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'worksheets in a workbook',
     requestUrl: '/v1.0/me/drive/items/{drive-item-id}/workbook/worksheets',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/workbook-list-worksheets?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/workbook-list-worksheets?view=graph-rest-1.0',
     tip: 'This query requires a driveItem id.  To find the ID of the driveItem that corresponds to an Excel Workbook, you can run: GET https://graph.microsoft.com/v1.0/me/drive/root/search(q=\'.xlsx\')?select=name,id,webUrl.',
     skipTest: false
   },
@@ -707,7 +707,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'add a new worksheet',
     requestUrl: '/v1.0/me/drive/items/{drive-item-id}/workbook/worksheets',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/worksheetcollection-add?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/worksheetcollection-add?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -723,7 +723,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'calculate loan payment',
     requestUrl: '/v1.0/me/drive/items/{drive-item-id}/workbook/functions/pmt',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/workbook#functions?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/workbook#functions?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -739,7 +739,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'used range in worksheet',
     requestUrl: '/v1.0/me/drive/items/{drive-item-id}/workbook/worksheets(\'Sheet1\')/usedRange',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/worksheet-usedrange?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/worksheet-usedrange?view=graph-rest-1.0',
     tip: 'This query requires a driveItem id.  To find the ID of the driveItem that corresponds to an Excel Workbook, you can run: GET https://graph.microsoft.com/v1.0/me/drive/root/search(q=\'.xlsx\')?select=name,id,webUrl.',
     skipTest: false
   },
@@ -748,7 +748,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'tables in worksheet',
     requestUrl: '/v1.0/me/drive/items/{drive-item-id}/workbook/worksheets/Sheet1/tables',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/worksheet-list-tables?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/worksheet-list-tables?view=graph-rest-1.0',
     tip: 'This query requires a driveItem id.  To find the ID of the driveItem that corresponds to an Excel Workbook, you can run: GET https://graph.microsoft.com/v1.0/me/drive/root/search(q=\'.xlsx\')?select=name,id,webUrl.',
     skipTest: false
   },
@@ -757,7 +757,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'charts in worksheet',
     requestUrl: '/v1.0/me/drive/items/{drive-item-id}/workbook/worksheets(\'Sheet1\')/charts',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/worksheet-list-charts?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/worksheet-list-charts?view=graph-rest-1.0',
     tip: 'This query requires a driveItem id.  To find the ID of the driveItem that corresponds to an Excel Workbook, you can run: GET https://graph.microsoft.com/v1.0/me/drive/root/search(q=\'.xlsx\')?select=name,id,webUrl.',
     skipTest: false
   },
@@ -766,7 +766,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'all Planner plans associated with a group',
     requestUrl: '/v1.0/groups/{group-id-with-plan}/planner/plans',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/plannergroup-list-plans?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/plannergroup-list-plans?view=graph-rest-1.0',
     tip: 'This query requires a group id.  To find the ID of a group you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/memberOf',
     skipTest: false
   },
@@ -775,7 +775,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get Planner plan',
     requestUrl: '/v1.0/planner/plans/{plan-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/plannerplan-get?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/plannerplan-get?view=graph-rest-1.0',
     tip: 'This query requires a plan id.  To find the ID of the plan you can run: GET https://graph.microsoft.com/v1.0/me/groups/{group-id}/plans.',
     skipTest: false
   },
@@ -784,7 +784,7 @@ export const queries: ISampleQuery[] = [
     method: 'PATCH',
     humanName: 'update a Planner plan',
     requestUrl: '/v1.0/planner/plans/{plan-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/plannerplan-update?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/plannerplan-update?view=graph-rest-1.0',
     headers: [
       {
         'name': 'If-Match',
@@ -800,7 +800,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'all buckets in Planner plan',
     requestUrl: '/v1.0/planner/plans/{plan-id}/buckets',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/plannerplan-list-buckets?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/plannerplan-list-buckets?view=graph-rest-1.0',
     tip: 'This query requires a plan id.  To find the ID of the plan you can run: GET https://graph.microsoft.com/v1.0/me/groups/{group-id}/plans.',
     skipTest: false
   },
@@ -809,7 +809,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create a bucket in Planner plan',
     requestUrl: '/v1.0/planner/buckets',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/planner-post-buckets?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/planner-post-buckets?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -825,7 +825,7 @@ export const queries: ISampleQuery[] = [
     method: 'PATCH',
     humanName: 'update a bucket in Planner plan',
     requestUrl: '/v1.0/planner/buckets/{bucket-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/plannerbucket-update?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/plannerbucket-update?view=graph-rest-1.0',
     headers: [
       {
         'name': 'If-Match',
@@ -841,7 +841,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'all Planner tasks for a plan',
     requestUrl: '/v1.0/planner/plans/{plan-id}/tasks',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/plannerplan-list-tasks?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/plannerplan-list-tasks?view=graph-rest-1.0',
     tip: 'This query requires a plan id.  To find the ID of the plan you can run: GET https://graph.microsoft.com/v1.0/me/groups/{group-id}/plans.',
     skipTest: false
   },
@@ -850,7 +850,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'all my Planner tasks',
     requestUrl: '/v1.0/me/planner/tasks',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/planneruser-list-tasks',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/planneruser-list-tasks',
     skipTest: false
   },
   {
@@ -858,7 +858,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'all Planner tasks for user',
     requestUrl: '/v1.0/users/{coworker-mail}/planner/tasks',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/planneruser-list-tasks?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/planneruser-list-tasks?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -866,7 +866,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get Planner task by id',
     requestUrl: '/v1.0/planner/tasks/{task-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/plannertask-get?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/plannertask-get?view=graph-rest-1.0',
     tip: 'This query requires a task id.  To find the ID of the task you can run: GET https://graph.microsoft.com/v1.0/me/planner/tasks',
     skipTest: false
   },
@@ -875,7 +875,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create a Planner task',
     requestUrl: '/v1.0/planner/tasks',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/planner-post-tasks?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/planner-post-tasks?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -891,7 +891,7 @@ export const queries: ISampleQuery[] = [
     method: 'PATCH',
     humanName: 'update a Planner task',
     requestUrl: '/v1.0/planner/tasks/{task-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/plannertask-update?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/plannertask-update?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-Type',
@@ -907,7 +907,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'details for Planner task',
     requestUrl: '/v1.0/planner/tasks/{task-id}/details',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/plannertaskdetails-get?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/plannertaskdetails-get?view=graph-rest-1.0',
     tip: 'This query requires a task id.  To find the ID of the task you can run: GET https://graph.microsoft.com/v1.0/me/planner/tasks',
     skipTest: false
   },
@@ -916,7 +916,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my recent files',
     requestUrl: '/v1.0/me/drive/recent',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/drive-recent?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/drive-recent?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -924,7 +924,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'items trending around me',
     requestUrl: '/v1.0/me/insights/trending',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/insights-list-trending?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/insights-list-trending?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -932,7 +932,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'items shared with me',
     requestUrl: '/v1.0/me/insights/shared',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/insights-list-shared?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/insights-list-shared?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -940,7 +940,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'items viewed and modified by me',
     requestUrl: '/v1.0/me/insights/used',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/insights-list-used?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/insights-list-used?view=graph-rest-1.0&tabs=http',
     skipTest: false
   },
   {
@@ -948,7 +948,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'people I work with',
     requestUrl: '/v1.0/me/people',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-people?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-people?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -956,7 +956,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'people whose name starts with J',
     requestUrl: '/v1.0/me/people/?$search=j',
-    docLink: 'https://docs.microsoft.com/en-us/graph/people-example',
+    docLink: 'https://learn.microsoft.com/en-us/graph/people-example',
     skipTest: false
   },
   {
@@ -964,7 +964,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get an open extension',
     requestUrl: '/v1.0/me?$select=id,displayName,mail,mobilePhone&$expand=extensions',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/opentypeextension?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/opentypeextension?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -972,7 +972,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create an open extension',
     requestUrl: '/v1.0/me/extensions',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/opentypeextension-post-opentypeextension?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/opentypeextension-post-opentypeextension?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -987,7 +987,7 @@ export const queries: ISampleQuery[] = [
     method: 'PATCH',
     humanName: 'update an open extension',
     requestUrl: '/v1.0/me/extensions/{extension-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/opentypeextension-update?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/opentypeextension-update?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-Type',
@@ -1002,7 +1002,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get available schema extensions',
     requestUrl: '/v1.0/schemaExtensions',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/schemaextension-get?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/schemaextension-get?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1010,7 +1010,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'filter groups by extension property value',
     requestUrl: '/v1.0/groups?$filter=adatumisv_courses/id eq \'123\'&$select=id,displayName,adatumisv_courses',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/schemaextension-post-schemaextensions?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/schemaextension-post-schemaextensions?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1018,7 +1018,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create a group with extension data',
     requestUrl: '/v1.0/groups',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/schemaextension-post-schemaextensions?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/schemaextension-post-schemaextensions?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -1033,7 +1033,7 @@ export const queries: ISampleQuery[] = [
     method: 'PATCH',
     humanName: 'update a group with extension data',
     requestUrl: '/v1.0/groups/{group-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/schemaextension-post-schemaextensions?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/schemaextension-post-schemaextensions?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-Type',
@@ -1048,7 +1048,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my notebooks',
     requestUrl: '/v1.0/me/onenote/notebooks',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/onenote?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/onenote?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1056,7 +1056,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my sections',
     requestUrl: '/v1.0/me/onenote/sections',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/section?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/section?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1064,7 +1064,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my pages',
     requestUrl: '/v1.0/me/onenote/pages',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/section-list-pages?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/section-list-pages?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1072,7 +1072,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create notebook',
     requestUrl: '/v1.0/me/onenote/notebooks',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/onenote-post-notebooks?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/onenote-post-notebooks?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -1088,7 +1088,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create section',
     requestUrl: '/v1.0/me/onenote/notebooks/{notebook-id}/sections',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/notebook-post-sections?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/notebook-post-sections?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -1104,7 +1104,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create page',
     requestUrl: '/v1.0/me/onenote/sections/{section-id}/pages',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/section-post-pages?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/section-post-pages?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -1120,7 +1120,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my organization\'s default SharePoint site',
     requestUrl: '/v1.0/sites/root',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/site-get?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/site-get?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1128,7 +1128,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'enumerate the document libraries under the root site',
     requestUrl: '/v1.0/sites/root/drives',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/drive-list#list-a-sites-drives?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/drive-list#list-a-sites-drives?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1136,7 +1136,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get SharePoint site based on relative path of the site',
     requestUrl: '/v1.0/sites/{host-name}:/{server-relative-path}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/site-getbypath?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/site-getbypath?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1144,7 +1144,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'search for a SharePoint site by keyword',
     requestUrl: '/v1.0/sites?search=contoso',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/site-search?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/site-search?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1152,7 +1152,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'enumerate subsites of the root site',
     requestUrl: '/v1.0/sites/root/sites',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/site-list-subsites?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/site-list-subsites?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1160,7 +1160,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'enumerate site columns of the root site',
     requestUrl: '/v1.0/sites/root/columns',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/site?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/site?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1168,7 +1168,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'enumerate site content types of the root site',
     requestUrl: '/v1.0/sites/root/contentTypes',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/site?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/site?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1176,7 +1176,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'enumerate the lists in the root site',
     requestUrl: '/v1.0/sites/root/lists',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/list-list?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/list-list?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1184,7 +1184,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'enumerate list columns',
     requestUrl: '/v1.0/sites/root/lists/{list-id}/columns',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/listitem?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/listitem?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1192,7 +1192,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'enumerate list content types',
     requestUrl: '/v1.0/sites/root/lists/{list-id}/contentTypes',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/listitem?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/listitem?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1200,7 +1200,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'enumerate the list items in a list',
     requestUrl: '/v1.0/sites/root/lists/{list-id}/items',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/listitem-list?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/listitem-list?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1208,7 +1208,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'enumerate list items with specific column values',
     requestUrl: '/v1.0/sites/root/lists/{list-id}/items?$filter=fields/Title eq \'{list-title}\'',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/listitem-list?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/listitem-list?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Prefer',
@@ -1222,7 +1222,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'perform parallel GETs',
     requestUrl: '/v1.0/$batch',
-    docLink: 'https://docs.microsoft.com/en-us/graph/json-batching',
+    docLink: 'https://learn.microsoft.com/en-us/graph/json-batching',
     headers: [
       {
         'name': 'Content-type',
@@ -1238,7 +1238,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'combine a POST and a GET',
     requestUrl: '/v1.0/$batch',
-    docLink: 'https://docs.microsoft.com/en-us/graph/json-batching',
+    docLink: 'https://learn.microsoft.com/en-us/graph/json-batching',
     headers: [
       {
         'name': 'Content-type',
@@ -1254,7 +1254,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create team',
     requestUrl: '/v1.0/teams',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/team-post?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/team-post?view=graph-rest-1.0&tabs=http',
     headers: [
       {
         'name': 'Content-Type',
@@ -1269,7 +1269,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'my joined teams',
     requestUrl: '/v1.0/me/joinedTeams',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-list-joinedteams?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-list-joinedteams?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1277,7 +1277,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'members of a team',
     requestUrl: '/v1.0/groups/{group-id-for-teams}/members',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/group-list-memberof?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/group-list-memberof?view=graph-rest-1.0',
     tip: 'This query requires a group id of the Team.  To find the group id of teams you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/joinedTeams',
     skipTest: false
   },
@@ -1286,7 +1286,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'channels of a team which I am member of',
     requestUrl: '/v1.0/teams/{team-id}/channels',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/channel-list?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/channel-list?view=graph-rest-1.0',
     tip: 'This query requires a team id.  To find the team id of teams you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/joinedTeams',
     skipTest: false
   },
@@ -1295,7 +1295,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'channel info',
     requestUrl: '/v1.0/teams/{team-id}/channels/{channel-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/channel-get?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/channel-get?view=graph-rest-1.0',
     tip: 'This query requires a team id and a channel id from that team. To find the team id  & channel id, you can run: 1) GET https://graph.microsoft.com/v1.0/me/joinedTeams 2) GET https://graph.microsoft.com/v1.0/teams/{team-id}/channels',
     skipTest: false
   },
@@ -1304,7 +1304,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create channel',
     requestUrl: '/v1.0/teams/{team-id}/channels',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/channel-post?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/channel-post?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -1320,7 +1320,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'apps in a team',
     requestUrl: '/v1.0/teams/{team-id}/installedApps?$expand=teamsAppDefinition',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/team-list-installedapps?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/team-list-installedapps?view=graph-rest-1.0',
     tip: 'This query requires a team id. To find the team id, you can run: GET https://graph.microsoft.com/v1.0/me/joinedTeams',
     skipTest: false
   },
@@ -1329,7 +1329,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'tabs in a channel',
     requestUrl: '/v1.0/teams/{team-id}/channels/{channel-id}/tabs?$expand=teamsApp',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/channel-list-tabs?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/channel-list-tabs?view=graph-rest-1.0',
     tip: 'This query requires a team id and a channel id from that team. To find the team id  & channel id, you can run: 1) GET https://graph.microsoft.com/v1.0/me/joinedTeams 2) GET https://graph.microsoft.com/v1.0/teams/{team-id}/channels',
     skipTest: false
   },
@@ -1338,7 +1338,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'items in a team drive',
     requestUrl: '/v1.0/groups/{group-id-for-teams}/drive/items/root/children',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/driveitem-list-children?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/driveitem-list-children?view=graph-rest-1.0&tabs=http',
     tip: 'This query requires a group id of the Team.  To find the group id of Teams you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/joinedTeams',
     skipTest: false
   },
@@ -1347,7 +1347,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create chat',
     requestUrl: '/v1.0/chats',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/chat-post?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/chat-post?view=graph-rest-1.0&tabs=http',
     headers: [
       {
         'name': 'Content-Type',
@@ -1363,7 +1363,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'messages (without replies) in a channel',
     requestUrl: '/beta/teams/{group-id-for-teams}/channels/{channel-id}/messages',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/channel-list-messages?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/channel-list-messages?view=graph-rest-beta',
     tip: 'This query requires a group id of the Team and channel id of the corresponding channel of that Team. To find the group id  & channel id, you can run: 1) GET https://graph.microsoft.com/beta/me/joinedTeams 2) GET https://graph.microsoft.com/beta/groups/{group-id-for-teams}/channels',
     skipTest: false
   },
@@ -1372,7 +1372,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'message in a channel',
     requestUrl: '/beta/teams/{group-id-for-teams}/channels/{channel-id}/messages/{message-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/chatmessage-get?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/chatmessage-get?view=graph-rest-beta',
     tip: 'This query requires a group id of the Team, channel id of the corresponding channel of that Team and message id of the message you want to retrieve. To find the group id, channel id and message-id you can run: 1) GET https://graph.microsoft.com/beta/me/joinedTeams 2) GET https://graph.microsoft.com/beta/groups/{group-id-for-teams}/channels 3) GET https://graph.microsoft.com/beta/teams/{group-id-for-teams}/channels/{channel-id}/messages',
     skipTest: false
   },
@@ -1381,7 +1381,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'replies to a message in channel',
     requestUrl: '/beta/teams/{group-id-for-teams}/channels/{channel-id}/messages/{message-id}/replies',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/chatmessage-get?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/chatmessage-get?view=graph-rest-beta',
     tip: 'This query requires a group id of the Team, channel id of the corresponding channel of that Team and message id of the message of which you need the replies. To find the group id, channel id and message-id you can run: 1) GET https://graph.microsoft.com/beta/me/joinedTeams 2) GET https://graph.microsoft.com/beta/groups/{group-id-for-teams}/channels 3) GET https://graph.microsoft.com/beta/teams/{group-id-for-teams}/channels/{channel-id}/messages',
     skipTest: false
   },
@@ -1390,7 +1390,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'reply of a message',
     requestUrl: '/beta/teams/{group-id-for-teams}/channels/{channel-id}/messages/{message-id}/replies/{reply-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/chatmessage-get?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/chatmessage-get?view=graph-rest-beta',
     tip: 'This query requires a group id of the Team, channel id of the corresponding channel of that Team, message id of the message of which you need the reply and the id of the specific reply. To find the group id, channel id, message-id and reply-id you can run: 1) GET https://graph.microsoft.com/beta/me/joinedTeams 2) GET https://graph.microsoft.com/beta/groups/{group-id-for-teams}/channels 3) GET https://graph.microsoft.com/beta/teams/{group-id-for-teams}/channels/{channel-id}/messages 4) GET https://graph.microsoft.com/beta/teams/{group-id-for-teams}/channels/{channel-id}/messages/{message-id}/replies',
     skipTest: false
   },
@@ -1399,7 +1399,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'apps installed for user',
     requestUrl: '/beta/me/teamwork/installedApps?$expand=teamsApp',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/userteamwork-list-installedapps?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/userteamwork-list-installedapps?view=graph-rest-beta&tabs=http',
     skipTest: false
   },
   {
@@ -1407,7 +1407,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list members of a chat',
     requestUrl: '/beta/chats/{chat-id}/members',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/chat-list-members?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/chat-list-members?view=graph-rest-beta',
     tip: 'This query requires a chat ID. Use the following call to find a list of chats and their corresponding IDs: GET https://graph.microsoft.com/beta/me/chats/',
     skipTest: false
   },
@@ -1416,7 +1416,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'member in a chat',
     requestUrl: '/beta/chats/{chat-id}/members/{membership-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/chat-get-members?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/chat-get-members?view=graph-rest-beta',
     tip: 'This query requires a chat ID and a membership ID. Use the following calls to get the IDs: 1) GET https://graph.microsoft.com/beta/me/chats/ and 2) GET https://graph.microsoft.com/beta/me/chats/{chat-id}/members/',
     skipTest: false
   },
@@ -1425,7 +1425,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'send channel message',
     requestUrl: '/v1.0/teams/{team-id}/channels/{channel-id}/messages',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/channel-post-messages?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/channel-post-messages?view=graph-rest-beta&tabs=http',
     headers: [
       {
         'name': 'Content-type',
@@ -1441,7 +1441,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'alerts',
     requestUrl: '/v1.0/security/alerts?$top=1',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/alert-list?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/alert-list?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1449,7 +1449,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'alerts with \'High\' severity',
     requestUrl: '/v1.0/security/alerts?$filter=Severity eq \'High\'&$top=5',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/alert-list?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/alert-list?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1457,7 +1457,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'alerts from \'Azure Security Center\'',
     requestUrl: '/v1.0/security/alerts?$filter=vendorInformation/provider eq \'ASC\'&$top=5',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/alert-list?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/alert-list?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1465,7 +1465,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'alerts filter by \'Category\'',
     requestUrl: '/v1.0/security/alerts?$filter=Category eq \'ransomware\'&$top=5',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/alert-list?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/alert-list?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1473,7 +1473,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'alerts filter by destination address',
     requestUrl: '/v1.0/security/alerts?$filter=networkConnections/any(d:d/destinationAddress eq \'{destination-address}\')',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/alert-list?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/alert-list?view=graph-rest-1.0',
     tip: 'This query requires a destination address. Run https://graph.microsoft.com/v1.0/security/alerts?$top=1 and search the results for a destinationAddress property.',
     skipTest: false
   },
@@ -1482,7 +1482,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'alerts filter by \'Status\'',
     requestUrl: '/v1.0/security/alerts?$filter=Status eq \'NewAlert\'&$top=1',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/alert-list?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/alert-list?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1490,7 +1490,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'secure scores (beta)',
     requestUrl: '/beta/security/secureScores?$top=5',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/securescores-list?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/securescores-list?view=graph-rest-beta',
     skipTest: false
   },
   {
@@ -1498,7 +1498,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'secure score control profiles (beta)',
     requestUrl: '/beta/security/secureScoreControlProfiles?$top=5',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/securescorecontrolprofiles-list?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/securescorecontrolprofiles-list?view=graph-rest-beta',
     skipTest: false
   },
   {
@@ -1506,7 +1506,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list TI indicators (beta)',
     requestUrl: '/beta/security/tiIndicators',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/tiindicators-list',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/tiindicators-list',
     skipTest: false
   },
   {
@@ -1514,7 +1514,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'security actions (beta)',
     requestUrl: '/beta/security/securityActions',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/securityactions-list',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/securityactions-list',
     skipTest: false
   },
   {
@@ -1522,7 +1522,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get all Conditional Access policies',
     requestUrl: '/v1.0/identity/conditionalAccess/policies',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/conditionalaccessroot-list-policies?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/conditionalaccessroot-list-policies?view=graph-rest-1.0&tabs=http',
     tip: 'We’d like to hear from you. Please leave your feedback on Conditional Access API here: https://aka.ms/caapifeedback',
     skipTest: false
   },
@@ -1531,7 +1531,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get all Named Locations',
     requestUrl: '/v1.0/identity/conditionalAccess/namedLocations',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/conditionalaccessroot-list-namedlocations?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/conditionalaccessroot-list-namedlocations?view=graph-rest-1.0&tabs=http',
     tip: 'We’d like to hear from you. Please leave your feedback on Conditional Access API here: https://aka.ms/caapifeedback',
     skipTest: false
   },
@@ -1540,7 +1540,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get all Conditional Access policies (beta)',
     requestUrl: '/beta/identity/conditionalAccess/policies',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/conditionalaccessroot-list-policies?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/conditionalaccessroot-list-policies?view=graph-rest-beta&tabs=http',
     tip: 'We’d like to hear from you. Please leave your feedback on Conditional Access API here: https://aka.ms/caapifeedback',
     skipTest: false
   },
@@ -1549,7 +1549,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get all Named Locations (beta)',
     requestUrl: '/beta/identity/conditionalAccess/namedLocations',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/conditionalaccessroot-list-namedlocations?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/conditionalaccessroot-list-namedlocations?view=graph-rest-beta&tabs=http',
     tip: 'We’d like to hear from you. Please leave your feedback on Conditional Access API here: https://aka.ms/caapifeedback',
     skipTest: false
   },
@@ -1558,7 +1558,7 @@ export const queries: ISampleQuery[] = [
     method: 'PATCH',
     humanName: 'update alert',
     requestUrl: '/v1.0/security/alerts/{alert-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/alert-update?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/alert-update?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-Type',
@@ -1574,7 +1574,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create TI indicator (beta)',
     requestUrl: '/beta/security/tiIndicators',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/tiindicators-post',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/tiindicators-post',
     headers: [
       {
         'name': 'Content-type',
@@ -1589,7 +1589,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create multiple TI indicators (beta)',
     requestUrl: '/beta/security/tiIndicators/microsoft.graph.submitTiIndicators',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/tiindicator-submittiindicators',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/tiindicator-submittiindicators',
     headers: [
       {
         'name': 'Content-type',
@@ -1604,7 +1604,7 @@ export const queries: ISampleQuery[] = [
     method: 'PATCH',
     humanName: 'update a TI indicator (beta)',
     requestUrl: '/beta/security/tiIndicators/{id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/tiindicator-update',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/tiindicator-update',
     headers: [
       {
         'name': 'Content-Type',
@@ -1620,7 +1620,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'update multiple TI indicators (beta)',
     requestUrl: '/beta/security/tiIndicators/microsoft.graph.updateTiIndicators',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/tiindicator-updatetiindicators',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/tiindicator-updatetiindicators',
     headers: [
       {
         'name': 'Content-type',
@@ -1636,7 +1636,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create security action (beta)',
     requestUrl: '/beta/security/securityActions',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/securityactions-post',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/securityactions-post',
     headers: [
       {
         'name': 'Content-type',
@@ -1652,7 +1652,7 @@ export const queries: ISampleQuery[] = [
     method: 'DELETE',
     humanName: 'delete TI indicator (beta)',
     requestUrl: '/beta/security/tiIndicators/{id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/tiindicator-delete',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/tiindicator-delete',
     tip: 'This query requires the TI indicator id. To find the ID, you can run: GET https://graph.microsoft.com/beta/security/tiIndicators?$top=1',
     skipTest: false
   },
@@ -1661,7 +1661,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'delete multiple TI indicators (beta)',
     requestUrl: '/beta/security/tiIndicators/microsoft.graph.deleteTiIndicators',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/tiindicator-deletetiindicators',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/tiindicator-deletetiindicators',
     headers: [
       {
         'name': 'Content-type',
@@ -1677,7 +1677,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'delete multiple TI indicators by external Id (beta)',
     requestUrl: '/beta/security/tiIndicators/microsoft.graph.deleteTiIndicatorsByExternalId',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/tiindicator-deletetiindicatorsbyexternalid',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/tiindicator-deletetiindicatorsbyexternalid',
     headers: [
       {
         'name': 'Content-type',
@@ -1693,7 +1693,7 @@ export const queries: ISampleQuery[] = [
     method: 'PUT',
     humanName: 'create a user activity and history item',
     requestUrl: '/v1.0/me/activities/uniqueIdInAppContext',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/projectrome-put-activity#example-2---deep-insert?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/projectrome-put-activity#example-2---deep-insert?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-Type',
@@ -1708,7 +1708,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get recent user activities',
     requestUrl: '/v1.0/me/activities/recent',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/projectrome-get-recent-activities?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/projectrome-get-recent-activities?view=graph-rest-1.0',
     skipTest: false
   },
   {
@@ -1722,7 +1722,7 @@ export const queries: ISampleQuery[] = [
         'value': 'eventual'
       }
     ],
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/application-list?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/application-list?view=graph-rest-1.0&tabs=http',
     tip: 'You are using the advanced query capabilities for Directory Objects, please send us feedback here: https://aka.ms/aadmgs',
     skipTest: false
   },
@@ -1737,7 +1737,7 @@ export const queries: ISampleQuery[] = [
         'value': 'eventual'
       }
     ],
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/serviceprincipal-list?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/serviceprincipal-list?view=graph-rest-1.0&tabs=http',
     tip: 'You are using the advanced query capabilities for Directory Objects, please send us feedback here: https://aka.ms/aadmgs',
     skipTest: false
   },
@@ -1746,7 +1746,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create a new application',
     requestUrl: '/v1.0/applications',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/application-post-applications?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/application-post-applications?view=graph-rest-1.0&tabs=http',
     headers: [
       {
         'name': 'Content-type',
@@ -1761,7 +1761,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'retrieve application properties',
     requestUrl: '/v1.0/applications/{application-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/application-get?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/application-get?view=graph-rest-1.0&tabs=http',
     tip: 'This query requires an application id. To find the ID of an application&#44; you can run: GET https://graph.microsoft.com/v1.0/applications',
     skipTest: false
   },
@@ -1770,7 +1770,7 @@ export const queries: ISampleQuery[] = [
     method: 'PATCH',
     humanName: 'update application properties',
     requestUrl: '/v1.0/applications/{application-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/application-update?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/application-update?view=graph-rest-1.0&tabs=http',
     headers: [
       {
         'name': 'Content-type',
@@ -1786,7 +1786,7 @@ export const queries: ISampleQuery[] = [
     method: 'DELETE',
     humanName: 'delete an application',
     requestUrl: '/v1.0/applications/{application-id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/application-delete?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/application-delete?view=graph-rest-1.0&tabs=http',
     tip: 'This query requires an application id. To find the ID of an application; you can run: GET https://graph.microsoft.com/v1.0/applications',
     skipTest: false
   },
@@ -1795,7 +1795,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'retrieve a list of owners',
     requestUrl: '/v1.0/applications/{application-id}/owners',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/application-list-owners?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/application-list-owners?view=graph-rest-1.0&tabs=http',
     tip: 'This query requires an application id. To find the ID of an application; you can run: GET https://graph.microsoft.com/beta/applications',
     skipTest: false
   },
@@ -1804,7 +1804,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create a new owner',
     requestUrl: '/v1.0/applications/{application-id}/owners',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/application-post-owners?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/application-post-owners?view=graph-rest-1.0&tabs=http',
     headers: [
       {
         'name': 'Content-type',
@@ -1820,7 +1820,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create a raw notification',
     requestUrl: '/beta/me/notifications',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-post-notifications?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-post-notifications?view=graph-rest-beta',
     headers: [
       {
         'name': 'Content-Type',
@@ -1836,7 +1836,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create a visual notification',
     requestUrl: '/beta/me/notifications',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/user-post-notifications?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/user-post-notifications?view=graph-rest-beta',
     headers: [
       {
         'name': 'Content-Type',
@@ -1852,7 +1852,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'search messages',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview',
     headers: [
       {
         'name': 'Content-Type',
@@ -1868,7 +1868,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: '(beta) search Teams message',
     requestUrl: '/beta/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview',
     headers: [
       {
         'name': 'Content-Type',
@@ -1884,7 +1884,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'search events',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview',
     headers: [
       {
         'name': 'Content-Type',
@@ -1900,7 +1900,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'search driveitems',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview',
     headers: [
       {
         'name': 'Content-Type',
@@ -1916,7 +1916,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: '(beta) search people',
     requestUrl: '/beta/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview',
     headers: [
       {
         'name': 'Content-Type',
@@ -1932,7 +1932,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'search lists',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview',
     headers: [
       {
         'name': 'Content-Type',
@@ -1948,7 +1948,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'search listItems',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview',
     headers: [
       {
         'name': 'Content-Type',
@@ -1964,7 +1964,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'search sites',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview',
     headers: [
       {
         'name': 'Content-Type',
@@ -1980,7 +1980,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'search external items',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview',
     headers: [
       {
         'name': 'Content-Type',
@@ -1996,7 +1996,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'page search results',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-1.0#page-search-results',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-1.0#page-search-results',
     headers: [
       {
         'name': 'Content-Type',
@@ -2012,7 +2012,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'sort search results',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-v1.0#sort-search-results',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-v1.0#sort-search-results',
     headers: [
       {
         'name': 'Content-Type',
@@ -2028,7 +2028,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'refine results with string aggregations',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-v1.0#refine-results-using-aggregations',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-v1.0#refine-results-using-aggregations',
     headers: [
       {
         'name': 'Content-Type',
@@ -2044,7 +2044,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'refine results with numeric aggregations',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-v1.0#refine-results-using-aggregationsw',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-v1.0#refine-results-using-aggregationsw',
     headers: [
       {
         'name': 'Content-Type',
@@ -2060,7 +2060,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'apply refined query passing the aggregationToken',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-v1.0#refine-results-using-aggregations',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-v1.0#refine-results-using-aggregations',
     headers: [
       {
         'name': 'Content-Type',
@@ -2076,7 +2076,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'request spelling correction',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-1.0#request-spelling-correction',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-1.0#request-spelling-correction',
     headers: [
       {
         'name': 'Content-Type',
@@ -2092,7 +2092,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: '(beta) Trim Duplicated SharePoint Search Results',
     requestUrl: '/beta/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-beta',
     headers: [
       {
         'name': 'Content-Type',
@@ -2108,7 +2108,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: '(beta) Search with queryTemplate',
     requestUrl: '/beta/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-beta',
     headers: [
       {
         'name': 'Content-Type',
@@ -2124,7 +2124,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'request result template',
     requestUrl: '/v1.0/search/query',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-1.0#search-display-layout',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/resources/search-api-overview?view=graph-rest-1.0#search-display-layout',
     headers: [
       {
         'name': 'Content-Type',
@@ -2140,7 +2140,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list ediscovery cases',
     requestUrl: '/beta/compliance/ediscovery/cases',
-    docLink: 'https://docs.microsoft.com/graph/api/ediscovery-case-list?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/graph/api/ediscovery-case-list?view=graph-rest-beta&tabs=http',
     tip: 'Go to Modify Permissions tab and consent to eDiscovery.Read.All or eDiscovery.ReadWrite.All permission to run this query',
     skipTest: false
   },
@@ -2149,7 +2149,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get ediscovery case',
     requestUrl: '/beta/compliance/ediscovery/cases/{caseId}',
-    docLink: 'https://docs.microsoft.com/graph/api/ediscovery-case-get?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/graph/api/ediscovery-case-get?view=graph-rest-beta&tabs=http',
     tip: 'Go to Modify Permissions tab and consent to eDiscovery.Read.All or eDiscovery.ReadWrite.All permission to run this query. This query requires a case id. To find the id of a case; you can run: GET https://graph.microsoft.com/beta/compliance/ediscovery/cases.',
     skipTest: false
   },
@@ -2158,7 +2158,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create ediscovery case',
     requestUrl: '/beta/compliance/ediscovery/cases',
-    docLink: 'https://docs.microsoft.com/graph/api/ediscovery-case-post?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/graph/api/ediscovery-case-post?view=graph-rest-beta&tabs=http',
     headers: [
       {
         'name': 'Content-type',
@@ -2174,7 +2174,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list review sets',
     requestUrl: '/beta/compliance/ediscovery/cases/{caseId}/reviewSets',
-    docLink: 'https://docs.microsoft.com/graph/api/ediscovery-case-list-reviewsets?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/graph/api/ediscovery-case-list-reviewsets?view=graph-rest-beta&tabs=http',
     tip: 'Go to Modify Permissions tab and consent to eDiscovery.Read.All or eDiscovery.ReadWrite.All permission to run this query. To find the id of a case; you can run: GET https://graph.microsoft.com/beta/compliance/ediscovery/cases.',
     skipTest: false
   },
@@ -2183,7 +2183,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list review set queries',
     requestUrl: '/beta/compliance/ediscovery/cases/{caseId}/reviewSets/{reviewSetId}/queries',
-    docLink: 'https://docs.microsoft.com/graph/api/ediscovery-reviewsetquery-list?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/ediscovery-reviewsetquery-list?view=graph-rest-beta',
     tip: 'Replace {caseId} with the ID from an eDiscovery Case (https://graph.microsoft.com/beta/compliance/ediscovery/cases) and {reviewSetId} with the ID from a review set that exists in that case (https://graph.microsoft.com/beta/compliance/ediscovery/cases/{caseid}/reviewSets). Then go to Modify Permissions tab and consent to eDiscovery.Read.All or eDiscovery.ReadWrite.All permission to run this query.',
     skipTest: false
   },
@@ -2192,7 +2192,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create review set query',
     requestUrl: '/beta/compliance/ediscovery/cases/{caseId}/reviewSets/{reviewSetId}/queries',
-    docLink: 'https://docs.microsoft.com/graph/api/ediscovery-reviewsetquery-post?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/ediscovery-reviewsetquery-post?view=graph-rest-beta',
     headers: [
       {
         'name': 'Content-Type',
@@ -2208,7 +2208,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get a list of custodians for a case',
     requestUrl: '/beta/compliance/ediscovery/cases/{caseId}/custodians',
-    docLink: 'https://docs.microsoft.com/graph/api/resources/ediscovery-custodian?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/resources/ediscovery-custodian?view=graph-rest-beta',
     tip: 'Replace {caseId} with the ID from an eDiscovery Case (https://graph.microsoft.com/beta/compliance/ediscovery/cases). Then go to Modify Permissions tab and consent to eDiscovery.Read.All or eDiscovery.ReadWrite.All permission to run this query.',
     skipTest: false
   },
@@ -2217,7 +2217,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'add custodian',
     requestUrl: '/beta/compliance/ediscovery/cases/{caseId}/custodians',
-    docLink: 'https://docs.microsoft.com/graph/api/ediscovery-case-post-custodians?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/ediscovery-case-post-custodians?view=graph-rest-beta',
     headers: [
       {
         'name': 'Content-Type',
@@ -2233,7 +2233,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get a list of source collections for a case',
     requestUrl: '/beta/compliance/ediscovery/cases/{caseId}/sourceCollections',
-    docLink: 'https://docs.microsoft.com/graph/api/ediscovery-case-list-sourcecollections?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/ediscovery-case-list-sourcecollections?view=graph-rest-beta',
     tip: 'Replace {caseId} with the ID from an eDiscovery Case (https://graph.microsoft.com/beta/compliance/ediscovery/cases). Then go to Modify Permissions tab and consent to eDiscovery.Read.All or eDiscovery.ReadWrite.All permission to run this query.',
     skipTest: false
   },
@@ -2242,7 +2242,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'add source collection',
     requestUrl: '/beta/compliance/ediscovery/cases/{caseId}/sourceCollections',
-    docLink: 'https://docs.microsoft.com/graph/api/ediscovery-case-post-sourcecollections?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/ediscovery-case-post-sourcecollections?view=graph-rest-beta',
     headers: [
       {
         'name': 'Content-Type',
@@ -2250,7 +2250,7 @@ export const queries: ISampleQuery[] = [
       }
     ],
     postBody: '{\r\n  "displayName": "Quarterly Financials search",\r\n  "contentQuery": "subject:\'Quarterly Financials\'",\r\n "custodianSources@odata.bind": "user source url"\r\n}',
-    tip: 'Replace {caseId} with the ID from an eDiscovery Case (https://graph.microsoft.com/beta/compliance/ediscovery/cases) and {user source url} odata url for the user source - see [Create sourceCollection](https://docs.microsoft.com/graph/api/ediscovery-case-post-sourcecollections?view=graph-rest-beta) for more details.',
+    tip: 'Replace {caseId} with the ID from an eDiscovery Case (https://graph.microsoft.com/beta/compliance/ediscovery/cases) and {user source url} odata url for the user source - see [Create sourceCollection](https://learn.microsoft.com/graph/api/ediscovery-case-post-sourcecollections?view=graph-rest-beta) for more details.',
     skipTest: false
   },
   {
@@ -2258,7 +2258,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get To Do task lists',
     requestUrl: '/v1.0/me/todo/lists',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/todo-list-lists?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/todo-list-lists?view=graph-rest-1.0',
     tip: 'This query requires the Tasks.ReadWrite permission',
     skipTest: false
   },
@@ -2274,7 +2274,7 @@ export const queries: ISampleQuery[] = [
       }
     ],
     postBody: '{\r\n  "displayName": "List created from Microsoft Graph Explorer"\r\n}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/todo-post-lists?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/todo-post-lists?view=graph-rest-1.0',
     tip: 'This query requires the Tasks.ReadWrite permission and a value for the displayName parameter',
     skipTest: false
   },
@@ -2290,7 +2290,7 @@ export const queries: ISampleQuery[] = [
       }
     ],
     postBody: '{\r\n  "title": "Task created from Microsoft Graph Explorer"\r\n}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/todotasklist-post-tasks?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/todotasklist-post-tasks?view=graph-rest-1.0',
     tip: 'This query requires the Tasks.ReadWrite permission. To find a value for the taskListId parameter, you can run: GET https://graph.microsoft.com/beta/me/todo/lists',
     skipTest: false
   },
@@ -2305,7 +2305,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/todotask-post-linkedresources?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/todotask-post-linkedresources?view=graph-rest-1.0',
     postBody: '{\r\n  "applicationName": "LinkedResource created from Microsoft Graph Explorer"\r\n}',
     tip: 'This query requires the Tasks.ReadWrite permission. To find a value for the taskListId parameter, you can run: GET https://graph.microsoft.com/beta/me/todo/lists. to find a value for the taskId, you can run: GET https://graph.microsoft.com/beta/me/todo/lists/{taskListId}',
     skipTest: false
@@ -2315,7 +2315,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list Azure AD gallery apps',
     requestUrl: '/beta/applicationTemplates',
-    docLink: 'https://docs.microsoft.com/graph/api/applicationtemplate-list?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/applicationtemplate-list?view=graph-rest-beta',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/appTemplateAPISurvey',
     skipTest: false
   },
@@ -2324,7 +2324,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'instantiate an Azure AD gallery app',
     requestUrl: '/beta/applicationTemplates/{id}/instantiate',
-    docLink: 'https://docs.microsoft.com/graph/api/applicationtemplate-instantiate?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/applicationtemplate-instantiate?view=graph-rest-beta',
     headers: [
       {
         'name': 'Content-type',
@@ -2340,7 +2340,7 @@ export const queries: ISampleQuery[] = [
     method: 'PATCH',
     humanName: 'update properties on the servicePrincipal',
     requestUrl: '/v1.0/servicePrincipals/{id}',
-    docLink: 'https://docs.microsoft.com/graph/api/serviceprincipal-update?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/graph/api/serviceprincipal-update?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-Type',
@@ -2356,7 +2356,7 @@ export const queries: ISampleQuery[] = [
     method: 'PATCH',
     humanName: 'update properties on the application',
     requestUrl: '/v1.0/applications/{id}',
-    docLink: 'https://docs.microsoft.com/graph/api/application-update?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/graph/api/application-update?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-Type',
@@ -2372,7 +2372,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'create a claim mapping policy',
     requestUrl: '/v1.0/policies/claimsMappingPolicies',
-    docLink: 'https://docs.microsoft.com/graph/api/claimsmappingpolicy-post-claimsmappingpolicies?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/graph/api/claimsmappingpolicy-post-claimsmappingpolicies?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -2388,7 +2388,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'assign a claims mapping policy to a serviceprincipal',
     requestUrl: '/v1.0/servicePrincipals/{id}/claimsMappingPolicies/$ref',
-    docLink: 'https://docs.microsoft.com/graph/api/serviceprincipal-post-claimsmappingpolicies?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/graph/api/serviceprincipal-post-claimsmappingpolicies?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -2404,7 +2404,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'assign an appRoleAssignment to a serviceprincipal',
     requestUrl: '/v1.0/servicePrincipals/{id}/appRoleAssignments',
-    docLink: 'https://docs.microsoft.com/graph/api/serviceprincipal-post-approleassignments?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/graph/api/serviceprincipal-post-approleassignments?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -2420,7 +2420,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list azure ad application proxy connectors',
     requestUrl: '/beta/onPremisesPublishingProfiles/applicationProxy/connectors',
-    docLink: 'https://docs.microsoft.com/graph/api/connector-get?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/graph/api/connector-get?view=graph-rest-beta&tabs=http',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/msgraphaadsurveyconnectors',
     skipTest: false
   },
@@ -2429,7 +2429,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list azure ad application proxy connector groups',
     requestUrl: '/beta/onPremisesPublishingProfiles/applicationProxy/connectorgroups',
-    docLink: 'https://docs.microsoft.com/graph/api/connectorgroup-get?view=graph-rest-beta&tabs=http',
+    docLink: 'https://learn.microsoft.com/graph/api/connectorgroup-get?view=graph-rest-beta&tabs=http',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/msgraphaadsurveyconnectorgroups',
     skipTest: false
   },
@@ -2438,7 +2438,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list azure ad devices',
     requestUrl: '/v1.0/devices',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/device-list?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/device-list?view=graph-rest-1.0&tabs=http',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/deviceAPIFeedback',
     skipTest: false
   },
@@ -2447,7 +2447,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get a specified azure ad device',
     requestUrl: '/v1.0/devices/{id}',
-    docLink: 'https://docs.microsoft.com/en-us/graph/api/device-get?view=graph-rest-1.0&tabs=http',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/device-get?view=graph-rest-1.0&tabs=http',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/deviceAPIFeedback',
     skipTest: false
   },
@@ -2456,7 +2456,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get high risk users',
     requestUrl: '/v1.0/identityProtection/riskyUsers?$filter=riskLevel eq \'high\'',
-    docLink: 'https://docs.microsoft.com/graph/api/riskyuser-get?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/graph/api/riskyuser-get?view=graph-rest-1.0',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/IdentityProtectionAPIFeedback',
     skipTest: false
   },
@@ -2465,7 +2465,7 @@ export const queries: ISampleQuery[] = [
     method: 'POST',
     humanName: 'confirm a user as compromised',
     requestUrl: '/v1.0/identityProtection/riskyUsers/confirmCompromised',
-    docLink: 'https://docs.microsoft.com/graph/api/riskyuser-confirmcompromised?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/graph/api/riskyuser-confirmcompromised?view=graph-rest-1.0',
     headers: [
       {
         'name': 'Content-type',
@@ -2481,7 +2481,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get risk detections',
     requestUrl: '/v1.0/identityProtection/riskDetections',
-    docLink: 'https://docs.microsoft.com/graph/api/riskdetection-get?view=graph-rest-1.0',
+    docLink: 'https://learn.microsoft.com/graph/api/riskdetection-get?view=graph-rest-1.0',
     tip: 'We’d like to hear from you. Please leave your feedback on this API here: https://aka.ms/IdentityProtectionAPIFeedback',
     skipTest: false
   },
@@ -2490,7 +2490,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list catalog entries',
     requestUrl: '/beta/admin/windows/updates/catalog/entries',
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-catalog-list-entries?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-catalog-list-entries?view=graph-rest-beta',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query.',
     skipTest: false
   },
@@ -2499,7 +2499,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list deployments',
     requestUrl: '/beta/admin/windows/updates/deployments',
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-updates-list-deployments?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-updates-list-deployments?view=graph-rest-beta',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query.',
     skipTest: false
   },
@@ -2514,7 +2514,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-updates-post-deployments?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-updates-post-deployments?view=graph-rest-beta',
     postBody: '{\r\n    "content": {\r\n        "@odata.type": "#microsoft.graph.windowsUpdates.featureUpdateReference",\r\n        "version": "{featureUpdateVersion}"\r\n    }\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the featureUpdateVersion parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/catalog/entries.',
     skipTest: false
@@ -2530,7 +2530,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-updates-post-deployments?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-updates-post-deployments?view=graph-rest-beta',
     postBody: '{\r\n    "content": {\r\n        "@odata.type": "microsoft.graph.windowsUpdates.expeditedQualityUpdateReference",\r\n        "releaseDate": "{qualityUpdateReleaseDate}"\r\n    }\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the qualityUpdateReleaseDate parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/catalog/entries.',
     skipTest: false
@@ -2546,7 +2546,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-updates-post-deployments?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-updates-post-deployments?view=graph-rest-beta',
     postBody: '{\r\n    "content": {\r\n        "@odata.type": "#microsoft.graph.windowsUpdates.featureUpdateReference",\r\n        "version": "{featureUpdateVersion}"\r\n    },\r\n    "settings": {\r\n        "@odata.type": "microsoft.graph.windowsUpdates.windowsDeploymentSettings",\r\n        "rollout": {\r\n            "devicesPerOffer": 100,\r\n            "durationBetweenOffers": "P7D"\r\n        },\r\n        "monitoring": {\r\n            "monitoringRules": [\r\n                {\r\n                    "@odata.type": "#microsoft.graph.windowsUpdates.monitoringRule",\r\n                    "signal": "rollback",\r\n                    "threshold": 5,\r\n                    "action": "pauseDeployment"\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the featureUpdateVersion parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/catalog/entries.',
     skipTest: false
@@ -2562,7 +2562,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-updates-post-deployments?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-updates-post-deployments?view=graph-rest-beta',
     postBody: '{\r\n    "content": {\r\n        "@odata.type": "#microsoft.graph.windowsUpdates.featureUpdateReference",\r\n        "version": "{featureUpdateVersion}"\r\n    },\r\n    "settings": {\r\n        "@odata.type": "microsoft.graph.windowsUpdates.windowsDeploymentSettings",\r\n        "rollout": {\r\n            "startDateTime": "{deploymentStartDateTime}",\r\n            "endDateTime": "{deploymentEndDateTime}",\r\n            "durationBetweenOffers": "P7D"\r\n        },\r\n        "monitoring": {\r\n            "monitoringRules": [\r\n                {\r\n                    "@odata.type": "#microsoft.graph.windowsUpdates.monitoringRule",\r\n                    "signal": "rollback",\r\n                    "threshold": 5,\r\n                    "action": "pauseDeployment"\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the featureUpdateVersion parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/catalog/entries.',
     skipTest: false
@@ -2572,7 +2572,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get deployment',
     requestUrl: '/beta/admin/windows/updates/deployments/{deploymentId}',
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-deployment-get?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-deployment-get?view=graph-rest-beta',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the deploymentId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/deployments.',
     skipTest: false
   },
@@ -2587,7 +2587,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-deployment-update?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-deployment-update?view=graph-rest-beta',
     postBody: '{\r\n    "settings": {\r\n        "@odata.type": "microsoft.graph.windowsUpdates.windowsDeploymentSettings",\r\n        "monitoring": {\r\n            "monitoringRules": [\r\n                {\r\n                    "signal": "rollback",\r\n                    "threshold": 5,\r\n                    "action": "pauseDeployment"\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the deploymentId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/deployments.',
     skipTest: false
@@ -2603,7 +2603,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-deployment-update?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-deployment-update?view=graph-rest-beta',
     postBody: '{\r\n    "state": {\r\n        "@odata.type": "#microsoft.graph.windowsUpdates.deploymentState",\r\n        "requestedValue": "paused"\r\n    }\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the deploymentId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/deployments.',
     skipTest: false
@@ -2619,7 +2619,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-deployment-update?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-deployment-update?view=graph-rest-beta',
     postBody: '{\r\n    "state": {\r\n        "@odata.type": "#microsoft.graph.windowsUpdates.deploymentState",\r\n        "requestedValue": "none"\r\n    }\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the deploymentId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/deployments.',
     skipTest: false
@@ -2629,7 +2629,7 @@ export const queries: ISampleQuery[] = [
     method: 'DELETE',
     humanName: 'delete deployment',
     requestUrl: '/beta/admin/windows/updates/deployments/{deploymentId}',
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-deployment-delete?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-deployment-delete?view=graph-rest-beta',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the deploymentId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/deployments.',
     skipTest: false
   },
@@ -2638,7 +2638,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list deployment audience members',
     requestUrl: '/beta/admin/windows/updates/deployments/{deploymentId}/audience/members',
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-deploymentaudience-list-members?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-deploymentaudience-list-members?view=graph-rest-beta',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the deploymentId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/deployments.',
     skipTest: false
   },
@@ -2647,7 +2647,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list deployment audience exclusions',
     requestUrl: '/beta/admin/windows/updates/deployments/{deploymentId}/audience/exclusions',
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-deploymentaudience-list-exclusions?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-deploymentaudience-list-exclusions?view=graph-rest-beta',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the deploymentId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/deployments.',
     skipTest: false
   },
@@ -2662,7 +2662,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-deploymentaudience-updateaudience?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-deploymentaudience-updateaudience?view=graph-rest-beta',
     postBody: '{\r\n    "addMembers": [\r\n        {\r\n            "@odata.type": "#microsoft.graph.windowsUpdates.azureADDevice",\r\n            "id": "{azureAdDeviceId}"\r\n        }\r\n    ]\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the deploymentId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/deployments.',
     skipTest: false
@@ -2678,7 +2678,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-deploymentaudience-updateaudience?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-deploymentaudience-updateaudience?view=graph-rest-beta',
     postBody: '{\r\n    "addExclusions": [\r\n        {\r\n            "@odata.type": "#microsoft.graph.windowsUpdates.azureADDevice",\r\n            "id": "{azureAdDeviceId}"\r\n        }\r\n    ]\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the deploymentId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/deployments.',
     skipTest: false
@@ -2694,7 +2694,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-deploymentaudience-updateaudience?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-deploymentaudience-updateaudience?view=graph-rest-beta',
     postBody: '{\r\n    "removeMembers": [\r\n        {\r\n            "@odata.type": "#microsoft.graph.windowsUpdates.azureADDevice",\r\n            "id": "{azureAdDeviceId}"\r\n        }\r\n    ]\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the deploymentId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/deployments.',
     skipTest: false
@@ -2710,7 +2710,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-deploymentaudience-updateaudience?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-deploymentaudience-updateaudience?view=graph-rest-beta',
     postBody: '{\r\n    "removeExclusions": [\r\n        {\r\n            "@odata.type": "#microsoft.graph.windowsUpdates.azureADDevice",\r\n            "id": "{azureAdDeviceId}"\r\n        }\r\n    ]\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the deploymentId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updates/deployments.',
     skipTest: false
@@ -2720,7 +2720,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list updatable assets',
     requestUrl: '/beta/admin/windows/updates/updatableAssets',
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-updates-list-updatableassets?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-updates-list-updatableassets?view=graph-rest-beta',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query.',
     skipTest: false
   },
@@ -2729,7 +2729,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get updatable asset',
     requestUrl: '/beta/admin/windows/updates/updatableAssets/{updatableAssetId}',
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-updatableasset-get?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-updatableasset-get?view=graph-rest-beta',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the updatableAssetId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updatableAssets.',
     skipTest: false
   },
@@ -2738,7 +2738,7 @@ export const queries: ISampleQuery[] = [
     method: 'DELETE',
     humanName: 'delete updatable asset',
     requestUrl: '/beta/admin/windows/updates/updatableAssets/{updatableAssetId}',
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-updatableasset-delete?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-updatableasset-delete?view=graph-rest-beta',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the updatableAssetId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updatableAssets.',
     skipTest: false
   },
@@ -2747,7 +2747,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'list Azure AD devices',
     requestUrl: '/beta/admin/windows/updates/updatableAssets/?$filter=isof(\'microsoft.graph.windowsUpdates.azureADDevice\')',
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-updates-list-updatableassets-azureaddevice?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-updates-list-updatableassets-azureaddevice?view=graph-rest-beta',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query.',
     skipTest: false
   },
@@ -2756,7 +2756,7 @@ export const queries: ISampleQuery[] = [
     method: 'GET',
     humanName: 'get Azure AD device',
     requestUrl: '/beta/admin/windows/updates/updatableAssets/{updatableAssetId}',
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-azureaddevice-get?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-azureaddevice-get?view=graph-rest-beta',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the updatableAssetId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updatableAssets.',
     skipTest: false
   },
@@ -2765,7 +2765,7 @@ export const queries: ISampleQuery[] = [
     method: 'DELETE',
     humanName: 'delete Azure AD device',
     requestUrl: '/beta/admin/windows/updates/updatableAssets/{updatableAssetId}',
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-azureaddevice-delete?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-azureaddevice-delete?view=graph-rest-beta',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query. To find a value for the updatableAssetId parameter, you can run: GET https://graph.microsoft.com/beta/admin/windows/updatableAssets.',
     skipTest: false
   },
@@ -2780,7 +2780,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-updatableasset-enrollassets?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-updatableasset-enrollassets?view=graph-rest-beta',
     postBody: '{\r\n    "updateCategory": "feature",\r\n    "assets": [\r\n        {\r\n            "@odata.type": "#microsoft.graph.windowsUpdates.azureADDevice",\r\n            "id": "{azureAdDeviceId}"\r\n        }\r\n    ]\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query.',
     skipTest: false
@@ -2796,7 +2796,7 @@ export const queries: ISampleQuery[] = [
         'value': 'application/json'
       }
     ],
-    docLink: 'https://docs.microsoft.com/graph/api/windowsupdates-updatableasset-unenrollassets?view=graph-rest-beta',
+    docLink: 'https://learn.microsoft.com/graph/api/windowsupdates-updatableasset-unenrollassets?view=graph-rest-beta',
     postBody: '{\r\n    "updateCategory": "feature",\r\n    "assets": [\r\n        {\r\n            "@odata.type": "#microsoft.graph.windowsUpdates.azureADDevice",\r\n            "id": "{azureAdDeviceId}"\r\n        }\r\n    ]\r\n}',
     tip: 'Please enable the WindowsUpdates.ReadWrite.All permission to use this query.',
     skipTest: false
