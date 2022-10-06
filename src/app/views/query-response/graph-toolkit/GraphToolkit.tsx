@@ -5,7 +5,6 @@ import {
   getTheme, IStyle, ITheme, Label, Link,
   MessageBar, MessageBarType, styled
 } from '@fluentui/react';
-
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IRootState } from '../../../../types/root';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';

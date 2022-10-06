@@ -172,6 +172,86 @@ const Profile = (props: any) => {
     )
   }
 
+  const classes = classNames(props);
+
+  const panelOverlayProps: IOverlayProps = {
+    isDarkThemed: true
+  }
+  const onRenderSecondaryText = (prop: IPersonaProps): JSX.Element => {
+    return (
+      <span style={{fontSize: FontSizes.small}}>
+        {prop.secondaryText}
+      </span>
+    );
+  }
+
+  const showProfileComponent = (userPersona: any): React.ReactNode => {
+
+    const smallPersona = <Persona
+      {...userPersona}
+      size={PersonaSize.size32}
+      styles={personaStyleToken}
+      hidePersonaDetails={true} />;
+
+    const fullPersona = <Persona
+      {...userPersona}
+      size={PersonaSize.size72}
+      hidePersonaDetails={false}
+      onRenderSecondaryText={onRenderSecondaryText}
+      styles={personaStyleToken} />
+
+    return (<>
+      <ActionButton ariaLabel='profile'
+        id={buttonId}
+        onClick={toggleIsCalloutVisible}
+        role='button'
+        styles={personaButtonStyles}
+      >
+        {smallPersona}
+      </ActionButton>
+
+      {isCalloutVisible && (
+        <Callout
+          className={styles.callout}
+          ariaLabelledBy={labelId}
+          ariaDescribedBy={descriptionId}
+          role='dialog'
+          gapSpace={0}
+          target={`#${buttonId}`}
+          isBeakVisible={false}
+          beakWidth={10}
+          onDismiss={toggleIsCalloutVisible}
+          setInitialFocus
+          styles={{root: {border: '1px solid' + theme.palette.neutralTertiary}}}
+        >
+          <Stack horizontal horizontalAlign='space-between' styles={{root:{ paddingBottom: 0}}}>
+            {profile &&
+            <ActionButton text={`${profile.tenant}`} disabled={true}/>
+            }
+            <ActionButton key={'sign-out'} onClick={() => handleSignOut()}>
+              {translateMessage('sign out')}
+            </ActionButton>
+          </Stack>
+          <Stack styles={{root:{ paddingLeft: 10 }}}>{fullPersona}</Stack>
+          {graphExplorerMode === Mode.Complete &&
+          <ActionButton key={'view-all-permissions'} onClick={() => changePanelState()} styles={permissionsLabelStyles}>
+            {translateMessage('view all permissions')}
+          </ActionButton>
+          }
+          <Stack styles={{root:{ background: theme.palette.neutralLighter, padding:10}}}>
+            <ActionButton key={'sign-other-account'} onClick={() => handleSignInOther()}
+              iconProps={{iconName: 'AddFriend'}}
+            >
+              {translateMessage('sign in other account')}
+            </ActionButton>
+
+          </Stack>
+        </Callout>
+      )}
+    </>
+    )
+  }
+
   return (
     <div className={classes.profile} style={profileContainerStyles}>
       {showProfileComponent(persona)}
