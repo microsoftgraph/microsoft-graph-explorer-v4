@@ -144,7 +144,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               <div id={'json-schema-tab'}>
                 <MessageBar messageBarType={MessageBarType.info}>
                   <FormattedMessage id='Get started with adaptive cards on' />
-                  <Link href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
+                  <Link href={'https://learn.microsoft.com/en-us/adaptive-cards/templating/sdk'}
                     target='_blank'
                     rel='noopener noreferrer'
                     tabIndex={0}
