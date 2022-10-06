@@ -1,20 +1,16 @@
 import {
   Announced,
-  DefaultButton,
   DetailsList,
   DetailsListLayoutMode,
   getTheme,
   GroupHeader,
   IColumn,
-  IDetailsListCheckboxProps,
   IOverlayProps,
   Label,
   Panel,
   PanelType,
-  PrimaryButton,
   SearchBox,
   SelectionMode,
-  Selection,
   IGroup
 } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -25,7 +21,6 @@ import { componentNames, eventTypes, telemetry } from '../../../../../telemetry'
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
 import { IRootState } from '../../../../../types/root';
-import { consentToScopes } from '../../../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';
@@ -40,11 +35,10 @@ interface IPanelList {
   classes: any;
   renderItemColumn: any;
   renderDetailsHeader: Function;
-  renderCustomCheckbox: Function;
 }
 
 const PanelList = ({ messages,
-  columns, classes, renderItemColumn, renderDetailsHeader, renderCustomCheckbox }: IPanelList) : JSX.Element => {
+  columns, classes, renderItemColumn, renderDetailsHeader }: IPanelList) : JSX.Element => {
 
   const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
     return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
@@ -57,11 +51,10 @@ const PanelList = ({ messages,
   const [searchStarted, setSearchStarted] = useState(false);
   const permissionsList: any[] = [];
   const tokenPresent = !!authToken.token;
-  const [selectedPermissions, setSelectedPermissions] = useState<string []>([]);
   const loading = scopes.pending.isFullPermissions;
 
   const theme = getTheme();
-  const { inactiveConsentStyles, permissionPanelStyles, activeConsentStyles } = profileStyles(theme);
+  const { permissionPanelStyles } = profileStyles(theme);
 
   useEffect(() => {
     setPermissions(sortPermissions(fullPermissions));
@@ -111,7 +104,7 @@ const PanelList = ({ messages,
   const onRenderGroupHeader = (props: any): JSX.Element | null => {
     if (props) {
       return (
-        <GroupHeader  {...props} onRenderGroupHeaderCheckbox={renderCustomCheckbox} styles={groupHeaderStyles}
+        <GroupHeader  {...props} onRenderGroupHeaderCheckbox={hideCheckbox} styles={groupHeaderStyles}
         />
       )
     }
@@ -122,7 +115,6 @@ const PanelList = ({ messages,
     let open = !!permissionsPanelOpen;
     open = !open;
     dispatch(togglePermissionsPanel(open));
-    selectedPermissions.length = 0;
     trackSelectPermissionsButtonClickEvent();
   };
 
@@ -130,29 +122,6 @@ const PanelList = ({ messages,
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
     });
-  };
-
-  const handleConsent = () => {
-    dispatch(consentToScopes(selectedPermissions));
-    setSelectedPermissions([]);
-  };
-
-
-  const onRenderFooterContent = () => {
-    return (
-      <div>
-        <PrimaryButton
-          disabled = {selectedPermissions.length === 0}
-          onClick={() => handleConsent()}
-          style={(selectedPermissions.length > 0) ? activeConsentStyles: inactiveConsentStyles}
-        >
-          {translateMessage('Consent')}
-        </PrimaryButton>
-        <DefaultButton onClick={() => changePanelState()}>
-          {translateMessage('Cancel')}
-        </DefaultButton>
-      </div>
-    );
   };
 
   const panelOverlayProps: IOverlayProps = {
@@ -173,18 +142,11 @@ const PanelList = ({ messages,
     }
   }
 
-  const selection = new Selection({
-    onSelectionChanged: () => {
-      const selected = selection.getSelection() as IPermission[];
-      const permissionsToConsent: string[] = [];
-      if (selected.length > 0) {
-        selected.forEach((option: IPermission) => {
-          permissionsToConsent.push(option.value);
-        });
-      }
-      setSelectedPermissions(permissionsToConsent);
-    }
-  });
+  const hideCheckbox = (): JSX.Element => {
+    return (
+      <div/>
+    )
+  }
 
   return (
     <div>
@@ -207,7 +169,6 @@ const PanelList = ({ messages,
         type={PanelType.medium}
         hasCloseButton={true}
         headerText={translateMessage('Permissions')}
-        onRenderFooterContent={onRenderFooterContent}
         isFooterAtBottom={true}
         closeButtonAriaLabel='Close'
         overlayProps={panelOverlayProps}
@@ -237,7 +198,6 @@ const PanelList = ({ messages,
                 renderItemColumn(item, index, column)}
               selectionMode={SelectionMode.multiple}
               layoutMode={DetailsListLayoutMode.justified}
-              selection={selection}
               compact={true}
               groupProps={{
                 showEmptyGroups: false,
@@ -248,7 +208,7 @@ const PanelList = ({ messages,
              'Toggle selection for all items'}
               checkButtonAriaLabel={messages['Row checkbox'] || 'Row checkbox'}
               onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)}
-              onRenderCheckbox={(props?: IDetailsListCheckboxProps) => renderCustomCheckbox(props)}
+              onRenderCheckbox={() => hideCheckbox()}
             />
           </>}
       </Panel>

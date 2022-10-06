@@ -83,20 +83,13 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
 
         case 'consented':
           if (consented) {
-            if(panel){
-              return <Label className={classes.consented}
-              ><FormattedMessage id='Consented' /></Label>;
-            }
             return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '80px'}}>
               <FormattedMessage id='Revoke' />
             </PrimaryButton>;
           } else {
-            if (!panel) {
-              return <PrimaryButton onClick={() => handleConsent(item)} style={{width: '80px'}}>
-                <FormattedMessage id='Consent' />
-              </PrimaryButton>;
-            }
-            return null;
+            return <PrimaryButton onClick={() => handleConsent(item)} style={{width: '80px'}}>
+              <FormattedMessage id='Consent' />
+            </PrimaryButton>;
           }
 
         case 'consentDescription':
@@ -141,14 +134,6 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
         );
       }
     });
-  }
-
-  const renderCustomCheckbox = (props: IDetailsListCheckboxProps): JSX.Element => {
-    return (
-      <div style={{ pointerEvents: 'none' }} >
-        <Checkbox checked={props ? props.checked : undefined} />
-      </div>
-    )
   }
 
   const getColumns = () : IColumn[] => {
@@ -216,7 +201,6 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
         renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
           renderItemColumn(item, index, column)}
         renderDetailsHeader={renderDetailsHeader}
-        renderCustomCheckbox={renderCustomCheckbox}
       />
     </div>
   };
