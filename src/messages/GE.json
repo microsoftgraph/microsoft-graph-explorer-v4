@@ -292,7 +292,7 @@
   "Status": "Status",
   "Admin consent required": "Admin consent required",
   "Consent": "Consent",
-  "Revoke": "Revoke",
+  "Revoke": "Unconsent",
   "permissions required to run the query": "One of the following permissions is required to run the query. Select a permission and click Consent.",
   "tab": " tab",
   "View the": " View the",
