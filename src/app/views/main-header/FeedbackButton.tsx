@@ -1,4 +1,4 @@
-import { getTheme, IButton, IconButton, IIconProps, Spinner, TooltipHost } from '@fluentui/react';
+import { getTheme, IButton, IconButton, IIconProps, Spinner, SpinnerSize, TooltipHost } from '@fluentui/react';
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { useSelector } from 'react-redux';
@@ -82,7 +82,7 @@ export const FeedbackButton = () => {
             componentRef={feedbackButtonRef}
           />
         </TooltipHost>
-        <Suspense fallback={<Spinner/>}>
+        <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
           <FeedbackForm onDismissSurvey={disableSurvey}
             activated={enableSurvey} onDisableSurvey={disableSurvey} />
         </Suspense>

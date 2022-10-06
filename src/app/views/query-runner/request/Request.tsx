@@ -2,7 +2,8 @@ import {
   FontSizes,
   Pivot,
   PivotItem,
-  Spinner
+  Spinner,
+  SpinnerSize
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { Component, CSSProperties, lazy, Suspense } from 'react';
@@ -74,7 +75,7 @@ export class Request extends Component<IRequestComponent, any> {
           'aria-controls': 'request-header-tab'
         }}
       >
-        <Suspense fallback={<Spinner/>}>
+        <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
           <div style={containerStyle} id={'request-header-tab'}>
             <RequestHeaders />
           </div>
@@ -91,7 +92,7 @@ export class Request extends Component<IRequestComponent, any> {
           'aria-controls': 'permission-tab'
         }}
       >
-        <Suspense fallback={<Spinner/>}>
+        <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
           <div style={containerStyle} id={'permission-tab'}>
             <Permission />
           </div>
@@ -110,7 +111,7 @@ export class Request extends Component<IRequestComponent, any> {
           headerButtonProps={{
             'aria-controls': 'access-token-tab'
           }}>
-          <Suspense fallback={<Spinner/>}>
+          <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
             <div style={containerStyle} id={'access-token-tab'}>
               <Auth />
             </div>

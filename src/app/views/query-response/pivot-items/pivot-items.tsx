@@ -1,4 +1,4 @@
-import { getTheme, IPivotItemProps, ITheme, PivotItem, Spinner } from '@fluentui/react';
+import { getTheme, IPivotItemProps, ITheme, PivotItem, Spinner, SpinnerSize } from '@fluentui/react';
 import React, { lazy, Suspense} from 'react';
 import { useSelector } from 'react-redux';
 
@@ -89,7 +89,7 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-headers-tab'
       }}
     >
-      <Suspense fallback={<Spinner/>}>
+      <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
         <div id={'response-headers-tab'}><ResponseHeaders /></div>
       </Suspense>
     </PivotItem>
@@ -107,7 +107,7 @@ export const GetPivotItems = () => {
           'aria-controls': 'code-snippets-tab'
         }}
       >
-        <Suspense fallback={<Spinner/>}>
+        <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
           <div id={'code-snippets-tab'}><Snippets /></div>
         </Suspense>
       </PivotItem>,
@@ -123,7 +123,7 @@ export const GetPivotItems = () => {
           'aria-controls': 'toolkit-tab'
         }}
       >
-        <Suspense fallback={<Spinner/>}>
+        <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
           <div id={'toolkit-tab'}><GraphToolkit /></div>
         </Suspense>
       </PivotItem>,
@@ -139,7 +139,7 @@ export const GetPivotItems = () => {
           'aria-controls': 'adaptive-cards-tab'
         }}
       >
-        <Suspense fallback={<Spinner/>}>
+        <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
           <ThemeContext.Consumer >
             {(theme) => (
             // @ts-ignore

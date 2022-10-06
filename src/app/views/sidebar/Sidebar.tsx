@@ -6,6 +6,7 @@ import {
   Pivot,
   PivotItem,
   Spinner,
+  SpinnerSize,
   Stack,
   TooltipDelay,
   TooltipHost
@@ -70,7 +71,7 @@ export const Sidebar = (props: ISidebar) => {
               'aria-controls': 'resources-tab'
             }}
           >
-            <Suspense fallback={<Spinner/>}>
+            <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
               <div id={'resources-tab'}><ResourceExplorer /></div>
             </Suspense>
           </PivotItem>
@@ -82,7 +83,7 @@ export const Sidebar = (props: ISidebar) => {
               'aria-controls': 'history-tab'
             }}
           >
-            <Suspense fallback={<Spinner/>}>
+            <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
               <div id={'history-tab'}><History /></div>
             </Suspense>
           </PivotItem>

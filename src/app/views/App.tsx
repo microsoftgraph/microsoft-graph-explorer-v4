@@ -1,4 +1,4 @@
-import { Announced, getTheme, ITheme, Spinner, styled } from '@fluentui/react';
+import { Announced, getTheme, ITheme, Spinner, SpinnerSize, styled } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import React, { Component, lazy, Suspense } from 'react';
 import { injectIntl } from 'react-intl';
@@ -469,7 +469,7 @@ class App extends Component<IAppProps, IAppState> {
                 <div style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                 }}>
-                  <Suspense fallback={<Spinner/>}>
+                  <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
                     <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                       <StatusMessages />
                     </div>

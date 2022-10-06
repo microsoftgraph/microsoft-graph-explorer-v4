@@ -177,7 +177,7 @@ const Profile = (props: any) => {
     <div className={classes.profile} style={profileContainerStyles}>
       {showProfileComponent(persona)}
       {permissionsPanelOpen &&
-      <Suspense fallback={<Spinner size={SpinnerSize.medium} />}>
+      <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
         <Permission/>
       </Suspense>
       }

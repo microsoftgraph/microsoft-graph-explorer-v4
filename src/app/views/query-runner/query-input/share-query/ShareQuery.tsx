@@ -1,6 +1,6 @@
 import {
   DefaultButton, Dialog, DialogFooter, DialogType, DirectionalHint, FontSizes,
-  IconButton, IIconProps, Spinner, TooltipHost
+  IconButton, IIconProps, Spinner, SpinnerSize, TooltipHost
 } from '@fluentui/react';
 import React, { useState, lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
@@ -93,7 +93,7 @@ export const ShareQuery = () => {
           aria-label={translateMessage('Share Query')}
         />
         <DialogFooter>
-          <Suspense fallback={<Spinner/>}>
+          <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
             <CopyButton handleOnClick={handleCopy} isIconButton={false} />
           </Suspense>
           <DefaultButton
