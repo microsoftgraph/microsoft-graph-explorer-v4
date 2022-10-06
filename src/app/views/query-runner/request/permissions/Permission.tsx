@@ -1,10 +1,8 @@
 import {
-  Checkbox,
   FontSizes,
   getId,
   getTheme,
   IColumn,
-  IDetailsListCheckboxProps,
   Label,
   PrimaryButton,
   TooltipHost
@@ -136,6 +134,16 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     });
   }
 
+  const getColumnCellStyles = () => {
+    return {
+      cellName: {
+        overflow: 'visible !important' as 'visible',
+        wordBreak: 'break-word',
+        overflowWrap: 'break-word'
+      }
+    }
+  }
+
   const getColumns = () : IColumn[] => {
     const columns: IColumn[] = [
       {
@@ -156,8 +164,8 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           name: translateMessage('Description'),
           fieldName: 'consentDescription',
           isResizable: true,
-          minWidth: (tokenPresent) ? 400 : 600,
-          maxWidth: (tokenPresent) ? 600 : 1000,
+          minWidth: (tokenPresent) ? 100 : 600,
+          maxWidth: (tokenPresent) ? 300 : 1000,
           isMultiline: true,
           columnActionsMode: 0
         }
@@ -171,9 +179,12 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
         name: translateMessage('Admin consent required'),
         fieldName: 'isAdmin',
         minWidth: (tokenPresent) ? 150 : 200,
-        maxWidth: (tokenPresent) ? 200 : 300,
+        maxWidth: (tokenPresent) ? 250 : 300,
         ariaLabel: translateMessage('Administrator permission'),
-        columnActionsMode: 0
+        columnActionsMode: 0,
+        isMultiline: true,
+        headerClassName: 'permissionHeader',
+        styles: getColumnCellStyles()
       }
     );
 
