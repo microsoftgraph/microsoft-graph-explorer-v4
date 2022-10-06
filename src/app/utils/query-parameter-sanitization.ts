@@ -54,7 +54,7 @@ function isKeyValuePair(str: string): boolean {
   return KEY_VALUE_REGEX.test(str);
 }
 
-export function isPropertyName(str: string): boolean {
+function isPropertyName(str: string): boolean {
   return PROPERTY_NAME_REGEX.test(str);
 }
 
