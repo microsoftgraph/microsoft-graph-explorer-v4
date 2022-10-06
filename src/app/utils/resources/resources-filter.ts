@@ -6,8 +6,7 @@ function getResourcesSupportedByVersion(
   searchText?: string
 ): IResource[] {
   const versionedResources: IResource[] = [];
-  const resourcesList = JSON.parse(JSON.stringify(resources)); // deep copy
-  resourcesList.forEach((resource: IResource) => {
+  resources.forEach((resource: IResource) => {
     if (versionExists(resource, version)) {
       resource.children = getResourcesSupportedByVersion(
         resource.children || [],
