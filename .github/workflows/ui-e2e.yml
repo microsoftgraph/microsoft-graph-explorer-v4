@@ -1,4 +1,4 @@
-name: Run Automated UI Tests
+name: Run Automated UI Tests (Manual Trigger)
 on:
   workflow_dispatch:
     inputs:
@@ -20,15 +20,7 @@ jobs:
         with:
           node-version: "14.x"
 
-      - name: Cache npm
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
-
       - name: Install dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: |
           npm ci --no-audit
           npx playwright install-deps
@@ -39,4 +31,4 @@ jobs:
         env:
           PLAYWRIGHT_TESTS_BASE_URL: ${{ github.event.inputs.base-url }}
         run: |
-          npx playwright test
+          npx playwright test ui

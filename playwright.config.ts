@@ -8,6 +8,7 @@ const config: PlaywrightTestConfig = {
   use: {
     baseURL
   },
+  testDir: './src/tests',
   projects: [
     {
       name: 'chromium',

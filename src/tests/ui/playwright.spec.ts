@@ -11,7 +11,7 @@ test.describe('Sample Queries', () => {
 
     const [newPage] = await Promise.all([
       page.waitForEvent('popup'),
-      page.locator('div[role="gridcell"]:has-text("https://docs.microsoft.com/en-us/graph/api/user-get")').click()
+      page.locator('div[role="gridcell"]:has-text("https://learn.microsoft.com/en-us/graph/api/user-get")').click()
     ]);
 
     await newPage.waitForLoadState();
