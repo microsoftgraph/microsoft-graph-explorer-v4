@@ -116,23 +116,6 @@ describe('App rendering', () => {
     expect(screen.getByRole('tab', { name: /expand/i} )).toBeDefined();
   });
 
-  it('should hide the sidebar when \'minimize sidebar button\' is clicked', async () => {
-    const user = userEvent.setup();
-    renderApp({ mobileScreen: false, showSidebar: true });
-    const minimizeButton = screen.getByRole('button', { name: /minimize sidebar/i });
-    await user.click(minimizeButton);
-    expect(screen.getByText(/sidebar minimized/i)).toBeDefined();
-
-    // resources, samples and history tabs are now buttons on the sidebar
-    const samplesButton = screen.getByRole('button', { name: /sample queries/i});
-    expect(screen.getByRole('button', { name: /resources/i})).toBeDefined();
-    expect(screen.getByRole('button', { name: /history/i})).toBeDefined();
-
-    await user.click(samplesButton);
-    expect(screen.getByText(/sidebar maximized/i)).toBeDefined();
-    expect(screen.getByRole('tab',{ name: /sample queries/i}));
-  })
-
   it('should render http methods dropdown when the \'request method button\' is clicked', async () => {
     const user = userEvent.setup();
     renderApp({mobileScreen: false, showSidebar: true});
