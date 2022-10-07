@@ -20,7 +20,7 @@ export function getConsentedScopesSuccess(response: string[]): IAction {
   };
 }
 
-export function signOutSuccess(response: boolean): any {
+export function signOutSuccess(response: string []): any {
   return {
     type: LOGOUT_SUCCESS,
     response
@@ -43,7 +43,7 @@ export function signOut() {
     } else {
       authenticationWrapper.logOutPopUp();
     }
-    dispatch(signOutSuccess(true));
+    dispatch(signOutSuccess([]));
   };
 }
 
