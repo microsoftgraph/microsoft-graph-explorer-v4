@@ -175,7 +175,7 @@ const Profile = (props: any) => {
   return (
     <div className={classes.profile} style={profileContainerStyles}>
       {showProfileComponent(persona)}
-      {permissionsPanelOpen && <Permission/>}
+      {permissionsPanelOpen && <Permission panel={true}/>}
     </div>
   );
 }
