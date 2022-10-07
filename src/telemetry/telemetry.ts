@@ -24,12 +24,14 @@ import {
   addCommonTelemetryItemProperties,
   filterRemoteDependencyData,
   filterTelemetryTypes,
-  sanitizeStackTrace,
   sanitizeTelemetryItemUriProperty
 } from './filters';
 import ITelemetry from './ITelemetry';
 import { getVersion } from '../app/utils/version';
-import { getBrowserScreenSize, getDeviceScreenScale } from '../app/utils/device-characteristics-telemetry';
+import {
+  getBrowserScreenSize,
+  getDeviceScreenScale
+} from '../app/utils/device-characteristics-telemetry';
 
 class Telemetry implements ITelemetry {
   private appInsights: ApplicationInsights;
@@ -58,7 +60,6 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackPageView();
     this.appInsights.addTelemetryInitializer(filterTelemetryTypes);
     this.appInsights.addTelemetryInitializer(filterRemoteDependencyData);
-    this.appInsights.addTelemetryInitializer(sanitizeStackTrace);
     this.appInsights.addTelemetryInitializer(sanitizeTelemetryItemUriProperty);
     this.appInsights.addTelemetryInitializer(addCommonTelemetryItemProperties);
     this.appInsights.context.application.ver = getVersion().toString();
