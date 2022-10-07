@@ -76,7 +76,9 @@ export const MainHeader: React.FunctionComponent <MainHeaderProps> = (props: Mai
                   mobileScreen ? 'GlobalNavButton': 'OpenPaneMirrored',
               style: { fontSize: '20px'} }}
               ariaLabel={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
-              onClick={() => props.toggleSidebar()} />
+              onClick={() => props.toggleSidebar()}
+              name={'Minimize sidebar'}
+            />
           </TooltipHost>
           }
           <h1><Label

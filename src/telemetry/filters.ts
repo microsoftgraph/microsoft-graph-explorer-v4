@@ -1,5 +1,4 @@
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
-import { errorTypes } from '.';
 import {
   ADAPTIVE_CARD_URL,
   DEVX_API_URL,
@@ -89,34 +88,6 @@ export function sanitizeTelemetryItemUriProperty(envelope: ITelemetryItem) {
     const startOfFragment = uri.indexOf('#');
     const sanitisedUri = uri.substring(0, startOfFragment);
     telemetryItem.uri = sanitisedUri;
-  }
-  return true;
-}
-
-export function sanitizeStackTrace(envelope: ITelemetryItem) {
-  if (envelope.baseType === 'ExceptionData') {
-    const telemetryItem = envelope.baseData || {};
-    telemetryItem.properties = telemetryItem.properties || {};
-
-    if (telemetryItem.exceptions && telemetryItem.exceptions.length > 0) {
-      const exception = telemetryItem.exceptions[0];
-      const parsedStack = exception.parsedStack[0];
-
-      // Only capture errors coming from our source code and not dependencies, to reduce noise
-      if (!parsedStack.fileName.startsWith('webpack-internal')) {
-        return false;
-      }
-
-      // Add properties for unhandled exceptions only
-      if (!telemetryItem.properties.ComponentName) {
-        telemetryItem.properties.ComponentName = parsedStack.assembly;
-        telemetryItem.properties.Message = exception.stack.split('\n')[0]; // Read first line only
-        exception.message = errorTypes.UNHANDLED_ERROR;
-      }
-
-      exception.hasFullStack = false;
-      exception.stack = null;
-    }
   }
   return true;
 }

@@ -40,7 +40,7 @@ function GetSnippets() {
   }
 
   return <Pivot
-    className={'pivot-response'}
+    className={'unstyled-pivot'}
     selectedKey={snippets.snippetTab}
     onLinkClick={handlePivotItemClick}
     styles={{ text: { fontSize: FontSizes.size14 } }}

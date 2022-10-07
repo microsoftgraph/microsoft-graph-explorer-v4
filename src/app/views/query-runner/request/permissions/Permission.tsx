@@ -8,7 +8,6 @@ import {
   IDetailsListCheckboxProps,
   Label,
   PrimaryButton,
-  Selection,
   TooltipHost
 } from '@fluentui/react';
 import React, { useEffect } from 'react';
@@ -202,31 +201,11 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     return columns;
   }
 
-  const selection = new Selection({
-    onSelectionChanged: () => {
-      const selected = selection.getSelection() as any;
-      const permissionsToConsent: string[] = [];
-      if (selected.length > 0) {
-        selected.forEach((option: IPermission) => {
-          permissionsToConsent.push(option.value);
-        });
-      }
-      if(permissionProps!.setPermissions){
-        permissionProps!.setPermissions(permissionsToConsent);
-      }
-    }
-  });
-
   const displayPermissionsPanel = () : JSX.Element => {
-    if (loading.isFullPermissions) {
-      return displayLoadingPermissionsText();
-    }
-
     return <div data-is-scrollable={true} style={panelStyles}>
       <PanelList
         classes={classes}
         messages={messages}
-        selection={selection}
         columns={getColumns()}
         renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
           renderItemColumn(item, index, column)}
