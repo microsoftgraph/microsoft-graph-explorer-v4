@@ -243,14 +243,15 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     input: autoInput
   }: any = queryInputStyles(currentTheme).autoComplete;
 
-  const onRenderDescription = (properties: any): any => {
-    if (!shouldShowSuggestions && !autoCompletePending) {
+  const handleRenderDescription = (properties?: ITextFieldProps): JSX.Element | null => {
+    if (!shouldShowSuggestions && !autoCompletePending && properties?.description) {
       return (
         <Text variant="small" >
-          {properties.description}
+          {properties?.description}
         </Text>
       );
     }
+    return null;
   };
 
 
@@ -272,7 +273,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           onRenderSuffix={(renderSuffix()) ? renderSuffix : undefined}
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
-          onRenderDescription={onRenderDescription}
+          onRenderDescription={handleRenderDescription}
           description={getErrorMessage(queryUrl)}
         />
       </div>
