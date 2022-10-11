@@ -269,7 +269,7 @@ const preliminaryChecksSuccess = async (dispatch: Function, preliminaryChecksObj
 
 const userRevokingAdminGrantedScopes = async (scopes: IScopes, permissionToRevoke: string) => {
   const userIsTenantAdmin = await isSignedInUserTenantAdmin();
-  // if(userIsTenantAdmin){ return false }
+  if(userIsTenantAdmin){ return false }
   return await isPermissionAdminGranted(scopes, permissionToRevoke);
 }
 
@@ -283,12 +283,14 @@ const isSignedInUserTenantAdmin = async (): Promise<boolean> => {
 const isPermissionAdminGranted = async (permissions: IScopes, permissionToRevoke: string): Promise<boolean> => {
   const { data } = permissions;
   const { fullPermissions, specificPermissions } = data;
-  return fullPermissions && fullPermissions.length > 0 ? permissionIsAdminGranted(fullPermissions, permissionToRevoke) :
-    specificPermissions && specificPermissions.length > 0 ?
-      permissionIsAdminGranted(specificPermissions, permissionToRevoke) : false;
+  if(fullPermissions && fullPermissions.length > 0) {
+    return permissionIsAdminGranted(fullPermissions, permissionToRevoke);
+  }
+  return permissionIsAdminGranted(specificPermissions, permissionToRevoke);
 }
 
 const permissionIsAdminGranted = (permissions: IPermission[], permissionToRevoke: string): boolean => {
+  if(!permissions){ return false}
   return permissions.some((permission: IPermission) =>
     permission.value.toLowerCase() === permissionToRevoke.toLowerCase() && permission.isAdmin);
 }
