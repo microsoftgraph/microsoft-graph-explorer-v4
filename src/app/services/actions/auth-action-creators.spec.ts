@@ -123,7 +123,7 @@ describe('Auth Action Creators', () => {
 
   it('should dispatch LOGOUT_SUCCESS when signOutSuccess() is called', () => {
     // Arrange
-    const response: boolean = false;
+    const response: boolean = true;
     const expectedAction = {
       type: LOGOUT_SUCCESS,
       response
