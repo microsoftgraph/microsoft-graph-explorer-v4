@@ -270,7 +270,7 @@ const preliminaryChecksSuccess = async (dispatch: Function, preliminaryChecksObj
 const userRevokingAdminGrantedScopes = async (scopes: IScopes, permissionToRevoke: string) => {
   const userIsTenantAdmin = await isSignedInUserTenantAdmin();
   if(userIsTenantAdmin){ return false }
-  return await isPermissionAdminGranted(scopes, permissionToRevoke);
+  return isPermissionAdminGranted(scopes, permissionToRevoke);
 }
 
 const isSignedInUserTenantAdmin = async (): Promise<boolean> => {
@@ -280,7 +280,7 @@ const isSignedInUserTenantAdmin = async (): Promise<boolean> => {
   return response ? response.value.some((value : any) => value.displayName === 'Global Administrator'): false
 }
 
-const isPermissionAdminGranted = async (permissions: IScopes, permissionToRevoke: string): Promise<boolean> => {
+const isPermissionAdminGranted = (permissions: IScopes, permissionToRevoke: string): boolean => {
   const { data } = permissions;
   const { fullPermissions, specificPermissions } = data;
   if(fullPermissions && fullPermissions.length > 0) {
