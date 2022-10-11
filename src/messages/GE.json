@@ -456,5 +456,6 @@
   "You require the following permissions to revoke": "You require Directory.Read.All and DelegatedPermissionGrant.ReadWrite.All to be able to revoke consent to permissions",
   "Cannot delete default scope": "Graph Explorer requires this permission by default to make basic calls on your behalf",
   "Permission revoked": "Permission revoked successfully",
-  "An error occurred when dissenting": "An error occurred when dissenting. Please try again"
+  "An error occurred when dissenting": "An error occurred when dissenting. Please try again",
+  "You are dissenting to an admin pre-consented permission": "You are dissenting to an admin pre-consented permission. Ask your tenant admin to revoke consent to this permission on Azure AD"
 }

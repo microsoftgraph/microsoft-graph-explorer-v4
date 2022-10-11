@@ -30,6 +30,7 @@ import { setQueryResponseStatus } from './query-status-action-creator';
 import { IQuery } from '../../../types/query-runner';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
+import { IPermission, IScopes } from '../../../types/permissions';
 
 export function fetchFullScopesSuccess(response: object): IAction {
   return {
@@ -168,7 +169,7 @@ interface IPreliminaryChecksObject {
   requiredPermissions: string[];
   consentedScopes: string[];
   permissionToRevoke: string;
-
+  scopes?: any;
 }
 
 enum REVOKE_STATUS {
@@ -179,7 +180,7 @@ enum REVOKE_STATUS {
 
 export function revokeScopes(permissionToRevoke: string): Function {
   return async (dispatch: Function, getState: Function) => {
-    const { consentedScopes, profile } = getState();
+    const { consentedScopes, profile, scopes } = getState();
     const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
     const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
 
@@ -191,10 +192,12 @@ export function revokeScopes(permissionToRevoke: string): Function {
     const newScopesString: string = newScopesArray.join(' ');
 
     const preliminaryChecksObject: IPreliminaryChecksObject = {
-      defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke
+      defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke, scopes
     }
 
-    if (!preliminaryChecksSuccess(dispatch, preliminaryChecksObject)) {
+    const hasPreliminaryCheckPassed = await preliminaryChecksSuccess(dispatch, preliminaryChecksObject);
+
+    if (!hasPreliminaryCheckPassed) {
       trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
       return;
     }
@@ -222,8 +225,9 @@ export function revokeScopes(permissionToRevoke: string): Function {
   }
 }
 
-const preliminaryChecksSuccess = (dispatch: Function, preliminaryChecksObject: IPreliminaryChecksObject) => {
-  const { defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke } = preliminaryChecksObject
+const preliminaryChecksSuccess = async (dispatch: Function, preliminaryChecksObject: IPreliminaryChecksObject) => {
+  const { defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke, scopes }
+   = preliminaryChecksObject
   if (userRevokingDefaultScopes(defaultUserScopes, permissionToRevoke)) {
     dispatch(
       setQueryResponseStatus({
@@ -247,7 +251,46 @@ const preliminaryChecksSuccess = (dispatch: Function, preliminaryChecksObject: I
     );
     return false;
   }
+
+  const userRevokingPreconsentedScopes = await userRevokingAdminGrantedScopes(scopes, permissionToRevoke);
+  if(userRevokingPreconsentedScopes) {
+    dispatch(
+      setQueryResponseStatus({
+        statusText: translateMessage('Unable to dissent'),
+        status: translateMessage('You are dissenting to an admin pre-consented permission'),
+        ok: false,
+        messageType: MessageBarType.error
+      })
+    );
+    return false;
+  }
   return true;
+}
+
+const userRevokingAdminGrantedScopes = async (scopes: IScopes, permissionToRevoke: string) => {
+  const userIsTenantAdmin = await isSignedInUserTenantAdmin();
+  // if(userIsTenantAdmin){ return false }
+  return await isPermissionAdminGranted(scopes, permissionToRevoke);
+}
+
+const isSignedInUserTenantAdmin = async (): Promise<boolean> => {
+  const tenantAdminQuery = {...getQuery};
+  tenantAdminQuery.sampleUrl = `${GRAPH_URL}/v1.0/me/memberOf`;
+  const response = await makePermissionsRequest([], tenantAdminQuery);
+  return response ? response.value.some((value : any) => value.displayName === 'Global Administrator'): false
+}
+
+const isPermissionAdminGranted = async (permissions: IScopes, permissionToRevoke: string): Promise<boolean> => {
+  const { data } = permissions;
+  const { fullPermissions, specificPermissions } = data;
+  return fullPermissions && fullPermissions.length > 0 ? permissionIsAdminGranted(fullPermissions, permissionToRevoke) :
+    specificPermissions && specificPermissions.length > 0 ?
+      permissionIsAdminGranted(specificPermissions, permissionToRevoke) : false;
+}
+
+const permissionIsAdminGranted = (permissions: IPermission[], permissionToRevoke: string): boolean => {
+  return permissions.some((permission: IPermission) =>
+    permission.value.toLowerCase() === permissionToRevoke.toLowerCase() && permission.isAdmin);
 }
 
 
