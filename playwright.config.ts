@@ -8,6 +8,7 @@ const config: PlaywrightTestConfig = {
   use: {
     baseURL
   },
-  testDir: './src/tests'
+  testDir: './src/tests',
+  reporter: [['html', { outputFolder: 'playwright-report' }]],
 };
 export default config;
