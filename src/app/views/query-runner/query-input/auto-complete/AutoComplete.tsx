@@ -1,4 +1,4 @@
-import { getTheme, KeyCodes, TextField } from '@fluentui/react';
+import { getTheme, KeyCodes, TextField, Text, ITextFieldProps } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -27,7 +27,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   let element: HTMLDivElement | null | undefined = null;
 
-  const { sampleQuery, autoComplete: { data: autoCompleteOptions } } = useSelector(
+  const { sampleQuery, autoComplete: { data: autoCompleteOptions, pending: autoCompletePending } } = useSelector(
     (state: IRootState) => state
   );
 
@@ -243,6 +243,17 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     input: autoInput
   }: any = queryInputStyles(currentTheme).autoComplete;
 
+  const handleRenderDescription = (properties?: ITextFieldProps): JSX.Element | null => {
+    if (!shouldShowSuggestions && !autoCompletePending && properties?.description) {
+      return (
+        <Text variant="small" >
+          {properties?.description}
+        </Text>
+      );
+    }
+    return null;
+  };
+
 
   return (
     <div onBlur={closeSuggestionDialog}>
@@ -262,7 +273,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           onRenderSuffix={(renderSuffix()) ? renderSuffix : undefined}
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
-          errorMessage={getErrorMessage(queryUrl)}
+          onRenderDescription={handleRenderDescription}
+          description={getErrorMessage(queryUrl)}
         />
       </div>
       {shouldShowSuggestions && queryUrl && suggestions.length > 0 &&
