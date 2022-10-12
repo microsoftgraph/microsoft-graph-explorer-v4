@@ -1,13 +1,20 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
+import { logIn } from './login';
 
-test.beforeEach(async ({ page, baseURL }) => {
-  await page.goto(baseURL!);
-  await expect(page).toHaveTitle(/Graph Explorer/);
+let page: Page;
+
+test.beforeAll(async ({ browser }) => {
+  page = await browser.newPage();
+  await logIn(page);
+});
+
+test.afterAll(async () => {
+  await page.close();
 });
 
 test.describe('Sample Queries', () => {
 
-  test.skip('Documentation link icons are visible and clicking on them opens a new tab', async ({ page }) => {
+  test.skip('Documentation link icons are visible and clicking on them opens a new tab', async () => {
 
     const [newPage] = await Promise.all([
       page.waitForEvent('popup'),
@@ -21,7 +28,7 @@ test.describe('Sample Queries', () => {
 
 test.describe('Settings', () => {
 
-  test('Change theme settings', async ({ page }) => {
+  test('Change theme settings', async () => {
 
     const settingsButton = page.locator('[aria-label="Settings"]');
     await settingsButton.click();
@@ -37,13 +44,13 @@ test.describe('Settings', () => {
     await settingsButton.click();
     await changeThemeButton.click();
     await page.locator('text=Light').click();
-
+    await page.locator('text=Close').click();
   })
 })
 
 test.describe('Run query', () => {
 
-  test('user can run query', async ({ page }) => {
+  test('user can run query', async () => {
     const runQueryButton = page.locator('.run-query-button button');
     await runQueryButton.click();
     await page.waitForTimeout(100);
@@ -54,7 +61,7 @@ test.describe('Run query', () => {
 });
 
 test.describe('Autocomplete', () => {
-  test('Adds message and gets autocomplete options', async ({ page }) => {
+  test('Adds message and gets autocomplete options', async () => {
 
     const queryInputField = page.locator('[aria-label="Query sample input"]');
     await queryInputField.click();
@@ -75,8 +82,8 @@ test.describe('Autocomplete', () => {
 
 test.describe('Version v1.0/beta', () => {
 
-  test('Changing the version via the dropdown menu changes the version in the request URL field', async ({ page }) => {
-    await page.locator('text=v1.0').click();
+  test('Changing the version via the dropdown menu changes the version in the request URL field', async () => {
+    await page.locator('[aria-label="Microsoft Graph API Version option"] span:has-text("v1.0")').click();
     await page.locator('button[role="option"]:has-text("beta")').click();
     expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/beta/me")').toBeDefined()
 
@@ -86,7 +93,7 @@ test.describe('Version v1.0/beta', () => {
 
   });
 
-  test('Changing the version via the request URL field changes the version in the dropdown', async ({ page }) => {
+  test('Changing the version via the request URL field changes the version in the dropdown', async () => {
     await page.locator('[aria-label="Query sample input"]').fill('https://graph.microsoft.com/beta/me');
     expect('[aria-label="Microsoft Graph API Version option"] span:has-text("beta")').toBeDefined();
 
