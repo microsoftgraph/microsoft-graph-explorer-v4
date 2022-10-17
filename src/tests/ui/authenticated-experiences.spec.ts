@@ -9,10 +9,6 @@ test.beforeAll(async ({ browser }) => {
   await authenticatedPage.waitForTimeout(5000);
 });
 
-test.afterAll(async () => {
-  await authenticatedPage.close();
-});
-
 test.describe('Sample Queries', () => {
 
   test('Sign in tooltip should not be visible', async () => {

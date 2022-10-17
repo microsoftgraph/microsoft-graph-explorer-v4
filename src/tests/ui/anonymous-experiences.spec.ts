@@ -7,10 +7,6 @@ test.beforeAll(async ({ browser }) => {
   await page.goto('/');
 });
 
-test.afterAll(async () => {
-  await page.close();
-});
-
 test.describe('Sample Queries', () => {
 
   test('Sign in tooltip should be visible', async () => {
