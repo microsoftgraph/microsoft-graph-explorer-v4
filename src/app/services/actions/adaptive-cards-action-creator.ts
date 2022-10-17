@@ -75,6 +75,7 @@ function createCardFromTemplate(templatePayload: any, payload: string): Adaptive
     $root: payload
   };
   AdaptiveCardsTemplateAPI.GlobalSettings.getUndefinedFieldValueSubstitutionString = (
+    // eslint-disable-next-line no-unused-vars
     _path: string
   ) => ' ';
   return template.expand(context);
