@@ -4,7 +4,7 @@ export const USER_INFO_URL = `${GRAPH_URL}/v1.0/me`;
 export const BETA_USER_INFO_URL = `${GRAPH_URL}/beta/me/profile`;
 export const USER_PICTURE_URL = `${GRAPH_URL}/beta/me/photo/$value`;
 export const AUTH_URL = 'https://login.microsoftonline.com';
-export const DEFAULT_USER_SCOPES = 'openid profile User.Read';
+export const DEFAULT_USER_SCOPES = 'openid profile User.Read Sites.Read.All Sites.ReadWrite.All';
 export const DEVX_API_URL = 'https://graphexplorerapi.azurewebsites.net';
 export const GRAPH_API_SANDBOX_URL =
   'https://proxy.apisandbox.msdn.microsoft.com/svc';
@@ -30,3 +30,18 @@ export const USER_ORGANIZATION_URL = `${GRAPH_URL}/v1.0/organization`;
 export const NPS_FEEDBACK_URL = 'https://petrol.office.microsoft.com/v1/feedback';
 // eslint-disable-next-line max-len
 export const REVOKING_PERMISSIONS_REQUIRED_SCOPES = 'DelegatedPermissionGrant.ReadWrite.All Directory.Read.All';
+export const AZURE_ADMIN_ROLES_AND_ACTIONS = {
+  'Application Administrator': ['microsoft.directory/adminConsentRequestPolicy/allProperties/allTasks',
+    'microsoft.directory/appConsent/appConsentRequests/allProperties/read'],
+  'Application Developer': ['microsoft.directory/applications/createAsOwner',
+    'microsoft.directory/oAuth2PermissionGrants/createAsOwner'],
+  'Attack Payload Author': [''],
+  'Attack Simulation Administrator': [],
+  'Attribute Assignment Administrator': [],
+  'Attribute Assignment Reader': [],
+  'Attribute Definition Administrator': [],
+  'Attribute Definition Reader': [],
+  'Authentication Administrator': [],
+  'Authentication Policy Administrator': [],
+  'Azure AD joined Device Local Administrator': []
+}
