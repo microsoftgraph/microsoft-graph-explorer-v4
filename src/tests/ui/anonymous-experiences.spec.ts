@@ -1,11 +1,10 @@
 import { test, expect, Page } from '@playwright/test';
-import { logIn } from './login';
 
 let page: Page;
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage();
-  await logIn(page);
+  await page.goto('/');
 });
 
 test.afterAll(async () => {
@@ -14,16 +13,16 @@ test.afterAll(async () => {
 
 test.describe('Sample Queries', () => {
 
-  test.skip('Documentation link icons are visible and clicking on them opens a new tab', async () => {
-
-    const [newPage] = await Promise.all([
-      page.waitForEvent('popup'),
-      page.locator('div[role="gridcell"]:has-text("https://learn.microsoft.com/en-us/graph/api/user-get")').click()
-    ]);
-
-    await newPage.waitForLoadState();
-    expect(newPage.title()).toBeDefined();
+  test('Sign in tooltip should be visible', async () => {
+    await page
+      .locator('[aria-label="Applications has 8 results 2 of 28"] [aria-label="expand collapse group"]')
+      .click();
+    await expect(page
+      // eslint-disable-next-line max-len
+      .locator('[aria-label="patchupdate application properties"] div[role="gridcell"]:has-text("Sign in to try this sample")'))
+      .toBeVisible();
   });
+
 });
 
 test.describe('Settings', () => {
