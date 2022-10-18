@@ -30,19 +30,3 @@ export const USER_ORGANIZATION_URL = `${GRAPH_URL}/v1.0/organization`;
 export const NPS_FEEDBACK_URL = 'https://petrol.office.microsoft.com/v1/feedback';
 // eslint-disable-next-line max-len
 export const REVOKING_PERMISSIONS_REQUIRED_SCOPES = 'DelegatedPermissionGrant.ReadWrite.All Directory.Read.All';
-export const AZURE_ADMIN_ROLES_AND_ACTIONS = {
-  'Application Administrator': ['microsoft.directory/adminConsentRequestPolicy/allProperties/allTasks',
-    'microsoft.directory/appConsent/appConsentRequests/allProperties/read'],
-  'Application Developer': ['microsoft.directory/applications/createAsOwner',
-    'microsoft.directory/oAuth2PermissionGrants/createAsOwner'],
-  'Attack Payload Author': [''],
-  'Attack Simulation Administrator': [],
-  'Attribute Assignment Administrator': [],
-  'Attribute Assignment Reader': [],
-  'Attribute Definition Administrator': [],
-  'Attribute Definition Reader': [],
-  'Authentication Administrator': [],
-  'Authentication Policy Administrator': [],
-  'Azure AD joined Device Local Administrator': [],
-  'Global Administrator': []
-}
