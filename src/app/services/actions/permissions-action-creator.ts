@@ -174,7 +174,8 @@ interface IPreliminaryChecksObject {
 enum REVOKE_STATUS {
   success = 'success',
   failure = 'failure',
-  preliminaryChecksFail = 'preliminaryChecksFail'
+  preliminaryChecksFail = 'preliminaryChecksFail',
+  allPrincipalScope = 'allPrincipalScope'
 }
 
 export function revokeScopes(permissionToRevoke: string): Function {
@@ -205,10 +206,12 @@ export function revokeScopes(permissionToRevoke: string): Function {
       const grantsPayload = await getTenantPermissionGrants([],servicePrincipalAppId);
       const signedInGrant = getSignedInPrincipalGrant(grantsPayload, profile.id);
       if(userRevokingAdminGrantedScopes(grantsPayload, permissionToRevoke)){
+        trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
         dispatchErrorStatus(dispatch, '401', 'You cannot revoke admin consented scopes', null);
         return;
       }
       if(!permissionToRevokeInGrant(signedInGrant, permissionToRevoke)){
+        trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
         dispatchGeneralStatus(dispatch, 'AllPrincipal scope', 'You cannot revoke AllPrincipal');
         return;
       }
