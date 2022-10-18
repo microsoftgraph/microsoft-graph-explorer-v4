@@ -188,7 +188,7 @@ export function revokeScopes(permissionToRevoke: string): Function {
       trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
       return;
     }
-    const newScopesArray: string[] = (consentedScopes.filter((scope: string) => scope !== permissionToRevoke));
+    const newScopesArray: string[] = consentedScopes.filter((scope: string) => scope !== permissionToRevoke);
     const newScopesString: string = newScopesArray.join(' ');
 
     const preliminaryChecksObject: IPreliminaryChecksObject = {
@@ -204,19 +204,28 @@ export function revokeScopes(permissionToRevoke: string): Function {
     try {
       const servicePrincipalAppId = await getServicePrincipalId(consentedScopes);
       const grantsPayload = await getPermissionGrant([],servicePrincipalAppId);
-      const signedInGrant = getSignInPrincipalGrant(grantsPayload, profile.id);
-      if(!permissionToRevokeInGrant(signedInGrant, permissionToRevoke)){
-        dispatchPermissionInAllPrincipal(dispatch);
-        return;
-      }
-      const userRevokingAdminScopes = await userRevokingAdminGrantedScopes(grantsPayload, sampleQuery);
+      const signedInGrant = getSignedInPrincipalGrant(grantsPayload, profile.id);
+      const signedInUserGroups = await getSignedInUserGroups();
+      const userRevokingAdminScopes = await userRevokingAdminGrantedScopes(grantsPayload, sampleQuery,
+        signedInUserGroups, permissionToRevoke);
+      let updatedScopes;
       if(userRevokingAdminScopes){
         dispatchErrorStatus(dispatch, '200', 'You cannot revoke admin consented scopes', null);
         return;
       }
-      const updatedScopes = await updatePermissionGrant(grantsPayload, profile, newScopesString);
-      if (updatedScopes.length !== newScopesArray.length) {
+
+      if(signedInUserIsAdmin(signedInUserGroups) && !permissionToRevokeInGrant(signedInGrant, permissionToRevoke)){
+        updatedScopes = updateAllPrincipalPermissionGrant(grantsPayload, permissionToRevoke);
+      }
+      else if(!permissionToRevokeInGrant(signedInGrant, permissionToRevoke)){
+        dispatchGeneralStatus(dispatch, 'All principal scope', 'You cannot revoke');
         return;
+      }
+      else{
+        updatedScopes = await updateSinglePrincipalPermissionGrant(grantsPayload, profile, newScopesString);
+        if (updatedScopes.length !== newScopesArray.length) {
+          return;
+        }
       }
       const authResponse = await getNewAuthObject(updatedScopes);
       if (authResponse && authResponse.accessToken) {
@@ -263,33 +272,18 @@ const preliminaryChecksSuccess = async (dispatch: Function, preliminaryChecksObj
     );
     return false;
   }
-
-  // const userRevokingPreconsentedScopes = await userRevokingAdminGrantedScopes(scopes, permissionToRevoke);
-  // if(userRevokingPreconsentedScopes) {
-  //   dispatch(
-  //     setQueryResponseStatus({
-  //       statusText: translateMessage('Unable to dissent'),
-  //       status: translateMessage('You are dissenting to an admin pre-consented permission'),
-  //       ok: false,
-  //       messageType: MessageBarType.error
-  //     })
-  //   );
-  //   return false;
-  // }
   return true;
 }
 
-const userRevokingAdminGrantedScopes = async (grantsPayload: any, sampleQuery: IQuery) => {
+const userRevokingAdminGrantedScopes = async (grantsPayload: any, sampleQuery: IQuery,
+  signedInUserGroups: [], permissionToRevoke: string): Promise<boolean> => {
   const allPrincipalGrants = grantsPayload.value.find((grant: any) =>
     grant.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
-  console.log('Here are the allprincipal grants ', allPrincipalGrants);
-  if(allPrincipalGrants){
-    const signedInUserGroups = await getSignedInUserGroups();
+  if(allPrincipalGrants && allPrincipalGrants.includes(permissionToRevoke)){
     if(!signedInUserGroups || (signedInUserGroups && signedInUserGroups.length === 0)){
       return false;
     }
-    const signedInUserIsTenantAdmin = isSignedInUserAdmin(signedInUserGroups.value);
-    if(!signedInUserIsTenantAdmin){ return true }
+    if(!signedInUserIsAdmin(signedInUserGroups)){ return true }
     if(!signedInAdminHasRightsOverUrl(signedInUserGroups, sampleQuery)){
       return true;
     }
@@ -301,10 +295,10 @@ const getSignedInUserGroups = async () => {
   const tenantAdminQuery = {...getQuery};
   tenantAdminQuery.sampleUrl = `${GRAPH_URL}/v1.0/me/memberOf`;
   const userGroups = await makePermissionsRequest([], tenantAdminQuery);
-  return userGroups;
+  return userGroups.value;
 }
 
-const isSignedInUserAdmin = (signedInUserGroups: []): boolean => {
+const signedInUserIsAdmin = (signedInUserGroups: []): boolean => {
   return signedInUserGroups.some((value : any) => value['@odata.type'] === '#microsoft.graph.directoryRole')
 }
 
@@ -316,6 +310,7 @@ const signedInAdminHasRightsOverUrl = async (signedInUserGroups: any, sampleQuer
     const adminRolesAndActions = Object.entries(AZURE_ADMIN_ROLES_AND_ACTIONS);
     const signedInAdminRole = adminRolesAndActions.find((role: any) => role[0].toLowerCase() ===
     adminRole.toLowerCase());
+    if(signedInAdminRole![0] === 'Global Administrator'){ return false}
     const signedInAdminRoleActions = signedInAdminRole![1];
     const { requestUrl } = parseSampleUrl(sampleQuery.sampleUrl);
     const signedInAdminHasRights = signedInAdminRoleActions.some((action: string) => {
@@ -356,17 +351,31 @@ const getNewAuthObject = async (updatedScopes: string[]) => {
   return authResponse;
 }
 
-const updatePermissionGrant = async (grantsPayload: any, profile: any, newScopesString: string) => {
+const updateSinglePrincipalPermissionGrant = async (grantsPayload: any, profile: any, newScopesString: string) => {
   const servicePrincipalAppId = await getServicePrincipalId([]);
-  const permissionGrantId = getSignInPrincipalGrant(grantsPayload, profile.id).id;
+  const permissionGrantId = getSignedInPrincipalGrant(grantsPayload, profile.id).id;
   await revokePermission(permissionGrantId, newScopesString);
   const response = await getPermissionGrant([], servicePrincipalAppId);
-  const principalGrant = getSignInPrincipalGrant(response, profile.id);
+  const principalGrant = getSignedInPrincipalGrant(response, profile.id);
   const updatedScopes = principalGrant.scope.split(' ');
   return updatedScopes;
 }
 
-const getSignInPrincipalGrant = (grantsPayload: any, userId: string) => {
+const updateAllPrincipalPermissionGrant = async (grantsPayload: any, permissionToRevoke: string) => {
+  const servicePrincipalAppId = await getServicePrincipalId([]);
+  const allPrincipalGrant = getAllPrincipalGrant(grantsPayload);
+  const updatedScopes = allPrincipalGrant.scope.split(' ').filter((scope: string) => scope !== permissionToRevoke);
+  await revokePermission(allPrincipalGrant.id, updatedScopes.join(' '));
+  const response = await getPermissionGrant([], servicePrincipalAppId);
+  return getAllPrincipalGrant(response).scope.split(' ');
+}
+
+const getAllPrincipalGrant = (grantsPayload: any) => {
+  return grantsPayload.value.find((grant: any) =>
+    grant.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
+}
+
+const getSignedInPrincipalGrant = (grantsPayload: any, userId: string) => {
   if (grantsPayload && grantsPayload.value.length > 1) {
     const filteredResponse = grantsPayload.value.find((permissionGrant: any) =>
       permissionGrant.principalId === userId);
@@ -410,22 +419,6 @@ const revokePermission = async (permissionGrantId: string, newScopes: string) =>
   }
 }
 
-
-const getAllPrincipalGrants = async (scopes: string[] = [], servicePrincipalAppId: string) => {
-  getQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
-  const response = await makePermissionsRequest(scopes, getQuery);
-  console.log('Here is the response', response);
-
-  // Return value whose consentType property is AllPrincipals
-  const allPrincipalConsentType = response.value.find((permissionGrant: any) => {
-    return permissionGrant.consentType === 'AllPrincipals';
-  })
-
-  console.log('Here is the allPrincipal ', allPrincipalConsentType);
-  return allPrincipalConsentType?.scopes;
-
-}
-
 const dispatchErrorStatus = (dispatch: Function, statusCode: string, code: string, error: any) => {
   dispatch(
     setQueryResponseStatus({
@@ -453,11 +446,11 @@ const dispatchAuthResponseStatus = (dispatch: Function, authResponse: any, profi
   );
 }
 
-const dispatchPermissionInAllPrincipal = (dispatch: Function) => {
+const dispatchGeneralStatus = (dispatch: Function, status: string, statusText: string) => {
   dispatch(
     setQueryResponseStatus({
-      statusText: translateMessage('Unable to dissent'),
-      status: translateMessage('The permission you are revoking is in AllPrincipals'),
+      statusText: translateMessage(statusText),
+      status: translateMessage(status),
       ok: true,
       messageType: MessageBarType.info
     })
