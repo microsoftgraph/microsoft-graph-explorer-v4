@@ -209,7 +209,7 @@ export function revokeScopes(permissionToRevoke: string): Function {
         return;
       }
       if(!permissionToRevokeInGrant(signedInGrant, permissionToRevoke)){
-        dispatchGeneralStatus(dispatch, 'All principal scope', 'You cannot revoke');
+        dispatchGeneralStatus(dispatch, 'AllPrincipal scope', 'You cannot revoke AllPrincipal');
         return;
       }
 

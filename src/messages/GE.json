@@ -458,5 +458,7 @@
   "Permission revoked": "Permission revoked successfully",
   "An error occurred when dissenting": "An error occurred when dissenting. Please try again",
   "You are dissenting to an admin pre-consented permission": "You are dissenting to an admin pre-consented permission. Ask your tenant admin to revoke consent to this permission on Azure AD",
-  "Possible error found in URL near": "Possible error found in URL near"
+  "Possible error found in URL near": "Possible error found in URL near",
+  "AllPrincipal scope": "AllPrincipal scope",
+  "You cannot revoke AllPrincipal": "You cannot revoke an AllPrincipal permission as its consent has been granted by your tenant admin"
 }
