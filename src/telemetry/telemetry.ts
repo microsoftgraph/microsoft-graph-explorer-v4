@@ -121,7 +121,7 @@ class Telemetry implements ITelemetry {
     telemetry.trackEvent(WINDOW_OPEN_EVENT, properties);
   }
 
-  public trackDeviceCharacteristicsTelemetry(componentName: string, properties?: any) {
+  public trackDeviceCharacteristicsTelemetry(properties?: any) {
     const deviceProperties = {
       deviceHeight: screen.height,
       deviceWidth: screen.width,
@@ -131,7 +131,6 @@ class Telemetry implements ITelemetry {
       scale: getDeviceScreenScale()
     };
     properties = Object.assign(properties || {}, deviceProperties);
-    properties.ComponentName = componentName;
 
     telemetry.trackEvent(DEVICE_CHARACTERISTICS_EVENT, properties);
   }
