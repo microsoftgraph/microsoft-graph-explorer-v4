@@ -15,7 +15,6 @@ import { sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
 import { IQuery } from '../types/query-runner';
 import {
   BUTTON_CLICK_EVENT,
-  DEVICE_CHARACTERISTICS_EVENT,
   LINK_CLICK_EVENT,
   TAB_CLICK_EVENT,
   WINDOW_OPEN_EVENT
