@@ -1,21 +1,21 @@
 export function getBrowserScreenSize(browserWidth: number){
   if(browserWidth >= 1920){
-    return 'xxxl';
+    return 'xxxl >= 1920';
   }
   else if(browserWidth >= 1366){
-    return 'xxl';
+    return 'xxl >= 1366';
   }
   else if(browserWidth >= 1024){
-    return 'xl';
+    return 'xl >= 1024';
   }
   else if(browserWidth >= 640){
-    return 'l';
+    return 'l >= 640';
   }
   else if(browserWidth >= 480){
-    return 'm';
+    return 'm >= 480';
   }
 
-  return 's';
+  return 's < 480';
 }
 
 export function getDeviceScreenScale(){
