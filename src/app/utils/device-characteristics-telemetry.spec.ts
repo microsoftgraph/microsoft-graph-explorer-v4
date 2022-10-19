@@ -21,7 +21,7 @@ describe('Device Telemetry', () => {
 
   it('should get device screen size', () => {
     const deviceWidth = 1367;
-    const expectedScreenSize = 'xxl';
+    const expectedScreenSize = 'xxl >= 1366';
     expect(getBrowserScreenSize(deviceWidth)).toBe(expectedScreenSize);
   });
 })
