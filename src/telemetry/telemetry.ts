@@ -31,7 +31,6 @@ import {
   getBrowserScreenSize,
   getDeviceScreenScale
 } from '../app/utils/device-characteristics-telemetry';
-import { componentNames } from '.';
 
 class Telemetry implements ITelemetry {
   private appInsights: ApplicationInsights;
@@ -67,10 +66,6 @@ class Telemetry implements ITelemetry {
 
   public trackEvent(name: string, properties: {}) {
     this.appInsights.trackEvent({ name, properties });
-  }
-
-  public trackMetric(name: string, properties: {}){
-    this.appInsights.trackMetric({name, average: 1}, properties);
   }
 
   public trackException(
@@ -125,18 +120,15 @@ class Telemetry implements ITelemetry {
     telemetry.trackEvent(WINDOW_OPEN_EVENT, properties);
   }
 
-  public trackDeviceCharacteristicsTelemetry(properties?: any) {
-    const deviceProperties = {
-      deviceHeight: (screen.height).toString(),
-      deviceWidth: (screen.width).toString(),
+  public getDeviceCharacteristicsData() {
+    return {
+      deviceHeight: screen.height.toString(),
+      deviceWidth: screen.width.toString(),
       browserScreenSize: getBrowserScreenSize(window.innerWidth),
-      browserHeight: (window.innerHeight).toString(),
-      browserWidth: (window.innerWidth).toString(),
+      browserHeight: window.innerHeight.toString(),
+      browserWidth: window.innerWidth.toString(),
       scale: getDeviceScreenScale()
     };
-    properties = Object.assign(properties || {}, deviceProperties);
-
-    telemetry.trackMetric(componentNames.DEVICE_CHARACTERISTICS_METRIC, properties);
   }
 
   private getInstrumentationKey() {
