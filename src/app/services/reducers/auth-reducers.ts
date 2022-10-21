@@ -38,7 +38,7 @@ export function consentedScopes(state: string[] = [], action: IAction): any {
     case GET_CONSENTED_SCOPES_SUCCESS:
       return action.response;
     case LOGOUT_SUCCESS:
-      return action.response;
+      return [];
     default:
       return state;
   }

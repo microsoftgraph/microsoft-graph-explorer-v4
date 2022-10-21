@@ -450,5 +450,6 @@
   "Parts between {} need to be replaced with real values": "Parts between {} need to be replaced with real values",
   "Get started with Graph Explorer": "Get started with Graph Explorer",
   "No resources found": "We did not find any resource items",
-  "No samples found": "We did not find any sample queries"
+  "No samples found": "We did not find any sample queries",
+  "Possible error found in URL near": "Possible error found in URL near"
 }
