@@ -93,14 +93,14 @@ IQueryRunnerState
     if (actions) {
       actions.runQuery(sampleQuery);
       const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+      const deviceCharacteristics = telemetry.getDeviceCharacteristicsData();
       telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
         {
           ComponentName: componentNames.RUN_QUERY_BUTTON,
           SelectedVersion: sampleQuery.selectedVersion,
-          QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`
+          QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
+          ...deviceCharacteristics
         });
-
-      telemetry.trackDeviceCharacteristicsTelemetry();
     }
     this.setState({ sampleBody: '' });
   };
