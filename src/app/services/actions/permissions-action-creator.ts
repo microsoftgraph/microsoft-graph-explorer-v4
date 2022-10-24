@@ -168,7 +168,7 @@ interface IPreliminaryChecksObject {
   requiredPermissions: string[];
   consentedScopes: string[];
   permissionToRevoke: string;
-  scopes?: any;
+  grantsPayload?: any;
 }
 
 enum REVOKE_STATUS {
@@ -180,7 +180,7 @@ enum REVOKE_STATUS {
 
 export function revokeScopes(permissionToRevoke: string): Function {
   return async (dispatch: Function, getState: Function) => {
-    const { consentedScopes, profile, scopes } = getState();
+    const { consentedScopes, profile } = getState();
     const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
     const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
 
@@ -191,34 +191,44 @@ export function revokeScopes(permissionToRevoke: string): Function {
     const newScopesArray: string[] = consentedScopes.filter((scope: string) => scope !== permissionToRevoke);
     const newScopesString: string = newScopesArray.join(' ');
 
-    const preliminaryChecksObject: IPreliminaryChecksObject = {
-      defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke, scopes
-    }
 
-    const hasPreliminaryCheckPassed = await preliminaryChecksSuccess(dispatch, preliminaryChecksObject);
-
-    if (!hasPreliminaryCheckPassed) {
-      trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
-      return;
-    }
     try {
       const servicePrincipalAppId = await getServicePrincipalId(consentedScopes);
       const grantsPayload = await getTenantPermissionGrants([],servicePrincipalAppId);
       const signedInGrant = getSignedInPrincipalGrant(grantsPayload, profile.id);
-      if(userRevokingAdminGrantedScopes(grantsPayload, permissionToRevoke)){
+      const preliminaryChecksObject: IPreliminaryChecksObject = {
+        defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke, grantsPayload
+      }
+      const hasPreliminaryCheckPassed = await preliminaryChecksSuccess(dispatch, preliminaryChecksObject);
+
+      if (!hasPreliminaryCheckPassed) {
+        trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
+        return;
+      }
+      const userIsTenantAdmin = await isSignedInUserTenantAdmin();
+      const permissionBeingRevokedIsAllPrincipal = userRevokingAdminGrantedScopes(grantsPayload, permissionToRevoke);
+
+      if(permissionBeingRevokedIsAllPrincipal && !userIsTenantAdmin) {
         trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
         dispatchErrorStatus(dispatch, '401', 'You cannot revoke admin consented scopes', null);
         return;
       }
-      if(!permissionToRevokeInGrant(signedInGrant, permissionToRevoke)){
+
+      let updatedScopes;
+      if(permissionBeingRevokedIsAllPrincipal && userIsTenantAdmin) {
+        console.log('We are here')
+        updatedScopes = await updateAllPrincipalPermissionGrant(grantsPayload, permissionToRevoke);
+      }
+      else if(!permissionToRevokeInGrant(signedInGrant, permissionToRevoke) && userIsTenantAdmin){
         trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
-        dispatchGeneralStatus(dispatch, 'AllPrincipal scope', 'You cannot revoke AllPrincipal');
+        dispatchGeneralStatus(dispatch, 'You cannot revoke AllPrincipal', 'AllPrincipal scope',);
         return;
       }
-
-      const updatedScopes = await updateSinglePrincipalPermissionGrant(grantsPayload, profile, newScopesString);
-      if (updatedScopes.length !== newScopesArray.length) {
-        return;
+      else{
+        updatedScopes = await updateSinglePrincipalPermissionGrant(grantsPayload, profile, newScopesString);
+        if (updatedScopes.length !== newScopesArray.length) {
+          return;
+        }
       }
 
       const authResponse = await getNewAuthObject(updatedScopes);
@@ -241,7 +251,7 @@ export function revokeScopes(permissionToRevoke: string): Function {
 }
 
 const preliminaryChecksSuccess = async (dispatch: Function, preliminaryChecksObject: IPreliminaryChecksObject) => {
-  const { defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke, scopes }
+  const { defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke, grantsPayload }
    = preliminaryChecksObject
   if (userRevokingDefaultScopes(defaultUserScopes, permissionToRevoke)) {
     dispatch(
@@ -255,7 +265,7 @@ const preliminaryChecksSuccess = async (dispatch: Function, preliminaryChecksObj
     return false;
   }
 
-  if (!userHasRequiredPermissions(requiredPermissions, consentedScopes)) {
+  if (!userHasRequiredPermissions(requiredPermissions, consentedScopes, grantsPayload)) {
     dispatch(
       setQueryResponseStatus({
         statusText: translateMessage('Unable to dissent'),
@@ -282,12 +292,26 @@ const userRevokingAdminGrantedScopes = (grantsPayload: any, permissionToRevoke: 
 }
 
 const userHasRequiredPermissions = (requiredPermissions: string[],
-  consentedScopes: string[]) => {
+  consentedScopes: string[], grantsPayload: any) => {
+  const allPrincipalGrants = grantsPayload.value.find((grant: any) =>
+    grant.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
+  const allPrincipalScopes = allPrincipalGrants.scope.split(' ');
+  console.log('Here are the all principal scopes', allPrincipalScopes);
+  console.log('Here is the old array', consentedScopes)
+  consentedScopes.concat(allPrincipalScopes);
+  console.log('Here is the new array', consentedScopes);
   return requiredPermissions.every(scope => consentedScopes.includes(scope));
 }
 
 const userRevokingDefaultScopes = (currentScopes: string[], permissionToDelete: string) => {
   return currentScopes.includes(permissionToDelete);
+}
+
+const isSignedInUserTenantAdmin = async (): Promise<boolean> => {
+  const tenantAdminQuery = {...getQuery};
+  tenantAdminQuery.sampleUrl = `${GRAPH_URL}/v1.0/me/memberOf`;
+  const response = await makePermissionsRequest([], tenantAdminQuery);
+  return response ? response.value.some((value : any) => value.displayName === 'Global Administrator'): false
 }
 
 
@@ -321,6 +345,20 @@ const updateSinglePrincipalPermissionGrant = async (grantsPayload: any, profile:
   return updatedScopes;
 }
 
+const updateAllPrincipalPermissionGrant = async (grantsPayload: any, permissionToRevoke: string) => {
+  const servicePrincipalAppId = await getServicePrincipalId([]);
+  const allPrincipalGrant = getAllPrincipalGrant(grantsPayload);
+  const updatedScopes = allPrincipalGrant.scope.split(' ').filter((scope: string) => scope !== permissionToRevoke);
+  await revokePermission(allPrincipalGrant.id, updatedScopes.join(' '));
+  const response = await getTenantPermissionGrants([], servicePrincipalAppId);
+  return getAllPrincipalGrant(response).scope.split(' ');
+}
+
+const getAllPrincipalGrant = (grantsPayload: any) => {
+  return grantsPayload.value.find((grant: any) =>
+    grant.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
+}
+
 const getSignedInPrincipalGrant = (grantsPayload: any, userId: string) => {
   if (grantsPayload && grantsPayload.value.length > 1) {
     const filteredResponse = grantsPayload.value.find((permissionGrant: any) =>
@@ -344,7 +382,7 @@ const getServicePrincipalId = async (scopes: string[]) => {
   const currentAppId = process.env.REACT_APP_CLIENT_ID;
   getQuery.sampleUrl = `${GRAPH_URL}/v1.0/servicePrincipals?$filter=appId eq '${currentAppId}'`;
   const response = await makePermissionsRequest(scopes, getQuery);
-  return response.value[0].id;
+  return response ? response.value[0].id : '';
 }
 
 const revokePermission = async (permissionGrantId: string, newScopes: string) => {
