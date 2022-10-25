@@ -13,7 +13,7 @@ describe('Terms of Use Action Creators', () => {
     const expectedAction: AppAction[] = [
       {
         type: CLEAR_TERMS_OF_USE,
-        response: false
+        response: null
       }
     ];
 
