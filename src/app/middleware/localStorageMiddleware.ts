@@ -1,6 +1,6 @@
-import { IAction } from '../../types/action';
+import { AppAction } from '../../types/action';
 
-const localStorageMiddleware = (_store: any) => (next: any) => (action: IAction) => {
+const localStorageMiddleware = (_store: any) => (next: any) => (action: AppAction) => {
   if (action.type === 'AUTHENTICATE_USER') {
     localStorage.setItem('authenticatedUser', JSON.stringify(action.response));
   }

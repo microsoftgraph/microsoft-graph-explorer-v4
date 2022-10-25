@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { useSelector } from 'react-redux';
 import FeedbackForm from '../query-runner/request/feedback/FeedbackForm';
-import { IRootState } from '../../../types/root';
+import { ApplicationState } from '../../../types/root';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 
 export const FeedbackButton = () => {
   const [enableSurvey, setEnableSurvey] = useState(false);
-  const { profile } = useSelector( (state: IRootState) => state );
+  const { profile } = useSelector((state: ApplicationState) => state);
   const currentTheme = getTheme();
   const feedbackIcon : IIconProps = {
     iconName : 'Feedback'

@@ -5,14 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
 import { componentNames, telemetry } from '../../../telemetry';
-import { IRootState } from '../../../types/root';
+import { ApplicationState } from '../../../types/root';
 import { clearTermsOfUse } from '../../services/actions/terms-of-use-action-creator';
 import { appStyles } from '../App.styles';
 
 const styledTermsOfUseMessage = () => {
 
   const { termsOfUse } =
-    useSelector((state: IRootState) => state);
+    useSelector((state: ApplicationState) => state);
 
   const dispatch = useDispatch();
   if (termsOfUse) {

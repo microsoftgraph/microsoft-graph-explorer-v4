@@ -15,7 +15,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { IPermission, IPermissionProps } from '../../../../../types/permissions';
-import { IRootState } from '../../../../../types/root';
+import { ApplicationState } from '../../../../../types/root';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
@@ -28,7 +28,7 @@ import messages from '../../../../../messages';
 export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
 
   const { sampleQuery, scopes, dimensions, authToken } =
-  useSelector( (state: IRootState) => state );
+    useSelector((state: ApplicationState) => state);
   const { pending: loading } = scopes;
   const tokenPresent = !!authToken.token;
   const dispatch = useDispatch();

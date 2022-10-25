@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { IResource, IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { addResourcePaths } from '../../../services/actions/resource-explorer-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
@@ -34,7 +34,7 @@ import { navStyles } from './resources.styles';
 const unstyledResourceExplorer = (props: any) => {
   const dispatch = useDispatch();
   const { resources } = useSelector(
-    (state: IRootState) => state
+    (state: ApplicationState) => state
   );
   const classes = classNames(props);
   const { data, pending, paths: selectedLinks } = resources;

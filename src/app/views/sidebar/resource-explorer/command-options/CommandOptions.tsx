@@ -5,7 +5,7 @@ import {
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IRootState } from '../../../../../types/root';
+import { ApplicationState } from '../../../../../types/root';
 import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
 import PathsReview from '../panels/PathsReview';
@@ -22,7 +22,7 @@ const CommandOptions = (props: ICommandOptions) => {
   const { version } = props;
   const theme = getTheme();
 
-  const { resources: { paths } } = useSelector((state: IRootState) => state);
+  const { resources: { paths } } = useSelector((state: ApplicationState) => state);
   const itemStyles = resourceExplorerStyles(theme).itemStyles;
   const commandStyles = resourceExplorerStyles(theme).commandBarStyles;
   const options: ICommandBarItemProps[] = [

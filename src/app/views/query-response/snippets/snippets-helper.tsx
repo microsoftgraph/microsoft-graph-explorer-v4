@@ -8,7 +8,7 @@ import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { CopyButton } from '../../common/copy/CopyButton';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -53,8 +53,8 @@ function Snippet(props: ISnippetProps) {
    */
   language = language.toLowerCase();
 
-  const sampleQuery = useSelector((state: IRootState) => state.sampleQuery, shallowEqual);
-  const { dimensions: { response }, snippets, responseAreaExpanded } = useSelector((state: IRootState) => state);
+  const sampleQuery = useSelector((state: ApplicationState) => state.sampleQuery, shallowEqual);
+  const { dimensions: { response }, snippets, responseAreaExpanded } = useSelector((state: ApplicationState) => state);
   const { data, pending: loadingState } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
 

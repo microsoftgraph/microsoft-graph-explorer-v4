@@ -13,12 +13,12 @@ import { useSelector } from 'react-redux';
 import { GitHubLogoIcon } from '@fluentui/react-icons-mdl2';
 
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
-import { IRootState } from '../../../types/root';
+import { ApplicationState } from '../../../types/root';
 import { translateMessage } from '../../utils/translate-messages';
 import { mainHeaderStyles } from './MainHeader.styles';
 
 export const Help = () => {
-  const { authToken } = useSelector((state: IRootState) => state);
+  const { authToken } = useSelector((state: ApplicationState) => state);
   const authenticated = authToken.token;
   const [items, setItems] = useState([]);
   const currentTheme = getTheme();

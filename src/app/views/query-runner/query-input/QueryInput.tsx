@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { httpMethods, IQuery, IQueryInputProps } from '../../../../types/query-runner';
 
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_API_VERSIONS } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
@@ -34,7 +34,7 @@ const QueryInput = (props: IQueryInputProps) => {
   });
 
   const { sampleQuery, authToken,
-    isLoadingData: submitting, sidebarProperties } = useSelector((state: IRootState) => state);
+    isLoadingData: submitting, sidebarProperties } = useSelector((state: ApplicationState) => state);
   const authenticated = !!authToken.token;
   const { mobileScreen } = sidebarProperties;
 

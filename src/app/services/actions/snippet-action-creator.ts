@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { Header, IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
@@ -9,14 +9,14 @@ import {
   SET_SNIPPET_TAB_SUCCESS
 } from '../redux-constants';
 
-export function getSnippetSuccess(response: string): IAction {
+export function getSnippetSuccess(response: string): AppAction {
   return {
     type: GET_SNIPPET_SUCCESS,
     response
   };
 }
 
-export function getSnippetError(response: object): IAction {
+export function getSnippetError(response: object): AppAction {
   return {
     type: GET_SNIPPET_ERROR,
     response

@@ -15,7 +15,7 @@ import {
   ISampleQueriesProps,
   ISampleQuery
 } from '../../../../types/query-runner';
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
 import { fetchSamples } from '../../../services/actions/samples-action-creators';
@@ -37,7 +37,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
   const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
   const { authToken, profile, samples } =
-    useSelector((state: IRootState) => state);
+    useSelector((state: ApplicationState) => state);
   const tokenPresent = authToken.token;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(samples.queries);
   const [groups, setGroups] = useState<IGroup[]>([]);

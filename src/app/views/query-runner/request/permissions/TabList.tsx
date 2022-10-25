@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { IPermission } from '../../../../../types/permissions';
-import { IRootState } from '../../../../../types/root';
+import { ApplicationState } from '../../../../../types/root';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 import { setConsentedStatus } from './util';
 
@@ -18,7 +18,7 @@ interface ITabList {
 
 const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) : JSX.Element => {
   const dispatch = useDispatch();
-  const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
+  const { consentedScopes, scopes, authToken } = useSelector((state: ApplicationState) => state);
   const permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
   const tokenPresent = !!authToken.token;
   const [isHoverOverPermissionsList, setIsHoverOverPermissionsList] = useState(false);

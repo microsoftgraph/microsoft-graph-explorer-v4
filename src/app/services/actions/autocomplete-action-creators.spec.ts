@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import fetch from 'jest-fetch-mock';
 import { store } from '../../../../src/store/index';
-import { IRootState } from '../../../types/root';
+import { ApplicationState } from '../../../types/root';
 import { Mode } from '../../../types/enums';
 import {
   fetchAutocompleteSuccess, fetchAutocompleteError,
@@ -20,7 +20,7 @@ const mockStore = configureMockStore(middleware);
 jest.mock('../../../../src/store/index');
 window.fetch = jest.fn();
 
-const mockState: IRootState = {
+const mockState: ApplicationState = {
   devxApi: {
     baseUrl: 'https://graph.microsoft.com/v1.0/me',
     parameters: '$count=true'

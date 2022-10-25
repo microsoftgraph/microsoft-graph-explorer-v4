@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import '../../../utils/string-operations';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import { ISettingsProps } from '../../../../types/settings';
 import { translateMessage } from '../../../utils/translate-messages';
 import { geLocale } from '../../../../appLocale';
@@ -27,7 +27,7 @@ import { mainHeaderStyles } from '../MainHeader.styles';
 
 export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   const dispatch = useDispatch();
-  const { authToken, theme: appTheme } = useSelector((state: IRootState) => state);
+  const { authToken, theme: appTheme } = useSelector((state: ApplicationState) => state);
   const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);

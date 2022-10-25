@@ -11,7 +11,7 @@ import { expandResponseArea } from '../../services/actions/response-expanded-act
 import { translateMessage } from '../../utils/translate-messages';
 import { GetPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
-import { IRootState } from '../../../types/root';
+import { ApplicationState } from '../../../types/root';
 import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
 import { queryResponseStyles } from './queryResponse.styles';
 
@@ -20,7 +20,7 @@ const QueryResponse = () => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [responseHeight, setResponseHeight] = useState('610px');
-  const { sampleQuery, dimensions } = useSelector((state: IRootState) => state);
+  const { sampleQuery, dimensions } = useSelector((state: ApplicationState) => state);
   const [currentTab, setCurrentTab] = useState<string>('response-preview');
   const currentTheme: ITheme = getTheme();
   const { modalStyles, modalPivotStyles } = queryResponseStyles(currentTheme);

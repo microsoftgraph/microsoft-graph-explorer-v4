@@ -24,7 +24,7 @@ import { componentNames, eventTypes, telemetry } from '../../../../../telemetry'
 
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
-import { IRootState } from '../../../../../types/root';
+import { ApplicationState } from '../../../../../types/root';
 import { consentToScopes } from '../../../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
@@ -50,7 +50,7 @@ const PanelList = ({ messages,
     return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
   }
 
-  const { consentedScopes, scopes, authToken, permissionsPanelOpen } = useSelector((state: IRootState) => state);
+  const { consentedScopes, scopes, authToken, permissionsPanelOpen } = useSelector((state: ApplicationState) => state);
   const { fullPermissions } = scopes.data;
   const [permissions, setPermissions] = useState<any []>([]);
   const [groups, setGroups] = useState<IGroup[]>([]);

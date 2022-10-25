@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { telemetry, eventTypes, componentNames } from '../../../../../../telemetry';
 
 import { ISampleQuery } from '../../../../../../types/query-runner';
-import { IRootState } from '../../../../../../types/root';
+import { ApplicationState } from '../../../../../../types/root';
 import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../../utils/translate-messages';
@@ -17,7 +17,7 @@ import { styles } from './suffix.styles';
 
 const SuffixRenderer = () => {
   const { autoComplete, sampleQuery, samples, queryRunnerStatus } = useSelector(
-    (state: IRootState) => state
+    (state: ApplicationState) => state
   );
   const fetchingSuggestions = autoComplete.pending;
   const autoCompleteError = autoComplete.error;

@@ -5,7 +5,7 @@ import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { componentNames, errorTypes, eventTypes, telemetry } from '../../../telemetry';
-import { IRootState } from '../../../types/root';
+import { ApplicationState } from '../../../types/root';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../services/actions/auth-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
 import { classNames } from '../classnames';
@@ -17,7 +17,7 @@ const Authentication = (props: any) => {
   const dispatch = useDispatch();
   const [loginInProgress, setLoginInProgress] = useState(false);
   const { authToken } = useSelector(
-    (state: IRootState) => state
+    (state: ApplicationState) => state
   );
   const tokenPresent = !!authToken.token;
   const logoutInProgress = !!authToken.pending;

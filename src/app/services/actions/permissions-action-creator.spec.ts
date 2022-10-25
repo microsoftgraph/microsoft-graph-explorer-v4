@@ -10,13 +10,13 @@ import {
 } from './permissions-action-creator';
 import { IPermissionsResponse } from '../../../types/permissions';
 import { store } from '../../../store/index';
-import { IRootState } from '../../../types/root';
+import { ApplicationState } from '../../../types/root';
 import { Mode } from '../../../types/enums';
 
 window.open = jest.fn();
 window.fetch = jest.fn();
 
-const mockState: IRootState = {
+const mockState: ApplicationState = {
   devxApi: {
     baseUrl: 'https://graph.microsoft.com/v1.0/me',
     parameters: '$count=true'

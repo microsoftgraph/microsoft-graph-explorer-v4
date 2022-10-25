@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../../../appLocale';
 import { authenticationWrapper } from '../../../../../modules/authentication';
-import { IRootState } from '../../../../../types/root';
+import { ApplicationState } from '../../../../../types/root';
 import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
 import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -21,7 +21,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
   const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
   const currentTheme = getTheme();
   const { NODE_ENV } = process.env;
-  const { profile, policies } = useSelector((state: IRootState) => state);
+  const { profile, policies } = useSelector((state: ApplicationState) => state);
 
   function surveyActivated(launcher: any, surveyItem: any) {
     return surveyItem;

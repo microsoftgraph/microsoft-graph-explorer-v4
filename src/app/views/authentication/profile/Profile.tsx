@@ -17,7 +17,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useId } from '@fluentui/react-hooks';
 
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import { signOut } from '../../../services/actions/auth-action-creators';
 import { togglePermissionsPanel } from '../../../services/actions/permissions-panel-action-creator';
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
@@ -51,7 +51,7 @@ const Profile = (props: any) => {
     authToken,
     permissionsPanelOpen,
     graphExplorerMode
-  } = useSelector((state: IRootState) => state);
+  } = useSelector((state: ApplicationState) => state);
   const authenticated = authToken.token;
   const [isCalloutVisible, setIsCalloutVisible] = useState(false);
   const toggleIsCalloutVisible = () => { setIsCalloutVisible(!isCalloutVisible) };

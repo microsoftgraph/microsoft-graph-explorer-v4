@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { IQuery } from '../../../types/query-runner';
-import { IRootState } from '../../../types/root';
+import { ApplicationState } from '../../../types/root';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
 import { GRAPH_URL } from '../../services/graph-constants';
@@ -16,7 +16,7 @@ import {
 const StatusMessages = () => {
   const dispatch = useDispatch();
   const { queryRunnerStatus, sampleQuery } =
-    useSelector((state: IRootState) => state);
+    useSelector((state: ApplicationState) => state);
 
   function displayStatusMessage(message: string, urls: any) {
     const { matches, parts } = getMatchesAndParts(message);

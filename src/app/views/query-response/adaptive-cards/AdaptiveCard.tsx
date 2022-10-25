@@ -11,7 +11,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { IQuery } from '../../../../types/query-runner';
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
@@ -189,7 +189,7 @@ function onPivotItemClick(query: IQuery | undefined, item?: PivotItem) {
   }
 }
 
-function mapStateToProps({ adaptiveCard, sampleQuery, queryRunnerStatus }: IRootState) {
+function mapStateToProps({ adaptiveCard, sampleQuery, queryRunnerStatus }: ApplicationState) {
   return {
     card: adaptiveCard,
     sampleQuery,

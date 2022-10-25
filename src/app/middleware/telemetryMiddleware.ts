@@ -5,9 +5,9 @@ import {
   eventTypes,
   telemetry
 } from '../../telemetry';
-import { IAction } from '../../types/action';
+import { AppAction } from '../../types/action';
 import { IQuery } from '../../types/query-runner';
-import { IRootState } from '../../types/root';
+import { ApplicationState } from '../../types/root';
 import {
   FETCH_ADAPTIVE_CARD_ERROR,
   FETCH_SCOPES_ERROR,
@@ -19,8 +19,8 @@ import {
 import { sanitizeQueryUrl } from '../utils/query-url-sanitization';
 
 const telemetryMiddleware =
-  (store: any) => (next: any) => async (action: IAction) => {
-    const state: IRootState = store.getState();
+  (store: any) => (next: any) => async (action: AppAction) => {
+    const state: ApplicationState = store.getState();
     switch (action.type) {
       case GET_SNIPPET_ERROR: {
         trackException(

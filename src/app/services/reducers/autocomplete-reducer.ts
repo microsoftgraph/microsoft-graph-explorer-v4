@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { IAutocompleteResponse } from '../../../types/auto-complete';
 import { AUTOCOMPLETE_FETCH_ERROR, AUTOCOMPLETE_FETCH_PENDING, AUTOCOMPLETE_FETCH_SUCCESS } from '../redux-constants';
 
@@ -8,7 +8,7 @@ const initialState: IAutocompleteResponse = {
   error: null
 };
 
-export function autoComplete(state = initialState, action: IAction): IAutocompleteResponse {
+export function autoComplete(state = initialState, action: AppAction): IAutocompleteResponse {
   switch (action.type) {
     case AUTOCOMPLETE_FETCH_PENDING:
       return {

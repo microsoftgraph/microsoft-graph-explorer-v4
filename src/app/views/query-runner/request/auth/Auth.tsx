@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { authenticationWrapper } from '../../../../../modules/authentication';
 
 import { componentNames, telemetry } from '../../../../../telemetry';
-import { IRootState } from '../../../../../types/root';
+import { ApplicationState } from '../../../../../types/root';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { trackedGenericCopy } from '../../../common/copy';
@@ -15,7 +15,7 @@ import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment'
 import { authStyles } from './Auth.styles';
 
 export function Auth(props: any) {
-  const { authToken, dimensions: { request: { height } } } = useSelector((state: IRootState) => state);
+  const { authToken, dimensions: { request: { height } } } = useSelector((state: ApplicationState) => state);
   const requestHeight = convertVhToPx(height, 60);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

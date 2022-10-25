@@ -2,7 +2,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
 import { responseMessages } from './ResponseMessages';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
@@ -10,7 +10,7 @@ import ResponseDisplay from './ResponseDisplay';
 
 const Response = () => {
   const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery, authToken, graphExplorerMode } =
-    useSelector((state: IRootState) => state);
+    useSelector((state: ApplicationState) => state);
   const { body, headers } = graphResponse;
   const dispatch = useDispatch();
 

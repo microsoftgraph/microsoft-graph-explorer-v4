@@ -12,9 +12,9 @@ import {
   FETCH_RESOURCES_PENDING
 } from '../../../app/services/redux-constants';
 import { Mode } from '../../../types/enums';
-import { IRootState } from '../../../types/root';
+import { ApplicationState } from '../../../types/root';
 
-const mockState: IRootState = {
+const mockState: ApplicationState = {
   devxApi: {
     baseUrl: 'https://graph.microsoft.com/v1.0/me',
     parameters: '$count=true'

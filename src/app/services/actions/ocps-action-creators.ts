@@ -1,5 +1,5 @@
 import { authenticationWrapper } from '../../../modules/authentication';
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
 import {
   GET_POLICY_ERROR,
@@ -13,14 +13,14 @@ interface IPolicyValues {
   feedback: number
 }
 
-export function getPoliciesSuccess(response: object): IAction {
+export function getPoliciesSuccess(response: object): AppAction {
   return {
     type: GET_POLICY_SUCCESS,
     response
   };
 }
 
-export function getPoliciesError(response: object): IAction {
+export function getPoliciesError(response: object): AppAction {
   return {
     type: GET_POLICY_ERROR,
     response

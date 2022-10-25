@@ -9,7 +9,7 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
-import { IRootState } from '../../../../../types/root';
+import { ApplicationState } from '../../../../../types/root';
 
 interface IHeader {
   name: string;
@@ -17,7 +17,7 @@ interface IHeader {
 }
 
 const RequestHeaders = (props: any) => {
-  const { sampleQuery, dimensions: { request: { height } } } = useSelector((state: IRootState) => state);
+  const { sampleQuery, dimensions: { request: { height } } } = useSelector((state: ApplicationState) => state);
   const [announcedMessage, setAnnouncedMessage] = useState('');
   const [isHoverOverHeadersList, setIsHoverOverHeadersList] = useState(false);
   const [isUpdatingHeader, setIsUpdatingHeader] = useState<boolean>(false);

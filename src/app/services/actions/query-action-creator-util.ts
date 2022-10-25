@@ -9,7 +9,7 @@ import {
 } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
 
 import { authenticationWrapper } from '../../../modules/authentication';
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
@@ -22,7 +22,7 @@ import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
-export function queryResponse(response: object): IAction {
+export function queryResponse(response: object): AppAction {
   return {
     type: QUERY_GRAPH_SUCCESS,
     response

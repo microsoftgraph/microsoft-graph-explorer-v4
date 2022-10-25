@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
-import { IRootState } from '../../../../../types/root';
+import { ApplicationState } from '../../../../../types/root';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { copy } from '../../../common/copy';
@@ -16,7 +16,7 @@ import { shareQueryStyles } from './ShareQuery.styles';
 
 
 export const ShareQuery = () => {
-  const { sampleQuery } = useSelector((state: IRootState) => state);
+  const { sampleQuery } = useSelector((state: ApplicationState) => state);
   const [showShareQueryDialog, setShareQuaryDialogStatus] = useState(true);
 
   const query = { ...sampleQuery };

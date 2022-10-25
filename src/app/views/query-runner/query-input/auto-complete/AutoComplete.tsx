@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IAutoCompleteProps } from '../../../../../types/auto-complete';
-import { IRootState } from '../../../../../types/root';
+import { ApplicationState } from '../../../../../types/root';
 import { fetchAutoCompleteOptions } from '../../../../services/actions/autocomplete-action-creators';
 import { GRAPH_API_VERSIONS, GRAPH_URL } from '../../../../services/graph-constants';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
@@ -28,7 +28,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   let element: HTMLDivElement | null | undefined = null;
 
   const { sampleQuery, autoComplete: { data: autoCompleteOptions, pending: autoCompletePending } } = useSelector(
-    (state: IRootState) => state
+    (state: ApplicationState) => state
   );
 
   const previousQuery = usePrevious(sampleQuery.sampleUrl);

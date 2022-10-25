@@ -1,5 +1,5 @@
 import { authenticationWrapper } from '../../../modules/authentication';
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
 import {
   AUTHENTICATION_PENDING, GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS,
@@ -13,7 +13,7 @@ export function getAuthTokenSuccess(response: boolean): any {
   };
 }
 
-export function getConsentedScopesSuccess(response: string[]): IAction {
+export function getConsentedScopesSuccess(response: string[]): AppAction {
   return {
     type: GET_CONSENTED_SCOPES_SUCCESS,
     response
