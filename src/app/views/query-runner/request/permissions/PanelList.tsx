@@ -1,6 +1,7 @@
 import {
   Announced, DefaultButton, DetailsList, DetailsListLayoutMode, getTheme, GroupHeader, IColumn,
-  IDetailsListCheckboxProps, IGroup, IOverlayProps, Label, Panel, PanelType, PrimaryButton, SearchBox, Selection, SelectionMode
+  IDetailsListCheckboxProps, IGroup, IOverlayProps, Label, Panel, PanelType, PrimaryButton,
+  SearchBox, Selection, SelectionMode
 } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';

@@ -2,7 +2,7 @@ import {
   Checkbox, FontSizes, getId, getTheme, IColumn, Icon, IDetailsListCheckboxProps, Label,
   PrimaryButton, TooltipHost
 } from '@fluentui/react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 

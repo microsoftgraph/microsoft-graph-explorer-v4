@@ -1,5 +1,6 @@
 import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
 import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 
 import { AppDispatch } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';

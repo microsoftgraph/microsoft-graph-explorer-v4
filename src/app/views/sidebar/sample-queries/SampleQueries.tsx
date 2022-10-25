@@ -4,7 +4,7 @@ import {
   GroupHeader, IColumn, Icon, IDetailsRowStyles, IGroup, Link, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 

@@ -1,5 +1,5 @@
 import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode } from '@fluentui/react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 

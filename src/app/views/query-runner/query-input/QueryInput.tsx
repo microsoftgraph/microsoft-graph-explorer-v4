@@ -1,6 +1,7 @@
 import { Dropdown, IDropdownOption, IStackTokens, Stack } from '@fluentui/react';
 import { injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 
 import { AppDispatch } from '../../../../store';
 import { httpMethods, IQuery, IQueryInputProps } from '../../../../types/query-runner';
