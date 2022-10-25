@@ -13,6 +13,7 @@ import {
   fetchAutocompleteSuccess, fetchAutocompleteError,
   fetchAutocompletePending, fetchAutoCompleteOptions
 } from '../../../app/services/actions/autocomplete-action-creators';
+import { AppAction } from '../../../types/action';
 
 const middleware = [thunk];
 const mockStore = configureMockStore(middleware);
@@ -130,7 +131,7 @@ describe('Autocomplete action creators', () => {
   it('should dispatch AUTOCOMPLETE_FETCH_ERROR with error payload when fetchAutocompleteError() is called', () => {
     // Arrange
     const errorObject = {};
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: AUTOCOMPLETE_FETCH_ERROR,
       response: errorObject
     }
@@ -154,7 +155,7 @@ describe('Autocomplete action creators', () => {
       },
       createdAt: ''
     }
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: AUTOCOMPLETE_FETCH_SUCCESS,
       response
     }
@@ -168,7 +169,7 @@ describe('Autocomplete action creators', () => {
 
   it('should dispatch AUTOCOMPLETE_FETCH_PENDING when fetchAutocompletePending() is called', () => {
     // Arrange
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: AUTOCOMPLETE_FETCH_PENDING,
       response: null
     }
@@ -223,7 +224,7 @@ describe('Autocomplete action creators', () => {
 
     it('should dispatch AUTOCOMPLETE_FETCH_ERROR when fetch does not return autoOptions', () => {
       // Arrange
-      const expectedAction = {
+      const expectedAction: AppAction = {
         type: AUTOCOMPLETE_FETCH_ERROR,
         response: {}
       };

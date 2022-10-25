@@ -12,6 +12,7 @@ import { IPermissionsResponse } from '../../../types/permissions';
 import { store } from '../../../store/index';
 import { ApplicationState } from '../../../types/root';
 import { Mode } from '../../../types/enums';
+import { AppAction } from '../../../types/action';
 
 window.open = jest.fn();
 window.fetch = jest.fn();
@@ -127,7 +128,7 @@ describe('Permissions action creators', () => {
       }
     }
 
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: FETCH_FULL_SCOPES_SUCCESS,
       response
     }
@@ -145,7 +146,7 @@ describe('Permissions action creators', () => {
       error: {}
     }
 
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: FETCH_SCOPES_ERROR,
       response
     }

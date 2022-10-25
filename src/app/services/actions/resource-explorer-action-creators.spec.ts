@@ -1,18 +1,19 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import {
+  addResourcePaths, fetchResources, fetchResourcesError,
+  fetchResourcesPending, fetchResourcesSuccess, removeResourcePaths
+} from '../../../app/services/actions/resource-explorer-action-creators';
+import {
+  FETCH_RESOURCES_ERROR,
+  FETCH_RESOURCES_PENDING, FETCH_RESOURCES_SUCCESS, RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
+} from '../../../app/services/redux-constants';
+import { AppAction } from '../../../types/action';
+import { Mode } from '../../../types/enums';
+import { ApplicationState } from '../../../types/root';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
-import {
-  addResourcePaths, fetchResourcesSuccess, fetchResourcesError,
-  fetchResourcesPending, removeResourcePaths, fetchResources
-} from '../../../app/services/actions/resource-explorer-action-creators';
-import {
-  FETCH_RESOURCES_SUCCESS, RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, FETCH_RESOURCES_ERROR,
-  FETCH_RESOURCES_PENDING
-} from '../../../app/services/redux-constants';
-import { Mode } from '../../../types/enums';
-import { ApplicationState } from '../../../types/root';
 
 const mockState: ApplicationState = {
   devxApi: {
@@ -148,7 +149,7 @@ describe('Resource Explorer actions', () => {
   it('should dispatch FETCH_RESOURCES_SUCCESS when fetchResourcesSuccess() is called', () => {
 
     const response = fetchMock.mockResponseOnce(JSON.stringify({ ok: true }));
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: FETCH_RESOURCES_SUCCESS,
       response
     };
@@ -198,7 +199,7 @@ describe('Resource Explorer actions', () => {
   it('should dispatch FETCH_RESOURCES_ERROR when fetchResourcesError() is called', () => {
     // Arrange
     const response = {};
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: FETCH_RESOURCES_ERROR,
       response
     }
@@ -212,7 +213,7 @@ describe('Resource Explorer actions', () => {
 
   it('should dispatch FETCH_RESOURCES_PENDING when fetchResourcesPending() is called', () => {
     // Arrange
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: FETCH_RESOURCES_PENDING,
       response: null
     }
@@ -226,8 +227,8 @@ describe('Resource Explorer actions', () => {
 
   it('should dispatch FETCH_RESOURCES_PENDING and FETCH_RESOURCES_SUCCESS when fetchResources() is called', () => {
     // Arrange
-    const expectedAction = [
-      { type: FETCH_RESOURCES_PENDING },
+    const expectedAction: AppAction[] = [
+      { type: FETCH_RESOURCES_PENDING, response: null },
       {
         type: FETCH_RESOURCES_SUCCESS,
         response: { paths, ok: true }
