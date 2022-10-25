@@ -1,17 +1,6 @@
 import {
-  ActionButton,
-  Callout,
-  FontSizes,
-  getTheme,
-  IPersonaProps,
-  IPersonaSharedProps,
-  mergeStyleSets,
-  Persona,
-  PersonaSize,
-  Spinner,
-  SpinnerSize,
-  Stack,
-  styled
+  ActionButton, Callout, FontSizes, getTheme, IPersonaProps, IPersonaSharedProps, mergeStyleSets,
+  Persona, PersonaSize, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,6 +16,7 @@ import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
 import { Mode } from '../../../../types/enums';
+import { AppDispatch } from '../../../../store';
 
 const getInitials = (name: string) => {
   let initials = '';
@@ -45,7 +35,7 @@ const getInitials = (name: string) => {
 };
 
 const Profile = (props: any) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const {
     profile,
     authToken,

@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { IQuery } from '../../../types/query-runner';
+import { AppDispatch } from '../../../store';
 import { ApplicationState } from '../../../types/root';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
@@ -14,7 +15,7 @@ import {
 } from '../../utils/status-message';
 
 const StatusMessages = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const { queryRunnerStatus, sampleQuery } =
     useSelector((state: ApplicationState) => state);
 

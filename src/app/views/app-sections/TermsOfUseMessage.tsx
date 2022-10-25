@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
+import { AppDispatch } from '../../../store';
 import { componentNames, telemetry } from '../../../telemetry';
 import { ApplicationState } from '../../../types/root';
 import { clearTermsOfUse } from '../../services/actions/terms-of-use-action-creator';
@@ -14,7 +15,7 @@ const styledTermsOfUseMessage = () => {
   const { termsOfUse } =
     useSelector((state: ApplicationState) => state);
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   if (termsOfUse) {
     return <MessageBar messageBarType={MessageBarType.info}
       isMultiline={true}

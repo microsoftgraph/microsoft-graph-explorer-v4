@@ -5,6 +5,7 @@ import {
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { AppDispatch } from '../../../../../store';
 import { ApplicationState } from '../../../../../types/root';
 import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -16,7 +17,7 @@ interface ICommandOptions {
 }
 
 const CommandOptions = (props: ICommandOptions) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const { version } = props;

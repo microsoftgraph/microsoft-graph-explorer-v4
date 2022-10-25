@@ -1,10 +1,11 @@
 import {
   CommandBar, ICommandBarItemProps, Label, Panel, PanelType, PrimaryButton
 } from '@fluentui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { AppDispatch } from '../../../../../store';
 import { IResourceLink } from '../../../../../types/resources';
 import { ApplicationState } from '../../../../../types/root';
 import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
@@ -20,7 +21,7 @@ export interface IPathsReview {
 }
 
 const PathsReview = (props: IPathsReview) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const { resources: { paths: items } } = useSelector(
     (state: ApplicationState) => state
   );

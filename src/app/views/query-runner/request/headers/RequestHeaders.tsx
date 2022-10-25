@@ -3,13 +3,14 @@ import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { AppDispatch } from '../../../../../store';
+import { ApplicationState } from '../../../../../types/root';
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
-import { ApplicationState } from '../../../../../types/root';
 
 interface IHeader {
   name: string;
@@ -28,7 +29,7 @@ const RequestHeaders = (props: any) => {
   const { intl: { messages } } = props;
   const sampleQueryHeaders = sampleQuery.sampleHeaders;
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const classes = classNames(props);
 
   const textfieldRef = React.createRef<ITextField>();

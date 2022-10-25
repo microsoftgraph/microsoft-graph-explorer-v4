@@ -4,17 +4,14 @@ import {
   GroupHeader, IColumn, Icon, IDetailsRowStyles, IGroup, Link, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
+import { AppDispatch } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
-import {
-  IQuery,
-  ISampleQueriesProps,
-  ISampleQuery
-} from '../../../../types/query-runner';
+import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import { ApplicationState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
@@ -42,7 +39,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(samples.queries);
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState<boolean>(false);
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const currentTheme = getTheme();
 
   const { error, pending } = samples;

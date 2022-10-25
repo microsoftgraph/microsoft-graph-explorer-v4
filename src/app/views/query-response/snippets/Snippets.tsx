@@ -1,13 +1,14 @@
 import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
 import { useDispatch, useSelector } from 'react-redux';
-import React from 'react';
 
+import { AppDispatch } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { ApplicationState } from '../../../../types/root';
 import { setSnippetTabSuccess } from '../../../services/actions/snippet-action-creator';
 import { renderSnippets } from './snippets-helper';
+
 function GetSnippets() {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const { snippets } = useSelector((state: ApplicationState) => state);
   const supportedLanguages = {
     'CSharp': {

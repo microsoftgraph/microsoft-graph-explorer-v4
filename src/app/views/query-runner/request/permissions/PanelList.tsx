@@ -1,27 +1,13 @@
 import {
-  Announced,
-  DefaultButton,
-  DetailsList,
-  DetailsListLayoutMode,
-  getTheme,
-  GroupHeader,
-  IColumn,
-  IDetailsListCheckboxProps,
-  IOverlayProps,
-  Label,
-  Panel,
-  PanelType,
-  PrimaryButton,
-  SearchBox,
-  SelectionMode,
-  Selection,
-  IGroup
+  Announced, DefaultButton, DetailsList, DetailsListLayoutMode, getTheme, GroupHeader, IColumn,
+  IDetailsListCheckboxProps, IGroup, IOverlayProps, Label, Panel, PanelType, PrimaryButton, SearchBox, Selection, SelectionMode
 } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 
+import { AppDispatch } from '../../../../../store';
+import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
 import { ApplicationState } from '../../../../../types/root';
@@ -80,7 +66,7 @@ const PanelList = ({ messages,
   }, [permissions, searchStarted])
 
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 

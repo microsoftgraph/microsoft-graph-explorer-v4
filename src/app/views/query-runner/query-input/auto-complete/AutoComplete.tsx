@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
+import { AppDispatch } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IAutoCompleteProps } from '../../../../../types/auto-complete';
 import { ApplicationState } from '../../../../../types/root';
@@ -22,7 +23,7 @@ import { usePrevious } from './use-previous';
 
 const AutoComplete = (props: IAutoCompleteProps) => {
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const focusRef = useRef<any>(null);
 
   let element: HTMLDivElement | null | undefined = null;
