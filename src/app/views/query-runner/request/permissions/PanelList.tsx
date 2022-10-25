@@ -64,11 +64,11 @@ const PanelList = ({ messages,
 
   useEffect(() => {
     if (shouldGenerateGroups.current) {
-      if(permissionsList.length === 0){ return }
       setGroups(generateGroupsFromList(permissionsList, 'groupName'));
       if(groups && groups.length > 0) {
         shouldGenerateGroups.current = false;
       }
+      if(permissionsList.length === 0){ return }
     }
   }, [permissions, searchStarted])
 
@@ -94,7 +94,8 @@ const PanelList = ({ messages,
 
       filteredPermissions = fullPermissions.filter((permission: IPermission) => {
         const name = permission.value.toLowerCase();
-        return name.includes(keyword);
+        const groupName = permission.value.split('.')[0].toLowerCase();
+        return name.includes(keyword) || groupName.includes(keyword);
       });
     }
     setPermissions(filteredPermissions);
@@ -150,19 +151,6 @@ const PanelList = ({ messages,
 
   return (
     <div>
-      <Label className={classes.permissionText}>
-        <FormattedMessage id='Select different permissions' />
-      </Label>
-      <hr />
-      <SearchBox
-        className={classes.searchBox}
-        placeholder={messages['Search permissions']}
-        onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
-          searchValueChanged(event, newValue)}
-        styles={searchBoxStyles}
-      />
-      <Announced message={`${permissions.length} search results available.`} />
-      <hr />
       <Panel
         isOpen={permissionsPanelOpen}
         onDismiss={() => changePanelState()}
@@ -174,7 +162,7 @@ const PanelList = ({ messages,
         overlayProps={panelOverlayProps}
         styles={permissionPanelStyles}
       >
-        {loading || groups && groups.length === 0 ? displayLoadingPermissionsText() :
+        {loading ? displayLoadingPermissionsText() :
           <>
             <Label className={classes.permissionText}>
               <FormattedMessage id='Select different permissions' />
@@ -211,8 +199,8 @@ const PanelList = ({ messages,
               onRenderCheckbox={() => hideCheckbox()}
             />
           </>}
-      </Panel>
-      {permissions && permissions.length === 0 &&
+
+        {!loading && permissions && permissions.length === 0 &&
         <Label style={{
           display: 'flex',
           width: '100%',
@@ -222,7 +210,8 @@ const PanelList = ({ messages,
         }}>
           <FormattedMessage id='permissions not found' />
         </Label>
-      }
+        }
+      </Panel>
     </div>
   );
 };
