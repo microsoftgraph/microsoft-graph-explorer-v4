@@ -27,7 +27,8 @@ describe('Query Action Creators', () => {
   it('should dispatch CLEAR_RESPONSE action when clearResponse() is called', () => {
     // Assert
     const expectedAction = {
-      type: CLEAR_RESPONSE
+      type: CLEAR_RESPONSE,
+      response: null
     }
 
     // Act

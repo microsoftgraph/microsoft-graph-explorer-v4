@@ -213,7 +213,8 @@ describe('Resource Explorer actions', () => {
   it('should dispatch FETCH_RESOURCES_PENDING when fetchResourcesPending() is called', () => {
     // Arrange
     const expectedAction = {
-      type: FETCH_RESOURCES_PENDING
+      type: FETCH_RESOURCES_PENDING,
+      response: null
     }
 
     // Act

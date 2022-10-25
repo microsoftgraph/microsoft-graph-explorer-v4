@@ -169,7 +169,8 @@ describe('Autocomplete action creators', () => {
   it('should dispatch AUTOCOMPLETE_FETCH_PENDING when fetchAutocompletePending() is called', () => {
     // Arrange
     const expectedAction = {
-      type: AUTOCOMPLETE_FETCH_PENDING
+      type: AUTOCOMPLETE_FETCH_PENDING,
+      response: null
     }
 
     // Act

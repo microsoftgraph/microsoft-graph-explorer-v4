@@ -11,7 +11,8 @@ describe('Terms of Use Action Creators', () => {
   it('should set terms of use flag to false', () => {
     const expectedAction = [
       {
-        type: CLEAR_TERMS_OF_USE
+        type: CLEAR_TERMS_OF_USE,
+        response: null
       }
     ];
 

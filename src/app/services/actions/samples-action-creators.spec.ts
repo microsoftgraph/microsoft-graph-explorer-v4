@@ -26,7 +26,8 @@ describe('Samples action creators', () => {
 
   it('should dispatch SAMPLES_FETCH_PENDING when fetchSamplesPending() is called', () => {
     const expectedAction = {
-      type: SAMPLES_FETCH_PENDING
+      type: SAMPLES_FETCH_PENDING,
+      response: null
     };
 
     const action = fetchSamplesPending();

@@ -36,7 +36,8 @@ describe('Snippet actions creators', () => {
 
   it('should dispatch GET_SNIPPET_PENDING when getSnippetPending() is called', () => {
     const expectedAction = {
-      type: GET_SNIPPET_PENDING
+      type: GET_SNIPPET_PENDING,
+      response: null
     };
 
     const action = getSnippetPending();
