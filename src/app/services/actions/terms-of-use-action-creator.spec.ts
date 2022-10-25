@@ -1,8 +1,8 @@
-import { clearTermsOfUse } from '../../../app/services/actions/terms-of-use-action-creator';
-import { CLEAR_TERMS_OF_USE } from '../../../app/services/redux-constants';
-
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+
+import { clearTermsOfUse } from '../../../app/services/actions/terms-of-use-action-creator';
+import { CLEAR_TERMS_OF_USE } from '../../../app/services/redux-constants';
 import { AppAction } from '../../../types/action';
 
 const middlewares = [thunk];
@@ -13,7 +13,7 @@ describe('Terms of Use Action Creators', () => {
     const expectedAction: AppAction[] = [
       {
         type: CLEAR_TERMS_OF_USE,
-        response: null
+        response: false
       }
     ];
 
