@@ -5,13 +5,12 @@ import {
 } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { AppDispatch } from '../../../../../store';
+import { AppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
-import { ApplicationState } from '../../../../../types/root';
 import { consentToScopes } from '../../../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
@@ -37,7 +36,8 @@ const PanelList = ({ messages,
     return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
   }
 
-  const { consentedScopes, scopes, authToken, permissionsPanelOpen } = useSelector((state: ApplicationState) => state);
+  const { consentedScopes, scopes, authToken,
+    permissionsPanelOpen } = useAppSelector((state) => state);
   const { fullPermissions } = scopes.data;
   const [permissions, setPermissions] = useState<any []>([]);
   const [groups, setGroups] = useState<IGroup[]>([]);

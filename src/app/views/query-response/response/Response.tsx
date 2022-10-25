@@ -1,9 +1,8 @@
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import React from 'react';
 
-import { AppDispatch } from '../../../../store';
-import { ApplicationState } from '../../../../types/root';
+import { AppDispatch, useAppSelector } from '../../../../store';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import ResponseDisplay from './ResponseDisplay';
@@ -11,7 +10,7 @@ import { responseMessages } from './ResponseMessages';
 
 const Response = () => {
   const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery, authToken, graphExplorerMode } =
-    useSelector((state: ApplicationState) => state);
+    useAppSelector((state) => state);
   const { body, headers } = graphResponse;
   const dispatch: AppDispatch = useDispatch();
 

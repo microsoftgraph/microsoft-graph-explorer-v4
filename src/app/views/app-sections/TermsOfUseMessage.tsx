@@ -1,19 +1,18 @@
 import { Link, MessageBar, MessageBarType, styled } from '@fluentui/react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
-import { AppDispatch } from '../../../store';
+import { AppDispatch, useAppSelector } from '../../../store';
 import { componentNames, telemetry } from '../../../telemetry';
-import { ApplicationState } from '../../../types/root';
 import { clearTermsOfUse } from '../../services/actions/terms-of-use-action-creator';
 import { appStyles } from '../App.styles';
 
 const styledTermsOfUseMessage = () => {
 
   const { termsOfUse } =
-    useSelector((state: ApplicationState) => state);
+    useAppSelector((state) => state);
 
   const dispatch: AppDispatch = useDispatch();
   if (termsOfUse) {

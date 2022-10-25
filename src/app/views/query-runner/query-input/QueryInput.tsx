@@ -1,11 +1,10 @@
 import { Dropdown, IDropdownOption, IStackTokens, Stack } from '@fluentui/react';
 import { injectIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import React from 'react';
 
-import { AppDispatch } from '../../../../store';
+import { AppDispatch, useAppSelector } from '../../../../store';
 import { httpMethods, IQuery, IQueryInputProps } from '../../../../types/query-runner';
-import { ApplicationState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_API_VERSIONS } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
@@ -34,7 +33,7 @@ const QueryInput = (props: IQueryInputProps) => {
   });
 
   const { sampleQuery, authToken,
-    isLoadingData: submitting, sidebarProperties } = useSelector((state: ApplicationState) => state);
+    isLoadingData: submitting, sidebarProperties } = useAppSelector((state) => state);
   const authenticated = !!authToken.token;
   const { mobileScreen } = sidebarProperties;
 

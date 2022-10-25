@@ -4,12 +4,11 @@ import {
 } from '@fluentui/react';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import messages from '../../../../../messages';
-import { AppDispatch } from '../../../../../store';
+import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionProps } from '../../../../../types/permissions';
-import { ApplicationState } from '../../../../../types/root';
 import { consentToScopes, fetchScopes } from '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
@@ -21,7 +20,7 @@ import TabList from './TabList';
 export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const { sampleQuery, scopes, dimensions, authToken } =
-    useSelector((state: ApplicationState) => state);
+    useAppSelector((state) => state);
   const { pending: loading } = scopes;
   const tokenPresent = !!authToken.token;
   const dispatch: AppDispatch = useDispatch();

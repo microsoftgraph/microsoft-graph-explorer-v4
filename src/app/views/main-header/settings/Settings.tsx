@@ -3,14 +3,13 @@ import {
   getTheme, IconButton, IContextualMenuProps, TooltipHost
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
-import { AppDispatch } from '../../../../store';
+import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { loadGETheme } from '../../../../themes';
 import { AppTheme } from '../../../../types/enums';
-import { ApplicationState } from '../../../../types/root';
 import { ISettingsProps } from '../../../../types/settings';
 import { changeTheme } from '../../../services/actions/theme-action-creator';
 import '../../../utils/string-operations';
@@ -19,7 +18,7 @@ import { mainHeaderStyles } from '../MainHeader.styles';
 
 export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { authToken, theme: appTheme } = useSelector((state: ApplicationState) => state);
+  const { authToken, theme: appTheme } = useAppSelector((state) => state);
   const authenticated = authToken.token;
   const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);

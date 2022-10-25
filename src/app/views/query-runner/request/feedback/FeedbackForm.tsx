@@ -3,13 +3,12 @@ import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import { AuthenticationType } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 import { OfficeBrowserFeedback } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../../appLocale';
 import { authenticationWrapper } from '../../../../../modules/authentication';
-import { AppDispatch } from '../../../../../store';
+import { AppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, telemetry } from '../../../../../telemetry';
-import { ApplicationState } from '../../../../../types/root';
 import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
 import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -22,7 +21,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
   const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
   const currentTheme = getTheme();
   const { NODE_ENV } = process.env;
-  const { profile, policies } = useSelector((state: ApplicationState) => state);
+  const { profile, policies } = useAppSelector((state) => state);
 
   function surveyActivated(launcher: any, surveyItem: any) {
     return surveyItem;

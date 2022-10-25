@@ -1,11 +1,10 @@
 import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { AppDispatch } from '../../../../../store';
+import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission } from '../../../../../types/permissions';
-import { ApplicationState } from '../../../../../types/root';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 import { setConsentedStatus } from './util';
 
@@ -19,7 +18,7 @@ interface ITabList {
 
 const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) : JSX.Element => {
   const dispatch: AppDispatch = useDispatch();
-  const { consentedScopes, scopes, authToken } = useSelector((state: ApplicationState) => state);
+  const { consentedScopes, scopes, authToken } = useAppSelector((state) => state);
   const permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
   const tokenPresent = !!authToken.token;
   const [isHoverOverPermissionsList, setIsHoverOverPermissionsList] = useState(false);

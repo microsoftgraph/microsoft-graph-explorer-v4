@@ -1,16 +1,15 @@
 import { getTheme, ITheme, Label, Link, PivotItem } from '@fluentui/react';
 import React, { useEffect } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { FormattedMessage } from 'react-intl';
 import { getSnippet } from '../../../services/actions/snippet-action-creator';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 
-import { AppDispatch } from '../../../../store';
+import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
-import { ApplicationState } from '../../../../types/root';
 import { translateMessage } from '../../../utils/translate-messages';
 import { CopyButton } from '../../common/copy/CopyButton';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
@@ -55,8 +54,8 @@ function Snippet(props: ISnippetProps) {
    */
   language = language.toLowerCase();
 
-  const sampleQuery = useSelector((state: ApplicationState) => state.sampleQuery, shallowEqual);
-  const { dimensions: { response }, snippets, responseAreaExpanded } = useSelector((state: ApplicationState) => state);
+  const { dimensions: { response }, snippets,
+    responseAreaExpanded, sampleQuery } = useAppSelector((state) => state);
   const { data, pending: loadingState } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
 

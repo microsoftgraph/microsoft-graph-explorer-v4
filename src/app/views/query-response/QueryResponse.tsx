@@ -4,10 +4,9 @@ import {
 import { Resizable } from 're-resizable';
 import React, { CSSProperties, useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { AppDispatch } from '../../../store';
-import { ApplicationState } from '../../../types/root';
+import { AppDispatch, useAppSelector } from '../../../store';
 import { expandResponseArea } from '../../services/actions/response-expanded-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
 import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
@@ -19,7 +18,7 @@ const QueryResponse = () => {
   const dispatch: AppDispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [responseHeight, setResponseHeight] = useState('610px');
-  const { sampleQuery, dimensions } = useSelector((state: ApplicationState) => state);
+  const { sampleQuery, dimensions } = useAppSelector((state) => state);
   const [currentTab, setCurrentTab] = useState<string>('response-preview');
   const currentTheme: ITheme = getTheme();
   const { modalStyles, modalPivotStyles } = queryResponseStyles(currentTheme);

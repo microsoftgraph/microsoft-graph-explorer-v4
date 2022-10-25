@@ -3,11 +3,10 @@ import {
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { AppDispatch } from '../../../../../store';
+import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IResourceLink } from '../../../../../types/resources';
-import { ApplicationState } from '../../../../../types/root';
 import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
@@ -22,8 +21,8 @@ export interface IPathsReview {
 
 const PathsReview = (props: IPathsReview) => {
   const dispatch: AppDispatch = useDispatch();
-  const { resources: { paths: items } } = useSelector(
-    (state: ApplicationState) => state
+  const { resources: { paths: items } } = useAppSelector(
+    (state) => state
   );
   const { isOpen } = props;
   const headerText = translateMessage('Selected Resources') + ' ' + translateMessage('Preview');

@@ -7,13 +7,12 @@ import {
 import debouce from 'lodash.debounce';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { AppDispatch } from '../../../../store';
+import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { IResource, IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
-import { ApplicationState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { addResourcePaths } from '../../../services/actions/resource-explorer-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
@@ -34,8 +33,8 @@ import { navStyles } from './resources.styles';
 
 const unstyledResourceExplorer = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
-  const { resources } = useSelector(
-    (state: ApplicationState) => state
+  const { resources } = useAppSelector(
+    (state) => state
   );
   const classes = classNames(props);
   const { data, pending, paths: selectedLinks } = resources;

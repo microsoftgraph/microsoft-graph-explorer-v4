@@ -1,10 +1,9 @@
 import { Announced, ITextField, PrimaryButton, styled, TextField } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { AppDispatch } from '../../../../../store';
-import { ApplicationState } from '../../../../../types/root';
+import { AppDispatch, useAppSelector } from '../../../../../store';
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
@@ -18,7 +17,7 @@ interface IHeader {
 }
 
 const RequestHeaders = (props: any) => {
-  const { sampleQuery, dimensions: { request: { height } } } = useSelector((state: ApplicationState) => state);
+  const { sampleQuery, dimensions: { request: { height } } } = useAppSelector((state) => state);
   const [announcedMessage, setAnnouncedMessage] = useState('');
   const [isHoverOverHeadersList, setIsHoverOverHeadersList] = useState(false);
   const [isUpdatingHeader, setIsUpdatingHeader] = useState<boolean>(false);

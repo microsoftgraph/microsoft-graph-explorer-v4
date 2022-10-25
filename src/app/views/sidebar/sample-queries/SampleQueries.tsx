@@ -6,13 +6,12 @@ import {
 } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
-import { AppDispatch } from '../../../../store';
+import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
-import { ApplicationState } from '../../../../types/root';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
 import { fetchSamples } from '../../../services/actions/samples-action-creators';
@@ -34,7 +33,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
   const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
   const { authToken, profile, samples } =
-    useSelector((state: ApplicationState) => state);
+    useAppSelector((state) => state);
   const tokenPresent = authToken.token;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(samples.queries);
   const [groups, setGroups] = useState<IGroup[]>([]);
