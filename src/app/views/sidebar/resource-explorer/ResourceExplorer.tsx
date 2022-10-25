@@ -31,7 +31,7 @@ import {
 import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
 
-const unstyledResourceExplorer = (props: any) => {
+const UnstyledResourceExplorer = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
   const { resources } = useAppSelector(
     (state) => state
@@ -251,5 +251,5 @@ const unstyledResourceExplorer = (props: any) => {
 }
 
 // @ts-ignore
-const ResourceExplorer = styled(unstyledResourceExplorer, sidebarStyles);
+const ResourceExplorer = styled(UnstyledResourceExplorer, sidebarStyles);
 export default ResourceExplorer;

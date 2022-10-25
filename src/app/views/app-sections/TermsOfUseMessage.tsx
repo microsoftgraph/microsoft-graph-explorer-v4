@@ -9,7 +9,7 @@ import { componentNames, telemetry } from '../../../telemetry';
 import { clearTermsOfUse } from '../../services/actions/terms-of-use-action-creator';
 import { appStyles } from '../App.styles';
 
-const styledTermsOfUseMessage = () => {
+const StyledTermsOfUseMessage = () => {
 
   const { termsOfUse } =
     useAppSelector((state) => state);
@@ -42,5 +42,5 @@ const styledTermsOfUseMessage = () => {
   return <div />;
 }
 // @ts-ignore
-const TermsOfUseMessage = styled(styledTermsOfUseMessage, appStyles);
+const TermsOfUseMessage = styled(StyledTermsOfUseMessage, appStyles);
 export default TermsOfUseMessage;
