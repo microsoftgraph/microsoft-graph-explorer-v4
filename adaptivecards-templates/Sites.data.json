@@ -1,0 +1,29 @@
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#sites",
+    "value": [
+        {
+            "createdDateTime": "2017-09-15T01:20:12Z",
+            "description": "Let's store our notes on how we can make this company and its services, better.",
+            "id": "m365x214355.sharepoint.com,5a58bb09-1fba-41c1-8125-69da264370a0,7268dd48-720e-4115-a352-35db188918be",
+            "lastModifiedDateTime": "2019-08-04T04:20:10Z",
+            "name": "ee",
+            "webUrl": "https://m365x214355.sharepoint.com/ee",
+            "displayName": "Engineering Excellence",
+            "parentReference": {
+                "siteId": "m365x214355.sharepoint.com,5a58bb09-1fba-41c1-8125-69da264370a0,9f2ec1da-0be4-4a74-9254-973f0add78fd"
+            }
+        },
+        {
+            "createdDateTime": "2017-09-15T01:11:50Z",
+            "description": "Let's capture our thoughts in this subsite blog.",
+            "id": "m365x214355.sharepoint.com,5a58bb09-1fba-41c1-8125-69da264370a0,5e9767b8-95bc-4bd1-aeb0-d6598e566ec0",
+            "lastModifiedDateTime": "2019-03-26T03:48:20Z",
+            "name": "internalblogs",
+            "webUrl": "https://m365x214355.sharepoint.com/internalblogs",
+            "displayName": "Internal blog",
+            "parentReference": {
+                "siteId": "m365x214355.sharepoint.com,5a58bb09-1fba-41c1-8125-69da264370a0,9f2ec1da-0be4-4a74-9254-973f0add78fd"
+            }
+        }
+    ]
+}

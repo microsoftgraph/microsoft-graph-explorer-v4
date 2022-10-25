@@ -1,0 +1,39 @@
+{
+    "profile": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users/$entity",
+        "businessPhones": [
+            "+1 412 555 0109"
+        ],
+        "displayName": "Megan Bowen",
+        "givenName": "Megan",
+        "jobTitle": "Auditor",
+        "mail": "MeganB@M365x214355.onmicrosoft.com",
+        "mobilePhone": null,
+        "officeLocation": "12/1110",
+        "preferredLanguage": "en-US",
+        "surname": "Bowen",
+        "userPrincipalName": "MeganB@M365x214355.onmicrosoft.com",
+        "id": "48d31887-5fad-4d73-a9f5-3c356e68a038"
+    },
+    "reports": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#directoryObjects",
+        "value": [
+            {
+                "@odata.type": "#microsoft.graph.user",
+                "id": "ec63c778-24e1-4240-bea3-d12a167d5232",
+                "businessPhones": [
+                    "+20 255501070"
+                ],
+                "displayName": "Pradeep Gupta",
+                "givenName": "Pradeep",
+                "jobTitle": "Accountant II",
+                "mail": "PradeepG@M365x214355.onmicrosoft.com",
+                "mobilePhone": null,
+                "officeLocation": "98/2202",
+                "preferredLanguage": "en-US",
+                "surname": "Gupta",
+                "userPrincipalName": "PradeepG@M365x214355.onmicrosoft.com"
+            }
+        ]
+    }
+}
