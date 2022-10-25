@@ -1,4 +1,5 @@
 import { geLocale } from '../../../appLocale';
+import { AppDispatch } from '../../../store';
 import { AppAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
 import {
@@ -21,14 +22,15 @@ export function fetchSamplesError(response: object): AppAction {
   };
 }
 
-export function fetchSamplesPending(): any {
+export function fetchSamplesPending(): AppAction {
   return {
-    type: SAMPLES_FETCH_PENDING
+    type: SAMPLES_FETCH_PENDING,
+    response: null
   };
 }
 
-export function fetchSamples(): Function {
-  return async (dispatch: Function, getState: Function) => {
+export function fetchSamples() {
+  return async (dispatch: AppDispatch, getState: Function) => {
     const { devxApi } = getState();
     let samplesUrl = `${devxApi.baseUrl}/samples`;
 

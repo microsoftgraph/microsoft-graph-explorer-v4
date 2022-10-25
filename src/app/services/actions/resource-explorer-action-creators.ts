@@ -14,9 +14,10 @@ export function fetchResourcesSuccess(response: object): AppAction {
   };
 }
 
-export function fetchResourcesPending(): any {
+export function fetchResourcesPending(): AppAction {
   return {
-    type: FETCH_RESOURCES_PENDING
+    type: FETCH_RESOURCES_PENDING,
+    response: null
   };
 }
 
@@ -41,7 +42,7 @@ export function removeResourcePaths(response: object): AppAction {
   };
 }
 
-export function fetchResources(): Function {
+export function fetchResources() {
   return async (dispatch: Function, getState: Function) => {
     try {
       const { devxApi }: ApplicationState = getState();

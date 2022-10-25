@@ -23,20 +23,21 @@ export function getSnippetError(response: object): AppAction {
   };
 }
 
-export function getSnippetPending(): any {
+export function getSnippetPending(): AppAction {
   return {
-    type: GET_SNIPPET_PENDING
+    type: GET_SNIPPET_PENDING,
+    response: null
   };
 }
 
-export function setSnippetTabSuccess(response: string): any {
+export function setSnippetTabSuccess(response: string): AppAction {
   return {
     type: SET_SNIPPET_TAB_SUCCESS,
     response
   }
 }
 
-export function getSnippet(language: string): Function {
+export function getSnippet(language: string) {
   return async (dispatch: Function, getState: Function) => {
     const { devxApi, sampleQuery } = getState();
 

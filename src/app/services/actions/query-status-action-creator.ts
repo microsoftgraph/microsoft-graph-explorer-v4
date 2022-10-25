@@ -9,14 +9,15 @@ export function setQueryResponseStatus(response: object): AppAction {
   };
 }
 
-export function clearResponse() {
+export function clearResponse(): AppAction {
   return {
-    type: CLEAR_RESPONSE
+    type: CLEAR_RESPONSE,
+    response: null
   };
 }
 
 
-export function clearQueryStatus(): Function {
+export function clearQueryStatus() {
   return (dispatch: Dispatch) => {
     dispatch({
       type: CLEAR_QUERY_STATUS

@@ -39,8 +39,18 @@ export function fetchUrlScopesSuccess(response: Object): AppAction {
   }
 }
 
-export function fetchScopesPending(type: string): any {
-  return { type };
+export function fetchFullScopesPending(): AppAction {
+  return {
+    type: FETCH_FULL_SCOPES_PENDING,
+    response: 'full'
+  };
+}
+
+export function fetchUrlScopesPending(): AppAction {
+  return {
+    type: FETCH_URL_SCOPES_PENDING,
+    response: 'url'
+  };
 }
 
 export function fetchScopesError(response: object): AppAction {
@@ -50,7 +60,7 @@ export function fetchScopesError(response: object): AppAction {
   };
 }
 
-export function fetchScopes(): Function {
+export function fetchScopes() {
   return async (dispatch: Function, getState: Function) => {
     try {
       const { devxApi, permissionsPanelOpen, profile, sampleQuery: query }: ApplicationState = getState();
@@ -80,8 +90,11 @@ export function fetchScopes(): Function {
       };
 
       const options: IRequestOptions = { headers };
-
-      dispatch(fetchScopesPending(permissionsPanelOpen ? FETCH_FULL_SCOPES_PENDING : FETCH_URL_SCOPES_PENDING));
+      if (permissionsPanelOpen) {
+        dispatch(fetchFullScopesPending());
+      } else {
+        dispatch(fetchUrlScopesPending());
+      }
 
       const response = await fetch(permissionsUrl, options);
       if (response.ok) {
@@ -113,7 +126,7 @@ export function getPermissionsScopeType(profile: IUser | null | undefined) {
   return PERMS_SCOPE.WORK;
 }
 
-export function consentToScopes(scopes: string[]): Function {
+export function consentToScopes(scopes: string[]) {
   return async (dispatch: Function, getState: Function) => {
     try {
       const { profile }: ApplicationState = getState();

@@ -20,17 +20,14 @@ export function fetchAutocompleteError(response: object): AppAction {
   };
 }
 
-export function fetchAutocompletePending(): any {
+export function fetchAutocompletePending(): AppAction {
   return {
-    type: AUTOCOMPLETE_FETCH_PENDING
+    type: AUTOCOMPLETE_FETCH_PENDING,
+    response: null
   };
 }
 
-export function fetchAutoCompleteOptions(
-  url: string,
-  version: string,
-  context: SignContext = 'paths'
-): Function {
+export function fetchAutoCompleteOptions(url: string, version: string, context: SignContext = 'paths') {
   return async (dispatch: Function, getState: Function) => {
     const devxApiUrl = getState().devxApi.baseUrl;
     const resources = getState().resources.data;

@@ -113,7 +113,7 @@ function createAuthenticatedRequest(
     .responseType(ResponseType.RAW);
 }
 
-export function makeGraphRequest(scopes: string[]): Function {
+export function makeGraphRequest(scopes: string[]) {
   return async (query: IQuery) => {
     let response;
 

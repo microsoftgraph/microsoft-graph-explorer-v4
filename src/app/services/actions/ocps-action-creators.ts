@@ -27,15 +27,16 @@ export function getPoliciesError(response: object): AppAction {
   };
 }
 
-export function getPoliciesPending(): any {
+export function getPoliciesPending(): AppAction {
   return {
-    type: GET_POLICY_PENDING
+    type: GET_POLICY_PENDING,
+    response: null
   };
 }
 
 
 // TODO: Test this function
-export function getPolicies(): Function {
+export function getPolicies() {
   return async (dispatch: Function) => {
     try {
       const policyUrl = getPolicyUrl();

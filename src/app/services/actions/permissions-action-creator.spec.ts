@@ -6,7 +6,7 @@ import {
 } from '../../../app/services/redux-constants';
 
 import {
-  fetchFullScopesSuccess, fetchScopesPending, fetchScopesError, getPermissionsScopeType
+  fetchFullScopesSuccess, fetchFullScopesPending, fetchUrlScopesPending, fetchScopesError, getPermissionsScopeType
 } from './permissions-action-creator';
 import { IPermissionsResponse } from '../../../types/permissions';
 import { store } from '../../../store/index';
@@ -161,16 +161,18 @@ describe('Permissions action creators', () => {
   it('should dispatch FETCH_FULL_SCOPES_PENDING or FETCH_URL_SCOPES_PENDING depending on type passed to fetchScopesPending', () => {
     // Arrange
     const expectedFullScopesAction = {
-      type: FETCH_FULL_SCOPES_PENDING
+      type: FETCH_FULL_SCOPES_PENDING,
+      response: 'full'
     }
 
     const expectedUrlScopesAction = {
-      type: FETCH_URL_SCOPES_PENDING
+      type: FETCH_URL_SCOPES_PENDING,
+      response: 'url'
     }
 
     // Act
-    const fullScopesAction = fetchScopesPending(FETCH_FULL_SCOPES_PENDING);
-    const urlScopesAction = fetchScopesPending(FETCH_URL_SCOPES_PENDING)
+    const fullScopesAction = fetchFullScopesPending();
+    const urlScopesAction = fetchUrlScopesPending()
 
     // Assert
     expect(fullScopesAction).toEqual(expectedFullScopesAction);
