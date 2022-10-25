@@ -295,12 +295,10 @@ const userHasRequiredPermissions = (requiredPermissions: string[],
   consentedScopes: string[], grantsPayload: any) => {
   const allPrincipalGrants = grantsPayload.value.find((grant: any) =>
     grant.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
-  const allPrincipalScopes = allPrincipalGrants.scope.split(' ');
-  console.log('Here are the all principal scopes', allPrincipalScopes);
-  console.log('Here is the old array', consentedScopes)
-  consentedScopes.concat(allPrincipalScopes);
-  console.log('Here is the new array', consentedScopes);
-  return requiredPermissions.every(scope => consentedScopes.includes(scope));
+  const allPrincipalScopes = allPrincipalGrants.scope.split(' ') as string[];
+  let principalAndAllPrincipalScopes: string[] = [];
+  principalAndAllPrincipalScopes = consentedScopes.concat(allPrincipalScopes);
+  return requiredPermissions.every(scope => principalAndAllPrincipalScopes.includes(scope));
 }
 
 const userRevokingDefaultScopes = (currentScopes: string[], permissionToDelete: string) => {
@@ -325,7 +323,6 @@ const getNewAuthObject = async (updatedScopes: string[]) => {
   let retries = 2;
   await authenticationWrapper.logOut();
   let authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
-
   while (retries > 0 && authResponse && authResponse.scopes.length !== updatedScopes.length) {
     await authenticationWrapper.logOut();
     authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
