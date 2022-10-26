@@ -1,8 +1,8 @@
 import { expect } from '@playwright/test';
 require('dotenv').config();
 
-const PLAYWRIGHT_TESTS_USERNAME = process.env.PLAYWRIGHT_TESTS_USERNAME;
-const PLAYWRIGHT_TESTS_PASSWORD = process.env.PLAYWRIGHT_TESTS_PASSWORD;
+const PLAYWRIGHT_TESTS_USERNAME = process.env.PLAYWRIGHT_TESTS_USERNAME || '';
+const PLAYWRIGHT_TESTS_PASSWORD = process.env.PLAYWRIGHT_TESTS_PASSWORD || '';
 
 export const logIn = async (page: any) => {
 
@@ -14,7 +14,7 @@ export const logIn = async (page: any) => {
     page.locator('[aria-label="Sign in"]').click()
   ]);
 
-  await popup.locator('input[name="loginfmt"]').fill(PLAYWRIGHT_TESTS_USERNAME!);
+  await popup.locator('input[name="loginfmt"]').fill(PLAYWRIGHT_TESTS_USERNAME);
   await popup.locator('text=Next').click();
   await expect(popup).toBeDefined();
 
