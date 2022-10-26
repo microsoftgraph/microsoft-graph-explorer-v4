@@ -11,7 +11,7 @@ import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IPermission, IPermissionProps } from '../../../../../types/permissions';
+import { IPermission, IPermissionGrant, IPermissionProps } from '../../../../../types/permissions';
 import { IRootState } from '../../../../../types/root';
 import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -21,10 +21,11 @@ import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
 import TabList from './TabList';
 import messages from '../../../../../messages';
+import { REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
 
 export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
 
-  const { sampleQuery, scopes, dimensions, authToken } =
+  const { sampleQuery, scopes, dimensions, authToken, consentedScopes } =
   useSelector( (state: IRootState) => state );
   const { pending: loading } = scopes;
   const tokenPresent = !!authToken.token;
@@ -99,7 +100,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
                 styles={{ root: { display: 'inline-block' } }}
               >
                 <PrimaryButton disabled={true} onClick={() => handleConsent(item)} style={{width: '80px'}}>
-                  <FormattedMessage id='UnConsent' />
+                  <FormattedMessage id='Unconsent' />
                 </PrimaryButton>
               </TooltipHost>;
             }
@@ -129,19 +130,19 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           if(scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0
              && consented) {
 
-            const tenantWideGrant = scopes.data.tenantWidePermissionsGrant;
-            const allPrincipalPermissions = getAllPrincipalPermissions(tenantWideGrant) as string[];
-            const permissionInAllPrincipal = allPrincipalPermissions.some((permission: any) =>
+            const tenantWideGrant : IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant;
+            const allPrincipalPermissions = getAllPrincipalPermissions(tenantWideGrant);
+            const permissionInAllPrincipal = allPrincipalPermissions.some((permission: string) =>
               item.value === permission);
 
             if(permissionInAllPrincipal){
               return <div style={{ textAlign: 'center' }}>
-                <Label>AllPrincipal</Label>
+                <Label>{translateMessage('AllPrincipal')}</Label>
               </div>
             }
             else{
               return <div style={{ textAlign: 'center' }}>
-                <Label>Principal</Label>
+                <Label>{translateMessage('Principal')}</Label>
               </div>
             }
           }
@@ -163,14 +164,19 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     }
   };
 
-  const getAllPrincipalPermissions = (tenantWidePermissionsGrant: any) => {
+  const getAllPrincipalPermissions = (tenantWidePermissionsGrant: IPermissionGrant[]): string[] => {
     const allPrincipalPermissions = tenantWidePermissionsGrant.find((permission: any) =>
       permission.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
-    return allPrincipalPermissions.scope.split(' ');
+    return allPrincipalPermissions ? allPrincipalPermissions.scope.split(' ') : [];
   }
 
-  // TODO: Check if user has required permissions
-  const userHasRequiredPermissions = () => {
+  const userHasRequiredPermissions = () : boolean => {
+    if(scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0) {
+      const allPrincipalPermissions = getAllPrincipalPermissions(scopes.data.tenantWidePermissionsGrant);
+      const principalAndAllPrincipalPermissions = [...allPrincipalPermissions, ...consentedScopes];
+      const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
+      return requiredPermissions.every(scope => principalAndAllPrincipalPermissions.includes(scope));
+    }
     return false;
   }
 

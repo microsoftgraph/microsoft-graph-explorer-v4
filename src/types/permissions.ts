@@ -44,3 +44,17 @@ export interface IScopes {
   };
   error: any | null;
 }
+
+export interface IPermissionGrant {
+  clientId: string;
+  consentType: string;
+  principalId: string | null;
+  resourceId: string;
+  scope: string;
+  id?: string
+}
+
+export interface IOAuthGrantPayload {
+  value: IPermissionGrant[];
+  '@odata.context': string;
+}

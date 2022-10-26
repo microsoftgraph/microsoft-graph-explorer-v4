@@ -31,6 +31,8 @@ import { setQueryResponseStatus } from './query-status-action-creator';
 import { IQuery } from '../../../types/query-runner';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
+import { IOAuthGrantPayload, IPermissionGrant } from '../../../types/permissions';
+import { AuthenticationResult } from '@azure/msal-browser';
 
 export function fetchFullScopesSuccess(response: object): IAction {
   return {
@@ -184,7 +186,7 @@ interface IPreliminaryChecksObject {
   requiredPermissions: string[];
   consentedScopes: string[];
   permissionToRevoke: string;
-  grantsPayload?: any;
+  grantsPayload?: IOAuthGrantPayload;
 }
 
 enum REVOKE_STATUS {
@@ -280,7 +282,7 @@ const preliminaryChecksSuccess = async (dispatch: Function, preliminaryChecksObj
     return false;
   }
 
-  if (!userHasRequiredPermissions(requiredPermissions, consentedScopes, grantsPayload)) {
+  if (!userHasRequiredPermissions(requiredPermissions, consentedScopes, grantsPayload!)) {
     dispatch(
       setQueryResponseStatus({
         statusText: translateMessage('Unable to dissent'),
@@ -294,11 +296,11 @@ const preliminaryChecksSuccess = async (dispatch: Function, preliminaryChecksObj
   return true;
 }
 
-const userRevokingAdminGrantedScopes = (grantsPayload: any, permissionToRevoke: string): boolean => {
+const userRevokingAdminGrantedScopes = (grantsPayload: IOAuthGrantPayload, permissionToRevoke: string): boolean => {
   if(!grantsPayload){
     return false;
   }
-  const allPrincipalGrants = grantsPayload.value.find((grant: any) =>
+  const allPrincipalGrants = grantsPayload.value.find((grant: IPermissionGrant) =>
     grant.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
   if(allPrincipalGrants && allPrincipalGrants.scope.includes(permissionToRevoke)){
     return true
@@ -309,10 +311,10 @@ const userRevokingAdminGrantedScopes = (grantsPayload: any, permissionToRevoke: 
 // We have to check if the required permissions are in the allPrincipal and single principal scopes
 // because of a bug in AAD that causes the principal scopes to temporarily miss allPrincipal scopes
 const userHasRequiredPermissions = (requiredPermissions: string[],
-  consentedScopes: string[], grantsPayload: any) => {
-  const allPrincipalGrants = grantsPayload.value.find((grant: any) =>
+  consentedScopes: string[], grantsPayload: IOAuthGrantPayload) : boolean => {
+  const allPrincipalGrants = grantsPayload.value.find((grant: IPermissionGrant) =>
     grant.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
-  const allPrincipalScopes = allPrincipalGrants.scope.split(' ') as string[];
+  const allPrincipalScopes = allPrincipalGrants!.scope.split(' ') as string[];
   let principalAndAllPrincipalScopes: string[] = [];
   principalAndAllPrincipalScopes = consentedScopes.concat(allPrincipalScopes);
   return requiredPermissions.every(scope => principalAndAllPrincipalScopes.includes(scope));
@@ -336,7 +338,7 @@ const makePermissionsRequest = async (scopes: string[], query: IQuery) => {
   return parseResponse(response, respHeaders);
 }
 
-const getNewAuthObject = async (updatedScopes: string[]) => {
+const getNewAuthObject = async (updatedScopes: string[]): Promise<AuthenticationResult> => {
   let retries = 2;
   await authenticationWrapper.logOut();
   let authResponse = await authenticationWrapper.consentToScopes(updatedScopes);
@@ -349,52 +351,63 @@ const getNewAuthObject = async (updatedScopes: string[]) => {
   return authResponse;
 }
 
-const updateSinglePrincipalPermissionGrant = async (grantsPayload: any, profile: any, newScopesString: string) => {
+const updateSinglePrincipalPermissionGrant = async (grantsPayload: IOAuthGrantPayload, profile: IUser,
+  newScopesString: string) => {
   const servicePrincipalAppId = await getServicePrincipalId([]);
   const permissionGrantId = getSignedInPrincipalGrant(grantsPayload, profile.id).id;
-  await revokePermission(permissionGrantId, newScopesString);
+  await revokePermission(permissionGrantId!, newScopesString);
   const response = await getTenantPermissionGrants([], servicePrincipalAppId);
   const principalGrant = getSignedInPrincipalGrant(response, profile.id);
   const updatedScopes = principalGrant.scope.split(' ');
   return updatedScopes;
 }
 
-const updateAllPrincipalPermissionGrant = async (grantsPayload: any, permissionToRevoke: string) => {
+const updateAllPrincipalPermissionGrant = async (grantsPayload: IOAuthGrantPayload, permissionToRevoke: string) => {
   const servicePrincipalAppId = await getServicePrincipalId([]);
   const allPrincipalGrant = getAllPrincipalGrant(grantsPayload);
   const updatedScopes = allPrincipalGrant.scope.split(' ').filter((scope: string) => scope !== permissionToRevoke);
-  await revokePermission(allPrincipalGrant.id, updatedScopes.join(' '));
+  await revokePermission(allPrincipalGrant.id!, updatedScopes.join(' '));
   const response = await getTenantPermissionGrants([], servicePrincipalAppId);
-  return getAllPrincipalGrant(response).scope.split(' ');
+  return getAllPrincipalGrant(response)!.scope.split(' ');
 }
 
-const getAllPrincipalGrant = (grantsPayload: any) => {
-  if(!grantsPayload){ return [] }
+const getAllPrincipalGrant = (grantsPayload: IOAuthGrantPayload): IPermissionGrant => {
+  const emptyGrant: IPermissionGrant = {
+    id: '',
+    consentType: '',
+    scope: '',
+    clientId: '',
+    principalId: '',
+    resourceId: ''
+  }
+  if(!grantsPayload){ return emptyGrant }
+
   return grantsPayload.value.find((grant: any) =>
-    grant.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
+    grant.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase()) || emptyGrant;
 }
 
-const getSignedInPrincipalGrant = (grantsPayload: any, userId: string) => {
+const getSignedInPrincipalGrant = (grantsPayload: IOAuthGrantPayload, userId: string): IPermissionGrant => {
   if (grantsPayload && grantsPayload.value.length > 1) {
-    const filteredResponse = grantsPayload.value.find((permissionGrant: any) =>
+    const filteredResponse = grantsPayload.value.find((permissionGrant: IPermissionGrant) =>
       permissionGrant.principalId === userId);
-    return filteredResponse;
+    return filteredResponse!;
   }
   return grantsPayload.value[0];
 }
 
-export const getTenantPermissionGrants = async (scopes: string[], servicePrincipalAppId: string) => {
-  if(!servicePrincipalAppId){ return }
+export const getTenantPermissionGrants = async (scopes: string[], servicePrincipalAppId: string):
+Promise<IOAuthGrantPayload> => {
+  if(!servicePrincipalAppId){ return { value: [], '@odata.context': ''} }
   getQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
   const response = await makePermissionsRequest(scopes, getQuery);
   return response;
 }
-const permissionToRevokeInGrant = (permissionsGrant: any, permissionToRevoke: string) => {
+const permissionToRevokeInGrant = (permissionsGrant: IPermissionGrant, permissionToRevoke: string): boolean => {
   if(!permissionsGrant){ return false }
   return permissionsGrant.scope.split(' ').includes(permissionToRevoke);
 }
 
-export const getServicePrincipalId = async (scopes: string[]) => {
+export const getServicePrincipalId = async (scopes: string[]) : Promise<string> => {
   const currentAppId = process.env.REACT_APP_CLIENT_ID;
   getQuery.sampleUrl = `${GRAPH_URL}/v1.0/servicePrincipals?$filter=appId eq '${currentAppId}'`;
   const response = await makePermissionsRequest(scopes, getQuery);
@@ -431,7 +444,7 @@ const dispatchErrorStatus = (dispatch: Function, statusCode: string, code: strin
   );
 }
 
-const dispatchAuthResponseStatus = (dispatch: Function, authResponse: any, profile: any) => {
+const dispatchAuthResponseStatus = (dispatch: Function, authResponse: AuthenticationResult, profile: IUser) => {
   if (authResponse.account && authResponse.account.localAccountId !== profile?.id) {
     dispatch(getProfileInfo());
   }

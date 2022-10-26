@@ -460,5 +460,8 @@
   "Possible error found in URL near": "Possible error found in URL near",
   "AllPrincipal scope": "AllPrincipal scope",
   "You cannot revoke AllPrincipal permissions": "You cannot revoke this permission as its consent has been granted tenant-wide by your tenant admin",
-  "You cannot revoke permissions not in your scopes": "You cannot revoke permissions that are not in your list of consented scopes"
+  "You cannot revoke permissions not in your scopes": "You cannot revoke permissions that are not in your list of consented scopes",
+  "Unconsent": "Unconsent",
+  "AllPrincipal": "AllPrincipal",
+  "Principal": "Principal"
 }
