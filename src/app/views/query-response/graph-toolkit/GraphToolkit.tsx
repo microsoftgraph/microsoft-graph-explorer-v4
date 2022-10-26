@@ -6,7 +6,7 @@ import {
   MessageBar, MessageBarType, styled
 } from '@fluentui/react';
 import { componentNames, telemetry } from '../../../../telemetry';
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
 import { queryResponseStyles } from '../queryResponse.styles';
@@ -62,7 +62,7 @@ class GraphToolkit extends Component<any> {
   }
 }
 
-function mapStateToProps({ sampleQuery }: IRootState) {
+function mapStateToProps({ sampleQuery }: ApplicationState) {
   return {
     sampleQuery
   };

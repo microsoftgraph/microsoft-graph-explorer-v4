@@ -1,26 +1,24 @@
 import {
-  Announced, FontSizes, IconButton,
-  Modal, Pivot, PivotItem, getTheme, ITheme
+  Announced, FontSizes, getTheme, IconButton, ITheme, Modal, Pivot, PivotItem
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import React, { useState, useEffect, CSSProperties } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
+import { AppDispatch, useAppSelector } from '../../../store';
 import { expandResponseArea } from '../../services/actions/response-expanded-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
+import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
 import { GetPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
 import './query-response.scss';
-import { IRootState } from '../../../types/root';
-import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
 import { queryResponseStyles } from './queryResponse.styles';
 
-
 const QueryResponse = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [responseHeight, setResponseHeight] = useState('610px');
-  const { sampleQuery, dimensions } = useSelector((state: IRootState) => state);
+  const { sampleQuery, dimensions } = useAppSelector((state) => state);
   const [currentTab, setCurrentTab] = useState<string>('response-preview');
   const currentTheme: ITheme = getTheme();
   const { modalStyles, modalPivotStyles } = queryResponseStyles(currentTheme);

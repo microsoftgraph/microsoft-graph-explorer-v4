@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { IPermissionsResponse, IScopes } from '../../../types/permissions';
 import {
   FETCH_SCOPES_ERROR, FETCH_URL_SCOPES_PENDING, FETCH_FULL_SCOPES_SUCCESS,
@@ -17,7 +17,7 @@ const initialState: IScopes = {
   error: null
 };
 
-export function scopes(state: IScopes = initialState, action: IAction): any {
+export function scopes(state: IScopes = initialState, action: AppAction): any {
   switch (action.type) {
     case FETCH_FULL_SCOPES_SUCCESS:
       let response: IPermissionsResponse = { ...action.response as IPermissionsResponse };
