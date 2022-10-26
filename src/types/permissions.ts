@@ -35,12 +35,12 @@ export interface IScopes {
   pending: {
     isSpecificPermissions: boolean;
     isFullPermissions: boolean;
-    isAllPrincipalPermissions?: boolean;
+    isTenantWidePermissionsGrant?: boolean;
   };
   data: {
     specificPermissions: IPermission[];
     fullPermissions: IPermission[];
-    allPrincipalPermissions?: any
+    tenantWidePermissionsGrant?: any
   };
   error: any | null;
 }

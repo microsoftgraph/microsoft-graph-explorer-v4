@@ -86,9 +86,23 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
 
         case 'consented':
           if (consented) {
-            return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '80px'}}>
-              <FormattedMessage id='Revoke' />
-            </PrimaryButton>;
+            if(userHasRequiredPermissions()){
+              return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '80px'}}>
+                <FormattedMessage id='Revoke' />
+              </PrimaryButton>;
+            }
+            else{
+              return <TooltipHost
+                content={translateMessage('You require the following permissions to revoke')}
+                id={hostId}
+                calloutProps={{ gapSpace: 0 }}
+                styles={{ root: { display: 'inline-block' } }}
+              >
+                <PrimaryButton disabled={true} onClick={() => handleConsent(item)} style={{width: '80px'}}>
+                  <FormattedMessage id='UnConsent' />
+                </PrimaryButton>
+              </TooltipHost>;
+            }
           } else {
             return <PrimaryButton onClick={() => handleConsent(item)} style={{width: '80px'}}>
               <FormattedMessage id='Consent' />
@@ -112,11 +126,15 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           </>;
 
         case 'consentType':
-          if(scopes && scopes.data.allPrincipalPermissions && scopes.data.allPrincipalPermissions.length > 0
+          if(scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0
              && consented) {
-            const allPrincipalPermissions = scopes.data.allPrincipalPermissions as string[];
-            const tenantGrant = allPrincipalPermissions.find((permission: any) => item.value === permission);
-            if(tenantGrant){
+
+            const tenantWideGrant = scopes.data.tenantWidePermissionsGrant;
+            const allPrincipalPermissions = getAllPrincipalPermissions(tenantWideGrant) as string[];
+            const permissionInAllPrincipal = allPrincipalPermissions.some((permission: any) =>
+              item.value === permission);
+
+            if(permissionInAllPrincipal){
               return <div style={{ textAlign: 'center' }}>
                 <Label>AllPrincipal</Label>
               </div>
@@ -144,6 +162,17 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
       }
     }
   };
+
+  const getAllPrincipalPermissions = (tenantWidePermissionsGrant: any) => {
+    const allPrincipalPermissions = tenantWidePermissionsGrant.find((permission: any) =>
+      permission.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
+    return allPrincipalPermissions.scope.split(' ');
+  }
+
+  // TODO: Check if user has required permissions
+  const userHasRequiredPermissions = () => {
+    return false;
+  }
 
   const renderDetailsHeader = (props: any, defaultRender?: any) => {
     return defaultRender!({
@@ -223,7 +252,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
 
       );
     }
-    if(scopes && scopes.data.allPrincipalPermissions.length > 0){
+    if(scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0){
       columns.push(
         {
           key: 'consentType',

@@ -472,9 +472,7 @@ export function fetchAllPrincipalGrants() {
       const servicePrincipalAppId = await getServicePrincipalId([]);
       if(servicePrincipalAppId){
         const tenantWideGrant = await getTenantPermissionGrants([], servicePrincipalAppId);
-        const allPrincipalGrant = getAllPrincipalGrant(tenantWideGrant);
-        const allPrincipalScopes = allPrincipalGrant.scope.split(' ');
-        dispatch(getAllPrincipalGrantsSuccess(allPrincipalScopes));
+        dispatch(getAllPrincipalGrantsSuccess(tenantWideGrant.value));
       }
       else{
         dispatch(getAllPrincipalGrantsError({}));

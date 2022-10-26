@@ -9,12 +9,12 @@ const initialState: IScopes = {
   pending: {
     isSpecificPermissions: false,
     isFullPermissions: false,
-    isAllPrincipalPermissions: false
+    isTenantWidePermissionsGrant: false
   },
   data: {
     specificPermissions: [],
     fullPermissions: [],
-    allPrincipalPermissions: []
+    tenantWidePermissionsGrant: []
   },
   error: null
 };
@@ -55,8 +55,8 @@ export function scopes(state: IScopes = initialState, action: IAction): any {
       };
     case GET_ALL_PRINCIPAL_GRANTS_SUCCESS:
       return {
-        pending: { ...state.pending, isAllPrincipalPermissions: false },
-        data: { ...state.data, allPrincipalPermissions: action.response },
+        pending: { ...state.pending, isTenantWidePermissionsGrant: false },
+        data: { ...state.data, tenantWidePermissionsGrant: action.response },
         error: null
       }
     default:
