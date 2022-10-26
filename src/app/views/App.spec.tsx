@@ -83,7 +83,7 @@ jest.mock('@microsoft/applicationinsights-react-js', () => ({
 console.warn = jest.fn();
 
 describe('App rendering', () => {
-  it('should confirm that all the major sections of the app are rendered', async () => {
+  it('should confirm that all the major sections of the app are rendered ', async () => {
     renderApp({mobileScreen: false, showSidebar: true});
     expect(screen.getByRole('button', { name: /sign in/i })).toBeDefined();
     expect(screen.getByRole('button', { name: /settings/i })).toBeDefined();
