@@ -2,17 +2,19 @@ import { IAction } from '../../../types/action';
 import { IPermissionsResponse, IScopes } from '../../../types/permissions';
 import {
   FETCH_SCOPES_ERROR, FETCH_URL_SCOPES_PENDING, FETCH_FULL_SCOPES_SUCCESS,
-  FETCH_URL_SCOPES_SUCCESS, FETCH_FULL_SCOPES_PENDING
+  FETCH_URL_SCOPES_SUCCESS, FETCH_FULL_SCOPES_PENDING, GET_ALL_PRINCIPAL_GRANTS_SUCCESS
 } from '../redux-constants';
 
 const initialState: IScopes = {
   pending: {
     isSpecificPermissions: false,
-    isFullPermissions: false
+    isFullPermissions: false,
+    isAllPrincipalPermissions: false
   },
   data: {
     specificPermissions: [],
-    fullPermissions: []
+    fullPermissions: [],
+    allPrincipalPermissions: []
   },
   error: null
 };
@@ -51,6 +53,12 @@ export function scopes(state: IScopes = initialState, action: IAction): any {
         data: state.data,
         error: null
       };
+    case GET_ALL_PRINCIPAL_GRANTS_SUCCESS:
+      return {
+        pending: { ...state.pending, isAllPrincipalPermissions: false },
+        data: { ...state.data, allPrincipalPermissions: action.response },
+        error: null
+      }
     default:
       return state;
   }

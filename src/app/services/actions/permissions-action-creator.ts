@@ -19,7 +19,8 @@ import {
   FETCH_FULL_SCOPES_PENDING,
   FETCH_URL_SCOPES_PENDING,
   FETCH_FULL_SCOPES_SUCCESS,
-  FETCH_URL_SCOPES_SUCCESS
+  FETCH_URL_SCOPES_SUCCESS,
+  GET_ALL_PRINCIPAL_GRANTS_SUCCESS, GET_ALL_PRINCIPAL_GRANTS_ERROR
 } from '../redux-constants';
 import {
   getAuthTokenSuccess,
@@ -54,6 +55,21 @@ export function fetchScopesError(response: object): IAction {
     type: FETCH_SCOPES_ERROR,
     response
   };
+}
+
+export function getAllPrincipalGrantsSuccess(response: object): IAction {
+  return {
+    type: GET_ALL_PRINCIPAL_GRANTS_SUCCESS,
+    response
+  };
+}
+
+export function getAllPrincipalGrantsError(response: object): IAction {
+  return {
+    type: GET_ALL_PRINCIPAL_GRANTS_ERROR,
+    response
+  };
+
 }
 
 export function fetchScopes(): Function {
@@ -210,18 +226,17 @@ export function revokeScopes(permissionToRevoke: string): Function {
 
       if(permissionBeingRevokedIsAllPrincipal && !userIsTenantAdmin) {
         trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
-        dispatchErrorStatus(dispatch, '401', 'You cannot revoke admin consented scopes', null);
+        dispatchErrorStatus(dispatch, '401', 'You cannot revoke AllPrincipal permissions', null);
         return;
       }
 
       let updatedScopes;
       if(permissionBeingRevokedIsAllPrincipal && userIsTenantAdmin) {
-        console.log('We are here')
         updatedScopes = await updateAllPrincipalPermissionGrant(grantsPayload, permissionToRevoke);
       }
       else if(!permissionToRevokeInGrant(signedInGrant, permissionToRevoke) && userIsTenantAdmin){
         trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
-        dispatchGeneralStatus(dispatch, 'You cannot revoke AllPrincipal', 'AllPrincipal scope',);
+        dispatchGeneralStatus(dispatch, 'You cannot revoke permissions not in your scopes', 'Permission not found');
         return;
       }
       else{
@@ -291,6 +306,8 @@ const userRevokingAdminGrantedScopes = (grantsPayload: any, permissionToRevoke: 
   return false;
 }
 
+// We have to check if the required permissions are in the allPrincipal and single principal scopes
+// because of a bug in AAD that causes the principal scopes to temporarily miss allPrincipal scopes
 const userHasRequiredPermissions = (requiredPermissions: string[],
   consentedScopes: string[], grantsPayload: any) => {
   const allPrincipalGrants = grantsPayload.value.find((grant: any) =>
@@ -352,6 +369,7 @@ const updateAllPrincipalPermissionGrant = async (grantsPayload: any, permissionT
 }
 
 const getAllPrincipalGrant = (grantsPayload: any) => {
+  if(!grantsPayload){ return [] }
   return grantsPayload.value.find((grant: any) =>
     grant.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
 }
@@ -365,7 +383,8 @@ const getSignedInPrincipalGrant = (grantsPayload: any, userId: string) => {
   return grantsPayload.value[0];
 }
 
-const getTenantPermissionGrants = async (scopes: string[], servicePrincipalAppId: string) => {
+export const getTenantPermissionGrants = async (scopes: string[], servicePrincipalAppId: string) => {
+  if(!servicePrincipalAppId){ return }
   getQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
   const response = await makePermissionsRequest(scopes, getQuery);
   return response;
@@ -375,7 +394,7 @@ const permissionToRevokeInGrant = (permissionsGrant: any, permissionToRevoke: st
   return permissionsGrant.scope.split(' ').includes(permissionToRevoke);
 }
 
-const getServicePrincipalId = async (scopes: string[]) => {
+export const getServicePrincipalId = async (scopes: string[]) => {
   const currentAppId = process.env.REACT_APP_CLIENT_ID;
   getQuery.sampleUrl = `${GRAPH_URL}/v1.0/servicePrincipals?$filter=appId eq '${currentAppId}'`;
   const response = await makePermissionsRequest(scopes, getQuery);
@@ -445,4 +464,23 @@ const trackRevokeConsentEvent = (status: string, permissionObject: any) => {
     permissionObject,
     status
   });
+}
+
+export function fetchAllPrincipalGrants() {
+  return async (dispatch: Function) => {
+    try{
+      const servicePrincipalAppId = await getServicePrincipalId([]);
+      if(servicePrincipalAppId){
+        const tenantWideGrant = await getTenantPermissionGrants([], servicePrincipalAppId);
+        const allPrincipalGrant = getAllPrincipalGrant(tenantWideGrant);
+        const allPrincipalScopes = allPrincipalGrant.scope.split(' ');
+        dispatch(getAllPrincipalGrantsSuccess(allPrincipalScopes));
+      }
+      else{
+        dispatch(getAllPrincipalGrantsError({}));
+      }
+    }catch(error: any){
+      dispatch(getAllPrincipalGrantsError(error));
+    }
+  }
 }

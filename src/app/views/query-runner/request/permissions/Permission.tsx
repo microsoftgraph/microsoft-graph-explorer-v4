@@ -47,6 +47,11 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
   }
 
   useEffect(() => {
+    console.log('Dispatching this')
+    dispatch(permissionActionCreators.fetchAllPrincipalGrants());
+  }, [])
+
+  useEffect(() => {
     getPermissions();
   },[sampleQuery]);
 
@@ -105,6 +110,23 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
               </span>
             </TooltipHost>
           </>;
+
+        case 'consentType':
+          if(scopes && scopes.data.allPrincipalPermissions && scopes.data.allPrincipalPermissions.length > 0
+             && consented) {
+            const allPrincipalPermissions = scopes.data.allPrincipalPermissions as string[];
+            const tenantGrant = allPrincipalPermissions.find((permission: any) => item.value === permission);
+            if(tenantGrant){
+              return <div style={{ textAlign: 'center' }}>
+                <Label>AllPrincipal</Label>
+              </div>
+            }
+            else{
+              return <div style={{ textAlign: 'center' }}>
+                <Label>Principal</Label>
+              </div>
+            }
+          }
 
         default:
           return (
@@ -197,8 +219,21 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           fieldName: 'consented',
           minWidth: 100,
           maxWidth: 100
-        }
+        },
+
       );
+    }
+    if(scopes && scopes.data.allPrincipalPermissions.length > 0){
+      columns.push(
+        {
+          key: 'consentType',
+          name: translateMessage('Consent type'),
+          isResizable: false,
+          fieldName: 'consentType',
+          minWidth: 100,
+          maxWidth: 100
+        }
+      )
     }
     return columns;
   }
