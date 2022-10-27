@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { IGraphResponse } from '../../../types/query-response';
 import {
   CLEAR_RESPONSE,
@@ -15,7 +15,7 @@ const initialState: IGraphResponse = {
 
 export function graphResponse(
   state: IGraphResponse = initialState,
-  action: IAction
+  action: AppAction
 ): any {
   switch (action.type) {
     case QUERY_GRAPH_SUCCESS:

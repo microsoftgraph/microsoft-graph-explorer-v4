@@ -12,7 +12,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
@@ -191,7 +191,7 @@ export class Request extends Component<IRequestComponent, any> {
 }
 
 function mapStateToProps(
-  { graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions, profile }: IRootState) {
+  { graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions, profile }: ApplicationState) {
   return {
     mode: graphExplorerMode,
     sampleBody: sampleQuery.sampleBody,

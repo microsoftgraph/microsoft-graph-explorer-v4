@@ -1,18 +1,18 @@
 
+import { useDispatch } from 'react-redux';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
-import { IRootState } from '../../../../types/root';
+import { AppDispatch, useAppSelector } from '../../../../store';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
-import { responseMessages } from './ResponseMessages';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import ResponseDisplay from './ResponseDisplay';
+import { responseMessages } from './ResponseMessages';
 
 const Response = () => {
   const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery, authToken, graphExplorerMode } =
-    useSelector((state: IRootState) => state);
+    useAppSelector((state) => state);
   const { body, headers } = graphResponse;
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
 

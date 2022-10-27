@@ -1,8 +1,10 @@
-import { IAction } from '../../types/action';
+import { saveTheme } from '../../themes/theme-utils';
+import { AppAction } from '../../types/action';
+import { CHANGE_THEME_SUCCESS } from '../services/redux-constants';
 
-const localStorageMiddleware = (_store: any) => (next: any) => (action: IAction) => {
-  if (action.type === 'AUTHENTICATE_USER') {
-    localStorage.setItem('authenticatedUser', JSON.stringify(action.response));
+const localStorageMiddleware = () => (next: any) => (action: AppAction) => {
+  if (action.type === CHANGE_THEME_SUCCESS) {
+    saveTheme(action.response);
   }
   return next(action);
 };

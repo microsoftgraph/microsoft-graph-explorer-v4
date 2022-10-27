@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { IHistoryItem } from '../../../types/history';
 import {
   ADD_HISTORY_ITEM_SUCCESS,
@@ -7,7 +7,7 @@ import {
   REMOVE_HISTORY_ITEM_SUCCESS
 } from '../redux-constants';
 
-export function history(state: any[] = [], action: IAction): any {
+export function history(state: any[] = [], action: AppAction): any {
   switch (action.type) {
     case ADD_HISTORY_ITEM_SUCCESS:
       let historyItems = [...state, action.response];
