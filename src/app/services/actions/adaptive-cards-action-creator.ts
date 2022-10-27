@@ -4,7 +4,6 @@ import { AppAction } from '../../../types/action';
 import { IAdaptiveCardContent } from '../../../types/adaptivecard';
 import { IQuery } from '../../../types/query-runner';
 import { lookupTemplate } from '../../utils/adaptive-cards-lookup';
-import { ADAPTIVE_CARD_URL } from '../graph-constants';
 import {
   FETCH_ADAPTIVE_CARD_ERROR,
   FETCH_ADAPTIVE_CARD_PENDING,
@@ -52,12 +51,10 @@ export function getAdaptiveCard(payload: string, sampleQuery: IQuery) {
 
     dispatch(getAdaptiveCardPending());
     try {
-      const response = await fetch(`${ADAPTIVE_CARD_URL}/${templateFileName}`);
-      const templatePayload = await response.json();
-      const card = createCardFromTemplate(templatePayload, payload);
+      const card = createCardFromTemplate(templateFileName, payload);
       const adaptiveCardContent: IAdaptiveCardContent = {
         card,
-        template: templatePayload
+        template: templateFileName
       };
       return dispatch(getAdaptiveCardSuccess(adaptiveCardContent));
     } catch (error: any) {

@@ -1,0 +1,59 @@
+{
+    "type": "AdaptiveCard",
+    "version": "1.4",
+    "@odata.type": "#microsoft.graph.group",
+    "body": [
+        {
+            "type": "Container",
+            "$data": "${value}",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "weight": "Bolder",
+                    "text": "${displayName}"
+                },
+                {
+                    "type": "Container",
+                    "spacing": "Small",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "$when": "${jobTitle != $null}",
+                            "text": "${toUpper(jobTitle)}",
+                            "spacing": "Small"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "${officeLocation}",
+                            "spacing": "None"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "${mail}",
+                            "spacing": "None"
+                        }
+                    ]
+                },
+                {
+                    "type": "ActionSet",
+                    "actions": [
+                        {
+                            "type": "Action.OpenUrl",
+                            "$when": "${userPrincipalName != $null}",
+                            "title": "Send a message",
+                            "url": "im:${userPrincipalName}"
+                        },
+                        {
+                            "type": "Action.OpenUrl",
+                            "$when": "${mail != $null}",
+                            "title": "Send an email",
+                            "url": "mailto:${mail}"
+                        }
+                    ]
+                }
+            ],
+            "separator": true
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+}

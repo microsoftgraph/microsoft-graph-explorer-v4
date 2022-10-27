@@ -1,0 +1,128 @@
+{
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": 2
+                },
+                {
+                    "type": "Column",
+                    "width": 4,
+                    "items": [
+                        {
+                            "type": "ColumnSet",
+                            "columns": [
+                                {
+                                    "type": "Column",
+                                    "width": "auto",
+                                    "items": [
+                                        {
+                                            "type": "Image",
+                                            "altText": "",
+                                            "size": "Small",
+                                            "url": "https://graph.microsoft.com/v1.0/users/{profile.mail}/photo/$value",
+                                            "style": "Person"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Column",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "{profile.displayName}"
+                                        },
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "{profile.jobTitle}",
+                                            "spacing": "None",
+                                            "isSubtle": true
+                                        },
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "{profile.officeLocation}",
+                                            "spacing": "None",
+                                            "isSubtle": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "style": "emphasis"
+                },
+                {
+                    "type": "Column",
+                    "width": 2
+                }
+            ]
+        },
+        {
+            "type": "Container",
+            "style": "emphasis",
+            "bleed": true,
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "People reporting to {profile.displayName} ({length(reports.value)})",
+                    "wrap": true
+                },
+                {
+                    "type": "ColumnSet",
+                    "columns": [
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "ColumnSet",
+                                    "columns": [
+                                        {
+                                            "type": "Column",
+                                            "width": "auto",
+                                            "items": [
+                                                {
+                                                    "type": "Image",
+                                                    "altText": "",
+                                                    "url": "https://graph.microsoft.com/v1.0/users/{reports[0].mail}/photo/$value",
+                                                    "size": "Small",
+                                                    "style": "Person"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "Column",
+                                            "width": "stretch",
+                                            "items": [
+                                                {
+                                                    "type": "TextBlock",
+                                                    "text": "{reports.value[0].displayName}"
+                                                },
+                                                {
+                                                    "type": "TextBlock",
+                                                    "text": "{reports.value[0].jobTitle}",
+                                                    "isSubtle": true,
+                                                    "spacing": "None"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Column",
+                            "width": "stretch"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+}
