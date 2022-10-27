@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { IPolicies } from '../../../types/ocps-api';
 import { GET_POLICY_ERROR, GET_POLICY_PENDING, GET_POLICY_SUCCESS } from '../redux-constants';
 
@@ -8,7 +8,7 @@ const initialState: IPolicies = {
   error: null
 };
 
-export function policies(state = initialState, action: IAction): any {
+export function policies(state = initialState, action: AppAction): any {
   switch (action.type) {
     case GET_POLICY_SUCCESS:
       return {

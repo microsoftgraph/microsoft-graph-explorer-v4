@@ -1,7 +1,7 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { LOGOUT_SUCCESS, PROFILE_REQUEST_SUCCESS } from '../redux-constants';
 
-export function profile(state = null, action: IAction): any {
+export function profile(state = null, action: AppAction): any {
   switch (action.type) {
     case LOGOUT_SUCCESS:
       return null;

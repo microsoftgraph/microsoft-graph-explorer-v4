@@ -1,11 +1,11 @@
 import { getTheme, KeyCodes, TextField, Text, ITextFieldProps } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
+import { AppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IAutoCompleteProps } from '../../../../../types/auto-complete';
-import { IRootState } from '../../../../../types/root';
 import { fetchAutoCompleteOptions } from '../../../../services/actions/autocomplete-action-creators';
 import { GRAPH_API_VERSIONS, GRAPH_URL } from '../../../../services/graph-constants';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
@@ -22,13 +22,13 @@ import { usePrevious } from './use-previous';
 
 const AutoComplete = (props: IAutoCompleteProps) => {
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const focusRef = useRef<any>(null);
 
   let element: HTMLDivElement | null | undefined = null;
 
-  const { sampleQuery, autoComplete: { data: autoCompleteOptions, pending: autoCompletePending } } = useSelector(
-    (state: IRootState) => state
+  const { sampleQuery, autoComplete: { data: autoCompleteOptions, pending: autoCompletePending } } = useAppSelector(
+    (state) => state
   );
 
   const previousQuery = usePrevious(sampleQuery.sampleUrl);

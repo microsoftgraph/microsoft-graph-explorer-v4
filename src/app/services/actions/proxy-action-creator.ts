@@ -1,8 +1,8 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { GRAPH_API_SANDBOX_ENDPOINT_URL, GRAPH_API_SANDBOX_URL } from '../graph-constants';
 import { SET_GRAPH_PROXY_URL } from '../redux-constants';
 
-export function getGraphProxyUrl(): Function {
+export function getGraphProxyUrl() {
   return async (dispatch: Function) => {
     try {
       const response = await fetch(GRAPH_API_SANDBOX_ENDPOINT_URL);
@@ -17,7 +17,7 @@ export function getGraphProxyUrl(): Function {
   };
 }
 
-export function setGraphProxyUrl(response: string): IAction {
+export function setGraphProxyUrl(response: string): AppAction {
   return {
     type: SET_GRAPH_PROXY_URL,
     response

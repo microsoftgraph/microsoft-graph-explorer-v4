@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import {
   FETCH_SCOPES_ERROR,
   GET_CONSENT_ERROR,
@@ -9,7 +9,7 @@ import {
   QUERY_GRAPH_SUCCESS
 } from '../redux-constants';
 
-export function isLoadingData(state = {}, action: IAction): any {
+export function isLoadingData(state = {}, action: AppAction): any {
   switch (action.type) {
     case GET_CONSENT_ERROR:
       return false;
