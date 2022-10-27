@@ -36,6 +36,7 @@ export interface IScopes {
     isSpecificPermissions: boolean;
     isFullPermissions: boolean;
     isTenantWidePermissionsGrant?: boolean;
+    isRevokePermissions?: boolean;
   };
   data: {
     specificPermissions: IPermission[];

@@ -2,14 +2,16 @@ import { IAction } from '../../../types/action';
 import { IPermissionsResponse, IScopes } from '../../../types/permissions';
 import {
   FETCH_SCOPES_ERROR, FETCH_URL_SCOPES_PENDING, FETCH_FULL_SCOPES_SUCCESS,
-  FETCH_URL_SCOPES_SUCCESS, FETCH_FULL_SCOPES_PENDING, GET_ALL_PRINCIPAL_GRANTS_SUCCESS
+  FETCH_URL_SCOPES_SUCCESS, FETCH_FULL_SCOPES_PENDING, GET_ALL_PRINCIPAL_GRANTS_SUCCESS,
+  REVOKE_SCOPES_PENDING, REVOKE_SCOPES_ERROR, REVOKE_SCOPES_SUCCESS
 } from '../redux-constants';
 
 const initialState: IScopes = {
   pending: {
     isSpecificPermissions: false,
     isFullPermissions: false,
-    isTenantWidePermissionsGrant: false
+    isTenantWidePermissionsGrant: false,
+    isRevokePermissions: false
   },
   data: {
     specificPermissions: [],
@@ -57,6 +59,24 @@ export function scopes(state: IScopes = initialState, action: IAction): any {
       return {
         pending: { ...state.pending, isTenantWidePermissionsGrant: false },
         data: { ...state.data, tenantWidePermissionsGrant: action.response },
+        error: null
+      }
+    case REVOKE_SCOPES_PENDING:
+      return{
+        pending: { ...state.pending, isRevokePermissions: true },
+        data: state.data,
+        error: null
+      }
+    case REVOKE_SCOPES_ERROR:
+      return{
+        pending: { ...state.pending, isRevokePermissions: false },
+        data: state.data,
+        error: null
+      }
+    case REVOKE_SCOPES_SUCCESS:
+      return {
+        pending: { ...state.pending, isRevokePermissions: false },
+        data: state.data,
         error: null
       }
     default:
