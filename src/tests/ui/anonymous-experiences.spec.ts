@@ -174,6 +174,7 @@ test.describe('Version v1.0/beta', () => {
     })
   });
 
+  // TODO: Break this test
   test.describe('History tab', () => {
     test('Something ', async () => {
       await page.locator('button[role="button"]:has-text("Run query")').click();
@@ -184,7 +185,6 @@ test.describe('Version v1.0/beta', () => {
         page.waitForEvent('download'),
         page.locator('[aria-label="Export Today queries"]').click()
       ]);
-      console.log('Here it is ', download);
       await page.locator('[aria-label="Delete Today queries"]').click();
       await page.locator('text=Delete all requests in the group : Today').click();
       await page.locator('button:has-text("Delete")').click();
