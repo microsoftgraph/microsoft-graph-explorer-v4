@@ -3,7 +3,10 @@ import {
   getId,
   getTheme,
   IColumn,
+  IconButton,
+  IIconProps,
   Label,
+  Link,
   PrimaryButton,
   TooltipHost
 } from '@fluentui/react';
@@ -21,7 +24,8 @@ import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
 import TabList from './TabList';
 import messages from '../../../../../messages';
-import { REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
+import { ADMIN_CONSENT_LINK, REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
+import { styles } from '../../query-input/auto-complete/suffix/suffix.styles';
 
 export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
 
@@ -238,10 +242,10 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
         minWidth: (tokenPresent) ? 150 : 200,
         maxWidth: (tokenPresent) ? 250 : 300,
         ariaLabel: translateMessage('Administrator permission'),
-        columnActionsMode: 0,
         isMultiline: true,
         headerClassName: 'permissionHeader',
-        styles: getColumnCellStyles()
+        styles: getColumnCellStyles(),
+        onRenderHeader: () => renderColumnHeader('Admin consent required')
       }
     );
 
@@ -266,11 +270,50 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           isResizable: false,
           fieldName: 'consentType',
           minWidth: 100,
-          maxWidth: 100
+          maxWidth: 100,
+          onRenderHeader: () => renderColumnHeader('Consent Type')
         }
       )
     }
     return columns;
+  }
+  const iconStyles = () => {
+    return {
+      root: {
+        position: 'relative' as 'relative',
+        top: '3px'
+      }
+
+    }
+  }
+  const infoIcon: IIconProps = {
+    iconName: 'Info',
+    styles: iconStyles()
+  };
+
+  const openExternalWebsite = (url: string) => {
+    switch(url){
+      case 'Consent Type':
+        window.open(ADMIN_CONSENT_LINK, '_blank');
+        break;
+      case 'Admin consent required':
+        window.open(ADMIN_CONSENT_LINK, '_blank');
+    }
+  }
+
+
+  const renderColumnHeader = (headerText: string) => {
+    return <div style={{ textAlign: 'center', color: 'red' }}>
+      <IconButton
+        iconProps={infoIcon}
+        className={styles.iconButton}
+        id={'buttonId'}
+        ariaLabel={translateMessage(headerText)}
+        onClick={() => openExternalWebsite(headerText)}
+      >
+      </IconButton>
+      {translateMessage(headerText)}
+    </div>
   }
 
   const displayPermissionsPanel = () : JSX.Element => {
