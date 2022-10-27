@@ -6,6 +6,7 @@ import configureMockStore from 'redux-mock-store';
 import fetch from 'jest-fetch-mock';
 import thunk from 'redux-thunk';
 import { authenticationWrapper } from '../../../modules/authentication';
+import { AppAction } from '../../../types/action';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -24,7 +25,7 @@ describe('OCPS action creators', () => {
       screenshot: 1,
       feedback: 20
     }
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: GET_POLICY_SUCCESS,
       response: policyObject
     }
@@ -39,7 +40,7 @@ describe('OCPS action creators', () => {
   it('should dispatch GET_POLICY_ERROR when getPoliciesError() is called', () => {
     // Arrange
     const error = {};
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: GET_POLICY_ERROR,
       response: error
     }
@@ -53,8 +54,9 @@ describe('OCPS action creators', () => {
 
   it('should dispatch GET_POLICY_PENDING when getPoliciesPending() is called', () => {
     // Arrange
-    const expectedAction = {
-      type: GET_POLICY_PENDING
+    const expectedAction: AppAction = {
+      type: GET_POLICY_PENDING,
+      response: null
     }
 
     // Act

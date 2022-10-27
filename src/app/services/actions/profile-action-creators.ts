@@ -1,19 +1,15 @@
 import { AgeGroup } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
+
+import { AppDispatch } from '../../../store';
+import { AppAction } from '../../../types/action';
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
 import { translateMessage } from '../../utils/translate-messages';
 import {
-  ACCOUNT_TYPE,
-  BETA_USER_INFO_URL,
-  DEFAULT_USER_SCOPES,
-  USER_INFO_URL,
-  USER_ORGANIZATION_URL,
-  USER_PICTURE_URL
+  ACCOUNT_TYPE, BETA_USER_INFO_URL, DEFAULT_USER_SCOPES, USER_INFO_URL,
+  USER_ORGANIZATION_URL, USER_PICTURE_URL
 } from '../graph-constants';
-import {
-  PROFILE_REQUEST_ERROR,
-  PROFILE_REQUEST_SUCCESS
-} from '../redux-constants';
+import { PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS } from '../redux-constants';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 
 interface IBetaProfile {
@@ -26,14 +22,14 @@ interface IProfileResponse {
   response: any;
 }
 
-export function profileRequestSuccess(response: object): any {
+export function profileRequestSuccess(response: object): AppAction {
   return {
     type: PROFILE_REQUEST_SUCCESS,
     response
   };
 }
 
-export function profileRequestError(response: object): any {
+export function profileRequestError(response: object): AppAction {
   return {
     type: PROFILE_REQUEST_ERROR,
     response
@@ -52,15 +48,15 @@ const query: IQuery = {
   sampleUrl: ''
 };
 
-export function getProfileInfo(): Function {
-  return async (dispatch: Function) => {
+export function getProfileInfo() {
+  return async (dispatch: AppDispatch) => {
     try {
       const profile: IUser = await getProfileInformation();
       const { profileType, ageGroup } = await getBetaProfile();
       profile.profileType = profileType;
       profile.ageGroup = ageGroup;
       profile.profileImageUrl = await getProfileImage();
-      profile.tenant= await getTenantInfo(profileType);
+      profile.tenant = await getTenantInfo(profileType);
       dispatch(profileRequestSuccess(profile));
     } catch (error) {
       dispatch(profileRequestError({ error }));
@@ -151,13 +147,13 @@ export async function getProfileResponse(): Promise<IProfileResponse> {
 }
 
 export async function getTenantInfo(profileType: ACCOUNT_TYPE) {
-  if(profileType===ACCOUNT_TYPE.MSA) {
+  if (profileType === ACCOUNT_TYPE.MSA) {
     return 'Personal';
   }
-  try{
+  try {
     query.sampleUrl = USER_ORGANIZATION_URL;
     const { userInfo: tenant } = await getProfileResponse();
-    return  tenant.value[0]?.displayName;
+    return tenant.value[0]?.displayName;
   } catch (error: any) {
     return '';
   }

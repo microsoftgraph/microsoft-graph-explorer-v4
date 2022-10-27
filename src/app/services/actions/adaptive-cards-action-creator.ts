@@ -1,5 +1,6 @@
 import * as AdaptiveCardsTemplateAPI from 'adaptivecards-templating';
-import { IAction } from '../../../types/action';
+import { AppDispatch } from '../../../store';
+import { AppAction } from '../../../types/action';
 import { IAdaptiveCardContent } from '../../../types/adaptivecard';
 import { IQuery } from '../../../types/query-runner';
 import { lookupTemplate } from '../../utils/adaptive-cards-lookup';
@@ -9,32 +10,29 @@ import {
   FETCH_ADAPTIVE_CARD_SUCCESS
 } from '../redux-constants';
 
-export function getAdaptiveCardSuccess(result: object): IAction {
+export function getAdaptiveCardSuccess(result: object): AppAction {
   return {
     type: FETCH_ADAPTIVE_CARD_SUCCESS,
     response: result
   };
 }
 
-export function getAdaptiveCardError(error: string): IAction {
+export function getAdaptiveCardError(error: string): AppAction {
   return {
     type: FETCH_ADAPTIVE_CARD_ERROR,
     response: error
   };
 }
 
-export function getAdaptiveCardPending(): IAction {
+export function getAdaptiveCardPending(): AppAction {
   return {
     type: FETCH_ADAPTIVE_CARD_PENDING,
     response: ''
   };
 }
 
-export function getAdaptiveCard(
-  payload: string,
-  sampleQuery: IQuery
-): Function {
-  return async (dispatch: Function) => {
+export function getAdaptiveCard(payload: string, sampleQuery: IQuery) {
+  return async (dispatch: AppDispatch): Promise<AppAction> => {
     if (!payload) {
       // no payload so return empty result
       return dispatch(getAdaptiveCardSuccess({}));
