@@ -98,7 +98,7 @@ describe('Resources Reducer', () => {
     const isRunning = true;
     const newState = { ...initialState };
     newState.pending = isRunning;
-    const queryAction: any = { type: FETCH_RESOURCES_PENDING };
+    const queryAction = { type: FETCH_RESOURCES_PENDING, response: null };
     const state = resources(initialState, queryAction);
     expect(state).toEqual(newState);
   });

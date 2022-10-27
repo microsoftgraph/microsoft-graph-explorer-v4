@@ -36,13 +36,13 @@ describe('Graph Explorer Snippet Reducer', () => {
       response: 'error'
     }
 
-    const expectedAction = {
+    const expectedState = {
       pending: false,
       data: null,
       error: 'error'
     }
 
     const newState = snippets(initialState, action);
-    expect(newState).toEqual(expectedAction);
+    expect(newState).toEqual(expectedState);
   })
 });

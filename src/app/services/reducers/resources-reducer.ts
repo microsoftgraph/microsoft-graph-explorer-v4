@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { IResource, IResourceLink, IResources } from '../../../types/resources';
 import content from '../../utils/resources/resources.json';
 import {
@@ -18,7 +18,7 @@ const initialState: IResources = {
   paths: []
 };
 
-export function resources(state: IResources = initialState, action: IAction): IResources {
+export function resources(state: IResources = initialState, action: AppAction): IResources {
   switch (action.type) {
     case FETCH_RESOURCES_SUCCESS:
       return {

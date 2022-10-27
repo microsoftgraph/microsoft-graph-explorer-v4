@@ -1,7 +1,7 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { RESPONSE_EXPANDED } from '../redux-constants';
 
-export function responseAreaExpanded(state: boolean = false, action: IAction): any {
+export function responseAreaExpanded(state: boolean = false, action: AppAction): any {
   switch (action.type) {
     case RESPONSE_EXPANDED:
       return !!action.response;

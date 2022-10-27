@@ -1,37 +1,29 @@
 import {
-  Checkbox,
-  FontSizes,
-  getId,
-  getTheme,
-  IColumn,
-  Icon,
-  IDetailsListCheckboxProps,
-  Label,
-  PrimaryButton,
-  TooltipHost
+  Checkbox, FontSizes, getId, getTheme, IColumn, Icon, IDetailsListCheckboxProps, Label,
+  PrimaryButton, TooltipHost
 } from '@fluentui/react';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
+import messages from '../../../../../messages';
+import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionProps } from '../../../../../types/permissions';
-import { IRootState } from '../../../../../types/root';
-import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
+import { consentToScopes, fetchScopes } from '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
 import TabList from './TabList';
-import messages from '../../../../../messages';
 
-export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
+export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const { sampleQuery, scopes, dimensions, authToken } =
-  useSelector( (state: IRootState) => state );
+    useAppSelector((state) => state);
   const { pending: loading } = scopes;
   const tokenPresent = !!authToken.token;
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const panel = permissionProps?.panel;
 
   const classProps = {
@@ -45,17 +37,17 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
 
-  const getPermissions = () : void => {
-    dispatch(permissionActionCreators.fetchScopes());
+  const getPermissions = (): void => {
+    dispatch(fetchScopes());
   }
 
   useEffect(() => {
     getPermissions();
-  },[sampleQuery]);
+  }, [sampleQuery]);
 
-  const handleConsent = async (permission: IPermission) : Promise<void> => {
+  const handleConsent = async (permission: IPermission): Promise<void> => {
     const consentScopes = [permission.value];
-    dispatch(permissionActionCreators.consentToScopes(consentScopes));
+    dispatch(consentToScopes(consentScopes));
   };
 
   const renderItemColumn = (item: any, index: any, column: IColumn | undefined) => {
@@ -145,7 +137,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     )
   }
 
-  const getColumns = () : IColumn[] => {
+  const getColumns = (): IColumn[] => {
     const columns: IColumn[] = [
       {
         key: 'value',
@@ -201,7 +193,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     return columns;
   }
 
-  const displayPermissionsPanel = () : JSX.Element => {
+  const displayPermissionsPanel = (): JSX.Element => {
     return <div data-is-scrollable={true} style={panelStyles}>
       <PanelList
         classes={classes}
@@ -215,7 +207,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     </div>
   };
 
-  const displayPermissionsAsTab = () : JSX.Element => {
+  const displayPermissionsAsTab = (): JSX.Element => {
     if (loading.isSpecificPermissions) {
       return displayLoadingPermissionsText();
     }
@@ -238,7 +230,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     );
   }
 
-  return(
+  return (
     <>
       {panel ? displayPermissionsPanel() : displayPermissionsAsTab()}
     </>

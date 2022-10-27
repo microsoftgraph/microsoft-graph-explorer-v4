@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { queries } from '../../views/sidebar/sample-queries/queries';
 import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_PENDING, SAMPLES_FETCH_SUCCESS } from '../redux-constants';
 
@@ -8,7 +8,7 @@ const initialState = {
   error: null
 };
 
-export function samples(state = initialState, action: IAction): any {
+export function samples(state = initialState, action: AppAction): any {
   switch (action.type) {
     case SAMPLES_FETCH_PENDING:
       return {

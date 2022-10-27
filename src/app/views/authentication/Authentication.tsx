@@ -1,24 +1,23 @@
-import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import React, { useState } from 'react';
 import { injectIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+
 import { authenticationWrapper } from '../../../modules/authentication';
+import { getSignInAuthErrorHint, signInAuthError } from '../../../modules/authentication/authentication-error-hints';
+import { AppDispatch, useAppSelector } from '../../../store';
 import { componentNames, errorTypes, eventTypes, telemetry } from '../../../telemetry';
-import { IRootState } from '../../../types/root';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../services/actions/auth-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
-import { getSignInAuthErrorHint, signInAuthError } from '../../../modules/authentication/authentication-error-hints';
 
 const Authentication = (props: any) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const [loginInProgress, setLoginInProgress] = useState(false);
-  const { authToken } = useSelector(
-    (state: IRootState) => state
-  );
+  const { authToken } = useAppSelector((state) => state);
   const tokenPresent = !!authToken.token;
   const logoutInProgress = !!authToken.pending;
 
