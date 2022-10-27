@@ -14,7 +14,7 @@ import { SortOrder } from '../../../../types/enums';
 import { IHarPayload } from '../../../../types/har';
 import { IHistoryItem, IHistoryProps } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import * as queryActionCreators from '../../../services/actions/query-action-creators';
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
@@ -575,7 +575,7 @@ export class History extends Component<IHistoryProps, any> {
   }
 }
 
-function mapStateToProps({ history, theme }: IRootState) {
+function mapStateToProps({ history, theme }: ApplicationState) {
   return {
     history,
     appTheme: theme
