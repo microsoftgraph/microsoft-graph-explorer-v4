@@ -202,36 +202,6 @@ export class RevokePermissionsUtil {
     }
   }
 
-  public dispatchAuthResponseStatus(dispatch: Function) {
-    dispatch(
-      setQueryResponseStatus({
-        statusText: translateMessage('Success'),
-        status: translateMessage('Permission revoked'),
-        ok: true,
-        messageType: MessageBarType.success
-      })
-    );
-  }
-
-  public dispatchGeneralStatus(dispatch: Function, status: string, statusText: string){
-    dispatch(
-      setQueryResponseStatus({
-        statusText: translateMessage(statusText),
-        status: translateMessage(status),
-        ok: true,
-        messageType: MessageBarType.info
-      })
-    )
-  }
-
-  public trackRevokeConsentEvent(status: string, permissionObject: any){
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      componentName: componentNames.REVOKE_PERMISSION_CONSENT_BUTTON,
-      permissionObject,
-      status
-    });
-  }
-
   public getServicePrincipalAppId(){
     return this.servicePrincipalAppId
   }

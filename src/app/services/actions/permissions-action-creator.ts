@@ -31,6 +31,8 @@ import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { IOAuthGrantPayload } from '../../../types/permissions';
 import { RevokePermissionsUtil } from './permissions-action-creator.util';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
+import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesErrorHandler';
 
 export function fetchFullScopesSuccess(response: object): IAction {
   return {
@@ -207,7 +209,7 @@ export function revokeScopes(permissionToRevoke: string): Function {
     dispatch(revokeScopesPending());
 
     if (!consentedScopes && consentedScopes.length === 0) {
-      revokePermissionUtil.trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
+      trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
       return;
     }
     const newScopesArray: string[] = consentedScopes.filter((scope: string) => scope !== permissionToRevoke);
@@ -224,17 +226,20 @@ export function revokeScopes(permissionToRevoke: string): Function {
         preliminaryChecksSuccess(dispatch, preliminaryChecksObject);
 
       if (!hasPreliminaryCheckPassed) {
-        revokePermissionUtil.trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
-        return;
+        trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
+        throw new RevokeScopesError({errorText: 'Preliminary checks failed', statusText: 'Cannot delete default scope',
+          status: '400', messageType: 1})
       }
       const userIsTenantAdmin = await revokePermissionUtil.isSignedInUserTenantAdmin();
       const permissionBeingRevokedIsAllPrincipal = revokePermissionUtil.
         userRevokingAdminGrantedScopes(grantsPayload, permissionToRevoke);
 
       if(permissionBeingRevokedIsAllPrincipal && !userIsTenantAdmin) {
-        revokePermissionUtil.trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
-        revokePermissionUtil.dispatchGeneralStatus(dispatch, 'Shiet', 'ff');
-        return;
+        trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
+        throw new RevokeScopesError({errorText:'Revoking admin granted scopes',
+          statusText: 'You are dissenting to an admin pre-consented permission',
+          status: 'Revoking admin granted scopes',
+          messageType: 1})
       }
 
       let updatedScopes;
@@ -242,36 +247,62 @@ export function revokeScopes(permissionToRevoke: string): Function {
         updatedScopes = await revokePermissionUtil.updateAllPrincipalPermissionGrant(grantsPayload, permissionToRevoke);
       }
       else if(!revokePermissionUtil.permissionToRevokeInGrant(signedInGrant, permissionToRevoke) && userIsTenantAdmin){
-        revokePermissionUtil.trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
-        revokePermissionUtil.
-          dispatchGeneralStatus(dispatch, 'You cannot revoke permissions not in your scopes', 'Permission not found');
-        return;
+        trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
+        throw new RevokeScopesError({errorText: 'Permission not found',
+          statusText: 'You cannot revoke permissions not in your scopes', status: 'Permission not found',
+          messageType: 1})
       }
       else{
         updatedScopes = await revokePermissionUtil.
           updateSinglePrincipalPermissionGrant(grantsPayload, profile, newScopesString);
         if (updatedScopes.length !== newScopesArray.length) {
-          return;
+          throw new RevokeScopesError({errorText: 'Scopes not updated',statusText: 'Scopes not updated',
+            status: '500', messageType: 1})
         }
       }
-      revokePermissionUtil.dispatchAuthResponseStatus(dispatch);
+      dispatchRevokeScopesStatus(dispatch, 'Permission revoked', 'Success', 4);
+      dispatch(getConsentedScopesSuccess(updatedScopes));
       dispatch(revokeScopesSuccess());
-      revokePermissionUtil.trackRevokeConsentEvent(REVOKE_STATUS.success, permissionToRevoke);
+      trackRevokeConsentEvent(REVOKE_STATUS.success, permissionToRevoke);
     }
-    catch (error: any) {
-      const { statusCode, code } = error;
-      // dispatchErrorStatus(dispatch, statusCode, code, error);
-      dispatch(revokeScopesError());
-      const permissionObject = {
-        permissionToRevoke,
-        statusCode,
-        code
+    catch (errorMessage: any) {
+      if(errorMessage instanceof RevokeScopesError) {
+        const { errorText, statusText, status, messageType } = errorMessage
+        dispatchRevokeScopesStatus(dispatch, statusText, status, messageType);
+        dispatch(revokeScopesError());
+        const permissionObject = {
+          permissionToRevoke,
+          statusCode: statusText,
+          status: errorText
+        }
+        trackRevokeConsentEvent(REVOKE_STATUS.failure, permissionObject);
       }
-      revokePermissionUtil.trackRevokeConsentEvent(REVOKE_STATUS.failure, permissionObject);
+      else{
+        trackRevokeConsentEvent(REVOKE_STATUS.failure, 'Failed to revoke consent');
+        dispatchRevokeScopesStatus(dispatch, 'Failed to revoke consent', 'Failed', 1);
+      }
     }
   }
 }
 
+const dispatchRevokeScopesStatus = (dispatch: Function, status: string, statusText: string, messageType: number) => {
+  dispatch(
+    setQueryResponseStatus({
+      statusText: translateMessage(statusText),
+      status: translateMessage(status),
+      ok: false,
+      messageType
+    })
+  )
+}
+
+const trackRevokeConsentEvent = (status: string, permissionObject: any) => {
+  telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+    componentName: componentNames.REVOKE_PERMISSION_CONSENT_BUTTON,
+    permissionObject,
+    status
+  });
+}
 
 export function fetchAllPrincipalGrants() {
   return async (dispatch: Function, getState: Function) => {

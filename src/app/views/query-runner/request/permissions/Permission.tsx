@@ -6,7 +6,6 @@ import {
   IconButton,
   IIconProps,
   Label,
-  Link,
   PrimaryButton,
   TooltipHost
 } from '@fluentui/react';
@@ -52,13 +51,12 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
   }
 
   useEffect(() => {
-    console.log('Dispatching this')
     dispatch(permissionActionCreators.fetchAllPrincipalGrants());
   }, [])
 
   useEffect(() => {
     getPermissions();
-  },[sampleQuery, scopes.pending.isRevokePermissions]);
+  },[sampleQuery, scopes.pending.isRevokePermissions, authToken]);
 
   const handleConsent = async (permission: IPermission) : Promise<void> => {
     const consentScopes = [permission.value];
@@ -205,6 +203,17 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     }
   }
 
+  const consentTypeHeaderStyles = () => {
+    return {
+
+      cellTitle: {
+        textAlign: 'center',
+        width: '200px',
+        height: '50px'
+      }
+    }
+  }
+
   const getColumns = () : IColumn[] => {
     const columns: IColumn[] = [
       {
@@ -271,7 +280,8 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           fieldName: 'consentType',
           minWidth: 100,
           maxWidth: 100,
-          onRenderHeader: () => renderColumnHeader('Consent Type')
+          onRenderHeader: () => renderColumnHeader('Consent Type'),
+          styles: consentTypeHeaderStyles()
         }
       )
     }
@@ -303,7 +313,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
 
 
   const renderColumnHeader = (headerText: string) => {
-    return <div style={{ textAlign: 'center', color: 'red' }}>
+    return <div style={{ textAlign: 'center'}}>
       <IconButton
         iconProps={infoIcon}
         className={styles.iconButton}
