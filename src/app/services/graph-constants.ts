@@ -31,4 +31,6 @@ export const NPS_FEEDBACK_URL = 'https://petrol.office.microsoft.com/v1/feedback
 // eslint-disable-next-line max-len
 export const REVOKING_PERMISSIONS_REQUIRED_SCOPES = 'DelegatedPermissionGrant.ReadWrite.All Directory.Read.All';
 // eslint-disable-next-line max-len
-export const ADMIN_CONSENT_LINK = 'https://learn.microsoft.com/en-us/graph/security-authorization#:~:text=If%20you%27re%20calling%20the%20Microsoft%20Graph%20Security%20API%20from%20Graph%20Explorer'
+export const ADMIN_CONSENT_DOC_LINK = 'https://learn.microsoft.com/en-us/graph/security-authorization#:~:text=If%20you%27re%20calling%20the%20Microsoft%20Graph%20Security%20API%20from%20Graph%20Explorer'
+// eslint-disable-next-line max-len
+export const CONSENT_TYPE_DOC_LINK = 'https://learn.microsoft.com/en-us/graph/api/resources/oauth2permissiongrant?view=graph-rest-1.0#:~:text=(eq%20only).-,consentType,-String'

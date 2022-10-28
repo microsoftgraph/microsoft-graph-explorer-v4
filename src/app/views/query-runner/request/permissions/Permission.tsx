@@ -23,7 +23,8 @@ import PanelList from './PanelList';
 import { permissionStyles } from './Permission.styles';
 import TabList from './TabList';
 import messages from '../../../../../messages';
-import { ADMIN_CONSENT_LINK, REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
+import { ADMIN_CONSENT_DOC_LINK, CONSENT_TYPE_DOC_LINK,
+  REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
 import { styles } from '../../query-input/auto-complete/suffix/suffix.styles';
 
 export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
@@ -304,10 +305,10 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
   const openExternalWebsite = (url: string) => {
     switch(url){
       case 'Consent Type':
-        window.open(ADMIN_CONSENT_LINK, '_blank');
+        window.open(CONSENT_TYPE_DOC_LINK, '_blank');
         break;
       case 'Admin consent required':
-        window.open(ADMIN_CONSENT_LINK, '_blank');
+        window.open(ADMIN_CONSENT_DOC_LINK, '_blank');
     }
   }
 
