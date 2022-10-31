@@ -52,7 +52,7 @@ export function setDescriptionColumnSize(): IDescriptionSize{
     default:
       return {
         minWidth: 200,
-        maxWidth: 250
+        maxWidth: 251
       }
   }
 }

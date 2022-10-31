@@ -152,6 +152,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
               </div>
             }
           }
+          return <div/>
 
         default:
           return (

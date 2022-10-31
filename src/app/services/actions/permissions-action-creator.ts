@@ -297,11 +297,11 @@ export function revokeScopes(permissionToRevoke: string) {
   }
 }
 
-const dispatchRevokeScopesStatus = (dispatch: Function, status: string, statusText: string, messageType: number) => {
+const dispatchRevokeScopesStatus = (dispatch: Function,  statusText: string, status: string, messageType: number) => {
   dispatch(
     setQueryResponseStatus({
-      statusText: translateMessage(statusText),
-      status: translateMessage(status),
+      statusText: translateMessage(status),
+      status: translateMessage(statusText),
       ok: false,
       messageType
     })
@@ -323,7 +323,7 @@ export function fetchAllPrincipalGrants() {
       const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
       const servicePrincipalAppId = revokePermissionUtil.getServicePrincipalAppId();
       if(servicePrincipalAppId){
-        const tenantWideGrant = await revokePermissionUtil.getGrantsPayload();
+        const tenantWideGrant = revokePermissionUtil.getGrantsPayload();
         dispatch(getAllPrincipalGrantsSuccess(tenantWideGrant.value));
       }
       else{
