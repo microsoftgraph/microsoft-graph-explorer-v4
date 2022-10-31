@@ -51,7 +51,6 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='Send'
         itemKey='request-body' // To be used to construct component name for telemetry data
         ariaLabel={messages['request body']}
-        title={messages['request body']}
         headerText={messages['request body']}
         headerButtonProps={{
           'aria-controls': 'request-body-tab'
@@ -66,7 +65,6 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='FileComment'
         itemKey='request-headers'
         ariaLabel={messages['request header']}
-        title={messages['request header']}
         headerText={messages['request header']}
         headerButtonProps={{
           'aria-controls': 'request-header-tab'
@@ -81,7 +79,6 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='AzureKeyVault'
         itemKey='modify-permissions'
         ariaLabel={translateMessage('modify permissions')}
-        title={translateMessage('permissions preview')}
         headerText={messages['modify permissions']}
         headerButtonProps={{
           'aria-controls': 'permission-tab'
@@ -99,7 +96,6 @@ export class Request extends Component<IRequestComponent, any> {
           itemIcon='AuthenticatorApp'
           itemKey='access-token'
           ariaLabel={translateMessage('Access Token')}
-          title={translateMessage('Access Token')}
           headerText={translateMessage('Access Token')}
           headerButtonProps={{
             'aria-controls': 'access-token-tab'

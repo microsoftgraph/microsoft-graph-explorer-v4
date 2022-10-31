@@ -4,7 +4,7 @@ import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
-import { ClientError } from '../../utils/ClientError';
+import { ClientError } from '../../utils/error-utils/ClientError';
 import { setStatusMessage } from '../../utils/status-message';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
 import {

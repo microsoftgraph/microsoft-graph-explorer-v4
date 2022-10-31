@@ -154,7 +154,7 @@ const PanelList = ({ messages,
       <Panel
         isOpen={permissionsPanelOpen}
         onDismiss={() => changePanelState()}
-        type={PanelType.medium}
+        type={PanelType.largeFixed}
         hasCloseButton={true}
         headerText={translateMessage('Permissions')}
         isFooterAtBottom={true}
