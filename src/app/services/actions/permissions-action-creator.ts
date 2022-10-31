@@ -102,7 +102,7 @@ export function revokeScopesError(): any{
   }
 }
 
-export function fetchScopes(): Function {
+export function fetchScopes() {
   return async (dispatch: Function, getState: Function) => {
     try {
       const { devxApi, permissionsPanelOpen, profile, sampleQuery: query }: ApplicationState = getState();
@@ -213,7 +213,7 @@ enum REVOKE_STATUS {
   allPrincipalScope = 'allPrincipalScope'
 }
 
-export function revokeScopes(permissionToRevoke: string): Function {
+export function revokeScopes(permissionToRevoke: string) {
   return async (dispatch: Function, getState: Function) => {
     const { consentedScopes, profile } = getState();
     const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
