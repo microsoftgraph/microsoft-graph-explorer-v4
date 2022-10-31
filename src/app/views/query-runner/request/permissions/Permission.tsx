@@ -93,7 +93,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
         case 'consented':
           if (consented) {
             if(userHasRequiredPermissions()){
-              return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '80px'}}>
+              return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '80px', textAlign:'center'}}>
                 <FormattedMessage id='Revoke' />
               </PrimaryButton>;
             }
@@ -104,7 +104,8 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
                 calloutProps={{ gapSpace: 0 }}
                 styles={{ root: { display: 'inline-block' } }}
               >
-                <PrimaryButton disabled={true} onClick={() => handleConsent(item)} style={{width: '80px'}}>
+                <PrimaryButton disabled={true} onClick={() => handleConsent(item)} style={{width: '80px',
+                  textAlign:'center'}}>
                   <FormattedMessage id='Unconsent' />
                 </PrimaryButton>
               </TooltipHost>;
@@ -254,8 +255,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           isResizable: false,
           fieldName: 'consented',
           minWidth: 100,
-          maxWidth: 100,
-          styles: columnCellStyles
+          maxWidth: 100
         },
 
       );
