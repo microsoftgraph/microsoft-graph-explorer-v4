@@ -43,7 +43,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
 
   const classes = classNames(classProps);
   const theme = getTheme();
-  const panelStyles = permissionStyles(theme).panelContainer;
+  const {panelContainer: panelStyles, tooltipStyles, columnCellStyles, cellTitleStyles } = permissionStyles(theme);
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
 
@@ -188,31 +188,10 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
       ...props,
       onRenderColumnHeaderTooltip: (tooltipHostProps: any) => {
         return (
-          <TooltipHost {...tooltipHostProps} />
+          <TooltipHost {...tooltipHostProps} styles={tooltipStyles} />
         );
       }
     });
-  }
-
-  const getColumnCellStyles = () => {
-    return {
-      cellName: {
-        overflow: 'visible !important' as 'visible',
-        wordBreak: 'break-word',
-        overflowWrap: 'break-word'
-      }
-    }
-  }
-
-  const consentTypeHeaderStyles = () => {
-    return {
-
-      cellTitle: {
-        textAlign: 'center',
-        width: '200px',
-        height: '50px'
-      }
-    }
   }
 
   const getColumns = () : IColumn[] => {
@@ -221,8 +200,8 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
         key: 'value',
         name: translateMessage('Permission'),
         fieldName: 'value',
-        minWidth: 200,
-        maxWidth: 250,
+        minWidth: 150,
+        maxWidth: 200,
         isResizable: true,
         columnActionsMode: 0
       }
@@ -254,7 +233,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
         ariaLabel: translateMessage('Administrator permission'),
         isMultiline: true,
         headerClassName: 'permissionHeader',
-        styles: getColumnCellStyles(),
+        styles: columnCellStyles,
         onRenderHeader: () => renderColumnHeader('Admin consent required')
       }
     );
@@ -267,12 +246,14 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           isResizable: false,
           fieldName: 'consented',
           minWidth: 100,
-          maxWidth: 100
+          maxWidth: 100,
+          styles: columnCellStyles
         },
 
       );
     }
-    if(scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0){
+    if(scopes && scopes.data.tenantWidePermissionsGrant &&
+       scopes.data.tenantWidePermissionsGrant.length > 0 && tokenPresent){
       columns.push(
         {
           key: 'consentType',
@@ -282,24 +263,16 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           minWidth: 100,
           maxWidth: 100,
           onRenderHeader: () => renderColumnHeader('Consent Type'),
-          styles: consentTypeHeaderStyles()
+          styles: columnCellStyles
         }
       )
     }
     return columns;
   }
-  const iconStyles = () => {
-    return {
-      root: {
-        position: 'relative' as 'relative',
-        top: '3px'
-      }
 
-    }
-  }
   const infoIcon: IIconProps = {
     iconName: 'Info',
-    styles: iconStyles()
+    styles: cellTitleStyles
   };
 
   const openExternalWebsite = (url: string) => {
@@ -309,6 +282,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
         break;
       case 'Admin consent required':
         window.open(ADMIN_CONSENT_DOC_LINK, '_blank');
+        break;
     }
   }
 

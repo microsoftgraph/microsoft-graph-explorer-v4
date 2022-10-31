@@ -49,6 +49,30 @@ export const permissionStyles = (theme: ITheme) => {
       paddingLeft: 10,
       paddingRight: 20,
       minHeight: 200
+    },
+    tooltipStyles: {
+      root: {
+        display: 'flex',
+        alignItems: 'stretch'
+      }
+    },
+    columnCellStyles: {
+      cellName: {
+        overflow: 'visible !important' as 'visible',
+        wordBreak: 'break-word',
+        overflowWrap: 'break-word',
+        flex: 1
+      },
+      cellTitle: {
+        display: 'flex',
+        flex: 1
+      }
+    },
+    cellTitleStyles: {
+      root: {
+        position: 'relative' as 'relative',
+        top: '3px'
+      }
     }
   };
 };
