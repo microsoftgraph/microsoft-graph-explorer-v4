@@ -243,10 +243,9 @@ export function revokeScopes(permissionToRevoke: string) {
         throw new RevokeScopesError({errorText: 'Preliminary checks failed', statusText: 'Cannot delete default scope',
           status: '400', messageType: 1})
       }
-      const userIsTenantAdmin = await revokePermissionUtil.isSignedInUserTenantAdmin();
+      const userIsTenantAdmin = await RevokePermissionsUtil.isSignedInUserTenantAdmin();
       const permissionBeingRevokedIsAllPrincipal = revokePermissionUtil.
         userRevokingAdminGrantedScopes(grantsPayload, permissionToRevoke);
-
       if(permissionBeingRevokedIsAllPrincipal && !userIsTenantAdmin) {
         trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
         throw new RevokeScopesError({errorText:'Revoking admin granted scopes',

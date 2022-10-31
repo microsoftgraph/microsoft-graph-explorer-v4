@@ -1,12 +1,9 @@
 import { MessageBarType } from '@fluentui/react';
-import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { IOAuthGrantPayload, IPermissionGrant } from '../../../types/permissions';
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
 import { translateMessage } from '../../utils/translate-messages';
 import { GRAPH_URL } from '../graph-constants';
-import { getConsentedScopesSuccess } from './auth-action-creators';
-import { getProfileInfo } from './profile-action-creators';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 
@@ -104,7 +101,7 @@ export class RevokePermissionsUtil {
     return requiredPermissions.every(scope => principalAndAllPrincipalScopes.includes(scope));
   }
 
-  public async isSignedInUserTenantAdmin(){
+  public static async isSignedInUserTenantAdmin(): Promise<boolean>{
     const tenantAdminQuery = {...genericQuery};
     tenantAdminQuery.sampleUrl = `${GRAPH_URL}/v1.0/me/memberOf`;
     const response = await RevokePermissionsUtil.makePermissionsRequest([], tenantAdminQuery);
@@ -152,7 +149,7 @@ export class RevokePermissionsUtil {
       grant.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase()) || emptyGrant;
   }
 
-  private static getSignedInPrincipalGrant = (grantsPayload: IOAuthGrantPayload, userId: string) => {
+  public static getSignedInPrincipalGrant = (grantsPayload: IOAuthGrantPayload, userId: string) => {
     if (grantsPayload && grantsPayload.value.length > 1) {
       const filteredResponse = grantsPayload.value.find((permissionGrant: IPermissionGrant) =>
         permissionGrant.principalId === userId);
@@ -161,7 +158,7 @@ export class RevokePermissionsUtil {
     return grantsPayload.value[0];
   }
 
-  private static async getTenantPermissionGrants(scopes: string[], servicePrincipalAppId: string):
+  public static async getTenantPermissionGrants(scopes: string[], servicePrincipalAppId: string):
   Promise<IOAuthGrantPayload>{
     if(!servicePrincipalAppId){ return { value: [], '@odata.context': ''} }
     genericQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
@@ -174,7 +171,7 @@ export class RevokePermissionsUtil {
     return permissionsGrant.scope.split(' ').includes(permissionToRevoke);
   }
 
-  private static async getServicePrincipalId(scopes: string[]) : Promise<string> {
+  public static async getServicePrincipalId(scopes: string[]) : Promise<string> {
     const currentAppId = process.env.REACT_APP_CLIENT_ID;
     genericQuery.sampleUrl = `${GRAPH_URL}/v1.0/servicePrincipals?$filter=appId eq '${currentAppId}'`;
     const response = await this.makePermissionsRequest(scopes, genericQuery);
