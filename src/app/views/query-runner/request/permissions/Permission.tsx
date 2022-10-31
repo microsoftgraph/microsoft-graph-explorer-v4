@@ -285,7 +285,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const openExternalWebsite = (url: string) => {
     switch(url){
-      case 'Consent Type':
+      case 'Consent type':
         window.open(CONSENT_TYPE_DOC_LINK, '_blank');
         break;
       case 'Admin consent required':
