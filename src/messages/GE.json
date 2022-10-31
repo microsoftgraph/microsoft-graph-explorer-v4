@@ -463,5 +463,6 @@
   "You cannot revoke permissions not in your scopes": "You cannot revoke permissions that are not in your list of consented scopes",
   "Unconsent": "Unconsent",
   "AllPrincipal": "AllPrincipal",
-  "Principal": "Principal"
+  "Principal": "Principal",
+  "Consent type": "Consent type"
 }

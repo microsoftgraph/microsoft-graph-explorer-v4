@@ -61,11 +61,15 @@ export const permissionStyles = (theme: ITheme) => {
         overflow: 'visible !important' as 'visible',
         wordBreak: 'break-word',
         overflowWrap: 'break-word',
-        flex: 1
+        flex: 1,
+        whiteSpace: 'normal'
       },
       cellTitle: {
         display: 'flex',
-        flex: 1
+        flex: 1,
+        position: 'relative' as 'relative',
+        right: '4px',
+        textAlign: 'center'
       }
     },
     cellTitleStyles: {

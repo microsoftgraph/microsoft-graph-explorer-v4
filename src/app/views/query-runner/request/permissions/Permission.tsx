@@ -1,4 +1,5 @@
 import {
+  DetailsListLayoutMode,
   FontSizes,
   getId,
   getTheme,
@@ -26,6 +27,7 @@ import messages from '../../../../../messages';
 import { ADMIN_CONSENT_DOC_LINK, CONSENT_TYPE_DOC_LINK,
   REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
 import { styles } from '../../query-input/auto-complete/suffix/suffix.styles';
+import { setDescriptionColumnSize } from './util';
 
 export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
 
@@ -190,11 +192,18 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
         return (
           <TooltipHost {...tooltipHostProps} styles={tooltipStyles} />
         );
-      }
+      },
+      styles: { root: {
+        height: '40px',
+        lineHeight: '20px',
+        textAlign: 'center',
+        marginTop: '4px'
+      } }
     });
   }
 
   const getColumns = () : IColumn[] => {
+    const columnSizes = setDescriptionColumnSize();
     const columns: IColumn[] = [
       {
         key: 'value',
@@ -214,8 +223,8 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           name: translateMessage('Description'),
           fieldName: 'consentDescription',
           isResizable: true,
-          minWidth: (tokenPresent) ? 100 : 600,
-          maxWidth: (tokenPresent) ? 300 : 1000,
+          minWidth: (tokenPresent) ? columnSizes.minWidth : 600,
+          maxWidth: (tokenPresent) ? columnSizes.maxWidth : 1000,
           isMultiline: true,
           columnActionsMode: 0
         }
@@ -225,7 +234,6 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     columns.push(
       {
         key: 'isAdmin',
-        isResizable: true,
         name: translateMessage('Admin consent required'),
         fieldName: 'isAdmin',
         minWidth: (tokenPresent) ? 150 : 200,
@@ -262,7 +270,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
           fieldName: 'consentType',
           minWidth: 100,
           maxWidth: 100,
-          onRenderHeader: () => renderColumnHeader('Consent Type'),
+          onRenderHeader: () => renderColumnHeader('Consent type'),
           styles: columnCellStyles
         }
       )
@@ -297,7 +305,9 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
         onClick={() => openExternalWebsite(headerText)}
       >
       </IconButton>
-      {translateMessage(headerText)}
+      <span style={{position: 'relative', left: '4px', margin: '-8px'}}>
+        {translateMessage(headerText)}
+      </span>
     </div>
   }
 
