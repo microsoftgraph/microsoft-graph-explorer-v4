@@ -28,6 +28,7 @@ import { ADMIN_CONSENT_DOC_LINK, CONSENT_TYPE_DOC_LINK,
   REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
 import { styles } from '../../query-input/auto-complete/suffix/suffix.styles';
 import { setDescriptionColumnSize } from './util';
+import { componentNames, telemetry } from '../../../../../telemetry';
 
 export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
@@ -140,17 +141,8 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
             const allPrincipalPermissions = getAllPrincipalPermissions(tenantWideGrant);
             const permissionInAllPrincipal = allPrincipalPermissions.some((permission: string) =>
               item.value === permission);
+            return permissionConsentTypeLabel(permissionInAllPrincipal);
 
-            if(permissionInAllPrincipal){
-              return <div style={{ textAlign: 'center' }}>
-                <Label>{translateMessage('AllPrincipal')}</Label>
-              </div>
-            }
-            else{
-              return <div style={{ textAlign: 'center' }}>
-                <Label>{translateMessage('Principal')}</Label>
-              </div>
-            }
           }
           return <div/>
 
@@ -170,6 +162,23 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
       }
     }
   };
+
+  const permissionConsentTypeLabel = (permissionInAllPrincipal : boolean) : JSX.Element => {
+    if(permissionInAllPrincipal){
+      return (
+        <div style={{textAlign: 'center'}}>
+          <Label>{translateMessage('AllPrincipal')}</Label>
+        </div>
+      )
+    }
+    else{
+      return (
+        <div>
+          {translateMessage('Principal')}
+        </div>
+      )
+    }
+  }
 
   const getAllPrincipalPermissions = (tenantWidePermissionsGrant: IPermissionGrant[]): string[] => {
     const allPrincipalPermissions = tenantWidePermissionsGrant.find((permission: any) =>
@@ -288,11 +297,17 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
     switch(url){
       case 'Consent type':
         window.open(CONSENT_TYPE_DOC_LINK, '_blank');
+        trackLinkClickedEvent(CONSENT_TYPE_DOC_LINK, componentNames.CONSENT_TYPE_DOC_LINK)
         break;
       case 'Admin consent required':
         window.open(ADMIN_CONSENT_DOC_LINK, '_blank');
+        trackLinkClickedEvent(ADMIN_CONSENT_DOC_LINK, componentNames.ADMIN_CONSENT_DOC_LINK);
         break;
     }
+  }
+
+  const trackLinkClickedEvent = (link: string, componentName: string) => {
+    telemetry.trackLinkClickEvent(link, componentName);
   }
 
 

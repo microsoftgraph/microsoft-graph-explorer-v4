@@ -228,14 +228,13 @@ export function revokeScopes(permissionToRevoke: string) {
     const newScopesArray: string[] = consentedScopes.filter((scope: string) => scope !== permissionToRevoke);
     const newScopesString: string = newScopesArray.join(' ');
 
-
     try {
       const grantsPayload = revokePermissionUtil.getGrantsPayload();
       const signedInGrant = revokePermissionUtil.getSignedInGrant();
       const preliminaryChecksObject: IPreliminaryChecksObject = {
         defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke, grantsPayload
       }
-      const hasPreliminaryCheckPassed = await revokePermissionUtil.
+      const hasPreliminaryCheckPassed = revokePermissionUtil.
         preliminaryChecksSuccess(dispatch, preliminaryChecksObject);
 
       if (!hasPreliminaryCheckPassed) {

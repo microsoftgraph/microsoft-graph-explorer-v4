@@ -83,6 +83,8 @@ export const CODE_SNIPPET_LANGUAGES = {
 export const GE_DOCUMENTATION_LINK = 'GE documentation link';
 export const GITHUB_LINK = 'Github link';
 export const GRAPH_DOCUMENTATION_LINK = 'Graph documentation link'
+export const CONSENT_TYPE_DOC_LINK = 'Consent type doc link';
+export const ADMIN_CONSENT_DOC_LINK = 'Admin consent doc link';
 
 // Actions
 export const GET_SNIPPET_ACTION = 'Get snippet action';
