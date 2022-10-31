@@ -4,8 +4,7 @@ import { logIn } from './login';
 let authenticatedPage: Page;
 
 test.beforeAll(async ({ browser }) => {
-  authenticatedPage = await browser.newPage({baseURL: 'http://localhost:3000'});
-  await authenticatedPage.goto('http://localhost:3000');
+  authenticatedPage = await browser.newPage();
   await logIn(authenticatedPage);
   await authenticatedPage.waitForTimeout(5000);
 });

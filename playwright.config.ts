@@ -6,7 +6,7 @@ const baseURL = process.env.PLAYWRIGHT_TESTS_BASE_URL!;
 const config: PlaywrightTestConfig = {
   globalSetup: require.resolve('./src/tests/ui/global-setup'),
   use: {
-    baseURL: 'http://localhost:3000/',
+    baseURL,
     trace: 'on-first-retry'
   },
   testDir: './src/tests',

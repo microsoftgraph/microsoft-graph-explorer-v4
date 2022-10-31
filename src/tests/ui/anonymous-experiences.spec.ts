@@ -3,8 +3,8 @@ import { test, expect, Page } from '@playwright/test';
 let page: Page;
 
 test.beforeAll(async ({ browser }) => {
-  page = await browser.newPage({baseURL: 'http://localhost:3000'});
-  await page.goto('http://localhost:3000');
+  page = await browser.newPage();
+  await page.goto('/');
 });
 
 test.describe('Sample Queries', () => {
