@@ -280,7 +280,6 @@ export function revokeScopes(permissionToRevoke: string) {
       if(errorMessage instanceof RevokeScopesError) {
         const { errorText, statusText, status, messageType } = errorMessage
         dispatchRevokeScopesStatus(dispatch, statusText, status, messageType);
-        dispatch(revokeScopesError());
         const permissionObject = {
           permissionToRevoke,
           statusCode: statusText,
@@ -289,14 +288,16 @@ export function revokeScopes(permissionToRevoke: string) {
         trackRevokeConsentEvent(REVOKE_STATUS.failure, permissionObject);
       }
       else{
+        const { code , message} = errorMessage;
         trackRevokeConsentEvent(REVOKE_STATUS.failure, 'Failed to revoke consent');
-        dispatchRevokeScopesStatus(dispatch, 'Failed to revoke consent', 'Failed', 1);
+        dispatchRevokeScopesStatus(dispatch, message? message : 'Failed to revoke consent', code ? code :'Failed', 1);
       }
     }
   }
 }
 
 const dispatchRevokeScopesStatus = (dispatch: Function,  statusText: string, status: string, messageType: number) => {
+  dispatch(revokeScopesError());
   dispatch(
     setQueryResponseStatus({
       statusText: translateMessage(status),

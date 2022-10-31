@@ -173,8 +173,8 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
     }
     else{
       return (
-        <div>
-          {translateMessage('Principal')}
+        <div style={{textAlign: 'center'}}>
+          <Label>{translateMessage('Principal')}</Label>
         </div>
       )
     }
