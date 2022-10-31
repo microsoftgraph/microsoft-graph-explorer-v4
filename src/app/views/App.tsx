@@ -11,7 +11,7 @@ import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
-import { IRootState } from '../../types/root';
+import { ApplicationState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import * as authActionCreators from '../services/actions/auth-action-creators';
@@ -486,7 +486,7 @@ class App extends Component<IAppProps, IAppState> {
 
 const mapStateToProps = ({ sidebarProperties, theme, dimensions,
   profile, sampleQuery, authToken, graphExplorerMode
-}: IRootState) => {
+}: ApplicationState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
 

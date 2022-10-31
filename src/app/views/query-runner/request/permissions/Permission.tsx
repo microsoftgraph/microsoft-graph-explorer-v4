@@ -1,5 +1,4 @@
 import {
-  DetailsListLayoutMode,
   FontSizes,
   getId,
   getTheme,
@@ -12,11 +11,12 @@ import {
 } from '@fluentui/react';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { IPermission, IPermissionGrant, IPermissionProps } from '../../../../../types/permissions';
-import { IRootState } from '../../../../../types/root';
-import * as permissionActionCreators from '../../../../services/actions/permissions-action-creator';
+import { AppDispatch, useAppSelector } from '../../../../../store';
+import { IPermission,IPermissionGrant, IPermissionProps } from '../../../../../types/permissions';
+import { consentToScopes, fetchScopes, revokeScopes, fetchAllPrincipalGrants } from
+  '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
@@ -29,13 +29,13 @@ import { ADMIN_CONSENT_DOC_LINK, CONSENT_TYPE_DOC_LINK,
 import { styles } from '../../query-input/auto-complete/suffix/suffix.styles';
 import { setDescriptionColumnSize } from './util';
 
-export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element => {
+export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const { sampleQuery, scopes, dimensions, authToken, consentedScopes } =
-  useSelector( (state: IRootState) => state );
+    useAppSelector((state) => state);
   const { pending: loading } = scopes;
   const tokenPresent = !!authToken.token;
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const panel = permissionProps?.panel;
 
   const classProps = {
@@ -49,25 +49,25 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
 
-  const getPermissions = () : void => {
-    dispatch(permissionActionCreators.fetchScopes());
+  const getPermissions = (): void => {
+    dispatch(fetchScopes());
   }
 
   useEffect(() => {
-    dispatch(permissionActionCreators.fetchAllPrincipalGrants());
+    dispatch(fetchAllPrincipalGrants());
   }, [])
 
   useEffect(() => {
     getPermissions();
   },[sampleQuery, scopes.pending.isRevokePermissions, authToken]);
 
-  const handleConsent = async (permission: IPermission) : Promise<void> => {
+  const handleConsent = async (permission: IPermission): Promise<void> => {
     const consentScopes = [permission.value];
-    dispatch(permissionActionCreators.consentToScopes(consentScopes));
+    dispatch(consentToScopes(consentScopes));
   };
 
   const handleRevoke = async (permission: IPermission) : Promise<void> => {
-    dispatch(permissionActionCreators.revokeScopes(permission.value));
+    dispatch(revokeScopes(permission.value));
   };
 
   const renderItemColumn = (item: any, index: any, column: IColumn | undefined) => {
@@ -324,7 +324,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     </div>
   };
 
-  const displayPermissionsAsTab = () : JSX.Element => {
+  const displayPermissionsAsTab = (): JSX.Element => {
     if (loading.isSpecificPermissions) {
       return displayLoadingPermissionsText();
     }
@@ -347,7 +347,7 @@ export const Permission = ( permissionProps?: IPermissionProps ) : JSX.Element =
     );
   }
 
-  return(
+  return (
     <>
       {panel ? displayPermissionsPanel() : displayPermissionsAsTab()}
     </>

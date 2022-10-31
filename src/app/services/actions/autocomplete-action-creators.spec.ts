@@ -7,12 +7,13 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import fetch from 'jest-fetch-mock';
 import { store } from '../../../../src/store/index';
-import { IRootState } from '../../../types/root';
+import { ApplicationState } from '../../../types/root';
 import { Mode } from '../../../types/enums';
 import {
   fetchAutocompleteSuccess, fetchAutocompleteError,
   fetchAutocompletePending, fetchAutoCompleteOptions
 } from '../../../app/services/actions/autocomplete-action-creators';
+import { AppAction } from '../../../types/action';
 
 const middleware = [thunk];
 const mockStore = configureMockStore(middleware);
@@ -20,7 +21,7 @@ const mockStore = configureMockStore(middleware);
 jest.mock('../../../../src/store/index');
 window.fetch = jest.fn();
 
-const mockState: IRootState = {
+const mockState: ApplicationState = {
   devxApi: {
     baseUrl: 'https://graph.microsoft.com/v1.0/me',
     parameters: '$count=true'
@@ -130,7 +131,7 @@ describe('Autocomplete action creators', () => {
   it('should dispatch AUTOCOMPLETE_FETCH_ERROR with error payload when fetchAutocompleteError() is called', () => {
     // Arrange
     const errorObject = {};
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: AUTOCOMPLETE_FETCH_ERROR,
       response: errorObject
     }
@@ -154,7 +155,7 @@ describe('Autocomplete action creators', () => {
       },
       createdAt: ''
     }
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: AUTOCOMPLETE_FETCH_SUCCESS,
       response
     }
@@ -168,8 +169,9 @@ describe('Autocomplete action creators', () => {
 
   it('should dispatch AUTOCOMPLETE_FETCH_PENDING when fetchAutocompletePending() is called', () => {
     // Arrange
-    const expectedAction = {
-      type: AUTOCOMPLETE_FETCH_PENDING
+    const expectedAction: AppAction = {
+      type: AUTOCOMPLETE_FETCH_PENDING,
+      response: null
     }
 
     // Act
@@ -222,7 +224,7 @@ describe('Autocomplete action creators', () => {
 
     it('should dispatch AUTOCOMPLETE_FETCH_ERROR when fetch does not return autoOptions', () => {
       // Arrange
-      const expectedAction = {
+      const expectedAction: AppAction = {
         type: AUTOCOMPLETE_FETCH_ERROR,
         response: {}
       };

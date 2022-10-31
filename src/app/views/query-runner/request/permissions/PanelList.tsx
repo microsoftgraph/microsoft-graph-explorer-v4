@@ -1,26 +1,16 @@
 import {
-  Announced,
-  DetailsList,
-  DetailsListLayoutMode,
-  getTheme,
-  GroupHeader,
-  IColumn,
-  IOverlayProps,
-  Label,
-  Panel,
-  PanelType,
-  SearchBox,
-  SelectionMode,
-  IGroup
+  Announced, DetailsList, DetailsListLayoutMode, getTheme, GroupHeader, IColumn,
+  IGroup, IOverlayProps, Label, Panel, PanelType,
+  SearchBox, SelectionMode
 } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
-import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
+import { useDispatch } from 'react-redux';
 
+import { AppDispatch, useAppSelector } from '../../../../../store';
+import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
-import { IRootState } from '../../../../../types/root';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';
@@ -44,7 +34,8 @@ const PanelList = ({ messages,
     return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
   }
 
-  const { consentedScopes, scopes, authToken, permissionsPanelOpen } = useSelector((state: IRootState) => state);
+  const { consentedScopes, scopes, authToken,
+    permissionsPanelOpen } = useAppSelector((state) => state);
   const { fullPermissions } = scopes.data;
   const [permissions, setPermissions] = useState<any []>([]);
   const [groups, setGroups] = useState<IGroup[]>([]);
@@ -73,7 +64,7 @@ const PanelList = ({ messages,
   }, [permissions, searchStarted])
 
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
