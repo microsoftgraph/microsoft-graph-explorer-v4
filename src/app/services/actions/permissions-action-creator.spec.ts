@@ -338,7 +338,7 @@ describe('Permissions action creators', () => {
         {type: QUERY_GRAPH_STATUS,
           response: {
             statusText: 'Failed',
-            status: 'Failed to revoke consent',
+            status: 'An error occurred when unconsenting. Please try again',
             ok: false,
             messageType: 1
           }}
@@ -403,7 +403,7 @@ describe('Permissions action creators', () => {
           type: QUERY_GRAPH_STATUS,
           response: {
             statusText: 'Failed',
-            status: 'Failed to revoke consent',
+            status: 'An error occurred when unconsenting. Please try again',
             ok: false,
             messageType: 1
           }}
