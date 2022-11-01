@@ -30,7 +30,7 @@ import {
 import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { IOAuthGrantPayload } from '../../../types/permissions';
-import { RevokePermissionsUtil } from './permissions-action-creator.util';
+import { RevokePermissionsUtil, REVOKE_STATUS } from './permissions-action-creator.util';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesError';
 
@@ -91,14 +91,14 @@ export function revokeScopesPending(): AppAction {
   }
 }
 
-export function revokeScopesSuccess(): AppAction{
+export function revokeScopesSuccess(): AppAction {
   return {
     type: REVOKE_SCOPES_SUCCESS,
     response: null
   }
 }
 
-export function revokeScopesError(): AppAction{
+export function revokeScopesError(): AppAction {
   return {
     type: REVOKE_SCOPES_ERROR,
     response: null
@@ -201,21 +201,6 @@ export function consentToScopes(scopes: string[]) {
   };
 }
 
-interface IPreliminaryChecksObject {
-  defaultUserScopes: string[];
-  requiredPermissions: string[];
-  consentedScopes: string[];
-  permissionToRevoke: string;
-  grantsPayload?: IOAuthGrantPayload;
-}
-
-enum REVOKE_STATUS {
-  success = 'success',
-  failure = 'failure',
-  preliminaryChecksFail = 'preliminaryChecksFail',
-  allPrincipalScope = 'allPrincipalScope'
-}
-
 export function revokeScopes(permissionToRevoke: string) {
   return async (dispatch: Function, getState: Function) => {
     const { consentedScopes, profile } = getState();
@@ -234,22 +219,23 @@ export function revokeScopes(permissionToRevoke: string) {
     const newScopesString: string = newScopesArray.join(' ');
 
     try {
-      const { userIsTenantAdmin, permissionBeingRevokedIsAllPrincipal,
-        grantsPayload } = await revokePermissionUtil.
-        getUserPermissionChecks({consentedScopes, requiredPermissions, defaultUserScopes, permissionToRevoke});
+      const { userIsTenantAdmin, permissionBeingRevokedIsAllPrincipal, grantsPayload } = await revokePermissionUtil.
+        getUserPermissionChecks({ consentedScopes, requiredPermissions, defaultUserScopes, permissionToRevoke });
 
       let updatedScopes;
-      if(permissionBeingRevokedIsAllPrincipal && userIsTenantAdmin) {
+      if (permissionBeingRevokedIsAllPrincipal && userIsTenantAdmin) {
         updatedScopes = await revokePermissionUtil.updateAllPrincipalPermissionGrant(grantsPayload, permissionToRevoke);
       }
-      else{
+      else {
         updatedScopes = await revokePermissionUtil.
           updateSinglePrincipalPermissionGrant(grantsPayload, profile, newScopesString);
       }
 
       if (updatedScopes.length !== newScopesArray.length) {
-        throw new RevokeScopesError({errorText: 'Scopes not updated',statusText: 'Scopes not updated',
-          status: '500', messageType: 1})
+        throw new RevokeScopesError({
+          errorText: 'Scopes not updated', statusText: 'Scopes not updated',
+          status: '500', messageType: 1
+        })
       }
 
       dispatchRevokeScopesStatus(dispatch, 'Permission revoked', 'Success', 4);
@@ -258,7 +244,9 @@ export function revokeScopes(permissionToRevoke: string) {
       trackRevokeConsentEvent(REVOKE_STATUS.success, permissionToRevoke);
     }
     catch (errorMessage: any) {
-      if(errorMessage instanceof RevokeScopesError) {
+      console.log(errorMessage instanceof RevokeScopesError, errorMessage);
+      if (errorMessage instanceof RevokeScopesError || errorMessage instanceof Function) {
+        console.log('Instance is heeeeeeeeeeeeeeere')
         const { errorText, statusText, status, messageType } = errorMessage
         dispatchRevokeScopesStatus(dispatch, statusText, status, messageType);
         const permissionObject = {
@@ -268,16 +256,17 @@ export function revokeScopes(permissionToRevoke: string) {
         }
         trackRevokeConsentEvent(REVOKE_STATUS.failure, permissionObject);
       }
-      else{
-        const { code , message} = errorMessage;
+      else {
+        const { code, message } = errorMessage;
         trackRevokeConsentEvent(REVOKE_STATUS.failure, 'Failed to revoke consent');
-        dispatchRevokeScopesStatus(dispatch, message? message : 'Failed to revoke consent', code ? code :'Failed', 1);
+        dispatchRevokeScopesStatus(dispatch, message ? message : 'Failed to revoke consent', code ? code : 'Failed', 1);
       }
     }
   }
 }
 
-const dispatchRevokeScopesStatus = (dispatch: Function,  statusText: string, status: string, messageType: number) => {
+const dispatchRevokeScopesStatus = (dispatch: Function, statusText: string, status: string, messageType: number) => {
+  console.log('dispatchRevokeScopesStatus', statusText, status, messageType);
   dispatch(revokeScopesError());
   dispatch(
     setQueryResponseStatus({
@@ -299,18 +288,18 @@ const trackRevokeConsentEvent = (status: string, permissionObject: any) => {
 
 export function fetchAllPrincipalGrants() {
   return async (dispatch: Function, getState: Function) => {
-    try{
+    try {
       const { profile } = getState();
       const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
       const servicePrincipalAppId = revokePermissionUtil.getServicePrincipalAppId();
-      if(servicePrincipalAppId){
+      if (servicePrincipalAppId) {
         const tenantWideGrant = revokePermissionUtil.getGrantsPayload();
         dispatch(getAllPrincipalGrantsSuccess(tenantWideGrant.value));
       }
-      else{
+      else {
         dispatch(getAllPrincipalGrantsError({}));
       }
-    }catch(error: any){
+    } catch (error: any) {
       dispatch(getAllPrincipalGrantsError(error));
     }
   }

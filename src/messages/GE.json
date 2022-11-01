@@ -460,7 +460,7 @@
   "Possible error found in URL near": "Possible error found in URL near",
   "AllPrincipal scope": "AllPrincipal scope",
   "You cannot revoke AllPrincipal permissions": "You cannot revoke this permission as its consent has been granted tenant-wide by your tenant admin",
-  "You cannot revoke permissions not in your scopes": "Permission is not in your list of scopes. Try again after a few minutes",
+  "You cannot revoke permissions not in your scopes": "You are experiencing a delay in updating this permission on AAD. Try again after a few minutes",
   "Unconsent": "Unconsent",
   "AllPrincipal": "AllPrincipal",
   "Principal": "Principal",

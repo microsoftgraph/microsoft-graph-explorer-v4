@@ -270,21 +270,18 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
       );
     }
-    if(scopes && scopes.data.tenantWidePermissionsGrant &&
-       scopes.data.tenantWidePermissionsGrant.length > 0 && tokenPresent){
-      columns.push(
-        {
-          key: 'consentType',
-          name: translateMessage('Consent type'),
-          isResizable: false,
-          fieldName: 'consentType',
-          minWidth: 100,
-          maxWidth: 100,
-          onRenderHeader: () => renderColumnHeader('Consent type'),
-          styles: columnCellStyles
-        }
-      )
-    }
+    columns.push(
+      {
+        key: 'consentType',
+        name: translateMessage('Consent type'),
+        isResizable: false,
+        fieldName: 'consentType',
+        minWidth: 100,
+        maxWidth: 100,
+        onRenderHeader: () => renderColumnHeader('Consent type'),
+        styles: columnCellStyles
+      }
+    )
     return columns;
   }
 
