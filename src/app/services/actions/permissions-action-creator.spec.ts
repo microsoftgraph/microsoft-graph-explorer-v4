@@ -334,14 +334,7 @@ describe('Permissions action creators', () => {
             ok: false,
             messageType: 1
           }
-        },
-        {type: QUERY_GRAPH_STATUS,
-          response: {
-            statusText: 'Failed',
-            status: 'An error occurred when unconsenting. Please try again',
-            ok: false,
-            messageType: 1
-          }}
+        }
       ]
 
 
@@ -398,15 +391,7 @@ describe('Permissions action creators', () => {
             ok: false,
             messageType: 1
           }
-        },
-        {
-          type: QUERY_GRAPH_STATUS,
-          response: {
-            statusText: 'Failed',
-            status: 'An error occurred when unconsenting. Please try again',
-            ok: false,
-            messageType: 1
-          }}
+        }
       ]
 
       // Act and Assert
@@ -458,6 +443,7 @@ describe('Permissions action creators', () => {
 
       const expectedActions = [
         {type: 'REVOKE_SCOPES_PENDING'},
+        {type: 'REVOKE_SCOPES_ERROR'},
         {
           type: QUERY_GRAPH_STATUS,
           response: {
