@@ -1,11 +1,10 @@
-import { MessageBarType } from '@fluentui/react';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { IOAuthGrantPayload, IPermissionGrant } from '../../../types/permissions';
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
-import { translateMessage } from '../../utils/translate-messages';
+import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesError';
 import { GRAPH_URL } from '../graph-constants';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
-import { setQueryResponseStatus } from './query-status-action-creator';
 
 interface IPreliminaryChecksObject {
   defaultUserScopes: string[];
@@ -15,6 +14,8 @@ interface IPreliminaryChecksObject {
   grantsPayload?: IOAuthGrantPayload;
 }
 
+type PartialCheckObject = Omit<IPreliminaryChecksObject, 'grantsPayload'>
+
 const genericQuery: IQuery = {
   selectedVerb: 'GET',
   sampleHeaders: [],
@@ -22,6 +23,12 @@ const genericQuery: IQuery = {
   sampleUrl: ''
 };
 
+enum REVOKE_STATUS {
+  success = 'success',
+  failure = 'failure',
+  preliminaryChecksFail = 'preliminaryChecksFail',
+  allPrincipalScope = 'allPrincipalScope'
+}
 export class RevokePermissionsUtil {
 
   private servicePrincipalAppId: string;
@@ -44,31 +51,21 @@ export class RevokePermissionsUtil {
     return new RevokePermissionsUtil(servicePrincipalAppId, grantsPayload, signedInGrant, profileId);
   }
 
-  public preliminaryChecksSuccess(dispatch: Function, preliminaryChecksObject:IPreliminaryChecksObject ){
+  public preliminaryChecksSuccess(preliminaryChecksObject:IPreliminaryChecksObject ): boolean{
     const { defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke, grantsPayload }
    = preliminaryChecksObject
     if (this.userRevokingDefaultScopes(defaultUserScopes, permissionToRevoke)) {
-      dispatch(
-        setQueryResponseStatus({
-          statusText: translateMessage('Default scope'),
-          status: translateMessage('Cannot delete default scope'),
-          ok: false,
-          messageType: MessageBarType.error
-        })
-      );
-      return false;
+      throw new RevokeScopesError({errorText:'Revoking admin granted scopes',
+        statusText: 'Default scope',
+        status: 'Cannot delete default scope',
+        messageType: 1})
     }
 
     if (!this.userHasRequiredPermissions(requiredPermissions, consentedScopes, grantsPayload!)) {
-      dispatch(
-        setQueryResponseStatus({
-          statusText: translateMessage('Unable to dissent'),
-          status: translateMessage('You require the following permissions to revoke'),
-          ok: false,
-          messageType: MessageBarType.error
-        })
-      );
-      return false;
+      throw new RevokeScopesError({errorText:'Revoking admin granted scopes',
+        statusText: 'Unable to dissent',
+        status: 'You require the following permissions to revoke',
+        messageType: 1})
     }
     return true;
   }
@@ -200,6 +197,47 @@ export class RevokePermissionsUtil {
     catch (error: any) {
       throw error;
     }
+  }
+
+  public async getUserPermissionChecks(preliminaryObject: PartialCheckObject) : Promise<{
+    userIsTenantAdmin : boolean, permissionBeingRevokedIsAllPrincipal: boolean, grantsPayload: IOAuthGrantPayload}>{
+    const { permissionToRevoke } = preliminaryObject;
+    const grantsPayload = this.getGrantsPayload();
+    const signedInGrant = this.getSignedInGrant();
+    const preliminaryChecksObject: IPreliminaryChecksObject = {
+      ...preliminaryObject, grantsPayload
+    }
+
+    if (!this.preliminaryChecksSuccess(preliminaryChecksObject)) {
+      this.trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
+    }
+
+    const userIsTenantAdmin = await RevokePermissionsUtil.isSignedInUserTenantAdmin();
+    const permissionBeingRevokedIsAllPrincipal = this.userRevokingAdminGrantedScopes(grantsPayload, permissionToRevoke);
+
+    if(permissionBeingRevokedIsAllPrincipal && !userIsTenantAdmin) {
+      this.trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
+      throw new RevokeScopesError({errorText:'Revoking admin granted scopes',
+        statusText: 'You are dissenting to an admin pre-consented permission',
+        status: 'Revoking admin granted scopes',
+        messageType: 1})
+    }
+
+    if(!this.permissionToRevokeInGrant(signedInGrant, permissionToRevoke) && userIsTenantAdmin){
+      this.trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
+      throw new RevokeScopesError({errorText: 'Permission not found',
+        statusText: 'You cannot revoke permissions not in your scopes', status: 'Permission not found',
+        messageType: 1})
+    }
+    return { userIsTenantAdmin, permissionBeingRevokedIsAllPrincipal, grantsPayload };
+  }
+
+  private trackRevokeConsentEvent = (status: string, permissionObject: any) => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      componentName: componentNames.REVOKE_PERMISSION_CONSENT_BUTTON,
+      permissionObject,
+      status
+    });
   }
 
   public getServicePrincipalAppId(){

@@ -6,11 +6,13 @@ interface IRevokeScopesError {
   messageType: number;
   status: string;
 }
+
 export class RevokeScopesError extends ClientError {
   statusText: string;
   messageType: number;
   status: string;
-  errorText: string
+  errorText: string;
+
   constructor(error: IRevokeScopesError = { errorText: '', statusText: '', messageType: 0, status: '' }) {
     super();
     Object.assign(this, error);
