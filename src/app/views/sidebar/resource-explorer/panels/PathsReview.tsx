@@ -21,6 +21,10 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IResourceLink } from '../../../../../types/resources';
 import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
+import {
+  GRAPH_BETA_DESCRIPTION_URL,
+  GRAPH_V1_DESCRIPTION_URL
+} from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal, trackGenerate } from '../../../common/download';
 import Paths from './Paths';
@@ -34,9 +38,7 @@ export interface IPathsReview {
 
 const PathsReview = (props: IPathsReview) => {
   const dispatch: AppDispatch = useDispatch();
-  const {
-    resources: { paths: items }
-  } = useAppSelector((state) => state);
+  const items = useAppSelector((state) => state.resources.paths);
   const { isOpen } = props;
   const headerText =
     translateMessage('Selected Resources') + ' ' + translateMessage('Preview');
@@ -61,36 +63,27 @@ const PathsReview = (props: IPathsReview) => {
     }
   ];
 
-  const getItemsForActions = () => {
-    if (selectedItems.length === 0) {
-      return items;
-    }
-    return selectedItems;
-  };
-
   const generateCollection = () => {
-    const content = generatePostmanCollection(getItemsForActions());
+    const content = generatePostmanCollection(items);
     const filename = `${content.info.name}-${content.info._postman_id}.postman_collection.json`;
     downloadToLocal(content, filename);
   };
   const getDescriptionUrl = () => {
-    const workingItems = getItemsForActions();
-    if (workingItems.length > 0 && workingItems[0].version === 'beta') {
-      return 'https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/beta/openapi.yaml';
+    if (items.length > 0 && items[0].version === 'beta') {
+      return GRAPH_BETA_DESCRIPTION_URL;
     }
-    return 'https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/v1.0/openapi.yaml';
+    return GRAPH_V1_DESCRIPTION_URL;
   };
   const getVersionsCount = () => {
-    const workingItems = getItemsForActions();
-    const versions = workingItems.map((item) => item.version);
+    const versions = items.map((item) => item.version);
     return new Set(versions).size;
   };
   const redirectToKiotaWeb = () => {
-    const includePatterns = getItemsForActions()
-      .map((item) => item.url)
-      .flat()
-      .join(',');
+    const includePatterns = Array.from(
+      new Set<string>(items.map((item) => item.url).flat()) // remove duplicates
+    ).join(',');
     const versionCount = getVersionsCount();
+    trackGenerate();
     if (versionCount > 1) {
       setShowVersionErrorMessageTrue();
     } else {
@@ -100,7 +93,6 @@ const PathsReview = (props: IPathsReview) => {
         `https://app.kiota.dev/generate?i=${includePatterns}&d=${getDescriptionUrl()}&b=True&ad=True&c=GraphServiceClient`,
         '_blank'
       );
-      trackGenerate();
     }
   };
   const stackTokens: IStackTokens = { childrenGap: 40 };
@@ -129,14 +121,14 @@ const PathsReview = (props: IPathsReview) => {
         <Stack horizontal tokens={stackTokens}>
           <DefaultButton
             onClick={generateCollection}
-            disabled={selectedItems.length > 0}
+            disabled={items.length === 0 || selectedItems.length > 0}
           >
             <FormattedMessage id='Download postman collection' />
           </DefaultButton>
           <PrimaryButton
             id={generateId}
             onClick={redirectToKiotaWeb}
-            disabled={selectedItems.length > 0}
+            disabled={items.length === 0 || selectedItems.length > 0}
           >
             <FormattedMessage id='Generate client - preview' />
           </PrimaryButton>
