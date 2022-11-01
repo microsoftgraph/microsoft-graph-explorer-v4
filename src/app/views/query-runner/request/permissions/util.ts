@@ -16,43 +16,43 @@ interface IDescriptionSize {
   minWidth: number;
   maxWidth: number;
 }
-export function setDescriptionColumnSize(): IDescriptionSize{
+export function setDescriptionColumnSize(): IDescriptionSize {
   const browserSize = getBrowserScreenSize(window.innerWidth);
-  switch(browserSize){
+  switch (browserSize) {
     case 's':
       return {
-        minWidth: 100,
-        maxWidth: 150
+        minWidth: 90,
+        maxWidth: 140
       }
     case 'm':
       return {
-        minWidth: 150,
-        maxWidth: 200
+        minWidth: 140,
+        maxWidth: 190
       }
     case 'l':
       return {
-        minWidth: 200,
-        maxWidth: 250
+        minWidth: 190,
+        maxWidth: 240
       }
     case 'xl':
       return {
-        minWidth: 250,
-        maxWidth: 400
+        minWidth: 240,
+        maxWidth: 390
       }
     case 'xxl':
       return {
-        minWidth: 400,
-        maxWidth: 500
+        minWidth: 390,
+        maxWidth: 490
       }
     case 'xxxl':
       return {
-        minWidth: 500,
-        maxWidth: 600
+        minWidth: 490,
+        maxWidth: 590
       }
     default:
       return {
-        minWidth: 200,
-        maxWidth: 251
+        minWidth: 190,
+        maxWidth: 250
       }
   }
 }

@@ -1,4 +1,5 @@
 import {
+  DefaultButton,
   FontSizes,
   getId,
   getTheme,
@@ -71,6 +72,8 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
     dispatch(revokeScopes(permission.value));
   };
 
+  const buttonIcon: IIconProps = { iconName: 'Info' };
+
   const renderItemColumn = (item: any, index: any, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
     const consented = !!item.consented;
@@ -105,14 +108,19 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
                 calloutProps={{ gapSpace: 0 }}
                 styles={{ root: { display: 'inline-block' } }}
               >
-                <PrimaryButton disabled={true} onClick={() => handleConsent(item)} style={{width: '80px',
-                  textAlign:'center'}}>
-                  <FormattedMessage id='Unconsent' />
-                </PrimaryButton>
+                <DefaultButton
+                  toggle
+                  checked={false}
+                  text={translateMessage('Revoke')}
+                  iconProps={buttonIcon}
+                  allowDisabledFocus
+                  disabled={true}
+                  style={{width: '100px'}}
+                />
               </TooltipHost>;
             }
           } else {
-            return <PrimaryButton onClick={() => handleConsent(item)} style={{width: '80px'}}>
+            return <PrimaryButton onClick={() => handleConsent(item)} style={{width: '100px'}}>
               <FormattedMessage id='Consent' />
             </PrimaryButton>;
           }
@@ -248,7 +256,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
         name: translateMessage('Admin consent required'),
         fieldName: 'isAdmin',
         minWidth: (tokenPresent) ? 150 : 200,
-        maxWidth: (tokenPresent) ? 250 : 300,
+        maxWidth: (tokenPresent) ? 200 : 300,
         ariaLabel: translateMessage('Administrator permission'),
         isMultiline: true,
         headerClassName: 'permissionHeader',
@@ -279,7 +287,8 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
         minWidth: 100,
         maxWidth: 100,
         onRenderHeader: () => renderColumnHeader('Consent type'),
-        styles: columnCellStyles
+        styles: columnCellStyles,
+        ariaLabel: translateMessage('Permission consent type')
       }
     )
     return columns;
