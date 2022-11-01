@@ -95,6 +95,9 @@ export class RevokePermissionsUtil {
     grantsPayload: IOAuthGrantPayload) {
     const allPrincipalGrants = grantsPayload.value.find((grant: IPermissionGrant) =>
       grant.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
+    if(!allPrincipalGrants){
+      return requiredPermissions.every(scope => consentedScopes.includes(scope));
+    }
     const allPrincipalScopes = allPrincipalGrants!.scope.split(' ') as string[];
     let principalAndAllPrincipalScopes: string[] = [];
     principalAndAllPrincipalScopes = consentedScopes.concat(allPrincipalScopes);

@@ -222,6 +222,7 @@ export function revokeScopes(permissionToRevoke: string) {
     dispatch(revokeScopesPending());
 
     if (!consentedScopes && consentedScopes.length === 0) {
+      dispatch(revokeScopesError());
       trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
       return;
     }
@@ -239,8 +240,7 @@ export function revokeScopes(permissionToRevoke: string) {
 
       if (!hasPreliminaryCheckPassed) {
         trackRevokeConsentEvent(REVOKE_STATUS.preliminaryChecksFail, permissionToRevoke);
-        throw new RevokeScopesError({errorText: 'Preliminary checks failed', statusText: 'Cannot delete default scope',
-          status: '400', messageType: 1})
+        return;
       }
       const userIsTenantAdmin = await RevokePermissionsUtil.isSignedInUserTenantAdmin();
       const permissionBeingRevokedIsAllPrincipal = revokePermissionUtil.
