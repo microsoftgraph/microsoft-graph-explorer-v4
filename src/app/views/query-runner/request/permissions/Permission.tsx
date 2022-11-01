@@ -97,7 +97,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
         case 'consented':
           if (consented) {
             if(userHasRequiredPermissions()){
-              return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '80px', textAlign:'center'}}>
+              return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '100px', textAlign:'center'}}>
                 <FormattedMessage id='Revoke' />
               </PrimaryButton>;
             }
