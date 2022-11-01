@@ -23,3 +23,9 @@ function trackDownload(filename: string) {
     filename
   });
 }
+
+export function trackGenerate() {
+  telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+    ComponentName: componentNames.DOWNLOAD_POSTMAN_COLLECTION_BUTTON
+  });
+}

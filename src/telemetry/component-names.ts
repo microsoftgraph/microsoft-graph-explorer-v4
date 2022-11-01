@@ -18,6 +18,7 @@ export const EXPORT_HISTORY_ITEM_BUTTON = 'Export history item button';
 export const DELETE_HISTORY_ITEM_BUTTON = 'Delete history item button';
 export const RESPONSE_HEADERS_COPY_BUTTON = 'Response headers copy button';
 export const DOWNLOAD_POSTMAN_COLLECTION_BUTTON = 'Download postman collection button';
+export const GENERATE_CLIENT_PREVIEW_BUTTON = 'generate client - preview button';
 export const REMOVE_RESOURCE_FROM_COLLECTION_BUTTON = 'Remove resource from collection button';
 export const QUERY_COPY_BUTTON = 'Query copy button';
 export const SETTINGS_BUTTON = 'Settings button';
