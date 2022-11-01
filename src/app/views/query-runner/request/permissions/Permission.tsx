@@ -273,7 +273,9 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
           isResizable: false,
           fieldName: 'consented',
           minWidth: 100,
-          maxWidth: 100
+          maxWidth: 120,
+          onRenderHeader: () => renderColumnHeader('Status'),
+          styles: columnCellStyles
         },
 
       );
@@ -318,7 +320,15 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
 
   const renderColumnHeader = (headerText: string) => {
-    return <div style={{ textAlign: 'center'}}>
+    if(headerText === 'Status'){
+      return (
+        <span style={{position: 'relative', top: '2px', left: '2px', flex:1}}>
+          {translateMessage('Status')}
+        </span>
+      )
+    }
+
+    return (<div style={{ textAlign: 'center'}}>
       <IconButton
         iconProps={infoIcon}
         className={styles.iconButton}
@@ -330,7 +340,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
       <span style={{position: 'relative', left: '4px', margin: '-8px'}}>
         {translateMessage(headerText)}
       </span>
-    </div>
+    </div>)
   }
 
   const displayPermissionsPanel = () : JSX.Element => {

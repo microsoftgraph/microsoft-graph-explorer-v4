@@ -292,7 +292,7 @@ describe('Permissions action creators', () => {
   });
 
   describe('Revoke scopes', () => {
-    it('should return Default Scope error when user tries to dissent to default scope',() => {
+    it('should return Default Scope error when user tries to dissent to default scope', () => {
       // Arrange
       const store_ = mockStore(mockState);
       jest.spyOn(RevokePermissionsUtil, 'getServicePrincipalId').mockResolvedValue('1234');
@@ -326,11 +326,13 @@ describe('Permissions action creators', () => {
       })
 
       const expectedActions = [
-        {type: 'REVOKE_SCOPES_PENDING'},
-        {type: QUERY_GRAPH_STATUS,
+        { type: 'REVOKE_SCOPES_PENDING', response: null },
+        { type: 'REVOKE_SCOPES_ERROR', response: null },
+        {
+          type: QUERY_GRAPH_STATUS,
           response: {
-            statusText: 'Default scope',
-            status: 'Graph Explorer requires this permission for its normal working behavior',
+            statusText: 'Failed',
+            status: 'An error occurred when unconsenting. Please try again',
             ok: false,
             messageType: 1
           }
@@ -341,7 +343,7 @@ describe('Permissions action creators', () => {
       // Act and Assert
       // @ts-ignore
       return store_.dispatch(revokeScopes('User.Read'))
-      // @ts-ignore
+        // @ts-ignore
         .then(() => {
           expect(store_.getActions()).toEqual(expectedActions);
         });
@@ -381,13 +383,13 @@ describe('Permissions action creators', () => {
       });
 
       const expectedActions = [
-        {type: 'REVOKE_SCOPES_PENDING'},
+        { type: 'REVOKE_SCOPES_PENDING', response: null },
+        { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
           type: QUERY_GRAPH_STATUS,
           response: {
-            statusText: 'Unable to dissent',
-            // eslint-disable-next-line max-len
-            status: 'You require Directory.Read.All and DelegatedPermissionGrant.ReadWrite.All to be able to revoke consent to permissions',
+            statusText: 'Failed',
+            status: 'An error occurred when unconsenting. Please try again',
             ok: false,
             messageType: 1
           }
@@ -397,7 +399,7 @@ describe('Permissions action creators', () => {
       // Act and Assert
       // @ts-ignore
       return store_.dispatch(revokeScopes('Access.Read'))
-      // @ts-ignore
+        // @ts-ignore
         .then(() => {
           expect(store_.getActions()).toEqual(expectedActions);
         });
@@ -442,8 +444,8 @@ describe('Permissions action creators', () => {
       jest.spyOn(RevokePermissionsUtil, 'isSignedInUserTenantAdmin').mockResolvedValue(false);
 
       const expectedActions = [
-        {type: 'REVOKE_SCOPES_PENDING'},
-        {type: 'REVOKE_SCOPES_ERROR'},
+        { type: 'REVOKE_SCOPES_PENDING', response: null },
+        { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
           type: QUERY_GRAPH_STATUS,
           response: {
@@ -458,7 +460,7 @@ describe('Permissions action creators', () => {
       // Act and Assert
       // @ts-ignore
       return store_.dispatch(revokeScopes('Access.Read'))
-      // @ts-ignore
+        // @ts-ignore
         .then(() => {
           expect(store_.getActions()).toEqual(expectedActions);
         });

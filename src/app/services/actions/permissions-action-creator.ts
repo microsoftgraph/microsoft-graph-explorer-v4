@@ -244,9 +244,7 @@ export function revokeScopes(permissionToRevoke: string) {
       trackRevokeConsentEvent(REVOKE_STATUS.success, permissionToRevoke);
     }
     catch (errorMessage: any) {
-      console.log(errorMessage instanceof RevokeScopesError, errorMessage);
       if (errorMessage instanceof RevokeScopesError || errorMessage instanceof Function) {
-        console.log('Instance is heeeeeeeeeeeeeeere')
         const { errorText, statusText, status, messageType } = errorMessage
         dispatchRevokeScopesStatus(dispatch, statusText, status, messageType);
         const permissionObject = {
@@ -266,7 +264,6 @@ export function revokeScopes(permissionToRevoke: string) {
 }
 
 const dispatchRevokeScopesStatus = (dispatch: Function, statusText: string, status: string, messageType: number) => {
-  console.log('dispatchRevokeScopesStatus', statusText, status, messageType);
   dispatch(revokeScopesError());
   dispatch(
     setQueryResponseStatus({

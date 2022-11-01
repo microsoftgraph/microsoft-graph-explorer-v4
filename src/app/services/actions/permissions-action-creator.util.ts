@@ -53,7 +53,6 @@ export class RevokePermissionsUtil {
     const { defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke, grantsPayload }
       = preliminaryChecksObject
     if (this.userRevokingDefaultScopes(defaultUserScopes, permissionToRevoke)) {
-      console.log('Throwing here')
       throw new RevokeScopesError({
         errorText: 'Revoking default scopes',
         statusText: 'Cannot delete default scope',
