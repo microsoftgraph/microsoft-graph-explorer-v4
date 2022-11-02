@@ -164,6 +164,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                   className={classes.copyIcon}
                   handleOnClick={handleCopy}
                   isIconButton={true}
+                  style={{ float: 'right', zIndex: 1 }}
                 />
                 <Monaco
                   language='json'
