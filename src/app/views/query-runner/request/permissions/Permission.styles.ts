@@ -75,7 +75,15 @@ export const permissionStyles = (theme: ITheme) => {
     cellTitleStyles: {
       root: {
         position: 'relative' as 'relative',
-        top: '3px'
+        top: '4px'
+      }
+    },
+    detailsHeaderStyles: {
+      root: {
+        height: window.innerWidth < 1699 ? '40px' : '32px',
+        lineHeight: '20px',
+        textAlign: 'center',
+        marginTop: '7px'
       }
     }
   };

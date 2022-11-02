@@ -47,7 +47,8 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const classes = classNames(classProps);
   const theme = getTheme();
-  const {panelContainer: panelStyles, tooltipStyles, columnCellStyles, cellTitleStyles } = permissionStyles(theme);
+  const {panelContainer: panelStyles, tooltipStyles, columnCellStyles, cellTitleStyles,
+    detailsHeaderStyles} = permissionStyles(theme);
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
 
@@ -84,75 +85,16 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
       switch (column.key) {
 
         case 'isAdmin':
-          if (item.isAdmin) {
-            return <div style={{ textAlign: 'center' }}>
-              <Label><FormattedMessage id='Yes' /></Label>
-            </div>;
-          } else {
-            return <div style={{ textAlign: 'center' }}>
-              <Label><FormattedMessage id='No' /></Label>
-            </div>;
-          }
+          return adminLabel(item);
 
         case 'consented':
-          if (consented) {
-            if(userHasRequiredPermissions()){
-              return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '100px', textAlign:'center'}}>
-                <FormattedMessage id='Revoke' />
-              </PrimaryButton>;
-            }
-            else{
-              return <TooltipHost
-                content={translateMessage('You require the following permissions to revoke')}
-                id={hostId}
-                calloutProps={{ gapSpace: 0 }}
-                styles={{ root: { display: 'inline-block' } }}
-              >
-                <DefaultButton
-                  toggle
-                  checked={false}
-                  text={translateMessage('Revoke')}
-                  iconProps={buttonIcon}
-                  allowDisabledFocus
-                  disabled={true}
-                  style={{width: '100px'}}
-                />
-              </TooltipHost>;
-            }
-          } else {
-            return <PrimaryButton onClick={() => handleConsent(item)} style={{width: '100px'}}>
-              <FormattedMessage id='Consent' />
-            </PrimaryButton>;
-          }
+          return consentedButton(consented, item, hostId);
 
         case 'consentDescription':
-          return <>
-            <TooltipHost
-              content={item.consentDescription}
-              id={hostId}
-              calloutProps={{ gapSpace: 0 }}
-              styles={{
-                root: { display: 'block' }
-              }}
-            >
-              <span aria-labelledby={hostId}>
-                {item.consentDescription}
-              </span>
-            </TooltipHost>
-          </>;
+          return consentDescriptionJSX(item, hostId);
 
         case 'consentType':
-          if(scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0
-             && consented) {
-
-            const tenantWideGrant : IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant;
-            const allPrincipalPermissions = getAllPrincipalPermissions(tenantWideGrant);
-            const permissionInAllPrincipal = allPrincipalPermissions.some((permission: string) =>
-              item.value === permission);
-            return permissionConsentTypeLabel(permissionInAllPrincipal);
-
-          }
-          return <div/>
+          return consentTypeProperty(consented, item);
 
         default:
           return (
@@ -170,6 +112,81 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
       }
     }
   };
+
+  const consentDescriptionJSX = (item: any, hostId: string) => {
+    return(
+      <>
+        <TooltipHost
+          content={item.consentDescription}
+          id={hostId}
+          calloutProps={{ gapSpace: 0 }}
+          styles={{
+            root: { display: 'block' }
+          }}
+        >
+          <span aria-labelledby={hostId}>
+            {item.consentDescription}
+          </span>
+        </TooltipHost></>
+    )
+  }
+
+  const adminLabel = (item: any): JSX.Element => {
+    if (item.isAdmin) {
+      return <div style={{ textAlign: 'center' }}>
+        <Label><FormattedMessage id='Yes' /></Label>
+      </div>;
+    } else {
+      return <div style={{ textAlign: 'center' }}>
+        <Label><FormattedMessage id='No' /></Label>
+      </div>;
+    }
+  }
+
+  const consentedButton = (consented: boolean, item: any, hostId: string): JSX.Element => {
+    if (consented) {
+      if(userHasRequiredPermissions()){
+        return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '100px', textAlign:'center'}}>
+          <FormattedMessage id='Revoke' />
+        </PrimaryButton>;
+      }
+      else{
+        return <TooltipHost
+          content={translateMessage('You require the following permissions to revoke')}
+          id={hostId}
+          calloutProps={{ gapSpace: 0 }}
+          styles={{ root: { display: 'inline-block' } }}
+        >
+          <DefaultButton
+            toggle
+            checked={false}
+            text={translateMessage('Revoke')}
+            iconProps={buttonIcon}
+            allowDisabledFocus
+            disabled={true}
+            style={{width: '100px'}}
+          />
+        </TooltipHost>;
+      }
+    } else {
+      return <PrimaryButton onClick={() => handleConsent(item)} style={{width: '100px'}}>
+        <FormattedMessage id='Consent' />
+      </PrimaryButton>;
+    }
+  }
+
+  const consentTypeProperty = (consented: boolean, item: any): JSX.Element => {
+    if(scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0
+             && consented) {
+
+      const tenantWideGrant : IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant;
+      const allPrincipalPermissions = getAllPrincipalPermissions(tenantWideGrant);
+      const permissionInAllPrincipal = allPrincipalPermissions.some((permission: string) =>
+        item.value === permission);
+      return permissionConsentTypeLabel(permissionInAllPrincipal);
+    }
+    return <div/>
+  }
 
   const permissionConsentTypeLabel = (permissionInAllPrincipal : boolean) : JSX.Element => {
     if(permissionInAllPrincipal){
@@ -212,12 +229,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
           <TooltipHost {...tooltipHostProps} styles={tooltipStyles} />
         );
       },
-      styles: { root: {
-        height: '40px',
-        lineHeight: '20px',
-        textAlign: 'center',
-        marginTop: '4px'
-      } }
+      styles: detailsHeaderStyles
     });
   }
 

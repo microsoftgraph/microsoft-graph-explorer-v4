@@ -96,7 +96,7 @@ export class RevokePermissionsUtil {
     if (!allPrincipalGrants) {
       return requiredPermissions.every(scope => consentedScopes.includes(scope));
     }
-    const allPrincipalScopes = allPrincipalGrants!.scope.split(' ') as string[];
+    const allPrincipalScopes = allPrincipalGrants.scope.split(' ') as string[];
     let principalAndAllPrincipalScopes: string[] = [];
     principalAndAllPrincipalScopes = consentedScopes.concat(allPrincipalScopes);
     return requiredPermissions.every(scope => principalAndAllPrincipalScopes.includes(scope));
@@ -132,7 +132,7 @@ export class RevokePermissionsUtil {
     const updatedScopes = allPrincipalGrant.scope.split(' ').filter((scope: string) => scope !== permissionToRevoke);
     await this.revokePermission(allPrincipalGrant.id!, updatedScopes.join(' '));
     const response = await RevokePermissionsUtil.getTenantPermissionGrants([], servicePrincipalAppId);
-    return this.getAllPrincipalGrant(response)!.scope.split(' ');
+    return this.getAllPrincipalGrant(response).scope.split(' ');
   }
 
   private getAllPrincipalGrant(grantsPayload: IOAuthGrantPayload): IPermissionGrant {

@@ -29,7 +29,6 @@ import {
 } from './auth-action-creators';
 import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
-import { IOAuthGrantPayload } from '../../../types/permissions';
 import { RevokePermissionsUtil, REVOKE_STATUS } from './permissions-action-creator.util';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesError';
