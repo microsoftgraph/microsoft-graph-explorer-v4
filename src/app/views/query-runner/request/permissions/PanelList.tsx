@@ -130,7 +130,8 @@ const PanelList = ({ messages,
 
   const groupHeaderStyles = () => {
     return {
-      check: { display: 'none' }
+      check: { display: 'none'},
+      root: { background: theme.palette.white}
     }
   }
 

@@ -73,7 +73,13 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
     dispatch(revokeScopes(permission.value));
   };
 
-  const buttonIcon: IIconProps = { iconName: 'Info' };
+  const buttonIcon: IIconProps = {
+    iconName: 'Info',
+    style: {
+      position: 'relative',
+      top: '1px',
+      left: '6px'
+    } };
 
   const renderItemColumn = (item: any, index: any, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
