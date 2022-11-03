@@ -138,7 +138,7 @@ test.describe('Share query', () => {
 
 test.describe('Resources explorer', () => {
   test('should open the resources explorer when the resources explorer button is clicked', async () => {
-    await page.locator('button[role="tab"]:has-text(" Resources")').click();
+    await page.locator('button[role="tab"]:has-text("Resources")').click();
     await page.locator('text=admin (3)').click();
     await page.locator('text=admin').nth(1).click();
     const queryInputField = page.locator('[aria-label="Query sample input"]');
@@ -148,14 +148,14 @@ test.describe('Resources explorer', () => {
   });
 
   test('should isolate a resource when the isolate button is clicked', async () => {
-    await page.locator('button[role="tab"]:has-text(" Resources")').click();
+    await page.locator('button[role="tab"]:has-text("Resources")').click();
     await page.locator('text=admin (3)More actions >> [aria-label="More actions"]').click();
     await page.locator('button[role="menuitem"]:has-text("Isolate")').click();
-    await page.locator('button:has-text("Close isolation")').click();
+    await page.locator('button:has-text("Close isolation")').click();
   });
 
   test('should add a resource to collection', async () => {
-    await page.locator('button[role="tab"]:has-text(" Resources")').click();
+    await page.locator('button[role="tab"]:has-text("Resources")').click();
     await page.locator('text=admin (3)').click();
     await page.locator('text=GETadminMore actions >> [aria-label="More actions"]').click();
     await page.locator('button[role="menuitem"]:has-text("Add to collection")').click();
@@ -166,11 +166,11 @@ test.describe('Resources explorer', () => {
     ]);
     expect(download.suggestedFilename().indexOf('postman_collection.json')).toBeGreaterThan(-1);
     await page.locator('[aria-label="select row"]').click();
-    await page.locator('button[role="menuitem"]:has-text("Remove")').click();
+    await page.locator('button[role="menuitem"]:has-text("Remove")').click();
   });
 
   test('should switch between v1 and beta versions of resources', async () => {
-    await page.locator('button[role="tab"]:has-text(" Resources")').click();
+    await page.locator('button[role="tab"]:has-text("Resources")').click();
     await page.locator('button[role="switch"]').click();
     expect(page.locator('label:has-text("On")')).toBeDefined();
   })
@@ -180,7 +180,7 @@ test.describe('History tab', () => {
   test('should show added history items to Today\'s collection ', async () => {
     await page.locator('button[role="button"]:has-text("Run query")').click();
     await page.locator('text= Sample queries Resources History >> [aria-label="More items"]').click();
-    await page.locator('button[role="menuitem"]:has-text(" History")').click();
+    await page.locator('button[role="menuitem"]:has-text("History")').click();
     expect(page.locator('span:has-text("Today")')).toBeDefined();
   });
 
@@ -198,13 +198,14 @@ test.describe('History tab', () => {
     await page.locator('[aria-label="Delete Today queries"]').click();
     await page.locator('text=Delete all requests in the group : Today').click();
     await page.locator('button:has-text("Delete")').click();
+    expect(page.locator('text=We did not find any history items')).toBeDefined();
   });
 });
 
 test.describe('Request section', () => {
 
   test('should add request headers', async () => {
-    const queryInput = await page.locator('[aria-label="Query sample input"]');
+    const queryInput = page.locator('[aria-label="Query sample input"]');
     await queryInput.click();
     queryInput.fill('https://graph.microsoft.com/v1.0/users?$count=true');
     await page.locator('[aria-label="Request headers"]').click();
@@ -214,13 +215,15 @@ test.describe('Request section', () => {
     await page.locator('[placeholder="Value"]').fill('eventual');
     await page.locator('button:has-text("Add")').click();
     await page.locator('button[role="button"]:has-text("Run query")').click();
+    expect(page.locator('text=ConsistencyLevel')).toBeDefined();
+    expect(page.locator('text=eventual')).toBeDefined();
   });
 
   test('should edit request headers', async () => {
     await page.locator('[aria-label="Edit request header"]').click();
     await page.locator('[placeholder="Key"]').fill('ConsistencyLev');
     await page.locator('button:has-text("Update")').click();
-    const newHeaderKey = await page.locator('text=ConsistencyLev');
+    const newHeaderKey = page.locator('text=ConsistencyLev');
     expect(newHeaderKey).toBeDefined();
   });
 
@@ -231,11 +234,11 @@ test.describe('Request section', () => {
 
   test('should add request body to non-GET requests', async () => {
     await page.locator('[aria-label="Request body"]').click();
-    await page.locator('button[role="tab"]:has-text(" Sample queries")').click();
+    await page.locator('button[role="tab"]:has-text("Sample queries")').click();
     // eslint-disable-next-line max-len
     await page.locator('[aria-label="Applications has 8 results 2 of 28"] [aria-label="expand collapse group"]').click();
     await page.locator('[aria-label="update application properties"]').dblclick();
-    expect(await page.locator('text=/.*"signInAudience".*/')).toBeDefined();
+    expect(page.locator('text=/.*"signInAudience".*/')).toBeDefined();
   });
 
   test.describe('Snippets', () => {
