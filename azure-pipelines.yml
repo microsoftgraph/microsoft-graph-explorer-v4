@@ -86,10 +86,6 @@ jobs:
           npm test
         displayName: "Runs Unit tests"
 
-      - script: |
-          npm run ci
-        displayName: "Runs Accessibility tests"
-
       - task: PublishTestResults@2
         condition: succeededOrFailed()
         inputs:
