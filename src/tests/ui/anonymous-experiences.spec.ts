@@ -224,7 +224,6 @@ test.describe('Request section', () => {
     expect(newHeaderKey).toBeDefined();
   });
 
-  // complete this test
   test('should delete request headers', async () => {
     expect(page.locator('text=ConsistencyLev')).toBeDefined();
     await page.locator('[aria-label="Remove request header"]').click();
@@ -237,7 +236,45 @@ test.describe('Request section', () => {
     await page.locator('[aria-label="Applications has 8 results 2 of 28"] [aria-label="expand collapse group"]').click();
     await page.locator('[aria-label="update application properties"]').dblclick();
     expect(await page.locator('text=/.*"signInAudience".*/')).toBeDefined();
+  });
+
+  test.describe('Snippets', () => {
+    test('should show snippets for the selected language', async () => {
+      const queryInput = page.locator('[aria-label="Query sample input"]');
+      await queryInput.click();
+      queryInput.fill('https://graph.microsoft.com/v1.0/me/messages');
+      await queryInput.press('Tab');
+      const snippetTab = page.locator('[aria-label="Code snippets"]');
+      await snippetTab.click();
+      const cSharpTab = page.locator('button[role="tab"]:has-text("CSharp")');
+      await cSharpTab.click();
+      await page.locator('button[role="tab"]:has-text("JavaScript")').click();
+      await page.locator('button[name="Java"]').click();
+      await page.locator('button[role="tab"]:has-text("Go")').click();
+      await page.locator('button[role="tab"]:has-text("PowerShell")').click();
+    });
   })
+
+  test.describe('Toolkit component', () => {
+    test('should show toolkit component for a valid url', async () => {
+      const queryInput = page.locator('[aria-label="Query sample input"]');
+      await queryInput.click();
+      await queryInput.fill('https://graph.microsoft.com/me');
+      const toolkitTab = page.locator('[aria-label="Toolkit component"]');
+      await toolkitTab.click();
+      expect(page.locator('text=Open this example in')).toBeDefined();
+    });
+
+    test('should show an error message for an invalid url', async () => {
+      const queryInput = page.locator('[aria-label="Query sample input"]');
+      await queryInput.click();
+      await queryInput.fill('https://graph.microsoft.com/me/messages');
+      const toolkitTab = page.locator('[aria-label="Toolkit component"]');
+      await toolkitTab.click();
+      expect(page.locator('text=No toolkit component is available')).toBeDefined();
+    })
+  })
+
 })
 
 
