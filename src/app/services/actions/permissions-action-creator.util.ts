@@ -96,7 +96,7 @@ export class RevokePermissionsUtil {
     if (!allPrincipalGrants) {
       return requiredPermissions.every(scope => consentedScopes.includes(scope));
     }
-    const allPrincipalScopes = allPrincipalGrants.scope.split(' ') as string[];
+    const allPrincipalScopes = allPrincipalGrants.scope.split(' ');
     let principalAndAllPrincipalScopes: string[] = [];
     principalAndAllPrincipalScopes = consentedScopes.concat(allPrincipalScopes);
     return requiredPermissions.every(scope => principalAndAllPrincipalScopes.includes(scope));
