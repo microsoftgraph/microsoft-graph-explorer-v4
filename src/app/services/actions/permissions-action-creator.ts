@@ -142,8 +142,8 @@ export function consentToScopes(scopes: string[]) {
         }
         dispatch(
           setQueryResponseStatus({
-            statusText: 200,
-            status: translateMessage('Scope consent success'),
+            statusText: translateMessage('Success'),
+            status: translateMessage('Scope consent successful'),
             ok: true,
             messageType: MessageBarType.success
           }))
