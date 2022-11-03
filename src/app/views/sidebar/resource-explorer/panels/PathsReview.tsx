@@ -69,13 +69,13 @@ const PathsReview = (props: IPathsReview) => {
     downloadToLocal(content, filename);
   };
   const getDescriptionUrl = () => {
-    if (items.length > 0 && items[0].version === 'beta') {
+    if (items && items.length > 0 && items[0].version === 'beta') {
       return GRAPH_BETA_DESCRIPTION_URL;
     }
     return GRAPH_V1_DESCRIPTION_URL;
   };
   const getVersionsCount = () => {
-    const versions = items.map((item) => item.version);
+    const versions = items ? items.map((item) => item.version) : [];
     return new Set(versions).size;
   };
   const redirectToKiotaWeb = () => {
