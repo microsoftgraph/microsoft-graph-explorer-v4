@@ -11,7 +11,7 @@ test.beforeAll(async ({ browser }) => {
 
 test.describe('Sample Queries', () => {
 
-  test.skip('Sign in tooltip should not be visible', async () => {
+  test('Sign in tooltip should not be visible', async () => {
     await authenticatedPage
       .locator('[aria-label="Applications has 8 results 2 of 28"] [aria-label="expand collapse group"]')
       .click();
@@ -25,7 +25,7 @@ test.describe('Sample Queries', () => {
 
 test.describe('Settings', () => {
 
-  test.skip('Change theme settings', async () => {
+  test('Change theme settings', async () => {
 
     const settingsButton = authenticatedPage.locator('[aria-label="Settings"]');
     await settingsButton.click();
@@ -49,7 +49,7 @@ test.describe('Settings', () => {
 
 test.describe('Run query', () => {
 
-  test.skip('user can run query', async () => {
+  test('user can run query', async () => {
     const runQueryButton = authenticatedPage.locator('.run-query-button button');
     await runQueryButton.click();
     await authenticatedPage.waitForTimeout(100);
@@ -61,7 +61,7 @@ test.describe('Run query', () => {
 });
 
 test.describe('Profile', () => {
-  test.skip('should show profile', async () => {
+  test('should show profile', async () => {
     await authenticatedPage.locator('[aria-label="profile"]').click();
     await expect(authenticatedPage.locator('button:has-text("Consent to permissions")')).toBeVisible();
   });

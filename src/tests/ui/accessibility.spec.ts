@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Accessibility', () => {
   test.use({ viewport: { width: 1024, height: 768 } });
 
-  test.skip('should not have any automatically detectable accessibility issues', async ({ page }) => {
+  test('should not have any automatically detectable accessibility issues', async ({ page }) => {
 
     await page.goto('/');
     await page.waitForTimeout(500);
