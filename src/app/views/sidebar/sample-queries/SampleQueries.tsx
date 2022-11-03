@@ -138,6 +138,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             calloutProps={{ gapSpace: 0 }}
           >
             <Link
+              aria-label={item.docLink}
               target="_blank"
               href={item.docLink}
               onClick={() => trackDocumentLinkClickedEvent(item)}
