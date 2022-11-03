@@ -232,7 +232,7 @@ export function revokeScopes(permissionToRevoke: string) {
 
       if (updatedScopes.length !== newScopesArray.length) {
         throw new RevokeScopesError({
-          errorText: 'Scopes not updated', statusText: 'Scopes not updated',
+          errorText: 'Scopes not updated', statusText: 'An error occurred when dissenting',
           status: '500', messageType: 1
         })
       }
