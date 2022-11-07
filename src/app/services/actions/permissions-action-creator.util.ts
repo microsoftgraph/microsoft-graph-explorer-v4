@@ -228,8 +228,8 @@ export class RevokePermissionsUtil {
     if (!this.permissionToRevokeInGrant(signedInGrant, permissionToRevoke) && userIsTenantAdmin) {
       this.trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
       throw new RevokeScopesError({
-        errorText: 'Permission not found',
-        statusText: 'You cannot revoke permissions not in your scopes', status: 'Permission not found',
+        errorText: 'Permission propagation delay',
+        statusText: 'You cannot revoke permissions not in your scopes', status: 'Permission propagation delay',
         messageType: 1
       })
     }
