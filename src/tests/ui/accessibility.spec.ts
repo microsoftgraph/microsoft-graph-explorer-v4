@@ -8,7 +8,7 @@ test.describe('Accessibility', () => {
 
     await page.goto('/');
     await page.waitForTimeout(500);
-    test.slow();
+    test.setTimeout(150000);
     const accessibilityScanResults = await new AxeBuilder({ page })
       .disableRules([
         'landmark-one-main',
