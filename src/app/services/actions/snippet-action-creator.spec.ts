@@ -14,7 +14,8 @@ describe('Snippet actions creators', () => {
     // Arrange
     const expectedActions = [
       {
-        type: GET_SNIPPET_PENDING
+        type: 'GET_SNIPPET_PENDING',
+        response: null
       },
       {
         type: GET_SNIPPET_SUCCESS,
