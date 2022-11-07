@@ -1,19 +1,14 @@
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect, Page } from '@playwright/test';
-
-
-let page: Page;
-
-test.beforeAll(async ({ browser }) => {
-  page = await browser.newPage();
-  await page.goto('/');
-});
+import { test, expect } from '@playwright/test';
 
 test.describe('Accessibility', () => {
   test.use({ viewport: { width: 1024, height: 768 } });
 
-  test('should not have any automatically detectable accessibility issues', async () => {
-    test.setTimeout(500000);
+  test('should not have any automatically detectable accessibility issues', async ({ page }) => {
+
+    await page.goto('/');
+    await page.waitForTimeout(500);
+    test.slow();
     const accessibilityScanResults = await new AxeBuilder({ page })
       .disableRules([
         'landmark-one-main',
