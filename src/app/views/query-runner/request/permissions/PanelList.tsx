@@ -1,30 +1,16 @@
 import {
-  Announced,
-  DefaultButton,
-  DetailsList,
-  DetailsListLayoutMode,
-  getTheme,
-  GroupHeader,
-  IColumn,
-  IDetailsListCheckboxProps,
-  IOverlayProps,
-  Label,
-  Panel,
-  PanelType,
-  PrimaryButton,
-  SearchBox,
-  SelectionMode,
-  Selection,
-  IGroup
+  Announced, DefaultButton, DetailsList, DetailsListLayoutMode, getTheme, GroupHeader, IColumn,
+  IDetailsListCheckboxProps, IGroup, IOverlayProps, Label, Panel, PanelType, PrimaryButton,
+  SearchBox, Selection, SelectionMode
 } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
-import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
+import { useDispatch } from 'react-redux';
 
+import { AppDispatch, useAppSelector } from '../../../../../store';
+import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
-import { IRootState } from '../../../../../types/root';
 import { consentToScopes } from '../../../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
@@ -50,7 +36,8 @@ const PanelList = ({ messages,
     return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
   }
 
-  const { consentedScopes, scopes, authToken, permissionsPanelOpen } = useSelector((state: IRootState) => state);
+  const { consentedScopes, scopes, authToken,
+    permissionsPanelOpen } = useAppSelector((state) => state);
   const { fullPermissions } = scopes.data;
   const [permissions, setPermissions] = useState<any []>([]);
   const [groups, setGroups] = useState<IGroup[]>([]);
@@ -71,16 +58,16 @@ const PanelList = ({ messages,
 
   useEffect(() => {
     if (shouldGenerateGroups.current) {
-      if(permissionsList.length === 0){ return }
       setGroups(generateGroupsFromList(permissionsList, 'groupName'));
       if(groups && groups.length > 0) {
         shouldGenerateGroups.current = false;
       }
+      if(permissionsList.length === 0){ return }
     }
   }, [permissions, searchStarted])
 
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
@@ -101,7 +88,8 @@ const PanelList = ({ messages,
 
       filteredPermissions = fullPermissions.filter((permission: IPermission) => {
         const name = permission.value.toLowerCase();
-        return name.includes(keyword);
+        const groupName = permission.value.split('.')[0].toLowerCase();
+        return name.includes(keyword) || groupName.includes(keyword);
       });
     }
     setPermissions(filteredPermissions);
@@ -188,19 +176,6 @@ const PanelList = ({ messages,
 
   return (
     <div>
-      <Label className={classes.permissionText}>
-        <FormattedMessage id='Select different permissions' />
-      </Label>
-      <hr />
-      <SearchBox
-        className={classes.searchBox}
-        placeholder={messages['Search permissions']}
-        onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
-          searchValueChanged(event, newValue)}
-        styles={searchBoxStyles}
-      />
-      <Announced message={`${permissions.length} search results available.`} />
-      <hr />
       <Panel
         isOpen={permissionsPanelOpen}
         onDismiss={() => changePanelState()}
@@ -213,7 +188,7 @@ const PanelList = ({ messages,
         overlayProps={panelOverlayProps}
         styles={permissionPanelStyles}
       >
-        {loading || groups && groups.length === 0 ? displayLoadingPermissionsText() :
+        {loading ? displayLoadingPermissionsText() :
           <>
             <Label className={classes.permissionText}>
               <FormattedMessage id='Select different permissions' />
@@ -251,8 +226,8 @@ const PanelList = ({ messages,
               onRenderCheckbox={(props?: IDetailsListCheckboxProps) => renderCustomCheckbox(props)}
             />
           </>}
-      </Panel>
-      {permissions && permissions.length === 0 &&
+
+        {!loading && permissions && permissions.length === 0 &&
         <Label style={{
           display: 'flex',
           width: '100%',
@@ -262,7 +237,8 @@ const PanelList = ({ messages,
         }}>
           <FormattedMessage id='permissions not found' />
         </Label>
-      }
+        }
+      </Panel>
     </div>
   );
 };

@@ -1,23 +1,11 @@
 import {
-  ActionButton,
-  Callout,
-  FontSizes,
-  getTheme,
-  IPersonaProps,
-  IPersonaSharedProps,
-  mergeStyleSets,
-  Persona,
-  PersonaSize,
-  Spinner,
-  SpinnerSize,
-  Stack,
-  styled
+  ActionButton, Callout, FontSizes, getTheme, IPersonaProps, IPersonaSharedProps, mergeStyleSets,
+  Persona, PersonaSize, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useId } from '@fluentui/react-hooks';
 
-import { IRootState } from '../../../../types/root';
 import { signOut } from '../../../services/actions/auth-action-creators';
 import { togglePermissionsPanel } from '../../../services/actions/permissions-panel-action-creator';
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
@@ -27,6 +15,7 @@ import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
 import { Mode } from '../../../../types/enums';
+import { AppDispatch, useAppSelector } from '../../../../store';
 
 const getInitials = (name: string) => {
   let initials = '';
@@ -45,13 +34,13 @@ const getInitials = (name: string) => {
 };
 
 const Profile = (props: any) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const {
     profile,
     authToken,
     permissionsPanelOpen,
     graphExplorerMode
-  } = useSelector((state: IRootState) => state);
+  } = useAppSelector((state) => state);
   const authenticated = authToken.token;
   const [isCalloutVisible, setIsCalloutVisible] = useState(false);
   const toggleIsCalloutVisible = () => { setIsCalloutVisible(!isCalloutVisible) };
@@ -59,7 +48,7 @@ const Profile = (props: any) => {
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
   const theme = getTheme();
-  const { personaStyleToken , profileSpinnerStyles, permissionsLabelStyles, personaButtonStyles,
+  const { personaStyleToken, profileSpinnerStyles, permissionsLabelStyles, personaButtonStyles,
     profileContainerStyles } = profileStyles(theme);
 
   useEffect(() => {
@@ -99,7 +88,7 @@ const Profile = (props: any) => {
 
   const onRenderSecondaryText = (prop: IPersonaProps): JSX.Element => {
     return (
-      <span style={{fontSize: FontSizes.small}}>
+      <span style={{ fontSize: FontSizes.small }}>
         {prop.secondaryText}
       </span>
     );
@@ -142,25 +131,26 @@ const Profile = (props: any) => {
           beakWidth={10}
           onDismiss={toggleIsCalloutVisible}
           setInitialFocus
-          styles={{root: {border: '1px solid' + theme.palette.neutralTertiary}}}
+          styles={{ root: { border: '1px solid' + theme.palette.neutralTertiary } }}
         >
-          <Stack horizontal horizontalAlign='space-between' styles={{root:{ paddingBottom: 0}}}>
+          <Stack horizontal horizontalAlign='space-between' styles={{ root: { paddingBottom: 0 } }}>
             {profile &&
-            <ActionButton text={`${profile.tenant}`} disabled={true}/>
+              <ActionButton text={`${profile.tenant}`} disabled={true} />
             }
             <ActionButton key={'sign-out'} onClick={() => handleSignOut()}>
               {translateMessage('sign out')}
             </ActionButton>
           </Stack>
-          <Stack styles={{root:{ paddingLeft: 10 }}}>{fullPersona}</Stack>
+          <Stack styles={{ root: { paddingLeft: 10 } }}>{fullPersona}</Stack>
           {graphExplorerMode === Mode.Complete &&
-          <ActionButton key={'view-all-permissions'} onClick={() => changePanelState()} styles={permissionsLabelStyles}>
-            {translateMessage('view all permissions')}
-          </ActionButton>
+            <ActionButton key={'view-all-permissions'}
+              onClick={() => changePanelState()} styles={permissionsLabelStyles}>
+              {translateMessage('view all permissions')}
+            </ActionButton>
           }
-          <Stack styles={{root:{ background: theme.palette.neutralLighter, padding:10}}}>
+          <Stack styles={{ root: { background: theme.palette.neutralLighter, padding: 10 } }}>
             <ActionButton key={'sign-other-account'} onClick={() => handleSignInOther()}
-              iconProps={{iconName: 'AddFriend'}}
+              iconProps={{ iconName: 'AddFriend' }}
             >
               {translateMessage('sign in other account')}
             </ActionButton>
@@ -175,7 +165,7 @@ const Profile = (props: any) => {
   return (
     <div className={classes.profile} style={profileContainerStyles}>
       {showProfileComponent(persona)}
-      {permissionsPanelOpen && <Permission/>}
+      {permissionsPanelOpen && <Permission panel={true} />}
     </div>
   );
 }

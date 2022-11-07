@@ -1,17 +1,16 @@
 
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { RESPONSE_HEADERS_COPY_BUTTON } from '../../../../telemetry/component-names';
-import { IRootState } from '../../../../types/root';
 
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { CopyButton } from '../../common/copy/CopyButton';
+import { useAppSelector } from '../../../../store';
 
 const ResponseHeaders = () => {
   const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } =
-    useSelector((state: IRootState) => state);
+    useAppSelector((state) => state);
   const { headers } = graphResponse;
 
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);

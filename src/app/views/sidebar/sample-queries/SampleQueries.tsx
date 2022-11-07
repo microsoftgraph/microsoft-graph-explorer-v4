@@ -6,16 +6,12 @@ import {
 } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
+import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
-import {
-  IQuery,
-  ISampleQueriesProps,
-  ISampleQuery
-} from '../../../../types/query-runner';
-import { IRootState } from '../../../../types/root';
+import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
 import { fetchSamples } from '../../../services/actions/samples-action-creators';
@@ -37,12 +33,12 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
   const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
   const { authToken, profile, samples } =
-    useSelector((state: IRootState) => state);
+    useAppSelector((state) => state);
   const tokenPresent = authToken.token;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(samples.queries);
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState<boolean>(false);
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const currentTheme = getTheme();
 
   const { error, pending } = samples;
@@ -364,7 +360,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
           rel="noopener noreferrer"
           onClick={(e) => telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
             componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
-          href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
+          href={`https://learn.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
         >
           <FormattedMessage id='Microsoft Graph API Reference docs' />
         </Link>

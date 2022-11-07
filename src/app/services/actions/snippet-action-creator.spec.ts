@@ -9,6 +9,7 @@ import {
 } from './snippet-action-creator';
 import { GET_SNIPPET_SUCCESS, GET_SNIPPET_ERROR, GET_SNIPPET_PENDING } from '../redux-constants';
 import { Header, IQuery } from '../../../types/query-runner';
+import { AppAction } from '../../../types/action';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -17,7 +18,7 @@ describe('Snippet actions creators', () => {
   it('should dispatch GET_SNIPPET_SUCCESS when getSnippetSuccess() is called', () => {
     const snippet = 'GraphServiceClient graphClient = new GraphServiceClient( authProvider );';
 
-    const expectedAction = [{
+    const expectedAction: AppAction[] = [{
       type: GET_SNIPPET_SUCCESS,
       response: {
         csharp: snippet
@@ -35,8 +36,9 @@ describe('Snippet actions creators', () => {
   });
 
   it('should dispatch GET_SNIPPET_PENDING when getSnippetPending() is called', () => {
-    const expectedAction = {
-      type: GET_SNIPPET_PENDING
+    const expectedAction: AppAction = {
+      type: GET_SNIPPET_PENDING,
+      response: null
     };
 
     const action = getSnippetPending();
@@ -46,7 +48,7 @@ describe('Snippet actions creators', () => {
 
   it('should dispatch GET_SNIPPET_ERROR when getSnippetError() is called', () => {
     const response = {};
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: GET_SNIPPET_ERROR,
       response
     };

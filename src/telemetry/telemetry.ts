@@ -15,7 +15,6 @@ import { sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
 import { IQuery } from '../types/query-runner';
 import {
   BUTTON_CLICK_EVENT,
-  DEVICE_CHARACTERISTICS_EVENT,
   LINK_CLICK_EVENT,
   TAB_CLICK_EVENT,
   WINDOW_OPEN_EVENT
@@ -24,12 +23,14 @@ import {
   addCommonTelemetryItemProperties,
   filterRemoteDependencyData,
   filterTelemetryTypes,
-  sanitizeStackTrace,
   sanitizeTelemetryItemUriProperty
 } from './filters';
 import ITelemetry from './ITelemetry';
 import { getVersion } from '../app/utils/version';
-import { getBrowserScreenSize, getDeviceScreenScale } from '../app/utils/device-characteristics-telemetry';
+import {
+  getBrowserScreenSize,
+  getDeviceScreenScale
+} from '../app/utils/device-characteristics-telemetry';
 
 class Telemetry implements ITelemetry {
   private appInsights: ApplicationInsights;
@@ -58,7 +59,6 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackPageView();
     this.appInsights.addTelemetryInitializer(filterTelemetryTypes);
     this.appInsights.addTelemetryInitializer(filterRemoteDependencyData);
-    this.appInsights.addTelemetryInitializer(sanitizeStackTrace);
     this.appInsights.addTelemetryInitializer(sanitizeTelemetryItemUriProperty);
     this.appInsights.addTelemetryInitializer(addCommonTelemetryItemProperties);
     this.appInsights.context.application.ver = getVersion().toString();
@@ -120,18 +120,15 @@ class Telemetry implements ITelemetry {
     telemetry.trackEvent(WINDOW_OPEN_EVENT, properties);
   }
 
-  public trackDeviceCharacteristicsTelemetry(properties?: any) {
-    const deviceProperties = {
-      deviceHeight: screen.height,
-      deviceWidth: screen.width,
+  public getDeviceCharacteristicsData() {
+    return {
+      deviceHeight: screen.height.toString(),
+      deviceWidth: screen.width.toString(),
       browserScreenSize: getBrowserScreenSize(window.innerWidth),
-      browserHeight: window.innerHeight,
-      browserWidth: window.innerWidth,
+      browserHeight: window.innerHeight.toString(),
+      browserWidth: window.innerWidth.toString(),
       scale: getDeviceScreenScale()
     };
-    properties = Object.assign(properties || {}, deviceProperties);
-
-    telemetry.trackEvent(DEVICE_CHARACTERISTICS_EVENT, properties);
   }
 
   private getInstrumentationKey() {

@@ -1,0 +1,43 @@
+{
+    "type": "AdaptiveCard",
+    "@odata.type": "#microsoft.graph.driveItem",
+    "body": [
+        {
+            "$data": "${value}",
+            "type": "Container",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "${name}",
+                    "weight": "Bolder"
+                },     
+                {
+                    "type": "FactSet",
+                    "facts": [
+                        {
+                            "title": "Created",
+                            "value": "{{DATE(${createdDateTime}, SHORT)}} by ${createdBy.user.displayName}"
+                        },
+                        {
+                            "title": "Modified",
+                            "value": "{{DATE(${lastModifiedDateTime}, SHORT)}} by ${lastModifiedBy.user.displayName}"
+                        }
+                    ]
+                },           
+                {
+                    "type": "ActionSet",
+                    "actions": [
+                        {
+                            "type": "Action.OpenUrl",
+                            "title": "Open file",
+                            "url": "${webUrl}"
+                        }
+                    ]
+                }
+            ],
+            "separator": true
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.0"
+}

@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { IAdaptiveCardResponse } from '../../../types/adaptivecard';
 import {
   FETCH_ADAPTIVE_CARD_ERROR,
@@ -12,7 +12,7 @@ const initialState: IAdaptiveCardResponse = {
   error: ''
 };
 
-export function adaptiveCard(state = initialState, action: IAction): any {
+export function adaptiveCard(state = initialState, action: AppAction): any {
   switch (action.type) {
     case FETCH_ADAPTIVE_CARD_SUCCESS:
       return {

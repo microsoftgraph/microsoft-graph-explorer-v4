@@ -11,7 +11,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IAdaptiveCardProps } from '../../../../types/adaptivecard';
 import { IQuery } from '../../../../types/query-runner';
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
@@ -144,7 +144,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
               <div id={'json-schema-tab'}>
                 <MessageBar messageBarType={MessageBarType.info}>
                   <FormattedMessage id='Get started with adaptive cards on' />
-                  <Link href={'https://docs.microsoft.com/en-us/adaptive-cards/templating/sdk'}
+                  <Link href={'https://learn.microsoft.com/en-us/adaptive-cards/templating/sdk'}
                     target='_blank'
                     rel='noopener noreferrer'
                     tabIndex={0}
@@ -164,6 +164,7 @@ class AdaptiveCard extends Component<IAdaptiveCardProps> {
                   className={classes.copyIcon}
                   handleOnClick={handleCopy}
                   isIconButton={true}
+                  style={{ float: 'right', zIndex: 1 }}
                 />
                 <Monaco
                   language='json'
@@ -189,7 +190,7 @@ function onPivotItemClick(query: IQuery | undefined, item?: PivotItem) {
   }
 }
 
-function mapStateToProps({ adaptiveCard, sampleQuery, queryRunnerStatus }: IRootState) {
+function mapStateToProps({ adaptiveCard, sampleQuery, queryRunnerStatus }: ApplicationState) {
   return {
     card: adaptiveCard,
     sampleQuery,

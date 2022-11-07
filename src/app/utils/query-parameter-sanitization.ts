@@ -54,19 +54,23 @@ function isKeyValuePair(str: string): boolean {
   return KEY_VALUE_REGEX.test(str);
 }
 
-export function isPropertyName(str: string): boolean {
+function isPropertyName(str: string): boolean {
   return PROPERTY_NAME_REGEX.test(str);
 }
 
-export function isAllAlpha(str: string): boolean {
+function isAllAlpha(str: string): boolean {
   return ALL_ALPHA_REGEX.test(str);
+}
+
+function isPlaceHolderSegment(segment: string) {
+  return segment.startsWith('{') && segment.endsWith('}')
 }
 
 /**
  * Redact variable segments of query parameters
  * @param queryParameter e.g. $top=5, $search="pizza", $filter=startswith(displayName, 'J')
  */
-export function sanitizeQueryParameter(queryParameter: string): string {
+function sanitizeQueryParameter(queryParameter: string): string {
   // return if not key-value pair
   if (!queryParameter.includes('=')) {
     return queryParameter;
@@ -481,4 +485,11 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
     sanitizedQueryString += ' <unknown>';
   }
   return sanitizedQueryString.trim();
+}
+
+export {
+  isPropertyName,
+  isAllAlpha,
+  isPlaceHolderSegment,
+  sanitizeQueryParameter
 }

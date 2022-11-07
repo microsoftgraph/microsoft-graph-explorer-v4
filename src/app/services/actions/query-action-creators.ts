@@ -20,7 +20,7 @@ import {
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
 
-export function runQuery(query: IQuery): Function {
+export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = !!getState()?.authToken?.token;
     const respHeaders: any = {};
