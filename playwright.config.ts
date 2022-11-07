@@ -7,7 +7,8 @@ const config: PlaywrightTestConfig = {
   globalSetup: require.resolve('./src/tests/ui/global-setup'),
   use: {
     baseURL,
-    trace: 'on-first-retry'
+    trace: 'on-first-retry',
+    headless: !!process.env.CI
   },
   testDir: './src/tests',
   workers: process.env.CI ? 4 : undefined,
