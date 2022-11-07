@@ -1,10 +1,18 @@
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
+
+let page: Page;
+
+test.beforeAll(async ({ browser }) => {
+  const context = await browser.newContext();
+  page = await context.newPage();
+  await page.goto('/');
+});
 
 test.describe('Accessibility', () => {
-  test.use({ viewport: { width: 1024, height: 768 }, headless: true });
+  test.use({ viewport: { width: 1024, height: 768 }});
 
-  test('should not have any automatically detectable accessibility issues', async ({ page }) => {
+  test('should not have any automatically detectable accessibility issues', async () => {
 
     await page.goto('/');
     await page.waitForTimeout(500);
