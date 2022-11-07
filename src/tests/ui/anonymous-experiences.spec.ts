@@ -183,23 +183,6 @@ test.describe('History tab', () => {
     await page.locator('button[role="menuitem"]:has-text("History")').click();
     expect(page.locator('span:has-text("Today")')).toBeDefined();
   });
-
-  test('should download history item collection when download button is clicked', async () => {
-    await page.locator('button[role="button"]:has-text("Run query")').click();
-    const [download] = await Promise.all([
-      page.waitForEvent('download'),
-      page.locator('[aria-label="Export Today queries"]').click()
-    ]);
-    expect(download.suggestedFilename().indexOf('graph.microsoft.com_today')).toBeGreaterThan(-1);
-  });
-
-  test('should delete history item collection when Delete button is clicked', async () => {
-    await page.locator('button[role="button"]:has-text("Run query")').click();
-    await page.locator('[aria-label="Delete Today queries"]').click();
-    await page.locator('text=Delete all requests in the group : Today').click();
-    await page.locator('button:has-text("Delete")').click();
-    expect(page.locator('text=We did not find any history items')).toBeDefined();
-  });
 });
 
 test.describe('Request section', () => {
