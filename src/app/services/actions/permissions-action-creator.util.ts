@@ -219,7 +219,7 @@ export class RevokePermissionsUtil {
       this.trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
       throw new RevokeScopesError({
         errorText: 'Revoking admin granted scopes',
-        statusText: 'You are dissenting to an admin pre-consented permission',
+        statusText: 'You are unconsenting to an admin pre-consented permission',
         status: 'Revoking admin granted scopes',
         messageType: 1
       })
