@@ -73,7 +73,7 @@
                 "build:prod": "npm run build",
                 "bump": "standard-version --skip.tag --skip.changelog",
                 "preinstall": "npx npm-force-resolutions",
-                "test-ui": "npx playwright test src/tests/ui"
+                "test-ui": "npx playwright test src/tests/ui --workers 4"
         },
         "eslintConfig": {
                 "extends": "react-app"

@@ -7,6 +7,7 @@ let page: Page;
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage();
   await page.goto('/');
+  console.log('Here is the page ', page.url())
 });
 
 test.describe('Accessibility', () => {
@@ -14,7 +15,6 @@ test.describe('Accessibility', () => {
 
   test('should not have any automatically detectable accessibility issues', async () => {
     test.setTimeout(150000);
-    await page.waitForNavigation();
     const accessibilityScanResults = await new AxeBuilder({ page })
       .disableRules([
         'landmark-one-main',
