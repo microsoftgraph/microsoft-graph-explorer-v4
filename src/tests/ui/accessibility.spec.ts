@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from '@playwright/test';
 
 test.describe('Accessibility', () => {
-  test.use({ viewport: { width: 1024, height: 768 } });
+  test.use({ viewport: { width: 1024, height: 768 }, headless: true });
 
   test('should not have any automatically detectable accessibility issues', async ({ page }) => {
 
