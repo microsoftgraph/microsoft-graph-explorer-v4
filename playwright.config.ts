@@ -10,6 +10,7 @@ const config: PlaywrightTestConfig = {
     trace: 'on-first-retry'
   },
   testDir: './src/tests',
+  workers: process.env.CI ? 4 : undefined,
   reporter: [
     [
       'html',
