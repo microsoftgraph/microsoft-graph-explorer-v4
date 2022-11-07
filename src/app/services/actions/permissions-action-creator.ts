@@ -184,6 +184,13 @@ export function consentToScopes(scopes: string[]) {
         ) {
           dispatch(getProfileInfo());
         }
+        dispatch(
+          setQueryResponseStatus({
+            statusText: translateMessage('Success'),
+            status: translateMessage('Scope consent successful'),
+            ok: true,
+            messageType: MessageBarType.success
+          }))
       }
     } catch (error: any) {
       const { errorCode } = error;

@@ -467,5 +467,6 @@
   "Consent type": "Consent type",
   "Failed to revoke consent": "An error occurred when unconsenting. Please try again",
   "Permission consent type": "Shows whether consent to the permission is personal or tenant-wide",
-  "Permission propagation delay": "Permission propagation delay"
+  "Permission propagation delay": "Permission propagation delay",
+  "Scope consent successful": "Scope consent successful"
 }
