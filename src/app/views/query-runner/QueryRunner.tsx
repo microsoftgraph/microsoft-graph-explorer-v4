@@ -101,8 +101,6 @@ IQueryRunnerState
           QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
           ...deviceCharacteristics
         });
-
-      telemetry.trackDeviceCharacteristicsTelemetry();
     }
     this.setState({ sampleBody: '' });
   };
