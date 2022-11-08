@@ -39,7 +39,6 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     </Label>);
   }
 
-
   const displayNotSignedInMessage = () : JSX.Element => {
     return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='sign in to view a list of all permissions' />

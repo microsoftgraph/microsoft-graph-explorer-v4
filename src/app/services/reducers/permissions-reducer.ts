@@ -62,13 +62,13 @@ export function scopes(state: IScopes = initialState, action: AppAction): any {
         error: null
       }
     case REVOKE_SCOPES_PENDING:
-      return{
+      return {
         pending: { ...state.pending, isRevokePermissions: true },
         data: state.data,
         error: null
       }
     case REVOKE_SCOPES_ERROR:
-      return{
+      return {
         pending: { ...state.pending, isRevokePermissions: false },
         data: state.data,
         error: 'error'

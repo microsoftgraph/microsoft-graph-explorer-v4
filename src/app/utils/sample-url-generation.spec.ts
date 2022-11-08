@@ -79,14 +79,14 @@ describe('Sample Url Generation', () => {
 
   it('replaces whitespace with + sign', () => {
     const search = '?filter=displayName eq \'All Company\'';
-    const parsedSearch= '?filter=displayName+eq+\'All+Company\'';
+    const parsedSearch = '?filter=displayName+eq+\'All+Company\'';
 
     const url = `https://graph.microsoft.com/v1.0/groups${search}`;
 
     const expectedUrl = {
       requestUrl: 'groups',
       queryVersion: 'v1.0',
-      sampleUrl:`https://graph.microsoft.com/v1.0/groups${parsedSearch}` ,
+      sampleUrl: `https://graph.microsoft.com/v1.0/groups${parsedSearch}`,
       search: parsedSearch
     };
 

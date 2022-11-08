@@ -6,7 +6,6 @@ import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { setSnippetTabSuccess } from '../../../services/actions/snippet-action-creator';
 import { renderSnippets } from './snippets-helper';
-
 function GetSnippets() {
   const dispatch: AppDispatch = useDispatch();
   const { snippets } = useAppSelector((state) => state);
