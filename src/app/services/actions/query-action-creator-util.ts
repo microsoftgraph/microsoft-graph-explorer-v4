@@ -14,7 +14,7 @@ import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { IStatus } from '../../../types/status';
-import { ClientError } from '../../utils/ClientError';
+import { ClientError } from '../../utils/error-utils/ClientError';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { translateMessage } from '../../utils/translate-messages';
 import { authProvider, GraphClient } from '../graph-client';
@@ -96,6 +96,7 @@ function createAuthenticatedRequest(
       sampleHeaders[header.name] = header.value;
     });
   }
+  const updatedHeaders = { ...sampleHeaders, 'cache-control': 'no-cache', pragma: 'no-cache' }
 
   const msalAuthOptions: AuthCodeMSALBrowserAuthenticationProviderOptions = {
     account: authenticationWrapper.getAccount()!,
@@ -109,7 +110,7 @@ function createAuthenticatedRequest(
   return GraphClient.getInstance()
     .api(encodeHashCharacters(query))
     .middlewareOptions([middlewareOptions])
-    .headers(sampleHeaders)
+    .headers(updatedHeaders)
     .responseType(ResponseType.RAW);
 }
 
