@@ -1,7 +1,11 @@
 
 import { IQuery, ISampleQuery } from '../../../../../../types/query-runner';
+import { IResource } from '../../../../../../types/resources';
 import { GRAPH_URL } from '../../../../../services/graph-constants';
 import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
+import {
+  getMatchingResourceForUrl, getResourcesSupportedByVersion
+} from '../../../../../utils/resources/resources-filter';
 import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 
 export interface IHint {
@@ -12,18 +16,28 @@ export interface IHint {
   description?: string;
 }
 
-export interface ISampleFilter {
-  queries: ISampleQuery[];
+export interface FilterParams {
+  source: ISampleQuery[] | IResource[];
   sampleQuery: IQuery;
-  sampleUrl: string;
-  queryRunnerStatus: any
 }
 
-export const getMatchingSamples = (filterParams: ISampleFilter): ISampleQuery[] => {
-  const { queries, sampleQuery, sampleUrl, queryRunnerStatus } = filterParams;
+const getSampleDocumentationUrl = (filterParams: FilterParams): string => {
+  const samples = getMatchingSamples(filterParams);
+  return (samples.length > 0) ? samples[0].docLink || '' : '';
+}
+
+const getMatchingSamples = (filterParams: FilterParams): ISampleQuery[] => {
+  const { sampleQuery } = filterParams;
+  const queries = filterParams.source as ISampleQuery[];
+  const { requestUrl, queryVersion } =
+    parseSampleUrl(sanitizeQueryUrl(sampleQuery.sampleUrl));
+  const method = filterParams.sampleQuery.selectedVerb;
+
+  const sampleUrl = `/${queryVersion}/${requestUrl}`;
+
   const querySamples: ISampleQuery[] = [];
   queries
-    .filter((sample: ISampleQuery) => sample.method === sampleQuery.selectedVerb)
+    .filter((sample: ISampleQuery) => sample.method === method)
     .forEach((sample: ISampleQuery) => {
       const { requestUrl: baseUrl, queryVersion: version } =
         parseSampleUrl(sanitizeQueryUrl(GRAPH_URL + sample.requestUrl));
@@ -32,55 +46,30 @@ export const getMatchingSamples = (filterParams: ISampleFilter): ISampleQuery[] 
         querySamples.push(sample);
       }
     });
-  if (querySamples.length > 1) {
-    const tipFilter = filterQueriesUsingTip(querySamples, queryRunnerStatus);
-    if (tipFilter.length > 1) {
-      return filterQueriesUsingQueryParameters(querySamples, sampleQuery);
-    }
-    return tipFilter;
-  }
   return querySamples;
 };
 
-function filterQueriesUsingTip(querySamples: ISampleQuery[], queryRunnerStatus: any) {
-  if (queryRunnerStatus && queryRunnerStatus.statusText === 'Tip') {
-    const exact = querySamples.filter(k => k.tip === queryRunnerStatus.status);
-    if (exact.length === 1) {
-      return exact;
-    }
+
+const getResourceDocumentationUrl = (filterParams: FilterParams): string | null => {
+
+  const { requestUrl, queryVersion } = parseSampleUrl(sanitizeQueryUrl(filterParams.sampleQuery.sampleUrl));
+  const resources = filterParams.source as IResource[];
+  const method = filterParams.sampleQuery.selectedVerb;
+
+  const supportedResources = getResourcesSupportedByVersion(resources, queryVersion);
+  const matchingResource = getMatchingResourceForUrl(requestUrl, supportedResources)!;
+
+  if (matchingResource && matchingResource.labels.length > 0) {
+    const currentLabel = matchingResource.labels.filter(k => k.name === queryVersion)[0];
+    const methodLabel = currentLabel.methods.find((value) =>
+      value.name.toLowerCase() === method.toLowerCase());
+    return methodLabel?.documentationUrl!;
   }
-  return querySamples;
+  return null;
 }
 
-function filterQueriesUsingQueryParameters(querySamples: ISampleQuery[], sampleQuery: IQuery) {
-  const { search } = parseSampleUrl(sampleQuery.sampleUrl);
-  if (search) {
-    const parameters: string[] = [];
-    const splitSearch = search.split('&');
-    if (splitSearch.length > 0) {
-      splitSearch.forEach(element => {
-        const parameter = element.substring(element.indexOf('$') + 1, element.lastIndexOf('='));
-        parameters.push(parameter);
-      });
+export {
+  getSampleDocumentationUrl,
+  getResourceDocumentationUrl
+};
 
-      const list: ISampleQuery[] = [];
-      parameters.forEach(param => {
-        const fit = querySamples.find(k => k.requestUrl.includes(param));
-        if (fit) {
-          list.push(fit);
-        }
-      });
-
-      if (list.length > 0) {
-        return getUniqueSample(list);
-      }
-    }
-  }
-  return querySamples;
-
-  function getUniqueSample(list: ISampleQuery[]) {
-    return list.filter((sample, index, filteredList) =>
-      filteredList.findIndex(query =>
-        (query.id === sample.id)) === index);
-  }
-}

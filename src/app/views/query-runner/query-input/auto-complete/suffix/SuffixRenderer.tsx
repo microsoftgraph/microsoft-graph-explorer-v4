@@ -6,16 +6,15 @@ import React, { useState } from 'react';
 
 import { useAppSelector } from '../../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../../telemetry';
-import { ISampleQuery } from '../../../../../../types/query-runner';
 import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../../utils/translate-messages';
 import { HintList } from './HintList';
-import { getMatchingSamples, IHint } from './suffix-util';
+import { getResourceDocumentationUrl, getSampleDocumentationUrl, IHint } from './suffix-util';
 import { styles } from './suffix.styles';
 
 const SuffixRenderer = () => {
-  const { autoComplete, sampleQuery, samples, queryRunnerStatus } = useAppSelector(
+  const { autoComplete, sampleQuery, samples, resources } = useAppSelector(
     (state) => state
   );
   const fetchingSuggestions = autoComplete.pending;
@@ -25,20 +24,25 @@ const SuffixRenderer = () => {
 
   const getDocumentationLink = (): IHint | null => {
     const { queries } = samples;
-    const sampleUrl = `/${queryVersion}/${requestUrl}`;
-    if (queries) {
-      const querySamples: ISampleQuery[] = getMatchingSamples({ queries, sampleQuery, sampleUrl, queryRunnerStatus });
 
-      const hasDocumentationLink = (querySamples.length > 0);
-      if (hasDocumentationLink) {
-        return {
-          link: {
-            url: querySamples[0].docLink || '',
-            name: translateMessage('Learn more')
-          },
-          description: translateMessage('A documentation link for this URL exists. Click learn more to access it')
-        };
-      }
+    const documentationUrl =
+      getSampleDocumentationUrl({
+        sampleQuery,
+        source: queries
+      }) ||
+      getResourceDocumentationUrl({
+        sampleQuery,
+        source: resources.data.children
+      });
+
+    if (documentationUrl) {
+      return {
+        link: {
+          url: documentationUrl,
+          name: translateMessage('Learn more')
+        },
+        description: translateMessage('A documentation link for this URL exists. Click learn more to access it')
+      };
     }
     return null;
   }
@@ -95,7 +99,7 @@ const SuffixRenderer = () => {
   }
   const hints = getHints();
   const hintsAvailable = hints.length > 0;
-  const infoIcon: IIconProps = { iconName: 'Info' };
+  const infoIcon: IIconProps = { iconName: 'TextDocument' };
 
 
   return (
