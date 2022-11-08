@@ -9,12 +9,12 @@ import {
 } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
 
 import { authenticationWrapper } from '../../../modules/authentication';
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { IStatus } from '../../../types/status';
-import { ClientError } from '../../utils/ClientError';
+import { ClientError } from '../../utils/error-utils/ClientError';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { translateMessage } from '../../utils/translate-messages';
 import { authProvider, GraphClient } from '../graph-client';
@@ -22,7 +22,7 @@ import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
-export function queryResponse(response: object): IAction {
+export function queryResponse(response: object): AppAction {
   return {
     type: QUERY_GRAPH_SUCCESS,
     response
@@ -96,6 +96,7 @@ function createAuthenticatedRequest(
       sampleHeaders[header.name] = header.value;
     });
   }
+  const updatedHeaders = { ...sampleHeaders, 'cache-control': 'no-cache', pragma: 'no-cache' }
 
   const msalAuthOptions: AuthCodeMSALBrowserAuthenticationProviderOptions = {
     account: authenticationWrapper.getAccount()!,
@@ -109,11 +110,11 @@ function createAuthenticatedRequest(
   return GraphClient.getInstance()
     .api(encodeHashCharacters(query))
     .middlewareOptions([middlewareOptions])
-    .headers(sampleHeaders)
+    .headers(updatedHeaders)
     .responseType(ResponseType.RAW);
 }
 
-export function makeGraphRequest(scopes: string[]): Function {
+export function makeGraphRequest(scopes: string[]) {
   return async (query: IQuery) => {
     let response;
 

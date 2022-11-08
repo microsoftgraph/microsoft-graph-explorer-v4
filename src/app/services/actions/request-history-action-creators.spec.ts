@@ -13,6 +13,7 @@ import {
   BULK_ADD_HISTORY_ITEMS_SUCCESS
 } from '../redux-constants';
 import { IHistoryItem } from '../../../types/history';
+import { AppAction } from '../../../types/action';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -49,7 +50,7 @@ describe('Request History Action Creators', () => {
       duration: 200
     }
 
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: VIEW_HISTORY_ITEM_SUCCESS,
       response
     }
@@ -78,7 +79,7 @@ describe('Request History Action Creators', () => {
       duration: 200
     }
 
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: REMOVE_HISTORY_ITEM_SUCCESS,
       response: historyItem
     }
@@ -123,7 +124,7 @@ describe('Request History Action Creators', () => {
       }
     ]
 
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
       response: ['12345', '12345']
     }
@@ -167,7 +168,7 @@ describe('Request History Action Creators', () => {
       }
     ]
 
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: BULK_ADD_HISTORY_ITEMS_SUCCESS,
       response: historyItems
     }

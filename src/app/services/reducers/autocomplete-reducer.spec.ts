@@ -1,4 +1,3 @@
-import { IAction } from '../../../types/action';
 import { autoComplete } from '../../../app/services/reducers/autocomplete-reducer';
 import {
   AUTOCOMPLETE_FETCH_ERROR, AUTOCOMPLETE_FETCH_PENDING,

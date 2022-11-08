@@ -15,7 +15,7 @@ import { ISidebarProps } from './sidebar';
 import { ISnippet } from './snippets';
 import { IStatus } from './status';
 
-export interface IRootState {
+export interface ApplicationState {
   theme: string;
   adaptiveCard: IAdaptiveCardResponse;
   graphExplorerMode: Mode;

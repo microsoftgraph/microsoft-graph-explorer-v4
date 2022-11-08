@@ -1,12 +1,11 @@
 import { getTheme, IPivotItemProps, ITheme, PivotItem } from '@fluentui/react';
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../../../store';
 
 import { componentNames, telemetry } from '../../../../telemetry';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
-import { IRootState } from '../../../../types/root';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
@@ -21,7 +20,8 @@ import { Snippets } from '../snippets';
 
 export const GetPivotItems = () => {
 
-  const { graphExplorerMode: mode, sampleQuery, graphResponse: { body } } = useSelector((state: IRootState) => state);
+  const { graphExplorerMode: mode, sampleQuery,
+    graphResponse: { body } } = useAppSelector((state) => state);
 
   const currentTheme: ITheme = getTheme();
   const dotStyle = queryResponseStyles(currentTheme).dot;

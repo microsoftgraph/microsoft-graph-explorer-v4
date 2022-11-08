@@ -1,15 +1,15 @@
 import { Announced, ITextField, PrimaryButton, styled, TextField } from '@fluentui/react';
 import React, { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
+import { AppDispatch, useAppSelector } from '../../../../../store';
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
-import { IRootState } from '../../../../../types/root';
 
 interface IHeader {
   name: string;
@@ -17,7 +17,7 @@ interface IHeader {
 }
 
 const RequestHeaders = (props: any) => {
-  const { sampleQuery, dimensions: { request: { height } } } = useSelector((state: IRootState) => state);
+  const { sampleQuery, dimensions: { request: { height } } } = useAppSelector((state) => state);
   const [announcedMessage, setAnnouncedMessage] = useState('');
   const [isHoverOverHeadersList, setIsHoverOverHeadersList] = useState(false);
   const [isUpdatingHeader, setIsUpdatingHeader] = useState<boolean>(false);
@@ -28,7 +28,7 @@ const RequestHeaders = (props: any) => {
   const { intl: { messages } } = props;
   const sampleQueryHeaders = sampleQuery.sampleHeaders;
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const classes = classNames(props);
 
   const textfieldRef = React.createRef<ITextField>();

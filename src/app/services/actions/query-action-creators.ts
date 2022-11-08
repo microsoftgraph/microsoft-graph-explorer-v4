@@ -4,7 +4,7 @@ import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
-import { ClientError } from '../../utils/ClientError';
+import { ClientError } from '../../utils/error-utils/ClientError';
 import { setStatusMessage } from '../../utils/status-message';
 import { writeHistoryData } from '../../views/sidebar/history/history-utils';
 import {
@@ -20,7 +20,7 @@ import {
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
 
-export function runQuery(query: IQuery): Function {
+export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = !!getState()?.authToken?.token;
     const respHeaders: any = {};
