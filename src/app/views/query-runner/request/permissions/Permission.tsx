@@ -50,6 +50,14 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   const {panelContainer: panelStyles, tooltipStyles, columnCellStyles, cellTitleStyles,
     detailsHeaderStyles} = permissionStyles(theme);
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
+  const tabHeaderStyles = {... detailsHeaderStyles};
+
+  const handleResize = () => {
+    if(window.innerWidth < 1830){
+      tabHeaderStyles.root.height = '40px';
+    }
+  }
+  window.addEventListener('resize', handleResize);
 
 
   const getPermissions = (): void => {
@@ -235,7 +243,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
           <TooltipHost {...tooltipHostProps} styles={tooltipStyles} />
         );
       },
-      styles: detailsHeaderStyles
+      styles: tabHeaderStyles
     });
   }
 
