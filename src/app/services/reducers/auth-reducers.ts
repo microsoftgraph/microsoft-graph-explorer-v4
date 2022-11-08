@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { IAuthenticateResult } from '../../../types/authentication';
 import {
   AUTHENTICATION_PENDING, GET_AUTH_TOKEN_SUCCESS,
@@ -11,7 +11,7 @@ const initialState: IAuthenticateResult = {
   token: false
 }
 
-export function authToken(state = initialState, action: IAction): IAuthenticateResult {
+export function authToken(state = initialState, action: AppAction): IAuthenticateResult {
   switch (action.type) {
     case GET_AUTH_TOKEN_SUCCESS:
       return {
@@ -33,7 +33,7 @@ export function authToken(state = initialState, action: IAction): IAuthenticateR
   }
 }
 
-export function consentedScopes(state: string[] = [], action: IAction): any {
+export function consentedScopes(state: string[] = [], action: AppAction): any {
   switch (action.type) {
     case GET_CONSENTED_SCOPES_SUCCESS:
       return action.response;

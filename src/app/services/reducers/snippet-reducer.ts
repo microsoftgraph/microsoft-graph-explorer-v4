@@ -1,4 +1,4 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import {
   GET_SNIPPET_ERROR, GET_SNIPPET_PENDING, GET_SNIPPET_SUCCESS,
   SET_SNIPPET_TAB_SUCCESS
@@ -12,7 +12,7 @@ const initialState: ISnippet = {
   snippetTab: 'csharp'
 };
 
-export function snippets(state = initialState, action: IAction): any {
+export function snippets(state = initialState, action: AppAction): any {
   switch (action.type) {
     case GET_SNIPPET_SUCCESS:
       return {

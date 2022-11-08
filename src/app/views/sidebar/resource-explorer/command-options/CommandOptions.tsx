@@ -3,9 +3,9 @@ import {
   getId, getTheme, IButtonProps, ICommandBarItemProps, PrimaryButton
 } from '@fluentui/react';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { IRootState } from '../../../../../types/root';
+import { AppDispatch, useAppSelector } from '../../../../../store';
 import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
 import PathsReview from '../panels/PathsReview';
@@ -16,13 +16,13 @@ interface ICommandOptions {
 }
 
 const CommandOptions = (props: ICommandOptions) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const { version } = props;
   const theme = getTheme();
 
-  const { resources: { paths } } = useSelector((state: IRootState) => state);
+  const { resources: { paths } } = useAppSelector((state) => state);
   const itemStyles = resourceExplorerStyles(theme).itemStyles;
   const commandStyles = resourceExplorerStyles(theme).commandBarStyles;
   const options: ICommandBarItemProps[] = [
