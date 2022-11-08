@@ -232,7 +232,7 @@ const UnstyledResourceExplorer = (props: any) => {
           (<Nav
             groups={items}
             styles={navStyles}
-            onRenderLink={(link) => {
+            onRenderLink={(link: any) => {
               return <ResourceLink
                 link={link}
                 isolateTree={isolateTree}

@@ -129,7 +129,7 @@ const SuffixRenderer = () => {
           <Text block variant='xLarge' className={styles.title} id={labelId}>
             /{requestUrl}
           </Text>
-          <HintList hints={hints} />
+          <HintList hints={hints} requestUrl={requestUrl} />
         </Callout>
       )}
     </>

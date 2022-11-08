@@ -24,6 +24,7 @@ export const SETTINGS_BUTTON = 'Settings button';
 export const HELP_BUTTON = 'Help button';
 export const SIGN_IN_BUTTON = 'Sign in button';
 export const SIGN_IN_WITH_OTHER_ACCOUNT_BUTTON = 'Sign in with other account button';
+export const REVOKE_PERMISSION_CONSENT_BUTTON = 'Revoke consent to permissions button'
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
@@ -53,6 +54,7 @@ export const QUERY_URL_AUTOCOMPLETE_DROPDOWN = 'Query URL autocomplete dropdown'
 
 // Links
 export const DOCUMENTATION_LINK = 'Documentation link';
+export const AUTOCOMPLETE_DOCUMENTATION_LINK = 'Autocomplete documentation link';
 export const REPORT_AN_ISSUE_LINK = 'Report an issue link';
 export const OFFICE_DEV_PROGRAM_LINK = 'Office dev program link';
 export const GRAPH_TOOLKIT_PLAYGROUND_LINK = 'Graph toolkit playground link';
@@ -82,6 +84,8 @@ export const CODE_SNIPPET_LANGUAGES = {
 export const GE_DOCUMENTATION_LINK = 'GE documentation link';
 export const GITHUB_LINK = 'Github link';
 export const GRAPH_DOCUMENTATION_LINK = 'Graph documentation link'
+export const CONSENT_TYPE_DOC_LINK = 'Consent type doc link';
+export const ADMIN_CONSENT_DOC_LINK = 'Admin consent doc link';
 
 // Actions
 export const GET_SNIPPET_ACTION = 'Get snippet action';
