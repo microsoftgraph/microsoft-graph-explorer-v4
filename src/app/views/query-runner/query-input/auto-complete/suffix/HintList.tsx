@@ -1,12 +1,12 @@
 import { DefaultButton, Separator, Stack, Text } from '@fluentui/react';
 import React from 'react';
 
+import { IHint } from '.';
 import { componentNames, eventTypes, telemetry } from '../../../../../../telemetry';
 import { GRAPH_URL } from '../../../../../services/graph-constants';
 import { validateExternalLink } from '../../../../../utils/external-link-validation';
 import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
-import { IHint } from './suffix-util';
 import { styles } from './suffix.styles';
 
 export const HintList = ({ hints, requestUrl }: any) => {

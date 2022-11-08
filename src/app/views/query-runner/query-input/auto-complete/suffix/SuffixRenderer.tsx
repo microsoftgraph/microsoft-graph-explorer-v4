@@ -4,13 +4,14 @@ import {
 } from '@fluentui/react';
 import React, { useState } from 'react';
 
+import { IHint } from '.';
 import { useAppSelector } from '../../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../../telemetry';
 import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../../utils/translate-messages';
+import DocumentationService from './documentation';
 import { HintList } from './HintList';
-import { getResourceDocumentationUrl, getSampleDocumentationUrl, IHint } from './suffix-util';
 import { styles } from './suffix.styles';
 
 const SuffixRenderer = () => {
@@ -25,16 +26,17 @@ const SuffixRenderer = () => {
   const getDocumentationLink = (): IHint | null => {
     const { queries } = samples;
 
-    const documentationUrl =
-      getSampleDocumentationUrl({
-        sampleQuery,
-        source: queries
-      }) ||
-      getResourceDocumentationUrl({
-        sampleQuery,
-        source: resources.data.children
-      });
+    const resourceDocumentationUrl = new DocumentationService({
+      sampleQuery,
+      source: resources.data.children
+    }).getDocumentationLink();
 
+    const sampleDocumentationUrl = new DocumentationService({
+      sampleQuery,
+      source: queries
+    }).getDocumentationLink();
+
+    const documentationUrl = sampleDocumentationUrl || resourceDocumentationUrl;
     if (documentationUrl) {
       return {
         link: {

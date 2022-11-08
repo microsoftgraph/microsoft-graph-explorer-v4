@@ -1,6 +1,7 @@
 import { IResource } from '../../../../../../types/resources';
 import content from '../../../../../utils/resources/resources.json';
-import { getResourceDocumentationUrl, getSampleDocumentationUrl } from './suffix-util';
+import { queries } from '../../../../sidebar/sample-queries/queries';
+import DocumentationService from './documentation';
 
 const resource = JSON.parse(JSON.stringify(content)) as IResource;
 
@@ -17,10 +18,11 @@ describe('Tests suffix utilities', () => {
     const query = { ...sampleQuery };
     const id = 'AAMkAGFkNWI1Njg3LWZmNTUtNDZjOS04ZTM2LTc5ZTc5ZjFlNTM4ZgB1SyTR4EQuQIAbWVtP3x1LBwD4_HsJDyJ8QAAA=';
     query.sampleUrl = `https://graph.microsoft.com/v1.0/me/messages/${id}`;
-    const documentationUrl = getResourceDocumentationUrl({
+    const docService = new DocumentationService({
       sampleQuery: query,
       source: resource.children
-    });
+    })
+    const documentationUrl = docService.getDocumentationLink();
     expect(documentationUrl).toBeDefined();
   });
 
@@ -28,10 +30,11 @@ describe('Tests suffix utilities', () => {
     const query = { ...sampleQuery };
     query.sampleUrl = 'https://graph.microsoft.com/v1.0/me/messages';
 
-    const documentationUrl = getSampleDocumentationUrl({
+    const docService = new DocumentationService({
       sampleQuery: query,
-      source: resource.children
-    });
+      source: queries
+    })
+    const documentationUrl = docService.getDocumentationLink();
     expect(documentationUrl).toBeDefined();
   });
 
