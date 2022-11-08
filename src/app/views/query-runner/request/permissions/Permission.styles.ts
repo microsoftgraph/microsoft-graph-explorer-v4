@@ -80,7 +80,7 @@ export const permissionStyles = (theme: ITheme) => {
     },
     detailsHeaderStyles: {
       root: {
-        height: window.innerWidth < 1699 ? '40px' : '32px',
+        height: window.innerWidth < 1830 ? '40px' : '32px',
         lineHeight: '20px',
         textAlign: 'center',
         marginTop: '7px'
