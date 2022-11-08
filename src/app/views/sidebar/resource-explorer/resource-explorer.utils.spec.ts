@@ -1,6 +1,8 @@
 import { IResource } from '../../../../types/resources';
-import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
+import { getMatchingResourceForUrl, getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
 import content from '../../../utils/resources/resources.json';
+import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import {
   createResourcesList, getAvailableMethods, getCurrentTree, getResourcePaths, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
@@ -71,5 +73,35 @@ describe('Resource payload should', () => {
     const item: any = filtered.links[0];
     const paths = getResourcePaths(item, version);
     expect(paths.length).toBe(33);
+  });
+});
+
+describe('Resource filter should', () => {
+  const resources = getResourcesSupportedByVersion(resource.children, 'v1.0');
+
+  const messageId = 'AAMkAGFkNWI1Njg3LWZmNTUtNDZjOS04ZTM2LTc5ZTc5ZjFlNTM4ZgB1SyTR4EQuQIAbWVtP3x1LBwD4_HsJDyJ8QAAA=';
+
+  const pairs = [
+    {
+      base: 'https://graph.microsoft.com/v1.0/chats/b214-e0ac-be40/messages/187117c7-af33-4b45-4d34',
+      tokenised: 'https://graph.microsoft.com/v1.0/chats/{chat-id}/messages/{chatMessage-id}'
+    },
+    {
+      base: `https://graph.microsoft.com/v1.0/me/messages/${messageId}`,
+      tokenised: 'https://graph.microsoft.com/v1.0/me/messages/{message-id}'
+    }
+  ]
+
+  pairs.forEach(pair => {
+    it('return segments matching url', async () => {
+      const { requestUrl } = parseSampleUrl(sanitizeQueryUrl(pair.base));
+      const { requestUrl: baseUrl } = parseSampleUrl(pair.tokenised);
+
+      const setWithId = getMatchingResourceForUrl(requestUrl, resources)!;
+      const setWithPlaceholder = getMatchingResourceForUrl(baseUrl, resources)!;
+
+      expect(setWithId.children.length).toBe(setWithPlaceholder.children.length);
+    });
+
   });
 });
