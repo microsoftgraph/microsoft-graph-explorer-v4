@@ -1,5 +1,7 @@
 import { INavLink } from '@fluentui/react';
 
+export type Method = 'Get' | 'Post' | 'Patch' | 'Put' | 'Delete';
+
 export interface IResource {
   segment: string;
   labels: IResourceLabel[];
@@ -8,7 +10,12 @@ export interface IResource {
 
 export interface IResourceLabel {
   name: string;
-  methods: string[];
+  methods: ResourceMethod[];
+}
+
+export interface ResourceMethod {
+  name: Method;
+  documentationUrl?: string | null;
 }
 
 export interface IResources {

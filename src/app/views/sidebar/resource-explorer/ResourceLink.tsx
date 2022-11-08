@@ -43,7 +43,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         className={classes.badge}
         style={methodButtonStyles}
       >
-        {resourceLink.method}
+        {resourceLink.method.toUpperCase()}
       </span>}
 
     <span className={linkStyle.resourceLinkNameContainer}>

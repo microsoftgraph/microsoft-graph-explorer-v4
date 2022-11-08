@@ -150,8 +150,9 @@ const UnstyledResourceExplorer = (props: any) => {
     const resourceUrl = getUrlFromLink(resourceLink);
     if (!resourceUrl) { return; }
     const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
+    const verb = resourceLink.method!;
     const query: IQuery = {
-      selectedVerb: resourceLink.method!,
+      selectedVerb: verb.toString().toUpperCase(),
       selectedVersion: version,
       sampleUrl,
       sampleHeaders: [],

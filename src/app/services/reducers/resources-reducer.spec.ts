@@ -32,11 +32,33 @@ const paths = [{
   url: '/issues',
   name: 'issues (1)',
   labels: [
-    { name: 'v1.0', methods: ['Get', 'Post'] },
-    { name: 'beta', methods: ['Get', 'Post'] }
+    {
+      name: 'v1.0', methods: [{
+        name: 'Get',
+        documentationUrl: null
+      }, {
+        name: 'Post',
+        documentationUrl: null
+      }]
+    },
+    {
+      name: 'beta', methods: [{
+        name: 'Get',
+        documentationUrl: null
+      }, {
+        name: 'Post',
+        documentationUrl: null
+      }]
+    }
   ],
   version: 'v1.0',
-  methods: ['Get', 'Post'],
+  methods: [{
+    name: 'Get',
+    documentationUrl: null
+  }, {
+    name: 'Post',
+    documentationUrl: null
+  }],
   isExpanded: true,
   parent: '/',
   level: 1,
@@ -48,7 +70,15 @@ const paths = [{
 const resourceLinks: IResourceLink[] = [
   {
     labels: [
-      { name: 'v1.0', methods: ['Get', 'Post'] }
+      {
+        name: 'v1.0', methods: [{
+          name: 'Get',
+          documentationUrl: null
+        }, {
+          name: 'Post',
+          documentationUrl: null
+        }]
+      }
     ],
     key: '5-issues',
     url: '/issues',
