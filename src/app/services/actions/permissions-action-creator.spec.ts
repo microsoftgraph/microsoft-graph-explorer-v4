@@ -277,6 +277,15 @@ describe('Permissions action creators', () => {
       {
         type: 'GET_CONSENTED_SCOPES_SUCCESS',
         response: ['profile.Read User.Read']
+      },
+      {
+        type: 'QUERY_GRAPH_STATUS',
+        response: {
+          statusText: 'Success',
+          status: 'Scope consent successful',
+          ok: true,
+          messageType: 4
+        }
       }
     ];
 
