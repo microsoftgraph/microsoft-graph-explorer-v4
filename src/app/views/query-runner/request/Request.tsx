@@ -1,6 +1,6 @@
 import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -18,7 +18,7 @@ import './request.scss';
 
 const Request = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
-  let selectedPivot = 'request-body';
+  const [selectedPivot, setSelectedPivot] = useState('request-body');
   const { graphExplorerMode: mode, dimensions } = useAppSelector((state) => state);
   const pivot = selectedPivot.replace('.$', '');
   const minHeight = 60;
@@ -111,7 +111,7 @@ const Request = (props: any) => {
       return;
     }
     onPivotItemClick(pivotItem);
-    selectedPivot = pivotItem.props.itemKey!;
+    setSelectedPivot(pivotItem.props.itemKey!);
   }
 
   const onPivotItemClick = (item?: PivotItem) => {
