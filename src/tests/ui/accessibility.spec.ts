@@ -6,6 +6,7 @@ let page: Page;
 test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext();
   page = await context.newPage();
+  await page.goto('/');
 });
 
 test.describe('Accessibility', () => {
@@ -13,8 +14,6 @@ test.describe('Accessibility', () => {
 
   test('should not have any automatically detectable accessibility issues', async () => {
 
-    await page.goto('/');
-    await page.waitForTimeout(500);
     test.slow();
     const accessibilityScanResults = await new AxeBuilder({ page })
       .disableRules([
