@@ -78,6 +78,22 @@ export const Help = () => {
           }
         },
         onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GITHUB_LINK)
+      },
+      {
+        key: 'quickstart',
+        text: translateMessage('Generate a minimal app here'),
+        href: 'https://developer.microsoft.com/en-us/graph/quick-start',
+        target: '_blank',
+        iconProps: {
+          iconName: 'Onboarding',
+          styles: {
+            root: {
+              position: 'relative',
+              top: '-2px'
+            }
+          }
+        },
+        onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.QUICKSTART_LINK)
       }
     ];
     setItems(menuItems);
