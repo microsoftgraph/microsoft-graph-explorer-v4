@@ -85,10 +85,6 @@ const getItems = (content: IHistoryItem[]) => {
   return sortItems(list);
 }
 
-
-
-
-
 const History = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
   const { history } = useAppSelector((state) => state);
@@ -274,7 +270,7 @@ const History = (props: any) => {
               <IconButton
                 className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
                 iconProps={{
-                  iconName: props.group!.isCollapsed
+                  iconName: properties.group!.isCollapsed
                     ? 'ChevronRightSmall'
                     : 'ChevronDownSmall'
                 }}
