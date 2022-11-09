@@ -4,7 +4,7 @@ import { IntlProvider } from 'react-intl';
 
 import { geLocale } from '../../../../appLocale';
 import { IHistoryProps } from '../../../../types/history';
-import { History } from './History';
+import { History } from './index';
 import { messages_ } from '../../../utils/get-messages';
 
 interface IExtendedHistory extends IHistoryProps {
