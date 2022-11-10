@@ -232,7 +232,7 @@ const History = (props: any) => {
 
   const onToggleCollapse = (properties: any) => {
     return () => {
-      properties!.onToggleCollapse!(properties!.group!);
+      properties.onToggleCollapse(properties.group);
     };
   }
 
