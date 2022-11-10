@@ -26,17 +26,23 @@ const AdaptiveCard = (props: any) => {
   const { sampleQuery, queryRunnerStatus: queryStatus, adaptiveCard: card } = useAppSelector((state) => state);
   const { data, pending } = card;
 
-  const classes = classNames(props as any);
+  const classes = classNames(props);
   const currentTheme: ITheme = getTheme();
   const textStyle = queryResponseStyles(currentTheme).queryResponseText.root as IStyle;
 
   useEffect(() => {
-    dispatch(getAdaptiveCard(body, sampleQuery))
+    dispatch(getAdaptiveCard(body, sampleQuery));
+
+    if (!adaptiveCard) {
+      adaptiveCard = new AdaptiveCardsAPI.AdaptiveCard();
+    }
+
     if (hostConfig) {
-      adaptiveCard!.hostConfig = new AdaptiveCardsAPI.HostConfig(
+      adaptiveCard.hostConfig = new AdaptiveCardsAPI.HostConfig(
         hostConfig
       );
     }
+
     return () => {
       adaptiveCard = null;
     }
@@ -83,8 +89,8 @@ const AdaptiveCard = (props: any) => {
     }
 
     try {
-      adaptiveCard!.parse(data.card);
-      const renderedCard = adaptiveCard!.render();
+      adaptiveCard.parse(data.card);
+      const renderedCard = adaptiveCard.render();
       const handleCopy = async () => {
         trackedGenericCopy(JSON.stringify(data.template, null, 4),
           componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
