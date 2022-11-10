@@ -1,5 +1,5 @@
-import { getTheme, IPivotItemProps, ITheme, PivotItem } from '@fluentui/react';
-import React from 'react';
+import { getTheme, IPivotItemProps, ITheme, PivotItem, Spinner, SpinnerSize } from '@fluentui/react';
+import React, { lazy, Suspense } from 'react';
 import { useAppSelector } from '../../../../store';
 
 import { componentNames, telemetry } from '../../../../telemetry';

@@ -11,7 +11,7 @@ import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { translateMessage } from '../../../utils/translate-messages';
-import { CopyButton } from '../../common/copy/CopyButton';
+import { CopyButton } from '../../common/copy-button/CopyButton';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { getSnippetStyles } from './Snippets.styles';
 

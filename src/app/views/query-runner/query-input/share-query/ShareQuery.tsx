@@ -2,7 +2,7 @@ import {
   DefaultButton, Dialog, DialogFooter, DialogType, DirectionalHint, FontSizes,
   IconButton, IIconProps, Spinner, SpinnerSize, TooltipHost
 } from '@fluentui/react';
-import React, { useState } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { useAppSelector } from '../../../../../store';
 
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';

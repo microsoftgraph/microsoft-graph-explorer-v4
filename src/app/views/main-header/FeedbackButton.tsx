@@ -1,7 +1,6 @@
 import { getTheme, IButton, IconButton, IIconProps, Spinner, SpinnerSize, TooltipHost } from '@fluentui/react';
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
-import FeedbackForm from '../query-runner/request/feedback/FeedbackForm';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { useAppSelector } from '../../../store';

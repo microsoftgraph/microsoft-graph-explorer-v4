@@ -5,7 +5,7 @@ import { RESPONSE_HEADERS_COPY_BUTTON } from '../../../../telemetry/component-na
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
-import { CopyButton } from '../../common/copy/CopyButton';
+import { CopyButton } from '../../common/copy-button/CopyButton';
 import { useAppSelector } from '../../../../store';
 
 const ResponseHeaders = () => {
