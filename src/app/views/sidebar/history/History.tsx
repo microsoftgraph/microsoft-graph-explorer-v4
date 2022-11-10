@@ -92,9 +92,6 @@ const History = (props: any) => {
   const [hideDialog, setHideDialog] = useState(true);
   const [category, setCategory] = useState('');
 
-  const {
-    intl: { messages }
-  }: any = props;
   const classes = classNames(props);
 
   if (!history || history.length === 0) {
@@ -459,7 +456,7 @@ const History = (props: any) => {
     <>
       <div>
         <SearchBox
-          placeholder={messages['Search history items']}
+          placeholder={translateMessage('Search history items')}
           className={classes.searchBox}
           onChange={searchValueChanged}
           styles={searchBoxStyles}
@@ -500,9 +497,9 @@ const History = (props: any) => {
         onDismiss={closeDialog}
         dialogContentProps={{
           type: DialogType.normal,
-          title: `${messages['Delete requests']} : ${category}`,
+          title: `${translateMessage('Delete requests')} : ${category}`,
           closeButtonAriaLabel: 'Close',
-          subText: `${messages['Are you sure you want to delete these requests?']}`
+          subText: `${translateMessage('Are you sure you want to delete these requests?')}`
         }}
         modalProps={{
           titleAriaId: getId(),
