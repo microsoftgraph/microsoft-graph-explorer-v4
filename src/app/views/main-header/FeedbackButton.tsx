@@ -1,16 +1,16 @@
 import { getTheme, IButton, IconButton, IIconProps, Spinner, SpinnerSize, TooltipHost } from '@fluentui/react';
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../types/root';
+import FeedbackForm from '../query-runner/request/feedback/FeedbackForm';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
+import { useAppSelector } from '../../../store';
 
 const FeedbackForm = lazy(() => import('../query-runner/request/feedback/FeedbackForm'))
 
 export const FeedbackButton = () => {
   const [enableSurvey, setEnableSurvey] = useState(false);
-  const { profile } = useSelector( (state: IRootState) => state );
+  const { profile } = useAppSelector((state) => state);
   const currentTheme = getTheme();
   const feedbackIcon : IIconProps = {
     iconName : 'Feedback'

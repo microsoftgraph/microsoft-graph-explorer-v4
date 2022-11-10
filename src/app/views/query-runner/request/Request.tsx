@@ -14,7 +14,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
 import { IRequestComponent } from '../../../../types/request';
-import { IRootState } from '../../../../types/root';
+import { ApplicationState } from '../../../../types/root';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
@@ -54,7 +54,6 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='Send'
         itemKey='request-body' // To be used to construct component name for telemetry data
         ariaLabel={messages['request body']}
-        title={messages['request body']}
         headerText={messages['request body']}
         headerButtonProps={{
           'aria-controls': 'request-body-tab'
@@ -69,7 +68,6 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='FileComment'
         itemKey='request-headers'
         ariaLabel={messages['request header']}
-        title={messages['request header']}
         headerText={messages['request header']}
         headerButtonProps={{
           'aria-controls': 'request-header-tab'
@@ -86,7 +84,6 @@ export class Request extends Component<IRequestComponent, any> {
         itemIcon='AzureKeyVault'
         itemKey='modify-permissions'
         ariaLabel={translateMessage('modify permissions')}
-        title={translateMessage('permissions preview')}
         headerText={messages['modify permissions']}
         headerButtonProps={{
           'aria-controls': 'permission-tab'
@@ -106,7 +103,6 @@ export class Request extends Component<IRequestComponent, any> {
           itemIcon='AuthenticatorApp'
           itemKey='access-token'
           ariaLabel={translateMessage('Access Token')}
-          title={translateMessage('Access Token')}
           headerText={translateMessage('Access Token')}
           headerButtonProps={{
             'aria-controls': 'access-token-tab'
@@ -200,7 +196,7 @@ export class Request extends Component<IRequestComponent, any> {
 }
 
 function mapStateToProps(
-  { graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions, profile }: IRootState) {
+  { graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions, profile }: ApplicationState) {
   return {
     mode: graphExplorerMode,
     sampleBody: sampleQuery.sampleBody,

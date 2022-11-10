@@ -1,0 +1,28 @@
+{
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "@odata.type": "#microsoft.graph.trending",
+    "body": [
+        {
+            "type": "Container",
+            "$data": "{value}",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "{resourceVisualization.title}"
+                },
+                {
+                    "type": "TextBlock",
+                    "text": "{resourceVisualization.previewText}"
+                },
+                {
+                    "type": "Image",
+                    "altText": "",
+                    "url": "{resourceVisualization.previewImageUrl}"
+                }
+            ],
+            "separator": true
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+}

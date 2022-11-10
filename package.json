@@ -1,6 +1,6 @@
 {
         "name": "graph-explorer-v2",
-        "version": "6.5.0",
+        "version": "7.0.0",
         "private": true,
         "dependencies": {
                 "@augloop/types-core": "file:packages/types-core-2.16.189.tgz",
@@ -15,8 +15,9 @@
                 "@microsoft/microsoft-graph-client": "3.0.2",
                 "@monaco-editor/react": "4.4.6",
                 "@ms-ofb/officebrowserfeedbacknpm": "file:packages/officebrowserfeedbacknpm-1.6.6.tgz",
+                "adaptive-expressions": "4.17.1",
                 "adaptivecards": "2.11.1",
-                "adaptivecards-templating": "1.4.0",
+                "adaptivecards-templating": "2.3.1",
                 "apg-js": "4.1.2",
                 "babel-loader": "8.2.5",
                 "babel-preset-react-app": "10.0.1",
@@ -48,7 +49,7 @@
                 "react-app-polyfill": "3.0.0",
                 "react-dom": "16.14.0",
                 "react-intl": "2.8.0",
-                "react-redux": "7.2.8",
+                "react-redux": "8.0.4",
                 "redux": "4.2.0",
                 "redux-thunk": "2.4.1",
                 "resolve": "1.22.1",

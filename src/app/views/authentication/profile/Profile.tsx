@@ -1,23 +1,11 @@
 import {
-  ActionButton,
-  Callout,
-  FontSizes,
-  getTheme,
-  IPersonaProps,
-  IPersonaSharedProps,
-  mergeStyleSets,
-  Persona,
-  PersonaSize,
-  Spinner,
-  SpinnerSize,
-  Stack,
-  styled
+  ActionButton, Callout, FontSizes, getTheme, IPersonaProps, IPersonaSharedProps, mergeStyleSets,
+  Persona, PersonaSize, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
-import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useId } from '@fluentui/react-hooks';
 
-import { IRootState } from '../../../../types/root';
 import { signOut } from '../../../services/actions/auth-action-creators';
 import { togglePermissionsPanel } from '../../../services/actions/permissions-panel-action-creator';
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
@@ -26,6 +14,7 @@ import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
 import { Mode } from '../../../../types/enums';
+import { AppDispatch, useAppSelector } from '../../../../store';
 
 const Permission = lazy(() => import('../../query-runner/request/permissions'))
 
@@ -46,13 +35,13 @@ const getInitials = (name: string) => {
 };
 
 const Profile = (props: any) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const {
     profile,
     authToken,
     permissionsPanelOpen,
     graphExplorerMode
-  } = useSelector((state: IRootState) => state);
+  } = useAppSelector((state) => state);
   const authenticated = authToken.token;
   const [isCalloutVisible, setIsCalloutVisible] = useState(false);
   const toggleIsCalloutVisible = () => { setIsCalloutVisible(!isCalloutVisible) };
