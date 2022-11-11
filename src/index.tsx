@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import { initializeIcons } from '@fluentui/react';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { addLocaleData, IntlProvider } from 'react-intl';
 
 import de from 'react-intl/locale-data/de';
@@ -189,5 +189,5 @@ const Root = () => {
     </Provider>
   );
 };
-
-ReactDOM.render(<Root />, document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root')!);
+root.render(<Root />);
