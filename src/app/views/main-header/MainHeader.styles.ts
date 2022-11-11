@@ -45,6 +45,17 @@ export const mainHeaderStyles = (theme: ITheme, mobileScreen?: boolean) => {
       flexShrink: 1,
       flexBasis: '60px'
     },
+    checkoutStyles: {
+      flexGrow: 1,
+      flexShrink: 1,
+      flexBasis: '60px'
+    },
+    checkoutContainerStyles: {
+      display: 'flex',
+      alignItems: 'stretch',
+      height: 50,
+      width: 50
+    },
     settingsContainerStyles: {
       display: 'flex',
       alignItems: 'stretch',
@@ -65,8 +76,10 @@ export const mainHeaderStyles = (theme: ITheme, mobileScreen?: boolean) => {
     graphExplorerLabelStyles: {
       fontSize: mobileScreen ? FontSizes.medium : FontSizes.xLarge,
       fontWeight: FontWeights.semibold,
-      position: mobileScreen ? 'relative' as 'relative' : 'static' as 'static',
+      position: mobileScreen
+        ? ('relative' as 'relative')
+        : ('static' as 'static'),
       top: '3px'
     }
-  }
-}
+  };
+};

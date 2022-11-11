@@ -1,10 +1,19 @@
-import { Dropdown, IDropdownOption, IStackTokens, Stack } from '@fluentui/react';
+import {
+  Dropdown,
+  IDropdownOption,
+  IStackTokens,
+  Stack
+} from '@fluentui/react';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import React from 'react';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
-import { httpMethods, IQuery, IQueryInputProps } from '../../../../types/query-runner';
+import {
+  httpMethods,
+  IQuery,
+  IQueryInputProps
+} from '../../../../types/query-runner';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_API_VERSIONS } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
@@ -14,31 +23,34 @@ import SubmitButton from '../../../views/common/submit-button/SubmitButton';
 import { queryRunnerStyles } from '../QueryRunner.styles';
 import { AutoComplete } from './auto-complete';
 import { ShareQuery } from './share-query';
+import { AddToCart } from './add-to-cart/AddToCart';
 
 const QueryInput = (props: IQueryInputProps) => {
-  const {
-    handleOnRunQuery,
-    handleOnMethodChange,
-    handleOnVersionChange
-  } = props;
+  const { handleOnRunQuery, handleOnMethodChange, handleOnVersionChange } =
+    props;
 
   const dispatch: AppDispatch = useDispatch();
 
   const urlVersions: IDropdownOption[] = [];
-  GRAPH_API_VERSIONS.forEach(version => {
+  GRAPH_API_VERSIONS.forEach((version) => {
     urlVersions.push({
       key: version,
       text: version
-    })
+    });
   });
 
-  const { sampleQuery, authToken,
-    isLoadingData: submitting, sidebarProperties } = useAppSelector((state) => state);
+  const {
+    sampleQuery,
+    authToken,
+    isLoadingData: submitting,
+    sidebarProperties
+  } = useAppSelector((state) => state);
   const authenticated = !!authToken.token;
   const { mobileScreen } = sidebarProperties;
 
   const showError = !authenticated && sampleQuery.selectedVerb !== 'GET';
-  const { queryButtonStyles, verbSelector, shareQueryButtonStyles } = queryRunnerStyles();
+  const { queryButtonStyles, verbSelector, shareQueryButtonStyles } =
+    queryRunnerStyles();
   verbSelector.title = {
     ...verbSelector.title,
     background: getStyleFor(sampleQuery.selectedVerb)
@@ -50,7 +62,6 @@ const QueryInput = (props: IQueryInputProps) => {
   };
 
   const getChangedQueryContent = (newUrl: string): IQuery => {
-
     const query = { ...sampleQuery };
     const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);
 
@@ -59,7 +70,7 @@ const QueryInput = (props: IQueryInputProps) => {
     }
     query.sampleUrl = newUrl;
     return query;
-  }
+  };
 
   const runQuery = () => {
     if (!sampleQuery.sampleUrl) {
@@ -77,18 +88,25 @@ const QueryInput = (props: IQueryInputProps) => {
 
   return (
     <>
-      <Stack horizontal={mobileScreen ? false : true} tokens={queryInputStackTokens}>
+      <Stack
+        horizontal={mobileScreen ? false : true}
+        tokens={queryInputStackTokens}
+      >
         <Stack.Item styles={!mobileScreen ? queryButtonStyles : {}}>
           <Dropdown
             ariaLabel={translateMessage('HTTP request method option')}
             selectedKey={sampleQuery.selectedVerb}
             options={httpMethods}
             styles={verbSelector}
-            errorMessage={showError ? translateMessage('Sign in to use this method') : undefined}
+            errorMessage={
+              showError
+                ? translateMessage('Sign in to use this method')
+                : undefined
+            }
             onChange={(event, method) => handleOnMethodChange(method)}
           />
         </Stack.Item>
-        <Stack.Item >
+        <Stack.Item>
           <Dropdown
             ariaLabel={translateMessage('Microsoft Graph API Version option')}
             selectedKey={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
@@ -97,10 +115,7 @@ const QueryInput = (props: IQueryInputProps) => {
           />
         </Stack.Item>
         <Stack.Item grow disableShrink>
-          <AutoComplete
-            contentChanged={contentChanged}
-            runQuery={runQuery}
-          />
+          <AutoComplete contentChanged={contentChanged} runQuery={runQuery} />
         </Stack.Item>
         <Stack.Item shrink>
           <SubmitButton
@@ -113,13 +128,16 @@ const QueryInput = (props: IQueryInputProps) => {
             allowDisabledFocus={true}
           />
         </Stack.Item>
+        <Stack.Item shrink>
+          <AddToCart />
+        </Stack.Item>
         <Stack.Item shrink styles={!mobileScreen ? shareQueryButtonStyles : {}}>
           <ShareQuery />
         </Stack.Item>
       </Stack>
     </>
-  )
-}
+  );
+};
 
 // @ts-ignore
 const IntlQueryInput = injectIntl(QueryInput);

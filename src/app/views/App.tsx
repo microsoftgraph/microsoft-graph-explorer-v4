@@ -10,7 +10,11 @@ import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
-import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
+import {
+  IInitMessage,
+  IQuery,
+  IThemeChangedMessage
+} from '../../types/query-runner';
 import { ApplicationState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
@@ -60,13 +64,16 @@ interface IAppState {
   mobileScreen: boolean;
   hideDialog: boolean;
   sidebarTabSelection: string;
+  isPathsPreviewOpen: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
   private currentTheme: ITheme = getTheme();
-  private statusAreaMobileStyle = appStyles(this.currentTheme).statusAreaMobileScreen;
-  private statusAreaFullScreenStyle = appStyles(this.currentTheme).statusAreaFullScreen;
+  private statusAreaMobileStyle = appStyles(this.currentTheme)
+    .statusAreaMobileScreen;
+  private statusAreaFullScreenStyle = appStyles(this.currentTheme)
+    .statusAreaFullScreen;
 
   constructor(props: IAppProps) {
     super(props);
@@ -74,7 +81,8 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: 'GET',
       mobileScreen: false,
       hideDialog: true,
-      sidebarTabSelection: 'sample-queries'
+      sidebarTabSelection: 'sample-queries',
+      isPathsPreviewOpen: false
     };
   }
 
@@ -82,7 +90,13 @@ class App extends Component<IAppProps, IAppState> {
     this.setState({
       sidebarTabSelection: selectedTab
     });
-  }
+  };
+  private openPathsPreview = () => {
+    this.setState({
+      sidebarTabSelection: 'resources',
+      isPathsPreviewOpen: true
+    });
+  };
 
   public componentDidMount = async () => {
     this.displayToggleButton(this.mediaQueryList);
@@ -262,11 +276,9 @@ class App extends Component<IAppProps, IAppState> {
   public toggleSidebar = (): void => {
     const shouldShowSidebar = this.setSidebarProperties();
     this.changeDimensions(shouldShowSidebar ? '26%' : '4%');
-    telemetry.trackEvent(
-      eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.SIDEBAR_HAMBURGER_BUTTON
-      });
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.SIDEBAR_HAMBURGER_BUTTON
+    });
   };
 
   public displayToggleButton = (mediaQueryList: any) => {
@@ -286,7 +298,6 @@ class App extends Component<IAppProps, IAppState> {
 
     // @ts-ignore
     this.props.actions!.toggleSidebar(properties);
-
   };
 
   private setSidebarProperties() {
@@ -303,7 +314,10 @@ class App extends Component<IAppProps, IAppState> {
     const width = this.changeDimensions(sidebarWidth);
     const { sidebarProperties } = this.props;
     const minimised = !sidebarProperties.showSidebar;
-    if ((width <= breakPoint && !minimised) || (width > breakPoint && minimised)) {
+    if (
+      (width <= breakPoint && !minimised) ||
+      (width > breakPoint && minimised)
+    ) {
       this.setSidebarProperties();
     }
   }
@@ -324,7 +338,11 @@ class App extends Component<IAppProps, IAppState> {
 
   private shouldDisplayContent(parameters: any) {
     const { graphExplorerMode, mobileScreen, showSidebar } = parameters;
-    return !(graphExplorerMode === Mode.Complete && mobileScreen && showSidebar);
+    return !(
+      graphExplorerMode === Mode.Complete &&
+      mobileScreen &&
+      showSidebar
+    );
   }
 
   private removeFlexBasisProperty() {
@@ -360,8 +378,14 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { authenticated, graphExplorerMode, minimised, sampleQuery,
-      sidebarProperties, dimensions }: any = this.props;
+    const {
+      authenticated,
+      graphExplorerMode,
+      minimised,
+      sampleQuery,
+      sidebarProperties,
+      dimensions
+    }: any = this.props;
     const { sidebar, content } = dimensions;
 
     let sidebarWidth = classes.sidebar;
@@ -375,7 +399,8 @@ class App extends Component<IAppProps, IAppState> {
 
     const displayContent = this.shouldDisplayContent({
       graphExplorerMode,
-      mobileScreen, showSidebar
+      mobileScreen,
+      showSidebar
     });
 
     if (mobileScreen) {
@@ -394,11 +419,15 @@ class App extends Component<IAppProps, IAppState> {
     return (
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
-        <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
+        <div
+          className={`ms-Grid ${classes.app}`}
+          style={{ paddingLeft: mobileScreen && '15px' }}
+        >
           <MainHeader
             minimised={minimised}
             toggleSidebar={this.toggleSidebar}
             mobileScreen={mobileScreen}
+            openPathsReview={this.openPathsPreview}
           />
           <Announced
             message={
@@ -407,11 +436,15 @@ class App extends Component<IAppProps, IAppState> {
                 : translateMessage('Sidebar maximized')
             }
           />
-          <div className={`ms-Grid-row ${classes.appRow}`} style={{
-            flexWrap: mobileScreen && 'wrap',
-            marginRight: showSidebar || (graphExplorerMode === Mode.TryIt) && '-20px',
-            flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row'
-          }}>
+          <div
+            className={`ms-Grid-row ${classes.appRow}`}
+            style={{
+              flexWrap: mobileScreen && 'wrap',
+              marginRight:
+                showSidebar || (graphExplorerMode === Mode.TryIt && '-20px'),
+              flexDirection: graphExplorerMode === Mode.TryIt ? 'column' : 'row'
+            }}
+          >
             {graphExplorerMode === Mode.Complete && (
               <Resizable
                 onResize={(e: any, direction: any, ref: any) => {
@@ -434,14 +467,17 @@ class App extends Component<IAppProps, IAppState> {
                   height: ''
                 }}
               >
-                <Sidebar currentTab={this.state.sidebarTabSelection}
-                  setSidebarTabSelection={this.setSidebarTabSelection} showSidebar={showSidebar}
+                <Sidebar
+                  currentTab={this.state.sidebarTabSelection}
+                  setSidebarTabSelection={this.setSidebarTabSelection}
+                  showSidebar={showSidebar}
                   toggleSidebar={this.toggleSidebar}
-                  mobileScreen={mobileScreen} />
+                  mobileScreen={mobileScreen}
+                  isPathReviewOpen={this.state.isPathsPreviewOpen}
+                />
               </Resizable>
             )}
-            {graphExplorerMode === Mode.TryIt &&
-              headerMessaging(query)}
+            {graphExplorerMode === Mode.TryIt && headerMessaging(query)}
 
             {displayContent && (
               <Resizable
@@ -451,23 +487,46 @@ class App extends Component<IAppProps, IAppState> {
                   right: false
                 }}
                 size={{
-                  width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
+                  width:
+                    graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
                   height: ''
                 }}
-                style={!sidebarProperties.showSidebar && !mobileScreen ? {
-                  marginLeft: '8px', display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
-                } : {
-                  display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
-                }}
+                style={
+                  !sidebarProperties.showSidebar && !mobileScreen
+                    ? {
+                        marginLeft: '8px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'stretch',
+                        flex: 1
+                      }
+                    : {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'stretch',
+                        flex: 1
+                      }
+                }
               >
-                <div style={{ marginBottom: 2 }} >
+                <div style={{ marginBottom: 2 }}>
                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
                 </div>
 
-                <div style={{
-                  display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
-                }}>
-                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'stretch',
+                    flex: 1
+                  }}
+                >
+                  <div
+                    style={
+                      mobileScreen
+                        ? this.statusAreaMobileStyle
+                        : this.statusAreaFullScreenStyle
+                    }
+                  >
                     <StatusMessages />
                   </div>
                   <QueryResponse verb={this.state.selectedVerb} />
@@ -475,7 +534,13 @@ class App extends Component<IAppProps, IAppState> {
               </Resizable>
             )}
           </div>
-          <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
+          <div
+            style={
+              mobileScreen
+                ? this.statusAreaMobileStyle
+                : this.statusAreaFullScreenStyle
+            }
+          >
             <TermsOfUseMessage />
           </div>
         </div>
@@ -484,8 +549,14 @@ class App extends Component<IAppProps, IAppState> {
   }
 }
 
-const mapStateToProps = ({ sidebarProperties, theme, dimensions,
-  profile, sampleQuery, authToken, graphExplorerMode
+const mapStateToProps = ({
+  sidebarProperties,
+  theme,
+  dimensions,
+  profile,
+  sampleQuery,
+  authToken,
+  graphExplorerMode
 }: ApplicationState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;

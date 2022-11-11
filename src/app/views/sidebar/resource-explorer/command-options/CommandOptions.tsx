@@ -1,6 +1,15 @@
 import {
-  CommandBar, CommandBarButton, DefaultButton, Dialog, DialogFooter, DialogType,
-  getId, getTheme, IButtonProps, ICommandBarItemProps, PrimaryButton
+  CommandBar,
+  CommandBarButton,
+  DefaultButton,
+  Dialog,
+  DialogFooter,
+  DialogType,
+  getId,
+  getTheme,
+  IButtonProps,
+  ICommandBarItemProps,
+  PrimaryButton
 } from '@fluentui/react';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -11,18 +20,21 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import PathsReview from '../panels/PathsReview';
 import { resourceExplorerStyles } from '../resources.styles';
 
-interface ICommandOptions {
+interface ICommandOptionsProps {
   version: string;
+  isPathReviewOpen: boolean;
 }
 
-const CommandOptions = (props: ICommandOptions) => {
+const CommandOptions = (props: ICommandOptionsProps) => {
   const dispatch: AppDispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(false);
+  const {
+    resources: { paths }
+  } = useAppSelector((state) => state);
+  const [isOpen, setIsOpen] = useState(props.isPathReviewOpen);
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const { version } = props;
   const theme = getTheme();
 
-  const { resources: { paths } } = useAppSelector((state) => state);
   const itemStyles = resourceExplorerStyles(theme).itemStyles;
   const commandStyles = resourceExplorerStyles(theme).commandBarStyles;
   const options: ICommandBarItemProps[] = [
@@ -45,17 +57,15 @@ const CommandOptions = (props: ICommandOptions) => {
       ariaLabel: translateMessage('Delete'),
       onClick: () => toggleIsDialogHidden()
     }
-  ]
+  ];
 
   const toggleSelectedResourcesPreview = () => {
-    let open = isOpen;
-    open = !open;
-    setIsOpen(open);
-  }
+    setIsOpen(!isOpen);
+  };
 
   const removeAllResources = () => {
     dispatch(removeResourcePaths(paths));
-  }
+  };
 
   const CustomButton: React.FunctionComponent<IButtonProps> = (props_: any) => {
     return <CommandBarButton {...props_} styles={itemStyles} />;
@@ -65,12 +75,14 @@ const CommandOptions = (props: ICommandOptions) => {
     type: DialogType.normal,
     title: translateMessage('Delete collection'),
     closeButtonAriaLabel: 'Close',
-    subText: translateMessage('Do you want to remove all the items you have added to the collection?')
+    subText: translateMessage(
+      'Do you want to remove all the items you have added to the collection?'
+    )
   };
 
   const toggleIsDialogHidden = () => {
     setIsDialogHidden(!isDialogHidden);
-  }
+  };
 
   return (
     <div>
@@ -99,12 +111,18 @@ const CommandOptions = (props: ICommandOptions) => {
         }}
       >
         <DialogFooter>
-          <PrimaryButton onClick={removeAllResources} text={translateMessage('Yes')} />
-          <DefaultButton onClick={toggleIsDialogHidden} text={translateMessage('Cancel')} />
+          <PrimaryButton
+            onClick={removeAllResources}
+            text={translateMessage('Yes')}
+          />
+          <DefaultButton
+            onClick={toggleIsDialogHidden}
+            text={translateMessage('Cancel')}
+          />
         </DialogFooter>
       </Dialog>
     </div>
-  )
-}
+  );
+};
 
 export default CommandOptions;
