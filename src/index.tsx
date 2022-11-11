@@ -1,8 +1,8 @@
 import { AuthenticationResult } from '@azure/msal-browser';
 import { initializeIcons } from '@fluentui/react';
-import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
-import 'bootstrap/dist/css/bootstrap-grid.min.css';
-import ReactDOM from 'react-dom/client';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 
 import App from './app/views/App';
