@@ -1,32 +1,24 @@
-import React, { Component } from 'react';
-import { IImageComponentProps, IImageComponentState } from '../../../../types/image';
+import React, { useEffect, useState } from 'react';
+import { IImageComponentProps } from '../../../../types/image';
 
-export class Image extends Component<IImageComponentProps, IImageComponentState> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      imageUrl: ''
-    };
-  }
+export const Image = ({ styles, alt, body }: IImageComponentProps): JSX.Element => {
+  const [imageUrl, setImageUrl] = useState<string>('');
 
-  public async componentDidMount() {
-    const { body } = this.props;
-
-    if (body) {
-      const buffer = await body.clone().arrayBuffer();
+  async function getImageUrl() {
+    body.clone().arrayBuffer().then((buffer: any) => {
       const blob = new Blob([buffer], { type: 'image/jpeg' });
-      const imageUrl = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob);
+      setImageUrl(url);
+    });
+  }
 
-      this.setState({ imageUrl });
+  useEffect(() => {
+    if (body) {
+      getImageUrl();
     }
-  }
+  }, []);
 
-  public render() {
-    const { imageUrl } = this.state;
-    const { styles, alt } = this.props;
-
-    return (
-      <img style={styles} src={imageUrl} alt={alt} />
-    );
-  }
+  return (
+    <img style={styles} src={imageUrl} alt={alt} />
+  );
 }
