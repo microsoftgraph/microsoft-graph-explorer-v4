@@ -41,8 +41,16 @@ export const AddToCart = () => {
     if (pathSegments.length === 0) {
       return undefined;
     }
+    const pathSegmentToMatch = decodeURIComponent(pathSegments[0]);
     for (const resource of resourcesToMatch) {
-      if (resource.segment === pathSegments[0]) {
+      if (
+        resource.segment === pathSegmentToMatch ||
+        (resource.segment.endsWith('}') &&
+          resource.segment.startsWith('{') &&
+          pathSegmentToMatch.startsWith('{') &&
+          pathSegmentToMatch.endsWith('}'))
+      ) {
+        // workaround for when the segment is a parameter and the parameter name doesn't match
         const result = getDeeperMostResource(
           resource.children,
           pathSegments.slice(1)
