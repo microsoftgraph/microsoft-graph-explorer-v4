@@ -112,13 +112,15 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (
           styles={rightItemsStyles}
           tokens={{ childrenGap: mobileScreen ? 0 : 10 }}
         >
-          <Checkout togglePathsReview={props.togglePathsReview} />
           {!mobileScreen && (
-            <FontIcon
-              aria-label='tenant icon'
-              iconName='tenantIcon'
-              style={tenantIconStyles}
-            />
+            <>
+              <Checkout togglePathsReview={props.togglePathsReview} />
+              <FontIcon
+                aria-label='tenant icon'
+                iconName='tenantIcon'
+                style={tenantIconStyles}
+              />
+            </>
           )}
           {!profile && !mobileScreen && (
             <div style={tenantContainerStyle}>

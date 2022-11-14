@@ -128,9 +128,11 @@ const QueryInput = (props: IQueryInputProps) => {
             allowDisabledFocus={true}
           />
         </Stack.Item>
-        <Stack.Item shrink>
-          <AddToCart />
-        </Stack.Item>
+        {!mobileScreen && (
+          <Stack.Item shrink>
+            <AddToCart />
+          </Stack.Item>
+        )}
         <Stack.Item shrink styles={!mobileScreen ? shareQueryButtonStyles : {}}>
           <ShareQuery />
         </Stack.Item>
