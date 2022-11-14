@@ -12,7 +12,7 @@ import { useAppSelector } from '../../../../store';
 import { translateMessage } from '../../../utils/translate-messages';
 import { mainHeaderStyles } from '../MainHeader.styles';
 interface ICheckoutProps {
-  openPathsReview: () => void;
+  togglePathsReview: (isOpen: boolean) => void;
 }
 export const Checkout = (props: ICheckoutProps) => {
   const {
@@ -60,7 +60,7 @@ export const Checkout = (props: ICheckoutProps) => {
           styles={checkoutButtonStyles}
           menuIconProps={{ iconName: 'ShoppingCart' }}
           menuProps={menuProperties}
-          onMenuClick={props.openPathsReview}
+          onMenuClick={() => props.togglePathsReview(true)}
         />
         <span>({pathItems.length})</span>
       </TooltipHost>

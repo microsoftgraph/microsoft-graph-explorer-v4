@@ -22,6 +22,7 @@ interface ISidebar {
   currentTab: string;
   setSidebarTabSelection: Function;
   isPathReviewOpen: boolean;
+  togglePathsReview: (isOpen: boolean) => void;
   showSidebar: boolean;
   toggleSidebar: Function;
   mobileScreen: boolean;
@@ -76,7 +77,10 @@ export const Sidebar = (props: ISidebar) => {
             }}
           >
             <div id={'resources-tab'}>
-              <ResourceExplorer isPathReviewOpen={props.isPathReviewOpen} />
+              <ResourceExplorer
+                isPathReviewOpen={props.isPathReviewOpen}
+                togglePathsReview={props.togglePathsReview}
+              />
             </div>
           </PivotItem>
           <PivotItem

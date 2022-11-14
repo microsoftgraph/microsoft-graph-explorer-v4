@@ -33,7 +33,7 @@ import { GRAPH_URL } from '../../../services/graph-constants';
 import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
-import { classNames } from '../../classnames';
+import { classNames, IClassNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import CommandOptions from './command-options/CommandOptions';
@@ -47,7 +47,14 @@ import {
 import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
 
-const UnstyledResourceExplorer = (props: any) => {
+interface ResourceExplorerProps {
+  isPathReviewOpen: boolean;
+  togglePathsReview: (isOpen: boolean) => void;
+}
+
+const UnstyledResourceExplorer = (
+  props: ResourceExplorerProps & IClassNames
+) => {
   const dispatch: AppDispatch = useDispatch();
   const { resources } = useAppSelector((state) => state);
   const classes = classNames(props);
@@ -250,6 +257,7 @@ const UnstyledResourceExplorer = (props: any) => {
           <CommandOptions
             version={version}
             isPathReviewOpen={props.isPathReviewOpen}
+            togglePathsReview={props.togglePathsReview}
           />
         </>
       )}

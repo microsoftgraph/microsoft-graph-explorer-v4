@@ -7,11 +7,7 @@ import {
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch, useAppSelector } from '../../../../../store';
-import {
-  IResource,
-  IResourceLink,
-  ResourceLinkType
-} from '../../../../../types/resources';
+import { IResource, IResourceLink } from '../../../../../types/resources';
 import { addResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { getResourcesSupportedByVersion } from '../../../../utils/resources/resources-filter';

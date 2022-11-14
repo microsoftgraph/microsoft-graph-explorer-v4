@@ -1,6 +1,6 @@
 import { classNamesFunction, ITheme } from '@fluentui/react';
 
-interface IClassNames {
+export interface IClassNames {
   [prop: string]: unknown;
   theme?: ITheme;
   styles?: object;

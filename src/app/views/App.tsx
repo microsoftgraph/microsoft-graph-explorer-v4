@@ -91,11 +91,17 @@ class App extends Component<IAppProps, IAppState> {
       sidebarTabSelection: selectedTab
     });
   };
-  private openPathsPreview = () => {
-    this.setState({
-      sidebarTabSelection: 'resources',
-      isPathsPreviewOpen: true
-    });
+  private togglePathsPreview = (isOpen: boolean) => {
+    if (isOpen) {
+      this.setState({
+        sidebarTabSelection: 'resources',
+        isPathsPreviewOpen: isOpen
+      });
+    } else {
+      this.setState({
+        isPathsPreviewOpen: isOpen
+      });
+    }
   };
 
   public componentDidMount = async () => {
@@ -427,7 +433,7 @@ class App extends Component<IAppProps, IAppState> {
             minimised={minimised}
             toggleSidebar={this.toggleSidebar}
             mobileScreen={mobileScreen}
-            openPathsReview={this.openPathsPreview}
+            togglePathsReview={this.togglePathsPreview}
           />
           <Announced
             message={
@@ -474,6 +480,7 @@ class App extends Component<IAppProps, IAppState> {
                   toggleSidebar={this.toggleSidebar}
                   mobileScreen={mobileScreen}
                   isPathReviewOpen={this.state.isPathsPreviewOpen}
+                  togglePathsReview={this.togglePathsPreview}
                 />
               </Resizable>
             )}

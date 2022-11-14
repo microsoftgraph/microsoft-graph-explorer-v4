@@ -23,6 +23,7 @@ import { resourceExplorerStyles } from '../resources.styles';
 interface ICommandOptionsProps {
   version: string;
   isPathReviewOpen: boolean;
+  togglePathsReview: (isOpen: boolean) => void;
 }
 
 const CommandOptions = (props: ICommandOptionsProps) => {
@@ -30,7 +31,6 @@ const CommandOptions = (props: ICommandOptionsProps) => {
   const {
     resources: { paths }
   } = useAppSelector((state) => state);
-  const [isOpen, setIsOpen] = useState(props.isPathReviewOpen);
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const { version } = props;
   const theme = getTheme();
@@ -60,7 +60,7 @@ const CommandOptions = (props: ICommandOptionsProps) => {
   ];
 
   const toggleSelectedResourcesPreview = () => {
-    setIsOpen(!isOpen);
+    props.togglePathsReview(!props.isPathReviewOpen);
   };
 
   const removeAllResources = () => {
@@ -96,7 +96,7 @@ const CommandOptions = (props: ICommandOptionsProps) => {
         styles={commandStyles}
       />
       <PathsReview
-        isOpen={isOpen}
+        isOpen={props.isPathReviewOpen}
         version={version}
         toggleSelectedResourcesPreview={toggleSelectedResourcesPreview}
       />

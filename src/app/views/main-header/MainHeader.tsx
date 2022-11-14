@@ -26,7 +26,7 @@ interface MainHeaderProps {
   minimised: boolean;
   toggleSidebar: Function;
   mobileScreen: boolean;
-  openPathsReview: () => void;
+  togglePathsReview: (isOpen: boolean) => void;
 }
 const sectionStackTokens: IStackTokens = {
   childrenGap: 0
@@ -115,7 +115,7 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (
         >
           <span style={checkoutStyles}>
             {' '}
-            <Checkout openPathsReview={props.openPathsReview} />{' '}
+            <Checkout togglePathsReview={props.togglePathsReview} />{' '}
           </span>
           {!mobileScreen && (
             <FontIcon
