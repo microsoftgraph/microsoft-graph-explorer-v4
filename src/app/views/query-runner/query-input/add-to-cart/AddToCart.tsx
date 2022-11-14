@@ -30,7 +30,7 @@ export const AddToCart = () => {
   const content = (
     <div style={{ padding: '3px' }}>{translateMessage('Add to cart')}</div>
   );
-  const getDeeperMostResource = (
+  const getTrunkToDeeperMostLeafResource = (
     resourcesToMatch: IResource[],
     pathSegments: string[]
   ): IResource | undefined => {
@@ -47,14 +47,19 @@ export const AddToCart = () => {
           pathSegmentToMatch.endsWith('}'))
       ) {
         // workaround for when the segment is a parameter and the parameter name doesn't match
-        const result = getDeeperMostResource(
+        let result = getTrunkToDeeperMostLeafResource(
           resource.children,
           pathSegments.slice(1)
         );
+        if (!result && pathSegments.length === 1) {
+          result = resource;
+        }
         if (result) {
-          return result;
-        } else if (pathSegments.length === 1) {
-          return resource;
+          if (resource === result) {
+            return { ...resource, children: [] };
+          } else {
+            return { ...resource, children: [result] };
+          }
         }
       }
     }
@@ -70,12 +75,16 @@ export const AddToCart = () => {
       resources.data.children,
       query.selectedVersion
     );
-    let resource = getDeeperMostResource(filteredPayload, pathSegments);
+    const resource = getTrunkToDeeperMostLeafResource(
+      filteredPayload,
+      pathSegments
+    );
     if (resource) {
-      resource = { ...resource, children: [] };
       const navigationGroup = createResourcesList(
         [resource],
-        query.selectedVersion
+        query.selectedVersion,
+        undefined,
+        true
       );
       dispatch(
         addResourcePaths(

@@ -18,7 +18,8 @@ interface ITreeFilter {
 export function createResourcesList(
   source: IResource[],
   version: string,
-  searchText?: string
+  searchText?: string,
+  leafOnly: boolean = false
 ): INavLinkGroup[] {
   function getLinkType({ segment, links }: any): ResourceLinkType {
     const isGraphFunction = segment.startsWith('microsoft.graph');
@@ -37,7 +38,10 @@ export function createResourcesList(
     const { segment, children } = parent;
     const links: IResourceLink[] = [];
     const childPaths = [...paths, segment];
-    if (methods.length > 1) {
+    if (
+      methods.length > 1 &&
+      (!leafOnly || (leafOnly && children.length === 0))
+    ) {
       if (
         !searchText ||
         (searchText && childPaths.some((path) => path.contains(searchText)))
@@ -112,7 +116,7 @@ export function createResourcesList(
     // if segment name does not contain search text, then found text is in child, so expand this link
     const isExpanded =
       searchText &&
-        ![...paths, segment].some((path) => path.contains(searchText))
+      ![...paths, segment].some((path) => path.contains(searchText))
         ? true
         : false;
 
@@ -207,7 +211,9 @@ export function getResourcePaths(
     content.forEach((element: IResourceLink) => {
       element.version = version;
       element.url = `${getUrlFromLink(element)}`;
-      element.key = element.key?.includes(version) ? element.key : `${element.key}-${element.version}`
+      element.key = element.key?.includes(version)
+        ? element.key
+        : `${element.key}-${element.version}`;
     });
   }
   return content;
@@ -223,5 +229,3 @@ function flatten(content: IResourceLink[]): IResourceLink[] {
   });
   return result;
 }
-
-
