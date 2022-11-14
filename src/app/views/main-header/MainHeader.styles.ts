@@ -45,6 +45,9 @@ export const mainHeaderStyles = (theme: ITheme, mobileScreen?: boolean) => {
       flexShrink: 1,
       flexBasis: '60px'
     },
+    checkoutNumberStyles: {
+      marginTop: '12px'
+    },
     checkoutStyles: {
       flexGrow: 1,
       flexShrink: 1,

@@ -5,6 +5,7 @@ import {
   IconButton,
   IContextualMenuItem,
   IContextualMenuProps,
+  Label,
   TooltipHost
 } from '@fluentui/react';
 import React from 'react';
@@ -22,7 +23,8 @@ export const Checkout = (props: ICheckoutProps) => {
   const {
     iconButton: checkoutButtonStyles,
     checkoutContainerStyles,
-    tooltipStyles
+    tooltipStyles,
+    checkoutNumberStyles
   } = mainHeaderStyles(currentTheme);
   const calloutStyles: React.CSSProperties = {
     overflowY: 'hidden'
@@ -62,7 +64,7 @@ export const Checkout = (props: ICheckoutProps) => {
           menuProps={menuProperties}
           onMenuClick={() => props.togglePathsReview(true)}
         />
-        <span>({pathItems.length})</span>
+        <Label style={checkoutNumberStyles}>({pathItems.length})</Label>
       </TooltipHost>
     </div>
   );

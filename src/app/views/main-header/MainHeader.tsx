@@ -113,10 +113,7 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (
           styles={rightItemsStyles}
           tokens={{ childrenGap: mobileScreen ? 0 : 10 }}
         >
-          <span style={checkoutStyles}>
-            {' '}
-            <Checkout togglePathsReview={props.togglePathsReview} />{' '}
-          </span>
+          <Checkout togglePathsReview={props.togglePathsReview} />
           {!mobileScreen && (
             <FontIcon
               aria-label='tenant icon'
