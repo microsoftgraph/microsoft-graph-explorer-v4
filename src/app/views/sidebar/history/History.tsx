@@ -11,7 +11,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { SortOrder } from '../../../../types/enums';
-import { IHarPayload } from '../../../../types/har';
+import { Entry } from '../../../../types/har';
 import { IHistoryItem, IHistoryProps } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
 import { ApplicationState } from '../../../../types/root';
@@ -29,7 +29,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
-import { createHarPayload, exportQuery, generateHar } from './har-utils';
+import { createHarEntry, exportQuery, generateHar } from './har-utils';
 
 export class History extends Component<IHistoryProps, any> {
   constructor(props: any) {
@@ -354,10 +354,10 @@ export class History extends Component<IHistoryProps, any> {
   private exportHistoryByCategory = (category: string) => {
     const { historyItems } = this.state;
     const itemsToExport = historyItems.filter((query: IHistoryItem) => query.category === category);
-    const entries: IHarPayload[] = [];
+    const entries: Entry[] = [];
 
     itemsToExport.forEach((query: IHistoryItem) => {
-      const harPayload = createHarPayload(query);
+      const harPayload = createHarEntry(query);
       entries.push(harPayload);
     });
 
@@ -401,7 +401,7 @@ export class History extends Component<IHistoryProps, any> {
   };
 
   private onExportQuery = (query: IHistoryItem) => {
-    const harPayload = createHarPayload(query);
+    const harPayload = createHarEntry(query);
     const generatedHarData = generateHar([harPayload]);
     exportQuery(generatedHarData, `${query.url}/`);
     this.trackHistoryItemEvent(
