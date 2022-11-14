@@ -55,8 +55,7 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (
     tenantIconStyles,
     moreInformationStyles,
     tenantLabelStyle,
-    tenantContainerStyle,
-    checkoutStyles
+    tenantContainerStyle
   } = mainHeaderStyles(currentTheme, mobileScreen);
 
   return (

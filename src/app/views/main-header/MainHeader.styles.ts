@@ -48,11 +48,6 @@ export const mainHeaderStyles = (theme: ITheme, mobileScreen?: boolean) => {
     checkoutNumberStyles: {
       marginTop: '12px'
     },
-    checkoutStyles: {
-      flexGrow: 1,
-      flexShrink: 1,
-      flexBasis: '60px'
-    },
     checkoutContainerStyles: {
       display: 'flex',
       alignItems: 'stretch',
