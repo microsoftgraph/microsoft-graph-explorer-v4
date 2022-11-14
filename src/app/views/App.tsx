@@ -501,18 +501,18 @@ class App extends Component<IAppProps, IAppState> {
                 style={
                   !sidebarProperties.showSidebar && !mobileScreen
                     ? {
-                        marginLeft: '8px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'stretch',
-                        flex: 1
-                      }
+                      marginLeft: '8px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'stretch',
+                      flex: 1
+                    }
                     : {
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'stretch',
-                        flex: 1
-                      }
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'stretch',
+                      flex: 1
+                    }
                 }
               >
                 <div style={{ marginBottom: 2 }}>

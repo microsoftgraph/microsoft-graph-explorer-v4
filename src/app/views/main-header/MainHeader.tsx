@@ -92,8 +92,8 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (
                     !minimised && !mobileScreen
                       ? 'ClosePaneMirrored'
                       : mobileScreen
-                      ? 'GlobalNavButton'
-                      : 'OpenPaneMirrored',
+                        ? 'GlobalNavButton'
+                        : 'OpenPaneMirrored',
                   style: { fontSize: '20px' }
                 }}
                 ariaLabel={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
