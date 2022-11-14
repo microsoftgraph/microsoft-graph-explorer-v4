@@ -198,7 +198,7 @@ describe('App rendering', () => {
     await user.click(requestHeadersTab);
     expect(screen.getByPlaceholderText(/key/i)).toBeDefined();
     expect(screen.getByPlaceholderText(/value/i)).toBeDefined();
-    expect(screen.getByRole('button', { name: /add/i})).toBeDefined();
+    expect(screen.getByRole('button', { name: /add$/i})).toBeDefined();
     expect(screen.getByRole('columnheader', { name: /key/i})).toBeDefined();
     expect(screen.getByRole('columnheader', { name: /value/i})).toBeDefined();
     expect(screen.getByRole('columnheader', { name: /actions/i})).toBeDefined();
