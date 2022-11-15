@@ -107,7 +107,7 @@ const SuffixRenderer = () => {
   return (
     <>
       <TooltipHost
-        content={translateMessage('More info')}
+        content={translateMessage('Documentation')}
         id={getId()}
         calloutProps={calloutProps}
         styles={hostStyles}
@@ -117,7 +117,7 @@ const SuffixRenderer = () => {
           className={styles.iconButton}
           onClick={toggleCallout}
           id={buttonId}
-          ariaLabel={translateMessage('More Info')}
+          ariaLabel={translateMessage('Documentation')}
           disabled={!hintsAvailable}
         />
       </TooltipHost>
