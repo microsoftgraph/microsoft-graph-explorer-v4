@@ -8,7 +8,8 @@ const config: PlaywrightTestConfig = {
   use: {
     baseURL,
     trace: 'on-first-retry',
-    headless: !!process.env.CI
+    headless: !!process.env.CI,
+    ignoreHTTPSErrors: true
   },
   testDir: './src/tests',
   workers: process.env.CI ? 4 : undefined,
