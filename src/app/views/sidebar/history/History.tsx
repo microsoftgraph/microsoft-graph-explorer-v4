@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { SortOrder } from '../../../../types/enums';
-import { IHarPayload } from '../../../../types/har';
+import { Entry } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
 import { runQuery } from '../../../services/actions/query-action-creators';
@@ -30,7 +30,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
-import { createHarPayload, exportQuery, generateHar } from './har-utils';
+import { createHarEntry, exportQuery, generateHar } from './har-utils';
 
 const columns = [
   { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20 },
@@ -332,11 +332,11 @@ const History = (props: any) => {
   };
 
   const exportHistoryByCategory = (value: string) => {
-    const itemsToExport = historyItems.filter((query) => query.category === value);
-    const entries: IHarPayload[] = [];
+    const itemsToExport = historyItems.filter((query: IHistoryItem) => query.category === value);
+    const entries: Entry[] = [];
 
     itemsToExport.forEach((query: IHistoryItem) => {
-      const harPayload = createHarPayload(query);
+      const harPayload = createHarEntry(query);
       entries.push(harPayload);
     });
 
@@ -375,7 +375,7 @@ const History = (props: any) => {
   };
 
   const onExportQuery = (query: IHistoryItem) => {
-    const harPayload = createHarPayload(query);
+    const harPayload = createHarEntry(query);
     const generatedHarData = generateHar([harPayload]);
     exportQuery(generatedHarData, `${query.url}/`);
     trackHistoryItemEvent(
