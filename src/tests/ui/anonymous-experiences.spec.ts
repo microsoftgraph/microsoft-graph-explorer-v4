@@ -43,6 +43,7 @@ test.describe('Settings', () => {
   });
 
   test('Get a sandbox with sample data', async () => {
+    test.slow();
     await page.locator('[aria-label="Settings"]').click();
     // Click text=Get a sandbox with sample data
     const [page1] = await Promise.all([
