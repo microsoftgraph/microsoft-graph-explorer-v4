@@ -199,7 +199,7 @@ jobs:
   run-automated-ui-tests:
     name: Run Automated UI Tests
     needs: publish-preview-site
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     timeout-minutes: 60
     steps:
       - name: Checkout repository
