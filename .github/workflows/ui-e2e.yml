@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "14.x"
+          node-version: "16.x"
 
       - name: Install dependencies
         run: |
@@ -26,16 +26,16 @@ jobs:
           npx playwright install-deps
           npx playwright install
 
-      - name: Run Playwright Tests
-        continue-on-error: false
-        env:
-          PLAYWRIGHT_TESTS_BASE_URL: ${{ github.event.inputs.base-url }}
-        run: |
-          npx playwright test ui
-
       - name: Run Accessibility Tests
         continue-on-error: false
         env:
           PLAYWRIGHT_TESTS_BASE_URL: ${{ github.event.inputs.base-url }}
         run: |
           npx playwright test accessibility
+
+      - name: Run Playwright Tests
+        continue-on-error: false
+        env:
+          PLAYWRIGHT_TESTS_BASE_URL: ${{ github.event.inputs.base-url }}
+        run: |
+          npx playwright test ui
