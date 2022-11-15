@@ -32,3 +32,10 @@ jobs:
           PLAYWRIGHT_TESTS_BASE_URL: ${{ github.event.inputs.base-url }}
         run: |
           npx playwright test ui
+
+      - name: Run Accessibility Tests
+        continue-on-error: false
+        env:
+          PLAYWRIGHT_TESTS_BASE_URL: ${{ github.event.inputs.base-url }}
+        run: |
+          npx playwright test accessibility
