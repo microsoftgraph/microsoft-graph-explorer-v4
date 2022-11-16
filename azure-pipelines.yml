@@ -75,10 +75,10 @@ extends:
       image: windows-latest
       os: windows
 
-    sdl:
-      sourceRepositoriesToScan:
-        exclude:
-        - repository: ReleasePipelines
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "16.x"
+        displayName: "Install Node.js"
 
     customBuildTags:
     - ES365AIMigrationTooling
@@ -110,9 +110,15 @@ extends:
             npm run lint
           displayName: "Runs linting checks"
 
-        - script: |
-            npm test
-          displayName: "Runs Unit tests"
+  - job: Two
+    displayName: "Publish artifacts"
+    dependsOn: One
+    condition: succeeded()
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "16.x"
+        displayName: "Install Node.js"
 
         - task: PublishTestResults@2
           condition: succeededOrFailed()
