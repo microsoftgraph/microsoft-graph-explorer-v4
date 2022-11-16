@@ -77,7 +77,7 @@ extends:
 
       - task: NodeTool@0
         inputs:
-          versionSpec: "16.x"
+          versionSpec: "14.x"
         displayName: "Install Node.js"
 
     customBuildTags:
@@ -117,7 +117,7 @@ extends:
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: "16.x"
+          versionSpec: "14.x"
         displayName: "Install Node.js"
 
         - task: PublishTestResults@2
