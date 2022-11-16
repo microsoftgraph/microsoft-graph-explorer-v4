@@ -14,7 +14,7 @@ test.describe('Accessibility', () => {
 
   test('should not have any automatically detectable accessibility issues', async () => {
 
-    test.setTimeout(500000);
+    test.setTimeout(180000); //3min
     const accessibilityScan = new AxeBuilder({ page }).setLegacyMode();
     const result = await accessibilityScan
       .disableRules([
