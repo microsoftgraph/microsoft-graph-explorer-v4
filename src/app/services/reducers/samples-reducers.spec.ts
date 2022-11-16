@@ -54,15 +54,11 @@ describe('Samples Reducer', () => {
       error: null
     };
 
-    const mockResponse = {
-      status: 400
-    };
-
     const newState = { ...initialState };
-    newState.error = mockResponse;
+    newState.error = 'error';
     newState.queries = queries;
 
-    const queryAction = { type: SAMPLES_FETCH_ERROR, response: mockResponse };
+    const queryAction = { type: SAMPLES_FETCH_ERROR, response: queries };
     const state = samples(initialState, queryAction);
 
     expect(state).toEqual(newState);
