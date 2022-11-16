@@ -1,13 +1,11 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, Page } from '@playwright/test';
 
-let page: Page;
+const TEST_TIMEOUT_MS = 500000; // in milliseconds = 5min
 
-test.beforeAll(async ({ browser }) => {
-  const context = await browser.newContext();
-  page = await context.newPage();
-  await page.goto('/');
-});
+describe('Graph Explorer accessibility', () => {
+  let driver: ThenableWebDriver;
+  jest.setTimeout(TEST_TIMEOUT_MS);
 
 test.describe('Accessibility', () => {
   test.use({ viewport: { width: 1024, height: 768 }});
