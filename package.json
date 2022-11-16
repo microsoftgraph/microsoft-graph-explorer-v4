@@ -116,7 +116,7 @@
                 "html-webpack-plugin": "5.5.0",
                 "jest": "28.1.0",
                 "jest-canvas-mock": "2.4.0",
-                "jest-environment-jsdom": "29.2.2",
+                "jest-environment-jsdom": "28.1.3",
                 "jest-fetch-mock": "3.0.3",
                 "jest-sonar-reporter": "2.0.0",
                 "jest-watch-typeahead": "2.2.0",
