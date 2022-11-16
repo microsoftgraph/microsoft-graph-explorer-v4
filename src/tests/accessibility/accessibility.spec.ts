@@ -15,7 +15,7 @@ test.describe('Accessibility', () => {
   test('should not have any automatically detectable accessibility issues', async () => {
 
     test.slow();
-    const accessibilityScanResults = await new AxeBuilder({ page })
+    const accessibilityScanResults = await new AxeBuilder({ page }).setLegacyMode()
       .disableRules([
         'landmark-one-main',
         'region',
