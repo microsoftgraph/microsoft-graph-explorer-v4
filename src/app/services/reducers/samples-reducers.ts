@@ -24,7 +24,8 @@ export function samples(state = initialState, action: AppAction): any {
       return {
         ...state,
         pending: false,
-        queries: action.response
+        queries: action.response,
+        error: 'error'
       };
     default:
       return state;
