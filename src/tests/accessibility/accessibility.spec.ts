@@ -14,8 +14,9 @@ test.describe('Accessibility', () => {
 
   test('should not have any automatically detectable accessibility issues', async () => {
 
-    test.slow();
-    const accessibilityScanResults = await new AxeBuilder({ page }).setLegacyMode()
+    test.setTimeout(500000);
+    const accessibilityScan = new AxeBuilder({ page }).setLegacyMode();
+    const result = await accessibilityScan
       .disableRules([
         'landmark-one-main',
         'region',
@@ -27,7 +28,8 @@ test.describe('Accessibility', () => {
         'aria-required-children'
       ])
       .analyze();
+    accessibilityScan.setLegacyMode(false);
 
-    expect(accessibilityScanResults.violations).toEqual([]);
+    expect(result.violations).toEqual([]);
   });
 })
