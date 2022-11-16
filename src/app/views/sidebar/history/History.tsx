@@ -4,7 +4,7 @@ import {
   DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
   Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from '@fluentui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -93,6 +93,10 @@ const History = (props: any) => {
   const [category, setCategory] = useState('');
 
   const classes = classNames(props);
+
+  useEffect(() => {
+    setHistoryItems(history);
+  }, [history])
 
   if (!history || history.length === 0) {
     return NoResultsFound('We did not find any history items');

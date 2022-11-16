@@ -1,5 +1,5 @@
-import { IHistoryItem } from '../../../../types/history';
-import { writeHistoryData, readHistoryData, removeHistoryData } from './history-utils';
+import { IHistoryItem } from '../../types/history';
+import { historyCache } from './history-utils';
 
 
 let historyItems: IHistoryItem[] = [];
@@ -43,8 +43,8 @@ describe('History utils should', () => {
       status: 200
     }
     expect(historyItems.length).toBe(0);
-    await writeHistoryData(historyItem);
-    const historyData = await readHistoryData();
+    await historyCache.writeHistoryData(historyItem);
+    const historyData = await historyCache.readHistoryData();
     expect(historyData.length).toBe(1);
   });
 
@@ -61,9 +61,9 @@ describe('History utils should', () => {
       duration: 200,
       status: 200
     }
-    await writeHistoryData(historyItem);
+    await historyCache.writeHistoryData(historyItem);
     expect(historyItems.length).toBe(2);
-    await removeHistoryData(historyItem);
+    await historyCache.removeHistoryData(historyItem);
     expect(historyItems.length).toBe(1);
   });
 
@@ -83,7 +83,7 @@ describe('History utils should', () => {
     }
     historyItems.push(historyItem);
     expect(historyItems.length).toBe(1);
-    const historyData = await readHistoryData();
+    const historyData = await historyCache.readHistoryData();
     expect(historyData.length).toBe(0);
   });
 })
