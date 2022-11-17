@@ -14,7 +14,7 @@ test.describe('Accessibility', () => {
 
   test('should not have any automatically detectable accessibility issues', async () => {
 
-    test.setTimeout(180000); //3min
+    page.locator('[aria-label="Settings"]');
     const accessibilityScan = new AxeBuilder({ page }).setLegacyMode();
     const result = await accessibilityScan
       .disableRules([
