@@ -24,7 +24,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "14.x"
 
       - name: Cache npm
         uses: actions/cache@v3
@@ -60,7 +60,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "14.x"
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -85,7 +85,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "14.x"
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -113,7 +113,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "14.x"
 
       - name: Cache node_modules
         uses: actions/cache@v3
