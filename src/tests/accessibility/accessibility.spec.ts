@@ -43,7 +43,8 @@ describe('Graph Explorer accessibility', () => {
         'document-title',
         'html-has-lang',
         'page-has-heading-one',
-        'landmark-unique'
+        'landmark-unique',
+        'aria-required-children'
       ])
       .analyze();
     expect(accessibilityScanResults.violations).toStrictEqual([]);
