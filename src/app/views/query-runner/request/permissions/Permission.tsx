@@ -61,7 +61,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   useEffect(() => {
     getPermissions();
-  },[sampleQuery, scopes.pending.isRevokePermissions, authToken]);
+  },[sampleQuery]);
 
   const handleConsent = async (permission: IPermission): Promise<void> => {
     const consentScopes = [permission.value];
