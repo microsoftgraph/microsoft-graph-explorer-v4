@@ -22,10 +22,7 @@ test.describe('Accessibility', () => {
         'html-has-lang',
         'page-has-heading-one',
         'landmark-unique',
-        'aria-allowed-attr',
-        'aria-required-children',
-        'color-contrast',
-        'aria-conditional-attr'
+        'aria-required-children'
       ])
       .analyze();
     accessibilityScan.setLegacyMode(false);
