@@ -4,16 +4,8 @@ import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import { initializeIcons } from '@fluentui/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { addLocaleData, IntlProvider } from 'react-intl';
+import { IntlProvider } from 'react-intl';
 
-import de from 'react-intl/locale-data/de';
-import en from 'react-intl/locale-data/en';
-import es from 'react-intl/locale-data/es';
-import fr from 'react-intl/locale-data/fr';
-import jp from 'react-intl/locale-data/ja';
-import pt from 'react-intl/locale-data/pt';
-import ru from 'react-intl/locale-data/ru';
-import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
@@ -110,8 +102,6 @@ refreshAccessToken();
 
 setInterval(refreshAccessToken, 1000 * 60 * 10); // refresh access token every 10 minutes
 
-addLocaleData([...pt, ...de, ...en, ...fr, ...jp, ...ru, ...zh, ...es]);
-
 const theme = new URLSearchParams(location.search).get('theme');
 
 if (theme) {
@@ -151,7 +141,7 @@ loadResources();
 /**
  * Set's up Monaco Editor's Workers.
  */
-enum Workers {
+ num Workers {
   Json = 'json',
   Editor = 'editor',
 }
