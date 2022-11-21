@@ -141,7 +141,7 @@ loadResources();
 /**
  * Set's up Monaco Editor's Workers.
  */
- num Workers {
+enum Workers {
   Json = 'json',
   Editor = 'editor',
 }
