@@ -78,9 +78,7 @@ const PanelList = ({ messages,
 
   const searchValueChanged = (event: any, value?: string): void => {
     let valueToSearch = '';
-    if(value !== ''){
-      valueToSearch = value!;
-    }
+    valueToSearch = value!;
     setSearchValue(valueToSearch);
     shouldGenerateGroups.current = true;
     setSearchStarted((search) => !search);
