@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test';
+import { expect, Locator } from '@playwright/test';
 require('dotenv').config();
 
 const PLAYWRIGHT_TESTS_USERNAME = process.env.PLAYWRIGHT_TESTS_USERNAME || '';
@@ -20,8 +20,8 @@ export const logIn = async (page: any) => {
 
   await popup.locator('[placeholder="Password"]').fill(PLAYWRIGHT_TESTS_PASSWORD);
   await popup.locator('text=Sign in').click();
-  const finalStep = popup.locator('text=Yes');
-  if (!!finalStep) {
+  const finalStep : Locator = popup.locator('text=Yes');
+  if (finalStep) {
     await finalStep.click();
   }
 

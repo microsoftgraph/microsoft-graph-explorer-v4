@@ -12,6 +12,7 @@ test.beforeAll(async ({ browser }) => {
 test.describe('Sample Queries', () => {
 
   test('Sign in tooltip should not be visible', async () => {
+    test.slow();
     await authenticatedPage
       .locator('[aria-label="Applications has 8 results 2 of 28"] [aria-label="expand collapse group"]')
       .click();
