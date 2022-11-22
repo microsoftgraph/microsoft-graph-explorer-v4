@@ -1,5 +1,6 @@
 import { Announced, ITextField, PrimaryButton, styled, TextField } from '@fluentui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { ContentType } from '../../../../types/enums';
 import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 import { Image, Monaco } from '../../common';

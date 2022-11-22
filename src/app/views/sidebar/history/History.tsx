@@ -4,7 +4,7 @@ import {
   DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
   Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from '@fluentui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

@@ -1,6 +1,6 @@
 import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import React, { CSSProperties, useState } from 'react';
+import { CSSProperties, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

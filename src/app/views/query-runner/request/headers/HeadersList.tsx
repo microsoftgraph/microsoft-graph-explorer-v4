@@ -1,5 +1,4 @@
 import { DetailsList, DetailsRow, IColumn, IconButton, SelectionMode } from '@fluentui/react';
-import * as React from 'react';
 import { IHeadersListControl } from '../../../../../types/request';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { headerStyles } from './Headers.styles';

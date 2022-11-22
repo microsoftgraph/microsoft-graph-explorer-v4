@@ -2,7 +2,6 @@ import { AuthenticationResult } from '@azure/msal-browser';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import { initializeIcons } from '@fluentui/react';
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { addLocaleData, IntlProvider } from 'react-intl';
 

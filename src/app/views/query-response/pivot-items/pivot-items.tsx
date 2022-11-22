@@ -1,5 +1,4 @@
 import { getTheme, IPivotItemProps, ITheme, PivotItem } from '@fluentui/react';
-import React from 'react';
 import { useAppSelector } from '../../../../store';
 
 import { componentNames, telemetry } from '../../../../telemetry';
