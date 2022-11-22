@@ -12,7 +12,6 @@ const config: PlaywrightTestConfig = {
     ignoreHTTPSErrors: true
   },
   testDir: './src/tests',
-  workers: process.env.CI ? 4 : undefined,
   reporter: [
     [
       'html',
