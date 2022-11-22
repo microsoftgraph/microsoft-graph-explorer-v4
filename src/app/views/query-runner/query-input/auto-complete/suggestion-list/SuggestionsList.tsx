@@ -1,5 +1,5 @@
 import { Label, styled } from '@fluentui/react';
-import React, { useEffect } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 
 import { ISuggestionsList } from '../../../../../../types/auto-complete';
 import { classNames } from '../../../../classnames';
@@ -27,7 +27,7 @@ const styledSuggesions = (props: any) => {
 
   return (
     <ul className={classes.suggestions} tabIndex={-1}>
-      {filteredSuggestions.map((suggestion: {} | null | undefined, index: number) => {
+      {filteredSuggestions.map((suggestion: ReactNode, index: number) => {
         return (
           <li
             className={(index === activeSuggestion) ? classes.suggestionActive : classes.suggestionOption}
