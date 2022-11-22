@@ -21,7 +21,7 @@ export const logIn = async (page: any) => {
   await popup.locator('[placeholder="Password"]').fill(PLAYWRIGHT_TESTS_PASSWORD);
   await popup.locator('text=Sign in').click();
   const finalStep = popup.locator('text=Yes');
-  if (finalStep) {
+  if (!!finalStep) {
     await finalStep.click();
   }
 
