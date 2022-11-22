@@ -52,6 +52,7 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
         break;
       case GRAPH_API_SANDBOX_URL:
         baseData.name = sanitizeGraphAPISandboxUrl(target);
+        break;
       default:
         break;
     }
