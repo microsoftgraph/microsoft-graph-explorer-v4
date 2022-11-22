@@ -41,6 +41,7 @@ const PanelList = ({ messages,
   const [permissions, setPermissions] = useState<any []>([]);
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState(false);
+  const [searchValue, setSearchValue ] = useState<string>('');
   const permissionsList: any[] = [];
   const tokenPresent = !!authToken.token;
   const loading = scopes.pending.isFullPermissions;
@@ -64,7 +65,6 @@ const PanelList = ({ messages,
     }
   }, [permissions, searchStarted])
 
-
   const dispatch: AppDispatch = useDispatch();
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
@@ -78,11 +78,14 @@ const PanelList = ({ messages,
   });
 
   const searchValueChanged = (event: any, value?: string): void => {
+    let valueToSearch = '';
+    valueToSearch = value!;
+    setSearchValue(valueToSearch);
     shouldGenerateGroups.current = true;
     setSearchStarted((search) => !search);
     let filteredPermissions = scopes.data.fullPermissions;
-    if (value) {
-      const keyword = value.toLowerCase();
+    if (valueToSearch) {
+      const keyword = valueToSearch.toLowerCase();
 
       filteredPermissions = fullPermissions.filter((permission: IPermission) => {
         const name = permission.value.toLowerCase();
@@ -142,6 +145,11 @@ const PanelList = ({ messages,
     )
   }
 
+  const clearSearchBox = () => {
+    setSearchValue('');
+    searchValueChanged({},'');
+  }
+
   return (
     <div>
       <Panel
@@ -167,6 +175,8 @@ const PanelList = ({ messages,
               onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
                 searchValueChanged(event, newValue)}
               styles={searchBoxStyles}
+              onClear={() => clearSearchBox()}
+              value={searchValue}
             />
             <Announced message={`${permissions.length} search results available.`} />
             <hr />
