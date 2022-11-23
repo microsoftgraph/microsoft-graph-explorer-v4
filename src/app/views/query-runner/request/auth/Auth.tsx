@@ -6,6 +6,7 @@ import { authenticationWrapper } from '../../../../../modules/authentication';
 import { useAppSelector } from '../../../../../store';
 
 import { componentNames, telemetry } from '../../../../../telemetry';
+import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { trackedGenericCopy } from '../../../common/copy';
@@ -14,7 +15,7 @@ import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment'
 import { authStyles } from './Auth.styles';
 
 export function Auth(props: any) {
-  const { authToken, dimensions: { request: { height } } } = useAppSelector((state) => state);
+  const { authToken, profile, dimensions: { request: { height } } } = useAppSelector((state) => state);
   const requestHeight = convertVhToPx(height, 60);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -55,6 +56,7 @@ export function Auth(props: any) {
             title={translateMessage('Get token details (Powered by jwt.ms)')}
             ariaLabel={translateMessage('Get token details (Powered by jwt.ms)')}
             href={`https://jwt.ms#access_token=${accessToken}`}
+            disabled={profile?.profileType === ACCOUNT_TYPE.MSA}
             target='_blank' />
         </div>
         <Label className={classes.accessToken} >{accessToken}</Label>
