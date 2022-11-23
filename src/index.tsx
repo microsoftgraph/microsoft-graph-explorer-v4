@@ -15,7 +15,7 @@ import { bulkAddHistoryItems } from './app/services/actions/request-history-acti
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
-import { readHistoryData } from './app/views/sidebar/history/history-utils';
+import { historyCache } from './modules/cache/history-utils';
 import { geLocale } from './appLocale';
 import messages from './messages';
 import { authenticationWrapper } from './modules/authentication';
@@ -127,7 +127,7 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
   appStore.dispatch(setDevxApiUrl(devxApi));
 }
 
-readHistoryData().then((data: any) => {
+historyCache.readHistoryData().then((data: any) => {
   if (data.length > 0) {
     appStore.dispatch(bulkAddHistoryItems(data));
   }

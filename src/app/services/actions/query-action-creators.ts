@@ -6,7 +6,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
 import { ClientError } from '../../utils/error-utils/ClientError';
 import { setStatusMessage } from '../../utils/status-message';
-import { writeHistoryData } from '../../views/sidebar/history/history-utils';
+import { historyCache } from '../../../modules/cache/history-utils';
 import {
   anonymousRequest,
   authenticatedRequest,
@@ -180,7 +180,7 @@ async function createHistory(
     result
   };
 
-  writeHistoryData(historyItem);
+  historyCache.writeHistoryData(historyItem);
 
   dispatch(addHistoryItem(historyItem));
   return result;
