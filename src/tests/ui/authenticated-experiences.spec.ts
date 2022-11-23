@@ -4,6 +4,7 @@ import { logIn } from './login';
 let authenticatedPage: Page;
 
 test.beforeAll(async ({ browser }) => {
+  test.slow();
   authenticatedPage = await browser.newPage();
   await logIn(authenticatedPage);
   await authenticatedPage.waitForTimeout(5000);
