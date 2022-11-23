@@ -170,11 +170,11 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const displayAutoCompleteSuggestions = (url: string) => {
 
-    const { index } = getLastDelimiterInUrl(url);
-    const { previous: preceedingText } = getSearchText(url, index!);
-    const shouldSuggestVersions = preceedingText === GRAPH_URL + '/';
-
     setShouldShowSuggestions(false);
+
+    const { index } = getLastDelimiterInUrl(url);
+    const { previous: preceedingText, searchText: searchTerm } = getSearchText(url, index!);
+    const shouldSuggestVersions = preceedingText === GRAPH_URL + '/';
 
     let theSuggestions: string[] = [];
     if (shouldSuggestVersions) {
@@ -184,16 +184,19 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       theSuggestions = getSuggestions(url, autoCompleteOptions);
     }
 
-    if (theSuggestions.length > 0) {
-      const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
-      if (filtered.length > 0) {
-        setSuggestions(filtered);
-        setShouldShowSuggestions(true);
-      }
-    } else {
-      setShouldShowSuggestions(false);
+    if (theSuggestions.length === 0) {
+      return;
     }
 
+    const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
+    if (filtered.length > 0) {
+      setSuggestions(filtered);
+      setShouldShowSuggestions(true);
+    }
+
+    if (filtered.length === 1 && filtered[0] === searchTerm) {
+      setShouldShowSuggestions(false);
+    }
   }
 
   const trackSuggestionSelectionEvent = (suggestion: string) => {
