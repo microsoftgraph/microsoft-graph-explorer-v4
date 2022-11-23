@@ -3,16 +3,8 @@ import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import { initializeIcons } from '@fluentui/react';
 import ReactDOM from 'react-dom/client';
-import { addLocaleData, IntlProvider } from 'react-intl';
+import { IntlProvider } from 'react-intl';
 
-import de from 'react-intl/locale-data/de';
-import en from 'react-intl/locale-data/en';
-import es from 'react-intl/locale-data/es';
-import fr from 'react-intl/locale-data/fr';
-import jp from 'react-intl/locale-data/ja';
-import pt from 'react-intl/locale-data/pt';
-import ru from 'react-intl/locale-data/ru';
-import zh from 'react-intl/locale-data/zh';
 import { Provider } from 'react-redux';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
@@ -22,7 +14,7 @@ import { bulkAddHistoryItems } from './app/services/actions/request-history-acti
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
-import { readHistoryData } from './app/views/sidebar/history/history-utils';
+import { historyCache } from './modules/cache/history-utils';
 import { geLocale } from './appLocale';
 import messages from './messages';
 import { authenticationWrapper } from './modules/authentication';
@@ -109,8 +101,6 @@ refreshAccessToken();
 
 setInterval(refreshAccessToken, 1000 * 60 * 10); // refresh access token every 10 minutes
 
-addLocaleData([...pt, ...de, ...en, ...fr, ...jp, ...ru, ...zh, ...es]);
-
 const theme = new URLSearchParams(location.search).get('theme');
 
 if (theme) {
@@ -136,7 +126,7 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
   appStore.dispatch(setDevxApiUrl(devxApi));
 }
 
-readHistoryData().then((data: any) => {
+historyCache.readHistoryData().then((data: any) => {
   if (data.length > 0) {
     appStore.dispatch(bulkAddHistoryItems(data));
   }

@@ -1,7 +1,9 @@
 import { geLocale } from '../../../appLocale';
+import { samplesCache } from '../../../modules/cache/samples.cache';
 import { AppDispatch } from '../../../store';
 import { AppAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
+import { queries } from '../../views/sidebar/sample-queries/queries';
 import {
   SAMPLES_FETCH_ERROR,
   SAMPLES_FETCH_PENDING,
@@ -55,7 +57,11 @@ export function fetchSamples() {
       const res = await response.json();
       return dispatch(fetchSamplesSuccess(res.sampleQueries));
     } catch (error) {
-      return dispatch(fetchSamplesError({ error }));
+      let cachedSamples = await samplesCache.readSamples();
+      if (cachedSamples.length === 0) {
+        cachedSamples = queries;
+      }
+      return dispatch(fetchSamplesError(cachedSamples));
     }
   };
 }
