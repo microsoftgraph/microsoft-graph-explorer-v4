@@ -1,7 +1,6 @@
 import { MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { useState } from 'react';
-import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

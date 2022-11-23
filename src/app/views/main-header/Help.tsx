@@ -9,7 +9,6 @@ import {
   TooltipHost
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import * as React from 'react';
 import { GitHubLogoIcon } from '@fluentui/react-icons-mdl2';
 
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';

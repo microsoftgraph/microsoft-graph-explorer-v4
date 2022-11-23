@@ -3,7 +3,6 @@ import {
   getTheme, IconButton, IContextualMenuProps, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import * as React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';

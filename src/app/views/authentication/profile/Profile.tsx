@@ -3,7 +3,6 @@ import {
   Persona, PersonaSize, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { useId } from '@fluentui/react-hooks';
 

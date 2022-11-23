@@ -4,7 +4,6 @@ import {
   SearchBox, SelectionMode
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
-import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

@@ -1,5 +1,4 @@
 import { Link, MessageBar, MessageBarType } from '@fluentui/react';
-import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { getLoginType } from '../../../modules/authentication/authUtils';
