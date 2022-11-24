@@ -1,7 +1,7 @@
 
 import { AppAction } from '../../../types/action';
 import { IHistoryItem } from '../../../types/history';
-import { bulkRemoveHistoryData, removeHistoryData } from '../../views/sidebar/history/history-utils';
+import { historyCache } from '../../../modules/cache/history-utils';
 import {
   ADD_HISTORY_ITEM_SUCCESS,
   REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
@@ -35,7 +35,7 @@ export function removeHistoryItem(historyItem: IHistoryItem) {
 
   delete historyItem.category;
   return async (dispatch: Function) => {
-    return removeHistoryData(historyItem)
+    return historyCache.removeHistoryData(historyItem)
       .then(() => {
         dispatch({
           type: REMOVE_HISTORY_ITEM_SUCCESS,
@@ -53,7 +53,7 @@ export function bulkRemoveHistoryItems(historyItems: IHistoryItem[]) {
   });
 
   return async (dispatch: Function) => {
-    return bulkRemoveHistoryData(listOfKeys)
+    return historyCache.bulkRemoveHistoryData(listOfKeys)
       .then(() => {
         dispatch({
           type: REMOVE_ALL_HISTORY_ITEMS_SUCCESS,

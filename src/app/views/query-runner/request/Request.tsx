@@ -5,16 +5,14 @@ import {
   Spinner,
   SpinnerSize
 } from '@fluentui/react';
+import React, { useState, CSSProperties, lazy, Suspense } from 'react';
 import { Resizable } from 're-resizable';
-import React, { Component, CSSProperties, lazy, Suspense } from 'react';
 import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { useDispatch } from 'react-redux';
 
+import { AppDispatch, useAppSelector } from '../../../../store';
 import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
-import { IRequestComponent } from '../../../../types/request';
-import { ApplicationState } from '../../../../types/root';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
@@ -25,20 +23,21 @@ const Permission = lazy(() => import('./permissions'));
 const Auth = lazy(() => import('./auth'));
 const RequestHeaders = lazy(() => import('./headers'));
 
-export class Request extends Component<IRequestComponent, any> {
-  constructor(props: IRequestComponent) {
-    super(props);
-    this.state = {
-      selectedPivot: 'request-body'
-    }
-  }
 
-  private getPivotItems = (height: string) => {
-    const {
-      handleOnEditorChange,
-      mode,
-      intl: { messages }
-    }: any = this.props;
+const Request = (props: any) => {
+  const dispatch: AppDispatch = useDispatch();
+  const [selectedPivot, setSelectedPivot] = useState('request-body');
+  const { graphExplorerMode: mode, dimensions } = useAppSelector((state) => state);
+  const pivot = selectedPivot.replace('.$', '');
+  const minHeight = 60;
+  const maxHeight = 800;
+
+  const {
+    handleOnEditorChange,
+    intl: { messages }
+  }: any = props;
+
+  const getPivotItems = (height: string) => {
 
     const heightAdjustment = 55;
     const containerStyle: CSSProperties = {
@@ -119,102 +118,74 @@ export class Request extends Component<IRequestComponent, any> {
     return pivotItems;
   }
 
-  private handlePivotItemClick = (pivotItem?: PivotItem) => {
+  const requestPivotItems = getPivotItems(dimensions.request.height);
+
+  const handlePivotItemClick = (pivotItem?: PivotItem) => {
     if (!pivotItem) {
       return;
     }
-    this.onPivotItemClick(pivotItem);
-    this.setState({ selectedPivot: pivotItem.props.itemKey });
+    onPivotItemClick(pivotItem);
+    setSelectedPivot(pivotItem.props.itemKey!);
   }
 
-  private onPivotItemClick = (item?: PivotItem) => {
+  const onPivotItemClick = (item?: PivotItem) => {
     if (!item) { return; }
     const tabKey = item.props.itemKey;
-    const { sampleQuery }: any = this.props;
+    const { sampleQuery }: any = props;
     if (tabKey) {
       telemetry.trackTabClickEvent(tabKey, sampleQuery);
     }
   };
 
-  private setRequestAndResponseHeights = (requestHeight: string) => {
+  const setRequestAndResponseHeights = (requestHeight: string) => {
     const heightInPx = requestHeight.replace('px', '').trim();
     const requestHeightInVh = convertPxToVh(parseFloat(heightInPx)).toString();
     const maxDeviceVerticalHeight = 90;
-    const dimen = { ...this.props.dimensions };
+    const dimen = { ...props.dimensions };
     dimen.request.height = requestHeightInVh;
     const response = maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''));
     dimen.response.height = response + 'vh';
-    this.props.actions!.setDimensions(dimen);
+    dispatch(setDimensions(dimen));
   };
 
-
-  public render() {
-    const { dimensions } = this.props;
-    const requestPivotItems = this.getPivotItems(dimensions.request.height);
-    const { selectedPivot } = this.state;
-    const pivot = selectedPivot.replace('.$', '');
-    const minHeight = 60;
-    const maxHeight = 800;
-    return (
-      <>
-        <Resizable
-          style={{
-            border: 'solid 1px #ddd'
-          }}
-          onResize={(e: any, direction: any, ref: any) => {
-            if (ref && ref.style && ref.style.height) {
-              this.setRequestAndResponseHeights(ref.style.height);
-            }
-          }}
-          maxHeight={maxHeight}
-          minHeight={minHeight}
-          bounds={'window'}
-          size={{
-            height: 'inherit',
-            width: '100%'
-          }}
-          enable={{
-            bottom: true
-          }}
-        >
-          <div className='query-request'>
-            <Pivot
-              overflowBehavior='menu'
-              overflowAriaLabel={translateMessage('More items')}
-              onLinkClick={this.handlePivotItemClick}
-              className='pivot-request'
-              selectedKey={pivot}
-              styles={{ text: { fontSize: FontSizes.size14 } }}
-            >
-              {requestPivotItems}
-            </Pivot>
-          </div>
-        </Resizable>
-      </>
-    );
-  }
+  return (
+    <>
+      <Resizable
+        style={{
+          border: 'solid 1px #ddd'
+        }}
+        onResize={(e: any, direction: any, ref: any) => {
+          if (ref && ref.style && ref.style.height) {
+            setRequestAndResponseHeights(ref.style.height);
+          }
+        }}
+        maxHeight={maxHeight}
+        minHeight={minHeight}
+        bounds={'window'}
+        size={{
+          height: 'inherit',
+          width: '100%'
+        }}
+        enable={{
+          bottom: true
+        }}
+      >
+        <div className='query-request'>
+          <Pivot
+            overflowBehavior='menu'
+            overflowAriaLabel={translateMessage('More items')}
+            onLinkClick={handlePivotItemClick}
+            className='pivot-request'
+            selectedKey={pivot}
+            styles={{ text: { fontSize: FontSizes.size14 } }}
+          >
+            {requestPivotItems}
+          </Pivot>
+        </div>
+      </Resizable>
+    </>
+  );
 }
 
-function mapStateToProps(
-  { graphExplorerMode, sampleQuery, theme, sidebarProperties, dimensions, profile }: ApplicationState) {
-  return {
-    mode: graphExplorerMode,
-    sampleBody: sampleQuery.sampleBody,
-    theme,
-    mobileScreen: !!sidebarProperties.mobileScreen,
-    dimensions,
-    profile: profile?.profileType
-  };
-}
-
-function mapDispatchToProps(dispatch: Dispatch) {
-  return {
-    actions: bindActionCreators({
-      setDimensions
-    }, dispatch)
-  };
-}
-
-// @ts-ignore
 const IntlRequest = injectIntl(Request);
-export default connect(mapStateToProps, mapDispatchToProps)(IntlRequest);
+export default IntlRequest;

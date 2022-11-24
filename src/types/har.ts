@@ -1,149 +1,97 @@
-interface IHarLog {
-  version: string;
-  creator: IHarCreator;
-  browser?: IHarBrowser;
-  entries: IHarEntries[];
-  comment?: string;
+export interface HarFormat {
+  log: Log;
 }
 
-interface IHarCreator {
-  name: string;
+interface Log {
   version: string;
-  comment?: string;
+  creator: Creator;
+  pages: Page[];
+  entries: Entry[];
 }
 
-interface IHarBrowser {
-  name: string;
-  version: string;
-  comment?: string;
-}
-
-interface IHarEntries {
-  pageref?: string;
+export interface Entry {
   startedDateTime: string;
   time: number;
-  request: IHarRequest;
-  response: IHarResponse;
-  cache: IHarCache;
-  timings: IHarTimings;
-  serverIpAddress?: string;
-  connection?: string;
-  comment?: string;
+  request: Request;
+  response: Response;
+  cache: Cache;
+  timings: Timings;
+  pageref: string;
 }
 
-interface IHarRequest {
-  method: string;
-  url: string;
-  httpVersion: string;
-  cookies: IHarCookies[];
-  headers: IHarHeaders[];
-  queryString: IHarQueryString[];
-  postData?: IHarPostData;
-  headersSize: number;
-  bodySize: number;
-  comment?: string;
+interface Timings {
+  blocked: number;
+  dns: number;
+  connect: number;
+  send: number;
+  wait: number;
+  receive: number;
+  ssl: number;
 }
 
-interface IHarResponse {
-  status: number;
-  statusText: string;
-  httpVersion: string;
-  cookies: IHarCookies[];
-  headers: IHarHeaders[];
-  content: IHarContent;
-  redirectURL: string;
-  headersSize: number;
-  bodySize: number;
-  comment?: string;
-}
-
-interface IHarCookies {
-  name: string;
-  value: string;
-  path?: string;
-  domain?: string;
-  expires?: string;
-  httpOnly?: boolean;
-  secure?: boolean;
-  comment?: string;
-}
-
-export interface IHarHeaders {
-  name: string;
-  value: string;
-  comment?: string;
-}
-
-interface IHarQueryString {
-  name: string;
-  value: string;
-  comment?: string;
-}
-
-interface IHarPostData {
-  mimeType: string;
-  params?: IHarParams;
-  text: string;
-  comment?: string;
-}
-
-interface IHarParams {
-  name: string;
-  value?: string;
-  fileName?: string;
-  contentType?: string;
-  comment?: string;
-}
-
-interface IHarContent {
-  size: number;
-  compression?: number;
-  mimeType: string;
-  text?: string;
-  encoding?: string;
-  comment?: string;
-}
-
-interface IHarCache {
+interface Cache {
   beforeRequest?: object;
   afterRequest?: object;
   comment?: string;
 }
 
-interface IHarTimings {
-  blocked?: number;
-  dns?: number;
-  connect?: number;
-  send: number;
-  wait: number;
-  receive: number;
-  ssl?: number;
-  comment?: string;
+interface Response {
+  status: number;
+  statusText: string;
+  httpVersion: string;
+  headers: HarHeader[];
+  cookies: any[];
+  content: Content;
+  redirectURL: string;
+  headersSize: number;
+  bodySize: number;
 }
 
-export interface IHarFormat {
-  log: IHarLog;
+interface Content {
+  size: number;
+  mimeType: string;
+  compression: number;
+  text: string;
 }
 
-export interface IHarPayload {
-  startedDateTime: string;
-  time: number;
+interface Request {
   method: string;
   url: string;
   httpVersion: string;
-  cookies: IHarCookies[];
-  request: {
-    headers: IHarHeaders[];
-  };
-  response: {
-    headers: IHarHeaders[];
-  };
-  queryString: IHarQueryString[];
-  postData?: IHarPostData;
-  status: number;
-  statusText: string;
-  content: IHarContent;
-  sendTime: number;
-  waitTime: number;
-  receiveTime: number;
+  headers: HarHeader[];
+  queryString: HarHeader[];
+  cookies: Cookie[];
+  headersSize: number;
+  bodySize: number;
+  postData?: Content;
+}
+
+interface Cookie {
+  name: string;
+  value: string;
+  expires?: any;
+  httpOnly: boolean;
+  secure: boolean;
+}
+
+export interface HarHeader {
+  name: string;
+  value: string;
+}
+
+interface Page {
+  startedDateTime: string;
+  id: string;
+  title: string;
+  pageTimings: PageTimings;
+}
+
+interface PageTimings {
+  onContentLoad: number;
+  onLoad: number;
+}
+
+interface Creator {
+  name: string;
+  version: string;
 }
