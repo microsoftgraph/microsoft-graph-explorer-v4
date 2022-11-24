@@ -2,7 +2,7 @@ import {
   ActionButton, Callout, FontSizes, getTheme, IPersonaProps, IPersonaSharedProps, mergeStyleSets,
   Persona, PersonaSize, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useId } from '@fluentui/react-hooks';
 

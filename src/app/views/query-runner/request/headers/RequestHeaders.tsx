@@ -1,5 +1,5 @@
 import { Announced, ITextField, PrimaryButton, styled, TextField } from '@fluentui/react';
-import React, { useState } from 'react';
+import { useState, createRef } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -31,7 +31,7 @@ const RequestHeaders = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
   const classes = classNames(props);
 
-  const textfieldRef = React.createRef<ITextField>();
+  const textfieldRef = createRef<ITextField>();
   const onSetFocus = () => textfieldRef.current!.focus();
 
   const changeHeaderProperties =

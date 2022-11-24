@@ -18,6 +18,7 @@
                 "adaptive-expressions": "4.17.1",
                 "adaptivecards": "2.11.1",
                 "adaptivecards-templating": "2.3.1",
+                "ajv": "8.11.0",
                 "apg-js": "4.1.2",
                 "babel-loader": "8.2.5",
                 "babel-preset-react-app": "10.0.1",
@@ -45,9 +46,9 @@
                 "postcss-loader": "7.0.1",
                 "postcss-preset-env": "7.8.2",
                 "re-resizable": "6.9.9",
-                "react": "16.14.0",
+                "react": "18.2.0",
                 "react-app-polyfill": "3.0.0",
-                "react-dom": "16.14.0",
+                "react-dom": "18.2.0",
                 "react-intl": "6.2.1",
                 "react-redux": "8.0.4",
                 "redux": "4.2.0",
@@ -95,8 +96,8 @@
                 "@types/isomorphic-fetch": "0.0.36",
                 "@types/jest": "27.4.1",
                 "@types/lodash.debounce": "4.0.7",
-                "@types/react": "17.0.44",
-                "@types/react-dom": "17.0.11",
+                "@types/react": "18.0.25",
+                "@types/react-dom": "18.0.8",
                 "@types/react-intl": "3.0.0",
                 "@types/react-redux": "7.1.23",
                 "@types/redux-logger": "3.0.9",
@@ -131,6 +132,6 @@
                 "indent": 4
         },
         "resolutions": {
-                "@types/react": "17.0.30"
+                "axe-core": "4.4.3"
         }
 }

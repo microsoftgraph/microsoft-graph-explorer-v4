@@ -2,8 +2,7 @@ import { AuthenticationResult } from '@azure/msal-browser';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import { initializeIcons } from '@fluentui/react';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { IntlProvider } from 'react-intl';
 
 import { Provider } from 'react-redux';
@@ -179,5 +178,5 @@ const Root = () => {
     </Provider>
   );
 };
-
-ReactDOM.render(<Root />, document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root')!);
+root.render(<Root />);

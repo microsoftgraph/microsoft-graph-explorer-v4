@@ -2,7 +2,6 @@ import {
   DirectionalHint, FontSizes, getTheme, IconButton,
   Pivot, PivotItem, Stack, TooltipDelay, TooltipHost
 } from '@fluentui/react';
-import React from 'react';
 
 import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';

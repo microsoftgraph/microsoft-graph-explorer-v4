@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
   FontIcon, getId, getTheme, IconButton, IStackTokens, Label,
   registerIcons, Stack, TooltipHost

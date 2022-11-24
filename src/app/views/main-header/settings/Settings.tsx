@@ -2,7 +2,7 @@ import {
   ChoiceGroup, DefaultButton, Dialog, DialogFooter, DialogType, DirectionalHint, getId,
   getTheme, IconButton, IContextualMenuProps, TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
