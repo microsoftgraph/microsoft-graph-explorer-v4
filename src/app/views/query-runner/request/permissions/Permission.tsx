@@ -10,7 +10,7 @@ import {
   PrimaryButton,
   TooltipHost
 } from '@fluentui/react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

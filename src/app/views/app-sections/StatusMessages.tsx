@@ -1,5 +1,5 @@
 import { Link, MessageBar } from '@fluentui/react';
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
