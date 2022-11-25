@@ -1,5 +1,5 @@
 import { getTheme, KeyCodes, TextField, Text, ITextFieldProps } from '@fluentui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';

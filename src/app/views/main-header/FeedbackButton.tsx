@@ -1,5 +1,5 @@
 import { getTheme, IButton, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
-import React, { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import FeedbackForm from '../query-runner/request/feedback/FeedbackForm';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
@@ -16,8 +16,8 @@ export const FeedbackButton = () => {
   const feedbackTitle = translateMessage('Feedback');
   const content = <div style={{padding:'3px'}}>{translateMessage('Feedback')}</div>
 
-  const feedbackButtonRef = React.useRef<IButton>(null)
-  const isFirstRender = React.useRef(true);
+  const feedbackButtonRef = useRef<IButton>(null)
+  const isFirstRender = useRef(true);
   useEffect( () => {
     if (isFirstRender.current) {
       isFirstRender.current = false;

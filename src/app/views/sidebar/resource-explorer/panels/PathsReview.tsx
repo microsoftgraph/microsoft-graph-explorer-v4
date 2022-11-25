@@ -1,7 +1,7 @@
 import {
   CommandBar, ICommandBarItemProps, Label, Panel, PanelType, PrimaryButton
 } from '@fluentui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

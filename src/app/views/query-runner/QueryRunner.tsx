@@ -1,5 +1,5 @@
 import { IDropdownOption, MessageBarType } from '@fluentui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

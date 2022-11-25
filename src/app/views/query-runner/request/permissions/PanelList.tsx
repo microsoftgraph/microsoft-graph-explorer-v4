@@ -3,7 +3,7 @@ import {
   IGroup, IOverlayProps, Label, Panel, PanelType,
   SearchBox, SelectionMode
 } from '@fluentui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

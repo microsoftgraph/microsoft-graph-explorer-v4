@@ -1,5 +1,5 @@
 import { Link, MessageBar, MessageBarType } from '@fluentui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { IAuthenticateResult } from '../../../../types/authentication';
 import { Mode } from '../../../../types/enums';
