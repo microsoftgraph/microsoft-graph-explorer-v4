@@ -1,5 +1,5 @@
 import { getTheme, IButton, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
-import React, { useState, useEffect, useRef, lazy } from 'react';
+import { useState, useEffect, useRef, lazy } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';

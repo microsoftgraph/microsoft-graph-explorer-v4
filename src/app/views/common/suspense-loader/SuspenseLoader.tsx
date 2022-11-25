@@ -1,5 +1,5 @@
 import { Spinner, SpinnerSize } from '@fluentui/react';
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 
 interface SuspenseChildren{
   children: React.ReactNode;
@@ -7,9 +7,7 @@ interface SuspenseChildren{
 export const SuspenseLoader = ({ children }: SuspenseChildren) => {
   return (
     <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
-      <div>
-        {children}
-      </div>
+      {children}
     </Suspense>
   );
 }
