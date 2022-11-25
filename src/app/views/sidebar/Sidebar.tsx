@@ -11,7 +11,7 @@ import {
   TooltipDelay,
   TooltipHost
 } from '@fluentui/react';
-import React, { lazy, Suspense} from 'react';
+import { lazy, Suspense} from 'react';
 
 import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';

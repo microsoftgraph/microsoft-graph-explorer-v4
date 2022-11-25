@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { RESPONSE_HEADERS_COPY_BUTTON } from '../../../../telemetry/component-names';
 
 import { Monaco } from '../../common';

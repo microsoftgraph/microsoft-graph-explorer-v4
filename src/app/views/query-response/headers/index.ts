@@ -1,2 +1,2 @@
 import ResponseHeaders from './ResponseHeaders';
-export default ResponseHeaders;
+export { ResponseHeaders as default };

@@ -5,7 +5,7 @@ import {
   Spinner,
   SpinnerSize
 } from '@fluentui/react';
-import React, { useState, CSSProperties, lazy, Suspense } from 'react';
+import { useState, CSSProperties, lazy, Suspense } from 'react';
 import { Resizable } from 're-resizable';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';

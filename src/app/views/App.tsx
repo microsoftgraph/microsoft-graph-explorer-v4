@@ -1,6 +1,6 @@
 import { Announced, getTheme, ITheme, Spinner, SpinnerSize, styled } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import React, { Component, lazy, Suspense } from 'react';
+import { Component, lazy, Suspense } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';

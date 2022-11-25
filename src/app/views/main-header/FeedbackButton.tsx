@@ -1,5 +1,5 @@
 import { getTheme, IButton, IconButton, IIconProps, Spinner, SpinnerSize, TooltipHost } from '@fluentui/react';
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
@@ -17,8 +17,8 @@ export const FeedbackButton = () => {
   const feedbackTitle = translateMessage('Feedback');
   const content = <div style={{padding:'3px'}}>{translateMessage('Feedback')}</div>
 
-  const feedbackButtonRef = React.useRef<IButton>(null)
-  const isFirstRender = React.useRef(true);
+  const feedbackButtonRef = useRef<IButton>(null)
+  const isFirstRender = useRef(true);
   useEffect( () => {
     if (isFirstRender.current) {
       isFirstRender.current = false;

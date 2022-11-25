@@ -1,2 +1,2 @@
 import ResourceExplorer from './ResourceExplorer';
-export default  ResourceExplorer ;
+export {ResourceExplorer as default };

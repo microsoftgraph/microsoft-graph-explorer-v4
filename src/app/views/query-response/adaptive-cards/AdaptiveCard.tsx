@@ -3,7 +3,7 @@ import {
   MessageBar, MessageBarType, Pivot, PivotItem, styled
 } from '@fluentui/react';
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

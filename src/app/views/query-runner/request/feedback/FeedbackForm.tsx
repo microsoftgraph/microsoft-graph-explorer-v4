@@ -2,7 +2,7 @@ import { getTheme, MessageBarType } from '@fluentui/react';
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import { AuthenticationType } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 import { OfficeBrowserFeedback } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../../appLocale';
