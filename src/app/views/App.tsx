@@ -1,6 +1,6 @@
-import { Announced, getTheme, ITheme, Spinner, SpinnerSize, styled } from '@fluentui/react';
+import { Announced, getTheme, ITheme, styled } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import { Component, lazy, Suspense } from 'react';
+import { Component, lazy } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -34,6 +34,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
 import { MainHeader } from './main-header/MainHeader';
+import { SuspenseLoader } from './common/suspense-loader/SuspenseLoader';
 
 export interface IAppProps {
   theme?: ITheme;
@@ -469,11 +470,11 @@ class App extends Component<IAppProps, IAppState> {
                 <div style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                 }}>
-                  <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
+                  <SuspenseLoader>
                     <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                       <StatusMessages />
                     </div>
-                  </Suspense>
+                  </SuspenseLoader>
                   <QueryResponse verb={this.state.selectedVerb} />
                 </div>
               </Resizable>

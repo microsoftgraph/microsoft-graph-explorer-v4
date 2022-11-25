@@ -5,18 +5,17 @@ import {
   IconButton,
   Pivot,
   PivotItem,
-  Spinner,
-  SpinnerSize,
   Stack,
   TooltipDelay,
   TooltipHost
 } from '@fluentui/react';
-import { lazy, Suspense} from 'react';
+import { lazy } from 'react';
 
 import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';
 import SampleQueries from './sample-queries/SampleQueries';
 import { sidebarStyles } from './Sidebar.styles';
+import { SuspenseLoader } from '../common/suspense-loader/SuspenseLoader';
 
 interface ISidebar {
   currentTab: string;
@@ -71,9 +70,9 @@ export const Sidebar = (props: ISidebar) => {
               'aria-controls': 'resources-tab'
             }}
           >
-            <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
+            <SuspenseLoader>
               <div id={'resources-tab'}><ResourceExplorer /></div>
-            </Suspense>
+            </SuspenseLoader>
           </PivotItem>
           <PivotItem
             headerText={translateMessage('History')}
@@ -83,9 +82,9 @@ export const Sidebar = (props: ISidebar) => {
               'aria-controls': 'history-tab'
             }}
           >
-            <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
+            <SuspenseLoader>
               <div id={'history-tab'}><History /></div>
-            </Suspense>
+            </SuspenseLoader>
           </PivotItem>
         </Pivot>
       }

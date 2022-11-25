@@ -1,9 +1,10 @@
-import { getTheme, IButton, IconButton, IIconProps, Spinner, SpinnerSize, TooltipHost } from '@fluentui/react';
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { getTheme, IButton, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
+import React, { useState, useEffect, useRef, lazy } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { useAppSelector } from '../../../store';
+import { SuspenseLoader } from '../common/suspense-loader/SuspenseLoader';
 
 const FeedbackForm = lazy(() => import('../query-runner/request/feedback/FeedbackForm'))
 
@@ -81,10 +82,10 @@ export const FeedbackButton = () => {
             componentRef={feedbackButtonRef}
           />
         </TooltipHost>
-        <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
+        <SuspenseLoader>
           <FeedbackForm onDismissSurvey={disableSurvey}
             activated={enableSurvey} onDisableSurvey={disableSurvey} />
-        </Suspense>
+        </SuspenseLoader>
       </div>
       }
     </div>

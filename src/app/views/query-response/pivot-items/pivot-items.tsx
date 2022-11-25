@@ -1,5 +1,5 @@
-import { getTheme, IPivotItemProps, ITheme, PivotItem, Spinner, SpinnerSize } from '@fluentui/react';
-import { lazy, Suspense } from 'react';
+import { getTheme, IPivotItemProps, ITheme, PivotItem } from '@fluentui/react';
+import { lazy } from 'react';
 import { useAppSelector } from '../../../../store';
 
 import { componentNames, telemetry } from '../../../../telemetry';
@@ -13,6 +13,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
+import { SuspenseLoader } from '../../common/suspense-loader/SuspenseLoader';
 
 const AdaptiveCard = lazy(() => import('../adaptive-cards/AdaptiveCard'));
 const GraphToolkit = lazy(() => import('../graph-toolkit/GraphToolkit'));
@@ -89,9 +90,9 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-headers-tab'
       }}
     >
-      <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
+      <SuspenseLoader>
         <div id={'response-headers-tab'}><ResponseHeaders /></div>
-      </Suspense>
+      </SuspenseLoader>
     </PivotItem>
   ];
   if (mode === Mode.Complete) {
@@ -107,9 +108,9 @@ export const GetPivotItems = () => {
           'aria-controls': 'code-snippets-tab'
         }}
       >
-        <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
+        <SuspenseLoader>
           <div id={'code-snippets-tab'}><Snippets /></div>
-        </Suspense>
+        </SuspenseLoader>
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'
@@ -123,9 +124,9 @@ export const GetPivotItems = () => {
           'aria-controls': 'toolkit-tab'
         }}
       >
-        <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
+        <SuspenseLoader>
           <div id={'toolkit-tab'}><GraphToolkit /></div>
-        </Suspense>
+        </SuspenseLoader>
       </PivotItem>,
       <PivotItem
         key='adaptive-cards'
@@ -139,10 +140,10 @@ export const GetPivotItems = () => {
           'aria-controls': 'adaptive-cards-tab'
         }}
       >
-        <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
+        <SuspenseLoader>
           <ThemeContext.Consumer >
             {(theme) => (
-            // @ts-ignore
+              // @ts-ignore
               <div id={'adaptive-cards-tab'}>
                 <AdaptiveCard
                   body={body}
@@ -151,7 +152,7 @@ export const GetPivotItems = () => {
               </div>
             )}
           </ThemeContext.Consumer>
-        </Suspense>
+        </SuspenseLoader>
       </PivotItem>
     );
   }

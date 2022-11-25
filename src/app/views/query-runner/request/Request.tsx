@@ -1,11 +1,9 @@
 import {
   FontSizes,
   Pivot,
-  PivotItem,
-  Spinner,
-  SpinnerSize
+  PivotItem
 } from '@fluentui/react';
-import { useState, CSSProperties, lazy, Suspense } from 'react';
+import { useState, CSSProperties, lazy } from 'react';
 import { Resizable } from 're-resizable';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
@@ -18,6 +16,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { RequestBody } from './body';
 import './request.scss';
+import { SuspenseLoader } from '../../common/suspense-loader/SuspenseLoader';
 
 const Permission = lazy(() => import('./permissions'));
 const Auth = lazy(() => import('./auth'));
@@ -72,11 +71,11 @@ const Request = (props: any) => {
           'aria-controls': 'request-header-tab'
         }}
       >
-        <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
+        <SuspenseLoader>
           <div style={containerStyle} id={'request-header-tab'}>
             <RequestHeaders />
           </div>
-        </Suspense>
+        </SuspenseLoader>
       </PivotItem>,
       <PivotItem
         key='modify-permissions'
@@ -88,11 +87,11 @@ const Request = (props: any) => {
           'aria-controls': 'permission-tab'
         }}
       >
-        <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
+        <SuspenseLoader>
           <div style={containerStyle} id={'permission-tab'}>
             <Permission />
           </div>
-        </Suspense>
+        </SuspenseLoader>
       </PivotItem>
     ];
     if (mode === Mode.Complete) {
@@ -106,11 +105,11 @@ const Request = (props: any) => {
           headerButtonProps={{
             'aria-controls': 'access-token-tab'
           }}>
-          <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
+          <SuspenseLoader>
             <div style={containerStyle} id={'access-token-tab'}>
               <Auth />
             </div>
-          </Suspense>
+          </SuspenseLoader>
         </PivotItem>,
       );
     }
