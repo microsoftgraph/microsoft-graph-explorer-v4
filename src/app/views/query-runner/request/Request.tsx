@@ -127,7 +127,7 @@ const Request = (props: any) => {
     const heightInPx = requestHeight.replace('px', '').trim();
     const requestHeightInVh = convertPxToVh(parseFloat(heightInPx)).toString();
     const maxDeviceVerticalHeight = 90;
-    const dimen = { ...props.dimensions };
+    const dimen = { ...dimensions };
     dimen.request.height = requestHeightInVh;
     const response = maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''));
     dimen.response.height = response + 'vh';
