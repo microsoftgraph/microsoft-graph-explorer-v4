@@ -1,5 +1,4 @@
 import { ActionButton, getId, getTheme, TooltipHost } from '@fluentui/react';
-import React from 'react';
 import { translateMessage } from '../../../utils/translate-messages';
 import Profile from '../profile/Profile';
 import { profileButtonStyles } from './ProfileButton.styles';

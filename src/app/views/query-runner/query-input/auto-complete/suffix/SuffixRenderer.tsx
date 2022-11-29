@@ -2,7 +2,7 @@ import {
   Callout, getId, IconButton, IIconProps, ITooltipHostStyles,
   Spinner, Text, TooltipHost
 } from '@fluentui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { useAppSelector } from '../../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../../telemetry';

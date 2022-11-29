@@ -3,7 +3,7 @@ import {
   IGroup, IOverlayProps, Label, Panel, PanelType,
   SearchBox, SelectionMode
 } from '@fluentui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -77,14 +77,12 @@ const PanelList = ({ messages,
   });
 
   const searchValueChanged = (event: any, value?: string): void => {
-    let valueToSearch = '';
-    valueToSearch = value!;
-    setSearchValue(valueToSearch);
+    setSearchValue(value!);
     shouldGenerateGroups.current = true;
     setSearchStarted((search) => !search);
     let filteredPermissions = scopes.data.fullPermissions;
-    if (valueToSearch) {
-      const keyword = valueToSearch.toLowerCase();
+    if (value) {
+      const keyword = value.toLowerCase();
 
       filteredPermissions = fullPermissions.filter((permission: IPermission) => {
         const name = permission.value.toLowerCase();
