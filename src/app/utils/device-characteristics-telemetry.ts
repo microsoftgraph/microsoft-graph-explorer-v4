@@ -1,4 +1,7 @@
 export function getBrowserScreenSize(browserWidth: number){
+  if (browserWidth >= 2560) {
+    return 'xxxxl';
+  }
   if(browserWidth >= 1920){
     return 'xxxl';
   }
