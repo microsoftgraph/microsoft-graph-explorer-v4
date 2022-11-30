@@ -1,4 +1,3 @@
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
   getTheme, IStyle, ITheme, Label, Link,
@@ -9,6 +8,7 @@ import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { useAppSelector } from '../../../../store';
+import { classNames } from '../../classnames';
 
 const GraphToolkit = () => {
   const { sampleQuery } = useAppSelector((state) => state);
@@ -16,6 +16,7 @@ const GraphToolkit = () => {
 
   const currentTheme: ITheme = getTheme();
   const textStyle = queryResponseStyles(currentTheme).queryResponseText.root as IStyle;
+  const linkStyle = queryResponseStyles(currentTheme).link as IStyle
 
   if (toolkitUrl && exampleUrl) {
     return (
@@ -27,6 +28,7 @@ const GraphToolkit = () => {
             onClick={(e) =>
               telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
                 componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK)}
+            styles={{root: linkStyle}}
           >
             <FormattedMessage id='graph toolkit playground' />
           </Link>
@@ -46,6 +48,7 @@ const GraphToolkit = () => {
         href='https://aka.ms/mgt'
         rel='noopener noreferrer'
         target='_blank'
+        styles={{root: linkStyle}}
       >
         <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />
         .

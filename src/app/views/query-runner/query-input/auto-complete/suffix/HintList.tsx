@@ -1,5 +1,4 @@
 import { DefaultButton, Separator, Stack, Text } from '@fluentui/react';
-import React from 'react';
 
 import { componentNames, eventTypes, telemetry } from '../../../../../../telemetry';
 import { GRAPH_URL } from '../../../../../services/graph-constants';

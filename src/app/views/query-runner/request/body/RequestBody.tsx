@@ -1,5 +1,4 @@
 import { FocusZone } from '@fluentui/react';
-import React from 'react';
 import { useAppSelector } from '../../../../../store';
 
 import { Monaco } from '../../../common';

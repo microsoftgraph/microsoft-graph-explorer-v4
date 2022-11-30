@@ -37,17 +37,22 @@ export function setDescriptionColumnSize(): IDescriptionSize {
     case 'xl':
       return {
         minWidth: 240,
-        maxWidth: 390
+        maxWidth: 370
       }
     case 'xxl':
       return {
-        minWidth: 390,
-        maxWidth: 490
+        minWidth: 370,
+        maxWidth: 420
       }
     case 'xxxl':
       return {
         minWidth: 490,
-        maxWidth: 590
+        maxWidth: 550
+      }
+    case 'xxxxl':
+      return {
+        minWidth: 500,
+        maxWidth: 1000
       }
     default:
       return {

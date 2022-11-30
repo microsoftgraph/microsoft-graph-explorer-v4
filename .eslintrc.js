@@ -147,7 +147,8 @@ module.exports = {
     }],
     'spaced-comment': 'off',
     'use-isnan': 'error',
-    'valid-typeof': 'off'
+    'valid-typeof': 'off',
+    'react/react-in-jsx-scope': 'off'
   },
   settings: {
     react: {

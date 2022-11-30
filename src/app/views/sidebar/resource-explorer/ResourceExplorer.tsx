@@ -5,7 +5,7 @@ import {
   Stack, styled, Toggle
 } from '@fluentui/react';
 import debouce from 'lodash.debounce';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

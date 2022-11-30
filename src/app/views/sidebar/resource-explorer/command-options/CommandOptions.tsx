@@ -2,7 +2,7 @@ import {
   CommandBar, CommandBarButton, DefaultButton, Dialog, DialogFooter, DialogType,
   getId, getTheme, IButtonProps, ICommandBarItemProps, PrimaryButton
 } from '@fluentui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';

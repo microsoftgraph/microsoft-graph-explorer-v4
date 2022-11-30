@@ -1,6 +1,5 @@
 
 import { useDispatch } from 'react-redux';
-import React from 'react';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
