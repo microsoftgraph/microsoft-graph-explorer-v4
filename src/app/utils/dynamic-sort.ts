@@ -12,12 +12,20 @@ export function dynamicSort(property: string | null, sortOrder: SortOrder) {
   }
   if (property) {
     return (first: any, second: any) => {
-      const result = (first[property] < second[property]) ? -1 : (first[property] > second[property]) ? 1 : 0;
+      let result;
+      if(first[property] < second[property]){
+        result = -1
+      }
+      result = (first[property] > second[property]) ? 1 : 0;
       return result * order;
     };
   }
   return (first: any, second: any) => {
-    const result = (first < second) ? -1 : (first > second) ? 1 : 0;
+    let result;
+    if(first < second){
+      result = -1
+    }
+    result = (first > second) ? 1 : 0;
     return result * order;
   };
 }
