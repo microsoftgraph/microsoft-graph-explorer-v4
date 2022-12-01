@@ -275,7 +275,7 @@ function sanitizeSearchQueryOptionValue(queryOptionValue: string): string {
 
     // Sanitize segments within brackets
     if (segment.startsWith('(')) {
-      const textWithinBrackets = segment.substring(1, segment.length - 2);
+      const textWithinBrackets = segment.substr(1, segment.length - 2);
       const sanitizedText = sanitizeSearchQueryOptionValue(textWithinBrackets);
       sanitizedQueryString += ` (${sanitizedText})`;
       continue;
@@ -441,7 +441,7 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
 
     // Sanitize segments within brackets
     if (segment.startsWith('(')) {
-      const textWithinBrackets = segment.substring(1, segment.length - 2);
+      const textWithinBrackets = segment.substr(1, segment.length - 2);
       const sanitizedText = sanitizeFilterQueryOptionValue(textWithinBrackets);
       sanitizedQueryString += `(${sanitizedText})`;
       continue;
