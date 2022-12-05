@@ -91,6 +91,9 @@ const AdaptiveCard = (props: any) => {
     try {
       adaptiveCard.parse(data.card);
       const renderedCard = adaptiveCard.render();
+      if(renderedCard){
+        renderedCard.style.backgroundColor = currentTheme.palette.whiteTranslucent40;
+      }
       const handleCopy = async () => {
         trackedGenericCopy(JSON.stringify(data.template, null, 4),
           componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
