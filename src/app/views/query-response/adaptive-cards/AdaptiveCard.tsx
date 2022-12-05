@@ -93,6 +93,7 @@ const AdaptiveCard = (props: any) => {
       const renderedCard = adaptiveCard.render();
       if(renderedCard){
         renderedCard.style.backgroundColor = currentTheme.palette.whiteTranslucent40;
+        renderedCard.style.color = 'black';
       }
       const handleCopy = async () => {
         trackedGenericCopy(JSON.stringify(data.template, null, 4),
