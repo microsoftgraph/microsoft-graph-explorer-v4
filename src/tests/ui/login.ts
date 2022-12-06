@@ -1,10 +1,10 @@
-import { expect, Locator } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 require('dotenv').config();
 
 const PLAYWRIGHT_TESTS_USERNAME = process.env.PLAYWRIGHT_TESTS_USERNAME || '';
 const PLAYWRIGHT_TESTS_PASSWORD = process.env.PLAYWRIGHT_TESTS_PASSWORD || '';
 
-export const logIn = async (page: any) => {
+export const logIn = async (page: any) : Promise<Page> => {
 
   await page.goto('/');
   await expect(page.locator('label:has-text("Sample")')).toBeVisible();
@@ -21,10 +21,9 @@ export const logIn = async (page: any) => {
   await popup.locator('[placeholder="Password"]').fill(PLAYWRIGHT_TESTS_PASSWORD);
   await popup.locator('text=Sign in').click();
   await expect(popup).toHaveURL('https://login.microsoftonline.com/common/login');
-  const finalStep : Locator = popup.locator('text=Yes');
+  const finalStep = popup.locator('text=Yes');
   if (finalStep) {
     await finalStep.click();
   }
-  await page.locator('text=Yes').press('Enter');
-
+  return page;
 };

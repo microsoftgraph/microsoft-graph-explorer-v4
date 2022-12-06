@@ -6,11 +6,11 @@ let authenticatedPage: Page;
 test.beforeAll(async ({ browser }) => {
   test.slow();
   authenticatedPage = await browser.newPage();
-  await logIn(authenticatedPage);
+  authenticatedPage = await logIn(authenticatedPage);
   await authenticatedPage.waitForTimeout(5000);
 });
 
-test.describe('Sample Queries', () => {
+test.describe('Settings', async () => {
 
   test('Sign in tooltip should not be visible', async () => {
     test.slow();
@@ -22,10 +22,6 @@ test.describe('Sample Queries', () => {
       .locator('[aria-label="patchupdate application properties"] div[role="gridcell"]:has-text("Sign in to try this sample")'))
       .not.toBeVisible();
   });
-
-});
-
-test.describe('Settings', () => {
 
   test('Change theme settings', async () => {
 

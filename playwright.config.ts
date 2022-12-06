@@ -19,6 +19,14 @@ const config: PlaywrightTestConfig = {
     ]
   ],
   timeout: 30000,
-  retries: 2
+  retries: 2,
+  projects: [
+    {
+      name: 'Desktop Chrome',
+      use: {
+        browserName: 'chromium'
+      }
+    }
+  ]
 };
 export default config;
