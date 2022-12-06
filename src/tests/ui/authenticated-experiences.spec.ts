@@ -12,17 +12,6 @@ test.beforeAll(async ({ browser }) => {
 
 test.describe('Settings', async () => {
 
-  test('Sign in tooltip should not be visible', async () => {
-    test.slow();
-    await authenticatedPage
-      .locator('[aria-label="Applications has 8 results 2 of 28"] [aria-label="expand collapse group"]')
-      .click();
-    await expect(authenticatedPage
-      // eslint-disable-next-line max-len
-      .locator('[aria-label="patchupdate application properties"] div[role="gridcell"]:has-text("Sign in to try this sample")'))
-      .not.toBeVisible();
-  });
-
   test('Change theme settings', async () => {
 
     const settingsButton = authenticatedPage.locator('[aria-label="Settings"]');
