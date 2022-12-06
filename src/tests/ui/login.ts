@@ -14,22 +14,17 @@ export const logIn = async (page: any) => {
     page.locator('[aria-label="Sign in"]').click()
   ]);
 
-  const useAnotherAccountButton: Locator = await page.locator('div[role="button"]:has-text("Use another account")');
-  if(useAnotherAccountButton) {
-    // eslint-disable-next-line no-console
-    console.log('Something is happening here');
-    await useAnotherAccountButton.click();
-  }
-
   await popup.locator('input[name="loginfmt"]').fill(PLAYWRIGHT_TESTS_USERNAME);
   await popup.locator('text=Next').click();
   await expect(popup).toBeDefined();
 
   await popup.locator('[placeholder="Password"]').fill(PLAYWRIGHT_TESTS_PASSWORD);
   await popup.locator('text=Sign in').click();
+  await expect(popup).toHaveURL('https://login.microsoftonline.com/common/login');
   const finalStep : Locator = popup.locator('text=Yes');
   if (finalStep) {
     await finalStep.click();
   }
+  await page.locator('text=Yes').press('Enter');
 
 };
