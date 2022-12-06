@@ -6,4 +6,4 @@ const dataToAppend = '' +
 !function() { return window['appVersion'] = '${thisApp.version}' }()
     `;
 
-fs.appendFileSync('build/static/js/graph-explorer-v2.js', dataToAppend);
+fs.appendFileSync('build/static/js/graph-explorer-v' + thisApp.version + '.js', dataToAppend);
