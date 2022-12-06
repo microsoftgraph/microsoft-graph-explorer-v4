@@ -14,6 +14,13 @@ export const logIn = async (page: any) => {
     page.locator('[aria-label="Sign in"]').click()
   ]);
 
+  const useAnotherAccountButton: Locator = await page.locator('div[role="button"]:has-text("Use another account")');
+  if(useAnotherAccountButton) {
+    // eslint-disable-next-line no-console
+    console.log('Something is happening here');
+    await useAnotherAccountButton.click();
+  }
+
   await popup.locator('input[name="loginfmt"]').fill(PLAYWRIGHT_TESTS_USERNAME);
   await popup.locator('text=Next').click();
   await expect(popup).toBeDefined();
