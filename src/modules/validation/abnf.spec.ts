@@ -20,7 +20,8 @@ const validUrls = [
 
 const invalidUrls = [
   'https://graph.microsoft.com/me+you',
-  'https://graph.microsoft.com/v1.0/me/messages?$$select=id'
+  'https://graph.microsoft.com/v1.0/me/messages?$$select=id',
+  'https://graph.microsoft.com/v1.0/me/drive/root:/Encoded%'
 ];
 
 /*
