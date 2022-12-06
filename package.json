@@ -87,7 +87,7 @@
                 "not op_mini all"
         ],
         "devDependencies": {
-                "@axe-core/playwright": "4.5.2",
+                "@axe-core/playwright": "4.4.5",
                 "@playwright/test": "1.26.1",
                 "@testing-library/react": "12.1.5",
                 "@testing-library/user-event": "14.4.3",
