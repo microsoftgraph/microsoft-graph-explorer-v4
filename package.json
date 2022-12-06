@@ -50,7 +50,7 @@
                 "react": "16.14.0",
                 "react-app-polyfill": "3.0.0",
                 "react-dom": "16.14.0",
-                "react-intl": "6.2.1",
+                "react-intl": "6.2.5",
                 "react-redux": "8.0.5",
                 "redux": "4.2.0",
                 "redux-thunk": "2.4.2",
