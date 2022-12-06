@@ -216,12 +216,6 @@ jobs:
           npx playwright install
           npx playwright install-deps
 
-      - name: Run Accessibility Tests
-        env:
-          PLAYWRIGHT_TESTS_BASE_URL: ${{ needs.publish-preview-site.outputs.static_web_app_url }}
-        run: |
-          npx playwright test accessibility
-
       - name: Run Playwright Tests
         env:
           PLAYWRIGHT_TESTS_BASE_URL: ${{ needs.publish-preview-site.outputs.static_web_app_url }}
@@ -229,6 +223,12 @@ jobs:
           PLAYWRIGHT_TESTS_PASSWORD: ${{ secrets.PLAYWRIGHT_TESTS_PASSWORD }}
         run: |
           npx playwright test ui
+
+      - name: Run Accessibility Tests
+        env:
+          PLAYWRIGHT_TESTS_BASE_URL: ${{ needs.publish-preview-site.outputs.static_web_app_url }}
+        run: |
+          npx playwright test accessibility
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v2
