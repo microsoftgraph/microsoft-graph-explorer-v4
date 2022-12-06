@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import { getTheme } from '@fluentui/react';
-import React from 'react';
 
 const TenantIcon = () => {
   const theme = getTheme();

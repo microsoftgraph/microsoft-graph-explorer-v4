@@ -1,6 +1,7 @@
 import { ISuggestions, SignContext } from '.';
 import { parseOpenApiResponse } from '../../app/utils/open-api-parser';
 import {
+  getMatchingResourceForUrl,
   getResourcesSupportedByVersion
 } from '../../app/utils/resources/resources-filter';
 import { IOpenApiParseContent, IOpenApiResponse, IParsedOpenApiResponse } from '../../types/open-api';
@@ -44,13 +45,9 @@ class Suggestions implements ISuggestions {
     if (!url) {
       return this.createOpenApiResponse(versionedResources, url);
     } else {
-      const parts = url.split('/');
-      let toSearch = [...versionedResources];
-      for (const element of parts) {
-        toSearch = toSearch.find(k => k.segment === element)?.children || [];
-      }
-      if (toSearch.length > 0) {
-        return this.createOpenApiResponse(toSearch, url)
+      const matching = getMatchingResourceForUrl(url, versionedResources);
+      if (matching && matching.children.length > 0) {
+        return this.createOpenApiResponse(matching.children, url)
       }
     }
     return null;

@@ -1,6 +1,6 @@
 import { FocusZone } from '@fluentui/react';
 import Editor, { OnChange, useMonaco } from '@monaco-editor/react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { ThemeContext } from '../../../../themes/theme-context';
 import './monaco.scss';
