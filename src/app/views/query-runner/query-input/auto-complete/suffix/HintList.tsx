@@ -1,5 +1,4 @@
 import { DefaultButton, Separator, Stack, Text } from '@fluentui/react';
-import React from 'react';
 
 import { IHint } from '.';
 import { componentNames, eventTypes, telemetry } from '../../../../../../telemetry';

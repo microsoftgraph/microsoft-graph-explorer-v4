@@ -71,7 +71,8 @@ describe('OCPS action creators', () => {
     const store = mockStore({});
     const expectedActions = [
       {
-        type: GET_POLICY_PENDING
+        type: GET_POLICY_PENDING,
+        response: null
       },
       {
         type: GET_POLICY_SUCCESS,

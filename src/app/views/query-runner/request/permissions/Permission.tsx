@@ -10,7 +10,7 @@ import {
   PrimaryButton,
   TooltipHost
 } from '@fluentui/react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -61,7 +61,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   useEffect(() => {
     getPermissions();
-  },[sampleQuery, scopes.pending.isRevokePermissions, authToken]);
+  },[sampleQuery]);
 
   const handleConsent = async (permission: IPermission): Promise<void> => {
     const consentScopes = [permission.value];
@@ -138,11 +138,11 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const adminLabel = (item: any): JSX.Element => {
     if (item.isAdmin) {
-      return <div style={{ textAlign: 'center' }}>
+      return <div style={{ textAlign: 'left', paddingLeft:'10px' }}>
         <Label><FormattedMessage id='Yes' /></Label>
       </div>;
     } else {
-      return <div style={{ textAlign: 'center' }}>
+      return <div style={{ textAlign: 'left', paddingLeft: '10px' }}>
         <Label><FormattedMessage id='No' /></Label>
       </div>;
     }
@@ -151,7 +151,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   const consentedButton = (consented: boolean, item: any, hostId: string): JSX.Element => {
     if (consented) {
       if(userHasRequiredPermissions()){
-        return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '100px', textAlign:'center'}}>
+        return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '100px', textAlign:'left'}}>
           <FormattedMessage id='Revoke' />
         </PrimaryButton>;
       }
@@ -196,14 +196,14 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   const permissionConsentTypeLabel = (permissionInAllPrincipal : boolean) : JSX.Element => {
     if(permissionInAllPrincipal){
       return (
-        <div style={{textAlign: 'center'}}>
+        <div style={{textAlign: 'left', paddingLeft: '10px'}}>
           <Label>{translateMessage('AllPrincipal')}</Label>
         </div>
       )
     }
     else{
       return (
-        <div style={{textAlign: 'center'}}>
+        <div style={{textAlign: 'left', paddingLeft: '10px'}}>
           <Label>{translateMessage('Principal')}</Label>
         </div>
       )
@@ -260,7 +260,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
           fieldName: 'consentDescription',
           isResizable: true,
           minWidth: (tokenPresent) ? columnSizes.minWidth : 600,
-          maxWidth: (tokenPresent) ? columnSizes.maxWidth : 1000,
+          maxWidth: (tokenPresent) ? columnSizes.maxWidth : 750,
           isMultiline: true,
           columnActionsMode: 0
         }
@@ -272,8 +272,8 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
         key: 'isAdmin',
         name: translateMessage('Admin consent required'),
         fieldName: 'isAdmin',
-        minWidth: (tokenPresent) ? 150 : 200,
-        maxWidth: (tokenPresent) ? 200 : 300,
+        minWidth:  150,
+        maxWidth:  200,
         ariaLabel: translateMessage('Administrator permission'),
         isMultiline: true,
         headerClassName: 'permissionHeader',
@@ -289,8 +289,8 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
           name: translateMessage('Status'),
           isResizable: false,
           fieldName: 'consented',
-          minWidth: 100,
-          maxWidth: 120,
+          minWidth: 90,
+          maxWidth: 100,
           onRenderHeader: () => renderColumnHeader('Status'),
           styles: columnCellStyles
         },
@@ -303,8 +303,8 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
         name: translateMessage('Consent type'),
         isResizable: false,
         fieldName: 'consentType',
-        minWidth: 100,
-        maxWidth: 100,
+        minWidth: 110,
+        maxWidth: 120,
         onRenderHeader: () => renderColumnHeader('Consent type'),
         styles: columnCellStyles,
         ariaLabel: translateMessage('Permission consent type')
@@ -345,16 +345,17 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
       )
     }
 
-    return (<div style={{ textAlign: 'center'}}>
+    return (<div style={{ textAlign: 'left', display: 'flex'}}>
       <IconButton
         iconProps={infoIcon}
         className={styles.iconButton}
         id={'buttonId'}
         ariaLabel={translateMessage(headerText)}
         onClick={() => openExternalWebsite(headerText)}
+        styles={{root: { position: 'relative', right: '1px'}}}
       >
       </IconButton>
-      <span style={{position: 'relative', left: '4px', margin: '-8px'}}>
+      <span style={{paddingTop: '4px' }}>
         {translateMessage(headerText)}
       </span>
     </div>)

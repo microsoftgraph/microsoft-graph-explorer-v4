@@ -2,7 +2,7 @@ import {
   Callout, getId, IconButton, IIconProps, ITooltipHostStyles,
   Spinner, Text, TooltipHost
 } from '@fluentui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { IHint } from '.';
 import { useAppSelector } from '../../../../../../store';

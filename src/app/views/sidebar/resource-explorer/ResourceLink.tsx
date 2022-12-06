@@ -2,7 +2,7 @@ import {
   ContextualMenuItemType, getId, IconButton,
   IContextualMenuItem, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
-import React, { CSSProperties } from 'react';
+import { CSSProperties } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { ResourceLinkType, ResourceOptions } from '../../../../types/resources';

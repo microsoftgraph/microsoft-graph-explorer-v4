@@ -67,9 +67,7 @@ export const permissionStyles = (theme: ITheme) => {
       cellTitle: {
         display: 'flex',
         flex: 1,
-        position: 'relative' as 'relative',
-        right: '4px',
-        textAlign: 'center'
+        textAlign: 'left'
       }
     },
     cellTitleStyles: {
@@ -82,7 +80,7 @@ export const permissionStyles = (theme: ITheme) => {
       root: {
         height: '40px',
         lineHeight: '20px',
-        textAlign: 'center',
+        textAlign: 'left',
         marginTop: '7px'
       }
     }
