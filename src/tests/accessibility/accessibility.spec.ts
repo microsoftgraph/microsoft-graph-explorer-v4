@@ -7,8 +7,8 @@ describe('Graph Explorer accessibility', () => {
   let driver: ThenableWebDriver;
   jest.setTimeout(TEST_TIMEOUT_MS);
 
-test.describe('Accessibility', () => {
-  test.use({ viewport: { width: 1024, height: 768 }});
+  // set browser environment to use headless Chrome
+  beforeAll(async () => {
 
   test('should not have any automatically detectable accessibility issues', async () => {
 
