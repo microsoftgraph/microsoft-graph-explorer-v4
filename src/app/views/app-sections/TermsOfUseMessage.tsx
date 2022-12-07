@@ -26,8 +26,8 @@ const StyledTermsOfUseMessage = () => {
         href={'https://learn.microsoft.com/' + geLocale +
           '/legal/microsoft-apis/terms-of-use?context=graph/context'} target='_blank' rel='noopener noreferrer'
         underline>
-        {translateMessage('Terms of use')}</Link>.
-      {translateMessage('View the')}
+        <FormattedMessage id='Terms of use' /></Link>.
+      <FormattedMessage id='View the' />
       <Link
         onClick={(e) =>
           telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
@@ -35,7 +35,7 @@ const StyledTermsOfUseMessage = () => {
         href={'https://privacy.microsoft.com/' + geLocale + '/privacystatement'}
         target='_blank' rel='noopener noreferrer'
         underline>
-        {translateMessage('Microsoft Privacy Statement')}</Link>.
+        <FormattedMessage id='Microsoft Privacy Statement' /></Link>.
     </MessageBar>;
   }
   return <div />;

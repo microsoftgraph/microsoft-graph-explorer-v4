@@ -54,11 +54,11 @@ export const ResponseMessages = () => {
 
   // Display link to step to next result
   if (odataLink) {
-    messageBars.push(
-      <MessageBar messageBarType={MessageBarType.info} key={'odataLink'}>
-        {translateMessage('This response contains an @odata property.')}: @odata.{odataLink.name}
+    return (
+      <MessageBar messageBarType={MessageBarType.info}>
+        <FormattedMessage id={'This response contains an @odata property.'} />: @odata.{odataLink.name}
         <Link onClick={() => setQuery()} underline>
-          &nbsp;{translateMessage('Click here to follow the link')}
+          &nbsp;<FormattedMessage id='Click here to follow the link' />
         </Link>
       </MessageBar>
     );
@@ -69,9 +69,9 @@ export const ResponseMessages = () => {
     messageBars.push(
       <div key={'contentDownloadUrl'}>
         <MessageBar messageBarType={MessageBarType.warning}>
-          {translateMessage('This response contains unviewable content')}
+          <FormattedMessage id={'This response contains unviewable content'} />
           <Link href={body?.contentDownloadUrl} download underline>
-            {translateMessage('Click to download file')}
+            <FormattedMessage id={'Click to download file'} />
           </Link>&nbsp;
         </MessageBar>
       </div>
@@ -83,9 +83,9 @@ export const ResponseMessages = () => {
     messageBars.push(
       <div key={'throwsCorsError'}>
         <MessageBar messageBarType={MessageBarType.warning}>
-          {translateMessage('Response content not available due to CORS policy')}
+          <FormattedMessage id={'Response content not available due to CORS policy'} />
           <Link target='_blank' href={MOZILLA_CORS_DOCUMENTATION_LINK} underline>
-            {translateMessage('here')}
+            <FormattedMessage id={'here'} />
           </Link>.
         </MessageBar>
       </div>

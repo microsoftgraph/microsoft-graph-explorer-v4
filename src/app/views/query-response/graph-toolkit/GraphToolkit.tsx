@@ -30,7 +30,7 @@ const GraphToolkit = () => {
             onClick={(e) =>
               telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
                 componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK)}
-            styles={{ root: linkStyle }}
+            styles={{root: linkStyle}}
             underline
           >
             {translateMessage('graph toolkit playground')}
@@ -52,7 +52,7 @@ const GraphToolkit = () => {
         href='https://aka.ms/mgt'
         rel='noopener noreferrer'
         target='_blank'
-        styles={{ root: linkStyle }}
+        styles={{root: linkStyle}}
         underline
       >
         {translateMessage('Learn more about the Microsoft Graph Toolkit')}

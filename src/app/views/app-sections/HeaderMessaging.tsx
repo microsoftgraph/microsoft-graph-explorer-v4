@@ -12,9 +12,9 @@ export function headerMessaging(query: string): React.ReactNode {
       {loginType === LoginType.Popup && <>
         <MessageBar messageBarType={MessageBarType.info} isMultiline={true}>
           <p>
-            {translateMessage('To try the full features')},
+            <FormattedMessage id='To try the full features' />,
             <Link tabIndex={0} href={query} target='_blank' rel='noopener noreferrer' underline>
-              {translateMessage('full Graph Explorer')}.
+              <FormattedMessage id='full Graph Explorer' />.
             </Link>
           </p>
           <p>
@@ -28,7 +28,7 @@ export function headerMessaging(query: string): React.ReactNode {
           {translateMessage('To try operations other than GET')},
 
           <Link tabIndex={0} href={query} target='_blank' rel='noopener noreferrer' underline>
-            {translateMessage('sign in')}.
+            <FormattedMessage id='sign in' />.
           </Link>
         </p>
       </MessageBar>}
