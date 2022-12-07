@@ -1,10 +1,10 @@
-import { expect, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 require('dotenv').config();
 
 const PLAYWRIGHT_TESTS_USERNAME = process.env.PLAYWRIGHT_TESTS_USERNAME || '';
 const PLAYWRIGHT_TESTS_PASSWORD = process.env.PLAYWRIGHT_TESTS_PASSWORD || '';
 
-export const logIn = async (page: any) : Promise<Page> => {
+export const logIn = async (page: any) => {
 
   await page.goto('/');
   // await expect(page.locator('label:has-text("Sample")')).toBeVisible();
@@ -27,5 +27,4 @@ export const logIn = async (page: any) : Promise<Page> => {
   if (finalStep) {
     await finalStep.click();
   }
-  return page;
 };

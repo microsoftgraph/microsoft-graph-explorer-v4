@@ -6,20 +6,20 @@ let authenticatedPage: Page;
 test.beforeAll(async ({ browser }) => {
   test.slow();
   authenticatedPage = await browser.newPage();
-  authenticatedPage = await logIn(authenticatedPage);
-  // await authenticatedPage.waitForTimeout(5000);
+  await logIn(authenticatedPage);
+  await authenticatedPage.waitForTimeout(5000);
 });
 
 test.describe('Settings', () => {
 
   test('Change theme settings', async () => {
 
-    const settingsButton = authenticatedPage.locator('[aria-label="Settings"]');
+    const settingsButton = await authenticatedPage.locator('[aria-label="Settings"]');
     await settingsButton.click();
-    const changeThemeButton = authenticatedPage.locator('button[role="menuitem"]:has-text("Change theme")');
+    const changeThemeButton = await authenticatedPage.locator('button[role="menuitem"]:has-text("Change theme")');
     await changeThemeButton.click();
     await authenticatedPage.locator('text=Dark').click();
-    const closeThemeDialogButton = authenticatedPage.locator('button:has-text("Close")');
+    const closeThemeDialogButton = await authenticatedPage.locator('button:has-text("Close")');
     await closeThemeDialogButton.click();
     await authenticatedPage.locator('[aria-label="Settings"]').click();
     await changeThemeButton.click();
@@ -37,10 +37,10 @@ test.describe('Settings', () => {
 test.describe('Run query', () => {
 
   test('user can run query', async () => {
-    const runQueryButton = authenticatedPage.locator('.run-query-button button');
+    const runQueryButton = await authenticatedPage.locator('.run-query-button button');
     await runQueryButton.click();
     await authenticatedPage.waitForTimeout(100);
-    const messageBar = authenticatedPage.locator('.ms-MessageBar-content');
+    const messageBar = await  authenticatedPage.locator('.ms-MessageBar-content');
     expect(messageBar).toBeDefined();
     await expect(authenticatedPage.locator('text=/.*"displayName": "Megan Bowen".*/')).not.toBeVisible();
   });
