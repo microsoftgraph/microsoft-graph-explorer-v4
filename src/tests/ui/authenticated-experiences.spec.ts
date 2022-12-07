@@ -7,10 +7,10 @@ test.beforeAll(async ({ browser }) => {
   test.slow();
   authenticatedPage = await browser.newPage();
   authenticatedPage = await logIn(authenticatedPage);
-  await authenticatedPage.waitForTimeout(5000);
+  // await authenticatedPage.waitForTimeout(5000);
 });
 
-test.describe('Settings', async () => {
+test.describe('Settings', () => {
 
   test('Change theme settings', async () => {
 

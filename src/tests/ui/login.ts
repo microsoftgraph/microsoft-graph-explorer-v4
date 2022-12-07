@@ -21,7 +21,7 @@ export const logIn = async (page: any) : Promise<Page> => {
   await popup.locator('[placeholder="Password"]').fill(PLAYWRIGHT_TESTS_PASSWORD);
   await popup.locator('text=Sign in').click();
   await expect(popup).toHaveURL('https://login.microsoftonline.com/common/login');
-  const finalStep = popup.locator('text=Yes');
+  const finalStep = await popup.locator('text=Yes');
   if (finalStep) {
     await finalStep.click();
   }
