@@ -22,9 +22,9 @@ const config: PlaywrightTestConfig = {
   retries: 2,
   projects: [
     {
-      name: 'Desktop Chrome',
+      name: 'Desktop Firefox',
       use: {
-        browserName: 'chromium'
+        browserName: 'firefox'
       }
     }
   ]
