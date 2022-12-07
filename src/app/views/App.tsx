@@ -86,7 +86,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public componentDidMount = async () => {
     this.displayToggleButton(this.mediaQueryList);
-    this.mediaQueryList.addEventListener('click',this.displayToggleButton);
+    this.mediaQueryList.addEventListener('pointerdown',this.displayToggleButton);
 
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('sid');
