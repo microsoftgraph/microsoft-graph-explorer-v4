@@ -1,4 +1,3 @@
-import React from 'react';
 import { Label } from '@fluentui/react';
 import { FormattedMessage } from 'react-intl';
 

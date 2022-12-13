@@ -1,20 +1,14 @@
 import { IDropdownOption, MessageBarType } from '@fluentui/react';
-import React, { Component } from 'react';
+import { useState } from 'react';
 import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { useDispatch } from 'react-redux';
 
+import { AppDispatch, useAppSelector } from '../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { ContentType } from '../../../types/enums';
-import {
-  IQueryRunnerProps,
-  IQueryRunnerState
-} from '../../../types/query-runner';
-import { ApplicationState } from '../../../types/root';
-
-import * as queryActionCreators from '../../services/actions/query-action-creators';
-import * as queryInputActionCreators from '../../services/actions/query-input-action-creators';
-import * as queryStatusActionCreators from '../../services/actions/query-status-action-creator';
+import { runQuery } from '../../services/actions/query-action-creators';
+import { setSampleQuery } from '../../services/actions/query-input-action-creators';
+import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
@@ -22,53 +16,28 @@ import { QueryInput } from './query-input';
 import './query-runner.scss';
 import Request from './request/Request';
 
-export class QueryRunner extends Component<
-IQueryRunnerProps,
-IQueryRunnerState
-> {
-  constructor(props: IQueryRunnerProps) {
-    super(props);
-    this.state = {
-      url: '',
-      sampleBody: ''
-    };
-  }
+const QueryRunner = (props: any) => {
+  const dispatch: AppDispatch = useDispatch();
+  const { sampleQuery } = useAppSelector((state) => state);
 
-  private handleOnMethodChange = (method?: IDropdownOption) => {
-    const query = { ...this.props.sampleQuery };
-    const { actions } = this.props;
+  const [sampleBody, setSampleBody] = useState('');
+
+  const handleOnMethodChange = (method?: IDropdownOption) => {
+    const query = { ...sampleQuery };
     if (method !== undefined) {
       query.selectedVerb = method.text;
-      if (actions) {
-        actions.setSampleQuery(query);
-      }
+      dispatch(setSampleQuery(query));
 
       // Sets selected verb in App Component
-      this.props.onSelectVerb(method.text);
+      props.onSelectVerb(method.text);
     }
   };
 
-  private handleOnBlur = () => {
-    const { url } = this.state;
-    const query = { ...this.props.sampleQuery };
-    const { actions } = this.props;
-
-    if (url) {
-      query.sampleUrl = url;
-      if (actions) {
-        actions.setSampleQuery(query);
-      }
-    }
+  const handleOnEditorChange = (value?: string) => {
+    setSampleBody(value!);
   };
 
-  private handleOnEditorChange = (body?: string) => {
-    this.setState({ sampleBody: body });
-  };
-
-  private handleOnRunQuery = () => {
-    const { sampleBody } = this.state;
-    const { actions, sampleQuery } = this.props;
-
+  const handleOnRunQuery = () => {
     if (sampleBody) {
       const headers = sampleQuery.sampleHeaders;
       const contentType = headers.find(k => k.name.toLowerCase() === 'content-type');
@@ -76,13 +45,13 @@ IQueryRunnerState
         try {
           sampleQuery.sampleBody = JSON.parse(sampleBody);
         } catch (error) {
-          actions!.setQueryResponseStatus({
+          dispatch(setQueryResponseStatus({
             ok: false,
             statusText: translateMessage('Malformed JSON body'),
             status: `${translateMessage('Review the request body')} ${error}`,
             messageType: MessageBarType.error
-          });
-          this.setState({ sampleBody: '' });
+          }));
+          setSampleBody('');
           return;
         }
       } else {
@@ -90,23 +59,20 @@ IQueryRunnerState
       }
     }
 
-    if (actions) {
-      actions.runQuery(sampleQuery);
-      const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
-      const deviceCharacteristics = telemetry.getDeviceCharacteristicsData();
-      telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
-        {
-          ComponentName: componentNames.RUN_QUERY_BUTTON,
-          SelectedVersion: sampleQuery.selectedVersion,
-          QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
-          ...deviceCharacteristics
-        });
-    }
-    this.setState({ sampleBody: '' });
+    dispatch(runQuery(sampleQuery));
+    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+    const deviceCharacteristics = telemetry.getDeviceCharacteristicsData();
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
+      {
+        ComponentName: componentNames.RUN_QUERY_BUTTON,
+        SelectedVersion: sampleQuery.selectedVersion,
+        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
+        ...deviceCharacteristics
+      });
+    setSampleBody('');
   };
 
-  private handleOnVersionChange = (urlVersion?: IDropdownOption) => {
-    const { sampleQuery } = this.props;
+  const handleOnVersionChange = (urlVersion?: IDropdownOption) => {
     if (urlVersion) {
       const { queryVersion: oldQueryVersion } = parseSampleUrl(
         sampleQuery.sampleUrl
@@ -115,11 +81,11 @@ IQueryRunnerState
         sampleQuery.sampleUrl,
         urlVersion.text
       );
-      this.props.actions!.setSampleQuery({
+      dispatch(setSampleQuery({
         ...sampleQuery,
         sampleUrl,
         selectedVersion: newQueryVersion
-      });
+      }));
       if (oldQueryVersion !== newQueryVersion) {
         telemetry.trackEvent(eventTypes.DROPDOWN_CHANGE_EVENT, {
           ComponentName: componentNames.VERSION_CHANGE_DROPDOWN,
@@ -130,57 +96,33 @@ IQueryRunnerState
     }
   };
 
-  public render() {
-    return (
-      <>
-        <div className='ms-Grid-row'>
-          <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
-            {
-              // @ts-ignore
-              <QueryInput
-                handleOnRunQuery={this.handleOnRunQuery}
-                handleOnMethodChange={this.handleOnMethodChange}
-                handleOnVersionChange={this.handleOnVersionChange}
-                handleOnBlur={this.handleOnBlur}
-              />
-            }
-          </div>
+  return (
+    <>
+      <div className='ms-Grid-row'>
+        <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
+          {
+            <QueryInput
+              handleOnRunQuery={handleOnRunQuery}
+              handleOnMethodChange={handleOnMethodChange}
+              handleOnVersionChange={handleOnVersionChange}
+            />
+          }
         </div>
-        <div className='ms-Grid-row' style={{ marginTop: 10 }}>
-          <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
-            {
-              // @ts-ignore
-              <Request
-                handleOnEditorChange={this.handleOnEditorChange}
-                sampleQuery={this.props.sampleQuery}
-              />
-            }
-          </div>
+      </div>
+      <div className='ms-Grid-row' style={{ marginTop: 10 }}>
+        <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
+          {
+            <Request
+              handleOnEditorChange={handleOnEditorChange}
+              sampleQuery={sampleQuery}
+            />
+          }
         </div>
-      </>
-    );
-  }
-}
-
-function mapDispatchToProps(dispatch: Dispatch): object {
-  return {
-    actions: bindActionCreators(
-      {
-        ...queryActionCreators,
-        ...queryInputActionCreators,
-        ...queryStatusActionCreators
-      },
-      dispatch
-    )
-  };
-}
-
-function mapStateToProps({ sampleQuery }: ApplicationState) {
-  return {
-    sampleQuery
-  };
+      </div>
+    </>
+  );
 }
 
 // @ts-ignore
 const IntlQueryRunner = injectIntl(QueryRunner);
-export default connect(mapStateToProps, mapDispatchToProps)(IntlQueryRunner);
+export default IntlQueryRunner;

@@ -1,5 +1,5 @@
 import { DirectionalHint, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import FeedbackForm from '../query-runner/request/feedback/FeedbackForm';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';

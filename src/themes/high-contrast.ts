@@ -23,7 +23,8 @@ export const highContrast = {
     black: '#f8f8f8',
     white: '#000000',
     blueMid: '#6cb8f6',
-    green: '#92c353'
+    green: '#92c353',
+    whiteTranslucent40: '#ffffff'
   },
   semanticColors: {
     messageText: '#f4f4f4',
