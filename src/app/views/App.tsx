@@ -333,6 +333,7 @@ class App extends Component<IAppProps, IAppState> {
     and is set to 100% leading to a distortion of the page when these exact steps are followed.
     https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1433#issuecomment-1036135231
     Removing the property altogether helps maintain the layout of the page.
+    Check if this reflects
     */
 
     const collection = document.getElementsByClassName('layout');
