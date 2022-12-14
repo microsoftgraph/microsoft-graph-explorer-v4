@@ -14,6 +14,7 @@ import {
 } from '../redux-constants';
 import { IHistoryItem } from '../../../types/history';
 import { AppAction } from '../../../types/action';
+import { IGraphResponse } from '../../../types/query-response';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -37,17 +38,9 @@ describe('Request History Action Creators', () => {
 
   it('should dispatch VIEW_HISTORY_ITEM_SUCCESS when viewHistoryItem() is called with a valid history item', () => {
     // Assert
-    const response: IHistoryItem = {
-      index: 0,
-      statusText: 'Something worked!',
-      responseHeaders: [],
-      result: {},
-      url: 'https://graph.microsoft.com/v1.0/me',
-      method: 'GET',
-      headers: [],
-      createdAt: Date.now().toString(),
-      status: 200,
-      duration: 200
+    const response: IGraphResponse = {
+      body: undefined,
+      headers: undefined
     }
 
     const expectedAction: AppAction = {
