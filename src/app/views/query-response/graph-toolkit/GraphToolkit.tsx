@@ -9,7 +9,6 @@ import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { useAppSelector } from '../../../../store';
-import { classNames } from '../../classnames';
 
 const GraphToolkit = () => {
   const { sampleQuery } = useAppSelector((state) => state);

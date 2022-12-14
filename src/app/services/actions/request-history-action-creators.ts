@@ -27,7 +27,10 @@ export function bulkAddHistoryItems(historyItems: IHistoryItem[]): AppAction {
 export function viewHistoryItem(historyItem: IHistoryItem): AppAction {
   return {
     type: VIEW_HISTORY_ITEM_SUCCESS,
-    response: historyItem
+    response: {
+      body: historyItem.result,
+      headers: historyItem.headers
+    }
   };
 }
 
