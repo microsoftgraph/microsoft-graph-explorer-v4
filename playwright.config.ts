@@ -20,13 +20,5 @@ const config: PlaywrightTestConfig = {
   ],
   timeout: 30000,
   retries: 2,
-  projects: [
-    {
-      name: 'Desktop Firefox',
-      use: {
-        browserName: 'firefox'
-      }
-    }
-  ]
 };
 export default config;
