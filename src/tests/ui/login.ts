@@ -7,7 +7,6 @@ const PLAYWRIGHT_TESTS_PASSWORD = process.env.PLAYWRIGHT_TESTS_PASSWORD || '';
 export const logIn = async (page: any) => {
 
   await page.goto('/');
-  // await expect(page.locator('label:has-text("Sample")')).toBeVisible();
 
   const [popup] = await Promise.all([
     page.waitForEvent('popup'),

@@ -13,7 +13,7 @@ test.describe('Sample Queries', () => {
     await page
       .locator('[aria-label="Applications has 8 results 2 of 28"] [aria-label="expand collapse group"]')
       .click();
-    await expect(page).toHaveScreenshot('sampleQueriesGroup.png');
+    await expect(page).toHaveScreenshot('sampleQueriesGroup.png'); //no-commit
     await expect(page
       // eslint-disable-next-line max-len
       .locator('[aria-label="patchupdate application properties"] div[role="gridcell"]:has-text("Sign in to try this sample")'))
