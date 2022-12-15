@@ -26,6 +26,4 @@ yarn-error.log*
 .vs
 *.xml
 playwright-report/index.html
-/src/tests/ui/anonymous-experiences.spec.ts-snapshots
-/src/tests/ui/authenticated-experiences.spec.ts-snapshots
 test-results
