@@ -2,15 +2,14 @@ import AxeBuilder from '@axe-core/webdriverjs';
 import webdriver, { ThenableWebDriver } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 
-const TEST_TIMEOUT_MS = 300000; // in milliseconds = 5min
+const TEST_TIMEOUT_MS = 500000; // in milliseconds = 5min
 
 describe('Graph Explorer accessibility', () => {
   let driver: ThenableWebDriver;
+  jest.setTimeout(TEST_TIMEOUT_MS);
 
   // set browser environment to use headless Chrome
   beforeAll(async () => {
-    const service = new chrome.ServiceBuilder(process.env.REACT_APP_CHROMEDRIVER_PATH).build();
-    chrome.setDefaultService(service);
 
     driver = new webdriver.Builder()
       .forBrowser('chrome')
@@ -42,7 +41,8 @@ describe('Graph Explorer accessibility', () => {
         'document-title',
         'html-has-lang',
         'page-has-heading-one',
-        'landmark-unique'
+        'landmark-unique',
+        'aria-required-children'
       ])
       .analyze();
     expect(accessibilityScanResults.violations).toStrictEqual([]);
