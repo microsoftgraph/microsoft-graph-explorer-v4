@@ -15,12 +15,10 @@ export const logIn = async (page: any) => {
 
   await popup.locator('input[name="loginfmt"]').fill(PLAYWRIGHT_TESTS_USERNAME);
   await popup.locator('text=Next').click();
-  expect(popup).toBeDefined();
 
   await popup.locator('[placeholder="Password"]').fill(PLAYWRIGHT_TESTS_PASSWORD);
   await popup.locator('text=Sign in').click();
 
-  expect(popup).toBeDefined();
   await expect(popup).toHaveURL('https://login.microsoftonline.com/common/login');
   await popup.locator('text=Yes').click();
 };
