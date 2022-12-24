@@ -1,11 +1,27 @@
 import { test, expect, Page } from '@playwright/test';
-import { logIn } from './login';
+require('dotenv').config();
 
 let authenticatedPage: Page;
+const PLAYWRIGHT_TESTS_USERNAME = process.env.PLAYWRIGHT_TESTS_USERNAME || '';
+const PLAYWRIGHT_TESTS_PASSWORD = process.env.PLAYWRIGHT_TESTS_PASSWORD || '';
 
 test.beforeAll(async ({ browser }) => {
   authenticatedPage = await browser.newPage();
-  await logIn(authenticatedPage);
+  await authenticatedPage.goto('/');
+
+  const [popup] = await Promise.all([
+    authenticatedPage.waitForEvent('popup'),
+    authenticatedPage.locator('[aria-label="Sign in"]').click()
+  ]);
+
+  await popup.locator('input[name="loginfmt"]').fill(PLAYWRIGHT_TESTS_USERNAME);
+  await popup.locator('text=Next').click();
+
+  await popup.locator('[placeholder="Password"]').fill(PLAYWRIGHT_TESTS_PASSWORD);
+  await popup.locator('text=Sign in').click();
+
+  await expect(popup).toHaveURL('https://login.microsoftonline.com/common/login');
+  await popup.locator('text=Yes').click();
 });
 
 test.describe('Settings', () => {
