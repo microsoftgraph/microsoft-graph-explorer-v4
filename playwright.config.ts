@@ -18,7 +18,6 @@ const config: PlaywrightTestConfig = {
       { outputFolder: 'playwright-report' }
     ]
   ],
-  timeout: 60000,
   retries: 2
 };
 export default config;
