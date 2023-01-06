@@ -5,7 +5,7 @@
         "dependencies": {
                 "@augloop/types-core": "file:packages/types-core-2.16.189.tgz",
                 "@axe-core/webdriverjs": "4.4.5",
-                "@azure/msal-browser": "2.32.0",
+                "@azure/msal-browser": "2.32.1",
                 "@babel/core": "7.20.5",
                 "@babel/runtime": "7.20.6",
                 "@fluentui/react": "8.103.5",
