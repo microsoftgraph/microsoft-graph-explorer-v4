@@ -93,6 +93,7 @@ const History = (props: any) => {
   const [hideDialog, setHideDialog] = useState(true);
   const [category, setCategory] = useState('');
   const [groups, setGroups] = useState<IGroup[]>([]);
+  const [searchStarted, setSearchStarted] = useState(false);
 
   const shouldGenerateGroups = useRef(true);
 
@@ -105,7 +106,7 @@ const History = (props: any) => {
         shouldGenerateGroups.current = false;
       }
     }
-  })
+  }, [historyItems, searchStarted])
 
   const classes = classNames(props);
 
@@ -119,6 +120,7 @@ const History = (props: any) => {
 
   const searchValueChanged = (_event: any, value?: string): void => {
     shouldGenerateGroups.current = true;
+    setSearchStarted(searchStatus => !searchStatus);
     let content = [...history];
     if (value) {
       const keyword = value.toLowerCase();
