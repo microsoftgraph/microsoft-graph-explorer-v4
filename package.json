@@ -42,7 +42,7 @@
                 "mini-css-extract-plugin": "2.7.1",
                 "monaco-editor": "0.34.1",
                 "monaco-editor-webpack-plugin": "7.0.1",
-                "office-ui-fabric-core": "11.0.1",
+                "office-ui-fabric-core": "11.1.0",
                 "postcss-flexbugs-fixes": "5.0.2",
                 "postcss-loader": "7.0.2",
                 "postcss-preset-env": "7.8.3",
