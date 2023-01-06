@@ -24,30 +24,6 @@ test.beforeAll(async ({ browser }) => {
   await popup.locator('text=Yes').click();
 });
 
-test.describe('Settings', () => {
-
-  test('Change theme settings', async () => {
-
-    const settingsButton = await authenticatedPage.locator('[aria-label="Settings"]');
-    await settingsButton.click();
-    const changeThemeButton = authenticatedPage.locator('button[role="menuitem"]:has-text("Change theme")');
-    await changeThemeButton.click();
-    await authenticatedPage.locator('text=Dark').click();
-    const closeThemeDialogButton = authenticatedPage.locator('button:has-text("Close")');
-    await closeThemeDialogButton.click();
-    await authenticatedPage.locator('[aria-label="Settings"]').click();
-    await changeThemeButton.click();
-    await authenticatedPage.locator('text=High contrast').click();
-    await closeThemeDialogButton.click();
-    await settingsButton.click();
-    await changeThemeButton.click();
-    await authenticatedPage.locator('text=Light').click();
-    await authenticatedPage.locator('text=Close').click();
-  });
-
-
-})
-
 test.describe('Run query', () => {
 
   test('user can run query', async () => {

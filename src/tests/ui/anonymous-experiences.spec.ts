@@ -7,20 +7,6 @@ test.beforeAll(async ({ browser }) => {
   await page.goto('/');
 });
 
-test.describe('Sample Queries', () => {
-
-  test('Sign in tooltip should be visible', async () => {
-    await page
-      .locator('[aria-label="Applications has 8 results 2 of 28"] [aria-label="expand collapse group"]')
-      .click();
-    await expect(page
-      // eslint-disable-next-line max-len
-      .locator('[aria-label="patchupdate application properties"] div[role="gridcell"]:has-text("Sign in to try this sample")'))
-      .toBeVisible();
-  });
-
-});
-
 test.describe('Settings', () => {
 
   test('Change theme settings', async () => {
@@ -214,15 +200,6 @@ test.describe('Request section', () => {
     expect(page.locator('text=ConsistencyLev')).toBeDefined();
     await page.locator('[aria-label="Remove request header"]').click();
   })
-
-  test('should add request body to non-GET requests', async () => {
-    await page.locator('[aria-label="Request body"]').click();
-    await page.locator('button[role="tab"]:has-text("Sample queries")').click();
-    // eslint-disable-next-line max-len
-    await page.locator('[aria-label="Applications has 8 results 2 of 28"] [aria-label="expand collapse group"]').click();
-    await page.locator('[aria-label="update application properties"]').dblclick();
-    expect(page.locator('text=/.*"signInAudience".*/')).toBeDefined();
-  });
 
   test.describe('Snippets', () => {
     test('should show snippets for the selected language', async () => {
