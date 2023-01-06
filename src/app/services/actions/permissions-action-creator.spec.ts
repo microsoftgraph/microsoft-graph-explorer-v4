@@ -1,26 +1,10 @@
 import configureMockStore from 'redux-mock-store';
-
-import { AnyAction } from '@reduxjs/toolkit';
-import {
-  FETCH_FULL_SCOPES_PENDING,
-  FETCH_FULL_SCOPES_SUCCESS,
-  GET_CONSENTED_SCOPES_PENDING,
-  QUERY_GRAPH_STATUS,
-  REVOKE_SCOPES_PENDING
-} from '../../../app/services/redux-constants';
 import { authenticationWrapper } from '../../../modules/authentication';
-import { ApplicationState, store } from '../../../store/index';
-import { Mode } from '../../../types/enums';
-import { getPermissionsScopeType } from '../../utils/getPermissionsScopeType';
-import { translateMessage } from '../../utils/translate-messages';
+import thunk from 'redux-thunk';
 import { ACCOUNT_TYPE } from '../graph-constants';
-import { consentToScopes } from '../slices/auth.slice';
-import { fetchScopes } from '../slices/scopes.slice';
-import { mockThunkMiddleware } from './mockThunkMiddleware';
 import { RevokePermissionsUtil } from './permissions-action-creator.util';
-import { revokeScopes } from './revoke-scopes.action';
-
-let mockStore = configureMockStore([mockThunkMiddleware]);
+const middleware = [thunk];
+let mockStore = configureMockStore(middleware);
 
 beforeEach(() => {
   const mockStore_ = configureMockStore([mockThunkMiddleware]);
