@@ -82,6 +82,7 @@ const AdaptiveCard = (props: any) => {
             tabIndex={0}
             target='_blank'
             rel='noopener noreferrer'
+            underline
           >
             <FormattedMessage id='Adaptive Cards designer' />
           </Link>
@@ -158,6 +159,7 @@ const AdaptiveCard = (props: any) => {
                   target='_blank'
                   rel='noopener noreferrer'
                   tabIndex={0}
+                  underline
                 >
                   <FormattedMessage id='Adaptive Cards Templating SDK' />
                 </Link>
@@ -166,6 +168,7 @@ const AdaptiveCard = (props: any) => {
                   target='_blank'
                   rel='noopener noreferrer'
                   tabIndex={0}
+                  underline
                 >
                   <FormattedMessage id='Adaptive Cards designer' />
                 </Link>
