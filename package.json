@@ -18,7 +18,7 @@
                 "adaptivecards": "2.11.1",
                 "adaptivecards-templating": "2.3.1",
                 "apg-js": "4.1.2",
-                "babel-loader": "8.2.5",
+                "babel-loader": "9.1.0",
                 "babel-preset-react-app": "10.0.1",
                 "bfj": "7.0.2",
                 "bootstrap": "5.2.3",
