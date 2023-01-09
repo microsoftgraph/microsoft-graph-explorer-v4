@@ -1,7 +1,7 @@
 require('dotenv').config();
 import type { PlaywrightTestConfig } from '@playwright/test';
 
-const baseURL = 'https://developer.microsoft.com/en-us/graph/graph-explorer';
+const baseURL = process.env.PLAYWRIGHT_TESTS_BASE_URL!;
 
 const config: PlaywrightTestConfig = {
   globalSetup: require.resolve('./src/tests/ui/global-setup'),
@@ -9,7 +9,8 @@ const config: PlaywrightTestConfig = {
     baseURL,
     trace: 'on-first-retry',
     headless: !!process.env.CI,
-    ignoreHTTPSErrors: true
+    ignoreHTTPSErrors: true,
+    screenshot: 'only-on-failure'
   },
   testDir: './src/tests',
   reporter: [
@@ -18,6 +19,7 @@ const config: PlaywrightTestConfig = {
       { outputFolder: 'playwright-report' }
     ]
   ],
-  retries: 2
+  retries: 2,
+  timeout: 60000
 };
 export default config;
