@@ -69,11 +69,8 @@ test.describe('Run query', () => {
   });
 
   test('should show documentation link for queries with links ', async () => {
-    // Click [aria-label="my profile"]
     await page.locator('[aria-label="my profile"]').click();
-    // Click [aria-label="More Info"]
     await page.locator('[aria-label="More Info"]').click();
-    // Click button:has-text("Learn more")
     const [page3] = await Promise.all([
       page.waitForEvent('popup'),
       page.locator('button:has-text("Learn more")').click()
@@ -127,20 +124,15 @@ test.describe('Request section', () => {
   test('should show permissions for /me endpoint', async () => {
     await page.locator('button[role="tab"]:has-text(" Sample queries")').click();
     await page.locator('[aria-label="my profile"]').click();
-    // Click [aria-label="Modify permissions"]
     await page.locator('[aria-label="Modify permissions"]').click();
-    // Click text=One of the following permissions is required to run the query. Sign in with an a
     const permissionsText = page.locator('text=One of the following permissions is required to run the query. Sign in with an a');
     expect(permissionsText).toBeDefined();
-    // Click div[role="gridcell"]:has-text("Directory.Read.AllDirectory.Read.All")
     const DirectoryPermission =  page.locator('div[role="gridcell"]:has-text("Directory.Read.AllDirectory.Read.All")');
     expect(DirectoryPermission).toBeDefined();
   })
 
   test('should show access token message when not authenticated ', async () => {
-    // Click [aria-label="Access token"]
     await page.locator('[aria-label="Access token"]').click();
-    // Click text=To view your access token, sign in to Graph Explorer.
     const tokenMessage =  page.locator('text=To view your access token, sign in to Graph Explorer.');
     expect(tokenMessage).toBeDefined();
   })

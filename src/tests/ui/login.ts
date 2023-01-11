@@ -20,5 +20,8 @@ export const logIn = async (page: any) => {
   await popup.locator('text=Sign in').click();
 
   await expect(popup).toHaveURL('https://login.microsoftonline.com/common/login');
-  await popup.locator('text=Yes').click();
+  const finalStep = popup.locator('text=Yes');
+  if(finalStep.isVisible()) {
+    await finalStep.click();
+  }
 };

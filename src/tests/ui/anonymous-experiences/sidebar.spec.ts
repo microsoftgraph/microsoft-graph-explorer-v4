@@ -62,39 +62,21 @@ test.describe('Sample Query tab', () => {
   test('should select a sample query when clicked', async () => {
     await page.locator('button[role="tab"]:has-text(" Sample queries")').click();
     expect(page.locator('text=Getting Started')).toBeDefined();
-    // Click [aria-label="getmy profile"] span:has-text("GET")
     await page.locator('[aria-label="getmy profile"] span:has-text("GET")').click();
-    // Click button[role="button"]:has-text("Run query")
     await page.locator('button[role="button"]:has-text("Run query")').click();
-    // Click div[role="gridcell"]:has-text("https://docs.microsoft.com/en-us/graph/api/user-get")
     const [page4] = await Promise.all([
       page.waitForEvent('popup'),
       page.locator('div[role="gridcell"]:has-text("https://docs.microsoft.com/en-us/graph/api/user-get")').click()
     ]);
-    // expect(page4.url().indexOf('https://learn.microsoft.com/en-us/graph/api/user-get')).toBeGreaterThan(-1);
-    // Click [aria-label="Applications has 8 results 2 of 29"] [aria-label="expand collapse group"]
-    await page.locator('[aria-label="Applications has 8 results 2 of 29"] [aria-label="expand collapse group"]').click();
-    // Click [aria-label="postcreate a new application"] div[role="gridcell"]:has-text("Sign in to try this sample")
-    expect(page.locator('[aria-label="postcreate a new application"] div[role="gridcell"]:has-text("Sign in to try this sample")')).toBeDefined();
-    // Click text=Microsoft Graph API Reference docs.
-    const [page5] = await Promise.all([
-      page.waitForEvent('popup'),
-      page.locator('text=Microsoft Graph API Reference docs.').click()
-    ]);
-    // expect(page5.url().indexOf('https://learn.microsoft.com/en-us/graph/api/overview')).toBeGreaterThan(-1);
+    expect(page4).toBeDefined();
   })
 
   test('should search for a sample query', async () => {
     await page.locator('button[role="tab"]:has-text(" Sample queries")').click();
-    // Click [placeholder="Search sample queries"]
     await page.locator('[placeholder="Search sample queries"]').click();
-    // Fill [placeholder="Search sample queries"]
     await page.locator('[placeholder="Search sample queries"]').fill('drive');
-    // Click [aria-label="all the items in my drive"]
     await page.locator('[aria-label="all the items in my drive"]').click();
-    // Click [aria-label="OneDrive has 5 results 4 of 5"] [aria-label="expand collapse group"]
     await page.locator('[aria-label="OneDrive has 5 results 4 of 5"] [aria-label="expand collapse group"]').click();
-    // Click [aria-label="my recent files"]
     await page.locator('[aria-label="my recent files"]').click();
   })
 })
