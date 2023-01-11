@@ -27,6 +27,32 @@ Where `REACT_APP_CLIENT_ID` is the `Application (client) ID` from the Azure port
 * `npm run ci` to run accessibility tests from the command line
 * `npm run lint` linting your files
 
+## Getting Help & Guides
+### Where To Get Support
+If you encounter any Graph-related issues, refer to the following discussion forums to see if there is a similar issue first:
+* [Microsoft Graph - Microsoft Q&A](https://learn.microsoft.com/en-us/answers/tags/161/ms-graph)
+* [Microsoft Graph - Stack Overflow](https://stackoverflow.com/questions/tagged/msgraph)
+* [Microsoft Graph SDKs - Microsoft Q&A](https://learn.microsoft.com/en-us/answers/tags/290/microsoft-graph-sdk)
+* [Microsoft Graph SDKs - Stack Overflow](https://stackoverflow.com/questions/tagged/microsoft-graph-sdks)
+* [Microsoft Graph Toolkit - Microsoft Q&A](https://learn.microsoft.com/en-us/answers/tags/303/microsoft-graph-toolkit)
+* [Microsoft Graph Toolkit - Stack Overflow](https://stackoverflow.com/questions/tagged/microsoft-graph-toolkit)
+
+If there is no similar issue, submit the issue on [Microsoft Q&A](https://learn.microsoft.com/en-us/answers/questions/ask/?displayLabel=Microsoft%20Graph) with the tag Microsoft Graph or ask questions on [Stack Overflow](https://stackoverflow.com/questions/ask?tags=msgraph).
+
+For more information please see the [Microsoft Graph Docs](https://learn.microsoft.com/en-us/graph/overview) and [Microsoft Graph REST API Docs](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0).
+
+### Building Apps
+To build applications using graph components, check out:
+* [Microsoft Graph Toolkit Docs](https://learn.microsoft.com/en-us/graph/toolkit/overview)
+* [Microsoft Graph SDKs Docs](https://learn.microsoft.com/en-us/graph/sdks/sdks-overview)
+
+### Graph Samples
+Go to [Microsoft Graph Quick Start](https://developer.microsoft.com/en-us/graph/quick-start) to build sample apps that call the Micrososft Graph API. These samples can also be found on [Github](https://github.com/orgs/microsoftgraph/repositories?q=sample&type=all&language=&sort=).
+
+Here are two examples to get you started:
+* [Using the Microsoft Graph .NET SDK](https://github.com/microsoftgraph/msgraph-sample-aspnet-core)
+* [Using the Microsoft Graph JavaScript SDK](https://github.com/microsoftgraph/msgraph-sample-javascriptspa)
+
 ## Contributing
 Please see the [contributing guidelines](CONTRIBUTING.md).
 
