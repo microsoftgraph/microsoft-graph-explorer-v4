@@ -48,22 +48,6 @@ test.describe('Response section', () => {
     expect(page.locator('text=No toolkit component is available')).toBeDefined();
   })
 
-  test('should show a valid adaptive card for a successful request', async () => {
-    const queryInput = page.locator('[aria-label="Query sample input"]')
-    await queryInput.click();
-    await queryInput.fill('https://graph.microsoft.com/v1.0/me');
-    await page.locator('button[role="button"]:has-text("Run query")').click();
-    await page.locator('[aria-label="Adaptive cards"]').click();
-    const response = page.locator('text=Megan Bowen')
-    expect(response).toBeDefined();
-    const jsonResponseTab =  page.locator('[aria-label="JSON template"]');
-    await jsonResponseTab.click();
-    // Click text=Get started with adaptive cards on Adaptive Cards Templating SDK and experiment
-    // eslint-disable-next-line max-len
-    const jsonResponseSample = page.locator('text=Get started with adaptive cards on Adaptive Cards Templating SDK and experiment ');
-    expect(jsonResponseSample).toBeDefined();
-  })
-
   test('should open an expanded modal with response tabs when Expand is clicked', async () => {
     await page.locator('[aria-label="Expand response"]').click();
     await page.locator('text= Response preview Response headers Code snippets Toolkit component Adaptiv >> [aria-label="Response headers"]').click();

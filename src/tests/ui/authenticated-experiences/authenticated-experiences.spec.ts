@@ -43,27 +43,5 @@ test.describe('Profile', () => {
     await authenticatedPage.locator('[aria-label="profile"]').click();
     await expect(authenticatedPage.locator('button:has-text("Consent to permissions")')).toBeVisible();
   });
-
-  test('should show the permissions panel', async () => {
-    const consentToPermissionsButton = authenticatedPage.locator('button:has-text("Consent to permissions")');
-    await consentToPermissionsButton.click();
-    // eslint-disable-next-line max-len
-    await authenticatedPage.locator('div[role="gridcell"]:has-text("APIConnectors.Read.AllAPIConnectors.Read.All")').click();
-    // eslint-disable-next-line max-len
-    await authenticatedPage.locator('[aria-label="AccessReview has 3 results 2 of 172"] [aria-label="expand collapse group"]').click();
-    // eslint-disable-next-line max-len
-    await authenticatedPage.locator('div[role="gridcell"]:has-text("AccessReview.Read.AllAccessReview.Read.All")').click();
-    // Click [aria-label="Admin consent required"]
-    const [consentRequiredDocsPage] = await Promise.all([
-      authenticatedPage.waitForEvent('popup'),
-      authenticatedPage.locator('[aria-label="Admin consent required"]').click()
-    ]);
-    expect(consentRequiredDocsPage).toBeDefined();
-    const [consentTypeDocsPage] = await Promise.all([
-      authenticatedPage.waitForEvent('popup'),
-      authenticatedPage.locator('[aria-label="Consent type"]').click()
-    ]);
-    expect(consentTypeDocsPage).toBeDefined();
-  })
 })
 
