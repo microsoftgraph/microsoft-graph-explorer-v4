@@ -14,17 +14,17 @@ test.beforeAll(async ({ browser }) => {
     authenticatedPage.locator('[aria-label="Sign in"]').click()
   ]);
 
-  await popup.locator('input[name="loginfmt"]').fill('admin@m365x06962211.onmicrosoft.com');
+  await popup.locator('input[name="loginfmt"]').fill(PLAYWRIGHT_TESTS_USERNAME);
   await popup.locator('text=Next').click();
 
-  await popup.locator('[placeholder="Password"]').fill('7c2HWQ84LU');
+  await popup.locator('[placeholder="Password"]').fill(PLAYWRIGHT_TESTS_PASSWORD);
   await popup.locator('text=Sign in').click();
 
   await expect(popup).toHaveURL('https://login.microsoftonline.com/common/login');
   await popup.locator('text=Yes').click();
 });
 
-test.describe.skip('Run query', () => {
+test.describe('Run query', () => {
 
   test('user can run query', async () => {
     const runQueryButton = authenticatedPage.locator('.run-query-button button');
@@ -38,7 +38,7 @@ test.describe.skip('Run query', () => {
 
 });
 
-test.describe.skip('Profile', () => {
+test.describe('Profile', () => {
   test('should show profile', async () => {
     await authenticatedPage.locator('[aria-label="profile"]').click();
     await expect(authenticatedPage.locator('button:has-text("Consent to permissions")')).toBeVisible();

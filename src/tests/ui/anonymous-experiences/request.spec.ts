@@ -8,7 +8,7 @@ test.beforeAll(async ({ browser }) => {
   await page.goto('/');
 });
 
-test.describe.skip('Run query', () => {
+test.describe('Run query', () => {
 
   test('should change version options', async () => {
     await page.locator('[aria-label="HTTP request method option"] >> text=GET').click();
@@ -59,12 +59,27 @@ test.describe.skip('Run query', () => {
   });
 
   test('user can run query', async () => {
+    const profileSample = page.locator('[aria-label="my profile"]');
+    await profileSample.click();
     const runQueryButton = page.locator('.run-query-button button');
     await runQueryButton.click();
     await page.waitForTimeout(100);
     const messageBar = page.locator('.ms-MessageBar-content');
     expect(messageBar).toBeDefined();
   });
+
+  test('should show documentation link for queries with links ', async () => {
+    // Click [aria-label="my profile"]
+    await page.locator('[aria-label="my profile"]').click();
+    // Click [aria-label="More Info"]
+    await page.locator('[aria-label="More Info"]').click();
+    // Click button:has-text("Learn more")
+    const [page3] = await Promise.all([
+      page.waitForEvent('popup'),
+      page.locator('button:has-text("Learn more")').click()
+    ]);
+    expect(page3.url().indexOf('https://learn.microsoft.com/')).toBeGreaterThan(-1);
+  })
 
   test('should launch the share query dialog when share query button is clicked', async () => {
     await page.locator('[aria-label="Share query"]').click();
@@ -80,7 +95,7 @@ test.describe.skip('Run query', () => {
 
 });
 
-test.describe.skip('Request section', () => {
+test.describe('Request section', () => {
   test('should add request headers', async () => {
     const queryInput = page.locator('[aria-label="Query sample input"]');
     await queryInput.click();

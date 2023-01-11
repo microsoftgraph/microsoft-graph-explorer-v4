@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { test, expect, Page } from '@playwright/test';
 
 let page: Page;
@@ -77,5 +78,40 @@ test.describe('Help button', () => {
       page.locator('text=GitHub').click()
     ]);
     expect(page4.url().indexOf('https://github.com/microsoftgraph/microsoft-graph-explorer')).toBeGreaterThan(-1);
+  })
+})
+
+test.describe('Feedback button', () => {
+  test('should provide feedback', async () => {
+    // Click [aria-label="Help Improve Graph Explorer\?"]
+    await page.locator('[aria-label="Help Improve Graph Explorer\\?"]').click();
+    // Click .obf-ChoiceGroupIcon >> nth=0
+    await page.locator('.obf-ChoiceGroupIcon').first().click();
+    // Click [aria-label="Tell us more about your experience"]
+    await page.locator('[aria-label="Tell us more about your experience"]').click();
+    // Fill [aria-label="Tell us more about your experience"]
+    await page.locator('[aria-label="Tell us more about your experience"]').fill('Ge is just so simple to use');
+    // Check input[type="checkbox"]
+    await page.locator('input[type="checkbox"]').check();
+    // Click [placeholder="Email \(optional\)"]
+    await page.locator('[placeholder="Email \\(optional\\)"]').click();
+    // Fill [placeholder="Email \(optional\)"]
+    await page.locator('[placeholder="Email \\(optional\\)"]').fill(' dummyemail@email.com');
+    // Click text=Submit
+    await page.locator('text=Submit').click();
+    // Click text=Graph Explorer Feedback - Submitted Successfully
+    const response = page.locator('text=Graph Explorer Feedback - Submitted Successfully');
+    expect(await response.isVisible()).toBeTruthy();
+  })
+})
+
+test.describe('Sign in button', () => {
+  test('should launch the sign in popup', async () => {
+    // Click [aria-label="Sign in"]
+    const [page2] = await Promise.all([
+      page.waitForEvent('popup'),
+      page.locator('[aria-label="Sign in"]').click()
+    ]);
+    expect(page2).toBeDefined();
   })
 })

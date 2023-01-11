@@ -8,22 +8,11 @@ test.beforeAll(async ({ browser }) => {
   await page.goto('/');
 });
 
-test.describe.skip('Response section', () => {
+test.describe('Response section', () => {
   test('should show a response for a successful request', async () => {
     await page.locator('button[role="button"]:has-text("Run query")').click();
     const response = page.locator('text=/.*"displayName".*/');
     expect(response).toBeDefined();
-  })
-
-  test.skip('should show response headers for a successful request', async () => {
-    await page.locator('[aria-label="my profile"]').click();
-    // Click button[role="button"]:has-text("Run query")
-    await page.locator('button[role="button"]:has-text("Run query")').click();
-    // Click [aria-label="Response headers"]
-    await page.locator('[aria-label="Response headers"]').click();
-    // Click text=/.*"access-control-allow-origin".*/
-    const responseSample =  page.locator('text=/.*"access-control-allow-origin".*/');
-    expect(responseSample).toBeDefined();
   })
 
   test('should show snippets for the selected language', async () => {
