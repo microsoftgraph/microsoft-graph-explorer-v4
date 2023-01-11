@@ -29,17 +29,13 @@ Where `REACT_APP_CLIENT_ID` is the `Application (client) ID` from the Azure port
 
 ## Getting Help & Guides
 ### Where To Get Support
-If you encounter any Graph-related issues, refer to the following discussion forums to see if there is a similar issue first:
+If you encounter any MS Graph related issues, refer to the following discussion forums:
 * [Microsoft Graph - Microsoft Q&A](https://learn.microsoft.com/en-us/answers/tags/161/ms-graph)
 * [Microsoft Graph - Stack Overflow](https://stackoverflow.com/questions/tagged/msgraph)
-* [Microsoft Graph SDKs - Microsoft Q&A](https://learn.microsoft.com/en-us/answers/tags/290/microsoft-graph-sdk)
-* [Microsoft Graph SDKs - Stack Overflow](https://stackoverflow.com/questions/tagged/microsoft-graph-sdks)
-* [Microsoft Graph Toolkit - Microsoft Q&A](https://learn.microsoft.com/en-us/answers/tags/303/microsoft-graph-toolkit)
-* [Microsoft Graph Toolkit - Stack Overflow](https://stackoverflow.com/questions/tagged/microsoft-graph-toolkit)
 
-If there is no similar issue, submit the issue on [Microsoft Q&A](https://learn.microsoft.com/en-us/answers/questions/ask/?displayLabel=Microsoft%20Graph) with the tag Microsoft Graph or ask questions on [Stack Overflow](https://stackoverflow.com/questions/ask?tags=msgraph).
+If there is no similar issue, submit the issue on [Microsoft Q&A](https://learn.microsoft.com/en-us/answers/questions/ask/?displayLabel=Microsoft%20Graph) with the tag "Microsoft Graph" or ask questions on [Stack Overflow](https://stackoverflow.com/questions/ask?tags=msgraph).
 
-For more information please see the [Microsoft Graph Docs](https://learn.microsoft.com/en-us/graph/overview) and [Microsoft Graph REST API Docs](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0).
+For more information, have a look at the [Microsoft Graph Docs](https://learn.microsoft.com/en-us/graph/overview) and [Microsoft Graph REST API Docs](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0).
 
 ### Building Apps
 To build applications using graph components, check out:
