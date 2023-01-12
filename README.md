@@ -29,25 +29,21 @@ Where `REACT_APP_CLIENT_ID` is the `Application (client) ID` from the Azure port
 
 ## Getting Help & Guides
 ### Where To Get Support
-If you encounter any MS Graph related issues, refer to the following discussion forums:
-* [Microsoft Graph - Microsoft Q&A](https://learn.microsoft.com/en-us/answers/tags/161/ms-graph)
-* [Microsoft Graph - Stack Overflow](https://stackoverflow.com/questions/tagged/msgraph)
+Are you having any trouble with Micrososft Graph or would you like to request a Graph feature?
+* Check the [Microsoft Graph - Microsoft Q&A](https://learn.microsoft.com/en-us/answers/tags/161/ms-graph) and [Microsoft Graph - Stack Overflow](https://stackoverflow.com/questions/tagged/msgraph) which provide solutionsto commonly experienced issues and asked questions.
 
-If there is no similar issue, submit the issue on [Microsoft Q&A](https://learn.microsoft.com/en-us/answers/questions/ask/?displayLabel=Microsoft%20Graph) with the tag "Microsoft Graph" or ask questions on [Stack Overflow](https://stackoverflow.com/questions/ask?tags=msgraph).
+* If there is no similar issue, submit the issue on [Microsoft Q&A](https://learn.microsoft.com/en-us/answers/questions/ask/?displayLabel=Microsoft%20Graph) with the tag "Microsoft Graph" or ask questions on [Stack Overflow](https://stackoverflow.com/questions/ask?tags=msgraph).
 
-For more information, have a look at the [Microsoft Graph Docs](https://learn.microsoft.com/en-us/graph/overview) and [Microsoft Graph REST API Docs](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0).
+* For more information about Microsoft Graph, refer to the [Microsoft Graph Docs](https://learn.microsoft.com/en-us/graph/overview) and [Microsoft Graph REST API Docs](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0).
 
-### Building Apps
-To build applications using graph components, check out:
-* [Microsoft Graph Toolkit Docs](https://learn.microsoft.com/en-us/graph/toolkit/overview)
-* [Microsoft Graph SDKs Docs](https://learn.microsoft.com/en-us/graph/sdks/sdks-overview)
+If you are new to Graph Explorer, [read our guides on Getting Started](https://learn.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview).
 
-### Graph Samples
-Go to [Microsoft Graph Quick Start](https://developer.microsoft.com/en-us/graph/quick-start) to build sample apps that call the Micrososft Graph API. These samples can also be found on [Github](https://github.com/orgs/microsoftgraph/repositories?q=sample&type=all&language=&sort=).
+If you want to report a Graph Explorer bug or suggest new features & enhancements, you can do so [here on the Github repository](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues).
 
-Here are two examples to get you started:
-* [Using the Microsoft Graph .NET SDK](https://github.com/microsoftgraph/msgraph-sample-aspnet-core)
-* [Using the Microsoft Graph JavaScript SDK](https://github.com/microsoftgraph/msgraph-sample-javascriptspa)
+### Building Apps & Accessing M365 Data
+To simplify your Microsoft Graph app-building experience, use our [Microsoft Graph SDKs]((https://learn.microsoft.com/en-us/graph/sdks/sdks-overview)) and [Microsoft Graph Toolkit (MGT)]((https://learn.microsoft.com/en-us/graph/toolkit/overview)) which provide fully functional and out-of-the-box web components.
+
+Refer to [Microsoft Graph Quick Start](https://developer.microsoft.com/en-us/graph/quick-start) to get a pre-initialized SDK sample application up and running in less 3 minutes using the language of your choice.
 
 ## Contributing
 Please see the [contributing guidelines](CONTRIBUTING.md).
