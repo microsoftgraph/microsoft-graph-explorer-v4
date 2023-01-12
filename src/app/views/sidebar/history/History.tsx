@@ -2,9 +2,10 @@ import {
   Announced,
   ContextualMenuItemType, DefaultButton, DetailsList, DetailsRow, Dialog,
   DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
+  IGroup,
   Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from '@fluentui/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -91,6 +92,21 @@ const History = (props: any) => {
   const [historyItems, setHistoryItems] = useState<IHistoryItem[]>(history);
   const [hideDialog, setHideDialog] = useState(true);
   const [category, setCategory] = useState('');
+  const [groups, setGroups] = useState<IGroup[]>([]);
+  const [searchStarted, setSearchStarted] = useState(false);
+
+  const shouldGenerateGroups = useRef(true);
+
+  const items = getItems(historyItems);
+
+  useEffect(() => {
+    if (shouldGenerateGroups.current) {
+      setGroups(generateGroupsFromList(items, 'category'));
+      if (groups && groups.length > 0) {
+        shouldGenerateGroups.current = false;
+      }
+    }
+  }, [historyItems, searchStarted])
 
   const classes = classNames(props);
 
@@ -103,6 +119,8 @@ const History = (props: any) => {
   }
 
   const searchValueChanged = (_event: any, value?: string): void => {
+    shouldGenerateGroups.current = true;
+    setSearchStarted(searchStatus => !searchStatus);
     let content = [...history];
     if (value) {
       const keyword = value.toLowerCase();
@@ -453,8 +471,6 @@ const History = (props: any) => {
       });
   }
 
-  const items = getItems(historyItems);
-  const groups = generateGroupsFromList(items, 'category');
 
   return (
     <>
