@@ -36,12 +36,13 @@ Are you having any trouble with Micrososft Graph or would you like to request a 
 
 * For more information about Microsoft Graph, refer to the [Microsoft Graph Docs](https://learn.microsoft.com/en-us/graph/overview) and [Microsoft Graph REST API Docs](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0).
 
-If you are new to Graph Explorer, [read our guides on Getting Started](https://learn.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview).
+Are you new to Graph Explorer or would like to raise a bug or request a feature?
+* Use our [Graph Explorer Getting Started Docs](https://learn.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview)  to get guidance on how to quickly use Graph Explorer.
 
-If you want to report a Graph Explorer bug or suggest new features & enhancements, you can do so [here on the Github repository](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues).
+* Use [https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues) to report Graph Explorer bugs and to suggest new features or enhancements (and ask Graph Explorer related questions).
 
 ### Building Apps & Accessing M365 Data
-* To simplify your Microsoft Graph app-building experience, use our [Microsoft Graph SDKs]((https://learn.microsoft.com/en-us/graph/sdks/sdks-overview)) and [Microsoft Graph Toolkit (MGT)]((https://learn.microsoft.com/en-us/graph/toolkit/overview)) provide fully functional and out-of-the-box web components.
+* To simplify your Microsoft Graph app-building experience, use our [Microsoft Graph SDKs]((https://learn.microsoft.com/en-us/graph/sdks/sdks-overview)) and [Microsoft Graph Toolkit (MGT)]((https://learn.microsoft.com/en-us/graph/toolkit/overview)) which provide fully functional and out-of-the-box web components.
 
 * Refer to [Microsoft Graph Quick Start](https://developer.microsoft.com/en-us/graph/quick-start) to get a pre-initialized SDK sample application up and running in less 3 minutes using the language of your choice.
 
