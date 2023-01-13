@@ -5,6 +5,12 @@ const baseURL = process.env.PLAYWRIGHT_TESTS_BASE_URL!;
 
 const config: PlaywrightTestConfig = {
   globalSetup: require.resolve('./src/tests/ui/global-setup'),
+  expect: {
+    toMatchSnapshot: {
+      threshold: 0.3,
+      maxDiffPixelRatio: 0.04
+    }
+  },
   use: {
     baseURL,
     trace: 'on-first-retry',
@@ -19,7 +25,7 @@ const config: PlaywrightTestConfig = {
       { outputFolder: 'playwright-report' }
     ]
   ],
-  retries: 2,
+  retries: 1,
   timeout: 60000
 };
 export default config;

@@ -16,6 +16,8 @@ test.describe('Run query', () => {
     const runQueryButton = authenticatedPage.locator('.run-query-button button');
     await runQueryButton.click();
     await authenticatedPage.waitForTimeout(100);
+    await authenticatedPage.evaluate(() => document.fonts.ready);
+    expect(await authenticatedPage.screenshot()).toMatchSnapshot();
     const messageBar = authenticatedPage.locator('.ms-MessageBar-content');
     expect(messageBar).toBeDefined();
     await expect(authenticatedPage.locator('text=/.*"displayName": "Megan Bowen".*/')).not.toBeVisible();
@@ -26,7 +28,13 @@ test.describe('Run query', () => {
 test.describe('Request', () => {
   test('Access token is available and is decodeable', async () => {
     await authenticatedPage.locator('[aria-label="Access token"]').click();
+    await authenticatedPage.waitForTimeout(100);
+    await authenticatedPage.evaluate(() => document.fonts.ready);
+    expect(await authenticatedPage.screenshot()).toMatchSnapshot();
     await authenticatedPage.locator('[aria-label="Copy"]').click();
+    await authenticatedPage.waitForTimeout(100);
+    await authenticatedPage.evaluate(() => document.fonts.ready);
+    expect(await authenticatedPage.screenshot()).toMatchSnapshot();
     const [page5] = await Promise.all([
       authenticatedPage.waitForEvent('popup'),
       authenticatedPage.locator('[aria-label="Get token details \\(Powered by jwt\\.ms\\)"]').click()
@@ -35,14 +43,20 @@ test.describe('Request', () => {
   })
 })
 
-test.describe('Profile', () => {
+test.describe.serial('Profile', () => {
   test('should show profile', async () => {
     await authenticatedPage.locator('[aria-label="profile"]').click();
+    await authenticatedPage.waitForTimeout(100);
+    await authenticatedPage.evaluate(() => document.fonts.ready);
+    expect(await authenticatedPage.screenshot()).toMatchSnapshot();
     await expect(authenticatedPage.locator('button:has-text("Consent to permissions")')).toBeVisible();
   });
 
   test('should open the permissions panel', async () => {
     await authenticatedPage.locator('button:has-text("Consent to permissions")').click();
+    await authenticatedPage.waitForTimeout(100);
+    await authenticatedPage.evaluate(() => document.fonts.ready);
+    expect(await authenticatedPage.screenshot()).toMatchSnapshot();
     await authenticatedPage.waitForTimeout(500);
     expect(authenticatedPage.locator('div[role="heading"]:has-text("Permissions")')).toBeDefined();
   })
