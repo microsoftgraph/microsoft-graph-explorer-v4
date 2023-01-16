@@ -58,6 +58,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     const targetValue = e.target.value;
     setQueryUrl(targetValue);
     props.contentChanged(targetValue);
+    console.log(targetValue)
   };
 
   const initialiseAutoComplete = (currentValue: string) => {
@@ -197,7 +198,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
 
     if (filtered.length === 1 && filtered[0] === searchTerm) {
-      setShouldShowSuggestions(false);
+      appendSuggestionToUrl(searchTerm);
     }
   }
 

@@ -64,15 +64,13 @@ const QueryInput = (props: IQueryInputProps) => {
     if (!sampleQuery.sampleUrl) {
       return;
     }
-    // allows the state to be populated with the new url before running it
-    setTimeout(() => {
-      handleOnRunQuery();
-    }, 500);
+    handleOnRunQuery(sampleQuery);
   };
 
   const queryInputStackTokens: IStackTokens = {
     childrenGap: 7
   };
+
 
   return (
     <>
