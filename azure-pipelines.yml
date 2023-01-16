@@ -78,7 +78,30 @@ jobs:
           npm install
         displayName: "npm install"
 
-  - job: OneAndHalf
+      - script: |
+          npm run lint
+        displayName: "Runs linting checks"
+
+      - script: |
+          npm test
+        displayName: "Runs Unit tests"
+
+      - script: |
+          npm run ci
+        displayName: "Runs Accessibility tests"
+
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: "JUnit"
+          testResultsFiles: "test-report.xml"
+        displayName: "Publish Test Results"
+
+      - script: |
+          npm run build
+        displayName: "Run build"
+
+  - job: Two
     displayName: "Run playwright tests"
     steps:
       - task: NodeTool@0
@@ -93,7 +116,7 @@ jobs:
       - script: |
           npm install -D @playwright/test
           npx playwright install-deps
-        displayName: "Install playwright deps"
+        displayName: "Install playwright dependancies"
 
       - script: |
           npx playwright install
@@ -102,31 +125,27 @@ jobs:
       - script: |
           set CI=true
           npm run test-playwright
+
         env:
-          REACT_APP_CLIENT_ID: "b1181e51-edd6-4dff-a946-feb5b4518233"
+          REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
           REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_STAGING_FEEDBACK_CAMPAIGN_ID)
           REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID)
           REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
           REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
           REACT_APP_USAGE_TIME: $(REACT_APP_USAGE_TIME)
-          PLAYWRIGHT_TESTS_BASE_URL: "http://localhost:3000/"
-          PLAYWRIGHT_TESTS_USERNAME: "admin@m365x06962211.onmicrosoft.com"
-          PLAYWRIGHT_TESTS_PASSWORD: "7c2HWQ84LU"
+          PLAYWRIGHT_TESTS_BASE_URL: $(PLAYWRIGHT_TESTS_BASE_URL)
+          PLAYWRIGHT_TESTS_USERNAME: $(PLAYWRIGHT_TESTS_USERNAME)
+          PLAYWRIGHT_TESTS_PASSWORD: $(PLAYWRIGHT_TESTS_PASSWORD)
         displayName: "Run playwright tests"
 
-      - publish: $(System.DefaultWorkingDirectory)/playwright-report
+      - publish: $(System.DefaultWorkingDirectory)/test-results
         artifact: playwright-report
         condition: always()
+        displayName: "Publish test results"
 
-      - task: PublishTestResults@2
-        condition: succeededOrFailed()
-        inputs:
-          testResultsFormat: "JUnit"
-          testResultsFiles: "test-report.xml"
-        displayName: "Publish Test Results"
 
-  - job: Two
+  - job: Three
     displayName: "Publish artifacts"
     dependsOn: One
     condition: succeeded()
