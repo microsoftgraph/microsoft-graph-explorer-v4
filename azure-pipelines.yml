@@ -109,7 +109,9 @@ jobs:
           REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
           REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
           REACT_APP_USAGE_TIME: $(REACT_APP_USAGE_TIME)
-
+          PLAYWRIGHT_TESTS_BASE_URL: "http://localhost:3000/"
+          PLAYWRIGHT_TESTS_USERNAME: "admin@m365x06962211.onmicrosoft.com"
+          PLAYWRIGHT_TESTS_PASSWORD: "7c2HWQ84LU"
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
