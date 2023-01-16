@@ -100,6 +100,7 @@ jobs:
         displayName: "Install playwright"
 
       - script: |
+          set CI=true
           npm run test-playwright
         env:
           REACT_APP_CLIENT_ID: "b1181e51-edd6-4dff-a946-feb5b4518233"
