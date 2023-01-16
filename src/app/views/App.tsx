@@ -86,7 +86,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public componentDidMount = async () => {
     this.displayToggleButton(this.mediaQueryList);
-    this.mediaQueryList.addEventListener('pointerdown',this.displayToggleButton);
+    this.mediaQueryList.addListener(this.displayToggleButton);
 
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('sid');
@@ -186,7 +186,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public componentWillUnmount(): void {
     window.removeEventListener('message', this.receiveMessage);
-    this.mediaQueryList.removeEventListener('click', this.displayToggleButton);
+    this.mediaQueryList.removeListener(this.displayToggleButton);
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
