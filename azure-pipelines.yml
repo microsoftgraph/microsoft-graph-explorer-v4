@@ -93,11 +93,13 @@ jobs:
       - script: |
           npm install -D @playwright/test
           npx playwright install-deps
-          npx playwright install
         displayName: "Install playwright deps"
 
       - script: |
           npx playwright install
+        displayName: "Re-install dep"
+
+      - script: |
           npm run test-playwright
         env:
           REACT_APP_CLIENT_ID: "b1181e51-edd6-4dff-a946-feb5b4518233"
@@ -107,7 +109,6 @@ jobs:
           REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
           REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
           REACT_APP_USAGE_TIME: $(REACT_APP_USAGE_TIME)
-        displayName: "Run playwright tests"
 
 
       - task: PublishTestResults@2
