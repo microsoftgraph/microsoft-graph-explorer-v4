@@ -77,14 +77,43 @@ jobs:
       - script: |
           npm install
         displayName: "npm install"
+        
+  - job: OneAndHalf
+    displayName: "Run playwright tests"
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "14.20.x"
+        displayName: "Install npm"
+      
+      - script: |
+          npm install -D @playwright/test
+          npx playwright install
+          npx playwright install-deps
+        displayName: "Install playwright deps"
+      
+      - script: |
+          npm run build
+        env:
+          REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
+          REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
+          REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_STAGING_FEEDBACK_CAMPAIGN_ID)
+          REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID)
+          REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
+          REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
+          REACT_APP_USAGE_TIME: $(REACT_APP_USAGE_TIME)
+        displayName: "Build app"
+        
+      - script: |
+          npm install serve
 
       - script: |
-          npm run lint
-        displayName: "Runs linting checks"
+          serve -s build
+        displayName: "Install serve"
 
       - script: |
-          npm test
-        displayName: "Runs Unit tests"
+          npm run test-ui
+        displayName: "Run playwright tests"
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
