@@ -362,6 +362,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
           onClick={(e) => telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
             componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
           href={`https://learn.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
+          underline
         >
           <FormattedMessage id='Microsoft Graph API Reference docs' />
         </Link>

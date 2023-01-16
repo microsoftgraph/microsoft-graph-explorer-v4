@@ -55,7 +55,7 @@ export function ResponseMessages(
     return (
       <MessageBar messageBarType={MessageBarType.info}>
         <FormattedMessage id={'This response contains an @odata property.'} />: @odata.{odataLink.name}
-        <Link onClick={() => setQuery()}>
+        <Link onClick={() => setQuery()} underline>
           &nbsp;<FormattedMessage id='Click here to follow the link' />
         </Link>
       </MessageBar>
@@ -68,7 +68,7 @@ export function ResponseMessages(
       <div>
         <MessageBar messageBarType={MessageBarType.warning}>
           <FormattedMessage id={'This response contains unviewable content'} />
-          <Link href={body?.contentDownloadUrl} download>
+          <Link href={body?.contentDownloadUrl} download underline>
             <FormattedMessage id={'Click to download file'} />
           </Link>&nbsp;
         </MessageBar>
@@ -82,7 +82,7 @@ export function ResponseMessages(
       <div>
         <MessageBar messageBarType={MessageBarType.warning}>
           <FormattedMessage id={'Response content not available due to CORS policy'} />
-          <Link target='_blank' href={MOZILLA_CORS_DOCUMENTATION_LINK}>
+          <Link target='_blank' href={MOZILLA_CORS_DOCUMENTATION_LINK} underline>
             <FormattedMessage id={'here'} />
           </Link>.
         </MessageBar>
