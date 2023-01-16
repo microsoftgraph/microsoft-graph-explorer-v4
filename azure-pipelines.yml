@@ -93,7 +93,7 @@ jobs:
         displayName: "Install playwright deps"
       
       - script: |
-          npm run build
+          npm run start
         env:
           REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
@@ -104,12 +104,6 @@ jobs:
           REACT_APP_USAGE_TIME: $(REACT_APP_USAGE_TIME)
         displayName: "Build app"
         
-      - script: |
-          npm install serve
-
-      - script: |
-          serve -s build
-        displayName: "Install serve"
 
       - script: |
           npm run test-ui
