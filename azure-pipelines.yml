@@ -97,7 +97,7 @@ jobs:
 
       - script: |
           npx playwright install
-        displayName: "Re-install dep"
+        displayName: "Install playwright"
 
       - script: |
           npm run test-playwright
@@ -112,6 +112,11 @@ jobs:
           PLAYWRIGHT_TESTS_BASE_URL: "http://localhost:3000/"
           PLAYWRIGHT_TESTS_USERNAME: "admin@m365x06962211.onmicrosoft.com"
           PLAYWRIGHT_TESTS_PASSWORD: "7c2HWQ84LU"
+        displayName: "Run playwright tests"
+
+      - publish: $(System.DefaultWorkingDirectory)/playwright-report
+        artifact: playwright-report
+        condition: always()
 
       - task: PublishTestResults@2
         condition: succeededOrFailed()
@@ -119,10 +124,6 @@ jobs:
           testResultsFormat: "JUnit"
           testResultsFiles: "test-report.xml"
         displayName: "Publish Test Results"
-
-      - script: |
-          npm run build
-        displayName: "Run build"
 
   - job: Two
     displayName: "Publish artifacts"
