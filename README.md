@@ -26,7 +26,24 @@ Where `REACT_APP_CLIENT_ID` is the `Application (client) ID` from the Azure port
 * `npm test` to run tests from the command line for scenarios like parsing metadata and functional explorer tests.
 * `npm run ci` to run accessibility tests from the command line
 * `npm run lint` linting your files
+## Getting Help & Guides
+### Where To Get Support
+Are you having any trouble with Micrososft Graph or would you like to request a Graph feature?
+* Check the [Microsoft Graph - Microsoft Q&A](https://learn.microsoft.com/en-us/answers/tags/161/ms-graph) and [Microsoft Graph - Stack Overflow](https://stackoverflow.com/questions/tagged/msgraph) which provide solutions to commonly experienced issues and asked questions.
 
+* If there is no similar issue, submit the issue on [Microsoft Q&A](https://learn.microsoft.com/en-us/answers/questions/ask/?displayLabel=Microsoft%20Graph) with the tag "Microsoft Graph" or ask questions on [Stack Overflow](https://stackoverflow.com/questions/ask?tags=msgraph).
+
+* For more information about Microsoft Graph, refer to the [Microsoft Graph Docs](https://learn.microsoft.com/en-us/graph/overview) and [Microsoft Graph REST API Docs](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0).
+
+Are you new to Graph Explorer or would like to raise a bug or request a feature?
+* Use our [Graph Explorer Getting Started Docs](https://learn.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview)  to get guidance on how to quickly use Graph Explorer.
+
+* Use [https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues) to report Graph Explorer bugs and to suggest new features or enhancements (and ask Graph Explorer related questions).
+
+### Building Apps & Accessing M365 Data
+* To simplify your Microsoft Graph app-building experience, use our [Microsoft Graph SDKs]((https://learn.microsoft.com/en-us/graph/sdks/sdks-overview)) and [Microsoft Graph Toolkit (MGT)]((https://learn.microsoft.com/en-us/graph/toolkit/overview)) which provide fully functional and out-of-the-box web components.
+
+* Refer to [Microsoft Graph Quick Start](https://developer.microsoft.com/en-us/graph/quick-start) to get a pre-initialized SDK sample application up and running in less 3 minutes using the language of your choice.
 ## Contributing
 Please see the [contributing guidelines](CONTRIBUTING.md).
 
