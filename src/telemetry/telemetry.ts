@@ -23,7 +23,8 @@ import {
   addCommonTelemetryItemProperties,
   filterRemoteDependencyData,
   filterTelemetryTypes,
-  sanitizeTelemetryItemUriProperty
+  sanitizeTelemetryItemUriProperty,
+  filterResizeObserverExceptions
 } from './filters';
 import ITelemetry from './ITelemetry';
 import { getVersion } from '../app/utils/version';
@@ -57,6 +58,7 @@ class Telemetry implements ITelemetry {
   public initialize() {
     this.appInsights.loadAppInsights();
     this.appInsights.trackPageView();
+    this.appInsights.addTelemetryInitializer(filterResizeObserverExceptions);
     this.appInsights.addTelemetryInitializer(filterTelemetryTypes);
     this.appInsights.addTelemetryInitializer(filterRemoteDependencyData);
     this.appInsights.addTelemetryInitializer(sanitizeTelemetryItemUriProperty);

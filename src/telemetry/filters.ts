@@ -89,3 +89,9 @@ export function sanitizeTelemetryItemUriProperty(envelope: ITelemetryItem) {
   }
   return true;
 }
+
+export function filterResizeObserverExceptions(envelope: ITelemetryItem){
+  if (envelope.data?.message === 'ErrorEvent: ResizeObserver loop limit exceeded') {
+    return false;
+  }
+}
