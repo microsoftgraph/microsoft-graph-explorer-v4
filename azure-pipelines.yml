@@ -92,8 +92,8 @@ jobs:
       
       - script: |
           npm install -D @playwright/test
-          npx playwright install
           npx playwright install-deps
+          npx playwright install
         displayName: "Install playwright deps"
       
       - script: |
