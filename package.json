@@ -77,7 +77,9 @@
                 "start-server": "npm start",
                 "test-playwright": "start-server-and-test start-server http://localhost:3000 test-ui",
                 "test-ui": "npx playwright test src/tests/ui/",
+                "test-playwright-accessibility": "start-server-and-test start-server http://localhost:3000 test-accessibility",
                 "test-accessibility": "npx playwright test src/tests/accessibility"
+
         },
         "eslintConfig": {
                 "extends": "react-app"

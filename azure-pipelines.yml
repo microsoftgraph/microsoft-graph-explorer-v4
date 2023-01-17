@@ -136,7 +136,7 @@ jobs:
         displayName: "Run playwright tests"
 
       - script: |
-          npx playwright test accessibility
+          npm run test-playwright-accessibility
         displayName: "Run accessibility tests"
 
       - publish: $(System.DefaultWorkingDirectory)/test-results
