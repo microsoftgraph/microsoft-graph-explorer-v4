@@ -139,6 +139,10 @@ jobs:
           PLAYWRIGHT_TESTS_PASSWORD: $(PLAYWRIGHT_TESTS_PASSWORD)
         displayName: "Run playwright tests"
 
+      - script: |
+          npx playwright test accessibility
+        displayName: "Run accessibility tests"
+
       - publish: $(System.DefaultWorkingDirectory)/test-results
         artifact: playwright-report
         condition: always()

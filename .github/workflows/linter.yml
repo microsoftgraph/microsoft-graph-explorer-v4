@@ -193,49 +193,6 @@ jobs:
         run: |
           echo "::set-output name=static_web_app_url::$PLAYWRIGHT_TESTS_BASE_URL"
           echo $PLAYWRIGHT_TESTS_BASE_URL
-        env:
-          PLAYWRIGHT_TESTS_BASE_URL: ${{ steps.builddeploy.outputs.static_web_app_url }}
-
-  run-automated-ui-tests:
-    name: Run Automated UI Tests
-    needs: publish-preview-site
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Get url
-        run: echo $PLAYWRIGHT_TESTS_BASE_URL
-        env:
-          PLAYWRIGHT_TESTS_BASE_URL: ${{ needs.publish-preview-site.outputs.static_web_app_url }}
-
-      - name: Install playwright dependencies
-        run: |
-          npm install -D @playwright/test
-          npx playwright install
-          npx playwright install-deps
-
-      - name: Run Playwright Tests
-        env:
-          PLAYWRIGHT_TESTS_BASE_URL: ${{ needs.publish-preview-site.outputs.static_web_app_url }}
-          PLAYWRIGHT_TESTS_USERNAME: ${{ secrets.PLAYWRIGHT_TESTS_USERNAME }}
-          PLAYWRIGHT_TESTS_PASSWORD: ${{ secrets.PLAYWRIGHT_TESTS_PASSWORD }}
-        run: |
-          npx playwright test ui
-
-      - name: Run Accessibility Tests
-        env:
-          PLAYWRIGHT_TESTS_BASE_URL: ${{ needs.publish-preview-site.outputs.static_web_app_url }}
-        run: |
-          npx playwright test accessibility
-
-      - name: Upload HTML report
-        uses: actions/upload-artifact@v2
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
