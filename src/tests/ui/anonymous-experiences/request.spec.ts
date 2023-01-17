@@ -134,7 +134,7 @@ test.describe('Run query', () => {
 
 });
 
-test.describe('Request section', () => {  //serial
+test.describe.serial('Request section', () => {
   test('should add request headers', async () => {
     const queryInput = page.locator('[aria-label="Query sample input"]');
     await queryInput.click();
