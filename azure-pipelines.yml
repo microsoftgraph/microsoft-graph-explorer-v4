@@ -32,6 +32,10 @@ pr:
       - azure-pipelines.yml
       - package-lock.json
 
+variables:
+  isMaster: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+  isDev: $[eq(variables['Build.SourceBranch'], 'refs/heads/dev')]
+
 trigger:
   branches:
     include:
@@ -99,7 +103,7 @@ jobs:
 
   - job: Two
     displayName: "Run playwright tests"
-    condition: contains(variables['build.SourceBranch'], 'refs/heads/dev')
+    condition: eq(variables['isDev'], 'true')
     steps:
       - task: NodeTool@0
         inputs:
@@ -149,7 +153,7 @@ jobs:
   - job: Three
     displayName: "Publish artifacts"
     dependsOn: One
-    condition: succeeded()
+    condition: and(succeeded(), or(eq(variables['isMaster'], 'true'), eq(variables['isDev'], 'true')))
     steps:
       - task: NodeTool@0
         inputs:
@@ -174,7 +178,7 @@ jobs:
 
       - task: PowerShell@2
         displayName: "Set version-number"
-        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+        condition: and(succeeded(), eq(variables['isMaster'], 'true'))
         inputs:
           targetType: "inline"
           script: |
@@ -186,7 +190,7 @@ jobs:
 
       - script: |
           npm run build
-        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+        condition: and(succeeded(), eq(variables['isMaster'], 'true'))
         env:
           REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
