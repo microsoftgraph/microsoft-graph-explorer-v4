@@ -139,7 +139,7 @@ jobs:
           npm run test-playwright-accessibility
         displayName: "Run accessibility tests"
 
-      - publish: $(System.DefaultWorkingDirectory)/test-results
+      - publish: $(System.DefaultWorkingDirectory)
         artifact: playwright-report
         condition: always()
         displayName: "Publish test results"
