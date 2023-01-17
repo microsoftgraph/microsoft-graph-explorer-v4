@@ -99,7 +99,6 @@ jobs:
 
   - job: Two
     displayName: "Run playwright tests"
-    condition: contains(variables['build.SourceBranch'], 'refs/heads/dev')
     steps:
       - task: NodeTool@0
         inputs:
