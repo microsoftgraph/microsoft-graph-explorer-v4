@@ -165,6 +165,16 @@ function getWorkerFor(worker: string): string {
 const telemetryProvider: ITelemetry = telemetry;
 telemetryProvider.initialize();
 
+window.onerror = (message, source, lineno, colno, error) => {
+  telemetry.trackException(error!, 0, {
+    message,
+    source,
+    lineno,
+    colno,
+    error
+  });
+}
+
 const Root = () => {
   return (
     <Provider store={appStore}>
