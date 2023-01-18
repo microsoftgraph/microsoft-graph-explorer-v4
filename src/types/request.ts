@@ -39,7 +39,7 @@ export interface IRequestComponent {
 export interface IRequestOptions {
   headers?: {};
   method?: string;
-  body?: string | undefined;
+  body?: string;
 }
 
 export interface IRequestState {
