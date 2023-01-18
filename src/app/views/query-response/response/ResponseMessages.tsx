@@ -16,7 +16,7 @@ interface ODataLink {
   name: string;
 }
 
-export function responseMessages(
+export function ResponseMessages(
   graphResponse: IGraphResponse,
   sampleQuery: IQuery,
   authToken: IAuthenticateResult,
