@@ -164,6 +164,8 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    outputs:
+      static_web_app_url: ${{ steps.builddeploy.outputs.static_web_app_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -186,6 +188,11 @@ jobs:
           action: "upload"
           app_location: "/" # App source code path
           app_artifact_location: "build" # Built app content directory - optional
+
+      - name: Set url
+        run: |
+          echo "::set-output name=static_web_app_url::$PLAYWRIGHT_TESTS_BASE_URL"
+          echo $PLAYWRIGHT_TESTS_BASE_URL
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

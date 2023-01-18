@@ -25,3 +25,5 @@ yarn-error.log*
 .idea
 .vs
 *.xml
+playwright-report/index.html
+test-results
