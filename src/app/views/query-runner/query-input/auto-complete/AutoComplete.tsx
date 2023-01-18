@@ -197,7 +197,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
 
     if (filtered.length === 1 && filtered[0] === searchTerm) {
-      setShouldShowSuggestions(false);
+      appendSuggestionToUrl(searchTerm);
     }
   }
 
