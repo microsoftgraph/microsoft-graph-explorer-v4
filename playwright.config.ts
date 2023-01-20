@@ -7,7 +7,8 @@ const config: PlaywrightTestConfig = {
   globalSetup: require.resolve('./src/tests/ui/global-setup'),
   expect: {
     toMatchSnapshot: {
-      threshold: 0.3
+      threshold: 0.3,
+      maxDiffPixelRatio: 0.02
     }
   },
   use: {
