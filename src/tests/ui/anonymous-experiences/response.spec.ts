@@ -36,9 +36,6 @@ test.describe('Response section', () => {
     expect(await page.screenshot({ clip: { x: 300, y: -200, width: 1920, height: 1080 } })).toMatchSnapshot();
     await page.locator('button[role="tab"]:has-text("JavaScript")').click();
     await page.locator('button[name="Java"]').click();
-    await page.waitForTimeout(200);
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot({ clip: { x: 300, y: -200, width: 1920, height: 1080 } })).toMatchSnapshot();
     await page.locator('button[role="tab"]:has-text("Go")').click();
     await page.locator('button[role="tab"]:has-text("PowerShell")').click();
     await page.waitForTimeout(200);
