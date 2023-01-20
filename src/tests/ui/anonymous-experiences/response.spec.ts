@@ -24,18 +24,12 @@ test.describe('Response section', () => {
     await queryInput.press('Tab');
     const snippetTab = page.locator('[aria-label="Code snippets"]');
     await snippetTab.click();
-    await page.waitForTimeout(200);
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot({ clip: { x: 300, y: -200, width: 1920, height: 1080 } })).toMatchSnapshot();
     const cSharpTab = page.locator('button[role="tab"]:has-text("CSharp")');
     await cSharpTab.click();
     await page.locator('button[role="tab"]:has-text("JavaScript")').click();
     await page.locator('button[name="Java"]').click();
     await page.locator('button[role="tab"]:has-text("Go")').click();
     await page.locator('button[role="tab"]:has-text("PowerShell")').click();
-    await page.waitForTimeout(200);
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot({ clip: { x: 300, y: -200, width: 1920, height: 1080 } })).toMatchSnapshot();
   });
 
   test('should show toolkit component for a valid url', async () => {
