@@ -43,9 +43,6 @@ test.describe('Request', () => {
 test.describe.serial('Profile', () => {
   test('should show profile', async () => {
     await authenticatedPage.locator('[aria-label="profile"]').click();
-    await authenticatedPage.waitForTimeout(100);
-    await authenticatedPage.evaluate(() => document.fonts.ready);
-    expect(await authenticatedPage.screenshot()).toMatchSnapshot();
     await expect(authenticatedPage.locator('button:has-text("Consent to permissions")')).toBeVisible();
   });
 

@@ -103,7 +103,6 @@ jobs:
 
   - job: Two
     displayName: "Run playwright tests"
-    condition: eq(variables['isDev'], 'true')
     steps:
       - task: NodeTool@0
         inputs:
@@ -113,6 +112,10 @@ jobs:
       - script: |
           npm install
         displayName: "npm install"
+
+      - script: |
+          npm run test-playwright-accessibility
+        displayName: "Run accessibility tests"
 
       - script: |
           npm install -D @playwright/test
@@ -139,10 +142,6 @@ jobs:
           PLAYWRIGHT_TESTS_USERNAME: $(PLAYWRIGHT_TESTS_USERNAME)
           PLAYWRIGHT_TESTS_PASSWORD: $(PLAYWRIGHT_TESTS_PASSWORD)
         displayName: "Run playwright tests"
-
-      - script: |
-          npm run test-playwright-accessibility
-        displayName: "Run accessibility tests"
 
       - publish: $(System.DefaultWorkingDirectory)/playwright-report
         artifact: playwright-report
