@@ -114,10 +114,6 @@ jobs:
         displayName: "npm install"
 
       - script: |
-          npm run test-playwright-accessibility
-        displayName: "Run accessibility tests"
-
-      - script: |
           npm install -D @playwright/test
           npx playwright install-deps
         displayName: "Install playwright dependancies"
@@ -125,6 +121,10 @@ jobs:
       - script: |
           npx playwright install
         displayName: "Install playwright"
+
+      - script: |
+          npm run test-playwright-accessibility
+        displayName: "Run accessibility tests"
 
       - script: |
           set CI=true
