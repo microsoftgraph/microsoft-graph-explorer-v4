@@ -168,10 +168,9 @@ telemetryProvider.initialize();
 window.onerror = (message, source, lineno, colno, error) => {
   telemetry.trackException(error!, 0, {
     message,
-    source,
-    lineno,
-    colno,
-    error
+    errorSrc: source,
+    lineNumber: lineno,
+    columnNumber: colno
   });
 }
 
