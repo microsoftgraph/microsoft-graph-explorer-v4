@@ -177,6 +177,7 @@ test.describe('Permissions', () => {
     await page.locator('[aria-label="Modify permissions"]').click();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(500);
+    await page.evaluate(() => document.fonts.ready);
     const permissionsText = page.locator('text=One of the following permissions is required to run the query. Sign in with an a');
     expect(permissionsText).toBeDefined();
     expect(await page.screenshot({ clip: { x: 0, y: 0, width: 1920, height: 400 } })).toMatchSnapshot();

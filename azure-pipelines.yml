@@ -124,6 +124,10 @@ jobs:
         displayName: "Install playwright"
 
       - script: |
+          npm run test-playwright-accessibility
+        displayName: "Run accessibility tests"
+
+      - script: |
           set CI=true
           npm run test-playwright
 
@@ -139,10 +143,6 @@ jobs:
           PLAYWRIGHT_TESTS_USERNAME: $(PLAYWRIGHT_TESTS_USERNAME)
           PLAYWRIGHT_TESTS_PASSWORD: $(PLAYWRIGHT_TESTS_PASSWORD)
         displayName: "Run playwright tests"
-
-      - script: |
-          npm run test-playwright-accessibility
-        displayName: "Run accessibility tests"
 
       - publish: $(System.DefaultWorkingDirectory)/playwright-report
         artifact: playwright-report
