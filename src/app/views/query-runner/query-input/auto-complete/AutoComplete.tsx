@@ -176,6 +176,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     const { previous: preceedingText, searchText: searchTerm } = getSearchText(url, index!);
     const shouldSuggestVersions = preceedingText === GRAPH_URL + '/';
 
+    setShouldShowSuggestions(false);
+
     let theSuggestions: string[] = [];
     if (shouldSuggestVersions) {
       theSuggestions = GRAPH_API_VERSIONS;
@@ -195,7 +197,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
 
     if (filtered.length === 1 && filtered[0] === searchTerm) {
-      setShouldShowSuggestions(false);
+      appendSuggestionToUrl(searchTerm);
     }
   }
 

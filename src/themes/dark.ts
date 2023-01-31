@@ -25,7 +25,8 @@ export const dark = {
     black: '#ffffff',
     white: '#070707',
     blueMid: '#6cb8f6',
-    green: '#00a100'
+    green: '#00a100',
+    whiteTranslucent40: '#ffffff'
   },
   semanticColors: {
     messageText: '#f3f2f1',

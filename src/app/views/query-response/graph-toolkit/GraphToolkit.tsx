@@ -3,12 +3,12 @@ import {
   getTheme, IStyle, ITheme, Label, Link,
   MessageBar, MessageBarType, styled
 } from '@fluentui/react';
+
 import { componentNames, telemetry } from '../../../../telemetry';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { useAppSelector } from '../../../../store';
-import { classNames } from '../../classnames';
 
 const GraphToolkit = () => {
   const { sampleQuery } = useAppSelector((state) => state);
@@ -29,6 +29,7 @@ const GraphToolkit = () => {
               telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
                 componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK)}
             styles={{root: linkStyle}}
+            underline
           >
             <FormattedMessage id='graph toolkit playground' />
           </Link>
@@ -49,6 +50,7 @@ const GraphToolkit = () => {
         rel='noopener noreferrer'
         target='_blank'
         styles={{root: linkStyle}}
+        underline
       >
         <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />
         .

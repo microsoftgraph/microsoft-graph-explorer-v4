@@ -31,9 +31,9 @@ const StatusMessages = () => {
         const link = urls[part];
         if (link) {
           if (link.includes(GRAPH_URL)) {
-            return <Link onClick={() => setQuery(link)}>{link}</Link>;
+            return <Link onClick={() => setQuery(link)} underline>{link}</Link>;
           }
-          return <Link target="_blank" href={link}>{link}</Link>;
+          return <Link target="_blank" href={link} underline>{link}</Link>;
         }
       };
       return (
