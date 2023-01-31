@@ -16,7 +16,7 @@ const GraphToolkit = () => {
 
   const currentTheme: ITheme = getTheme();
   const textStyle = queryResponseStyles(currentTheme).queryResponseText.root as IStyle;
-  const linkStyle = queryResponseStyles(currentTheme).link as IStyle
+  const linkStyle = queryResponseStyles(currentTheme).link as IStyle;
 
   if (toolkitUrl && exampleUrl) {
     return (
@@ -35,7 +35,7 @@ const GraphToolkit = () => {
           </Link>
           .
         </MessageBar>
-        <iframe width='100%' height='470px' src={toolkitUrl} title={translateMessage('Graph toolkit')} />
+        <iframe width='100%' height='400px' src={toolkitUrl} title={translateMessage('Graph toolkit')} />
       </>
     );
   }
