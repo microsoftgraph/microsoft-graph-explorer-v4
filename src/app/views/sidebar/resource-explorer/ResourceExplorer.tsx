@@ -1,6 +1,6 @@
 import {
   Breadcrumb, DefaultButton,
-  IBreadcrumbItem, INavLink, INavLinkGroup, Label, Nav,
+  IBreadcrumbItem, INavLink, INavLinkGroup, Label, MessageBar, MessageBarType, Nav,
   SearchBox, Spinner, SpinnerSize,
   Stack, styled, Toggle
 } from '@fluentui/react';
@@ -32,21 +32,34 @@ import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
 
 const UnstyledResourceExplorer = (props: any) => {
-  const dispatch: AppDispatch = useDispatch();
   const { resources } = useAppSelector(
     (state) => state
   );
-  const classes = classNames(props);
-  const { data, pending, paths: selectedLinks } = resources;
 
+  if (!resources.data.children){
+    return (
+      <section style={{ marginTop: '8px' }}>
+        <MessageBar messageBarType={MessageBarType.error}>
+          <FormattedMessage id='Resources are currently unavailable' />
+        </MessageBar>
+      </section>
+    );
+  }
+
+  const dispatch: AppDispatch = useDispatch();
+  const classes = classNames(props);
+
+  const { data, pending, paths: selectedLinks } = resources;
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
   ];
 
+  const resourcesToUse = JSON.parse(JSON.stringify(data.children));
+
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');
-  const filteredPayload = getResourcesSupportedByVersion(data.children, version, searchText);
+  const filteredPayload = getResourcesSupportedByVersion(resourcesToUse, version, searchText);
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
 
   const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload);
