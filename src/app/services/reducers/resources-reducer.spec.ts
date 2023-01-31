@@ -9,10 +9,56 @@ import {
   RESOURCEPATHS_ADD_SUCCESS,
   RESOURCEPATHS_DELETE_SUCCESS
 } from '../../../app/services/redux-constants';
-import content from '../../../app/utils/resources/resources.json';
 import { IResource, IResourceLink, IResources, ResourceLinkType } from '../../../types/resources';
 
-const res = JSON.parse(JSON.stringify(content)) as IResource;
+const res: IResource = {
+  'segment': '/',
+  'labels': [
+    {
+      'name': 'v1.0',
+      'methods': [
+        'Get'
+      ]
+    },
+    {
+      'name': 'beta',
+      'methods': [
+        'Get'
+      ]
+    }
+  ],
+  'children': [
+    {
+      'segment': 'accessReviewDecisions',
+      'labels': [
+        {
+          'name': 'beta',
+          'methods': [
+            'Get',
+            'Post'
+          ]
+        }
+      ],
+      'children': [
+        {
+          'segment': '{accessReviewDecision-id}',
+          'labels': [
+            {
+              'name': 'beta',
+              'methods': [
+                'Get',
+                'Patch',
+                'Delete'
+              ]
+            }
+          ],
+          'children': []
+        }
+      ]
+    }
+  ]
+};
+
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 

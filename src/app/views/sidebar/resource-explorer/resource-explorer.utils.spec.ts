@@ -1,15 +1,60 @@
 import { IResource } from '../../../../types/resources';
 import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
-import content from '../../../utils/resources/resources.json';
 import {
   createResourcesList, getAvailableMethods, getCurrentTree, getResourcePaths, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 
-const resource = JSON.parse(JSON.stringify(content)) as IResource;
+const resource: IResource = {
+  'segment': '/',
+  'labels': [
+    {
+      'name': 'v1.0',
+      'methods': [
+        'Get'
+      ]
+    },
+    {
+      'name': 'beta',
+      'methods': [
+        'Get'
+      ]
+    }
+  ],
+  'children': [
+    {
+      'segment': 'accessReviewDecisions',
+      'labels': [
+        {
+          'name': 'beta',
+          'methods': [
+            'Get',
+            'Post'
+          ]
+        }
+      ],
+      'children': [
+        {
+          'segment': '{accessReviewDecision-id}',
+          'labels': [
+            {
+              'name': 'beta',
+              'methods': [
+                'Get',
+                'Patch',
+                'Delete'
+              ]
+            }
+          ],
+          'children': []
+        }
+      ]
+    }
+  ]
+};
 
 describe('Resource payload should', () => {
   it('have children', async () => {
-    const resources: any = { ...content };
+    const resources: any = { ...resource };
     expect(resources.children.length).toBeGreaterThan(0);
   });
 
