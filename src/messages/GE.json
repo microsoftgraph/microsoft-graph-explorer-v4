@@ -471,5 +471,5 @@
   "Scope consent successful": "Scope consent successful",
   "Query documentation": "Query documentation",
   "This token is not a jwt token and cannot be decoded by jwt.ms": "This token is not a jwt token and cannot be decoded by jwt.ms",
-  "The URL must start with https://graph.microsoft.com/": "The URL must start with https://graph.microsoft.com/"
+  "The URL must start with http": "The URL must start with http"
 }
