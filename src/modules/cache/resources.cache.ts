@@ -18,7 +18,7 @@ export const resourcesCache = (function () {
   const readResources = async (): Promise<IResource[]> => {
     const items = await resourcesStorage.getItem(RESOURCE_KEY) as string;
     if (items) {
-      // return JSON.parse(items);
+      return JSON.parse(items);
     }
     return [];
   }
