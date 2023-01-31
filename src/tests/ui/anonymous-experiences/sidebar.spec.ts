@@ -128,7 +128,7 @@ test.describe.serial('Sample Query tab', () => {
     await page.locator('[placeholder="Search sample queries"]').fill('drive');
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('[aria-label="all the items in my drive"]').click();
+    await page.locator('[aria-label="list items in my drive"]').click();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
     expect(await page.screenshot()).toMatchSnapshot();
