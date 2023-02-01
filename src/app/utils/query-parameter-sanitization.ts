@@ -82,13 +82,7 @@ function sanitizeQueryParameter(queryParameter: string): string {
     .trim();
 
   switch (key) {
-    case '$top': {
-      if (!isPositiveInteger(value)) {
-        value = '<invalid-value>';
-      }
-      break;
-    }
-
+    case '$top':
     case '$skip': {
       if (!isPositiveInteger(value)) {
         value = '<invalid-value>';
@@ -255,8 +249,8 @@ function sanitizeSearchQueryOptionValue(queryOptionValue: string): string {
     return sanitizedQueryString;
   }
 
-  for (let segment of searchSegments) {
-    segment = segment.trim();
+  for (const searchSegment of searchSegments) {
+    const segment = searchSegment.trim();
 
     // No processing needed for logicalOperators operators; append operator to query string.
     if (LOGICAL_OPERATORS.includes(segment.toLowerCase())) {
@@ -417,7 +411,6 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
     QUERY_FUNCTIONS.forEach((funcName) => {
       if (segment.toLowerCase().startsWith(funcName)) {
         queryFunctionPrefix = funcName;
-        return;
       }
     });
     if (queryFunctionPrefix) {

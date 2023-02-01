@@ -17,7 +17,8 @@ const GraphToolkit = () => {
 
   const currentTheme: ITheme = getTheme();
   const textStyle = queryResponseStyles(currentTheme).queryResponseText.root as IStyle;
-  const linkStyle = queryResponseStyles(currentTheme).link as IStyle
+  const linkStyle = queryResponseStyles(currentTheme).link as IStyle;
+  
   const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 155);
 
   if (toolkitUrl && exampleUrl) {

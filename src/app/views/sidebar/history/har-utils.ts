@@ -99,7 +99,7 @@ export function generateHar(entries: Entry[]): HarFormat {
 }
 
 export function exportQuery(content: HarFormat, requestUrl: string) {
-  const url = requestUrl.substr(8).split('/');
+  const url = requestUrl.substring(8).split('/');
   url.pop();
 
   const filename = `${url.join('_')}.har`;

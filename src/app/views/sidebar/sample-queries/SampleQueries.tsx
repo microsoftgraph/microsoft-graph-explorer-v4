@@ -138,13 +138,14 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             calloutProps={{ gapSpace: 0 }}
           >
             <Link
+              aria-label={item.docLink}
               target="_blank"
               href={item.docLink}
               onClick={() => trackDocumentLinkClickedEvent(item)}
             >
               <Icon
                 className={classes.docLink}
-                ariaLabel={translateMessage('Query documentation')}
+                aria-label={translateMessage('Query documentation')}
                 iconName='TextDocument'
                 style={{
                   marginRight: '45%',

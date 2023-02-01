@@ -1,10 +1,9 @@
 import { getTheme, IPivotItemProps, ITheme, PivotItem } from '@fluentui/react';
 import { useAppSelector } from '../../../../store';
 
-import { componentNames, telemetry } from '../../../../telemetry';
+import { componentNames } from '../../../../telemetry';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { Mode } from '../../../../types/enums';
-import { IQuery } from '../../../../types/query-runner';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
@@ -147,12 +146,4 @@ export const GetPivotItems = () => {
   }
 
   return pivotItems;
-};
-
-export const onPivotItemClick = (query: IQuery, item?: PivotItem) => {
-  if (!item) { return; }
-  const tabKey = item.props.itemKey;
-  if (tabKey) {
-    telemetry.trackTabClickEvent(tabKey, query);
-  }
 };

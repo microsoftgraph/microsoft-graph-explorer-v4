@@ -37,7 +37,7 @@ export const queries: ISampleQuery[] = [
   {
     category: 'Getting Started',
     method: 'GET',
-    humanName: 'all the items in my drive',
+    humanName: 'list items in my drive',
     requestUrl: '/v1.0/me/drive/root/children',
     docLink: 'https://learn.microsoft.com/en-us/graph/api/driveitem-list-children?view=graph-rest-1.0',
     skipTest: false
@@ -632,7 +632,7 @@ export const queries: ISampleQuery[] = [
   {
     category: 'OneDrive',
     method: 'GET',
-    humanName: 'all the items in my drive',
+    humanName: 'list items in my drive',
     requestUrl: '/v1.0/me/drive/root/children',
     docLink: 'https://learn.microsoft.com/en-us/graph/api/driveitem-list-children?view=graph-rest-1.0',
     skipTest: false

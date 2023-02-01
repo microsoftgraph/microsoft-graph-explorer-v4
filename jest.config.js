@@ -6,7 +6,6 @@ module.exports = {
     '!build/**',
     '!src/**/*.d.ts',
     '!src/index.tsx',
-    '!src/tests/accessibility/**',
     '!src/app/middleware/telemetryMiddleware.ts',
     '!src/telemetry/telemetry.ts'
   ],

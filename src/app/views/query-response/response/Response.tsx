@@ -5,7 +5,7 @@ import { AppDispatch, useAppSelector } from '../../../../store';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import ResponseDisplay from './ResponseDisplay';
-import { responseMessages } from './ResponseMessages';
+import { ResponseMessages } from './ResponseMessages';
 
 const Response = () => {
   const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery, authToken, graphExplorerMode } =
@@ -20,7 +20,7 @@ const Response = () => {
   const contentType = getContentType(headers);
   return (
     <div style={{ display: 'block' }}>
-      {responseMessages(graphResponse, sampleQuery, authToken, graphExplorerMode, dispatch)}
+      {ResponseMessages(graphResponse, sampleQuery, authToken, graphExplorerMode, dispatch)}
       {!contentDownloadUrl && !throwsCorsError && headers &&
         <ResponseDisplay
           contentType={contentType}

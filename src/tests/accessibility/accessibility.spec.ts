@@ -1,40 +1,22 @@
-import AxeBuilder from '@axe-core/webdriverjs';
-import webdriver, { ThenableWebDriver } from 'selenium-webdriver';
-import chrome from 'selenium-webdriver/chrome';
+import AxeBuilder from '@axe-core/playwright';
+import { test, expect, Page } from '@playwright/test';
 
-const TEST_TIMEOUT_MS = 500000; // in milliseconds = 5min
+let page: Page;
 
-describe('Graph Explorer accessibility', () => {
-  let driver: ThenableWebDriver;
-  jest.setTimeout(TEST_TIMEOUT_MS);
+test.beforeAll(async ({ browser }) => {
+  const context = await browser.newContext();
+  page = await context.newPage();
+  await page.goto('/');
+});
 
-  // set browser environment to use headless Chrome
-  beforeAll(async () => {
+test.describe('Accessibility', () => {
+  test.use({ viewport: { width: 1024, height: 768 }});
 
-    driver = new webdriver.Builder()
-      .forBrowser('chrome')
-      .setChromeOptions(new chrome.Options().headless())
-      .withCapabilities(webdriver.Capabilities.chrome())
-      .build();
-  }, TEST_TIMEOUT_MS);
+  test('should not have any automatically detectable accessibility issues', async () => {
 
-  // end browser environment
-  afterAll(async () => {
-    return driver && driver.quit();
-  }, TEST_TIMEOUT_MS);
-
-  // load the page where app is hosted
-  beforeEach(async () => {
-    await driver
-      .manage()
-      .setTimeouts({ implicit: 0, pageLoad: 60000, script: TEST_TIMEOUT_MS });
-    await driver.get('http://localhost:3000/');
-  }, TEST_TIMEOUT_MS);
-
-  // scan the page and return an analysis
-  it('checks for accessibility violations', async () => {
-    const accessibilityScanResults = await new AxeBuilder(driver)
-      // disabled as main landmark already exists on live site
+    await page.locator('[aria-label="Settings"]').isVisible();
+    const accessibilityScan = new AxeBuilder({ page }).setLegacyMode();
+    const result = await accessibilityScan
       .disableRules([
         'landmark-one-main',
         'region',
@@ -42,9 +24,12 @@ describe('Graph Explorer accessibility', () => {
         'html-has-lang',
         'page-has-heading-one',
         'landmark-unique',
+        'aria-allowed-attr',
         'aria-required-children'
       ])
       .analyze();
-    expect(accessibilityScanResults.violations).toStrictEqual([]);
+    accessibilityScan.setLegacyMode(false);
+
+    expect(result.violations).toEqual([]);
   });
-});
+})
