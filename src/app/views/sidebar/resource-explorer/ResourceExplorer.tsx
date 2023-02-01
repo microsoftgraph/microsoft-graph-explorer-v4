@@ -1,6 +1,6 @@
 import {
   Breadcrumb, DefaultButton,
-  IBreadcrumbItem, INavLink, INavLinkGroup, Label, MessageBar, MessageBarType, Nav,
+  IBreadcrumbItem, INavLink, INavLinkGroup, Label, Nav,
   SearchBox, Spinner, SpinnerSize,
   Stack, styled, Toggle
 } from '@fluentui/react';
@@ -36,16 +36,6 @@ const UnstyledResourceExplorer = (props: any) => {
     (state) => state
   );
 
-  if (!resources.data.children){
-    return (
-      <section style={{ marginTop: '8px' }}>
-        <MessageBar messageBarType={MessageBarType.error}>
-          <FormattedMessage id='Resources are currently unavailable' />
-        </MessageBar>
-      </section>
-    );
-  }
-
   const dispatch: AppDispatch = useDispatch();
   const classes = classNames(props);
 
@@ -55,7 +45,7 @@ const UnstyledResourceExplorer = (props: any) => {
     { key: 'beta', text: 'beta' }
   ];
 
-  const resourcesToUse = JSON.parse(JSON.stringify(data.children));
+  const resourcesToUse = data.children ? JSON.parse(JSON.stringify(data.children)) : [] as IResource[];
 
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');
@@ -194,7 +184,7 @@ const UnstyledResourceExplorer = (props: any) => {
 
   return (
     <section style={{ marginTop: '8px' }}>
-      {!isolated && <>
+      {!isolated && items[0].links.length > 0 && <>
         <SearchBox
           placeholder={translateMessage('Search resources')}
           onChange={debouncedSearch}
@@ -237,11 +227,13 @@ const UnstyledResourceExplorer = (props: any) => {
         </>
       }
 
-      <Label styles={{ root: { position: 'relative', left: '10px' } }}>
+      { items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>
         <FormattedMessage id='Resources available' />
       </Label>
+      }
+
       {
-        items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '60px' }) :
+        items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
           (<Nav
             groups={items}
             styles={navStyles}
