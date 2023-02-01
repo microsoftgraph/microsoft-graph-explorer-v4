@@ -165,12 +165,12 @@ function getWorkerFor(worker: string): string {
 const telemetryProvider: ITelemetry = telemetry;
 telemetryProvider.initialize();
 
-window.onerror = (message, source, lineno, colno, error) => {
+window.onerror = (message, url, lineNumber, columnNumber, error) => {
   telemetry.trackException(error!, 0, {
     message,
-    errorSrc: source,
-    lineNumber: lineno,
-    columnNumber: colno
+    url,
+    lineNumber,
+    columnNumber
   });
 }
 
