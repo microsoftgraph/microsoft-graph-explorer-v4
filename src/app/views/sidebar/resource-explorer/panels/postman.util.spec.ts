@@ -3,46 +3,235 @@ import { createResourcesList, getResourcePaths } from '../resource-explorer.util
 import { generatePostmanCollection } from './postman.util';
 
 const res = {
-  'segment': 'sites',
+  'segment': '/',
   'labels': [
     {
       'name': 'v1.0',
       'methods': [
-        'Get',
-        'Post'
+        'Get'
       ]
     },
     {
       'name': 'beta',
       'methods': [
-        'Get',
-        'Post'
+        'Get'
       ]
     }
   ],
-  'children': [
-    {
-      'segment': '{site-id}',
-      'labels': [
-        {
-          'name': 'v1.0',
-          'methods': [
-            'Get',
-            'Patch',
-            'Delete'
-          ]
-        },
-        {
-          'name': 'beta',
-          'methods': [
-            'Get',
-            'Patch',
-            'Delete'
-          ]
-        }
-      ]
-    }
-  ]
+  'children': [{
+    'segment': 'appCatalogs',
+    'labels': [
+      {
+        'name': 'v1.0',
+        'methods': [
+          'Get',
+          'Patch'
+        ]
+      },
+      {
+        'name': 'beta',
+        'methods': [
+          'Get',
+          'Patch'
+        ]
+      }
+    ],
+    'children': [
+      {
+        'segment': 'teamsApps',
+        'labels': [
+          {
+            'name': 'v1.0',
+            'methods': [
+              'Get',
+              'Post'
+            ]
+          },
+          {
+            'name': 'beta',
+            'methods': [
+              'Get',
+              'Post'
+            ]
+          }
+        ],
+        'children': [
+          {
+            'segment': '{teamsApp-id}',
+            'labels': [
+              {
+                'name': 'v1.0',
+                'methods': [
+                  'Get',
+                  'Patch',
+                  'Delete'
+                ]
+              },
+              {
+                'name': 'beta',
+                'methods': [
+                  'Get',
+                  'Patch',
+                  'Delete'
+                ]
+              }
+            ],
+            'children': [
+              {
+                'segment': 'appDefinitions',
+                'labels': [
+                  {
+                    'name': 'v1.0',
+                    'methods': [
+                      'Get',
+                      'Post'
+                    ]
+                  },
+                  {
+                    'name': 'beta',
+                    'methods': [
+                      'Get',
+                      'Post'
+                    ]
+                  }
+                ],
+                'children': [
+                  {
+                    'segment': '{teamsAppDefinition-id}',
+                    'labels': [
+                      {
+                        'name': 'v1.0',
+                        'methods': [
+                          'Get',
+                          'Patch',
+                          'Delete'
+                        ]
+                      },
+                      {
+                        'name': 'beta',
+                        'methods': [
+                          'Get',
+                          'Patch',
+                          'Delete'
+                        ]
+                      }
+                    ],
+                    'children': [
+                      {
+                        'segment': 'bot',
+                        'labels': [
+                          {
+                            'name': 'v1.0',
+                            'methods': [
+                              'Get',
+                              'Patch',
+                              'Delete'
+                            ]
+                          },
+                          {
+                            'name': 'beta',
+                            'methods': [
+                              'Get',
+                              'Patch',
+                              'Delete'
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        'segment': 'colorIcon',
+                        'labels': [
+                          {
+                            'name': 'beta',
+                            'methods': [
+                              'Get',
+                              'Patch',
+                              'Delete'
+                            ]
+                          }
+                        ],
+                        'children': [
+                          {
+                            'segment': 'hostedContent',
+                            'labels': [
+                              {
+                                'name': 'beta',
+                                'methods': [
+                                  'Get',
+                                  'Patch',
+                                  'Delete'
+                                ]
+                              }
+                            ],
+                            'children': [
+                              {
+                                'segment': '$value',
+                                'labels': [
+                                  {
+                                    'name': 'beta',
+                                    'methods': [
+                                      'Get',
+                                      'Put'
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        'segment': 'outlineIcon',
+                        'labels': [
+                          {
+                            'name': 'beta',
+                            'methods': [
+                              'Get',
+                              'Patch',
+                              'Delete'
+                            ]
+                          }
+                        ],
+                        'children': [
+                          {
+                            'segment': 'hostedContent',
+                            'labels': [
+                              {
+                                'name': 'beta',
+                                'methods': [
+                                  'Get',
+                                  'Patch',
+                                  'Delete'
+                                ]
+                              }
+                            ],
+                            'children': [
+                              {
+                                'segment': '$value',
+                                'labels': [
+                                  {
+                                    'name': 'beta',
+                                    'methods': [
+                                      'Get',
+                                      'Put'
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }]
 };
 const resource = JSON.parse(JSON.stringify(res)) as IResource
 
