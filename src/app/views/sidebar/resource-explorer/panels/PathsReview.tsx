@@ -1,5 +1,5 @@
 import {
-  CommandBar, ICommandBarItemProps, Label, Panel, PanelType, PrimaryButton
+  CommandBar, ICommandBarItemProps, IOverlayProps, Label, Panel, PanelType, PrimaryButton
 } from '@fluentui/react';
 import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -67,6 +67,10 @@ const PathsReview = (props: IPathsReview) => {
     setSelectedItems(content);
   };
 
+  const panelOverlayProps: IOverlayProps = {
+    isDarkThemed: true
+  }
+
   return (
     <>
       <Panel
@@ -76,6 +80,7 @@ const PathsReview = (props: IPathsReview) => {
         type={PanelType.large}
         onRenderFooterContent={renderFooterContent}
         closeButtonAriaLabel='Close'
+        overlayProps={panelOverlayProps}
       >
         <Label>
           <FormattedMessage id='Export list as a Postman collection message' />
