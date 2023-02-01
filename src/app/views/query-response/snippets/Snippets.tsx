@@ -7,7 +7,7 @@ import { setSnippetTabSuccess } from '../../../services/actions/snippet-action-c
 import { renderSnippets } from './snippets-helper';
 function GetSnippets() {
   const dispatch: AppDispatch = useDispatch();
-  const { snippets } = useAppSelector((state) => state);
+  const { snippets, sampleQuery } = useAppSelector((state) => state);
   const supportedLanguages = {
     'CSharp': {
       sdkDownloadLink: 'https://aka.ms/csharpsdk',
@@ -35,7 +35,8 @@ function GetSnippets() {
     if (!pivotItem) {
       return;
     }
-    dispatch(setSnippetTabSuccess(pivotItem.props.itemKey!))
+    telemetry.trackTabClickEvent(pivotItem.props.itemKey!, sampleQuery);
+    dispatch(setSnippetTabSuccess(pivotItem.props.itemKey!));
   }
 
   return <Pivot
