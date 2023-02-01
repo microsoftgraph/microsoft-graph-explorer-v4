@@ -52,6 +52,7 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
         break;
       case GRAPH_API_SANDBOX_URL:
         baseData.name = sanitizeGraphAPISandboxUrl(target);
+        break;
       default:
         break;
     }
@@ -88,4 +89,10 @@ export function sanitizeTelemetryItemUriProperty(envelope: ITelemetryItem) {
     telemetryItem.uri = sanitisedUri;
   }
   return true;
+}
+
+export function filterResizeObserverExceptions(envelope: ITelemetryItem){
+  if (envelope.data?.message === 'ErrorEvent: ResizeObserver loop limit exceeded') {
+    return false;
+  }
 }

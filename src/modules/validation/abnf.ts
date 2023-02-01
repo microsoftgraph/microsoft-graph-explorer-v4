@@ -38,10 +38,12 @@ export class ValidatedUrl {
   }
 
   public validate(graphUrl: string): ValidationResult {
+    let decodedGraphUrl = graphUrl;
+    try { decodedGraphUrl = decodeURI(graphUrl); } catch (error) { /* empty */ }
     const result = ValidatedUrl.parser.parse(
       ValidatedUrl.getGrammar(),
       'odataUri',
-      decodeURI(graphUrl)
+      decodedGraphUrl
     );
     return result;
   }

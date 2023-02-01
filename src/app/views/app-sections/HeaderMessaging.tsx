@@ -13,7 +13,7 @@ export function headerMessaging(query: string): React.ReactNode {
         <MessageBar messageBarType={MessageBarType.info} isMultiline={true}>
           <p>
             <FormattedMessage id='To try the full features' />,
-            <Link tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
+            <Link tabIndex={0} href={query} target='_blank' rel='noopener noreferrer' underline>
               <FormattedMessage id='full Graph Explorer' />.
             </Link>
           </p>
@@ -27,7 +27,7 @@ export function headerMessaging(query: string): React.ReactNode {
         <p>
           <FormattedMessage id='To try operations other than GET' />,
 
-          <Link tabIndex={0} href={query} target='_blank' rel='noopener noreferrer'>
+          <Link tabIndex={0} href={query} target='_blank' rel='noopener noreferrer' underline>
             <FormattedMessage id='sign in' />.
           </Link>
         </p>

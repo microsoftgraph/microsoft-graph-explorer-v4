@@ -8,7 +8,7 @@ import { formatJsonStringForAllBrowsers } from './util/format-json';
 
 interface IMonaco {
   body: object | string | undefined;
-  onChange?: OnChange | undefined;
+  onChange?: OnChange;
   verb?: string;
   language?: string;
   readOnly?: boolean;

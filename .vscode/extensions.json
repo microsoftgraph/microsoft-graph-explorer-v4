@@ -18,7 +18,9 @@
 		"ms-vscode.sublime-keybindings",
 		"redhat.vscode-yaml",
 		"redhat.vscode-commons",
-		"eamodio.gitlens"
+		"eamodio.gitlens",
+		"ms-playwright.playwright",
+		"nitayneeman.playwright-snippets"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [
