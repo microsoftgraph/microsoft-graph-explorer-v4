@@ -3,7 +3,7 @@ import { createResourcesList, getResourcePaths } from '../resource-explorer.util
 import { generatePostmanCollection } from './postman.util';
 import content from '../resources.json'
 
-const resource = JSON.parse(JSON.stringify(content)) as IResource
+const resource = JSON.parse(JSON.stringify(content)) as IResource;
 
 describe('Postman collection should', () => {
   it('have items generated', async () => {
