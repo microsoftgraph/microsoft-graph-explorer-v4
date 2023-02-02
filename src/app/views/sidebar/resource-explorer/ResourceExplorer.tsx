@@ -184,7 +184,7 @@ const UnstyledResourceExplorer = (props: any) => {
 
   return (
     <section style={{ marginTop: '8px' }}>
-      {!isolated && items[0].links.length > 0 && <>
+      {!isolated && <>
         <SearchBox
           placeholder={translateMessage('Search resources')}
           onChange={debouncedSearch}
@@ -233,7 +233,7 @@ const UnstyledResourceExplorer = (props: any) => {
       }
 
       {
-        items[0].links.length === 0 && pending ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
+        items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
           (<Nav
             groups={items}
             styles={navStyles}
