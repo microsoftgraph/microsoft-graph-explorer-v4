@@ -21,7 +21,7 @@ export interface IPathsReview {
 
 const PathsReview = (props: IPathsReview) => {
   const dispatch: AppDispatch = useDispatch();
-  const { resources: { paths: items } } = useAppSelector(
+  const { resources: { paths: items }, theme } = useAppSelector(
     (state) => state
   );
   const { isOpen } = props;
@@ -67,8 +67,20 @@ const PathsReview = (props: IPathsReview) => {
     setSelectedItems(content);
   };
 
+  const isCurrentThemeDark = (): boolean => {
+    if (theme === 'dark' || theme === 'high-contrast') {
+      return true;
+    }
+    return false;
+  }
+
   const panelOverlayProps: IOverlayProps = {
-    isDarkThemed: true
+    styles: {
+      root: {
+        backgroundColor: isCurrentThemeDark() ? 'rgba(0,0,0,0.3)' :
+          'rgba(255,255,255,0.3))'
+      }
+    }
   }
 
   return (
