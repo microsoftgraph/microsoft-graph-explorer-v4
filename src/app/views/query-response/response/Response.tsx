@@ -13,7 +13,7 @@ const Response = () => {
   const { body, headers } = graphResponse;
   const dispatch: AppDispatch = useDispatch();
 
-  const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
+  const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 135);
 
   const contentDownloadUrl = body?.contentDownloadUrl;
   const throwsCorsError = body?.throwsCorsError;
