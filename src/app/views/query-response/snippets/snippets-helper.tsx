@@ -60,7 +60,7 @@ function Snippet(props: ISnippetProps) {
   const snippet = (!loadingState && data) ? data[language] : null;
 
   const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
-  const height = convertVhToPx(responseHeight, 140);
+  const height = convertVhToPx(responseHeight, 240);
 
   const dispatch: AppDispatch = useDispatch();
 
