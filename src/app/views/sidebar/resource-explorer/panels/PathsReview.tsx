@@ -1,5 +1,5 @@
 import {
-  CommandBar, ICommandBarItemProps, IOverlayProps, Label, Panel, PanelType, PrimaryButton
+  CommandBar, getTheme, ICommandBarItemProps, IOverlayProps, Label, Panel, PanelType, PrimaryButton
 } from '@fluentui/react';
 import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -27,6 +27,7 @@ const PathsReview = (props: IPathsReview) => {
   const { isOpen } = props;
   const headerText = translateMessage('Selected Resources') + ' ' + translateMessage('Preview');
   const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
+  const currentTheme = getTheme();
 
   const columns = [
     { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true }
@@ -77,8 +78,9 @@ const PathsReview = (props: IPathsReview) => {
   const panelOverlayProps: IOverlayProps = {
     styles: {
       root: {
-        backgroundColor: isCurrentThemeDark() ? 'rgba(0,0,0,0.3)' :
-          'rgba(255,255,255,0.3))'
+        backgroundColor: isCurrentThemeDark() ? currentTheme.palette.neutralLighter :
+          currentTheme.palette.whiteTranslucent40,
+        opacity: '0.8'
       }
     }
   }

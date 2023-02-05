@@ -127,8 +127,9 @@ const PanelList = ({ messages,
   const panelOverlayProps: IOverlayProps = {
     styles: {
       root: {
-        backgroundColor: isCurrentThemeDark() ? 'rgba(0,0,0,0.3)' :
-          'rgba(255,255,255,0.3))'
+        backgroundColor: isCurrentThemeDark() ? theme.palette.neutralLighter :
+          theme.palette.whiteTranslucent40,
+        opacity: '0.8'
       }
     }
   }
