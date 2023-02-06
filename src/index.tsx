@@ -2,9 +2,9 @@ import { AuthenticationResult } from '@azure/msal-browser';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import { initializeIcons } from '@fluentui/react';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { IntlProvider } from 'react-intl';
+
 import { Provider } from 'react-redux';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
@@ -14,7 +14,7 @@ import { bulkAddHistoryItems } from './app/services/actions/request-history-acti
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
-import { readHistoryData } from './app/views/sidebar/history/history-utils';
+import { historyCache } from './modules/cache/history-utils';
 import { geLocale } from './appLocale';
 import messages from './messages';
 import { authenticationWrapper } from './modules/authentication';
@@ -126,7 +126,7 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
   appStore.dispatch(setDevxApiUrl(devxApi));
 }
 
-readHistoryData().then((data: any) => {
+historyCache.readHistoryData().then((data: any) => {
   if (data.length > 0) {
     appStore.dispatch(bulkAddHistoryItems(data));
   }
@@ -178,5 +178,5 @@ const Root = () => {
     </Provider>
   );
 };
-
-ReactDOM.render(<Root />, document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root')!);
+root.render(<Root />);

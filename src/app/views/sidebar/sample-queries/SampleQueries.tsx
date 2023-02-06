@@ -4,7 +4,7 @@ import {
   GroupHeader, IColumn, Icon, IDetailsRowStyles, IGroup, Link, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -144,6 +144,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             >
               <Icon
                 className={classes.docLink}
+                ariaLabel={translateMessage('Query documentation')}
                 iconName='TextDocument'
                 style={{
                   marginRight: '45%',
@@ -361,6 +362,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
           onClick={(e) => telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
             componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
           href={`https://learn.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
+          underline
         >
           <FormattedMessage id='Microsoft Graph API Reference docs' />
         </Link>

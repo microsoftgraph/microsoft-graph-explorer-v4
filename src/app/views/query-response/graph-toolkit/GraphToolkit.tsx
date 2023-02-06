@@ -1,4 +1,3 @@
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
   getTheme, IStyle, ITheme, Label, Link,
@@ -17,6 +16,7 @@ const GraphToolkit = () => {
 
   const currentTheme: ITheme = getTheme();
   const textStyle = queryResponseStyles(currentTheme).queryResponseText.root as IStyle;
+  const linkStyle = queryResponseStyles(currentTheme).link as IStyle
 
   if (toolkitUrl && exampleUrl) {
     return (
@@ -28,6 +28,8 @@ const GraphToolkit = () => {
             onClick={(e) =>
               telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
                 componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK)}
+            styles={{root: linkStyle}}
+            underline
           >
             <FormattedMessage id='graph toolkit playground' />
           </Link>
@@ -47,6 +49,8 @@ const GraphToolkit = () => {
         href='https://aka.ms/mgt'
         rel='noopener noreferrer'
         target='_blank'
+        styles={{root: linkStyle}}
+        underline
       >
         <FormattedMessage id='Learn more about the Microsoft Graph Toolkit' />
         .

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IImageComponentProps } from '../../../../types/image';
 
 export const Image = ({ styles, alt, body }: IImageComponentProps): JSX.Element => {

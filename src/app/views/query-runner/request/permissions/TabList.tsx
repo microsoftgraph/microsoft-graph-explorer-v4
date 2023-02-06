@@ -1,5 +1,5 @@
 import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode } from '@fluentui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -32,7 +32,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   const displayNoPermissionsFoundMessage = () : JSX.Element => {
     return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='permissions not found in permissions tab' />
-      <Link onClick={openPermissionsPanel}>
+      <Link underline onClick={openPermissionsPanel}>
         <FormattedMessage id='open permissions panel' />
       </Link>
       <FormattedMessage id='permissions list' />

@@ -3,7 +3,7 @@ import {
   MessageBar, MessageBarType, Pivot, PivotItem, styled
 } from '@fluentui/react';
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -23,7 +23,7 @@ const AdaptiveCard = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
 
   const { body, hostConfig } = props;
-  const { sampleQuery, queryRunnerStatus: queryStatus, adaptiveCard: card } = useAppSelector((state) => state);
+  const { sampleQuery, queryRunnerStatus: queryStatus, adaptiveCard: card, theme } = useAppSelector((state) => state);
   const { data, pending } = card;
 
   const classes = classNames(props);
@@ -70,6 +70,7 @@ const AdaptiveCard = (props: any) => {
     );
   }
 
+
   if (body && !pending) {
     if (!data || (queryStatus && !queryStatus.ok)) {
       return (
@@ -81,6 +82,7 @@ const AdaptiveCard = (props: any) => {
             tabIndex={0}
             target='_blank'
             rel='noopener noreferrer'
+            underline
           >
             <FormattedMessage id='Adaptive Cards designer' />
           </Link>
@@ -91,6 +93,28 @@ const AdaptiveCard = (props: any) => {
     try {
       adaptiveCard.parse(data.card);
       const renderedCard = adaptiveCard.render();
+
+      if(renderedCard){
+        renderedCard.style.backgroundColor = currentTheme.palette.neutralLighter;
+
+        const applyTheme = (child: HTMLElement) => {
+          if(!child){ return; }
+          if(child && child.tagName === 'BUTTON'){ return; }
+
+          child.style.color = currentTheme.palette.whiteTranslucent40;
+          if (child.children.length > 0) {
+            // eslint-disable-next-line @typescript-eslint/prefer-for-of
+            for (let i = 0; i < child.children.length; i++) {
+              applyTheme(child.children[i] as HTMLElement);
+            }
+          }
+        }
+
+        if(theme !== 'light'){
+          applyTheme(renderedCard);
+        }
+      }
+
       const handleCopy = async () => {
         trackedGenericCopy(JSON.stringify(data.template, null, 4),
           componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
@@ -135,6 +159,7 @@ const AdaptiveCard = (props: any) => {
                   target='_blank'
                   rel='noopener noreferrer'
                   tabIndex={0}
+                  underline
                 >
                   <FormattedMessage id='Adaptive Cards Templating SDK' />
                 </Link>
@@ -143,6 +168,7 @@ const AdaptiveCard = (props: any) => {
                   target='_blank'
                   rel='noopener noreferrer'
                   tabIndex={0}
+                  underline
                 >
                   <FormattedMessage id='Adaptive Cards designer' />
                 </Link>

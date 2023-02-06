@@ -2,7 +2,7 @@ import {
   Announced, FontSizes, getTheme, IconButton, ITheme, Modal, Pivot, PivotItem
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import React, { CSSProperties, useEffect, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

@@ -1,5 +1,5 @@
 import { getTheme, ITheme, Label, Link, PivotItem } from '@fluentui/react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { FormattedMessage } from 'react-intl';
@@ -99,7 +99,7 @@ function Snippet(props: ISnippetProps) {
 
         {setCommentSymbol()} {translateMessage('Leverage libraries')} {language} {translateMessage('Client library')}
 
-        <Link  href={sdkDownloadLink} underline={true} styles={snippetLinkStyles}
+        <Link href={sdkDownloadLink} underline styles={snippetLinkStyles}
           onClick={(e) => trackLinkClickedEvent(sdkDownloadLink, e)} target={'_blank'} rel='noreferrer noopener'>
           {sdkDownloadLink}
         </Link>
@@ -107,7 +107,7 @@ function Snippet(props: ISnippetProps) {
 
         {setCommentSymbol()} {translateMessage('SDKs documentation')}
 
-        <Link href={sdkDocLink} underline={true} styles={snippetLinkStyles}
+        <Link href={sdkDocLink} underline styles={snippetLinkStyles}
           onClick={(e) => trackLinkClickedEvent(sdkDocLink, e)} target={'_blank'} rel='noreferrer noopener'>
           {sdkDocLink}
         </Link>
