@@ -68,15 +68,17 @@
         "scripts": {
                 "start": "node scripts/start.js",
                 "build": "node scripts/build.js && node versioned-build.js",
-                "test": "node scripts/test.js --no-watch --testPathIgnorePatterns=src/tests/accessibility /scripts/ --max-old-space-size=8192",
+                "test": "node scripts/test.js --no-watch --testPathIgnorePatterns=src/tests/ui src/tests/accessibility /scripts/ --max-old-space-size=8192",
                 "lint": "eslint . \"**/*.{js,ts,tsx}\"",
-                "start-server": "npm start",
-                "ci": "start-server-and-test start-server http://localhost:3000 test-ci",
-                "test-ci": "node scripts/test.js --no-watch accessibility.spec.ts",
                 "prebuild:prod": "standard-version",
                 "build:prod": "npm run build",
                 "bump": "standard-version --skip.tag --skip.changelog",
-                "preinstall": "npx npm-force-resolutions"
+                "preinstall": "npx npm-force-resolutions",
+                "start-server": "npm start",
+                "test-playwright": "start-server-and-test start-server http://localhost:3000 test-ui",
+                "test-ui": "npx playwright test src/tests/ui/",
+                "test-playwright-accessibility": "start-server-and-test start-server http://localhost:3000 test-accessibility",
+                "test-accessibility": "npx playwright test src/tests/accessibility"
         },
         "eslintConfig": {
                 "extends": "react-app"
@@ -88,8 +90,8 @@
                 "not op_mini all"
         ],
         "devDependencies": {
-                "@testing-library/react": "13.4.0",
-                "@testing-library/user-event": "14.4.3",
+                "@axe-core/playwright": "4.4.5",
+                "@playwright/test": "1.29.2",
                 "@types/chromedriver": "81.0.1",
                 "@types/enzyme": "3.10.12",
                 "@types/enzyme-adapter-react-16": "1.0.6",

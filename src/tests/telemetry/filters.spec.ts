@@ -3,7 +3,8 @@ import {
   filterTelemetryTypes,
   filterRemoteDependencyData,
   addCommonTelemetryItemProperties,
-  sanitizeTelemetryItemUriProperty
+  sanitizeTelemetryItemUriProperty,
+  filterResizeObserverExceptions
 } from '../../../src/telemetry/filters';
 
 describe('Telemetry filters should', () => {
@@ -56,7 +57,7 @@ describe('Telemetry filters should', () => {
 
     // Assert
     expect(result).toBe(true);
-  })
+  });
 
   it('sanitize telemetry item uri property', () => {
     // Arrange
@@ -76,5 +77,25 @@ describe('Telemetry filters should', () => {
 
     // Assert
     expect(result).toBe(true);
-  })
+  });
+
+  it('remove telemetry with ResizeObserver loop limit error when filterResizeObserverExceptions() is called', () => {
+    // Arrange
+    const envelope: ITelemetryItem = {
+      ver: '1.0',
+      name: 'test',
+      time: '',
+      iKey: '',
+      baseType: 'ErrorData',
+      data: {
+        message: 'ErrorEvent: ResizeObserver loop limit exceeded'
+      }
+    }
+
+    // Act
+    const result = filterResizeObserverExceptions(envelope);
+
+    // Assert
+    expect(result).toBe(false);
+  });
 })
