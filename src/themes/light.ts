@@ -25,7 +25,6 @@ export const light = {
     black: '#1d1d1d',
     white: '#ffffff',
     blueMid: '#00188F',
-    green: '#008000',
-    whiteTranslucent40: '#ffffff'
+    green: '#008000'
   }
 };

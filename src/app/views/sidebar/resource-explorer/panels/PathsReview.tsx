@@ -78,9 +78,8 @@ const PathsReview = (props: IPathsReview) => {
   const panelOverlayProps: IOverlayProps = {
     styles: {
       root: {
-        backgroundColor: isCurrentThemeDark() ? currentTheme.palette.neutralLighter :
-          currentTheme.palette.whiteTranslucent40,
-        opacity: '0.8'
+        backgroundColor: isCurrentThemeDark() ? currentTheme.palette.blackTranslucent40 :
+          currentTheme.palette.whiteTranslucent40
       }
     }
   }
