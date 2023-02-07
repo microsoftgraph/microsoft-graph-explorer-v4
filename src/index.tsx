@@ -28,21 +28,27 @@ import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
 
-// removes the loading spinner from GE html after the app is loaded
-const spinner = document.getElementById('spinner');
-if (spinner !== null) {
-  (spinner as any).parentElement.removeChild(spinner);
-}
-
-// removes the loading spinner from the portal team html after GE loads
-const apiExplorer = document.getElementsByTagName('api-explorer')[0];
-if (apiExplorer) {
-  (apiExplorer as any).parentElement.removeChild(apiExplorer);
-}
-
+const appRoot: HTMLElement = document.getElementById('root')!;
 initializeIcons();
 
 let currentTheme = readTheme() || 'light';
+export function removeSpinners() {
+  // removes the loading spinner from GE html after the app is loaded
+  const spinner = document.getElementById('spinner');
+  if (spinner !== null) {
+    (spinner as any).parentElement.removeChild(spinner);
+  }
+
+  // removes the loading spinner from the portal team html after GE loads
+  const apiExplorer = document.getElementsByTagName('api-explorer')[0];
+  if (apiExplorer) {
+    (apiExplorer as any).parentElement.removeChild(apiExplorer);
+  }
+
+  // makes appRoot visible
+  appRoot.classList.remove('hidden');
+}
+
 function setCurrentSystemTheme(): void {
   const themeFromLocalStorage = readTheme();
 
@@ -186,5 +192,5 @@ const Root = () => {
     </Provider>
   );
 };
-const root = ReactDOM.createRoot(document.getElementById('root')!);
+const root = ReactDOM.createRoot(appRoot);
 root.render(<Root />);
