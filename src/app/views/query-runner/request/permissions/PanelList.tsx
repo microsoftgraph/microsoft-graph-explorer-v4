@@ -118,10 +118,7 @@ const PanelList = ({ messages,
   };
 
   const isCurrentThemeDark = (): boolean => {
-    if (appTheme === 'dark' || appTheme === 'high-contrast') {
-      return true;
-    }
-    return false;
+    return (appTheme === 'dark' || appTheme === 'high-contrast');
   }
 
   const panelOverlayProps: IOverlayProps = {
