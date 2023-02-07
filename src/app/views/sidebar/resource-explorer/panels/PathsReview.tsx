@@ -69,10 +69,7 @@ const PathsReview = (props: IPathsReview) => {
   };
 
   const isCurrentThemeDark = (): boolean => {
-    if (theme === 'dark' || theme === 'high-contrast') {
-      return true;
-    }
-    return false;
+    return (theme === 'dark' || theme === 'high-contrast');
   }
 
   const panelOverlayProps: IOverlayProps = {
