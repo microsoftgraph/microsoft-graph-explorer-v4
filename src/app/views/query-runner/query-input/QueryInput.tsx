@@ -61,7 +61,7 @@ const QueryInput = (props: IQueryInputProps) => {
   }
 
   const runQuery = () => {
-    if (!sampleQuery.sampleUrl) {
+    if (!sampleQuery.sampleUrl || sampleQuery.sampleUrl.indexOf('graph.microsoft.com') === -1) {
       return;
     }
     handleOnRunQuery(sampleQuery);
