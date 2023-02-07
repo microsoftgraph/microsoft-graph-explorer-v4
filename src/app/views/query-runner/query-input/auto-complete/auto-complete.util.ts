@@ -51,8 +51,8 @@ function getErrorMessage(queryUrl: string) {
   if (error) {
     return `${translateMessage('Possible error found in URL near')}: ${error}`;
   }
-  if (queryUrl.indexOf('http') === -1){
-    return translateMessage('The URL must start with http');
+  if (queryUrl.indexOf('graph.microsoft.com') === -1){
+    return translateMessage('The URL must contain graph.microsoft.com');
   }
   return '';
 }
