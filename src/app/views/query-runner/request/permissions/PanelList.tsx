@@ -35,7 +35,7 @@ const PanelList = ({ messages,
   }
 
   const { consentedScopes, scopes, authToken,
-    permissionsPanelOpen } = useAppSelector((state) => state);
+    permissionsPanelOpen, theme: appTheme } = useAppSelector((state) => state);
   const { fullPermissions } = scopes.data;
   const [permissions, setPermissions] = useState<any []>([]);
   const [groups, setGroups] = useState<IGroup[]>([]);
@@ -117,8 +117,17 @@ const PanelList = ({ messages,
     });
   };
 
+  const isCurrentThemeDark = (): boolean => {
+    return (appTheme === 'dark' || appTheme === 'high-contrast');
+  }
+
   const panelOverlayProps: IOverlayProps = {
-    isDarkThemed: true
+    styles: {
+      root: {
+        backgroundColor: isCurrentThemeDark() ? theme.palette.blackTranslucent40 :
+          theme.palette.whiteTranslucent40
+      }
+    }
   }
 
   const displayLoadingPermissionsText = () => {

@@ -106,7 +106,7 @@ const AdaptiveCard = (props: any) => {
           if(!child){ return; }
           if(child && child.tagName === 'BUTTON'){ return; }
 
-          child.style.color = currentTheme.palette.whiteTranslucent40;
+          child.style.color = currentTheme.palette.black;
           if (child.children.length > 0) {
             // eslint-disable-next-line @typescript-eslint/prefer-for-of
             for (let i = 0; i < child.children.length; i++) {
