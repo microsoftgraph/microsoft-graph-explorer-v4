@@ -199,6 +199,10 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     if (filtered.length === 1 && filtered[0] === searchTerm) {
       appendSuggestionToUrl(searchTerm);
     }
+
+    if(filtered.length === 0){
+      props.contentChanged(queryUrl);
+    }
   }
 
   const trackSuggestionSelectionEvent = (suggestion: string) => {
