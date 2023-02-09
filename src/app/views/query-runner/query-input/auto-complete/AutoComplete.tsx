@@ -141,6 +141,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
       case KeyCodes.escape:
         if (shouldShowSuggestions) {
+          props.contentChanged(queryUrl)
           setShouldShowSuggestions(false);
         }
         break;
