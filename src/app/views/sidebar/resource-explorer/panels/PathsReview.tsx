@@ -1,5 +1,5 @@
 import {
-  CommandBar, ICommandBarItemProps, Label, Panel, PanelType, PrimaryButton
+  CommandBar, getTheme, ICommandBarItemProps, IOverlayProps, Label, Panel, PanelType, PrimaryButton
 } from '@fluentui/react';
 import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -21,12 +21,13 @@ export interface IPathsReview {
 
 const PathsReview = (props: IPathsReview) => {
   const dispatch: AppDispatch = useDispatch();
-  const { resources: { paths: items } } = useAppSelector(
+  const { resources: { paths: items }, theme } = useAppSelector(
     (state) => state
   );
   const { isOpen } = props;
   const headerText = translateMessage('Selected Resources') + ' ' + translateMessage('Preview');
   const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
+  const currentTheme = getTheme();
 
   const columns = [
     { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true }
@@ -67,6 +68,19 @@ const PathsReview = (props: IPathsReview) => {
     setSelectedItems(content);
   };
 
+  const isCurrentThemeDark = (): boolean => {
+    return (theme === 'dark' || theme === 'high-contrast');
+  }
+
+  const panelOverlayProps: IOverlayProps = {
+    styles: {
+      root: {
+        backgroundColor: isCurrentThemeDark() ? currentTheme.palette.blackTranslucent40 :
+          currentTheme.palette.whiteTranslucent40
+      }
+    }
+  }
+
   return (
     <>
       <Panel
@@ -76,6 +90,7 @@ const PathsReview = (props: IPathsReview) => {
         type={PanelType.large}
         onRenderFooterContent={renderFooterContent}
         closeButtonAriaLabel='Close'
+        overlayProps={panelOverlayProps}
       >
         <Label>
           <FormattedMessage id='Export list as a Postman collection message' />

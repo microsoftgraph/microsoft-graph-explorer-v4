@@ -36,17 +36,19 @@ const UnstyledResourceExplorer = (props: any) => {
   const { resources } = useAppSelector(
     (state) => state
   );
+
   const classes = classNames(props);
   const { data, pending, paths: selectedLinks } = resources;
-
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
   ];
 
+  const resourcesToUse = JSON.parse(JSON.stringify(data.children));
+
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');
-  const filteredPayload = getResourcesSupportedByVersion(data.children, version, searchText);
+  const filteredPayload = getResourcesSupportedByVersion(resourcesToUse, version, searchText);
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
 
   const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload);
