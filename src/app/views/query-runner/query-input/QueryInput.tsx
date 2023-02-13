@@ -61,18 +61,16 @@ const QueryInput = (props: IQueryInputProps) => {
   }
 
   const runQuery = () => {
-    if (!sampleQuery.sampleUrl) {
+    if (!sampleQuery.sampleUrl || sampleQuery.sampleUrl.indexOf('graph.microsoft.com') === -1) {
       return;
     }
-    // allows the state to be populated with the new url before running it
-    setTimeout(() => {
-      handleOnRunQuery();
-    }, 500);
+    handleOnRunQuery(sampleQuery);
   };
 
   const queryInputStackTokens: IStackTokens = {
     childrenGap: 7
   };
+
 
   return (
     <>

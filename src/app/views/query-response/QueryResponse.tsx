@@ -7,10 +7,12 @@ import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../store';
+import { telemetry } from '../../../telemetry';
+import { IQuery } from '../../../types/query-runner';
 import { expandResponseArea } from '../../services/actions/response-expanded-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
 import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
-import { GetPivotItems, onPivotItemClick } from './pivot-items/pivot-items';
+import { GetPivotItems } from './pivot-items/pivot-items';
 import './query-response.scss';
 import { queryResponseStyles } from './queryResponse.styles';
 
@@ -18,7 +20,7 @@ const QueryResponse = () => {
   const dispatch: AppDispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [responseHeight, setResponseHeight] = useState('610px');
-  const { sampleQuery, dimensions } = useAppSelector((state) => state);
+  const { sampleQuery, dimensions, snippets } = useAppSelector((state) => state);
   const [currentTab, setCurrentTab] = useState<string>('response-preview');
   const currentTheme: ITheme = getTheme();
   const { modalStyles, modalPivotStyles } = queryResponseStyles(currentTheme);
@@ -70,6 +72,17 @@ const QueryResponse = () => {
       queryResponseElements[0].scrollTop = 0;
     }
   }
+
+  const onPivotItemClick = (query: IQuery, item?: PivotItem) => {
+    if (!item) { return; }
+    const tabKey = item.props.itemKey;
+    if (tabKey) {
+      telemetry.trackTabClickEvent(tabKey, query);
+      if(snippets.snippetTab){
+        telemetry.trackTabClickEvent(snippets.snippetTab, query)
+      }
+    }
+  };
 
   return (
     <div style={flexQueryElement} >

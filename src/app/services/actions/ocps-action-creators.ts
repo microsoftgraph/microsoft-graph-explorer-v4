@@ -34,8 +34,6 @@ export function getPoliciesPending(): AppAction {
   };
 }
 
-
-// TODO: Test this function
 export function getPolicies() {
   return async (dispatch: Function) => {
     try {

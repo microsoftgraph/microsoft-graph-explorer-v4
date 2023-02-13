@@ -11,7 +11,7 @@ import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
 import { bulkAddHistoryItems } from './app/services/actions/request-history-action-creators';
-import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
+import { changeTheme, changeThemeSuccess } from './app/services/actions/theme-action-creator';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
 import { historyCache } from './modules/cache/history-utils';
@@ -26,24 +26,29 @@ import { loadGETheme } from './themes';
 import { readTheme } from './themes/theme-utils';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
-import { changeTheme } from './app/services/actions/theme-action-creator';
 import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
 
-// removes the loading spinner from GE html after the app is loaded
-const spinner = document.getElementById('spinner');
-if (spinner !== null) {
-  (spinner as any).parentElement.removeChild(spinner);
-}
-
-// removes the loading spinner from the portal team html after GE loads
-const apiExplorer = document.getElementsByTagName('api-explorer')[0];
-if (apiExplorer) {
-  (apiExplorer as any).parentElement.removeChild(apiExplorer);
-}
-
+const appRoot: HTMLElement = document.getElementById('root')!;
 initializeIcons();
 
 let currentTheme = readTheme() || 'light';
+export function removeSpinners() {
+  // removes the loading spinner from GE html after the app is loaded
+  const spinner = document.getElementById('spinner');
+  if (spinner !== null) {
+    (spinner as any).parentElement.removeChild(spinner);
+  }
+
+  // removes the loading spinner from the portal team html after GE loads
+  const apiExplorer = document.getElementsByTagName('api-explorer')[0];
+  if (apiExplorer) {
+    (apiExplorer as any).parentElement.removeChild(apiExplorer);
+  }
+
+  // makes appRoot visible
+  appRoot.classList.remove('hidden');
+}
+
 function setCurrentSystemTheme(): void {
   const themeFromLocalStorage = readTheme();
 
@@ -56,7 +61,7 @@ function setCurrentSystemTheme(): void {
   applyCurrentSystemTheme(currentTheme);
 }
 function getOSTheme(): string {
-  let currentSystemTheme: string = 'light';
+  let currentSystemTheme: string;
   const currentSystemThemeDark = window.matchMedia(
     '(prefers-color-scheme: dark)'
   );
@@ -166,6 +171,15 @@ function getWorkerFor(worker: string): string {
 const telemetryProvider: ITelemetry = telemetry;
 telemetryProvider.initialize();
 
+window.onerror = (message, url, lineNumber, columnNumber, error) => {
+  telemetry.trackException(error!, 0, {
+    message,
+    url,
+    lineNumber,
+    columnNumber
+  });
+}
+
 const Root = () => {
   return (
     <Provider store={appStore}>
@@ -178,5 +192,5 @@ const Root = () => {
     </Provider>
   );
 };
-const root = ReactDOM.createRoot(document.getElementById('root')!);
+const root = ReactDOM.createRoot(appRoot);
 root.render(<Root />);

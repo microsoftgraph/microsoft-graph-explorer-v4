@@ -12,6 +12,7 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      position: relative;
     }
 
     #spinner-text {
@@ -41,6 +42,10 @@
       border-color: #258ede transparent transparent transparent;
     }
 
+    #spinner p {
+      margin: 0;
+    }
+
     #lds-ring div:nth-child(1) {
       animation-delay: -0.45s;
     }
@@ -51,6 +56,16 @@
 
     #lds-ring div:nth-child(3) {
       animation-delay: -0.15s;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      border: 0;
     }
 
     @keyframes lds-ring {
@@ -77,7 +92,7 @@
     <p id="spinner-text">Loading Graph Explorer</p>
   </div>
   <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
+  <div id="root" class="hidden"></div>
 </body>
 
 </html>

@@ -68,7 +68,7 @@
   "modify permissions": "Modify permissions",
   "Save changes": "Save changes",
   "To change permissions, you will need to log-in again.": "To change permissions, you will need to log-in again.",
-  "all the items in my drive": "all the items in my drive",
+  "list items in my drive": "list items in my drive",
   "items trending around me": "items trending around me",
   "my direct reports": "my direct reports",
   "all users in the organization": "all users in the organization",
@@ -470,5 +470,6 @@
   "Permission propagation delay": "Permission propagation delay",
   "Scope consent successful": "Scope consent successful",
   "Query documentation": "Query documentation",
-  "This token is not a jwt token and cannot be decoded by jwt.ms": "This token is not a jwt token and cannot be decoded by jwt.ms"
+  "This token is not a jwt token and cannot be decoded by jwt.ms": "This token is not a jwt token and cannot be decoded by jwt.ms",
+  "The URL must contain graph.microsoft.com": "The URL must contain graph.microsoft.com"
 }

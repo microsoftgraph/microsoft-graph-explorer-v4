@@ -14,26 +14,25 @@ const HeadersList = ({
     const itemContent: any = headerStyles().itemContent;
     if (column) {
       const fieldContent = item[column.fieldName as keyof any] as string;
-      switch (column.key) {
-        case 'button':
-          return <div>
-            <IconButton
-              iconProps={{ iconName: 'Delete' }}
-              title={translateMessage('Remove request header')}
-              ariaLabel={translateMessage('Remove request header')}
-              onClick={() => handleOnHeaderDelete(item)}
-            />
-            <span style={{fontSize: 'large', position: 'relative', bottom: '3px'}}>|</span>
-            <IconButton
-              iconProps={{ iconName: 'Edit' }}
-              title={translateMessage('Edit request header')}
-              ariaLabel={translateMessage('Edit request header')}
-              onClick={() => handleOnHeaderEdit(item)}
-            />
-          </div>;
-
-        default:
-          return <div style={itemContent}>{fieldContent}</div>;
+      if(column.key === 'button') {
+        return <div>
+          <IconButton
+            iconProps={{ iconName: 'Delete' }}
+            title={translateMessage('Remove request header')}
+            ariaLabel={translateMessage('Remove request header')}
+            onClick={() => handleOnHeaderDelete(item)}
+          />
+          <span style={{fontSize: 'large', position: 'relative', bottom: '3px'}}>|</span>
+          <IconButton
+            iconProps={{ iconName: 'Edit' }}
+            title={translateMessage('Edit request header')}
+            ariaLabel={translateMessage('Edit request header')}
+            onClick={() => handleOnHeaderEdit(item)}
+          />
+        </div>;
+      }
+      else{
+        return <div style={itemContent}>{fieldContent}</div>;
       }
     }
   };

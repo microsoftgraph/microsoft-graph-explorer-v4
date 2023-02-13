@@ -141,6 +141,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
       case KeyCodes.escape:
         if (shouldShowSuggestions) {
+          props.contentChanged(queryUrl)
           setShouldShowSuggestions(false);
         }
         break;
@@ -197,7 +198,11 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
 
     if (filtered.length === 1 && filtered[0] === searchTerm) {
-      setShouldShowSuggestions(false);
+      appendSuggestionToUrl(searchTerm);
+    }
+
+    if(filtered.length === 0){
+      props.contentChanged(queryUrl);
     }
   }
 
