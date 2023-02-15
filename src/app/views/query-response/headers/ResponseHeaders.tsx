@@ -12,7 +12,7 @@ const ResponseHeaders = () => {
     useAppSelector((state) => state);
   const { headers } = graphResponse;
 
-  const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 100);
+  const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 135);
 
   const handleCopy = async () => trackedGenericCopy(JSON.stringify(headers), RESPONSE_HEADERS_COPY_BUTTON, sampleQuery)
 

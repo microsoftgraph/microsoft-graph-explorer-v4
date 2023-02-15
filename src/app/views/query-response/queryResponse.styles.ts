@@ -1,6 +1,13 @@
 import { ITheme } from '@fluentui/react';
+import { useAppSelector } from '../../../store';
+import { convertVhToPx, getResponseHeight } from '../common/dimensions/dimensions-adjustment';
 
 export const queryResponseStyles = (theme: ITheme) => {
+  const { dimensions: { response }, responseAreaExpanded} =
+    useAppSelector((state) => state);
+
+  const height = convertVhToPx(getResponseHeight( response.height, responseAreaExpanded), 175);
+
   return {
     dot: {
       height: '8px',
@@ -21,7 +28,7 @@ export const queryResponseStyles = (theme: ITheme) => {
       color: `${theme.palette.blueMid} !important`
     },
     card: {
-      height: '450px',
+      height,
       overflowY: 'auto'
     },
     copyIcon: {
