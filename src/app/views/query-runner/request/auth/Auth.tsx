@@ -25,6 +25,17 @@ export function Auth(props: any) {
   };
 
   useEffect(() => {
+    const accessTokensTabDiv = document.getElementById('access-tokens-tab');
+    if (accessTokensTabDiv) {
+      accessTokensTabDiv.addEventListener('keydown', (event: KeyboardEvent) => {
+        if (event && (event.ctrlKey || event.metaKey) && event.key === 'c') {
+          console.log('It was pressed ');
+        }
+      })
+    }
+  }, [authToken])
+
+  useEffect(() => {
     setLoading(true);
     authenticationWrapper.getToken().then((response: AuthenticationResult) => {
       setAccessToken(response.accessToken);
@@ -62,7 +73,7 @@ export function Auth(props: any) {
             target='_blank'
           />
         </div>
-        <Label className={classes.accessToken} >{accessToken}</Label>
+        <Label className={classes.accessToken} id='access-tokens-tab' tabIndex={0}>{accessToken}</Label>
       </div>
       :
       <Label className={classes.emptyStateLabel}>
