@@ -25,17 +25,6 @@ export function Auth(props: any) {
   };
 
   useEffect(() => {
-    const accessTokensTabDiv = document.getElementById('access-tokens-tab');
-    if (accessTokensTabDiv) {
-      accessTokensTabDiv.addEventListener('keydown', (event: KeyboardEvent) => {
-        if (event && (event.ctrlKey || event.metaKey) && event.key === 'c') {
-          console.log('It was pressed ');
-        }
-      })
-    }
-  }, [authToken])
-
-  useEffect(() => {
     setLoading(true);
     authenticationWrapper.getToken().then((response: AuthenticationResult) => {
       setAccessToken(response.accessToken);
