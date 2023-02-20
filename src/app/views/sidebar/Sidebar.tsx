@@ -15,7 +15,7 @@ import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';
 import SampleQueries from './sample-queries/SampleQueries';
 import { sidebarStyles } from './Sidebar.styles';
-import { SuspenseLoader } from '../common/suspense-loader/SuspenseLoader';
+import { SuspenseLoader } from '../common/lazy-loader/suspense-loader/SuspenseLoader';
 
 interface ISidebar {
   currentTab: string;

@@ -16,7 +16,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { RequestBody } from './body';
 import './request.scss';
-import { SuspenseLoader } from '../../common/suspense-loader/SuspenseLoader';
+import { SuspenseLoader } from '../../common/lazy-loader/suspense-loader/SuspenseLoader';
 
 const Permission = lazy(() => import('./permissions'));
 const Auth = lazy(() => import('./auth'));

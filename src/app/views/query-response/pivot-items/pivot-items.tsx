@@ -12,7 +12,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
-import { SuspenseLoader } from '../../common/suspense-loader/SuspenseLoader';
+import { SuspenseLoader } from '../../common/lazy-loader/suspense-loader/SuspenseLoader';
 
 const AdaptiveCard = lazy(() => import('../adaptive-cards/AdaptiveCard'));
 const GraphToolkit = lazy(() => import('../graph-toolkit/GraphToolkit'));

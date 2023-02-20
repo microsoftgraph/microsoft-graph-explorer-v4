@@ -11,7 +11,7 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { copy } from '../../../common/copy';
 import { createShareLink } from '../../../common/share';
 import { shareQueryStyles } from './ShareQuery.styles';
-import { SuspenseLoader } from '../../../common/suspense-loader/SuspenseLoader';
+import { SuspenseLoader } from '../../../common/lazy-loader/suspense-loader/SuspenseLoader';
 
 const CopyButton = lazy(() => import('../../../common/copy-button'))
 

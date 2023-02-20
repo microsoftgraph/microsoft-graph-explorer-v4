@@ -4,7 +4,7 @@ import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { useAppSelector } from '../../../store';
-import { SuspenseLoader } from '../common/suspense-loader/SuspenseLoader';
+import { SuspenseLoader } from '../common/lazy-loader/suspense-loader/SuspenseLoader';
 
 const FeedbackForm = lazy(() => import('../query-runner/request/feedback/FeedbackForm'))
 

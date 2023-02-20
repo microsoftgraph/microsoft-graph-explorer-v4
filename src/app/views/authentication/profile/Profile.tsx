@@ -2,7 +2,7 @@ import {
   ActionButton, Callout, FontSizes, getTheme, IPersonaProps, IPersonaSharedProps, mergeStyleSets,
   Persona, PersonaSize, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
-import { lazy, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useId } from '@fluentui/react-hooks';
 
@@ -15,9 +15,8 @@ import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
 import { Mode } from '../../../../types/enums';
 import { AppDispatch, useAppSelector } from '../../../../store';
-import { SuspenseLoader } from '../../common/suspense-loader/SuspenseLoader';
+import { Permission } from '../../common/lazy-loader/component-registry';
 
-const Permission = lazy(() => import('../../query-runner/request/permissions'))
 
 const getInitials = (name: string) => {
   let initials = '';
@@ -168,9 +167,7 @@ const Profile = (props: any) => {
     <div className={classes.profile} style={profileContainerStyles}>
       {showProfileComponent(persona)}
       {permissionsPanelOpen &&
-      <SuspenseLoader>
         <Permission panel={true} />
-      </SuspenseLoader>
       }
     </div>
   );

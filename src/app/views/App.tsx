@@ -34,7 +34,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
 import { MainHeader } from './main-header/MainHeader';
-import { SuspenseLoader } from './common/suspense-loader/SuspenseLoader';
+import { SuspenseLoader } from './common/lazy-loader/suspense-loader/SuspenseLoader';
 import { removeSpinners } from '../..';
 
 export interface IAppProps {
