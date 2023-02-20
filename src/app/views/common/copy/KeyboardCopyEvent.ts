@@ -18,14 +18,14 @@ export const KeyboardCopyEvent = () => {
     const targetIds = targets.map((target: EventTarget) => {
       return getTargetId(target);
     });
-    const filteredTargetIds = targetIds!.filter((value) => value !== null)!;
+    const filteredTargetIds = targetIds.filter((value) => value !== null)!;
     const componentName = Object.keys(componentList).find(key => filteredTargetIds.includes(key));
     return componentName || '';
   }
 
   const getTargetId = (target: EventTarget) => {
     if(target && target instanceof Element) {
-      return (target as Element).getAttribute('id');
+      return target.getAttribute('id');
     }
   }
 
