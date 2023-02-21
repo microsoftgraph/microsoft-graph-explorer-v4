@@ -78,7 +78,6 @@ export const LazySnippets = (props?: any) => {
 }
 
 export const LazyCopyButton = (props?: any) => {
-
   return (
     <SuspenseLoader>
       <CopyButton {...props} />
@@ -87,7 +86,6 @@ export const LazyCopyButton = (props?: any) => {
 }
 
 export const LazyAuth = (props?: any) => {
-
   return (
     <SuspenseLoader>
       <Auth {...props} />
@@ -96,7 +94,6 @@ export const LazyAuth = (props?: any) => {
 }
 
 export const LazyRequstHeaders = (props?: any) => {
-
   return (
     <SuspenseLoader>
       <RequestHeaders {...props} />
@@ -105,7 +102,6 @@ export const LazyRequstHeaders = (props?: any) => {
 }
 
 export const LazyHistory = (props?: any) => {
-
   return (
     <SuspenseLoader>
       <History {...props} />

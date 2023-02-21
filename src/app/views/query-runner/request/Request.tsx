@@ -3,7 +3,7 @@ import {
   Pivot,
   PivotItem
 } from '@fluentui/react';
-import { useState, CSSProperties, useEffect } from 'react';
+import { useState, CSSProperties } from 'react';
 import { Resizable } from 're-resizable';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
@@ -16,7 +16,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { RequestBody } from './body';
 import './request.scss';
-import * as LazyComponents from '../../common/lazy-loader/component-registry/registry';
+import { LazyPermission, LazyAuth, LazyRequstHeaders } from '../../common/lazy-loader/component-registry/registry';
 
 const Request = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
@@ -30,8 +30,6 @@ const Request = (props: any) => {
     handleOnEditorChange,
     intl: { messages }
   }: any = props;
-
-  const { LazyPermission, LazyAuth, LazyRequstHeaders } = LazyComponents;
 
 
   const getPivotItems = (height: string) => {
