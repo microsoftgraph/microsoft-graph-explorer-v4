@@ -157,7 +157,7 @@ const AdaptiveCard = (props: any) => {
               'aria-controls': 'json-schema-tab'
             }}
           >
-            <div id={'json-schema-tab'} tabIndex={0}>
+            <div id={'JSON-schema-tab'} tabIndex={0}>
               <MessageBar messageBarType={MessageBarType.info}>
                 <FormattedMessage id='Get started with adaptive cards on' />
                 <Link href={'https://learn.microsoft.com/en-us/adaptive-cards/templating/sdk'}

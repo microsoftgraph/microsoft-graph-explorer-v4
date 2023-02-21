@@ -56,7 +56,7 @@ export const KEYBOARD_COPY_TABS = {
   'javascript-tab': 'Javascript tab',
   'go-tab': 'Go tab',
   'powershell-tab': 'Powershell tab',
-  'json-schema-tab': 'JSON schema tab',
+  'JSON-schema-tab': 'JSON schema tab',
   'request-body-tab': 'Request body tab'
 }
 
