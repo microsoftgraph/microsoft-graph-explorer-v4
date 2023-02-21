@@ -1,12 +1,10 @@
 import { getTheme, IButton, IconButton, IIconProps, TooltipHost } from '@fluentui/react';
-import { useState, useEffect, useRef, lazy } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { useAppSelector } from '../../../store';
-import { SuspenseLoader } from '../common/lazy-loader/suspense-loader/SuspenseLoader';
-
-const FeedbackForm = lazy(() => import('../query-runner/request/feedback/FeedbackForm'))
+import { LazyFeedbackForm } from '../common/lazy-loader/component-registry';
 
 export const FeedbackButton = () => {
   const [enableSurvey, setEnableSurvey] = useState(false);
@@ -82,10 +80,8 @@ export const FeedbackButton = () => {
             componentRef={feedbackButtonRef}
           />
         </TooltipHost>
-        <SuspenseLoader>
-          <FeedbackForm onDismissSurvey={disableSurvey}
-            activated={enableSurvey} onDisableSurvey={disableSurvey} />
-        </SuspenseLoader>
+        <LazyFeedbackForm onDismissSurvey={disableSurvey}
+          activated={enableSurvey} onDisableSurvey={disableSurvey} />
       </div>
       }
     </div>

@@ -17,11 +17,7 @@ import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions
 import { RequestBody } from './body';
 import './request.scss';
 import { SuspenseLoader } from '../../common/lazy-loader/suspense-loader/SuspenseLoader';
-
-const Permission = lazy(() => import('./permissions'));
-const Auth = lazy(() => import('./auth'));
-const RequestHeaders = lazy(() => import('./headers'));
-
+import { LazyPermission, LazyAuth, LazyRequstHeaders } from '../../common/lazy-loader/component-registry';
 
 const Request = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
@@ -71,11 +67,9 @@ const Request = (props: any) => {
           'aria-controls': 'request-header-tab'
         }}
       >
-        <SuspenseLoader>
-          <div style={containerStyle} id={'request-header-tab'}>
-            <RequestHeaders />
-          </div>
-        </SuspenseLoader>
+        <div style={containerStyle} id={'request-header-tab'}>
+          <LazyRequstHeaders />
+        </div>
       </PivotItem>,
       <PivotItem
         key='modify-permissions'
@@ -87,11 +81,9 @@ const Request = (props: any) => {
           'aria-controls': 'permission-tab'
         }}
       >
-        <SuspenseLoader>
-          <div style={containerStyle} id={'permission-tab'}>
-            <Permission />
-          </div>
-        </SuspenseLoader>
+        <div style={containerStyle} id={'permission-tab'}>
+          <LazyPermission />
+        </div>
       </PivotItem>
     ];
     if (mode === Mode.Complete) {
@@ -105,12 +97,10 @@ const Request = (props: any) => {
           headerButtonProps={{
             'aria-controls': 'access-token-tab'
           }}>
-          <SuspenseLoader>
-            <div style={containerStyle} id={'access-token-tab'}>
-              <Auth />
-            </div>
-          </SuspenseLoader>
-        </PivotItem>,
+          <div style={containerStyle} id={'access-token-tab'}>
+            <LazyAuth />
+          </div>
+        </PivotItem>
       );
     }
 

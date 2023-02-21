@@ -34,8 +34,8 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
 import { MainHeader } from './main-header/MainHeader';
-import { SuspenseLoader } from './common/lazy-loader/suspense-loader/SuspenseLoader';
 import { removeSpinners } from '../..';
+import { LazyStatusMessages } from './common/lazy-loader/component-registry'
 
 export interface IAppProps {
   theme?: ITheme;
@@ -63,8 +63,6 @@ interface IAppState {
   hideDialog: boolean;
   sidebarTabSelection: string;
 }
-
-const StatusMessages = lazy(() => import('./app-sections/StatusMessages'));
 
 class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
@@ -472,11 +470,9 @@ class App extends Component<IAppProps, IAppState> {
                 <div style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                 }}>
-                  <SuspenseLoader>
-                    <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                      <StatusMessages />
-                    </div>
-                  </SuspenseLoader>
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
+                    <LazyStatusMessages />
+                  </div>
                   <QueryResponse verb={this.state.selectedVerb} />
                 </div>
               </Resizable>

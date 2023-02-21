@@ -1,5 +1,4 @@
 import { getTheme, IPivotItemProps, ITheme, PivotItem } from '@fluentui/react';
-import { lazy } from 'react';
 import { useAppSelector } from '../../../../store';
 
 import { componentNames } from '../../../../telemetry';
@@ -12,12 +11,8 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
-import { SuspenseLoader } from '../../common/lazy-loader/suspense-loader/SuspenseLoader';
-
-const AdaptiveCard = lazy(() => import('../adaptive-cards/AdaptiveCard'));
-const GraphToolkit = lazy(() => import('../graph-toolkit/GraphToolkit'));
-const ResponseHeaders = lazy(() => import('../headers'));
-const Snippets = lazy(() => import('../snippets'));
+import { LazyAdaptiveCards, LazyGraphToolkit, LazyResponseHeaders,
+  LazySnippets } from '../../common/lazy-loader/component-registry';
 
 export const GetPivotItems = () => {
 
@@ -89,9 +84,7 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-headers-tab'
       }}
     >
-      <SuspenseLoader>
-        <div id={'response-headers-tab'}><ResponseHeaders /></div>
-      </SuspenseLoader>
+      <div id={'response-headers-tab'}><LazyResponseHeaders /></div>
     </PivotItem>
   ];
   if (mode === Mode.Complete) {
@@ -107,9 +100,7 @@ export const GetPivotItems = () => {
           'aria-controls': 'code-snippets-tab'
         }}
       >
-        <SuspenseLoader>
-          <div id={'code-snippets-tab'}><Snippets /></div>
-        </SuspenseLoader>
+        <div id={'code-snippets-tab'}><LazySnippets /></div>
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'
@@ -123,9 +114,7 @@ export const GetPivotItems = () => {
           'aria-controls': 'toolkit-tab'
         }}
       >
-        <SuspenseLoader>
-          <div id={'toolkit-tab'}><GraphToolkit /></div>
-        </SuspenseLoader>
+        <div id={'toolkit-tab'}><LazyGraphToolkit /></div>
       </PivotItem>,
       <PivotItem
         key='adaptive-cards'
@@ -139,19 +128,17 @@ export const GetPivotItems = () => {
           'aria-controls': 'adaptive-cards-tab'
         }}
       >
-        <SuspenseLoader>
-          <ThemeContext.Consumer >
-            {(theme) => (
-              // @ts-ignore
-              <div id={'adaptive-cards-tab'}>
-                <AdaptiveCard
-                  body={body}
-                  hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
-                />
-              </div>
-            )}
-          </ThemeContext.Consumer>
-        </SuspenseLoader>
+        <ThemeContext.Consumer >
+          {(theme) => (
+            // @ts-ignore
+            <div id={'adaptive-cards-tab'}>
+              <LazyAdaptiveCards
+                body={body}
+                hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
+              />
+            </div>
+          )}
+        </ThemeContext.Consumer>
       </PivotItem>
     );
   }

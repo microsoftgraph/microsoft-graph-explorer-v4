@@ -2,7 +2,7 @@ import {
   DefaultButton, Dialog, DialogFooter, DialogType, DirectionalHint, FontSizes,
   IconButton, IIconProps, TooltipHost
 } from '@fluentui/react';
-import { lazy, useState } from 'react';
+import { useState } from 'react';
 import { useAppSelector } from '../../../../../store';
 
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
@@ -11,9 +11,7 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { copy } from '../../../common/copy';
 import { createShareLink } from '../../../common/share';
 import { shareQueryStyles } from './ShareQuery.styles';
-import { SuspenseLoader } from '../../../common/lazy-loader/suspense-loader/SuspenseLoader';
-
-const CopyButton = lazy(() => import('../../../common/copy-button'))
+import { LazyCopyButton } from '../../../common/lazy-loader/component-registry';
 
 export const ShareQuery = () => {
   const { sampleQuery } = useAppSelector((state) => state);
@@ -93,9 +91,7 @@ export const ShareQuery = () => {
           aria-label={translateMessage('Share Query')}
         />
         <DialogFooter>
-          <SuspenseLoader>
-            <CopyButton handleOnClick={handleCopy} isIconButton={false} />
-          </SuspenseLoader>
+          <LazyCopyButton handleOnClick={handleCopy} isIconButton={false} />
           <DefaultButton
             text={translateMessage('Close')}
             onClick={toggleShareQueryDialogState}

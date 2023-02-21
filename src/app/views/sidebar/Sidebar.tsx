@@ -9,13 +9,11 @@ import {
   TooltipDelay,
   TooltipHost
 } from '@fluentui/react';
-import { lazy } from 'react';
-
 import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';
 import SampleQueries from './sample-queries/SampleQueries';
 import { sidebarStyles } from './Sidebar.styles';
-import { SuspenseLoader } from '../common/lazy-loader/suspense-loader/SuspenseLoader';
+import { LazyHistory, LazyResourceExplorer } from '../common/lazy-loader/component-registry';
 
 interface ISidebar {
   currentTab: string;
@@ -25,8 +23,6 @@ interface ISidebar {
   mobileScreen: boolean;
 }
 
-const History = lazy(() => import('./history/History'));
-const ResourceExplorer = lazy(() => import('./resource-explorer'));
 export const Sidebar = (props: ISidebar) => {
   const theme = getTheme();
   const styles = sidebarStyles(theme).sidebarButtons;
@@ -70,9 +66,7 @@ export const Sidebar = (props: ISidebar) => {
               'aria-controls': 'resources-tab'
             }}
           >
-            <SuspenseLoader>
-              <div id={'resources-tab'}><ResourceExplorer /></div>
-            </SuspenseLoader>
+            <div id={'resources-tab'}><LazyResourceExplorer /></div>
           </PivotItem>
           <PivotItem
             headerText={translateMessage('History')}
@@ -82,9 +76,7 @@ export const Sidebar = (props: ISidebar) => {
               'aria-controls': 'history-tab'
             }}
           >
-            <SuspenseLoader>
-              <div id={'history-tab'}><History /></div>
-            </SuspenseLoader>
+            <div id={'history-tab'}><LazyHistory /></div>
           </PivotItem>
         </Pivot>
       }

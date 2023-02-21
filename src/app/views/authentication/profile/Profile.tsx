@@ -15,7 +15,7 @@ import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
 import { Mode } from '../../../../types/enums';
 import { AppDispatch, useAppSelector } from '../../../../store';
-import { Permission } from '../../common/lazy-loader/component-registry';
+import { LazyPermission } from '../../common/lazy-loader/component-registry';
 
 
 const getInitials = (name: string) => {
@@ -167,7 +167,7 @@ const Profile = (props: any) => {
     <div className={classes.profile} style={profileContainerStyles}>
       {showProfileComponent(persona)}
       {permissionsPanelOpen &&
-        <Permission panel={true} />
+        <LazyPermission panel={true} />
       }
     </div>
   );
