@@ -53,9 +53,9 @@ export const KEYBOARD_COPY_TABS = {
   'response-headers-tab': 'Response headers tab',
   'csharp-tab': 'Csharp tab',
   'java-tab': 'Java tab',
-  'javascript-tab': 'JavaScript tab',
+  'javascript-tab': 'Javascript tab',
   'go-tab': 'Go tab',
-  'powershell-tab': 'PowerShell tab',
+  'powershell-tab': 'Powershell tab',
   'json-schema-tab': 'JSON schema tab',
   'request-body-tab': 'Request body tab'
 }
