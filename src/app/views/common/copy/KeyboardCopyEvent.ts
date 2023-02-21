@@ -7,7 +7,7 @@ interface IComponentList {
 export const KeyboardCopyEvent = () => {
   const componentList: IComponentList = KEYBOARD_COPY_TABS;
   document.addEventListener('keydown', (event: KeyboardEvent) => {
-    if (event && (event.ctrlKey || event.metaKey) && event.key === 'c') {
+    if (event && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c') {
       const targets = event.composedPath();
       const componentName = getComponentName(targets);
       trackCopyEvent(componentName);
