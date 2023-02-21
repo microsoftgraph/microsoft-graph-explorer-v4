@@ -11,7 +11,7 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { copy } from '../../../common/copy';
 import { createShareLink } from '../../../common/share';
 import { shareQueryStyles } from './ShareQuery.styles';
-import { LazyCopyButton } from '../../../common/lazy-loader/component-registry';
+import { LazyCopyButton } from '../../../common/lazy-loader/component-registry/registry';
 
 export const ShareQuery = () => {
   const { sampleQuery } = useAppSelector((state) => state);

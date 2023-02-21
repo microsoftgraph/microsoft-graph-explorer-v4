@@ -35,7 +35,7 @@ import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
 import { MainHeader } from './main-header/MainHeader';
 import { removeSpinners } from '../..';
-import { LazyStatusMessages } from './common/lazy-loader/component-registry'
+import { LazyStatusMessages } from './common/lazy-loader/component-registry/registry'
 
 export interface IAppProps {
   theme?: ITheme;

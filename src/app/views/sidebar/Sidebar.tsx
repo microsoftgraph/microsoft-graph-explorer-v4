@@ -13,8 +13,7 @@ import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';
 import SampleQueries from './sample-queries/SampleQueries';
 import { sidebarStyles } from './Sidebar.styles';
-import { LazyHistory, LazyResourceExplorer } from '../common/lazy-loader/component-registry';
-
+import { LazyResourceExplorer, LazyHistory } from '../common/lazy-loader/component-registry/registry';
 interface ISidebar {
   currentTab: string;
   setSidebarTabSelection: Function;

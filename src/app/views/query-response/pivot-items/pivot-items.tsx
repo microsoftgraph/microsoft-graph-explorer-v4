@@ -12,7 +12,7 @@ import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/Ada
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
 import { LazyAdaptiveCards, LazyGraphToolkit, LazyResponseHeaders,
-  LazySnippets } from '../../common/lazy-loader/component-registry';
+  LazySnippets } from '../../common/lazy-loader/component-registry/registry';
 
 export const GetPivotItems = () => {
 

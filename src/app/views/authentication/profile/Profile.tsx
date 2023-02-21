@@ -15,7 +15,7 @@ import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
 import { Mode } from '../../../../types/enums';
 import { AppDispatch, useAppSelector } from '../../../../store';
-import { LazyPermission } from '../../common/lazy-loader/component-registry';
+import { LazyPermission } from '../../common/lazy-loader/component-registry/registry';
 
 
 const getInitials = (name: string) => {

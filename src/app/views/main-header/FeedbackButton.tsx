@@ -4,7 +4,7 @@ import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { useAppSelector } from '../../../store';
-import { LazyFeedbackForm } from '../common/lazy-loader/component-registry';
+import { LazyFeedbackForm } from '../common/lazy-loader/component-registry/registry';
 
 export const FeedbackButton = () => {
   const [enableSurvey, setEnableSurvey] = useState(false);
