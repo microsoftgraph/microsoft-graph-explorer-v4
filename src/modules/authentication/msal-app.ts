@@ -21,4 +21,5 @@ export const configuration: Configuration = {
   }
 };
 
+
 export const msalApplication = new PublicClientApplication(configuration);

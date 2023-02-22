@@ -20,6 +20,7 @@ import {
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
 import { authenticationWrapper } from '../../../modules/authentication';
+import { getAuthTokenSuccess, getConsentedScopesSuccess } from './auth-action-creators';
 
 export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
@@ -99,12 +100,15 @@ export function runQuery(query: IQuery) {
       }
     }
 
-    //handle claims here
     if(response && response.status === 401) {
       if(response.headers.get('www-authenticate')){
-        const tokenAvailable = await authenticationWrapper.handleClaimsChallenge(response, '', 'get');
-        if(tokenAvailable) {
-          dispatch(runQuery(query));
+        // eslint-disable-next-line max-len
+        const authResult = await authenticationWrapper.handleClaimsChallenge(response, query.sampleUrl, query.selectedVerb);
+        console.log('Query url is ', query.sampleUrl);
+        console.log('Something good ', authResult);
+        if(authResult) {
+          dispatch(getAuthTokenSuccess(!!authResult.accessToken))
+          dispatch(getConsentedScopesSuccess(authResult.scopes));
         }
       }
     }

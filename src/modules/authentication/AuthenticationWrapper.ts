@@ -308,32 +308,34 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     window.sessionStorage.clear();
   }
 
-  public async handleClaimsChallenge(response: any, endpoint: string, method: string ): Promise<boolean>{
+  public async handleClaimsChallenge(response: any, endpoint: string, method: string ): Promise<AuthenticationResult>{
     const account = this.getAccount();
     const authenticationHeader = response.headers.get('www-authenticate');
     const claimsChallenge = this.parseChallenges(authenticationHeader);
+    console.log('Account is ', account);
+    console.log('Auth header is ', authenticationHeader);
+    console.log('Claim challenge ', claimsChallenge);
 
     /**
      * Here we add the claims challenge to localStorage, using <cc.appId.userId.resource.method> scheme as key
      * This allows us to use the claim challenge string as a parameter in subsequent acquireTokenSilent calls
      * as MSAL will cache access tokens with different claims separately
      */
-    this.addClaimsToStorage(
+    if(account){
+      this.addClaimsToStorage(
       // eslint-disable-next-line max-len
-      `cc.${configuration.auth.clientId}.${account!.idTokenClaims!.oid}.${new URL(endpoint).hostname}.${method}`,
-      claimsChallenge.claims
-    );
+        `cc.${configuration.auth.clientId}.${account!.idTokenClaims!.oid}.${new URL(endpoint).hostname}.${method}`,
+        claimsChallenge.claims
+      );
+    }
 
+    // eslint-disable-next-line no-useless-catch
     try{
       const claims = window.atob(claimsChallenge.claims)
-      const tokenRespone = await this.loginWithInteraction([claimsChallenge.scope], '', claims);
-      if(tokenRespone.accessToken){
-        console.log('Tell user to make the call again or make the call for them by dispatching a new runQuery')
-        return true;
-      }
-      return false;
+      await this.logOut();
+      return await this.loginWithInteraction([], '', claims);
     }catch(error: any){
-      return false;
+      throw error;
     }
   }
 
