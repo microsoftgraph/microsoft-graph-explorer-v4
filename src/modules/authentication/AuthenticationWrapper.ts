@@ -1,7 +1,6 @@
 import {
   AccountInfo,
   AuthenticationResult,
-  BrowserAuthError,
   InteractionRequiredAuthError,
   PopupRequest,
   SilentRequest
@@ -155,21 +154,14 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
   }
 
-  private async getAuthResult(scopes: string[] = [], sessionId?: string): Promise<AuthenticationResult> {
-    const silentRequest: SilentRequest = {
-      scopes: scopes.length > 0 ? scopes : defaultScopes,
-      authority: this.getAuthority(),
-      account: this.getAccount(),
-      redirectUri: getCurrentUri()
-    };
+  private async getAuthResult(scopes: string[] = [], sessionId?: string):
+  Promise<AuthenticationResult> {
 
     try {
-      const result = await msalApplication.acquireTokenSilent(silentRequest);
-      this.storeHomeAccountId(result.account!);
-      return result;
+      return await this.loginSilently(scopes);
     } catch (error: any) {
       if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
-        return this.loginWithInteraction(silentRequest.scopes, sessionId);
+        return this.loginWithInteraction(scopes.length > 0 ? scopes : defaultScopes, sessionId);
 
       } else if (signInAuthError(error)) {
         this.deleteHomeAccountId();
@@ -178,6 +170,25 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       else {
         throw error;
       }
+    }
+  }
+
+  private async loginSilently(scopes: string[] = []): Promise<AuthenticationResult> {
+    const silentRequest: SilentRequest = {
+      scopes: scopes.length > 0 ? scopes : defaultScopes,
+      authority: this.getAuthority(),
+      account: this.getAccount(),
+      redirectUri: getCurrentUri()
+    };
+
+    // eslint-disable-next-line no-useless-catch
+    try{
+      const result = await msalApplication.acquireTokenSilent(silentRequest);
+      this.storeHomeAccountId(result.account!);
+      return result;
+    }
+    catch(error: any){
+      throw error;
     }
   }
 
@@ -193,7 +204,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return `${AUTH_URL}/${tenant}/`;
   }
 
-  private async loginWithInteraction(userScopes: string[], sessionId?: string) {
+  private async loginWithInteraction(userScopes: string[], sessionId?: string, claims?: string) {
     const popUpRequest: PopupRequest = {
       scopes: userScopes,
       authority: this.getAuthority(),
@@ -201,6 +212,10 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       redirectUri: getCurrentUri(),
       extraQueryParameters: { mkt: geLocale }
     };
+
+    if(claims){
+      popUpRequest.claims = claims;
+    }
 
     if (this.consentingToNewScopes) {
       delete popUpRequest.prompt;
@@ -293,7 +308,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     window.sessionStorage.clear();
   }
 
-  public async handleClaimsChallenge(response: any, endpoint: string, method: string ){
+  public async handleClaimsChallenge(response: any, endpoint: string, method: string ): Promise<boolean>{
     const account = this.getAccount();
     const authenticationHeader = response.headers.get('www-authenticate');
     const claimsChallenge = this.parseChallenges(authenticationHeader);
@@ -310,12 +325,15 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     );
 
     try{
-      const tokenRespone = await this.getAuthResult([claimsChallenge.scope]);
+      const claims = window.atob(claimsChallenge.claims)
+      const tokenRespone = await this.loginWithInteraction([claimsChallenge.scope], '', claims);
       if(tokenRespone.accessToken){
         console.log('Tell user to make the call again or make the call for them by dispatching a new runQuery')
+        return true;
       }
+      return false;
     }catch(error: any){
-      console.error(error);
+      return false;
     }
   }
 

@@ -19,6 +19,7 @@ import {
 } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
+import { authenticationWrapper } from '../../../modules/authentication';
 
 export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
@@ -94,6 +95,16 @@ export function runQuery(query: IQuery) {
           result = {
             contentDownloadUrl
           };
+        }
+      }
+    }
+
+    //handle claims here
+    if(response && response.status === 401) {
+      if(response.headers.get('www-authenticate')){
+        const tokenAvailable = await authenticationWrapper.handleClaimsChallenge(response, '', 'get');
+        if(tokenAvailable) {
+          dispatch(runQuery(query));
         }
       }
     }
