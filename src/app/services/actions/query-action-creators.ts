@@ -29,9 +29,11 @@ export function runQuery(query: IQuery) {
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query)
         .then(async (response: Response) => {
+          console.log('Good response is  ', response);
           await processResponse(response, respHeaders, dispatch, createdAt);
         })
         .catch(async (error: any) => {
+          console.log('Error is ', error);
           return handleError(dispatch, error);
         });
     }

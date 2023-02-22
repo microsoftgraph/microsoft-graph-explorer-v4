@@ -1,6 +1,7 @@
 import {
   AccountInfo,
   AuthenticationResult,
+  BrowserAuthError,
   InteractionRequiredAuthError,
   PopupRequest,
   SilentRequest
@@ -15,7 +16,7 @@ import { signInAuthError } from './authentication-error-hints';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './IAuthenticationWrapper';
-import { msalApplication } from './msal-app';
+import { configuration, msalApplication } from './msal-app';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 
@@ -290,5 +291,51 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     this.clearCache();
     this.deleteHomeAccountId();
     window.sessionStorage.clear();
+  }
+
+  public async handleClaimsChallenge(response: any, endpoint: string, method: string ){
+    const account = this.getAccount();
+    const authenticationHeader = response.headers.get('www-authenticate');
+    const claimsChallenge = this.parseChallenges(authenticationHeader);
+
+    /**
+     * Here we add the claims challenge to localStorage, using <cc.appId.userId.resource.method> scheme as key
+     * This allows us to use the claim challenge string as a parameter in subsequent acquireTokenSilent calls
+     * as MSAL will cache access tokens with different claims separately
+     */
+    this.addClaimsToStorage(
+      // eslint-disable-next-line max-len
+      `cc.${configuration.auth.clientId}.${account!.idTokenClaims!.oid}.${new URL(endpoint).hostname}.${method}`,
+      claimsChallenge.claims
+    );
+
+    try{
+      const tokenRespone = await this.getAuthResult([claimsChallenge.scope]);
+      if(tokenRespone.accessToken){
+        console.log('Tell user to make the call again or make the call for them by dispatching a new runQuery')
+      }
+    }catch(error: any){
+      console.error(error);
+    }
+  }
+
+  private parseChallenges(header: any){
+    interface IChallenge {
+      [key: string]: string;
+    }
+    const schemeSeparator = header.indexOf(' ');
+    const challenges: any = header.substring(schemeSeparator + 1).split(',');
+    const challengeMap: IChallenge = {};
+
+    challenges.forEach((challenge: string) => {
+      const [key, value] = challenge.split('=');
+      challengeMap[key.trim()] = window.decodeURI(value.replace(/['"]+/g, ''));
+    });
+
+    return challengeMap;
+  }
+
+  private addClaimsToStorage(claimsChallengeId: string, claimsChallenge: any){
+    sessionStorage.setItem(claimsChallengeId, claimsChallenge);
   }
 }
