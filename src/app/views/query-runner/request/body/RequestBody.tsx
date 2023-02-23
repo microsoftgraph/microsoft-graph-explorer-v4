@@ -8,7 +8,7 @@ const RequestBody = ({ handleOnEditorChange }: any) => {
   const { dimensions: { request: { height } }, sampleQuery } = useAppSelector((state) => state);
 
   return (
-    <FocusZone>
+    <FocusZone id='request-body-tab'>
       <Monaco
         body={sampleQuery.sampleBody}
         height={convertVhToPx(height, 60)}

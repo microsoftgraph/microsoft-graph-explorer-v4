@@ -73,7 +73,7 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-tab'
       }}
     >
-      <div id={'response-tab'}><Response /></div>
+      <div id={'response-tab'} tabIndex={0}><Response /></div>
     </PivotItem>,
     <PivotItem
       key='response-headers'
@@ -86,7 +86,7 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-headers-tab'
       }}
     >
-      <div id={'response-headers-tab'}><ResponseHeaders /></div>
+      <div id={'response-headers-tab'} tabIndex={0}><ResponseHeaders /></div>
     </PivotItem>
   ];
   if (mode === Mode.Complete) {
@@ -102,7 +102,7 @@ export const GetPivotItems = () => {
           'aria-controls': 'code-snippets-tab'
         }}
       >
-        <div id={'code-snippets-tab'}><Snippets /></div>
+        <div id={'code-snippets-tab'} tabIndex={0}><Snippets /></div>
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'
@@ -116,7 +116,7 @@ export const GetPivotItems = () => {
           'aria-controls': 'toolkit-tab'
         }}
       >
-        <div id={'toolkit-tab'}><GraphToolkit /></div>
+        <div id={'toolkit-tab'} tabIndex={0}><GraphToolkit /></div>
       </PivotItem>,
       <PivotItem
         key='adaptive-cards'
@@ -133,7 +133,7 @@ export const GetPivotItems = () => {
         <ThemeContext.Consumer >
           {(theme) => (
             // @ts-ignore
-            <div id={'adaptive-cards-tab'}>
+            <div id={'adaptive-cards-tab'} tabIndex={0}>
               <AdaptiveCard
                 body={body}
                 hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
