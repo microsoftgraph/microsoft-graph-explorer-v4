@@ -19,8 +19,6 @@ import {
 } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
-import { authenticationWrapper } from '../../../modules/authentication';
-import { getAuthTokenSuccess, getConsentedScopesSuccess } from './auth-action-creators';
 
 export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
@@ -31,11 +29,9 @@ export function runQuery(query: IQuery) {
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query)
         .then(async (response: Response) => {
-          console.log('Good response is  ', response);
           await processResponse(response, respHeaders, dispatch, createdAt);
         })
         .catch(async (error: any) => {
-          console.log('Error is ', error);
           return handleError(dispatch, error);
         });
     }
@@ -99,21 +95,22 @@ export function runQuery(query: IQuery) {
         }
       }
     }
+    dispatch(setQueryResponseStatus(status));
 
     if(response && response.status === 401) {
       if(response.headers.get('www-authenticate')){
-        // eslint-disable-next-line max-len
-        const authResult = await authenticationWrapper.handleClaimsChallenge(response, query.sampleUrl, query.selectedVerb);
-        console.log('Query url is ', query.sampleUrl);
-        console.log('Something good ', authResult);
-        if(authResult) {
-          dispatch(getAuthTokenSuccess(!!authResult.accessToken))
-          dispatch(getConsentedScopesSuccess(authResult.scopes));
-        }
+        dispatch(setQueryResponseStatus(
+          {
+            messageType: MessageBarType.error,
+            ok: false,
+            // eslint-disable-next-line max-len
+            status: `${response.status} - Additional authentication requirements must be satisfied through a claims challenge. https://learn.microsoft.com/en-us/azure/active-directory/develop/claims-challenge?tabs=dotnet`,
+            statusText: 'Unauthorized',
+            hint: 'Click here to re-authorize'
+          }
+        ))
       }
     }
-
-    dispatch(setQueryResponseStatus(status));
 
     return dispatch(
       queryResponse({

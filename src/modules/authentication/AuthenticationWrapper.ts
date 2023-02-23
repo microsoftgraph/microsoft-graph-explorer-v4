@@ -14,8 +14,8 @@ import {
 import { signInAuthError } from './authentication-error-hints';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
-import IAuthenticationWrapper from './IAuthenticationWrapper';
-import { configuration, msalApplication } from './msal-app';
+import IAuthenticationWrapper from './interfaces/IAuthenticationWrapper';
+import { msalApplication } from './msal-app';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 
@@ -204,7 +204,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return `${AUTH_URL}/${tenant}/`;
   }
 
-  private async loginWithInteraction(userScopes: string[], sessionId?: string, claims?: string) {
+  public async loginWithInteraction(userScopes: string[], sessionId?: string, claims?: string) {
     const popUpRequest: PopupRequest = {
       scopes: userScopes,
       authority: this.getAuthority(),
@@ -306,56 +306,5 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     this.clearCache();
     this.deleteHomeAccountId();
     window.sessionStorage.clear();
-  }
-
-  public async handleClaimsChallenge(response: any, endpoint: string, method: string ): Promise<AuthenticationResult>{
-    const account = this.getAccount();
-    const authenticationHeader = response.headers.get('www-authenticate');
-    const claimsChallenge = this.parseChallenges(authenticationHeader);
-    console.log('Account is ', account);
-    console.log('Auth header is ', authenticationHeader);
-    console.log('Claim challenge ', claimsChallenge);
-
-    /**
-     * Here we add the claims challenge to localStorage, using <cc.appId.userId.resource.method> scheme as key
-     * This allows us to use the claim challenge string as a parameter in subsequent acquireTokenSilent calls
-     * as MSAL will cache access tokens with different claims separately
-     */
-    if(account){
-      this.addClaimsToStorage(
-      // eslint-disable-next-line max-len
-        `cc.${configuration.auth.clientId}.${account!.idTokenClaims!.oid}.${new URL(endpoint).hostname}.${method}`,
-        claimsChallenge.claims
-      );
-    }
-
-    // eslint-disable-next-line no-useless-catch
-    try{
-      const claims = window.atob(claimsChallenge.claims)
-      await this.logOut();
-      return await this.loginWithInteraction([], '', claims);
-    }catch(error: any){
-      throw error;
-    }
-  }
-
-  private parseChallenges(header: any){
-    interface IChallenge {
-      [key: string]: string;
-    }
-    const schemeSeparator = header.indexOf(' ');
-    const challenges: any = header.substring(schemeSeparator + 1).split(',');
-    const challengeMap: IChallenge = {};
-
-    challenges.forEach((challenge: string) => {
-      const [key, value] = challenge.split('=');
-      challengeMap[key.trim()] = window.decodeURI(value.replace(/['"]+/g, ''));
-    });
-
-    return challengeMap;
-  }
-
-  private addClaimsToStorage(claimsChallengeId: string, claimsChallenge: any){
-    sessionStorage.setItem(claimsChallengeId, claimsChallenge);
   }
 }

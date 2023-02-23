@@ -1,4 +1,4 @@
-import { Link, MessageBar } from '@fluentui/react';
+import { Link, MessageBar, MessageBarType } from '@fluentui/react';
 import { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
@@ -6,16 +6,18 @@ import { useDispatch } from 'react-redux';
 import { IQuery } from '../../../types/query-runner';
 import { AppDispatch, useAppSelector } from '../../../store';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
-import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
+import { clearQueryStatus, setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
 import { GRAPH_URL } from '../../services/graph-constants';
 import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
+import { claimsChallenge } from '../../../modules/authentication';
+import { translateMessage } from '../../utils/translate-messages';
 
 const StatusMessages = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { queryRunnerStatus, sampleQuery } =
+  const { queryRunnerStatus, sampleQuery, graphResponse } =
     useAppSelector((state) => state);
 
   function displayStatusMessage(message: string, urls: any) {
@@ -51,6 +53,17 @@ const StatusMessages = () => {
     dispatch(setSampleQuery(query));
   }
 
+  const handleClaimsLink = async () => {
+    await claimsChallenge.handleClaimsChallenge(graphResponse.headers, sampleQuery);
+    if(claimsChallenge.getClaimsStatus()){
+      dispatch(setQueryResponseStatus({
+        messageBarType: MessageBarType.success,
+        statusText: 'Success',
+        status: translateMessage('You can now run the query again')
+      }))
+    }
+  }
+
   if (queryRunnerStatus) {
     const { messageType, statusText, status, duration, hint } = queryRunnerStatus;
     let urls: any = {};
@@ -59,6 +72,11 @@ const StatusMessages = () => {
     if (extractedUrls) {
       message = replaceLinks(status.toString());
       urls = convertArrayToObject(extractedUrls);
+    }
+
+    let actionLink = null ;
+    if(hint === 'Click here to re-authorize'){
+      actionLink = <Link onClick={handleClaimsLink} underline>{hint}</Link>
     }
 
     return <MessageBar messageBarType={messageType}
@@ -80,7 +98,7 @@ const StatusMessages = () => {
         <FormattedMessage id='tab' />
       </>}
 
-      {hint && <div>{hint}</div>}
+      {hint && actionLink ? <div>{actionLink}</div> : <div>{hint}</div>}
 
     </MessageBar>;
   }
