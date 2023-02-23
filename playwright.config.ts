@@ -30,6 +30,7 @@ const config: PlaywrightTestConfig = {
   projects: [
     {
       name: 'Chrome',
+      testIgnore: './src/tests/accessibility',
       use: {
         channel: 'chrome',
         viewport: { width: 1920, height: 1080 }}
