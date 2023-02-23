@@ -14,7 +14,7 @@ const config: PlaywrightTestConfig = {
   use: {
     baseURL,
     trace: 'on-first-retry',
-    headless: true,
+    headless: !!process.env.CI,
     ignoreHTTPSErrors: true,
     screenshot: 'only-on-failure'
   },
@@ -25,7 +25,7 @@ const config: PlaywrightTestConfig = {
       { outputFolder: 'playwright-report' }
     ]
   ],
-  //retries: 1,
+  retries: 1,
   timeout: 60000,
   projects: [
     {
