@@ -1,5 +1,5 @@
 require('dotenv').config();
-import type { PlaywrightTestConfig } from '@playwright/test';
+import { PlaywrightTestConfig } from '@playwright/test';
 
 const baseURL = process.env.PLAYWRIGHT_TESTS_BASE_URL!;
 
@@ -14,7 +14,7 @@ const config: PlaywrightTestConfig = {
   use: {
     baseURL,
     trace: 'on-first-retry',
-    headless: !!process.env.CI,
+    headless: true,
     ignoreHTTPSErrors: true,
     screenshot: 'only-on-failure'
   },
@@ -25,7 +25,21 @@ const config: PlaywrightTestConfig = {
       { outputFolder: 'playwright-report' }
     ]
   ],
-  retries: 1,
-  timeout: 60000
+  //retries: 1,
+  timeout: 60000,
+  projects: [
+    {
+      name: 'Chrome',
+      use: {
+        channel: 'chrome',
+        viewport: { width: 1920, height: 1080 }}
+    },
+    {
+      name: 'Ms-Edge',
+      use: {
+        channel: 'msedge',
+        viewport: { width: 1366, height: 768 }}
+    }
+  ]
 };
 export default config;
