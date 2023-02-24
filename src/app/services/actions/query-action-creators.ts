@@ -19,6 +19,7 @@ import {
 } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
+import { claimsChallenge } from '../../../modules/authentication';
 
 export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
@@ -99,6 +100,11 @@ export function runQuery(query: IQuery) {
 
     if(response && response.status === 401) {
       if(response.headers.get('www-authenticate')){
+        // TODO:
+        // check if there is a claims string on localstorage, do an acquireTokenSilent without alerting the user
+
+
+        claimsChallenge.handleClaimsChallenge(respHeaders, query);
         dispatch(setQueryResponseStatus(
           {
             messageType: MessageBarType.error,

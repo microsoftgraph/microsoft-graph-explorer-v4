@@ -12,12 +12,12 @@ import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
-import { claimsChallenge } from '../../../modules/authentication';
+import { authenticationWrapper, claimsChallenge } from '../../../modules/authentication';
 import { translateMessage } from '../../utils/translate-messages';
 
 const StatusMessages = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { queryRunnerStatus, sampleQuery, graphResponse } =
+  const { queryRunnerStatus, sampleQuery } =
     useAppSelector((state) => state);
 
   function displayStatusMessage(message: string, urls: any) {
@@ -54,7 +54,7 @@ const StatusMessages = () => {
   }
 
   const handleClaimsLink = async () => {
-    await claimsChallenge.handleClaimsChallenge(graphResponse.headers, sampleQuery);
+    await authenticationWrapper.logIn('', sampleQuery);
     if(claimsChallenge.getClaimsStatus()){
       dispatch(setQueryResponseStatus({
         messageBarType: MessageBarType.success,

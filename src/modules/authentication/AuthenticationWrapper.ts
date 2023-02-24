@@ -15,13 +15,21 @@ import { signInAuthError } from './authentication-error-hints';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './interfaces/IAuthenticationWrapper';
-import { msalApplication } from './msal-app';
+import { configuration, msalApplication } from './msal-app';
+import { claimsChallenge } from '.';
+import { IQuery } from '../../types/query-runner';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 
 export class AuthenticationWrapper implements IAuthenticationWrapper {
   private static instance: AuthenticationWrapper;
   private consentingToNewScopes: boolean = false;
+  private sampleQuery: IQuery = {
+    sampleUrl: '',
+    selectedVerb: '',
+    selectedVersion: '',
+    sampleHeaders: []
+  };
 
   public static getInstance(): AuthenticationWrapper {
     if (!AuthenticationWrapper.instance) {
@@ -39,7 +47,10 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return null;
   }
 
-  public async logIn(sessionId = ''): Promise<AuthenticationResult> {
+  public async logIn(sessionId = '', sampleQuery?: IQuery): Promise<AuthenticationResult> {
+    if(sampleQuery){
+      this.sampleQuery = sampleQuery;
+    }
     this.consentingToNewScopes = false;
     // eslint-disable-next-line no-useless-catch
     try {
@@ -125,8 +136,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   public async getToken() {
     const silentRequest: SilentRequest = {
-      scopes: defaultScopes, authority: this.getAuthority(),
-      account: this.getAccount(), redirectUri: getCurrentUri()
+      scopes: defaultScopes,
+      authority: this.getAuthority(),
+      account: this.getAccount(),
+      redirectUri: getCurrentUri(),
+      claims: this.getClaims()
     };
     const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
     return response;
@@ -178,7 +192,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       scopes: scopes.length > 0 ? scopes : defaultScopes,
       authority: this.getAuthority(),
       account: this.getAccount(),
-      redirectUri: getCurrentUri()
+      redirectUri: getCurrentUri(),
+      claims: this.getClaims()
     };
 
     // eslint-disable-next-line no-useless-catch
@@ -189,6 +204,18 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
     catch(error: any){
       throw error;
+    }
+  }
+
+  private getClaims(): string | undefined {
+    const account = this.getAccount();
+    // eslint-disable-next-line max-len
+    if (account && claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account!.idTokenClaims!.oid}.${this.sampleQuery.sampleUrl}.${this.sampleQuery.selectedVerb}`)){
+      // eslint-disable-next-line max-len
+      return window.atob(claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account!.idTokenClaims!.oid}.${this.sampleQuery.sampleUrl}.${this.sampleQuery.selectedVerb}`)!);
+    }
+    else{
+      return undefined;
     }
   }
 
@@ -204,18 +231,15 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return `${AUTH_URL}/${tenant}/`;
   }
 
-  public async loginWithInteraction(userScopes: string[], sessionId?: string, claims?: string) {
+  private async loginWithInteraction(userScopes: string[], sessionId?: string) {
     const popUpRequest: PopupRequest = {
       scopes: userScopes,
       authority: this.getAuthority(),
       prompt: 'select_account',
       redirectUri: getCurrentUri(),
-      extraQueryParameters: { mkt: geLocale }
+      extraQueryParameters: { mkt: geLocale },
+      claims: this.getClaims()
     };
-
-    if(claims){
-      popUpRequest.claims = claims;
-    }
 
     if (this.consentingToNewScopes) {
       delete popUpRequest.prompt;
@@ -230,6 +254,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     try {
       const result = await msalApplication.loginPopup(popUpRequest);
       this.storeHomeAccountId(result.account!);
+      console.log('Auth result is ', result);
       return result;
     } catch (error: any) {
       const { errorCode } = error;

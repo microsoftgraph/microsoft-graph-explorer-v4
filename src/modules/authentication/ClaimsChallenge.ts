@@ -25,21 +25,9 @@ export class ClaimsChallenge implements IClaimsChallenge {
     if (account) {
       this.addClaimsToStorage(
         // eslint-disable-next-line max-len
-        `cc.${configuration.auth.clientId}.${account!.idTokenClaims!.oid}.${new URL(sampleQuery.sampleUrl).hostname}.${sampleQuery.selectedVerb}`,
+        `cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${sampleQuery.sampleUrl}.${sampleQuery.selectedVerb}`,
         claimsChallenge.claims
       );
-    }
-
-    // eslint-disable-next-line no-useless-catch
-    try {
-      const claims = window.atob(claimsChallenge.claims)
-      await authenticationWrapper.logOut();
-      const authResponse = await authenticationWrapper.loginWithInteraction([], '', claims);
-      if(authResponse){
-        ClaimsChallenge.claimsStatus = true;
-      }
-    } catch (error: any) {
-      throw error;
     }
   }
 
@@ -61,6 +49,10 @@ export class ClaimsChallenge implements IClaimsChallenge {
 
   private addClaimsToStorage(claimsChallengeId: string, claimsChallenge: string) {
     sessionStorage.setItem(claimsChallengeId, claimsChallenge);
+  }
+
+  public getClaimsFromStorage(claimsChallengeId: string){
+    return sessionStorage.getItem(claimsChallengeId);
   }
 
   public getClaimsStatus(){
