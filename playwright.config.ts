@@ -29,17 +29,10 @@ const config: PlaywrightTestConfig = {
   timeout: 60000,
   projects: [
     {
-      name: 'Chrome',
-      testIgnore: './src/tests/accessibility',
-      use: {
-        channel: 'chrome',
-        viewport: { width: 1920, height: 1080 }}
-    },
-    {
       name: 'Ms-Edge',
       use: {
         channel: 'msedge',
-        viewport: { width: 1366, height: 768 }}
+        viewport: { width: 1920, height: 1080 }}
     }
   ]
 };
