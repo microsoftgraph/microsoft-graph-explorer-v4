@@ -19,7 +19,8 @@ import {
 } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
-import { claimsChallenge } from '../../../modules/authentication';
+import { authenticationWrapper, claimsChallenge } from '../../../modules/authentication';
+import { configuration } from '../../../modules/authentication/msal-app';
 
 export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
@@ -96,26 +97,38 @@ export function runQuery(query: IQuery) {
         }
       }
     }
-    dispatch(setQueryResponseStatus(status));
 
     if(response && response.status === 401) {
       if(response.headers.get('www-authenticate')){
         // TODO:
         // check if there is a claims string on localstorage, do an acquireTokenSilent without alerting the user
-
-
-        claimsChallenge.handleClaimsChallenge(respHeaders, query);
-        dispatch(setQueryResponseStatus(
-          {
-            messageType: MessageBarType.error,
-            ok: false,
-            // eslint-disable-next-line max-len
-            status: `${response.status} - Additional authentication requirements must be satisfied through a claims challenge. https://learn.microsoft.com/en-us/azure/active-directory/develop/claims-challenge?tabs=dotnet`,
-            statusText: 'Unauthorized',
-            hint: 'Click here to re-authorize'
+        const account = authenticationWrapper.getAccount()!;
+        // eslint-disable-next-line max-len
+        if (claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${query.sampleUrl}.${query.selectedVerb}`)){
+          // do a token acquisition silently
+          const authResult = await authenticationWrapper.logIn('', query);
+          if (authResult.accessToken){
+            // do the query again
+            return dispatch(runQuery(query));
           }
-        ))
+        }
+        else{
+          claimsChallenge.handleClaimsChallenge(respHeaders, query);
+          dispatch(setQueryResponseStatus(
+            {
+              messageType: MessageBarType.error,
+              ok: false,
+              // eslint-disable-next-line max-len
+              status: `${response.status} - Additional authentication requirements must be satisfied through a claims challenge. https://learn.microsoft.com/en-us/azure/active-directory/develop/claims-challenge?tabs=dotnet`,
+              statusText: 'Unauthorized',
+              hint: 'Click here to re-authorize'
+            }
+          ))
+        }
       }
+    }
+    else{
+      dispatch(setQueryResponseStatus(status));
     }
 
     return dispatch(

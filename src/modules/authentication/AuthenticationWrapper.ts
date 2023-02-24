@@ -254,7 +254,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     try {
       const result = await msalApplication.loginPopup(popUpRequest);
       this.storeHomeAccountId(result.account!);
-      console.log('Auth result is ', result);
       return result;
     } catch (error: any) {
       const { errorCode } = error;

@@ -4,7 +4,6 @@ import IClaimsChallenge, { IResponseHeaders } from './interfaces/IClaimsChalleng
 import { IQuery } from '../../types/query-runner';
 export class ClaimsChallenge implements IClaimsChallenge {
   private static instance: ClaimsChallenge;
-  private static claimsStatus = false;
 
   public static getInstance(){
     if (!ClaimsChallenge.instance) {
@@ -55,7 +54,4 @@ export class ClaimsChallenge implements IClaimsChallenge {
     return sessionStorage.getItem(claimsChallengeId);
   }
 
-  public getClaimsStatus(){
-    return ClaimsChallenge.claimsStatus;
-  }
 }

@@ -1,4 +1,4 @@
-import { Link, MessageBar, MessageBarType } from '@fluentui/react';
+import { Link, MessageBar } from '@fluentui/react';
 import { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
@@ -6,14 +6,14 @@ import { useDispatch } from 'react-redux';
 import { IQuery } from '../../../types/query-runner';
 import { AppDispatch, useAppSelector } from '../../../store';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
-import { clearQueryStatus, setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
+import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
 import { GRAPH_URL } from '../../services/graph-constants';
 import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
-import { authenticationWrapper, claimsChallenge } from '../../../modules/authentication';
-import { translateMessage } from '../../utils/translate-messages';
+import { authenticationWrapper } from '../../../modules/authentication';
+import { runQuery } from '../../services/actions/query-action-creators';
 
 const StatusMessages = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -54,13 +54,9 @@ const StatusMessages = () => {
   }
 
   const handleClaimsLink = async () => {
-    await authenticationWrapper.logIn('', sampleQuery);
-    if(claimsChallenge.getClaimsStatus()){
-      dispatch(setQueryResponseStatus({
-        messageBarType: MessageBarType.success,
-        statusText: 'Success',
-        status: translateMessage('You can now run the query again')
-      }))
+    const authResult = await authenticationWrapper.logIn('', sampleQuery);
+    if (authResult.accessToken){
+      dispatch(runQuery(sampleQuery))
     }
   }
 

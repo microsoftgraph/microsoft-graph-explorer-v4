@@ -471,6 +471,5 @@
   "Scope consent successful": "Scope consent successful",
   "Query documentation": "Query documentation",
   "This token is not a jwt token and cannot be decoded by jwt.ms": "This token is not a jwt token and cannot be decoded by jwt.ms",
-  "The URL must contain graph.microsoft.com": "The URL must contain graph.microsoft.com",
-  "You can now run the query again": "You can now run the query again"
+  "The URL must contain graph.microsoft.com": "The URL must contain graph.microsoft.com"
 }
