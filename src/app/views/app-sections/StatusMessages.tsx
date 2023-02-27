@@ -7,13 +7,14 @@ import { IQuery } from '../../../types/query-runner';
 import { AppDispatch, useAppSelector } from '../../../store';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
-import { GRAPH_URL } from '../../services/graph-constants';
+import { CLAIMS_CHALLENGE_DOC_LINK, GRAPH_URL } from '../../services/graph-constants';
 import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { runQuery } from '../../services/actions/query-action-creators';
+import { translateMessage } from '../../utils/translate-messages';
 
 const StatusMessages = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -34,6 +35,9 @@ const StatusMessages = () => {
         if (link) {
           if (link.includes(GRAPH_URL)) {
             return <Link onClick={() => setQuery(link)} underline>{link}</Link>;
+          }
+          if (link.includes(CLAIMS_CHALLENGE_DOC_LINK)){
+            return <Link href={link} underline target="_blank">{translateMessage('Learn more')}</Link>
           }
           return <Link target="_blank" href={link} underline>{link}</Link>;
         }
@@ -71,8 +75,12 @@ const StatusMessages = () => {
     }
 
     let actionLink = null ;
-    if(hint === 'Click here to re-authorize'){
-      actionLink = <Link onClick={handleClaimsLink} underline>{hint}</Link>
+    switch(hint){
+      case 'Click here to re-authorize':
+        actionLink = <Link onClick={handleClaimsLink} underline>{hint}</Link>
+        break;
+      default:
+        actionLink = null
     }
 
     return <MessageBar messageBarType={messageType}

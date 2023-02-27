@@ -21,6 +21,8 @@ import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
 import { authenticationWrapper, claimsChallenge } from '../../../modules/authentication';
 import { configuration } from '../../../modules/authentication/msal-app';
+import { translateMessage } from '../../utils/translate-messages';
+import { CLAIMS_CHALLENGE_DOC_LINK } from '../graph-constants';
 
 export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
@@ -114,8 +116,7 @@ export function runQuery(query: IQuery) {
             {
               messageType: MessageBarType.error,
               ok: false,
-              // eslint-disable-next-line max-len
-              status: `${response.status} - Additional authentication requirements must be satisfied through a claims challenge. https://learn.microsoft.com/en-us/azure/active-directory/develop/claims-challenge?tabs=dotnet`,
+              status: `${response.status} - ${translateMessage('Claims challenge')}: ${CLAIMS_CHALLENGE_DOC_LINK}`,
               statusText: 'Unauthorized',
               hint: 'Click here to re-authorize'
             }
