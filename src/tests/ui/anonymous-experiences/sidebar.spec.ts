@@ -86,10 +86,7 @@ test.describe('History tab', () => {
     await page.locator('button[role="button"]:has-text("Run query")').click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('text= Sample queries Resources History >> [aria-label="More items"]').click();
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('button[role="menuitem"]:has-text("History")').click();
+    await page.getByRole('tab', { name: 'History History xx' }).click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
     expect(page.locator('span:has-text("Today")')).toBeDefined();
@@ -132,10 +129,10 @@ test.describe.serial('Sample Query tab', () => {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('[aria-label="OneDrive has 5 results 4 of 5"] [aria-label="expand collapse group"]').click();
+    await page.getByRole('row', { name: 'OneDrive has 5 results 4 of 6' }).getByRole('button', { name: 'expand collapse group' }).click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('[aria-label="my recent files"]').click();
+    await page.getByRole('gridcell', { name: 'my recent files' }).click();
     await page.waitForTimeout(200);
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
