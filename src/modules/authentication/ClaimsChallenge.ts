@@ -1,6 +1,6 @@
 import { authenticationWrapper } from './index';
 import { configuration } from './msal-app';
-import IClaimsChallenge, { IResponseHeaders } from './interfaces/IClaimsChallenge';
+import IClaimsChallenge from './interfaces/IClaimsChallenge';
 import { IQuery } from '../../types/query-runner';
 export class ClaimsChallenge implements IClaimsChallenge {
   private static instance: ClaimsChallenge;
@@ -11,10 +11,10 @@ export class ClaimsChallenge implements IClaimsChallenge {
     }
     return ClaimsChallenge.instance;
   }
-  public async handleClaimsChallenge(responseHeaders: IResponseHeaders, sampleQuery: IQuery){
+  public async handleClaimsChallenge(responseHeaders: Headers, sampleQuery: IQuery){
     const account = authenticationWrapper.getAccount();
-    const authenticationHeader = responseHeaders['www-authenticate'];
-    const claimsChallenge = this.parseChallenges(authenticationHeader);
+    const authenticationHeader = responseHeaders.get('www-authenticate');
+    const claimsChallenge = this.parseChallenges(authenticationHeader!);
 
     /**
          * Here we add the claims challenge to localStorage, using <cc.appId.userId.resource.method> scheme as key

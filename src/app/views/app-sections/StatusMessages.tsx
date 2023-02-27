@@ -75,12 +75,8 @@ const StatusMessages = () => {
     }
 
     let actionLink = null ;
-    switch(hint){
-      case 'Click here to re-authorize':
-        actionLink = <Link onClick={handleClaimsLink} underline>{hint}</Link>
-        break;
-      default:
-        actionLink = null
+    if(hint && hint === 'Click here to re-authorize'){
+      actionLink = <Link onClick={handleClaimsLink} underline>{hint}</Link>
     }
 
     return <MessageBar messageBarType={messageType}

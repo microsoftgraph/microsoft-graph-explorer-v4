@@ -209,13 +209,10 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   private getClaims(): string | undefined {
     const account = this.getAccount();
-    // eslint-disable-next-line max-len
-    if (account && claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account!.idTokenClaims!.oid}.${this.sampleQuery.sampleUrl}.${this.sampleQuery.selectedVerb}`)){
-      // eslint-disable-next-line max-len
-      return window.atob(claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account!.idTokenClaims!.oid}.${this.sampleQuery.sampleUrl}.${this.sampleQuery.selectedVerb}`)!);
-    }
-    else{
-      return undefined;
+    if(account){
+      //eslint-disable-next-line max-len
+      const storedClaims = claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${this.sampleQuery.sampleUrl}.${this.sampleQuery.selectedVerb}`);
+      return storedClaims ? window.atob(storedClaims) : undefined;
     }
   }
 

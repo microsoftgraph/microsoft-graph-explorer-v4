@@ -24,6 +24,8 @@ import { configuration } from '../../../modules/authentication/msal-app';
 import { translateMessage } from '../../utils/translate-messages';
 import { CLAIMS_CHALLENGE_DOC_LINK } from '../graph-constants';
 
+const MAX_NUMBER_OF_RETRIES = 3;
+let CURRENT_RETRIES = 0;
 export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = !!getState()?.authToken?.token;
@@ -84,6 +86,7 @@ export function runQuery(query: IQuery) {
     }
 
     if (response && response.ok) {
+      CURRENT_RETRIES = 0;
       status.ok = true;
       status.messageType = MessageBarType.success;
 
@@ -100,33 +103,11 @@ export function runQuery(query: IQuery) {
       }
     }
 
-    if(response && response.status === 401) {
-      if(response.headers.get('www-authenticate')){
-        const account = authenticationWrapper.getAccount()!;
-        // eslint-disable-next-line max-len
-        if (claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${query.sampleUrl}.${query.selectedVerb}`)){
-          const authResult = await authenticationWrapper.logIn('', query);
-          if (authResult.accessToken){
-            return dispatch(runQuery(query));
-          }
-        }
-        else{
-          claimsChallenge.handleClaimsChallenge(respHeaders, query);
-          dispatch(setQueryResponseStatus(
-            {
-              messageType: MessageBarType.error,
-              ok: false,
-              status: `${response.status} - ${translateMessage('Claims challenge')}: ${CLAIMS_CHALLENGE_DOC_LINK}`,
-              statusText: 'Unauthorized',
-              hint: 'Click here to re-authorize'
-            }
-          ))
-        }
-      }
+    if(response && response.status === 401 && (CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES)) {
+      await handleClaimsChallenge(response, dispatch);
+      return;
     }
-    else{
-      dispatch(setQueryResponseStatus(status));
-    }
+    dispatch(setQueryResponseStatus(status));
 
     return dispatch(
       queryResponse({
@@ -134,6 +115,32 @@ export function runQuery(query: IQuery) {
         headers: respHeaders
       })
     );
+  }
+
+  async function handleClaimsChallenge(response: Response, dispatch: Function): Promise<void>{
+    if (response.headers.get('www-authenticate')) {
+      const account = authenticationWrapper.getAccount()!;
+      // eslint-disable-next-line max-len
+      if (account && claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${query.sampleUrl}.${query.selectedVerb}`)) {
+        const authResult = await authenticationWrapper.logIn('', query);
+        if (authResult.accessToken) {
+          CURRENT_RETRIES += 1;
+          dispatch(runQuery(query));
+        }
+      }
+      else {
+        claimsChallenge.handleClaimsChallenge(response.headers, query);
+        dispatch(setQueryResponseStatus(
+          {
+            messageType: MessageBarType.error,
+            ok: false,
+            status: `${response.status} - ${translateMessage('Claims challenge')}: ${CLAIMS_CHALLENGE_DOC_LINK}`,
+            statusText: 'Unauthorized',
+            hint: 'Click here to re-authorize'
+          }
+        ))
+      }
+    }
   }
 
   function handleError(dispatch: Function, error: any) {
