@@ -32,7 +32,7 @@ const config: PlaywrightTestConfig = {
       name: 'Ms-Edge',
       use: {
         channel: 'msedge',
-        viewport: { width: 1366, height: 768 }}
+        viewport: { width: 1920, height: 1080 }}
     }
   ]
 };
