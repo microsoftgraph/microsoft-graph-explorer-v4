@@ -100,15 +100,11 @@ export function runQuery(query: IQuery) {
 
     if(response && response.status === 401) {
       if(response.headers.get('www-authenticate')){
-        // TODO:
-        // check if there is a claims string on localstorage, do an acquireTokenSilent without alerting the user
         const account = authenticationWrapper.getAccount()!;
         // eslint-disable-next-line max-len
         if (claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${query.sampleUrl}.${query.selectedVerb}`)){
-          // do a token acquisition silently
           const authResult = await authenticationWrapper.logIn('', query);
           if (authResult.accessToken){
-            // do the query again
             return dispatch(runQuery(query));
           }
         }
