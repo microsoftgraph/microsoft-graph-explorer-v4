@@ -20,9 +20,7 @@ import {
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
 import { authenticationWrapper, claimsChallenge } from '../../../modules/authentication';
-import { configuration } from '../../../modules/authentication/msal-app';
-import { translateMessage } from '../../utils/translate-messages';
-import { CLAIMS_CHALLENGE_DOC_LINK } from '../graph-constants';
+import { BrowserAuthError } from '@azure/msal-browser';
 
 const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
@@ -151,6 +149,10 @@ export function runQuery(query: IQuery) {
       body = {
         throwsCorsError: true
       };
+    }
+
+    if (error instanceof BrowserAuthError){
+      status.statusText = `${error.name}: ${error.message}`;
     }
 
     dispatch(

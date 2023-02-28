@@ -68,7 +68,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       redirectUri: getCurrentUri(),
       extraQueryParameters: { mkt: geLocale }
     };
-    // eslint-disable-next-line no-useless-catch
     try {
       const result = await msalApplication.loginPopup(popUpRequest);
       this.storeHomeAccountId(result.account!);
@@ -209,7 +208,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   private getClaims(): string | undefined {
     const account = this.getAccount();
-    if(account){
+    if(account && !(this.sampleQuery.sampleUrl === '')){
       //eslint-disable-next-line max-len
       const storedClaims = claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${this.sampleQuery.sampleUrl}.${this.sampleQuery.selectedVerb}`);
       return storedClaims ? window.atob(storedClaims) : undefined;
@@ -254,9 +253,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       return result;
     } catch (error: any) {
       const { errorCode } = error;
-      if (signInAuthError(errorCode) && !this.consentingToNewScopes) {
+      if (signInAuthError(errorCode) && !this.consentingToNewScopes && (errorCode && errorCode !== 'user_cancelled')) {
         this.clearSession();
-        console.log('error code', errorCode)
         if (errorCode === 'interaction_in_progress') {
           this.eraseInteractionInProgressCookie();
         }
@@ -302,13 +300,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   private eraseInteractionInProgressCookie(): void {
     const keyValuePairs = document.cookie.split(';');
-    let cookieValue = '';
     let cookieKey = '';
 
     for (const pair of keyValuePairs) {
-      cookieValue = pair.substring(pair.indexOf('=') + 1);
-      if (cookieValue === 'interaction_in_progress') {
-        cookieKey = pair.substring(1, pair.indexOf('='));
+      cookieKey = pair.substring(0, pair.indexOf('=')).trim();
+      if (cookieKey === 'msal.interaction.status' || cookieKey === 'interaction_in_progress') {
         break;
       }
     }

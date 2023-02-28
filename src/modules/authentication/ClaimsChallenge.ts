@@ -22,11 +22,15 @@ export class ClaimsChallenge implements IClaimsChallenge {
          * as MSAL will cache access tokens with different claims separately
          */
     if (account) {
-      this.addClaimsToStorage(
-        // eslint-disable-next-line max-len
-        `cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${sampleQuery.sampleUrl}.${sampleQuery.selectedVerb}`,
-        claimsChallenge.claims
-      );
+      // eslint-disable-next-line max-len
+      const challengeAvailable = this.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${sampleQuery.sampleUrl}.${sampleQuery.selectedVerb}`);
+      if (!challengeAvailable && claimsChallenge && claimsChallenge.claims){
+        this.addClaimsToStorage(
+          // eslint-disable-next-line max-len
+          `cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${sampleQuery.sampleUrl}.${sampleQuery.selectedVerb}`,
+          claimsChallenge.claims
+        );
+      }
     }
   }
 
@@ -35,7 +39,7 @@ export class ClaimsChallenge implements IClaimsChallenge {
       [key: string]: string;
     }
     const schemeSeparator = header.indexOf(' ');
-    const challenges: any = header.substring(schemeSeparator + 1).split(',');
+    const challenges: string[] = header.substring(schemeSeparator + 1).split(',');
     const challengeMap: IChallenge = {};
 
     challenges.forEach((challenge: string) => {
@@ -53,5 +57,4 @@ export class ClaimsChallenge implements IClaimsChallenge {
   public getClaimsFromStorage(claimsChallengeId: string){
     return sessionStorage.getItem(claimsChallengeId);
   }
-
 }
