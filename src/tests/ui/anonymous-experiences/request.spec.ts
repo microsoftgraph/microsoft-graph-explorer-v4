@@ -180,7 +180,7 @@ test.describe('Permissions', () => {
     await page.evaluate(() => document.fonts.ready);
     const permissionsText = page.locator('text=One of the following permissions is required to run the query. Sign in with an a');
     expect(permissionsText).toBeDefined();
-    expect(await page.screenshot({ clip: { x: 0, y: 0, width: 1365, height: 400 } })).toMatchSnapshot();
+    expect(await page.screenshot()).toMatchSnapshot();
     const DirectoryPermission =  page.locator('div[role="gridcell"]:has-text("Directory.Read.AllDirectory.Read.All")');
     expect(DirectoryPermission).toBeDefined();
   })
