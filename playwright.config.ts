@@ -38,7 +38,7 @@ const config: PlaywrightTestConfig = {
       name: 'Chrome',
       use: {
         channel: 'chrome',
-        viewport: { width: 1360, height: 768 }}
+        viewport: { width: 1365, height: 768 }}
     }
   ]
 };
