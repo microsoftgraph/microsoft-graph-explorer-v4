@@ -33,6 +33,12 @@ const config: PlaywrightTestConfig = {
       use: {
         channel: 'msedge',
         viewport: { width: 1920, height: 1080 }}
+    },
+    {
+      name: 'Chrome',
+      use: {
+        channel: 'chrome',
+        viewport: { width: 1360, height: 768 }}
     }
   ]
 };
