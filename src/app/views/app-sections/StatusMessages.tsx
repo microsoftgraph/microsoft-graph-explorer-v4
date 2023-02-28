@@ -7,14 +7,11 @@ import { IQuery } from '../../../types/query-runner';
 import { AppDispatch, useAppSelector } from '../../../store';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
-import { CLAIMS_CHALLENGE_DOC_LINK, GRAPH_URL } from '../../services/graph-constants';
+import { GRAPH_URL } from '../../services/graph-constants';
 import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
-import { authenticationWrapper } from '../../../modules/authentication';
-import { runQuery } from '../../services/actions/query-action-creators';
-import { translateMessage } from '../../utils/translate-messages';
 
 const StatusMessages = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -36,9 +33,6 @@ const StatusMessages = () => {
           if (link.includes(GRAPH_URL)) {
             return <Link onClick={() => setQuery(link)} underline>{link}</Link>;
           }
-          if (link.includes(CLAIMS_CHALLENGE_DOC_LINK)){
-            return <Link href={link} underline target="_blank">{translateMessage('Learn more')}</Link>
-          }
           return <Link target="_blank" href={link} underline>{link}</Link>;
         }
       };
@@ -57,13 +51,6 @@ const StatusMessages = () => {
     dispatch(setSampleQuery(query));
   }
 
-  const handleClaimsLink = async () => {
-    const authResult = await authenticationWrapper.logIn('', sampleQuery);
-    if (authResult.accessToken){
-      dispatch(runQuery(sampleQuery))
-    }
-  }
-
   if (queryRunnerStatus) {
     const { messageType, statusText, status, duration, hint } = queryRunnerStatus;
     let urls: any = {};
@@ -72,11 +59,6 @@ const StatusMessages = () => {
     if (extractedUrls) {
       message = replaceLinks(status.toString());
       urls = convertArrayToObject(extractedUrls);
-    }
-
-    let actionLink = null ;
-    if(hint && hint === 'Click here to re-authorize'){
-      actionLink = <Link onClick={handleClaimsLink} underline>{hint}</Link>
     }
 
     return <MessageBar messageBarType={messageType}
@@ -98,7 +80,7 @@ const StatusMessages = () => {
         <FormattedMessage id='tab' />
       </>}
 
-      {hint && actionLink ? <div>{actionLink}</div> : <div>{hint}</div>}
+      {hint && <div>{hint}</div>}
 
     </MessageBar>;
   }

@@ -11,7 +11,7 @@ export class ClaimsChallenge implements IClaimsChallenge {
     }
     return ClaimsChallenge.instance;
   }
-  public async handleClaimsChallenge(responseHeaders: Headers, sampleQuery: IQuery){
+  public handleClaimsChallenge(responseHeaders: Headers, sampleQuery: IQuery){
     const account = authenticationWrapper.getAccount();
     const authenticationHeader = responseHeaders.get('www-authenticate');
     const claimsChallenge = this.parseChallenges(authenticationHeader!);

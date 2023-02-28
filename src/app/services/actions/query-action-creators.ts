@@ -119,26 +119,14 @@ export function runQuery(query: IQuery) {
 
   async function handleClaimsChallenge(response: Response, dispatch: Function): Promise<void>{
     if (response.headers.get('www-authenticate')) {
-      const account = authenticationWrapper.getAccount()!;
-      // eslint-disable-next-line max-len
-      if (account && claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${query.sampleUrl}.${query.selectedVerb}`)) {
+      const account = authenticationWrapper.getAccount();
+      if (account) {
+        claimsChallenge.handleClaimsChallenge(response.headers, query);
         const authResult = await authenticationWrapper.logIn('', query);
         if (authResult.accessToken) {
           CURRENT_RETRIES += 1;
           dispatch(runQuery(query));
         }
-      }
-      else {
-        claimsChallenge.handleClaimsChallenge(response.headers, query);
-        dispatch(setQueryResponseStatus(
-          {
-            messageType: MessageBarType.error,
-            ok: false,
-            status: `${response.status} - ${translateMessage('Claims challenge')}: ${CLAIMS_CHALLENGE_DOC_LINK}`,
-            statusText: 'Unauthorized',
-            hint: 'Click here to re-authorize'
-          }
-        ))
       }
     }
   }

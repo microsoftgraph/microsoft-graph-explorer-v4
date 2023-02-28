@@ -256,7 +256,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const { errorCode } = error;
       if (signInAuthError(errorCode) && !this.consentingToNewScopes) {
         this.clearSession();
-
+        console.log('error code', errorCode)
         if (errorCode === 'interaction_in_progress') {
           this.eraseInteractionInProgressCookie();
         }
