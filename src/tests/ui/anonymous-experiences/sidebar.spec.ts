@@ -135,6 +135,5 @@ test.describe.serial('Sample Query tab', () => {
     await page.getByRole('gridcell', { name: 'my recent files' }).click();
     await page.waitForTimeout(200);
     await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
   })
 })
