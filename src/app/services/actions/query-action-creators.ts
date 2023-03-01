@@ -19,8 +19,9 @@ import {
 } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
-import { authenticationWrapper, claimsChallenge } from '../../../modules/authentication';
+import { authenticationWrapper } from '../../../modules/authentication';
 import { BrowserAuthError } from '@azure/msal-browser';
+import { ClaimsChallenge } from '../../../modules/authentication/ClaimsChallenge';
 
 const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
@@ -119,7 +120,8 @@ export function runQuery(query: IQuery) {
     if (response.headers.get('www-authenticate')) {
       const account = authenticationWrapper.getAccount();
       if (account) {
-        claimsChallenge.handleClaimsChallenge(response.headers, query);
+        const claimsChallenge = new ClaimsChallenge(query);
+        claimsChallenge.handleClaimsChallenge(response.headers);
         const authResult = await authenticationWrapper.logIn('', query);
         if (authResult.accessToken) {
           CURRENT_RETRIES += 1;

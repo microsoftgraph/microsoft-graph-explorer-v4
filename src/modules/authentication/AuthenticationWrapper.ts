@@ -16,8 +16,8 @@ import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './interfaces/IAuthenticationWrapper';
 import { configuration, msalApplication } from './msal-app';
-import { claimsChallenge } from '.';
 import { IQuery } from '../../types/query-runner';
+import { ClaimsChallenge } from './ClaimsChallenge';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 
@@ -198,8 +198,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   private getClaims(): string | undefined {
     const account = this.getAccount();
     if(account && (this.sampleQuery.sampleUrl !== '')){
-      //eslint-disable-next-line max-len
-      const storedClaims = claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${this.sampleQuery.sampleUrl}.${this.sampleQuery.selectedVerb}`);
+      const claimsChallenge = new ClaimsChallenge(this.sampleQuery);
+      const storedClaims = claimsChallenge.getClaimsFromStorage();
       return storedClaims ? window.atob(storedClaims) : undefined;
     }
   }

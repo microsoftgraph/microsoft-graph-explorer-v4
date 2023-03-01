@@ -2,16 +2,26 @@ import { authenticationWrapper } from './index';
 import { configuration } from './msal-app';
 import IClaimsChallenge from './interfaces/IClaimsChallenge';
 import { IQuery } from '../../types/query-runner';
+import { AccountInfo } from '@azure/msal-browser';
 export class ClaimsChallenge implements IClaimsChallenge {
   private static instance: ClaimsChallenge;
+  private sampleQuery: IQuery = {
+    selectedVerb: '',
+    selectedVersion:'',
+    sampleHeaders: [],
+    sampleUrl: ''
+  };
+  private account: AccountInfo;
+  private claimsChallenge: string = '';
 
-  public static getInstance(){
-    if (!ClaimsChallenge.instance) {
-      ClaimsChallenge.instance = new ClaimsChallenge();
-    }
-    return ClaimsChallenge.instance;
+  constructor(sampleQuery: IQuery){
+    this.sampleQuery = sampleQuery;
+    this.account = authenticationWrapper.getAccount() || {} as AccountInfo;
+    // eslint-disable-next-line max-len
+    this.claimsChallenge = `cc.${configuration.auth.clientId}.${this.account.idTokenClaims!.oid}.${this.sampleQuery.sampleUrl}.${this.sampleQuery.selectedVerb}`
   }
-  public handleClaimsChallenge(responseHeaders: Headers, sampleQuery: IQuery){
+
+  public handleClaimsChallenge(responseHeaders: Headers): boolean{
     const account = authenticationWrapper.getAccount();
     const authenticationHeader = responseHeaders.get('www-authenticate');
     const claimsChallenge = this.parseChallenges(authenticationHeader!);
@@ -22,16 +32,15 @@ export class ClaimsChallenge implements IClaimsChallenge {
          * as MSAL will cache access tokens with different claims separately
          */
     if (account) {
-      // eslint-disable-next-line max-len
-      const challengeAvailable = this.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${sampleQuery.sampleUrl}.${sampleQuery.selectedVerb}`);
+      const challengeAvailable = this.getClaimsFromStorage();
       if (!challengeAvailable && claimsChallenge && claimsChallenge.claims){
         this.addClaimsToStorage(
-          // eslint-disable-next-line max-len
-          `cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${sampleQuery.sampleUrl}.${sampleQuery.selectedVerb}`,
+          this.claimsChallenge,
           claimsChallenge.claims
         );
       }
     }
+    return !!this.getClaimsFromStorage();
   }
 
   private parseChallenges(header: string) {
@@ -54,7 +63,7 @@ export class ClaimsChallenge implements IClaimsChallenge {
     sessionStorage.setItem(claimsChallengeId, claimsChallenge);
   }
 
-  public getClaimsFromStorage(claimsChallengeId: string){
-    return sessionStorage.getItem(claimsChallengeId);
+  public getClaimsFromStorage(){
+    return sessionStorage.getItem(this.claimsChallenge);
   }
 }
