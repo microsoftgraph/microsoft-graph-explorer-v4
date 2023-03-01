@@ -21,7 +21,7 @@ export class ClaimsChallenge implements IClaimsChallenge {
     this.claimsChallenge = `cc.${configuration.auth.clientId}.${this.account.idTokenClaims!.oid}.${this.sampleQuery.sampleUrl}.${this.sampleQuery.selectedVerb}`
   }
 
-  public handleClaimsChallenge(responseHeaders: Headers): boolean{
+  public handle(responseHeaders: Headers){
     const account = authenticationWrapper.getAccount();
     const authenticationHeader = responseHeaders.get('www-authenticate');
     const claimsChallenge = this.parseChallenges(authenticationHeader!);
@@ -40,7 +40,6 @@ export class ClaimsChallenge implements IClaimsChallenge {
         );
       }
     }
-    return !!this.getClaimsFromStorage();
   }
 
   private parseChallenges(header: string) {

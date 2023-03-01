@@ -103,7 +103,7 @@ export function runQuery(query: IQuery) {
     }
 
     if(response && response.status === 401 && (CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES)) {
-      await handleClaimsChallenge(response, dispatch);
+      await runReAuthenticatedRequest(response, dispatch);
       return;
     }
     dispatch(setQueryResponseStatus(status));
@@ -116,12 +116,11 @@ export function runQuery(query: IQuery) {
     );
   }
 
-  async function handleClaimsChallenge(response: Response, dispatch: Function): Promise<void>{
+  async function runReAuthenticatedRequest(response: Response, dispatch: Function): Promise<void>{
     if (response.headers.get('www-authenticate')) {
       const account = authenticationWrapper.getAccount();
       if (account) {
-        const claimsChallenge = new ClaimsChallenge(query);
-        claimsChallenge.handleClaimsChallenge(response.headers);
+        new ClaimsChallenge(query).handle(response.headers);
         const authResult = await authenticationWrapper.logIn('', query);
         if (authResult.accessToken) {
           CURRENT_RETRIES += 1;
