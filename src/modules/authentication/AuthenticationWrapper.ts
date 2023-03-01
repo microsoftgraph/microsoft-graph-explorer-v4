@@ -24,6 +24,7 @@ const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 export class AuthenticationWrapper implements IAuthenticationWrapper {
   private static instance: AuthenticationWrapper;
   private consentingToNewScopes: boolean = false;
+  private performingStepUpAuth: boolean = false;
   private sampleQuery: IQuery = {
     sampleUrl: '',
     selectedVerb: '',
@@ -50,6 +51,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   public async logIn(sessionId = '', sampleQuery?: IQuery): Promise<AuthenticationResult> {
     if(sampleQuery){
       this.sampleQuery = sampleQuery;
+      this.performingStepUpAuth = true;
     }
     this.consentingToNewScopes = false;
     // eslint-disable-next-line no-useless-catch
@@ -156,8 +158,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       return ocpsToken;
     } catch (error) {
       if (error instanceof InteractionRequiredAuthError) {
-        msalApplication.acquireTokenPopup(ocpsAccessTokenRequest).then((ocpsAccessTokenRequest) => {
-          const ocpsToken = ocpsAccessTokenRequest.accessToken;
+        msalApplication.acquireTokenPopup(ocpsAccessTokenRequest).then((ocpsAccessToken) => {
+          const ocpsToken = ocpsAccessToken.accessToken;
           return ocpsToken;
         })
       }
@@ -167,11 +169,18 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
   }
 
-  private async getAuthResult(scopes: string[] = [], sessionId?: string):
-  Promise<AuthenticationResult> {
-
+  private async getAuthResult(scopes: string[] = [], sessionId?: string): Promise<AuthenticationResult> {
     try {
-      return await this.loginSilently(scopes);
+      const silentRequest: SilentRequest = {
+        scopes: scopes.length > 0 ? scopes : defaultScopes,
+        authority: this.getAuthority(),
+        account: this.getAccount(),
+        redirectUri: getCurrentUri(),
+        claims: this.getClaims()
+      };
+      const result = await msalApplication.acquireTokenSilent(silentRequest);
+      this.storeHomeAccountId(result.account!);
+      return result;
     } catch (error: any) {
       if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
         return this.loginWithInteraction(scopes.length > 0 ? scopes : defaultScopes, sessionId);
@@ -186,29 +195,9 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     }
   }
 
-  private async loginSilently(scopes: string[] = []): Promise<AuthenticationResult> {
-    const silentRequest: SilentRequest = {
-      scopes: scopes.length > 0 ? scopes : defaultScopes,
-      authority: this.getAuthority(),
-      account: this.getAccount(),
-      redirectUri: getCurrentUri(),
-      claims: this.getClaims()
-    };
-
-    // eslint-disable-next-line no-useless-catch
-    try{
-      const result = await msalApplication.acquireTokenSilent(silentRequest);
-      this.storeHomeAccountId(result.account!);
-      return result;
-    }
-    catch(error: any){
-      throw error;
-    }
-  }
-
   private getClaims(): string | undefined {
     const account = this.getAccount();
-    if(account && !(this.sampleQuery.sampleUrl === '')){
+    if(account && (this.sampleQuery.sampleUrl !== '')){
       //eslint-disable-next-line max-len
       const storedClaims = claimsChallenge.getClaimsFromStorage(`cc.${configuration.auth.clientId}.${account.idTokenClaims!.oid}.${this.sampleQuery.sampleUrl}.${this.sampleQuery.selectedVerb}`);
       return storedClaims ? window.atob(storedClaims) : undefined;
@@ -237,7 +226,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       claims: this.getClaims()
     };
 
-    if (this.consentingToNewScopes) {
+    if (this.consentingToNewScopes || this.performingStepUpAuth) {
       delete popUpRequest.prompt;
       popUpRequest.loginHint = this.getAccount()?.username;
     }
