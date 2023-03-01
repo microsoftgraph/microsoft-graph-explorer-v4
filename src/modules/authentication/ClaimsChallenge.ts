@@ -14,9 +14,9 @@ export class ClaimsChallenge implements IClaimsChallenge {
   private account: AccountInfo;
   private claimsChallenge: string = '';
 
-  constructor(sampleQuery: IQuery){
+  constructor(sampleQuery: IQuery, account: AccountInfo){
     this.sampleQuery = sampleQuery;
-    this.account = authenticationWrapper.getAccount() || {} as AccountInfo;
+    this.account = account;
     // eslint-disable-next-line max-len
     this.claimsChallenge = `cc.${configuration.auth.clientId}.${this.account.idTokenClaims!.oid}.${this.sampleQuery.sampleUrl}.${this.sampleQuery.selectedVerb}`
   }

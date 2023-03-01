@@ -120,7 +120,7 @@ export function runQuery(query: IQuery) {
     if (response.headers.get('www-authenticate')) {
       const account = authenticationWrapper.getAccount();
       if (account) {
-        new ClaimsChallenge(query).handle(response.headers);
+        new ClaimsChallenge(query, account).handle(response.headers);
         const authResult = await authenticationWrapper.logIn('', query);
         if (authResult.accessToken) {
           CURRENT_RETRIES += 1;

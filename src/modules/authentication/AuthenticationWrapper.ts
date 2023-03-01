@@ -198,7 +198,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   private getClaims(): string | undefined {
     const account = this.getAccount();
     if(account && (this.sampleQuery.sampleUrl !== '')){
-      const claimsChallenge = new ClaimsChallenge(this.sampleQuery);
+      const claimsChallenge = new ClaimsChallenge(this.sampleQuery, account);
       const storedClaims = claimsChallenge.getClaimsFromStorage();
       return storedClaims ? window.atob(storedClaims) : undefined;
     }
