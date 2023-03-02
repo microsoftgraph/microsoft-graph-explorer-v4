@@ -8,8 +8,6 @@ test.beforeAll(async ({ browser }) => {
   await page.goto('/');
 });
 
-// await expect(authenticatedPage).toHaveScreenshot('runQuery.png', { clip: { x: 0, y: 0, width: 1920, height: 400 } });
-
 test.describe('Settings button', () => {
   test('should change theme settings', async () => {
 
