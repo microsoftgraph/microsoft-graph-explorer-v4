@@ -58,7 +58,7 @@ interface ShouldRunQueryArgs {
 const shouldRunQuery = ({ method, url, authenticated }: ShouldRunQueryArgs): boolean => {
   const isPOSTException = method === 'POST' && url.contains('search/query');
   const shouldRun = method === 'GET' || authenticated || isPOSTException;
-  return !shouldRun;
+  return shouldRun;
 }
 
 export {

@@ -167,7 +167,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
       onRender: (item: ISampleQuery) => {
         const signInText = translateMessage('Sign In to try this sample');
 
-        if (!shouldRunQuery({ method: item.method, authenticated: tokenPresent, url: item.requestUrl })) {
+        if (shouldRunQuery({ method: item.method, authenticated: tokenPresent, url: item.requestUrl })) {
           return <div aria-hidden='true' />;
         }
 
@@ -271,7 +271,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
     if (props) {
       const query: ISampleQuery = props.item!;
-      if (shouldRunQuery({ method: query.method, authenticated: tokenPresent, url: query.requestUrl })) {
+      if (!shouldRunQuery({ method: query.method, authenticated: tokenPresent, url: query.requestUrl })) {
         selectionDisabled = true;
       }
       return (

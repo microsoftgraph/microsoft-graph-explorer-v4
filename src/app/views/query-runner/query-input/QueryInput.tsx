@@ -37,7 +37,7 @@ const QueryInput = (props: IQueryInputProps) => {
   const authenticated = !!authToken.token;
   const { mobileScreen } = sidebarProperties;
 
-  const showError = shouldRunQuery({
+  const showError = !shouldRunQuery({
     method: sampleQuery.selectedVerb, authenticated,
     url: sampleQuery.sampleUrl
   });
