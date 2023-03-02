@@ -77,16 +77,15 @@ test.describe('Response area navigation', () => {
     expect(await page.screenshot()).toMatchSnapshot();
   })
   test('should have adaptive card tab in overflow menu', async () => {
-    const queryInput = page.locator('[aria-label="Query sample input"]');
-    await queryInput.click();
-    await queryInput.fill('https://graph.microsoft.com/v1.0/me');
+    await page.getByRole('button', { name: 'Minimize sidebar' }).click();
+    await page.getByRole('tab', { name: 'Sample queries Sample queries xx' }).click();
+    await page.getByRole('gridcell', { name: 'my profile' }).filter({ hasText: 'my profileGET my profile' }).click();
     await page.getByRole('button', { name: 'Run query' }).click();
-    await page.waitForTimeout(2000);
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(1000);
     await page.getByRole('tablist').filter({ hasText: 'Response preview' }).getByRole('button', { name: 'More items' }).click();
     await page.getByRole('menuitem', { name: 'Adaptive cards' }).click();
     await page.getByRole('tabpanel', { name: 'Adaptive cards' }).getByRole('tab', { name: 'Card' }).click();
-    await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(1000);
     expect(page.getByText('Megan Bowen')).toBeDefined();
     expect(await page.screenshot()).toMatchSnapshot();
     await page.getByRole('tab', { name: 'JSON template' }).click();
@@ -101,5 +100,16 @@ test.describe('Response area navigation', () => {
     await page.evaluate(() => document.fonts.ready);
     expect(page.locator('text=Open this example in')).toBeDefined();
     expect(await page.screenshot()).toMatchSnapshot();
+  });
+  test('should have expand component tab in overflow menu', async () => {
+    await page.getByRole('tablist').filter({ hasText: 'Response preview' }).getByRole('button', { name: 'More items' }).click();
+    await page.getByRole('menuitem', { name: 'Expand response' }).click();
+    await page.getByRole('button', { name: 'More items' }).click();
+    await page.getByRole('menuitem', { name: 'Code snippets' }).click();
+    await page.getByRole('tab', { name: 'CSharp CSharp' }).click();
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(500);
+    expect(await page.screenshot()).toMatchSnapshot();
+    await page.getByRole('button', { name: 'Close expanded response area' }).click();
   });
 });
