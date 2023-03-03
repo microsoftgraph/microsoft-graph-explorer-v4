@@ -38,6 +38,7 @@ trigger:
       - master
       - dev
       - feature/*
+      - chore/*
       - task/*
       - fix/*
   paths:
