@@ -15,7 +15,7 @@ import { signInAuthError } from './authentication-error-hints';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './interfaces/IAuthenticationWrapper';
-import { configuration, msalApplication } from './msal-app';
+import { msalApplication } from './msal-app';
 import { IQuery } from '../../types/query-runner';
 import { ClaimsChallenge } from './ClaimsChallenge';
 
@@ -25,6 +25,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   private static instance: AuthenticationWrapper;
   private consentingToNewScopes: boolean = false;
   private performingStepUpAuth: boolean = false;
+  private claimsAvailable: boolean = false;
   private sampleQuery: IQuery = {
     sampleUrl: '',
     selectedVerb: '',
@@ -56,7 +57,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     this.consentingToNewScopes = false;
     // eslint-disable-next-line no-useless-catch
     try {
-      return await this.getAuthResult([], sessionId);
+      const authResult = await this.getAuthResult([], sessionId);
+      if(this.performingStepUpAuth && authResult){
+        this.claimsAvailable = true;
+      }
+      return authResult;
     } catch (error) {
       throw error;
     }
@@ -141,7 +146,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       authority: this.getAuthority(),
       account: this.getAccount(),
       redirectUri: getCurrentUri(),
-      claims: this.getClaims()
+      claims: this.claimsAvailable ? this.getClaims() : undefined
     };
     const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
     return response;
