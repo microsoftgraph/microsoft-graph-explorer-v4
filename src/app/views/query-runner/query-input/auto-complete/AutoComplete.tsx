@@ -220,6 +220,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
     let query = selected;
     if (selected.startsWith(delimiters.DOLLAR.symbol)) {
+      if(queryUrl.includes(delimiters.DOLLAR.symbol)){
+        selected = selected.substring(1, selected.length);
+      }
       selected += delimiters.EQUALS.symbol;
       query = '';
     }
