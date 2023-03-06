@@ -32,5 +32,3 @@ export const REVOKING_PERMISSIONS_REQUIRED_SCOPES = 'DelegatedPermissionGrant.Re
 export const ADMIN_CONSENT_DOC_LINK = 'https://learn.microsoft.com/en-us/graph/security-authorization#:~:text=If%20you%27re%20calling%20the%20Microsoft%20Graph%20Security%20API%20from%20Graph%20Explorer'
 // eslint-disable-next-line max-len
 export const CONSENT_TYPE_DOC_LINK = 'https://learn.microsoft.com/en-us/graph/api/resources/oauth2permissiongrant?view=graph-rest-1.0#:~:text=(eq%20only).-,consentType,-String'
-// eslint-disable-next-line max-len
-export const CLAIMS_CHALLENGE_DOC_LINK = 'https://learn.microsoft.com/en-us/azure/active-directory/develop/claims-challenge'

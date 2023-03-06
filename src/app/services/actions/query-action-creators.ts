@@ -22,6 +22,7 @@ import { addHistoryItem } from './request-history-action-creators';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { BrowserAuthError } from '@azure/msal-browser';
 import { ClaimsChallenge } from '../../../modules/authentication/ClaimsChallenge';
+import { translateMessage } from '../../utils/translate-messages';
 
 const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
@@ -103,7 +104,8 @@ export function runQuery(query: IQuery) {
     }
 
     if(response && response.status === 401 && (CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES)) {
-      await runReAuthenticatedRequest(response, dispatch);
+      const successful = await runReAuthenticatedRequest(response);
+      if(successful){ dispatch(runQuery(query)); }
       return;
     }
     dispatch(setQueryResponseStatus(status));
@@ -116,18 +118,18 @@ export function runQuery(query: IQuery) {
     );
   }
 
-  async function runReAuthenticatedRequest(response: Response, dispatch: Function): Promise<void>{
+  async function runReAuthenticatedRequest(response: Response): Promise<boolean>{
     if (response.headers.get('www-authenticate')) {
       const account = authenticationWrapper.getAccount();
-      if (account) {
-        new ClaimsChallenge(query, account).handle(response.headers);
-        const authResult = await authenticationWrapper.logIn('', query);
-        if (authResult.accessToken) {
-          CURRENT_RETRIES += 1;
-          dispatch(runQuery(query));
-        }
+      if (!account) { return false; }
+      new ClaimsChallenge(query, account).handle(response.headers);
+      const authResult = await authenticationWrapper.logIn('', query);
+      if (authResult.accessToken) {
+        CURRENT_RETRIES += 1;
+        return true;
       }
     }
+    return false;
   }
 
   function handleError(dispatch: Function, error: any) {
@@ -152,8 +154,13 @@ export function runQuery(query: IQuery) {
       };
     }
 
-    if (error instanceof BrowserAuthError){
-      status.statusText = `${error.name}: ${error.message}`;
+    if (error && error instanceof BrowserAuthError) {
+      if (error.errorCode === 'user_cancelled'){
+        status.hint = `${translateMessage('user_cancelled')}`;
+      }
+      else{
+        status.statusText = `${error.name}: ${error.message}`;
+      }
     }
 
     dispatch(
