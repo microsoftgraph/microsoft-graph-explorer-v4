@@ -133,6 +133,7 @@ const QueryResponse = () => {
           isOpen={showModal}
           onDismiss={toggleExpandResponse}
           styles={modalStyles}
+          layerProps={{ eventBubblingEnabled: true }}
         >
           <IconButton
             styles={{
