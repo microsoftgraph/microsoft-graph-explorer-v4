@@ -60,11 +60,15 @@ const QueryInput = (props: IQueryInputProps) => {
     return query;
   }
 
-  const runQuery = () => {
+  const runQuery = (queryUrl?: string) => {
     if (!sampleQuery.sampleUrl || sampleQuery.sampleUrl.indexOf('graph.microsoft.com') === -1) {
       return;
     }
-    handleOnRunQuery(sampleQuery);
+    let query: IQuery = sampleQuery;
+    if (queryUrl) {
+      query = getChangedQueryContent(queryUrl);
+    }
+    handleOnRunQuery(query);
   };
 
   const queryInputStackTokens: IStackTokens = {
