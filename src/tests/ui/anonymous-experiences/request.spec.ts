@@ -144,6 +144,24 @@ test.describe('Run query', () => {
     expect(messageBar).toBeDefined();
   });
 
+  test('User can run query using the Enter key and different results are received for different queries', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me');
+    await queryInputField.press('Enter');
+    await page.waitForTimeout(100);
+    await page.evaluate(() => document.fonts.ready);
+    expect(page.getByText('"Megan Bowen"')).toBeDefined();
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me/messages?$select=sender');
+    await queryInputField.press('Enter');
+    await page.waitForTimeout(100);
+    await page.evaluate(() => document.fonts.ready);
+    expect(page.getByText('"Microsoft Viva"')).toBeDefined();
+  })
+
   test('should show documentation link for queries with links ', async () => {
     await page.locator('[aria-label="my profile"]').click();
     await page.locator('[aria-label="More Info"]').click();
