@@ -73,7 +73,7 @@ export const permissionStyles = (theme: ITheme) => {
     cellTitleStyles: {
       root: {
         position: 'relative' as 'relative',
-        top: '4px'
+        top: '5px'
       }
     },
     detailsHeaderStyles: {
