@@ -28,7 +28,6 @@ import messages from '../../../../../messages';
 import { ADMIN_CONSENT_DOC_LINK, CONSENT_TYPE_DOC_LINK,
   REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
 import { styles } from '../../query-input/auto-complete/suffix/suffix.styles';
-import { setDescriptionColumnSize } from './util';
 import { componentNames, telemetry } from '../../../../../telemetry';
 
 export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
@@ -138,11 +137,11 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const adminLabel = (item: any): JSX.Element => {
     if (item.isAdmin) {
-      return <div style={{ textAlign: 'left', paddingLeft:'10px' }}>
+      return <div style={{ paddingLeft:'32px', alignItems: 'stretch' }}>
         <Label><FormattedMessage id='Yes' /></Label>
       </div>;
     } else {
-      return <div style={{ textAlign: 'left', paddingLeft: '10px' }}>
+      return <div style={{ paddingLeft: '32px', alignItems: 'stretch' }}>
         <Label><FormattedMessage id='No' /></Label>
       </div>;
     }
@@ -196,14 +195,14 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   const permissionConsentTypeLabel = (permissionInAllPrincipal : boolean) : JSX.Element => {
     if(permissionInAllPrincipal){
       return (
-        <div style={{textAlign: 'left', paddingLeft: '10px'}}>
+        <div style={{textAlign: 'left', paddingLeft: '32px'}}>
           <Label>{translateMessage('AllPrincipal')}</Label>
         </div>
       )
     }
     else{
       return (
-        <div style={{textAlign: 'left', paddingLeft: '10px'}}>
+        <div style={{textAlign: 'left', paddingLeft: '32px'}}>
           <Label>{translateMessage('Principal')}</Label>
         </div>
       )
@@ -239,16 +238,15 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   }
 
   const getColumns = () : IColumn[] => {
-    const columnSizes = setDescriptionColumnSize();
     const columns: IColumn[] = [
       {
         key: 'value',
         name: translateMessage('Permission'),
         fieldName: 'value',
-        minWidth: 150,
+        minWidth: 110,
         maxWidth: 200,
-        isResizable: true,
-        columnActionsMode: 0
+        columnActionsMode: 0,
+        isResizable: true
       }
     ];
 
@@ -258,11 +256,12 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
           key: 'consentDescription',
           name: translateMessage('Description'),
           fieldName: 'consentDescription',
-          isResizable: true,
-          minWidth: (tokenPresent) ? columnSizes.minWidth : 600,
-          maxWidth: (tokenPresent) ? columnSizes.maxWidth : 750,
+          minWidth: 300,
           isMultiline: true,
-          columnActionsMode: 0
+          columnActionsMode: 0,
+          targetWidthProportion: 1,
+          flexGrow: 1,
+          isResizable: true
         }
       );
     }
@@ -272,13 +271,14 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
         key: 'isAdmin',
         name: translateMessage('Admin consent required'),
         fieldName: 'isAdmin',
-        minWidth:  150,
-        maxWidth:  200,
+        minWidth:  130,
         ariaLabel: translateMessage('Administrator permission'),
         isMultiline: true,
         headerClassName: 'permissionHeader',
         styles: columnCellStyles,
-        onRenderHeader: () => renderColumnHeader('Admin consent required')
+        onRenderHeader: () => renderColumnHeader('Admin consent required'),
+        targetWidthProportion: 1,
+        flexGrow: 1
       }
     );
 
@@ -289,10 +289,11 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
           name: translateMessage('Status'),
           isResizable: false,
           fieldName: 'consented',
-          minWidth: 90,
-          maxWidth: 100,
+          minWidth: 130,
           onRenderHeader: () => renderColumnHeader('Status'),
-          styles: columnCellStyles
+          styles: columnCellStyles,
+          targetWidthProportion: 1,
+          flexGrow: 1
         },
 
       );
@@ -303,11 +304,12 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
         name: translateMessage('Consent type'),
         isResizable: false,
         fieldName: 'consentType',
-        minWidth: 110,
-        maxWidth: 120,
+        minWidth: 130,
         onRenderHeader: () => renderColumnHeader('Consent type'),
         styles: columnCellStyles,
-        ariaLabel: translateMessage('Permission consent type')
+        ariaLabel: translateMessage('Permission consent type'),
+        targetWidthProportion: 1,
+        flexGrow: 1
       }
     )
     return columns;
