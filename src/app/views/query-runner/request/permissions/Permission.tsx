@@ -271,7 +271,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
         key: 'isAdmin',
         name: translateMessage('Admin consent required'),
         fieldName: 'isAdmin',
-        minWidth:  130,
+        minWidth:  180,
         ariaLabel: translateMessage('Administrator permission'),
         isMultiline: true,
         headerClassName: 'permissionHeader',
