@@ -84,7 +84,7 @@ test.describe('Run query', () => {
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1920, height: 1080 } })).toMatchSnapshot();
     // eslint-disable-next-line max-len
-    expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/v1.0/me/messages?$select=id,changeKey")').toBeDefined()
+    expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/v1.0/me/messages?$select=id")').toBeDefined()
   });
 
   test('Tests query parameter addition on autocomplete', async () => {
@@ -99,6 +99,34 @@ test.describe('Run query', () => {
     await queryInputField.press('Tab');
     await queryInputField.press('Tab');
     expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/v1.0/me/messages?$select=id")').toBeDefined()
+  })
+
+  test('Tests $filter query parameter for v1 version', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/users');
+    await queryInputField.type('?fil');
+    await page.locator('label:has-text("$filter")').click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.press('Tab');
+    await queryInputField.press('Tab');
+    await queryInputField.type('startsWith(displayName, \'Megan\')');
+    expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/v1.0/users?$filter=startsWith(displayName, \'Megan\')")').toBeDefined();
+  })
+
+  test('Tests query parameter for beta version that do not require a $ sign', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/beta/me/messages');
+    await queryInputField.type('?select=id,sender');
+    const runQueryButton = page.locator('.run-query-button button');
+    await runQueryButton.click();
+    expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/beta/me/messages?select=id,sender")').toBeDefined();
+    expect(page.getByText('"Microsoft Viva"')).toBeDefined();
   })
 
   test('user can run query', async () => {
@@ -147,7 +175,7 @@ test.describe('Run query', () => {
 
 });
 
-test.describe.serial('Request section', () => { //was serial before skip
+test.describe.serial('Request section', () => {
   test('should add request headers', async () => {
     const queryInput = page.locator('[aria-label="Query sample input"]');
     await queryInput.click();
