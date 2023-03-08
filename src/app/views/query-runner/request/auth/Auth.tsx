@@ -32,7 +32,7 @@ export function Auth(props: any) {
     }).catch(() => {
       setLoading(false);
     });
-  }, []);
+  }, [authToken]);
 
   const classes = classNames(props);
 
