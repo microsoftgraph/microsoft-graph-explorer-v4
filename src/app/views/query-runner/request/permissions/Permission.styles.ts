@@ -67,7 +67,7 @@ export const permissionStyles = (theme: ITheme) => {
       cellTitle: {
         display: 'flex',
         flex: 1,
-        textAlign: 'left'
+        textAlign: 'center'
       }
     },
     cellTitleStyles: {

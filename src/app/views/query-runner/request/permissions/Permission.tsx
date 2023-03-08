@@ -29,7 +29,6 @@ import { ADMIN_CONSENT_DOC_LINK, CONSENT_TYPE_DOC_LINK,
   REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
 import { styles } from '../../query-input/auto-complete/suffix/suffix.styles';
 import { componentNames, telemetry } from '../../../../../telemetry';
-
 export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const { sampleQuery, scopes, dimensions, authToken, consentedScopes } =
@@ -137,11 +136,11 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const adminLabel = (item: any): JSX.Element => {
     if (item.isAdmin) {
-      return <div style={{ paddingLeft:'32px', alignItems: 'stretch' }}>
+      return <div style={{paddingRight: '28px', textAlign: 'center' }}>
         <Label><FormattedMessage id='Yes' /></Label>
       </div>;
     } else {
-      return <div style={{ paddingLeft: '32px', alignItems: 'stretch' }}>
+      return <div style={{paddingRight: '28px', textAlign: 'center' }}>
         <Label><FormattedMessage id='No' /></Label>
       </div>;
     }
@@ -150,16 +149,17 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   const consentedButton = (consented: boolean, item: any, hostId: string): JSX.Element => {
     if (consented) {
       if(userHasRequiredPermissions()){
-        return <PrimaryButton onClick={() => handleRevoke(item)} style={{width: '100px', textAlign:'left'}}>
+        return <PrimaryButton onClick={() => handleRevoke(item)}
+          styles={{ root: {width: '100%' } }}
+        >
           <FormattedMessage id='Revoke' />
-        </PrimaryButton>;
+        </PrimaryButton>
       }
       else{
         return <TooltipHost
           content={translateMessage('You require the following permissions to revoke')}
           id={hostId}
           calloutProps={{ gapSpace: 0 }}
-          styles={{ root: { display: 'inline-block' } }}
         >
           <DefaultButton
             toggle
@@ -168,12 +168,14 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
             iconProps={buttonIcon}
             allowDisabledFocus
             disabled={true}
-            style={{width: '100px'}}
+            styles={{ root: { width: '100%' } }}
           />
-        </TooltipHost>;
+        </TooltipHost>
       }
     } else {
-      return <PrimaryButton onClick={() => handleConsent(item)} style={{width: '100px'}}>
+      return <PrimaryButton onClick={() => handleConsent(item)}
+        styles={{ root: {width: '100%' } }}
+      >
         <FormattedMessage id='Consent' />
       </PrimaryButton>;
     }
@@ -195,14 +197,14 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   const permissionConsentTypeLabel = (permissionInAllPrincipal : boolean) : JSX.Element => {
     if(permissionInAllPrincipal){
       return (
-        <div style={{textAlign: 'left', paddingLeft: '32px'}}>
+        <div style={{textAlign: 'center', paddingLeft: '32px'}}>
           <Label>{translateMessage('AllPrincipal')}</Label>
         </div>
       )
     }
     else{
       return (
-        <div style={{textAlign: 'left', paddingLeft: '32px'}}>
+        <div style={{textAlign: 'center', paddingLeft: '32px'}}>
           <Label>{translateMessage('Principal')}</Label>
         </div>
       )
