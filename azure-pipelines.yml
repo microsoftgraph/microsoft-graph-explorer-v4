@@ -62,9 +62,7 @@ jobs:
   - job: One
     displayName: "Build and test validation"
     steps:
-      - task: CredScan@2
-        inputs:
-          toolMajorVersion: "V2"
+      - task: CredScan@3
 
       - task: ComponentGovernanceComponentDetection@0
         inputs:
