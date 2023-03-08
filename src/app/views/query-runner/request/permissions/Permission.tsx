@@ -197,14 +197,14 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   const permissionConsentTypeLabel = (permissionInAllPrincipal : boolean) : JSX.Element => {
     if(permissionInAllPrincipal){
       return (
-        <div style={{textAlign: 'center', paddingLeft: '32px'}}>
+        <div style={{textAlign: 'center', paddingLeft: '10px'}}>
           <Label>{translateMessage('AllPrincipal')}</Label>
         </div>
       )
     }
     else{
       return (
-        <div style={{textAlign: 'center', paddingLeft: '32px'}}>
+        <div style={{textAlign: 'center', paddingLeft: '10px'}}>
           <Label>{translateMessage('Principal')}</Label>
         </div>
       )
