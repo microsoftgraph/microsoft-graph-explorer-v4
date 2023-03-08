@@ -103,6 +103,7 @@ jobs:
 
   - job: Two
     displayName: "Run playwright tests"
+    condition: eq(variables['isDev'], 'true')
     steps:
       - task: NodeTool@0
         inputs:
