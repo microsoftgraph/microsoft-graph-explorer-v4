@@ -10,14 +10,16 @@ function getClientIdFromEnv() {
 
 const windowHasClientId = getClientIdFromWindow();
 const clientId = windowHasClientId ? getClientIdFromWindow() : getClientIdFromEnv();
-const configuration: Configuration = {
+export const configuration: Configuration = {
   auth: {
-    clientId
+    clientId,
+    clientCapabilities: ['CP1']
   },
   cache: {
     cacheLocation: 'localStorage',
     storeAuthStateInCookie: true
   }
 };
+
 
 export const msalApplication = new PublicClientApplication(configuration);

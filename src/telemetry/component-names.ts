@@ -47,6 +47,18 @@ export const RESPONSE_PREVIEW_TAB = 'Response preview tab';
 export const RESPONSE_HEADERS_TAB = 'Response headers tab';
 export const TOOLKIT_COMPONENT_TAB = 'Toolkit component tab';
 export const MODIFY_PERMISSIONS_TAB = 'Modify permissions tab';
+export const KEYBOARD_COPY_TABS = {
+  'access-tokens-tab': 'Access token tab',
+  'response-tab': 'Response preview tab',
+  'response-headers-tab': 'Response headers tab',
+  'csharp-tab': 'Csharp tab',
+  'java-tab': 'Java tab',
+  'javascript-tab': 'Javascript tab',
+  'go-tab': 'Go tab',
+  'powershell-tab': 'Powershell tab',
+  'JSON-schema-tab': 'JSON schema tab',
+  'request-body-tab': 'Request body tab'
+}
 
 // Dropdowns
 export const VERSION_CHANGE_DROPDOWN = 'Version change dropdown';

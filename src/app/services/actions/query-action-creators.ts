@@ -19,7 +19,13 @@ import {
 } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
+import { authenticationWrapper } from '../../../modules/authentication';
+import { BrowserAuthError } from '@azure/msal-browser';
+import { ClaimsChallenge } from '../../../modules/authentication/ClaimsChallenge';
+import { translateMessage } from '../../utils/translate-messages';
 
+const MAX_NUMBER_OF_RETRIES = 3;
+let CURRENT_RETRIES = 0;
 export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = !!getState()?.authToken?.token;
@@ -80,6 +86,7 @@ export function runQuery(query: IQuery) {
     }
 
     if (response && response.ok) {
+      CURRENT_RETRIES = 0;
       status.ok = true;
       status.messageType = MessageBarType.success;
 
@@ -96,6 +103,11 @@ export function runQuery(query: IQuery) {
       }
     }
 
+    if(response && response.status === 401 && (CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES)) {
+      const successful = await runReAuthenticatedRequest(response);
+      if(successful){ dispatch(runQuery(query)); }
+      return;
+    }
     dispatch(setQueryResponseStatus(status));
 
     return dispatch(
@@ -104,6 +116,20 @@ export function runQuery(query: IQuery) {
         headers: respHeaders
       })
     );
+  }
+
+  async function runReAuthenticatedRequest(response: Response): Promise<boolean>{
+    if (response.headers.get('www-authenticate')) {
+      const account = authenticationWrapper.getAccount();
+      if (!account) { return false; }
+      new ClaimsChallenge(query, account).handle(response.headers);
+      const authResult = await authenticationWrapper.logIn('', query);
+      if (authResult.accessToken) {
+        CURRENT_RETRIES += 1;
+        return true;
+      }
+    }
+    return false;
   }
 
   function handleError(dispatch: Function, error: any) {
@@ -126,6 +152,15 @@ export function runQuery(query: IQuery) {
       body = {
         throwsCorsError: true
       };
+    }
+
+    if (error && error instanceof BrowserAuthError) {
+      if (error.errorCode === 'user_cancelled'){
+        status.hint = `${translateMessage('user_cancelled')}`;
+      }
+      else{
+        status.statusText = `${error.name}: ${error.message}`;
+      }
     }
 
     dispatch(

@@ -32,7 +32,7 @@ export function Auth(props: any) {
     }).catch(() => {
       setLoading(false);
     });
-  }, []);
+  }, [authToken]);
 
   const classes = classNames(props);
 
@@ -62,7 +62,7 @@ export function Auth(props: any) {
             target='_blank'
           />
         </div>
-        <Label className={classes.accessToken} >{accessToken}</Label>
+        <Label className={classes.accessToken} id='access-tokens-tab' tabIndex={0}>{accessToken}</Label>
       </div>
       :
       <Label className={classes.emptyStateLabel}>
