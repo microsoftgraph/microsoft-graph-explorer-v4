@@ -1,29 +1,27 @@
 import {
-  Callout, getId, IconButton, IIconProps, ITooltipHostStyles,
-  Spinner, Text, TooltipHost
+  getId, IconButton, IIconProps, ITooltipHostStyles, TooltipHost
 } from '@fluentui/react';
-import { useState } from 'react';
 
-import { IHint } from '.';
 import { useAppSelector } from '../../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../../telemetry';
+import { GRAPH_URL } from '../../../../../services/graph-constants';
+import { validateExternalLink } from '../../../../../utils/external-link-validation';
 import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../../utils/translate-messages';
 import DocumentationService from './documentation';
-import { HintList } from './HintList';
 import { styles } from './suffix.styles';
 
 const SuffixRenderer = () => {
-  const { autoComplete, sampleQuery, samples, resources } = useAppSelector(
+  const { sampleQuery, samples, resources } = useAppSelector(
     (state) => state
   );
-  const fetchingSuggestions = autoComplete.pending;
-  const autoCompleteError = autoComplete.error;
-  const { requestUrl, queryVersion } =
-    parseSampleUrl(sanitizeQueryUrl(sampleQuery.sampleUrl));
 
-  const getDocumentationLink = (): IHint | null => {
+  const buttonId = getId('callout-button');
+  const calloutProps = { gapSpace: 0 };
+  const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
+
+  const getDocumentationLink = (): string | null => {
     const { queries } = samples;
 
     const resourceDocumentationUrl = new DocumentationService({
@@ -37,77 +35,44 @@ const SuffixRenderer = () => {
     }).getDocumentationLink();
 
     const documentationUrl = sampleDocumentationUrl || resourceDocumentationUrl;
-    if (documentationUrl) {
-      return {
-        link: {
-          url: documentationUrl,
-          name: translateMessage('Learn more')
-        },
-        description: translateMessage('A documentation link for this URL exists. Click learn more to access it')
-      };
-    }
+    if (documentationUrl) { return documentationUrl; }
     return null;
   }
 
-  const [isCalloutVisible, setCalloutVisibility] = useState(false);
-  const buttonId = getId('callout-button');
-  const labelId = getId('callout-label');
-  const descriptionId = getId('callout-description');
-
-  const toggleCallout = () => {
-    let visible = isCalloutVisible;
-    visible = !visible;
-    setCalloutVisibility(visible);
-    if (visible) {
-      trackToggleEvent()
-    }
-  }
-
-  const trackToggleEvent = () => {
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.QUERY_MORE_INFO_BUTTON,
-        QuerySignature: `/${queryVersion}/${requestUrl}`
-      });
-  }
-
-  const calloutProps = { gapSpace: 0 };
-  const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
-
-  if (fetchingSuggestions) {
-    return (<TooltipHost
-      content={translateMessage('Fetching suggestions')}
-      id={getId()}
-      calloutProps={calloutProps}
-      styles={hostStyles}
-    >
-      <Spinner />
-    </TooltipHost>
-    );
-  }
-
-  const getHints = (): IHint[] => {
-    const availableHints: IHint[] = [];
-    if (autoCompleteError) {
-      availableHints.push({
-        description: translateMessage('No auto-complete suggestions available')
-      })
-    }
-    const documentationLink = getDocumentationLink();
-    if (documentationLink) {
-      availableHints.push(documentationLink);
-    }
-    return availableHints;
-  }
-  const hints = getHints();
-  const hintsAvailable = hints.length > 0;
+  const documentationLink = getDocumentationLink();
+  const documentationLinkAvailable = !!documentationLink;
   const infoIcon: IIconProps = { iconName: 'TextDocument' };
 
+  const onDocumentationLinkClicked = () => {
+    if (documentationLink) {
+      window.open(documentationLink, '_blank');
+      trackDocumentLinkClickedEvent();
+    }
+  };
+
+  const trackDocumentLinkClickedEvent = async (): Promise<void> => {
+    const { requestUrl } = parseSampleUrl(sanitizeQueryUrl(sampleQuery.sampleUrl));
+    const parsed = parseSampleUrl(sanitizeQueryUrl(`${GRAPH_URL}/v1.0/${requestUrl}`));
+
+    const properties: { [key: string]: any } = {
+      ComponentName: componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK,
+      QueryUrl: parsed.requestUrl,
+      Link: documentationLink
+    };
+    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, properties);
+
+    // Check if link throws error
+    validateExternalLink(documentationLink || '', componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK, documentationLink);
+  }
+
+  const tipMessage = documentationLinkAvailable ?
+    translateMessage('A documentation link for this URL exists. Click learn more to access it') :
+    translateMessage('Documentation')
 
   return (
     <>
       <TooltipHost
-        content={translateMessage('Documentation')}
+        content={tipMessage}
         id={getId()}
         calloutProps={calloutProps}
         styles={hostStyles}
@@ -115,29 +80,12 @@ const SuffixRenderer = () => {
         <IconButton
           iconProps={infoIcon}
           className={styles.iconButton}
-          onClick={toggleCallout}
+          onClick={() => onDocumentationLinkClicked()}
           id={buttonId}
-          ariaLabel={translateMessage('Documentation')}
-          disabled={!hintsAvailable}
+          ariaLabel={tipMessage}
+          disabled={!documentationLinkAvailable}
         />
       </TooltipHost>
-      {isCalloutVisible && (
-        <Callout
-          className={styles.callout}
-          ariaLabelledBy={labelId}
-          ariaDescribedBy={descriptionId}
-          role='alertdialog'
-          gapSpace={0}
-          target={`#${buttonId}`}
-          onDismiss={toggleCallout}
-          setInitialFocus
-        >
-          <Text block variant='xLarge' className={styles.title} id={labelId}>
-            /{requestUrl}
-          </Text>
-          <HintList hints={hints} requestUrl={requestUrl} />
-        </Callout>
-      )}
     </>
   );
 }

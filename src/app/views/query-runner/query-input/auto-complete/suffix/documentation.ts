@@ -31,7 +31,6 @@ class DocumentationService implements IDocumentationService {
     this.queryVersion = queryVersion;
     this.requestUrl = requestUrl;
     this.method = this.sampleQuery.selectedVerb;
-
   }
 
   public getDocumentationLink = (): string => {
