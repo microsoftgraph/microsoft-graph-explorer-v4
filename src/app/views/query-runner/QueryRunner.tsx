@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch, useAppSelector } from '../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { ContentType } from '../../../types/enums';
+import { IQuery } from '../../../types/query-runner';
 import { runQuery } from '../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
@@ -37,7 +38,7 @@ const QueryRunner = (props: any) => {
     setSampleBody(value!);
   };
 
-  const handleOnRunQuery = () => {
+  const handleOnRunQuery = (query?: IQuery) => {
     if (sampleBody) {
       const headers = sampleQuery.sampleHeaders;
       const contentType = headers.find(k => k.name.toLowerCase() === 'content-type');
@@ -57,6 +58,11 @@ const QueryRunner = (props: any) => {
       } else {
         sampleQuery.sampleBody = sampleBody;
       }
+    }
+    if(query) {
+      sampleQuery.sampleUrl = query.sampleUrl;
+      sampleQuery.selectedVersion = query.selectedVersion;
+      sampleQuery.selectedVerb = query.selectedVerb;
     }
 
     dispatch(runQuery(sampleQuery));
