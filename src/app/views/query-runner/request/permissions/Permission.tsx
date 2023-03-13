@@ -46,7 +46,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   const classes = classNames(classProps);
   const theme = getTheme();
   const {panelContainer: panelStyles, tooltipStyles, columnCellStyles, cellTitleStyles,
-    detailsHeaderStyles} = permissionStyles(theme);
+    detailsHeaderStyles, adminLabelStyles, consentButtonStyles, consentTypeLabelStyles } = permissionStyles(theme);
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
   const getPermissions = (): void => {
@@ -136,11 +136,11 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const adminLabel = (item: any): JSX.Element => {
     if (item.isAdmin) {
-      return <div style={{paddingRight: '28px', textAlign: 'center' }}>
+      return <div style={adminLabelStyles}>
         <span>{translateMessage('Yes')}</span>
       </div>;
     } else {
-      return <div style={{paddingRight: '28px', textAlign: 'center' }}>
+      return <div style={adminLabelStyles}>
         <span>{translateMessage('No')}</span>
       </div>;
     }
@@ -150,7 +150,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
     if (consented) {
       if(userHasRequiredPermissions()){
         return <PrimaryButton onClick={() => handleRevoke(item)}
-          styles={{ root: {width: '100%' } }}
+          styles={consentButtonStyles}
         >
           <FormattedMessage id='Revoke' />
         </PrimaryButton>
@@ -165,14 +165,14 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
             iconProps={buttonIcon}
             allowDisabledFocus
             disabled={true}
-            styles={{ root: { width: '100%' } }}>
+            styles={consentButtonStyles}>
             {translateMessage('Revoke')}
           </DefaultButton>
         </TooltipHost>
       }
     } else {
       return <PrimaryButton onClick={() => handleConsent(item)}
-        styles={{ root: {width: '100%' } }}
+        styles={consentButtonStyles}
       >
         <FormattedMessage id='Consent' />
       </PrimaryButton>;
@@ -195,14 +195,14 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   const permissionConsentTypeLabel = (permissionInAllPrincipal : boolean) : JSX.Element => {
     if(permissionInAllPrincipal){
       return (
-        <div style={{textAlign: 'center', paddingLeft: '10px'}} aria-label='AllPrincipal'>
+        <div style={consentTypeLabelStyles} aria-label={translateMessage('AllPrincipal')}>
           {translateMessage('AllPrincipal')}
         </div>
       )
     }
     else{
       return (
-        <div style={{textAlign: 'center', paddingLeft: '10px'}} aria-label='Principal'>
+        <div style={consentTypeLabelStyles} aria-label={translateMessage('Principal')}>
           {translateMessage('Principal')}
         </div>
       )
@@ -271,7 +271,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
         key: 'isAdmin',
         name: translateMessage('Admin consent required'),
         fieldName: 'isAdmin',
-        minWidth:  180,
+        minWidth:  187,
         ariaLabel: translateMessage('Administrator permission'),
         isMultiline: true,
         headerClassName: 'permissionHeader',

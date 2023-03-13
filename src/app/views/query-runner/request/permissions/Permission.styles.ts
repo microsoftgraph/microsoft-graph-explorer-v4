@@ -83,6 +83,19 @@ export const permissionStyles = (theme: ITheme) => {
         textAlign: 'left',
         marginTop: '7px'
       }
+    },
+    adminLabelStyles: {
+      textAlign: 'center' as 'center',
+      paddingRight: '28px'
+    },
+    consentButtonStyles: {
+      root: {
+        width: '100%'
+      }
+    },
+    consentTypeLabelStyles: {
+      textAlign: 'center' as 'center',
+      paddingLeft: '10px'
     }
   };
 };
