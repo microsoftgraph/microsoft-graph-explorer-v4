@@ -71,6 +71,13 @@ jobs:
           alertWarningLevel: "High"
           ignoreDirectories: ".github,.vscode/"
 
+      - task: ComponentGovernanceComponentDetection@0
+        inputs:
+          scanType: "Register"
+          verbosity: "Verbose"
+          alertWarningLevel: "High"
+          ignoreDirectories: ".github,.vscode/"
+
       - task: NodeTool@0
         inputs:
           versionSpec: "14.20.x"
