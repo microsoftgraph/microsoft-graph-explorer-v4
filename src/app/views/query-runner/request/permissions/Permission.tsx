@@ -137,11 +137,11 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   const adminLabel = (item: any): JSX.Element => {
     if (item.isAdmin) {
       return <div style={{paddingRight: '28px', textAlign: 'center' }}>
-        <Label><FormattedMessage id='Yes' /></Label>
+        <span>{translateMessage('Yes')}</span>
       </div>;
     } else {
       return <div style={{paddingRight: '28px', textAlign: 'center' }}>
-        <Label><FormattedMessage id='No' /></Label>
+        <span>{translateMessage('No')}</span>
       </div>;
     }
   }
@@ -162,14 +162,12 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
           calloutProps={{ gapSpace: 0 }}
         >
           <DefaultButton
-            toggle
-            checked={false}
-            text={translateMessage('Revoke')}
             iconProps={buttonIcon}
             allowDisabledFocus
             disabled={true}
-            styles={{ root: { width: '100%' } }}
-          />
+            styles={{ root: { width: '100%' } }}>
+            {translateMessage('Revoke')}
+          </DefaultButton>
         </TooltipHost>
       }
     } else {
@@ -197,15 +195,15 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   const permissionConsentTypeLabel = (permissionInAllPrincipal : boolean) : JSX.Element => {
     if(permissionInAllPrincipal){
       return (
-        <div style={{textAlign: 'center', paddingLeft: '10px'}}>
-          <Label>{translateMessage('AllPrincipal')}</Label>
+        <div style={{textAlign: 'center', paddingLeft: '10px'}} aria-label='AllPrincipal'>
+          {translateMessage('AllPrincipal')}
         </div>
       )
     }
     else{
       return (
-        <div style={{textAlign: 'center', paddingLeft: '10px'}}>
-          <Label>{translateMessage('Principal')}</Label>
+        <div style={{textAlign: 'center', paddingLeft: '10px'}} aria-label='Principal'>
+          {translateMessage('Principal')}
         </div>
       )
     }
@@ -356,7 +354,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
         id={'buttonId'}
         ariaLabel={translateMessage(headerText)}
         onClick={() => openExternalWebsite(headerText)}
-        styles={{root: { position: 'relative', right: '1px'}}}
+        styles={{root: { position: 'relative', left: '4px'}}}
       >
       </IconButton>
       <span style={{paddingTop: '4px' }}>
