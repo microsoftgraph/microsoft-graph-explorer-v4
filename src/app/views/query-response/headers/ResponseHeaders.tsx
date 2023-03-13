@@ -18,14 +18,14 @@ const ResponseHeaders = () => {
 
   if (headers) {
     return (
-      <>
+      <div id='response-headers-tab'>
         <CopyButton
           handleOnClick={handleCopy}
           isIconButton={true}
           style={{ float: 'right', zIndex: 1 }}
         />
         <Monaco body={headers} height={height} />
-      </>
+      </div>
     );
   }
 
