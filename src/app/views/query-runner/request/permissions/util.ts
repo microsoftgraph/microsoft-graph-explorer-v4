@@ -1,6 +1,9 @@
-import { IPermission } from '../../../../../types/permissions';
+import { IPermissionGrant, IPermission } from '../../../../../types/permissions';
 import { getBrowserScreenSize } from '../../../../utils/device-characteristics-telemetry';
 
+interface IPermissionConsentTypeMapping {
+  [key: string]: 'Principal' | 'AllPrinripal';
+}
 export function setConsentedStatus(tokenPresent: any, permissions: IPermission[], consentedScopes: string[]) {
   if (tokenPresent) {
     if (permissions && permissions.length > 0) {
@@ -10,6 +13,28 @@ export function setConsentedStatus(tokenPresent: any, permissions: IPermission[]
       });
     }
   }
+}
+
+export function setPermissionConsentType(permissions: IPermission[], tenantWideGrant: IPermissionGrant[]) {
+  const permissionConsentTypeMapping: IPermissionConsentTypeMapping = getConsentTypeMapping(tenantWideGrant);
+  if (permissions && permissions.length > 0 && Object.keys(permissionConsentTypeMapping).length > 0) {
+    permissions.forEach((permission: IPermission) => {
+      permission.consentType = permissionConsentTypeMapping[permission.value];
+    });
+  }
+}
+
+const getConsentTypeMapping = (tenantWideGrant: IPermissionGrant[]) => {
+  const permissionConsentTypeMapping: IPermissionConsentTypeMapping = {};
+  if (tenantWideGrant && tenantWideGrant.length > 0) {
+    tenantWideGrant.forEach((grant: any) => {
+      const grantScopes = grant.scope.split(' ');
+      grantScopes.forEach((scope: string) => {
+        permissionConsentTypeMapping[scope] = grant.consentType;
+      });
+    });
+  }
+  return permissionConsentTypeMapping;
 }
 
 interface IDescriptionSize {

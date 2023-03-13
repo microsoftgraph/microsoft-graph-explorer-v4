@@ -17,7 +17,7 @@ import { generateGroupsFromList } from '../../../../utils/generate-groups';
 import { searchBoxStyles } from '../../../../utils/searchbox.styles';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { profileStyles } from '../../../authentication/profile/Profile.styles';
-import { setConsentedStatus } from './util';
+import { setConsentedStatus, setPermissionConsentType } from './util';
 
 interface IPanelList {
   messages: any;
@@ -36,7 +36,8 @@ const PanelList = ({ messages,
 
   const { consentedScopes, scopes, authToken,
     permissionsPanelOpen, theme: appTheme } = useAppSelector((state) => state);
-  const { fullPermissions } = scopes.data;
+  const { fullPermissions, tenantWidePermissionsGrant } = scopes.data;
+  const tenantWideGrant = tenantWidePermissionsGrant ? tenantWidePermissionsGrant : [];
   const [permissions, setPermissions] = useState<any []>([]);
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState(false);
@@ -49,7 +50,9 @@ const PanelList = ({ messages,
   const { permissionPanelStyles } = profileStyles(theme);
 
   useEffect(() => {
-    setPermissions(sortPermissions(fullPermissions));
+    if(searchValue === ''){
+      setPermissions(sortPermissions(fullPermissions));
+    }
   }, [permissionsPanelOpen, scopes.data]);
 
   const shouldGenerateGroups = useRef(true)
@@ -67,6 +70,7 @@ const PanelList = ({ messages,
   const dispatch: AppDispatch = useDispatch();
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
+  setPermissionConsentType(permissions, tenantWideGrant);
 
   permissions.forEach((perm: IPermission) => {
     const permission: any = { ...perm };

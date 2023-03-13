@@ -53,15 +53,24 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const getPermissions = (): void => {
     dispatch(fetchScopes());
+    fetchPermissionGrants();
+  }
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     fetchPermissionGrants();
+  //   }, 0)
+  // }, [])
+
+  const fetchPermissionGrants = (): void => {
+    if (tokenPresent) {
+      dispatch(fetchAllPrincipalGrants());
+    }
   }
 
   useEffect(() => {
-    dispatch(fetchAllPrincipalGrants());
-  }, [])
-
-  useEffect(() => {
     getPermissions();
-  },[sampleQuery]);
+  },[sampleQuery, consentedScopes]);
 
   const handleConsent = async (permission: IPermission): Promise<void> => {
     const consentScopes = [permission.value];
@@ -181,33 +190,11 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   }
 
   const consentTypeProperty = (consented: boolean, item: any): JSX.Element => {
-    if(scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0
-             && consented) {
-
-      const tenantWideGrant : IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant;
-      const allPrincipalPermissions = getAllPrincipalPermissions(tenantWideGrant);
-      const permissionInAllPrincipal = allPrincipalPermissions.some((permission: string) =>
-        item.value === permission);
-      return permissionConsentTypeLabel(permissionInAllPrincipal);
-    }
-    return <div/>
-  }
-
-  const permissionConsentTypeLabel = (permissionInAllPrincipal : boolean) : JSX.Element => {
-    if(permissionInAllPrincipal){
-      return (
-        <div style={{textAlign: 'left', paddingLeft: '10px'}}>
-          <Label>{translateMessage('AllPrincipal')}</Label>
-        </div>
-      )
-    }
-    else{
-      return (
-        <div style={{textAlign: 'left', paddingLeft: '10px'}}>
-          <Label>{translateMessage('Principal')}</Label>
-        </div>
-      )
-    }
+    return (
+      <div style={{ textAlign: 'left', paddingLeft: '10px' }}>
+        {consented ? <Label>{translateMessage(item.consentType)}</Label> : null}
+      </div>
+    )
   }
 
   const getAllPrincipalPermissions = (tenantWidePermissionsGrant: IPermissionGrant[]): string[] => {
