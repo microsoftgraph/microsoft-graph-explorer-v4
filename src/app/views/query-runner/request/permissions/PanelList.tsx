@@ -49,7 +49,7 @@ const PanelList = ({ messages,
   const { permissionPanelStyles } = profileStyles(theme);
 
   useEffect(() => {
-    if(searchValue === '' && groups.length === 0){
+    if(!searchValue && groups && groups.length === 0){
       setPermissions(sortPermissions(fullPermissions));
     }
   }, [permissionsPanelOpen, scopes.data]);

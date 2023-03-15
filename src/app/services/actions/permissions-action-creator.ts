@@ -177,8 +177,8 @@ export function consentToScopes(scopes: string[]) {
       const authResponse = await authenticationWrapper.consentToScopes(scopes);
       if (authResponse && authResponse.accessToken) {
         dispatch(getAuthTokenSuccess(true));
-        const correctedScopes = correctConsentedScopes(scopes, consentedScopes, authResponse.scopes);
-        dispatch(getConsentedScopesSuccess(correctedScopes));
+        const validatedScopes = validateConsentedScopes(scopes, consentedScopes, authResponse.scopes);
+        dispatch(getConsentedScopesSuccess(validatedScopes));
         if (
           authResponse.account &&
           authResponse.account.localAccountId !== profile?.id
@@ -194,7 +194,6 @@ export function consentToScopes(scopes: string[]) {
           }))
       }
     } catch (error: any) {
-      console.log('Here is the error', error);
       const { errorCode } = error;
       dispatch(
         setQueryResponseStatus({
@@ -209,7 +208,7 @@ export function consentToScopes(scopes: string[]) {
   };
 }
 
-const correctConsentedScopes = (scopeToBeConsented: string[], consentedScopes: string[],
+const validateConsentedScopes = (scopeToBeConsented: string[], consentedScopes: string[],
   consentedResponse: string[]) => {
   if(!consentedScopes || !consentedResponse || !scopeToBeConsented) {
     return consentedResponse;
