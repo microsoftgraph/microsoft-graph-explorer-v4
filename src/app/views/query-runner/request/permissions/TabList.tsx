@@ -4,9 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
-import { IPermission, IPermissionGrant } from '../../../../../types/permissions';
+import { IPermission } from '../../../../../types/permissions';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
-import { setConsentedStatus, setPermissionConsentType } from './util';
+import { setConsentedStatus } from './util';
 
 interface ITabList {
   columns: any[];
@@ -20,12 +20,10 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   const dispatch: AppDispatch = useDispatch();
   const { consentedScopes, scopes, authToken } = useAppSelector((state) => state);
   const permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
-  const tenantWideGrant = scopes.data.tenantWidePermissionsGrant ? scopes.data.tenantWidePermissionsGrant : [];
   const tokenPresent = !!authToken.token;
   const [isScreenSizeReduced, setIsScreenSizeReduced] = useState(false);
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
-  setPermissionConsentType(permissions, tenantWideGrant);
 
   const openPermissionsPanel = () => {
     dispatch(togglePermissionsPanel(true));

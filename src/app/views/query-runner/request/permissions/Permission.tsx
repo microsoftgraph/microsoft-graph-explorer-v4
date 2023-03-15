@@ -56,11 +56,6 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
     fetchPermissionGrants();
   }
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     fetchPermissionGrants();
-  //   }, 0)
-  // }, [])
 
   const fetchPermissionGrants = (): void => {
     if (tokenPresent) {
@@ -190,11 +185,33 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   }
 
   const consentTypeProperty = (consented: boolean, item: any): JSX.Element => {
-    return (
-      <div style={{ textAlign: 'left', paddingLeft: '10px' }}>
-        {consented ? <Label>{translateMessage(item.consentType)}</Label> : null}
-      </div>
-    )
+    if (scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0
+      && consented) {
+
+      const tenantWideGrant: IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant;
+      const allPrincipalPermissions = getAllPrincipalPermissions(tenantWideGrant);
+      const permissionInAllPrincipal = allPrincipalPermissions.some((permission: string) =>
+        item.value === permission);
+      return permissionConsentTypeLabel(permissionInAllPrincipal);
+    }
+    return <div />
+  }
+
+  const permissionConsentTypeLabel = (permissionInAllPrincipal: boolean): JSX.Element => {
+    if (permissionInAllPrincipal) {
+      return (
+        <div style={{ textAlign: 'left', paddingLeft: '10px' }}>
+          <Label>{translateMessage('AllPrincipal')}</Label>
+        </div>
+      )
+    }
+    else {
+      return (
+        <div style={{ textAlign: 'left', paddingLeft: '10px' }}>
+          <Label>{translateMessage('Principal')}</Label>
+        </div>
+      )
+    }
   }
 
   const getAllPrincipalPermissions = (tenantWidePermissionsGrant: IPermissionGrant[]): string[] => {
