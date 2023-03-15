@@ -105,7 +105,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           appendSuggestionToUrl(selected);
         } else {
           props.contentChanged(queryUrl);
-          props.runQuery();
+          props.runQuery(queryUrl);
         }
         break;
 
@@ -200,10 +200,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     if (filtered.length === 1 && filtered[0] === searchTerm) {
       appendSuggestionToUrl(searchTerm);
     }
-
-    if(filtered.length === 0){
-      props.contentChanged(queryUrl);
-    }
   }
 
   const trackSuggestionSelectionEvent = (suggestion: string) => {
@@ -220,6 +216,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
     let query = selected;
     if (selected.startsWith(delimiters.DOLLAR.symbol)) {
+      if(queryUrl.includes(delimiters.DOLLAR.symbol)){
+        selected = selected.substring(1, selected.length);
+      }
       selected += delimiters.EQUALS.symbol;
       query = '';
     }
