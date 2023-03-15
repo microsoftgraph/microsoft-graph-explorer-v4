@@ -194,6 +194,7 @@ export function consentToScopes(scopes: string[]) {
           }))
       }
     } catch (error: any) {
+      console.log('Here is the error', error);
       const { errorCode } = error;
       dispatch(
         setQueryResponseStatus({
@@ -210,6 +211,9 @@ export function consentToScopes(scopes: string[]) {
 
 const correctConsentedScopes = (scopeToBeConsented: string[], consentedScopes: string[],
   consentedResponse: string[]) => {
+  if(!consentedScopes || !consentedResponse || !scopeToBeConsented) {
+    return consentedResponse;
+  }
   const expectedScopes = [...consentedScopes, ...scopeToBeConsented];
   if (expectedScopes.length === consentedResponse.length) {
     return consentedResponse;
