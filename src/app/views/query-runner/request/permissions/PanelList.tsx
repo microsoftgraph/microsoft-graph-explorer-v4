@@ -49,7 +49,9 @@ const PanelList = ({ messages,
   const { permissionPanelStyles } = profileStyles(theme);
 
   useEffect(() => {
-    setPermissions(sortPermissions(fullPermissions));
+    if(!searchValue && groups && groups.length === 0){
+      setPermissions(sortPermissions(fullPermissions));
+    }
   }, [permissionsPanelOpen, scopes.data]);
 
   const shouldGenerateGroups = useRef(true)
