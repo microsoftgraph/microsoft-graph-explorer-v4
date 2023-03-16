@@ -143,7 +143,8 @@ const PanelList = ({ messages,
   const groupHeaderStyles = () => {
     return {
       check: { display: 'none'},
-      root: { background: theme.palette.white}
+      root: { background: theme.palette.white},
+      title: { padding: '10px' }
     }
   }
 
