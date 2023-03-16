@@ -265,7 +265,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public toggleSidebar = (): void => {
     const shouldShowSidebar = this.setSidebarProperties();
-    this.changeDimensions(shouldShowSidebar ? '26%' : '4%');
+    this.changeDimensions(shouldShowSidebar ? '28%' : '4%');
     telemetry.trackEvent(
       eventTypes.BUTTON_CLICK_EVENT,
       {
@@ -285,7 +285,7 @@ class App extends Component<IAppProps, IAppState> {
       showSidebar
     };
     if (showSidebar) {
-      this.changeDimensions('26%');
+      this.changeDimensions('28%');
     }
 
     // @ts-ignore

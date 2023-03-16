@@ -173,11 +173,12 @@ export function getPermissionsScopeType(profile: IUser | null | undefined) {
 export function consentToScopes(scopes: string[]) {
   return async (dispatch: Function, getState: Function) => {
     try {
-      const { profile }: ApplicationState = getState();
+      const { profile, consentedScopes }: ApplicationState = getState();
       const authResponse = await authenticationWrapper.consentToScopes(scopes);
       if (authResponse && authResponse.accessToken) {
         dispatch(getAuthTokenSuccess(true));
-        dispatch(getConsentedScopesSuccess(authResponse.scopes));
+        const validatedScopes = validateConsentedScopes(scopes, consentedScopes, authResponse.scopes);
+        dispatch(getConsentedScopesSuccess(validatedScopes));
         if (
           authResponse.account &&
           authResponse.account.localAccountId !== profile?.id
@@ -205,6 +206,18 @@ export function consentToScopes(scopes: string[]) {
       );
     }
   };
+}
+
+const validateConsentedScopes = (scopeToBeConsented: string[], consentedScopes: string[],
+  consentedResponse: string[]) => {
+  if(!consentedScopes || !consentedResponse || !scopeToBeConsented) {
+    return consentedResponse;
+  }
+  const expectedScopes = [...consentedScopes, ...scopeToBeConsented];
+  if (expectedScopes.length === consentedResponse.length) {
+    return consentedResponse;
+  }
+  return expectedScopes;
 }
 
 export function revokeScopes(permissionToRevoke: string) {
