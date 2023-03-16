@@ -75,7 +75,7 @@ test.describe('Run query', () => {
     await page.locator('label:has-text("messages")').click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1920, height: 1080 } })).toMatchSnapshot();
-    await queryInputField.type('?sel');
+    await queryInputField.type('?$sel');
     await page.locator('label:has-text("$select")').click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1920, height: 1080 } })).toMatchSnapshot();
@@ -83,10 +83,51 @@ test.describe('Run query', () => {
     await queryInputField.press('Tab');
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1920, height: 1080 } })).toMatchSnapshot();
-
     // eslint-disable-next-line max-len
     expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/v1.0/me/messages?$select=id")').toBeDefined()
   });
+
+  test('Tests query parameter addition on autocomplete', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me/messages');
+    await queryInputField.type('?sel');
+    await page.locator('label:has-text("$select")').click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.press('Tab');
+    await queryInputField.press('Tab');
+    expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/v1.0/me/messages?$select=id")').toBeDefined()
+  })
+
+  test('Tests $filter query parameter for v1 version', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/users');
+    await queryInputField.type('?fil');
+    await page.locator('label:has-text("$filter")').click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.press('Tab');
+    await queryInputField.press('Tab');
+    await queryInputField.type('startsWith(displayName, \'Megan\')');
+    expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/v1.0/users?$filter=startsWith(displayName, \'Megan\')")').toBeDefined();
+  })
+
+  test('Tests query parameter for beta version that do not require a $ sign', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/beta/me/messages');
+    await queryInputField.type('?select=id,sender');
+    const runQueryButton = page.locator('.run-query-button button');
+    await runQueryButton.click();
+    expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/beta/me/messages?select=id,sender")').toBeDefined();
+    expect(page.getByText('"Microsoft Viva"')).toBeDefined();
+  })
 
   test('user can run query', async () => {
     const profileSample = page.locator('[aria-label="my profile"]');
@@ -102,6 +143,24 @@ test.describe('Run query', () => {
     expect(await page.screenshot()).toMatchSnapshot();
     expect(messageBar).toBeDefined();
   });
+
+  test('User can run query using the Enter key and different results are received for different queries', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me');
+    await queryInputField.press('Enter');
+    await page.waitForTimeout(100);
+    await page.evaluate(() => document.fonts.ready);
+    expect(page.getByText('"Megan Bowen"')).toBeDefined();
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me/messages?$select=sender');
+    await queryInputField.press('Enter');
+    await page.waitForTimeout(100);
+    await page.evaluate(() => document.fonts.ready);
+    expect(page.getByText('"Microsoft Viva"')).toBeDefined();
+  })
 
   test('should show documentation link for queries with links ', async () => {
     await page.locator('[aria-label="my profile"]').click();
@@ -160,7 +219,7 @@ test.describe.serial('Request section', () => {
     await page.locator('[placeholder="Key"]').fill('ConsistencyLev');
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
-    expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1920, height: 400 } })).toMatchSnapshot();
+    expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1365, height: 400 } })).toMatchSnapshot();
     await page.locator('button:has-text("Update")').click();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
@@ -180,7 +239,7 @@ test.describe('Permissions', () => {
     await page.evaluate(() => document.fonts.ready);
     const permissionsText = page.locator('text=One of the following permissions is required to run the query. Sign in with an a');
     expect(permissionsText).toBeDefined();
-    expect(await page.screenshot({ clip: { x: 0, y: 0, width: 1920, height: 400 } })).toMatchSnapshot();
+    expect(await page.screenshot()).toMatchSnapshot();
     const DirectoryPermission =  page.locator('div[role="gridcell"]:has-text("Directory.Read.AllDirectory.Read.All")');
     expect(DirectoryPermission).toBeDefined();
   })

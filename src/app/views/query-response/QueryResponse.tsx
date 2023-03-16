@@ -148,6 +148,8 @@ const QueryResponse = () => {
           />
           <Pivot className='pivot-response'
             onLinkClick={(pivotItem) => onModalPivotItemClicked(pivotItem)}
+            overflowBehavior='menu'
+            overflowAriaLabel={translateMessage('More items')}
             selectedKey={currentTab}
             styles={modalPivotStyles}>
             {GetPivotItems()}
