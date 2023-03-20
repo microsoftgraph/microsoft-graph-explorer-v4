@@ -139,15 +139,9 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   }
 
   const setAdminLabel = (item: any): JSX.Element => {
-    if (item.isAdmin) {
-      return <div style={adminLabelStyles}>
-        <span>{translateMessage('Yes')}</span>
-      </div>;
-    } else {
-      return <div style={adminLabelStyles}>
-        <span>{translateMessage('No')}</span>
-      </div>;
-    }
+    return <div style={adminLabelStyles}>
+      <Label>{item.isAdmin ? <FormattedMessage id='Yes' /> : <FormattedMessage id='No' />}</Label>
+    </div>;
   }
 
   const createConsentButton = (consented: boolean, item: any, hostId: string): JSX.Element => {
