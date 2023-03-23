@@ -182,7 +182,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
       const tenantGrantFetchPending = scopes.pending.isTenantWidePermissionsGrant;
       return (
         permissionConsentType({ item, allPrincipalPermissions, consentedScopes, singlePrincipalPermissions,
-          tenantGrantFetchPending })
+          tenantGrantFetchPending, dispatch })
       )
     }
   }

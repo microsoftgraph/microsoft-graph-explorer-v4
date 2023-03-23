@@ -1,5 +1,4 @@
 import { DirectionalHint, IconButton, IIconProps, Label, Spinner, TooltipHost } from '@fluentui/react';
-import { useDispatch } from 'react-redux';
 import { IPermission } from '../../../../../types/permissions'
 import { fetchAllPrincipalGrants } from '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -10,14 +9,14 @@ interface IConsentType {
   singlePrincipalPermissions: string[],
   itemNotInGrants?: Function,
   consentedScopes: string[],
-  tenantGrantFetchPending: boolean | undefined
+  tenantGrantFetchPending: boolean | undefined,
+  dispatch: Function
 }
 
 export const permissionConsentType = (props: IConsentType) => {
   const { item, allPrincipalPermissions, singlePrincipalPermissions, consentedScopes,
-    tenantGrantFetchPending
+    tenantGrantFetchPending, dispatch
   } = props;
-  // const dispatch = useDispatch();
   const consentTypeLabelStyles = {
     textAlign: 'center' as 'center',
     paddingLeft: '10px'
@@ -44,7 +43,7 @@ export const permissionConsentType = (props: IConsentType) => {
   }
 
   const handleOnClick = () => {
-    // dispatch(fetchAllPrincipalGrants());
+    dispatch(fetchAllPrincipalGrants());
   }
 
   const iconProps: IIconProps = {
