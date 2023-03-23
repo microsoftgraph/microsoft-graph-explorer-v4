@@ -380,9 +380,7 @@ export const getSinglePrincipalGrant = (tenantWideGrant: IPermissionGrant[], pri
     const allGrants = tenantWideGrant;
     const singlePrincipalGrant = allGrants.find(grant => grant.principalId === principalId);
     if(singlePrincipalGrant){
-      if(singlePrincipalGrant){
-        return singlePrincipalGrant.scope.split(' ');
-      }
+      return singlePrincipalGrant.scope.split(' ');
     }
   }
   return [];
