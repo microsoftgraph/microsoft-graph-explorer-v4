@@ -126,7 +126,7 @@ export class RevokePermissionsUtil {
     return updatedScopes;
   }
 
-  public async updateAllPrincipalPermissionGrant(grantsPayload: IOAuthGrantPayload, permissionToRevoke: string) {
+  public async getUpdatedAllPrincipalPermissionGrant(grantsPayload: IOAuthGrantPayload, permissionToRevoke: string) {
     const servicePrincipalAppId = await RevokePermissionsUtil.getServicePrincipalId([]);
     const allPrincipalGrant = this.getAllPrincipalGrant(grantsPayload);
     const updatedScopes = allPrincipalGrant.scope.split(' ').filter((scope: string) => scope !== permissionToRevoke);
@@ -156,6 +156,7 @@ export class RevokePermissionsUtil {
         permissionGrant.principalId === userId);
       return filteredResponse!;
     }
+    console.log('Signed in grant ', grantsPayload.value[0]);
     return grantsPayload.value[0];
   }
 
@@ -164,6 +165,7 @@ export class RevokePermissionsUtil {
     if (!servicePrincipalAppId) { return { value: [], '@odata.context': '' } }
     genericQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
     const oAuthGrant = await RevokePermissionsUtil.makePermissionsRequest(scopes, genericQuery);
+    console.log('oAuthGrant', oAuthGrant);
     return oAuthGrant;
   }
 
@@ -190,6 +192,7 @@ export class RevokePermissionsUtil {
     // eslint-disable-next-line no-useless-catch
     try {
       const response = await RevokePermissionsUtil.makePermissionsRequest([], patchQuery);
+      console.log('response for single princp', response);
       const { error } = response;
       if (error) {
         throw error;

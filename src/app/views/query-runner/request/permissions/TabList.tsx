@@ -1,10 +1,11 @@
 import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode } from '@fluentui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission } from '../../../../../types/permissions';
+import { fetchAllPrincipalGrants } from '../../../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 import { setConsentedStatus } from './util';
 
@@ -24,6 +25,10 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   const [isScreenSizeReduced, setIsScreenSizeReduced] = useState(false);
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
+
+  useEffect(() => {
+    dispatch(fetchAllPrincipalGrants());
+  }, [])
 
   const openPermissionsPanel = () => {
     dispatch(togglePermissionsPanel(true));
