@@ -16,8 +16,8 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission,IPermissionGrant, IPermissionProps } from '../../../../../types/permissions';
-import { consentToScopes, fetchScopes, revokeScopes, fetchAllPrincipalGrants } from
-  '../../../../services/actions/permissions-action-creator';
+import { consentToScopes, fetchScopes, revokeScopes, getAllPrincipalGrant,
+  getSinglePrincipalGrant } from '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
@@ -177,8 +177,8 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
       && consented && profile && profile.id) {
 
       const tenantWideGrant: IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant;
-      const allPrincipalPermissions = getAllPrincipalPermissions(tenantWideGrant);
-      const singlePrincipalPermissions: string[] = getSinglePrincipalPermissions(tenantWideGrant, profile.id);
+      const allPrincipalPermissions = getAllPrincipalGrant(tenantWideGrant);
+      const singlePrincipalPermissions: string[] = getSinglePrincipalGrant(tenantWideGrant, profile.id);
       const tenantGrantFetchPending = scopes.pending.isTenantWidePermissionsGrant;
       return (
         permissionConsentType({ item, allPrincipalPermissions, consentedScopes, singlePrincipalPermissions,
@@ -187,21 +187,9 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
     }
   }
 
-  const getAllPrincipalPermissions = (tenantWidePermissionsGrant: IPermissionGrant[]): string[] => {
-    const allPrincipalPermissions = tenantWidePermissionsGrant.find((permission: any) =>
-      permission.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
-    return allPrincipalPermissions ? allPrincipalPermissions.scope.split(' ') : [];
-  }
-
-  const getSinglePrincipalPermissions = (tenantWidePermissionsGrant: IPermissionGrant[], id: string): string[] => {
-    const singlePrincipalPermissions = tenantWidePermissionsGrant.find((permission: any) =>
-      permission.consentType.toLowerCase() === 'Principal'.toLowerCase() && permission.principalId === id);
-    return singlePrincipalPermissions ? singlePrincipalPermissions.scope.split(' ') : [];
-  }
-
   const userHasRequiredPermissions = () : boolean => {
     if(scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0) {
-      const allPrincipalPermissions = getAllPrincipalPermissions(scopes.data.tenantWidePermissionsGrant);
+      const allPrincipalPermissions = getAllPrincipalGrant(scopes.data.tenantWidePermissionsGrant);
       const principalAndAllPrincipalPermissions = [...allPrincipalPermissions, ...consentedScopes];
       const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
       return requiredPermissions.every(scope => principalAndAllPrincipalPermissions.includes(scope));
