@@ -253,10 +253,16 @@ jobs:
   - job: Four
     displayName: Run Accessibility Insights tool
     steps:
+      - task: NodeTool@0
+        displayName: "Use node 14"
+        inputs:
+          versionSpec: "14.20.x"
+        script: |
+          npm install
+          start-server-and-test start-server http://localhost:3000
+
       - task: accessibility-insights@3
         inputs:
           hostingMode: "dynamicSite"
           url: "http://localhost:3000"
           snapshot: true
-          script: |
-            start-server-and-test start-server http://localhost:3000
