@@ -1,6 +1,6 @@
 
 import { IQuery, ISampleQuery } from '../../../../../../types/query-runner';
-import { IResource } from '../../../../../../types/resources';
+import { IResource, ResourceMethod } from '../../../../../../types/resources';
 import { GRAPH_URL } from '../../../../../services/graph-constants';
 import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
 import {
@@ -69,9 +69,16 @@ class DocumentationService implements IDocumentationService {
 
     if (matchingResource && matchingResource.labels.length > 0) {
       const currentLabel = matchingResource.labels.filter(k => k.name === this.queryVersion)[0];
-      const methodLabel = currentLabel.methods.find((value) =>
-        value.name?.toLowerCase() === this.method.toLowerCase());
-      return methodLabel?.documentationUrl!;
+
+      const method = currentLabel.methods[0];
+      if (typeof method === 'string') {
+        return null;
+      }
+
+      if (typeof method === 'object') {
+        return currentLabel.methods.find((value: ResourceMethod) =>
+          value.name?.toLowerCase() === this.method.toLowerCase())?.documentationUrl!;
+      }
     }
     return null;
   }
