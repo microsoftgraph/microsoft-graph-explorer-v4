@@ -154,7 +154,6 @@ jobs:
         condition: always()
         displayName: "Publish test results"
 
-
   - job: Three
     displayName: "Publish artifacts"
     dependsOn: One
@@ -250,12 +249,14 @@ jobs:
         inputs:
           contents: node_modules
         displayName: "Delete node_modules"
-        
+
   - job: Four
     displayName: Run Accessibility Insights tool
     steps:
       - task: accessibility-insights@3
         inputs:
-          hostingMode: 'dynamicSite'
-          url: 'http://localhost:3000'
+          hostingMode: "dynamicSite"
+          url: "http://localhost:3000"
           snapshot: true
+          script: |
+            start-server-and-test start-server http://localhost:3000
