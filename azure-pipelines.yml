@@ -259,7 +259,7 @@ jobs:
           versionSpec: "14.20.x"
 
       - script: |
-          npm run install
+          npm install
         displayName: "Install dependencies"
 
       - script: |
