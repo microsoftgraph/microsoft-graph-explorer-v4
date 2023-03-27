@@ -257,9 +257,9 @@ jobs:
         displayName: "Use node 14"
         inputs:
           versionSpec: "14.20.x"
-        script: |
-          npm install
-          start-server-and-test start-server http://localhost:3000
+          script: |
+            npm install
+            start-server-and-test start-server http://localhost:3000
 
       - task: accessibility-insights@3
         inputs:
