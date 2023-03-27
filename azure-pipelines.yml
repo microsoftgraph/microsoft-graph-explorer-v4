@@ -257,9 +257,14 @@ jobs:
         displayName: "Use node 14"
         inputs:
           versionSpec: "14.20.x"
-          script: |
-            npm install
-            start-server-and-test start-server http://localhost:3000
+
+      - script: |
+          npm run install
+        displayName: "Install dependencies"
+
+      - script: |
+          npm run test-insight-tool
+        displayName: "Start server and test"
 
       - task: accessibility-insights@3
         inputs:
