@@ -250,3 +250,12 @@ jobs:
         inputs:
           contents: node_modules
         displayName: "Delete node_modules"
+        
+  - job: Four
+    displayName: Run Accessibility Insights tool
+    steps:
+      - task: accessibility-insights@3
+        inputs:
+          hostingMode: 'dynamicSite'
+          url: 'http://localhost:3000'
+          snapshot: true
