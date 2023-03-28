@@ -273,11 +273,12 @@ jobs:
       - script: |
           start /B serve -s build
         displayName: "Serve static files async"
+        timeoutInMinutes: 25
 
       - task: accessibility-insights.prod.task.accessibility-insights@3
-        timeoutInMinutes: 6
+        timeoutInMinutes: 25
         inputs:
           hostingMode: "dynamicSite"
           url: "http://localhost:3000"
           snapshot: true
-          scanTimeout: 300000
+          scanTimeout: 1200000
