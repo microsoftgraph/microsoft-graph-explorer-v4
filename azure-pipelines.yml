@@ -275,6 +275,7 @@ jobs:
         displayName: "Serve static files async"
 
       - task: accessibility-insights@3
+        timeoutInMinutes: 6
         inputs:
           hostingMode: "dynamicSite"
           url: "http://localhost:3000"
