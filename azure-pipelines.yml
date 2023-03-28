@@ -264,7 +264,15 @@ jobs:
 
       - script: |
           npm run build
+        displayName: "Build app"
+
+      - script: |
+          npm install -g serve
+        displayName: "Install serve"
+
+      - script: |
           start /B serve -s build
+        displayName: "Serve static files async"
 
       - task: accessibility-insights@3
         inputs:
