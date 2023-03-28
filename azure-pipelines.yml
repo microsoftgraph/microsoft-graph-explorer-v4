@@ -280,3 +280,4 @@ jobs:
           hostingMode: "dynamicSite"
           url: "http://localhost:3000"
           snapshot: true
+          scanTimeout: 300000
