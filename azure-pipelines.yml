@@ -263,8 +263,7 @@ jobs:
         displayName: "Install dependencies"
 
       - script: |
-          npm run start
-        displayName: "Start server and test"
+          npm run start &
 
       - task: accessibility-insights@3
         inputs:
