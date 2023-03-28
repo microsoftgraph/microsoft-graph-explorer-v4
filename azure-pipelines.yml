@@ -274,7 +274,7 @@ jobs:
           start /B serve -s build
         displayName: "Serve static files async"
 
-      - task: accessibility-insights@3
+      - task: accessibility-insights.prod.task.accessibility-insights@3
         timeoutInMinutes: 6
         inputs:
           hostingMode: "dynamicSite"
