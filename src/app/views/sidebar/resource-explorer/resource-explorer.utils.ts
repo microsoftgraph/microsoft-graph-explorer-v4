@@ -1,8 +1,7 @@
 import { INavLink, INavLinkGroup } from '@fluentui/react';
 
 import {
-  IResource, IResourceLabel, IResourceLink, Method, ResourceLinkType,
-  ResourceMethod
+  IResource, IResourceLabel, IResourceLink, Method, ResourceLinkType, ResourceMethod
 } from '../../../../types/resources';
 import { versionExists } from '../../../utils/resources/resources-filter';
 
@@ -30,7 +29,7 @@ export function createResourcesList(
   function getVersionedChildLinks(
     parent: IResource,
     paths: string[],
-    methods: ResourceMethod[]
+    methods: Method[]
   ): IResourceLink[] {
     const { segment, children } = parent;
     const links: IResourceLink[] = [];
@@ -50,7 +49,7 @@ export function createResourcesList(
               },
               segment,
               childPaths,
-              method.name
+              method
             )
           );
         });
@@ -89,7 +88,7 @@ export function createResourcesList(
     const parentKeyPart = parent === '/' ? 'root' : parent;
     const methodKeyPart = method ? `-${method?.toLowerCase()}` : '';
     const key = `${level}-${parentKeyPart}-${segment}${methodKeyPart}`;
-    const availableMethods: ResourceMethod[] = getAvailableMethods(labels, version);
+    const availableMethods: Method[] = getAvailableMethods(labels, version);
     const versionedChildren = getVersionedChildLinks(
       info,
       paths,
@@ -99,7 +98,7 @@ export function createResourcesList(
     // if segment has one method only and no children, do not make segment a node
     if (availableMethods.length === 1 && versionedChildren.length === 0) {
       paths = [...paths, segment];
-      method = availableMethods[0].name;
+      method = availableMethods[0];
     }
     const type = getLinkType({ ...info, links: versionedChildren });
     const enclosedCounter =
@@ -173,11 +172,22 @@ export function removeCounter(title: string): string {
 export function getAvailableMethods(
   labels: IResourceLabel[],
   version: string
-): ResourceMethod[] {
+): Method[] {
+  const methods: Method[] = [];
   const resourceLabel = labels.find(
     (label: IResourceLabel) => label.name === version
   )!;
-  return resourceLabel ? resourceLabel.methods : [];
+  if (resourceLabel && resourceLabel.methods) {
+    resourceLabel.methods.forEach(method => {
+      methods.push(getMethod(method));
+    });
+  }
+  return methods;
+}
+
+function getMethod(method: ResourceMethod): Method {
+  // added to guarantee backwards compatibility with old method definitions
+  return (typeof method === 'string') ? method as Method : method.name as Method;
 }
 
 export function getUrlFromLink(link: IResourceLink | INavLink): string {

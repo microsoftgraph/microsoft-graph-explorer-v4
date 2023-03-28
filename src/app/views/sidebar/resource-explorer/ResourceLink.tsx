@@ -32,7 +32,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
     background: getStyleFor(resourceLink.method),
     textAlign: 'center',
     marginRight: '12px',
-    maxHeight: 24
+    maxHeight: 24,
+    textTransform: 'uppercase'
   }
 
   const items = getMenuItems();
@@ -43,8 +44,9 @@ const ResourceLink = (props: IResourceLinkProps) => {
         className={classes.badge}
         style={methodButtonStyles}
       >
-        {resourceLink.method.toUpperCase()}
-      </span>}
+        {resourceLink.method}
+      </span>
+    }
 
     <span className={linkStyle.resourceLinkNameContainer}>
       <span className={linkStyle.resourceLinkText}>
