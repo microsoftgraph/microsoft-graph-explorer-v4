@@ -278,7 +278,6 @@ jobs:
       - task: accessibility-insights.prod.task.accessibility-insights@3
         timeoutInMinutes: 25
         inputs:
-          hostingMode: "dynamicSite"
-          url: "http://localhost:3000"
+          url: "https://developer.microsoft.com/en-us/graph/graph-explorer"
           snapshot: true
           scanTimeout: 1200000
