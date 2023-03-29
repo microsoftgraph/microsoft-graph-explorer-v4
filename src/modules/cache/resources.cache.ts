@@ -8,19 +8,29 @@ const resourcesStorage = localforage.createInstance({
 });
 
 const RESOURCE_KEY = 'resources';
+const expiryTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000; //1 week expiration
 
 export const resourcesCache = (function () {
 
   const saveResources = async (queries: IResource[]) => {
-    await resourcesStorage.setItem(RESOURCE_KEY, JSON.stringify(queries));
+    const cacheData={
+      data: JSON.stringify(queries),
+      expiry: expiryTime
+    }
+    await resourcesStorage.setItem(RESOURCE_KEY, cacheData);
   }
 
   const readResources = async (): Promise<IResource[]> => {
-    const items = await resourcesStorage.getItem(RESOURCE_KEY) as string;
-    if (items) {
-      return JSON.parse(items);
+    const cacheData = await resourcesStorage.getItem(RESOURCE_KEY) as any;
+    if (cacheData) {
+      const {data, expiry} = cacheData;
+      if(expiry < Date.now()){
+        resourcesStorage.removeItem(RESOURCE_KEY);
+        return[]
+      }
+      return  JSON.parse(data);
     }
-    return [];
+    return [] ;
   }
 
   return {
