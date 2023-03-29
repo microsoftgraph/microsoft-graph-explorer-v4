@@ -1,6 +1,6 @@
 import localforage from 'localforage';
 import { IResource } from '../../types/resources';
-
+import { ICacheData } from '../../types/sidebar';
 
 const resourcesStorage = localforage.createInstance({
   storeName: 'resources',
@@ -14,23 +14,23 @@ export const resourcesCache = (function () {
 
   const saveResources = async (queries: IResource[]) => {
     const cacheData={
-      data: JSON.stringify(queries),
+      queries: JSON.stringify(queries),
       expiry: expiryTime
     }
     await resourcesStorage.setItem(RESOURCE_KEY, cacheData);
   }
 
   const readResources = async (): Promise<IResource[]> => {
-    const cacheData = await resourcesStorage.getItem(RESOURCE_KEY) as any;
+    const cacheData = await resourcesStorage.getItem(RESOURCE_KEY) as ICacheData;
     if (cacheData) {
-      const {data, expiry} = cacheData;
-      if(expiry < Date.now()){
-        resourcesStorage.removeItem(RESOURCE_KEY);
-        return[]
+      const {queries, expiry} = cacheData;
+      if(expiry >= Date.now()){
+        return JSON.parse(queries);
       }
-      return  JSON.parse(data);
+      resourcesStorage.removeItem(RESOURCE_KEY);
+      return [];
     }
-    return [] ;
+    return [];
   }
 
   return {
