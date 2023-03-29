@@ -187,7 +187,7 @@ export function getAvailableMethods(
 
 function getMethod(method: ResourceMethod): Method {
   // added to guarantee backwards compatibility with old method definitions
-  return (typeof method === 'string') ? method as Method : method.name as Method;
+  return (typeof method === 'string') ? method : method.name;
 }
 
 export function getUrlFromLink(link: IResourceLink | INavLink): string {
