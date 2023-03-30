@@ -27,7 +27,9 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
   useEffect(() => {
-    dispatch(fetchAllPrincipalGrants());
+    if(tokenPresent){
+      dispatch(fetchAllPrincipalGrants());
+    }
   }, [])
 
   const openPermissionsPanel = () => {

@@ -11,6 +11,7 @@ import { AppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
+import { fetchAllPrincipalGrants } from '../../../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';
@@ -65,6 +66,12 @@ const PanelList = ({ messages,
       if(permissionsList.length === 0){ return }
     }
   }, [permissions, searchStarted])
+
+  useEffect(() => {
+    if (tokenPresent) {
+      dispatch(fetchAllPrincipalGrants());
+    }
+  }, [])
 
   const dispatch: AppDispatch = useDispatch();
 
