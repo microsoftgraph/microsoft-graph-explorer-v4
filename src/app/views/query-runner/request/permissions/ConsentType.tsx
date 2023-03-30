@@ -12,7 +12,7 @@ interface IConsentType {
   dispatch: Function
 }
 
-export const permissionConsentType = (props: IConsentType) => {
+export const PermissionConsentType = (props: IConsentType) => {
   const { item, allPrincipalPermissions, singlePrincipalPermissions,
     tenantGrantFetchPending, dispatch
   } = props;

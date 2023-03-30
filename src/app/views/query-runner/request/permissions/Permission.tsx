@@ -29,7 +29,7 @@ import { ADMIN_CONSENT_DOC_LINK, CONSENT_TYPE_DOC_LINK,
   REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
 import { styles } from '../../query-input/auto-complete/suffix/suffix.styles';
 import { componentNames, telemetry } from '../../../../../telemetry';
-import { permissionConsentType } from './ConsentType';
+import { PermissionConsentType } from './ConsentType';
 export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const { sampleQuery, scopes, dimensions, authToken, consentedScopes, profile } =
@@ -179,10 +179,11 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
       const allPrincipalPermissions = getAllPrincipalGrant(tenantWideGrant);
       const singlePrincipalPermissions: string[] = getSinglePrincipalGrant(tenantWideGrant, profile.id);
       const tenantGrantFetchPending = scopes.pending.isTenantWidePermissionsGrant;
-      return (
-        permissionConsentType({ item, allPrincipalPermissions, singlePrincipalPermissions,
-          tenantGrantFetchPending, dispatch })
-      )
+      const consentTypeProperties = {
+        item, allPrincipalPermissions, singlePrincipalPermissions,
+        tenantGrantFetchPending, dispatch
+      }
+      return <PermissionConsentType {...consentTypeProperties} />
     }
   }
 
