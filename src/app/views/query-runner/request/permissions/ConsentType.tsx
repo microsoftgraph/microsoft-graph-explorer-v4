@@ -8,13 +8,12 @@ interface IConsentType {
   allPrincipalPermissions: string[],
   singlePrincipalPermissions: string[],
   itemNotInGrants?: Function,
-  consentedScopes: string[],
   tenantGrantFetchPending: boolean | undefined,
   dispatch: Function
 }
 
 export const permissionConsentType = (props: IConsentType) => {
-  const { item, allPrincipalPermissions, singlePrincipalPermissions, consentedScopes,
+  const { item, allPrincipalPermissions, singlePrincipalPermissions,
     tenantGrantFetchPending, dispatch
   } = props;
   const consentTypeLabelStyles = {

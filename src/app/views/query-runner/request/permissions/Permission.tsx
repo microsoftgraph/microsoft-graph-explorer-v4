@@ -173,15 +173,14 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   }
 
   const setConsentTypeProperty = (consented: boolean, item: any) => {
-    if (scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0
-      && consented && profile && profile.id) {
+    if (scopes && consented && profile && profile.id) {
 
-      const tenantWideGrant: IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant;
+      const tenantWideGrant: IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant!;
       const allPrincipalPermissions = getAllPrincipalGrant(tenantWideGrant);
       const singlePrincipalPermissions: string[] = getSinglePrincipalGrant(tenantWideGrant, profile.id);
       const tenantGrantFetchPending = scopes.pending.isTenantWidePermissionsGrant;
       return (
-        permissionConsentType({ item, allPrincipalPermissions, consentedScopes, singlePrincipalPermissions,
+        permissionConsentType({ item, allPrincipalPermissions, singlePrincipalPermissions,
           tenantGrantFetchPending, dispatch })
       )
     }
