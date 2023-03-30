@@ -352,14 +352,10 @@ const dispatchGrantsStatus = (dispatch: Function, tenantGrantValue: IPermissionG
 }
 
 const allScopesHaveConsentType = (consentedScopes: string[], tenantWideGrant: IOAuthGrantPayload, id: string) => {
-  const requiredPermission = 'Directory.Read.All';
-  if(consentedScopes.includes(requiredPermission)){
-    const allPrincipalGrants: string[] = getAllPrincipalGrant(tenantWideGrant.value);
-    const singlePrincipalGrants: string[] = getSinglePrincipalGrant(tenantWideGrant.value, id);
-    const combinedPermissions = [...allPrincipalGrants, ...singlePrincipalGrants];
-    return consentedScopes.every(scope => combinedPermissions.includes(scope));
-  }
-  return false;
+  const allPrincipalGrants: string[] = getAllPrincipalGrant(tenantWideGrant.value);
+  const singlePrincipalGrants: string[] = getSinglePrincipalGrant(tenantWideGrant.value, id);
+  const combinedPermissions = [...allPrincipalGrants, ...singlePrincipalGrants];
+  return consentedScopes.every(scope => combinedPermissions.includes(scope));
 }
 
 export const getAllPrincipalGrant = (tenantWideGrant: IPermissionGrant[]): string[] => {
