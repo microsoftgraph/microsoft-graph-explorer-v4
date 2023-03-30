@@ -38,10 +38,6 @@ export const permissionConsentType = (props: IConsentType) => {
     )
   }
 
-  if(!consentedScopes.includes(item.value)){
-    return null;
-  }
-
   const handleOnClick = () => {
     dispatch(fetchAllPrincipalGrants());
   }
