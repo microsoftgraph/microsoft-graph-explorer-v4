@@ -46,7 +46,7 @@ export function removeResourcePaths(response: object): AppAction {
 export function fetchResources() {
   return async (dispatch: Function, getState: Function) => {
     const { devxApi }: ApplicationState = getState();
-    const resourcesUrl = `${devxApi.baseUrl}/openapi/tree`;
+    const resourcesUrl = `${devxApi.baseUrl}/openapi/tre`;
 
     const headers = {
       'Content-Type': 'application/json'
@@ -57,16 +57,15 @@ export function fetchResources() {
     dispatch(fetchResourcesPending());
 
     try {
+      const cachedResources = await resourcesCache.readResources();
+      if (cachedResources.length !== 0){
+        return dispatch(fetchResourcesSuccess(cachedResources));
+      }
+    } catch (error) {
       const response = await fetch(resourcesUrl, options);
       if (response.ok) {
         const resources = await response.json() as IResource;
         return dispatch(fetchResourcesSuccess(resources));
-      }
-      throw response;
-    } catch (error) {
-      const cachedResources = await resourcesCache.readResources();
-      if (cachedResources.length !== 0){
-        return dispatch(fetchResourcesSuccess(cachedResources));
       }
       return dispatch(fetchResourcesError({ error }));
     }
