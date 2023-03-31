@@ -56,8 +56,8 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   }
 
   if(permissions.length === 0){
-    return scopes.error && scopes.error.error && scopes.error.error.status !== 404 ?
-      displayErrorFetchingPermissionsMessage() : displayNoPermissionsFoundMessage();
+    return scopes.error && scopes.error.error && scopes.error.error.status && scopes.error.error.status === 404 ?
+      displayNoPermissionsFoundMessage() : displayErrorFetchingPermissionsMessage();
   }
 
   return (
