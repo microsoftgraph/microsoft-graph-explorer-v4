@@ -46,7 +46,7 @@ export function removeResourcePaths(response: object): AppAction {
 export function fetchResources() {
   return async (dispatch: Function, getState: Function) => {
     const { devxApi }: ApplicationState = getState();
-    const resourcesUrl = `${devxApi.baseUrl}/openapi/tre`;
+    const resourcesUrl = `${devxApi.baseUrl}/openapi/tree`;
 
     const headers = {
       'Content-Type': 'application/json'
