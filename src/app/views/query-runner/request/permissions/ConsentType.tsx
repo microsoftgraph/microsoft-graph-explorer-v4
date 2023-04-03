@@ -56,6 +56,7 @@ export const PermissionConsentType = (props: IConsentType) => {
           <IconButton onClick={handleOnClick}
             iconProps={iconProps}
             styles={{root: {left: '50px'}}}
+            ariaLabel={translateMessage('Reload consent-type')}
           >
             {translateMessage('Reload ')}
           </IconButton>
