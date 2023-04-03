@@ -14,7 +14,7 @@ import { createShareLink } from '../../../common/share';
 import { shareQueryStyles } from './ShareQuery.styles';
 
 
-export const ShareQuery = () => {
+const ShareQuery = () => {
   const { sampleQuery } = useAppSelector((state) => state);
   const [showShareQueryDialog, setShareQuaryDialogStatus] = useState(true);
 
@@ -102,3 +102,5 @@ export const ShareQuery = () => {
     </div>
   )
 }
+
+export default ShareQuery;
