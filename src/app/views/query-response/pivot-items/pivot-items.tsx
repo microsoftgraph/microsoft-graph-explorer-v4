@@ -11,8 +11,8 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
-import { LazyAdaptiveCards, LazyGraphToolkit, LazyResponseHeaders,
-  LazySnippets } from '../../common/lazy-loader/component-registry/registry';
+import { AdaptiveCards, GraphToolkit, ResponseHeaders,
+  Snippets } from '../../common/lazy-loader/component-registry';
 
 export const GetPivotItems = () => {
 
@@ -84,7 +84,7 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-headers-tab'
       }}
     >
-      <div id={'response-headers-tab'}><LazyResponseHeaders /></div>
+      <div id={'response-headers-tab'}><ResponseHeaders /></div>
     </PivotItem>
   ];
   if (mode === Mode.Complete) {
@@ -100,7 +100,7 @@ export const GetPivotItems = () => {
           'aria-controls': 'code-snippets-tab'
         }}
       >
-        <div id={'code-snippets-tab'}><LazySnippets /></div>
+        <div id={'code-snippets-tab'}><Snippets /></div>
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'
@@ -114,7 +114,7 @@ export const GetPivotItems = () => {
           'aria-controls': 'toolkit-tab'
         }}
       >
-        <div id={'toolkit-tab'}><LazyGraphToolkit /></div>
+        <div id={'toolkit-tab'}><GraphToolkit /></div>
       </PivotItem>,
       <PivotItem
         key='adaptive-cards'
@@ -132,7 +132,7 @@ export const GetPivotItems = () => {
           {(theme) => (
             // @ts-ignore
             <div id={'adaptive-cards-tab'}>
-              <LazyAdaptiveCards
+              <AdaptiveCards
                 body={body}
                 hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
               />

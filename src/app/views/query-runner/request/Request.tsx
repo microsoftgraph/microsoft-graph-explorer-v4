@@ -16,7 +16,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { RequestBody } from './body';
 import './request.scss';
-import { LazyPermission, LazyAuth, LazyRequstHeaders } from '../../common/lazy-loader/component-registry/registry';
+import { Permission, Auth, RequstHeaders } from '../../common/lazy-loader/component-registry';
 
 const Request = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
@@ -68,7 +68,7 @@ const Request = (props: any) => {
         }}
       >
         <div style={containerStyle} id={'request-header-tab'}>
-          <LazyRequstHeaders />
+          <RequstHeaders />
         </div>
       </PivotItem>,
       <PivotItem
@@ -82,7 +82,7 @@ const Request = (props: any) => {
         }}
       >
         <div style={containerStyle} id={'permission-tab'}>
-          <LazyPermission />
+          <Permission />
         </div>
       </PivotItem>
     ];
@@ -98,7 +98,7 @@ const Request = (props: any) => {
             'aria-controls': 'access-token-tab'
           }}>
           <div style={containerStyle} id={'access-token-tab'}>
-            <LazyAuth />
+            <Auth />
           </div>
         </PivotItem>
       );

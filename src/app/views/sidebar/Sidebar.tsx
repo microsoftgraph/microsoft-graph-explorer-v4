@@ -13,7 +13,7 @@ import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';
 import SampleQueries from './sample-queries/SampleQueries';
 import { sidebarStyles } from './Sidebar.styles';
-import { LazyResourceExplorer, LazyHistory } from '../common/lazy-loader/component-registry/registry';
+import { ResourceExplorer, History } from '../common/lazy-loader/component-registry';
 interface ISidebar {
   currentTab: string;
   setSidebarTabSelection: Function;
@@ -65,7 +65,7 @@ export const Sidebar = (props: ISidebar) => {
               'aria-controls': 'resources-tab'
             }}
           >
-            <div id={'resources-tab'}><LazyResourceExplorer /></div>
+            <div id={'resources-tab'}><ResourceExplorer /></div>
           </PivotItem>
           <PivotItem
             headerText={translateMessage('History')}
@@ -75,7 +75,7 @@ export const Sidebar = (props: ISidebar) => {
               'aria-controls': 'history-tab'
             }}
           >
-            <div id={'history-tab'}><LazyHistory /></div>
+            <div id={'history-tab'}><History /></div>
           </PivotItem>
         </Pivot>
       }

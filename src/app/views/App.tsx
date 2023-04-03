@@ -35,7 +35,7 @@ import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
 import { MainHeader } from './main-header/MainHeader';
 import { removeSpinners } from '../..';
-import { LazyStatusMessages } from './common/lazy-loader/component-registry/registry'
+import { StatusMessages } from './common/lazy-loader/component-registry'
 
 export interface IAppProps {
   theme?: ITheme;
@@ -471,7 +471,7 @@ class App extends Component<IAppProps, IAppState> {
                   display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                 }}>
                   <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                    <LazyStatusMessages />
+                    <StatusMessages />
                   </div>
                   <QueryResponse verb={this.state.selectedVerb} />
                 </div>

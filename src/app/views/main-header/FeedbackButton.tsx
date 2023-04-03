@@ -4,7 +4,7 @@ import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../../services/graph-constants';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { useAppSelector } from '../../../store';
-import { LazyFeedbackForm } from '../common/lazy-loader/component-registry/registry';
+import { FeedbackForm } from '../common/lazy-loader/component-registry';
 
 export const FeedbackButton = () => {
   const [enableSurvey, setEnableSurvey] = useState(false);
@@ -80,7 +80,7 @@ export const FeedbackButton = () => {
             componentRef={feedbackButtonRef}
           />
         </TooltipHost>
-        <LazyFeedbackForm onDismissSurvey={disableSurvey}
+        <FeedbackForm onDismissSurvey={disableSurvey}
           activated={enableSurvey} onDisableSurvey={disableSurvey} />
       </div>
       }
