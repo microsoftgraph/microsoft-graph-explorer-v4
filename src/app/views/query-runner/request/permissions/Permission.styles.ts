@@ -67,22 +67,35 @@ export const permissionStyles = (theme: ITheme) => {
       cellTitle: {
         display: 'flex',
         flex: 1,
-        textAlign: 'left'
+        textAlign: 'center'
       }
     },
     cellTitleStyles: {
       root: {
         position: 'relative' as 'relative',
-        top: '4px'
+        top: '5px'
       }
     },
     detailsHeaderStyles: {
       root: {
-        height: '40px',
+        height: '42px',
         lineHeight: '20px',
         textAlign: 'left',
         marginTop: '7px'
       }
+    },
+    adminLabelStyles: {
+      textAlign: 'center' as 'center',
+      paddingRight: '28px'
+    },
+    consentButtonStyles: {
+      root: {
+        width: '100%'
+      }
+    },
+    consentTypeLabelStyles: {
+      textAlign: 'center' as 'center',
+      paddingLeft: '10px'
     }
   };
 };

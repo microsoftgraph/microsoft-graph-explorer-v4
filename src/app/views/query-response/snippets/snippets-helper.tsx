@@ -36,6 +36,8 @@ export function renderSnippets(supportedLanguages: ISupportedLanguages) {
         'aria-controls': `${language}-tab`
       }}
       itemKey={language}
+      tabIndex={0}
+      id={`${language}-tab`}
     >
       <Snippet language={language} snippetInfo={supportedLanguages} />
     </PivotItem>

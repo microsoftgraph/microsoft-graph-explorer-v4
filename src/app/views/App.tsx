@@ -36,6 +36,7 @@ import { Sidebar } from './sidebar/Sidebar';
 import { MainHeader } from './main-header/MainHeader';
 import { removeSpinners } from '../..';
 import { StatusMessages } from './common/lazy-loader/component-registry'
+import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
 
 export interface IAppProps {
   theme?: ITheme;
@@ -88,6 +89,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public componentDidMount = async () => {
     removeSpinners();
+    KeyboardCopyEvent();
     this.displayToggleButton(this.mediaQueryList);
     this.mediaQueryList.addListener(this.displayToggleButton);
 
@@ -264,7 +266,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public toggleSidebar = (): void => {
     const shouldShowSidebar = this.setSidebarProperties();
-    this.changeDimensions(shouldShowSidebar ? '26%' : '4%');
+    this.changeDimensions(shouldShowSidebar ? '28%' : '4%');
     telemetry.trackEvent(
       eventTypes.BUTTON_CLICK_EVENT,
       {
@@ -284,7 +286,7 @@ class App extends Component<IAppProps, IAppState> {
       showSidebar
     };
     if (showSidebar) {
-      this.changeDimensions('26%');
+      this.changeDimensions('28%');
     }
 
     // @ts-ignore
