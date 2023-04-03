@@ -39,7 +39,7 @@ function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
     const item: Item = {
       name: `${name}-${version}`,
       request: {
-        method: method!,
+        method: method!.toString().toUpperCase(),
         url: {
           raw: `${GRAPH_URL}/${version}${url}`,
           protocol: 'https',
