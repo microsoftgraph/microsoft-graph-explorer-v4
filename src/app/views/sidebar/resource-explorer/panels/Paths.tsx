@@ -40,7 +40,8 @@ export default class Paths extends Component<IPathProps> {
             style={{
               fontWeight: 'bold',
               display: 'inline-block',
-              minWidth: '55px'
+              minWidth: '55px',
+              textTransform: 'uppercase'
             }}
           >
             {item.method}
