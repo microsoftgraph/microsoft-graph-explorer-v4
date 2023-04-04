@@ -16,8 +16,8 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission,IPermissionGrant, IPermissionProps } from '../../../../../types/permissions';
-import { consentToScopes, fetchScopes, revokeScopes, fetchAllPrincipalGrants } from
-  '../../../../services/actions/permissions-action-creator';
+import { consentToScopes, fetchScopes, revokeScopes, getAllPrincipalGrant,
+  getSinglePrincipalGrant } from '../../../../services/actions/permissions-action-creator';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
@@ -29,9 +29,10 @@ import { ADMIN_CONSENT_DOC_LINK, CONSENT_TYPE_DOC_LINK,
   REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
 import { styles } from '../../query-input/auto-complete/suffix/suffix.styles';
 import { componentNames, telemetry } from '../../../../../telemetry';
+import { PermissionConsentType } from './ConsentType';
 export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
-  const { sampleQuery, scopes, dimensions, authToken, consentedScopes } =
+  const { sampleQuery, scopes, dimensions, authToken, consentedScopes, profile } =
     useAppSelector((state) => state);
   const { pending: loading } = scopes;
   const tokenPresent = !!authToken.token;
@@ -45,25 +46,17 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const classes = classNames(classProps);
   const theme = getTheme();
-  const {panelContainer: panelStyles, tooltipStyles, columnCellStyles, cellTitleStyles,
-    detailsHeaderStyles, adminLabelStyles, consentButtonStyles, consentTypeLabelStyles } = permissionStyles(theme);
+  const { panelContainer: panelStyles, tooltipStyles, columnCellStyles, cellTitleStyles,
+    detailsHeaderStyles, adminLabelStyles, consentButtonStyles } = permissionStyles(theme);
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
   const getPermissions = (): void => {
     dispatch(fetchScopes());
-    fetchPermissionGrants();
-  }
-
-
-  const fetchPermissionGrants = (): void => {
-    if (tokenPresent) {
-      dispatch(fetchAllPrincipalGrants());
-    }
   }
 
   useEffect(() => {
     getPermissions();
-  },[sampleQuery, consentedScopes]);
+  },[sampleQuery]);
 
   const handleConsent = async (permission: IPermission): Promise<void> => {
     const consentScopes = [permission.value];
@@ -147,11 +140,13 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
   const createConsentButton = (consented: boolean, item: any, hostId: string): JSX.Element => {
     if (consented) {
       if(userHasRequiredPermissions()){
-        return <PrimaryButton onClick={() => handleRevoke(item)}
-          styles={consentButtonStyles}
-        >
-          <FormattedMessage id='Revoke' />
-        </PrimaryButton>
+        return (
+          <PrimaryButton onClick={() => handleRevoke(item)}
+            styles={consentButtonStyles}
+          >
+            <FormattedMessage id='Revoke' />
+          </PrimaryButton>
+        )
       }
       else{
         return <TooltipHost
@@ -177,34 +172,24 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
     }
   }
 
-  const setConsentTypeProperty = (consented: boolean, item: any): JSX.Element => {
-    if (scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0
-      && consented) {
+  const setConsentTypeProperty = (consented: boolean, item: any) => {
+    if (scopes && consented && profile && profile.id) {
 
-      const tenantWideGrant: IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant;
-      const allPrincipalPermissions = getAllPrincipalPermissions(tenantWideGrant);
-      const permissionInAllPrincipal = allPrincipalPermissions.some((permission: string) =>
-        item.value === permission);
-      return (
-        <div style={consentTypeLabelStyles}>
-          <Label>
-            {permissionInAllPrincipal ? translateMessage('AllPrincipal') : translateMessage('Principal')}
-          </Label>
-        </div>
-      )
+      const tenantWideGrant: IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant!;
+      const allPrincipalPermissions = getAllPrincipalGrant(tenantWideGrant);
+      const singlePrincipalPermissions: string[] = getSinglePrincipalGrant(tenantWideGrant, profile.id);
+      const tenantGrantFetchPending = scopes.pending.isTenantWidePermissionsGrant;
+      const consentTypeProperties = {
+        item, allPrincipalPermissions, singlePrincipalPermissions,
+        tenantGrantFetchPending, dispatch
+      }
+      return <PermissionConsentType {...consentTypeProperties} />
     }
-    return <div />
-  }
-
-  const getAllPrincipalPermissions = (tenantWidePermissionsGrant: IPermissionGrant[]): string[] => {
-    const allPrincipalPermissions = tenantWidePermissionsGrant.find((permission: any) =>
-      permission.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
-    return allPrincipalPermissions ? allPrincipalPermissions.scope.split(' ') : [];
   }
 
   const userHasRequiredPermissions = () : boolean => {
     if(scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0) {
-      const allPrincipalPermissions = getAllPrincipalPermissions(scopes.data.tenantWidePermissionsGrant);
+      const allPrincipalPermissions = getAllPrincipalGrant(scopes.data.tenantWidePermissionsGrant);
       const principalAndAllPrincipalPermissions = [...allPrincipalPermissions, ...consentedScopes];
       const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
       return requiredPermissions.every(scope => principalAndAllPrincipalPermissions.includes(scope));
