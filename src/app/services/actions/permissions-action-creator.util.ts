@@ -126,7 +126,7 @@ export class RevokePermissionsUtil {
     return updatedScopes;
   }
 
-  public async updateAllPrincipalPermissionGrant(grantsPayload: IOAuthGrantPayload, permissionToRevoke: string) {
+  public async getUpdatedAllPrincipalPermissionGrant(grantsPayload: IOAuthGrantPayload, permissionToRevoke: string) {
     const servicePrincipalAppId = await RevokePermissionsUtil.getServicePrincipalId([]);
     const allPrincipalGrant = this.getAllPrincipalGrant(grantsPayload);
     const updatedScopes = allPrincipalGrant.scope.split(' ').filter((scope: string) => scope !== permissionToRevoke);
