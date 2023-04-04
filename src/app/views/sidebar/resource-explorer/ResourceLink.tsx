@@ -4,8 +4,10 @@ import {
 } from '@fluentui/react';
 import { CSSProperties } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 
 import { ResourceLinkType, ResourceOptions } from '../../../../types/resources';
+import { validateExternalLink } from '../../../utils/external-link-validation';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
 interface IResourceLinkProps {
@@ -21,6 +23,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   const tooltipId = getId('tooltip');
   const buttonId = getId('targetButton');
+  const documentButton = getId('documentButton');
+  const documentButtonTooltip = getId('documentButtonTooltip');
 
 
   const iconButtonStyles = {
@@ -38,14 +42,55 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   const items = getMenuItems();
 
+  const openDocumentationLink = () => {
+    window.open(resourceLink.docLink, '_blank');
+    trackDocumentLinkClickedEvent();
+  }
+
+  const trackDocumentLinkClickedEvent = async (): Promise<void> => {
+    const documentationLink = resourceLink.docLink;
+    const properties: { [key: string]: any } = {
+      ComponentName: componentNames.RESOURCE_DOCUMENTATION_LINK,
+      QueryUrl: resourceLink.url,
+      Link: documentationLink
+    };
+    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, properties);
+    // Check if link throws error
+    validateExternalLink(documentationLink || '', componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK, documentationLink);
+  }
+
   return <span className={linkStyle.link}>
-    {resourceLink.method &&
-      <span
-        className={classes.badge}
-        style={methodButtonStyles}
+    {resourceLink.method && <>
+      <TooltipHost
+        content={translateMessage('Query documentation')}
+        id={documentButtonTooltip}
+        calloutProps={{ gapSpace: 0, target: `#${documentButton}` }}
+        tooltipProps={{
+          onRenderContent: function renderContent() {
+            return <div style={{ paddingBottom: 3 }}>
+              {resourceLink.docLink ? resourceLink.docLink : translateMessage('Query documentation not found')}
+            </div>
+          }
+        }}
       >
+        <IconButton
+          aria-label={translateMessage('Query documentation')}
+          role='button'
+          id={documentButton}
+          disabled={!resourceLink.docLink}
+          aria-describedby={documentButton}
+          styles={{
+            root: { marginTop: -5, marginRight: 2 },
+            menuIcon: { fontSize: 16, padding: 5 }
+          }}
+          onClick={() => openDocumentationLink()}
+          menuIconProps={{ iconName: 'TextDocument' }}
+        />
+      </TooltipHost>
+      <span className={classes.badge} style={methodButtonStyles}>
         {resourceLink.method}
       </span>
+    </>
     }
 
     <span className={linkStyle.resourceLinkNameContainer}>

@@ -67,6 +67,7 @@ export const QUERY_URL_AUTOCOMPLETE_DROPDOWN = 'Query URL autocomplete dropdown'
 // Links
 export const DOCUMENTATION_LINK = 'Documentation link';
 export const AUTOCOMPLETE_DOCUMENTATION_LINK = 'Autocomplete documentation link';
+export const RESOURCE_DOCUMENTATION_LINK = 'Resource documentation link';
 export const REPORT_AN_ISSUE_LINK = 'Report an issue link';
 export const OFFICE_DEV_PROGRAM_LINK = 'Office dev program link';
 export const GRAPH_TOOLKIT_PLAYGROUND_LINK = 'Graph toolkit playground link';
