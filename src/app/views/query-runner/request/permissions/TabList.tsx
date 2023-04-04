@@ -46,6 +46,12 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     </Label>);
   }
 
+  const displayErrorFetchingPermissionsMessage = () : JSX.Element => {
+    return (<Label className={classes.permissionLabel}>
+      <FormattedMessage id='Fetching permissions failing' />
+    </Label>);
+  }
+
   const displayNotSignedInMessage = () : JSX.Element => {
     return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='sign in to view a list of all permissions' />
@@ -57,7 +63,8 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   }
 
   if(permissions.length === 0){
-    return displayNoPermissionsFoundMessage();
+    return scopes.error && scopes.error.error && scopes.error.error.status && scopes.error.error.status === 404 ?
+      displayNoPermissionsFoundMessage() : displayErrorFetchingPermissionsMessage();
   }
 
   return (
