@@ -113,6 +113,14 @@ export function createResourcesList(
         ? true
         : false;
 
+    let docLink = '';
+    if (labels && labels.length > 0) {
+      const label = labels.find((l) => l.name === version);
+      if (label) {
+        docLink = label.methods.find((value: ResourceMethod) =>
+          value.name?.toLowerCase() === method?.toLowerCase())?.documentationUrl!;
+      }
+    }
     return {
       key,
       url: key,
@@ -124,7 +132,8 @@ export function createResourcesList(
       paths,
       method,
       type,
-      links: versionedChildren
+      links: versionedChildren,
+      docLink
     };
   }
 
