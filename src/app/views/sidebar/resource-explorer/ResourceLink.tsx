@@ -73,7 +73,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
           id={documentButtonTooltip}
           calloutProps={{ gapSpace: 0, target: `#${documentButton}` }}
           tooltipProps={{
-            onRenderContent: () => {
+            onRenderContent: function renderDocumentationContent() {
               return (
                 <div style={{ paddingBottom: 2 }}>
                   {resourceLink.docLink ? resourceLink.docLink : translateMessage('Query documentation not found')}
@@ -100,7 +100,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         id={tooltipId}
         calloutProps={{ gapSpace: 0, target: `#${buttonId}` }}
         tooltipProps={{
-          onRenderContent: () => {
+          onRenderContent: function renderContent() {
             return (
               <div style={{ paddingBottom: 2 }}>
                 <FormattedMessage id={'Add to collection'} />
