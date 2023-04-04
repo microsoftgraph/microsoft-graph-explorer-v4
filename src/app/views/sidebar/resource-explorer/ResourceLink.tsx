@@ -9,9 +9,7 @@ import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
 interface IResourceLinkProps {
   link: any;
-  isolateTree: Function;
   resourceOptionSelected: Function;
-  linkLevel: number;
   classes: any;
 }
 

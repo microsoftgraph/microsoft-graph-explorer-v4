@@ -30,7 +30,6 @@ export const REVOKE_PERMISSION_CONSENT_BUTTON = 'Revoke consent to permissions b
 export const HISTORY_LIST_ITEM = 'History list item';
 export const RESOURCES_LIST_ITEM = 'Resources list item';
 export const SAMPLE_QUERY_LIST_ITEM = 'Sample query list item';
-export const RESOURCES_ISOLATE_QUERY_LIST_ITEM = 'Resources isolate query list item';
 export const ADD_RESOURCE_TO_COLLECTION_LIST_ITEM = 'Add resource to collection list item';
 
 // Tabs
