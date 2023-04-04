@@ -23,6 +23,16 @@ test.describe('Run query', () => {
     await expect(authenticatedPage.locator('text=/.*"displayName": "Megan Bowen".*/')).not.toBeVisible();
   });
 
+  test('Run query button does not hung on queries that return 401 or 403 results', async () => {
+    await authenticatedPage.getByRole('textbox', { name: 'More Info' }).click();
+    await authenticatedPage.locator('.ms-TextField-fieldGroup').click();
+    await authenticatedPage.getByRole('textbox', { name: 'More Info' }).clear();
+    await authenticatedPage.getByRole('textbox', { name: 'More Info' }).fill('https://graph.microsoft.com/v1.0/deviceAppManagement/managedAppPolicies');
+    await authenticatedPage.getByRole('button', { name: 'Run query' }).click();
+    expect(authenticatedPage.getByText('"Forbidden"')).toBeDefined();
+    expect(authenticatedPage.getByRole('button', { name: 'Run query' })).toBeDefined();
+  })
+
 });
 
 test.describe('Request', () => {

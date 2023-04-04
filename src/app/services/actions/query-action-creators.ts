@@ -105,9 +105,12 @@ export function runQuery(query: IQuery) {
 
     if(response && response.status === 401 && (CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES)) {
       const successful = await runReAuthenticatedRequest(response);
-      if(successful){ dispatch(runQuery(query)); }
-      return;
+      if(successful){
+        dispatch(runQuery(query));
+        return;
+      }
     }
+
     dispatch(setQueryResponseStatus(status));
 
     return dispatch(

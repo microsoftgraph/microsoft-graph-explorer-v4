@@ -1,10 +1,11 @@
 import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode } from '@fluentui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission } from '../../../../../types/permissions';
+import { fetchAllPrincipalGrants } from '../../../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 import { setConsentedStatus } from './util';
 
@@ -25,6 +26,12 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
+  useEffect(() => {
+    if(tokenPresent){
+      dispatch(fetchAllPrincipalGrants());
+    }
+  }, [])
+
   const openPermissionsPanel = () => {
     dispatch(togglePermissionsPanel(true));
   }
@@ -39,6 +46,12 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     </Label>);
   }
 
+  const displayErrorFetchingPermissionsMessage = () : JSX.Element => {
+    return (<Label className={classes.permissionLabel}>
+      <FormattedMessage id='Fetching permissions failing' />
+    </Label>);
+  }
+
   const displayNotSignedInMessage = () : JSX.Element => {
     return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='sign in to view a list of all permissions' />
@@ -50,7 +63,8 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   }
 
   if(permissions.length === 0){
-    return displayNoPermissionsFoundMessage();
+    return scopes.error && scopes.error.error && scopes.error.error.status && scopes.error.error.status === 404 ?
+      displayNoPermissionsFoundMessage() : displayErrorFetchingPermissionsMessage();
   }
 
   return (
