@@ -1,12 +1,9 @@
-import {
-  ContextualMenuItemType, getId, getTheme, IconButton,
-  IContextualMenuItem, mergeStyleSets, TooltipHost
-} from '@fluentui/react';
+import { getId, getTheme, IconButton, mergeStyleSets, TooltipHost } from '@fluentui/react';
 import { CSSProperties } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 
-import { ResourceLinkType, ResourceOptions } from '../../../../types/resources';
+import { ResourceOptions } from '../../../../types/resources';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -26,7 +23,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const documentButton = getId('documentButton');
   const documentButtonTooltip = getId('documentButtonTooltip');
 
-
   const iconButtonStyles = {
     root: { marginTop: -5, marginRight: 2, zIndex: 10 },
     menuIcon: { fontSize: 14, padding: 5 }
@@ -39,8 +35,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
     maxHeight: 24,
     textTransform: 'uppercase'
   }
-
-  const items = getMenuItems();
 
   const openDocumentationLink = () => {
     window.open(resourceLink.docLink, '_blank');
@@ -79,7 +73,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
           id={documentButtonTooltip}
           calloutProps={{ gapSpace: 0, target: `#${documentButton}` }}
           tooltipProps={{
-            onRenderContent: function renderContent() {
+            onRenderContent: () => {
               return <div style={{ paddingBottom: 2 }}>
                 {resourceLink.docLink ? resourceLink.docLink : translateMessage('Query documentation not found')}
               </div>
@@ -99,57 +93,30 @@ const ResourceLink = (props: IResourceLinkProps) => {
         </TooltipHost>
       }
 
-      {items.length > 0 &&
-        <TooltipHost
-          content={translateMessage('Add to collection')}
-          id={tooltipId}
-          calloutProps={{ gapSpace: 0, target: `#${buttonId}` }}
-          tooltipProps={{
-            onRenderContent: function renderContent() {
-              return <div style={{ paddingBottom: 2 }}>
-                <FormattedMessage id={'Add to collection'} />
-              </div>
-            }
-          }}
-        >
-          <IconButton
-            ariaLabel={translateMessage('Add to collection')}
-            role='button'
-            id={buttonId}
-            aria-describedby={tooltipId}
-            styles={iconButtonStyles}
-            menuIconProps={{ iconName: 'AddNotes' }}
-            onClick={() => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, resourceLink)}
-          />
-        </TooltipHost>
-      }
+      <TooltipHost
+        content={translateMessage('Add to collection')}
+        id={tooltipId}
+        calloutProps={{ gapSpace: 0, target: `#${buttonId}` }}
+        tooltipProps={{
+          onRenderContent: () => {
+            return <div style={{ paddingBottom: 2 }}>
+              <FormattedMessage id={'Add to collection'} />
+            </div>
+          }
+        }}
+      >
+        <IconButton
+          ariaLabel={translateMessage('Add to collection')}
+          role='button'
+          id={buttonId}
+          aria-describedby={tooltipId}
+          styles={iconButtonStyles}
+          menuIconProps={{ iconName: 'AddNotes' }}
+          onClick={() => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, resourceLink)}
+        />
+      </TooltipHost>
     </div>
   </span>
-
-  function getMenuItems() {
-    const menuItems: IContextualMenuItem[] = [];
-
-    if (resourceLink) {
-      if (resourceLink.type === ResourceLinkType.NODE) {
-        menuItems.push(
-          {
-            key: 'isolate',
-            text: translateMessage('Isolate'),
-            itemType: ContextualMenuItemType.Normal,
-            onClick: () => props.isolateTree(resourceLink)
-          });
-      }
-
-      menuItems.push(
-        {
-          key: ResourceOptions.ADD_TO_COLLECTION,
-          text: translateMessage('Add to collection'),
-          itemType: ContextualMenuItemType.Normal,
-          onClick: () => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, resourceLink)
-        });
-    }
-    return menuItems;
-  }
 }
 
 const linkStyle = mergeStyleSets(
