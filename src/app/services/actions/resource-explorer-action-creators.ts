@@ -58,15 +58,18 @@ export function fetchResources() {
 
     try {
       const cachedResources = await resourcesCache.readResources();
-      if (cachedResources.length !== 0){
+      if (cachedResources) {
         return dispatch(fetchResourcesSuccess(cachedResources));
+      } else {
+        const response = await fetch(resourcesUrl, options);
+        if (response.ok) {
+          const resources = await response.json() as IResource;
+          resourcesCache.saveResources(resources);
+          return dispatch(fetchResourcesSuccess(resources));
+        }
+        throw response;
       }
     } catch (error) {
-      const response = await fetch(resourcesUrl, options);
-      if (response.ok) {
-        const resources = await response.json() as IResource;
-        return dispatch(fetchResourcesSuccess(resources));
-      }
       return dispatch(fetchResourcesError({ error }));
     }
   };
