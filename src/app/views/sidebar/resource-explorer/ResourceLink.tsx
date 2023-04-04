@@ -1,5 +1,5 @@
 import {
-  ContextualMenuItemType, getId, IconButton,
+  ContextualMenuItemType, getId, getTheme, IconButton,
   IContextualMenuItem, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
 import { CSSProperties } from 'react';
@@ -28,8 +28,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
 
   const iconButtonStyles = {
-    root: { marginTop: -5, marginRight: 2 },
-    menuIcon: { fontSize: 20, padding: 5 }
+    root: { marginTop: -5, marginRight: 2, zIndex: 10 },
+    menuIcon: { fontSize: 14, padding: 5 }
   };
 
   const methodButtonStyles: CSSProperties = {
@@ -60,37 +60,10 @@ const ResourceLink = (props: IResourceLinkProps) => {
   }
 
   return <span className={linkStyle.link}>
-    {resourceLink.method && <>
-      <TooltipHost
-        content={translateMessage('Query documentation')}
-        id={documentButtonTooltip}
-        calloutProps={{ gapSpace: 0, target: `#${documentButton}` }}
-        tooltipProps={{
-          onRenderContent: function renderContent() {
-            return <div style={{ paddingBottom: 3 }}>
-              {resourceLink.docLink ? resourceLink.docLink : translateMessage('Query documentation not found')}
-            </div>
-          }
-        }}
-      >
-        <IconButton
-          aria-label={translateMessage('Query documentation')}
-          role='button'
-          id={documentButton}
-          disabled={!resourceLink.docLink}
-          aria-describedby={documentButton}
-          styles={{
-            root: { marginTop: -5, marginRight: 2 },
-            menuIcon: { fontSize: 16, padding: 5 }
-          }}
-          onClick={() => openDocumentationLink()}
-          menuIconProps={{ iconName: 'TextDocument' }}
-        />
-      </TooltipHost>
+    {resourceLink.method &&
       <span className={classes.badge} style={methodButtonStyles}>
         {resourceLink.method}
       </span>
-    </>
     }
 
     <span className={linkStyle.resourceLinkNameContainer}>
@@ -99,35 +72,58 @@ const ResourceLink = (props: IResourceLinkProps) => {
       </span>
     </span>
 
-
-    {items.length > 0 &&
-      <TooltipHost
-        content={translateMessage('More actions')}
-        id={tooltipId}
-        calloutProps={{ gapSpace: 0, target: `#${buttonId}` }}
-        tooltipProps={{
-          onRenderContent: function renderContent() {
-            return <div style={{ paddingBottom: 3 }}>
-              <FormattedMessage id={'More actions'} />
-            </div>
-          }
-        }}
-      >
-        <IconButton
-          ariaLabel={translateMessage('More actions')}
-          role='button'
-          id={buttonId}
-          aria-describedby={tooltipId}
-          styles={iconButtonStyles}
-          menuIconProps={{ iconName: 'MoreVertical' }}
-          menuProps={{
-            shouldFocusOnMount: true,
-            alignTargetEdge: true,
-            items
+    <div>
+      {resourceLink.method &&
+        <TooltipHost
+          content={translateMessage('Query documentation')}
+          id={documentButtonTooltip}
+          calloutProps={{ gapSpace: 0, target: `#${documentButton}` }}
+          tooltipProps={{
+            onRenderContent: function renderContent() {
+              return <div style={{ paddingBottom: 2 }}>
+                {resourceLink.docLink ? resourceLink.docLink : translateMessage('Query documentation not found')}
+              </div>
+            }
           }}
-        />
-      </TooltipHost>
-    }
+        >
+          <IconButton
+            aria-label={translateMessage('Query documentation')}
+            role='button'
+            id={documentButton}
+            disabled={!resourceLink.docLink}
+            aria-describedby={documentButton}
+            styles={iconButtonStyles}
+            onClick={() => openDocumentationLink()}
+            menuIconProps={{ iconName: 'TextDocument' }}
+          />
+        </TooltipHost>
+      }
+
+      {items.length > 0 &&
+        <TooltipHost
+          content={translateMessage('Add to collection')}
+          id={tooltipId}
+          calloutProps={{ gapSpace: 0, target: `#${buttonId}` }}
+          tooltipProps={{
+            onRenderContent: function renderContent() {
+              return <div style={{ paddingBottom: 2 }}>
+                <FormattedMessage id={'Add to collection'} />
+              </div>
+            }
+          }}
+        >
+          <IconButton
+            ariaLabel={translateMessage('Add to collection')}
+            role='button'
+            id={buttonId}
+            aria-describedby={tooltipId}
+            styles={iconButtonStyles}
+            menuIconProps={{ iconName: 'AddNotes' }}
+            onClick={() => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, resourceLink)}
+          />
+        </TooltipHost>
+      }
+    </div>
   </span>
 
   function getMenuItems() {
@@ -158,8 +154,21 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
 const linkStyle = mergeStyleSets(
   {
-    link: { display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden' },
-    resourceLinkNameContainer: { textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex' },
+    link: {
+      display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden',
+      div: {
+        display: 'none'
+      },
+      '&:hover': {
+        background: getTheme().palette.neutralLighter,
+        div: {
+          display: 'inline',
+          overflow: 'hidden',
+          alignItems: 'center'
+        }
+      }
+    },
+    resourceLinkNameContainer: { textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex', padding: 5 },
     resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }
   }
 );
