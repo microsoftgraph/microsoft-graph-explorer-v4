@@ -74,9 +74,11 @@ const ResourceLink = (props: IResourceLinkProps) => {
           calloutProps={{ gapSpace: 0, target: `#${documentButton}` }}
           tooltipProps={{
             onRenderContent: () => {
-              return <div style={{ paddingBottom: 2 }}>
-                {resourceLink.docLink ? resourceLink.docLink : translateMessage('Query documentation not found')}
-              </div>
+              return (
+                <div style={{ paddingBottom: 2 }}>
+                  {resourceLink.docLink ? resourceLink.docLink : translateMessage('Query documentation not found')}
+                </div>
+              );
             }
           }}
         >
@@ -99,9 +101,11 @@ const ResourceLink = (props: IResourceLinkProps) => {
         calloutProps={{ gapSpace: 0, target: `#${buttonId}` }}
         tooltipProps={{
           onRenderContent: () => {
-            return <div style={{ paddingBottom: 2 }}>
-              <FormattedMessage id={'Add to collection'} />
-            </div>
+            return (
+              <div style={{ paddingBottom: 2 }}>
+                <FormattedMessage id={'Add to collection'} />
+              </div>
+            );
           }
         }}
       >
