@@ -38,6 +38,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const [queryUrl, setQueryUrl] = useState<string>(sampleQuery.sampleUrl);
   const [shouldShowSuggestions, setShouldShowSuggestions] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [backSpacing, setBackspacing] = useState<boolean>(false);
 
   useEffect(() => {
     setQueryUrl(sampleQuery.sampleUrl);
@@ -146,6 +147,10 @@ const AutoComplete = (props: IAutoCompleteProps) => {
         }
         break;
 
+      case KeyCodes.backspace:
+        setBackspacing(true);
+        break;
+
       default:
         break;
     }
@@ -197,7 +202,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       setShouldShowSuggestions(true);
     }
 
-    if (filtered.length === 1 && filtered[0] === searchTerm) {
+    if (filtered.length === 1 && filtered[0] === searchTerm && !backSpacing) {
       appendSuggestionToUrl(searchTerm);
     }
   }
@@ -216,9 +221,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
     let query = selected;
     if (selected.startsWith(delimiters.DOLLAR.symbol)) {
-      if(queryUrl.includes(delimiters.DOLLAR.symbol)){
-        selected = selected.substring(1, selected.length);
-      }
       selected += delimiters.EQUALS.symbol;
       query = '';
     }

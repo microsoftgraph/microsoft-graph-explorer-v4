@@ -129,6 +129,39 @@ test.describe('Run query', () => {
     expect(page.getByText('"Microsoft Viva"')).toBeDefined();
   })
 
+  test('Tests query parameter addition for chained query parameters', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/user');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/users?sel');
+    await queryInputField.press('Tab');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/users?$select=id&sel');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/users?$select=id&$select=d');
+    await queryInputField.press('Tab');
+    await queryInputField.press('Tab');
+    const queryContent = await page.locator('[aria-label="Query sample input"]').inputValue();
+    expect(queryContent).toBe('https://graph.microsoft.com/v1.0/users?$select=id&$select=deletedDateTime');
+  })
+
+  test('Tests query deletion on the query textbox', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me/users?$select=id');
+    for(let i = 0; i<11; i++){
+      await queryInputField.press('Backspace');
+    }
+    const queryContent = await page.locator('[aria-label="Query sample input"]').inputValue();
+    expect(queryContent).toBe('https://graph.microsoft.com/v1.0/me/users');
+
+  })
+
   test('user can run query', async () => {
     const profileSample = page.locator('[aria-label="my profile"]');
     await profileSample.click();
