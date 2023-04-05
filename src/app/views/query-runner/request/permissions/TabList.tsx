@@ -26,6 +26,12 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
+  const permissionsTabStyles = {
+    root: {
+      padding: '17px'
+    }
+  }
+
   useEffect(() => {
     if(tokenPresent){
       dispatch(fetchAllPrincipalGrants());
@@ -37,25 +43,21 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   }
 
   const displayNoPermissionsFoundMessage = () : JSX.Element => {
-    return (<Label className={classes.permissionLabel}>
-      <FormattedMessage id='permissions not found in permissions tab' />
-      <Link underline onClick={openPermissionsPanel}>
-        <FormattedMessage id='open permissions panel' />
-      </Link>
-      <FormattedMessage id='permissions list' />
-    </Label>);
-  }
-
-  const displayErrorFetchingPermissionsMessage = () : JSX.Element => {
-    return (<Label className={classes.permissionLabel}>
-      <FormattedMessage id='Fetching permissions failing' />
-    </Label>);
+    return (
+      <Label styles={permissionsTabStyles}>
+        <FormattedMessage id='permissions not found in permissions tab' />
+        <Link underline onClick={openPermissionsPanel}>
+          <FormattedMessage id='open permissions panel' />
+        </Link>
+        <FormattedMessage id='permissions list' />
+      </Label>);
   }
 
   const displayNotSignedInMessage = () : JSX.Element => {
-    return (<Label className={classes.permissionLabel}>
-      <FormattedMessage id='sign in to view a list of all permissions' />
-    </Label>)
+    return (
+      <Label styles={permissionsTabStyles}>
+        <FormattedMessage id='sign in to view a list of all permissions' />
+      </Label>)
   }
 
   if (!tokenPresent && permissions.length === 0) {
@@ -63,8 +65,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   }
 
   if(permissions.length === 0){
-    return scopes.error && scopes.error.error && scopes.error.error.status && scopes.error.error.status === 404 ?
-      displayNoPermissionsFoundMessage() : displayErrorFetchingPermissionsMessage();
+    displayNoPermissionsFoundMessage()
   }
 
   return (
