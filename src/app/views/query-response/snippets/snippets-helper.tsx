@@ -58,7 +58,7 @@ function Snippet(props: ISnippetProps) {
 
   const { dimensions: { response }, snippets,
     responseAreaExpanded, sampleQuery } = useAppSelector((state) => state);
-  const { data, pending: loadingState, error } = snippets;
+  const { data, pending: loadingState } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
 
   const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
