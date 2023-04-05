@@ -115,6 +115,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           event.preventDefault();
           const selected = suggestions[activeSuggestion];
           appendSuggestionToUrl(selected);
+          setShouldShowSuggestions(false);
         }
         break;
 
@@ -152,6 +153,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
         break;
 
       default:
+        setBackspacing(false);
         break;
     }
   };
