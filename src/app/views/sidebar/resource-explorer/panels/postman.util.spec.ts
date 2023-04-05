@@ -1,7 +1,7 @@
 import { IResource } from '../../../../../types/resources';
-import content from '../../../../utils/resources/resources.json';
 import { createResourcesList, getResourcePaths } from '../resource-explorer.utils';
 import { generatePostmanCollection } from './postman.util';
+import content from '../resources.json'
 
 const resource = JSON.parse(JSON.stringify(content)) as IResource;
 
