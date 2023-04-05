@@ -1,9 +1,9 @@
 import { lazy } from 'react';
 
-const ShareQuery = lazy(() => import('../../query-runner/query-input/share-query/ShareQuery'));
 
 export const popups = new Map<string, any>([
-  ['share-query', ShareQuery]
+  ['share-query', lazy(() => import('../../query-runner/query-input/share-query/ShareQuery'))],
+  ['theme-chooser', lazy(() => import('../../main-header/settings/ThemeChooser'))]
 ]);
 
-export type PopupItem = 'share-query';
+export type PopupItem = 'share-query' | 'theme-chooser';
