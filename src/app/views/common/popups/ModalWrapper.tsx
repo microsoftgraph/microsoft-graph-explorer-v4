@@ -35,7 +35,6 @@ export function ModalWrapper(props: WrapperProps) {
         </Suspense>
       }
     </Modal>
-
   );
 }
 

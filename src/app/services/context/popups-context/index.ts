@@ -8,7 +8,7 @@ export interface PopupsComponent<Data = {}> {
 }
 
 interface PopupSettings {
-  title: React.ReactNode;
+  title: React.ReactNode | string;
   subtitle?: string;
   width?: number | string;
 }
@@ -19,7 +19,7 @@ export interface PopupsProps<Data = {}> {
 }
 
 export type PopupsStatus = 'open' | 'closed' | 'dismissed' | null;
-export type PopupsType = 'modal' | 'panel';
+export type PopupsType = 'modal' | 'panel' | 'dialog';
 
 export interface ShowPopupsParameters<Data = {}> {
   component: React.ElementType<PopupsComponent<Data>>;

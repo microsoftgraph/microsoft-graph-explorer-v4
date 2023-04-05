@@ -6,4 +6,4 @@ export const popups = new Map<string, any>([
   ['share-query', ShareQuery]
 ]);
 
-export type PopupItem = keyof typeof popups;
+export type PopupItem = 'share-query';
