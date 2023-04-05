@@ -49,7 +49,9 @@ const PanelList = ({ messages,
   const { permissionPanelStyles } = profileStyles(theme);
 
   useEffect(() => {
-    setPermissions(sortPermissions(fullPermissions));
+    if(!searchValue && groups && groups.length === 0){
+      setPermissions(sortPermissions(fullPermissions));
+    }
   }, [permissionsPanelOpen, scopes.data]);
 
   const shouldGenerateGroups = useRef(true)
@@ -141,7 +143,8 @@ const PanelList = ({ messages,
   const groupHeaderStyles = () => {
     return {
       check: { display: 'none'},
-      root: { background: theme.palette.white}
+      root: { background: theme.palette.white},
+      title: { padding: '10px' }
     }
   }
 

@@ -105,7 +105,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           appendSuggestionToUrl(selected);
         } else {
           props.contentChanged(queryUrl);
-          props.runQuery();
+          props.runQuery(queryUrl);
         }
         break;
 
@@ -141,6 +141,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
       case KeyCodes.escape:
         if (shouldShowSuggestions) {
+          props.contentChanged(queryUrl)
           setShouldShowSuggestions(false);
         }
         break;
@@ -215,6 +216,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
     let query = selected;
     if (selected.startsWith(delimiters.DOLLAR.symbol)) {
+      if(queryUrl.includes(delimiters.DOLLAR.symbol)){
+        selected = selected.substring(1, selected.length);
+      }
       selected += delimiters.EQUALS.symbol;
       query = '';
     }
