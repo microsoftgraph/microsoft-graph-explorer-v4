@@ -10,7 +10,7 @@ test.beforeAll(async ({ browser }) => {
 
 test.describe('Run query', () => {
 
-  test.skip('should change version options', async () => {
+  test('should change version options', async () => {
     await page.locator('[aria-label="HTTP request method option"] >> text=GET').click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1920, height: 1080 } })).toMatchSnapshot();
@@ -32,7 +32,7 @@ test.describe('Run query', () => {
     expect(page.locator('text=Sign in to use this method')).toBeDefined();
   })
 
-  test.skip('Changing the version via the dropdown menu changes the version in the request URL field', async () => {
+  test('Changing the version via the dropdown menu changes the version in the request URL field', async () => {
     await page.locator('[aria-label="Microsoft Graph API Version option"] span:has-text("v1.0")').click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1920, height: 1080 } })).toMatchSnapshot();
@@ -51,7 +51,7 @@ test.describe('Run query', () => {
 
   });
 
-  test.skip('Changing the version via the request URL field changes the version in the dropdown', async () => {
+  test('Changing the version via the request URL field changes the version in the dropdown', async () => {
     await page.locator('[aria-label="Query sample input"]').fill('https://graph.microsoft.com/beta/me');
     expect('[aria-label="Microsoft Graph API Version option"] span:has-text("beta")').toBeDefined();
     await page.evaluate(() => document.fonts.ready);
@@ -64,7 +64,7 @@ test.describe('Run query', () => {
 
   });
 
-  test.skip('Adds message and gets autocomplete options', async () => {
+  test('Adds message and gets autocomplete options', async () => {
 
     const queryInputField = page.locator('[aria-label="Query sample input"]');
     await queryInputField.click();
@@ -87,7 +87,7 @@ test.describe('Run query', () => {
     expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/v1.0/me/messages?$select=id")').toBeDefined()
   });
 
-  test.skip('Tests query parameter addition on autocomplete', async () => {
+  test('Tests query parameter addition on autocomplete', async () => {
     const queryInputField = page.locator('[aria-label="Query sample input"]');
     await queryInputField.click();
     await page.evaluate(() => document.fonts.ready);
@@ -101,7 +101,7 @@ test.describe('Run query', () => {
     expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/v1.0/me/messages?$select=id")').toBeDefined()
   })
 
-  test.skip('Tests $filter query parameter for v1 version', async () => {
+  test('Tests $filter query parameter for v1 version', async () => {
     const queryInputField = page.locator('[aria-label="Query sample input"]');
     await queryInputField.click();
     await page.evaluate(() => document.fonts.ready);
@@ -116,7 +116,7 @@ test.describe('Run query', () => {
     expect('input[aria-label="Query sample input"]:has-text("https://graph.microsoft.com/v1.0/users?$filter=startsWith(displayName, \'Megan\')")').toBeDefined();
   })
 
-  test.skip('Tests query parameter for beta version that do not require a $ sign', async () => {
+  test('Tests query parameter for beta version that do not require a $ sign', async () => {
     const queryInputField = page.locator('[aria-label="Query sample input"]');
     await queryInputField.click();
     await page.evaluate(() => document.fonts.ready);
@@ -209,7 +209,7 @@ test.describe('Run query', () => {
     expect(queryContent).toBe('https://graph.microsoft.com/v1.0/groups?$filter=NOT groupTypes/any(c:c eq \'Unified\')&$count=true');
   });
 
-  test.skip('user can run query', async () => {
+  test('user can run query', async () => {
     const profileSample = page.locator('[aria-label="my profile"]');
     await profileSample.click();
     await page.evaluate(() => document.fonts.ready);
@@ -224,7 +224,7 @@ test.describe('Run query', () => {
     expect(messageBar).toBeDefined();
   });
 
-  test.skip('User can run query using the Enter key and different results are received for different queries', async () => {
+  test('User can run query using the Enter key and different results are received for different queries', async () => {
     const queryInputField = page.locator('[aria-label="Query sample input"]');
     await queryInputField.click();
     await page.evaluate(() => document.fonts.ready);
@@ -242,7 +242,7 @@ test.describe('Run query', () => {
     expect(page.getByText('"Microsoft Viva"')).toBeDefined();
   })
 
-  test.skip('should show documentation link for queries with links ', async () => {
+  test('should show documentation link for queries with links ', async () => {
     await page.locator('[aria-label="my profile"]').click();
     await page.locator('[aria-label="More Info"]').click();
     const [page3] = await Promise.all([
@@ -252,7 +252,7 @@ test.describe('Run query', () => {
     expect(page3.url().indexOf('https://learn.microsoft.com/')).toBeGreaterThan(-1);
   })
 
-  test.skip('should launch the share query dialog when share query button is clicked', async () => {
+  test('should launch the share query dialog when share query button is clicked', async () => {
     await page.locator('[aria-label="Share query"]').click();
     await page.evaluate(() => document.fonts.ready);
     expect(page.locator('div[role="heading"]:has-text("Share Query")')).toBeDefined();
@@ -273,7 +273,7 @@ test.describe('Run query', () => {
 
 });
 
-test.describe.skip('Request section', () => {// serial
+test.describe.serial('Request section', () => {
   test('should add request headers', async () => {
     const queryInput = page.locator('[aria-label="Query sample input"]');
     await queryInput.click();
@@ -309,7 +309,7 @@ test.describe.skip('Request section', () => {// serial
   });
 })
 
-test.describe.skip('Permissions', () => {
+test.describe('Permissions', () => {
   test('should show permissions for /me endpoint', async () => {
     await page.locator('button[role="tab"]:has-text(" Sample queries")').click();
     await page.locator('[aria-label="my profile"]').click();
@@ -325,7 +325,7 @@ test.describe.skip('Permissions', () => {
   })
 })
 
-test.describe.skip('Access token tab', () => {
+test.describe('Access token tab', () => {
   test('should show access token message when not authenticated ', async () => {
     await page.locator('[aria-label="Access token"]').click();
     await page.evaluate(() => document.fonts.ready);

@@ -136,14 +136,9 @@ function Snippet(props: ISnippetProps) {
           />
         </>
       }
-      {(!loadingState && !snippet && error && error.error && error.error.status === 404) ?
+      {!loadingState && !snippet &&
         <Label style={{ padding: 10 }}>
           <FormattedMessage id='Snippet not available' />
-        </Label>
-        :
-        (!loadingState && !snippet && error && error.error && error.error.status !== 404) &&
-        <Label style={{ padding: 10 }}>
-          <FormattedMessage id='Fetching code snippet failing' />
         </Label>
       }
     </div>
