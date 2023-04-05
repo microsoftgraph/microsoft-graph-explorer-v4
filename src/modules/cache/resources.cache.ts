@@ -8,7 +8,7 @@ const resourcesStorage = localforage.createInstance({
 });
 
 const RESOURCE_KEY = 'resources';
-const expiryTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000; //1 week expiration
+const expiryTime = new Date().getTime() + 3 * 24 * 60 * 60 * 1000; //3 days expiration
 
 export const resourcesCache = (function () {
 
