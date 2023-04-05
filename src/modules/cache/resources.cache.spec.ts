@@ -11,63 +11,82 @@ jest.mock('localforage', () => ({
   })
 }));
 
-let resources: IResource = {
-  children: [],
+const emptyResource: IResource = {
+  segment: '',
   labels: [],
-  segment: ''
-};
-describe('Resources Cache should', () => {
-  it('return the same resources after resources added', async () => {
-    expect(resources.children.length).toBe(0);
-    resources = {
-      segment: '/',
+  children: []
+}
+
+const resources: IResource = {
+  segment: '/',
+  labels: [
+    {
+      name: 'v1.0',
+      methods: [
+        'Get'
+      ]
+    },
+    {
+      name: 'beta',
+      methods: [
+        'Get'
+      ]
+    }
+  ],
+  children: [
+    {
+      segment: 'accessReviewDecisions',
       labels: [
-        {
-          name: 'v1.0',
-          methods: [
-            'Get'
-          ]
-        },
         {
           name: 'beta',
           methods: [
-            'Get'
+            'Get',
+            'Post'
           ]
         }
       ],
       children: [
         {
-          segment: 'accessReviewDecisions',
+          segment: '{accessReviewDecision-id}',
           labels: [
             {
               name: 'beta',
               methods: [
                 'Get',
-                'Post'
+                'Patch',
+                'Delete'
               ]
             }
           ],
-          children: [
-            {
-              segment: '{accessReviewDecision-id}',
-              labels: [
-                {
-                  name: 'beta',
-                  methods: [
-                    'Get',
-                    'Patch',
-                    'Delete'
-                  ]
-                }
-              ],
-              children: []
-            }
-          ]
+          children: []
         }
       ]
     }
-    resourcesCache.saveResources(resources);
-    const samplesData = await resourcesCache.readResources();
-    expect(samplesData).not.toBe(resources);
-  })
-})
+  ]
+};
+
+beforeEach(async () => {
+  // Save resource in the cache
+  await resourcesCache.saveResources(resources);
+});
+
+afterEach(async () => {
+  // Clear the cache
+  await resourcesCache.saveResources(emptyResource);
+});
+
+describe('Resources Cache should', () => {
+
+  it('update the cache after 3 days', async () => {
+    // Moving the clock forward by 3 days
+    const currentTime = new Date().getTime();
+    jest.spyOn(Date, 'now').mockImplementation(() => currentTime + 3 * 24 * 60 * 60 * 1000);
+
+    // Fetch the resource and check that it's updated
+    const updatedResource = await resourcesCache.readResources();
+
+    expect(updatedResource).toEqual(null);
+  });
+});
+
+
