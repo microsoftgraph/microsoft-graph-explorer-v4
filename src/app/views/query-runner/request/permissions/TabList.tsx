@@ -43,13 +43,14 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   }
 
   const displayNoPermissionsFoundMessage = () : JSX.Element => {
-    return (<Label styles={permissionsTabStyles}>
-      <FormattedMessage id='permissions not found in permissions tab' />
-      <Link underline onClick={openPermissionsPanel}>
-        <FormattedMessage id='open permissions panel' />
-      </Link>
-      <FormattedMessage id='permissions list' />
-    </Label>);
+    return (
+      <Label styles={permissionsTabStyles}>
+        <FormattedMessage id='permissions not found in permissions tab' />
+        <Link underline onClick={openPermissionsPanel}>
+          <FormattedMessage id='open permissions panel' />
+        </Link>
+        <FormattedMessage id='permissions list' />
+      </Label>);
   }
 
   const displayNotSignedInMessage = () : JSX.Element => {
