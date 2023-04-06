@@ -322,6 +322,17 @@ test.describe('Permissions', () => {
     expect(await page.screenshot()).toMatchSnapshot();
     const DirectoryPermission =  page.locator('div[role="gridcell"]:has-text("Directory.Read.AllDirectory.Read.All")');
     expect(DirectoryPermission).toBeDefined();
+  });
+
+  test('should show a message for opening permissions panel when permission requested is not available', async () => {
+    const queryInput = page.locator('[aria-label="Query sample input"]');
+    await queryInput.click();
+    queryInput.fill('https://graph.microsoft.com/v1.0/userssssss');
+    await page.locator('[aria-label="Modify permissions"]').click();
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(100);
+    expect(page.getByText('Permissions for the query are missing on this tab. Sign in to use the Select per')).toBeDefined();
+
   })
 })
 
