@@ -65,7 +65,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   }
 
   if(permissions.length === 0){
-    displayNoPermissionsFoundMessage()
+    return displayNoPermissionsFoundMessage();
   }
 
   return (
