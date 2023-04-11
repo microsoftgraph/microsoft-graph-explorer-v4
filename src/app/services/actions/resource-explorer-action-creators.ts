@@ -6,6 +6,7 @@ import {
 import { IResource } from '../../../types/resources';
 import { ApplicationState } from '../../../types/root';
 import { IRequestOptions } from '../../../types/request';
+import { resourcesCache } from '../../../modules/cache/resources.cache';
 
 export function fetchResourcesSuccess(response: object): AppAction {
   return {
@@ -44,24 +45,30 @@ export function removeResourcePaths(response: object): AppAction {
 
 export function fetchResources() {
   return async (dispatch: Function, getState: Function) => {
+    const { devxApi }: ApplicationState = getState();
+    const resourcesUrl = `${devxApi.baseUrl}/openapi/tree`;
+
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    const options: IRequestOptions = { headers };
+
+    dispatch(fetchResourcesPending());
+
     try {
-      const { devxApi }: ApplicationState = getState();
-      const resourcesUrl = `${devxApi.baseUrl}/openapi/tree`;
-
-      const headers = {
-        'Content-Type': 'application/json'
-      };
-
-      const options: IRequestOptions = { headers };
-
-      dispatch(fetchResourcesPending());
-
-      const response = await fetch(resourcesUrl, options);
-      if (response.ok) {
-        const resources = await response.json() as IResource;
-        return dispatch(fetchResourcesSuccess(resources));
+      const cachedResources = await resourcesCache.readResources();
+      if (cachedResources) {
+        return dispatch(fetchResourcesSuccess(cachedResources));
+      } else {
+        const response = await fetch(resourcesUrl, options);
+        if (response.ok) {
+          const resources = await response.json() as IResource;
+          resourcesCache.saveResources(resources);
+          return dispatch(fetchResourcesSuccess(resources));
+        }
+        throw response;
       }
-      throw response;
     } catch (error) {
       return dispatch(fetchResourcesError({ error }));
     }
