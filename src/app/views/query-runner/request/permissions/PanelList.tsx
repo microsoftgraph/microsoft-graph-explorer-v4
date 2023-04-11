@@ -11,6 +11,7 @@ import { AppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
+import { fetchAllPrincipalGrants } from '../../../../services/actions/permissions-action-creator';
 import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';
@@ -49,7 +50,9 @@ const PanelList = ({ messages,
   const { permissionPanelStyles } = profileStyles(theme);
 
   useEffect(() => {
-    setPermissions(sortPermissions(fullPermissions));
+    if(!searchValue && groups && groups.length === 0){
+      setPermissions(sortPermissions(fullPermissions));
+    }
   }, [permissionsPanelOpen, scopes.data]);
 
   const shouldGenerateGroups = useRef(true)
@@ -63,6 +66,12 @@ const PanelList = ({ messages,
       if(permissionsList.length === 0){ return }
     }
   }, [permissions, searchStarted])
+
+  useEffect(() => {
+    if (tokenPresent) {
+      dispatch(fetchAllPrincipalGrants());
+    }
+  }, [])
 
   const dispatch: AppDispatch = useDispatch();
 
@@ -141,7 +150,8 @@ const PanelList = ({ messages,
   const groupHeaderStyles = () => {
     return {
       check: { display: 'none'},
-      root: { background: theme.palette.white}
+      root: { background: theme.palette.white},
+      title: { padding: '10px' }
     }
   }
 
@@ -210,15 +220,15 @@ const PanelList = ({ messages,
           </>}
 
         {!loading && permissions && permissions.length === 0 &&
-        <Label style={{
-          display: 'flex',
-          width: '100%',
-          minHeight: '200px',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          <FormattedMessage id='permissions not found' />
-        </Label>
+          <Label style={{
+            display: 'flex',
+            width: '100%',
+            minHeight: '200px',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <FormattedMessage id='permissions not found' />
+          </Label>
         }
       </Panel>
     </div>

@@ -129,6 +129,86 @@ test.describe('Run query', () => {
     expect(page.getByText('"Microsoft Viva"')).toBeDefined();
   })
 
+  test('Tests query parameter addition for chained query parameters', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/use');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/users?sel');
+    await queryInputField.press('Tab');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/users?$select=id&fi');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/users?$select=id&$filter=startsWith(displayName, \'Megan\')');
+    const queryContent = await page.locator('[aria-label="Query sample input"]').inputValue();
+    expect(queryContent).toBe('https://graph.microsoft.com/v1.0/users?$select=id&$filter=startsWith(displayName, \'Megan\')');
+  })
+
+  test('Tests query deletion on the query textbox', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await page.evaluate(() => document.fonts.ready);
+    await queryInputField.fill('');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me/users?$select=id');
+    for(let i = 0; i<11; i++){
+      await queryInputField.press('Backspace');
+    }
+    const queryContent = await page.locator('[aria-label="Query sample input"]').inputValue();
+    expect(queryContent).toBe('https://graph.microsoft.com/v1.0/me/users');
+
+  })
+
+  test('Tests $count with $filter query parameter', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me/tran');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.gr');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?cou');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=t');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&fi');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&$filter=startsWith()');
+    await queryInputField.press('ArrowLeft');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&$filter=startsWith(displayName, \'a\')');
+    const queryContent = await page.locator('[aria-label="Query sample input"]').inputValue();
+    expect(queryContent).toBe('https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true&$filter=startsWith(displayName, \'a\')');
+  });
+
+  test('Tests $filter with or operator ', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/use');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/users?fi');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/users?$filter=startsWith(displayName, \'mary\') or startsW');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/users?$filter=startsWith(displayName, \'mary\') or startsWith(givenName, \'mary\') or startsWith(mail, \'mary\') or startsWith(userPrincipalName, \'mary\')');
+    const queryContent = await page.locator('[aria-label="Query sample input"]').inputValue();
+    expect(queryContent).toBe('https://graph.microsoft.com/v1.0/users?$filter=startsWith(displayName, \'mary\') or startsWith(givenName, \'mary\') or startsWith(mail, \'mary\') or startsWith(userPrincipalName, \'mary\')');
+  });
+
+  test('Add query properties after long filter properties ', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/groups');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/groups?fil');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/groups?$filter=NOT groupTypes/any(c:c eq \'Unified\')&$');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/groups?$filter=NOT groupTypes/any(c:c eq \'Unified\')&$c');
+    await queryInputField.press('Tab');
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/groups?$filter=NOT groupTypes/any(c:c eq \'Unified\')&$count=true');
+    await queryInputField.press('Enter');
+    expect(page.getByText('"Filter operator \'Not\' is not supported."')).toBeDefined();
+    const queryContent = await page.locator('[aria-label="Query sample input"]').inputValue();
+    expect(queryContent).toBe('https://graph.microsoft.com/v1.0/groups?$filter=NOT groupTypes/any(c:c eq \'Unified\')&$count=true');
+  });
+
   test('user can run query', async () => {
     const profileSample = page.locator('[aria-label="my profile"]');
     await profileSample.click();
@@ -219,7 +299,7 @@ test.describe.serial('Request section', () => {
     await page.locator('[placeholder="Key"]').fill('ConsistencyLev');
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
-    expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1920, height: 400 } })).toMatchSnapshot();
+    expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1365, height: 400 } })).toMatchSnapshot();
     await page.locator('button:has-text("Update")').click();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
@@ -239,9 +319,20 @@ test.describe('Permissions', () => {
     await page.evaluate(() => document.fonts.ready);
     const permissionsText = page.locator('text=One of the following permissions is required to run the query. Sign in with an a');
     expect(permissionsText).toBeDefined();
-    expect(await page.screenshot({ clip: { x: 0, y: 0, width: 1920, height: 400 } })).toMatchSnapshot();
+    expect(await page.screenshot()).toMatchSnapshot();
     const DirectoryPermission =  page.locator('div[role="gridcell"]:has-text("Directory.Read.AllDirectory.Read.All")');
     expect(DirectoryPermission).toBeDefined();
+  });
+
+  test('should show a message for opening permissions panel when permission requested is not available', async () => {
+    const queryInput = page.locator('[aria-label="Query sample input"]');
+    await queryInput.click();
+    queryInput.fill('https://graph.microsoft.com/v1.0/userssssss');
+    await page.locator('[aria-label="Modify permissions"]').click();
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(100);
+    expect(page.getByText('Permissions for the query are missing on this tab. Sign in to use the Select per')).toBeDefined();
+
   })
 })
 

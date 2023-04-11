@@ -25,7 +25,8 @@ test.describe('Accessibility', () => {
         'page-has-heading-one',
         'landmark-unique',
         'aria-allowed-attr',
-        'aria-required-children'
+        'aria-required-children',
+        'color-contrast'
       ])
       .analyze();
     accessibilityScan.setLegacyMode(false);

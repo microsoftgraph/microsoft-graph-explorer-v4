@@ -35,7 +35,7 @@ test.describe('Response section', () => {
   test('should show toolkit component for a valid url', async () => {
     const queryInput = page.locator('[aria-label="Query sample input"]');
     await queryInput.click();
-    await queryInput.fill('https://graph.microsoft.com/me');
+    await queryInput.fill('https://graph.microsoft.com/v1.0/me');
     await page.waitForTimeout(200);
     expect(await page.screenshot({ clip: { x: 300, y: -200, width: 1920, height: 1080 } })).toMatchSnapshot();
     const toolkitTab = page.locator('[aria-label="Toolkit component"]');
@@ -49,7 +49,7 @@ test.describe('Response section', () => {
   test('should show an error message for an invalid url', async () => {
     const queryInput = page.locator('[aria-label="Query sample input"]');
     await queryInput.click();
-    await queryInput.fill('https://graph.microsoft.com/me/messages');
+    await queryInput.fill('https://graph.microsoft.com/v1.0/me/messages');
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot({ clip: { x: 300, y: -200, width: 1920, height: 1080 } })).toMatchSnapshot();
     const toolkitTab = page.locator('[aria-label="Toolkit component"]');

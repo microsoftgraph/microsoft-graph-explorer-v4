@@ -306,7 +306,8 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
           check: { display: 'none' },
           title: {
             fontSize: FontSizes.medium,
-            fontWeight: FontWeights.semibold
+            fontWeight: FontWeights.semibold,
+            paddingBottom: 2
           },
           expand: {
             fontSize: FontSizes.small

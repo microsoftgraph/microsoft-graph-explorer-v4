@@ -1,12 +1,10 @@
 import { AppAction } from '../../../types/action';
 import { IResource, IResourceLink, IResources } from '../../../types/resources';
-import content from '../../utils/resources/resources.json';
 import {
   FETCH_RESOURCES_ERROR, FETCH_RESOURCES_PENDING,
   FETCH_RESOURCES_SUCCESS, RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
 } from '../redux-constants';
 
-const res = JSON.parse(JSON.stringify(content)) as IResource;
 const initialState: IResources = {
   pending: false,
   data: {
@@ -31,7 +29,7 @@ export function resources(state: IResources = initialState, action: AppAction): 
       return {
         pending: false,
         error: action.response,
-        data: res,
+        data: {} as IResource,
         paths: []
       };
     case FETCH_RESOURCES_PENDING:

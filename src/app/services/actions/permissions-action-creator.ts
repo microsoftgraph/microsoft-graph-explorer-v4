@@ -21,7 +21,7 @@ import {
   FETCH_FULL_SCOPES_SUCCESS,
   FETCH_URL_SCOPES_SUCCESS,
   GET_ALL_PRINCIPAL_GRANTS_SUCCESS, GET_ALL_PRINCIPAL_GRANTS_ERROR, REVOKE_SCOPES_PENDING,
-  REVOKE_SCOPES_SUCCESS, REVOKE_SCOPES_ERROR
+  REVOKE_SCOPES_SUCCESS, REVOKE_SCOPES_ERROR, GET_ALL_PRINCIPAL_GRANTS_PENDING
 } from '../redux-constants';
 import {
   getAuthTokenSuccess,
@@ -32,6 +32,7 @@ import { setQueryResponseStatus } from './query-status-action-creator';
 import { RevokePermissionsUtil, REVOKE_STATUS } from './permissions-action-creator.util';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesError';
+import { IOAuthGrantPayload, IPermissionGrant } from '../../../types/permissions';
 
 export function fetchFullScopesSuccess(response: object): AppAction {
   return {
@@ -64,6 +65,13 @@ export function fetchUrlScopesPending(): AppAction {
 export function fetchScopesError(response: object): AppAction {
   return {
     type: FETCH_SCOPES_ERROR,
+    response
+  };
+}
+
+export function getAllPrincipalGrantsPending(response: boolean){
+  return {
+    type: GET_ALL_PRINCIPAL_GRANTS_PENDING,
     response
   };
 }
@@ -143,7 +151,6 @@ export function fetchScopes() {
       const response = await fetch(permissionsUrl, options);
       if (response.ok) {
         const scopes = await response.json();
-
         return permissionsPanelOpen ? dispatch(fetchFullScopesSuccess({
           scopes: { fullPermissions: scopes }
         })) :
@@ -173,11 +180,12 @@ export function getPermissionsScopeType(profile: IUser | null | undefined) {
 export function consentToScopes(scopes: string[]) {
   return async (dispatch: Function, getState: Function) => {
     try {
-      const { profile }: ApplicationState = getState();
+      const { profile, consentedScopes }: ApplicationState = getState();
       const authResponse = await authenticationWrapper.consentToScopes(scopes);
       if (authResponse && authResponse.accessToken) {
         dispatch(getAuthTokenSuccess(true));
-        dispatch(getConsentedScopesSuccess(authResponse.scopes));
+        const validatedScopes = validateConsentedScopes(scopes, consentedScopes, authResponse.scopes);
+        dispatch(getConsentedScopesSuccess(validatedScopes));
         if (
           authResponse.account &&
           authResponse.account.localAccountId !== profile?.id
@@ -191,6 +199,7 @@ export function consentToScopes(scopes: string[]) {
             ok: true,
             messageType: MessageBarType.success
           }))
+        dispatch(fetchAllPrincipalGrants());
       }
     } catch (error: any) {
       const { errorCode } = error;
@@ -205,6 +214,18 @@ export function consentToScopes(scopes: string[]) {
       );
     }
   };
+}
+
+const validateConsentedScopes = (scopeToBeConsented: string[], consentedScopes: string[],
+  consentedResponse: string[]) => {
+  if(!consentedScopes || !consentedResponse || !scopeToBeConsented) {
+    return consentedResponse;
+  }
+  const expectedScopes = [...consentedScopes, ...scopeToBeConsented];
+  if (expectedScopes.length === consentedResponse.length) {
+    return consentedResponse;
+  }
+  return expectedScopes;
 }
 
 export function revokeScopes(permissionToRevoke: string) {
@@ -230,7 +251,8 @@ export function revokeScopes(permissionToRevoke: string) {
 
       let updatedScopes;
       if (permissionBeingRevokedIsAllPrincipal && userIsTenantAdmin) {
-        updatedScopes = await revokePermissionUtil.updateAllPrincipalPermissionGrant(grantsPayload, permissionToRevoke);
+        updatedScopes = await revokePermissionUtil.
+          getUpdatedAllPrincipalPermissionGrant(grantsPayload, permissionToRevoke);
       }
       else {
         updatedScopes = await revokePermissionUtil.
@@ -292,18 +314,70 @@ const trackRevokeConsentEvent = (status: string, permissionObject: any) => {
 export function fetchAllPrincipalGrants() {
   return async (dispatch: Function, getState: Function) => {
     try {
-      const { profile } = getState();
-      const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
+      const { profile, consentedScopes, scopes } = getState();
+      let tenantWideGrant: IOAuthGrantPayload = scopes.data.tenantWidePermissionsGrant;
+      let revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
       const servicePrincipalAppId = revokePermissionUtil.getServicePrincipalAppId();
+      dispatch(getAllPrincipalGrantsPending(true));
+      let requestCounter = 0;
+
       if (servicePrincipalAppId) {
-        const tenantWideGrant = revokePermissionUtil.getGrantsPayload();
-        dispatch(getAllPrincipalGrantsSuccess(tenantWideGrant.value));
-      }
-      else {
-        dispatch(getAllPrincipalGrantsError({}));
+        tenantWideGrant = revokePermissionUtil.getGrantsPayload();
+        if(tenantWideGrant){
+          if (!allScopesHaveConsentType(consentedScopes, tenantWideGrant, profile.id)){
+            while (requestCounter < 10 && profile && profile.id &&
+              !allScopesHaveConsentType(consentedScopes, tenantWideGrant, profile.id)) {
+              requestCounter += 1;
+              revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
+              dispatch(getAllPrincipalGrantsPending(true));
+              tenantWideGrant = revokePermissionUtil.getGrantsPayload();
+            }
+            dispatchGrantsStatus(dispatch, tenantWideGrant.value)
+          }
+          else{
+            dispatchGrantsStatus(dispatch, tenantWideGrant.value)
+          }
+        }
       }
     } catch (error: any) {
+      dispatch(getAllPrincipalGrantsPending(false));
       dispatch(getAllPrincipalGrantsError(error));
     }
   }
+}
+
+const dispatchGrantsStatus = (dispatch: Function, tenantGrantValue: IPermissionGrant[]): void => {
+  dispatch(getAllPrincipalGrantsPending(false));
+  dispatch(getAllPrincipalGrantsSuccess(tenantGrantValue));
+}
+
+const allScopesHaveConsentType = (consentedScopes: string[], tenantWideGrant: IOAuthGrantPayload, id: string) => {
+  const allPrincipalGrants: string[] = getAllPrincipalGrant(tenantWideGrant.value);
+  const singlePrincipalGrants: string[] = getSinglePrincipalGrant(tenantWideGrant.value, id);
+  const combinedPermissions = [...allPrincipalGrants, ...singlePrincipalGrants];
+  return consentedScopes.every(scope => combinedPermissions.includes(scope));
+}
+
+export const getAllPrincipalGrant = (tenantWideGrant: IPermissionGrant[]): string[] => {
+  if(tenantWideGrant){
+    const allGrants = tenantWideGrant;
+    if(allGrants){
+      const principalGrant =  allGrants.find(grant => grant.consentType === 'AllPrincipals');
+      if(principalGrant){
+        return principalGrant.scope.split(' ');
+      }
+    }
+  }
+  return [];
+}
+
+export const getSinglePrincipalGrant = (tenantWideGrant: IPermissionGrant[], principalId: string): string[] => {
+  if(tenantWideGrant && principalId){
+    const allGrants = tenantWideGrant;
+    const singlePrincipalGrant = allGrants.find(grant => grant.principalId === principalId);
+    if(singlePrincipalGrant){
+      return singlePrincipalGrant.scope.split(' ');
+    }
+  }
+  return [];
 }
