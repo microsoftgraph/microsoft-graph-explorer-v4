@@ -45,7 +45,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   const classes = classNames(classProps);
   const theme = getTheme();
-  const {panelContainer: panelStyles, tooltipStyles, columnCellStyles, cellTitleStyles,
+  const { tooltipStyles, columnCellStyles, cellTitleStyles,
     detailsHeaderStyles, adminLabelStyles, consentButtonStyles, consentTypeLabelStyles } = permissionStyles(theme);
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
@@ -324,7 +324,6 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
     telemetry.trackLinkClickEvent(link, componentName);
   }
 
-
   const renderColumnHeader = (headerText: string) => {
     if(headerText === 'Status'){
       return (
@@ -349,19 +348,6 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
       </span>
     </div>)
   }
-
-  const displayPermissionsPanel = () : JSX.Element => {
-    return <div data-is-scrollable={true} style={panelStyles}>
-      <PanelList
-        classes={classes}
-        messages={messages}
-        columns={getColumns()}
-        renderItemColumn={(item?: any, index?: number, column?: IColumn) =>
-          renderItemColumn(item, index, column)}
-        renderDetailsHeader={renderDetailsHeader}
-      />
-    </div>
-  };
 
   const displayPermissionsAsTab = (): JSX.Element => {
     if (loading.isSpecificPermissions) {
@@ -388,7 +374,7 @@ export const Permission = (permissionProps?: IPermissionProps): JSX.Element => {
 
   return (
     <>
-      {panel ? displayPermissionsPanel() : displayPermissionsAsTab()}
+      {displayPermissionsAsTab()}
     </>
   );
 }

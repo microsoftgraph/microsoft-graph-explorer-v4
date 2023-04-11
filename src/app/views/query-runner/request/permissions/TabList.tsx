@@ -1,11 +1,11 @@
 import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode } from '@fluentui/react';
 import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../../store';
+import { useAppSelector } from '../../../../../store';
 import { IPermission } from '../../../../../types/permissions';
-import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
+import { usePopups } from '../../../../services/hooks';
+import { translateMessage } from '../../../../utils/translate-messages';
 import { setConsentedStatus } from './util';
 
 interface ITabList {
@@ -16,8 +16,9 @@ interface ITabList {
   maxHeight: string;
 }
 
-const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList) : JSX.Element => {
-  const dispatch: AppDispatch = useDispatch();
+const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxHeight }: ITabList): JSX.Element => {
+  const { open: openPermissions } = usePopups('full-permissions', 'panel');
+
   const { consentedScopes, scopes, authToken } = useAppSelector((state) => state);
   const permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
   const tokenPresent = !!authToken.token;
@@ -26,10 +27,14 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
   const openPermissionsPanel = () => {
-    dispatch(togglePermissionsPanel(true));
+    openPermissions({
+      settings: {
+        title: translateMessage('Permissions')
+      }
+    })
   }
 
-  const displayNoPermissionsFoundMessage = () : JSX.Element => {
+  const displayNoPermissionsFoundMessage = (): JSX.Element => {
     return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='permissions not found in permissions tab' />
       <Link underline onClick={openPermissionsPanel}>
@@ -39,7 +44,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     </Label>);
   }
 
-  const displayNotSignedInMessage = () : JSX.Element => {
+  const displayNotSignedInMessage = (): JSX.Element => {
     return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='sign in to view a list of all permissions' />
     </Label>)
@@ -49,31 +54,33 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
     return displayNotSignedInMessage();
   }
 
-  if(permissions.length === 0){
+  if (permissions.length === 0) {
     return displayNoPermissionsFoundMessage();
   }
 
   return (
     <>
-      <Label className={classes.permissionLength} style={{paddingLeft: '12px'}}>
+      <Label className={classes.permissionLength} style={{ paddingLeft: '12px' }}>
         <FormattedMessage id='Permissions' />
       </Label>
-      <Label className={classes.permissionText} style={{paddingLeft: '12px'}}>
+      <Label className={classes.permissionText} style={{ paddingLeft: '12px' }}>
         {!tokenPresent && <FormattedMessage id='sign in to consent to permissions' />}
-        {tokenPresent && <FormattedMessage id='permissions required to run the query'/>}
+        {tokenPresent && <FormattedMessage id='permissions required to run the query' />}
       </Label>
       <div
         onMouseEnter={() => {
 
-          if(screen.width < 1260 || window.innerWidth < 1290){
+          if (screen.width < 1260 || window.innerWidth < 1290) {
             setIsScreenSizeReduced(true);
           }
         }
         }
         onMouseLeave={() => setIsScreenSizeReduced(false)}>
         <DetailsList
-          styles={!isScreenSizeReduced ? { root:
-            { maxHeight, overflowX: 'hidden' } } : { root: { maxHeight} }}
+          styles={!isScreenSizeReduced ? {
+            root:
+              { maxHeight, overflowX: 'hidden' }
+          } : { root: { maxHeight } }}
           items={permissions}
           columns={columns}
           onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}

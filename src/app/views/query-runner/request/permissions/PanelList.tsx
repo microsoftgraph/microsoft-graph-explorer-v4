@@ -1,7 +1,6 @@
 import {
   Announced, DetailsList, DetailsListLayoutMode, getTheme, GroupHeader, IColumn,
-  IGroup, IOverlayProps, Label, Panel, PanelType,
-  SearchBox, SelectionMode
+  IGroup, Label, SearchBox, SelectionMode
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -11,12 +10,11 @@ import { AppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
-import { togglePermissionsPanel } from '../../../../services/actions/permissions-panel-action-creator';
+import { PopupsComponent } from '../../../../services/context/popups-context';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';
 import { searchBoxStyles } from '../../../../utils/searchbox.styles';
-import { translateMessage } from '../../../../utils/translate-messages';
-import { profileStyles } from '../../../authentication/profile/Profile.styles';
+import { permissionStyles } from './Permission.styles';
 import { setConsentedStatus } from './util';
 
 interface IPanelList {
@@ -27,29 +25,28 @@ interface IPanelList {
   renderDetailsHeader: Function;
 }
 
-const PanelList = ({ messages,
-  columns, classes, renderItemColumn, renderDetailsHeader }: IPanelList) : JSX.Element => {
-
+const PanelList: React.FC<PopupsComponent<IPanelList>> = (props): JSX.Element => {
+  const { messages, columns, classes, renderItemColumn, renderDetailsHeader } = props.data;
   const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
     return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
   }
 
   const { consentedScopes, scopes, authToken,
-    permissionsPanelOpen, theme: appTheme } = useAppSelector((state) => state);
+    permissionsPanelOpen } = useAppSelector((state) => state);
   const { fullPermissions } = scopes.data;
-  const [permissions, setPermissions] = useState<any []>([]);
+  const [permissions, setPermissions] = useState<any[]>([]);
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState(false);
-  const [searchValue, setSearchValue ] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>('');
   const permissionsList: any[] = [];
   const tokenPresent = !!authToken.token;
   const loading = scopes.pending.isFullPermissions;
 
   const theme = getTheme();
-  const { permissionPanelStyles } = profileStyles(theme);
+  const { panelContainer: panelStyles } = permissionStyles(theme);
 
   useEffect(() => {
-    if(!searchValue && groups && groups.length === 0){
+    if (!searchValue && groups && groups.length === 0) {
       setPermissions(sortPermissions(fullPermissions));
     }
   }, [permissionsPanelOpen, scopes.data]);
@@ -59,10 +56,10 @@ const PanelList = ({ messages,
   useEffect(() => {
     if (shouldGenerateGroups.current) {
       setGroups(generateGroupsFromList(permissionsList, 'groupName'));
-      if(groups && groups.length > 0) {
+      if (groups && groups.length > 0) {
         shouldGenerateGroups.current = false;
       }
-      if(permissionsList.length === 0){ return }
+      if (permissionsList.length === 0) { return }
     }
   }, [permissions, searchStarted])
 
@@ -106,113 +103,76 @@ const PanelList = ({ messages,
     return null;
   };
 
-  const changePanelState = () => {
-    let open = !!permissionsPanelOpen;
-    open = !open;
-    dispatch(togglePermissionsPanel(open));
-    trackSelectPermissionsButtonClickEvent();
-  };
-
   const trackSelectPermissionsButtonClickEvent = () => {
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
     });
   };
 
-  const isCurrentThemeDark = (): boolean => {
-    return (appTheme === 'dark' || appTheme === 'high-contrast');
-  }
-
-  const panelOverlayProps: IOverlayProps = {
-    styles: {
-      root: {
-        backgroundColor: isCurrentThemeDark() ? theme.palette.blackTranslucent40 :
-          theme.palette.whiteTranslucent40
-      }
-    }
-  }
-
-  const displayLoadingPermissionsText = () => {
-    return (
-      <Label>
-        <FormattedMessage id={'Fetching permissions'} />...
-      </Label>
-    );
-  }
-
   const groupHeaderStyles = () => {
     return {
-      check: { display: 'none'},
-      root: { background: theme.palette.white},
+      check: { display: 'none' },
+      root: { background: theme.palette.white },
       title: { padding: '10px' }
     }
   }
 
   const hideCheckbox = (): JSX.Element => {
     return (
-      <div/>
+      <div />
     )
   }
 
   const clearSearchBox = () => {
     setSearchValue('');
-    searchValueChanged({},'');
+    searchValueChanged({}, '');
   }
 
   return (
-    <div>
-      <Panel
-        isOpen={permissionsPanelOpen}
-        onDismiss={() => changePanelState()}
-        type={PanelType.largeFixed}
-        hasCloseButton={true}
-        headerText={translateMessage('Permissions')}
-        isFooterAtBottom={true}
-        closeButtonAriaLabel='Close'
-        overlayProps={panelOverlayProps}
-        styles={permissionPanelStyles}
-      >
-        {loading ? displayLoadingPermissionsText() :
-          <>
-            <Label className={classes.permissionText}>
-              <FormattedMessage id='Select different permissions' />
-            </Label>
-            <hr />
-            <SearchBox
-              className={classes.searchBox}
-              placeholder={messages['Search permissions']}
-              onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
-                searchValueChanged(event, newValue)}
-              styles={searchBoxStyles}
-              onClear={() => clearSearchBox()}
-              value={searchValue}
-            />
-            <Announced message={`${permissions.length} search results available.`} />
-            <hr />
-            <DetailsList
-              onShouldVirtualize={() => false}
-              items={permissions}
-              columns={columns}
-              groups={groups}
-              onRenderItemColumn={(item?: any, index?: number, column?: IColumn) =>
-                renderItemColumn(item, index, column)}
-              selectionMode={SelectionMode.multiple}
-              layoutMode={DetailsListLayoutMode.justified}
-              compact={true}
-              groupProps={{
-                showEmptyGroups: false,
-                onRenderHeader: onRenderGroupHeader
-              }}
-              ariaLabelForSelectionColumn={messages['Toggle selection'] || 'Toggle selection'}
-              ariaLabelForSelectAllCheckbox={messages['Toggle selection for all items'] ||
-             'Toggle selection for all items'}
-              checkButtonAriaLabel={messages['Row checkbox'] || 'Row checkbox'}
-              onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)}
-              onRenderCheckbox={() => hideCheckbox()}
-            />
-          </>}
+    <div data-is-scrollable={true} style={panelStyles}>
+      {loading ? <Label>
+        <FormattedMessage id={'Fetching permissions'} />...
+      </Label> :
+        <>
+          <Label className={classes.permissionText}>
+            <FormattedMessage id='Select different permissions' />
+          </Label>
+          <hr />
+          <SearchBox
+            className={classes.searchBox}
+            placeholder={messages['Search permissions']}
+            onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
+              searchValueChanged(event, newValue)}
+            styles={searchBoxStyles}
+            onClear={() => clearSearchBox()}
+            value={searchValue}
+          />
+          <Announced message={`${permissions.length} search results available.`} />
+          <hr />
+          <DetailsList
+            onShouldVirtualize={() => false}
+            items={permissions}
+            columns={columns}
+            groups={groups}
+            onRenderItemColumn={(item?: any, index?: number, column?: IColumn) =>
+              renderItemColumn(item, index, column)}
+            selectionMode={SelectionMode.multiple}
+            layoutMode={DetailsListLayoutMode.justified}
+            compact={true}
+            groupProps={{
+              showEmptyGroups: false,
+              onRenderHeader: onRenderGroupHeader
+            }}
+            ariaLabelForSelectionColumn={messages['Toggle selection'] || 'Toggle selection'}
+            ariaLabelForSelectAllCheckbox={messages['Toggle selection for all items'] ||
+              'Toggle selection for all items'}
+            checkButtonAriaLabel={messages['Row checkbox'] || 'Row checkbox'}
+            onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)}
+            onRenderCheckbox={() => hideCheckbox()}
+          />
+        </>}
 
-        {!loading && permissions && permissions.length === 0 &&
+      {!loading && permissions && permissions.length === 0 &&
         <Label style={{
           display: 'flex',
           width: '100%',
@@ -222,8 +182,7 @@ const PanelList = ({ messages,
         }}>
           <FormattedMessage id='permissions not found' />
         </Label>
-        }
-      </Panel>
+      }
     </div>
   );
 };
