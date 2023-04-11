@@ -20,7 +20,6 @@ const mockState: ApplicationState = {
     baseUrl: 'https://graph.microsoft.com/v1.0/me',
     parameters: '$count=true'
   },
-  permissionsPanelOpen: true,
   profile: null,
   sampleQuery: {
     sampleUrl: 'http://localhost:8080/api/v1/samples/1',

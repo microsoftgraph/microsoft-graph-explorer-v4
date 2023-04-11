@@ -31,8 +31,7 @@ const PanelList: React.FC<PopupsComponent<IPanelList>> = (props): JSX.Element =>
     return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
   }
 
-  const { consentedScopes, scopes, authToken,
-    permissionsPanelOpen } = useAppSelector((state) => state);
+  const { consentedScopes, scopes, authToken } = useAppSelector((state) => state);
   const { fullPermissions } = scopes.data;
   const [permissions, setPermissions] = useState<any[]>([]);
   const [groups, setGroups] = useState<IGroup[]>([]);
@@ -49,7 +48,7 @@ const PanelList: React.FC<PopupsComponent<IPanelList>> = (props): JSX.Element =>
     if (!searchValue && groups && groups.length === 0) {
       setPermissions(sortPermissions(fullPermissions));
     }
-  }, [permissionsPanelOpen, scopes.data]);
+  }, [scopes.data]);
 
   const shouldGenerateGroups = useRef(true)
 

@@ -34,7 +34,6 @@ export interface ApplicationState {
   scopes: IScopes;
   history: IHistoryItem[];
   graphResponse: IGraphResponse;
-  permissionsPanelOpen: boolean;
   isLoadingData: boolean;
   snippets: ISnippet;
   responseAreaExpanded: boolean;

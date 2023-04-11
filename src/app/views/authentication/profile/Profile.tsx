@@ -2,20 +2,19 @@ import {
   ActionButton, Callout, FontSizes, getTheme, IPersonaProps, IPersonaSharedProps, mergeStyleSets,
   Persona, PersonaSize, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
+import { useId } from '@fluentui/react-hooks';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useId } from '@fluentui/react-hooks';
 
+import { AppDispatch, useAppSelector } from '../../../../store';
+import { Mode } from '../../../../types/enums';
 import { signOut } from '../../../services/actions/auth-action-creators';
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
+import { usePopups } from '../../../services/hooks';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
-import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
-import { Mode } from '../../../../types/enums';
-import { AppDispatch, useAppSelector } from '../../../../store';
-import { usePopups } from '../../../services/hooks';
 
 const getInitials = (name: string) => {
   let initials = '';
@@ -35,7 +34,7 @@ const getInitials = (name: string) => {
 
 const Profile = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
-  const { profile, authToken, permissionsPanelOpen, graphExplorerMode } = useAppSelector((state) => state);
+  const { profile, authToken, graphExplorerMode } = useAppSelector((state) => state);
 
   const { open: openPermissions } = usePopups('full-permissions', 'panel');
   const authenticated = authToken.token;
@@ -165,7 +164,6 @@ const Profile = (props: any) => {
   return (
     <div className={classes.profile} style={profileContainerStyles}>
       {showProfileComponent(persona)}
-      {permissionsPanelOpen && <Permission panel={true} />}
     </div>
   );
 }
