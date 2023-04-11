@@ -7,8 +7,8 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
+import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
-import PathsReview from '../panels/PathsReview';
 import { resourceExplorerStyles } from '../resources.styles';
 
 interface ICommandOptions {
@@ -17,7 +17,8 @@ interface ICommandOptions {
 
 const CommandOptions = (props: ICommandOptions) => {
   const dispatch: AppDispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(false);
+  const { open: previewCollection } = usePopups('preview-collection', 'panel');
+
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const { version } = props;
   const theme = getTheme();
@@ -31,7 +32,7 @@ const CommandOptions = (props: ICommandOptions) => {
       text: translateMessage('Preview collection'),
       ariaLabel: translateMessage('Preview collection'),
       iconProps: { iconName: 'View' },
-      onClick: () => toggleSelectedResourcesPreview()
+      onClick: () => openPreviewCollection()
     }
   ];
 
@@ -47,10 +48,15 @@ const CommandOptions = (props: ICommandOptions) => {
     }
   ]
 
-  const toggleSelectedResourcesPreview = () => {
-    let open = isOpen;
-    open = !open;
-    setIsOpen(open);
+  const openPreviewCollection = () => {
+    previewCollection({
+      settings: {
+        title: translateMessage('Selected Resources') + ' ' + translateMessage('Preview')
+      },
+      data: {
+        version
+      }
+    })
   }
 
   const removeAllResources = () => {
@@ -82,11 +88,6 @@ const CommandOptions = (props: ICommandOptions) => {
         farItemsGroupAriaLabel='More selection actions'
         buttonAs={CustomButton}
         styles={commandStyles}
-      />
-      <PathsReview
-        isOpen={isOpen}
-        version={version}
-        toggleSelectedResourcesPreview={toggleSelectedResourcesPreview}
       />
       <Dialog
         hidden={isDialogHidden}

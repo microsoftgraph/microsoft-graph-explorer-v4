@@ -1,5 +1,6 @@
 import {
-  CommandBar, getTheme, ICommandBarItemProps, IOverlayProps, Label, Panel, PanelType, PrimaryButton
+  CommandBar, getTheme, ICommandBarItemProps, IOverlayProps, Label,
+  PrimaryButton
 } from '@fluentui/react';
 import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -8,23 +9,21 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IResourceLink } from '../../../../../types/resources';
 import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
+import { PopupsComponent } from '../../../../services/context/popups-context';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
 import Paths from './Paths';
 import { generatePostmanCollection } from './postman.util';
 
 export interface IPathsReview {
-  isOpen: boolean;
   version: string;
-  toggleSelectedResourcesPreview: Function;
 }
 
-const PathsReview = (props: IPathsReview) => {
+const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   const dispatch: AppDispatch = useDispatch();
   const { resources: { paths: items }, theme } = useAppSelector(
     (state) => state
   );
-  const { isOpen } = props;
   const headerText = translateMessage('Selected Resources') + ' ' + translateMessage('Preview');
   const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
   const currentTheme = getTheme();
@@ -83,30 +82,28 @@ const PathsReview = (props: IPathsReview) => {
 
   return (
     <>
-      <Panel
-        headerText={`${headerText}`}
-        isOpen={isOpen}
-        onDismiss={() => props.toggleSelectedResourcesPreview()}
-        type={PanelType.large}
-        onRenderFooterContent={renderFooterContent}
-        closeButtonAriaLabel='Close'
-        overlayProps={panelOverlayProps}
-      >
-        <Label>
-          <FormattedMessage id='Export list as a Postman collection message' />
-        </Label>
-        <CommandBar
-          items={options}
-          ariaLabel='Selection actions'
-          primaryGroupAriaLabel='Selection actions'
-          farItemsGroupAriaLabel='More selection actions'
-        />
-        {items && <Paths
+      <Label>
+        <FormattedMessage id='Export list as a Postman collection message' />
+      </Label>
+      <CommandBar
+        items={options}
+        ariaLabel='Selection actions'
+        primaryGroupAriaLabel='Selection actions'
+        farItemsGroupAriaLabel='More selection actions'
+      />
+      {items && <>
+        <Paths
           resources={items}
           columns={columns}
           selectItems={selectItems}
-        />}
-      </Panel>
+        />
+        <div>
+          <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
+            <FormattedMessage id='Download postman collection' />
+          </PrimaryButton>
+        </div>
+      </>
+      }
     </>
   )
 }
