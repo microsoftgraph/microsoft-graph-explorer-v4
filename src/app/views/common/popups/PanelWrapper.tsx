@@ -1,4 +1,4 @@
-import { getTheme, IOverlayProps, Panel, Spinner } from '@fluentui/react';
+import { getTheme, IOverlayProps, Panel, PanelType, Spinner } from '@fluentui/react';
 import { Suspense } from 'react';
 
 import { useAppSelector } from '../../../../store';
@@ -25,12 +25,27 @@ export function PanelWrapper(props: WrapperProps) {
 
   const headerText = title ? title! : '';
 
+  const getPanelType = () => {
+    switch (popupsProps.settings.width) {
+      case 'sm':
+        return PanelType.smallFluid;
+      case 'md':
+        return PanelType.medium;
+      case 'lg':
+        return PanelType.large;
+    }
+    return undefined;
+  }
+
+  const panelType = getPanelType();
+
   return (
     <div>
       <Panel
         isOpen={isOpen}
         onDismiss={() => dismissPopup()}
         hasCloseButton={true}
+        type={panelType}
         headerText={headerText.toString()}
         isFooterAtBottom={true}
         closeButtonAriaLabel='Close'

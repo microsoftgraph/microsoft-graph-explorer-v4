@@ -24,8 +24,6 @@ const usePopups = <Data = {}>(item: PopupItem, type: PopupsType,
       component = popups.get(item);
     }
 
-    if (!properties.settings.width) { properties.settings.width = 600 }
-
     const payload = {
       component,
       popupsProps: properties,

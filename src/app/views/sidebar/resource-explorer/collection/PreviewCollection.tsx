@@ -1,6 +1,6 @@
 import {
-  CommandBar, getTheme, ICommandBarItemProps, IOverlayProps, Label,
-  PrimaryButton
+  CommandBar, DialogFooter, getTheme, ICommandBarItemProps,
+  Label, PrimaryButton
 } from '@fluentui/react';
 import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -19,14 +19,12 @@ export interface IPathsReview {
   version: string;
 }
 
-const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
+const PathsReview: React.FC<PopupsComponent<IPathsReview>> = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { resources: { paths: items }, theme } = useAppSelector(
+  const { resources: { paths: items } } = useAppSelector(
     (state) => state
   );
-  const headerText = translateMessage('Selected Resources') + ' ' + translateMessage('Preview');
   const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
-  const currentTheme = getTheme();
 
   const columns = [
     { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true }
@@ -36,16 +34,6 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     const content = generatePostmanCollection(items);
     const filename = `${content.info.name}-${content.info._postman_id}.postman_collection.json`;
     downloadToLocal(content, filename);
-  }
-
-  const renderFooterContent = () => {
-    return (
-      <div>
-        <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
-          <FormattedMessage id='Download postman collection' />
-        </PrimaryButton>
-      </div>
-    )
   }
 
   const removeSelectedItems = () => {
@@ -67,19 +55,6 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     setSelectedItems(content);
   };
 
-  const isCurrentThemeDark = (): boolean => {
-    return (theme === 'dark' || theme === 'high-contrast');
-  }
-
-  const panelOverlayProps: IOverlayProps = {
-    styles: {
-      root: {
-        backgroundColor: isCurrentThemeDark() ? currentTheme.palette.blackTranslucent40 :
-          currentTheme.palette.whiteTranslucent40
-      }
-    }
-  }
-
   return (
     <>
       <Label>
@@ -97,11 +72,11 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
           columns={columns}
           selectItems={selectItems}
         />
-        <div>
+        <DialogFooter>
           <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
             <FormattedMessage id='Download postman collection' />
           </PrimaryButton>
-        </div>
+        </DialogFooter>
       </>
       }
     </>

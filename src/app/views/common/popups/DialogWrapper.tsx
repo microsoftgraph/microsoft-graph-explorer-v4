@@ -7,12 +7,24 @@ export function DialogWrapper(props: WrapperProps) {
   const { isOpen, dismissPopup, Component, popupsProps, closePopup } = props;
   const { settings: { title, subtitle } } = popupsProps;
 
+  const getDialogType = () => {
+    switch (popupsProps.settings.width) {
+      case 'md':
+        return DialogType.normal;
+      case 'lg':
+        return DialogType.largeHeader;
+    }
+    return DialogType.normal;
+  }
+
+  const type = getDialogType();
+
   return (
     <Dialog
       hidden={!isOpen}
       onDismiss={() => dismissPopup()}
       dialogContentProps={{
-        type: DialogType.normal,
+        type,
         title: title?.toString(),
         isMultiline: false,
         subText: subtitle?.toString()
