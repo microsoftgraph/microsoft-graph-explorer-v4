@@ -8,7 +8,7 @@ test.beforeAll(async ({ browser }) => {
   await page.goto('/');
 });
 
-const waitForFonts = async () => {
+const waitForFonts = async (): Promise<void> => {
   await page.waitForTimeout(200);
   await page.evaluate(() => document.fonts.ready);
 };
@@ -80,8 +80,7 @@ test.describe('Response section', () => {
     await page.locator('text= Response preview Response headers Code snippets Toolkit component Adaptiv >> [aria-label="Toolkit component"]').click();
     await page.locator('text= Response preview Response headers Code snippets Toolkit component Adaptiv >> [aria-label="Adaptive cards"]').click();
     await page.locator('[aria-label="Close expanded response area"]').click();
-    await page.waitForTimeout(200);
-    await page.evaluate(() => document.fonts.ready);
+    await waitForFonts();
     expect(await page.screenshot()).toMatchSnapshot();
   })
 })
