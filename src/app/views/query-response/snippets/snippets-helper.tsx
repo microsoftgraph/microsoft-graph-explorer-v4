@@ -31,7 +31,7 @@ export function renderSnippets(supportedLanguages: ISupportedLanguages) {
   return Object.keys(supportedLanguages).map((language: string) => (
     <PivotItem
       key={language}
-      headerText={language}
+      headerText={language === 'CSharp' ? 'C#' : language}
       headerButtonProps={{
         'aria-controls': `${language}-tab`
       }}
