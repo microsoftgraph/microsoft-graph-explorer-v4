@@ -1,6 +1,6 @@
 {
         "name": "graph-explorer-v2",
-        "version": "8.0.0",
+        "version": "8.1.0",
         "private": true,
         "dependencies": {
                 "@augloop/types-core": "file:packages/types-core-2.16.189.tgz",
@@ -78,7 +78,7 @@
                 "test-playwright": "start-server-and-test start-server http://localhost:3000 test-ui",
                 "test-ui": "npx playwright test src/tests/ui/",
                 "test-playwright-accessibility": "start-server-and-test start-server http://localhost:3000 test-accessibility",
-                "test-accessibility": "npx playwright test src/tests/accessibility"
+                "test-accessibility": "npx playwright test src/tests/accessibility --project=Ms-Edge"
         },
         "eslintConfig": {
                 "extends": "react-app"

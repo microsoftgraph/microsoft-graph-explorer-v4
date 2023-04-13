@@ -45,6 +45,16 @@ test.describe('Request', () => {
     ]);
     expect(page5.url().indexOf('https://jwt.ms/')).toBeGreaterThan(-1);
   })
+
+  test('Permissions tab asks user to open permissions panel to view more permissions if missing on the tab', async () => {
+    const queryInput = authenticatedPage.locator('[aria-label="Query sample input"]');
+    await queryInput.click();
+    queryInput.fill('https://graph.microsoft.com/v1.0/userssssss');
+    await authenticatedPage.locator('[aria-label="Modify permissions"]').click();
+    await authenticatedPage.evaluate(() => document.fonts.ready);
+    await authenticatedPage.waitForTimeout(100);
+    expect(authenticatedPage.getByText('Permissions for the query are missing on this tab. Open the permissions panel to')).toBeDefined();
+  })
 })
 
 test.describe.serial('Profile', () => {

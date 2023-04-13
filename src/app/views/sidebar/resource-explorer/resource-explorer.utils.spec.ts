@@ -7,11 +7,10 @@ import {
   createResourcesList, getAvailableMethods, getCurrentTree, getResourcePaths, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 
-const resource = JSON.parse(JSON.stringify(content)) as IResource;
-
+const resource = JSON.parse(JSON.stringify(content)) as IResource
 describe('Resource payload should', () => {
   it('have children', async () => {
-    const resources: any = { ...content };
+    const resources: any = { ...resource };
     expect(resources.children.length).toBeGreaterThan(0);
   });
 
@@ -55,7 +54,7 @@ describe('Resource payload should', () => {
   it('return a string without counters', async () => {
     const version = 'v1.0';
     const paths = ['/', 'appCatalogs', 'teamsApps'];
-    const level = 2;
+    const level = 3 ;
     const currentTree = getCurrentTree({
       paths,
       level,

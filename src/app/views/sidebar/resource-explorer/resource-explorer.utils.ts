@@ -113,14 +113,8 @@ export function createResourcesList(
         ? true
         : false;
 
-    let docLink = '';
-    if (labels && labels.length > 0) {
-      const label = labels.find((l) => l.name === version);
-      if (label) {
-        docLink = label.methods.find((value: ResourceMethod) =>
-          value.name?.toLowerCase() === method?.toLowerCase())?.documentationUrl!;
-      }
-    }
+    let docLink = getLink(labels, version, method);
+
     return {
       key,
       url: key,
@@ -151,6 +145,22 @@ export function createResourcesList(
       links: navLink.links
     }
   ];
+}
+
+function getLink(labels: IResourceLabel[], version: string, method?: Method) {
+  let docLink = '';
+  if (labels && labels.length > 0 && !!method) {
+    const label = labels.find((l) => l.name === version);
+    if (label) {
+      let methods = label.methods;
+      if ((typeof methods[0] !== 'string')) {
+        methods = methods as ResourceMethod[];
+        docLink = methods.find((value: ResourceMethod) =>
+          value.name?.toLowerCase() === method.toLowerCase())?.documentationUrl!;
+      }
+    }
+  }
+  return docLink;
 }
 
 export function getCurrentTree({
@@ -194,9 +204,12 @@ export function getAvailableMethods(
   return methods;
 }
 
-function getMethod(method: ResourceMethod): Method {
+function getMethod(method: string | ResourceMethod): Method {
   // added to guarantee backwards compatibility with old method definitions
-  return (typeof method === 'string') ? method : method.name;
+  if (typeof method === 'string') {
+    return method as Method;
+  }
+  return method.name;
 }
 
 export function getUrlFromLink(link: IResourceLink | INavLink): string {

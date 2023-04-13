@@ -76,7 +76,9 @@ class DocumentationService implements IDocumentationService {
       }
 
       if (typeof method === 'object') {
-        return currentLabel.methods.find((value: ResourceMethod) =>
+        let methods = currentLabel.methods;
+        methods = methods as ResourceMethod[];
+        return methods.find((value: ResourceMethod) =>
           value.name?.toLowerCase() === this.method.toLowerCase())?.documentationUrl!;
       }
     }

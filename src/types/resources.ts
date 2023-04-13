@@ -10,7 +10,7 @@ export interface IResource {
 
 export interface IResourceLabel {
   name: string;
-  methods: ResourceMethod[];
+  methods: ResourceMethod[] | string[];
 }
 
 export interface ResourceMethod {

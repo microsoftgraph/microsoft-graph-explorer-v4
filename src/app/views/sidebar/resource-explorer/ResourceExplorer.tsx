@@ -1,7 +1,8 @@
 import {
-  INavLink, INavLinkGroup, Label, Nav,
-  SearchBox, Spinner, SpinnerSize,
-  Stack, styled, Toggle
+  INavLink, INavLinkGroup, Label, Nav, SearchBox, Spinner, SpinnerSize,
+  Stack,
+  styled,
+  Toggle
 } from '@fluentui/react';
 import debouce from 'lodash.debounce';
 import { useEffect, useMemo, useState } from 'react';
@@ -11,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
-import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
+import { IResource, IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { addResourcePaths } from '../../../services/actions/resource-explorer-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
@@ -30,19 +31,20 @@ import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
 
 const UnstyledResourceExplorer = (props: any) => {
-  const dispatch: AppDispatch = useDispatch();
   const { resources } = useAppSelector(
     (state) => state
   );
 
+  const dispatch: AppDispatch = useDispatch();
   const classes = classNames(props);
+
   const { data, pending, paths: selectedLinks } = resources;
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
   ];
 
-  const resourcesToUse = JSON.parse(JSON.stringify(data.children));
+  const resourcesToUse = data.children ? JSON.parse(JSON.stringify(data.children)) : [] as IResource[];
 
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');
@@ -144,11 +146,13 @@ const UnstyledResourceExplorer = (props: any) => {
       </>
       }
 
-      <Label styles={{ root: { position: 'relative', left: '10px' } }}>
+      {items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>
         <FormattedMessage id='Resources available' />
       </Label>
+      }
+
       {
-        items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '60px' }) :
+        items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
           (<Nav
             groups={items}
             styles={navStyles}

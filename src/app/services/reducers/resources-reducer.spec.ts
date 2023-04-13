@@ -9,10 +9,56 @@ import {
   RESOURCEPATHS_ADD_SUCCESS,
   RESOURCEPATHS_DELETE_SUCCESS
 } from '../../../app/services/redux-constants';
-import content from '../../../app/utils/resources/resources.json';
 import { IResource, IResourceLink, IResources, ResourceLinkType } from '../../../types/resources';
 
-const res = JSON.parse(JSON.stringify(content)) as IResource;
+const res = {
+  'segment': '/',
+  'labels': [
+    {
+      'name': 'v1.0',
+      'methods': [
+        'Get'
+      ]
+    },
+    {
+      'name': 'beta',
+      'methods': [
+        'Get'
+      ]
+    }
+  ],
+  'children': [
+    {
+      'segment': 'accessReviewDecisions',
+      'labels': [
+        {
+          'name': 'beta',
+          'methods': [
+            'Get',
+            'Post'
+          ]
+        }
+      ],
+      'children': [
+        {
+          'segment': '{accessReviewDecision-id}',
+          'labels': [
+            {
+              'name': 'beta',
+              'methods': [
+                'Get',
+                'Patch',
+                'Delete'
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+const resource = JSON.parse(JSON.stringify(res)) as IResource
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
@@ -102,9 +148,9 @@ describe('Resources Reducer', () => {
 
   it('should handle FETCH_RESOURCES_SUCCESS', () => {
     const newState = { ...initialState };
-    newState.data = res;
+    newState.data = resource;
 
-    const resourceAction = { type: FETCH_RESOURCES_SUCCESS, response: res };
+    const resourceAction = { type: FETCH_RESOURCES_SUCCESS, response: resource };
     const state = resources(initialState, resourceAction);
 
     expect(state).toEqual(newState);
@@ -116,7 +162,7 @@ describe('Resources Reducer', () => {
 
     const newState = { ...initialState };
     newState.error = mockResponse;
-    newState.data = res;
+    newState.data = resource;
 
     const resourceAction = { type: FETCH_RESOURCES_ERROR, response: mockResponse };
     const state = resources(initialState, resourceAction);

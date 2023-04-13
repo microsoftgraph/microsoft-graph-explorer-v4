@@ -58,7 +58,7 @@ function Snippet(props: ISnippetProps) {
 
   const { dimensions: { response }, snippets,
     responseAreaExpanded, sampleQuery } = useAppSelector((state) => state);
-  const { data, pending: loadingState, error } = snippets;
+  const { data, pending: loadingState } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
 
   const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
@@ -136,14 +136,9 @@ function Snippet(props: ISnippetProps) {
           />
         </>
       }
-      {(!loadingState && !snippet && error && error.error && error.error.status === 404) ?
+      {!loadingState && !snippet &&
         <Label style={{ padding: 10 }}>
           <FormattedMessage id='Snippet not available' />
-        </Label>
-        :
-        (!loadingState && !snippet && error && error.error && error.error.status !== 404) &&
-        <Label style={{ padding: 10 }}>
-          <FormattedMessage id='Fetching code snippet failing' />
         </Label>
       }
     </div>
