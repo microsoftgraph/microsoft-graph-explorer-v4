@@ -113,7 +113,7 @@ export function createResourcesList(
         ? true
         : false;
 
-    let docLink = getLink(labels, version, method);
+    const docLink = getLink(labels, version, method);
 
     return {
       key,
