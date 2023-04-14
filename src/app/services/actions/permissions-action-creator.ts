@@ -251,35 +251,29 @@ export function revokeScopes(permissionToRevoke: string) {
     }
 
     const newScopesArray: string[] = consentedScopes.filter((scope: string) => scope !== permissionToRevoke);
-    const newScopesString: string = newScopesArray.join(' ');
 
     try {
       const { userIsTenantAdmin, permissionBeingRevokedIsAllPrincipal, grantsPayload } = await revokePermissionUtil.
         getUserPermissionChecks({ consentedScopes, requiredPermissions, defaultUserScopes, permissionToRevoke });
 
-      let updatedScopes;
-      if (permissionBeingRevokedIsAllPrincipal && userIsTenantAdmin) {
-        updatedScopes = await revokePermissionUtil.
-          getUpdatedAllPrincipalPermissionGrant(grantsPayload, permissionToRevoke);
-      }
-      else {
-        updatedScopes = await revokePermissionUtil.
-          updateSinglePrincipalPermissionGrant(grantsPayload, profile, newScopesString);
-      }
+      const updatedScopes = await updatePermissionsWithRetry(permissionBeingRevokedIsAllPrincipal,
+        userIsTenantAdmin, revokePermissionUtil, grantsPayload, profile, permissionToRevoke, newScopesArray )
 
-      if (updatedScopes.length !== newScopesArray.length) {
+      if (updatedScopes) {
+        dispatchRevokeScopesStatus(dispatch, 'Permission revoked', 'Success', 4);
+        dispatch(getConsentedScopesSuccess(updatedScopes));
+        dispatch(revokeScopesSuccess());
+        trackRevokeConsentEvent(REVOKE_STATUS.success, permissionToRevoke);
+      }
+      else{
         throw new RevokeScopesError({
           errorText: 'Scopes not updated', statusText: 'An error occurred when unconsenting',
           status: '500', messageType: 1
         })
       }
-
-      dispatchRevokeScopesStatus(dispatch, 'Permission revoked', 'Success', 4);
-      dispatch(getConsentedScopesSuccess(updatedScopes));
-      dispatch(revokeScopesSuccess());
-      trackRevokeConsentEvent(REVOKE_STATUS.success, permissionToRevoke);
     }
     catch (errorMessage: any) {
+      console.log('Error occurred here ', errorMessage)
       if (errorMessage instanceof RevokeScopesError || errorMessage instanceof Function) {
         const { errorText, statusText, status, messageType } = errorMessage
         dispatchRevokeScopesStatus(dispatch, statusText, status, messageType);
@@ -297,6 +291,36 @@ export function revokeScopes(permissionToRevoke: string) {
       }
     }
   }
+}
+
+async function updatePermissionsWithRetry(permissionBeingRevokedIsAllPrincipal: boolean,
+  userIsTenantAdmin: boolean, revokePermissionUtil: RevokePermissionsUtil, grantsPayload: any, profile: any,
+  permissionToRevoke: string, newScopesArray: string[], retryCount: number = 0): Promise<string[] | null> {
+  let updatedScopes;
+  const maxRetryCount = 7;
+  const retryDelay = 1000; // milliseconds
+  const newScopesString = newScopesArray.join(' ');
+
+  console.log('Retrying now ', retryCount)
+
+  if (permissionBeingRevokedIsAllPrincipal && userIsTenantAdmin) {
+    updatedScopes = await revokePermissionUtil.getUpdatedAllPrincipalPermissionGrant(grantsPayload, permissionToRevoke);
+  } else {
+    updatedScopes = await revokePermissionUtil.updateSinglePrincipalPermissionGrant(grantsPayload, profile,
+      newScopesString);
+  }
+
+  if (updatedScopes.length === newScopesArray.length) {
+    return updatedScopes;
+  }
+
+  if (retryCount < maxRetryCount) {
+    await new Promise(resolve => setTimeout(resolve, retryDelay * Math.pow(2, retryCount)));
+    return updatePermissionsWithRetry(permissionBeingRevokedIsAllPrincipal, userIsTenantAdmin,
+      revokePermissionUtil, grantsPayload, profile, permissionToRevoke, newScopesArray,  retryCount + 1);
+  }
+
+  return null;
 }
 
 const dispatchRevokeScopesStatus = (dispatch: Function, statusText: string, status: string, messageType: number) => {
@@ -324,20 +348,25 @@ export function fetchAllPrincipalGrants() {
     try {
       const { profile, consentedScopes, scopes } = getState();
       let tenantWideGrant: IOAuthGrantPayload = scopes.data.tenantWidePermissionsGrant;
-      let revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id, true);
+      let revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
       const servicePrincipalAppId = revokePermissionUtil.getServicePrincipalAppId();
       dispatch(getAllPrincipalGrantsPending(true));
+      let requestCounter = 0;
 
       if (servicePrincipalAppId) {
         tenantWideGrant = revokePermissionUtil.getGrantsPayload();
-        if(tenantWideGrant){
-          if (!allScopesHaveConsentType(consentedScopes, tenantWideGrant, profile.id)){
-            dispatch(getAllPrincipalGrantsPending(true))
-            revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id, true);
-            tenantWideGrant = revokePermissionUtil.getGrantsPayload();
+        if (tenantWideGrant) {
+          if (!allScopesHaveConsentType(consentedScopes, tenantWideGrant, profile.id)) {
+            while (requestCounter < 10 && profile && profile.id &&
+              !allScopesHaveConsentType(consentedScopes, tenantWideGrant, profile.id)) {
+              requestCounter += 1;
+              revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
+              dispatch(getAllPrincipalGrantsPending(true));
+              tenantWideGrant = revokePermissionUtil.getGrantsPayload();
+            }
             dispatchGrantsStatus(dispatch, tenantWideGrant.value)
           }
-          else{
+          else {
             dispatchGrantsStatus(dispatch, tenantWideGrant.value)
           }
         }
