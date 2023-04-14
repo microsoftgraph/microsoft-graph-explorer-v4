@@ -473,5 +473,6 @@
   "This token is not a jwt token and cannot be decoded by jwt.ms": "This token is not a jwt token and cannot be decoded by jwt.ms",
   "The URL must contain graph.microsoft.com": "The URL must contain graph.microsoft.com",
   "Fetching code snippet failing": "Retry again",
-  "Fetching permissions failing": "Retry again"
+  "Fetching permissions failing": "Retry again",
+  "Reload consent-type": "Confirm that you have consented to Directory.Read.All or Directory.ReadWrite.All or DelegatedPermissionGrant.ReadWrite.All then click Reload"
 }

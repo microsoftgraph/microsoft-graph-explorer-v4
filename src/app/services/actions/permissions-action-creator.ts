@@ -235,6 +235,14 @@ export function revokeScopes(permissionToRevoke: string) {
     const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
     const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
     dispatch(revokeScopesPending());
+    dispatch(
+      setQueryResponseStatus({
+        statusText: translateMessage('Revoking '),
+        status: translateMessage('Please wait while we revoke this permission'),
+        ok: false,
+        messageType: MessageBarType.info
+      })
+    )
 
     if (!consentedScopes || consentedScopes.length === 0) {
       dispatch(revokeScopesError());
@@ -316,22 +324,17 @@ export function fetchAllPrincipalGrants() {
     try {
       const { profile, consentedScopes, scopes } = getState();
       let tenantWideGrant: IOAuthGrantPayload = scopes.data.tenantWidePermissionsGrant;
-      let revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
+      let revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id, true);
       const servicePrincipalAppId = revokePermissionUtil.getServicePrincipalAppId();
       dispatch(getAllPrincipalGrantsPending(true));
-      let requestCounter = 0;
 
       if (servicePrincipalAppId) {
         tenantWideGrant = revokePermissionUtil.getGrantsPayload();
         if(tenantWideGrant){
           if (!allScopesHaveConsentType(consentedScopes, tenantWideGrant, profile.id)){
-            while (requestCounter < 10 && profile && profile.id &&
-              !allScopesHaveConsentType(consentedScopes, tenantWideGrant, profile.id)) {
-              requestCounter += 1;
-              revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
-              dispatch(getAllPrincipalGrantsPending(true));
-              tenantWideGrant = revokePermissionUtil.getGrantsPayload();
-            }
+            dispatch(getAllPrincipalGrantsPending(true))
+            revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id, true);
+            tenantWideGrant = revokePermissionUtil.getGrantsPayload();
             dispatchGrantsStatus(dispatch, tenantWideGrant.value)
           }
           else{

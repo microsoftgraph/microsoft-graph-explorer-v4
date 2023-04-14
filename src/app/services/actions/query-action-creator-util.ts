@@ -266,3 +266,31 @@ export function queryResultsInCorsError(sampleUrl: string): boolean {
   }
   return false;
 }
+
+export async function exponentialFetchRetry<T>( fn: () => Promise<any>, retriesLeft: number,
+  interval: number, condition?: (result: T) => Promise<boolean>
+): Promise<T> {
+  try {
+    const result = await fn();
+    if (condition && (await condition(result))) {
+      console.log('Found the condition here')
+      throw new Error('Condition not met');
+    }
+    if(result){
+      console.log('Status ', result.status)
+      if(result.status && result.status >= 400){
+        console.log('Error occurred during fetch ')
+        throw new Error('Encountered an error during the fetch');
+      }
+    }
+    return result;
+  } catch (error: unknown) {
+    if (retriesLeft === 1) {
+      console.log('shit happened before I could retry. Exiting');
+      throw error;
+    }
+    console.log('Caught an error ', error);
+    await new Promise((resolve) => setTimeout(resolve, interval));
+    return exponentialFetchRetry(fn, retriesLeft - 1, interval * 2, condition);
+  }
+}
