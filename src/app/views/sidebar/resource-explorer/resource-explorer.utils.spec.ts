@@ -54,7 +54,7 @@ describe('Resource payload should', () => {
   it('return a string without counters', async () => {
     const version = 'v1.0';
     const paths = ['/', 'appCatalogs', 'teamsApps'];
-    const level = 3 ;
+    const level = 3;
     const currentTree = getCurrentTree({
       paths,
       level,
@@ -82,12 +82,14 @@ describe('Resource filter should', () => {
 
   const pairs = [
     {
-      base: 'https://graph.microsoft.com/v1.0/chats/b214-e0ac-be40/messages/187117c7-af33-4b45-4d34',
-      tokenised: 'https://graph.microsoft.com/v1.0/chats/{chat-id}/messages/{chatMessage-id}'
+      base:
+        'https://graph.microsoft.com/v1.0/appCatalogs/teamsApps/b214-e0ac-be40/appDefinitions/187117c7-af33-4b45-4d34',
+      tokenised:
+        'https://graph.microsoft.com/v1.0/appCatalogs/teamsApps/{teamsApps-id}/appDefinitions/{appDefinitions-id}'
     },
     {
-      base: `https://graph.microsoft.com/v1.0/me/messages/${messageId}`,
-      tokenised: 'https://graph.microsoft.com/v1.0/me/messages/{message-id}'
+      base: `https://graph.microsoft.com/v1.0/appCatalogs/teamsApps/${messageId}`,
+      tokenised: 'https://graph.microsoft.com/v1.0/appCatalogs/teamsApps/{teamsApps-id}'
     }
   ]
 
