@@ -280,12 +280,11 @@ export async function exponentialFetchRetry<T>( fn: () => Promise<any>, retriesL
       }
     }
     if(result){
-      if(result.status && result.status >= 400){
+      if((result.status && result.status >= 400 )){
         throw new Error('Encountered an error during the fetch');
       }
     }
     if(error){
-      console.log('Found an error. Restarting')
       throw new Error(error);
     }
     console.log('Here is the result ', { result });

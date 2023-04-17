@@ -474,5 +474,8 @@
   "The URL must contain graph.microsoft.com": "The URL must contain graph.microsoft.com",
   "Fetching code snippet failing": "Retry again",
   "Fetching permissions failing": "Retry again",
-  "Reload consent-type": "Confirm that you have consented to Directory.Read.All or Directory.ReadWrite.All or DelegatedPermissionGrant.ReadWrite.All then click Reload"
+  "Reload consent-type": "Confirm that you have consented to Directory.Read.All or Directory.ReadWrite.All or DelegatedPermissionGrant.ReadWrite.All and that you have reauthenticated if you revoked this permission earlier then click Reload",
+  "An error occured during the revoking process": "An error occured during the revoking process",
+  "Retrying": "Retrying",
+  "You require the following permissions to read": "You require Directory.Read.All or Directory.ReadWrite.All or DelegatedPermissionGrant.ReadWrite.All to read permission grants for your tenant"
 }

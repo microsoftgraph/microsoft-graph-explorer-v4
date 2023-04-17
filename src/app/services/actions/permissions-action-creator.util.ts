@@ -145,6 +145,7 @@ export class RevokePermissionsUtil {
         messageType: 1
       })
     }
+    console.log('Signed in grant ', signedInGrant);
 
     if (!this.permissionToRevokeInGrant(signedInGrant, permissionToRevoke) && userIsTenantAdmin) {
       this.trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
@@ -239,6 +240,7 @@ export class RevokePermissionsUtil {
       const response = await RevokePermissionsUtil.makeExponentialFetch([],
         patchQuery, () => this.permissionRevokedAvailable());
       const { error } = response;
+      console.log('Here is the response ', response);
       if (error) {
         throw error;
       }
