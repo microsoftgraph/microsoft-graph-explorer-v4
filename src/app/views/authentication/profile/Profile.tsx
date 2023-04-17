@@ -77,7 +77,8 @@ const Profile = (props: any) => {
   const changePanelState = () => {
     openPermissions({
       settings: {
-        title: translateMessage('Permissions')
+        title: translateMessage('Permissions'),
+        width: 'lg'
       }
     })
   };

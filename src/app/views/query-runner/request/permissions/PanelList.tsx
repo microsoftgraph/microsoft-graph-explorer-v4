@@ -1,48 +1,72 @@
 import {
   Announced, DetailsList, DetailsListLayoutMode, getTheme, GroupHeader, IColumn,
-  IGroup, Label, SearchBox, SelectionMode
+  IGroup, Label, SearchBox, SelectionMode, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
-import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
+import { fetchAllPrincipalGrants, fetchScopes } from '../../../../services/actions/permissions-action-creator';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';
 import { searchBoxStyles } from '../../../../utils/searchbox.styles';
+import { translateMessage } from '../../../../utils/translate-messages';
+import { getColumns } from './columns';
 import { permissionStyles } from './Permission.styles';
+import PermissionItem from './PermissionItem';
 import { setConsentedStatus } from './util';
 
-interface IPanelList {
-  messages: any;
-  columns: any[];
-  classes: any;
-  renderItemColumn: any;
-  renderDetailsHeader: Function;
-}
+const PanelList: React.FC<PopupsComponent<null>> = (): JSX.Element => {
+  const theme = getTheme();
+  const dispatch: AppDispatch = useDispatch();
 
-const PanelList: React.FC<PopupsComponent<IPanelList>> = (props): JSX.Element => {
-  const { messages, columns, classes, renderItemColumn, renderDetailsHeader } = props.data;
-  const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
-    return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
-  }
-
+  const { panelContainer: panelStyles, tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
   const { consentedScopes, scopes, authToken } = useAppSelector((state) => state);
   const { fullPermissions } = scopes.data;
+  const tokenPresent = !!authToken.token;
+  const loading = scopes.pending.isFullPermissions;
+
   const [permissions, setPermissions] = useState<any[]>([]);
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState(false);
   const [searchValue, setSearchValue] = useState<string>('');
-  const permissionsList: any[] = [];
-  const tokenPresent = !!authToken.token;
-  const loading = scopes.pending.isFullPermissions;
 
-  const theme = getTheme();
-  const { panelContainer: panelStyles } = permissionStyles(theme);
+  const permissionsList: any[] = [];
+
+  const getPermissions = (): void => {
+    dispatch(fetchScopes());
+    fetchPermissionGrants();
+  }
+
+  const fetchPermissionGrants = (): void => {
+    if (tokenPresent) {
+      dispatch(fetchAllPrincipalGrants());
+    }
+  }
+
+  useEffect(() => {
+    getPermissions();
+  }, [consentedScopes]);
+
+  const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
+    return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
+  }
+
+  const renderDetailsHeader = (properties: any, defaultRender?: any): JSX.Element => {
+    return defaultRender!({
+      ...properties,
+      onRenderColumnHeaderTooltip: (tooltipHostProps: any) => {
+        return (
+          <TooltipHost {...tooltipHostProps} styles={tooltipStyles} />
+        );
+      },
+      styles: detailsHeaderStyles
+    });
+  }
 
   useEffect(() => {
     if (!searchValue && groups && groups.length === 0) {
@@ -62,7 +86,6 @@ const PanelList: React.FC<PopupsComponent<IPanelList>> = (props): JSX.Element =>
     }
   }, [permissions, searchStarted])
 
-  const dispatch: AppDispatch = useDispatch();
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
@@ -102,11 +125,6 @@ const PanelList: React.FC<PopupsComponent<IPanelList>> = (props): JSX.Element =>
     return null;
   };
 
-  const trackSelectPermissionsButtonClickEvent = () => {
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
-    });
-  };
 
   const groupHeaderStyles = () => {
     return {
@@ -133,13 +151,12 @@ const PanelList: React.FC<PopupsComponent<IPanelList>> = (props): JSX.Element =>
         <FormattedMessage id={'Fetching permissions'} />...
       </Label> :
         <>
-          <Label className={classes.permissionText}>
+          <Label>
             <FormattedMessage id='Select different permissions' />
           </Label>
           <hr />
           <SearchBox
-            className={classes.searchBox}
-            placeholder={messages['Search permissions']}
+            placeholder={translateMessage('Search permissions')}
             onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
               searchValueChanged(event, newValue)}
             styles={searchBoxStyles}
@@ -151,10 +168,11 @@ const PanelList: React.FC<PopupsComponent<IPanelList>> = (props): JSX.Element =>
           <DetailsList
             onShouldVirtualize={() => false}
             items={permissions}
-            columns={columns}
+            columns={getColumns('panel', tokenPresent)}
             groups={groups}
-            onRenderItemColumn={(item?: any, index?: number, column?: IColumn) =>
-              renderItemColumn(item, index, column)}
+            onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
+              return <PermissionItem column={column} index={index} item={item} />
+            }}
             selectionMode={SelectionMode.multiple}
             layoutMode={DetailsListLayoutMode.justified}
             compact={true}
@@ -162,10 +180,10 @@ const PanelList: React.FC<PopupsComponent<IPanelList>> = (props): JSX.Element =>
               showEmptyGroups: false,
               onRenderHeader: onRenderGroupHeader
             }}
-            ariaLabelForSelectionColumn={messages['Toggle selection'] || 'Toggle selection'}
-            ariaLabelForSelectAllCheckbox={messages['Toggle selection for all items'] ||
+            ariaLabelForSelectionColumn={translateMessage('Toggle selection') || 'Toggle selection'}
+            ariaLabelForSelectAllCheckbox={translateMessage('Toggle selection for all items') ||
               'Toggle selection for all items'}
-            checkButtonAriaLabel={messages['Row checkbox'] || 'Row checkbox'}
+            checkButtonAriaLabel={translateMessage('Row checkbox') || 'Row checkbox'}
             onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)}
             onRenderCheckbox={() => hideCheckbox()}
           />

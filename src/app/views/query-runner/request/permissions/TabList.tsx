@@ -29,7 +29,8 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   const openPermissionsPanel = () => {
     openPermissions({
       settings: {
-        title: translateMessage('Permissions')
+        title: translateMessage('Permissions'),
+        width: 'lg'
       }
     })
   }
