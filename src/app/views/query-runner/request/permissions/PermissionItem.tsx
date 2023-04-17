@@ -29,7 +29,7 @@ const buttonIcon: IIconProps = {
   }
 };
 
-const PermissionItem = (props: PermissionItemProps) => {
+const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   const theme = getTheme();
   const dispatch: AppDispatch = useDispatch();
   const hostId: string = getId('tooltipHost');
@@ -89,28 +89,25 @@ const PermissionItem = (props: PermissionItemProps) => {
           <FormattedMessage id='Revoke' />
         </PrimaryButton>
       }
-      else {
-        return <TooltipHost
-          content={translateMessage('You require the following permissions to revoke')}
-          id={hostId}
-          calloutProps={{ gapSpace: 0 }}
-        >
-          <DefaultButton
-            iconProps={buttonIcon}
-            allowDisabledFocus
-            disabled={true}
-            styles={consentButtonStyles}>
-            {translateMessage('Revoke')}
-          </DefaultButton>
-        </TooltipHost>
-      }
-    } else {
-      return <PrimaryButton onClick={() => handleConsent(item)}
-        styles={consentButtonStyles}
+      return <TooltipHost
+        content={translateMessage('You require the following permissions to revoke')}
+        id={hostId}
+        calloutProps={{ gapSpace: 0 }}
       >
-        <FormattedMessage id='Consent' />
-      </PrimaryButton>;
+        <DefaultButton
+          iconProps={buttonIcon}
+          allowDisabledFocus
+          disabled={true}
+          styles={consentButtonStyles}>
+          {translateMessage('Revoke')}
+        </DefaultButton>
+      </TooltipHost>
     }
+    return <PrimaryButton onClick={() => handleConsent(item)}
+      styles={consentButtonStyles}
+    >
+      <FormattedMessage id='Consent' />
+    </PrimaryButton>;
   }
 
   if (column) {

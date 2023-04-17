@@ -2,7 +2,7 @@ import { createContext, useContext, useReducer } from 'react';
 
 import { PopupsComponent, PopupsProps, PopupsStatus, PopupsType } from '.';
 
-export interface IPopup<Data = {}> {
+export interface Popup<Data = {}> {
   component: React.ElementType<PopupsComponent<Data>>,
   popupsProps: PopupsProps<Data>,
   type: PopupsType,
@@ -15,11 +15,11 @@ export interface IPopup<Data = {}> {
 
 interface PopupAction {
   type: string;
-  payload: IPopup;
+  payload: Popup;
 }
 
 interface PopupState {
-  popups: IPopup[];
+  popups: Popup[];
 }
 
 const initialState: PopupState = {
@@ -34,7 +34,7 @@ export const POPUPS = {
 const PopupStateContext = createContext<PopupState>(initialState);
 const PopupDispatchContext = createContext<any>({});
 
-function reducedPopups(state: PopupState = initialState, action: PopupAction) {
+function reducedPopups(state: PopupState = initialState, action: PopupAction): PopupState {
   const payload = { ...action.payload };
   switch (action.type) {
     case POPUPS.ADD_POPUPS: {
@@ -59,13 +59,14 @@ function reducedPopups(state: PopupState = initialState, action: PopupAction) {
       }
     }
   }
+  return state;
 }
 
 export function PopupsProvider({ children }: any) {
   const [state, dispatch] = useReducer(reducedPopups, initialState);
 
   return (
-    <PopupStateContext.Provider value={state!}>
+    <PopupStateContext.Provider value={state}>
       <PopupDispatchContext.Provider value={dispatch}>
         {children}
       </PopupDispatchContext.Provider>

@@ -57,7 +57,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   }
 
   const renderDetailsHeader = (properties: any, defaultRender?: any): JSX.Element => {
-    return defaultRender!({
+    return defaultRender({
       ...properties,
       onRenderColumnHeaderTooltip: (tooltipHostProps: any) => {
         return (

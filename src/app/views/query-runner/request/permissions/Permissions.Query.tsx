@@ -78,7 +78,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   }, []);
 
   const renderDetailsHeader = (props: any, defaultRender?: any): JSX.Element => {
-    return defaultRender!({
+    return defaultRender({
       ...props,
       onRenderColumnHeaderTooltip: (tooltipHostProps: any) => {
         return (

@@ -23,7 +23,7 @@ export function PanelWrapper(props: WrapperProps) {
     }
   }
 
-  const headerText = title ? title! : '';
+  const headerText = title ? title : '';
 
   const getPanelType = () => {
     switch (popupsProps.settings.width) {

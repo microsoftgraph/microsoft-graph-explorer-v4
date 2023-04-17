@@ -1,6 +1,5 @@
 import {
-  CommandBar, DialogFooter, getTheme, ICommandBarItemProps,
-  Label, PrimaryButton
+  CommandBar, DialogFooter, ICommandBarItemProps, Label, PrimaryButton
 } from '@fluentui/react';
 import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';

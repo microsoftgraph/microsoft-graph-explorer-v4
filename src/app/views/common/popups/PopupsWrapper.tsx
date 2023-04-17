@@ -1,5 +1,5 @@
 import {
-  IPopup, POPUPS, usePopupsDispatchContext,
+  Popup, POPUPS, usePopupsDispatchContext,
   usePopupsStateContext
 } from '../../../services/context/popups-context/PopupsContext';
 import { DialogWrapper } from './DialogWrapper';
@@ -11,7 +11,7 @@ const PopupWrapper = () => {
   const { popups } = usePopupsStateContext();
   const dispatch = usePopupsDispatchContext();
 
-  const close = (payload: IPopup, result: any) => {
+  const close = (payload: Popup, result: any) => {
     if (result) {
       payload.result = result;
     }
@@ -19,19 +19,19 @@ const PopupWrapper = () => {
     dispatch({ type: POPUPS.DELETE_POPUPS, payload });
   }
 
-  const dismiss = (payload: IPopup) => {
+  const dismiss = (payload: Popup) => {
     payload.status = 'dismissed';
     dispatch({ type: POPUPS.DELETE_POPUPS, payload });
   }
 
   return (
     <>
-      {popups && popups.map((popup: IPopup, index: number) => {
+      {popups && popups.map((popup: Popup) => {
         const { component, type, popupsProps, open } = popup;
         if (type === 'panel') {
           return component && <PanelWrapper
             isOpen={!!open}
-            key={index}
+            key={popup.id}
             dismissPopup={() => dismiss(popup)}
             Component={component}
             popupsProps={popupsProps}
@@ -42,7 +42,7 @@ const PopupWrapper = () => {
         if (type === 'dialog') {
           return component && <DialogWrapper
             isOpen={!!open}
-            key={index}
+            key={popup.id}
             dismissPopup={() => dismiss(popup)}
             Component={component}
             popupsProps={popupsProps}
@@ -52,7 +52,7 @@ const PopupWrapper = () => {
 
         return component && <ModalWrapper
           isOpen={!!open}
-          key={index}
+          key={popup.id}
           dismissPopup={() => dismiss(popup)}
           Component={component}
           popupsProps={popupsProps}
