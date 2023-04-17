@@ -28,7 +28,7 @@ interface ISupportedLanguages {
 }
 
 export function renderSnippets(supportedLanguages: ISupportedLanguages) {
-  const sortedSupportedLanguages: any = {};
+  const sortedSupportedLanguages: ISupportedLanguages = {};
   Object.keys(supportedLanguages).sort().forEach(key => {
     sortedSupportedLanguages[key] = supportedLanguages[key];
   });
