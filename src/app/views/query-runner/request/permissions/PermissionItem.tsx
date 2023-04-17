@@ -2,9 +2,9 @@ import {
   DefaultButton, FontSizes, IColumn, IIconProps, Label,
   PrimaryButton, TooltipHost, getId, getTheme
 } from '@fluentui/react';
+import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
-import { FormattedMessage } from 'react-intl';
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionGrant } from '../../../../../types/permissions';
 import { consentToScopes, revokeScopes } from '../../../../services/actions/permissions-action-creator';
@@ -30,11 +30,10 @@ const PermissionItem = (props: PermissionItemProps) => {
   const dispatch: AppDispatch = useDispatch();
   const hostId: string = getId('tooltipHost');
   const { scopes, consentedScopes } = useAppSelector((state) => state);
-
-  const { adminLabelStyles, consentButtonStyles, consentTypeLabelStyles } = permissionStyles(theme);
-
   const { item, column } = props;
   const consented = !!item.consented;
+
+  const { adminLabelStyles, consentButtonStyles, consentTypeLabelStyles } = permissionStyles(theme);
 
   const handleConsent = async (permission: IPermission): Promise<void> => {
     const consentScopes = [permission.value];

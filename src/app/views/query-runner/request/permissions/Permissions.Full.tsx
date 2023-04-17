@@ -20,7 +20,7 @@ import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
 import { setConsentedStatus } from './util';
 
-const PanelList: React.FC<PopupsComponent<null>> = (): JSX.Element => {
+const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const theme = getTheme();
   const dispatch: AppDispatch = useDispatch();
 
@@ -203,4 +203,4 @@ const PanelList: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     </div>
   );
 };
-export default PanelList;
+export default FullPermissions;
