@@ -28,20 +28,26 @@ interface ISupportedLanguages {
 }
 
 export function renderSnippets(supportedLanguages: ISupportedLanguages) {
-  return Object.keys(supportedLanguages).map((language: string) => (
-    <PivotItem
-      key={language}
-      headerText={language}
-      headerButtonProps={{
-        'aria-controls': `${language}-tab`
-      }}
-      itemKey={language}
-      tabIndex={0}
-      id={`${language}-tab`}
-    >
-      <Snippet language={language} snippetInfo={supportedLanguages} />
-    </PivotItem>
-  ));
+  const sortedSupportedLanguages: ISupportedLanguages = {};
+  Object.keys(supportedLanguages).sort().forEach(key => {
+    sortedSupportedLanguages[key] = supportedLanguages[key];
+  });
+
+  return Object.keys(sortedSupportedLanguages).
+    map((language: string) => (
+      <PivotItem
+        key={language}
+        headerText={language === 'CSharp' ? 'C#' : language}
+        headerButtonProps={{
+          'aria-controls': `${language}-tab`
+        }}
+        itemKey={language}
+        tabIndex={0}
+        id={`${language}-tab`}
+      >
+        <Snippet language={language} snippetInfo={supportedLanguages} />
+      </PivotItem>
+    ));
 }
 
 function Snippet(props: ISnippetProps) {
