@@ -29,12 +29,19 @@ function getLastDelimiterInUrl(url: string): Delimiter {
   for (let i = url.length - 1; i >= 0; i--) {
     const symbol = symbols.find((s) => s.symbol === url[i]);
     if (symbol) {
+      const prevCharacter = url[i - 1];
+      const characterSymbol = symbols.find((s) => s.symbol === prevCharacter);
+      if (prevCharacter && characterSymbol) {
+        if (symbol.context === characterSymbol.context){
+          symbol.index = i - 1;
+          return symbol;
+        }
+      }
       symbol.index = i;
       return symbol;
     }
   }
   return delimiters.SLASH;
 }
-
 
 export { delimiters, getLastDelimiterInUrl }

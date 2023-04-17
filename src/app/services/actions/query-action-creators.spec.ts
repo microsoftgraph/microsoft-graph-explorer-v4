@@ -108,4 +108,30 @@ describe('Query action creators', () => {
       })
       .catch((e: Error) => { throw e });
   });
+
+  it('should dispatch query status when a 401 is received', () => {
+    const sampleUrl = 'https://graph.microsoft.com/v1.0/me';
+
+    const store = mockStore({ graphResponse: '' });
+    const query = { sampleUrl }
+    const mockFetch = jest.fn().mockImplementation(() => {
+      return Promise.resolve({
+        ok: false,
+        status: 401,
+        body: {},
+        headers: [{ 'content-type': 'application-json' }]
+      })
+    });
+
+    window.fetch = mockFetch;
+
+    // @ts-ignore
+    return store.dispatch(runQuery(query))
+      .then((response) => {
+        expect(response.type).toBe('QUERY_GRAPH_STATUS');
+        expect(response.response.ok).toBe(false);
+      })
+      .catch((e: Error) => { throw e });
+
+  })
 });

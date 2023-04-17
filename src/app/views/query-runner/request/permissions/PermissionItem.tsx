@@ -7,9 +7,13 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionGrant } from '../../../../../types/permissions';
-import { consentToScopes, revokeScopes } from '../../../../services/actions/permissions-action-creator';
+import {
+  consentToScopes, getAllPrincipalGrant,
+  getSinglePrincipalGrant, revokeScopes
+} from '../../../../services/actions/permissions-action-creator';
 import { REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
+import { PermissionConsentType } from './ConsentType';
 import { permissionStyles } from './Permission.styles';
 
 interface PermissionItemProps {
@@ -29,11 +33,11 @@ const PermissionItem = (props: PermissionItemProps) => {
   const theme = getTheme();
   const dispatch: AppDispatch = useDispatch();
   const hostId: string = getId('tooltipHost');
-  const { scopes, consentedScopes } = useAppSelector((state) => state);
+  const { scopes, consentedScopes, profile } = useAppSelector((state) => state);
   const { item, column } = props;
   const consented = !!item.consented;
 
-  const { adminLabelStyles, consentButtonStyles, consentTypeLabelStyles } = permissionStyles(theme);
+  const { adminLabelStyles, consentButtonStyles } = permissionStyles(theme);
 
   const handleConsent = async (permission: IPermission): Promise<void> => {
     const consentScopes = [permission.value];
@@ -56,23 +60,20 @@ const PermissionItem = (props: PermissionItemProps) => {
     return false;
   }
 
-  const ConsentTypeProperty = (): JSX.Element => {
-    if (scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0
-      && consented) {
+  const ConsentTypeProperty = (): JSX.Element | null => {
+    if (scopes && consented && profile && profile.id) {
 
-      const tenantWideGrant: IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant;
-      const allPrincipalPermissions = getAllPrincipalPermissions(tenantWideGrant);
-      const permissionInAllPrincipal = allPrincipalPermissions.some((permission: string) =>
-        item.value === permission);
-      return (
-        <div style={consentTypeLabelStyles}>
-          <Label>
-            {permissionInAllPrincipal ? translateMessage('AllPrincipal') : translateMessage('Principal')}
-          </Label>
-        </div>
-      )
+      const tenantWideGrant: IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant!;
+      const allPrincipalPermissions = getAllPrincipalGrant(tenantWideGrant);
+      const singlePrincipalPermissions: string[] = getSinglePrincipalGrant(tenantWideGrant, profile.id);
+      const tenantGrantFetchPending = scopes.pending.isTenantWidePermissionsGrant;
+      const consentTypeProperties = {
+        item, allPrincipalPermissions, singlePrincipalPermissions,
+        tenantGrantFetchPending, dispatch
+      }
+      return <PermissionConsentType {...consentTypeProperties} />
     }
-    return <div />
+    return null;
   }
 
   const handleRevoke = async (permission: IPermission): Promise<void> => {

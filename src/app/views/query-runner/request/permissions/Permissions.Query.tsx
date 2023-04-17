@@ -41,6 +41,12 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
+  const permissionsTabStyles = {
+    root: {
+      padding: '17px'
+    }
+  }
+
   const openPermissionsPanel = () => {
     openPermissions({
       settings: {
@@ -65,6 +71,12 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
     getPermissions();
   }, [sampleQuery, consentedScopes]);
 
+  useEffect(() => {
+    if (tokenPresent) {
+      dispatch(fetchAllPrincipalGrants());
+    }
+  }, []);
+
   const renderDetailsHeader = (props: any, defaultRender?: any): JSX.Element => {
     return defaultRender!({
       ...props,
@@ -86,19 +98,21 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   }
 
   const displayNoPermissionsFoundMessage = (): JSX.Element => {
-    return (<Label className={classes.permissionLabel}>
-      <FormattedMessage id='permissions not found in permissions tab' />
-      <Link underline onClick={openPermissionsPanel}>
-        <FormattedMessage id='open permissions panel' />
-      </Link>
-      <FormattedMessage id='permissions list' />
-    </Label>);
+    return (
+      <Label styles={permissionsTabStyles}>
+        <FormattedMessage id='permissions not found in permissions tab' />
+        <Link underline onClick={openPermissionsPanel}>
+          <FormattedMessage id='open permissions panel' />
+        </Link>
+        <FormattedMessage id='permissions list' />
+      </Label>);
   }
 
   const displayNotSignedInMessage = (): JSX.Element => {
-    return (<Label className={classes.permissionLabel}>
-      <FormattedMessage id='sign in to view a list of all permissions' />
-    </Label>)
+    return (
+      <Label styles={permissionsTabStyles}>
+        <FormattedMessage id='sign in to view a list of all permissions' />
+      </Label>)
   }
 
   if (!tokenPresent && permissions.length === 0) {
