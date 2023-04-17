@@ -16,13 +16,35 @@ interface IResourceLinkProps {
 const ResourceLink = (props: IResourceLinkProps) => {
   const { link: resourceLink, classes } = props;
 
+  const showButtons = {
+    background: getTheme().palette.neutralLight,
+    div: {
+      display: 'inline',
+      overflow: 'hidden',
+      alignItems: 'center'
+    }
+  };
+  const linkStyle = mergeStyleSets(
+    {
+      link: {
+        display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden',
+        div: resourceLink.isExpanded ? showButtons : {
+          display: 'none'
+        },
+        '&:hover, .is-selected &': showButtons
+      },
+      resourceLinkNameContainer: { textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex', padding: 5 },
+      resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }
+    }
+  );
+
   const tooltipId = getId('tooltip');
   const buttonId = getId('targetButton');
   const documentButton = getId('documentButton');
   const documentButtonTooltip = getId('documentButtonTooltip');
 
   const iconButtonStyles = {
-    root: { marginTop: -5, marginRight: 2, zIndex: 10 },
+    root: { marginRight: 1, zIndex: 10 },
     menuIcon: { fontSize: 14, padding: 5 }
   };
 
@@ -85,7 +107,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
             role='button'
             id={documentButton}
             disabled={!resourceLink.docLink}
-            aria-describedby={documentButton}
+            aria-describedby={documentButtonTooltip}
             styles={iconButtonStyles}
             onClick={() => openDocumentationLink()}
             menuIconProps={{ iconName: 'TextDocument' }}
@@ -113,7 +135,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
           id={buttonId}
           aria-describedby={tooltipId}
           styles={iconButtonStyles}
-          menuIconProps={{ iconName: 'AddNotes' }}
+          menuIconProps={{ iconName: 'BoxAdditionSolid' }}
           onClick={() => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, resourceLink)}
         />
       </TooltipHost>
@@ -121,25 +143,5 @@ const ResourceLink = (props: IResourceLinkProps) => {
   </span>
 }
 
-const linkStyle = mergeStyleSets(
-  {
-    link: {
-      display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden',
-      div: {
-        display: 'none'
-      },
-      '&:hover': {
-        background: getTheme().palette.neutralLighter,
-        div: {
-          display: 'inline',
-          overflow: 'hidden',
-          alignItems: 'center'
-        }
-      }
-    },
-    resourceLinkNameContainer: { textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex', padding: 5 },
-    resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }
-  }
-);
 
 export default ResourceLink;
