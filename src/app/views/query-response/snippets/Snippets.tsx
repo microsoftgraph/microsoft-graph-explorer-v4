@@ -13,6 +13,10 @@ function GetSnippets() {
       sdkDownloadLink: 'https://aka.ms/csharpsdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     },
+    'PowerShell': {
+      sdkDownloadLink: 'https://aka.ms/pshellsdk',
+      sdkDocLink: 'https://aka.ms/pshellsdkdocs'
+    },
     'Go': {
       sdkDownloadLink: 'https://aka.ms/graphgosdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
@@ -24,10 +28,6 @@ function GetSnippets() {
     'JavaScript': {
       sdkDownloadLink: 'https://aka.ms/graphjssdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
-    },
-    'PowerShell': {
-      sdkDownloadLink: 'https://aka.ms/pshellsdk',
-      sdkDocLink: 'https://aka.ms/pshellsdkdocs'
     }
   };
 
