@@ -28,7 +28,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
     {
       link: {
         display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden',
-        div: resourceLink.isExpanded ? showButtons : {
+        div: {
           display: 'none'
         },
         '&:hover, .is-selected &': showButtons
