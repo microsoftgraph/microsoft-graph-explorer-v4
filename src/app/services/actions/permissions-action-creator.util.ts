@@ -37,27 +37,19 @@ export class RevokePermissionsUtil {
   private permissionToRevoke: string = '';
   private updatedPrincipalScopes: string[] = [];
   private updatedAllPrincipalScopes: string[] = [];
-  private static isGettingConsentType: boolean = false;
-  private static consentedScopes: string[] = [];
-  private static tenantGrantPayload: IOAuthGrantPayload;
-  private static signedInProfileId: string;
 
   private constructor(servicePrincipalAppId: string, grantsPayload: IOAuthGrantPayload,
-    signedInGrant: IPermissionGrant, isGettingConsentType?: boolean, consentedScopes?: string[]) {
+    signedInGrant: IPermissionGrant, ) {
     this.servicePrincipalAppId = servicePrincipalAppId;
     this.grantsPayload = grantsPayload;
     this.signedInGrant = signedInGrant;
-    RevokePermissionsUtil.isGettingConsentType = isGettingConsentType ? isGettingConsentType : false;
-    RevokePermissionsUtil.consentedScopes = consentedScopes ? consentedScopes : [];
   }
 
-  static async initialize(profileId: string, isGettingConsentType?: boolean, consentedScopes?: string[]) {
+  static async initialize(profileId: string) {
     const servicePrincipalAppId = await RevokePermissionsUtil.getServicePrincipalId([]);
     const grantsPayload = await RevokePermissionsUtil.getTenantPermissionGrants([], servicePrincipalAppId);
     const signedInGrant = RevokePermissionsUtil.getSignedInPrincipalGrant(grantsPayload, profileId!);
-    RevokePermissionsUtil.signedInProfileId = profileId;
-    return new RevokePermissionsUtil(servicePrincipalAppId, grantsPayload, signedInGrant, isGettingConsentType,
-      consentedScopes);
+    return new RevokePermissionsUtil(servicePrincipalAppId, grantsPayload, signedInGrant);
   }
 
   public preliminaryChecksSuccess(preliminaryChecksObject: IPreliminaryChecksObject) {
@@ -117,7 +109,7 @@ export class RevokePermissionsUtil {
   public static async isSignedInUserTenantAdmin(): Promise<boolean> {
     const tenantAdminQuery = { ...genericQuery };
     tenantAdminQuery.sampleUrl = `${GRAPH_URL}/v1.0/me/memberOf`;
-    const response = await RevokePermissionsUtil.makeNormalGraphRequest([], tenantAdminQuery);
+    const response = await RevokePermissionsUtil.makeExponentialFetch([], tenantAdminQuery);
     return response ? response.value.some((value: any) => value.displayName === 'Global Administrator') : false
   }
 
@@ -201,8 +193,7 @@ export class RevokePermissionsUtil {
     if (!servicePrincipalAppId) { return { value: [], '@odata.context': '' } }
     genericQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
     genericQuery.sampleHeaders = [{ name: 'ConsistencyLevel', value: 'eventual' }];
-    const oAuthGrant = await RevokePermissionsUtil.makeNormalGraphRequest(scopes, genericQuery);
-    RevokePermissionsUtil.tenantGrantPayload = oAuthGrant;
+    const oAuthGrant = await RevokePermissionsUtil.makeExponentialFetch(scopes, genericQuery);
     return oAuthGrant;
   }
 
@@ -263,22 +254,9 @@ export class RevokePermissionsUtil {
     return Promise.resolve(combinedScopes.includes(this.permissionToRevoke));
   }
 
-  private static async allPermissionsHaveConsentType(): Promise<boolean>{
-    const allPrincipalGrants: string[] = RevokePermissionsUtil.getAllPrincipalGrant(RevokePermissionsUtil.
-      tenantGrantPayload).scope.split(' ');
-    const singlePrincipalGrants: string[] = RevokePermissionsUtil.getSignedInPrincipalGrant(RevokePermissionsUtil.
-      tenantGrantPayload, RevokePermissionsUtil.signedInProfileId).scope.split(' ');
-    const combinedPermissions = [...singlePrincipalGrants, allPrincipalGrants];
-    const result = this.consentedScopes.every(scope => combinedPermissions.includes(scope));
-    return Promise.resolve(!result);
-  }
-
   private static async makeExponentialFetch(scopes: string[], query: IQuery, condition?:
   (args?: any) => Promise<boolean>) {
     const respHeaders: any = {};
-    if (!condition && this.isGettingConsentType) {
-      condition = () => this.allPermissionsHaveConsentType();
-    }
     const response = await exponentialFetchRetry(() => makeGraphRequest(scopes)(query),
       8, 100, condition);
     return parseResponse(response, respHeaders);
