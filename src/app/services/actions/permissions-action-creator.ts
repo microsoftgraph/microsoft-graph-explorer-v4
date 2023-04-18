@@ -421,7 +421,6 @@ async function checkScopesConsentType(servicePrincipalAppId: string, tenantWideG
           !allScopesHaveConsentType(consentedScopes, tenantWideGrant, profile.id)) {
           requestCounter += 1;
           await new Promise((resolve) => setTimeout(resolve, 400 * requestCounter));
-          console.log('Happening now')
           revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
           dispatch(getAllPrincipalGrantsPending(true));
           tenantWideGrant = revokePermissionUtil.getGrantsPayload();
