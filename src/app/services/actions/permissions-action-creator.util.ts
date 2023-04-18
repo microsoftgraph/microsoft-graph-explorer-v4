@@ -117,7 +117,7 @@ export class RevokePermissionsUtil {
   public static async isSignedInUserTenantAdmin(): Promise<boolean> {
     const tenantAdminQuery = { ...genericQuery };
     tenantAdminQuery.sampleUrl = `${GRAPH_URL}/v1.0/me/memberOf`;
-    const response = await RevokePermissionsUtil.makeExponentialFetch([], tenantAdminQuery);
+    const response = await RevokePermissionsUtil.makeNormalGraphRequest([], tenantAdminQuery);
     return response ? response.value.some((value: any) => value.displayName === 'Global Administrator') : false
   }
 
@@ -130,6 +130,7 @@ export class RevokePermissionsUtil {
     const preliminaryChecksObject: IPreliminaryChecksObject = {
       ...preliminaryObject, grantsPayload
     }
+    const allPrincipalGrants = RevokePermissionsUtil.getAllPrincipalGrant(grantsPayload);
 
     this.preliminaryChecksSuccess(preliminaryChecksObject)
 
@@ -145,9 +146,8 @@ export class RevokePermissionsUtil {
         messageType: 1
       })
     }
-    console.log('Signed in grant ', signedInGrant);
 
-    if (!this.permissionToRevokeInGrant(signedInGrant, permissionToRevoke) && userIsTenantAdmin) {
+    if (!this.permissionToRevokeInGrant(signedInGrant, allPrincipalGrants, permissionToRevoke) && userIsTenantAdmin) {
       this.trackRevokeConsentEvent(REVOKE_STATUS.allPrincipalScope, permissionToRevoke);
       throw new RevokeScopesError({
         errorText: 'Permission propagation delay',
@@ -160,25 +160,16 @@ export class RevokePermissionsUtil {
 
   public async updateSinglePrincipalPermissionGrant(grantsPayload: IOAuthGrantPayload, profile: IUser,
     newScopesString: string) {
-    const servicePrincipalAppId = await RevokePermissionsUtil.getServicePrincipalId([]);
     const permissionGrantId = RevokePermissionsUtil.getSignedInPrincipalGrant(grantsPayload, profile.id).id;
-    await this.revokePermission(permissionGrantId!, newScopesString);
-    const response = await RevokePermissionsUtil.getTenantPermissionGrants([], servicePrincipalAppId);
-    const principalGrant = RevokePermissionsUtil.getSignedInPrincipalGrant(response, profile.id);
-    const updatedScopes = principalGrant.scope.split(' ');
-    this.updatedPrincipalScopes = updatedScopes;
-    return updatedScopes;
+    const isRevokeSuccessful = await this.revokePermission(permissionGrantId!, newScopesString);
+    return isRevokeSuccessful;
   }
 
   public async getUpdatedAllPrincipalPermissionGrant(grantsPayload: IOAuthGrantPayload, permissionToRevoke: string) {
-    const servicePrincipalAppId = await RevokePermissionsUtil.getServicePrincipalId([]);
     const allPrincipalGrant = RevokePermissionsUtil.getAllPrincipalGrant(grantsPayload);
     const updatedScopes = allPrincipalGrant.scope.split(' ').filter((scope: string) => scope !== permissionToRevoke);
-    await this.revokePermission(allPrincipalGrant.id!, updatedScopes.join(' '));
-    const response = await RevokePermissionsUtil.getTenantPermissionGrants([], servicePrincipalAppId);
-    const allPrincipalScopes = RevokePermissionsUtil.getAllPrincipalGrant(response).scope.split(' ');
-    this.updatedAllPrincipalScopes = allPrincipalScopes;
-    return allPrincipalScopes;
+    const isRevokeSuccessful = await this.revokePermission(allPrincipalGrant.id!, updatedScopes.join(' '));
+    return isRevokeSuccessful;
   }
 
   private static getAllPrincipalGrant(grantsPayload: IOAuthGrantPayload): IPermissionGrant {
@@ -209,45 +200,62 @@ export class RevokePermissionsUtil {
     : Promise<IOAuthGrantPayload> {
     if (!servicePrincipalAppId) { return { value: [], '@odata.context': '' } }
     genericQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
-    const oAuthGrant = await RevokePermissionsUtil.makeExponentialFetch(scopes, genericQuery);
+    genericQuery.sampleHeaders = [{ name: 'ConsistencyLevel', value: 'eventual' }];
+    const oAuthGrant = await RevokePermissionsUtil.makeNormalGraphRequest(scopes, genericQuery);
     RevokePermissionsUtil.tenantGrantPayload = oAuthGrant;
     return oAuthGrant;
   }
 
-  public permissionToRevokeInGrant(permissionsGrant: IPermissionGrant, permissionToRevoke: string) {
-    console.log('Permission grant iss ', permissionsGrant);
-    if (!permissionsGrant) { return false }
-    return permissionsGrant.scope.split(' ').includes(permissionToRevoke);
+  public permissionToRevokeInGrant(permissionsGrant: IPermissionGrant, allPrincipalGrant: IPermissionGrant,
+    permissionToRevoke: string) {
+    if (!permissionsGrant || !allPrincipalGrant) { return false }
+    const allPrincipalPermissions = allPrincipalGrant.scope.split(' ');
+    const principalPermissions = permissionsGrant.scope.split(' ');
+    const combinedPermissions = [...allPrincipalPermissions, ...principalPermissions];
+    return combinedPermissions.includes(permissionToRevoke);
   }
 
   public static async getServicePrincipalId(scopes: string[]): Promise<string> {
     const currentAppId = process.env.REACT_APP_CLIENT_ID;
     genericQuery.sampleUrl = `${GRAPH_URL}/v1.0/servicePrincipals?$filter=appId eq '${currentAppId}'`;
-    const response = await this.makeExponentialFetch(scopes, genericQuery);
+    const response = await this.makeNormalGraphRequest(scopes, genericQuery);
     return response ? response.value[0].id : '';
   }
 
-  private async revokePermission(permissionGrantId: string, newScopes: string) {
+  private async revokePermission(permissionGrantId: string, newScopes: string): Promise<boolean> {
     const oAuth2PermissionGrant = {
       scope: newScopes
     };
     const patchQuery = { ...genericQuery };
     patchQuery.sampleBody = JSON.stringify(oAuth2PermissionGrant);
     patchQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants/${permissionGrantId}`;
+    genericQuery.sampleHeaders = [{ name: 'ConsistencyLevel', value: 'eventual' }];
     patchQuery.selectedVerb = 'PATCH';
     // eslint-disable-next-line no-useless-catch
     try {
-      const response = await RevokePermissionsUtil.makeExponentialFetch([],
-        patchQuery, () => this.permissionRevokedAvailable());
+      const response = await RevokePermissionsUtil.makeExponentialFetch([], patchQuery,
+        (result: any, retries?: number) => this.checkFor400(result, retries!));
       const { error } = response;
-      console.log('Here is the response ', response);
-      if (error) {
-        throw error;
+      if (error && error.code === 'Request_BadRequest') {
+        return true;
       }
+      return false;
     }
     catch (error: any) {
       throw error;
     }
+  }
+
+  // This function checks whether a new PATCH is still successful. We are sure that
+  // a permisison has been revoked when a PATCH returns an error 400
+  private async checkFor400(result: any, retries: number){
+    if(result && result.status === 204){
+      if(retries > 6){
+        return false;
+      }
+      return true
+    }
+    return false;
   }
 
   private async permissionRevokedAvailable(){
@@ -265,13 +273,20 @@ export class RevokePermissionsUtil {
     return Promise.resolve(!result);
   }
 
-  private static async makeExponentialFetch(scopes: string[], query: IQuery, condition?: () => Promise<boolean>) {
+  private static async makeExponentialFetch(scopes: string[], query: IQuery, condition?:
+  (args?: any) => Promise<boolean>) {
     const respHeaders: any = {};
     if (!condition && this.isGettingConsentType) {
       condition = () => this.allPermissionsHaveConsentType();
     }
     const response = await exponentialFetchRetry(() => makeGraphRequest(scopes)(query),
       8, 100, condition);
+    return parseResponse(response, respHeaders);
+  }
+
+  private static async makeNormalGraphRequest(scopes: string[], query: IQuery) {
+    const respHeaders: any = {};
+    const response = await makeGraphRequest(scopes)(query);
     return parseResponse(response, respHeaders);
   }
 

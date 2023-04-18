@@ -304,31 +304,31 @@ Promise<string[] | null> {
   const {
     permissionBeingRevokedIsAllPrincipal, userIsTenantAdmin, revokePermissionUtil, grantsPayload,
     profile, permissionToRevoke, newScopesArray, retryCount, dispatch } = retryHandlerObject;
-  let updatedScopes;
+  let isRevokeSuccessful;
   const maxRetryCount = 7;
   const retryDelay = 100; // milliseconds
   const newScopesString = newScopesArray.join(' ');
 
   if (permissionBeingRevokedIsAllPrincipal && userIsTenantAdmin) {
-    updatedScopes = await revokePermissionUtil.getUpdatedAllPrincipalPermissionGrant(grantsPayload, permissionToRevoke);
+    isRevokeSuccessful = await revokePermissionUtil.getUpdatedAllPrincipalPermissionGrant(grantsPayload,
+      permissionToRevoke);
   } else {
-    updatedScopes = await revokePermissionUtil.updateSinglePrincipalPermissionGrant(grantsPayload, profile,
+    isRevokeSuccessful = await revokePermissionUtil.updateSinglePrincipalPermissionGrant(grantsPayload, profile,
       newScopesString);
   }
-  console.log('Here is the updated scopes ', updatedScopes);
 
-  if (updatedScopes.length === newScopesArray.length) {
-    return updatedScopes;
+  if (isRevokeSuccessful) {
+    return newScopesString.split(' ');
   }
-
-  if (retryCount < maxRetryCount) {
-    dispatchScopesStatus(dispatch, 'An error occured during the revoking process', 'Retrying', 3);
+  else if(retryCount < maxRetryCount) {
     await new Promise(resolve => setTimeout(resolve, retryDelay * Math.pow(2, retryCount)));
     retryHandlerObject.retryCount += 1;
     return updatePermissionsWithRetry(retryHandlerObject);
   }
+  else{
+    return null;
+  }
 
-  return null;
 }
 
 const dispatchScopesStatus = (dispatch: Function, statusText: string, status: string, messageType: number) => {

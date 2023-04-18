@@ -268,26 +268,19 @@ export function queryResultsInCorsError(sampleUrl: string): boolean {
 }
 
 export async function exponentialFetchRetry<T>( fn: () => Promise<any>, retriesLeft: number,
-  interval: number, condition?: (result: T) => Promise<boolean>
+  interval: number, condition?: (result: T, retriesLeft?: number) => Promise<boolean>
 ): Promise<T> {
   try {
     const result = await fn();
-    const { error } = result;
     if (condition) {
-      const isConditionSatisfied = await condition(result);
+      const isConditionSatisfied = await condition(result, retriesLeft);
       if(isConditionSatisfied){
-        throw new Error('Condition not met');
+        throw new Error('An error occured during the revoking process');
       }
     }
-    if(result){
-      if((result.status && result.status >= 400 )){
-        throw new Error('Encountered an error during the fetch');
-      }
+    if (result && result.status && result.status >= 500){
+      throw new Error('Encountered a server error during execution of the request');
     }
-    if(error){
-      throw new Error(error);
-    }
-    console.log('Here is the result ', { result });
     return result;
   } catch (error: unknown) {
     if (retriesLeft === 1) {
