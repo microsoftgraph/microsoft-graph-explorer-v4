@@ -34,9 +34,6 @@ export class RevokePermissionsUtil {
   private servicePrincipalAppId: string;
   private grantsPayload: IOAuthGrantPayload;
   private signedInGrant: IPermissionGrant;
-  private permissionToRevoke: string = '';
-  private updatedPrincipalScopes: string[] = [];
-  private updatedAllPrincipalScopes: string[] = [];
 
   private constructor(servicePrincipalAppId: string, grantsPayload: IOAuthGrantPayload,
     signedInGrant: IPermissionGrant, ) {
@@ -55,7 +52,6 @@ export class RevokePermissionsUtil {
   public preliminaryChecksSuccess(preliminaryChecksObject: IPreliminaryChecksObject) {
     const { defaultUserScopes, requiredPermissions, consentedScopes, permissionToRevoke, grantsPayload }
       = preliminaryChecksObject
-    this.permissionToRevoke = permissionToRevoke;
     if (this.userRevokingDefaultScopes(defaultUserScopes, permissionToRevoke)) {
       throw new RevokeScopesError({
         errorText: 'Revoking default scopes',
@@ -209,7 +205,7 @@ export class RevokePermissionsUtil {
   public static async getServicePrincipalId(scopes: string[]): Promise<string> {
     const currentAppId = process.env.REACT_APP_CLIENT_ID;
     genericQuery.sampleUrl = `${GRAPH_URL}/v1.0/servicePrincipals?$filter=appId eq '${currentAppId}'`;
-    const response = await this.makeNormalGraphRequest(scopes, genericQuery);
+    const response = await this.makeGraphRequest(scopes, genericQuery);
     return response ? response.value[0].id : '';
   }
 
@@ -224,31 +220,17 @@ export class RevokePermissionsUtil {
     patchQuery.selectedVerb = 'PATCH';
     // eslint-disable-next-line no-useless-catch
     try {
-      const response = await RevokePermissionsUtil.makeExponentialFetch([], patchQuery,
-        (result: any, retries?: number) => this.checkFor204StatusCode(result, retries!));
+      const response = await RevokePermissionsUtil.makeGraphRequest([], patchQuery);
       const { error } = response;
-      if (error && error.code === 'Request_BadRequest') {
-        return true;
+      if (error) {
+        return false;
       }
-      return false;
+      return true;
     }
     catch (error: any) {
       throw error;
     }
   }
-
-  // This function checks whether a new PATCH is still successful. We are sure that
-  // a permisison has been revoked when a PATCH returns an error 400
-  private async checkFor204StatusCode(result: any, retries: number){
-    if(result && result.status === 204){
-      if(retries > 6){
-        return false;
-      }
-      return true
-    }
-    return false;
-  }
-
 
   private static async makeExponentialFetch(scopes: string[], query: IQuery, condition?:
   (args?: any) => Promise<boolean>) {
@@ -258,7 +240,7 @@ export class RevokePermissionsUtil {
     return parseResponse(response, respHeaders);
   }
 
-  private static async makeNormalGraphRequest(scopes: string[], query: IQuery) {
+  private static async makeGraphRequest(scopes: string[], query: IQuery) {
     const respHeaders: any = {};
     const response = await makeGraphRequest(scopes)(query);
     return parseResponse(response, respHeaders);

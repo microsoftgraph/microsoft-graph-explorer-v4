@@ -228,7 +228,7 @@ const validateConsentedScopes = (scopeToBeConsented: string[], consentedScopes: 
   return expectedScopes;
 }
 
-interface IRetryHandler {
+interface IPermissionUpdate {
   permissionBeingRevokedIsAllPrincipal: boolean;
   userIsTenantAdmin: boolean;
   revokePermissionUtil: RevokePermissionsUtil;
@@ -237,6 +237,7 @@ interface IRetryHandler {
   permissionToRevoke: string;
   newScopesArray: string[];
   retryCount: number;
+  retryDelay: number;
   dispatch: Function;
 }
 export function revokeScopes(permissionToRevoke: string) {
@@ -260,11 +261,12 @@ export function revokeScopes(permissionToRevoke: string) {
       const { userIsTenantAdmin, permissionBeingRevokedIsAllPrincipal, grantsPayload } = await revokePermissionUtil.
         getUserPermissionChecks({ consentedScopes, requiredPermissions, defaultUserScopes, permissionToRevoke });
       const retryCount = 0;
-      const retryHandlerObject: IRetryHandler = {
+      const retryDelay = 100;
+      const permissionsUpdateObject: IPermissionUpdate = {
         permissionBeingRevokedIsAllPrincipal, userIsTenantAdmin, revokePermissionUtil, grantsPayload,
-        profile, permissionToRevoke, newScopesArray, retryCount, dispatch}
+        profile, permissionToRevoke, newScopesArray, retryCount, dispatch, retryDelay }
 
-      const updatedScopes = await updatePermissionsWithRetry(retryHandlerObject )
+      const updatedScopes = await updatePermissions(permissionsUpdateObject)
 
       if (updatedScopes) {
         dispatchScopesStatus(dispatch, 'Permission revoked', 'Success', 4);
@@ -299,14 +301,13 @@ export function revokeScopes(permissionToRevoke: string) {
   }
 }
 
-async function updatePermissionsWithRetry(retryHandlerObject: IRetryHandler):
+async function updatePermissions(permissionsUpdateObject: IPermissionUpdate):
 Promise<string[] | null> {
   const {
     permissionBeingRevokedIsAllPrincipal, userIsTenantAdmin, revokePermissionUtil, grantsPayload,
-    profile, permissionToRevoke, newScopesArray, retryCount } = retryHandlerObject;
+    profile, permissionToRevoke, newScopesArray, retryCount, dispatch, retryDelay } = permissionsUpdateObject;
   let isRevokeSuccessful;
   const maxRetryCount = 7;
-  const retryDelay = 100; // milliseconds
   const newScopesString = newScopesArray.join(' ');
 
   if (permissionBeingRevokedIsAllPrincipal && userIsTenantAdmin) {
@@ -320,10 +321,12 @@ Promise<string[] | null> {
   if (isRevokeSuccessful) {
     return newScopesString.split(' ');
   }
-  else if(retryCount < maxRetryCount) {
-    await new Promise(resolve => setTimeout(resolve, retryDelay * Math.pow(2, retryCount)));
-    retryHandlerObject.retryCount += 1;
-    return updatePermissionsWithRetry(retryHandlerObject);
+  else if((retryCount < maxRetryCount) && !isRevokeSuccessful) {
+    await new Promise(resolve => setTimeout(resolve, retryDelay * 2));
+    dispatchScopesStatus(dispatch, 'We are retrying the revoking operation', 'Retrying', 5);
+
+    permissionsUpdateObject.retryCount += 1;
+    return updatePermissions(permissionsUpdateObject);
   }
   else{
     return null;
