@@ -225,7 +225,7 @@ export class RevokePermissionsUtil {
     // eslint-disable-next-line no-useless-catch
     try {
       const response = await RevokePermissionsUtil.makeExponentialFetch([], patchQuery,
-        (result: any, retries?: number) => this.checkFor400(result, retries!));
+        (result: any, retries?: number) => this.checkFor204StatusCode(result, retries!));
       const { error } = response;
       if (error && error.code === 'Request_BadRequest') {
         return true;
@@ -239,20 +239,16 @@ export class RevokePermissionsUtil {
 
   // This function checks whether a new PATCH is still successful. We are sure that
   // a permisison has been revoked when a PATCH returns an error 400
-  private async checkFor400(result: any, retries: number){
+  private async checkFor204StatusCode(result: any, retries: number){
     if(result && result.status === 204){
       if(retries > 6){
         return false;
       }
       return true
     }
-    return false;
+    return true;
   }
 
-  private async permissionRevokedAvailable(){
-    const combinedScopes = [...this.updatedPrincipalScopes, ...this.updatedAllPrincipalScopes];
-    return Promise.resolve(combinedScopes.includes(this.permissionToRevoke));
-  }
 
   private static async makeExponentialFetch(scopes: string[], query: IQuery, condition?:
   (args?: any) => Promise<boolean>) {
