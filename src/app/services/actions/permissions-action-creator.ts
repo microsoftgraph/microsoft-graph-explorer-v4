@@ -303,7 +303,7 @@ async function updatePermissionsWithRetry(retryHandlerObject: IRetryHandler):
 Promise<string[] | null> {
   const {
     permissionBeingRevokedIsAllPrincipal, userIsTenantAdmin, revokePermissionUtil, grantsPayload,
-    profile, permissionToRevoke, newScopesArray, retryCount, dispatch } = retryHandlerObject;
+    profile, permissionToRevoke, newScopesArray, retryCount } = retryHandlerObject;
   let isRevokeSuccessful;
   const maxRetryCount = 7;
   const retryDelay = 100; // milliseconds

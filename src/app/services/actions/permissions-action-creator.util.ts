@@ -48,7 +48,7 @@ export class RevokePermissionsUtil {
   static async initialize(profileId: string) {
     const servicePrincipalAppId = await RevokePermissionsUtil.getServicePrincipalId([]);
     const grantsPayload = await RevokePermissionsUtil.getTenantPermissionGrants([], servicePrincipalAppId);
-    const signedInGrant = RevokePermissionsUtil.getSignedInPrincipalGrant(grantsPayload, profileId!);
+    const signedInGrant = RevokePermissionsUtil.getSignedInPrincipalGrant(grantsPayload, profileId);
     return new RevokePermissionsUtil(servicePrincipalAppId, grantsPayload, signedInGrant);
   }
 
@@ -246,7 +246,7 @@ export class RevokePermissionsUtil {
       }
       return true
     }
-    return true;
+    return false;
   }
 
 
