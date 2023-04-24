@@ -30,7 +30,11 @@ const ResourceLink = (props: IResourceLinkProps) => {
           overflow: 'hidden',
           alignItems: 'center'
         },
-        '&:hover, .is-selected &': showButtons
+        selectors: {
+          ':hover': showButtons,
+          ':focus-within': showButtons,
+          '.is-selected &': showButtons
+        }
       },
       resourceLinkNameContainer: { textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex', padding: 5 },
       resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }
@@ -72,7 +76,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
     validateExternalLink(documentationLink || '', componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK, documentationLink);
   }
 
-  return <span className={linkStyle.link}>
+  return <span className={linkStyle.link} tabIndex={0}>
     {resourceLink.method &&
       <span className={classes.badge} style={methodButtonStyles}>
         {resourceLink.method}
