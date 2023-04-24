@@ -1,8 +1,7 @@
 import {
   FETCH_SCOPES_ERROR,
   FETCH_FULL_SCOPES_SUCCESS,
-  FETCH_URL_SCOPES_PENDING,
-  QUERY_GRAPH_STATUS
+  FETCH_URL_SCOPES_PENDING
 } from '../../../app/services/redux-constants';
 
 import {
@@ -12,7 +11,7 @@ import {
   fetchFullScopesPending,
   revokeScopes
 } from './permissions-action-creator';
-import { IOAuthGrantPayload, IPermissionsResponse } from '../../../types/permissions';
+import { IPermissionsResponse } from '../../../types/permissions';
 import { store } from '../../../store/index';
 import { ApplicationState } from '../../../types/root';
 import { Mode } from '../../../types/enums';
@@ -308,7 +307,7 @@ describe('Permissions action creators', () => {
         consentType: 'Principal',
         principalId: '1234',
         resourceId: '1234',
-        scope: 'profile.read user.Read',
+        scope: 'profile.read User.Read',
         id: 'SomeNiceId'
       })
       jest.spyOn(RevokePermissionsUtil, 'getTenantPermissionGrants').mockResolvedValue({
@@ -318,7 +317,7 @@ describe('Permissions action creators', () => {
             consentType: 'Principal',
             principalId: '1234',
             resourceId: '1234',
-            scope: 'profile.read user.Read',
+            scope: 'profile.read User.Read',
             id: 'SomeNiceId'
           },
           {
@@ -326,7 +325,7 @@ describe('Permissions action creators', () => {
             consentType: 'AllPrincipal',
             principalId: null,
             resourceId: '1234',
-            scope: 'profile.read user.Read Directory.Read.All'
+            scope: 'profile.read User.Read Directory.Read.All'
           }
         ],
         '@odata.context': 'https://graph.microsoft.com/v1.0/$metadata#permissionGrants'
@@ -344,7 +343,7 @@ describe('Permissions action creators', () => {
               consentType: 'Principal',
               principalId: '1234',
               resourceId: '1234',
-              scope: 'profile.read user.Read',
+              scope: 'profile.read User.Read',
               id: 'SomeNiceId'
             },
             {
@@ -352,7 +351,7 @@ describe('Permissions action creators', () => {
               consentType: 'AllPrincipal',
               principalId: null,
               resourceId: '1234',
-              scope: 'profile.read user.Read Directory.Read.All'
+              scope: 'profile.read User.Read Directory.Read.All'
             }
           ],
           '@odata.context': 'https://graph.microsoft.com/v1.0/$metadata#permissionGrants'
