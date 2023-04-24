@@ -1,4 +1,4 @@
-import { getId, getTheme, IconButton, mergeStyleSets, TooltipHost } from '@fluentui/react';
+import { getId, IconButton, mergeStyleSets, TooltipHost } from '@fluentui/react';
 import { CSSProperties } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
@@ -17,11 +17,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const { link: resourceLink, classes } = props;
 
   const showButtons = {
-    background: getTheme().palette.neutralLight,
     div: {
-      display: 'inline',
-      overflow: 'hidden',
-      alignItems: 'center'
+      visibility: 'visible'
     }
   };
   const linkStyle = mergeStyleSets(
@@ -29,7 +26,9 @@ const ResourceLink = (props: IResourceLinkProps) => {
       link: {
         display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden',
         div: {
-          display: 'none'
+          visibility: 'hidden',
+          overflow: 'hidden',
+          alignItems: 'center'
         },
         '&:hover, .is-selected &': showButtons
       },
@@ -140,6 +139,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         />
       </TooltipHost>
     </div>
+    &nbsp;
   </span>
 }
 
