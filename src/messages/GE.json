@@ -475,5 +475,6 @@
   "The URL must contain graph.microsoft.com": "The URL must contain graph.microsoft.com",
   "Query documentation not found": "Query documentation not found",
   "Fetching code snippet failing": "Retry again",
-  "Fetching permissions failing": "Retry again"
+  "Fetching permissions failing": "Retry again",
+  "Read documentation": "Read documentation"
 }
