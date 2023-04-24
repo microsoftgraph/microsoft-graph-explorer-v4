@@ -3,8 +3,9 @@ import { IOAuthGrantPayload, IPermissionGrant } from '../../../types/permissions
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
 import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesError';
+import { exponentialFetchRetry } from '../../utils/fetch-retry-handler';
 import { GRAPH_URL } from '../graph-constants';
-import { exponentialFetchRetry, makeGraphRequest, parseResponse } from './query-action-creator-util';
+import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 
 interface IPreliminaryChecksObject {
   defaultUserScopes: string[];
