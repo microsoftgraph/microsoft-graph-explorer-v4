@@ -140,11 +140,13 @@ const UnstyledResourceExplorer = (props: any) => {
         />
       </Stack>
 
-      {selectedLinks && selectedLinks.length > 0 && <>
-        <Label><FormattedMessage id='Selected Resources' /> ({selectedLinks.length})</Label>
-        <CommandOptions version={version} />
-      </>
-      }
+      <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
+        {selectedLinks && selectedLinks.length > 0 && <>
+          <Label><FormattedMessage id='Selected Resources' /> ({selectedLinks.length})</Label>
+          <CommandOptions version={version} />
+        </>
+        }
+      </Stack>
 
       {items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>
         <FormattedMessage id='Resources available' />
