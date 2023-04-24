@@ -134,6 +134,18 @@ const Request = (props: any) => {
     dispatch(setDimensions(dimen));
   };
 
+  // Resizable element does not update it's size when the browser window is resized.
+  // This is a workaround to reset the height
+  window.addEventListener('resize', () => {
+    const resizable = document.getElementsByClassName('request-resizable');
+    if (resizable && resizable.length > 0) {
+      const resizableElement = resizable[0] as HTMLElement;
+      if(resizableElement && resizableElement.style && resizableElement.style.height){
+        resizableElement.style.height = '';
+      }
+    }
+  });
+
   return (
     <>
       <Resizable
@@ -155,6 +167,7 @@ const Request = (props: any) => {
         enable={{
           bottom: true
         }}
+        className='request-resizable'
       >
         <div className='query-request'>
           <Pivot
