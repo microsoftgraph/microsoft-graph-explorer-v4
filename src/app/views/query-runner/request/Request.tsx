@@ -155,7 +155,6 @@ const Request = (props: any) => {
         enable={{
           bottom: true
         }}
-        className='request-resizable'
       >
         <div className='query-request'>
           <Pivot
