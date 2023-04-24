@@ -90,34 +90,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
     </span>
 
     <div>
-      {resourceLink.method &&
-        <TooltipHost
-          content={translateMessage('Query documentation')}
-          id={documentButtonTooltip}
-          calloutProps={{ gapSpace: 0, target: `#${documentButton}` }}
-          tooltipProps={{
-            onRenderContent: function renderContent() {
-              return (
-                <div style={{ paddingBottom: 2 }}>
-                  {resourceLink.docLink ? resourceLink.docLink : translateMessage('Query documentation not found')}
-                </div>
-              );
-            }
-          }}
-        >
-          <IconButton
-            aria-label={translateMessage('Query documentation')}
-            role='button'
-            id={documentButton}
-            disabled={!resourceLink.docLink}
-            aria-describedby={documentButtonTooltip}
-            styles={iconButtonStyles}
-            onClick={() => openDocumentationLink()}
-            menuIconProps={{ iconName: 'TextDocument' }}
-          />
-        </TooltipHost>
-      }
-
       <TooltipHost
         content={translateMessage('Add to collection')}
         id={tooltipId}
@@ -142,6 +114,35 @@ const ResourceLink = (props: IResourceLinkProps) => {
           onClick={() => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, resourceLink)}
         />
       </TooltipHost>
+
+      {resourceLink.method &&
+        <TooltipHost
+          content={translateMessage('Read documentation')}
+          id={documentButtonTooltip}
+          calloutProps={{ gapSpace: 0, target: `#${documentButton}` }}
+          tooltipProps={{
+            onRenderContent: function renderContent() {
+              return (
+                <div style={{ paddingBottom: 2 }}>
+                  {resourceLink.docLink ? translateMessage('Read documentation')
+                    : translateMessage('Query documentation not found')}
+                </div>
+              );
+            }
+          }}
+        >
+          <IconButton
+            aria-label={translateMessage('Read documentation')}
+            role='button'
+            id={documentButton}
+            disabled={!resourceLink.docLink}
+            aria-describedby={documentButtonTooltip}
+            styles={iconButtonStyles}
+            onClick={() => openDocumentationLink()}
+            menuIconProps={{ iconName: 'TextDocument' }}
+          />
+        </TooltipHost>
+      }
     </div>
     &nbsp;
   </span>
