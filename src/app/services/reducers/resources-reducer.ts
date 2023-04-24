@@ -23,21 +23,21 @@ export function resources(state: IResources = initialState, action: AppAction): 
         pending: false,
         data: action.response,
         error: null,
-        paths: []
+        paths: state.paths
       };
     case FETCH_RESOURCES_ERROR:
       return {
         pending: false,
         error: action.response,
         data: {} as IResource,
-        paths: []
+        paths: state.paths
       };
     case FETCH_RESOURCES_PENDING:
       return {
         pending: true,
         data: initialState.data,
         error: null,
-        paths: []
+        paths: state.paths
       };
     case RESOURCEPATHS_ADD_SUCCESS:
       const paths: IResourceLink[] = [...state.paths];
