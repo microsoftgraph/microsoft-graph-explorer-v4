@@ -30,7 +30,6 @@ import {
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
-import { resourcesCache } from '../../../../modules/cache/resources.cache';
 
 const UnstyledResourceExplorer = (props: any) => {
   const { resources } = useAppSelector(
@@ -61,16 +60,8 @@ const UnstyledResourceExplorer = (props: any) => {
     setResourceItems(filteredPayload)
   }, [filteredPayload.length]);
 
-  useEffect(() => {
-    saveCollection();
-  }, [resources.paths])
-
   const [isolated, setIsolated] = useState<any>(null);
   const [linkLevel, setLinkLevel] = useState(-1);
-
-  const saveCollection = async () => {
-    await resourcesCache.saveCollection(resources.paths);
-  }
 
   const generateBreadCrumbs = () => {
     if (!!isolated && isolated.paths.length > 0) {
@@ -87,7 +78,7 @@ const UnstyledResourceExplorer = (props: any) => {
     return [];
   }
 
-  const addToCollection = async (item: IResourceLink) => {
+  const addToCollection = (item: IResourceLink) => {
     dispatch(addResourcePaths(getResourcePaths(item, version)));
   }
 

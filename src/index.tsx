@@ -26,9 +26,8 @@ import { loadGETheme } from './themes';
 import { readTheme } from './themes/theme-utils';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
-import { addResourcePaths, fetchResources } from './app/services/actions/resource-explorer-action-creators';
-import { resourcesCache } from './modules/cache/resources.cache';
-import { IResourceLink } from './types/resources';
+import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
+
 
 const appRoot: HTMLElement = document.getElementById('root')!;
 initializeIcons();
@@ -136,12 +135,6 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
 historyCache.readHistoryData().then((data: any) => {
   if (data && data.length > 0) {
     appStore.dispatch(bulkAddHistoryItems(data));
-  }
-});
-
-resourcesCache.readCollection().then((data: IResourceLink[]) => {
-  if (data && data.length > 0) {
-    appStore.dispatch(addResourcePaths(data));
   }
 });
 
