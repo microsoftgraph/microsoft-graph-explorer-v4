@@ -32,13 +32,9 @@ test.describe('Resources Explorer', () => {
     await page.locator('button[role="tab"]:has-text("Resources")').click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('text=admin (3)').click();
+    await page.locator('text=RegExp:text=admin \\(\\d+\\)').hover();
     await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('text=GETadminMore actions >> [aria-label="More actions"]').click();
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('button[role="menuitem"]:has-text("Add to collection")').click();
+    await page.locator('[aria-label="Add to collection"]').click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
     await page.locator('[aria-label="Preview collection"]').click();
