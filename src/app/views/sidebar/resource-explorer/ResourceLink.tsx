@@ -1,6 +1,5 @@
-import { getId, IconButton, mergeStyleSets, TooltipHost } from '@fluentui/react';
+import { getId, IconButton, ITooltipHostStyles, mergeStyleSets, TooltipHost } from '@fluentui/react';
 import { CSSProperties } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 
 import { ResourceOptions } from '../../../../types/resources';
@@ -76,6 +75,9 @@ const ResourceLink = (props: IResourceLinkProps) => {
     validateExternalLink(documentationLink || '', componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK, documentationLink);
   }
 
+  const calloutProps = { gapSpace: 0 };
+  const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
+
   return <span className={linkStyle.link} tabIndex={0}>
     {resourceLink.method &&
       <span className={classes.badge} style={methodButtonStyles}>
@@ -93,16 +95,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
       <TooltipHost
         content={translateMessage('Add to collection')}
         id={tooltipId}
-        calloutProps={{ gapSpace: 0, target: `#${buttonId}` }}
-        tooltipProps={{
-          onRenderContent: function renderContent() {
-            return (
-              <div style={{ paddingBottom: 2 }}>
-                <FormattedMessage id={'Add to collection'} />
-              </div>
-            );
-          }
-        }}
+        calloutProps={calloutProps}
+        styles={hostStyles}
       >
         <IconButton
           ariaLabel={translateMessage('Add to collection')}
@@ -114,6 +108,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
           onClick={() => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, resourceLink)}
         />
       </TooltipHost>
+
 
       {resourceLink.method &&
         <TooltipHost
