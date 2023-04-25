@@ -66,8 +66,8 @@ const SuffixRenderer = () => {
   }
 
   const tipMessage = documentationLinkAvailable ?
-    translateMessage('A documentation link for this URL exists. Click learn more to access it') :
-    translateMessage('Read Documentation')
+    translateMessage('Read documentation') :
+    translateMessage('Query documentation not found')
 
   return (
     <>
