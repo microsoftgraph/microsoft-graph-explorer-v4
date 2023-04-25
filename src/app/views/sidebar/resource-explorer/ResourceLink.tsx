@@ -112,19 +112,11 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
       {resourceLink.method &&
         <TooltipHost
-          content={translateMessage('Read documentation')}
+          content={resourceLink.docLink ? translateMessage('Read documentation')
+            : translateMessage('Query documentation not found')}
           id={documentButtonTooltip}
           calloutProps={{ gapSpace: 0, target: `#${documentButton}` }}
-          tooltipProps={{
-            onRenderContent: function renderContent() {
-              return (
-                <div style={{ paddingBottom: 2 }}>
-                  {resourceLink.docLink ? translateMessage('Read documentation')
-                    : translateMessage('Query documentation not found')}
-                </div>
-              );
-            }
-          }}
+          styles={hostStyles}
         >
           <IconButton
             aria-label={translateMessage('Read documentation')}
