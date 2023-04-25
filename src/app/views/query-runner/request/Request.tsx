@@ -1,6 +1,6 @@
 import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import { CSSProperties, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -19,7 +19,7 @@ import './request.scss';
 const Request = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
   const [selectedPivot, setSelectedPivot] = useState('request-body');
-  const { graphExplorerMode: mode, dimensions } = useAppSelector((state) => state);
+  const { graphExplorerMode: mode, dimensions, sidebarProperties } = useAppSelector((state) => state);
   const pivot = selectedPivot.replace('.$', '');
   const minHeight = 60;
   const maxHeight = 800;
@@ -28,6 +28,15 @@ const Request = (props: any) => {
     handleOnEditorChange,
     intl: { messages }
   }: any = props;
+
+  useEffect(() => {
+    if(sidebarProperties && sidebarProperties.mobileScreen){
+      window.addEventListener('resize', resizeHandler);
+    }
+    else{
+      window.removeEventListener('resize', resizeHandler);
+    }
+  }, [sidebarProperties.mobileScreen])
 
   const getPivotItems = (height: string) => {
 
@@ -136,7 +145,7 @@ const Request = (props: any) => {
 
   // Resizable element does not update it's size when the browser window is resized.
   // This is a workaround to reset the height
-  window.addEventListener('resize', () => {
+  const resizeHandler = () => {
     const resizable = document.getElementsByClassName('request-resizable');
     if (resizable && resizable.length > 0) {
       const resizableElement = resizable[0] as HTMLElement;
@@ -144,7 +153,7 @@ const Request = (props: any) => {
         resizableElement.style.height = '';
       }
     }
-  });
+  }
 
   return (
     <>
