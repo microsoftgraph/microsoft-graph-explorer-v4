@@ -30,7 +30,8 @@ const localStorageMiddleware = (store: any) => (next: any) => async (action: App
       updateResourcesCollection(action.response)
       break;
     }
-    case FETCH_RESOURCES_SUCCESS || FETCH_RESOURCES_ERROR: {
+    case FETCH_RESOURCES_SUCCESS:
+    case FETCH_RESOURCES_ERROR: {
       resourcesCache.readCollection().then((data: IResourceLink[]) => {
         if (data && data.length > 0) {
           store.dispatch(addResourcePaths(data));
