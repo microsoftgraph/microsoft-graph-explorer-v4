@@ -28,6 +28,7 @@ import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
 
+
 const appRoot: HTMLElement = document.getElementById('root')!;
 initializeIcons();
 
@@ -132,7 +133,7 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
 }
 
 historyCache.readHistoryData().then((data: any) => {
-  if (data.length > 0) {
+  if (data && data.length > 0) {
     appStore.dispatch(bulkAddHistoryItems(data));
   }
 });
