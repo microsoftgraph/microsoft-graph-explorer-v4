@@ -145,7 +145,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             >
               <Icon
                 className={classes.docLink}
-                aria-label={translateMessage('Query documentation')}
+                aria-label={translateMessage('Read documentation')}
                 iconName='TextDocument'
                 style={{
                   marginRight: '45%',

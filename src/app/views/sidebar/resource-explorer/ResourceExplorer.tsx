@@ -1,8 +1,8 @@
 import {
-  Breadcrumb, DefaultButton,
-  IBreadcrumbItem, INavLink, INavLinkGroup, Label, Nav,
-  SearchBox, Spinner, SpinnerSize,
-  Stack, styled, Toggle
+  INavLink, INavLinkGroup, Label, Nav, SearchBox, Spinner, SpinnerSize,
+  Stack,
+  styled,
+  Toggle
 } from '@fluentui/react';
 import debouce from 'lodash.debounce';
 import { useEffect, useMemo, useState } from 'react';
@@ -24,9 +24,8 @@ import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import CommandOptions from './command-options/CommandOptions';
 import {
-  createResourcesList, getCurrentTree,
-  getResourcePaths,
-  getUrlFromLink, removeCounter
+  createResourcesList, getResourcePaths,
+  getUrlFromLink
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
@@ -52,31 +51,12 @@ const UnstyledResourceExplorer = (props: any) => {
   const filteredPayload = getResourcesSupportedByVersion(resourcesToUse, version, searchText);
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
 
-  const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload);
   const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
 
   useEffect(() => {
     setItems(navigationGroup);
-    setResourceItems(filteredPayload)
   }, [filteredPayload.length]);
 
-  const [isolated, setIsolated] = useState<any>(null);
-  const [linkLevel, setLinkLevel] = useState(-1);
-
-  const generateBreadCrumbs = () => {
-    if (!!isolated && isolated.paths.length > 0) {
-      const breadcrumbItems: IBreadcrumbItem[] = [];
-      isolated.paths.forEach((path: string) => {
-        path = removeCounter(path);
-        breadcrumbItems.push({ text: path, key: path, onClick: navigateToBreadCrumb });
-      });
-      let { name } = isolated;
-      name = removeCounter(name);
-      breadcrumbItems.push({ text: name, key: name });
-      return breadcrumbItems;
-    }
-    return [];
-  }
 
   const addToCollection = (item: IResourceLink) => {
     dispatch(addResourcePaths(getResourcePaths(item, version)));
@@ -96,45 +76,6 @@ const UnstyledResourceExplorer = (props: any) => {
     return debouce(changeSearchValue, 300);
   }, []);
 
-  const navigateToBreadCrumb = (ev?: any, item?: IBreadcrumbItem): void => {
-    const iterator = item!.key;
-    if (iterator === '/') {
-      disableIsolation();
-      return;
-    }
-
-    if (isolated) {
-      const { paths } = isolated;
-      const level = paths.findIndex((k: string) => k === iterator);
-      const currentTree = getCurrentTree({ paths, level, resourceItems, version });
-      isolateTree(currentTree);
-    }
-  }
-
-  const isolateTree = (navLink: any): void => {
-    const tree = [
-      {
-        isExpanded: true,
-        links: navLink.links
-      }
-    ];
-    setItems(tree);
-    setIsolated(navLink);
-    setLinkLevel(navLink.level);
-    telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
-      {
-        ComponentName: componentNames.RESOURCES_ISOLATE_QUERY_LIST_ITEM,
-        ResourcePath: getUrlFromLink(navLink)
-      });
-  }
-
-  const disableIsolation = (): void => {
-    setIsolated(null);
-    setSearchText('');
-    const filtered = getResourcesSupportedByVersion(data.children, version);
-    setLinkLevel(-1);
-    setItems(createResourcesList(filtered, version));
-  }
 
   const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
     ev!.preventDefault();
@@ -153,8 +94,9 @@ const UnstyledResourceExplorer = (props: any) => {
     const resourceUrl = getUrlFromLink(resourceLink);
     if (!resourceUrl) { return; }
     const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
+    const verb = resourceLink.method!;
     const query: IQuery = {
-      selectedVerb: resourceLink.method!,
+      selectedVerb: verb.toString().toUpperCase(),
       selectedVersion: version,
       sampleUrl,
       sampleHeaders: [],
@@ -167,8 +109,6 @@ const UnstyledResourceExplorer = (props: any) => {
       SelectedVersion: version
     });
   }
-
-  const breadCrumbs = generateBreadCrumbs();
 
   if (pending) {
     return (
@@ -184,66 +124,45 @@ const UnstyledResourceExplorer = (props: any) => {
 
   return (
     <section style={{ marginTop: '8px' }}>
-      {!isolated && items[0].links.length > 0 && <>
-        <SearchBox
-          placeholder={translateMessage('Search resources')}
-          onChange={debouncedSearch}
-          disabled={!!isolated}
-          styles={searchBoxStyles}
+      <SearchBox
+        placeholder={translateMessage('Search resources')}
+        onChange={debouncedSearch}
+        styles={searchBoxStyles}
+      />
+      <hr />
+      <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
+        <Toggle label={`${translateMessage('Switch to beta')}`}
+          onChange={changeVersion}
+          onText={translateMessage('On')}
+          offText={translateMessage('Off')}
+          inlineLabel
+          styles={{ text: { position: 'relative', top: '4px' } }}
         />
-        <hr />
-        <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
-          <Toggle label={`${translateMessage('Switch to beta')}`}
-            onChange={changeVersion}
-            onText={translateMessage('On')}
-            offText={translateMessage('Off')}
-            inlineLabel
-            styles={{ text: { position: 'relative', top: '4px' } }}
-          />
-        </Stack>
-      </>}
+      </Stack>
 
-      {selectedLinks && selectedLinks.length > 0 && <>
-        <Label><FormattedMessage id='Selected Resources' /> ({selectedLinks.length})</Label>
-        <CommandOptions version={version} />
-      </>
-      }
-
-      {
-        isolated && breadCrumbs.length > 0 &&
-        <>
-          <DefaultButton
-            text={translateMessage('Close isolation')}
-            iconProps={{ iconName: 'Back' }}
-            onClick={disableIsolation}
-          />
-          <hr />
-          <Breadcrumb
-            items={breadCrumbs}
-            maxDisplayedItems={3}
-            ariaLabel={translateMessage('Path display')}
-            overflowAriaLabel={translateMessage('More path links')}
-          />
+      <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
+        {selectedLinks && selectedLinks.length > 0 && <>
+          <Label><FormattedMessage id='Selected Resources' /> ({selectedLinks.length})</Label>
+          <CommandOptions version={version} />
         </>
-      }
+        }
+      </Stack>
 
-      { items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>
+      {items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>
         <FormattedMessage id='Resources available' />
       </Label>
       }
 
       {
-        items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }):
+        items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
           (<Nav
             groups={items}
             styles={navStyles}
             onRenderLink={(link: any) => {
               return <ResourceLink
                 link={link}
-                isolateTree={isolateTree}
                 resourceOptionSelected={(activity: string, context: unknown) =>
                   resourceOptionSelected(activity, context)}
-                linkLevel={linkLevel}
                 classes={classes}
               />
             }}
