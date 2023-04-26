@@ -1,4 +1,4 @@
-import { PopupsProvider } from './PopupsContext';
+import { PopupsProvider, usePopupsDispatchContext, usePopupsStateContext } from './PopupsContext';
 
 export interface PopupsComponent<Data = {}> {
   dismissPopup: () => void;
@@ -57,4 +57,4 @@ export const initialState: PopupState = {
   popups: []
 };
 
-export { PopupsProvider };
+export { PopupsProvider, usePopupsStateContext, usePopupsDispatchContext };

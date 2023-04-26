@@ -1,7 +1,7 @@
 import {
-  Popup, POPUPS, usePopupsDispatchContext,
+  POPUPS, Popup, usePopupsDispatchContext,
   usePopupsStateContext
-} from '../../../services/context/popups-context/PopupsContext';
+} from '../../../services/context/popups-context';
 import { DialogWrapper } from './DialogWrapper';
 import { ModalWrapper } from './ModalWrapper';
 import { PanelWrapper } from './PanelWrapper';

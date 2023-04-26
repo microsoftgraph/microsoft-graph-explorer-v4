@@ -1,6 +1,8 @@
 import { PopupItem, popups } from '../../views/common/registry/popups';
-import { PopupsProps, PopupsStatus, PopupsType } from '../context/popups-context';
-import { POPUPS, usePopupsDispatchContext, usePopupsStateContext } from '../context/popups-context/PopupsContext';
+import {
+  POPUPS, PopupsProps, PopupsStatus, PopupsType,
+  usePopupsDispatchContext, usePopupsStateContext
+} from '../context/popups-context';
 
 type OpenPopupsFn<Data> = (properties: PopupsProps<Data>) => void;
 
@@ -41,3 +43,4 @@ const usePopups = <Data = {}>(item: PopupItem, type: PopupsType,
 }
 
 export { usePopups };
+
