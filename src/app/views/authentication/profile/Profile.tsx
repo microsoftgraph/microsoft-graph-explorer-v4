@@ -78,7 +78,7 @@ const Profile = (props: any) => {
     openPermissions({
       settings: {
         title: translateMessage('Permissions'),
-        width: 'md'
+        width: 'lg'
       }
     })
   };

@@ -32,9 +32,11 @@ export function PanelWrapper(props: WrapperProps) {
       case 'md':
         return PanelType.medium;
       case 'lg':
+        return PanelType.largeFixed;
+      case 'xl':
         return PanelType.large;
     }
-    return undefined;
+    return PanelType.medium;
   }
 
   const panelType = getPanelType();

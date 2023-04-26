@@ -20,7 +20,7 @@ export interface PopupsProps<Data = {}> {
 
 export type PopupsStatus = 'open' | 'closed' | 'dismissed' | null;
 export type PopupsType = 'modal' | 'panel' | 'dialog';
-export type width = 'xs' | 'sm' | 'md' | 'lg';
+export type width = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export interface ShowPopupsParameters<Data = {}> {
   component: React.ElementType<PopupsComponent<Data>>;

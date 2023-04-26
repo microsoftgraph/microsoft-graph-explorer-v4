@@ -52,7 +52,7 @@ const CommandOptions = (props: ICommandOptions) => {
     previewCollection({
       settings: {
         title: translateMessage('Selected Resources') + ' ' + translateMessage('Preview'),
-        width: 'lg'
+        width: 'xl'
       },
       data: {
         version
