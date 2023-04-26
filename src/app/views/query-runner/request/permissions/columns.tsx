@@ -117,23 +117,20 @@ const getColumns = (source: source, tokenPresent?: boolean): IColumn[] => {
         targetWidthProportion: 1,
         flexGrow: 1
       },
-
+      {
+        key: 'consentType',
+        name: translateMessage('Consent type'),
+        isResizable: false,
+        fieldName: 'consentType',
+        minWidth: 130,
+        onRenderHeader: () => renderColumnHeader('Consent type'),
+        styles: columnCellStyles,
+        ariaLabel: translateMessage('Permission consent type'),
+        targetWidthProportion: 1,
+        flexGrow: 1
+      }
     );
   }
-  columns.push(
-    {
-      key: 'consentType',
-      name: translateMessage('Consent type'),
-      isResizable: false,
-      fieldName: 'consentType',
-      minWidth: 130,
-      onRenderHeader: () => renderColumnHeader('Consent type'),
-      styles: columnCellStyles,
-      ariaLabel: translateMessage('Permission consent type'),
-      targetWidthProportion: 1,
-      flexGrow: 1
-    }
-  )
   return columns;
 }
 

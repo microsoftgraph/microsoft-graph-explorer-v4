@@ -1,0 +1,423 @@
+{
+    "segment": "/",
+    "labels": [
+          {
+      "name": "v1.0",
+      "methods": [
+        {
+          "name": "Get",
+          "documentationUrl": null
+        }
+      ]
+    },
+    {
+      "name": "beta",
+      "methods": [
+        {
+          "name": "Get",
+          "documentationUrl": null
+        }
+      ]
+    }
+  ],
+    "children": [
+    {
+      "segment": "appCatalogs",
+      "labels": [
+        {
+          "name": "beta",
+          "methods": [
+            {
+              "name": "Get",
+              "documentationUrl": null
+            },
+            {
+              "name": "Patch",
+              "documentationUrl": null
+            }
+          ]
+        },
+        {
+          "name": "v1.0",
+          "methods": [
+            {
+              "name": "Get",
+              "documentationUrl": null
+            },
+            {
+              "name": "Patch",
+              "documentationUrl": null
+            }
+          ]
+        }
+      ],
+      "children": [
+        {
+          "segment": "teamsApps",
+          "labels": [
+            {
+              "name": "beta",
+              "methods": [
+                {
+                  "name": "Get",
+                  "documentationUrl": "https://docs.microsoft.com/graph/api/appcatalogs-list-teamsapps?view=graph-rest-1.0"
+                },
+                {
+                  "name": "Post",
+                  "documentationUrl": "https://docs.microsoft.com/graph/api/teamsapp-publish?view=graph-rest-1.0"
+                }
+              ]
+            },
+            {
+              "name": "v1.0",
+              "methods": [
+                {
+                  "name": "Get",
+                  "documentationUrl": "https://docs.microsoft.com/graph/api/appcatalogs-list-teamsapps?view=graph-rest-1.0"
+                },
+                {
+                  "name": "Post",
+                  "documentationUrl": "https://docs.microsoft.com/graph/api/teamsapp-publish?view=graph-rest-1.0"
+                }
+              ]
+            }
+          ],
+          "children": [
+            {
+              "segment": "$count",
+              "labels": [
+                {
+                  "name": "beta",
+                  "methods": [
+                    {
+                      "name": "Get",
+                      "documentationUrl": null
+                    }
+                  ]
+                },
+                {
+                  "name": "v1.0",
+                  "methods": [
+                    {
+                      "name": "Get",
+                      "documentationUrl": null
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "segment": "{teamsApp-id}",
+              "labels": [
+                {
+                  "name": "beta",
+                  "methods": [
+                    {
+                      "name": "Get",
+                      "documentationUrl": null
+                    },
+                    {
+                      "name": "Patch",
+                      "documentationUrl": null
+                    },
+                    {
+                      "name": "Delete",
+                      "documentationUrl": null
+                    }
+                  ]
+                },
+                {
+                  "name": "v1.0",
+                  "methods": [
+                    {
+                      "name": "Get",
+                      "documentationUrl": null
+                    },
+                    {
+                      "name": "Patch",
+                      "documentationUrl": null
+                    },
+                    {
+                      "name": "Delete",
+                      "documentationUrl": null
+                    }
+                  ]
+                }
+              ],
+              "children": [
+                {
+                  "segment": "appDefinitions",
+                  "labels": [
+                    {
+                      "name": "beta",
+                      "methods": [
+                        {
+                          "name": "Get",
+                          "documentationUrl": null
+                        },
+                        {
+                          "name": "Post",
+                          "documentationUrl": "https://docs.microsoft.com/graph/api/teamsapp-update?view=graph-rest-1.0"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "v1.0",
+                      "methods": [
+                        {
+                          "name": "Get",
+                          "documentationUrl": null
+                        },
+                        {
+                          "name": "Post",
+                          "documentationUrl": "https://docs.microsoft.com/graph/api/teamsapp-update?view=graph-rest-1.0"
+                        }
+                      ]
+                    }
+                  ],
+                  "children": [
+                    {
+                      "segment": "$count",
+                      "labels": [
+                        {
+                          "name": "beta",
+                          "methods": [
+                            {
+                              "name": "Get",
+                              "documentationUrl": null
+                            }
+                          ]
+                        },
+                        {
+                          "name": "v1.0",
+                          "methods": [
+                            {
+                              "name": "Get",
+                              "documentationUrl": null
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "segment": "{teamsAppDefinition-id}",
+                      "labels": [
+                        {
+                          "name": "beta",
+                          "methods": [
+                            {
+                              "name": "Get",
+                              "documentationUrl": null
+                            },
+                            {
+                              "name": "Patch",
+                              "documentationUrl": null
+                            },
+                            {
+                              "name": "Delete",
+                              "documentationUrl": null
+                            }
+                          ]
+                        },
+                        {
+                          "name": "v1.0",
+                          "methods": [
+                            {
+                              "name": "Get",
+                              "documentationUrl": null
+                            },
+                            {
+                              "name": "Patch",
+                              "documentationUrl": null
+                            },
+                            {
+                              "name": "Delete",
+                              "documentationUrl": null
+                            }
+                          ]
+                        }
+                      ],
+                      "children": [
+                        {
+                          "segment": "bot",
+                          "labels": [
+                            {
+                              "name": "beta",
+                              "methods": [
+                                {
+                                  "name": "Get",
+                                  "documentationUrl": "https://docs.microsoft.com/graph/api/teamworkbot-get?view=graph-rest-1.0"
+                                },
+                                {
+                                  "name": "Patch",
+                                  "documentationUrl": null
+                                },
+                                {
+                                  "name": "Delete",
+                                  "documentationUrl": null
+                                }
+                              ]
+                            },
+                            {
+                              "name": "v1.0",
+                              "methods": [
+                                {
+                                  "name": "Get",
+                                  "documentationUrl": "https://docs.microsoft.com/graph/api/teamworkbot-get?view=graph-rest-1.0"
+                                },
+                                {
+                                  "name": "Patch",
+                                  "documentationUrl": null
+                                },
+                                {
+                                  "name": "Delete",
+                                  "documentationUrl": null
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "segment": "colorIcon",
+                          "labels": [
+                            {
+                              "name": "beta",
+                              "methods": [
+                                {
+                                  "name": "Get",
+                                  "documentationUrl": "https://docs.microsoft.com/graph/api/teamsappicon-get?view=graph-rest-1.0"
+                                },
+                                {
+                                  "name": "Patch",
+                                  "documentationUrl": null
+                                },
+                                {
+                                  "name": "Delete",
+                                  "documentationUrl": null
+                                }
+                              ]
+                            }
+                          ],
+                          "children": [
+                            {
+                              "segment": "hostedContent",
+                              "labels": [
+                                {
+                                  "name": "beta",
+                                  "methods": [
+                                    {
+                                      "name": "Get",
+                                      "documentationUrl": "https://docs.microsoft.com/graph/api/teamworkhostedcontent-get?view=graph-rest-1.0"
+                                    },
+                                    {
+                                      "name": "Patch",
+                                      "documentationUrl": null
+                                    },
+                                    {
+                                      "name": "Delete",
+                                      "documentationUrl": null
+                                    }
+                                  ]
+                                }
+                              ],
+                              "children": [
+                                {
+                                  "segment": "$value",
+                                  "labels": [
+                                    {
+                                      "name": "beta",
+                                      "methods": [
+                                        {
+                                          "name": "Get",
+                                          "documentationUrl": "https://docs.microsoft.com/graph/api/teamworkhostedcontent-get?view=graph-rest-1.0"
+                                        },
+                                        {
+                                          "name": "Put",
+                                          "documentationUrl": null
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "segment": "outlineIcon",
+                          "labels": [
+                            {
+                              "name": "beta",
+                              "methods": [
+                                {
+                                  "name": "Get",
+                                  "documentationUrl": "https://docs.microsoft.com/graph/api/teamsappicon-get?view=graph-rest-1.0"
+                                },
+                                {
+                                  "name": "Patch",
+                                  "documentationUrl": null
+                                },
+                                {
+                                  "name": "Delete",
+                                  "documentationUrl": null
+                                }
+                              ]
+                            }
+                          ],
+                          "children": [
+                            {
+                              "segment": "hostedContent",
+                              "labels": [
+                                {
+                                  "name": "beta",
+                                  "methods": [
+                                    {
+                                      "name": "Get",
+                                      "documentationUrl": "https://docs.microsoft.com/graph/api/teamworkhostedcontent-get?view=graph-rest-1.0"
+                                    },
+                                    {
+                                      "name": "Patch",
+                                      "documentationUrl": null
+                                    },
+                                    {
+                                      "name": "Delete",
+                                      "documentationUrl": null
+                                    }
+                                  ]
+                                }
+                              ],
+                              "children": [
+                                {
+                                  "segment": "$value",
+                                  "labels": [
+                                    {
+                                      "name": "beta",
+                                      "methods": [
+                                        {
+                                          "name": "Get",
+                                          "documentationUrl": "https://docs.microsoft.com/graph/api/teamworkhostedcontent-get?view=graph-rest-1.0"
+                                        },
+                                        {
+                                          "name": "Put",
+                                          "documentationUrl": null
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
