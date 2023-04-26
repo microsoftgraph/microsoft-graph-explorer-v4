@@ -51,7 +51,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
     openPermissions({
       settings: {
         title: translateMessage('Permissions'),
-        width: 'lg'
+        width: 'md'
       }
     })
   }
