@@ -454,7 +454,7 @@
   "No samples found": "We did not find any sample queries",
   "You require the following permissions to revoke": "You require Directory.Read.All and DelegatedPermissionGrant.ReadWrite.All to be able to revoke consent to permissions",
   "Cannot delete default scope": "Graph Explorer requires this permission for its normal working behavior",
-  "Permission revoked": "Permission revoked successfully. Sign out and sign in again for these changes to take effect",
+  "Permission revoked": "Permission revoked successfully. Sign out and sign in again for these changes to take effect. These changes may take some time to reflect on your token",
   "An error occurred when unconsenting": "An error occurred when unconsenting. Please try again",
   "You are unconsenting to an admin pre-consented permission": "You are unconsenting to an admin pre-consented permission. Ask your tenant admin to revoke consent to this permission on Azure AD",
   "Possible error found in URL near": "Possible error found in URL near",
@@ -476,5 +476,10 @@
   "Query documentation not found": "Query documentation not found",
   "Fetching code snippet failing": "Retry again",
   "Fetching permissions failing": "Retry again",
-  "Read documentation": "Read documentation"
+  "Read documentation": "Read documentation",
+  "Reload consent-type": "Confirm that you have consented to Directory.Read.All or Directory.ReadWrite.All or DelegatedPermissionGrant.ReadWrite.All and that you have reauthenticated if you revoked this permission earlier then click Reload",
+  "An error occured during the revoking process": "An error occured during the revoking process. Click the Unconsent button to retry the request",
+  "Retrying": "Retrying",
+  "You require the following permissions to read": "You require Directory.Read.All or Directory.ReadWrite.All or DelegatedPermissionGrant.ReadWrite.All to read permission grants for your tenant",
+  "We are retrying the revoking operation": "An error occurred during the revoking process. We are retrying the revoking operation"
 }
