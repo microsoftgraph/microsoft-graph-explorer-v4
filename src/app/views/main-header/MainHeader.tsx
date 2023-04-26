@@ -14,9 +14,7 @@ import { Mode } from '../../../types/enums';
 import { useAppSelector } from '../../../store';
 
 interface MainHeaderProps {
-  minimised: boolean;
   toggleSidebar: Function;
-  mobileScreen: boolean;
 }
 const sectionStackTokens: IStackTokens = {
   childrenGap: 0
@@ -31,11 +29,14 @@ registerIcons({
   }
 });
 export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: MainHeaderProps) => {
-  const { profile, graphExplorerMode } = useAppSelector(
+  const { profile, graphExplorerMode, sidebarProperties } = useAppSelector(
     (state) => state
   );
-  const minimised = props.minimised;
-  const mobileScreen = props.mobileScreen;
+
+  const mobileScreen = !!sidebarProperties.mobileScreen;
+  const showSidebar = !!sidebarProperties.showSidebar;
+  const minimised = !mobileScreen && !showSidebar;
+
   const currentTheme = getTheme();
   const { rootStyles: itemAlignmentStackStyles, rightItemsStyles, graphExplorerLabelStyles,
     feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles,
