@@ -45,3 +45,10 @@ export enum ResourceLinkType {
 export enum ResourceOptions {
   ADD_TO_COLLECTION = 'add-to-collection'
 }
+
+export interface Collection {
+  id: string;
+  name: string;
+  paths: IResourceLink[],
+  isDefault?: boolean;
+}

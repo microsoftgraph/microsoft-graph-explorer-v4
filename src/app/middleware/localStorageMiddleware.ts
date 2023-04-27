@@ -1,3 +1,4 @@
+import { collectionsCache } from '../../modules/cache/collections.cache';
 import { resourcesCache } from '../../modules/cache/resources.cache';
 import { samplesCache } from '../../modules/cache/samples.cache';
 import { saveTheme } from '../../themes/theme-utils';
@@ -5,7 +6,7 @@ import { AppAction } from '../../types/action';
 import { IResourceLink } from '../../types/resources';
 import { addResourcePaths } from '../services/actions/resource-explorer-action-creators';
 import {
-  CHANGE_THEME_SUCCESS, FETCH_RESOURCES_ERROR, FETCH_RESOURCES_SUCCESS,
+  CHANGE_THEME_SUCCESS, COLLECTION_CREATE_SUCCESS, FETCH_RESOURCES_ERROR, FETCH_RESOURCES_SUCCESS,
   RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, SAMPLES_FETCH_SUCCESS
 } from '../services/redux-constants';
 
@@ -30,6 +31,11 @@ const localStorageMiddleware = (store: any) => (next: any) => async (action: App
       updateResourcesCollection(action.response)
       break;
     }
+    case COLLECTION_CREATE_SUCCESS: {
+      collectionsCache.create(action.response);
+      break;
+    }
+
     case FETCH_RESOURCES_SUCCESS:
     case FETCH_RESOURCES_ERROR: {
       resourcesCache.readCollection().then((data: IResourceLink[]) => {

@@ -27,6 +27,8 @@ import { readTheme } from './themes/theme-utils';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
+import { collectionsCache } from './modules/cache/collections.cache';
+import { createCollection } from './app/services/actions/collections-action-creators';
 
 
 const appRoot: HTMLElement = document.getElementById('root')!;
@@ -135,6 +137,17 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
 historyCache.readHistoryData().then((data: any) => {
   if (data && data.length > 0) {
     appStore.dispatch(bulkAddHistoryItems(data));
+  }
+});
+
+collectionsCache.read().then((data: any) => {
+  if (!data || data.length === 0) {
+    appStore.dispatch(createCollection({
+      id: new Date().getTime().toString(),
+      title: 'My Collection',
+      paths: [],
+      isDefault: true
+    }));
   }
 });
 
