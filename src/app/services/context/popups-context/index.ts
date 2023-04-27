@@ -11,6 +11,7 @@ interface PopupSettings {
   title: React.ReactNode | string;
   subtitle?: string;
   width?: width;
+  renderFooter?: () => JSX.Element;
 }
 
 export interface PopupsProps<Data = {}> {

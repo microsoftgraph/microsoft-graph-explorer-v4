@@ -8,7 +8,7 @@ export function PanelWrapper(props: WrapperProps) {
   const { theme: appTheme } = useAppSelector((state) => state);
   const theme = getTheme();
   const { isOpen, dismissPopup, Component, popupsProps, closePopup } = props;
-  const { title } = popupsProps.settings;
+  const { title, renderFooter } = popupsProps.settings;
 
   const isCurrentThemeDark = (): boolean => {
     return (appTheme === 'dark' || appTheme === 'high-contrast');
@@ -41,6 +41,10 @@ export function PanelWrapper(props: WrapperProps) {
 
   const panelType = getPanelType();
 
+  const onRenderFooterContent = (): JSX.Element | null => {
+    return renderFooter? renderFooter() : null;
+  }
+
   return (
     <div>
       <Panel
@@ -52,6 +56,7 @@ export function PanelWrapper(props: WrapperProps) {
         isFooterAtBottom={true}
         closeButtonAriaLabel='Close'
         overlayProps={panelOverlayProps}
+        onRenderFooterContent={onRenderFooterContent}
       >
         <div>
           {
