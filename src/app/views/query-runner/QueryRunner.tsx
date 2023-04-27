@@ -36,6 +36,9 @@ const QueryRunner = (props: any) => {
 
   const handleOnEditorChange = (value?: string) => {
     setSampleBody(value!);
+    const query = { ...sampleQuery };
+    query.sampleBody = value;
+    dispatch(setSampleQuery(query));
   };
 
   const handleOnRunQuery = (query?: IQuery) => {
@@ -55,8 +58,6 @@ const QueryRunner = (props: any) => {
           setSampleBody('');
           return;
         }
-      } else {
-        sampleQuery.sampleBody = sampleBody;
       }
     }
     if(query) {
