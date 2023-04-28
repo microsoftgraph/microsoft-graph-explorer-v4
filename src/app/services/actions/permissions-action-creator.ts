@@ -245,9 +245,9 @@ export function revokeScopes(permissionToRevoke: string) {
     const { consentedScopes, profile } = getState();
     const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
     const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
-    const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
     dispatch(revokeScopesPending());
     dispatchScopesStatus(dispatch, 'Please wait while we revoke this permission', 'Revoking ', 0);
+    const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
 
     if (!consentedScopes || consentedScopes.length === 0) {
       dispatch(revokeScopesError());
