@@ -13,7 +13,7 @@ import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions
 import { Auth } from './auth';
 import { RequestBody } from './body';
 import { RequestHeaders } from './headers';
-import { Permission } from './permissions';
+import { Permissions } from './permissions';
 import './request.scss';
 
 const Request = (props: any) => {
@@ -88,7 +88,7 @@ const Request = (props: any) => {
         }}
       >
         <div style={containerStyle} id={'permission-tab'}>
-          <Permission />
+          <Permissions />
         </div>
       </PivotItem>
     ];

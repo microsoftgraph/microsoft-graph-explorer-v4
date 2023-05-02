@@ -148,7 +148,10 @@ module.exports = {
     'spaced-comment': 'off',
     'use-isnan': 'error',
     'valid-typeof': 'off',
-    'react/react-in-jsx-scope': 'off'
+    'react/react-in-jsx-scope': 'off',
+    'react/no-unstable-nested-components': [
+      'off', { 'allowAsProps': true }
+    ]
   },
   settings: {
     react: {
