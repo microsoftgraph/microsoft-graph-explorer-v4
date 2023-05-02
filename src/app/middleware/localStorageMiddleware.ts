@@ -22,7 +22,7 @@ const localStorageMiddleware = (store: any) => (next: any) => async (action: App
 
     case RESOURCEPATHS_ADD_SUCCESS: {
       const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-      if(navigationEntry && navigationEntry.loadEventEnd > 0) {
+      if (navigationEntry && navigationEntry.loadEventEnd > 0) {
         await saveResourcesCollection(action.response);
       }
       break;
@@ -52,25 +52,44 @@ const localStorageMiddleware = (store: any) => (next: any) => async (action: App
   return next(action);
 };
 
-async function saveResourcesCollection(collection: IResourceLink[]){
+async function saveResourcesCollection(paths: IResourceLink[]) {
   const cachedCollection = await resourcesCache.readCollection();
-  let newCollection: IResourceLink[] = collection;
-  if(cachedCollection && cachedCollection.length > 0 ){
-    newCollection = [...cachedCollection, ...collection]
+  let newPaths: IResourceLink[] = paths;
+  if (cachedCollection && cachedCollection.length > 0) {
+    newPaths = [...cachedCollection, ...paths]
   }
-  await resourcesCache.saveCollection(newCollection);
+  await resourcesCache.saveCollection(newPaths);
+
+  const collections = await collectionsCache.read();
+  if (collections && collections.length > 0) {
+    const item = collections[0];
+    item.paths = newPaths;
+    await collectionsCache.update(item.id, item);
+  }
 }
 
-async function updateResourcesCollection(collection: IResourceLink[]){
+async function updateResourcesCollection(paths: IResourceLink[]) {
   const cachedCollection = await resourcesCache.readCollection();
-  if(cachedCollection && cachedCollection.length > 0){
-    collection.forEach((path: IResourceLink) => {
+  if (cachedCollection && cachedCollection.length > 0) {
+    paths.forEach((path: IResourceLink) => {
       const index = cachedCollection.findIndex(k => k.key === path.key);
-      if(index > -1){
+      if (index > -1) {
         cachedCollection.splice(index, 1);
       }
     })
     await resourcesCache.saveCollection(cachedCollection);
+  }
+
+  const collections = await collectionsCache.read();
+  if (collections && collections.length > 0) {
+    const collection = collections[0];
+    paths.forEach((path: IResourceLink) => {
+      const index = collection.paths.findIndex(k => k.key === path.key);
+      if (index > -1) {
+        collection.paths.splice(index, 1);
+      }
+    })
+    await collectionsCache.update(collection.id, collection);
   }
 }
 
