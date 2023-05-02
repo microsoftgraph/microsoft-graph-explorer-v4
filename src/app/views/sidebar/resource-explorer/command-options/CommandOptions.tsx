@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
-import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
+import { removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { resourceExplorerStyles } from '../resources.styles';
@@ -23,7 +23,9 @@ const CommandOptions = (props: ICommandOptions) => {
   const { version } = props;
   const theme = getTheme();
 
-  const { resources: { paths } } = useAppSelector((state) => state);
+  const { collections } = useAppSelector((state) => state);
+  const paths = collections ? collections[0].paths : [];
+
   const itemStyles = resourceExplorerStyles(theme).itemStyles;
   const commandStyles = resourceExplorerStyles(theme).commandBarStyles;
   const options: ICommandBarItemProps[] = [

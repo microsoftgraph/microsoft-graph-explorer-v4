@@ -69,8 +69,7 @@ const initialState: IResources = {
     labels: [],
     segment: ''
   },
-  error: null,
-  paths: []
+  error: null
 };
 
 const paths = [{

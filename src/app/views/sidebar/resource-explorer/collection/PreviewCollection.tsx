@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IResourceLink } from '../../../../../types/resources';
-import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
+import { removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
@@ -20,9 +20,10 @@ export interface IPathsReview {
 
 const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   const dispatch: AppDispatch = useDispatch();
-  const { resources: { paths: items } } = useAppSelector(
+  const { collections } = useAppSelector(
     (state) => state
   );
+  const items = collections ? collections[0].paths : [];
   const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
 
   const columns = [

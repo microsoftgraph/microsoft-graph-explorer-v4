@@ -4,7 +4,7 @@ import { samplesCache } from '../../modules/cache/samples.cache';
 import { saveTheme } from '../../themes/theme-utils';
 import { AppAction } from '../../types/action';
 import { IResourceLink } from '../../types/resources';
-import { addResourcePaths } from '../services/actions/resource-explorer-action-creators';
+import { addResourcePaths } from '../services/actions/collections-action-creators';
 import {
   CHANGE_THEME_SUCCESS, COLLECTION_CREATE_SUCCESS, FETCH_RESOURCES_ERROR, FETCH_RESOURCES_SUCCESS,
   RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, SAMPLES_FETCH_SUCCESS

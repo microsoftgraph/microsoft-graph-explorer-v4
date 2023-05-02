@@ -120,8 +120,7 @@ const mockState: ApplicationState = {
       labels: [],
       children: []
     },
-    error: null,
-    paths: []
+    error: null
   },
   policies: {
     pending: false,
