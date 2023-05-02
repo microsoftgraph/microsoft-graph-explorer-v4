@@ -1,7 +1,7 @@
 import {
-  CommandBar, ICommandBarItemProps, Label, PrimaryButton
+  CommandBar, DialogFooter, ICommandBarItemProps, Label, PrimaryButton
 } from '@fluentui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -18,7 +18,7 @@ export interface IPathsReview {
   version: string;
 }
 
-const PathsReview: React.FC<PopupsComponent<IPathsReview>> = () => {
+const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   const dispatch: AppDispatch = useDispatch();
   const { resources: { paths: items } } = useAppSelector(
     (state) => state
@@ -54,6 +54,12 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = () => {
     setSelectedItems(content);
   };
 
+  useEffect(() => {
+    if (items.length === 0) {
+      props.closePopup();
+    }
+  }, [items]);
+
   return (
     <>
       <Label>
@@ -65,17 +71,17 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = () => {
         primaryGroupAriaLabel='Selection actions'
         farItemsGroupAriaLabel='More selection actions'
       />
-      {items && <>
+      {items && items.length > 0 && <>
         <Paths
           resources={items}
           columns={columns}
           selectItems={selectItems}
         />
-        <div>
+        <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
           <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
             <FormattedMessage id='Download postman collection' />
           </PrimaryButton>
-        </div>
+        </DialogFooter>
       </>
       }
     </>
