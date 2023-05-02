@@ -20,10 +20,11 @@ export interface IPathsReview {
 
 const PathsReview: React.FC<PopupsComponent<IPathsReview>> = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { resources: { paths: items } } = useAppSelector(
+  const { collections } = useAppSelector(
     (state) => state
   );
   const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
+  const items = collections ? collections[0].paths : [];
 
   const columns = [
     { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true }

@@ -31,14 +31,13 @@ import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
 
 const UnstyledResourceExplorer = (props: any) => {
-  const { resources } = useAppSelector(
+  const { resources: { data, pending }, collections } = useAppSelector(
     (state) => state
   );
 
   const dispatch: AppDispatch = useDispatch();
   const classes = classNames(props);
-
-  const { data, pending, paths: selectedLinks } = resources;
+  const selectedLinks = collections ? collections[0].paths : [];
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
@@ -56,7 +55,6 @@ const UnstyledResourceExplorer = (props: any) => {
   useEffect(() => {
     setItems(navigationGroup);
   }, [filteredPayload.length]);
-
 
   const addToCollection = (item: IResourceLink) => {
     dispatch(addResourcePaths(getResourcePaths(item, version)));
