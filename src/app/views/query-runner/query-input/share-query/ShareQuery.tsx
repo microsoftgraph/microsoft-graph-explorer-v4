@@ -18,8 +18,8 @@ const ShareQuery: React.FC<PopupsComponent<null>> = (props) => {
   const sanitizedQueryUrl = sanitizeQueryUrl(query.sampleUrl);
   const shareLink = createShareLink(sampleQuery);
 
-  const handleCopy = () => {
-    copy('share-query-text');
+  const handleCopy = async () => {
+    await copy('share-query-text');
     trackCopyEvent();
   }
 
