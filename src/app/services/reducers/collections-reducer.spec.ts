@@ -77,7 +77,7 @@ const resourceLinks: IResourceLink[] = [
   }
 ];
 
-describe('Resources Reducer', () => {
+describe('Collections Reducer', () => {
   it('should return initial state', () => {
     const dummyAction = { type: 'Dummy', response: { dummy: 'Dummy' } };
     const newState = collections(initialState, dummyAction);
