@@ -1,12 +1,10 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+
 import {
   RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
 } from '../redux-constants';
-import {
-  addResourcePaths,
-  removeResourcePaths
-} from './resource-explorer-action-creators';
+import { addResourcePaths, removeResourcePaths } from './collections-action-creators';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -43,7 +41,7 @@ const paths = [
   }
 ];
 
-describe('Resource Explorer actions', () => {
+describe('Collections actions', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
