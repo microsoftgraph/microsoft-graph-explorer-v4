@@ -2,6 +2,7 @@ import {
   POPUPS, Popup, usePopupsDispatchContext,
   usePopupsStateContext
 } from '../../../services/context/popups-context';
+import ErrorBoundary from '../error-boundary/ErrorBoundary';
 import { DialogWrapper } from './DialogWrapper';
 import { ModalWrapper } from './ModalWrapper';
 import { PanelWrapper } from './PanelWrapper';
@@ -25,7 +26,7 @@ const PopupWrapper = () => {
   }
 
   return (
-    <>
+    <ErrorBoundary>
       {popups && popups.map((popup: Popup) => {
         const { component, type, popupsProps, isOpen } = popup;
         if (type === 'panel') {
@@ -60,7 +61,7 @@ const PopupWrapper = () => {
         />
 
       })}
-    </>
+    </ErrorBoundary>
   );
 };
 
