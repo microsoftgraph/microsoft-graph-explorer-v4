@@ -18,7 +18,7 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   const authenticated = authToken.token;
   const [items, setItems] = useState([]);
   const currentTheme = getTheme();
-  const { open: openThemeChooser } = usePopups('theme-chooser', 'dialog');
+  const { show: showThemeChooser } = usePopups('theme-chooser', 'dialog');
 
   useEffect(() => {
     const menuItems: any = [
@@ -45,7 +45,7 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   }, [authenticated]);
 
   const toggleThemeChooserDialogState = () => {
-    openThemeChooser({
+    showThemeChooser({
       settings: {
         title: translateMessage('Change theme')
       }

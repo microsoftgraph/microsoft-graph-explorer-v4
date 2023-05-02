@@ -1,25 +1,18 @@
 import { PopupItem, popups } from '../../views/common/registry/popups';
 import {
-  POPUPS, PopupsProps, PopupsStatus, PopupsType,
+  POPUPS, PopupsProps, PopupsType,
+  UsePopupsResponse,
   usePopupsDispatchContext, usePopupsStateContext
 } from '../context/popups-context';
 
-type OpenPopupsFn<Data> = (properties: PopupsProps<Data>) => void;
-
-interface UsePopupsResponse<Data> {
-  open: OpenPopupsFn<Data>;
-  status?: PopupsStatus;
-  result: any;
-  reference: string | null;
-}
 
 const usePopups = <Data = {}>(item: PopupItem, type: PopupsType,
-  reference: string | null = null): UsePopupsResponse<Data> => {
+  reference?: string): UsePopupsResponse<Data> => {
   const dispatch = usePopupsDispatchContext();
   const { popups: popupsState } = usePopupsStateContext();
   const current = popupsState.find(k => k.reference === reference)
 
-  function open(properties: PopupsProps<Data>) {
+  function show(properties: PopupsProps<Data>) {
 
     let component = null;
     if (typeof (item) === 'string' && popups.has(item)) {
@@ -39,7 +32,7 @@ const usePopups = <Data = {}>(item: PopupItem, type: PopupsType,
       payload
     });
   }
-  return { open, status: current?.status, result: current?.result, reference };
+  return { show, status: current?.status, result: current?.result, reference };
 }
 
 export { usePopups };

@@ -5,8 +5,8 @@ export function reducedPopups(state: PopupState = initialState, action: PopupAct
   switch (action.type) {
     case POPUPS.ADD_POPUPS: {
       let popups = [...state.popups];
-      popups = popups.filter(k => k.open);
-      payload.open = true;
+      popups = popups.filter(k => k.isOpen);
+      payload.isOpen = true;
       payload.status = 'open';
       return {
         ...state,
@@ -17,7 +17,7 @@ export function reducedPopups(state: PopupState = initialState, action: PopupAct
     case POPUPS.DELETE_POPUPS: {
       const popups = [...state.popups];
       const index = state.popups.findIndex((e) => e.id === payload.id);
-      payload.open = false;
+      payload.isOpen = false;
       popups[index] = payload;
       return {
         ...state,

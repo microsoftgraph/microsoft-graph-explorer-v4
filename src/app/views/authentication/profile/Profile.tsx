@@ -36,7 +36,7 @@ const Profile = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
   const { profile, authToken, graphExplorerMode } = useAppSelector((state) => state);
 
-  const { open: openPermissions } = usePopups('full-permissions', 'panel');
+  const { show: showPermissions } = usePopups('full-permissions', 'panel');
   const authenticated = authToken.token;
   const [isCalloutVisible, setIsCalloutVisible] = useState(false);
   const toggleIsCalloutVisible = () => { setIsCalloutVisible(!isCalloutVisible) };
@@ -75,7 +75,7 @@ const Profile = (props: any) => {
   };
 
   const changePanelState = () => {
-    openPermissions({
+    showPermissions({
       settings: {
         title: translateMessage('Permissions'),
         width: 'lg'

@@ -27,10 +27,10 @@ const PopupWrapper = () => {
   return (
     <>
       {popups && popups.map((popup: Popup) => {
-        const { component, type, popupsProps, open } = popup;
+        const { component, type, popupsProps, isOpen } = popup;
         if (type === 'panel') {
           return component && <PanelWrapper
-            isOpen={!!open}
+            isOpen={!!isOpen}
             key={popup.id}
             dismissPopup={() => dismiss(popup)}
             Component={component}
@@ -41,7 +41,7 @@ const PopupWrapper = () => {
 
         if (type === 'dialog') {
           return component && <DialogWrapper
-            isOpen={!!open}
+            isOpen={!!isOpen}
             key={popup.id}
             dismissPopup={() => dismiss(popup)}
             Component={component}
@@ -51,7 +51,7 @@ const PopupWrapper = () => {
         }
 
         return component && <ModalWrapper
-          isOpen={!!open}
+          isOpen={!!isOpen}
           key={popup.id}
           dismissPopup={() => dismiss(popup)}
           Component={component}

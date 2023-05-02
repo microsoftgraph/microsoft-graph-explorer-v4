@@ -9,7 +9,7 @@ import { shareQueryStyles } from './ShareQuery.styles';
 
 const ShareButton = () => {
 
-  const { open: openShareQuery } = usePopups('share-query', 'dialog');
+  const { show: showShareQuery } = usePopups('share-query', 'dialog');
 
   const iconProps: IIconProps = {
     iconName: 'Share'
@@ -30,7 +30,7 @@ const ShareButton = () => {
         directionalHint={DirectionalHint.leftBottomEdge}
       >
         <IconButton
-          onClick={() => openShareQuery({
+          onClick={() => showShareQuery({
             settings: {
               title: translateMessage('Share Query'),
               subtitle: translateMessage('Share Query Message')

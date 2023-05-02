@@ -22,7 +22,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const dispatch: AppDispatch = useDispatch();
   const { sampleQuery, scopes, dimensions, authToken, consentedScopes } =
     useAppSelector((state) => state);
-  const { open: openPermissions } = usePopups('full-permissions', 'panel');
+  const { show: showPermissions } = usePopups('full-permissions', 'panel');
 
   const tokenPresent = !!authToken.token;
   const { pending: loading } = scopes;
@@ -48,7 +48,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   }
 
   const openPermissionsPanel = () => {
-    openPermissions({
+    showPermissions({
       settings: {
         title: translateMessage('Permissions'),
         width: 'lg'
