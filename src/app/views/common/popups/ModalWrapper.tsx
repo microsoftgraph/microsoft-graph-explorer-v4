@@ -32,6 +32,9 @@ export function ModalWrapper(props: WrapperProps) {
             dismissPopup={() => dismissPopup()}
             closePopup={(e: any) => closePopup(e)}
           />
+          {
+            popupsProps.settings.renderFooter && popupsProps.settings.renderFooter()
+          }
         </Suspense>
       }
     </Modal>

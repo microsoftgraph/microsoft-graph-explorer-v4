@@ -32,12 +32,16 @@ export function DialogWrapper(props: WrapperProps) {
     >
       {
         <Suspense fallback={<Spinner />}>
+
           <Component
             {...popupsProps}
             data={popupsProps.data || {}}
             dismissPopup={() => dismissPopup()}
             closePopup={(e: any) => closePopup(e)}
           />
+          {
+            popupsProps.settings.renderFooter && popupsProps.settings.renderFooter()
+          }
         </Suspense>
       }
     </Dialog>

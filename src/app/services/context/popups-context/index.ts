@@ -11,6 +11,7 @@ interface PopupSettings {
   title: React.ReactNode | string;
   subtitle?: string;
   width?: width;
+  renderFooter?: () => JSX.Element;
 }
 
 export interface PopupsProps<Data = {}> {
@@ -42,15 +43,24 @@ export const POPUPS = {
   DELETE_POPUPS: 'DELETE_POPUPS'
 }
 
-export interface Popup<Data = {}> {
+interface BasePopupState {
+  status?: PopupsStatus;
+  result?: any;
+  reference?: string;
+}
+
+export interface Popup<Data = {}> extends BasePopupState {
   component: React.ElementType<PopupsComponent<Data>>,
   popupsProps: PopupsProps<Data>,
   type: PopupsType,
   id: string;
-  result?: any;
-  open?: boolean;
-  status?: PopupsStatus;
-  reference?: string;
+  isOpen?: boolean;
+}
+
+type ShowPopupsFn<Data> = (properties: PopupsProps<Data>) => void;
+
+export interface UsePopupsResponse<Data> extends BasePopupState {
+  show: ShowPopupsFn<Data>;
 }
 
 export const initialState: PopupState = {

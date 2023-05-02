@@ -17,7 +17,7 @@ interface ICommandOptions {
 
 const CommandOptions = (props: ICommandOptions) => {
   const dispatch: AppDispatch = useDispatch();
-  const { open: previewCollection } = usePopups('preview-collection', 'panel');
+  const { show: previewCollection } = usePopups('preview-collection', 'panel');
 
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const { version } = props;

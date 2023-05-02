@@ -50,6 +50,10 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
 
   useEffect(() => {
     getPermissions();
+  }, []);
+
+  useEffect(() => {
+    setConsentedStatus(tokenPresent, permissions, consentedScopes);
   }, [consentedScopes]);
 
   const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
