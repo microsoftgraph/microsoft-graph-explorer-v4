@@ -37,29 +37,24 @@ const QueryRunner = (props: any) => {
   const handleOnEditorChange = (value?: string) => {
     setSampleBody(value!);
     const query = { ...sampleQuery };
-    query.sampleBody = value;
-    dispatch(setSampleQuery(query));
+    const headers = query.sampleHeaders;
+    const contentType = headers.find(k => k.name.toLowerCase() === 'content-type');
+    if (!contentType || (contentType.value === ContentType.Json)) {
+      try {
+        query.sampleBody = JSON.parse(sampleBody);
+        dispatch(setSampleQuery(query));
+      } catch (error) {
+        dispatch(setQueryResponseStatus({
+          ok: false,
+          statusText: translateMessage('Malformed JSON body'),
+          status: `${translateMessage('Review the request body')} ${error}`,
+          messageType: MessageBarType.error
+        }));
+      }
+    }
   };
 
   const handleOnRunQuery = (query?: IQuery) => {
-    if (sampleBody) {
-      const headers = sampleQuery.sampleHeaders;
-      const contentType = headers.find(k => k.name.toLowerCase() === 'content-type');
-      if (!contentType || (contentType.value === ContentType.Json)) {
-        try {
-          sampleQuery.sampleBody = JSON.parse(sampleBody);
-        } catch (error) {
-          dispatch(setQueryResponseStatus({
-            ok: false,
-            statusText: translateMessage('Malformed JSON body'),
-            status: `${translateMessage('Review the request body')} ${error}`,
-            messageType: MessageBarType.error
-          }));
-          setSampleBody('');
-          return;
-        }
-      }
-    }
     if(query) {
       sampleQuery.sampleUrl = query.sampleUrl;
       sampleQuery.selectedVersion = query.selectedVersion;
