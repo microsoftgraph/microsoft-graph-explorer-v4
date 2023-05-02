@@ -9,7 +9,12 @@ import { collections } from './collections-reducer';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-const initialState: Collection[] = [];
+const initialState: Collection[] = [{
+  id: '1',
+  name: 'Test Collection',
+  paths: [],
+  isDefault: true
+}];
 
 const paths = [{
   key: '5-issues',
@@ -103,7 +108,7 @@ describe('Collections Reducer', () => {
   });
 
   it('should handle RESOURCEPATHS_ADD_SUCCESS and return new state with the paths', () => {
-    const newState = { ...initialState };
+    const newState = [...initialState];
     newState[0].paths = resourceLinks;
     const action_ = {
       type: RESOURCEPATHS_ADD_SUCCESS,
@@ -114,7 +119,7 @@ describe('Collections Reducer', () => {
   });
 
   it('should handle RESOURCEPATHS_DELETE_SUCCESS and return new state with no resource paths', () => {
-    const newState = { ...initialState };
+    const newState = [...initialState];
     newState[0].paths = resourceLinks;
     const action_ = {
       type: RESOURCEPATHS_DELETE_SUCCESS,
@@ -125,7 +130,7 @@ describe('Collections Reducer', () => {
   });
 
   it('should return unchanged state if no relevant action is passed', () => {
-    const newState = { ...initialState };
+    const newState = [...initialState];
     const action_ = {
       type: 'Dummy',
       response: { dummy: 'Dummy' }
