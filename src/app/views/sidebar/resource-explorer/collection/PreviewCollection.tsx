@@ -1,5 +1,5 @@
 import {
-  CommandBar, DialogFooter, ICommandBarItemProps, Label, PrimaryButton
+  CommandBar, ICommandBarItemProps, Label, PrimaryButton
 } from '@fluentui/react';
 import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -71,11 +71,11 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = () => {
           columns={columns}
           selectItems={selectItems}
         />
-        <DialogFooter>
+        <div>
           <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
             <FormattedMessage id='Download postman collection' />
           </PrimaryButton>
-        </DialogFooter>
+        </div>
       </>
       }
     </>
