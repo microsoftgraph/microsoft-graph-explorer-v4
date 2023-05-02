@@ -16,7 +16,7 @@ export function collections(state: Collection[] = initialState, action: AppActio
       return items;
 
     case RESOURCEPATHS_ADD_SUCCESS:
-      const index = 0;
+      const index = state.findIndex(k => k.isDefault);
       if (index > -1) {
         const paths: IResourceLink[] = [...state[index].paths];
         action.response.forEach((element: any) => {
@@ -32,7 +32,7 @@ export function collections(state: Collection[] = initialState, action: AppActio
       return state
 
     case RESOURCEPATHS_DELETE_SUCCESS:
-      const indexOfDefaultCollection = 0;
+      const indexOfDefaultCollection = state.findIndex(k => k.isDefault);
       if (indexOfDefaultCollection > -1) {
         const list: IResourceLink[] = [...state[indexOfDefaultCollection].paths];
         action.response.forEach((path: IResourceLink) => {

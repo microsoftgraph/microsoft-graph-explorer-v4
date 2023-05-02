@@ -22,7 +22,7 @@ const localStorageMiddleware = (store: any) => (next: any) => async (action: App
 
     case RESOURCEPATHS_ADD_SUCCESS: {
       const collections = await collectionsCache.read();
-      if (collections && collections.length > 0) {
+      if (collections.length > 0) {
         const item = collections[0];
         item.paths = action.response;
         await collectionsCache.update(item.id, item);
@@ -31,10 +31,11 @@ const localStorageMiddleware = (store: any) => (next: any) => async (action: App
     }
 
     case RESOURCEPATHS_DELETE_SUCCESS: {
+      const paths = action.response;
       const collections = await collectionsCache.read();
-      if (collections && collections.length > 0) {
+      if (collections.length > 0) {
         const collection = collections[0];
-        action.response.forEach((path: IResourceLink) => {
+        paths.forEach((path: IResourceLink) => {
           const index = collection.paths.findIndex(k => k.key === path.key);
           if (index > -1) {
             collection.paths.splice(index, 1);
@@ -46,7 +47,7 @@ const localStorageMiddleware = (store: any) => (next: any) => async (action: App
     }
 
     case COLLECTION_CREATE_SUCCESS: {
-      collectionsCache.create(action.response);
+      await collectionsCache.create(action.response);
       break;
     }
 
