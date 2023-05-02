@@ -69,7 +69,11 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
 
   useEffect(() => {
     getPermissions();
-  }, [sampleQuery, consentedScopes]);
+  }, [sampleQuery]);
+
+  useEffect(() => {
+    setConsentedStatus(tokenPresent, permissions, consentedScopes);
+  }, [consentedScopes]);
 
   useEffect(() => {
     if (tokenPresent) {
