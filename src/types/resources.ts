@@ -42,7 +42,8 @@ export enum ResourceLinkType {
 }
 
 export enum ResourceOptions {
-  ADD_TO_COLLECTION = 'add-to-collection'
+  ADD_TO_COLLECTION = 'add-to-collection',
+  REMOVE_FROM_COLLECTION = 'remove-from-collection'
 }
 
 export interface Collection {
