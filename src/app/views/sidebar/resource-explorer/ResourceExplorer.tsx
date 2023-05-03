@@ -159,6 +159,7 @@ const UnstyledResourceExplorer = (props: any) => {
             onRenderLink={(link: any) => {
               return <ResourceLink
                 link={link}
+                version={version}
                 resourceOptionSelected={(activity: string, context: unknown) =>
                   resourceOptionSelected(activity, context)}
                 classes={classes}
