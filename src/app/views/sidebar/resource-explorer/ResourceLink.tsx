@@ -108,18 +108,18 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
     <div>
       {resourceLink.isInCollection ? <TooltipHost
-        content={translateMessage('Remove from collection')}
+        content={translateMessage('remove')}
         id={removeCollectionButtonTooltip}
         calloutProps={calloutProps}
         styles={hostStyles}
       >
         <IconButton
-          ariaLabel={translateMessage('Remove from collection')}
+          ariaLabel={translateMessage('remove')}
           role='button'
           id={removeCollectionButton}
           aria-describedby={removeCollectionButtonTooltip}
           styles={iconButtonStyles}
-          menuIconProps={{ iconName: 'Cancel' }}
+          menuIconProps={{ iconName: 'BoxSubtractSolid' }}
           onClick={() => props.resourceOptionSelected(ResourceOptions.REMOVE_FROM_COLLECTION, link)}
         />
       </TooltipHost> :
