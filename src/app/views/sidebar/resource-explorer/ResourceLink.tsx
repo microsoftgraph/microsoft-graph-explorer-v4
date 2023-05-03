@@ -1,24 +1,28 @@
-import { getId, getTheme, IconButton, ITooltipHostStyles, mergeStyleSets, TooltipHost } from '@fluentui/react';
+import {
+  getId, getTheme, IconButton, INavLink,
+  ITooltipHostStyles, mergeStyleSets, TooltipHost
+} from '@fluentui/react';
 import { CSSProperties, useEffect } from 'react';
 
 import { useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { ResourceOptions } from '../../../../types/resources';
+import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
 import { existsInCollection, setExisting } from './resourcelink.utils';
 
 interface IResourceLinkProps {
-  link: any;
+  link: INavLink;
   resourceOptionSelected: Function;
   classes: any;
   version: string;
 }
 
 const ResourceLink = (props: IResourceLinkProps) => {
-  const { link, classes, version } = props;
+  const { classes, version } = props;
   const { collections } = useAppSelector(state => state);
+  const link = props.link as IResourceLink;
 
   const paths = collections?.find(k => k.isDefault)?.paths || [];
   const resourceLink = { ...link };
@@ -65,7 +69,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
   };
 
   const methodButtonStyles: CSSProperties = {
-    background: getStyleFor(resourceLink.method),
+    background: getStyleFor(resourceLink.method!),
     alignSelf: 'center',
     margin: 2,
     textTransform: 'uppercase'

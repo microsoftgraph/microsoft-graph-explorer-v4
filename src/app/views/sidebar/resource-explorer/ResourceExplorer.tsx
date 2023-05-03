@@ -164,9 +164,9 @@ const UnstyledResourceExplorer = (props: any) => {
           (<Nav
             groups={items}
             styles={navStyles}
-            onRenderLink={(link: any) => {
+            onRenderLink={link => {
               return <ResourceLink
-                link={link}
+                link={link!}
                 version={version}
                 resourceOptionSelected={(activity: string, context: unknown) =>
                   resourceOptionSelected(activity, context)}
