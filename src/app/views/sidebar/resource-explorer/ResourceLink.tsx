@@ -120,7 +120,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
           aria-describedby={removeCollectionButtonTooltip}
           styles={iconButtonStyles}
           menuIconProps={{ iconName: 'Cancel' }}
-          onClick={() => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, link)}
+          onClick={() => props.resourceOptionSelected(ResourceOptions.REMOVE_FROM_COLLECTION, link)}
         />
       </TooltipHost> :
         <TooltipHost
