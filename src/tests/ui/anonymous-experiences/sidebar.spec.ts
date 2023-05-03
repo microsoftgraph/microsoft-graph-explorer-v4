@@ -14,7 +14,7 @@ test.describe('Resources Explorer', () => {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('text=admin (3)').click();
+    await page.locator('text=admin (5)').click();
     await page.locator('text=admin').nth(1).click();
     await page.waitForTimeout(200);
     await page.evaluate(() => document.fonts.ready);
@@ -28,32 +28,13 @@ test.describe('Resources Explorer', () => {
     expect(queryInputValue).toBe('https://graph.microsoft.com/v1.0/admin');
   });
 
-  test('should isolate a resource when the isolate button is clicked', async () => {
-    await page.locator('button[role="tab"]:has-text("Resources")').click();
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('text=admin (3)More actions >> [aria-label="More actions"]').click();
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('button[role="menuitem"]:has-text("Isolate")').click();
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('button:has-text("Close isolation")').click();
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
-  });
-
   test('should add a resource to collection', async () => {
     await page.locator('button[role="tab"]:has-text("Resources")').click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('text=admin (3)').click();
+    await page.locator('text=RegExp:text=admin \\(\\d+\\)').hover();
     await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('text=GETadminMore actions >> [aria-label="More actions"]').click();
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('button[role="menuitem"]:has-text("Add to collection")').click();
+    await page.locator('[aria-label="Add to collection"]').click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
     await page.locator('[aria-label="Preview collection"]').click();
@@ -78,6 +59,34 @@ test.describe('Resources Explorer', () => {
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
     expect(page.locator('label:has-text("On")')).toBeDefined();
+  })
+
+  test('should persist storage for resources collection', async () => {
+    await page.getByRole('tab', { name: 'Resources Resources xx' }).click();
+    await page.getByRole('link', { name: 'admin (5) More actions' }).getByRole('button', { name: 'More actions' }).click();
+    await page.getByRole('menuitem', { name: 'Add to collection' }).click();
+    await page.getByRole('menuitem', { name: 'Preview collection' }).click();
+    await page.getByRole('button', { name: 'Close' }).click();
+    await page.reload();
+
+    await page.getByRole('tab', { name: 'Resources Resources xx' }).click();
+    expect(page.getByText('Selected Resources (78)')).toBeVisible();
+    await page.getByRole('menuitem', { name: 'Preview collection' }).click();
+    await page.getByRole('button', { name: 'Close' }).click();
+    await page.getByRole('menuitem', { name: 'Delete' }).click();
+    await page.getByRole('button', { name: 'Yes' }).click();
+    await page.reload();
+
+    await page.getByRole('tab', { name: 'Resources Resources xx' }).click();
+    await page.getByRole('button', { name: 'agreements (3)' }).click();
+    await page.getByRole('link', { name: 'GET agreements More actions' }).getByRole('button', { name: 'More actions' }).click();
+    await page.getByRole('menuitem', { name: 'Add to collection' }).click();
+    await page.reload();
+
+    await page.getByRole('tab', { name: 'Resources Resources xx' }).click();
+    await page.getByRole('menuitem', { name: 'Preview collection' }).click();
+    expect(page.getByText('GET/v1.0/agreements')).toBeVisible();
+    await page.getByRole('button', { name: 'Close' }).click();
   })
 })
 

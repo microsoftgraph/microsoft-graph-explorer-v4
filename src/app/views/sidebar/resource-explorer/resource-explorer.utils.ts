@@ -1,10 +1,7 @@
 import { INavLink, INavLinkGroup } from '@fluentui/react';
 
 import {
-  IResource,
-  IResourceLabel,
-  IResourceLink,
-  ResourceLinkType
+  IResource, IResourceLabel, IResourceLink, Method, ResourceLinkType, ResourceMethod
 } from '../../../../types/resources';
 import { versionExists } from '../../../utils/resources/resources-filter';
 
@@ -32,7 +29,7 @@ export function createResourcesList(
   function getVersionedChildLinks(
     parent: IResource,
     paths: string[],
-    methods: string[]
+    methods: Method[]
   ): IResourceLink[] {
     const { segment, children } = parent;
     const links: IResourceLink[] = [];
@@ -52,7 +49,7 @@ export function createResourcesList(
               },
               segment,
               childPaths,
-              method.toUpperCase()
+              method
             )
           );
         });
@@ -84,14 +81,14 @@ export function createResourcesList(
     info: IResource,
     parent: string,
     paths: string[] = [],
-    method?: string
+    method?: Method
   ): IResourceLink {
     const { segment, labels } = info;
     const level = paths.length;
     const parentKeyPart = parent === '/' ? 'root' : parent;
     const methodKeyPart = method ? `-${method?.toLowerCase()}` : '';
     const key = `${level}-${parentKeyPart}-${segment}${methodKeyPart}`;
-    const availableMethods = getAvailableMethods(labels, version);
+    const availableMethods: Method[] = getAvailableMethods(labels, version);
     const versionedChildren = getVersionedChildLinks(
       info,
       paths,
@@ -101,7 +98,7 @@ export function createResourcesList(
     // if segment has one method only and no children, do not make segment a node
     if (availableMethods.length === 1 && versionedChildren.length === 0) {
       paths = [...paths, segment];
-      method = availableMethods[0].toUpperCase();
+      method = availableMethods[0];
     }
     const type = getLinkType({ ...info, links: versionedChildren });
     const enclosedCounter =
@@ -116,6 +113,8 @@ export function createResourcesList(
         ? true
         : false;
 
+    const docLink = getLink(labels, version, method);
+
     return {
       key,
       url: key,
@@ -127,7 +126,8 @@ export function createResourcesList(
       paths,
       method,
       type,
-      links: versionedChildren
+      links: versionedChildren,
+      docLink
     };
   }
 
@@ -145,6 +145,22 @@ export function createResourcesList(
       links: navLink.links
     }
   ];
+}
+
+function getLink(labels: IResourceLabel[], version: string, method?: Method) {
+  let docLink = '';
+  if (labels && labels.length > 0 && !!method) {
+    const label = labels.find((l) => l.name === version);
+    if (label) {
+      let methods = label.methods;
+      if ((typeof methods[0] !== 'string')) {
+        methods = methods as ResourceMethod[];
+        docLink = methods.find((value: ResourceMethod) =>
+          value.name?.toLowerCase() === method.toLowerCase())?.documentationUrl!;
+      }
+    }
+  }
+  return docLink;
 }
 
 export function getCurrentTree({
@@ -175,11 +191,25 @@ export function removeCounter(title: string): string {
 export function getAvailableMethods(
   labels: IResourceLabel[],
   version: string
-): string[] {
-  const current = labels.find(
+): Method[] {
+  const methods: Method[] = [];
+  const resourceLabel = labels.find(
     (label: IResourceLabel) => label.name === version
-  );
-  return current ? current.methods : [];
+  )!;
+  if (resourceLabel && resourceLabel.methods) {
+    resourceLabel.methods.forEach(method => {
+      methods.push(getMethod(method));
+    });
+  }
+  return methods;
+}
+
+function getMethod(method: string | ResourceMethod): Method {
+  // added to guarantee backwards compatibility with old method definitions
+  if (typeof method === 'string') {
+    return method as Method;
+  }
+  return method.name;
 }
 
 export function getUrlFromLink(link: IResourceLink | INavLink): string {
