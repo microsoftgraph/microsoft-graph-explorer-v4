@@ -1,5 +1,5 @@
 import { IDropdownOption, MessageBarType } from '@fluentui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -23,6 +23,12 @@ const QueryRunner = (props: any) => {
 
   const [sampleBody, setSampleBody] = useState('');
 
+  useEffect(() => {
+    const query = { ...sampleQuery };
+    query.sampleBody = sampleBody;
+    dispatch(setSampleQuery(query));
+  }, [sampleBody])
+
   const handleOnMethodChange = (method?: IDropdownOption) => {
     const query = { ...sampleQuery };
     if (method !== undefined) {
@@ -36,22 +42,6 @@ const QueryRunner = (props: any) => {
 
   const handleOnEditorChange = (value?: string) => {
     setSampleBody(value!);
-    const query = { ...sampleQuery };
-    const headers = query.sampleHeaders;
-    const contentType = headers.find(k => k.name.toLowerCase() === 'content-type');
-    if (!contentType || (contentType.value === ContentType.Json)) {
-      try {
-        query.sampleBody = JSON.parse(sampleBody);
-        dispatch(setSampleQuery(query));
-      } catch (error) {
-        dispatch(setQueryResponseStatus({
-          ok: false,
-          statusText: translateMessage('Malformed JSON body'),
-          status: `${translateMessage('Review the request body')} ${error}`,
-          messageType: MessageBarType.error
-        }));
-      }
-    }
   };
 
   const handleOnRunQuery = (query?: IQuery) => {
@@ -60,6 +50,27 @@ const QueryRunner = (props: any) => {
       sampleQuery.selectedVersion = query.selectedVersion;
       sampleQuery.selectedVerb = query.selectedVerb;
     }
+
+    if (sampleBody) {
+      const headers = sampleQuery.sampleHeaders;
+      const contentType = headers.find(k => k.name.toLowerCase() === 'content-type');
+      if (!contentType || (contentType.value === ContentType.Json)) {
+        try {
+          sampleQuery.sampleBody = JSON.parse(sampleBody);
+        } catch (error) {
+          dispatch(setQueryResponseStatus({
+            ok: false,
+            statusText: translateMessage('Malformed JSON body'),
+            status: `${translateMessage('Review the request body')} ${error}`,
+            messageType: MessageBarType.error
+          }));
+          return;
+        }
+      } else {
+        sampleQuery.sampleBody = sampleBody;
+      }
+    }
+
 
     dispatch(runQuery(sampleQuery));
     const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
@@ -71,7 +82,6 @@ const QueryRunner = (props: any) => {
         QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
         ...deviceCharacteristics
       });
-    setSampleBody('');
   };
 
   const handleOnVersionChange = (urlVersion?: IDropdownOption) => {
