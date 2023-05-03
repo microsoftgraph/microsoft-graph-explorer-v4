@@ -13,7 +13,7 @@ import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { IResource, IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
-import { addResourcePaths } from '../../../services/actions/collections-action-creators';
+import { addResourcePaths, removeResourcePaths } from '../../../services/actions/collections-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
@@ -60,6 +60,10 @@ const UnstyledResourceExplorer = (props: any) => {
     dispatch(addResourcePaths(getResourcePaths(item, version)));
   }
 
+  const removeFromCollection = (item: IResourceLink) => {
+    dispatch(removeResourcePaths(getResourcePaths(item, version)));
+  }
+
   const changeVersion = (_event: React.MouseEvent<HTMLElement>, checked?: boolean | undefined): void => {
     const selectedVersion = checked ? versions[1].key : versions[0].key;
     setVersion(selectedVersion);
@@ -84,6 +88,10 @@ const UnstyledResourceExplorer = (props: any) => {
   const resourceOptionSelected = (activity: string, context: any) => {
     if (activity === ResourceOptions.ADD_TO_COLLECTION) {
       addToCollection(context);
+    }
+
+    if (activity === ResourceOptions.REMOVE_FROM_COLLECTION) {
+      removeFromCollection(context);
     }
   }
 
@@ -156,9 +164,10 @@ const UnstyledResourceExplorer = (props: any) => {
           (<Nav
             groups={items}
             styles={navStyles}
-            onRenderLink={(link: any) => {
+            onRenderLink={link => {
               return <ResourceLink
-                link={link}
+                link={link!}
+                version={version}
                 resourceOptionSelected={(activity: string, context: unknown) =>
                   resourceOptionSelected(activity, context)}
                 classes={classes}
