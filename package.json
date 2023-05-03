@@ -95,7 +95,7 @@
                 "@testing-library/react": "13.4.0",
                 "@testing-library/user-event": "14.4.3",
                 "@types/chromedriver": "81.0.1",
-                "@types/enzyme": "3.10.12",
+                "@types/enzyme": "3.10.13",
                 "@types/enzyme-adapter-react-16": "1.0.6",
                 "@types/isomorphic-fetch": "0.0.36",
                 "@types/jest": "27.4.1",
