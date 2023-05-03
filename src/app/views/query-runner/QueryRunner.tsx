@@ -24,9 +24,11 @@ const QueryRunner = (props: any) => {
   const [sampleBody, setSampleBody] = useState('');
 
   useEffect(() => {
-    const query = { ...sampleQuery };
-    query.sampleBody = sampleBody;
-    dispatch(setSampleQuery(query));
+    if(sampleQuery.selectedVerb !== 'GET') {
+      const query = { ...sampleQuery };
+      query.sampleBody = sampleBody;
+      dispatch(setSampleQuery(query));
+    }
   }, [sampleBody])
 
   const handleOnMethodChange = (method?: IDropdownOption) => {
@@ -45,13 +47,7 @@ const QueryRunner = (props: any) => {
   };
 
   const handleOnRunQuery = (query?: IQuery) => {
-    if(query) {
-      sampleQuery.sampleUrl = query.sampleUrl;
-      sampleQuery.selectedVersion = query.selectedVersion;
-      sampleQuery.selectedVerb = query.selectedVerb;
-    }
-
-    if (sampleBody) {
+    if (sampleBody && sampleQuery.selectedVerb !== 'GET') {
       const headers = sampleQuery.sampleHeaders;
       const contentType = headers.find(k => k.name.toLowerCase() === 'content-type');
       if (!contentType || (contentType.value === ContentType.Json)) {
@@ -71,6 +67,11 @@ const QueryRunner = (props: any) => {
       }
     }
 
+    if (query) {
+      sampleQuery.sampleUrl = query.sampleUrl;
+      sampleQuery.selectedVersion = query.selectedVersion;
+      sampleQuery.selectedVerb = query.selectedVerb;
+    }
 
     dispatch(runQuery(sampleQuery));
     const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
