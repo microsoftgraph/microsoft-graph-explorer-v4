@@ -134,8 +134,5 @@
                 "reportPath": "reports",
                 "reportFile": "test-report.xml",
                 "indent": 4
-        },
-        "resolutions": {
-                "@types/react": "17.0.44"
         }
 }
