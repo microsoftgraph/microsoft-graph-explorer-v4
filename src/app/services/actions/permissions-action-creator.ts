@@ -112,15 +112,17 @@ export function revokeScopesError(): AppAction {
   }
 }
 
-export function fetchScopes() {
+type ScopesFetchType = 'full' | 'query';
+
+export function fetchScopes(scopesFetchType: ScopesFetchType = 'full') {
   return async (dispatch: Function, getState: Function) => {
     try {
-      const { devxApi, permissionsPanelOpen, profile, sampleQuery: query }: ApplicationState = getState();
+      const { devxApi, profile, sampleQuery: query }: ApplicationState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
 
       const scopeType = getPermissionsScopeType(profile);
 
-      if (!permissionsPanelOpen) {
+      if (scopesFetchType === 'query') {
         const signature = sanitizeQueryUrl(query.sampleUrl);
         const { requestUrl, sampleUrl } = parseSampleUrl(signature);
 
@@ -142,7 +144,7 @@ export function fetchScopes() {
       };
 
       const options: IRequestOptions = { headers };
-      if (permissionsPanelOpen) {
+      if (scopesFetchType === 'full') {
         dispatch(fetchFullScopesPending());
       } else {
         dispatch(fetchUrlScopesPending());
@@ -151,7 +153,8 @@ export function fetchScopes() {
       const response = await fetch(permissionsUrl, options);
       if (response.ok) {
         const scopes = await response.json();
-        return permissionsPanelOpen ? dispatch(fetchFullScopesSuccess({
+
+        return scopesFetchType === 'full' ? dispatch(fetchFullScopesSuccess({
           scopes: { fullPermissions: scopes }
         })) :
           dispatch(fetchUrlScopesSuccess({

@@ -13,8 +13,8 @@ import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { IResource, IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
+import { addResourcePaths } from '../../../services/actions/collections-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { addResourcePaths } from '../../../services/actions/resource-explorer-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
@@ -31,14 +31,13 @@ import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
 
 const UnstyledResourceExplorer = (props: any) => {
-  const { resources } = useAppSelector(
+  const { resources: { data, pending }, collections } = useAppSelector(
     (state) => state
   );
 
   const dispatch: AppDispatch = useDispatch();
   const classes = classNames(props);
-
-  const { data, pending, paths: selectedLinks } = resources;
+  const selectedLinks = collections ? collections.find(k => k.isDefault)!.paths : [];
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
@@ -56,7 +55,6 @@ const UnstyledResourceExplorer = (props: any) => {
   useEffect(() => {
     setItems(navigationGroup);
   }, [filteredPayload.length]);
-
 
   const addToCollection = (item: IResourceLink) => {
     dispatch(addResourcePaths(getResourcePaths(item, version)));
