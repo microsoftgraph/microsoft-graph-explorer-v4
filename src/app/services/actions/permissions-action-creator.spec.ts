@@ -34,7 +34,6 @@ const mockState: ApplicationState = {
     baseUrl: 'https://graph.microsoft.com/v1.0/me',
     parameters: '$count=true'
   },
-  permissionsPanelOpen: true,
   profile: {
     id: '123',
     displayName: 'test',
@@ -121,8 +120,7 @@ const mockState: ApplicationState = {
       labels: [],
       children: []
     },
-    error: null,
-    paths: []
+    error: null
   },
   policies: {
     pending: false,
