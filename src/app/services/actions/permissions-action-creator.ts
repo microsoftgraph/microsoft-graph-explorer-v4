@@ -359,6 +359,7 @@ const trackRevokeConsentEvent = (status: string, permissionObject: any) => {
 
 export function fetchAllPrincipalGrants() {
   return async (dispatch: Function, getState: Function) => {
+    dispatch(getAllPrincipalGrantsPending(true));
     try {
       const { profile, consentedScopes, scopes } = getState();
       const tenantWideGrant: IOAuthGrantPayload = scopes.data.tenantWidePermissionsGrant;
@@ -372,6 +373,7 @@ export function fetchAllPrincipalGrants() {
           consentedScopes, profile, requestCounter, dispatch);
       }
       else{
+        dispatch(getAllPrincipalGrantsPending(false));
         dispatchScopesStatus(dispatch, 'Permissions', 'You require the following permissions to read', 0)
       }
     } catch (error: any) {
