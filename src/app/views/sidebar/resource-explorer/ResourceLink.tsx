@@ -93,6 +93,18 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   setExisting(resourceLink, existsInCollection(link, paths, version));
 
+  const handleAddToCollectionClick = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+    props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, link);
+  }
+
+  const handleRemoveFromCollectionClick = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+    props.resourceOptionSelected(ResourceOptions.REMOVE_FROM_COLLECTION, link);
+  }
+
   return <span className={linkStyle.link} tabIndex={0}>
     {resourceLink.method &&
       <span className={classes.badge} style={methodButtonStyles}>
@@ -120,7 +132,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
           aria-describedby={removeCollectionButtonTooltip}
           styles={iconButtonStyles}
           menuIconProps={{ iconName: 'BoxSubtractSolid' }}
-          onClick={() => props.resourceOptionSelected(ResourceOptions.REMOVE_FROM_COLLECTION, link)}
+          onClick={handleRemoveFromCollectionClick}
         />
       </TooltipHost> :
         <TooltipHost
@@ -136,7 +148,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
             aria-describedby={tooltipId}
             styles={iconButtonStyles}
             menuIconProps={{ iconName: 'BoxAdditionSolid' }}
-            onClick={() => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, link)}
+            onClick={handleAddToCollectionClick}
           />
         </TooltipHost>}
 
