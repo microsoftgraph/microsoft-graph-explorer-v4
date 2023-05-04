@@ -35,6 +35,7 @@ pr:
 variables:
   isMaster: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
   isDev: $[eq(variables['Build.SourceBranch'], 'refs/heads/dev')]
+  isFeature: $[eq(variables['Build.SourceBranch'], 'refs/heads/feature/test-release')]
 
 trigger:
   branches:
@@ -151,7 +152,7 @@ jobs:
   - job: Three
     displayName: "Publish artifacts"
     dependsOn: One
-    condition: and(succeeded(), or(eq(variables['isMaster'], 'true'), eq(variables['isDev'], 'true')))
+    condition: and(succeeded(), or(eq(variables['isMaster'], 'true'), eq(variables['isDev'], 'true'), eq(variables['isFeature'], 'true')))
     steps:
       - task: NodeTool@0
         inputs:
@@ -188,7 +189,7 @@ jobs:
 
       - script: |
           npm run build
-        condition: and(succeeded(), eq(variables['isMaster'], 'true'))
+        condition: and(succeeded(), eq(variables['isMaster'], 'true'), eq(variables['isFeature'], 'true'))
         env:
           REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
           REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
