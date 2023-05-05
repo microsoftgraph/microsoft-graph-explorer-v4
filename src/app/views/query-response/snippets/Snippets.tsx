@@ -28,7 +28,11 @@ function GetSnippets() {
     'JavaScript': {
       sdkDownloadLink: 'https://aka.ms/graphjssdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
-    }
+    },
+    'Python': {
+      sdkDownloadLink: 'https://aka.ms/msgraphpythonsdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
   };
 
   const handlePivotItemClick = (pivotItem?: PivotItem) => {
