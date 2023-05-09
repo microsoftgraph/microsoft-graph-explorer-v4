@@ -37,7 +37,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const classes = classNames(classProps);
   const theme = getTheme();
   const { tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
-  const tabHeight = convertVhToPx(dimensions.request.height, 110);
+  const tabHeight =  '100%' //convertVhToPx(dimensions.request.height, 110);
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
@@ -128,7 +128,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   }
 
   return (
-    <>
+    <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
       <Label className={classes.permissionLength} style={{ paddingLeft: '12px' }}>
         <FormattedMessage id='Permissions' />
       </Label>
@@ -144,12 +144,12 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
           }
         }
         }
-        onMouseLeave={() => setIsScreenSizeReduced(false)}>
+        onMouseLeave={() => setIsScreenSizeReduced(false)}
+        style={{ flex: 1, backgroundColor: 'red'}}
+      >
         <DetailsList
-          styles={!isScreenSizeReduced ? {
-            root:
-              { maxHeight: tabHeight, overflowX: 'hidden' }
-          } : { root: { maxHeight: tabHeight } }}
+          styles={{ root: { height: tabHeight, overflowY: 'auto' },
+            contentWrapper: {height: '100%'}, focusZone: {height: '100%'}}}
           items={permissions}
           columns={getColumns('tab', tokenPresent)}
           onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
@@ -159,6 +159,6 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
       </div>
-    </>
+    </div>
   );
 }
