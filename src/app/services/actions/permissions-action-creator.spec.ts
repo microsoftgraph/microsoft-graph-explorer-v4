@@ -288,8 +288,7 @@ describe('Permissions action creators', () => {
     // @ts-ignore
     return store_.dispatch(consentToScopes())
       // @ts-ignore
-      .then((stuff) => {
-        console.log('Here is the stuff', store_.getActions());
+      .then(() => {
         expect(store_.getActions()).toEqual(expectedAction);
       });
   });
