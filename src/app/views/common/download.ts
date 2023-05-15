@@ -1,5 +1,3 @@
-import { telemetry, eventTypes, componentNames } from '../../../telemetry';
-
 export function downloadToLocal(content: any, filename: string) {
   const blob = new Blob([JSON.stringify(content, null, 4)], {
     type: 'text/json'

@@ -1,4 +1,3 @@
-import { FolderQueryIcon } from '@fluentui/react-icons-mdl2';
 import { APIManifest, ManifestRequest } from '../../../../../types/api-manifest';
 import { IResourceLink, Method } from '../../../../../types/resources';
 import { GRAPH_BETA_DESCRIPTION_URL, GRAPH_URL, GRAPH_V1_DESCRIPTION_URL } from '../../../../services/graph-constants';
