@@ -1,5 +1,6 @@
 import {
-  CommandBar, DefaultButton, DialogFooter, ICommandBarItemProps, Label, PrimaryButton
+  CommandBar, DefaultButton, DialogFooter, ICommandBarItemProps, Icon,
+  Label, PrimaryButton
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -10,10 +11,10 @@ import { componentNames, eventTypes, telemetry } from '../../../../../telemetry'
 import { IResourceLink } from '../../../../../types/resources';
 import { removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { PopupsComponent } from '../../../../services/context/popups-context';
+import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
 import Paths from './Paths';
-import { generateAPIManifest } from './api-manifest.util';
 import { generatePostmanCollection } from './postman.util';
 
 export interface IPathsReview {
@@ -22,6 +23,7 @@ export interface IPathsReview {
 
 const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   const dispatch: AppDispatch = useDispatch();
+  const { show: showManifestDescription } = usePopups('manifest-description', 'panel')
   const { collections } = useAppSelector(
     (state) => state
   );
@@ -37,13 +39,6 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     const filename = `${content.info.name}-${content.info._postman_id}.postman_collection.json`;
     downloadToLocal(content, filename);
     trackDownload(filename, componentNames.DOWNLOAD_POSTMAN_COLLECTION_BUTTON);
-  }
-
-  const generateManifest = () => {
-    const manifest = generateAPIManifest(items);
-    const filename = `${manifest.publisher.name}-API-Manifest.json`;
-    downloadToLocal(manifest, filename);
-    trackDownload(filename, componentNames.DOWNLOAD_API_MANIFEST_BUTTON);
   }
 
   function trackDownload(filename: string, componentName: string) {
@@ -99,8 +94,16 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
           <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
             <FormattedMessage id='Download postman collection' />
           </PrimaryButton>
-          <DefaultButton onClick={generateManifest} disabled={selectedItems.length > 0}>
-            <FormattedMessage id='Generate API client' />
+          <DefaultButton onClick={() => showManifestDescription({
+            settings: {
+              title: translateMessage('Download an API manifest')
+            }
+          })} disabled={selectedItems.length > 0}>
+            <Icon
+              style={{ marginRight: 10 }}
+              aria-label={translateMessage('Describes the API Manifest before you can download')}
+              iconName='Info'></Icon>
+            <FormattedMessage id='API Manifest' />
           </DefaultButton>
         </DialogFooter>
       </>

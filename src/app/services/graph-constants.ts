@@ -36,3 +36,5 @@ export const GRAPH_BETA_DESCRIPTION_URL =
   'https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/beta/openapi.yaml';
 export const GRAPH_V1_DESCRIPTION_URL =
   'https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/v1.0/openapi.yaml';
+export const API_MANIFEST_SPEC_PAGE =
+  'https://darrelmiller.github.io/api-manifest/draft-miller-api-manifest.html#name-publisher-object';
