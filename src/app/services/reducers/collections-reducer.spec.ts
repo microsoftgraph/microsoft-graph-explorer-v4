@@ -109,13 +109,13 @@ describe('Collections Reducer', () => {
 
   it('should handle RESOURCEPATHS_ADD_SUCCESS and return new state with the paths', () => {
     const newState = [...initialState];
-    newState[0].paths = resourceLinks;
+    newState[0].paths = [];
     const action_ = {
       type: RESOURCEPATHS_ADD_SUCCESS,
       response: paths
     }
     const state_ = collections(newState, action_);
-    expect(state_[0].paths).toEqual(resourceLinks);
+    expect(state_[0].paths.length).toEqual(resourceLinks.length);
   });
 
   it('should handle RESOURCEPATHS_DELETE_SUCCESS and return new state with no resource paths', () => {

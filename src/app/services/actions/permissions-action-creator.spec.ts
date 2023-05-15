@@ -265,10 +265,7 @@ describe('Permissions action creators', () => {
       correlationId: 'string'
     })
     const expectedAction: any = [
-      {
-        type: 'GET_AUTH_TOKEN_SUCCESS',
-        response: true
-      },
+      { type: 'GET_AUTH_TOKEN_SUCCESS', response: true },
       {
         type: 'GET_CONSENTED_SCOPES_SUCCESS',
         response: ['profile.Read User.Read']
@@ -281,7 +278,8 @@ describe('Permissions action creators', () => {
           ok: true,
           messageType: 4
         }
-      }
+      },
+      { type: 'GET_ALL_PRINCIPAL_GRANTS_PENDING', response: true }
     ];
 
     const store_ = mockStore(mockState);
