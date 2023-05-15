@@ -124,13 +124,13 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
     <div>
       {resourceLink.isInCollection ? <TooltipHost
-        content={translateMessage('remove')}
+        content={translateMessage('Remove from collection')}
         id={removeCollectionButtonTooltip}
         calloutProps={calloutProps}
         styles={hostStyles}
       >
         <IconButton
-          ariaLabel={translateMessage('remove')}
+          ariaLabel={translateMessage('Remove from collection')}
           role='button'
           id={removeCollectionButton}
           aria-describedby={removeCollectionButtonTooltip}

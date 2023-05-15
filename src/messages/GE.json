@@ -481,5 +481,6 @@
   "An error occured during the revoking process": "An error occured during the revoking process. Click the Unconsent button to retry the request",
   "Retrying": "Retrying",
   "You require the following permissions to read": "You require Directory.Read.All or Directory.ReadWrite.All or DelegatedPermissionGrant.ReadWrite.All to read permission grants for your tenant",
-  "We are retrying the revoking operation": "An error occurred during the revoking process. We are retrying the revoking operation"
+  "We are retrying the revoking operation": "An error occurred during the revoking process. We are retrying the revoking operation",
+  "Remove from collection": "Remove from collection"
 }

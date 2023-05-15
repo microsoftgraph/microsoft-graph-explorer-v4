@@ -18,13 +18,9 @@ export function collections(state: Collection[] = initialState, action: AppActio
     case RESOURCEPATHS_ADD_SUCCESS:
       const index = state.findIndex(k => k.isDefault);
       if (index > -1) {
-        const paths: IResourceLink[] = [...state[index].paths];
-        action.response.forEach((element: any) => {
-          const exists = !!paths.find(k => k.key === element.key);
-          if (!exists) {
-            paths.push(element);
-          }
-        });
+        const paths: IResourceLink[] = Array.from(
+          new Set([...state[index].paths, ...action.response])
+        );
         const context = [...state];
         context[index].paths = paths;
         return context;
