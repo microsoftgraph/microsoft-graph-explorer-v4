@@ -248,9 +248,9 @@ export function revokeScopes(permissionToRevoke: string) {
     const { consentedScopes, profile } = getState();
     const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
     const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
-    const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
     dispatch(revokeScopesPending());
     dispatchScopesStatus(dispatch, 'Please wait while we revoke this permission', 'Revoking ', 0);
+    const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
 
     if (!consentedScopes || consentedScopes.length === 0) {
       dispatch(revokeScopesError());
@@ -359,6 +359,7 @@ const trackRevokeConsentEvent = (status: string, permissionObject: any) => {
 
 export function fetchAllPrincipalGrants() {
   return async (dispatch: Function, getState: Function) => {
+    dispatch(getAllPrincipalGrantsPending(true));
     try {
       const { profile, consentedScopes, scopes } = getState();
       const tenantWideGrant: IOAuthGrantPayload = scopes.data.tenantWidePermissionsGrant;
@@ -372,6 +373,7 @@ export function fetchAllPrincipalGrants() {
           consentedScopes, profile, requestCounter, dispatch);
       }
       else{
+        dispatch(getAllPrincipalGrantsPending(false));
         dispatchScopesStatus(dispatch, 'Permissions', 'You require the following permissions to read', 0)
       }
     } catch (error: any) {
