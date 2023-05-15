@@ -107,3 +107,4 @@ export const GET_ADAPTIVE_CARD_ACTION = 'Get adaptive card action';
 export const FETCH_PERMISSIONS_ACTION = 'Fetch permissions action';
 export const MONACO_EDITOR_FORMAT_JSON_ACTION = 'Monaco editor format JSON action';
 export const LAUNCH_FEEDBACK_POPUP_ACTION = 'Launch feedback popup action';
+export const DOWNLOAD_API_MANIFEST_BUTTON = 'Download api manifest button';

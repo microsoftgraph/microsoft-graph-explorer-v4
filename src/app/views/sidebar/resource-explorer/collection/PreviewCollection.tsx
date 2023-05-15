@@ -1,17 +1,19 @@
 import {
-  CommandBar, DialogFooter, ICommandBarItemProps, Label, PrimaryButton
+  CommandBar, DefaultButton, DialogFooter, ICommandBarItemProps, Label, PrimaryButton
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
+import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IResourceLink } from '../../../../../types/resources';
 import { removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
 import Paths from './Paths';
+import { generateAPIManifest } from './api-manifest.util';
 import { generatePostmanCollection } from './postman.util';
 
 export interface IPathsReview {
@@ -34,6 +36,21 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     const content = generatePostmanCollection(items);
     const filename = `${content.info.name}-${content.info._postman_id}.postman_collection.json`;
     downloadToLocal(content, filename);
+    trackDownload(filename, componentNames.DOWNLOAD_POSTMAN_COLLECTION_BUTTON);
+  }
+
+  const generateManifest = () => {
+    const manifest = generateAPIManifest(items);
+    const filename = `${manifest.publisher.name}-API-Manifest.json`;
+    downloadToLocal(manifest, filename);
+    trackDownload(filename, componentNames.DOWNLOAD_API_MANIFEST_BUTTON);
+  }
+
+  function trackDownload(filename: string, componentName: string) {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      componentName,
+      filename
+    });
   }
 
   const removeSelectedItems = () => {
@@ -82,6 +99,9 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
           <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
             <FormattedMessage id='Download postman collection' />
           </PrimaryButton>
+          <DefaultButton onClick={generateManifest} disabled={selectedItems.length > 0}>
+            <FormattedMessage id='Generate API client' />
+          </DefaultButton>
         </DialogFooter>
       </>
       }

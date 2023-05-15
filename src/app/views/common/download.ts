@@ -5,7 +5,6 @@ export function downloadToLocal(content: any, filename: string) {
     type: 'text/json'
   });
   download(blob, filename);
-  trackDownload(filename);
 }
 
 function download(blob: Blob, filename: string) {
@@ -15,11 +14,4 @@ function download(blob: Blob, filename: string) {
   document.body.appendChild(elem);
   elem.click();
   document.body.removeChild(elem);
-}
-
-function trackDownload(filename: string) {
-  telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-    ComponentName: componentNames.DOWNLOAD_POSTMAN_COLLECTION_BUTTON,
-    filename
-  });
 }
