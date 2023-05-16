@@ -130,7 +130,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   }
 
   return (
-    <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+    <div style={{ height: tabHeight, display: 'flex', flexDirection: 'column' }}>
       <Label className={classes.permissionLength} style={{ paddingLeft: '12px' }}>
         <FormattedMessage id='Permissions' />
       </Label>
