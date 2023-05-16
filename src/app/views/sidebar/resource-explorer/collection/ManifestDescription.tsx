@@ -13,33 +13,33 @@ import { API_MANIFEST_SPEC_PAGE } from '../../../../services/graph-constants';
 import { downloadToLocal } from '../../../common/download';
 import { generateAPIManifest } from './api-manifest.util';
 
-const manifestStyle = mergeStyleSets(
-  {
-    root: {
-      lineHeight: 'normal', width: '100%',
-      h3: {
-        fontSize: FontSizes.size16,
-        fontWeight: FontWeights.semibold
-      }
-    },
-    steps: {
-      background: getTheme().palette.neutralLighter,
-      margin: 5,
-      padding: 5,
-      ul: {
-        listStyleType: 'circle',
-        marginLeft: 18
-      },
-      code: {
-        background: getTheme().palette.neutralLight,
-        marginLeft: 2,
-        FontStyle: 'italic'
-      }
-    }
-  }
-);
 
 const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
+  const manifestStyle = mergeStyleSets(
+    {
+      root: {
+        lineHeight: 'normal', width: '100%',
+        h3: {
+          fontSize: FontSizes.size16,
+          fontWeight: FontWeights.semibold
+        }
+      },
+      steps: {
+        background: getTheme().palette.neutralLighter,
+        margin: 5,
+        padding: 5,
+        ul: {
+          listStyleType: 'circle',
+          marginLeft: 18
+        },
+        code: {
+          background: getTheme().palette.neutralLight,
+          marginLeft: 2,
+          FontStyle: 'italic'
+        }
+      }
+    }
+  );
   const { collections } = useAppSelector(
     (state) => state
   );
