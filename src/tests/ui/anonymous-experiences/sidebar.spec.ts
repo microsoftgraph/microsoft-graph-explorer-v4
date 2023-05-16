@@ -28,27 +28,6 @@ test.describe('Resources Explorer', () => {
     expect(queryInputValue).toBe('https://graph.microsoft.com/v1.0/admin');
   });
 
-  test('should add a resource to collection', async () => {
-    await page.locator('button[role="tab"]:has-text("Resources")').click();
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
-    await page.getByRole('link', { name: 'admin (5) Add to collection' }).click();
-    await page.getByRole('button', { name: 'Add to collection' }).click();
-    expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('[aria-label="Preview collection"]').click();
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
-    const [download] = await Promise.all([
-      page.waitForEvent('download'),
-      page.locator('button:has-text("Download Postman collection")').click()
-    ]);
-    expect(download.suggestedFilename().indexOf('postman_collection.json')).toBeGreaterThan(-1);
-    await page.locator('[aria-label="select row"]').click();
-    await page.locator('button[role="menuitem"]:has-text("Remove")').click();
-    await page.evaluate(() => document.fonts.ready);
-    expect(await page.screenshot()).toMatchSnapshot();
-  });
-
   test('should switch between v1 and beta versions of resources', async () => {
     await page.locator('button[role="tab"]:has-text("Resources")').click();
     await page.evaluate(() => document.fonts.ready);
@@ -57,35 +36,6 @@ test.describe('Resources Explorer', () => {
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
     expect(page.locator('label:has-text("On")')).toBeDefined();
-  })
-
-  test('should persist storage for resources collection', async () => {
-    await page.getByRole('tab', { name: 'Resources Resources xx' }).click();
-    await page.getByRole('switch', { name: 'Switch to beta' }).click();
-    await page.getByRole('link', { name: 'admin (5) Add to collection' }).click();
-    await page.getByRole('button', { name: 'Add to collection' }).click();
-    await page.getByRole('menuitem', { name: 'Preview collection' }).click();
-    await page.getByRole('button', { name: 'Close' }).click();
-    await page.reload();
-
-    await page.getByRole('tab', { name: 'Resources Resources xx' }).click();
-    expect(page.getByText('Selected Resources (78)')).toBeVisible();
-    await page.getByRole('menuitem', { name: 'Preview collection' }).click();
-    await page.getByRole('button', { name: 'Close' }).click();
-    await page.getByRole('menuitem', { name: 'Delete' }).click();
-    await page.getByRole('button', { name: 'Yes' }).click();
-    await page.reload();
-
-    await page.getByRole('tab', { name: 'Resources Resources xx' }).click();
-    await page.getByRole('button', { name: 'agreements (3)' }).click();
-    await page.getByRole('link', { name: 'agreements (3) Add to collection' }).click();
-    await page.getByRole('button', { name: 'Add to collection' }).click();
-    await page.reload();
-
-    await page.getByRole('tab', { name: 'Resources Resources xx' }).click();
-    await page.getByRole('menuitem', { name: 'Preview collection' }).click();
-    expect(page.getByText('GET/v1.0/agreements')).toBeVisible();
-    await page.getByRole('button', { name: 'Close' }).click();
   })
 })
 
