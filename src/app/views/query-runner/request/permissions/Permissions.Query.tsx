@@ -12,7 +12,6 @@ import { fetchAllPrincipalGrants, fetchScopes } from '../../../../services/actio
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
 import { setConsentedStatus } from './util';
@@ -20,7 +19,7 @@ import { getColumns } from './columns';
 
 export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
   const dispatch: AppDispatch = useDispatch();
-  const { sampleQuery, scopes, dimensions, authToken, consentedScopes } =
+  const { sampleQuery, scopes, authToken, consentedScopes } =
     useAppSelector((state) => state);
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
 
@@ -37,7 +36,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const classes = classNames(classProps);
   const theme = getTheme();
   const { tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
-  const tabHeight =  '100%' //convertVhToPx(dimensions.request.height, 110);
+  const tabHeight =  '100%';
 
   const elements = document.querySelectorAll('.ms-Viewport');
   if (elements && elements.length > 0) {
@@ -156,8 +155,10 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
         style={{ flex: 1 }}
       >
         <DetailsList
-          styles={{ root: { height: tabHeight, overflowY: 'auto' },
-            contentWrapper: {height: '100%'}, focusZone: { height: '100%'}}}
+          styles={!isScreenSizeReduced ? {
+            root:
+              { maxHeight: tabHeight, overflowX: 'hidden', overflowY: 'auto' }
+          } : { root: { maxHeight: tabHeight, overflowY: 'auto' } }}
           items={permissions}
           columns={getColumns('tab', tokenPresent)}
           onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
