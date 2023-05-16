@@ -32,10 +32,8 @@ test.describe('Resources Explorer', () => {
     await page.locator('button[role="tab"]:has-text("Resources")').click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('text=RegExp:text=admin \\(\\d+\\)').hover();
-    await page.evaluate(() => document.fonts.ready);
-    await page.locator('[aria-label="Add to collection"]').click();
-    await page.evaluate(() => document.fonts.ready);
+    await page.getByRole('link', { name: 'admin (5) Add to collection' }).click();
+    await page.getByRole('button', { name: 'Add to collection' }).click();
     expect(await page.screenshot()).toMatchSnapshot();
     await page.locator('[aria-label="Preview collection"]').click();
     await page.evaluate(() => document.fonts.ready);
@@ -63,8 +61,9 @@ test.describe('Resources Explorer', () => {
 
   test('should persist storage for resources collection', async () => {
     await page.getByRole('tab', { name: 'Resources Resources xx' }).click();
-    await page.getByRole('link', { name: 'admin (5) More actions' }).getByRole('button', { name: 'More actions' }).click();
-    await page.getByRole('menuitem', { name: 'Add to collection' }).click();
+    await page.getByRole('switch', { name: 'Switch to beta' }).click();
+    await page.getByRole('link', { name: 'admin (5) Add to collection' }).click();
+    await page.getByRole('button', { name: 'Add to collection' }).click();
     await page.getByRole('menuitem', { name: 'Preview collection' }).click();
     await page.getByRole('button', { name: 'Close' }).click();
     await page.reload();
@@ -79,8 +78,8 @@ test.describe('Resources Explorer', () => {
 
     await page.getByRole('tab', { name: 'Resources Resources xx' }).click();
     await page.getByRole('button', { name: 'agreements (3)' }).click();
-    await page.getByRole('link', { name: 'GET agreements More actions' }).getByRole('button', { name: 'More actions' }).click();
-    await page.getByRole('menuitem', { name: 'Add to collection' }).click();
+    await page.getByRole('link', { name: 'agreements (3) Add to collection' }).click();
+    await page.getByRole('button', { name: 'Add to collection' }).click();
     await page.reload();
 
     await page.getByRole('tab', { name: 'Resources Resources xx' }).click();
