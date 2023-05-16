@@ -29,6 +29,14 @@ const Request = (props: any) => {
     intl: { messages }
   }: any = props;
 
+  const elements = document.querySelectorAll('.ms-Viewport');
+  if (elements && elements.length > 0) {
+    elements.forEach((element) => {
+      const castedElement = element as HTMLElement;
+      castedElement.style.height = '100%';
+    });
+  }
+
   useEffect(() => {
     if(sidebarProperties && sidebarProperties.mobileScreen){
       window.addEventListener('resize', resizeHandler);

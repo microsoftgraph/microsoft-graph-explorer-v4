@@ -91,13 +91,21 @@ const RequestHeaders = (props: any) => {
     dispatch(queryInputActionCreators.setSampleQuery(query));
   }
 
+  const elements = document.querySelectorAll('.ms-Viewport');
+  if (elements && elements.length > 0) {
+    elements.forEach((element) => {
+      const castedElement = element as HTMLElement;
+      castedElement.style.height = '100%';
+    });
+  }
+
   return (
     <div
       onMouseEnter={() => setIsHoverOverHeadersList(true)}
       onMouseLeave={() => setIsHoverOverHeadersList(false)}
       className={classes.container}
-      style={isHoverOverHeadersList ? { height: convertVhToPx(height, 60) } :
-        { height: convertVhToPx(height, 60), overflow: 'hidden' }}>
+      style={isHoverOverHeadersList ? { height: '100%' } :
+        { height: '100%', overflow: 'hidden' }}>
       <Announced message={announcedMessage} />
       <div className='row'>
         <div className='col-sm-5'>

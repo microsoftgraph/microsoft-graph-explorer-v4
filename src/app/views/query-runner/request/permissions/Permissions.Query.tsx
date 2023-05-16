@@ -39,6 +39,14 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const { tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
   const tabHeight =  '100%' //convertVhToPx(dimensions.request.height, 110);
 
+  const elements = document.querySelectorAll('.ms-Viewport');
+  if (elements && elements.length > 0) {
+    elements.forEach((element) => {
+      const castedElement = element as HTMLElement;
+      castedElement.style.height = '100%';
+    });
+  }
+
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
   const permissionsTabStyles = {
@@ -145,11 +153,11 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
         }
         }
         onMouseLeave={() => setIsScreenSizeReduced(false)}
-        style={{ flex: 1, backgroundColor: 'red'}}
+        style={{ flex: 1 }}
       >
         <DetailsList
           styles={{ root: { height: tabHeight, overflowY: 'auto' },
-            contentWrapper: {height: '100%'}, focusZone: {height: '100%'}}}
+            contentWrapper: {height: '100%'}, focusZone: { height: '100%'}}}
           items={permissions}
           columns={getColumns('tab', tokenPresent)}
           onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
