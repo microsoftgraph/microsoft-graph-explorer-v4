@@ -117,6 +117,7 @@ test.describe('Run query', () => {
   })
 
   test('Tests query parameter for beta version that do not require a $ sign', async () => {
+    await page.reload();
     const queryInputField = page.locator('[aria-label="Query sample input"]');
     await queryInputField.click();
     await page.evaluate(() => document.fonts.ready);
@@ -242,14 +243,27 @@ test.describe('Run query', () => {
     expect(page.getByText('"Microsoft Viva"')).toBeDefined();
   })
 
-  test('should show documentation link for queries with links ', async () => {
+  test('User can add request bodies that persist when switching between tabs', async () => {
     await page.locator('[aria-label="my profile"]').click();
-    await page.locator('[aria-label="More Info"]').click();
-    const [page3] = await Promise.all([
-      page.waitForEvent('popup'),
-      page.locator('button:has-text("Learn more")').click()
-    ]);
-    expect(page3.url().indexOf('https://learn.microsoft.com/')).toBeGreaterThan(-1);
+    await page.getByRole('tab', { name: 'Request body' }).click();
+    await page.getByRole('tab', { name: 'Request body' }).press('Tab');
+    await page.getByRole('textbox', { name: 'Editor content;Press Alt+F1 for Accessibility Options.' }).fill('{\n\n    "$schema": {}}\n}');
+    await page.getByRole('tab', { name: 'Request headers' }).click();
+    await page.getByRole('tab', { name: 'Request body' }).click();
+    expect(page.getByText('"$schema"')).toBeVisible();
+
+    // Make sure that request body is not there when switching between queries
+    await page.getByRole('gridcell', { name: 'my profile (beta)' }).click();
+    expect(page.getByText('"$schema"')).not.toBeVisible();
+  })
+
+  test('should show documentation link for queries with links ', async () => {
+    await page.reload();
+    await page.locator('[aria-label="my profile"]').click();
+    const page2Promise = page.waitForEvent('popup');
+    await page.getByRole('button', { name: 'Read documentation' }).click();
+    const page2 = await page2Promise;
+    expect(page2.url().indexOf('https://learn.microsoft.com/')).toBeGreaterThan(-1);
   })
 
   test('should launch the share query dialog when share query button is clicked', async () => {
