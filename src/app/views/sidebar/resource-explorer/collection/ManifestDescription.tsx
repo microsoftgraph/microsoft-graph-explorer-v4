@@ -4,13 +4,13 @@ import {
   VerticalDivider, getTheme, mergeStyleSets
 } from '@fluentui/react';
 import React from 'react';
-
 import { FormattedMessage } from 'react-intl';
+
 import { useAppSelector } from '../../../../../store';
-import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
+import { componentNames } from '../../../../../telemetry';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { API_MANIFEST_SPEC_PAGE } from '../../../../services/graph-constants';
-import { downloadToLocal } from '../../../common/download';
+import { downloadToLocal, trackDownload } from '../../../common/download';
 import { generateAPIManifest } from './api-manifest.util';
 
 const manifestStyle = mergeStyleSets(
@@ -50,13 +50,6 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
     const filename = `${manifest.publisher.name}-API-Manifest.json`;
     downloadToLocal(manifest, filename);
     trackDownload(filename, componentNames.DOWNLOAD_API_MANIFEST_BUTTON);
-  }
-
-  function trackDownload(filename: string, componentName: string) {
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      componentName,
-      filename
-    });
   }
 
   return (
