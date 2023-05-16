@@ -7,7 +7,6 @@ import { AppDispatch, useAppSelector } from '../../../../../store';
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
 
@@ -17,7 +16,7 @@ interface IHeader {
 }
 
 const RequestHeaders = (props: any) => {
-  const { sampleQuery, dimensions: { request: { height } } } = useAppSelector((state) => state);
+  const { sampleQuery } = useAppSelector((state) => state);
   const [announcedMessage, setAnnouncedMessage] = useState('');
   const [isHoverOverHeadersList, setIsHoverOverHeadersList] = useState(false);
   const [isUpdatingHeader, setIsUpdatingHeader] = useState<boolean>(false);

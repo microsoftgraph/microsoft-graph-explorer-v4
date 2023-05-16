@@ -14,8 +14,9 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
-import { setConsentedStatus } from './util';
 import { getColumns } from './columns';
+import { applyHeightProperty } from '../util.ts/CssHelpers';
+import { setConsentedStatus } from './util';
 
 export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
   const dispatch: AppDispatch = useDispatch();
@@ -38,13 +39,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const { tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
   const tabHeight =  '100%';
 
-  const elements = document.querySelectorAll('.ms-Viewport');
-  if (elements && elements.length > 0) {
-    elements.forEach((element) => {
-      const castedElement = element as HTMLElement;
-      castedElement.style.height = '100%';
-    });
-  }
+  applyHeightProperty();
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
@@ -157,8 +152,8 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
         <DetailsList
           styles={!isScreenSizeReduced ? {
             root:
-              { maxHeight: tabHeight, overflowX: 'hidden', overflowY: 'auto' }
-          } : { root: { maxHeight: tabHeight, overflowY: 'auto' } }}
+              { height: tabHeight, overflowX: 'hidden', overflowY: 'auto' }
+          } : { root: { height: tabHeight, overflowY: 'auto' } }}
           items={permissions}
           columns={getColumns('tab', tokenPresent)}
           onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {

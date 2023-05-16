@@ -15,6 +15,7 @@ import { RequestBody } from './body';
 import { RequestHeaders } from './headers';
 import { Permissions } from './permissions';
 import './request.scss';
+import { applyHeightProperty } from './util.ts/CssHelpers';
 
 const Request = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
@@ -29,13 +30,7 @@ const Request = (props: any) => {
     intl: { messages }
   }: any = props;
 
-  const elements = document.querySelectorAll('.ms-Viewport');
-  if (elements && elements.length > 0) {
-    elements.forEach((element) => {
-      const castedElement = element as HTMLElement;
-      castedElement.style.height = '100%';
-    });
-  }
+  applyHeightProperty();
 
   useEffect(() => {
     if(sidebarProperties && sidebarProperties.mobileScreen){
