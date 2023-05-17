@@ -1,12 +1,10 @@
 import { CSSProperties } from 'react';
 import { generateResourcePathsFromPostmanCollection } from './postman.util';
 import { IIconProps, IconButton } from '@fluentui/react';
-import { useAppSelector } from '../../../../../store';
 import { useDispatch } from 'react-redux';
-import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
+import { addResourcePaths } from '../../../../services/actions/collections-action-creators';
 
 export const UploadPostmanCollection = () => {
-  const { collections, resources } = useAppSelector(state => state);
   const dispatch = useDispatch();
 
   const uploadIcon: IIconProps = { iconName: 'Upload' };
