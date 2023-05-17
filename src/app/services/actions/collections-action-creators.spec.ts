@@ -15,8 +15,8 @@ const paths = [
     url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues',
     name: 'issues (1)',
     labels: [
-      { name: 'v1.0', methods: ['Get', 'Post'] },
-      { name: 'beta', methods: ['Get', 'Post'] }
+      { name: 'v1.0', methods: ['GET', 'POST'] },
+      { name: 'beta', methods: ['GET', 'POST'] }
     ],
     isExpanded: true,
     parent: '{serviceHealth-id}',
@@ -29,8 +29,8 @@ const paths = [
     url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues/{serviceHealthIssue-id}',
     name: '{serviceHealthIssue-id} (1)',
     labels: [
-      { name: 'v1.0', methods: ['Get', 'Patch', 'Delete'] },
-      { name: 'beta', methods: ['Get', 'Patch', 'Delete'] }
+      { name: 'v1.0', methods: ['GET', 'PATCH', 'DELETE'] },
+      { name: 'beta', methods: ['GET', 'PATCH', 'DELETE'] }
     ],
     isExpanded: true,
     parent: 'issues',
