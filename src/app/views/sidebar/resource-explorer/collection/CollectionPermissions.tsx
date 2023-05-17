@@ -47,27 +47,31 @@ const CollectionPermissions: React.FC<PopupsComponent<null>> = (props) => {
       setIsFetching(false);
       setPermissions(perms.results);
     } catch (error) {
-      setIsFetching(false);
-      console.log(error);
+      throw new Error('Error fetching permissions');
     }
   }
 
   useEffect(() => {
     if (paths && paths.length > 0) {
-      getPermissions();
+      getPermissions().catch(() => {
+        setIsFetching(false);
+      }
+      );
     }
   }, [paths]);
 
   if (!isFetching && permissions.length === 0) {
-    <Label style={{
-      display: 'flex',
-      width: '100%',
-      minHeight: '200px',
-      justifyContent: 'center',
-      alignItems: 'center'
-    }}>
-      <FormattedMessage id='permissions not found' />
-    </Label>
+    return (
+      <Label style={{
+        display: 'flex',
+        width: '100%',
+        minHeight: '200px',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <FormattedMessage id='permissions not found' />
+      </Label>
+    )
   }
 
   function downloadPermissions(): void {
