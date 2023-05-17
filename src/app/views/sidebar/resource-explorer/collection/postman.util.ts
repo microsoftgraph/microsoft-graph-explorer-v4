@@ -4,8 +4,11 @@ import {
   IPostmanCollection,
   Item
 } from '../../../../../types/postman-collection';
-import { IResourceLink, ResourceLinkType } from '../../../../../types/resources';
+import { IResource, IResourceLink, ResourceLinkType } from '../../../../../types/resources';
 import { GRAPH_URL } from '../../../../services/graph-constants';
+import { parseSampleUrl } from '../../../../utils/sample-url-generation';
+import { getMatchingResourceForUrl } from '../../../../utils/resources/resources-filter';
+import { getCurrentTree } from '../resource-explorer.utils';
 
 export function generatePostmanCollection(
   paths: IResourceLink[]
@@ -57,33 +60,49 @@ function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
   return list;
 }
 
-export function generateResourceLinksFromPostmanCollection(collection: IPostmanCollection): IResourceLink[] {
+export function generateResourceLinksFromPostmanCollection(collection: IPostmanCollection, resources: IResource):
+IResourceLink[] {
   const resourceLinks: IResourceLink[] = [];
 
   collection.item.forEach((item) => {
     const { name, request } = item;
     const { method, url } = request!;
 
-    const version = url.path[0];
-    const paths = url.path.slice(1);
+    // const version = url.path[0];
+    const paths = url.path;
+    paths.shift();
+    paths.unshift('/')
 
-    const resourceLink: IResourceLink = {
-      name,
-      url: url.raw,
-      method: method.toLowerCase(),
+    const { queryVersion: version, requestUrl } = parseSampleUrl(url.raw);
+
+    const level = paths.length;
+
+    const filtered = getCurrentTree({resourceItems: resources.children, level, version, paths})
+    if(!filtered) { return }
+    const filteredResource = filtered.links[0] as IResourceLink;
+
+    if(!filteredResource){return  }
+
+    console.log(filteredResource);
+
+    const resourceLink: any = {
+      name: name.replace(`-${version}`, ''),
+      url: `/${requestUrl}`,
+      method: method.toUpperCase(),
       version,
       paths,
       links: [],
       labels: [],
-      parent: '',
-      level: 0,
-      type: ResourceLinkType.NODE
+      parent: filteredResource.parent,
+      level,
+      type: ResourceLinkType.PATH,
+      isExpanded: false,
+      key: `${filteredResource.key}-${version}`,
+      docLink: filteredResource.docLink
     };
 
     resourceLinks.push(resourceLink);
   });
-
-  console.log('Here are the links ', resourceLinks);
 
   return resourceLinks;
 }

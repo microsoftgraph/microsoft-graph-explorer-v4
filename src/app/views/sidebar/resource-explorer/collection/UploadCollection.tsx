@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 
 export const UploadPostmanCollection = () => {
-  const { collections } = useAppSelector(state => state);
+  const { collections, resources } = useAppSelector(state => state);
   const dispatch = useDispatch();
 
   const uploadIcon: IIconProps = { iconName: 'Upload' };
@@ -16,7 +16,6 @@ export const UploadPostmanCollection = () => {
   }
   const selectFile = () => {
     const fileInput = document.getElementById('file-input');
-    console.log('Found the input component ', fileInput);
     fileInput?.click();
   }
 
@@ -36,8 +35,7 @@ export const UploadPostmanCollection = () => {
         try{
           const jsonData = JSON.parse(fileContent as string);
           // Do something with the parsed JSON data
-          console.log('Parsed JSON data:', jsonData);
-          const uploadedCollections = generateResourceLinksFromPostmanCollection(jsonData);
+          const uploadedCollections = generateResourceLinksFromPostmanCollection(jsonData, resources.data);
           dispatch(removeResourcePaths(getPaths()));
           dispatch(addResourcePaths(uploadedCollections));
         }
