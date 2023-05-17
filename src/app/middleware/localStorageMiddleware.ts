@@ -23,7 +23,7 @@ const localStorageMiddleware = (store: any) => (next: any) => async (action: App
     case RESOURCEPATHS_ADD_SUCCESS: {
       const collections = await collectionsCache.read();
       const item = collections.find(k => k.isDefault)!;
-      item.paths = action.response;
+      item.paths = Array.from(new Set([...item.paths, ...action.response]));
       await collectionsCache.update(item.id, item);
       break;
     }
