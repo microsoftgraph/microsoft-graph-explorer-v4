@@ -33,9 +33,8 @@ test.describe('Sidebar navigation', () => {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
     await page.getByRole('button', { name: 'applications (8)' }).click();
-    page.getByRole('link', { name: 'GET applications More actions' });
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.getByRole('link', { name: 'GET applications More actions' }).click();
+    await page.getByRole('link', { name: 'Get applications' }).click();
   })
   test('should have history tab', async () => {
     await page.getByRole('button', { name: 'Minimize sidebar' }).click();
@@ -71,7 +70,7 @@ test.describe('Response area navigation', () => {
   test('should have code snippets tab in overflow menu', async () => {
     await page.getByRole('tablist').filter({hasText:'Response preview'}).getByRole('button',{name:'More items' }).click();
     await page.getByRole('menuitem', { name: 'Code snippets' }).click();
-    await page.getByRole('tab', { name: 'CSharp CSharp' }).click();
+    await page.getByRole('tab', { name: 'C# C#' }).click();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(500);
     expect(await page.screenshot()).toMatchSnapshot();
@@ -106,7 +105,7 @@ test.describe('Response area navigation', () => {
     await page.getByRole('menuitem', { name: 'Expand response' }).click();
     await page.getByRole('button', { name: 'More items' }).click();
     await page.getByRole('menuitem', { name: 'Code snippets' }).click();
-    await page.getByRole('tab', { name: 'CSharp CSharp' }).click();
+    await page.getByRole('tab', { name: 'C# C#' }).click();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(500);
     expect(await page.screenshot()).toMatchSnapshot();

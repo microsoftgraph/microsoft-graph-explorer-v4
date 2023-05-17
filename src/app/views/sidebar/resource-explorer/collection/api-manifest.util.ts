@@ -29,7 +29,7 @@ function getRequestsFromPaths(paths: IResourceLink[]): ManifestRequest[] {
   paths.forEach(path => {
     const { version, method, url } = path;
     requests.push({
-      method: method as Method,
+      method: method!.toString().toUpperCase(),
       uriTemplate: `${GRAPH_URL}/${version}${url}`
     });
   });

@@ -15,7 +15,7 @@ const collectionPaths: IResourceLink[] = [
       'agreementAcceptances',
       '{agreementAcceptance-id}'
     ],
-    method: 'Get',
+    method: 'GET',
     type: ResourceLinkType.PATH,
     links: [],
     docLink: '',
@@ -34,7 +34,7 @@ const collectionPaths: IResourceLink[] = [
       'agreementAcceptances',
       '{agreementAcceptance-id}'
     ],
-    method: 'Patch',
+    method: 'PATCH',
     type: ResourceLinkType.PATH,
     links: [],
     docLink: '',
@@ -51,17 +51,17 @@ describe('Resource link should', () => {
         {
           name: 'beta',
           methods: [
-            'Get',
-            'Patch',
-            'Delete'
+            'GET',
+            'PATCH',
+            'DELETE'
           ]
         },
         {
           name: 'v1.0',
           methods: [
-            'Get',
-            'Patch',
-            'Delete'
+            'GET',
+            'PATCH',
+            'DELETE'
           ]
         }
       ],
@@ -87,7 +87,7 @@ describe('Resource link should', () => {
             'agreementAcceptances',
             '{agreementAcceptance-id}'
           ],
-          method: 'Get',
+          method: 'GET',
           type: 'path',
           links: [],
           docLink: ''
@@ -105,7 +105,7 @@ describe('Resource link should', () => {
             'agreementAcceptances',
             '{agreementAcceptance-id}'
           ],
-          method: 'Patch',
+          method: 'PATCH',
           type: 'path',
           links: [],
           docLink: ''
@@ -130,7 +130,7 @@ describe('Resource link should', () => {
           'agreementAcceptances',
           '{agreementAcceptance-id}'
         ],
-        method: 'Delete',
+        method: 'DELETE',
         type: ResourceLinkType.PATH,
         links: [],
         docLink: ''

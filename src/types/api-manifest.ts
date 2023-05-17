@@ -12,7 +12,7 @@ interface ApiDependency {
 }
 
 export interface ManifestRequest {
-  method: Method;
+  method: string;
   uriTemplate: string;
 }
 
