@@ -4,7 +4,7 @@ import {
   IPostmanCollection,
   Item
 } from '../../../../../types/postman-collection';
-import { IResourceLink } from '../../../../../types/resources';
+import { IResourceLink, ResourceLinkType } from '../../../../../types/resources';
 import { GRAPH_URL } from '../../../../services/graph-constants';
 
 export function generatePostmanCollection(
@@ -55,4 +55,35 @@ function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
     list.push(item);
   });
   return list;
+}
+
+export function generateResourceLinksFromPostmanCollection(collection: IPostmanCollection): IResourceLink[] {
+  const resourceLinks: IResourceLink[] = [];
+
+  collection.item.forEach((item) => {
+    const { name, request } = item;
+    const { method, url } = request!;
+
+    const version = url.path[0];
+    const paths = url.path.slice(1);
+
+    const resourceLink: IResourceLink = {
+      name,
+      url: url.raw,
+      method: method.toLowerCase(),
+      version,
+      paths,
+      links: [],
+      labels: [],
+      parent: '',
+      level: 0,
+      type: ResourceLinkType.NODE
+    };
+
+    resourceLinks.push(resourceLink);
+  });
+
+  console.log('Here are the links ', resourceLinks);
+
+  return resourceLinks;
 }
