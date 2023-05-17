@@ -53,7 +53,7 @@ describe('Resource link should', () => {
           methods: [
             'GET',
             'PATCH',
-            'Delete'
+            'DELETE'
           ]
         },
         {
@@ -61,7 +61,7 @@ describe('Resource link should', () => {
           methods: [
             'GET',
             'PATCH',
-            'Delete'
+            'DELETE'
           ]
         }
       ],
@@ -130,7 +130,7 @@ describe('Resource link should', () => {
           'agreementAcceptances',
           '{agreementAcceptance-id}'
         ],
-        method: 'Delete',
+        method: 'DELETE',
         type: ResourceLinkType.PATH,
         links: [],
         docLink: ''

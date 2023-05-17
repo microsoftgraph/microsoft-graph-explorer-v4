@@ -127,8 +127,8 @@ const paths = [
     url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues/{serviceHealthIssue-id}',
     name: '{serviceHealthIssue-id} (1)',
     labels: [
-      { name: 'v1.0', methods: ['GET', 'PATCH', 'Delete'] },
-      { name: 'beta', methods: ['GET', 'PATCH', 'Delete'] }
+      { name: 'v1.0', methods: ['GET', 'PATCH', 'DELETE'] },
+      { name: 'beta', methods: ['GET', 'PATCH', 'DELETE'] }
     ],
     isExpanded: true,
     parent: 'issues',

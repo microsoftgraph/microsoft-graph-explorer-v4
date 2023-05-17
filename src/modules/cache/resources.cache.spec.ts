@@ -54,7 +54,7 @@ const resources: IResource = {
               methods: [
                 'GET',
                 'PATCH',
-                'Delete'
+                'DELETE'
               ]
             }
           ],

@@ -45,7 +45,7 @@ const res = {
               'methods': [
                 'GET',
                 'PATCH',
-                'Delete'
+                'DELETE'
               ]
             }
           ]
