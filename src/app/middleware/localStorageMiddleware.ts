@@ -21,10 +21,13 @@ const localStorageMiddleware = (store: any) => (next: any) => async (action: App
       break;
 
     case RESOURCEPATHS_ADD_SUCCESS: {
-      const collections = await collectionsCache.read();
-      const item = collections.find(k => k.isDefault)!;
-      item.paths = Array.from(new Set([...item.paths, ...action.response]));
-      await collectionsCache.update(item.id, item);
+      const navigationEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      if(navigationEntry && navigationEntry.loadEventEnd > 0) {
+        const collections = await collectionsCache.read();
+        const item = collections.find(k => k.isDefault)!;
+        item.paths = Array.from(new Set([...item.paths, ...action.response]));
+        await collectionsCache.update(item.id, item);
+      }
       break;
     }
 

@@ -49,6 +49,8 @@ export const UploadPostmanCollection = () => {
       reader.readAsText(file);
     }
   }
+
+
   return (
     <>
       <input type="file" id="file-input" style={style_} onChange={handleFileSelect}/>
