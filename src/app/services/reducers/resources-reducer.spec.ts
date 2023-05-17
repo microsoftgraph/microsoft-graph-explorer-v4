@@ -14,13 +14,13 @@ const res = {
     {
       'name': 'v1.0',
       'methods': [
-        'Get'
+        'GET'
       ]
     },
     {
       'name': 'beta',
       'methods': [
-        'Get'
+        'GET'
       ]
     }
   ],
@@ -31,8 +31,8 @@ const res = {
         {
           'name': 'beta',
           'methods': [
-            'Get',
-            'Post'
+            'GET',
+            'POST'
           ]
         }
       ],
@@ -43,9 +43,9 @@ const res = {
             {
               'name': 'beta',
               'methods': [
-                'Get',
-                'Patch',
-                'Delete'
+                'GET',
+                'PATCH',
+                'DELETE'
               ]
             }
           ]
@@ -76,29 +76,29 @@ const paths = [{
   labels: [
     {
       name: 'v1.0', methods: [{
-        name: 'Get',
+        name: 'GET',
         documentationUrl: null
       }, {
-        name: 'Post',
+        name: 'POST',
         documentationUrl: null
       }]
     },
     {
       name: 'beta', methods: [{
-        name: 'Get',
+        name: 'GET',
         documentationUrl: null
       }, {
-        name: 'Post',
+        name: 'POST',
         documentationUrl: null
       }]
     }
   ],
   version: 'v1.0',
   methods: [{
-    name: 'Get',
+    name: 'GET',
     documentationUrl: null
   }, {
-    name: 'Post',
+    name: 'POST',
     documentationUrl: null
   }],
   isExpanded: true,
@@ -114,10 +114,10 @@ const resourceLinks: IResourceLink[] = [
     labels: [
       {
         name: 'v1.0', methods: [{
-          name: 'Get',
+          name: 'GET',
           documentationUrl: null
         }, {
-          name: 'Post',
+          name: 'POST',
           documentationUrl: null
         }]
       }
