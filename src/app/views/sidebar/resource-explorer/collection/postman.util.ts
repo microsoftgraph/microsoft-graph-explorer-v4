@@ -8,7 +8,7 @@ import { IResource, IResourceLink, ResourceLinkType, ResourcePath } from '../../
 import { GRAPH_URL } from '../../../../services/graph-constants';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { getMatchingResourceForUrl } from '../../../../utils/resources/resources-filter';
-import { getCurrentTree } from '../resource-explorer.utils';
+import { generateKey, getCurrentTree } from '../resource-explorer.utils';
 
 export function generatePostmanCollection(
   paths: ResourcePath[]
@@ -75,17 +75,14 @@ ResourcePath[] {
 
     const { queryVersion: version, requestUrl } = parseSampleUrl(url.raw);
 
-    const level = paths.length;
-
     const resourceLink: ResourcePath = {
       name: name.replace(`-${version}`, ''),
       url: `/${requestUrl}`,
       method: method.toUpperCase(),
       version,
       paths,
-      level,
       type: ResourceLinkType.PATH,
-      key: version
+      key: generateKey(method, paths, version)
     };
 
     resourcePaths.push(resourceLink);

@@ -19,13 +19,6 @@ export const UploadPostmanCollection = () => {
     fileInput?.click();
   }
 
-  const getPaths = () => {
-    if(!collections){ return []}
-    const paths = collections.find(k => k.isDefault)!.paths;
-    return paths;
-  }
-
-
   const handleFileSelect = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -34,15 +27,13 @@ export const UploadPostmanCollection = () => {
         const fileContent = e!.target!.result!;
         try{
           const jsonData = JSON.parse(fileContent as string);
-          // Do something with the parsed JSON data
-          const uploadedCollections = generateResourcePathsFromPostmanCollection(jsonData, resources.data);
-          dispatch(removeResourcePaths(getPaths()));
+          const uploadedCollections = generateResourcePathsFromPostmanCollection(jsonData);
           dispatch(addResourcePaths(uploadedCollections));
         }
         catch(error){
+          // dispatch setQuery
           console.log('Error while parsing JSON data:', error);
         }
-        // console.log('File content:', fileContent);
       };
       reader.readAsText(file);
     }

@@ -11,11 +11,10 @@ describe('Postman collection should', () => {
     expect(collection.item.length).toBeGreaterThan(0);
   });
 
-  it('generate resourcelink[] from postman collection', async () => {
+  it('generate resource paths from postman collection', async () => {
     const { collection, paths } = setupCollection();
-    console.log('Paths ', paths);
     const resourceLinks = generateResourcePathsFromPostmanCollection(collection);
-    expect(resourceLinks).toBe(paths);
+    expect(resourceLinks).toStrictEqual(paths);
   });
 
 });

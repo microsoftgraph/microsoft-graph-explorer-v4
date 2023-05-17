@@ -85,9 +85,6 @@ export function createResourcesList(
   ): IResourceLink {
     const { segment, labels } = info;
     const level = paths.length;
-    const parentKeyPart = parent === '/' ? 'root' : parent;
-    const methodKeyPart = method ? `-${method?.toLowerCase()}` : '';
-    const key = `${level}-${parentKeyPart}-${segment}${methodKeyPart}`;
     const availableMethods: Method[] = getAvailableMethods(labels, version);
     const versionedChildren = getVersionedChildLinks(
       info,
@@ -114,6 +111,7 @@ export function createResourcesList(
         : false;
 
     const docLink = getLink(labels, version, method);
+    const key = generateKey(method, paths, version);
 
     return {
       key,
@@ -145,6 +143,17 @@ export function createResourcesList(
       links: navLink.links
     }
   ];
+}
+
+export function generateKey(method: string | undefined, paths: string[], version: string) {
+  const level = paths.length;
+  let pathsKeyPart = '';
+  paths.forEach(path => {
+    pathsKeyPart += `-${path === '/' ? 'root' : path}`;
+  })
+  const methodKeyPart = method ? `-${method?.toLowerCase()}` : '';
+  const key = `${level}${pathsKeyPart}${methodKeyPart}-${version}`;
+  return key;
 }
 
 function getLink(labels: IResourceLabel[], version: string, method?: Method) {
@@ -228,9 +237,9 @@ export function getResourcePaths(
 ): ResourcePath[] {
   const { links } = item;
   let content: ResourcePath[] = flatten(links);
-  const { key, level, paths,type,url,method, name } = item!;
+  const { key, paths,type,url,method, name } = item!;
 
-  content.unshift({ key , level, paths, type,url,method,version, name });
+  content.unshift({ key , paths, type,url,method,version, name });
   content = content.filter(
     (k: ResourcePath) => k.type !== ResourceLinkType.NODE
   );
@@ -247,8 +256,8 @@ export function getResourcePaths(
 function flatten(content: IResourceLink[]): ResourcePath[] {
   let result: any[] = [];
   content.forEach(function (item: IResourceLink) {
-    const { key, level, paths,type,url,method, name } = item!;
-    result.push({ key, level, paths,type,url,method, name });
+    const { key, paths,type,url,method, name } = item!;
+    result.push({ key, paths,type,url,method, name });
     if (Array.isArray(item.links)) {
       result = result.concat(flatten(item.links));
     }

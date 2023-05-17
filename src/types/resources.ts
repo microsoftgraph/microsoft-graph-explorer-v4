@@ -31,7 +31,6 @@ export interface IResourceLink extends INavLink, Omit<ResourcePath, 'key'> {
 export interface ResourcePath {
   paths: string[];
   name: string;
-  level: number;
   type: ResourceLinkType;
   version?: string;
   method?: string;
