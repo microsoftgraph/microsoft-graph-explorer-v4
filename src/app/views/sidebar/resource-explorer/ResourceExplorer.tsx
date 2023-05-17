@@ -44,6 +44,8 @@ const UnstyledResourceExplorer = (props: any) => {
     { key: 'beta', text: 'beta' }
   ];
 
+  console.log('Selected links: ', selectedLinks);
+
   const resourcesToUse = data.children ? JSON.parse(JSON.stringify(data.children)) : [] as IResource[];
 
   const [version, setVersion] = useState(versions[0].key);

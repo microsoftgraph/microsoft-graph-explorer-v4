@@ -1,8 +1,13 @@
 import { CSSProperties } from 'react';
 import { generateResourceLinksFromPostmanCollection } from './postman.util';
 import { IIconProps, IconButton } from '@fluentui/react';
+import { useAppSelector } from '../../../../../store';
+import { useDispatch } from 'react-redux';
+import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 
 export const UploadPostmanCollection = () => {
+  const { collections } = useAppSelector(state => state);
+  const dispatch = useDispatch();
 
   const uploadIcon: IIconProps = { iconName: 'Upload' };
 
@@ -15,6 +20,13 @@ export const UploadPostmanCollection = () => {
     fileInput?.click();
   }
 
+  const getPaths = () => {
+    if(!collections){ return []}
+    const paths = collections.find(k => k.isDefault)!.paths;
+    return paths;
+  }
+
+
   const handleFileSelect = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -26,6 +38,8 @@ export const UploadPostmanCollection = () => {
           // Do something with the parsed JSON data
           console.log('Parsed JSON data:', jsonData);
           const uploadedCollections = generateResourceLinksFromPostmanCollection(jsonData);
+          dispatch(removeResourcePaths(getPaths()));
+          dispatch(addResourcePaths(uploadedCollections));
         }
         catch(error){
           console.log('Error while parsing JSON data:', error);
