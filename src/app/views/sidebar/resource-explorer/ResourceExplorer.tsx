@@ -99,8 +99,9 @@ const UnstyledResourceExplorer = (props: any) => {
   }
 
   const setQuery = (resourceLink: INavLink) => {
+    const link = resourceLink as IResourceLink;
     if (resourceLink.type === ResourceLinkType.NODE) { return; }
-    const resourceUrl = getUrlFromLink(resourceLink);
+    const resourceUrl = getUrlFromLink(link.paths);
     if (!resourceUrl) { return; }
     const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
     const verb = resourceLink.method!;

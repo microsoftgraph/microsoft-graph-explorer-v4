@@ -1,7 +1,7 @@
 import { IResource } from '../../../../../types/resources';
 import content from '../../../../utils/resources/resources.json';
 import { createResourcesList, getResourcePaths } from '../resource-explorer.utils';
-import { generatePostmanCollection, generateResourceLinksFromPostmanCollection } from './postman.util';
+import { generatePostmanCollection, generateResourcePathsFromPostmanCollection } from './postman.util';
 
 const resource = JSON.parse(JSON.stringify(content)) as IResource;
 
@@ -13,9 +13,11 @@ describe('Postman collection should', () => {
 
   it('generate resourcelink[] from postman collection', async () => {
     const { collection, paths } = setupCollection();
-    const resourceLinks = generateResourceLinksFromPostmanCollection(collection, resource);
-    expect(paths).toBe(resourceLinks);
+    console.log('Paths ', paths);
+    const resourceLinks = generateResourcePathsFromPostmanCollection(collection);
+    expect(resourceLinks).toBe(paths);
   });
+
 });
 
 function setupCollection() {

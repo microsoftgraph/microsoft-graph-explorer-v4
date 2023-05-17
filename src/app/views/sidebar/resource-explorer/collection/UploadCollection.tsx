@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { generateResourceLinksFromPostmanCollection } from './postman.util';
+import { generateResourcePathsFromPostmanCollection } from './postman.util';
 import { IIconProps, IconButton } from '@fluentui/react';
 import { useAppSelector } from '../../../../../store';
 import { useDispatch } from 'react-redux';
@@ -35,7 +35,7 @@ export const UploadPostmanCollection = () => {
         try{
           const jsonData = JSON.parse(fileContent as string);
           // Do something with the parsed JSON data
-          const uploadedCollections = generateResourceLinksFromPostmanCollection(jsonData, resources.data);
+          const uploadedCollections = generateResourcePathsFromPostmanCollection(jsonData, resources.data);
           dispatch(removeResourcePaths(getPaths()));
           dispatch(addResourcePaths(uploadedCollections));
         }

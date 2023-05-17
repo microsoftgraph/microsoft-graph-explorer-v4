@@ -4,14 +4,14 @@ import {
   IPostmanCollection,
   Item
 } from '../../../../../types/postman-collection';
-import { IResource, IResourceLink, ResourceLinkType } from '../../../../../types/resources';
+import { IResource, IResourceLink, ResourceLinkType, ResourcePath } from '../../../../../types/resources';
 import { GRAPH_URL } from '../../../../services/graph-constants';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { getMatchingResourceForUrl } from '../../../../utils/resources/resources-filter';
 import { getCurrentTree } from '../resource-explorer.utils';
 
 export function generatePostmanCollection(
-  paths: IResourceLink[]
+  paths: ResourcePath[]
 ): IPostmanCollection {
   const collection: IPostmanCollection = {
     info: {
@@ -25,7 +25,7 @@ export function generatePostmanCollection(
   return collection;
 }
 
-function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
+function generateItemsFromPaths(resources: ResourcePath[]): Item[] {
   const list: Item[] = [];
   resources.forEach(resource => {
     const {
@@ -60,9 +60,9 @@ function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
   return list;
 }
 
-export function generateResourceLinksFromPostmanCollection(collection: IPostmanCollection, resources: IResource):
-IResourceLink[] {
-  const resourceLinks: IResourceLink[] = [];
+export function generateResourcePathsFromPostmanCollection(collection: IPostmanCollection):
+ResourcePath[] {
+  const resourcePaths: ResourcePath[] = [];
 
   collection.item.forEach((item) => {
     const { name, request } = item;
@@ -77,32 +77,19 @@ IResourceLink[] {
 
     const level = paths.length;
 
-    const filtered = getCurrentTree({resourceItems: resources.children, level, version, paths})
-    if(!filtered) { return }
-    const filteredResource = filtered.links[0] as IResourceLink;
-
-    if(!filteredResource){return  }
-
-    console.log(filteredResource);
-
-    const resourceLink: any = {
+    const resourceLink: ResourcePath = {
       name: name.replace(`-${version}`, ''),
       url: `/${requestUrl}`,
       method: method.toUpperCase(),
       version,
       paths,
-      links: [],
-      labels: [],
-      parent: filteredResource.parent,
       level,
       type: ResourceLinkType.PATH,
-      isExpanded: false,
-      key: `${filteredResource.key}-${version}`,
-      docLink: filteredResource.docLink
+      key: version
     };
 
-    resourceLinks.push(resourceLink);
+    resourcePaths.push(resourceLink);
   });
 
-  return resourceLinks;
+  return resourcePaths;
 }

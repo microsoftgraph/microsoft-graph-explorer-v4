@@ -24,15 +24,19 @@ export interface IResources {
   error: Error | null;
 }
 
-export interface IResourceLink extends INavLink {
+export interface IResourceLink extends INavLink, Omit<ResourcePath, 'key'> {
   labels: IResourceLabel[];
-  parent: string;
-  level: number;
-  paths: string[];
-  type: ResourceLinkType;
   links: IResourceLink[];
+}
+export interface ResourcePath {
+  paths: string[];
+  name: string;
+  level: number;
+  type: ResourceLinkType;
   version?: string;
   method?: string;
+  key?: string;
+  url: string;
 }
 
 export enum ResourceLinkType {
