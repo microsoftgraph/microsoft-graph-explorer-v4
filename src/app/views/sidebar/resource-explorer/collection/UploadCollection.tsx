@@ -1,13 +1,17 @@
 import { CSSProperties } from 'react';
 import { generateResourcePathsFromPostmanCollection } from './postman.util';
-import { IIconProps, IconButton } from '@fluentui/react';
+import { ActionButton, IIconProps, Label } from '@fluentui/react';
 import { useDispatch } from 'react-redux';
 import { addResourcePaths } from '../../../../services/actions/collections-action-creators';
+import { translateMessage } from '../../../../utils/translate-messages';
+import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
 
 export const UploadPostmanCollection = () => {
   const dispatch = useDispatch();
 
-  const uploadIcon: IIconProps = { iconName: 'Upload' };
+  const uploadIcon: IIconProps = {
+    iconName: 'Upload'
+  };
 
   const style_: CSSProperties = {
     display: 'none'
@@ -29,8 +33,12 @@ export const UploadPostmanCollection = () => {
           dispatch(addResourcePaths(uploadedCollections));
         }
         catch(error){
-          // dispatch setQuery
-          console.log('Error while parsing JSON data:', error);
+          dispatch(
+            setQueryResponseStatus({
+              status: 'error',
+              statusMessage: translateMessage('Invalid file format')
+            })
+          )
         }
       };
       reader.readAsText(file);
@@ -39,10 +47,18 @@ export const UploadPostmanCollection = () => {
 
 
   return (
-    <>
+    <div style={{position: 'relative', bottom: '4px'}}>
       <input type="file" id="file-input" style={style_} onChange={handleFileSelect}/>
-      <IconButton iconProps={uploadIcon} title="Emoji" ariaLabel="Emoji"
-        disabled={false} onClick={() => selectFile()} />
-    </>
+      <ActionButton iconProps={uploadIcon}
+        title={translateMessage('Upload collection')}
+        ariaLabel={translateMessage('Upload collection')}
+        disabled={false}
+        onClick={() => selectFile()}
+      >
+        <Label>
+          {translateMessage('Upload')}
+        </Label>
+      </ActionButton>
+    </div>
   )
 }

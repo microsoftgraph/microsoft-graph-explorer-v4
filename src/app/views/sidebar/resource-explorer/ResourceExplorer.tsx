@@ -138,7 +138,7 @@ const UnstyledResourceExplorer = (props: any) => {
         styles={searchBoxStyles}
       />
       <hr />
-      <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
+      <Stack horizontal tokens={{ childrenGap: 13, padding: 10 }}>
         <Toggle label={`${translateMessage('Switch to beta')}`}
           onChange={changeVersion}
           onText={translateMessage('On')}

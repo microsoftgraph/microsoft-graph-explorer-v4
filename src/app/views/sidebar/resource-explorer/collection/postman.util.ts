@@ -68,7 +68,6 @@ ResourcePath[] {
     const { name, request } = item;
     const { method, url } = request!;
 
-    // const version = url.path[0];
     const paths = url.path;
     paths.shift();
     paths.unshift('/')
