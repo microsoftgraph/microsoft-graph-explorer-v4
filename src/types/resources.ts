@@ -1,6 +1,6 @@
 import { INavLink } from '@fluentui/react';
 
-export type Method = 'Get' | 'Post' | 'Patch' | 'Put' | 'Delete';
+export type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 
 export interface IResource {
   segment: string;
