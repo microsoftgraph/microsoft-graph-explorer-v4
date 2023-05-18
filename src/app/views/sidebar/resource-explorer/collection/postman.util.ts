@@ -4,11 +4,10 @@ import {
   IPostmanCollection,
   Item
 } from '../../../../../types/postman-collection';
-import { IResource, IResourceLink, ResourceLinkType, ResourcePath } from '../../../../../types/resources';
+import { ResourceLinkType, ResourcePath } from '../../../../../types/resources';
 import { GRAPH_URL } from '../../../../services/graph-constants';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
-import { getMatchingResourceForUrl } from '../../../../utils/resources/resources-filter';
-import { generateKey, getCurrentTree } from '../resource-explorer.utils';
+import { generateKey } from '../resource-explorer.utils';
 
 export function generatePostmanCollection(
   paths: ResourcePath[]

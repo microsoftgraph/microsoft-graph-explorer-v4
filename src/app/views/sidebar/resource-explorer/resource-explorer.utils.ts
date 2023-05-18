@@ -1,4 +1,4 @@
-import { INavLink, INavLinkGroup } from '@fluentui/react';
+import { INavLinkGroup } from '@fluentui/react';
 
 import {
   IResource, IResourceLabel, IResourceLink, Method, ResourceLinkType, ResourceMethod, ResourcePath
