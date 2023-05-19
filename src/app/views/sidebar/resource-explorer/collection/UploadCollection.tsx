@@ -102,7 +102,7 @@ export const UploadPostmanCollection = () => {
         onClick={() => selectFile()}
       >
         <Label>
-          {translateMessage('Upload')}
+          {translateMessage('Upload collection')}
         </Label>
       </ActionButton>
       <Dialog
