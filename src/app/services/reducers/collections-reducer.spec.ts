@@ -23,29 +23,29 @@ const paths = [{
   labels: [
     {
       name: 'v1.0', methods: [{
-        name: 'Get',
+        name: 'GET',
         documentationUrl: null
       }, {
-        name: 'Post',
+        name: 'POST',
         documentationUrl: null
       }]
     },
     {
       name: 'beta', methods: [{
-        name: 'Get',
+        name: 'GET',
         documentationUrl: null
       }, {
-        name: 'Post',
+        name: 'POST',
         documentationUrl: null
       }]
     }
   ],
   version: 'v1.0',
   methods: [{
-    name: 'Get',
+    name: 'GET',
     documentationUrl: null
   }, {
-    name: 'Post',
+    name: 'POST',
     documentationUrl: null
   }],
   isExpanded: true,
@@ -61,10 +61,10 @@ const resourceLinks: IResourceLink[] = [
     labels: [
       {
         name: 'v1.0', methods: [{
-          name: 'Get',
+          name: 'GET',
           documentationUrl: null
         }, {
-          name: 'Post',
+          name: 'POST',
           documentationUrl: null
         }]
       }
