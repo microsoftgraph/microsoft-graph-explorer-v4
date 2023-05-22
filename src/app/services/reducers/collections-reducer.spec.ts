@@ -1,7 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
-import { Collection, IResourceLink, ResourceLinkType } from '../../../types/resources';
+import { Collection, IResourceLink, ResourceLinkType, ResourcePath } from '../../../types/resources';
 import { addResourcePaths, removeResourcePaths } from '../actions/collections-action-creators';
 import { RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS } from '../redux-constants';
 import { collections } from './collections-reducer';
@@ -16,44 +16,14 @@ const initialState: Collection[] = [{
   isDefault: true
 }];
 
-const paths = [{
+const paths: ResourcePath[] = [{
   key: '5-issues',
   url: '/issues',
   name: 'issues (1)',
-  labels: [
-    {
-      name: 'v1.0', methods: [{
-        name: 'GET',
-        documentationUrl: null
-      }, {
-        name: 'POST',
-        documentationUrl: null
-      }]
-    },
-    {
-      name: 'beta', methods: [{
-        name: 'GET',
-        documentationUrl: null
-      }, {
-        name: 'POST',
-        documentationUrl: null
-      }]
-    }
-  ],
   version: 'v1.0',
-  methods: [{
-    name: 'GET',
-    documentationUrl: null
-  }, {
-    name: 'POST',
-    documentationUrl: null
-  }],
-  isExpanded: true,
-  parent: '/',
-  level: 1,
+  method: 'GET',
   paths: ['/'],
-  type: 'path',
-  links: []
+  type: ResourceLinkType.PATH
 }];
 
 const resourceLinks: IResourceLink[] = [

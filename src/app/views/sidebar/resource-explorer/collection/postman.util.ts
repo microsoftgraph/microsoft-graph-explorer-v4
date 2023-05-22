@@ -59,8 +59,7 @@ function generateItemsFromPaths(resources: ResourcePath[]): Item[] {
   return list;
 }
 
-export function generateResourcePathsFromPostmanCollection(collection: IPostmanCollection):
-ResourcePath[] {
+export function generateResourcePathsFromPostmanCollection(collection: IPostmanCollection): ResourcePath[] {
   const resourcePaths: ResourcePath[] = [];
 
   collection.item.forEach((item) => {
@@ -73,14 +72,15 @@ ResourcePath[] {
 
     const { queryVersion: version, requestUrl } = parseSampleUrl(url.raw);
 
+    const linkName = name.replace(`-${version}`, '');
     const resourceLink: ResourcePath = {
-      name: name.replace(`-${version}`, ''),
+      name: linkName,
       url: `/${requestUrl}`,
       method: method.toUpperCase(),
       version,
       paths,
       type: ResourceLinkType.PATH,
-      key: generateKey(method, paths, version)
+      key: generateKey(method, linkName, paths, version)
     };
 
     resourcePaths.push(resourceLink);
