@@ -1,8 +1,8 @@
 import { APIManifest, ManifestRequest } from '../../../../../types/api-manifest';
-import { IResourceLink } from '../../../../../types/resources';
+import { ResourcePath } from '../../../../../types/resources';
 import { GRAPH_BETA_DESCRIPTION_URL, GRAPH_URL, GRAPH_V1_DESCRIPTION_URL } from '../../../../services/graph-constants';
 
-export function generateAPIManifest(paths: IResourceLink[]): APIManifest {
+export function generateAPIManifest(paths: ResourcePath[]): APIManifest {
   return {
     publisher: {
       name: 'Microsoft Graph',
@@ -24,7 +24,7 @@ export function generateAPIManifest(paths: IResourceLink[]): APIManifest {
   };
 }
 
-function getRequestsFromPaths(paths: IResourceLink[]): ManifestRequest[] {
+function getRequestsFromPaths(paths: ResourcePath[]): ManifestRequest[] {
   const requests: ManifestRequest[] = [];
   paths.forEach(path => {
     const { version, method, url } = path;
