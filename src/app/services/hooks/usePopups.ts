@@ -6,7 +6,7 @@ import {
 } from '../context/popups-context';
 
 
-const usePopups = <Data = {}>(item: PopupItem | JSX.Element, type: PopupsType,
+const usePopups = <Data = {}>(item: PopupItem , type: PopupsType,
   reference?: string): UsePopupsResponse<Data> => {
   const dispatch = usePopupsDispatchContext();
   const { popups: popupsState } = usePopupsStateContext();
@@ -14,7 +14,7 @@ const usePopups = <Data = {}>(item: PopupItem | JSX.Element, type: PopupsType,
 
   function show(properties: PopupsProps<Data>) {
 
-    let component = item;
+    let component = null;
     if (typeof (item) === 'string' && popups.has(item)) {
       component = popups.get(item);
     }

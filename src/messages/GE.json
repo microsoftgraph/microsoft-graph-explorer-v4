@@ -483,7 +483,7 @@
   "You require the following permissions to read": "You require Directory.Read.All or Directory.ReadWrite.All or DelegatedPermissionGrant.ReadWrite.All to read permission grants for your tenant",
   "We are retrying the revoking operation": "An error occurred during the revoking process. We are retrying the revoking operation",
   "Remove from collection": "Remove from collection",
-  "Invalid file format": "Oops! Looks like you tried to upload an invalid file format. Please upload a valid Postman collection file",
+  "Invalid file format": "Looks like you tried to upload an invalid file format. Please upload a valid Postman collection file",
   "Upload collection": "Upload collection",
   "Would you like to merge with the current collection?": "Would you like to merge with the current collection?"
 }
