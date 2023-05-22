@@ -1,4 +1,4 @@
-import { INavLinkGroup } from '@fluentui/react';
+import { INavLinkGroup, getId } from '@fluentui/react';
 
 import {
   IResource, IResourceLabel, IResourceLink, Method, ResourceLinkType, ResourceMethod, ResourcePath
@@ -145,14 +145,20 @@ export function createResourcesList(
   ];
 }
 
+// const level = paths.length;
+//     const parentKeyPart = parent === '/' ? 'root' : parent;
+//     const methodKeyPart = method ? `-${method?.toLowerCase()}` : '';
+//     const key = `${level}-${parentKeyPart}-${segment}${methodKeyPart}`;
+
 export function generateKey(method: string | undefined, paths: string[], version: string) {
   const level = paths.length;
   let pathsKeyPart = '';
   paths.forEach(path => {
-    pathsKeyPart += `-${path === '/' ? 'root' : path}`;
+    pathsKeyPart += `${path === '/' ? 'root' : path}`;
   })
-  const methodKeyPart = method ? `-${method?.toLowerCase()}` : '';
-  const key = `${level}${pathsKeyPart}${methodKeyPart}-${version}`;
+  const methodKeyPart = method ? `${method?.toLowerCase()}` : '';
+  const pathId = getId(pathsKeyPart);
+  const key = `${level}-${pathsKeyPart}-${pathId}-${methodKeyPart}-${version}`;
   return key;
 }
 
@@ -256,7 +262,7 @@ export function getResourcePaths(
 function flatten(content: IResourceLink[]): ResourcePath[] {
   let result: any[] = [];
   content.forEach(function (item: IResourceLink) {
-    const { key, paths,type,url,method, name } = item!;
+    const { key, paths, type, url, method, name } = item!;
     result.push({ key, paths,type,url,method, name });
     if (Array.isArray(item.links)) {
       result = result.concat(flatten(item.links));
