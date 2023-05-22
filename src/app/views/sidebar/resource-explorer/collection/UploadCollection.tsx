@@ -12,7 +12,7 @@ import { useAppSelector } from '../../../../../store';
 export const UploadPostmanCollection = () => {
   const dispatch = useDispatch();
   const [isDialogHidden, setIsDialogHidden] = useState(true);
-  const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>();
+  const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>([]);
   const { collections } = useAppSelector((state) => state);
 
   const uploadIcon: IIconProps = {
@@ -41,7 +41,7 @@ export const UploadPostmanCollection = () => {
             toggleIsDialogHidden();
           }
           else{
-            dispatch(addResourcePaths(generatedCollection!));
+            dispatch(addResourcePaths(generatedCollection));
           }
         }
         catch(error){
@@ -71,7 +71,7 @@ export const UploadPostmanCollection = () => {
   }
 
   const mergeWithExistingCollection = () => {
-    dispatch(addResourcePaths(uploadedCollections!));
+    dispatch(addResourcePaths(uploadedCollections));
     setIsDialogHidden(!isDialogHidden);
   }
 
@@ -79,7 +79,7 @@ export const UploadPostmanCollection = () => {
     const resourcePaths = getPathsFromCollection();
     dispatch(removeResourcePaths(resourcePaths));
     setIsDialogHidden(!isDialogHidden);
-    dispatch(addResourcePaths(uploadedCollections!));
+    dispatch(addResourcePaths(uploadedCollections));
   }
 
   const getPathsFromCollection = (): ResourcePath[] => {
@@ -116,8 +116,8 @@ export const UploadPostmanCollection = () => {
         }}
       >
         <DialogFooter>
-          <PrimaryButton onClick={mergeWithExistingCollection} text={translateMessage('Yes')} />
-          <DefaultButton onClick={overwriteCollection} text={translateMessage('No')} />
+          <PrimaryButton onClick={mergeWithExistingCollection} text={translateMessage('YES')} />
+          <DefaultButton onClick={overwriteCollection} text={translateMessage('NO')} />
         </DialogFooter>
       </Dialog>
     </div>

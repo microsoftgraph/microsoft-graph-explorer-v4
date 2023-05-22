@@ -258,7 +258,7 @@ function flatten(content: IResourceLink[]): ResourcePath[] {
   let result: any[] = [];
   content.forEach(function (item: IResourceLink) {
     const { key, paths, type, url, method, name } = item!;
-    result.push({ key, paths,type,url,method, name });
+    result.push({ key, paths, type, url, method, name });
     if (Array.isArray(item.links)) {
       result = result.concat(flatten(item.links));
     }
