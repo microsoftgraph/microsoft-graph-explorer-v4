@@ -29,6 +29,7 @@ import {
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
+import { UploadPostmanCollection } from './collection/UploadCollection';
 
 const UnstyledResourceExplorer = (props: any) => {
   const { resources: { data, pending }, collections } = useAppSelector(
@@ -96,8 +97,9 @@ const UnstyledResourceExplorer = (props: any) => {
   }
 
   const setQuery = (resourceLink: INavLink) => {
+    const link = resourceLink as IResourceLink;
     if (resourceLink.type === ResourceLinkType.NODE) { return; }
-    const resourceUrl = getUrlFromLink(resourceLink);
+    const resourceUrl = getUrlFromLink(link.paths);
     if (!resourceUrl) { return; }
     const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
     const verb = resourceLink.method!;
@@ -136,7 +138,7 @@ const UnstyledResourceExplorer = (props: any) => {
         styles={searchBoxStyles}
       />
       <hr />
-      <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
+      <Stack horizontal tokens={{ childrenGap: 13, padding: 10 }}>
         <Toggle label={`${translateMessage('Switch to beta')}`}
           onChange={changeVersion}
           onText={translateMessage('On')}
@@ -144,6 +146,7 @@ const UnstyledResourceExplorer = (props: any) => {
           inlineLabel
           styles={{ text: { position: 'relative', top: '4px' } }}
         />
+        < UploadPostmanCollection />
       </Stack>
 
       <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
