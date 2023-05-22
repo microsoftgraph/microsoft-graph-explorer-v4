@@ -238,7 +238,7 @@ export function getResourcePaths(
 ): ResourcePath[] {
   const { links } = item;
   let content: ResourcePath[] = flatten(links);
-  const { key, paths,type,url,method, name } = item!;
+  const { key, paths,type,url,method, name } = item;
 
   content.unshift({ key , paths, type,url,method,version, name });
   content = content.filter(
@@ -257,7 +257,7 @@ export function getResourcePaths(
 function flatten(content: IResourceLink[]): ResourcePath[] {
   let result: any[] = [];
   content.forEach(function (item: IResourceLink) {
-    const { key, paths, type, url, method, name } = item!;
+    const { key, paths, type, url, method, name } = item;
     result.push({ key, paths, type, url, method, name });
     if (Array.isArray(item.links)) {
       result = result.concat(flatten(item.links));
