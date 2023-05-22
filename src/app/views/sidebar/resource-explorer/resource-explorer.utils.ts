@@ -145,11 +145,6 @@ export function createResourcesList(
   ];
 }
 
-// const level = paths.length;
-//     const parentKeyPart = parent === '/' ? 'root' : parent;
-//     const methodKeyPart = method ? `-${method?.toLowerCase()}` : '';
-//     const key = `${level}-${parentKeyPart}-${segment}${methodKeyPart}`;
-
 export function generateKey(method: string | undefined, paths: string[], version: string) {
   const level = paths.length;
   let pathsKeyPart = '';
