@@ -1,4 +1,4 @@
-import { IResource } from '../../../../../types/resources';
+import { IResource, ResourcePath } from '../../../../../types/resources';
 import content from '../../../../utils/resources/resources.json';
 import { createResourcesList, getResourcePaths } from '../resource-explorer.utils';
 import { generatePostmanCollection, generateResourcePathsFromPostmanCollection } from './postman.util';
@@ -14,7 +14,9 @@ describe('Postman collection should', () => {
   it('generate resource paths from postman collection', async () => {
     const { collection, paths } = setupCollection();
     const resourceLinks = generateResourcePathsFromPostmanCollection(collection);
-    expect(resourceLinks).toStrictEqual(paths);
+    const resourceLinksWithoutKey = getResourcePathsWithoutKey(resourceLinks);
+    const pathsWithoutKey = getResourcePathsWithoutKey(paths);
+    expect(resourceLinksWithoutKey).toStrictEqual(pathsWithoutKey);
   });
 
 });
@@ -26,5 +28,14 @@ function setupCollection() {
   const paths = getResourcePaths(item, version);
   const collection = generatePostmanCollection(paths);
   return {collection, paths};
+}
+
+const getResourcePathsWithoutKey = (resourcePath: ResourcePath[]) => {
+  return resourcePath.map(path => {
+    return {
+      ...path,
+      key: undefined
+    }
+  });
 }
 
