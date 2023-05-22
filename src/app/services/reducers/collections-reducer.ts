@@ -1,5 +1,5 @@
 import { AppAction } from '../../../types/action';
-import { Collection, IResourceLink } from '../../../types/resources';
+import { Collection, ResourcePath } from '../../../types/resources';
 import {
   COLLECTION_CREATE_SUCCESS,
   RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
@@ -18,7 +18,7 @@ export function collections(state: Collection[] = initialState, action: AppActio
     case RESOURCEPATHS_ADD_SUCCESS:
       const index = state.findIndex(k => k.isDefault);
       if (index > -1) {
-        const paths: IResourceLink[] = Array.from(
+        const paths: ResourcePath[] = Array.from(
           new Set([...state[index].paths, ...action.response])
         );
         const context = [...state];
@@ -30,8 +30,8 @@ export function collections(state: Collection[] = initialState, action: AppActio
     case RESOURCEPATHS_DELETE_SUCCESS:
       const indexOfDefaultCollection = state.findIndex(k => k.isDefault);
       if (indexOfDefaultCollection > -1) {
-        const list: IResourceLink[] = [...state[indexOfDefaultCollection].paths];
-        action.response.forEach((path: IResourceLink) => {
+        const list: ResourcePath[] = [...state[indexOfDefaultCollection].paths];
+        action.response.forEach((path: ResourcePath) => {
           const pathIndex = list.findIndex(k => k.key === path.key);
           list.splice(pathIndex, 1);
         });
