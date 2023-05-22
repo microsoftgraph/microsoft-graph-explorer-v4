@@ -62,7 +62,7 @@ describe('Resource payload should', () => {
       version
     });
     const link = currentTree.links[0];
-    const withoutCounter = getUrlFromLink(link);
+    const withoutCounter = getUrlFromLink(link.paths);
     expect(withoutCounter).toBe('/appCatalogs/teamsApps');
   });
 

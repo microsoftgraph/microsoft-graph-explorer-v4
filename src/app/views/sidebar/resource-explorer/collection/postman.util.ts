@@ -4,11 +4,13 @@ import {
   IPostmanCollection,
   Item
 } from '../../../../../types/postman-collection';
-import { IResourceLink } from '../../../../../types/resources';
+import { ResourceLinkType, ResourcePath } from '../../../../../types/resources';
 import { GRAPH_URL } from '../../../../services/graph-constants';
+import { parseSampleUrl } from '../../../../utils/sample-url-generation';
+import { generateKey } from '../resource-explorer.utils';
 
 export function generatePostmanCollection(
-  paths: IResourceLink[]
+  paths: ResourcePath[]
 ): IPostmanCollection {
   const collection: IPostmanCollection = {
     info: {
@@ -22,7 +24,7 @@ export function generatePostmanCollection(
   return collection;
 }
 
-function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
+function generateItemsFromPaths(resources: ResourcePath[]): Item[] {
   const list: Item[] = [];
   resources.forEach(resource => {
     const {
@@ -55,4 +57,34 @@ function generateItemsFromPaths(resources: IResourceLink[]): Item[] {
     list.push(item);
   });
   return list;
+}
+
+export function generateResourcePathsFromPostmanCollection(collection: IPostmanCollection):
+ResourcePath[] {
+  const resourcePaths: ResourcePath[] = [];
+
+  collection.item.forEach((item) => {
+    const { name, request } = item;
+    const { method, url } = request!;
+
+    const paths = url.path;
+    paths.shift();
+    paths.unshift('/')
+
+    const { queryVersion: version, requestUrl } = parseSampleUrl(url.raw);
+
+    const resourceLink: ResourcePath = {
+      name: name.replace(`-${version}`, ''),
+      url: `/${requestUrl}`,
+      method: method.toUpperCase(),
+      version,
+      paths,
+      type: ResourceLinkType.PATH,
+      key: generateKey(method, paths, version)
+    };
+
+    resourcePaths.push(resourceLink);
+  });
+
+  return resourcePaths;
 }
