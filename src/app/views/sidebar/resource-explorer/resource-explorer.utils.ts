@@ -1,4 +1,4 @@
-import { INavLinkGroup, getId } from '@fluentui/react';
+import { INavLinkGroup } from '@fluentui/react';
 
 import {
   IResource, IResourceLabel, IResourceLink, Method, ResourceLinkType, ResourceMethod, ResourcePath
@@ -33,7 +33,7 @@ export function createResourcesList(
   ): IResourceLink[] {
     const { segment, children } = parent;
     const links: IResourceLink[] = [];
-    const childPaths = [...paths, segment];
+    const childPaths = Array.from(new Set([...paths, segment]));
     if (methods.length > 1) {
       if (
         !searchText ||
@@ -111,7 +111,8 @@ export function createResourcesList(
         : false;
 
     const docLink = getLink(labels, version, method);
-    const key = generateKey(method, paths, version);
+    const pathItems = Array.from(new Set([...paths, segment]));
+    const key = generateKey(method, pathItems, version);
 
     return {
       key,
@@ -121,7 +122,7 @@ export function createResourcesList(
       isExpanded,
       parent,
       level,
-      paths,
+      paths: pathItems,
       method: method?.toUpperCase(),
       type,
       links: versionedChildren,
@@ -146,15 +147,13 @@ export function createResourcesList(
 }
 
 export function generateKey(method: string | undefined, paths: string[], version: string) {
-  const level = paths.length;
+  const pathItems = Array.from(new Set([...paths]));
   let pathsKeyPart = '';
-  paths.forEach(path => {
-    pathsKeyPart += `${path === '/' ? 'root' : path}`;
+  pathItems.forEach(path => {
+    pathsKeyPart += `${path === '/' ? 'root' : path}-`;
   })
   const methodKeyPart = method ? `${method?.toLowerCase()}` : '';
-  const pathId = getId(pathsKeyPart);
-  const key = `${level}-${pathsKeyPart}-${pathId}-${methodKeyPart}-${version}`;
-  return key;
+  return `${paths.length - 1}-${pathsKeyPart}${methodKeyPart}-${version}`.replace('--', '-');
 }
 
 function getLink(labels: IResourceLabel[], version: string, method?: Method) {
@@ -223,13 +222,8 @@ function getMethod(method: string | ResourceMethod): Method {
 }
 
 export function getUrlFromLink(paths: string[]): string {
-  let url = '';
-  if (paths.length > 1) {
-    paths.slice(1).forEach((path: string) => {
-      url += '/' + path;
-    });
-  }
-  return url;
+  const items = [...paths];
+  return items.join('/').replace('//', '/');
 }
 
 export function getResourcePaths(
@@ -238,9 +232,9 @@ export function getResourcePaths(
 ): ResourcePath[] {
   const { links } = item;
   let content: ResourcePath[] = flatten(links);
-  const { key, paths,type,url,method, name } = item;
+  const { key, paths, type, url, method, name } = item;
 
-  content.unshift({ key , paths, type,url,method,version, name });
+  content.unshift({ key, paths, type, url, method, version, name });
   content = content.filter(
     (k: ResourcePath) => k.type !== ResourceLinkType.NODE
   );

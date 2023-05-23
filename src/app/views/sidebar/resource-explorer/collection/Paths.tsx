@@ -4,10 +4,10 @@ import {
   IColumn, Selection
 } from '@fluentui/react/lib/DetailsList';
 import { getId, MarqueeSelection, TooltipHost } from '@fluentui/react';
-import { IResourceLink } from '../../../../../types/resources';
+import { ResourcePath } from '../../../../../types/resources';
 
 interface IPathProps {
-  resources: IResourceLink[];
+  resources: ResourcePath[];
   columns: IColumn[];
   selectItems: Function;
 }

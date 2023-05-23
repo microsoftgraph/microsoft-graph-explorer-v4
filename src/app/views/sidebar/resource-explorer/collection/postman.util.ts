@@ -59,8 +59,7 @@ function generateItemsFromPaths(resources: ResourcePath[]): Item[] {
   return list;
 }
 
-export function generateResourcePathsFromPostmanCollection(collection: IPostmanCollection):
-ResourcePath[] {
+export function generateResourcePathsFromPostmanCollection(collection: IPostmanCollection): ResourcePath[] {
   const resourcePaths: ResourcePath[] = [];
 
   collection.item.forEach((item) => {
