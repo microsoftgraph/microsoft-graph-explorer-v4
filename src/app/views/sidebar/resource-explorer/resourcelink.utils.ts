@@ -7,9 +7,7 @@ export const existsInCollection = (link: IResourceLink, paths: ResourcePath[], v
     return !!found;
   }
 
-  let resourceUrl = getUrlFromLink(link.paths) + '/';
-  resourceUrl += link.type === 'node' ? link.name.split(' ')[0] : link.url.split('-').pop();
-  const pathsInCollection = paths.filter(p => p.url.startsWith(resourceUrl) &&
+  const pathsInCollection = paths.filter(p => p.url.startsWith(getUrlFromLink(link.paths)) &&
     p.key!.split('-').pop() === version);
 
   if (pathsInCollection.length === 0) {

@@ -72,15 +72,14 @@ export function generateResourcePathsFromPostmanCollection(collection: IPostmanC
 
     const { queryVersion: version, requestUrl } = parseSampleUrl(url.raw);
 
-    const linkName = name.replace(`-${version}`, '');
     const resourceLink: ResourcePath = {
-      name: linkName,
+      name: name.replace(`-${version}`, ''),
       url: `/${requestUrl}`,
       method: method.toUpperCase(),
       version,
       paths,
       type: ResourceLinkType.PATH,
-      key: generateKey(method, linkName, paths, version)
+      key: generateKey(method, paths, version)
     };
 
     resourcePaths.push(resourceLink);
