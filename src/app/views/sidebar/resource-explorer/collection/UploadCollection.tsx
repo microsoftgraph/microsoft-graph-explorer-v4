@@ -63,7 +63,7 @@ export const UploadPostmanCollection = () => {
     type: DialogType.normal,
     title: translateMessage('Upload collection'),
     closeButtonAriaLabel: 'Close',
-    subText: translateMessage('Would you like to merge with the current collection?')
+    subText: translateMessage('You have an existing')
   };
 
   const toggleIsDialogHidden = () => {
@@ -116,8 +116,8 @@ export const UploadPostmanCollection = () => {
         }}
       >
         <DialogFooter>
-          <PrimaryButton onClick={mergeWithExistingCollection} text={translateMessage('YES')} />
-          <DefaultButton onClick={overwriteCollection} text={translateMessage('NO')} />
+          <PrimaryButton onClick={mergeWithExistingCollection} text={translateMessage('Merge with existing')} />
+          <DefaultButton onClick={overwriteCollection} text={translateMessage('Replace existing')} />
         </DialogFooter>
       </Dialog>
     </div>
