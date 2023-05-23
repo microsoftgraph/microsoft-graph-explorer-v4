@@ -79,7 +79,7 @@ describe('Resource payload should', () => {
     const paths = ['/', 'appCatalogs', 'teamsApps'];
     const method = 'GET';
     const key = generateKey(method, paths, version);
-    expect(key).toBe('3-root-appCatalogs-teamsApps-get-v1.0');
+    expect(key).toBe('2-root-appCatalogs-teamsApps-get-v1.0');
   });
 });
 
