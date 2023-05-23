@@ -93,7 +93,7 @@ export const UploadPostmanCollection = () => {
 
 
   return (
-    <div style={{position: 'relative', bottom: '4px'}} hidden={true}>
+    <div style={{position: 'relative', bottom: '4px'}} >
       <input type="file" id="file-input" style={style_} onChange={handleFileSelect}/>
       <ActionButton iconProps={uploadIcon}
         title={translateMessage('Upload collection')}
