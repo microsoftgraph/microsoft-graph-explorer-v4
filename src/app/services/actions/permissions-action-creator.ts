@@ -117,10 +117,10 @@ type ScopesFetchType = 'full' | 'query';
 export function fetchScopes(scopesFetchType: ScopesFetchType = 'full') {
   return async (dispatch: Function, getState: Function) => {
     try {
-      const { devxApi, profile, sampleQuery: query }: ApplicationState = getState();
+      const { devxApi, sampleQuery: query }: ApplicationState = getState();
       let permissionsUrl = `${devxApi.baseUrl}/permissions`;
 
-      const scopeType = getPermissionsScopeType(profile);
+      const scopeType = 'delegatedWork';
 
       if (scopesFetchType === 'query') {
         const signature = sanitizeQueryUrl(query.sampleUrl);
@@ -171,13 +171,6 @@ export function fetchScopes(scopesFetchType: ScopesFetchType = 'full') {
       );
     }
   };
-}
-
-export function getPermissionsScopeType(profile: IUser | null | undefined) {
-  if (profile?.profileType === ACCOUNT_TYPE.MSA) {
-    return PERMS_SCOPE.PERSONAL;
-  }
-  return PERMS_SCOPE.WORK;
 }
 
 export function consentToScopes(scopes: string[]) {
