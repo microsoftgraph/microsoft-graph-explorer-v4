@@ -43,7 +43,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         div: {
           visibility: 'hidden',
           overflow: 'hidden',
-          alignSelf: 'center'
+          marginTop: 2
         },
         selectors: {
           ':hover': { background: getTheme().palette.neutralLight, ...showButtons },
@@ -51,7 +51,10 @@ const ResourceLink = (props: IResourceLinkProps) => {
           '.is-selected &': showButtons
         }
       },
-      resourceLinkNameContainer: { textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex', padding: 5 },
+      resourceLinkNameContainer: {
+        textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex',
+        padding: 5, marginTop: 2
+      },
       resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }
     }
   );
