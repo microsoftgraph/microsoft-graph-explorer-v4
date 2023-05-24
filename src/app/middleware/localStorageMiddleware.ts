@@ -5,6 +5,7 @@ import { saveTheme } from '../../themes/theme-utils';
 import { AppAction } from '../../types/action';
 import { ResourcePath } from '../../types/resources';
 import { addResourcePaths } from '../services/actions/collections-action-creators';
+import { getUniquePaths } from '../services/reducers/collections-reducer.util';
 import {
   CHANGE_THEME_SUCCESS, COLLECTION_CREATE_SUCCESS, FETCH_RESOURCES_ERROR, FETCH_RESOURCES_SUCCESS,
   RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, SAMPLES_FETCH_SUCCESS
@@ -23,7 +24,7 @@ const localStorageMiddleware = (store: any) => (next: any) => async (action: App
     case RESOURCEPATHS_ADD_SUCCESS: {
       const collections = await collectionsCache.read();
       const item = collections.find(k => k.isDefault)!;
-      item.paths = Array.from(new Set([...item.paths, ...action.response]));
+      item.paths = getUniquePaths(item.paths, action.response);
       await collectionsCache.update(item.id, item);
       break;
     }

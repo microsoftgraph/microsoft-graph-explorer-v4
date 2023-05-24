@@ -4,6 +4,7 @@ import {
   COLLECTION_CREATE_SUCCESS,
   RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
 } from '../redux-constants';
+import { getUniquePaths } from './collections-reducer.util';
 
 const initialState: Collection[] = [];
 
@@ -18,9 +19,7 @@ export function collections(state: Collection[] = initialState, action: AppActio
     case RESOURCEPATHS_ADD_SUCCESS:
       const index = state.findIndex(k => k.isDefault);
       if (index > -1) {
-        const paths: ResourcePath[] = Array.from(
-          new Set([...state[index].paths, ...action.response])
-        );
+        const paths: ResourcePath[] = getUniquePaths(state[index].paths, action.response);
         const context = [...state];
         context[index].paths = paths;
         return context;
