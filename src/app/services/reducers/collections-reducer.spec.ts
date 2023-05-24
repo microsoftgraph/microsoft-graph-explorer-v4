@@ -109,4 +109,15 @@ describe('Collections Reducer', () => {
     expect(state_).toEqual(newState);
   });
 
+  it('should handle RESOURCEPATHS_ADD_SUCCESS and return unique paths', () => {
+    const newState = [...initialState];
+    newState[0].paths = paths;
+    const action_ = {
+      type: RESOURCEPATHS_ADD_SUCCESS,
+      response: [paths[0]]
+    }
+    const state_ = collections(newState, action_);
+    expect(state_[0].paths.length).toEqual(paths.length);
+  });
+
 });
