@@ -486,6 +486,6 @@
   "Invalid file format": "Looks like you tried to upload an invalid file format. Please upload a valid Postman collection file",
   "Upload collection": "Upload collection",
   "You have an existing": "You have an existing collection. What would you like to do?",
-  "Merge with existing": "Merge with existing",
-  "Replace existing": "Replace existing"
+  "Merge with existing": "Merge",
+  "Replace existing": "Replace"
 }
