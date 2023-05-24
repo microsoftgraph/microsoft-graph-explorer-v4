@@ -10,10 +10,7 @@ import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
 import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
-import {
-  ACCOUNT_TYPE, DEFAULT_USER_SCOPES, PERMS_SCOPE,
-  REVOKING_PERMISSIONS_REQUIRED_SCOPES
-} from '../graph-constants';
+import { DEFAULT_USER_SCOPES, REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
   FETCH_FULL_SCOPES_PENDING,
