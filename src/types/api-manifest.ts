@@ -19,8 +19,8 @@ interface Auth {
   access: Access[];
 }
 
-interface Access {
-  type: 'delegated' | 'application';
+export interface Access {
+  type: 'Delegated' | 'Application';
   actions: string[];
 }
 

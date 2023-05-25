@@ -1,27 +1,16 @@
 import { DefaultButton, DetailsList, DialogFooter, Label, PrimaryButton, SelectionMode } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { useAppSelector } from '../../../../../store';
 import { componentNames } from '../../../../../telemetry';
 import { PopupsComponent } from '../../../../services/context/popups-context';
+import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal, trackDownload } from '../../../common/download';
-import { getCollectionPermissions } from './collection-permissions.util';
-
-interface CollectionPermission {
-  value: string;
-  scopeType: string;
-  consentDisplayName: string;
-  consentDescription: string;
-  isAdmin: boolean;
-  isLeastPrivilege: boolean;
-  isHidden: boolean;
-}
 
 const CollectionPermissions: React.FC<PopupsComponent<null>> = (props) => {
-  const [permissions, setPermissions] = useState<CollectionPermission[]>([]);
-  const [isFetching, setIsFetching] = useState(false);
+  const { getPermissions, permissions, isFetching } = useCollectionPermissions();
 
   const { collections } = useAppSelector(
     (state) => state
@@ -40,23 +29,15 @@ const CollectionPermissions: React.FC<PopupsComponent<null>> = (props) => {
     }
   ];
 
-  async function getPermissions() {
-    setIsFetching(true);
-    try {
-      const perms = await getCollectionPermissions(paths);
-      setIsFetching(false);
-      setPermissions(perms.results);
-    } catch (error) {
-      throw new Error('Error fetching permissions');
-    }
+  function downloadPermissions(): void {
+    const filename = 'collection-permissions.json';
+    downloadToLocal(permissions, filename);
+    trackDownload(filename, componentNames.DOWNLOAD_COLLECTION_PERMISSIONS_BUTTON);
   }
 
   useEffect(() => {
-    if (paths && paths.length > 0) {
-      getPermissions().catch(() => {
-        setIsFetching(false);
-      }
-      );
+    if (paths.length > 0) {
+      getPermissions(paths)
     }
   }, [paths]);
 
@@ -74,23 +55,21 @@ const CollectionPermissions: React.FC<PopupsComponent<null>> = (props) => {
     )
   }
 
-  function downloadPermissions(): void {
-    const filename = 'collection-permissions.json';
-    downloadToLocal(permissions, filename);
-    trackDownload(filename, componentNames.DOWNLOAD_COLLECTION_PERMISSIONS_BUTTON);
+  if (isFetching) {
+    return (
+      <Label>
+        <FormattedMessage id={'Fetching permissions'} />...
+      </Label>
+    )
   }
 
   return (
     <>
-      {isFetching ? <Label>
-        <FormattedMessage id={'Fetching permissions'} />...
-      </Label> :
-        <DetailsList
-          items={permissions}
-          columns={columns}
-          selectionMode={SelectionMode.none}
-        />
-      }
+      <DetailsList
+        items={permissions}
+        columns={columns}
+        selectionMode={SelectionMode.none}
+      />
       {permissions.length > 0 &&
         <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
           <PrimaryButton onClick={downloadPermissions}>
