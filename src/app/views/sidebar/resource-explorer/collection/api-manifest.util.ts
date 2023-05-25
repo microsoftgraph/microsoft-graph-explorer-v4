@@ -37,11 +37,6 @@ function getAccessFromPermissions(permissions: CollectionPermission[]): Access[]
 
   const type = 'openid';
 
-  const delegatedPermissions: string[] = [];
-  permissions.filter(permission => permission.scopeType.toString() === 'Delegated').forEach(element => {
-    delegatedPermissions.push(element.value);
-  });
-
   return [
     {
       type,

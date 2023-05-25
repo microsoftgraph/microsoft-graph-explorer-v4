@@ -51,7 +51,8 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
   const items = collections ? collections.find(k => k.isDefault)!.paths : [];
 
   const downloadManifest = () => {
-    const filename = `${manifest!.publisher.name}-API-Manifest.json`;
+    if (!manifest) { return; }
+    const filename = `${manifest.publisher.name}-API-Manifest.json`;
     downloadToLocal(manifest, filename);
     trackDownload(filename, componentNames.DOWNLOAD_API_MANIFEST_BUTTON);
   }
