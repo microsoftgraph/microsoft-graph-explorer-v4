@@ -32,18 +32,22 @@ async function getCollectionPermissions(paths: ResourcePath[]) {
 const CollectionPermissionsProvider = ({ children }: any) => {
   const [permissions, setPermissions] = useState<CollectionPermission[]>([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [code, setCode] = useState('');
 
-  async function getPermissions(items: ResourcePath[]): Promise<CollectionPermission[] | null> {
-    try {
-      setIsFetching(true);
-      const perms = await getCollectionPermissions(items);
-      setPermissions(perms.results);
-      setIsFetching(false);
-      return perms.result;
-    } catch (error) {
-      setIsFetching(false);
+  async function getPermissions(items: ResourcePath[]): Promise<void> {
+    const hashCode = window.btoa(JSON.stringify([...items]));
+    if (hashCode !== code) {
+      try {
+        setIsFetching(true);
+        const perms = await getCollectionPermissions(items);
+        setPermissions(perms.results);
+        setIsFetching(false);
+        setCode(hashCode);
+      } catch (error) {
+        setIsFetching(false);
+        setPermissions([]);
+      }
     }
-    return null;
   }
 
   return (
