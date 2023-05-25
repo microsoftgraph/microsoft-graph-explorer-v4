@@ -1,9 +1,6 @@
 import { useState } from 'react';
 
-import { Method, ResourcePath } from '../../../../types/resources';
-import {
-  CollectionPermission
-} from '../../../views/sidebar/resource-explorer/collection/collection-permission';
+import { CollectionPermission, Method, ResourcePath } from '../../../../types/resources';
 import { CollectionPermissionsContext } from './CollectionPermissionsContext';
 
 const DEVX_API_URL = 'https://graphexplorerapi-staging.azurewebsites.net/api/permissions';

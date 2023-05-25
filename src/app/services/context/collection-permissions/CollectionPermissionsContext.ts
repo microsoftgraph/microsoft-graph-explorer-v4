@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import { ResourcePath } from '../../../../types/resources';
-import { CollectionPermission } from '../../../views/sidebar/resource-explorer/collection/collection-permission';
+
+import { CollectionPermission, ResourcePath } from '../../../../types/resources';
 
 interface CollectionPermissionsContext {
   getPermissions: (paths: ResourcePath[]) => Promise<CollectionPermission[] | null>;
