@@ -12,11 +12,8 @@ export function generateAPIManifest(paths: ResourcePath[]): APIManifest {
       {
         apiDescripionUrl: paths[0].version === 'beta' ? GRAPH_BETA_DESCRIPTION_URL : GRAPH_V1_DESCRIPTION_URL,
         auth: {
-          clientId: '',
-          permissions: {
-            delegated: [],
-            application: []
-          }
+          clientIdentifier: '',
+          access: []
         },
         requests: getRequestsFromPaths(paths)
       }
