@@ -8,7 +8,8 @@ export function generateAPIManifest(paths: ResourcePath[]): APIManifest {
       name: 'Microsoft Graph',
       contactEmail: ''
     },
-    apiDependencies: [
+    apiDependencies: {
+      graph:
       {
         apiDescripionUrl: paths[0].version === 'beta' ? GRAPH_BETA_DESCRIPTION_URL : GRAPH_V1_DESCRIPTION_URL,
         auth: {
@@ -17,7 +18,7 @@ export function generateAPIManifest(paths: ResourcePath[]): APIManifest {
         },
         requests: getRequestsFromPaths(paths)
       }
-    ]
+    }
   };
 }
 

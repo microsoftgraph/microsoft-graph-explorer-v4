@@ -1,17 +1,22 @@
 export interface APIManifest {
   publisher: Publisher;
-  apiDependencies: ApiDependency[];
+  apiDependencies: ApiDependencies;
+}
+
+interface Publisher {
+  name: string;
+  contactEmail: string;
+}
+
+interface ApiDependencies {
+  graph: ApiDependency;
 }
 
 interface ApiDependency {
   apiDescripionUrl: string;
   auth: Auth;
+  baseUrl?: string;
   requests: ManifestRequest[];
-}
-
-export interface ManifestRequest {
-  method: string;
-  uriTemplate: string;
 }
 
 interface Auth {
@@ -19,12 +24,22 @@ interface Auth {
   access: Access[];
 }
 
-interface Access {
-  type: 'delegated' | 'application';
-  actions: string[];
+export interface Access {
+  type: string;
+  claims: Claims;
 }
 
-interface Publisher {
-  name: string;
-  contactEmail: string;
+interface Claims {
+  scp?: ClaimDetail;
+  roles?: ClaimDetail
+}
+
+interface ClaimDetail {
+  essential: boolean;
+  values: string[];
+}
+
+export interface ManifestRequest {
+  method: string;
+  uriTemplate: string;
 }
