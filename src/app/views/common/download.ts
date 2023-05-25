@@ -1,4 +1,6 @@
-export function downloadToLocal(content: any, filename: string) {
+import { telemetry, eventTypes } from '../../../telemetry';
+
+function downloadToLocal(content: any, filename: string) {
   const blob = new Blob([JSON.stringify(content, null, 4)], {
     type: 'text/json'
   });
@@ -13,3 +15,15 @@ function download(blob: Blob, filename: string) {
   elem.click();
   document.body.removeChild(elem);
 }
+
+function trackDownload(filename: string, componentName: string) {
+  telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+    componentName,
+    filename
+  });
+}
+
+export {
+  downloadToLocal,
+  trackDownload
+};

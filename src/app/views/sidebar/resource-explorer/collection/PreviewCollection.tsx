@@ -24,6 +24,7 @@ export interface IPathsReview {
 const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   const dispatch: AppDispatch = useDispatch();
   const { show: showManifestDescription } = usePopups('manifest-description', 'panel')
+  const { show: viewPermissions } = usePopups('collection-permissions', 'panel')
   const { collections } = useAppSelector(
     (state) => state
   );
@@ -102,8 +103,15 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
             <Icon
               style={{ marginRight: 10 }}
               aria-label={translateMessage('Describes the API Manifest before you can download')}
-              iconName='Info'></Icon>
+              iconName='Info' />
             <FormattedMessage id='API Manifest' />
+          </DefaultButton>
+          <DefaultButton onClick={() => viewPermissions({
+            settings: {
+              title: translateMessage('View permissions')
+            }
+          })} disabled={selectedItems.length > 0}>
+            <FormattedMessage id='View permissions' />
           </DefaultButton>
         </DialogFooter>
       </>
