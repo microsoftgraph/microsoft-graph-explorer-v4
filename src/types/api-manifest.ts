@@ -1,5 +1,3 @@
-import { Method } from './resources';
-
 export interface APIManifest {
   publisher: Publisher;
   apiDependencies: ApiDependency[];
@@ -17,13 +15,13 @@ export interface ManifestRequest {
 }
 
 interface Auth {
-  clientId: string;
-  permissions: Permissions;
+  clientIdentifier: string;
+  access: Access[];
 }
 
-interface Permissions {
-  delegated: string[];
-  application: string[];
+interface Access {
+  type: 'delegated' | 'application';
+  actions: string[];
 }
 
 interface Publisher {
