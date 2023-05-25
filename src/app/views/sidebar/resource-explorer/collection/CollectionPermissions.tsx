@@ -73,7 +73,7 @@ const CollectionPermissions: React.FC<PopupsComponent<null>> = (props) => {
       {permissions.length > 0 &&
         <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
           <PrimaryButton onClick={downloadPermissions}>
-            <FormattedMessage id='Download' />
+            <FormattedMessage id='Download permissions' />
           </PrimaryButton>
           <DefaultButton onClick={() => props.dismissPopup()}>
             <FormattedMessage id='Close' />
