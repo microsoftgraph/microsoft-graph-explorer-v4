@@ -8,7 +8,8 @@ export function generateAPIManifest(paths: ResourcePath[], permissions: Collecti
       name: 'Microsoft Graph',
       contactEmail: ''
     },
-    apiDependencies: [
+    apiDependencies: {
+      graph:
       {
         apiDescripionUrl: paths[0].version === 'beta' ? GRAPH_BETA_DESCRIPTION_URL : GRAPH_V1_DESCRIPTION_URL,
         auth: {
@@ -17,7 +18,7 @@ export function generateAPIManifest(paths: ResourcePath[], permissions: Collecti
         },
         requests: getRequestsFromPaths(paths)
       }
-    ]
+    }
   };
 }
 
@@ -34,19 +35,32 @@ function getRequestsFromPaths(paths: ResourcePath[]): ManifestRequest[] {
 }
 function getAccessFromPermissions(permissions: CollectionPermission[]): Access[] {
 
+  const type = 'openid';
+
   const delegatedPermissions: string[] = [];
   permissions.filter(permission => permission.scopeType.toString() === 'Delegated').forEach(element => {
     delegatedPermissions.push(element.value);
   });
 
-  return [{
-    type: 'Application',
-    actions: getScopedList(permissions, 'Application')
-  }, {
-    type: 'Delegated',
-    actions: getScopedList(permissions, 'DelegatedWork')
-  }];
-
+  return [
+    {
+      type,
+      claims: {
+        scp: {
+          essential: true,
+          values: getScopedList(permissions, 'Application')
+        }
+      }
+    }, {
+      type,
+      claims: {
+        roles: {
+          essential: true,
+          values: getScopedList(permissions, 'DelegatedWork')
+        }
+      }
+    }
+  ];
 }
 
 function getScopedList(permissions: CollectionPermission[], scopeType: string): string[] {

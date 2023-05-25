@@ -12,6 +12,6 @@ describe('API Manifest should', () => {
     const item: any = filtered.links[0];
     const paths = getResourcePaths(item, version);
     const manifest = generateAPIManifest(paths, []);
-    expect(manifest.apiDependencies[0].requests.length).toBe(paths.length);
+    expect(manifest.apiDependencies.graph.requests.length).toBe(paths.length);
   });
 });
