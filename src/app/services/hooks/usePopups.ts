@@ -6,7 +6,7 @@ import {
 } from '../context/popups-context';
 
 
-const usePopups = <Data = {}>(item: PopupItem, type: PopupsType,
+const usePopups = <Data = {}>(item: PopupItem , type: PopupsType,
   reference?: string): UsePopupsResponse<Data> => {
   const dispatch = usePopupsDispatchContext();
   const { popups: popupsState } = usePopupsStateContext();

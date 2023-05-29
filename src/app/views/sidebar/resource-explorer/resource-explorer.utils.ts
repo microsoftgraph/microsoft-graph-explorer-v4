@@ -1,7 +1,7 @@
-import { INavLink, INavLinkGroup } from '@fluentui/react';
+import { INavLinkGroup } from '@fluentui/react';
 
 import {
-  IResource, IResourceLabel, IResourceLink, Method, ResourceLinkType, ResourceMethod
+  IResource, IResourceLabel, IResourceLink, Method, ResourceLinkType, ResourceMethod, ResourcePath
 } from '../../../../types/resources';
 import { versionExists } from '../../../utils/resources/resources-filter';
 
@@ -33,7 +33,7 @@ export function createResourcesList(
   ): IResourceLink[] {
     const { segment, children } = parent;
     const links: IResourceLink[] = [];
-    const childPaths = [...paths, segment];
+    const childPaths = Array.from(new Set([...paths, segment]));
     if (methods.length > 1) {
       if (
         !searchText ||
@@ -85,9 +85,6 @@ export function createResourcesList(
   ): IResourceLink {
     const { segment, labels } = info;
     const level = paths.length;
-    const parentKeyPart = parent === '/' ? 'root' : parent;
-    const methodKeyPart = method ? `-${method?.toLowerCase()}` : '';
-    const key = `${level}-${parentKeyPart}-${segment}${methodKeyPart}`;
     const availableMethods: Method[] = getAvailableMethods(labels, version);
     const versionedChildren = getVersionedChildLinks(
       info,
@@ -114,6 +111,8 @@ export function createResourcesList(
         : false;
 
     const docLink = getLink(labels, version, method);
+    const pathItems = Array.from(new Set([...paths, segment]));
+    const key = generateKey(method, pathItems, version);
 
     return {
       key,
@@ -123,8 +122,8 @@ export function createResourcesList(
       isExpanded,
       parent,
       level,
-      paths,
-      method,
+      paths: pathItems,
+      method: method?.toUpperCase(),
       type,
       links: versionedChildren,
       docLink
@@ -145,6 +144,16 @@ export function createResourcesList(
       links: navLink.links
     }
   ];
+}
+
+export function generateKey(method: string | undefined, paths: string[], version: string) {
+  const pathItems = Array.from(new Set([...paths]));
+  let pathsKeyPart = '';
+  pathItems.forEach(path => {
+    pathsKeyPart += `${path === '/' ? 'root' : path}-`;
+  })
+  const methodKeyPart = method ? `${method?.toLowerCase()}` : '';
+  return `${paths.length - 1}-${pathsKeyPart}${methodKeyPart}-${version}`.replace('--', '-');
 }
 
 function getLink(labels: IResourceLabel[], version: string, method?: Method) {
@@ -212,41 +221,38 @@ function getMethod(method: string | ResourceMethod): Method {
   return method.name;
 }
 
-export function getUrlFromLink(link: IResourceLink | INavLink): string {
-  const { paths } = link;
-  let url = '';
-  if (paths.length > 1) {
-    paths.slice(1).forEach((path: string) => {
-      url += '/' + path;
-    });
-  }
-  return url;
+export function getUrlFromLink(paths: string[]): string {
+  const items = [...paths];
+  return items.join('/').replace('//', '/');
 }
 
 export function getResourcePaths(
   item: IResourceLink,
   version: string
-): IResourceLink[] {
+): ResourcePath[] {
   const { links } = item;
-  let content: IResourceLink[] = flatten(links);
-  content.unshift(item);
+  let content: ResourcePath[] = flatten(links);
+  const { key, paths, type, url, method, name } = item;
+
+  content.unshift({ key, paths, type, url, method, version, name });
   content = content.filter(
-    (k: IResourceLink) => k.type !== ResourceLinkType.NODE
+    (k: ResourcePath) => k.type !== ResourceLinkType.NODE
   );
   if (content.length > 0) {
-    content.forEach((element: IResourceLink) => {
+    content.forEach((element: ResourcePath) => {
       element.version = version;
-      element.url = `${getUrlFromLink(element)}`;
+      element.url = `${getUrlFromLink(element.paths)}`;
       element.key = element.key?.includes(version) ? element.key : `${element.key}-${element.version}`
     });
   }
   return content;
 }
 
-function flatten(content: IResourceLink[]): IResourceLink[] {
+function flatten(content: IResourceLink[]): ResourcePath[] {
   let result: any[] = [];
   content.forEach(function (item: IResourceLink) {
-    result.push(item);
+    const { key, paths, type, url, method, name } = item;
+    result.push({ key, paths, type, url, method, name });
     if (Array.isArray(item.links)) {
       result = result.concat(flatten(item.links));
     }
