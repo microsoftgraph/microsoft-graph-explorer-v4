@@ -1,19 +1,22 @@
 import { CSSProperties, useState } from 'react';
 import { generateResourcePathsFromPostmanCollection } from './postman.util';
 import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
-  Label, MessageBarType, PrimaryButton, getId } from '@fluentui/react';
+  Label, MessageBarType, PrimaryButton, getId, getTheme } from '@fluentui/react';
 import { useDispatch } from 'react-redux';
 import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
 import { ResourcePath } from '../../../../../types/resources';
 import { useAppSelector } from '../../../../../store';
+import { collectionStyles } from './Collection.styles';
 
 export const UploadPostmanCollection = () => {
   const dispatch = useDispatch();
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>([]);
   const { collections } = useAppSelector((state) => state);
+  const theme = getTheme();
+  const { uploadButtonStyles, uploadLabelStyles } = collectionStyles(theme);
 
   const uploadIcon: IIconProps = {
     iconName: 'Upload'
@@ -22,6 +25,7 @@ export const UploadPostmanCollection = () => {
   const style_: CSSProperties = {
     display: 'none'
   }
+
   const selectFile = () => {
     const fileInput = document.getElementById('file-input');
     fileInput?.click();
@@ -91,17 +95,17 @@ export const UploadPostmanCollection = () => {
     return resourcePaths
   }
 
-
   return (
     <div style={{position: 'relative', bottom: '4px'}} >
-      <input type="file" id="file-input" style={style_} onChange={handleFileSelect}/>
       <ActionButton iconProps={uploadIcon}
         title={translateMessage('Upload collection')}
         ariaLabel={translateMessage('Upload collection')}
         disabled={false}
         onClick={() => selectFile()}
+        styles={uploadButtonStyles}
       >
-        <Label>
+        <input type="file" id="file-input" style={style_} onChange={handleFileSelect}/>
+        <Label styles = { uploadLabelStyles }>
           {translateMessage('Upload collection')}
         </Label>
       </ActionButton>
