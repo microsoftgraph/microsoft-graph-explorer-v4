@@ -104,8 +104,8 @@ export const UploadPostmanCollection = () => {
         onClick={() => selectFile()}
         styles={uploadButtonStyles}
       >
-        <input type="file" id="file-input" style={style_} onChange={handleFileSelect}/>
-        <Label styles = { uploadLabelStyles }>
+        <input type="file" id="file-input" style={style_} onInput={handleFileSelect} value={''}/>
+        <Label styles = {uploadLabelStyles}>
           {translateMessage('Upload collection')}
         </Label>
       </ActionButton>
