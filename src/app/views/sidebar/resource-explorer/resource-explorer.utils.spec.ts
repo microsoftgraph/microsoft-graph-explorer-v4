@@ -4,7 +4,7 @@ import { getMatchingResourceForUrl, getResourcesSupportedByVersion } from '../..
 import content from '../../../utils/resources/resources.json';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import {
-  createResourcesList, getAvailableMethods, getCurrentTree, getResourcePaths, getUrlFromLink, removeCounter
+  createResourcesList, generateKey, getAvailableMethods, getCurrentTree, getResourcePaths, getUrlFromLink, removeCounter
 } from './resource-explorer.utils';
 
 const resource = JSON.parse(JSON.stringify(content)) as IResource
@@ -62,7 +62,7 @@ describe('Resource payload should', () => {
       version
     });
     const link = currentTree.links[0];
-    const withoutCounter = getUrlFromLink(link);
+    const withoutCounter = getUrlFromLink(link.paths);
     expect(withoutCounter).toBe('/appCatalogs/teamsApps');
   });
 
@@ -72,6 +72,14 @@ describe('Resource payload should', () => {
     const item: any = filtered.links[0];
     const paths = getResourcePaths(item, version);
     expect(paths.length).toBeGreaterThan(0);
+  });
+
+  it('return a valid key for a link', async () => {
+    const version = 'v1.0';
+    const paths = ['/', 'appCatalogs', 'teamsApps'];
+    const method = 'GET';
+    const key = generateKey(method, paths, version);
+    expect(key).toBe('2-root-appCatalogs-teamsApps-get-v1.0');
   });
 });
 
