@@ -5,7 +5,7 @@ import {
 } from '../../../app/services/redux-constants';
 
 import {
-  fetchFullScopesSuccess, fetchScopesError, fetchScopes,
+  fetchFullScopesSuccess, fetchScopesError, getPermissionsScopeType, fetchScopes,
   consentToScopes,
   fetchUrlScopesPending,
   fetchFullScopesPending,
@@ -196,6 +196,18 @@ describe('Permissions action creators', () => {
     // Assert
     expect(fullScopesAction).toEqual(expectedFullScopesAction);
     expect(urlScopesAction).toEqual(expectedUrlScopesAction)
+  });
+
+  it('should return a valid scope type when getPermissionsScopeType() is called with a user profile or null', () => {
+    // Arrange
+    const expectedResult = 'DelegatedWork';
+
+    // Act
+    const result = getPermissionsScopeType(null);
+
+    // Assert
+    expect(result).toEqual(expectedResult);
+
   });
 
   it('should fetch scopes', () => {
