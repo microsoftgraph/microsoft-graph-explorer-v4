@@ -30,6 +30,7 @@ import { readTheme } from './themes/theme-utils';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { Collection } from './types/resources';
+import variantService from './app/services/variantService';
 
 
 const appRoot: HTMLElement = document.getElementById('root')!;
@@ -161,6 +162,7 @@ function loadResources() {
 }
 loadResources();
 
+variantService.initialize();
 const telemetryProvider: ITelemetry = telemetry;
 telemetryProvider.initialize();
 

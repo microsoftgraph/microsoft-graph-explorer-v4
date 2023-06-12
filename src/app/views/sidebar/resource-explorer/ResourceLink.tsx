@@ -2,7 +2,7 @@ import {
   getId, getTheme, IconButton, INavLink,
   ITooltipHostStyles, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
-import { CSSProperties, useEffect } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 
 import { useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
@@ -11,6 +11,7 @@ import { validateExternalLink } from '../../../utils/external-link-validation';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
 import { existsInCollection, setExisting } from './resourcelink.utils';
+import variantService from '../../../services/variantService';
 
 interface IResourceLinkProps {
   link: INavLink;
@@ -27,6 +28,16 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const paths = collections?.find(k => k.isDefault)?.paths || [];
   const resourceLink = { ...link };
 
+  const [alwaysShowButtons, setAlwaysShowButtons] = useState(false);
+
+  useEffect(() => {
+    variantService.getFeatureVariables('gesample', 'alwaysShowButtons').then((value) => {
+      if(value !== undefined) {
+        setAlwaysShowButtons(!!value);
+      }
+    });
+  }, []);
+
   useEffect(() => {
     setExisting(resourceLink, existsInCollection(link, paths, version));
   }, [paths])
@@ -41,7 +52,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
       link: {
         display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden',
         div: {
-          visibility: 'hidden',
+          visibility: alwaysShowButtons ? showButtons : 'hidden',
           overflow: 'hidden',
           marginTop: 2
         },
