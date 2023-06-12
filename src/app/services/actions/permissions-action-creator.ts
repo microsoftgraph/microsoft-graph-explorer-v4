@@ -10,10 +10,8 @@ import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
 import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
-import {
-  ACCOUNT_TYPE, DEFAULT_USER_SCOPES, PERMS_SCOPE,
-  REVOKING_PERMISSIONS_REQUIRED_SCOPES
-} from '../graph-constants';
+import { ACCOUNT_TYPE, DEFAULT_USER_SCOPES, PERMS_SCOPE,
+  REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
   FETCH_FULL_SCOPES_PENDING,
@@ -118,9 +116,8 @@ export function fetchScopes(scopesFetchType: ScopesFetchType = 'full') {
   return async (dispatch: Function, getState: Function) => {
     try {
       const { devxApi, profile, sampleQuery: query }: ApplicationState = getState();
-      let permissionsUrl = `${devxApi.baseUrl}/permissions`;
-
       const scopeType = getPermissionsScopeType(profile);
+      let permissionsUrl = `${devxApi.baseUrl}/permissions?scopeType=${scopeType}`;
 
       if (scopesFetchType === 'query') {
         const signature = sanitizeQueryUrl(query.sampleUrl);
@@ -131,11 +128,11 @@ export function fetchScopes(scopesFetchType: ScopesFetchType = 'full') {
         }
 
         // eslint-disable-next-line max-len
-        permissionsUrl = `${permissionsUrl}?requesturl=/${requestUrl}&method=${query.selectedVerb}&scopeType=${scopeType}`;
+        permissionsUrl = `${permissionsUrl}&requesturl=/${requestUrl}&method=${query.selectedVerb}`;
       }
 
       if (devxApi.parameters) {
-        permissionsUrl = `${permissionsUrl}${query ? '&' : '?'}${devxApi.parameters}`;
+        permissionsUrl = `${permissionsUrl}&${devxApi.parameters}`;
       }
 
       const headers = {
