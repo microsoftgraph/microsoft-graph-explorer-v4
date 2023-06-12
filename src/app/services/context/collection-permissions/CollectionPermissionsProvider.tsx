@@ -26,6 +26,9 @@ async function getCollectionPermissions(paths: ResourcePath[]) {
     body: JSON.stringify(getRequestsFromPaths(paths))
   });
   const perms = await response.json();
+  if (!perms.results) {
+    throw new Error('No permissions found');
+  }
   return perms;
 }
 
