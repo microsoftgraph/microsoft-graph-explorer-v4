@@ -19,9 +19,9 @@ test.beforeAll(async ({ browser }) => {
 test.describe('Sidebar navigation', () => {
   test('should have sample queries tab', async () => {
     await page.getByRole('button', { name: 'Minimize sidebar' }).click();
+    await page.getByRole('tab', { name: 'Sample queries Sample queries xx' }).click();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(800);
-    await page.getByRole('tab', { name: 'Sample queries Sample queries xx' }).click();
     expect(page.getByRole('gridcell', { name: 'my profile' }).filter({ hasText: 'my profileGET my profile' })).toBeDefined();
     expect(await page.screenshot()).toMatchSnapshot();
     await page.getByRole('gridcell', { name: 'my profile' }).filter({ hasText: 'my profileGET my profile' }).click();
@@ -34,7 +34,7 @@ test.describe('Sidebar navigation', () => {
     await page.waitForTimeout(200);
     await page.getByRole('button', { name: 'applications (8)' }).click();
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.getByRole('link', { name: 'Get applications' }).click();
+    await page.getByRole('button', { name: 'Minimize sidebar' }).click();
   })
   test('should have history tab', async () => {
     await page.getByRole('button', { name: 'Minimize sidebar' }).click();
