@@ -1,5 +1,5 @@
 import localforage from 'localforage';
-import { IResource } from '../../types/resources';
+import { IResource, IResourceLink } from '../../types/resources';
 import { ICacheData } from '../../types/sidebar';
 
 const resourcesStorage = localforage.createInstance({
@@ -8,6 +8,7 @@ const resourcesStorage = localforage.createInstance({
 });
 
 const RESOURCE_KEY = 'resources';
+const COLLECTION_KEY = 'collection';
 const expiryTime = new Date().getTime() + 3 * 24 * 60 * 60 * 1000; //3 days expiration
 
 export const resourcesCache = (function () {
@@ -32,8 +33,19 @@ export const resourcesCache = (function () {
     return null;
   }
 
+  const saveCollection = async (collection: IResourceLink[]) => {
+    await resourcesStorage.setItem(COLLECTION_KEY, collection);
+  }
+
+  const readCollection = async (): Promise<IResourceLink[]> => {
+    const cachedCollections = await resourcesStorage.getItem(COLLECTION_KEY) as IResourceLink[];
+    return cachedCollections ? cachedCollections : [] as IResourceLink[];
+  }
+
   return {
     saveResources,
-    readResources
+    readResources,
+    saveCollection,
+    readCollection
   }
 })();

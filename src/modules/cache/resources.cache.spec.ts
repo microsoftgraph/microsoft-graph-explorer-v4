@@ -23,13 +23,13 @@ const resources: IResource = {
     {
       name: 'v1.0',
       methods: [
-        'Get'
+        'GET'
       ]
     },
     {
       name: 'beta',
       methods: [
-        'Get'
+        'GET'
       ]
     }
   ],
@@ -40,8 +40,8 @@ const resources: IResource = {
         {
           name: 'beta',
           methods: [
-            'Get',
-            'Post'
+            'GET',
+            'POST'
           ]
         }
       ],
@@ -52,9 +52,9 @@ const resources: IResource = {
             {
               name: 'beta',
               methods: [
-                'Get',
-                'Patch',
-                'Delete'
+                'GET',
+                'PATCH',
+                'DELETE'
               ]
             }
           ],

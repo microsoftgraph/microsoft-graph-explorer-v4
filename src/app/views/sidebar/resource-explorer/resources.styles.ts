@@ -21,13 +21,11 @@ export const navStyles: any = (properties: any) => ({
   chevronIcon: [
     properties.isExpanded && {
       transform: 'rotate(0deg)',
-      position: 'relative',
-      top: '-3px'
+      position: 'relative'
     },
     !properties.isExpanded && {
       transform: 'rotate(-90deg)',
-      position: 'relative',
-      top: '-3px'
+      position: 'relative'
     }
   ],
   chevronButton: [
