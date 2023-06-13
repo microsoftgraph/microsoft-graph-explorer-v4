@@ -1,12 +1,13 @@
+import { resourcesCache } from '../../../modules/cache/resources.cache';
 import { AppAction } from '../../../types/action';
-import {
-  FETCH_RESOURCES_SUCCESS, FETCH_RESOURCES_PENDING,
-  FETCH_RESOURCES_ERROR, RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
-} from '../redux-constants';
+import { IRequestOptions } from '../../../types/request';
 import { IResource } from '../../../types/resources';
 import { ApplicationState } from '../../../types/root';
-import { IRequestOptions } from '../../../types/request';
-import { resourcesCache } from '../../../modules/cache/resources.cache';
+import {
+  FETCH_RESOURCES_ERROR,
+  FETCH_RESOURCES_PENDING,
+  FETCH_RESOURCES_SUCCESS
+} from '../redux-constants';
 
 export function fetchResourcesSuccess(response: object): AppAction {
   return {
@@ -25,20 +26,6 @@ export function fetchResourcesPending(): AppAction {
 export function fetchResourcesError(response: object): AppAction {
   return {
     type: FETCH_RESOURCES_ERROR,
-    response
-  };
-}
-
-export function addResourcePaths(response: object): AppAction {
-  return {
-    type: RESOURCEPATHS_ADD_SUCCESS,
-    response
-  };
-}
-
-export function removeResourcePaths(response: object): AppAction {
-  return {
-    type: RESOURCEPATHS_DELETE_SUCCESS,
     response
   };
 }

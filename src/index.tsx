@@ -1,23 +1,26 @@
 import { AuthenticationResult } from '@azure/msal-browser';
-import 'bootstrap/dist/css/bootstrap-grid.min.css';
-import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import { initializeIcons } from '@fluentui/react';
+import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
+import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import ReactDOM from 'react-dom/client';
 import { IntlProvider } from 'react-intl';
 
 import { Provider } from 'react-redux';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
+import { createCollection } from './app/services/actions/collections-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
 import { bulkAddHistoryItems } from './app/services/actions/request-history-action-creators';
+import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
 import { changeTheme, changeThemeSuccess } from './app/services/actions/theme-action-creator';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
-import { historyCache } from './modules/cache/history-utils';
 import { geLocale } from './appLocale';
 import messages from './messages';
 import { authenticationWrapper } from './modules/authentication';
+import { collectionsCache } from './modules/cache/collections.cache';
+import { historyCache } from './modules/cache/history-utils';
 import { store } from './store';
 import './styles/index.scss';
 import { telemetry } from './telemetry';
@@ -26,7 +29,8 @@ import { loadGETheme } from './themes';
 import { readTheme } from './themes/theme-utils';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
-import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
+import { Collection } from './types/resources';
+
 
 const appRoot: HTMLElement = document.getElementById('root')!;
 initializeIcons();
@@ -132,8 +136,23 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
 }
 
 historyCache.readHistoryData().then((data: any) => {
-  if (data.length > 0) {
+  if (data && data.length > 0) {
     appStore.dispatch(bulkAddHistoryItems(data));
+  }
+});
+
+collectionsCache.read().then((data: Collection[]) => {
+  if (!data || data.length === 0) {
+    appStore.dispatch(createCollection({
+      id: new Date().getTime().toString(),
+      title: 'My Collection',
+      paths: [],
+      isDefault: true
+    }));
+  } else {
+    data.forEach((collection: Collection) => {
+      appStore.dispatch(createCollection(collection));
+    });
   }
 });
 
@@ -141,32 +160,6 @@ function loadResources() {
   appStore.dispatch(fetchResources());
 }
 loadResources();
-
-/**
- * Set's up Monaco Editor's Workers.
- */
-enum Workers {
-  Json = 'json',
-  Editor = 'editor',
-}
-
-(window as any).MonacoEnvironment = {
-  getWorkerUrl(moduleId: any, label: string) {
-    if (label === 'json') {
-      return getWorkerFor(Workers.Json);
-    }
-    return getWorkerFor(Workers.Editor);
-  }
-};
-
-function getWorkerFor(worker: string): string {
-  // tslint:disable-next-line:max-line-length
-  const WORKER_PATH =
-    'https://graphstagingblobstorage.blob.core.windows.net/staging/vendor/bower_components/explorer-v2/build';
-
-  return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
-	    importScripts('${WORKER_PATH}/${worker}.worker.js');`)}`;
-}
 
 const telemetryProvider: ITelemetry = telemetry;
 telemetryProvider.initialize();

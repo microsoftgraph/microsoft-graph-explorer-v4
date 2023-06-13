@@ -1,8 +1,7 @@
 import {
   FETCH_SCOPES_ERROR,
   FETCH_FULL_SCOPES_SUCCESS,
-  FETCH_URL_SCOPES_PENDING,
-  QUERY_GRAPH_STATUS
+  FETCH_URL_SCOPES_PENDING
 } from '../../../app/services/redux-constants';
 
 import {
@@ -35,7 +34,6 @@ const mockState: ApplicationState = {
     baseUrl: 'https://graph.microsoft.com/v1.0/me',
     parameters: '$count=true'
   },
-  permissionsPanelOpen: true,
   profile: {
     id: '123',
     displayName: 'test',
@@ -122,8 +120,7 @@ const mockState: ApplicationState = {
       labels: [],
       children: []
     },
-    error: null,
-    paths: []
+    error: null
   },
   policies: {
     pending: false,
@@ -268,10 +265,7 @@ describe('Permissions action creators', () => {
       correlationId: 'string'
     })
     const expectedAction: any = [
-      {
-        type: 'GET_AUTH_TOKEN_SUCCESS',
-        response: true
-      },
+      { type: 'GET_AUTH_TOKEN_SUCCESS', response: true },
       {
         type: 'GET_CONSENTED_SCOPES_SUCCESS',
         response: ['profile.Read User.Read']
@@ -284,7 +278,8 @@ describe('Permissions action creators', () => {
           ok: true,
           messageType: 4
         }
-      }
+      },
+      { type: 'GET_ALL_PRINCIPAL_GRANTS_PENDING', response: true }
     ];
 
     const store_ = mockStore(mockState);
@@ -299,7 +294,7 @@ describe('Permissions action creators', () => {
   });
 
   describe('Revoke scopes', () => {
-    it('should return Default Scope error when user tries to dissent to default scope', () => {
+    it('should return Default Scope error when user tries to dissent to default scope', async () => {
       // Arrange
       const store_ = mockStore(mockState);
       jest.spyOn(RevokePermissionsUtil, 'getServicePrincipalId').mockResolvedValue('1234');
@@ -332,11 +327,48 @@ describe('Permissions action creators', () => {
         '@odata.context': 'https://graph.microsoft.com/v1.0/$metadata#permissionGrants'
       })
 
+      const revokePermissionsUtil = await RevokePermissionsUtil.initialize('kkk');
+
+      jest.spyOn(revokePermissionsUtil, 'getUserPermissionChecks').mockResolvedValue({
+        userIsTenantAdmin: false,
+        permissionBeingRevokedIsAllPrincipal: true,
+        grantsPayload: {
+          value: [
+            {
+              clientId: '1234',
+              consentType: 'Principal',
+              principalId: '1234',
+              resourceId: '1234',
+              scope: 'profile.read User.Read',
+              id: 'SomeNiceId'
+            },
+            {
+              clientId: '',
+              consentType: 'AllPrincipal',
+              principalId: null,
+              resourceId: '1234',
+              scope: 'profile.read User.Read Directory.Read.All'
+            }
+          ],
+          '@odata.context': 'https://graph.microsoft.com/v1.0/$metadata#permissionGrants'
+        }
+      })
+
       const expectedActions = [
         { type: 'REVOKE_SCOPES_PENDING', response: null },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: QUERY_GRAPH_STATUS,
+          type: 'QUERY_GRAPH_STATUS',
+          response: {
+            statusText: 'Revoking ',
+            status: 'Please wait while we revoke this permission',
+            ok: false,
+            messageType: 0
+          }
+        },
+        { type: 'REVOKE_SCOPES_ERROR', response: null },
+        {
+          type: 'QUERY_GRAPH_STATUS',
           response: {
             statusText: 'Failed',
             status: 'An error occurred when unconsenting. Please try again',
@@ -356,7 +388,7 @@ describe('Permissions action creators', () => {
         });
     });
 
-    it('should return 401 when user does not have required permissions', () => {
+    it('should return 401 when user does not have required permissions', async () => {
       // Arrange
       const store_ = mockStore(mockState);
       jest.spyOn(RevokePermissionsUtil, 'getServicePrincipalId').mockResolvedValue('1234');
@@ -393,7 +425,17 @@ describe('Permissions action creators', () => {
         { type: 'REVOKE_SCOPES_PENDING', response: null },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: QUERY_GRAPH_STATUS,
+          type: 'QUERY_GRAPH_STATUS',
+          response: {
+            statusText: 'Revoking ',
+            status: 'Please wait while we revoke this permission',
+            ok: false,
+            messageType: 0
+          }
+        },
+        { type: 'REVOKE_SCOPES_ERROR', response: null },
+        {
+          type: 'QUERY_GRAPH_STATUS',
           response: {
             statusText: 'Failed',
             status: 'An error occurred when unconsenting. Please try again',
@@ -414,7 +456,7 @@ describe('Permissions action creators', () => {
     });
 
     //revisit
-    it('should raise error when user attempts to dissent to an admin granted permission', () => {
+    it('should raise error when user attempts to dissent to an admin granted permission', async () => {
       // Arrange
       const store_ = mockStore(mockState);
       jest.spyOn(RevokePermissionsUtil, 'getServicePrincipalId').mockResolvedValue('1234');
@@ -454,7 +496,17 @@ describe('Permissions action creators', () => {
         { type: 'REVOKE_SCOPES_PENDING', response: null },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: QUERY_GRAPH_STATUS,
+          type: 'QUERY_GRAPH_STATUS',
+          response: {
+            statusText: 'Revoking ',
+            status: 'Please wait while we revoke this permission',
+            ok: false,
+            messageType: 0
+          }
+        },
+        { type: 'REVOKE_SCOPES_ERROR', response: null },
+        {
+          type: 'QUERY_GRAPH_STATUS',
           response: {
             statusText: 'Failed',
             status: 'An error occurred when unconsenting. Please try again',
@@ -466,11 +518,8 @@ describe('Permissions action creators', () => {
 
       // Act and Assert
       // @ts-ignore
-      return store_.dispatch(revokeScopes('Access.Read'))
-        // @ts-ignore
-        .then(() => {
-          expect(store_.getActions()).toEqual(expectedActions);
-        });
+      await store_.dispatch(revokeScopes('Access.Read'));
+      expect(store_.getActions()).toEqual(expectedActions);
     });
   })
 })

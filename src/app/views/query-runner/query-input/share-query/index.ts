@@ -1,1 +1,3 @@
-export { ShareQuery } from './ShareQuery';
+import ShareButton from './ShareButton';
+
+export { ShareButton };
