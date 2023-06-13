@@ -66,6 +66,15 @@ class Telemetry implements ITelemetry {
     this.appInsights.context.application.ver = getVersion().toString();
   }
 
+  public getUserId(){
+    try {
+      const userId = document.cookie.split(';').filter((item) => item.trim().startsWith('ai_user')).map((item) => item.split('=')[1])[0];
+      return userId.split('|')[0];
+    } catch (error) {
+      return 'error';
+    }
+  }
+
   public trackEvent(name: string, properties: {}) {
     this.appInsights.trackEvent({ name, properties });
   }

@@ -4,7 +4,7 @@ import {VariantAssignmentServiceClient} from 'expvariantassignmentsdk/src/contra
 import { VariantAssignmentClientSettings } from 'expvariantassignmentsdk/src/contracts/VariantAssignmentClientSettings';
 import { setToLS, getFromLS } from '../../themes/theme-utils';
 import { authenticationWrapper } from '../../modules/authentication';
-// import {v4 as uuidv4} from 'uuid';
+import { telemetry } from '../../telemetry';
 
 
 interface TasResponse {
@@ -48,12 +48,11 @@ class VariantService {
     });
   }
 
-
   public createUser() {
     // We create a random user profile for our case. Ideally, all these values should be extracted out of
     // the incoming call as part of a middleware or enrichment prior to making the assignment call.
-    const clientid = 123456789;
-    setToLS('clientid', clientid.toString());
+    setToLS('clientid', telemetry.getUserId());
+    console.log(telemetry.getUserId());
 
     // For simplicity we also create and store the user session which will be consistent until a restart
     setToLS('sessionid',  !authenticationWrapper.getSessionId());
