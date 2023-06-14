@@ -12,7 +12,7 @@ interface TasResponse {
   Parameters: Parameters;
 }
 interface Parameters {
-  [key: string]: string | boolean | Number;
+  [key: string]: string | boolean | number;
 }
 class VariantService {
 
@@ -44,7 +44,7 @@ class VariantService {
     Promise.resolve(response).then((r) => {
       this.expResponse = r.featureVariables as TasResponse[] | null;
       this.assignmentContext = r.assignmentContext;
-      console.log(r.assignmentContext);
+      console.log(response);
     });
   }
 
@@ -52,7 +52,6 @@ class VariantService {
     // We create a random user profile for our case. Ideally, all these values should be extracted out of
     // the incoming call as part of a middleware or enrichment prior to making the assignment call.
     setToLS('clientid', telemetry.getUserId());
-    console.log(telemetry.getUserId());
 
     // For simplicity we also create and store the user session which will be consistent until a restart
     setToLS('sessionid',  !authenticationWrapper.getSessionId());
