@@ -44,7 +44,6 @@ class VariantService {
     Promise.resolve(response).then((r) => {
       this.expResponse = r.featureVariables as TasResponse[] | null;
       this.assignmentContext = r.assignmentContext;
-      console.log(response);
     });
   }
 
@@ -60,6 +59,7 @@ class VariantService {
   public getAssignmentContext() {
     return this.assignmentContext;
   }
+
 
   // Here we create a simple constructor for our test application. In real examples, your product might be already integrated with a config
   // provider or an ini file. An alternate approach is to hard-code the values within the context of the code spread across multiple locations.

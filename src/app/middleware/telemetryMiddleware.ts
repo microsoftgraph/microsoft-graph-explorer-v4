@@ -17,6 +17,7 @@ import {
   SAMPLES_FETCH_ERROR
 } from '../services/redux-constants';
 import { sanitizeQueryUrl } from '../utils/query-url-sanitization';
+import variantService from '../services/variantService';
 
 const telemetryMiddleware =
   (store: any) => (next: any) => async (action: AppAction) => {
@@ -63,7 +64,8 @@ const telemetryMiddleware =
       case RESOURCEPATHS_ADD_SUCCESS: {
         telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
           ComponentName: componentNames.ADD_RESOURCE_TO_COLLECTION_LIST_ITEM,
-          ResourcePath: action.response[0].url
+          ResourcePath: action.response[0].url,
+          AssignmentContext: variantService.getAssignmentContext()
         });
         break;
       }
