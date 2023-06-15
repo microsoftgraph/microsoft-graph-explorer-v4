@@ -7,9 +7,12 @@ import { CSSProperties, useEffect } from 'react';
 import { useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IResourceLink, ResourceOptions } from '../../../../types/resources';
+import { GRAPH_URL } from '../../../services/graph-constants';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
+import DocumentationService from '../../query-runner/query-input/auto-complete/suffix/documentation';
+import { getUrlFromLink } from './resource-explorer.utils';
 import { existsInCollection, setExisting } from './resourcelink.utils';
 
 interface IResourceLinkProps {
@@ -21,7 +24,7 @@ interface IResourceLinkProps {
 
 const ResourceLink = (props: IResourceLinkProps) => {
   const { classes, version } = props;
-  const { collections } = useAppSelector(state => state);
+  const { collections, resources } = useAppSelector(state => state);
   const link = props.link as IResourceLink;
 
   const paths = collections?.find(k => k.isDefault)?.paths || [];
@@ -77,6 +80,17 @@ const ResourceLink = (props: IResourceLinkProps) => {
     margin: 2,
     textTransform: 'uppercase'
   }
+
+  resourceLink.docLink = resourceLink.docLink ? resourceLink.docLink : resourceLink.method ? new DocumentationService({
+    sampleQuery: {
+      sampleUrl: `${GRAPH_URL}/${version}${getUrlFromLink(resourceLink.paths)}`,
+      selectedVerb: resourceLink.method,
+      selectedVersion: version!,
+      sampleBody: '',
+      sampleHeaders: []
+    },
+    source: resources.data.children
+  }).getDocumentationLink() : null;
 
   const openDocumentationLink = () => {
     window.open(resourceLink.docLink, '_blank');
