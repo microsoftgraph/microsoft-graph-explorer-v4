@@ -31,7 +31,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const [alwaysShowButtons, setAlwaysShowButtons] = useState(false);
 
   useEffect(() => {
-    variantService.getFeatureVariables('gesample', 'alwaysShowButtons').then((value) => {
+    variantService.getFeatureVariables('default', 'alwaysShowButtons').then((value) => {
       if(value !== undefined) {
         setAlwaysShowButtons(!!value);
       }

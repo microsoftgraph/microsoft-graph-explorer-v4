@@ -47,7 +47,7 @@ class VariantService {
   // and audience filters like market/region, browser, ismsft etc.,
   private getParameters(): Map<string, string[]> {
     const map: Map<string, string[]> = new Map<string, string[]>();
-    map.set('userId', [telemetry.getUserId()]);
+    map.set('clientId', [telemetry.getUserId()]);
     return map;
   }
 }
