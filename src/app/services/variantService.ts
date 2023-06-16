@@ -3,6 +3,8 @@ import { VariantAssignmentRequest } from 'expvariantassignmentsdk/src/interfaces
 import {VariantAssignmentServiceClient} from 'expvariantassignmentsdk/src/contracts/VariantAssignmentServiceClient';
 import { VariantAssignmentClientSettings } from 'expvariantassignmentsdk/src/contracts/VariantAssignmentClientSettings';
 import { telemetry } from '../../telemetry';
+import { readFromLocalStorage, saveToLocalStorage } from '../utils/local-storage';
+import { EXP_URL } from './graph-constants';
 
 
 interface TasResponse {
@@ -15,12 +17,13 @@ interface Parameters {
 class VariantService {
 
   static myInstance: VariantService = null as any;
-  private endpoint = 'https://default.exp-tas.com/exptas76/9b835cbf-9742-40db-84a7-7a323a77f3eb-gedev/api/v1/tas';
+  private endpoint = EXP_URL;
   private expResponse: TasResponse[] | null = [];
   private assignmentContext: string = '';
 
   public async initialize() {
     const settings: VariantAssignmentClientSettings = { endpoint: this.endpoint };
+    this.createUser();
     const request: VariantAssignmentRequest =
         {
           parameters: this.getParameters()
@@ -34,6 +37,11 @@ class VariantService {
     });
   }
 
+  public createUser() {
+    const userid = telemetry.getUserId();
+    saveToLocalStorage('userid', userid.toString());
+  }
+
   public getAssignmentContext() {
     return this.assignmentContext;
   }
@@ -43,11 +51,11 @@ class VariantService {
     return defaultConfig?.Parameters[flagname];
   }
 
-  // Parameters will include randomization units (you can have more than one in a single call!!)
+  // Parameters will include randomization units (you can have more than one in a single call!)
   // and audience filters like market/region, browser, ismsft etc.,
   private getParameters(): Map<string, string[]> {
     const map: Map<string, string[]> = new Map<string, string[]>();
-    map.set('clientId', [telemetry.getUserId()]);
+    map.set('userid', [readFromLocalStorage('userid')]);
     return map;
   }
 }

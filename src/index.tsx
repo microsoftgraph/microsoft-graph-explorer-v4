@@ -26,17 +26,18 @@ import './styles/index.scss';
 import { telemetry } from './telemetry';
 import ITelemetry from './telemetry/ITelemetry';
 import { loadGETheme } from './themes';
-import { readTheme } from './themes/theme-utils';
+import { readFromLocalStorage } from './app/utils/local-storage';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { Collection } from './types/resources';
 import variantService from './app/services/variantService';
+import { CURRENT_THEME } from './app/services/graph-constants';
 
 
 const appRoot: HTMLElement = document.getElementById('root')!;
 initializeIcons();
 
-let currentTheme = readTheme() || 'light';
+let currentTheme = readFromLocalStorage(CURRENT_THEME) || 'light';
 export function removeSpinners() {
   // removes the loading spinner from GE html after the app is loaded
   const spinner = document.getElementById('spinner');
@@ -55,7 +56,7 @@ export function removeSpinners() {
 }
 
 function setCurrentSystemTheme(): void {
-  const themeFromLocalStorage = readTheme();
+  const themeFromLocalStorage = readFromLocalStorage(CURRENT_THEME);
 
   if (themeFromLocalStorage) {
     currentTheme = themeFromLocalStorage;
