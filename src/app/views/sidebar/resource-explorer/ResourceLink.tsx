@@ -6,7 +6,7 @@ import { CSSProperties, useEffect } from 'react';
 
 import { useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { IResourceLink, ResourceOptions } from '../../../../types/resources';
+import { IResourceLink, IResources, ResourceOptions } from '../../../../types/resources';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { getStyleFor } from '../../../utils/http-methods.utils';
@@ -81,16 +81,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
     textTransform: 'uppercase'
   }
 
-  resourceLink.docLink = resourceLink.docLink ? resourceLink.docLink : resourceLink.method ? new DocumentationService({
-    sampleQuery: {
-      sampleUrl: `${GRAPH_URL}/${version}${getUrlFromLink(resourceLink.paths)}`,
-      selectedVerb: resourceLink.method,
-      selectedVersion: version!,
-      sampleBody: '',
-      sampleHeaders: []
-    },
-    source: resources.data.children
-  }).getDocumentationLink() : null;
+  resourceLink.docLink = resourceLink.docLink ? resourceLink.docLink
+    : getDocumentationLink(resourceLink, version, resources);
 
   const openDocumentationLink = () => {
     window.open(resourceLink.docLink, '_blank');
@@ -200,3 +192,21 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
 
 export default ResourceLink;
+
+function getDocumentationLink(resourceLink: IResourceLink, version: string, resources: IResources): string | null {
+  if (!resourceLink.method) {
+    return null;
+  }
+
+  return new DocumentationService({
+    sampleQuery: {
+      sampleUrl: `${GRAPH_URL}/${version}${getUrlFromLink(resourceLink.paths)}`,
+      selectedVerb: resourceLink.method,
+      selectedVersion: version,
+      sampleBody: '',
+      sampleHeaders: []
+    },
+    source: resources.data.children
+  }).getDocumentationLink();
+}
+
