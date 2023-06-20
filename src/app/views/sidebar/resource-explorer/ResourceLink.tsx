@@ -190,7 +190,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
   </span>
 }
 
-
 export default ResourceLink;
 
 function getDocumentationLink(resourceLink: IResourceLink, version: string, resources: IResources): string | null {
