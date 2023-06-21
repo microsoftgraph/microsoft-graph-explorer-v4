@@ -28,7 +28,7 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   const { collections } = useAppSelector(
     (state) => state
   );
-  const items = collections ? collections.find(k => k.isDefault)!.paths : [];
+  const items = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
   const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
 
   const columns = [
