@@ -12,6 +12,7 @@ import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
 import { existsInCollection, setExisting } from './resourcelink.utils';
 import variantService from '../../../services/variant-service';
+import { ALWAYSSHOWBUTTONS } from '../../../services/variant-constants';
 
 interface IResourceLinkProps {
   link: INavLink;
@@ -31,7 +32,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const [alwaysShowButtons, setAlwaysShowButtons] = useState(false);
 
   useEffect(() => {
-    variantService.getFeatureVariables('default', 'alwaysShowButtons').then((value) => {
+    variantService.getFeatureVariables('default', ALWAYSSHOWBUTTONS).then((value) => {
       if(value) {
         setAlwaysShowButtons(!!value);
       }
