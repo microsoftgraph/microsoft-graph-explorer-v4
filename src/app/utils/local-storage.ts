@@ -1,9 +1,9 @@
 export const saveToLocalStorage = (key: string, value: Object|string) => {
-  if (typeof value === 'string') {
-    localStorage.setItem(key, value);
-  } else {
-    localStorage.setItem(key, JSON.stringify(value));
-  }
+  let itemToStore = value;
+  if (typeof value != 'string') {
+    itemToStore = JSON.stringify(value)
+  } 
+  localStorage.setItem(key, itemToStore);
 };
 
 export const readFromLocalStorage = (key: string) => {
