@@ -17,7 +17,7 @@ import {
   SAMPLES_FETCH_ERROR
 } from '../services/redux-constants';
 import { sanitizeQueryUrl } from '../utils/query-url-sanitization';
-import variantService from '../services/variantService';
+import variantService from '../services/variant-service';
 
 const telemetryMiddleware =
   (store: any) => (next: any) => async (action: AppAction) => {

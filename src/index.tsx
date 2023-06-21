@@ -30,7 +30,7 @@ import { readFromLocalStorage } from './app/utils/local-storage';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { Collection } from './types/resources';
-import variantService from './app/services/variantService';
+import variantService from './app/services/variant-service';
 import { CURRENT_THEME } from './app/services/graph-constants';
 
 

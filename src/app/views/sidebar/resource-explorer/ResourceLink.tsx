@@ -11,7 +11,7 @@ import { validateExternalLink } from '../../../utils/external-link-validation';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
 import { existsInCollection, setExisting } from './resourcelink.utils';
-import variantService from '../../../services/variantService';
+import variantService from '../../../services/variant-service';
 
 interface IResourceLinkProps {
   link: INavLink;
