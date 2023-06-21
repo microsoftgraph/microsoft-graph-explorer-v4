@@ -2,9 +2,10 @@
 import { VariantAssignmentRequest } from 'expvariantassignmentsdk/src/interfaces/VariantAssignmentRequest';
 import {VariantAssignmentServiceClient} from 'expvariantassignmentsdk/src/contracts/VariantAssignmentServiceClient';
 import { VariantAssignmentClientSettings } from 'expvariantassignmentsdk/src/contracts/VariantAssignmentClientSettings';
-import { telemetry } from '../../telemetry';
+import { errorTypes, telemetry } from '../../telemetry';
 import { readFromLocalStorage, saveToLocalStorage } from '../utils/local-storage';
 import { EXP_URL } from './graph-constants';
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 
 
 interface TasResponse {
@@ -32,9 +33,14 @@ class VariantService {
     const client = new VariantAssignmentServiceClient(settings);
     const response = await client.getVariantAssignments(request);
     Promise.resolve(response).then((r) => {
-      this.expResponse = r.featureVariables as TasResponse[] | null;
-      this.assignmentContext = r.assignmentContext;
-    });
+      if (r){
+        this.expResponse = r.featureVariables as TasResponse[] | null;
+        this.assignmentContext = r.assignmentContext;
+      }
+    })
+      .catch((error) => {
+        telemetry.trackException(new Error(errorTypes.UNHANDLED_ERROR), SeverityLevel.Error, error);
+      });
   }
 
   public createUser() {
