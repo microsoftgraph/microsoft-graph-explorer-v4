@@ -32,7 +32,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   useEffect(() => {
     variantService.getFeatureVariables('default', 'alwaysShowButtons').then((value) => {
-      if(value !== undefined) {
+      if(value) {
         setAlwaysShowButtons(!!value);
       }
     });
