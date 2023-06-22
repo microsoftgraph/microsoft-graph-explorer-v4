@@ -24,7 +24,7 @@ const CommandOptions = (props: ICommandOptions) => {
   const theme = getTheme();
 
   const { collections } = useAppSelector((state) => state);
-  const paths = collections ? collections.find(k => k.isDefault)!.paths : [];
+  const paths = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
 
   const itemStyles = resourceExplorerStyles(theme).itemStyles;
   const commandStyles = resourceExplorerStyles(theme).commandBarStyles;
