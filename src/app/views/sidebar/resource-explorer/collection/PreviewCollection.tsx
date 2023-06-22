@@ -100,20 +100,20 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
         <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
           <FormattedMessage id='Download postman collection' />
         </PrimaryButton>
-        <DefaultButton onClick={() => showManifestDescription({
+        <PrimaryButton onClick={() => showManifestDescription({
           settings: {
             title: translateMessage('Download an API manifest')
           }
         })} disabled={selectedItems.length > 0}>
           <FormattedMessage id='Create API manifest' />
-        </DefaultButton>
-        <DefaultButton onClick={() => viewPermissions({
+        </PrimaryButton>
+        <PrimaryButton onClick={() => viewPermissions({
           settings: {
             title: translateMessage('Required Permissions')
           }
         })} disabled={selectedItems.length > 0}>
           <FormattedMessage id='View permissions' />
-        </DefaultButton>
+        </PrimaryButton>
       </DialogFooter>
     </>
   )
