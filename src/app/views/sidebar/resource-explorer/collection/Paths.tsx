@@ -69,6 +69,13 @@ export default class Paths extends Component<IPathProps> {
           ariaLabelForSelectionColumn='Toggle selection'
           ariaLabelForSelectAllCheckbox='Toggle selection for all items'
           checkButtonAriaLabel='select row'
+          styles={{
+            root: {
+              maxHeight: '80vh',
+              overflowY: 'auto',
+              overflowX: 'hidden'
+            }
+          }}
         />
       </MarqueeSelection>
     );

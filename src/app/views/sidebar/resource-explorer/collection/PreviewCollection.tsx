@@ -85,37 +85,40 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
         primaryGroupAriaLabel='Selection actions'
         farItemsGroupAriaLabel='More selection actions'
       />
-      {items && items.length > 0 && <>
+      {items && items.length > 0 && <div style={{ height: '81vh' }}>
         <Paths
           resources={items}
           columns={columns}
           selectItems={selectItems}
         />
-        <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
-          <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
-            <FormattedMessage id='Download postman collection' />
-          </PrimaryButton>
-          <DefaultButton onClick={() => showManifestDescription({
-            settings: {
-              title: translateMessage('Download an API manifest')
-            }
-          })} disabled={selectedItems.length > 0}>
-            <Icon
-              style={{ marginRight: 10 }}
-              aria-label={translateMessage('Describes the API Manifest before you can download')}
-              iconName='Info' />
-            <FormattedMessage id='API Manifest' />
-          </DefaultButton>
-          <DefaultButton onClick={() => viewPermissions({
-            settings: {
-              title: translateMessage('View permissions')
-            }
-          })} disabled={selectedItems.length > 0}>
-            <FormattedMessage id='View permissions' />
-          </DefaultButton>
-        </DialogFooter>
-      </>
+      </div>
       }
+      <DialogFooter
+        styles={{
+          actionsRight: { bottom: 0, justifyContent: 'start' }
+        }}>
+        <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
+          <FormattedMessage id='Download postman collection' />
+        </PrimaryButton>
+        <DefaultButton onClick={() => showManifestDescription({
+          settings: {
+            title: translateMessage('Download an API manifest')
+          }
+        })} disabled={selectedItems.length > 0}>
+          <Icon
+            style={{ marginRight: 10 }}
+            aria-label={translateMessage('Describes the API Manifest before you can download')}
+            iconName='Info' />
+          <FormattedMessage id='API Manifest' />
+        </DefaultButton>
+        <DefaultButton onClick={() => viewPermissions({
+          settings: {
+            title: translateMessage('View permissions')
+          }
+        })} disabled={selectedItems.length > 0}>
+          <FormattedMessage id='View permissions' />
+        </DefaultButton>
+      </DialogFooter>
     </>
   )
 }
