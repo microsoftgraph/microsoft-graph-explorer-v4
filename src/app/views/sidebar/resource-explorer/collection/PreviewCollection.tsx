@@ -1,5 +1,6 @@
 import {
-  CommandBar, DefaultButton, DialogFooter, ICommandBarItemProps, Icon,
+  CommandBar,
+  DialogFooter, ICommandBarItemProps,
   Label, PrimaryButton
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
