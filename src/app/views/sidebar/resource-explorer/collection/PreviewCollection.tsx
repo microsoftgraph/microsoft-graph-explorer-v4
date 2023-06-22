@@ -105,15 +105,11 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
             title: translateMessage('Download an API manifest')
           }
         })} disabled={selectedItems.length > 0}>
-          <Icon
-            style={{ marginRight: 10 }}
-            aria-label={translateMessage('Describes the API Manifest before you can download')}
-            iconName='Info' />
-          <FormattedMessage id='API Manifest' />
+          <FormattedMessage id='Create API manifest' />
         </DefaultButton>
         <DefaultButton onClick={() => viewPermissions({
           settings: {
-            title: translateMessage('View permissions')
+            title: translateMessage('Required Permissions')
           }
         })} disabled={selectedItems.length > 0}>
           <FormattedMessage id='View permissions' />
