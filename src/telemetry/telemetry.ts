@@ -32,6 +32,7 @@ import {
   getBrowserScreenSize,
   getDeviceScreenScale
 } from '../app/utils/device-characteristics-telemetry';
+import variantService from '../app/services/variant-service';
 
 class Telemetry implements ITelemetry {
   private appInsights: ApplicationInsights;
@@ -66,8 +67,10 @@ class Telemetry implements ITelemetry {
     this.appInsights.context.application.ver = getVersion().toString();
   }
 
-  public trackEvent(name: string, properties: {}) {
-    this.appInsights.trackEvent({ name, properties });
+  public trackEvent(name: string, properties:{ AssignmentContext?: string, [key: string]: any } = {}) {
+    const defaultProperties = { AssignmentContext: variantService.getAssignmentContext() };
+    const mergedProperties = { ...defaultProperties, ...properties };
+    this.appInsights.trackEvent({ name, properties: mergedProperties });
   }
 
   public trackException(

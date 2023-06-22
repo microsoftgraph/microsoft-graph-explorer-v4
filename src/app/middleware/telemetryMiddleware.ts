@@ -64,8 +64,7 @@ const telemetryMiddleware =
       case RESOURCEPATHS_ADD_SUCCESS: {
         telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
           ComponentName: componentNames.ADD_RESOURCE_TO_COLLECTION_LIST_ITEM,
-          ResourcePath: action.response[0].url,
-          AssignmentContext: variantService.getAssignmentContext()
+          ResourcePath: action.response[0].url
         });
         break;
       }
