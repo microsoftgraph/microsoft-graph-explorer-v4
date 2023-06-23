@@ -38,7 +38,7 @@ const UnstyledResourceExplorer = (props: any) => {
 
   const dispatch: AppDispatch = useDispatch();
   const classes = classNames(props);
-  const selectedLinks = collections ? collections.find(k => k.isDefault)!.paths : [];
+  const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
