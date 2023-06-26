@@ -10,6 +10,7 @@ import { ResourcePath } from '../../../../../types/resources';
 import { useAppSelector } from '../../../../../store';
 import { collectionStyles } from './Collection.styles';
 import { isGeneratedCollectionInCollection } from './upload-collection.util';
+import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 
 export const UploadPostmanCollection = () => {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ export const UploadPostmanCollection = () => {
           if(collections && collections.length > 0 && collections.find(k => k.isDefault)!.paths.length > 0){
             const currentCollection = collections.find(k => k.isDefault)!.paths;
             if(isGeneratedCollectionInCollection(currentCollection, generatedCollection)){
+              trackUploadAction('Collection exists');
               dispatchCollectionSelectionStatus('Collection items exist', 'Collection items exist');
             }
             else{
@@ -52,10 +54,12 @@ export const UploadPostmanCollection = () => {
             }
           }
           else{
+            trackUploadAction('Collection added')
             dispatch(addResourcePaths(generatedCollection));
           }
         }
         catch(error){
+          trackUploadAction('Invalid file format');
           dispatchCollectionSelectionStatus('Invalid file format', 'Invalid file format');
         }
       };
@@ -74,6 +78,13 @@ export const UploadPostmanCollection = () => {
     )
   }
 
+  const trackUploadAction = (status: string) => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      componentName: componentNames.UPLOAD_COLLECTIONS_BUTTON,
+      status
+    });
+  }
+
   const deleteResourcesDialogProps = {
     type: DialogType.normal,
     title: translateMessage('Upload collection'),
@@ -86,11 +97,13 @@ export const UploadPostmanCollection = () => {
   }
 
   const mergeWithExistingCollection = () => {
+    trackUploadAction('Collection merged');
     dispatch(addResourcePaths(uploadedCollections));
     setIsDialogHidden(!isDialogHidden);
   }
 
   const overwriteCollection = () => {
+    trackUploadAction('Collection replaced');
     const resourcePaths = getPathsFromCollection();
     dispatch(removeResourcePaths(resourcePaths));
     setIsDialogHidden(!isDialogHidden);
