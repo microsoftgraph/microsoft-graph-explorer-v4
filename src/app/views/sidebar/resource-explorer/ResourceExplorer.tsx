@@ -24,7 +24,7 @@ const UnstyledResourceExplorer = (props: any) => {
     }
   }
 
-  const count = selectedLinks.length > 0 ? `(${selectedLinks.length})` : '';
+  const count = selectedLinks.length > 0 ? selectedLinks.length : '';
 
   return (
     <section style={{ marginTop: '8px' }}>
@@ -45,8 +45,9 @@ const UnstyledResourceExplorer = (props: any) => {
         </PivotItem>
 
         <PivotItem
-          headerText={`${translateMessage('Collection')} ${count}`}
+          headerText={translateMessage('Collection')}
           itemIcon='History'
+          itemCount={count}
           itemKey='history'
           headerButtonProps={{
             'aria-controls': 'collection-tab'

@@ -87,7 +87,7 @@ const PathsReview = () => {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <FormattedMessage id='add to collection first' />
+        <FormattedMessage id='add to collection first' /> / <UploadPostmanCollection />
       </Label>
     )
   }
