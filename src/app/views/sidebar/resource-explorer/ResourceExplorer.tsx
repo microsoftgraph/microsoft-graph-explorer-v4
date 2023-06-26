@@ -6,9 +6,9 @@ import {
 
 import { telemetry } from '../../../../telemetry';
 import { translateMessage } from '../../../utils/translate-messages';
-import { History } from '../history';
 import { sidebarStyles } from '../Sidebar.styles';
 import Endpoints from './Endpoints';
+import PathsReview from './collection/PreviewCollection';
 
 const UnstyledResourceExplorer = (props: any) => {
 
@@ -47,7 +47,13 @@ const UnstyledResourceExplorer = (props: any) => {
             'aria-controls': 'collection-tab'
           }}
         >
-          <div id={'collection-tab'}><History /></div>
+          <div id={'collection-tab'}><PathsReview dismissPopup={function (): void {
+            throw new Error('Function not implemented.');
+          }} closePopup={function (results?: string | object | undefined): void {
+            throw new Error('Function not implemented.');
+          }} settings={{ title: 'Path' }} data={{
+            version: '1.0.0'
+          }} /></div>
         </PivotItem>
       </Pivot>
     </section >

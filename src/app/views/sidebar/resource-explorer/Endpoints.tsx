@@ -31,7 +31,7 @@ import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
 import { UploadPostmanCollection } from './collection/UploadCollection';
 
-const UnstyledResourceExplorer = (props: any) => {
+const UnstyledEndpoints = (props: any) => {
   const { resources: { data, pending }, collections } = useAppSelector(
     (state) => state
   );
@@ -185,5 +185,5 @@ const UnstyledResourceExplorer = (props: any) => {
 }
 
 // @ts-ignore
-const ResourceExplorer = styled(UnstyledResourceExplorer, sidebarStyles);
-export default ResourceExplorer;
+const Endpoints = styled(UnstyledEndpoints, sidebarStyles);
+export default Endpoints;
