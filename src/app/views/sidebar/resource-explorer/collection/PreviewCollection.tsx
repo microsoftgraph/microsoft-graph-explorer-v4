@@ -1,6 +1,8 @@
 import {
   CommandBar,
+  DefaultButton,
   DialogFooter, ICommandBarItemProps,
+  IContextualMenuProps,
   Label,
   PrimaryButton, SearchBox
 } from '@fluentui/react';
@@ -79,6 +81,25 @@ const PathsReview = () => {
     )
   }
 
+  const menuProps: IContextualMenuProps = {
+    items: [
+      {
+        key: 'postmanCollection',
+        text: translateMessage('Postman collection'),
+        onClick: () => generateCollection()
+      },
+      {
+        key: 'apiManifest',
+        text: translateMessage('API manifest'),
+        onClick: () => showManifestDescription({
+          settings: {
+            title: translateMessage('Download an API manifest')
+          }
+        })
+      }
+    ]
+  };
+
   return (
     <section style={{ marginTop: '8px' }}>
       <SearchBox
@@ -103,23 +124,18 @@ const PathsReview = () => {
         styles={{
           actionsRight: { bottom: 0, justifyContent: 'start' }
         }}>
-        <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
-          <FormattedMessage id='Download postman collection' />
-        </PrimaryButton>
-        <PrimaryButton onClick={() => showManifestDescription({
-          settings: {
-            title: translateMessage('Download an API manifest')
-          }
-        })} disabled={selectedItems.length > 0}>
-          <FormattedMessage id='Create API manifest' />
-        </PrimaryButton>
-        <PrimaryButton onClick={() => viewPermissions({
+        <PrimaryButton
+          text={translateMessage('Download')}
+          menuProps={menuProps}
+          allowDisabledFocus
+        />
+        <DefaultButton onClick={() => viewPermissions({
           settings: {
             title: translateMessage('Required Permissions')
           }
         })} disabled={selectedItems.length > 0}>
           <FormattedMessage id='View permissions' />
-        </PrimaryButton>
+        </DefaultButton>
       </DialogFooter>
     </section>
   )
