@@ -39,7 +39,8 @@ const initialState: any = {
     sampleHeaders: [],
     selectedVersion: 'v1.0'
   },
-  termsOfUse: true
+  termsOfUse: true,
+  collections: []
 };
 
 export const store = createStore(
