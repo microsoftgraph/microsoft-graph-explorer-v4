@@ -4,6 +4,7 @@ import {
   styled
 } from '@fluentui/react';
 
+import { useAppSelector } from '../../../../store';
 import { telemetry } from '../../../../telemetry';
 import { translateMessage } from '../../../utils/translate-messages';
 import { sidebarStyles } from '../Sidebar.styles';
@@ -11,6 +12,8 @@ import Endpoints from './Endpoints';
 import PathsReview from './collection/PreviewCollection';
 
 const UnstyledResourceExplorer = (props: any) => {
+  const { collections } = useAppSelector((state) => state);
+  const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
 
   const onPivotItemClick = (item?: PivotItem) => {
     if (!item) { return; }
@@ -20,6 +23,8 @@ const UnstyledResourceExplorer = (props: any) => {
       telemetry.trackTabClickEvent(key);
     }
   }
+
+  const count = selectedLinks.length > 0 ? `(${selectedLinks.length})` : '';
 
   return (
     <section style={{ marginTop: '8px' }}>
@@ -40,20 +45,14 @@ const UnstyledResourceExplorer = (props: any) => {
         </PivotItem>
 
         <PivotItem
-          headerText={translateMessage('Collection')}
+          headerText={`${translateMessage('Collection')} ${count}`}
           itemIcon='History'
           itemKey='history'
           headerButtonProps={{
             'aria-controls': 'collection-tab'
           }}
         >
-          <div id={'collection-tab'}><PathsReview dismissPopup={function (): void {
-            throw new Error('Function not implemented.');
-          }} closePopup={function (results?: string | object | undefined): void {
-            throw new Error('Function not implemented.');
-          }} settings={{ title: 'Path' }} data={{
-            version: '1.0.0'
-          }} /></div>
+          <div id={'collection-tab'}><PathsReview /></div>
         </PivotItem>
       </Pivot>
     </section >

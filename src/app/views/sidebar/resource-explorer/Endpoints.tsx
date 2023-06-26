@@ -22,7 +22,6 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
-import CommandOptions from './command-options/CommandOptions';
 import {
   createResourcesList, getResourcePaths,
   getUrlFromLink
@@ -32,13 +31,12 @@ import { navStyles } from './resources.styles';
 import { UploadPostmanCollection } from './collection/UploadCollection';
 
 const UnstyledEndpoints = (props: any) => {
-  const { resources: { data, pending }, collections } = useAppSelector(
+  const { resources: { data, pending } } = useAppSelector(
     (state) => state
   );
 
   const dispatch: AppDispatch = useDispatch();
   const classes = classNames(props);
-  const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
@@ -147,14 +145,6 @@ const UnstyledEndpoints = (props: any) => {
           styles={{ text: { position: 'relative', top: '4px' } }}
         />
         < UploadPostmanCollection />
-      </Stack>
-
-      <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
-        {selectedLinks && selectedLinks.length > 0 && <>
-          <Label><FormattedMessage id='Selected Resources' /> ({selectedLinks.length})</Label>
-          <CommandOptions version={version} />
-        </>
-        }
       </Stack>
 
       {items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>

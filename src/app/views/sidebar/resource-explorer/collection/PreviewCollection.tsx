@@ -1,9 +1,10 @@
 import {
   CommandBar,
   DialogFooter, ICommandBarItemProps,
-  Label, PrimaryButton
+  Label,
+  PrimaryButton, SearchBox
 } from '@fluentui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -11,18 +12,13 @@ import { AppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IResourceLink } from '../../../../../types/resources';
 import { removeResourcePaths } from '../../../../services/actions/collections-action-creators';
-import { PopupsComponent } from '../../../../services/context/popups-context';
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
 import Paths from './Paths';
 import { generatePostmanCollection } from './postman.util';
 
-export interface IPathsReview {
-  version: string;
-}
-
-const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
+const PathsReview = () => {
   const dispatch: AppDispatch = useDispatch();
   const { show: showManifestDescription } = usePopups('manifest-description', 'panel')
   const { show: viewPermissions } = usePopups('collection-permissions', 'panel')
@@ -69,24 +65,33 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     setSelectedItems(content);
   };
 
-  useEffect(() => {
-    if (items.length === 0) {
-      props.closePopup();
-    }
-  }, [items]);
+  if (items.length === 0) {
+    return (
+      <Label style={{
+        display: 'flex',
+        width: '100%',
+        minHeight: '200px',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <FormattedMessage id='add to collection first' />
+      </Label>
+    )
+  }
 
   return (
-    <>
-      <Label>
-        <FormattedMessage id='Export list as a Postman collection message' />
-      </Label>
+    <section style={{ marginTop: '8px' }}>
+      <SearchBox
+        placeholder={translateMessage('Search')}
+      />
+      <hr />
       <CommandBar
         items={options}
         ariaLabel='Selection actions'
         primaryGroupAriaLabel='Selection actions'
         farItemsGroupAriaLabel='More selection actions'
       />
-      {items && items.length > 0 && <div style={{ height: '81vh' }}>
+      {items && items.length > 0 && <div style={{ height: '69vh' }}>
         <Paths
           resources={items}
           columns={columns}
@@ -116,7 +121,7 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
           <FormattedMessage id='View permissions' />
         </PrimaryButton>
       </DialogFooter>
-    </>
+    </section>
   )
 }
 

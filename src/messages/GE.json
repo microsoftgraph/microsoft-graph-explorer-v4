@@ -495,5 +495,6 @@
   "View permissions": "View permissions",
   "Required Permissions": "Required Permissions",
   "Create API manifest": "Create API manifest",
-  "Download an API manifest": "Download an API manifest"
+  "Download an API manifest": "Download an API manifest",
+  "add to collection first": "Add a request to the collection first"
 }

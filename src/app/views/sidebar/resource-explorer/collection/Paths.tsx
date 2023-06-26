@@ -1,9 +1,9 @@
-import { Component } from 'react';
+import { MarqueeSelection, TooltipHost, getId } from '@fluentui/react';
 import {
   DetailsList, DetailsListLayoutMode,
   IColumn, Selection
 } from '@fluentui/react/lib/DetailsList';
-import { getId, MarqueeSelection, TooltipHost } from '@fluentui/react';
+import { Component } from 'react';
 import { ResourcePath } from '../../../../../types/resources';
 
 interface IPathProps {
@@ -71,7 +71,7 @@ export default class Paths extends Component<IPathProps> {
           checkButtonAriaLabel='select row'
           styles={{
             root: {
-              maxHeight: '80vh',
+              maxHeight: '68vh',
               overflowY: 'auto',
               overflowX: 'hidden'
             }
