@@ -1,16 +1,19 @@
+import {
+  CommandBarButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
+  Label, MessageBarType, PrimaryButton, getId, getTheme
+} from '@fluentui/react';
 import { CSSProperties, useState } from 'react';
-import { generateResourcePathsFromPostmanCollection } from './postman.util';
-import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
-  Label, MessageBarType, PrimaryButton, getId, getTheme } from '@fluentui/react';
 import { useDispatch } from 'react-redux';
-import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
-import { translateMessage } from '../../../../utils/translate-messages';
-import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
-import { ResourcePath } from '../../../../../types/resources';
+
 import { useAppSelector } from '../../../../../store';
-import { collectionStyles } from './Collection.styles';
-import { isGeneratedCollectionInCollection } from './upload-collection.util';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
+import { ResourcePath } from '../../../../../types/resources';
+import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
+import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
+import { translateMessage } from '../../../../utils/translate-messages';
+import { collectionStyles } from './Collection.styles';
+import { generateResourcePathsFromPostmanCollection } from './postman.util';
+import { isGeneratedCollectionInCollection } from './upload-collection.util';
 
 export const UploadPostmanCollection = () => {
   const dispatch = useDispatch();
@@ -18,7 +21,7 @@ export const UploadPostmanCollection = () => {
   const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>([]);
   const { collections } = useAppSelector((state) => state);
   const theme = getTheme();
-  const { uploadButtonStyles, uploadLabelStyles } = collectionStyles(theme);
+  const { uploadLabelStyles } = collectionStyles(theme);
 
   const uploadIcon: IIconProps = {
     iconName: 'Upload'
@@ -120,19 +123,17 @@ export const UploadPostmanCollection = () => {
   }
 
   return (
-    <div style={{position: 'relative', bottom: '4px'}} >
-      <ActionButton iconProps={uploadIcon}
+    <>
+      <CommandBarButton iconProps={uploadIcon}
         title={translateMessage('Upload collection')}
         ariaLabel={translateMessage('Upload collection')}
-        disabled={false}
         onClick={() => selectFile()}
-        styles={uploadButtonStyles}
       >
         <input type="file" id="file-input" style={style_} onInput={handleFileSelect} value={''}/>
         <Label styles = {uploadLabelStyles}>
           {translateMessage('Upload collection')}
         </Label>
-      </ActionButton>
+      </CommandBarButton>
       <Dialog
         hidden={isDialogHidden}
         onDismiss={toggleIsDialogHidden}
@@ -148,6 +149,6 @@ export const UploadPostmanCollection = () => {
           <DefaultButton onClick={overwriteCollection} text={translateMessage('Replace existing')} />
         </DialogFooter>
       </Dialog>
-    </div>
+    </>
   )
 }

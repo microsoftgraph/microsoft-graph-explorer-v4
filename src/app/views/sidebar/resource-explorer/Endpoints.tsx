@@ -28,7 +28,6 @@ import {
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
-import { UploadPostmanCollection } from './collection/UploadCollection';
 
 const UnstyledEndpoints = (props: any) => {
   const { resources: { data, pending } } = useAppSelector(
@@ -144,7 +143,6 @@ const UnstyledEndpoints = (props: any) => {
           inlineLabel
           styles={{ text: { position: 'relative', top: '4px' } }}
         />
-        < UploadPostmanCollection />
       </Stack>
 
       {items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>

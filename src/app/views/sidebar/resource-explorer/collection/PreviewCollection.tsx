@@ -19,6 +19,7 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
 import Paths from './Paths';
 import { generatePostmanCollection } from './postman.util';
+import { UploadPostmanCollection } from './UploadCollection';
 
 const PathsReview = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -54,6 +55,16 @@ const PathsReview = () => {
   }
 
   const options: ICommandBarItemProps[] = [
+    {
+      key: 'upload',
+      disabled: selectedItems.length > 0,
+      onRender: () => {
+        return <UploadPostmanCollection />
+      }
+    }
+  ];
+
+  const farItems: ICommandBarItemProps[] = [
     {
       key: 'remove',
       text: translateMessage('remove'),
@@ -108,6 +119,7 @@ const PathsReview = () => {
       <hr />
       <CommandBar
         items={options}
+        farItems={farItems}
         ariaLabel='Selection actions'
         primaryGroupAriaLabel='Selection actions'
         farItemsGroupAriaLabel='More selection actions'
