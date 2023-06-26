@@ -487,5 +487,6 @@
   "Upload collection": "Upload collection",
   "You have an existing": "You have an existing collection. What would you like to do?",
   "Merge with existing": "Merge",
-  "Replace existing": "Replace"
+  "Replace existing": "Replace",
+  "Collection items exist": "The path items in the collection you uploaded are already in the current collection"
 }

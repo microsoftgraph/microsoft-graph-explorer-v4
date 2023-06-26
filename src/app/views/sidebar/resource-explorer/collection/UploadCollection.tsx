@@ -9,6 +9,7 @@ import { setQueryResponseStatus } from '../../../../services/actions/query-statu
 import { ResourcePath } from '../../../../../types/resources';
 import { useAppSelector } from '../../../../../store';
 import { collectionStyles } from './Collection.styles';
+import { isGeneratedCollectionInCollection } from './upload-collection.util';
 
 export const UploadPostmanCollection = () => {
   const dispatch = useDispatch();
@@ -41,26 +42,36 @@ export const UploadPostmanCollection = () => {
           const jsonData = JSON.parse(fileContent as string);
           const generatedCollection = generateResourcePathsFromPostmanCollection(jsonData);
           if(collections && collections.length > 0 && collections.find(k => k.isDefault)!.paths.length > 0){
-            setUploadedCollections(generatedCollection);
-            toggleIsDialogHidden();
+            const currentCollection = collections.find(k => k.isDefault)!.paths;
+            if(isGeneratedCollectionInCollection(currentCollection, generatedCollection)){
+              dispatchCollectionSelectionStatus('Collection items exist', 'Collection items exist');
+            }
+            else{
+              setUploadedCollections(generatedCollection);
+              toggleIsDialogHidden();
+            }
           }
           else{
             dispatch(addResourcePaths(generatedCollection));
           }
         }
         catch(error){
-          dispatch(
-            setQueryResponseStatus({
-              status: translateMessage('Invalid file format'),
-              statusMessage: translateMessage('Invalid file format'),
-              ok: true,
-              messageType: MessageBarType.error
-            })
-          )
+          dispatchCollectionSelectionStatus('Invalid file format', 'Invalid file format');
         }
       };
       reader.readAsText(file);
     }
+  }
+
+  const dispatchCollectionSelectionStatus = (status: string, statusMessage: string) => {
+    dispatch(
+      setQueryResponseStatus({
+        status: translateMessage(status),
+        statusMessage: translateMessage(statusMessage),
+        ok: false,
+        messageType: MessageBarType.error
+      })
+    )
   }
 
   const deleteResourcesDialogProps = {
