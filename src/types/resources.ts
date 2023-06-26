@@ -55,3 +55,13 @@ export interface Collection {
   paths: ResourcePath[],
   isDefault?: boolean;
 }
+
+export interface CollectionPermission {
+  value: string;
+  scopeType: string;
+  consentDisplayName: string;
+  consentDescription: string;
+  isAdmin: boolean;
+  isLeastPrivilege: boolean;
+  isHidden: boolean;
+}
