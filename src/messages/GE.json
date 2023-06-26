@@ -490,5 +490,10 @@
   "Replace existing": "Replace",
   "Collection items exist": "The path items in the collection you uploaded are already in the current collection",
   "Endpoints": "Endpoints",
-  "Collection": "Collection"
+  "Collection": "Collection",
+  "Download permissions": "Download permissions",
+  "View permissions": "View permissions",
+  "Required Permissions": "Required Permissions",
+  "Create API manifest": "Create API manifest",
+  "Download an API manifest": "Download an API manifest"
 }
