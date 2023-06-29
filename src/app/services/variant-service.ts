@@ -17,7 +17,6 @@ interface Parameters {
 }
 class VariantService {
 
-  static myInstance: VariantService = null as any;
   private endpoint = EXP_URL;
   private expResponse: TasResponse[] | null = [];
   private assignmentContext: string = '';
