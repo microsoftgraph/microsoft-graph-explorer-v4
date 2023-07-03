@@ -1,5 +1,5 @@
 import { getTheme, ITheme, Label, Link, PivotItem } from '@fluentui/react';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { FormattedMessage } from 'react-intl';
@@ -64,13 +64,18 @@ function Snippet(props: ISnippetProps) {
 
   const { dimensions: { response }, snippets,
     responseAreaExpanded, sampleQuery } = useAppSelector((state) => state);
-  const { data, pending: loadingState } = snippets;
+  const { data, pending: loadingState, error } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
-
   const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
   const height = convertVhToPx(responseHeight, 240);
+  const [snippetError, setError] = useState(error);
 
   const dispatch: AppDispatch = useDispatch();
+
+  const openApiSnippets: string[] = ['go', 'powershell', 'csharp'];
+  useEffect(() => {
+    setError(error && error.error ? error.error : error);
+  }, [error])
 
   const handleCopy = async () => {
     trackedGenericCopy(snippet, CODE_SNIPPETS_COPY_BUTTON, sampleQuery, { Language: language });
@@ -123,6 +128,36 @@ function Snippet(props: ISnippetProps) {
     );
   }
 
+  const displayError = (): JSX.Element | null => {
+    if((!loadingState && snippet) || (!loadingState && !snippetError)){
+      return null;
+    }
+    // OpenAPI generated and C# snippets are returning 404 for snippets not available
+    // other snippets are returning 400 for snippets not available
+    // https://github.com/microsoftgraph/microsoft-graph-devx-api/issues/1494
+    if(
+      (openApiSnippets.includes(language) && snippetError && snippetError.status && snippetError.status === 404) ||
+      (snippetError && snippetError.status && snippetError.status === 400)
+    ){
+      return(
+        <Label style={{ padding: 10 }}>
+          <FormattedMessage id='Snippet not available' />
+        </Label>
+      )
+    }
+    else{
+      return (
+        <>
+          {!loadingState &&
+            <Label style={{ padding: 10 }}>
+              <FormattedMessage id='Fetching code snippet failing' />
+            </Label>
+          }
+        </>
+      )
+    }
+  }
+
   return (
     <div style={{ display: 'block' }} id={`${language}-tab`}>
       {loadingState &&
@@ -142,11 +177,7 @@ function Snippet(props: ISnippetProps) {
           />
         </>
       }
-      {!loadingState && !snippet &&
-        <Label style={{ padding: 10 }}>
-          <FormattedMessage id='Snippet not available' />
-        </Label>
-      }
+      {displayError()}
     </div>
   );
 }
