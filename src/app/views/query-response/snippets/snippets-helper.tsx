@@ -74,7 +74,7 @@ function Snippet(props: ISnippetProps) {
 
   const openApiSnippets: string[] = ['go', 'powershell', 'csharp'];
   useEffect(() => {
-    setError(error && error.error ? error.error : error);
+    setError(error?.error ? error.error : error);
   }, [error])
 
   const handleCopy = async () => {
@@ -136,8 +136,8 @@ function Snippet(props: ISnippetProps) {
     // other snippets are returning 400 for snippets not available
     // https://github.com/microsoftgraph/microsoft-graph-devx-api/issues/1494
     if(
-      (openApiSnippets.includes(language) && snippetError && snippetError.status && snippetError.status === 404) ||
-      (snippetError && snippetError.status && snippetError.status === 400)
+      (openApiSnippets.includes(language) && snippetError?.status && snippetError.status === 404) ||
+      (snippetError?.status && snippetError.status === 400)
     ){
       return(
         <Label style={{ padding: 10 }}>
