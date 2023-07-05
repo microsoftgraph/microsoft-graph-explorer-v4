@@ -173,8 +173,8 @@ const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
           styles={
             !isScreenSizeReduced
               ? {
-                  root: { maxHeight: tabHeight, overflowX: 'hidden' }
-                }
+                root: { maxHeight: tabHeight, overflowX: 'hidden' }
+              }
               : { root: { maxHeight: tabHeight } }
           }
           items={permissions}
