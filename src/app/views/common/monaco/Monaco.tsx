@@ -1,5 +1,6 @@
 import { FocusZone } from '@fluentui/react';
-import Editor, { OnChange, useMonaco } from '@monaco-editor/react';
+import Editor, { OnChange, loader, useMonaco } from '@monaco-editor/react';
+import *  as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { useEffect } from 'react';
 
 import { ThemeContext } from '../../../../themes/theme-context';
@@ -26,7 +27,8 @@ export function Monaco(props: IMonaco) {
   }
   const itemHeight = height ? height : '300px';
 
-  const monaco = useMonaco();
+  loader.config({ monaco });
+
   useEffect(() => {
     if (monaco) {
       monaco.languages.json.jsonDefaults.setDiagnosticsOptions({

@@ -17,6 +17,7 @@ const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
@@ -389,6 +390,14 @@ module.exports = function (webpackEnv) {
                 'sass-loader'
               )
             },
+            {
+              test: /\.css$/,
+              use: ['style-loader', 'css-loader']
+            },
+            {
+              test: /\.ttf$/,
+              use: ['file-loader']
+            },
             // "file" loader makes sure those assets get served by WebpackDevServer.
             // When you `import` an asset, you get its (virtual) filename.
             // In production, they would get copied to the `build` folder.
@@ -414,6 +423,9 @@ module.exports = function (webpackEnv) {
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1
+      }),
+      new MonacoWebpackPlugin({
+        languages: ['json', 'typescript','javascript', 'css', 'java', 'csharp', 'html', 'powershell', 'go']
       }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
