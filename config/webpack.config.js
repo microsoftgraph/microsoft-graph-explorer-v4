@@ -1,9 +1,6 @@
-
-
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
-const resolve = require('resolve');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
@@ -43,11 +40,11 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-const hasJsxRuntime = (() => {
+const hasJsxRuntime = () => {
   if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
     return false;
   }
-})
+};
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -147,7 +144,7 @@ module.exports = function (webpackEnv) {
       // require.resolve('webpack-dev-server/client') + '?/',
       // require.resolve('webpack/hot/dev-server'),
       isEnvDevelopment &&
-      require.resolve('react-dev-utils/webpackHotDevClient'),
+        require.resolve('react-dev-utils/webpackHotDevClient'),
       // Finally, this is your app's code:
       paths.appIndexJs
       // We include the app code last so that if there is a runtime error during
@@ -162,17 +159,19 @@ module.exports = function (webpackEnv) {
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
       filename: 'static/js/graph-explorer-v2.js',
+      chunkFilename: 'static/js/graph-explorer.chunk.[name].[chunkhash].js',
       // We inferred the "public path" (such as / or /my-project) from homepage.
       // We use "/" in development.
       publicPath,
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
-        ? info =>
-          path
-            .relative(paths.appSrc, info.absoluteResourcePath)
-            .replace(/\\/g, '/')
+        ? (info) =>
+            path
+              .relative(paths.appSrc, info.absoluteResourcePath)
+              .replace(/\\/g, '/')
         : isEnvDevelopment &&
-        (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'))
+          ((info) =>
+            path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'))
     },
     resolve: {
       // This allows you to set a fallback for where Webpack should look for modules.
@@ -201,8 +200,8 @@ module.exports = function (webpackEnv) {
       // `web` extension prefixes have been added for better support
       // for React Native Web.
       extensions: paths.moduleFileExtensions
-        .map(ext => `.${ext}`)
-        .filter(ext => useTypeScript || !ext.includes('ts')),
+        .map((ext) => `.${ext}`)
+        .filter((ext) => useTypeScript || !ext.includes('ts')),
       alias: {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
@@ -221,7 +220,8 @@ module.exports = function (webpackEnv) {
           paths.appPackageJson,
           babelRuntimeEntry,
           babelRuntimeEntryHelpers,
-          babelRuntimeRegenerator])
+          babelRuntimeRegenerator
+        ])
       ]
     },
     resolveLoader: {
@@ -412,9 +412,6 @@ module.exports = function (webpackEnv) {
       ]
     },
     plugins: [
-      new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1
-      }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
@@ -425,19 +422,19 @@ module.exports = function (webpackEnv) {
           },
           isEnvProduction
             ? {
-              minify: {
-                removeComments: true,
-                collapseWhitespace: false,
-                removeRedundantAttributes: true,
-                useShortDoctype: true,
-                removeEmptyAttributes: true,
-                removeStyleLinkTypeAttributes: true,
-                keepClosingSlash: true,
-                minifyJS: false,
-                minifyCSS: true,
-                minifyURLs: true
+                minify: {
+                  removeComments: true,
+                  collapseWhitespace: false,
+                  removeRedundantAttributes: true,
+                  useShortDoctype: true,
+                  removeEmptyAttributes: true,
+                  removeStyleLinkTypeAttributes: true,
+                  keepClosingSlash: true,
+                  minifyJS: false,
+                  minifyCSS: true,
+                  minifyURLs: true
+                }
               }
-            }
             : undefined
         )
       ),
@@ -448,8 +445,8 @@ module.exports = function (webpackEnv) {
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       isEnvProduction &&
-      shouldInlineRuntimeChunk &&
-      new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
+        shouldInlineRuntimeChunk &&
+        new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
       // Makes some environment variables available in index.html.
       // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
       // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
@@ -479,9 +476,9 @@ module.exports = function (webpackEnv) {
       // isEnvDevelopment &&
       // new WatchMissingNodeModulesPlugin(paths.appNodeModules),
       isEnvProduction &&
-      new MiniCssExtractPlugin({
-        filename: 'static/css/graph-explorer-v2.css'
-      }),
+        new MiniCssExtractPlugin({
+          filename: 'static/css/graph-explorer-v2.css'
+        }),
       // Generate a manifest file which contains a mapping of all asset filenames
       // to their corresponding output file so that tools can pick it up without
       // having to parse `index.html`.
@@ -501,22 +498,21 @@ module.exports = function (webpackEnv) {
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the Webpack build.
       isEnvProduction &&
-      new WorkboxWebpackPlugin.GenerateSW({
-        clientsClaim: true,
-        exclude: [/\.map$/, /asset-manifest\.json$/],
-        navigateFallback: publicUrl + '/index.html',
-        navigateFallbackDenylist: [
-          // Exclude URLs starting with /_, as they're likely an API call
-          new RegExp('^/_'),
-          // Exclude URLs containing a dot, as they're likely a resource in
-          // public/ and not a SPA route
-          new RegExp('/[^/]+\\.[^/]+$')
-        ],
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024
-      }),
+        new WorkboxWebpackPlugin.GenerateSW({
+          clientsClaim: true,
+          exclude: [/\.map$/, /asset-manifest\.json$/],
+          navigateFallback: publicUrl + '/index.html',
+          navigateFallbackDenylist: [
+            // Exclude URLs starting with /_, as they're likely an API call
+            new RegExp('^/_'),
+            // Exclude URLs containing a dot, as they're likely a resource in
+            // public/ and not a SPA route
+            new RegExp('/[^/]+\\.[^/]+$')
+          ],
+          maximumFileSizeToCacheInBytes: 10 * 1024 * 1024
+        }),
       // TypeScript type checking
-      useTypeScript &&
-      new ForkTsCheckerWebpackPlugin()
+      useTypeScript && new ForkTsCheckerWebpackPlugin()
     ].filter(Boolean),
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter

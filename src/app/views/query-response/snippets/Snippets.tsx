@@ -9,23 +9,23 @@ function GetSnippets() {
   const dispatch: AppDispatch = useDispatch();
   const { snippets, sampleQuery } = useAppSelector((state) => state);
   const supportedLanguages = {
-    'CSharp': {
+    CSharp: {
       sdkDownloadLink: 'https://aka.ms/csharpsdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     },
-    'PowerShell': {
+    PowerShell: {
       sdkDownloadLink: 'https://aka.ms/pshellsdk',
       sdkDocLink: 'https://aka.ms/pshellsdkdocs'
     },
-    'Go': {
+    Go: {
       sdkDownloadLink: 'https://aka.ms/graphgosdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     },
-    'Java': {
+    Java: {
       sdkDownloadLink: 'https://aka.ms/graphjavasdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     },
-    'JavaScript': {
+    JavaScript: {
       sdkDownloadLink: 'https://aka.ms/graphjssdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     }
@@ -37,18 +37,22 @@ function GetSnippets() {
     }
     telemetry.trackTabClickEvent(pivotItem.props.itemKey!, sampleQuery);
     dispatch(setSnippetTabSuccess(pivotItem.props.itemKey!));
-  }
+  };
 
-  return <Pivot
-    className={'unstyled-pivot'}
-    selectedKey={snippets.snippetTab}
-    onLinkClick={handlePivotItemClick}
-    styles={{ text: { fontSize: FontSizes.size14 } }}
-  >
-    {renderSnippets(supportedLanguages)}
-  </Pivot>;
+  return (
+    <Pivot
+      className={'unstyled-pivot'}
+      selectedKey={snippets.snippetTab}
+      onLinkClick={handlePivotItemClick}
+      styles={{ text: { fontSize: FontSizes.size14 } }}
+    >
+      {renderSnippets(supportedLanguages)}
+    </Pivot>
+  );
 }
-export const Snippets = telemetry.trackReactComponent(
+const Snippets = telemetry.trackReactComponent(
   GetSnippets,
   componentNames.CODE_SNIPPETS_TAB
 );
+
+export default Snippets;

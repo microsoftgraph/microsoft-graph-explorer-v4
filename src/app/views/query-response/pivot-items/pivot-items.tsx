@@ -1,4 +1,5 @@
 import { getTheme, IPivotItemProps, ITheme, PivotItem } from '@fluentui/react';
+import { lazy, Suspense } from 'react';
 import { useAppSelector } from '../../../../store';
 
 import { componentNames } from '../../../../telemetry';
@@ -8,18 +9,37 @@ import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
-import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
-import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
-import GraphToolkit from '../graph-toolkit/GraphToolkit';
-import { ResponseHeaders } from '../headers';
+const AdaptiveCard = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "adaptive-card" */ '../adaptive-cards/AdaptiveCard'
+    )
+);
+import {
+  darkThemeHostConfig,
+  lightThemeHostConfig
+} from '../adaptive-cards/AdaptiveHostConfig';
+const GraphToolkit = lazy(
+  () => import(/* webpackChunkName: "mgt" */ '../graph-toolkit/GraphToolkit')
+);
+const ResponseHeaders = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "response-headers" */ '../headers/ResponseHeaders'
+    )
+);
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
-import { Snippets } from '../snippets';
+const Snippets = lazy(
+  () => import(/* webpackChunkName: "snippets" */ '../snippets/Snippets')
+);
 
 export const GetPivotItems = () => {
-
-  const { graphExplorerMode: mode, sampleQuery,
-    graphResponse: { body } } = useAppSelector((state) => state);
+  const {
+    graphExplorerMode: mode,
+    sampleQuery,
+    graphResponse: { body }
+  } = useAppSelector((state) => state);
 
   const currentTheme: ITheme = getTheme();
   const dotStyle = queryResponseStyles(currentTheme).dot;
@@ -38,7 +58,12 @@ export const GetPivotItems = () => {
     if (!!body) {
       const { toolkitUrl, exampleUrl } = lookupToolkitUrl(sampleQuery);
       if (toolkitUrl && exampleUrl) {
-        validateExternalLink(toolkitUrl, componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK, null, sampleQuery);
+        validateExternalLink(
+          toolkitUrl,
+          componentNames.GRAPH_TOOLKIT_PLAYGROUND_LINK,
+          null,
+          sampleQuery
+        );
         return <span style={dotStyle} />;
       }
     }
@@ -46,7 +71,7 @@ export const GetPivotItems = () => {
   }
   function renderItemLink(
     link?: IPivotItemProps,
-    defaultRenderer?: (link?: IPivotItemProps) => JSX.Element | null,
+    defaultRenderer?: (link?: IPivotItemProps) => JSX.Element | null
   ): JSX.Element | null {
     if (!link || !defaultRenderer) {
       return null;
@@ -73,7 +98,9 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-tab'
       }}
     >
-      <div id={'response-tab'} tabIndex={0}><Response /></div>
+      <div id={'response-tab'} tabIndex={0}>
+        <Response />
+      </div>
     </PivotItem>,
     <PivotItem
       key='response-headers'
@@ -86,7 +113,11 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-headers-tab'
       }}
     >
-      <div id={'response-headers-tab'} tabIndex={0}><ResponseHeaders /></div>
+      <div id={'response-headers-tab'} tabIndex={0}>
+        <Suspense fallback='Loading response headers...'>
+          <ResponseHeaders />
+        </Suspense>
+      </div>
     </PivotItem>
   ];
   if (mode === Mode.Complete) {
@@ -102,7 +133,11 @@ export const GetPivotItems = () => {
           'aria-controls': 'code-snippets-tab'
         }}
       >
-        <div id={'code-snippets-tab'} tabIndex={0}><Snippets /></div>
+        <div id={'code-snippets-tab'} tabIndex={0}>
+          <Suspense fallback='Loading snippets...'>
+            <Snippets />
+          </Suspense>
+        </div>
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'
@@ -116,7 +151,11 @@ export const GetPivotItems = () => {
           'aria-controls': 'toolkit-tab'
         }}
       >
-        <div id={'toolkit-tab'} tabIndex={0}><GraphToolkit /></div>
+        <div id={'toolkit-tab'} tabIndex={0}>
+          <Suspense fallback='Loading Graph Toolkit component...'>
+            <GraphToolkit />
+          </Suspense>
+        </div>
       </PivotItem>,
       <PivotItem
         key='adaptive-cards'
@@ -130,14 +169,20 @@ export const GetPivotItems = () => {
           'aria-controls': 'adaptive-cards-tab'
         }}
       >
-        <ThemeContext.Consumer >
+        <ThemeContext.Consumer>
           {(theme) => (
             // @ts-ignore
             <div id={'adaptive-cards-tab'} tabIndex={0}>
-              <AdaptiveCard
-                body={body}
-                hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
-              />
+              <Suspense fallback='Loading adaptive card...'>
+                <AdaptiveCard
+                  body={body}
+                  hostConfig={
+                    theme === 'light'
+                      ? lightThemeHostConfig
+                      : darkThemeHostConfig
+                  }
+                />
+              </Suspense>
             </div>
           )}
         </ThemeContext.Consumer>

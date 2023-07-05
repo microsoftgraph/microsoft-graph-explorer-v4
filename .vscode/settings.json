@@ -15,14 +15,13 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "eslint.validate": [
-    "typescript",
-    "typescriptreact"
-  ],
+  "eslint.validate": ["typescript", "typescriptreact"],
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "*.ts": "$(capture).js, $(capture).d.ts, $(capture).spec.ts",
     "*.tsx": "$(capture).ts, $(capture).d.ts, $(capture).spec.tsx, $(capture).styles.ts",
     "package.json": "package-lock.json, .npmrc"
-  }
+  },
+  "liveServer.settings.port": 3000,
+  "liveServer.settings.root": "build"
 }

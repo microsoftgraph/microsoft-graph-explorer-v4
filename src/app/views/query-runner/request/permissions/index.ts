@@ -1,4 +1,4 @@
-import { Permissions } from './Permissions.Query';
+import Permissions from './Permissions.Query';
 
 export {
   Permissions

@@ -16,9 +16,10 @@ import { getVersion } from '../../../../utils/version';
 import CampaignDefinitions from './campaignDefinitions';
 import { uiStringMap } from './uiStrings';
 
-export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurvey }: any) {
+const FeedbackForm = ({ activated, onDismissSurvey, onDisableSurvey }: any) => {
   const dispatch: AppDispatch = useDispatch();
-  const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
+  const [officeBrowserFeedback, setOfficeBrowserFeedback] =
+    useState<any>(undefined);
   const currentTheme = getTheme();
   const { NODE_ENV } = process.env;
   const { profile, policies } = useAppSelector((state) => state);
@@ -32,7 +33,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
     loadAndInitialize(floodgateObject, surveyActivated).then(() => {
       setOfficeBrowserFeedback(floodgateObject);
     });
-  }
+  };
 
   useEffect(() => {
     initializeFeedback();
@@ -52,38 +53,42 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
         translateMessage('Slightly difficult'),
         translateMessage('Neither easy nor difficult'),
         translateMessage('Slightly easy'),
-        translateMessage('Extremely easy')],
+        translateMessage('Extremely easy')
+      ],
       showEmailRequest: true,
       showPrompt: false,
       surveyType: 2,
       title: translateMessage('title')
-    }
-    if(officeBrowserFeedback){
-      officeBrowserFeedback.floodgate.showCustomSurvey(customSurvey).catch(
-        (error: any) => {
+    };
+    if (officeBrowserFeedback) {
+      officeBrowserFeedback.floodgate
+        .showCustomSurvey(customSurvey)
+        .catch((error: any) => {
           onDisableSurvey();
-          throw error; }
-      );
+          throw error;
+        });
     }
-  }
+  };
 
   if (activated) {
     showCustomSurvey();
   }
 
-
   async function loadAndInitialize(
     floodgateObject: any,
     // eslint-disable-next-line no-unused-vars
-    _onSurveyActivated: (launcher: any, surveyItem: any) => void): Promise<void> {
+    _onSurveyActivated: (launcher: any, surveyItem: any) => void
+  ): Promise<void> {
     floodgateObject.initOptions = {
       appId: 2256,
       stylesUrl: ' ', // Mandatory field
-      environment: (NODE_ENV === 'development') ? 1 : 0, // 0 - Prod, 1 - Int
+      environment: NODE_ENV === 'development' ? 1 : 0, // 0 - Prod, 1 - Int
       ageGroup: profile?.ageGroup,
       authenticationType: getAuthType(profile?.profileType!),
       locale: geLocale,
-      onError: (error: string): string => { throw error; },
+      onError: (error: string): string => {
+        throw error;
+      },
       build: getVersion().toString(),
       primaryColour: currentTheme.palette.themePrimary,
       secondaryColour: currentTheme.palette.themeSecondary,
@@ -92,7 +97,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
         // loggableUserId: `a:${profile?.id}`,
         tenantId: authenticationWrapper.getAccount()?.tenantId
       },
-      userEmail: ' ',  // Replaced by the user email
+      userEmail: ' ', // Replaced by the user email
       userEmailConsentDefault: false, // Should the email checkbox be checked
       emailPolicyValue: policies?.data?.email,
       screenshotPolicyValue: policies?.data?.screenshot,
@@ -102,42 +107,47 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
     floodgateObject.floodgate.initOptions = {
       autoDismiss: 2,
       campaignDefinitions: CampaignDefinitions,
-      showEmailAddress: (policies?.data?.email !== 2),
-      surveyEnabled: (profile?.profileType !== ACCOUNT_TYPE.AAD),
+      showEmailAddress: policies?.data?.email !== 2,
+      surveyEnabled: profile?.profileType !== ACCOUNT_TYPE.AAD,
       onDismiss: (campaignId: string, submitted: boolean) => {
-        const SecondsBeforePopup = getSecondsBeforePopup(floodgateObject.floodgate.getEngine()
-          .previousSurveyEventActivityStats);
+        const SecondsBeforePopup = getSecondsBeforePopup(
+          floodgateObject.floodgate.getEngine().previousSurveyEventActivityStats
+        );
         const telemetryData = { SecondsBeforePopup, IsSubmitted: false };
         if (submitted) {
-          dispatch(setQueryResponseStatus({
-            status: translateMessage('Submitted Successfully'),
-            statusText: translateMessage('Graph Explorer Feedback'),
-            ok: true,
-            messageType: MessageBarType.success
-          }));
-          trackSurveyPopup({...telemetryData, IsSubmitted: true}, campaignId);
-        }
-        else{
+          dispatch(
+            setQueryResponseStatus({
+              status: translateMessage('Submitted Successfully'),
+              statusText: translateMessage('Graph Explorer Feedback'),
+              ok: true,
+              messageType: MessageBarType.success
+            })
+          );
+          trackSurveyPopup({ ...telemetryData, IsSubmitted: true }, campaignId);
+        } else {
           trackSurveyPopup(telemetryData, campaignId);
         }
         onDismissSurvey();
       },
-      uIStringGetter: (str: string): any => { return uiStringMap[str]; }
+      uIStringGetter: (str: string): any => {
+        return uiStringMap[str];
+      }
     };
-
 
     // Setting the UI strings here before initialization.
     floodgateObject.setUiStrings({
-      'PrivacyStatement': translateMessage('Privacy Statement'),
+      PrivacyStatement: translateMessage('Privacy Statement'),
       '_PrivacyStatement.comment': translateMessage('Privacy Consent'),
-      'Form': {
-        'EmailPlaceholder': translateMessage('Email (optional)'),
-        'RatingLabel': translateMessage('Rating'),
-        'Submit': translateMessage('Submit'),
-        'Cancel': translateMessage('Cancel'),
-        'EmailCheckBoxLabel': translateMessage('You can contact me about this feedback')
+      Form: {
+        EmailPlaceholder: translateMessage('Email (optional)'),
+        RatingLabel: translateMessage('Rating'),
+        Submit: translateMessage('Submit'),
+        Cancel: translateMessage('Cancel'),
+        EmailCheckBoxLabel: translateMessage(
+          'You can contact me about this feedback'
+        )
       },
-      'CloseLabel': translateMessage('Close')
+      CloseLabel: translateMessage('Close')
     });
 
     floodgateObject.floodgate.initialize().then(
@@ -145,65 +155,93 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
         floodgateObject.floodgate.start();
         setEvents();
       },
-      function (err: string) { throw err; });
+      function (err: string) {
+        throw err;
+      }
+    );
 
     function setEvents() {
       window.onload = function () {
         if (floodgateObject.floodgate) {
           floodgateObject.floodgate.start();
-          floodgateObject.floodgate.getEngine().getActivityListener().logActivity('OnPageLoad');
-          floodgateObject.floodgate.getEngine().getActivityListener().logActivityStartTime('AppUsageTime');
+          floodgateObject.floodgate
+            .getEngine()
+            .getActivityListener()
+            .logActivity('OnPageLoad');
+          floodgateObject.floodgate
+            .getEngine()
+            .getActivityListener()
+            .logActivityStartTime('AppUsageTime');
         }
-      }
+      };
       window.onfocus = function () {
         if (floodgateObject.floodgate) {
           floodgateObject.floodgate.start();
-          floodgateObject.floodgate.getEngine().getActivityListener().logActivityStartTime('AppUsageTime');
-          floodgateObject.floodgate.getEngine().getActivityListener().logActivity('AppResume');
+          floodgateObject.floodgate
+            .getEngine()
+            .getActivityListener()
+            .logActivityStartTime('AppUsageTime');
+          floodgateObject.floodgate
+            .getEngine()
+            .getActivityListener()
+            .logActivity('AppResume');
         }
-      }
+      };
 
       window.onblur = function () {
         if (floodgateObject.floodgate) {
-          floodgateObject.floodgate.getEngine().getActivityListener().logActivityStopTime('AppUsageTime');
+          floodgateObject.floodgate
+            .getEngine()
+            .getActivityListener()
+            .logActivityStopTime('AppUsageTime');
           floodgateObject.floodgate.stop();
         }
-      }
+      };
       window.onunload = function () {
         if (officeBrowserFeedback.floodgate) {
-          officeBrowserFeedback.floodgate.getEngine().getActivityListener().logActivityStopTime('AppUsageTime');
+          officeBrowserFeedback.floodgate
+            .getEngine()
+            .getActivityListener()
+            .logActivityStopTime('AppUsageTime');
           officeBrowserFeedback.floodgate.stop();
         }
-      }
+      };
     }
   }
 
   const trackSurveyPopup = (telemetryData: any, campaignId: string) => {
-    if(campaignId === process.env.REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID){
-      telemetry.trackWindowOpenEvent(componentNames.LAUNCH_FEEDBACK_POPUP_ACTION, telemetryData);
+    if (campaignId === process.env.REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID) {
+      telemetry.trackWindowOpenEvent(
+        componentNames.LAUNCH_FEEDBACK_POPUP_ACTION,
+        telemetryData
+      );
     }
-  }
+  };
 
-  const getSecondsBeforePopup = (previousSurveyEventActivityStats: any) : string => {
-    let latestCount : number = 0;
+  const getSecondsBeforePopup = (
+    previousSurveyEventActivityStats: any
+  ): string => {
+    let latestCount: number = 0;
     if (Object.keys(previousSurveyEventActivityStats.Surveys).length > 0) {
-      const surveyStats: any = Object.values(previousSurveyEventActivityStats.Surveys);
+      const surveyStats: any = Object.values(
+        previousSurveyEventActivityStats.Surveys
+      );
       latestCount = surveyStats[0].Counts;
     }
     return latestCount.toString();
-  }
+  };
 
   function getCampaignId(): string {
     return process.env.REACT_APP_FEEDBACK_CAMPAIGN_ID || '';
   }
 
-  return (
-    <div />
-  );
+  return <div />;
 
   function getAuthType(profileType: ACCOUNT_TYPE) {
-    return AuthenticationType[ACCOUNT_TYPE[profileType] as keyof typeof AuthenticationType];
-
+    return AuthenticationType[
+      ACCOUNT_TYPE[profileType] as keyof typeof AuthenticationType
+    ];
   }
+};
 
-}
+export default FeedbackForm;

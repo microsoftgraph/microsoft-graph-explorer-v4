@@ -1,6 +1,6 @@
 import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import { CSSProperties, useEffect, useState } from 'react';
+import { CSSProperties, Suspense, lazy, useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -9,17 +9,32 @@ import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
-import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
-import { Auth } from './auth';
+import {
+  convertPxToVh,
+  convertVhToPx
+} from '../../common/dimensions/dimensions-adjustment';
+const Auth = lazy(() => import(/* webpackChunkName: "auth" */ './auth/Auth'));
 import { RequestBody } from './body';
-import { RequestHeaders } from './headers';
-import { Permissions } from './permissions';
+const RequestHeaders = lazy(
+  () =>
+    import(/* webpackChunkName: "request-headers" */ './headers/RequestHeaders')
+);
+const Permissions = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "permissions" */ './permissions/Permissions.Query'
+    )
+);
 import './request.scss';
 
 const Request = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
   const [selectedPivot, setSelectedPivot] = useState('request-body');
-  const { graphExplorerMode: mode, dimensions, sidebarProperties } = useAppSelector((state) => state);
+  const {
+    graphExplorerMode: mode,
+    dimensions,
+    sidebarProperties
+  } = useAppSelector((state) => state);
   const pivot = selectedPivot.replace('.$', '');
   const minHeight = 60;
   const maxHeight = 800;
@@ -30,16 +45,14 @@ const Request = (props: any) => {
   }: any = props;
 
   useEffect(() => {
-    if(sidebarProperties && sidebarProperties.mobileScreen){
+    if (sidebarProperties && sidebarProperties.mobileScreen) {
       window.addEventListener('resize', resizeHandler);
-    }
-    else{
+    } else {
       window.removeEventListener('resize', resizeHandler);
     }
-  }, [sidebarProperties.mobileScreen])
+  }, [sidebarProperties.mobileScreen]);
 
   const getPivotItems = (height: string) => {
-
     const heightAdjustment = 55;
     const containerStyle: CSSProperties = {
       height: convertVhToPx(height, heightAdjustment),
@@ -74,7 +87,9 @@ const Request = (props: any) => {
         }}
       >
         <div style={containerStyle} id={'request-header-tab'}>
-          <RequestHeaders />
+          <Suspense fallback='Loading request headers...'>
+            <RequestHeaders />
+          </Suspense>
         </div>
       </PivotItem>,
       <PivotItem
@@ -88,7 +103,9 @@ const Request = (props: any) => {
         }}
       >
         <div style={containerStyle} id={'permission-tab'}>
-          <Permissions />
+          <Suspense fallback='Loading permissions...'>
+            <Permissions />
+          </Suspense>
         </div>
       </PivotItem>
     ];
@@ -102,16 +119,19 @@ const Request = (props: any) => {
           headerText={translateMessage('Access Token')}
           headerButtonProps={{
             'aria-controls': 'access-token-tab'
-          }}>
+          }}
+        >
           <div style={containerStyle} id={'access-token-tab'}>
-            <Auth />
+            <Suspense fallback='Loading access token...'>
+              <Auth />
+            </Suspense>
           </div>
-        </PivotItem>,
+        </PivotItem>
       );
     }
 
     return pivotItems;
-  }
+  };
 
   const requestPivotItems = getPivotItems(dimensions.request.height);
 
@@ -121,10 +141,12 @@ const Request = (props: any) => {
     }
     onPivotItemClick(pivotItem);
     setSelectedPivot(pivotItem.props.itemKey!);
-  }
+  };
 
   const onPivotItemClick = (item?: PivotItem) => {
-    if (!item) { return; }
+    if (!item) {
+      return;
+    }
     const tabKey = item.props.itemKey;
     const { sampleQuery }: any = props;
     if (tabKey) {
@@ -138,7 +160,8 @@ const Request = (props: any) => {
     const maxDeviceVerticalHeight = 90;
     const dimen = { ...dimensions };
     dimen.request.height = requestHeightInVh;
-    const response = maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''));
+    const response =
+      maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''));
     dimen.response.height = response + 'vh';
     dispatch(setDimensions(dimen));
   };
@@ -149,11 +172,15 @@ const Request = (props: any) => {
     const resizable = document.getElementsByClassName('request-resizable');
     if (resizable && resizable.length > 0) {
       const resizableElement = resizable[0] as HTMLElement;
-      if(resizableElement && resizableElement.style && resizableElement.style.height){
+      if (
+        resizableElement &&
+        resizableElement.style &&
+        resizableElement.style.height
+      ) {
         resizableElement.style.height = '';
       }
     }
-  }
+  };
 
   return (
     <>
@@ -193,7 +220,7 @@ const Request = (props: any) => {
       </Resizable>
     </>
   );
-}
+};
 
 const IntlRequest = injectIntl(Request);
 export default IntlRequest;
