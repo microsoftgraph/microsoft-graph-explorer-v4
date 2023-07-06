@@ -157,7 +157,7 @@ module.exports = function (webpackEnv) {
     ].filter(Boolean),
     output: {
       // The build folder.
-      path: isEnvProduction ? paths.appBuild : undefined,
+      path: isEnvProduction ? paths.appBuild : path.resolve(__dirname, 'dist'),
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
@@ -249,6 +249,14 @@ module.exports = function (webpackEnv) {
               presets: ['@babel/preset-env']
             }
           }
+        },
+        {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader']
+        },
+        {
+          test: /\.ttf$/,
+          type: 'asset/resource'
         },
         {
           // "oneOf" will traverse all following loaders until one will
@@ -389,14 +397,6 @@ module.exports = function (webpackEnv) {
                 },
                 'sass-loader'
               )
-            },
-            {
-              test: /\.css$/,
-              use: ['style-loader', 'css-loader']
-            },
-            {
-              test: /\.ttf$/,
-              use: 'asset/resource'
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.
             // When you `import` an asset, you get its (virtual) filename.
