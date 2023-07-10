@@ -16,10 +16,11 @@ import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
 import { getColumns } from './columns';
 import { setConsentedStatus } from './util';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
 export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
   const dispatch: AppDispatch = useDispatch();
-  const { sampleQuery, scopes, authToken, consentedScopes } =
+  const { sampleQuery, scopes, authToken, consentedScopes, dimensions } =
     useAppSelector((state) => state);
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
 
@@ -36,7 +37,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const classes = classNames(classProps);
   const theme = getTheme();
   const { tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
-  const tabHeight =  '100%';
+  const tabHeight =  convertVhToPx(dimensions.request.height, 110);
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
@@ -127,7 +128,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   }
 
   return (
-    <div style={{ height: tabHeight, display: 'flex', flexDirection: 'column' }}>
+    <div >
       <Label className={classes.permissionLength} style={{ paddingLeft: '12px' }}>
         <FormattedMessage id='Permissions' />
       </Label>

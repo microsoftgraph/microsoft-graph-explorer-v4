@@ -9,6 +9,7 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
 interface IHeader {
   name: string;
@@ -16,7 +17,7 @@ interface IHeader {
 }
 
 const RequestHeaders = (props: any) => {
-  const { sampleQuery } = useAppSelector((state) => state);
+  const { sampleQuery, dimensions: { request: { height } } } = useAppSelector((state) => state);
   const [announcedMessage, setAnnouncedMessage] = useState('');
   const [isHoverOverHeadersList, setIsHoverOverHeadersList] = useState(false);
   const [isUpdatingHeader, setIsUpdatingHeader] = useState<boolean>(false);
@@ -95,8 +96,8 @@ const RequestHeaders = (props: any) => {
       onMouseEnter={() => setIsHoverOverHeadersList(true)}
       onMouseLeave={() => setIsHoverOverHeadersList(false)}
       className={classes.container}
-      style={isHoverOverHeadersList ? { height: '100%' } :
-        { height: '100%', overflow: 'hidden' }}>
+      style={isHoverOverHeadersList ? { height: convertVhToPx(height, 60)  } :
+        { height: convertVhToPx(height, 60) , overflow: 'hidden' }}>
       <Announced message={announcedMessage} />
       <div className='row'>
         <div className='col-sm-5'>
