@@ -52,6 +52,6 @@ export enum ResourceOptions {
 export interface Collection {
   id: string;
   name: string;
-  paths: IResourceLink[],
+  paths: ResourcePath[],
   isDefault?: boolean;
 }

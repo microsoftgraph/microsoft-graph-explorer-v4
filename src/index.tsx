@@ -26,16 +26,18 @@ import './styles/index.scss';
 import { telemetry } from './telemetry';
 import ITelemetry from './telemetry/ITelemetry';
 import { loadGETheme } from './themes';
-import { readTheme } from './themes/theme-utils';
+import { readFromLocalStorage } from './app/utils/local-storage';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { Collection } from './types/resources';
+import variantService from './app/services/variant-service';
+import { CURRENT_THEME } from './app/services/graph-constants';
 
 
 const appRoot: HTMLElement = document.getElementById('root')!;
 initializeIcons();
 
-let currentTheme = readTheme() || 'light';
+let currentTheme = readFromLocalStorage(CURRENT_THEME) || 'light';
 export function removeSpinners() {
   // removes the loading spinner from GE html after the app is loaded
   const spinner = document.getElementById('spinner');
@@ -54,7 +56,7 @@ export function removeSpinners() {
 }
 
 function setCurrentSystemTheme(): void {
-  const themeFromLocalStorage = readTheme();
+  const themeFromLocalStorage = readFromLocalStorage(CURRENT_THEME);
 
   if (themeFromLocalStorage) {
     currentTheme = themeFromLocalStorage;
@@ -161,32 +163,7 @@ function loadResources() {
 }
 loadResources();
 
-/**
- * Set's up Monaco Editor's Workers.
- */
-enum Workers {
-  Json = 'json',
-  Editor = 'editor',
-}
-
-(window as any).MonacoEnvironment = {
-  getWorkerUrl(moduleId: any, label: string) {
-    if (label === 'json') {
-      return getWorkerFor(Workers.Json);
-    }
-    return getWorkerFor(Workers.Editor);
-  }
-};
-
-function getWorkerFor(worker: string): string {
-  // tslint:disable-next-line:max-line-length
-  const WORKER_PATH =
-    'https://graphstagingblobstorage.blob.core.windows.net/staging/vendor/bower_components/explorer-v2/build';
-
-  return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
-	    importScripts('${WORKER_PATH}/${worker}.worker.js');`)}`;
-}
-
+variantService.initialize();
 const telemetryProvider: ITelemetry = telemetry;
 telemetryProvider.initialize();
 

@@ -1076,7 +1076,7 @@
           {
             "name": "addReply",
             "parameters": {
-              "comment": "Hello ${issueAuthor}\n\nThank you for reporting your concern. Unfortunately, we in the Graph Explorer team do not have any ownership of the APIs that are causing you issues. If you report this issue in the Microsoft Q&A forum, it will get routed to the appropriate team for them to triage.\n\nhttps://aka.ms/askgraph"
+              "comment": "Hello @${issueAuthor}\n\nThank you for reporting your concern. Unfortunately, we in the Graph Explorer team do not have any ownership of the APIs that are causing you issues. If you report this issue in the Microsoft Q&A forum, it will get routed to the appropriate team for them to triage.\n\nhttps://aka.ms/askgraph"
             }
           },
           {
@@ -1337,7 +1337,7 @@
           {
             "name": "addReply",
             "parameters": {
-              "comment": "Hello ${issueAuthor}\n\nThank you for reporting your concern. Unfortunately, we in the Graph Explorer team do not have any ownership of the APIs that are causing you issues. If you report this issue in the Microsoft Q&A forum, it will get routed to the appropriate team for them to triage.\n\nhttps://aka.ms/askgraph"
+              "comment": "Hello @${issueAuthor}\n\nThank you for reporting your concern. Unfortunately, we in the Graph Explorer team do not have any ownership of the APIs that are causing you issues. If you report this issue in the Microsoft Q&A forum, it will get routed to the appropriate team for them to triage.\n\nhttps://aka.ms/askgraph"
             }
           }
         ]
