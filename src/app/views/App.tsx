@@ -38,6 +38,7 @@ import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
+import CollectionPermissionsProvider from '../services/context/collection-permissions/CollectionPermissionsProvider';
 
 export interface IAppProps {
   theme?: ITheme;
@@ -484,7 +485,9 @@ class App extends Component<IAppProps, IAppState> {
               <TermsOfUseMessage />
             </div>
           </div>
-          <PopupsWrapper />
+          <CollectionPermissionsProvider>
+            <PopupsWrapper />
+          </CollectionPermissionsProvider>
         </PopupsProvider>
       </ThemeContext.Provider>
     );
