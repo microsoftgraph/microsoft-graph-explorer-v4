@@ -1,6 +1,5 @@
 import { FocusZone } from '@fluentui/react';
-import Editor, { OnChange, loader, useMonaco } from '@monaco-editor/react';
-import *  as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import Editor, { OnChange, useMonaco } from '@monaco-editor/react';
 import { useEffect } from 'react';
 
 import { ThemeContext } from '../../../../themes/theme-context';
@@ -18,7 +17,6 @@ interface IMonaco {
 }
 
 export function Monaco(props: IMonaco) {
-
   let { body } = props;
   const { onChange, language, readOnly, height } = props;
 
@@ -27,7 +25,7 @@ export function Monaco(props: IMonaco) {
   }
   const itemHeight = height ? height : '300px';
 
-  loader.config({ monaco });
+  const monaco = useMonaco();
 
   useEffect(() => {
     if (monaco) {
@@ -45,7 +43,7 @@ export function Monaco(props: IMonaco) {
     <FocusZone disabled={props.extraInfoElement ? false : true}>
       <div className='monaco-editor'>
         {props.extraInfoElement}
-        <ThemeContext.Consumer >
+        <ThemeContext.Consumer>
           {(theme) => (<Editor
             width='800 !important'
             height={itemHeight}
@@ -64,7 +62,7 @@ export function Monaco(props: IMonaco) {
               renderLineHighlight: 'none',
               scrollBeyondLastLine: true,
               overviewRulerBorder: false,
-              wordSeparators:'"'
+              wordSeparators: '"'
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
