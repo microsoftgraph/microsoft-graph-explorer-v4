@@ -7,7 +7,6 @@ import { AppDispatch, useAppSelector } from '../../../../../store';
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
-import { applyHeightProperty } from '../util.ts/CssHelpers';
 import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
 
@@ -90,8 +89,6 @@ const RequestHeaders = (props: any) => {
     query.sampleHeaders = headers;
     dispatch(queryInputActionCreators.setSampleQuery(query));
   }
-
-  applyHeightProperty();
 
   return (
     <div

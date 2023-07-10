@@ -15,7 +15,6 @@ import { classNames } from '../../../classnames';
 import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
 import { getColumns } from './columns';
-import { applyHeightProperty } from '../util.ts/CssHelpers';
 import { setConsentedStatus } from './util';
 
 export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
@@ -38,8 +37,6 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const theme = getTheme();
   const { tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
   const tabHeight =  '100%';
-
-  applyHeightProperty();
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 

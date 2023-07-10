@@ -15,7 +15,6 @@ import { RequestBody } from './body';
 import { RequestHeaders } from './headers';
 import { Permissions } from './permissions';
 import './request.scss';
-import { applyHeightProperty } from './util.ts/CssHelpers';
 
 const Request = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
@@ -29,8 +28,6 @@ const Request = (props: any) => {
     handleOnEditorChange,
     intl: { messages }
   }: any = props;
-
-  applyHeightProperty();
 
   useEffect(() => {
     if(sidebarProperties && sidebarProperties.mobileScreen){
