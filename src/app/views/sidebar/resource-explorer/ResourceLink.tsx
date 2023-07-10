@@ -6,10 +6,13 @@ import { CSSProperties, useEffect } from 'react';
 
 import { useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { IResourceLink, ResourceOptions } from '../../../../types/resources';
+import { IResourceLink, IResources, ResourceOptions } from '../../../../types/resources';
+import { GRAPH_URL } from '../../../services/graph-constants';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
+import DocumentationService from '../../query-runner/query-input/auto-complete/suffix/documentation';
+import { getUrlFromLink } from './resource-explorer.utils';
 import { existsInCollection, setExisting } from './resourcelink.utils';
 
 interface IResourceLinkProps {
@@ -21,7 +24,7 @@ interface IResourceLinkProps {
 
 const ResourceLink = (props: IResourceLinkProps) => {
   const { classes, version } = props;
-  const { collections } = useAppSelector(state => state);
+  const { collections, resources } = useAppSelector(state => state);
   const link = props.link as IResourceLink;
 
   const paths = collections?.find(k => k.isDefault)?.paths || [];
@@ -43,7 +46,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
         div: {
           visibility: 'hidden',
           overflow: 'hidden',
-          alignSelf: 'center'
+          marginTop: 2
         },
         selectors: {
           ':hover': { background: getTheme().palette.neutralLight, ...showButtons },
@@ -51,7 +54,10 @@ const ResourceLink = (props: IResourceLinkProps) => {
           '.is-selected &': showButtons
         }
       },
-      resourceLinkNameContainer: { textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex', padding: 5 },
+      resourceLinkNameContainer: {
+        textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex',
+        padding: 5, marginTop: 2
+      },
       resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }
     }
   );
@@ -74,6 +80,9 @@ const ResourceLink = (props: IResourceLinkProps) => {
     margin: 2,
     textTransform: 'uppercase'
   }
+
+  resourceLink.docLink = resourceLink.docLink ? resourceLink.docLink
+    : getDocumentationLink(resourceLink, version, resources);
 
   const openDocumentationLink = () => {
     window.open(resourceLink.docLink, '_blank');
@@ -181,5 +190,22 @@ const ResourceLink = (props: IResourceLinkProps) => {
   </span>
 }
 
-
 export default ResourceLink;
+
+function getDocumentationLink(resourceLink: IResourceLink, version: string, resources: IResources): string | null {
+  if (!resourceLink.method) {
+    return null;
+  }
+
+  return new DocumentationService({
+    sampleQuery: {
+      sampleUrl: `${GRAPH_URL}/${version}${getUrlFromLink(resourceLink.paths)}`,
+      selectedVerb: resourceLink.method,
+      selectedVersion: version,
+      sampleBody: '',
+      sampleHeaders: []
+    },
+    source: resources.data.children
+  }).getDocumentationLink();
+}
+

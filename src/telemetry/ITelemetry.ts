@@ -16,4 +16,5 @@ export default interface ITelemetry {
     severityLevel: SeverityLevel,
     properties: {}
   ): void;
+  getUserId():string
 }
