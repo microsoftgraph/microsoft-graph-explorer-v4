@@ -3,7 +3,7 @@ import content from '../../../../utils/resources/resources.json';
 import { createResourcesList, getResourcePaths } from '../resource-explorer.utils';
 import { generatePostmanCollection, generateResourcePathsFromPostmanCollection } from './postman.util';
 
-const resource = JSON.parse(JSON.stringify(content)) as IResource;
+const resource = structuredClone(content) as IResource;
 
 describe('Postman collection should', () => {
   it('have items generated', async () => {
