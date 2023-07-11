@@ -24,7 +24,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "14.x"
+          node-version: '18.x'
 
       - name: Cache npm
         uses: actions/cache@v3
@@ -60,7 +60,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "14.x"
+          node-version: '18.x'
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -85,7 +85,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "14.x"
+          node-version: '18.x'
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -113,7 +113,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "14.x"
+          node-version: '18.x'
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -185,9 +185,9 @@ jobs:
           skip_deploy_on_missing_secrets: true
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_SAND_0AC78C710 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
-          action: "upload"
-          app_location: "/" # App source code path
-          app_artifact_location: "build" # Built app content directory - optional
+          action: 'upload'
+          app_location: '/' # App source code path
+          app_artifact_location: 'build' # Built app content directory - optional
 
       - name: Set url
         run: |
@@ -204,4 +204,4 @@ jobs:
         uses: Azure/static-web-apps-deploy@v0.0.1-preview
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_SAND_0AC78C710 }}
-          action: "close"
+          action: 'close'
