@@ -1,4 +1,6 @@
-const esModules = ['@ms-ofb', 'ngx-bootstrap', 'lodash-es', '@fluentui'].join('|');
+const esModules = ['@ms-ofb', 'ngx-bootstrap', 'lodash-es', '@fluentui'].join(
+  '|'
+);
 module.exports = {
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
@@ -12,25 +14,31 @@ module.exports = {
   resolver: `${__dirname}/src/tests/common/resolver.js`,
   setupFiles: ['react-app-polyfill/jsdom'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
-  testMatch: [
-    '**/__tests__/**/*.[jt]s?(x)',
-    '**/?(*.)+(spec|test).[jt]s?(x)'
-  ],
-  globals: {
-    crypto: require('crypto'),
-    'ts-jest': {
-      isolatedModules: true
-    }
-  },
+  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
   testEnvironmentOptions: {
     url: 'http://localhost'
   },
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
+    '^.+\\.(js|jsx|ts|tsx)$': [
+      'ts-jest',
+      {
+        isolatedModules: true
+      }
+    ],
     '^.+\\.css$': '<rootDir>/config/jest/cssTransform.js',
-    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': 'ts-jest',
-    [`(${esModules}).+\\.js$`]: 'ts-jest'
+    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': [
+      'ts-jest',
+      {
+        isolatedModules: true
+      }
+    ],
+    [`(${esModules}).+\\.js$`]: [
+      'ts-jest',
+      {
+        isolatedModules: true
+      }
+    ]
   },
   transformIgnorePatterns: [
     '^.+\\.module\\.(css|sass|scss)$',
