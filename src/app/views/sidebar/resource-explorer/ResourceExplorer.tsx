@@ -44,7 +44,7 @@ const UnstyledResourceExplorer = (props: any) => {
     { key: 'beta', text: 'beta' }
   ];
 
-  const resourcesToUse = data.children ? JSON.parse(JSON.stringify(data.children)) : [] as IResource[];
+  const resourcesToUse = data.children ? structuredClone(data.children) : [] as IResource[];
 
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');

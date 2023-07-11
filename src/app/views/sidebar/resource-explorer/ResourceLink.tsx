@@ -1,6 +1,6 @@
 import {
   getId, getTheme, IconButton, INavLink,
-  ITooltipHostStyles, mergeStyleSets, TooltipHost
+  ITooltipHostStyles, mergeStyleSets, registerIcons, TooltipHost
 } from '@fluentui/react';
 import { CSSProperties, useEffect } from 'react';
 
@@ -9,11 +9,11 @@ import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IResourceLink, IResources, ResourceOptions } from '../../../../types/resources';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { validateExternalLink } from '../../../utils/external-link-validation';
-import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
 import DocumentationService from '../../query-runner/query-input/auto-complete/suffix/documentation';
 import { getUrlFromLink } from './resource-explorer.utils';
 import { existsInCollection, setExisting } from './resourcelink.utils';
+import { BlockedIcon } from '@fluentui/react-icons-mdl2';
 
 interface IResourceLinkProps {
   link: INavLink;
@@ -23,10 +23,9 @@ interface IResourceLinkProps {
 }
 
 const ResourceLink = (props: IResourceLinkProps) => {
-  const { classes, version } = props;
+  const { version } = props;
   const { collections, resources } = useAppSelector(state => state);
   const link = props.link as IResourceLink;
-
   const paths = collections?.find(k => k.isDefault)?.paths || [];
   const resourceLink = { ...link };
 
@@ -39,14 +38,16 @@ const ResourceLink = (props: IResourceLinkProps) => {
       visibility: 'visible'
     }
   };
+
   const linkStyle = mergeStyleSets(
     {
       link: {
-        display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden',
+        display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden', justifyContent: 'space-between',
         div: {
           visibility: 'hidden',
           overflow: 'hidden',
-          marginTop: 2
+          marginTop: 2,
+          marginLeft: 'auto'
         },
         selectors: {
           ':hover': { background: getTheme().palette.neutralLight, ...showButtons },
@@ -55,12 +56,28 @@ const ResourceLink = (props: IResourceLinkProps) => {
         }
       },
       resourceLinkNameContainer: {
-        textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex',
-        padding: 5, marginTop: 2
+        textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex', marginTop: '4px', paddingLeft: '4px'
       },
-      resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }
+      resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', marginTop: '6px' }
     }
   );
+
+  const iconButtonStyles = {
+    root: { marginRight: 1 },
+    menuIcon: { fontSize: 16, padding: 5 }
+  };
+
+  const methodButtonStyles: CSSProperties = {
+    textTransform: 'uppercase',
+    paddingLeft: '4px',
+    marginTop: '6px'
+  }
+
+  registerIcons({
+    icons: {
+      ANewIconName: <BlockedIcon />
+    }
+  });
 
   const tooltipId = getId('tooltip');
   const buttonId = getId('targetButton');
@@ -68,18 +85,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const documentButtonTooltip = getId('documentButtonTooltip');
   const removeCollectionButton = getId('removeCollectionButton');
   const removeCollectionButtonTooltip = getId('removeCollectionButtonTooltip');
-
-  const iconButtonStyles = {
-    root: { marginRight: 1, zIndex: 10 },
-    menuIcon: { fontSize: 16, padding: 5 }
-  };
-
-  const methodButtonStyles: CSSProperties = {
-    background: getStyleFor(resourceLink.method!),
-    alignSelf: 'center',
-    margin: 2,
-    textTransform: 'uppercase'
-  }
 
   resourceLink.docLink = resourceLink.docLink ? resourceLink.docLink
     : getDocumentationLink(resourceLink, version, resources);
@@ -119,17 +124,27 @@ const ResourceLink = (props: IResourceLinkProps) => {
   }
 
   return <span className={linkStyle.link} tabIndex={0}>
-    {resourceLink.method &&
-      <span className={classes.badge} style={methodButtonStyles}>
-        {resourceLink.method}
+    {resourceLink.method ?
+      <span className={linkStyle.resourceLinkNameContainer}>
+        <span style={{marginTop: '4px'}}>
+          <BlockedIcon />
+        </span>
+        &nbsp;
+        <span style={methodButtonStyles}>
+          {resourceLink.method}
+        </span>
+      </span>
+      :
+      <span className={linkStyle.resourceLinkNameContainer}>
+        <span style={{marginTop: '4px'}}>
+          <BlockedIcon />
+        </span>
+        &nbsp;
+        <span className={linkStyle.resourceLinkText}>
+          {resourceLink.name}
+        </span>
       </span>
     }
-
-    <span className={linkStyle.resourceLinkNameContainer}>
-      <span className={linkStyle.resourceLinkText}>
-        {resourceLink.name}
-      </span>
-    </span>
 
     <div>
       {resourceLink.isInCollection ? <TooltipHost
