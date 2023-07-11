@@ -7,9 +7,9 @@ import { AppDispatch, useAppSelector } from '../../../../../store';
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
 interface IHeader {
   name: string;
@@ -96,8 +96,8 @@ const RequestHeaders = (props: any) => {
       onMouseEnter={() => setIsHoverOverHeadersList(true)}
       onMouseLeave={() => setIsHoverOverHeadersList(false)}
       className={classes.container}
-      style={isHoverOverHeadersList ? { height: convertVhToPx(height, 60) } :
-        { height: convertVhToPx(height, 60), overflow: 'hidden' }}>
+      style={isHoverOverHeadersList ? { height: convertVhToPx(height, 60)  } :
+        { height: convertVhToPx(height, 60) , overflow: 'hidden' }}>
       <Announced message={announcedMessage} />
       <div className='row'>
         <div className='col-sm-5'>
