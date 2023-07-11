@@ -3,7 +3,7 @@ import content from '../../../../../utils/resources/resources.json';
 import { queries } from '../../../../sidebar/sample-queries/queries';
 import DocumentationService from './documentation';
 
-const resource = structuredClone(content) as IResource;
+const resource = JSON.parse(JSON.stringify(content)) as IResource;
 
 const sampleQuery = {
   sampleUrl: '',
