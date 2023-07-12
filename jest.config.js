@@ -16,21 +16,21 @@ module.exports = {
     '**/__tests__/**/*.[jt]s?(x)',
     '**/?(*.)+(spec|test).[jt]s?(x)'
   ],
-  globals: {
-    crypto: require('crypto'),
-    'ts-jest': {
-      isolatedModules: true
-    }
-  },
   testEnvironmentOptions: {
     url: 'http://localhost'
   },
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
+    '^.+\\.(js|jsx|ts|tsx)$': ['ts-jest', {
+      isolatedModules: true
+    }],
     '^.+\\.css$': '<rootDir>/config/jest/cssTransform.js',
-    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': 'ts-jest',
-    [`(${esModules}).+\\.js$`]: 'ts-jest'
+    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': ['ts-jest', {
+      isolatedModules: true
+    }],
+    [`(${esModules}).+\\.js$`]: ['ts-jest', {
+      isolatedModules: true
+    }]
   },
   transformIgnorePatterns: [
     '^.+\\.module\\.(css|sass|scss)$',
