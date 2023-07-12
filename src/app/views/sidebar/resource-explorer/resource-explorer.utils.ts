@@ -31,7 +31,7 @@ export function createResourcesList(
     paths: string[],
     methods: Method[]
   ): IResourceLink[] {
-    const { segment, children } = parent;
+    const { segment, children, labels } = parent;
     const links: IResourceLink[] = [];
     const childPaths = Array.from(new Set([...paths, segment]));
     if (methods.length > 1) {
@@ -49,7 +49,8 @@ export function createResourcesList(
               },
               segment,
               childPaths,
-              method
+              method,
+              getLink(labels, version, method)
             )
           );
         });
@@ -81,7 +82,8 @@ export function createResourcesList(
     info: IResource,
     parent: string,
     paths: string[] = [],
-    method?: Method
+    method?: Method,
+    docLink?: string
   ): IResourceLink {
     const { segment, labels } = info;
     const level = paths.length;
@@ -110,7 +112,6 @@ export function createResourcesList(
         ? true
         : false;
 
-    const docLink = getLink(labels, version, method);
     const pathItems = Array.from(new Set([...paths, segment]));
     const key = generateKey(method, pathItems, version);
 
@@ -126,7 +127,8 @@ export function createResourcesList(
       method: method?.toUpperCase(),
       type,
       links: versionedChildren,
-      docLink
+      docLink: docLink ? docLink : getLink(labels, version, method)
+
     };
   }
 
