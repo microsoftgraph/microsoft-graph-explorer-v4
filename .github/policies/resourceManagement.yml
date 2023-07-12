@@ -139,8 +139,8 @@ configuration:
             This issue will now be closed. If you encounter any issues with Graph Explorer in the future, please feel free to open an issue.
       - addLabel:
           label: Service issue
-      actions:
-      - closeIssue
+      - addLabel:
+          label: 'Needs: Author Feedback'
       description:
 onFailure:
 onSuccess:
