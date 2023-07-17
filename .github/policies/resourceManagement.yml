@@ -1,14 +1,14 @@
-id: 
+id:
 name: GitOps.PullRequestIssueManagement
 description: GitOps.PullRequestIssueManagement primitive
-owner: 
+owner:
 resource: repository
 disabled: false
-where: 
+where:
 configuration:
   resourceManagementConfiguration:
     scheduledSearches:
-    - description: 
+    - description:
       frequencies:
       - hourly:
           hour: 1
@@ -25,7 +25,7 @@ configuration:
           label: Service Bug
       actions:
       - closeIssue
-    - description: 
+    - description:
       frequencies:
       - hourly:
           hour: 1
@@ -45,7 +45,7 @@ configuration:
           label: 'Status: No Recent Activity'
       - addReply:
           reply: This issue has been automatically marked as stale because it has been marked as requiring author feedback but has not had any activity for **4 days**. It will be closed if no further activity occurs **within 3 days of this comment**.
-    - description: 
+    - description:
       frequencies:
       - hourly:
           hour: 1
@@ -60,7 +60,7 @@ configuration:
       - addReply:
           reply: This issue has been marked as duplicate and has not had any activity for **1 day**. It will be closed for housekeeping purposes.
       - closeIssue
-    - description: 
+    - description:
       frequencies:
       - hourly:
           hour: 1
@@ -96,7 +96,7 @@ configuration:
           label: "Needs: Attention \U0001F44B"
       - removeLabel:
           label: 'Needs: Author Feedback'
-      description: 
+      description:
     - if:
       - payloadType: Issues
       - not:
@@ -107,7 +107,7 @@ configuration:
       then:
       - removeLabel:
           label: 'Status: No Recent Activity'
-      description: 
+      description:
     - if:
       - payloadType: Issue_Comment
       - activitySenderHasAssociation:
@@ -121,7 +121,7 @@ configuration:
       then:
       - addLabel:
           label: 'Needs: Author Feedback'
-      description: 
+      description:
     - if:
       - payloadType: Issue_Comment
       - hasLabel:
@@ -134,10 +134,12 @@ configuration:
 
             Thank you for reporting your concern. Unfortunately, we in the Graph Explorer team do not have any ownership of the APIs that are causing you issues. If you report this issue in the Microsoft Q&A forum, it will get routed to the appropriate team for them to triage.
 
-
             https://aka.ms/askgraph
+
+            This issue will now be closed. If you encounter any issues with Graph Explorer in the future, please feel free to open an issue.
       - addLabel:
           label: Service issue
-      description: 
-onFailure: 
-onSuccess: 
+      - closeIssue
+      description:
+onFailure:
+onSuccess:
