@@ -38,3 +38,5 @@ export const GRAPH_V1_DESCRIPTION_URL =
   'https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/v1.0/openapi.yaml';
 export const API_MANIFEST_SPEC_PAGE =
   'https://darrelmiller.github.io/api-manifest/draft-miller-api-manifest.html#name-publisher-object';
+export const CURRENT_THEME='CURRENT_THEME';
+export const EXP_URL='https://default.exp-tas.com/exptas76/9b835cbf-9742-40db-84a7-7a323a77f3eb-gedev/api/v1/tas';

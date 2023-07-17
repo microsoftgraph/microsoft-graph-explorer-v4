@@ -12,15 +12,15 @@ import { fetchAllPrincipalGrants, fetchScopes } from '../../../../services/actio
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
-import { setConsentedStatus } from './util';
 import { getColumns } from './columns';
+import { setConsentedStatus } from './util';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
 export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
   const dispatch: AppDispatch = useDispatch();
-  const { sampleQuery, scopes, dimensions, authToken, consentedScopes } =
+  const { sampleQuery, scopes, authToken, consentedScopes, dimensions } =
     useAppSelector((state) => state);
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
 
@@ -37,7 +37,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const classes = classNames(classProps);
   const theme = getTheme();
   const { tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
-  const tabHeight = convertVhToPx(dimensions.request.height, 110);
+  const tabHeight =  convertVhToPx(dimensions.request.height, 110);
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
@@ -128,7 +128,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   }
 
   return (
-    <>
+    <div >
       <Label className={classes.permissionLength} style={{ paddingLeft: '12px' }}>
         <FormattedMessage id='Permissions' />
       </Label>
@@ -144,12 +144,14 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
           }
         }
         }
-        onMouseLeave={() => setIsScreenSizeReduced(false)}>
+        onMouseLeave={() => setIsScreenSizeReduced(false)}
+        style={{ flex: 1 }}
+      >
         <DetailsList
           styles={!isScreenSizeReduced ? {
             root:
-              { maxHeight: tabHeight, overflowX: 'hidden' }
-          } : { root: { maxHeight: tabHeight } }}
+              { height: tabHeight, overflowX: 'hidden', overflowY: 'auto' }
+          } : { root: { height: tabHeight, overflowY: 'auto' } }}
           items={permissions}
           columns={getColumns('tab', tokenPresent)}
           onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
@@ -159,6 +161,6 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
       </div>
-    </>
+    </div>
   );
 }
