@@ -1,6 +1,6 @@
 import {
   getId, getTheme, IconButton, INavLink,
-  ITooltipHostStyles, mergeStyleSets, registerIcons, TooltipHost
+  ITooltipHostStyles, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
 import { CSSProperties, useEffect } from 'react';
 
@@ -10,7 +10,6 @@ import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { translateMessage } from '../../../utils/translate-messages';
 import { existsInCollection, setExisting } from './resourcelink.utils';
-import { BlockedIcon } from '@fluentui/react-icons-mdl2';
 
 interface IResourceLinkProps {
   link: INavLink;
@@ -68,13 +67,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
     textTransform: 'uppercase',
     paddingLeft: '4px',
     marginTop: '6px'
-  }
-
-  registerIcons({
-    icons: {
-      ANewIconName: <BlockedIcon />
-    }
-  });
+  };
 
   const tooltipId = getId('tooltip');
   const buttonId = getId('targetButton');
