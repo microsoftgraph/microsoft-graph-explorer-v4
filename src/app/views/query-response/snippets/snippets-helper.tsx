@@ -72,7 +72,6 @@ function Snippet(props: ISnippetProps) {
 
   const dispatch: AppDispatch = useDispatch();
 
-  const openApiSnippets: string[] = ['go', 'powershell', 'csharp'];
   useEffect(() => {
     setSnippetError(error?.error ? error.error : error);
   }, [error])
@@ -132,11 +131,8 @@ function Snippet(props: ISnippetProps) {
     if((!loadingState && snippet) || (!loadingState && !snippetError)){
       return null;
     }
-    // OpenAPI generated and C# snippets are returning 404 for snippets not available
-    // other snippets are returning 400 for snippets not available
-    // https://github.com/microsoftgraph/microsoft-graph-devx-api/issues/1494
     if(
-      (openApiSnippets.includes(language) && snippetError?.status && snippetError.status === 404) ||
+      (snippetError?.status && snippetError.status === 404) ||
       (snippetError?.status && snippetError.status === 400)
     ){
       return(
