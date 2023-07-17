@@ -120,20 +120,12 @@ const ResourceLink = (props: IResourceLinkProps) => {
   return <span className={linkStyle.link} tabIndex={0}>
     {resourceLink.method ?
       <span className={linkStyle.resourceLinkNameContainer}>
-        <span style={{marginTop: '4px'}}>
-          <BlockedIcon />
-        </span>
-        &nbsp;
         <span style={methodButtonStyles}>
           {resourceLink.method}
         </span>
       </span>
       :
       <span className={linkStyle.resourceLinkNameContainer}>
-        <span style={{marginTop: '4px'}}>
-          <BlockedIcon />
-        </span>
-        &nbsp;
         <span className={linkStyle.resourceLinkText}>
           {resourceLink.name}
         </span>
