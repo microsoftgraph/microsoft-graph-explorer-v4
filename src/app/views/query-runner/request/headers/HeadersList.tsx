@@ -75,6 +75,7 @@ const HeadersList = ({
       onRenderItemColumn={renderItemColumn}
       onRenderRow={renderRow}
       selectionMode={SelectionMode.none}
+      styles={{root: {height: '100%'}}}
     />
   );
 };
