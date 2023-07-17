@@ -6,12 +6,9 @@ import { CSSProperties, useEffect } from 'react';
 
 import { useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { IResourceLink, IResources, ResourceOptions } from '../../../../types/resources';
-import { GRAPH_URL } from '../../../services/graph-constants';
+import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { translateMessage } from '../../../utils/translate-messages';
-import DocumentationService from '../../query-runner/query-input/auto-complete/suffix/documentation';
-import { getUrlFromLink } from './resource-explorer.utils';
 import { existsInCollection, setExisting } from './resourcelink.utils';
 import { BlockedIcon } from '@fluentui/react-icons-mdl2';
 
@@ -24,7 +21,7 @@ interface IResourceLinkProps {
 
 const ResourceLink = (props: IResourceLinkProps) => {
   const { version } = props;
-  const { collections, resources } = useAppSelector(state => state);
+  const { collections } = useAppSelector(state => state);
   const link = props.link as IResourceLink;
   const paths = collections?.find(k => k.isDefault)?.paths || [];
   const resourceLink = { ...link };
@@ -85,9 +82,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const documentButtonTooltip = getId('documentButtonTooltip');
   const removeCollectionButton = getId('removeCollectionButton');
   const removeCollectionButtonTooltip = getId('removeCollectionButtonTooltip');
-
-  resourceLink.docLink = resourceLink.docLink ? resourceLink.docLink
-    : getDocumentationLink(resourceLink, version, resources);
 
   const openDocumentationLink = () => {
     window.open(resourceLink.docLink, '_blank');
@@ -206,21 +200,3 @@ const ResourceLink = (props: IResourceLinkProps) => {
 }
 
 export default ResourceLink;
-
-function getDocumentationLink(resourceLink: IResourceLink, version: string, resources: IResources): string | null {
-  if (!resourceLink.method) {
-    return null;
-  }
-
-  return new DocumentationService({
-    sampleQuery: {
-      sampleUrl: `${GRAPH_URL}/${version}${getUrlFromLink(resourceLink.paths)}`,
-      selectedVerb: resourceLink.method,
-      selectedVersion: version,
-      sampleBody: '',
-      sampleHeaders: []
-    },
-    source: resources.data.children
-  }).getDocumentationLink();
-}
-
