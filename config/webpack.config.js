@@ -1,5 +1,3 @@
-
-
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
@@ -17,6 +15,7 @@ const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
@@ -43,11 +42,11 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-const hasJsxRuntime = (() => {
+const hasJsxRuntime = () => {
   if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
     return false;
   }
-})
+};
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -156,7 +155,7 @@ module.exports = function (webpackEnv) {
     ].filter(Boolean),
     output: {
       // The build folder.
-      path: isEnvProduction ? paths.appBuild : undefined,
+      path: isEnvProduction ? paths.appBuild : path.resolve(__dirname, 'dist'),
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
@@ -389,21 +388,22 @@ module.exports = function (webpackEnv) {
                 'sass-loader'
               )
             },
+            {
+              test: /\.ttf$/,
+              type: 'asset/resource'
+            },
             // "file" loader makes sure those assets get served by WebpackDevServer.
             // When you `import` an asset, you get its (virtual) filename.
             // In production, they would get copied to the `build` folder.
             // This loader doesn't use a "test" so it will catch all modules
             // that fall through the other loaders.
             {
-              loader: require.resolve('file-loader'),
               // Exclude `js` files to keep "css" loader working as it injects
               // its runtime that would otherwise be processed through "file" loader.
               // Also exclude `html` and `json` extensions so they get processed
               // by webpacks internal loaders.
-              exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
-              options: {
-                name: 'static/media/[name].[contenthash:8].[ext]'
-              }
+              exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/, /data:image\/svg\+xml;/],
+              type: 'asset/resource'
             }
             // ** STOP ** Are you adding a new loader?
             // Make sure to add the new loader(s) before the "file" loader.
@@ -414,6 +414,19 @@ module.exports = function (webpackEnv) {
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1
+      }),
+      new MonacoWebpackPlugin({
+        languages: [
+          'json',
+          'typescript',
+          'javascript',
+          'css',
+          'java',
+          'csharp',
+          'html',
+          'powershell',
+          'go'
+        ]
       }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
