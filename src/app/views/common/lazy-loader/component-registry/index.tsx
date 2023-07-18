@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { lazy } from 'react';
 import { IPermissionProps } from '../../../../../types/permissions';
 import { SuspenseLoader } from '../suspense-loader/SuspenseLoader';
@@ -8,8 +9,6 @@ const LazyStatusMessages = lazy( () =>
 /* webpackChunkName: "statusMessages" */ import('../../../app-sections/StatusMessages'));
 const LazyResponseHeaders = lazy(() =>
 /* webpackChunkName: "responseHeaders" */import('../../../query-response/headers/ResponseHeaders'));
-const LazyFeedbackForm = lazy( () =>
-/* webpackChunkName: "feedbackForm" */import('../../../query-runner/request/feedback/FeedbackForm'));
 const LazyAdaptiveCard = lazy(() =>
 /* webpackChunkName: "adaptiveCards" */import('../../../query-response/adaptive-cards/AdaptiveCard'));
 const LazyGraphToolkit = lazy(() =>
@@ -33,6 +32,17 @@ const LazyHistory = lazy(() =>
 const LazyResourceExplorer = lazy(() =>
 /* webpackChunkName: "resourceExplorer" */import('../../../sidebar/resource-explorer/ResourceExplorer'));
 
+export const popups = new Map<string, any>([
+  ['share-query', lazy(() =>
+  /* webpackChunkName: "share query" */ import('../../../query-runner/query-input/share-query/ShareQuery'))],
+  ['theme-chooser', lazy(() =>
+  /* webpackChunkName: "theme chooser" */ import('../../../main-header/settings/ThemeChooser'))],
+  ['preview-collection', lazy(() =>
+  /* webpackChunkName: "preview collection" */ import('../../../sidebar/resource-explorer/collection/PreviewCollection'))],
+  ['full-permissions', lazy(() =>
+  /* webpackChunkName: "full permissions" */ import('../../../query-runner/request/permissions/Permissions.Full'))]
+]);
+
 export const Permission = (props?: IPermissionProps) => {
   return (
     <SuspenseLoader>
@@ -45,14 +55,6 @@ export const StatusMessages = () => {
   return (
     <SuspenseLoader>
       <LazyStatusMessages />
-    </SuspenseLoader>
-  )
-}
-
-export const FeedbackForm = (props: any) => {
-  return (
-    <SuspenseLoader>
-      <LazyFeedbackForm {...props} />
     </SuspenseLoader>
   )
 }

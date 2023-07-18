@@ -1,10 +1,15 @@
-import { PopupItem, popups } from '../../views/common/registry/popups';
+import { popups } from '../../views/common/lazy-loader/component-registry';
 import {
   POPUPS, PopupsProps, PopupsType,
   UsePopupsResponse,
   usePopupsDispatchContext, usePopupsStateContext
 } from '../context/popups-context';
 
+type PopupItem =
+  'share-query' |
+  'theme-chooser' |
+  'preview-collection' |
+  'full-permissions';
 
 const usePopups = <Data = {}>(item: PopupItem , type: PopupsType,
   reference?: string): UsePopupsResponse<Data> => {
