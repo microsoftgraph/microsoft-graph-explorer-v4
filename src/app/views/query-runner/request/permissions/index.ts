@@ -1,3 +1,3 @@
-import { Permission } from './Permission';
+import { Permissions } from './Permissions.Query';
 
-export { Permission as default };
+export default Permissions;

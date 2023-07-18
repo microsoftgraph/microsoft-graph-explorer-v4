@@ -1,12 +1,12 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {
-  addResourcePaths, fetchResources, fetchResourcesError,
-  fetchResourcesPending, fetchResourcesSuccess, removeResourcePaths
+  fetchResources, fetchResourcesError,
+  fetchResourcesPending, fetchResourcesSuccess
 } from '../../../app/services/actions/resource-explorer-action-creators';
 import {
   FETCH_RESOURCES_ERROR,
-  FETCH_RESOURCES_PENDING, FETCH_RESOURCES_SUCCESS, RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
+  FETCH_RESOURCES_PENDING, FETCH_RESOURCES_SUCCESS
 } from '../../../app/services/redux-constants';
 import { AppAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
@@ -20,7 +20,6 @@ const mockState: ApplicationState = {
     baseUrl: 'https://graph.microsoft.com/v1.0/me',
     parameters: '$count=true'
   },
-  permissionsPanelOpen: true,
   profile: null,
   sampleQuery: {
     sampleUrl: 'http://localhost:8080/api/v1/samples/1',
@@ -99,8 +98,7 @@ const mockState: ApplicationState = {
       labels: [],
       children: []
     },
-    error: null,
-    paths: []
+    error: null
   },
   policies: {
     pending: false,
@@ -115,8 +113,8 @@ const paths = [
     url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues',
     name: 'issues (1)',
     labels: [
-      { name: 'v1.0', methods: ['Get', 'Post'] },
-      { name: 'beta', methods: ['Get', 'Post'] }
+      { name: 'v1.0', methods: ['GET', 'POST'] },
+      { name: 'beta', methods: ['GET', 'POST'] }
     ],
     isExpanded: true,
     parent: '{serviceHealth-id}',
@@ -129,8 +127,8 @@ const paths = [
     url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues/{serviceHealthIssue-id}',
     name: '{serviceHealthIssue-id} (1)',
     labels: [
-      { name: 'v1.0', methods: ['Get', 'Patch', 'Delete'] },
-      { name: 'beta', methods: ['Get', 'Patch', 'Delete'] }
+      { name: 'v1.0', methods: ['GET', 'PATCH', 'DELETE'] },
+      { name: 'beta', methods: ['GET', 'PATCH', 'DELETE'] }
     ],
     isExpanded: true,
     parent: 'issues',
@@ -157,44 +155,6 @@ describe('Resource Explorer actions', () => {
     const action = fetchResourcesSuccess(response);
     expect(action).toEqual(expectedAction);
   });
-
-  it('should dispatch RESOURCEPATHS_ADD_SUCCESS when addResourcePaths() is called with valid paths', () => {
-
-    const expectedActions = [
-      {
-        type: RESOURCEPATHS_ADD_SUCCESS,
-        response: paths
-      }
-    ];
-
-    const store_ = mockStore({
-      resources: {
-        paths: []
-      }
-    });
-
-    store_.dispatch(addResourcePaths(paths));
-    expect(store_.getActions()).toEqual(expectedActions);
-  });
-
-  it('should dispatch RESOURCEPATHS_DELETE_SUCCESS when removeResourcePaths() is dispatched', () => {
-
-    const expectedActions = [
-      {
-        type: RESOURCEPATHS_DELETE_SUCCESS,
-        response: paths
-      }
-    ];
-
-    const store_ = mockStore({
-      resources: {
-        paths
-      }
-    });
-
-    store_.dispatch(removeResourcePaths(paths));
-    expect(store_.getActions()).toEqual(expectedActions);
-  })
 
   it('should dispatch FETCH_RESOURCES_ERROR when fetchResourcesError() is called', () => {
     // Arrange

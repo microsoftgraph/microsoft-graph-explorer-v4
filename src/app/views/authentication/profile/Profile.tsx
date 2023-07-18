@@ -2,22 +2,19 @@ import {
   ActionButton, Callout, FontSizes, getTheme, IPersonaProps, IPersonaSharedProps, mergeStyleSets,
   Persona, PersonaSize, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
+import { useId } from '@fluentui/react-hooks';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useId } from '@fluentui/react-hooks';
 
+import { AppDispatch, useAppSelector } from '../../../../store';
+import { Mode } from '../../../../types/enums';
 import { signOut } from '../../../services/actions/auth-action-creators';
-import { togglePermissionsPanel } from '../../../services/actions/permissions-panel-action-creator';
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
+import { usePopups } from '../../../services/hooks';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
-import { Mode } from '../../../../types/enums';
-import { AppDispatch, useAppSelector } from '../../../../store';
-import { Permission } from '../../common/lazy-loader/component-registry';
-
-
 const getInitials = (name: string) => {
   let initials = '';
   if (name && name !== '') {
@@ -36,15 +33,13 @@ const getInitials = (name: string) => {
 
 const Profile = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
-  const {
-    profile,
-    authToken,
-    permissionsPanelOpen,
-    graphExplorerMode
-  } = useAppSelector((state) => state);
+  const { profile, authToken, graphExplorerMode } = useAppSelector((state) => state);
+
+  const { show: showPermissions } = usePopups('full-permissions', 'panel');
   const authenticated = authToken.token;
   const [isCalloutVisible, setIsCalloutVisible] = useState(false);
   const toggleIsCalloutVisible = () => { setIsCalloutVisible(!isCalloutVisible) };
+
   const buttonId = useId('callout-button');
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
@@ -79,9 +74,12 @@ const Profile = (props: any) => {
   };
 
   const changePanelState = () => {
-    let open = !!permissionsPanelOpen;
-    open = !open;
-    dispatch(togglePermissionsPanel(open));
+    showPermissions({
+      settings: {
+        title: translateMessage('Permissions'),
+        width: 'lg'
+      }
+    })
   };
 
   const classes = classNames(props);
@@ -166,9 +164,6 @@ const Profile = (props: any) => {
   return (
     <div className={classes.profile} style={profileContainerStyles}>
       {showProfileComponent(persona)}
-      {permissionsPanelOpen &&
-        <Permission panel={true} />
-      }
     </div>
   );
 }

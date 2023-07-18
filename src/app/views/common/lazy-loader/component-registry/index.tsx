@@ -2,24 +2,36 @@ import { lazy } from 'react';
 import { IPermissionProps } from '../../../../../types/permissions';
 import { SuspenseLoader } from '../suspense-loader/SuspenseLoader';
 
-const LazyPermission = lazy(() => import('../../../query-runner/request/permissions'));
-const LazyStatusMessages = lazy( () => import('../../../app-sections/StatusMessages'));
-const LazyResponseHeaders = lazy(() => import('../../../query-response/headers/ResponseHeaders'));
-const LazyFeedbackForm = lazy( () => import('../../../query-runner/request/feedback/FeedbackForm'));
-const LazyAdaptiveCard = lazy(() => import('../../../query-response/adaptive-cards/AdaptiveCard'));
-const LazyGraphToolkit = lazy(() => import('../../../query-response/graph-toolkit/GraphToolkit'));
-const LazySnippets = lazy(() => import('../../../query-response/snippets/Snippets').then(module => {
-  return { default: module.Snippets }
-}));
+const LazyPermission = lazy(() =>
+/* webpackChunkName: "permissions" */ import('../../../query-runner/request/permissions'));
+const LazyStatusMessages = lazy( () =>
+/* webpackChunkName: "statusMessages" */ import('../../../app-sections/StatusMessages'));
+const LazyResponseHeaders = lazy(() =>
+/* webpackChunkName: "responseHeaders" */import('../../../query-response/headers/ResponseHeaders'));
+const LazyFeedbackForm = lazy( () =>
+/* webpackChunkName: "feedbackForm" */import('../../../query-runner/request/feedback/FeedbackForm'));
+const LazyAdaptiveCard = lazy(() =>
+/* webpackChunkName: "adaptiveCards" */import('../../../query-response/adaptive-cards/AdaptiveCard'));
+const LazyGraphToolkit = lazy(() =>
+/* webpackChunkName: "graphToolkit" */import('../../../query-response/graph-toolkit/GraphToolkit'));
+const LazySnippets = lazy(() =>
+/* webpackChunkName: "code snippets" */import('../../../query-response/snippets/Snippets').then(module => {
+    return { default: module.Snippets }
+  }));
 
-const LazyCopyButton = lazy(() => import('../../copy-button/CopyButton').then(module => {
-  return { default: module.CopyButton }
-}));
+const LazyCopyButton = lazy(() =>
+/* webpackChunkName: "copy button" */import('../../copy-button/CopyButton').then(module => {
+    return { default: module.CopyButton }
+  }));
 
-const LazyAuth = lazy(() => import('../../../query-runner/request/auth/Auth'));
-const LazyRequestHeaders = lazy(() => import('../../../query-runner/request/headers/RequestHeaders'));
-const LazyHistory = lazy(() => import('../../../sidebar/history/History'));
-const LazyResourceExplorer = lazy(() => import('../../../sidebar/resource-explorer/ResourceExplorer'));
+const LazyAuth = lazy(() =>
+/* webpackChunkName: "authTab" */import('../../../query-runner/request/auth/Auth'));
+const LazyRequestHeaders = lazy(() =>
+/* webpackChunkName: "requestHeaders" */import('../../../query-runner/request/headers/RequestHeaders'));
+const LazyHistory = lazy(() =>
+/* webpackChunkName: "history" */import('../../../sidebar/history/History'));
+const LazyResourceExplorer = lazy(() =>
+/* webpackChunkName: "resourceExplorer" */import('../../../sidebar/resource-explorer/ResourceExplorer'));
 
 export const Permission = (props?: IPermissionProps) => {
   return (

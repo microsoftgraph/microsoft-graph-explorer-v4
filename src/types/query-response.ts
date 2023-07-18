@@ -18,12 +18,6 @@ export interface IQueryResponseProps {
   mobileScreen: boolean;
 }
 
-export interface IQueryResponseState {
-  showShareQueryDialog: boolean;
-  showModal: boolean;
-  query: string;
-}
-
 export interface IGraphResponse {
   body: any | undefined;
   headers: any | undefined;

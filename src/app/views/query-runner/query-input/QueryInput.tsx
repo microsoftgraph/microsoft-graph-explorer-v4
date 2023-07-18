@@ -3,7 +3,7 @@ import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
-import { httpMethods, IQuery, IQueryInputProps } from '../../../../types/query-runner';
+import { IQuery, IQueryInputProps, httpMethods } from '../../../../types/query-runner';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_API_VERSIONS } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
@@ -12,7 +12,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import SubmitButton from '../../../views/common/submit-button/SubmitButton';
 import { queryRunnerStyles } from '../QueryRunner.styles';
 import { AutoComplete } from './auto-complete';
-import { ShareQuery } from './share-query';
+import { ShareButton } from './share-query';
 
 const QueryInput = (props: IQueryInputProps) => {
   const {
@@ -115,7 +115,7 @@ const QueryInput = (props: IQueryInputProps) => {
           />
         </Stack.Item>
         <Stack.Item shrink styles={!mobileScreen ? shareQueryButtonStyles : {}}>
-          <ShareQuery />
+          <ShareButton />
         </Stack.Item>
       </Stack>
     </>

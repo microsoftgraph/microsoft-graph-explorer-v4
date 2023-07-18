@@ -1,50 +1,123 @@
 import {
-  ContextualMenuItemType, getId, IconButton,
-  IContextualMenuItem, mergeStyleSets, TooltipHost
+  getId, getTheme, IconButton, INavLink,
+  ITooltipHostStyles, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
-import { CSSProperties } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { CSSProperties, useEffect } from 'react';
 
-import { ResourceLinkType, ResourceOptions } from '../../../../types/resources';
+import { useAppSelector } from '../../../../store';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
+import { IResourceLink, ResourceOptions } from '../../../../types/resources';
+import { validateExternalLink } from '../../../utils/external-link-validation';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
+import { existsInCollection, setExisting } from './resourcelink.utils';
+
 interface IResourceLinkProps {
-  link: any;
-  isolateTree: Function;
+  link: INavLink;
   resourceOptionSelected: Function;
-  linkLevel: number;
   classes: any;
+  version: string;
 }
 
 const ResourceLink = (props: IResourceLinkProps) => {
-  const { link: resourceLink, classes } = props;
+  const { classes, version } = props;
+  const { collections } = useAppSelector(state => state);
+  const link = props.link as IResourceLink;
+
+  const paths = collections?.find(k => k.isDefault)?.paths || [];
+  const resourceLink = { ...link };
+
+  useEffect(() => {
+    setExisting(resourceLink, existsInCollection(link, paths, version));
+  }, [paths])
+
+  const showButtons = {
+    div: {
+      visibility: 'visible'
+    }
+  };
+  const linkStyle = mergeStyleSets(
+    {
+      link: {
+        display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden',
+        div: {
+          visibility: 'hidden',
+          overflow: 'hidden',
+          marginTop: 2
+        },
+        selectors: {
+          ':hover': { background: getTheme().palette.neutralLight, ...showButtons },
+          ':focus-within': showButtons,
+          '.is-selected &': showButtons
+        }
+      },
+      resourceLinkNameContainer: {
+        textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex',
+        padding: 5, marginTop: 2
+      },
+      resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }
+    }
+  );
 
   const tooltipId = getId('tooltip');
   const buttonId = getId('targetButton');
-
+  const documentButton = getId('documentButton');
+  const documentButtonTooltip = getId('documentButtonTooltip');
+  const removeCollectionButton = getId('removeCollectionButton');
+  const removeCollectionButtonTooltip = getId('removeCollectionButtonTooltip');
 
   const iconButtonStyles = {
-    root: { marginTop: -5, marginRight: 2 },
-    menuIcon: { fontSize: 20, padding: 5 }
+    root: { marginRight: 1, zIndex: 10 },
+    menuIcon: { fontSize: 16, padding: 5 }
   };
 
   const methodButtonStyles: CSSProperties = {
-    background: getStyleFor(resourceLink.method),
-    textAlign: 'center',
-    marginRight: '12px',
-    maxHeight: 24
+    background: getStyleFor(resourceLink.method!),
+    alignSelf: 'center',
+    margin: 2,
+    textTransform: 'uppercase'
   }
 
-  const items = getMenuItems();
+  const openDocumentationLink = () => {
+    window.open(resourceLink.docLink, '_blank');
+    trackDocumentLinkClickedEvent();
+  }
 
-  return <span className={linkStyle.link}>
+  const trackDocumentLinkClickedEvent = async (): Promise<void> => {
+    const documentationLink = resourceLink.docLink;
+    const properties: { [key: string]: any } = {
+      ComponentName: componentNames.RESOURCE_DOCUMENTATION_LINK,
+      QueryUrl: resourceLink.url,
+      Link: documentationLink
+    };
+    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, properties);
+    // Check if link throws error
+    validateExternalLink(documentationLink || '', componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK, documentationLink);
+  }
+
+  const calloutProps = { gapSpace: 0 };
+  const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
+
+  setExisting(resourceLink, existsInCollection(link, paths, version));
+
+  const handleAddToCollectionClick = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+    props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, link);
+  }
+
+  const handleRemoveFromCollectionClick = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+    props.resourceOptionSelected(ResourceOptions.REMOVE_FROM_COLLECTION, link);
+  }
+
+  return <span className={linkStyle.link} tabIndex={0}>
     {resourceLink.method &&
-      <span
-        className={classes.badge}
-        style={methodButtonStyles}
-      >
+      <span className={classes.badge} style={methodButtonStyles}>
         {resourceLink.method}
-      </span>}
+      </span>
+    }
 
     <span className={linkStyle.resourceLinkNameContainer}>
       <span className={linkStyle.resourceLinkText}>
@@ -52,69 +125,63 @@ const ResourceLink = (props: IResourceLinkProps) => {
       </span>
     </span>
 
-
-    {items.length > 0 &&
-      <TooltipHost
-        content={translateMessage('More actions')}
-        id={tooltipId}
-        calloutProps={{ gapSpace: 0, target: `#${buttonId}` }}
-        tooltipProps={{
-          onRenderContent: function renderContent() {
-            return <div style={{ paddingBottom: 3 }}>
-              <FormattedMessage id={'More actions'} />
-            </div>
-          }
-        }}
+    <div>
+      {resourceLink.isInCollection ? <TooltipHost
+        content={translateMessage('Remove from collection')}
+        id={removeCollectionButtonTooltip}
+        calloutProps={calloutProps}
+        styles={hostStyles}
       >
         <IconButton
-          ariaLabel={translateMessage('More actions')}
+          ariaLabel={translateMessage('Remove from collection')}
           role='button'
-          id={buttonId}
-          aria-describedby={tooltipId}
+          id={removeCollectionButton}
+          aria-describedby={removeCollectionButtonTooltip}
           styles={iconButtonStyles}
-          menuIconProps={{ iconName: 'MoreVertical' }}
-          menuProps={{
-            shouldFocusOnMount: true,
-            alignTargetEdge: true,
-            items
-          }}
+          menuIconProps={{ iconName: 'BoxSubtractSolid' }}
+          onClick={handleRemoveFromCollectionClick}
         />
-      </TooltipHost>
-    }
-  </span>
+      </TooltipHost> :
+        <TooltipHost
+          content={translateMessage('Add to collection')}
+          id={tooltipId}
+          calloutProps={calloutProps}
+          styles={hostStyles}
+        >
+          <IconButton
+            ariaLabel={translateMessage('Add to collection')}
+            role='button'
+            id={buttonId}
+            aria-describedby={tooltipId}
+            styles={iconButtonStyles}
+            menuIconProps={{ iconName: 'BoxAdditionSolid' }}
+            onClick={handleAddToCollectionClick}
+          />
+        </TooltipHost>}
 
-  function getMenuItems() {
-    const menuItems: IContextualMenuItem[] = [];
-
-    if (resourceLink) {
-      if (resourceLink.type === ResourceLinkType.NODE) {
-        menuItems.push(
-          {
-            key: 'isolate',
-            text: translateMessage('Isolate'),
-            itemType: ContextualMenuItemType.Normal,
-            onClick: () => props.isolateTree(resourceLink)
-          });
+      {resourceLink.method &&
+        <TooltipHost
+          content={resourceLink.docLink ? translateMessage('Read documentation')
+            : translateMessage('Query documentation not found')}
+          id={documentButtonTooltip}
+          calloutProps={{ gapSpace: 0, target: `#${documentButton}` }}
+          styles={hostStyles}
+        >
+          <IconButton
+            aria-label={translateMessage('Read documentation')}
+            role='button'
+            id={documentButton}
+            disabled={!resourceLink.docLink}
+            aria-describedby={documentButtonTooltip}
+            styles={iconButtonStyles}
+            onClick={() => openDocumentationLink()}
+            menuIconProps={{ iconName: 'TextDocument' }}
+          />
+        </TooltipHost>
       }
-
-      menuItems.push(
-        {
-          key: ResourceOptions.ADD_TO_COLLECTION,
-          text: translateMessage('Add to collection'),
-          itemType: ContextualMenuItemType.Normal,
-          onClick: () => props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, resourceLink)
-        });
-    }
-    return menuItems;
-  }
+    </div>
+    &nbsp;
+  </span>
 }
-
-const linkStyle = mergeStyleSets(
-  {
-    link: { display: 'flex', lineHeight: 'normal', width: '100%', overflow: 'hidden' },
-    resourceLinkNameContainer: { textAlign: 'left', flex: '1', overflow: 'hidden', display: 'flex' },
-    resourceLinkText: { textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }
-  }
-);
 
 export default ResourceLink;
