@@ -28,6 +28,10 @@ function GetSnippets() {
     'JavaScript': {
       sdkDownloadLink: 'https://aka.ms/graphjssdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'Cli' : {
+      sdkDownloadLink: 'https://github.com/microsoftgraph/msgraph-cli#installation',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
     }
   };
 
