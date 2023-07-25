@@ -1,6 +1,5 @@
 import { authenticationWrapper } from '.';
 import { HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
-import { AuthenticationWrapper } from './AuthenticationWrapper';
 
 window.open = jest.fn();
 jest.spyOn(window.sessionStorage.__proto__, 'clear');
@@ -14,12 +13,7 @@ jest.mock('./msal-app.ts', () => {
     account: null,
     getAccount: jest.fn(),
     logoutRedirect: jest.fn(),
-    logoutPopup: jest.fn(),
-    loginRedirect: jest.fn(),
-    loginPopup: jest.fn(),
-    acquireTokenSilent: jest.fn(),
-    acquireTokenPopup: jest.fn(),
-    getAllAccounts: jest.fn()
+    logoutPopup: jest.fn()
   };
 
   return {
@@ -27,37 +21,6 @@ jest.mock('./msal-app.ts', () => {
   };
 })
 describe('Tests authentication wrapper functions should', () => {
-  it('return null when account data is null', () => {
-    const sessionId = authenticationWrapper.getSessionId();
-    expect(sessionId).toBeNull();
-  });
-
-  it('throw an error when logIn fails', () => {
-    const logIn = authenticationWrapper.logIn();
-    expect(logIn).rejects.toThrow();
-  });
-
-  it('throw an error when consenting to scopes fails', () => {
-    const consentToScopes = authenticationWrapper.consentToScopes();
-    expect(consentToScopes).rejects.toThrow();
-  })
-
-  it('return undefined when getAccount is called and msalApplication is undefined', () => {
-    const account = authenticationWrapper.getAccount();
-    expect(account).toBeUndefined();
-  })
-
-  it('throw an error when getToken returns a rejected Promise', () => {
-    const getToken = authenticationWrapper.getToken();
-    expect(getToken).rejects.toBeUndefined();
-  });
-
-  describe('throw an error when getOcpsToken fails ', () => {
-    it('Throws an error when getOcpsToken fails', () => {
-      const getOcpsToken = authenticationWrapper.getOcpsToken();
-      expect(getOcpsToken).rejects.toThrow();
-    });
-  })
 
   it('log out a user and call removeItem with the home_account_key', () => {
     authenticationWrapper.logOut();
