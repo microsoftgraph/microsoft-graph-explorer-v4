@@ -78,7 +78,8 @@
                 "test-playwright": "start-server-and-test start-server http://localhost:3000 test-ui",
                 "test-ui": "npx playwright test src/tests/ui/",
                 "test-playwright-accessibility": "start-server-and-test start-server http://localhost:3000 test-accessibility",
-                "test-accessibility": "npx playwright test src/tests/accessibility --project=Ms-Edge"
+                "test-accessibility": "npx playwright test src/tests/accessibility --project=Ms-Edge",
+                "preinstall": "npx npm-force-resolutions"
         },
         "eslintConfig": {
                 "extends": "react-app"
@@ -132,5 +133,8 @@
                 "reportPath": "reports",
                 "reportFile": "test-report.xml",
                 "indent": 4
+        },
+        "resolutions": {
+                "axe-core": "4.4.3"
         }
 }
