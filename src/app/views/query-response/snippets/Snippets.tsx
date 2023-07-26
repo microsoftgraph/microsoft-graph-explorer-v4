@@ -30,7 +30,7 @@ function GetSnippets() {
       sdkDocLink: 'https://aka.ms/sdk-doc'
     },
     'Cli' : {
-      sdkDownloadLink: 'https://github.com/microsoftgraph/msgraph-cli#installation',
+      sdkDownloadLink: 'https://aka.ms/msgraphclisdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     }
   };
