@@ -1,10 +1,11 @@
 const esModules = ['@ms-ofb', 'ngx-bootstrap', 'lodash-es', '@fluentui'].join('|');
 module.exports = {
   collectCoverageFrom: [
-    'src/**/*.{js,jsx,ts,tsx}',
+    'src/**/*.{js,jsx,ts}',
     '!**/node_modules/**',
     '!build/**',
     '!src/**/*.d.ts',
+    '!src/**/*.tsx',
     '!src/index.tsx',
     '!src/app/middleware/telemetryMiddleware.ts',
     '!src/telemetry/telemetry.ts'
@@ -16,21 +17,21 @@ module.exports = {
     '**/__tests__/**/*.[jt]s?(x)',
     '**/?(*.)+(spec|test).[jt]s?(x)'
   ],
+  globals: {
+    crypto: require('crypto'),
+    'ts-jest': {
+      isolatedModules: true
+    }
+  },
   testEnvironmentOptions: {
     url: 'http://localhost'
   },
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': ['ts-jest', {
-      isolatedModules: true
-    }],
+    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
     '^.+\\.css$': '<rootDir>/config/jest/cssTransform.js',
-    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': ['ts-jest', {
-      isolatedModules: true
-    }],
-    [`(${esModules}).+\\.js$`]: ['ts-jest', {
-      isolatedModules: true
-    }]
+    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': 'ts-jest',
+    [`(${esModules}).+\\.js$`]: 'ts-jest'
   },
   transformIgnorePatterns: [
     '^.+\\.module\\.(css|sass|scss)$',
