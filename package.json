@@ -78,7 +78,8 @@
                 "test-playwright": "start-server-and-test start-server http://localhost:3000 test-ui",
                 "test-ui": "npx playwright test src/tests/ui/",
                 "test-playwright-accessibility": "start-server-and-test start-server http://localhost:3000 test-accessibility",
-                "test-accessibility": "npx playwright test src/tests/accessibility --project=Ms-Edge"
+                "test-accessibility": "npx playwright test src/tests/accessibility --project=Ms-Edge",
+                "preinstall": "npx npm-force-resolutions"
         },
         "eslintConfig": {
                 "extends": "react-app"
@@ -116,7 +117,7 @@
                 "html-webpack-plugin": "5.5.3",
                 "jest": "28.1.0",
                 "jest-canvas-mock": "2.5.2",
-                "jest-environment-jsdom": "29.5.0",
+                "jest-environment-jsdom": "28.1.3",
                 "jest-fetch-mock": "3.0.3",
                 "jest-sonar-reporter": "2.0.0",
                 "jest-watch-typeahead": "2.2.2",
@@ -132,5 +133,8 @@
                 "reportPath": "reports",
                 "reportFile": "test-report.xml",
                 "indent": 4
+        },
+        "resolutions": {
+                "axe-core": "4.4.3"
         }
 }
