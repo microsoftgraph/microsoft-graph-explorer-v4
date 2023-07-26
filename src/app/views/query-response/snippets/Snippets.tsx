@@ -32,7 +32,7 @@ function GetSnippets() {
     'Python': {
       sdkDownloadLink: 'https://aka.ms/msgraphpythonsdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
-    },
+    }
   };
 
   const handlePivotItemClick = (pivotItem?: PivotItem) => {
