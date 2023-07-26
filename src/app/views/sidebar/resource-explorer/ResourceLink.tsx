@@ -184,5 +184,4 @@ const ResourceLink = (props: IResourceLinkProps) => {
   </span>
 }
 
-
 export default ResourceLink;

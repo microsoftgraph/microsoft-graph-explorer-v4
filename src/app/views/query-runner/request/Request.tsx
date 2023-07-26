@@ -185,7 +185,7 @@ const Request = (props: any) => {
             onLinkClick={handlePivotItemClick}
             className='pivot-request'
             selectedKey={pivot}
-            styles={{ text: { fontSize: FontSizes.size14 } }}
+            styles={{ text: { fontSize: FontSizes.size14 }}}
           >
             {requestPivotItems}
           </Pivot>
