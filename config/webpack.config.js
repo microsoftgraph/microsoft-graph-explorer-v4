@@ -414,7 +414,7 @@ module.exports = function (webpackEnv) {
     },
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 100
+        maxChunks: 25
       }),
       new MonacoWebpackPlugin({
         languages: [
