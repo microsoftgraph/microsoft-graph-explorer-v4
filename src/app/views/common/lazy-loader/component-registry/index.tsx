@@ -3,7 +3,7 @@ import { lazy } from 'react';
 import { IPermissionProps } from '../../../../../types/permissions';
 import { SuspenseLoader } from '../suspense-loader/SuspenseLoader';
 
-const LazyPermission = lazy(() =>
+const LazySpecificPermissions = lazy(() =>
   import(/* webpackChunkName: "permissions" */ '../../../query-runner/request/permissions'));
 const LazyStatusMessages = lazy( () =>
   import(/* webpackChunkName: "statusMessages" */ '../../../app-sections/StatusMessages'));
@@ -25,22 +25,19 @@ const LazyHistory = lazy(() =>
   import(/* webpackChunkName: "history" */ '../../../sidebar/history/History'));
 const LazyResourceExplorer = lazy(() =>
   import(/* webpackChunkName: "resourceExplorer" */ '../../../sidebar/resource-explorer/ResourceExplorer'));
-
-export const popups = new Map<string, any>([
-  ['share-query', lazy(() =>
-    import(/* webpackChunkName: "share query" */ '../../../query-runner/query-input/share-query/ShareQuery'))],
-  ['theme-chooser', lazy(() =>
-    import(/* webpackChunkName: "theme chooser" */ '../../../main-header/settings/ThemeChooser'))],
-  ['preview-collection', lazy(() =>
-    import(/* webpackChunkName: "preview collection" */ '../../../sidebar/resource-explorer/collection/PreviewCollection'))],
-  ['full-permissions', lazy(() =>
-    import(/* webpackChunkName: "full permissions" */ '../../../query-runner/request/permissions/Permissions.Full'))]
-]);
+const LazyShareQuery = lazy(() =>
+  import(/* webpackChunkName: "share query" */ '../../../query-runner/query-input/share-query/ShareQuery'));
+const LazyThemeChoser = lazy(() =>
+  import(/* webpackChunkName: "theme chooser" */ '../../../main-header/settings/ThemeChooser'));
+const LazyPreviewCollection = lazy(() =>
+  import(/* webpackChunkName: "preview collection" */ '../../../sidebar/resource-explorer/collection/PreviewCollection'));
+const LazyFullPermissions = lazy(() =>
+  import(/* webpackChunkName: "full permissions" */ '../../../query-runner/request/permissions/Permissions.Full'));
 
 export const Permission = (props?: IPermissionProps) => {
   return (
     <SuspenseLoader>
-      <LazyPermission {...props} />
+      <LazySpecificPermissions {...props} />
     </SuspenseLoader>
   )
 }
@@ -121,6 +118,38 @@ export const ResourceExplorer = (props?: any) => {
   return (
     <SuspenseLoader>
       <LazyResourceExplorer {...props} />
+    </SuspenseLoader>
+  )
+}
+
+export const ShareQuery = (props?: any) => {
+  return (
+    <SuspenseLoader>
+      <LazyShareQuery {...props} />
+    </SuspenseLoader>
+  )
+}
+
+export const ThemeChoser = (props?: any) => {
+  return (
+    <SuspenseLoader>
+      <LazyThemeChoser {...props} />
+    </SuspenseLoader>
+  )
+}
+
+export const PreviewCollection = (props?: any) => {
+  return (
+    <SuspenseLoader>
+      <LazyPreviewCollection {...props} />
+    </SuspenseLoader>
+  )
+}
+
+export const FullPermissions = (props?: any) => {
+  return (
+    <SuspenseLoader>
+      <LazyFullPermissions {...props} />
     </SuspenseLoader>
   )
 }
