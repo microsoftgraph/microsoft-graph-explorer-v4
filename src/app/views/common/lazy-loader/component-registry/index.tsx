@@ -4,43 +4,37 @@ import { IPermissionProps } from '../../../../../types/permissions';
 import { SuspenseLoader } from '../suspense-loader/SuspenseLoader';
 
 const LazyPermission = lazy(() =>
-/* webpackChunkName: "permissions" */ import('../../../query-runner/request/permissions'));
+  import(/* webpackChunkName: "permissions" */ '../../../query-runner/request/permissions'));
 const LazyStatusMessages = lazy( () =>
-/* webpackChunkName: "statusMessages" */ import('../../../app-sections/StatusMessages'));
+  import(/* webpackChunkName: "statusMessages" */ '../../../app-sections/StatusMessages'));
 const LazyResponseHeaders = lazy(() =>
-/* webpackChunkName: "responseHeaders" */import('../../../query-response/headers/ResponseHeaders'));
+  import(/* webpackChunkName: "responseHeaders" */ '../../../query-response/headers/ResponseHeaders'));
 const LazyAdaptiveCard = lazy(() =>
-/* webpackChunkName: "adaptiveCards" */import('../../../query-response/adaptive-cards/AdaptiveCard'));
+  import(/* webpackChunkName: "adaptiveCards" */ '../../../query-response/adaptive-cards/AdaptiveCard'));
 const LazyGraphToolkit = lazy(() =>
-/* webpackChunkName: "graphToolkit" */import('../../../query-response/graph-toolkit/GraphToolkit'));
+  import(/* webpackChunkName: "graphToolkit" */ '../../../query-response/graph-toolkit/GraphToolkit'));
 const LazySnippets = lazy(() =>
-/* webpackChunkName: "code snippets" */import('../../../query-response/snippets/Snippets').then(module => {
-    return { default: module.Snippets }
-  }));
-
+  import(/* webpackChunkName: "code snippets" */ '../../../query-response/snippets/Snippets'));
 const LazyCopyButton = lazy(() =>
-/* webpackChunkName: "copy button" */import('../../copy-button/CopyButton').then(module => {
-    return { default: module.CopyButton }
-  }));
-
+  import(/* webpackChunkName: "copy button" */ '../../copy-button/CopyButton'));
 const LazyAuth = lazy(() =>
-/* webpackChunkName: "authTab" */import('../../../query-runner/request/auth/Auth'));
+  import(/* webpackChunkName: "authTab" */ '../../../query-runner/request/auth/Auth'));
 const LazyRequestHeaders = lazy(() =>
-/* webpackChunkName: "requestHeaders" */import('../../../query-runner/request/headers/RequestHeaders'));
+  import(/* webpackChunkName: "requestHeaders" */ '../../../query-runner/request/headers/RequestHeaders'));
 const LazyHistory = lazy(() =>
-/* webpackChunkName: "history" */import('../../../sidebar/history/History'));
+  import(/* webpackChunkName: "history" */ '../../../sidebar/history/History'));
 const LazyResourceExplorer = lazy(() =>
-/* webpackChunkName: "resourceExplorer" */import('../../../sidebar/resource-explorer/ResourceExplorer'));
+  import(/* webpackChunkName: "resourceExplorer" */ '../../../sidebar/resource-explorer/ResourceExplorer'));
 
 export const popups = new Map<string, any>([
   ['share-query', lazy(() =>
-  /* webpackChunkName: "share query" */ import('../../../query-runner/query-input/share-query/ShareQuery'))],
+    import(/* webpackChunkName: "share query" */ '../../../query-runner/query-input/share-query/ShareQuery'))],
   ['theme-chooser', lazy(() =>
-  /* webpackChunkName: "theme chooser" */ import('../../../main-header/settings/ThemeChooser'))],
+    import(/* webpackChunkName: "theme chooser" */ '../../../main-header/settings/ThemeChooser'))],
   ['preview-collection', lazy(() =>
-  /* webpackChunkName: "preview collection" */ import('../../../sidebar/resource-explorer/collection/PreviewCollection'))],
+    import(/* webpackChunkName: "preview collection" */ '../../../sidebar/resource-explorer/collection/PreviewCollection'))],
   ['full-permissions', lazy(() =>
-  /* webpackChunkName: "full permissions" */ import('../../../query-runner/request/permissions/Permissions.Full'))]
+    import(/* webpackChunkName: "full permissions" */ '../../../query-runner/request/permissions/Permissions.Full'))]
 ]);
 
 export const Permission = (props?: IPermissionProps) => {

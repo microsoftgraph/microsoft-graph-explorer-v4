@@ -10,7 +10,7 @@ import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { trackedGenericCopy } from '../../../common/copy';
-import { CopyButton } from '../../../common/copy-button/CopyButton';
+import { CopyButton } from '../../../common/lazy-loader/component-registry';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { authStyles } from './Auth.styles';
 
