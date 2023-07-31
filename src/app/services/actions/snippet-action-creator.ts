@@ -53,7 +53,7 @@ export function getSnippet(language: string) {
       if (language !== 'csharp') {
         snippetsUrl += `?lang=${language}`;
       }
-      const openApiSnippets: string[] = ['cli', 'go', 'powershell'];
+      const openApiSnippets: string[] = ['go', 'powershell', 'python', 'cli'];
       if (openApiSnippets.includes(language)) {
         snippetsUrl += '&generation=openapi';
       }

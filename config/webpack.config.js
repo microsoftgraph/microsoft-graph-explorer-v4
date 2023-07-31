@@ -427,6 +427,7 @@ module.exports = function (webpackEnv) {
           'html',
           'powershell',
           'go',
+          'python',
           'bash'
         ]
       }),
