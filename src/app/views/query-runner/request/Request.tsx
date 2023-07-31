@@ -1,6 +1,6 @@
 import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import { CSSProperties, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -13,13 +13,13 @@ import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions
 import { Auth } from './auth';
 import { RequestBody } from './body';
 import { RequestHeaders } from './headers';
-import { Permission } from './permissions';
+import { Permissions } from './permissions';
 import './request.scss';
 
 const Request = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
   const [selectedPivot, setSelectedPivot] = useState('request-body');
-  const { graphExplorerMode: mode, dimensions } = useAppSelector((state) => state);
+  const { graphExplorerMode: mode, dimensions, sidebarProperties } = useAppSelector((state) => state);
   const pivot = selectedPivot.replace('.$', '');
   const minHeight = 60;
   const maxHeight = 800;
@@ -28,6 +28,15 @@ const Request = (props: any) => {
     handleOnEditorChange,
     intl: { messages }
   }: any = props;
+
+  useEffect(() => {
+    if(sidebarProperties && sidebarProperties.mobileScreen){
+      window.addEventListener('resize', resizeHandler);
+    }
+    else{
+      window.removeEventListener('resize', resizeHandler);
+    }
+  }, [sidebarProperties.mobileScreen])
 
   const getPivotItems = (height: string) => {
 
@@ -79,7 +88,7 @@ const Request = (props: any) => {
         }}
       >
         <div style={containerStyle} id={'permission-tab'}>
-          <Permission />
+          <Permissions />
         </div>
       </PivotItem>
     ];
@@ -134,6 +143,18 @@ const Request = (props: any) => {
     dispatch(setDimensions(dimen));
   };
 
+  // Resizable element does not update it's size when the browser window is resized.
+  // This is a workaround to reset the height
+  const resizeHandler = () => {
+    const resizable = document.getElementsByClassName('request-resizable');
+    if (resizable && resizable.length > 0) {
+      const resizableElement = resizable[0] as HTMLElement;
+      if(resizableElement && resizableElement.style && resizableElement.style.height){
+        resizableElement.style.height = '';
+      }
+    }
+  }
+
   return (
     <>
       <Resizable
@@ -155,6 +176,7 @@ const Request = (props: any) => {
         enable={{
           bottom: true
         }}
+        className='request-resizable'
       >
         <div className='query-request'>
           <Pivot
@@ -163,7 +185,7 @@ const Request = (props: any) => {
             onLinkClick={handlePivotItemClick}
             className='pivot-request'
             selectedKey={pivot}
-            styles={{ text: { fontSize: FontSizes.size14 } }}
+            styles={{ text: { fontSize: FontSizes.size14 }}}
           >
             {requestPivotItems}
           </Pivot>

@@ -133,6 +133,7 @@ const QueryResponse = () => {
           isOpen={showModal}
           onDismiss={toggleExpandResponse}
           styles={modalStyles}
+          layerProps={{ eventBubblingEnabled: true }}
         >
           <IconButton
             styles={{
@@ -147,6 +148,8 @@ const QueryResponse = () => {
           />
           <Pivot className='pivot-response'
             onLinkClick={(pivotItem) => onModalPivotItemClicked(pivotItem)}
+            overflowBehavior='menu'
+            overflowAriaLabel={translateMessage('More items')}
             selectedKey={currentTab}
             styles={modalPivotStyles}>
             {GetPivotItems()}

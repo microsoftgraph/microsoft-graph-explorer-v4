@@ -1,28 +1,24 @@
 import {
-  ChoiceGroup, DefaultButton, Dialog, DialogFooter, DialogType, DirectionalHint, getId,
+  DirectionalHint, getId,
   getTheme, IconButton, IContextualMenuProps, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { loadGETheme } from '../../../../themes';
-import { AppTheme } from '../../../../types/enums';
 import { ISettingsProps } from '../../../../types/settings';
-import { changeTheme } from '../../../services/actions/theme-action-creator';
+import { usePopups } from '../../../services/hooks';
 import '../../../utils/string-operations';
 import { translateMessage } from '../../../utils/translate-messages';
 import { mainHeaderStyles } from '../MainHeader.styles';
 
 export const Settings: React.FunctionComponent<ISettingsProps> = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const { authToken, theme: appTheme } = useAppSelector((state) => state);
+  const { authToken } = useAppSelector((state) => state);
   const authenticated = authToken.token;
-  const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const currentTheme = getTheme();
+  const { show: showThemeChooser } = usePopups('theme-chooser', 'dialog');
 
   useEffect(() => {
     const menuItems: any = [
@@ -49,21 +45,13 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   }, [authenticated]);
 
   const toggleThemeChooserDialogState = () => {
-    let hidden = themeChooserDialogHidden;
-    hidden = !hidden;
-    hideThemeChooserDialog(hidden);
+    showThemeChooser({
+      settings: {
+        title: translateMessage('Change theme')
+      }
+    });
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.THEME_CHANGE_BUTTON
-    });
-  };
-
-  const handleChangeTheme = (selectedTheme: any) => {
-    const newTheme: string = selectedTheme.key;
-    dispatch(changeTheme(newTheme));
-    loadGETheme(newTheme);
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.SELECT_THEME_BUTTON,
-      SelectedTheme: selectedTheme.key.replace('-', ' ').toSentenceCase()
     });
   };
 
@@ -119,48 +107,6 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
           onMenuClick={trackSettingsButtonClickEvent}
         />
       </TooltipHost>
-      <div>
-        <Dialog
-          hidden={themeChooserDialogHidden}
-          onDismiss={() => toggleThemeChooserDialogState()}
-          dialogContentProps={{
-            type: DialogType.normal,
-            title: translateMessage('Change theme'),
-            isMultiline: false
-          }}
-        >
-          <ChoiceGroup
-            defaultSelectedKey={appTheme}
-            styles={{ flexContainer: { flexWrap: 'nowrap' } }}
-            options={[
-              {
-                key: AppTheme.Light,
-                iconProps: { iconName: 'Light' },
-                text: translateMessage('Light')
-              },
-              {
-                key: AppTheme.Dark,
-                iconProps: { iconName: 'CircleFill' },
-                text: translateMessage('Dark')
-              },
-              {
-                key: AppTheme.HighContrast,
-                iconProps: { iconName: 'Contrast' },
-                text: translateMessage('High Contrast')
-              }
-            ]}
-            onChange={(_event, selectedTheme) =>
-              handleChangeTheme(selectedTheme)
-            }
-          />
-          <DialogFooter>
-            <DefaultButton
-              text={translateMessage('Close')}
-              onClick={() => toggleThemeChooserDialogState()}
-            />
-          </DialogFooter>
-        </Dialog>
-      </div>
     </div>
   );
 }

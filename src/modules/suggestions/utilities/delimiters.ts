@@ -25,26 +25,23 @@ const delimiters: Delimiters = {
 };
 
 function getLastDelimiterInUrl(url: string): Delimiter {
-  const symbols = Object.values(delimiters);
-  symbols.forEach(key => {
-    const prevCharIndex = url.lastIndexOf(key.symbol) - 1;
-    key.index = isSecondLastCharADelimiter(url.charAt(prevCharIndex)) ? url.lastIndexOf(key.symbol)-1 :
-      url.lastIndexOf(key.symbol);
-  });
-
-  return symbols.reduce((prev, current) => (prev.index > current.index) ? prev : current);
-}
-
-const isSecondLastCharADelimiter = (prevCharacter: string): boolean => {
-  const symbols = Object.values(delimiters);
-  let isSecondLastCharDelimiter = false;
-  for(const symbol of symbols ){
-    if(prevCharacter === symbol.symbol){
-      isSecondLastCharDelimiter = true;
-      break;
+  const symbols: Delimiter[] = Object.values(delimiters);
+  for (let i = url.length - 1; i >= 0; i--) {
+    const symbol = symbols.find((s) => s.symbol === url[i]);
+    if (symbol) {
+      const prevCharacter = url[i - 1];
+      const characterSymbol = symbols.find((s) => s.symbol === prevCharacter);
+      if (prevCharacter && characterSymbol) {
+        if (symbol.context === characterSymbol.context){
+          symbol.index = i - 1;
+          return symbol;
+        }
+      }
+      symbol.index = i;
+      return symbol;
     }
   }
-  return isSecondLastCharDelimiter;
+  return delimiters.SLASH;
 }
 
 export { delimiters, getLastDelimiterInUrl }

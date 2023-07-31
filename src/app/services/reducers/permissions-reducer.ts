@@ -3,7 +3,8 @@ import { IPermissionsResponse, IScopes } from '../../../types/permissions';
 import {
   FETCH_SCOPES_ERROR, FETCH_URL_SCOPES_PENDING, FETCH_FULL_SCOPES_SUCCESS,
   FETCH_URL_SCOPES_SUCCESS, FETCH_FULL_SCOPES_PENDING, GET_ALL_PRINCIPAL_GRANTS_SUCCESS,
-  REVOKE_SCOPES_PENDING, REVOKE_SCOPES_ERROR, REVOKE_SCOPES_SUCCESS
+  REVOKE_SCOPES_PENDING, REVOKE_SCOPES_ERROR, REVOKE_SCOPES_SUCCESS, GET_ALL_PRINCIPAL_GRANTS_PENDING,
+  GET_ALL_PRINCIPAL_GRANTS_ERROR
 } from '../redux-constants';
 
 const initialState: IScopes = {
@@ -55,11 +56,23 @@ export function scopes(state: IScopes = initialState, action: AppAction): any {
         data: state.data,
         error: null
       };
+    case GET_ALL_PRINCIPAL_GRANTS_PENDING:
+      return {
+        pending: { ...state.pending, isTenantWidePermissionsGrant: action.response },
+        data: state.data,
+        error: null
+      }
     case GET_ALL_PRINCIPAL_GRANTS_SUCCESS:
       return {
-        pending: { ...state.pending, isTenantWidePermissionsGrant: false },
+        pending: state.pending,
         data: { ...state.data, tenantWidePermissionsGrant: action.response },
         error: null
+      }
+    case GET_ALL_PRINCIPAL_GRANTS_ERROR:
+      return {
+        pending: state.pending,
+        data: state.data,
+        error: action.response
       }
     case REVOKE_SCOPES_PENDING:
       return {

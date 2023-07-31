@@ -1,11 +1,12 @@
 import { IDropdownOption, MessageBarType } from '@fluentui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { ContentType } from '../../../types/enums';
+import { IQuery } from '../../../types/query-runner';
 import { runQuery } from '../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
@@ -22,6 +23,14 @@ const QueryRunner = (props: any) => {
 
   const [sampleBody, setSampleBody] = useState('');
 
+  useEffect(() => {
+    if(sampleQuery.selectedVerb !== 'GET') {
+      const query = { ...sampleQuery };
+      query.sampleBody = sampleBody;
+      dispatch(setSampleQuery(query));
+    }
+  }, [sampleBody])
+
   const handleOnMethodChange = (method?: IDropdownOption) => {
     const query = { ...sampleQuery };
     if (method !== undefined) {
@@ -37,8 +46,8 @@ const QueryRunner = (props: any) => {
     setSampleBody(value!);
   };
 
-  const handleOnRunQuery = () => {
-    if (sampleBody) {
+  const handleOnRunQuery = (query?: IQuery) => {
+    if (sampleBody && sampleQuery.selectedVerb !== 'GET') {
       const headers = sampleQuery.sampleHeaders;
       const contentType = headers.find(k => k.name.toLowerCase() === 'content-type');
       if (!contentType || (contentType.value === ContentType.Json)) {
@@ -51,12 +60,17 @@ const QueryRunner = (props: any) => {
             status: `${translateMessage('Review the request body')} ${error}`,
             messageType: MessageBarType.error
           }));
-          setSampleBody('');
           return;
         }
       } else {
         sampleQuery.sampleBody = sampleBody;
       }
+    }
+
+    if (query) {
+      sampleQuery.sampleUrl = query.sampleUrl;
+      sampleQuery.selectedVersion = query.selectedVersion;
+      sampleQuery.selectedVerb = query.selectedVerb;
     }
 
     dispatch(runQuery(sampleQuery));
@@ -69,7 +83,6 @@ const QueryRunner = (props: any) => {
         QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
         ...deviceCharacteristics
       });
-    setSampleBody('');
   };
 
   const handleOnVersionChange = (urlVersion?: IDropdownOption) => {

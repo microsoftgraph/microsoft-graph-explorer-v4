@@ -38,6 +38,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const [queryUrl, setQueryUrl] = useState<string>(sampleQuery.sampleUrl);
   const [shouldShowSuggestions, setShouldShowSuggestions] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [backSpacing, setBackspacing] = useState<boolean>(false);
 
   useEffect(() => {
     setQueryUrl(sampleQuery.sampleUrl);
@@ -105,7 +106,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           appendSuggestionToUrl(selected);
         } else {
           props.contentChanged(queryUrl);
-          props.runQuery();
+          props.runQuery(queryUrl);
         }
         break;
 
@@ -114,6 +115,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           event.preventDefault();
           const selected = suggestions[activeSuggestion];
           appendSuggestionToUrl(selected);
+          setShouldShowSuggestions(false);
         }
         break;
 
@@ -146,7 +148,12 @@ const AutoComplete = (props: IAutoCompleteProps) => {
         }
         break;
 
+      case KeyCodes.backspace:
+        setBackspacing(true);
+        break;
+
       default:
+        setBackspacing(false);
         break;
     }
   };
@@ -197,12 +204,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
       setShouldShowSuggestions(true);
     }
 
-    if (filtered.length === 1 && filtered[0] === searchTerm) {
+    if (filtered.length === 1 && filtered[0] === searchTerm && !backSpacing) {
       appendSuggestionToUrl(searchTerm);
-    }
-
-    if(filtered.length === 0){
-      props.contentChanged(queryUrl);
     }
   }
 

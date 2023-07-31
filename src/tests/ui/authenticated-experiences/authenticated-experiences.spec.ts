@@ -23,6 +23,16 @@ test.describe('Run query', () => {
     await expect(authenticatedPage.locator('text=/.*"displayName": "Megan Bowen".*/')).not.toBeVisible();
   });
 
+  test('Run query button does not hung on queries that return 401 or 403 results', async () => {
+    await authenticatedPage.getByRole('textbox', { name: 'Read documentation' }).click();
+    await authenticatedPage.locator('.ms-TextField-fieldGroup').click();
+    await authenticatedPage.getByRole('textbox', { name: 'Read documentation' }).clear();
+    await authenticatedPage.getByRole('textbox', { name: 'Read documentation' }).fill('https://graph.microsoft.com/v1.0/deviceAppManagement/managedAppPolicies');
+    await authenticatedPage.getByRole('button', { name: 'Run query' }).click();
+    expect(authenticatedPage.getByText('"Forbidden"')).toBeDefined();
+    expect(authenticatedPage.getByRole('button', { name: 'Run query' })).toBeDefined();
+  })
+
 });
 
 test.describe('Request', () => {
@@ -34,6 +44,16 @@ test.describe('Request', () => {
       authenticatedPage.locator('[aria-label="Get token details \\(Powered by jwt\\.ms\\)"]').click()
     ]);
     expect(page5.url().indexOf('https://jwt.ms/')).toBeGreaterThan(-1);
+  })
+
+  test('Permissions tab asks user to open permissions panel to view more permissions if missing on the tab', async () => {
+    const queryInput = authenticatedPage.locator('[aria-label="Query sample input"]');
+    await queryInput.click();
+    queryInput.fill('https://graph.microsoft.com/v1.0/userssssss');
+    await authenticatedPage.locator('[aria-label="Modify permissions"]').click();
+    await authenticatedPage.evaluate(() => document.fonts.ready);
+    await authenticatedPage.waitForTimeout(100);
+    expect(authenticatedPage.getByText('Permissions for the query are missing on this tab. Open the permissions panel to')).toBeDefined();
   })
 })
 
