@@ -25,7 +25,7 @@ import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import {
-  isJsonString, performSearch, trackDocumentLinkClickedEvent,
+  isJsonString, performSearch, shouldRunQuery, trackDocumentLinkClickedEvent,
   trackSampleQueryClickEvent
 } from './sample-query-utils';
 
@@ -167,7 +167,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
       onRender: (item: ISampleQuery) => {
         const signInText = translateMessage('Sign In to try this sample');
 
-        if (item.method === 'GET' || tokenPresent) {
+        if (shouldRunQuery({ method: item.method, authenticated: tokenPresent, url: item.requestUrl })) {
           return <div aria-hidden='true' />;
         }
 
@@ -270,7 +270,8 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     }
 
     if (props) {
-      if (!tokenPresent && props.item.method !== 'GET') {
+      const query: ISampleQuery = props.item!;
+      if (!shouldRunQuery({ method: query.method, authenticated: tokenPresent, url: query.requestUrl })) {
         selectionDisabled = true;
       }
       return (
@@ -280,7 +281,6 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             styles={customStyles}
             onClick={() => {
               if (!selectionDisabled) {
-                const query: ISampleQuery = props.item!;
                 querySelected(query);
               }
               setSelectedQuery(props.item)
