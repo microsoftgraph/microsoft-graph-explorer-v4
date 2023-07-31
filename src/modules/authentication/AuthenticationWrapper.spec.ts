@@ -48,3 +48,27 @@ describe('Tests authentication wrapper functions should', () => {
     expect(window.sessionStorage.clear).toHaveBeenCalled();
   })
 })
+
+describe('Tests authentication wrapper functions should', () => {
+  it('throw an error when logIn fails', () => {
+    const logIn = authenticationWrapper.logIn();
+    expect(logIn).rejects.toThrow();
+  });
+
+  it('throw an error when consenting to scopes fails', () => {
+    const consentToScopes = authenticationWrapper.consentToScopes();
+    expect(consentToScopes).rejects.toThrow();
+  });
+
+  it('throw an error when getToken returns a rejected Promise', () => {
+    const getToken = authenticationWrapper.getToken();
+    expect(getToken).rejects.toBeUndefined();
+  });
+
+  describe('throw an error when getOcpsToken fails ', () => {
+    it('Throws an error when getOcpsToken fails', () => {
+      const getOcpsToken = authenticationWrapper.getOcpsToken();
+      expect(getOcpsToken).rejects.toThrow();
+    });
+  });
+});
