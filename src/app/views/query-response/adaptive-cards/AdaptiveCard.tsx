@@ -126,7 +126,7 @@ const AdaptiveCard = (props: any) => {
       }
       return (
         <Pivot className='adaptive-pivot'
-          onLinkClick={(pivotItem: any) => onPivotItemClick(sampleQuery, pivotItem)}
+          onLinkClick={(pivotItem: PivotItem | undefined) => onPivotItemClick(sampleQuery, pivotItem)}
           styles={{ text: { fontSize: FontSizes.size14 } }}>
           <PivotItem
             itemKey='card'
@@ -200,7 +200,7 @@ const AdaptiveCard = (props: any) => {
 }
 
 // @ts-ignore
-const styledAdaptiveCard = styled(AdaptiveCard, queryResponseStyles as any);
+const styledAdaptiveCard = styled(AdaptiveCard, queryResponseStyles);
 const trackedComponent = telemetry.trackReactComponent(styledAdaptiveCard, componentNames.ADAPTIVE_CARDS_TAB);
 // @ts-ignore
 const IntlAdaptiveCard = injectIntl(trackedComponent);
