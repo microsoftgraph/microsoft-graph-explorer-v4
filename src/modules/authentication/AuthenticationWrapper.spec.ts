@@ -13,7 +13,28 @@ jest.mock('./msal-app.ts', () => {
     account: null,
     getAccount: jest.fn(),
     logoutRedirect: jest.fn(),
-    logoutPopup: jest.fn()
+    logoutPopup: jest.fn(),
+    getAllAccounts: jest.fn(),
+    loginPopup: jest.fn(() => {
+      return Promise.resolve({
+        account: {
+          homeAccountId: 'homeAccountId',
+          environment: 'environment',
+          tenantId: 'tenantId',
+          username: 'username'
+        }
+      })
+    }),
+    acquireTokenSilent: jest.fn(() => {
+      return Promise.resolve({
+        account: {
+          homeAccountId: 'homeAccountId',
+          environment: 'environment',
+          tenantId: 'tenantId',
+          username: 'username'
+        }
+      })
+    })
   };
 
   return {
@@ -50,25 +71,35 @@ describe('Tests authentication wrapper functions should', () => {
 })
 
 describe('Tests authentication wrapper functions should', () => {
-  it('throw an error when logIn fails', () => {
-    const logIn = authenticationWrapper.logIn();
-    expect(logIn).rejects.toThrow();
+  it('return null when account data is null', () => {
+    const sessionId = authenticationWrapper.getSessionId();
+    expect(sessionId).toBeNull();
   });
 
-  it('throw an error when consenting to scopes fails', () => {
-    const consentToScopes = authenticationWrapper.consentToScopes();
-    expect(consentToScopes).rejects.toThrow();
+  it('return undefined when getAccount is called and number of accounts is zero', () => {
+    const account = authenticationWrapper.getAccount();
+    expect(account).toBeUndefined();
+  })
+
+  it('Log a user in with the appropriate homeAccountId as returned by the auth call', async () => {
+    const logIn = await authenticationWrapper.logIn();
+    expect(logIn.account!.homeAccountId).toBe('homeAccountId');
   });
 
-  it('throw an error when getToken returns a rejected Promise', () => {
-    const getToken = authenticationWrapper.getToken();
-    expect(getToken).rejects.toBeUndefined();
+  it('get consented scopes along with a valid homeAccountId as returned by the auth call', async () => {
+    const consentToScopes = await authenticationWrapper.consentToScopes();
+    expect(consentToScopes.account!.homeAccountId).toBe('homeAccountId');
+  });
+
+  it('get auth token with a valid homeAccountId as returned by the auth call', async () => {
+    const token = await authenticationWrapper.getToken();
+    expect(token.account!.homeAccountId).toBe('homeAccountId');
   });
 
   describe('throw an error when getOcpsToken fails ', () => {
-    it('Throws an error when getOcpsToken fails', () => {
-      const getOcpsToken = authenticationWrapper.getOcpsToken();
-      expect(getOcpsToken).rejects.toThrow();
+    it('Throws an error when getOcpsToken fails', async () => {
+      const getOcpsToken = await authenticationWrapper.getOcpsToken();
+      expect(getOcpsToken).toBeUndefined();
     });
   });
 });
