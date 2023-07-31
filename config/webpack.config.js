@@ -426,7 +426,8 @@ module.exports = function (webpackEnv) {
           'html',
           'powershell',
           'go',
-          'python'
+          'python',
+          'bash'
         ]
       }),
       // Generates an `index.html` file with the <script> injected.
