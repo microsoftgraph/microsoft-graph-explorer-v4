@@ -70,7 +70,8 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRun
 
   const options: IRequestOptions = {
     method: query.selectedVerb,
-    headers
+    headers,
+    body: query.sampleBody ? JSON.stringify(query.sampleBody) : undefined
   };
   return { graphUrl, options };
 }
