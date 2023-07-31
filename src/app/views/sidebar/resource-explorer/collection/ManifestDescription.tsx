@@ -57,6 +57,12 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
     trackDownload(filename, componentNames.DOWNLOAD_API_MANIFEST_BUTTON);
   }
 
+  const openManifestInVisualStudio = () => {
+    const base64UrlEncodedManifest = btoa(JSON.stringify(manifest));
+    const manifestContentUrl = `vscode://ms-graph.kiota/OpenManifest?manifestContent=${base64UrlEncodedManifest}`;
+    window.open(manifestContentUrl, '_blank');
+  }
+
   useEffect(() => {
     getPermissions(items);
   }, [])
@@ -108,6 +114,9 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
       <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
         <PrimaryButton disabled={!!isFetching} onClick={downloadManifest}>
           {!isFetching ? <FormattedMessage id='Download API Manifest' /> : <Spinner />}
+        </PrimaryButton>
+        <PrimaryButton disabled={!!isFetching} onClick={openManifestInVisualStudio}>
+          {!isFetching ? <FormattedMessage id='Open in VS Code' /> : <Spinner />}
         </PrimaryButton>
         <DefaultButton onClick={() => props.dismissPopup()}>
           <FormattedMessage id='Close' />
