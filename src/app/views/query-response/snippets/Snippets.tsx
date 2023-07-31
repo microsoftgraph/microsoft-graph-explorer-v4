@@ -33,6 +33,10 @@ function GetSnippets() {
       sdkDownloadLink: 'https://aka.ms/graphphpsdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     },
+    'Python': {
+      sdkDownloadLink: 'https://aka.ms/msgraphpythonsdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
     'Cli' : {
       sdkDownloadLink: 'https://aka.ms/msgraphclisdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
