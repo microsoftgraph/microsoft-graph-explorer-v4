@@ -1,7 +1,7 @@
 import { FontSizes, FontWeights, ITheme } from '@fluentui/react';
 
 export const sidebarStyles = (theme: ITheme) => {
-  const height = '80dvh'
+  const height = '85dvh'
   return {
     searchBox: {
       marginTop: theme.spacing.s1
