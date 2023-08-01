@@ -41,7 +41,7 @@ jest.mock('./msal-app.ts', () => {
     msalApplication
   };
 })
-describe('Tests authentication wrapper functions should', () => {
+describe('AuthenticationWrapper should', () => {
 
   it('log out a user and call removeItem with the home_account_key', () => {
     authenticationWrapper.logOut();
@@ -68,9 +68,7 @@ describe('Tests authentication wrapper functions should', () => {
     expect(window.localStorage.removeItem).toHaveBeenCalled();
     expect(window.sessionStorage.clear).toHaveBeenCalled();
   })
-})
 
-describe('Tests authentication wrapper functions should', () => {
   it('return null when account data is null', () => {
     const sessionId = authenticationWrapper.getSessionId();
     expect(sessionId).toBeNull();
@@ -96,10 +94,8 @@ describe('Tests authentication wrapper functions should', () => {
     expect(token.account!.homeAccountId).toBe('homeAccountId');
   });
 
-  describe('throw an error when getOcpsToken fails ', () => {
-    it('Throws an error when getOcpsToken fails', async () => {
-      const getOcpsToken = await authenticationWrapper.getOcpsToken();
-      expect(getOcpsToken).toBeUndefined();
-    });
+  it('Throws an error when getOcpsToken fails', async () => {
+    const getOcpsToken = await authenticationWrapper.getOcpsToken();
+    expect(getOcpsToken).toBeUndefined();
   });
-});
+})
