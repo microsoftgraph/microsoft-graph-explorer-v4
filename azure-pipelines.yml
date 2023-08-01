@@ -18,7 +18,6 @@ pr:
       - feature/*
       - task/*
       - fix/*
-      - chore/upgrade-to-node18
   paths:
     exclude:
       - .github/*
@@ -45,7 +44,6 @@ trigger:
       - feature/*
       - task/*
       - fix/*
-      - chore/upgrade-to-node18
   paths:
     exclude:
       - .github/*
@@ -103,6 +101,7 @@ jobs:
 
   - job: Two
     displayName: "Run playwright tests"
+    condition: eq(variables['isDev'], 'true')
     steps:
       - task: NodeTool@0
         inputs:
@@ -121,6 +120,10 @@ jobs:
       - script: |
           npx playwright install
         displayName: "Install playwright"
+
+      - script: |
+          npm run test-playwright-accessibility
+        displayName: "Run accessibility tests"
 
       - script: |
           set CI=true
