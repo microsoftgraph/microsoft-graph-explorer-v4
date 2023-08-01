@@ -141,7 +141,6 @@ jobs:
           PLAYWRIGHT_TESTS_BASE_URL: $(PLAYWRIGHT_TESTS_BASE_URL)
           PLAYWRIGHT_TESTS_USERNAME: $(PLAYWRIGHT_TESTS_USERNAME)
           PLAYWRIGHT_TESTS_PASSWORD: $(PLAYWRIGHT_TESTS_PASSWORD)
-        displayName: "Run playwright tests"
 
       - publish: $(System.DefaultWorkingDirectory)/playwright-report
         artifact: playwright-report
