@@ -101,7 +101,6 @@ jobs:
 
   - job: Two
     displayName: "Run playwright tests"
-    condition: eq(variables['isDev'], 'true')
     steps:
       - task: NodeTool@0
         inputs:
@@ -118,12 +117,12 @@ jobs:
         displayName: "Install playwright dependancies"
 
       - script: |
-          npx playwright install
-        displayName: "Install playwright"
-
-      - script: |
           npm run test-playwright-accessibility
         displayName: "Run accessibility tests"
+
+      - script: |
+          npx playwright install
+        displayName: "Install playwright"
 
       - script: |
           set CI=true
