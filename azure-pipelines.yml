@@ -18,7 +18,7 @@ pr:
       - feature/*
       - task/*
       - fix/*
-      - chore/*
+      - chore/upgrade-to-node18
   paths:
     exclude:
       - .github/*
@@ -45,7 +45,7 @@ trigger:
       - feature/*
       - task/*
       - fix/*
-      - chore/*
+      - chore/upgrade-to-node18
   paths:
     exclude:
       - .github/*
