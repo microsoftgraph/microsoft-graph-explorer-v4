@@ -26,7 +26,7 @@ const QueryResponse = () => {
   const { modalStyles, modalPivotStyles } = queryResponseStyles(currentTheme);
 
   useEffect(() => {
-    setResponseHeight(convertVhToPx(dimensions.response.height, 50));
+    setResponseHeight(convertVhToPx(dimensions.response.height, 220));
   }, [dimensions]);
 
   const flexQueryElement: CSSProperties = {
