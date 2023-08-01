@@ -18,6 +18,7 @@ pr:
       - feature/*
       - task/*
       - fix/*
+      - chore/*
   paths:
     exclude:
       - .github/*
@@ -44,6 +45,7 @@ trigger:
       - feature/*
       - task/*
       - fix/*
+      - chore/*
   paths:
     exclude:
       - .github/*
