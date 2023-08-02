@@ -76,6 +76,7 @@ export default class Paths extends Component<IPathProps> {
               overflowX: 'hidden'
             }
           }}
+          onShouldVirtualize={() => false}
         />
       </MarqueeSelection>
     );
