@@ -60,6 +60,7 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRun
     Authorization: `Bearer ${authToken}`,
     'Content-Type': 'application/json',
     SdkVersion: 'GraphExplorer/4.0',
+    prefer: 'ms-graph-dev-mode',
     ...sampleHeaders
   };
 
@@ -91,6 +92,7 @@ function createAuthenticatedRequest(
 ): GraphRequest {
   const sampleHeaders: any = {};
   sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
+  sampleHeaders.prefer = 'ms-graph-dev-mode';
 
   if (query.sampleHeaders && query.sampleHeaders.length > 0) {
     query.sampleHeaders.forEach((header) => {
