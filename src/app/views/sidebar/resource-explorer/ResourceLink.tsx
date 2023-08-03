@@ -10,6 +10,7 @@ import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { translateMessage } from '../../../utils/translate-messages';
 import { existsInCollection, setExisting } from './resourcelink.utils';
+import { getStyleFor } from '../../../utils/http-methods.utils';
 
 interface IResourceLinkProps {
   link: INavLink;
@@ -64,9 +65,15 @@ const ResourceLink = (props: IResourceLinkProps) => {
   };
 
   const methodButtonStyles: CSSProperties = {
+    background: getStyleFor(resourceLink.method!),
     textTransform: 'uppercase',
-    paddingLeft: '4px',
-    marginTop: '6px'
+    padding: '4px',
+    width: '50px',
+    color: getTheme().palette.white,
+    alignSelf: 'center',
+    font: 'bold 12px/16px "Segoe UI", "Segoe WP", "Helvetica Neue", "Nimbus Sans L", Arial, sans-serif',
+    textAlign: 'center',
+    marginBottom: '4px'
   };
 
   const tooltipId = getId('tooltip');
