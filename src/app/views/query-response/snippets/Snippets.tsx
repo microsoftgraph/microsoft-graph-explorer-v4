@@ -28,6 +28,18 @@ function GetSnippets() {
     'JavaScript': {
       sdkDownloadLink: 'https://aka.ms/graphjssdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'PHP': {
+      sdkDownloadLink: 'https://aka.ms/graphphpsdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'Python': {
+      sdkDownloadLink: 'https://aka.ms/msgraphpythonsdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
+    },
+    'Cli' : {
+      sdkDownloadLink: 'https://aka.ms/msgraphclisdk',
+      sdkDocLink: 'https://aka.ms/sdk-doc'
     }
   };
 

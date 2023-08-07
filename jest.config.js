@@ -1,4 +1,6 @@
-const esModules = ['@ms-ofb', 'ngx-bootstrap', 'lodash-es', '@fluentui'].join('|');
+const esModules = ['@ms-ofb', 'ngx-bootstrap', 'lodash-es', '@fluentui'].join(
+  '|'
+);
 module.exports = {
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
