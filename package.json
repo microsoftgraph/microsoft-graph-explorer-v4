@@ -59,7 +59,7 @@
                 "resolve": "1.22.2",
                 "sass": "1.62.1",
                 "sass-loader": "13.3.2",
-                "style-loader": "3.3.1",
+                "style-loader": "3.3.3",
                 "typescript": "5.1.6",
                 "url": "0.11.1",
                 "url-loader": "4.1.1",
