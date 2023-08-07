@@ -114,7 +114,7 @@
                 "chromedriver": "^114.0.2",
                 "enzyme": "3.11.0",
                 "enzyme-adapter-react-16": "1.15.7",
-                "eslint": "8.39.0",
+                "eslint": "8.46.0",
                 "html-webpack-plugin": "5.5.3",
                 "jest": "28.1.0",
                 "jest-canvas-mock": "2.5.2",
