@@ -42,6 +42,14 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
           marginLeft: 2,
           FontStyle: 'italic'
         }
+      },
+      actionButtons: {
+        display: 'flex',
+        gap: '8px'
+      },
+      spinner: {
+        marginRight: '4px',
+        marginLeft: '4px'
       }
     }
   );
@@ -65,7 +73,7 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
 
   const renderManifestButtons = () : JSX.Element => {
     return(
-      <div style={{display: 'flex', gap: '8px'}}>
+      <div className={manifestStyle.actionButtons}>
         <PrimaryButton disabled={!!isFetching} onClick={downloadManifest}>
           <FormattedMessage id='Download API Manifest' />
         </PrimaryButton>
@@ -125,7 +133,7 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
       visit the <Link href={API_MANIFEST_SPEC_PAGE} target='_blank' >API Manifest specification</Link> page.
 
       <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
-        {!isFetching ? renderManifestButtons() : <Spinner styles={{root: { marginRight: '4px', marginLeft: '4px'}}} />}
+        {!isFetching ? renderManifestButtons() : <Spinner className={manifestStyle.spinner} />}
         <DefaultButton onClick={() => props.dismissPopup()}>
           <FormattedMessage id='Close' />
         </DefaultButton>
