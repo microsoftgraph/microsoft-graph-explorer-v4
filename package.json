@@ -108,7 +108,7 @@
                 "@types/redux-mock-store": "1.0.3",
                 "@types/selenium-webdriver": "4.1.15",
                 "@typescript-eslint/eslint-plugin": "5.60.1",
-                "@typescript-eslint/parser": "5.61.0",
+                "@typescript-eslint/parser": "5.62.0",
                 "acorn": "8.8.2",
                 "babel-jest": "29.5.0",
                 "chromedriver": "^114.0.2",
