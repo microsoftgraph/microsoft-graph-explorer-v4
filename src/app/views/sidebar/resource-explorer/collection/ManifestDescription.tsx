@@ -63,6 +63,19 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
     window.open(manifestContentUrl, '_blank');
   }
 
+  const renderManifestButtons = () : JSX.Element => {
+    return(
+      <div style={{display: 'flex', gap: '8px'}}>
+        <PrimaryButton disabled={!!isFetching} onClick={downloadManifest}>
+          <FormattedMessage id='Download API Manifest' />
+        </PrimaryButton>
+        <PrimaryButton disabled={!!isFetching} onClick={openManifestInVisualStudio}>
+          <FormattedMessage id='Open in VS Code' />
+        </PrimaryButton>
+      </div>
+    )
+  }
+
   useEffect(() => {
     getPermissions(items);
   }, [])
@@ -112,12 +125,7 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
       visit the <Link href={API_MANIFEST_SPEC_PAGE} target='_blank' >API Manifest specification</Link> page.
 
       <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
-        <PrimaryButton disabled={!!isFetching} onClick={downloadManifest}>
-          {!isFetching ? <FormattedMessage id='Download API Manifest' /> : <Spinner />}
-        </PrimaryButton>
-        <PrimaryButton disabled={!!isFetching} onClick={openManifestInVisualStudio}>
-          {!isFetching ? <FormattedMessage id='Open in VS Code' /> : <Spinner />}
-        </PrimaryButton>
+        {!isFetching ? renderManifestButtons() : <Spinner styles={{root: { marginRight: '4px', marginLeft: '4px'}}} />}
         <DefaultButton onClick={() => props.dismissPopup()}>
           <FormattedMessage id='Close' />
         </DefaultButton>
