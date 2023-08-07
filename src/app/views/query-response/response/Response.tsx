@@ -32,7 +32,7 @@ const Response = () => {
         <ResponseDisplay
           contentType={contentType}
           body={body}
-          height={responseHeight}
+          height={responseAreaExpanded ? defaultHeight : responseHeight}
         />}
     </div>
   );

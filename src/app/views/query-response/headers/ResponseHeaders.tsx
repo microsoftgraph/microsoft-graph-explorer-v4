@@ -32,7 +32,7 @@ const ResponseHeaders = () => {
           isIconButton={true}
           style={{ float: 'right', zIndex: 1 }}
         />
-        <Monaco body={headers} height={responseHeight} />
+        <Monaco body={headers} height={responseAreaExpanded ? defaultHeight : responseHeight} />
       </div>
     );
   }
