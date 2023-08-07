@@ -12,7 +12,15 @@ const ResponseHeaders = () => {
     useAppSelector((state) => state);
   const { headers } = graphResponse;
 
-  const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 220);
+  const defaultHeight = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 220);
+  let responseHeight = defaultHeight;
+
+  const queryResponseElement = document.getElementsByClassName('query-response')[0];
+  if(queryResponseElement){
+    const queryResponseElementHeight = queryResponseElement?.clientHeight;
+    responseHeight = `${queryResponseElementHeight-140}px`
+  }
+
 
   const handleCopy = async () => trackedGenericCopy(JSON.stringify(headers), RESPONSE_HEADERS_COPY_BUTTON, sampleQuery)
 
@@ -24,7 +32,7 @@ const ResponseHeaders = () => {
           isIconButton={true}
           style={{ float: 'right', zIndex: 1 }}
         />
-        <Monaco body={headers} height={height} />
+        <Monaco body={headers} height={responseHeight} />
       </div>
     );
   }
