@@ -93,7 +93,7 @@
         ],
         "devDependencies": {
                 "@axe-core/playwright": "4.7.0",
-                "@playwright/test": "1.33.0",
+                "@playwright/test": "1.36.2",
                 "@types/chromedriver": "81.0.1",
                 "@types/enzyme": "3.10.13",
                 "@types/enzyme-adapter-react-16": "1.0.6",
