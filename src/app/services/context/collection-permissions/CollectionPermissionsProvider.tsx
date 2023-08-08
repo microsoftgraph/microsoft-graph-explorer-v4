@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { CollectionPermission, Method, ResourcePath } from '../../../../types/resources';
 import { CollectionPermissionsContext } from './CollectionPermissionsContext';
@@ -36,6 +36,7 @@ const CollectionPermissionsProvider = ({ children }: any) => {
   const [permissions, setPermissions] = useState<CollectionPermission[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const [code, setCode] = useState('');
+  const valueObject = useMemo(() => ({ permissions, isFetching }), [permissions, isFetching]);
 
   async function getPermissions(items: ResourcePath[]): Promise<void> {
     const hashCode = window.btoa(JSON.stringify([...items]));
@@ -55,7 +56,7 @@ const CollectionPermissionsProvider = ({ children }: any) => {
 
   return (
     <CollectionPermissionsContext.Provider
-      value={{ getPermissions, permissions, isFetching }}>{children}</CollectionPermissionsContext.Provider>
+      value={{ getPermissions, ...valueObject}}>{children}</CollectionPermissionsContext.Provider>
   );
 }
 
