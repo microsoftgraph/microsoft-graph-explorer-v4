@@ -17,7 +17,6 @@ pr:
       - feature/*
       - task/*
       - fix/*
-      - dependabot-upgrades
   paths:
     exclude:
       - .github/*
@@ -44,7 +43,6 @@ trigger:
       - feature/*
       - task/*
       - fix/*
-      - dependabot-upgrades
   paths:
     exclude:
       - .github/*
@@ -114,6 +112,7 @@ extends:
 
   - job: Two
     displayName: "Run playwright tests"
+    condition: eq(variables['isDev'], 'true')
     steps:
       - task: NodeTool@0
         inputs:
@@ -132,6 +131,10 @@ extends:
       - script: |
           npx playwright install
         displayName: "Install playwright"
+
+      - script: |
+          npm run test-playwright-accessibility
+        displayName: "Run accessibility tests"
 
       - script: |
           set CI=true
