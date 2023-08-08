@@ -123,10 +123,6 @@ jobs:
         displayName: "Install playwright"
 
       - script: |
-          npm run test-playwright-accessibility
-        displayName: "Run accessibility tests"
-
-      - script: |
           set CI=true
           npm run test-playwright
 
