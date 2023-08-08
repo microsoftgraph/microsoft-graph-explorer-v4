@@ -11,7 +11,7 @@ import { useAppSelector } from '../../../../../store';
 import { componentNames } from '../../../../../telemetry';
 import { APIManifest } from '../../../../../types/api-manifest';
 import { PopupsComponent } from '../../../../services/context/popups-context';
-import { API_MANIFEST_SPEC_PAGE } from '../../../../services/graph-constants';
+import { API_MANIFEST_SPEC_PAGE, PERMS_SCOPE } from '../../../../services/graph-constants';
 import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
 import { downloadToLocal, trackDownload } from '../../../common/download';
 import { generateAPIManifest } from './api-manifest.util';
@@ -84,12 +84,29 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
     )
   }
 
+  const getFilteredPermissions = (scopeType: string) => {
+    if(scopeType === `${PERMS_SCOPE.APPLICATION}_${PERMS_SCOPE.WORK}`){
+      return permissions;
+    }
+    return permissions.filter(k => k.scopeType === scopeType);
+  }
+
   useEffect(() => {
     getPermissions(items);
   }, [])
 
   useEffect(() => {
-    const generatedManifest = generateAPIManifest(items, permissions);
+    let generatedManifest = {} as APIManifest;
+    if(props && props.data && props.data){
+      const { selectedScopeType } = props.data;
+      if(selectedScopeType){
+        const filteredPermissions = getFilteredPermissions(selectedScopeType);
+        generatedManifest = generateAPIManifest(items, filteredPermissions);
+        setManifest(generatedManifest);
+        return;
+      }
+    }
+    generatedManifest = generateAPIManifest(items, permissions);
     setManifest(generatedManifest);
   }, [permissions]);
 
