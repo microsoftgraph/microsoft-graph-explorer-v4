@@ -97,7 +97,7 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
 
   useEffect(() => {
     let generatedManifest = {} as APIManifest;
-    if(props && props.data && props.data){
+    if(props && props.data){
       const { selectedScopeType } = props.data;
       if(selectedScopeType){
         const filteredPermissions = getFilteredPermissions(selectedScopeType);

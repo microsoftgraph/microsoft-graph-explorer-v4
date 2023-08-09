@@ -100,7 +100,7 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
         title: translateMessage('Download an API manifest')
       },
       data: {
-        selectedScopeType: chosenItem || `${PERMS_SCOPE.APPLICATION}_${PERMS_SCOPE.WORK}`
+        selectedScopeType: chosenItem ?? `${PERMS_SCOPE.APPLICATION}_${PERMS_SCOPE.WORK}`
       }
     });
   }
