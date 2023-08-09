@@ -67,7 +67,7 @@ function Snippet(props: ISnippetProps) {
   const { data, pending: loadingState, error } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
   const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
-  const height = convertVhToPx(responseHeight, 240);
+  const height = convertVhToPx(responseHeight, 220);
   const [snippetError, setSnippetError] = useState(error);
 
   const dispatch: AppDispatch = useDispatch();
