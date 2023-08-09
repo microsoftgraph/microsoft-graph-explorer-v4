@@ -42,7 +42,6 @@ export function Monaco(props: IMonaco) {
   return (
     <FocusZone disabled= {true}>
       <div className='monaco-editor'>
-        {/* {props.extraInfoElement} */}
         <ThemeContext.Consumer>
           {(theme) => (<Editor
             width='800 !important'
