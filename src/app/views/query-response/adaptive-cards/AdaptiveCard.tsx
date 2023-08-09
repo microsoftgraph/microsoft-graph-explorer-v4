@@ -16,7 +16,8 @@ import { classNames } from '../../classnames';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
 import { CopyButton } from '../../common/copy/CopyButton';
-import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
+import { convertVhToPx, getResponseEditorHeight,
+  getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { queryResponseStyles } from './../queryResponse.styles';
 
 const AdaptiveCard = (props: any) => {
@@ -32,8 +33,8 @@ const AdaptiveCard = (props: any) => {
   const currentTheme: ITheme = getTheme();
   const textStyle = queryResponseStyles(currentTheme).queryResponseText.root as IStyle;
 
-  const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
-  const height = convertVhToPx(responseHeight, 220);
+  const defaultHeight = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 220);
+  const monacoHeight = getResponseEditorHeight(190);
 
   useEffect(() => {
     dispatch(getAdaptiveCard(body, sampleQuery));
@@ -52,7 +53,6 @@ const AdaptiveCard = (props: any) => {
       adaptiveCard = null;
     }
   }, [body])
-
 
   const onPivotItemClick = (query: IQuery | undefined, item?: PivotItem) => {
     if (!item) { return; }
@@ -187,7 +187,7 @@ const AdaptiveCard = (props: any) => {
               <Monaco
                 language='json'
                 body={data.template}
-                height={height}
+                height={responseAreaExpanded ? defaultHeight : monacoHeight}
               />
             </div>
           </PivotItem>
