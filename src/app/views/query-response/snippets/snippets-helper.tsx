@@ -106,6 +106,9 @@ function Snippet(props: ISnippetProps) {
     // eslint-disable-next-line max-len
     `\n${setCommentSymbol()} ${translateMessage('Leverage libraries')} ${language} ${translateMessage('Client library')} ${sdkDownloadLink}\n`
     const sdkLink = `${setCommentSymbol()} ${translateMessage('SDKs documentation')} ${sdkDocLink}\n`
+    if (language === 'php') {
+      return '<?php '+ clientLibraryLink + sdkLink;
+    }
     return clientLibraryLink + sdkLink ;
   }
 
