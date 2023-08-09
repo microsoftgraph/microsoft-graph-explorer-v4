@@ -27,12 +27,3 @@ export function getResponseEditorHeight(adjustment: number){
   }
   return responseHeight;
 }
-
-export const getResponseAreaHeight = () => {
-  const queryResponseElement = document.getElementsByClassName('query-response')[0];
-  let responseHeight = 0;
-  if(queryResponseElement){
-    responseHeight = queryResponseElement?.clientHeight;
-  }
-  return responseHeight;
-}
