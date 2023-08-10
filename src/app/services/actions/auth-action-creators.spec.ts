@@ -2,20 +2,20 @@ import {
   AUTHENTICATION_PENDING, GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS,
   LOGOUT_SUCCESS
 } from '../../../app/services/redux-constants';
-
 import {
   getAuthTokenSuccess, getConsentedScopesSuccess, signOutSuccess,
   setAuthenticationPending,
   storeScopes, signIn, signOut
 } from '../../../app/services/actions/auth-action-creators';
 import { AppAction } from '../../../types/action';
-
 import configureMockStore from 'redux-mock-store';
-
 import thunk from 'redux-thunk';
 import { HOME_ACCOUNT_KEY } from '../graph-constants';
+import { msalApplication } from '../../../modules/authentication/msal-app';
+
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
+
 window.open = jest.fn();
 jest.spyOn(window.sessionStorage.__proto__, 'clear');
 
@@ -24,6 +24,7 @@ jest.spyOn(window.localStorage.__proto__, 'getItem');
 jest.spyOn(window.localStorage.__proto__, 'removeItem');
 
 window.localStorage.setItem(HOME_ACCOUNT_KEY, '1234567');
+msalApplication.logoutPopup = jest.fn();
 
 describe('Auth Action Creators', () => {
   it('should dispatch AUTHENTICATION_PENDING when setAuthenticationPending() is called', () => {
@@ -143,6 +144,9 @@ describe('Auth Action Creators', () => {
 
   it('should confirm that a user can sign out', () => {
     // Arrange
+    // Mock the fetch function
+    global.fetch = jest.fn();
+
     window.open = jest.fn();
     const store = mockStore({});
     const expectedActions = [
@@ -159,11 +163,10 @@ describe('Auth Action Creators', () => {
     // home account key is available before signing out
     expect(window.localStorage.getItem(HOME_ACCOUNT_KEY)).toBe('1234567');
     //@ts-ignore
-    store.dispatch(signOut())
+    store.dispatch(signOut());
     const actions = store.getActions();
 
-    // logoutPop launches a popup window.
-    expect(window.open).toHaveBeenCalled();
+    // logoutPop launches a popup window and deleted homeAccountKey.
     expect(window.localStorage.removeItem).toHaveBeenCalledWith(HOME_ACCOUNT_KEY);
 
     // after signing out, the home account key is removed

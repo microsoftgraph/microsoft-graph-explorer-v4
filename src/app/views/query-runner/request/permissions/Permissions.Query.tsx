@@ -25,9 +25,16 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
 
   const tokenPresent = !!authToken.token;
-  const { pending: loading } = scopes;
+  const { pending: loading, error } = scopes;
   const permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
   const [isScreenSizeReduced, setIsScreenSizeReduced] = useState(false);
+  const [permissionsError, setPermissionsError] = useState(error);
+
+  useEffect(() => {
+    if(error?.error && error?.error?.url.contains('permissions')){
+      setPermissionsError(error?.error);
+    }
+  }, [error])
 
   const classProps = {
     styles: permissionProps!.styles,
@@ -119,12 +126,20 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
       </Label>)
   }
 
+  const displayErrorFetchingPermissionsMessage = () : JSX.Element => {
+    return (<Label className={classes.permissionLabel}>
+      <FormattedMessage id='Fetching permissions failing' />
+    </Label>);
+  }
+
   if (!tokenPresent && permissions.length === 0) {
     return displayNotSignedInMessage();
   }
 
   if (permissions.length === 0) {
-    return displayNoPermissionsFoundMessage();
+    return permissionsError?.status && (permissionsError?.status === 404 || permissionsError?.status === 400)
+      ? displayNoPermissionsFoundMessage() :
+      displayErrorFetchingPermissionsMessage();
   }
 
   return (

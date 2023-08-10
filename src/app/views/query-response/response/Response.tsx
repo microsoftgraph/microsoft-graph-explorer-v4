@@ -13,7 +13,14 @@ const Response = () => {
   const { body, headers } = graphResponse;
   const dispatch: AppDispatch = useDispatch();
 
-  const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 135);
+  const defaultHeight = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 220);
+  let responseHeight = defaultHeight;
+
+  const queryResponseElement = document.getElementsByClassName('query-response')[0];
+  if(queryResponseElement){
+    const queryResponseElementHeight = queryResponseElement?.clientHeight;
+    responseHeight = `${queryResponseElementHeight-140}px`
+  }
 
   const contentDownloadUrl = body?.contentDownloadUrl;
   const throwsCorsError = body?.throwsCorsError;
@@ -25,7 +32,7 @@ const Response = () => {
         <ResponseDisplay
           contentType={contentType}
           body={body}
-          height={height}
+          height={responseAreaExpanded ? defaultHeight : responseHeight}
         />}
     </div>
   );

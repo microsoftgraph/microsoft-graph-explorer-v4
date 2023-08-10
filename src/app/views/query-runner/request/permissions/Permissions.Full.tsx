@@ -193,7 +193,8 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
           />
         </>}
 
-      {!loading && permissions && permissions.length === 0 &&
+      {!loading && permissions && permissions.length === 0 && scopes?.error && scopes?.error?.error &&
+        scopes?.error?.error?.status && scopes?.error?.error?.status === 404 ?
         <Label style={{
           display: 'flex',
           width: '100%',
@@ -202,7 +203,11 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
           alignItems: 'center'
         }}>
           <FormattedMessage id='permissions not found' />
-        </Label>
+        </Label> :
+        !loading && permissions && permissions.length === 0 && scopes.error && scopes.error.error &&
+          <Label>
+            <FormattedMessage id='Fetching permissions failing' />
+          </Label>
       }
     </div>
   );
