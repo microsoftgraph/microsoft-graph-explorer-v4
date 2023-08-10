@@ -69,7 +69,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
     textTransform: 'uppercase',
     padding: '4px',
     width: '50px',
-    color: getTheme().palette.white,
+    color: 'white',
     alignSelf: 'center',
     font: 'bold 12px/16px "Segoe UI", "Segoe WP", "Helvetica Neue", "Nimbus Sans L", Arial, sans-serif',
     textAlign: 'center',
