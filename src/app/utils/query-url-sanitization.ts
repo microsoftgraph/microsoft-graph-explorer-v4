@@ -56,8 +56,7 @@ export function sanitizeGraphAPISandboxUrl(url: string): string {
  */
 export function sanitizeQueryUrl(url: string): string {
   try {
-    const sanitiis = sanitizedQueryUrl(url);
-    return sanitiis;
+    return sanitizedQueryUrl(url);
   } catch (e: any) {
     return '';
   }
