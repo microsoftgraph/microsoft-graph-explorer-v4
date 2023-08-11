@@ -43,16 +43,6 @@ export const Sidebar = (props: ISidebar) => {
           defaultSelectedKey={props.currentTab}
           styles={{ text: { fontSize: FontSizes.size14 } }}>
           <PivotItem
-            headerText={translateMessage('Resources')}
-            itemIcon='ExploreData'
-            itemKey='resources'
-            headerButtonProps={{
-              'aria-controls': 'resources-tab'
-            }}
-          >
-            <div id={'resources-tab'}><ResourceExplorer /></div>
-          </PivotItem>
-          <PivotItem
             headerText={translateMessage('Sample Queries')}
             itemIcon='Rocket'
             itemKey='sample-queries'
@@ -61,6 +51,16 @@ export const Sidebar = (props: ISidebar) => {
             }}
           >
             <div id={'sample-queries-tab'}><SampleQueries /></div>
+          </PivotItem>
+          <PivotItem
+            headerText={translateMessage('Resources')}
+            itemIcon='ExploreData'
+            itemKey='resources'
+            headerButtonProps={{
+              'aria-controls': 'resources-tab'
+            }}
+          >
+            <div id={'resources-tab'}><ResourceExplorer /></div>
           </PivotItem>
           <PivotItem
             headerText={translateMessage('History')}

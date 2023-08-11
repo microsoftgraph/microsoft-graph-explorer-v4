@@ -79,7 +79,7 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: 'GET',
       mobileScreen: false,
       hideDialog: true,
-      sidebarTabSelection: 'resources'
+      sidebarTabSelection: 'sample-queries'
     };
   }
 
