@@ -1,7 +1,7 @@
 import { CSSProperties, useState } from 'react';
 import { generateResourcePathsFromPostmanCollection } from './postman.util';
 import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
-  Label, MessageBarType, PrimaryButton, getId, getTheme } from '@fluentui/react';
+  MessageBarType, PrimaryButton, getId, getTheme } from '@fluentui/react';
 import { useDispatch } from 'react-redux';
 import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -18,7 +18,7 @@ export const UploadPostmanCollection = () => {
   const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>([]);
   const { collections } = useAppSelector((state) => state);
   const theme = getTheme();
-  const { uploadButtonStyles, uploadLabelStyles } = collectionStyles(theme);
+  const { uploadButtonStyles } = collectionStyles(theme);
 
   const uploadIcon: IIconProps = {
     iconName: 'Upload'
