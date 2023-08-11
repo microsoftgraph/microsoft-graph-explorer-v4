@@ -2,7 +2,8 @@ import { APIManifest, Access, ManifestRequest } from '../../../../../types/api-m
 import { CollectionPermission, ResourcePath } from '../../../../../types/resources';
 import { GRAPH_BETA_DESCRIPTION_URL, GRAPH_URL, GRAPH_V1_DESCRIPTION_URL } from '../../../../services/graph-constants';
 
-export function generateAPIManifest(paths: ResourcePath[], permissions: CollectionPermission[]): APIManifest {
+export function generateAPIManifest(paths: ResourcePath[], permissions: CollectionPermission[],
+  scopeType: string): APIManifest {
   return {
     publisher: {
       name: 'Microsoft Graph',
@@ -14,7 +15,7 @@ export function generateAPIManifest(paths: ResourcePath[], permissions: Collecti
         apiDescripionUrl: paths[0].version === 'beta' ? GRAPH_BETA_DESCRIPTION_URL : GRAPH_V1_DESCRIPTION_URL,
         auth: {
           clientIdentifier: '',
-          access: getAccessFromPermissions(permissions)
+          access: getAccessFromPermissions(permissions, scopeType)
         },
         requests: getRequestsFromPaths(paths)
       }
@@ -33,29 +34,25 @@ function getRequestsFromPaths(paths: ResourcePath[]): ManifestRequest[] {
   });
   return requests;
 }
-function getAccessFromPermissions(permissions: CollectionPermission[]): Access[] {
 
+function getAccessFromPermissions(permissions: CollectionPermission[], scopeType: string): Access[] {
+  if(scopeType === 'Application_DelegatedWork'){
+    return [createAccessPermissions(permissions, 'Application'), createAccessPermissions(permissions, 'DelegatedWork')];
+  }
+  return [createAccessPermissions(permissions, scopeType)];
+}
+
+function createAccessPermissions(permissions: CollectionPermission[], scopeType: string): Access {
   const type = 'openid';
-
-  return [
-    {
-      type,
-      claims: {
-        scp: {
-          essential: true,
-          values: getScopedList(permissions, 'Application')
-        }
-      }
-    }, {
-      type,
-      claims: {
-        roles: {
-          essential: true,
-          values: getScopedList(permissions, 'DelegatedWork')
-        }
+  return {
+    type,
+    claims: {
+      roles: {
+        essential: true,
+        values: getScopedList(permissions, scopeType)
       }
     }
-  ];
+  }
 }
 
 function getScopedList(permissions: CollectionPermission[], scopeType: string): string[] {

@@ -501,7 +501,11 @@
   "Application permissions": "Application permissions",
   "Delegated & application permissions": "Delegated & application permissions",
   "To generate client": "To generate an API client with the specified resources you selected:",
-  "Use VS Code": "you can use the API manifest with the [Kiota]",
+  "Use VS Code": "You can use the API manifest with the [Kiota]",
   "VS Code extension": "VS Code extension",
-  "Use Kiota CLI": "You can download and use the API manifest with the [Kiota CLI]"
+  "Use Kiota CLI": "You can download and use the API manifest with the [Kiota CLI]",
+  "Download API Manifest": "Download API Manifest",
+  "Open in VS Code": "Open in VS Code",
+  "Microsoft Graph OpenAPI explorer": "Microsoft Graph OpenAPI explorer",
+  "Hold on, we are creating the manifest": "Hold on, we are creating the manifest"
 }

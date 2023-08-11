@@ -18,7 +18,7 @@ import { generateAPIManifest } from './api-manifest.util';
 import { translateMessage } from '../../../../utils/translate-messages';
 
 
-const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
+const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
   const { getPermissions, permissions, isFetching } = useCollectionPermissions();
   const [manifest, setManifest] = useState<APIManifest>();
   const [isGeneratingManifest, setIsGeneratingManifest] = useState<boolean>(false);
@@ -88,6 +88,20 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
   );
   const items = collections ? collections.find(k => k.isDefault)!.paths : [];
 
+  useEffect(() => {
+    getPermissions(items);
+  }, []);
+
+  useEffect(() => {
+    if(!isFetching && selectedScope !== ''){
+      const generatedManifest = generateAPIManifest(items, permissions, selectedScope);
+      if(Object.keys(generatedManifest).length > 0){
+        setIsGeneratingManifest(false);
+        setManifest(generatedManifest);
+      }
+    }
+  }, [selectedScope, isFetching]);
+
   const downloadManifest = () => {
     if (!manifest) { return; }
     const filename = `${manifest.publisher.name}-API-Manifest.json`;
@@ -101,33 +115,10 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
     window.open(manifestContentUrl, '_blank');
   }
 
-  const getFilteredPermissions = (scopeType: string) => {
-    if(scopeType === `${PERMS_SCOPE.APPLICATION}_${PERMS_SCOPE.WORK}`){
-      return permissions;
-    }
-    return permissions.filter(k => k.scopeType === scopeType);
-  }
-
-  useEffect(() => {
-    getPermissions(items);
-  }, []);
-
   const onSelectionChange = useCallback((ev: FormEvent<HTMLElement | HTMLInputElement> | undefined,
     option: IChoiceGroupOption | undefined) => {
-    console.log('Selected ', option!.key)
     setSelectedScope(option!.key);
     setIsGeneratingManifest(true);
-    do{
-      console.log('Still fetching ', isFetching);
-      //
-    }while(isFetching);
-    const filteredPermissions = getFilteredPermissions(option!.key);
-    const generatedManifest = generateAPIManifest(items, filteredPermissions);
-    if(Object.keys(generatedManifest).length > 0){
-      setIsGeneratingManifest(false);
-    }
-    console.log('Generated manifest ', generatedManifest);
-    setManifest(generatedManifest);
   }, []);
 
   return (
