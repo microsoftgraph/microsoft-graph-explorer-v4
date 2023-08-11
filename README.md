@@ -72,10 +72,6 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 - Once the installation is complete run the command `npx playwright test ui`.
 - Playwright commands can be extended using arguments described in the official documentation [Running tests](https://playwright.dev/docs/running-tests)
 
-## Known issues
-
-- You cannot remove permissions by using the Graph Explorer UI. You will need to [remove the application consent](http://shawntabrizi.com/aad/revoking-consent-azure-active-directory-applications/) and then re-consent to remove permissions. I know, this is far from a good experience.
-
 ## Additional resources
 
 - [Microsoft Graph website](https://graph.microsoft.io)
