@@ -1,10 +1,10 @@
 import {
-  DefaultButton, DialogFooter, FontSizes, FontWeights, Link,
+  ChoiceGroup,
+  FontSizes, FontWeights, IChoiceGroupOption, Link,
   PrimaryButton,
-  Spinner,
   VerticalDivider, getTheme, mergeStyleSets
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { useAppSelector } from '../../../../../store';
@@ -15,11 +15,15 @@ import { API_MANIFEST_SPEC_PAGE, PERMS_SCOPE } from '../../../../services/graph-
 import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
 import { downloadToLocal, trackDownload } from '../../../common/download';
 import { generateAPIManifest } from './api-manifest.util';
+import { translateMessage } from '../../../../utils/translate-messages';
 
 
 const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
   const { getPermissions, permissions, isFetching } = useCollectionPermissions();
   const [manifest, setManifest] = useState<APIManifest>();
+  const [isGeneratingManifest, setIsGeneratingManifest] = useState<boolean>(false);
+  const [selectedScope, setSelectedScope] = useState<string>('');
+
   const manifestStyle = mergeStyleSets(
     {
       root: {
@@ -50,9 +54,35 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
       spinner: {
         marginRight: '4px',
         marginLeft: '4px'
+      },
+      permissionsButtons: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: '50px',
+        paddingTop: '15px',
+        paddingBottom: '15px'
       }
     }
   );
+
+  const options: IChoiceGroupOption[] = [
+    {
+      key: `${PERMS_SCOPE.WORK}`,
+      text: translateMessage('Delegated work'),
+      disabled: isGeneratingManifest
+    },
+    {
+      key: `${PERMS_SCOPE.APPLICATION}`,
+      text: translateMessage('Application permissions'),
+      disabled: isGeneratingManifest
+    },
+    {
+      key: `${PERMS_SCOPE.APPLICATION}_${PERMS_SCOPE.WORK}`,
+      text: translateMessage('Delegated & application permissions'),
+      disabled: isGeneratingManifest
+    }
+  ];
+
   const { collections } = useAppSelector(
     (state) => state
   );
@@ -71,19 +101,6 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
     window.open(manifestContentUrl, '_blank');
   }
 
-  const renderManifestButtons = () : JSX.Element => {
-    return(
-      <div className={manifestStyle.actionButtons}>
-        <PrimaryButton disabled={!!isFetching} onClick={downloadManifest}>
-          <FormattedMessage id='Download API Manifest' />
-        </PrimaryButton>
-        <PrimaryButton disabled={!!isFetching} onClick={openManifestInVisualStudio}>
-          <FormattedMessage id='Open in VS Code' />
-        </PrimaryButton>
-      </div>
-    )
-  }
-
   const getFilteredPermissions = (scopeType: string) => {
     if(scopeType === `${PERMS_SCOPE.APPLICATION}_${PERMS_SCOPE.WORK}`){
       return permissions;
@@ -93,46 +110,60 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
 
   useEffect(() => {
     getPermissions(items);
-  }, [])
+  }, []);
 
-  useEffect(() => {
-    let generatedManifest = {} as APIManifest;
-    if(props && props.data){
-      const { selectedScopeType } = props.data;
-      if(selectedScopeType){
-        const filteredPermissions = getFilteredPermissions(selectedScopeType);
-        generatedManifest = generateAPIManifest(items, filteredPermissions);
-        setManifest(generatedManifest);
-        return;
-      }
+  const onSelectionChange = useCallback((ev: FormEvent<HTMLElement | HTMLInputElement> | undefined,
+    option: IChoiceGroupOption | undefined) => {
+    console.log('Selected ', option!.key)
+    setSelectedScope(option!.key);
+    setIsGeneratingManifest(true);
+    do{
+      console.log('Still fetching ', isFetching);
+      //
+    }while(isFetching);
+    const filteredPermissions = getFilteredPermissions(option!.key);
+    const generatedManifest = generateAPIManifest(items, filteredPermissions);
+    if(Object.keys(generatedManifest).length > 0){
+      setIsGeneratingManifest(false);
     }
-    generatedManifest = generateAPIManifest(items, permissions);
+    console.log('Generated manifest ', generatedManifest);
     setManifest(generatedManifest);
-  }, [permissions]);
+  }, []);
 
   return (
     <div className={manifestStyle.root}>
-      To generate an API client, you need to
-      download the API Manifest and use it with the Kiota VS code extenstion / Kiota CLI
+      <FormattedMessage id='API manifest description' />
+      <br />
+      <br/>
+      <VerticalDivider />
+
+      <FormattedMessage id='Permissions choice' />
+      <ChoiceGroup options={options}
+        onChange={onSelectionChange} label=''
+        styles={{flexContainer: manifestStyle.permissionsButtons}}
+      />
 
       <VerticalDivider />
 
-      <h3>Using VS Code</h3>
-      <div className={manifestStyle.steps}>
-        Steps:
-        <ul>
-          <li>Download the API Manifest</li>
-          <li>Install the Kiota VS Code extension</li>
-          <li>Open the API Manifest in VS Code</li>
-          <li>Right click on the API Manifest and select "Generate client code"</li>
-          <li>Choose the language you want to generate the code for</li>
-          <li>Choose the output folder</li>
-        </ul>
-      </div>
+      <FormattedMessage id='To generate client'/>
+      <br/>
+      <FormattedMessage id='Use VS Code'/>
+      <Link>kiota documentation link</Link>
+      <FormattedMessage id='VS Code extension'/>
+      <br/>
+      <br/>
+
+      <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching}
+        onClick={openManifestInVisualStudio}>
+        {isGeneratingManifest && <FormattedMessage id='Hold on, we are creating the manifest' />}
+        {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
+      </PrimaryButton>
 
       <VerticalDivider />
-
-      <h3>Using the CLI</h3>
+      <br />
+      <br />
+      <FormattedMessage id='Use Kiota CLI' />
+      <br/>
       <div className={manifestStyle.steps}>
         Steps:
         <ul>
@@ -146,15 +177,15 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = (props) => {
         </ul>
       </div>
       <VerticalDivider />
+      <br/>
+      <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching}
+        onClick={downloadManifest}>
+        {isGeneratingManifest && <FormattedMessage id='Hold on, we are creating the manifest' />}
+        {!isGeneratingManifest && <FormattedMessage id='Download API Manifest' />}
+      </PrimaryButton>
+      <br/>
       To learn more about the API Manifest,
       visit the <Link href={API_MANIFEST_SPEC_PAGE} target='_blank' >API Manifest specification</Link> page.
-
-      <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
-        {!isFetching ? renderManifestButtons() : <Spinner className={manifestStyle.spinner} />}
-        <DefaultButton onClick={() => props.dismissPopup()}>
-          <FormattedMessage id='Close' />
-        </DefaultButton>
-      </DialogFooter>
     </div>
   )
 }

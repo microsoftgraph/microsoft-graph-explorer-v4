@@ -438,7 +438,7 @@
   "Client library": "client library here ",
   "SDKs documentation": "To read more about our SDKs, go to the documentation page at ",
   "Add to collection": "Add to collection",
-  "Switch to beta": "Switch to beta",
+  "Switch to the beta APIs": "Switch to the beta APIs",
   "Resources": "Resources",
   "More items": "More items",
   "Update": "Update",
@@ -494,5 +494,14 @@
   "View permissions": "View permissions",
   "Required Permissions": "Required Permissions",
   "Create API manifest": "Create API manifest",
-  "Download an API manifest": "Download an API manifest"
+  "Download an API manifest": "Download an API manifest",
+  "API manifest description": "The API manifest can be used to enable a variety of scenarios. To learn more about the API manifest, visit the API Manifest specification page",
+  "Permissions choice": "First, select the type of permissions you will need for your intended application:",
+  "Delegated permissions": "Delegated permissions",
+  "Application permissions": "Application permissions",
+  "Delegated & application permissions": "Delegated & application permissions",
+  "To generate client": "To generate an API client with the specified resources you selected:",
+  "Use VS Code": "you can use the API manifest with the [Kiota]",
+  "VS Code extension": "VS Code extension",
+  "Use Kiota CLI": "You can download and use the API manifest with the [Kiota CLI]"
 }

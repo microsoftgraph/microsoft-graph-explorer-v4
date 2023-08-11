@@ -129,9 +129,6 @@ export const UploadPostmanCollection = () => {
         styles={uploadButtonStyles}
       >
         <input type="file" id="file-input" style={style_} onInput={handleFileSelect} value={''}/>
-        <Label styles = {uploadLabelStyles}>
-          {translateMessage('Upload collection')}
-        </Label>
       </ActionButton>
       <Dialog
         hidden={isDialogHidden}

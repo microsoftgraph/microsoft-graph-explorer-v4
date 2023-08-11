@@ -1,7 +1,6 @@
 import {
   CommandBar,
   DialogFooter, ICommandBarItemProps,
-  IContextualMenuProps,
   Label, PrimaryButton
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
@@ -18,7 +17,6 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
 import Paths from './Paths';
 import { generatePostmanCollection } from './postman.util';
-import { PERMS_SCOPE } from '../../../../services/graph-constants';
 
 export interface IPathsReview {
   version: string;
@@ -67,40 +65,15 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     }
   ];
 
-  const menuProps: IContextualMenuProps = {
-    items: [
-      {
-        key: PERMS_SCOPE.WORK,
-        text: 'Use delegated permissions',
-        iconProps: { iconName: 'Permissions' },
-        onClick: () => createManifest(PERMS_SCOPE.WORK)
-      },
-      {
-        key: PERMS_SCOPE.APPLICATION,
-        text: 'Use application permissions',
-        iconProps: { iconName: 'Permissions' },
-        onClick: () => createManifest(PERMS_SCOPE.APPLICATION)
-      },
-      {
-        key: `${PERMS_SCOPE.APPLICATION}_${PERMS_SCOPE.WORK}`,
-        text: 'Use both permissions',
-        iconProps: { iconName: 'Permissions' },
-        onClick: () => createManifest(`${PERMS_SCOPE.APPLICATION}_${PERMS_SCOPE.WORK}`)
-      }
-    ]
-  };
-
   const selectItems = (content: IResourceLink[]) => {
     setSelectedItems(content);
   };
 
-  const createManifest = (chosenItem?: string) => {
+  const createManifest = () => {
     showManifestDescription({
       settings: {
-        title: translateMessage('Download an API manifest')
-      },
-      data: {
-        selectedScopeType: chosenItem ?? `${PERMS_SCOPE.APPLICATION}_${PERMS_SCOPE.WORK}`
+        title: translateMessage('API manifest'),
+        width: 'lg'
       }
     });
   }
@@ -140,9 +113,6 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
         <PrimaryButton
           onClick={() => createManifest()}
           disabled={selectedItems.length > 0}
-          split={true}
-          splitButtonAriaLabel='Select scopeType'
-          menuProps={menuProps}
         >
           <FormattedMessage id='Create API manifest' />
         </PrimaryButton>
