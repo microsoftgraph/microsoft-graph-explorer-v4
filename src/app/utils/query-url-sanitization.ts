@@ -13,7 +13,6 @@ const DEPRECATION_REGEX = /^[a-z]+_v2$/gi;
 const FUNCTION_CALL_REGEX = /^[a-z]+\(.*\)$/i;
 // Matches entity and entity set name patterns like microsoft.graph.group or all letters
 const ENTITY_NAME_REGEX = /^((microsoft\.graph(\.[a-z]+|[A-Za-z0-9_]+\(.+\)|\(\))+)|[a-z]+)$/i;
-///^((microsoft.graph(.[a-z]+)+)|[a-z]+)$/i;
 // Matches folder/file path which is part of url  e.g. /root:/FolderA/FileB.txt:/
 const ITEM_PATH_REGEX = /(?:\/)[\w]+:[\w\/.]+(:(?=\/)|$)/g;
 // Matches patterns like root: <value>
