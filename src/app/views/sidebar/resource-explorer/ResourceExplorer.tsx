@@ -4,6 +4,7 @@ import {
   DialogFooter,
   DialogType,
   getId,
+  getTheme,
   IconButton,
   INavLink, INavLinkGroup, Label, Nav, PrimaryButton, SearchBox, Spinner, SpinnerSize,
   Stack,
@@ -34,7 +35,7 @@ import {
   getUrlFromLink
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
-import { navStyles } from './resources.styles';
+import { navStyles, resourceExplorerStyles } from './resources.styles';
 import { UploadPostmanCollection } from './collection/UploadCollection';
 import { usePopups } from '../../../services/hooks';
 
@@ -59,6 +60,7 @@ const UnstyledResourceExplorer = (props: any) => {
   const filteredPayload = getResourcesSupportedByVersion(resourcesToUse, version, searchText);
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
   const { show: previewCollection } = usePopups('preview-collection', 'panel');
+  const resourcesStyles = resourceExplorerStyles(getTheme());
 
 
   const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
@@ -186,6 +188,7 @@ const UnstyledResourceExplorer = (props: any) => {
         <Toggle
           onChange={changeVersion}
           inlineLabel
+          styles={{root: {position: 'relative', top: '4px'}}}
         />
       </Stack>
       <Stack horizontal tokens={{ childrenGap: 10, padding: 10 }}>
@@ -197,6 +200,7 @@ const UnstyledResourceExplorer = (props: any) => {
             disabled={selectedLinks.length === 0}
             iconProps={{ iconName: 'View' }}
             onClick={() => openPreviewCollection()}
+            styles={resourcesStyles.iconButtons}
           />
         </TooltipHost>
         <TooltipHost
@@ -211,6 +215,7 @@ const UnstyledResourceExplorer = (props: any) => {
             iconProps={{ iconName: 'Delete' }}
             disabled={selectedLinks.length === 0}
             onClick={() => toggleIsDialogHidden()}
+            styles={resourcesStyles.iconButtons}
           />
         </TooltipHost>
       </Stack>

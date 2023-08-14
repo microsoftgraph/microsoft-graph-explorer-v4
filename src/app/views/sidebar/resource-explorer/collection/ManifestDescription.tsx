@@ -139,7 +139,12 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
       <FormattedMessage id='To generate client'/>
       <br/>
       <FormattedMessage id='Use VS Code'/>
-      <Link>kiota documentation link</Link>
+      <Link href='https://learn.microsoft.com/en-us/openapi/kiota/overview'
+        target='_blank'
+      >
+        &nbsp;Kiota
+      </Link>
+      &nbsp;
       <FormattedMessage id='VS Code extension'/>
       <br/>
       <br/>
@@ -154,6 +159,12 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
       <br />
       <br />
       <FormattedMessage id='Use Kiota CLI' />
+      <Link
+        href='https://aka.ms/get/kiota'
+        target='_blank'
+      >
+        &nbsp;Kiota CLI
+      </Link>
       <br/>
       <div className={manifestStyle.steps}>
         Steps:
