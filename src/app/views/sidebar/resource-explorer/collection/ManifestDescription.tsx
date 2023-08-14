@@ -104,7 +104,9 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
 
   const downloadManifest = () => {
     if (!manifest) { return; }
-    const filename = `${manifest.publisher.name}-API-Manifest.json`;
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/:/g, '-').replace(/\./g, '-');
+    const filename = `${manifest.publisher.name}-API-Manifest-${timestamp}.json`;
     downloadToLocal(manifest, filename);
     trackDownload(filename, componentNames.DOWNLOAD_API_MANIFEST_BUTTON);
   }
