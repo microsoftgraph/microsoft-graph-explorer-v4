@@ -1,4 +1,4 @@
-import { getTheme, ITheme, Label, Link, PivotItem } from '@fluentui/react';
+import { ITheme, Label, Link, PivotItem, getTheme } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -88,7 +88,7 @@ function Snippet(props: ISnippetProps) {
   }, [sampleQuery.sampleUrl]);
 
   const setCommentSymbol = (): string => {
-    return language.trim() === 'powershell' ? '#' : '//';
+    return (language.trim() === 'powershell' || language.trim() === 'python') ? '#' : '//';
   }
 
   const trackLinkClickedEvent = (link: string, e:any) => {
