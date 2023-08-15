@@ -1,4 +1,4 @@
-import { Label, PivotItem } from '@fluentui/react';
+import { ITheme, Label, Link, PivotItem, getTheme } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -13,6 +13,7 @@ import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names
 import { translateMessage } from '../../../utils/translate-messages';
 import { CopyButton } from '../../common/copy/CopyButton';
 import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
+import { getSnippetStyles } from './Snippets.styles';
 
 interface ISnippetProps {
   language: string;
@@ -101,15 +102,29 @@ function Snippet(props: ISnippetProps) {
     return componentName || '' ;
   }
 
-  const addExtraSnippetInformation = () : string => {
-    const clientLibraryLink =
-    // eslint-disable-next-line max-len
-    `\n${setCommentSymbol()} ${translateMessage('Leverage libraries')} ${language} ${translateMessage('Client library')} ${sdkDownloadLink}\n`
-    const sdkLink = `${setCommentSymbol()} ${translateMessage('SDKs documentation')} ${sdkDocLink}\n`
-    if (language === 'php') {
-      return '<?php '+ clientLibraryLink + sdkLink;
-    }
-    return clientLibraryLink + sdkLink ;
+  const addExtraSnippetInformation = () : JSX.Element => {
+    const currentTheme: ITheme = getTheme();
+    const snippetLinkStyles = getSnippetStyles(currentTheme);
+    const snippetCommentStyles = getSnippetStyles(currentTheme).snippetComments;
+    return (
+      <div style={snippetCommentStyles}>
+
+        {setCommentSymbol()} {translateMessage('Leverage libraries')} {language} {translateMessage('Client library')}
+
+        <Link href={sdkDownloadLink} underline styles={snippetLinkStyles}
+          onClick={(e) => trackLinkClickedEvent(sdkDownloadLink, e)} target={'_blank'} rel='noreferrer noopener'>
+          {sdkDownloadLink}
+        </Link>
+        <br />
+
+        {setCommentSymbol()} {translateMessage('SDKs documentation')}
+
+        <Link href={sdkDocLink} underline styles={snippetLinkStyles}
+          onClick={(e) => trackLinkClickedEvent(sdkDocLink, e)} target={'_blank'} rel='noreferrer noopener'>
+          {sdkDocLink}
+        </Link>
+      </div>
+    );
   }
 
   const displayError = (): JSX.Element | null => {
@@ -150,10 +165,11 @@ function Snippet(props: ISnippetProps) {
         <>
           <CopyButton isIconButton={true} style={{ float: 'right', zIndex: 1 }} handleOnClick={handleCopy} />
           <Monaco
-            body={addExtraSnippetInformation() + snippet}
+            body={snippet}
             language={language}
             readOnly={true}
             height={height}
+            extraInfoElement={addExtraSnippetInformation()}
           />
         </>
       }
