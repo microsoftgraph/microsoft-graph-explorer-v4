@@ -12,7 +12,8 @@ import { componentNames, telemetry } from '../../../../telemetry';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { translateMessage } from '../../../utils/translate-messages';
 import { CopyButton } from '../../common/copy/CopyButton';
-import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
+import { convertVhToPx, getResponseEditorHeight,
+  getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { getSnippetStyles } from './Snippets.styles';
 
 interface ISnippetProps {
@@ -67,8 +68,10 @@ function Snippet(props: ISnippetProps) {
   const { data, pending: loadingState, error } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
   const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
-  const height = convertVhToPx(responseHeight, 220);
+  const defaultHeight = convertVhToPx(responseHeight, 220);
   const [snippetError, setSnippetError] = useState(error);
+
+  const monacoHeight = getResponseEditorHeight(235);
 
   const dispatch: AppDispatch = useDispatch();
 
@@ -168,7 +171,7 @@ function Snippet(props: ISnippetProps) {
             body={snippet}
             language={language}
             readOnly={true}
-            height={height}
+            height={responseAreaExpanded ? defaultHeight : monacoHeight}
             extraInfoElement={addExtraSnippetInformation()}
           />
         </>
