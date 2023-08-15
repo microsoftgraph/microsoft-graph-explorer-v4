@@ -8,7 +8,7 @@ import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { useAppSelector } from '../../../../../store';
-import { componentNames } from '../../../../../telemetry';
+import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { APIManifest } from '../../../../../types/api-manifest';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { API_MANIFEST_SPEC_PAGE, PERMS_SCOPE } from '../../../../services/graph-constants';
@@ -115,6 +115,7 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
     const base64UrlEncodedManifest = btoa(JSON.stringify(manifest));
     const manifestContentUrl = `vscode://ms-graph.kiota/OpenManifest?manifestContent=${base64UrlEncodedManifest}`;
     window.open(manifestContentUrl, '_blank');
+    trackVSCodeButtonClick();
   }
 
   const onSelectionChange = useCallback((ev: FormEvent<HTMLElement | HTMLInputElement> | undefined,
@@ -122,6 +123,12 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
     setSelectedScope(option!.key);
     setIsGeneratingManifest(true);
   }, []);
+
+  const trackVSCodeButtonClick = () => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.OPEN_MANIFEST_IN_VISUAL_STUDIO_CODE_BUTTON
+    });
+  }
 
   return (
     <div className={manifestStyle.root}>
