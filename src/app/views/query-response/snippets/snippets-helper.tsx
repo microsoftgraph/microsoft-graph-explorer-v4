@@ -71,7 +71,7 @@ function Snippet(props: ISnippetProps) {
   const defaultHeight = convertVhToPx(responseHeight, 220);
   const [snippetError, setSnippetError] = useState(error);
 
-  const monacoHeight = getResponseEditorHeight(200);
+  const monacoHeight = getResponseEditorHeight(240);
 
   const dispatch: AppDispatch = useDispatch();
 
