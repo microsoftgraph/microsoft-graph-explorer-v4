@@ -1,5 +1,5 @@
-import { getTheme, ITheme, Label, Link, PivotItem } from '@fluentui/react';
-import { useEffect } from 'react';
+import { ITheme, Label, Link, PivotItem, getTheme } from '@fluentui/react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { FormattedMessage } from 'react-intl';
@@ -12,7 +12,8 @@ import { componentNames, telemetry } from '../../../../telemetry';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { translateMessage } from '../../../utils/translate-messages';
 import { CopyButton } from '../../common/copy/CopyButton';
-import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
+import { convertVhToPx, getResponseEditorHeight,
+  getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { getSnippetStyles } from './Snippets.styles';
 
 interface ISnippetProps {
@@ -64,13 +65,19 @@ function Snippet(props: ISnippetProps) {
 
   const { dimensions: { response }, snippets,
     responseAreaExpanded, sampleQuery } = useAppSelector((state) => state);
-  const { data, pending: loadingState } = snippets;
+  const { data, pending: loadingState, error } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
-
   const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
-  const height = convertVhToPx(responseHeight, 240);
+  const defaultHeight = convertVhToPx(responseHeight, 220);
+  const [snippetError, setSnippetError] = useState(error);
+
+  const monacoHeight = getResponseEditorHeight(235);
 
   const dispatch: AppDispatch = useDispatch();
+
+  useEffect(() => {
+    setSnippetError(error?.error ? error.error : error);
+  }, [error])
 
   const handleCopy = async () => {
     trackedGenericCopy(snippet, CODE_SNIPPETS_COPY_BUTTON, sampleQuery, { Language: language });
@@ -81,7 +88,7 @@ function Snippet(props: ISnippetProps) {
   }, [sampleQuery.sampleUrl]);
 
   const setCommentSymbol = (): string => {
-    return language.trim() === 'powershell' ? '#' : '//';
+    return (language.trim() === 'powershell' || language.trim() === 'python') ? '#' : '//';
   }
 
   const trackLinkClickedEvent = (link: string, e:any) => {
@@ -123,6 +130,33 @@ function Snippet(props: ISnippetProps) {
     );
   }
 
+  const displayError = (): JSX.Element | null => {
+    if((!loadingState && snippet) || (!loadingState && !snippetError)){
+      return null;
+    }
+    if(
+      (snippetError?.status && snippetError.status === 404) ||
+      (snippetError?.status && snippetError.status === 400)
+    ){
+      return(
+        <Label style={{ padding: 10 }}>
+          <FormattedMessage id='Snippet not available' />
+        </Label>
+      )
+    }
+    else{
+      return (
+        <>
+          {!loadingState &&
+            <Label style={{ padding: 10 }}>
+              <FormattedMessage id='Fetching code snippet failing' />
+            </Label>
+          }
+        </>
+      )
+    }
+  }
+
   return (
     <div style={{ display: 'block' }} id={`${language}-tab`}>
       {loadingState &&
@@ -137,16 +171,12 @@ function Snippet(props: ISnippetProps) {
             body={snippet}
             language={language}
             readOnly={true}
-            height={height}
+            height={responseAreaExpanded ? defaultHeight : monacoHeight}
             extraInfoElement={addExtraSnippetInformation()}
           />
         </>
       }
-      {!loadingState && !snippet &&
-        <Label style={{ padding: 10 }}>
-          <FormattedMessage id='Snippet not available' />
-        </Label>
-      }
+      {displayError()}
     </div>
   );
 }

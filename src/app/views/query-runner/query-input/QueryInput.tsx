@@ -10,6 +10,7 @@ import { getStyleFor } from '../../../utils/http-methods.utils';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
 import SubmitButton from '../../../views/common/submit-button/SubmitButton';
+import { shouldRunQuery } from '../../sidebar/sample-queries/sample-query-utils';
 import { queryRunnerStyles } from '../QueryRunner.styles';
 import { AutoComplete } from './auto-complete';
 import { ShareButton } from './share-query';
@@ -36,7 +37,10 @@ const QueryInput = (props: IQueryInputProps) => {
   const authenticated = !!authToken.token;
   const { mobileScreen } = sidebarProperties;
 
-  const showError = !authenticated && sampleQuery.selectedVerb !== 'GET';
+  const showError = !shouldRunQuery({
+    method: sampleQuery.selectedVerb, authenticated,
+    url: sampleQuery.sampleUrl
+  });
   const { queryButtonStyles, verbSelector, shareQueryButtonStyles } = queryRunnerStyles();
   verbSelector.title = {
     ...verbSelector.title,

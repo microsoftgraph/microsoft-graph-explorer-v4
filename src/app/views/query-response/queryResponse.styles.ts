@@ -6,7 +6,7 @@ export const queryResponseStyles = (theme: ITheme) => {
   const { dimensions: { response }, responseAreaExpanded} =
     useAppSelector((state) => state);
 
-  const height = convertVhToPx(getResponseHeight( response.height, responseAreaExpanded), 175);
+  const height = convertVhToPx(getResponseHeight( response.height, responseAreaExpanded), 220);
 
   return {
     dot: {
