@@ -5,6 +5,7 @@ import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { setSnippetTabSuccess } from '../../../services/actions/snippet-action-creator';
 import { renderSnippets } from './snippets-helper';
+import { translateMessage } from '../../../utils/translate-messages';
 function GetSnippets() {
   const dispatch: AppDispatch = useDispatch();
   const { snippets, sampleQuery } = useAppSelector((state) => state);
@@ -56,6 +57,8 @@ function GetSnippets() {
     selectedKey={snippets.snippetTab}
     onLinkClick={handlePivotItemClick}
     styles={{ text: { fontSize: FontSizes.size14 } }}
+    overflowBehavior='menu'
+    overflowAriaLabel={translateMessage('More items')}
   >
     {renderSnippets(supportedLanguages)}
   </Pivot>;
