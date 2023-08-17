@@ -113,7 +113,8 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
 
   const openManifestInVisualStudio = () => {
     const base64UrlEncodedManifest = btoa(JSON.stringify(manifest));
-    const manifestContentUrl = `vscode://ms-graph.kiota/OpenManifest?manifestContent=${base64UrlEncodedManifest}`;
+    // eslint-disable-next-line max-len
+    const manifestContentUrl = `vscode://ms-graph.kiota/OpenManifest?manifestContent=${base64UrlEncodedManifest}&apiIdentifier=graph`;
     window.open(manifestContentUrl, '_blank');
     trackVSCodeButtonClick();
   }
