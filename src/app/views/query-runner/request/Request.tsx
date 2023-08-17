@@ -76,7 +76,7 @@ const Request = (props: any) => {
         }}
       >
         <div style={containerStyle} id={'request-header-tab'}>
-          <RequstHeaders />
+          <RequestHeaders />
         </div>
       </PivotItem>,
       <PivotItem
