@@ -16,7 +16,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { RequestBody } from './body';
 import './request.scss';
-import { Permission, Auth, RequstHeaders } from '../../common/lazy-loader/component-registry';
+import { Permission, Auth, RequestHeaders } from '../../common/lazy-loader/component-registry';
 
 const Request = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
@@ -76,7 +76,7 @@ const Request = (props: any) => {
         }}
       >
         <div style={containerStyle} id={'request-header-tab'}>
-          <RequstHeaders />
+          <RequestHeaders />
         </div>
       </PivotItem>,
       <PivotItem
@@ -90,7 +90,7 @@ const Request = (props: any) => {
         }}
       >
         <div style={containerStyle} id={'permission-tab'}>
-          <Permission />
+          <Permissions />
         </div>
       </PivotItem>
     ];
