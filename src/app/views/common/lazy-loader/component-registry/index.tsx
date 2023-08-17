@@ -98,7 +98,7 @@ export const Auth = (props?: any) => {
   )
 }
 
-export const RequstHeaders = (props?: any) => {
+export const RequestHeaders = (props?: any) => {
   return (
     <SuspenseLoader>
       <LazyRequestHeaders {...props} />
