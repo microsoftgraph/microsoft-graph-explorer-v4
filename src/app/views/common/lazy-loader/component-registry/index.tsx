@@ -34,7 +34,7 @@ const LazyPreviewCollection = lazy(() =>
 const LazyFullPermissions = lazy(() =>
   import(/* webpackChunkName: "full permissions" */ '../../../query-runner/request/permissions/Permissions.Full'));
 
-export const Permission = (props?: IPermissionProps) => {
+export const Permissions = (props?: IPermissionProps) => {
   return (
     <SuspenseLoader>
       <LazySpecificPermissions {...props} />

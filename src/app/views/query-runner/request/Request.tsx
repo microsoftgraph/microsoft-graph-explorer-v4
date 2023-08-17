@@ -16,7 +16,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { RequestBody } from './body';
 import './request.scss';
-import { Permission, Auth, RequestHeaders } from '../../common/lazy-loader/component-registry';
+import { Permissions, Auth, RequestHeaders } from '../../common/lazy-loader/component-registry';
 
 const Request = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
