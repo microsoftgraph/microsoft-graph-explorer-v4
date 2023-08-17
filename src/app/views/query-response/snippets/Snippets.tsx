@@ -63,7 +63,8 @@ function GetSnippets() {
     {renderSnippets(supportedLanguages)}
   </Pivot>;
 }
-export const Snippets = telemetry.trackReactComponent(
+const Snippets = telemetry.trackReactComponent(
   GetSnippets,
   componentNames.CODE_SNIPPETS_TAB
 );
+export default Snippets;
