@@ -90,7 +90,7 @@ const Request = (props: any) => {
         }}
       >
         <div style={containerStyle} id={'permission-tab'}>
-          <Permission />
+          <Permissions />
         </div>
       </PivotItem>
     ];
