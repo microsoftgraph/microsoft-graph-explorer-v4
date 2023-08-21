@@ -9,7 +9,8 @@ import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { useAppSelector } from '../../../../store';
-import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
+import { convertVhToPx, getResponseEditorHeight,
+  getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 
 const GraphToolkit = () => {
   const { sampleQuery, dimensions: {response },responseAreaExpanded } = useAppSelector((state) => state);
@@ -19,7 +20,8 @@ const GraphToolkit = () => {
   const textStyle = queryResponseStyles(currentTheme).queryResponseText.root as IStyle;
   const linkStyle = queryResponseStyles(currentTheme).link as IStyle;
 
-  const height = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 220);
+  const defaultHeight = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 220);
+  const monacoHeight = getResponseEditorHeight(115);
 
   if (toolkitUrl && exampleUrl) {
     return (
@@ -38,7 +40,8 @@ const GraphToolkit = () => {
           </Link>
           .
         </MessageBar>
-        <iframe width='100%' height={height} src={toolkitUrl} title={translateMessage('Graph toolkit')} />
+        <iframe width='100%' height={responseAreaExpanded ? defaultHeight : monacoHeight}
+          src={toolkitUrl} title={translateMessage('Graph toolkit')} />
       </>
     );
   }

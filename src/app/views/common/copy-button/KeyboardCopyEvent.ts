@@ -20,7 +20,7 @@ export const KeyboardCopyEvent = () => {
     });
     const filteredTargetIds = targetIds.filter((value) => value !== null)!;
     const componentName = Object.keys(componentList).find(key => filteredTargetIds.includes(key));
-    return componentName || '';
+    return componentName ?? '';
   }
 
   const getTargetId = (target: EventTarget) => {
