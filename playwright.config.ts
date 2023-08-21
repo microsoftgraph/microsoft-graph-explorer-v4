@@ -1,5 +1,5 @@
 require('dotenv').config();
-import { PlaywrightTestConfig } from '@playwright/test';
+import { PlaywrightTestConfig, devices } from '@playwright/test';
 
 const baseURL = process.env.PLAYWRIGHT_TESTS_BASE_URL!;
 
@@ -29,17 +29,21 @@ const config: PlaywrightTestConfig = {
   timeout: 60000,
   projects: [
     {
-      name: 'Ms-Edge',
-      use: {
-        channel: 'msedge',
-        viewport: { width: 1920, height: 1080 }}
-    },
-    {
-      name: 'Chrome',
-      use: {
-        channel: 'chrome',
-        viewport: { width: 1365, height: 768 }}
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] }
     }
+    // {
+    //   name: 'Ms-Edge',
+    //   use: {
+    //     channel: 'msedge',
+    //     viewport: { width: 1920, height: 1080 }}
+    // },
+    // {
+    //   name: 'Chrome',
+    //   use: {
+    //     channel: 'chrome',
+    //     viewport: { width: 1365, height: 768 }}
+    // }
   ]
 };
 export default config;
