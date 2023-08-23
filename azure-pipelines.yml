@@ -104,7 +104,7 @@ jobs:
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: "18.16.x"
+          versionSpec: "14.17.x"
         displayName: "Install npm"
 
       - script: |
