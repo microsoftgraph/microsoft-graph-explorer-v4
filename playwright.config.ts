@@ -29,21 +29,17 @@ const config: PlaywrightTestConfig = {
   timeout: 60000,
   projects: [
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] }
+      name: 'Ms-Edge',
+      use: {
+        channel: 'msedge',
+        viewport: { width: 1920, height: 1080 }}
+    },
+    {
+      name: 'Chrome',
+      use: {
+        channel: 'chrome',
+        viewport: { width: 1365, height: 768 }}
     }
-    // {
-    //   name: 'Ms-Edge',
-    //   use: {
-    //     channel: 'msedge',
-    //     viewport: { width: 1920, height: 1080 }}
-    // },
-    // {
-    //   name: 'Chrome',
-    //   use: {
-    //     channel: 'chrome',
-    //     viewport: { width: 1365, height: 768 }}
-    // }
   ]
 };
 export default config;

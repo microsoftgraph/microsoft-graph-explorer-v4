@@ -79,7 +79,7 @@
                 "test-playwright": "start-server-and-test start-server http://127.0.0.1:3000 test-ui",
                 "test-ui": "npx playwright test src/tests/ui/",
                 "test-playwright-accessibility": "start-server-and-test start-server http://127.0.0.1:3000 test-accessibility",
-                "test-accessibility": "npx playwright test src/tests/accessibility"
+                "test-accessibility": "npx playwright test src/tests/accessibility --project=Ms-Edge"
         },
         "eslintConfig": {
                 "extends": "react-app"
