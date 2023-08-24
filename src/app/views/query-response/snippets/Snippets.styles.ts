@@ -8,8 +8,8 @@ export const getSnippetStyles = (theme: ITheme) => {
     snippetComments: {
       color: theme.palette.green,
       marginLeft: '28px',
-      fontFamily: 'Consolas, monospace',
-      font: '9px',
+      fontFamily: 'Consolas,"Courier new", monospace',
+      fontSize: '14px',
       lineHeight: '1.5'
     }
   }

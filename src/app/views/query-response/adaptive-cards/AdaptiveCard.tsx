@@ -15,8 +15,9 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
-import { CopyButton } from '../../common/copy/CopyButton';
-import { convertVhToPx, getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
+import { CopyButton } from '../../common/lazy-loader/component-registry';
+import { convertVhToPx, getResponseEditorHeight,
+  getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { queryResponseStyles } from './../queryResponse.styles';
 
 const AdaptiveCard = (props: any) => {
@@ -32,8 +33,8 @@ const AdaptiveCard = (props: any) => {
   const currentTheme: ITheme = getTheme();
   const textStyle = queryResponseStyles(currentTheme).queryResponseText.root as IStyle;
 
-  const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
-  const height = convertVhToPx(responseHeight, 220);
+  const defaultHeight = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 220);
+  const monacoHeight = getResponseEditorHeight(190);
 
   useEffect(() => {
     dispatch(getAdaptiveCard(body, sampleQuery));
@@ -52,7 +53,6 @@ const AdaptiveCard = (props: any) => {
       adaptiveCard = null;
     }
   }, [body])
-
 
   const onPivotItemClick = (query: IQuery | undefined, item?: PivotItem) => {
     if (!item) { return; }
@@ -126,7 +126,7 @@ const AdaptiveCard = (props: any) => {
       }
       return (
         <Pivot className='adaptive-pivot'
-          onLinkClick={(pivotItem) => onPivotItemClick(sampleQuery, pivotItem)}
+          onLinkClick={(pivotItem: PivotItem | undefined) => onPivotItemClick(sampleQuery, pivotItem)}
           styles={{ text: { fontSize: FontSizes.size14 } }}>
           <PivotItem
             itemKey='card'
@@ -187,7 +187,7 @@ const AdaptiveCard = (props: any) => {
               <Monaco
                 language='json'
                 body={data.template}
-                height={height}
+                height={responseAreaExpanded ? defaultHeight : monacoHeight}
               />
             </div>
           </PivotItem>
@@ -200,7 +200,7 @@ const AdaptiveCard = (props: any) => {
 }
 
 // @ts-ignore
-const styledAdaptiveCard = styled(AdaptiveCard, queryResponseStyles as any);
+const styledAdaptiveCard = styled(AdaptiveCard, queryResponseStyles);
 const trackedComponent = telemetry.trackReactComponent(styledAdaptiveCard, componentNames.ADAPTIVE_CARDS_TAB);
 // @ts-ignore
 const IntlAdaptiveCard = injectIntl(trackedComponent);

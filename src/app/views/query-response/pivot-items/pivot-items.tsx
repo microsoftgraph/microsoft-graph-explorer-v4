@@ -8,13 +8,11 @@ import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
-import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
-import GraphToolkit from '../graph-toolkit/GraphToolkit';
-import { ResponseHeaders } from '../headers';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
-import { Snippets } from '../snippets';
+import { AdaptiveCards, GraphToolkit, ResponseHeaders,
+  Snippets } from '../../common/lazy-loader/component-registry';
 
 export const GetPivotItems = () => {
 
@@ -134,7 +132,7 @@ export const GetPivotItems = () => {
           {(theme) => (
             // @ts-ignore
             <div id={'adaptive-cards-tab'} tabIndex={0}>
-              <AdaptiveCard
+              <AdaptiveCards
                 body={body}
                 hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
               />
