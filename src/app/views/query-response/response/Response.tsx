@@ -7,6 +7,7 @@ import { convertVhToPx, getResponseEditorHeight,
   getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import ResponseDisplay from './ResponseDisplay';
 import { ResponseMessages } from './ResponseMessages';
+import { Mode } from '../../../../types/enums';
 
 const Response = () => {
   const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery, authToken, graphExplorerMode } =
@@ -27,7 +28,7 @@ const Response = () => {
         <ResponseDisplay
           contentType={contentType}
           body={body}
-          height={responseAreaExpanded ? defaultHeight : monacoHeight}
+          height={(responseAreaExpanded || graphExplorerMode === Mode.TryIt) ? defaultHeight : monacoHeight}
         />}
     </div>
   );

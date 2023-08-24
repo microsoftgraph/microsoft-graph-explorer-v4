@@ -19,6 +19,7 @@ import { CopyButton } from '../../common/lazy-loader/component-registry';
 import { convertVhToPx, getResponseEditorHeight,
   getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { queryResponseStyles } from './../queryResponse.styles';
+import { Mode } from '../../../../types/enums';
 
 const AdaptiveCard = (props: any) => {
   let adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null = new AdaptiveCardsAPI.AdaptiveCard();
@@ -26,7 +27,8 @@ const AdaptiveCard = (props: any) => {
 
   const { body, hostConfig } = props;
   const {dimensions: { response }, responseAreaExpanded,
-    sampleQuery, queryRunnerStatus: queryStatus, adaptiveCard: card, theme } = useAppSelector((state) => state);
+    sampleQuery, queryRunnerStatus: queryStatus, adaptiveCard: card, theme,
+    graphExplorerMode } = useAppSelector((state) => state);
   const { data, pending } = card;
 
   const classes = classNames(props);
@@ -187,7 +189,7 @@ const AdaptiveCard = (props: any) => {
               <Monaco
                 language='json'
                 body={data.template}
-                height={responseAreaExpanded ? defaultHeight : monacoHeight}
+                height={(responseAreaExpanded || graphExplorerMode === Mode.TryIt) ? defaultHeight : monacoHeight}
               />
             </div>
           </PivotItem>

@@ -7,9 +7,10 @@ import { CopyButton } from '../../common/lazy-loader/component-registry';
 import { convertVhToPx, getResponseEditorHeight,
   getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { useAppSelector } from '../../../../store';
+import { Mode } from '../../../../types/enums';
 
 const ResponseHeaders = () => {
-  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } =
+  const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery, graphExplorerMode } =
     useAppSelector((state) => state);
   const { headers } = graphResponse;
 
@@ -27,7 +28,8 @@ const ResponseHeaders = () => {
           isIconButton={true}
           style={{ float: 'right', zIndex: 1 }}
         />
-        <Monaco body={headers} height={responseAreaExpanded ? defaultHeight : monacoHeight} />
+        <Monaco body={headers} height={(responseAreaExpanded || graphExplorerMode === Mode.TryIt)
+          ? defaultHeight : monacoHeight} />
       </div>
     );
   }

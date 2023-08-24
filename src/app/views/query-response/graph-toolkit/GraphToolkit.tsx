@@ -11,9 +11,11 @@ import { queryResponseStyles } from '../queryResponse.styles';
 import { useAppSelector } from '../../../../store';
 import { convertVhToPx, getResponseEditorHeight,
   getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
+import { Mode } from '../../../../types/enums';
 
 const GraphToolkit = () => {
-  const { sampleQuery, dimensions: {response },responseAreaExpanded } = useAppSelector((state) => state);
+  const { sampleQuery, dimensions: {response },responseAreaExpanded,
+    graphExplorerMode } = useAppSelector((state) => state);
   const { toolkitUrl, exampleUrl } = lookupToolkitUrl(sampleQuery);
 
   const currentTheme: ITheme = getTheme();
@@ -40,8 +42,9 @@ const GraphToolkit = () => {
           </Link>
           .
         </MessageBar>
-        <iframe width='100%' height={responseAreaExpanded ? defaultHeight : monacoHeight}
-          src={toolkitUrl} title={translateMessage('Graph toolkit')} />
+        <iframe width='100%' height={(responseAreaExpanded || graphExplorerMode === Mode.TryIt)
+          ? defaultHeight : monacoHeight}
+        src={toolkitUrl} title={translateMessage('Graph toolkit')} />
       </>
     );
   }
