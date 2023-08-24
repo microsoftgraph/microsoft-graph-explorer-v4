@@ -15,7 +15,6 @@ import { CopyButton } from '../../common/lazy-loader/component-registry';
 import { convertVhToPx, getResponseEditorHeight,
   getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { getSnippetStyles } from './Snippets.styles';
-import { Mode } from '../../../../types/enums';
 
 interface ISnippetProps {
   language: string;
@@ -65,7 +64,7 @@ function Snippet(props: ISnippetProps) {
   language = language.toLowerCase();
 
   const { dimensions: { response }, snippets,
-    responseAreaExpanded, sampleQuery, graphExplorerMode } = useAppSelector((state) => state);
+    responseAreaExpanded, sampleQuery } = useAppSelector((state) => state);
   const { data, pending: loadingState, error } = snippets;
   const snippet = (!loadingState && data) ? data[language] : null;
   const responseHeight = getResponseHeight(response.height, responseAreaExpanded);
@@ -172,7 +171,7 @@ function Snippet(props: ISnippetProps) {
             body={snippet}
             language={language}
             readOnly={true}
-            height={(responseAreaExpanded || graphExplorerMode === Mode.TryIt) ? defaultHeight : monacoHeight}
+            height={responseAreaExpanded ? defaultHeight : monacoHeight}
             extraInfoElement={addExtraSnippetInformation()}
           />
         </>
