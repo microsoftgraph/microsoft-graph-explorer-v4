@@ -14,8 +14,9 @@ export function setConsentedStatus(tokenPresent: any, permissions: IPermission[]
 export function sortPermissionsWithPrivilege(permissionsToSort: IPermission[]){
   const leastPrivilegedIndex = permissionsToSort.findIndex(permission => permission.isLeastPrivilege === true);
   if(leastPrivilegedIndex !== -1){
-    const leastPrivilegedPermission = permissionsToSort.splice(leastPrivilegedIndex, 1)[0];
-    return [leastPrivilegedPermission, ...permissionsToSort];
+    const leastPrivilegedPermission = permissionsToSort.find(permission => permission.isLeastPrivilege === true);
+    return [leastPrivilegedPermission!,
+      ...permissionsToSort.filter(permission => permission !== leastPrivilegedPermission)];
   }
   return permissionsToSort;
 }
