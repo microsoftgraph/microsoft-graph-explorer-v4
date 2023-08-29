@@ -293,7 +293,7 @@
   "Admin consent required": "Admin consent required",
   "Consent": "Consent",
   "Revoke": "Unconsent",
-  "permissions required to run the query": "One of the following permissions is required to run the query. If possible, consent to the least privileged permission. The first permission is the least privileged permission in the list",
+  "permissions required to run the query": "One of the following permissions is required to run the query. If possible, consent to the least privileged permission.",
   "tab": " tab",
   "View the": " View the",
   "viewing a cached set": "You are viewing a cached set of samples because of a network connection failure.",
