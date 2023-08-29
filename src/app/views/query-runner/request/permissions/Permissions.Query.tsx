@@ -31,7 +31,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const [permissionsError, setPermissionsError] = useState(error);
 
   useEffect(() => {
-    if(error?.error && error?.error?.url.contains('permissions')){
+    if(error?.error && error?.error?.url?.includes('permissions')){
       setPermissionsError(error?.error);
     }
   }, [error])
