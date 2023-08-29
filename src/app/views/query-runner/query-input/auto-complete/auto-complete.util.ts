@@ -58,12 +58,16 @@ function getErrorMessage(queryUrl: string) {
 }
 
 function getValidationError(queryUrl: string): string | null {
-  const validator = new ValidatedUrl();
-  const validation = validator.validate(queryUrl);
-  if (!validation.success) {
-    return queryUrl.substring(validation.matched, validation.maxMatched);
+  try {
+    const validator = new ValidatedUrl();
+    const validation = validator.validate(queryUrl);
+    if (!validation.success) {
+      return queryUrl.substring(validation.matched, validation.maxMatched);
+    }
+    throw new Error('Validation unsuccessful');
+  } catch (error) {
+    return null;
   }
-  return null;
 }
 
 function getSearchText(input: string, index: number) {
