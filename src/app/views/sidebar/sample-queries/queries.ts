@@ -1276,9 +1276,9 @@ export const queries: ISampleQuery[] = [
     category: 'Microsoft Teams',
     method: 'GET',
     humanName: 'members of a team',
-    requestUrl: '/v1.0/groups/{group-id-for-teams}/members',
-    docLink: 'https://learn.microsoft.com/en-us/graph/api/group-list-memberof?view=graph-rest-1.0',
-    tip: 'This query requires a group id of the Team.  To find the group id of teams you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/joinedTeams',
+    requestUrl: '/v1.0/teams/{team-id}/members',
+    docLink: 'https://learn.microsoft.com/en-us/graph/api/team-list-members?view=graph-rest-1.0&tabs=http',
+    tip: 'This query requires a team id. To find the team id of teams you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/joinedTeams',
     skipTest: false
   },
   {
@@ -1287,7 +1287,7 @@ export const queries: ISampleQuery[] = [
     humanName: 'channels of a team which I am member of',
     requestUrl: '/v1.0/teams/{team-id}/channels',
     docLink: 'https://learn.microsoft.com/en-us/graph/api/channel-list?view=graph-rest-1.0',
-    tip: 'This query requires a team id.  To find the team id of teams you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/joinedTeams',
+    tip: 'This query requires a team id. To find the team id of teams you belong to, you can run: GET https://graph.microsoft.com/v1.0/me/joinedTeams',
     skipTest: false
   },
   {
