@@ -15,7 +15,6 @@ export const authenticationStyles = (theme: ITheme) => {
       justifyContent: 'start',
       marginRight: theme.spacing.s1,
       padding: theme.spacing.s1,
-      position: 'relative',
       top: '1px'
     },
     spinnerContainer: {

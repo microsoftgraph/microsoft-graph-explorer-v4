@@ -1,4 +1,5 @@
-import { MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
+import { BrowserAuthError } from '@azure/msal-browser';
+import { MessageBarType, Spinner, SpinnerSize, getTheme, mergeStyles } from '@fluentui/react';
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { useState } from 'react';
 import { injectIntl } from 'react-intl';
@@ -10,22 +11,20 @@ import { AppDispatch, useAppSelector } from '../../../store';
 import { componentNames, errorTypes, eventTypes, telemetry } from '../../../telemetry';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../services/actions/auth-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
-import { classNames } from '../classnames';
-import { showSignInButtonOrProfile } from './auth-util-components';
+import { translateMessage } from '../../utils/translate-messages';
 import { authenticationStyles } from './Authentication.styles';
+import { showSignInButtonOrProfile } from './auth-util-components';
 
-const Authentication = (props: any) => {
+const Authentication = () => {
   const dispatch: AppDispatch = useDispatch();
   const [loginInProgress, setLoginInProgress] = useState(false);
   const { authToken } = useAppSelector((state) => state);
   const tokenPresent = !!authToken.token;
   const logoutInProgress = !!authToken.pending;
+  const theme = getTheme();
+  const spinnerContainer = mergeStyles(authenticationStyles(theme).spinnerContainer);
+  const spinner = mergeStyles(authenticationStyles(theme).spinner);
 
-  const classes = classNames(props);
-
-  const {
-    intl: { messages }
-  }: any = props;
   const signIn = async (): Promise<void> => {
     setLoginInProgress(true);
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
@@ -39,15 +38,15 @@ const Authentication = (props: any) => {
         dispatch(getAuthTokenSuccess(!!authResponse.accessToken));
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
       }
-    } catch (error: any) {
-      const { errorCode } = error;
+    } catch (error: unknown) {
+      const { errorCode } = error as BrowserAuthError;
       if (signInAuthError(errorCode)) {
         authenticationWrapper.clearSession();
       }
       dispatch(
         setQueryResponseStatus({
           ok: false,
-          statusText: messages['Authentication failed'],
+          statusText: translateMessage('Authentication failed'),
           status: removeUnderScore(errorCode),
           messageType: MessageBarType.error,
           hint: getSignInAuthErrorHint(errorCode)
@@ -70,14 +69,14 @@ const Authentication = (props: any) => {
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.SIGN_IN_WITH_OTHER_ACCOUNT_BUTTON
     });
-    try{
+    try {
       const authResponse = await authenticationWrapper.logInWithOther();
       if (authResponse) {
         setLoginInProgress(false);
         dispatch(getAuthTokenSuccess(!!authResponse.accessToken));
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
       }
-    } catch(error: any) {
+    } catch (error: unknown) {
       setLoginInProgress(false);
     }
   }
@@ -89,8 +88,8 @@ const Authentication = (props: any) => {
 
   const showProgressSpinner = (): React.ReactNode => {
     return (
-      <div className={classes.spinnerContainer}>
-        <Spinner className={classes.spinner} size={SpinnerSize.medium} />
+      <div className={spinnerContainer}>
+        <Spinner className={spinner} size={SpinnerSize.medium} />
       </div>
     );
   };
@@ -118,6 +117,4 @@ const Authentication = (props: any) => {
 
 // @ts-ignore
 const IntlAuthentication = injectIntl(Authentication);
-// @ts-ignore
-const StyledAuthentication = styled(IntlAuthentication, authenticationStyles);
-export default StyledAuthentication;
+export default IntlAuthentication;
