@@ -4,6 +4,7 @@ import {
   getId,
   getTheme,
   IconButton,
+  IContextualMenuItem,
   IContextualMenuProps,
   registerIcons,
   TooltipHost
@@ -19,7 +20,7 @@ import { useAppSelector } from '../../../store';
 export const Help = () => {
   const { authToken } = useAppSelector((state) => state);
   const authenticated = authToken.token;
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<IContextualMenuItem[]>([]);
   const currentTheme = getTheme();
 
   registerIcons({
@@ -29,7 +30,7 @@ export const Help = () => {
   });
 
   useEffect(() => {
-    const menuItems: any = [
+    const menuItems: IContextualMenuItem[] = [
       {
         key: 'report-issue',
         text: translateMessage('Report an Issue'),
@@ -38,7 +39,9 @@ export const Help = () => {
         iconProps: {
           iconName: 'ReportWarning'
         },
-        onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.REPORT_AN_ISSUE_LINK)
+        onClick: (e) =>
+          telemetry.trackLinkClickEvent((e!.currentTarget as HTMLAnchorElement).href,
+            componentNames.REPORT_AN_ISSUE_LINK)
       },
       { key: 'divider_1', itemType: ContextualMenuItemType.Divider },
       {
@@ -49,7 +52,9 @@ export const Help = () => {
         iconProps: {
           iconName: 'TextDocument'
         },
-        onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GE_DOCUMENTATION_LINK)
+        onClick: (e) =>
+          telemetry.trackLinkClickEvent((e!.currentTarget as HTMLAnchorElement).href,
+            componentNames.GE_DOCUMENTATION_LINK)
       },
       {
         key: 'graph-documentation',
@@ -59,9 +64,9 @@ export const Help = () => {
         iconProps: {
           iconName: 'Documentation'
         },
-        onClick: (e: any) => telemetry.trackLinkClickEvent(
-          e.currentTarget.href,
-          componentNames.GRAPH_DOCUMENTATION_LINK)
+        onClick: (e) =>
+          telemetry.trackLinkClickEvent((e!.currentTarget as HTMLAnchorElement).href,
+            componentNames.GRAPH_DOCUMENTATION_LINK)
       },
       {
         key: 'github',
@@ -77,7 +82,9 @@ export const Help = () => {
             }
           }
         },
-        onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GITHUB_LINK)
+        onClick: (e) =>
+          telemetry.trackLinkClickEvent((e!.currentTarget as HTMLAnchorElement).href,
+            componentNames.GITHUB_LINK)
       }
     ];
     setItems(menuItems);
@@ -102,19 +109,19 @@ export const Help = () => {
     calloutProps: {
       style: calloutStyles
     },
-    styles:{container: {border: '1px solid' + currentTheme.palette.neutralTertiary}}
+    styles: { container: { border: '1px solid' + currentTheme.palette.neutralTertiary } }
   };
 
   return (
     <div style={helpContainerStyles}>
       <TooltipHost
         content={
-          <div style={{padding:'3px'}}>
+          <div style={{ padding: '3px' }}>
             {translateMessage('Help')}
           </div>}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}
-        styles={ tooltipStyles }
+        styles={tooltipStyles}
       >
         <IconButton
           ariaLabel={translateMessage('Help')}

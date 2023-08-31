@@ -1,6 +1,6 @@
-import { ChoiceGroup, DefaultButton, DialogFooter } from '@fluentui/react';
-
+import { ChoiceGroup, DefaultButton, DialogFooter, IChoiceGroupOption } from '@fluentui/react';
 import { useDispatch } from 'react-redux';
+
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { loadGETheme } from '../../../../themes';
@@ -13,13 +13,13 @@ const ThemeChooser: React.FC<PopupsComponent<null>> = (props) => {
   const dispatch: AppDispatch = useDispatch();
   const { theme: appTheme } = useAppSelector((state) => state);
 
-  const handleChangeTheme = (selectedTheme: any) => {
-    const newTheme: string = selectedTheme.key;
+  const handleChangeTheme = (selectedTheme?: IChoiceGroupOption) => {
+    const newTheme: string = selectedTheme!.key;
     dispatch(changeTheme(newTheme));
     loadGETheme(newTheme);
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.SELECT_THEME_BUTTON,
-      SelectedTheme: selectedTheme.key.replace('-', ' ').toSentenceCase()
+      SelectedTheme: selectedTheme!.key.replace('-', ' ').toSentenceCase()
     });
   };
 

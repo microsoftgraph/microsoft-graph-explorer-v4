@@ -1,6 +1,6 @@
 import {
   DirectionalHint, getId,
-  getTheme, IconButton, IContextualMenuProps, TooltipHost
+  getTheme, IconButton, IContextualMenuItem, IContextualMenuProps, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 
@@ -16,12 +16,12 @@ import { mainHeaderStyles } from '../MainHeader.styles';
 export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   const { authToken } = useAppSelector((state) => state);
   const authenticated = authToken.token;
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<IContextualMenuItem[]>([]);
   const currentTheme = getTheme();
   const { show: showThemeChooser } = usePopups('theme-chooser', 'dialog');
 
   useEffect(() => {
-    const menuItems: any = [
+    const menuItems: IContextualMenuItem[] = [
       {
         key: 'change-theme',
         text: translateMessage('Change theme'),
