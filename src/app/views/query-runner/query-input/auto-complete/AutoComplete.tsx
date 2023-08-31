@@ -1,4 +1,4 @@
-import { getTheme, ITextFieldProps, KeyCodes, Text, TextField } from '@fluentui/react';
+import { getTheme, ITextFieldProps, KeyCodes, mergeStyles, Text, TextField } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -252,10 +252,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   }
 
   const currentTheme = getTheme();
-  const {
-    input: autoInput
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  }: any = queryInputStyles(currentTheme).autoComplete;
+  const autoInput = mergeStyles(queryInputStyles(currentTheme).autoComplete);
 
   const handleRenderDescription = (properties?: ITextFieldProps): JSX.Element | null => {
     if (!shouldShowSuggestions && !autoCompletePending && properties?.description) {
