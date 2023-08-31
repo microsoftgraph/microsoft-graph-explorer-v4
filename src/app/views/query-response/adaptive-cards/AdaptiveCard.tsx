@@ -1,5 +1,6 @@
 import {
   FontSizes, getTheme, IStyle, ITheme, Label, Link,
+  mergeStyles,
   MessageBar, MessageBarType, Pivot, PivotItem, styled
 } from '@fluentui/react';
 import * as AdaptiveCardsAPI from 'adaptivecards';
@@ -12,14 +13,16 @@ import { componentNames, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
-import { classNames } from '../../classnames';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
+import {
+  convertVhToPx, getResponseEditorHeight,
+  getResponseHeight
+} from '../../common/dimensions/dimensions-adjustment';
 import { CopyButton } from '../../common/lazy-loader/component-registry';
-import { convertVhToPx, getResponseEditorHeight,
-  getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { queryResponseStyles } from './../queryResponse.styles';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const AdaptiveCard = (props: any) => {
   let adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null = new AdaptiveCardsAPI.AdaptiveCard();
   const dispatch: AppDispatch = useDispatch();
@@ -29,9 +32,11 @@ const AdaptiveCard = (props: any) => {
     sampleQuery, queryRunnerStatus: queryStatus, adaptiveCard: card, theme } = useAppSelector((state) => state);
   const { data, pending } = card;
 
-  const classes = classNames(props);
   const currentTheme: ITheme = getTheme();
   const textStyle = queryResponseStyles(currentTheme).queryResponseText.root as IStyle;
+  const emptyStateLabelClass = mergeStyles(queryResponseStyles(currentTheme).emptyStateLabel);
+  const cardClass = mergeStyles(queryResponseStyles(currentTheme).card);
+  const copyIconClass = mergeStyles(queryResponseStyles(currentTheme).copyIcon);
 
   const defaultHeight = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 220);
   const monacoHeight = getResponseEditorHeight(190);
@@ -68,7 +73,7 @@ const AdaptiveCard = (props: any) => {
 
   if (body && pending) {
     return (
-      <Label className={classes.emptyStateLabel}>
+      <Label className={emptyStateLabelClass}>
         <FormattedMessage id='Fetching Adaptive Card' />
         ...
       </Label>
@@ -132,7 +137,7 @@ const AdaptiveCard = (props: any) => {
             itemKey='card'
             ariaLabel={translateMessage('card')}
             headerText={translateMessage('card')}
-            className={classes.card}
+            className={cardClass}
             headerButtonProps={{
               'aria-controls': 'card-tab'
             }}
@@ -179,7 +184,7 @@ const AdaptiveCard = (props: any) => {
                 </Link>
               </MessageBar>
               <CopyButton
-                className={classes.copyIcon}
+                className={copyIconClass}
                 handleOnClick={handleCopy}
                 isIconButton={true}
                 style={{ float: 'right', zIndex: 1 }}
@@ -193,8 +198,10 @@ const AdaptiveCard = (props: any) => {
           </PivotItem>
         </Pivot>
       );
-    } catch (err: any) {
-      return <div style={{ color: 'red' }}>{err.message}</div>;
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        return <div style={{ color: 'red' }}>{err.message}</div>;
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 import {
-  ActionButton, Callout, FontSizes, getTheme, IPersonaProps, IPersonaSharedProps, mergeStyleSets,
-  Persona, PersonaSize, Spinner, SpinnerSize, Stack, styled
+  ActionButton, Callout, FontSizes, getTheme, IPersonaProps, IPersonaSharedProps, mergeStyles, mergeStyleSets,
+  Persona, PersonaSize, Spinner, SpinnerSize, Stack
 } from '@fluentui/react';
 import { useId } from '@fluentui/react-hooks';
 import { useEffect, useState } from 'react';
@@ -12,9 +12,12 @@ import { signOut } from '../../../services/actions/auth-action-creators';
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
 import { usePopups } from '../../../services/hooks';
 import { translateMessage } from '../../../utils/translate-messages';
-import { classNames } from '../../classnames';
-import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
+
+interface ProfileProps {
+  signInWithOther: () => void;
+}
+
 const getInitials = (name: string) => {
   let initials = '';
   if (name && name !== '') {
@@ -31,7 +34,7 @@ const getInitials = (name: string) => {
   return initials;
 };
 
-const Profile = (props: any) => {
+const Profile = (props: ProfileProps) => {
   const dispatch: AppDispatch = useDispatch();
   const { profile, authToken, graphExplorerMode } = useAppSelector((state) => state);
 
@@ -46,13 +49,13 @@ const Profile = (props: any) => {
   const theme = getTheme();
   const { personaStyleToken, profileSpinnerStyles, permissionsLabelStyles, personaButtonStyles,
     profileContainerStyles } = profileStyles(theme);
+  const profileClass = mergeStyles(profileContainerStyles);
 
   useEffect(() => {
     if (authenticated) {
       dispatch(getProfileInfo());
     }
   }, [authenticated]);
-
 
   if (!profile) {
     return (<Spinner size={SpinnerSize.medium} styles={profileSpinnerStyles} />);
@@ -82,10 +85,11 @@ const Profile = (props: any) => {
     })
   };
 
-  const classes = classNames(props);
+  const onRenderSecondaryText = (prop: IPersonaProps | undefined): JSX.Element | null => {
+    if (!prop) {
+      return null;
+    }
 
-
-  const onRenderSecondaryText = (prop: IPersonaProps): JSX.Element => {
     return (
       <span style={{ fontSize: FontSizes.small }}>
         {prop.secondaryText}
@@ -93,7 +97,7 @@ const Profile = (props: any) => {
     );
   }
 
-  const showProfileComponent = (userPersona: any): React.ReactNode => {
+  const showProfileComponent = (userPersona: IPersonaSharedProps): React.ReactNode => {
 
     const smallPersona = <Persona
       {...userPersona}
@@ -162,7 +166,7 @@ const Profile = (props: any) => {
   }
 
   return (
-    <div className={classes.profile} style={profileContainerStyles}>
+    <div className={profileClass}>
       {showProfileComponent(persona)}
     </div>
   );
@@ -175,7 +179,4 @@ const styles = mergeStyleSets({
   }
 });
 
-// @ts-ignore
-const styledProfile = styled(Profile, authenticationStyles);
-// @ts-ignore
-export default styledProfile;
+export default Profile;
