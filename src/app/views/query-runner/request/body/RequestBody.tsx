@@ -4,7 +4,11 @@ import { useAppSelector } from '../../../../../store';
 import { Monaco } from '../../../common';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
-const RequestBody = ({ handleOnEditorChange }: any) => {
+interface RequestBodyProps {
+  handleOnEditorChange: (value?: string) => void;
+}
+
+const RequestBody = ({ handleOnEditorChange }: RequestBodyProps) => {
   const { dimensions: { request: { height } }, sampleQuery } = useAppSelector((state) => state);
 
   return (

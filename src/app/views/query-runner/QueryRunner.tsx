@@ -1,6 +1,5 @@
 import { IDropdownOption, MessageBarType } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../store';
@@ -17,14 +16,18 @@ import { QueryInput } from './query-input';
 import './query-runner.scss';
 import Request from './request/Request';
 
-const QueryRunner = (props: any) => {
+interface QueryRunnerProps {
+  onSelectVerb: (verb: string) => void;
+}
+
+const QueryRunner = ({ onSelectVerb }: QueryRunnerProps) => {
   const dispatch: AppDispatch = useDispatch();
   const { sampleQuery } = useAppSelector((state) => state);
 
   const [sampleBody, setSampleBody] = useState('');
 
   useEffect(() => {
-    if(sampleQuery.selectedVerb !== 'GET') {
+    if (sampleQuery.selectedVerb !== 'GET') {
       const query = { ...sampleQuery };
       query.sampleBody = sampleBody;
       dispatch(setSampleQuery(query));
@@ -38,7 +41,7 @@ const QueryRunner = (props: any) => {
       dispatch(setSampleQuery(query));
 
       // Sets selected verb in App Component
-      props.onSelectVerb(method.text);
+      onSelectVerb(method.text);
     }
   };
 
@@ -136,6 +139,4 @@ const QueryRunner = (props: any) => {
   );
 }
 
-// @ts-ignore
-const IntlQueryRunner = injectIntl(QueryRunner);
-export default IntlQueryRunner;
+export default QueryRunner;

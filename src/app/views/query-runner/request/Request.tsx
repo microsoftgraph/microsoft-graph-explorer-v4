@@ -7,18 +7,25 @@ import { Resizable } from 're-resizable';
 import { CSSProperties, useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
+import { Direction } from 're-resizable/lib/resizer';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
+import { IQuery } from '../../../../types/query-runner';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
+import { Auth, Permissions, RequestHeaders } from '../../common/lazy-loader/component-registry';
 import { RequestBody } from './body';
 import './request.scss';
-import { Permissions, Auth, RequestHeaders } from '../../common/lazy-loader/component-registry';
 
-const Request = (props: any) => {
+interface RequestProps {
+  handleOnEditorChange: (value?: string) => void;
+  sampleQuery: IQuery
+}
+
+const Request = ({ handleOnEditorChange, sampleQuery }: RequestProps) => {
   const dispatch: AppDispatch = useDispatch();
   const [selectedPivot, setSelectedPivot] = useState('request-body');
   const { graphExplorerMode: mode, dimensions, sidebarProperties } = useAppSelector((state) => state);
@@ -26,16 +33,11 @@ const Request = (props: any) => {
   const minHeight = 60;
   const maxHeight = 800;
 
-  const {
-    handleOnEditorChange,
-    intl: { messages }
-  }: any = props;
-
   useEffect(() => {
-    if(sidebarProperties && sidebarProperties.mobileScreen){
+    if (sidebarProperties && sidebarProperties.mobileScreen) {
       window.addEventListener('resize', resizeHandler);
     }
-    else{
+    else {
       window.removeEventListener('resize', resizeHandler);
     }
   }, [sidebarProperties.mobileScreen])
@@ -55,8 +57,8 @@ const Request = (props: any) => {
         key='request-body'
         itemIcon='Send'
         itemKey='request-body' // To be used to construct component name for telemetry data
-        ariaLabel={messages['request body']}
-        headerText={messages['request body']}
+        ariaLabel={translateMessage('request body')}
+        headerText={translateMessage('request body')}
         headerButtonProps={{
           'aria-controls': 'request-body-tab'
         }}
@@ -69,8 +71,8 @@ const Request = (props: any) => {
         key='request-headers'
         itemIcon='FileComment'
         itemKey='request-headers'
-        ariaLabel={messages['request header']}
-        headerText={messages['request header']}
+        ariaLabel={translateMessage('request header')}
+        headerText={translateMessage('request header')}
         headerButtonProps={{
           'aria-controls': 'request-header-tab'
         }}
@@ -84,7 +86,7 @@ const Request = (props: any) => {
         itemIcon='AzureKeyVault'
         itemKey='modify-permissions'
         ariaLabel={translateMessage('modify permissions')}
-        headerText={messages['modify permissions']}
+        headerText={translateMessage('modify permissions')}
         headerButtonProps={{
           'aria-controls': 'permission-tab'
         }}
@@ -128,7 +130,6 @@ const Request = (props: any) => {
   const onPivotItemClick = (item?: PivotItem) => {
     if (!item) { return; }
     const tabKey = item.props.itemKey;
-    const { sampleQuery }: any = props;
     if (tabKey) {
       telemetry.trackTabClickEvent(tabKey, sampleQuery);
     }
@@ -151,11 +152,18 @@ const Request = (props: any) => {
     const resizable = document.getElementsByClassName('request-resizable');
     if (resizable && resizable.length > 0) {
       const resizableElement = resizable[0] as HTMLElement;
-      if(resizableElement && resizableElement.style && resizableElement.style.height){
+      if (resizableElement && resizableElement.style && resizableElement.style.height) {
         resizableElement.style.height = '';
       }
     }
   }
+
+  const handleResize = (event_: MouseEvent | TouchEvent, direction_: Direction,
+    elementRef: HTMLElement): void => {
+    if (elementRef && elementRef.style && elementRef.style.height) {
+      setRequestAndResponseHeights(elementRef.style.height);
+    }
+  };
 
   return (
     <>
@@ -163,11 +171,7 @@ const Request = (props: any) => {
         style={{
           border: 'solid 1px #ddd'
         }}
-        onResize={(e: any, direction: any, ref: any) => {
-          if (ref && ref.style && ref.style.height) {
-            setRequestAndResponseHeights(ref.style.height);
-          }
-        }}
+        onResize={handleResize}
         maxHeight={maxHeight}
         minHeight={minHeight}
         bounds={'window'}
@@ -187,7 +191,7 @@ const Request = (props: any) => {
             onLinkClick={handlePivotItemClick}
             className='pivot-request'
             selectedKey={pivot}
-            styles={{ text: { fontSize: FontSizes.size14 }}}
+            styles={{ text: { fontSize: FontSizes.size14 } }}
           >
             {requestPivotItems}
           </Pivot>
@@ -197,5 +201,4 @@ const Request = (props: any) => {
   );
 }
 
-const IntlRequest = injectIntl(Request);
-export default IntlRequest;
+export default Request;
