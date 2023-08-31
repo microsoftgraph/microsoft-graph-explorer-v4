@@ -9,6 +9,7 @@ import { setSampleQuery } from '../../services/actions/query-input-action-creato
 import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
 import { GRAPH_URL } from '../../services/graph-constants';
 import {
+  StringObject,
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
@@ -18,7 +19,7 @@ const StatusMessages = () => {
   const { queryRunnerStatus, sampleQuery } =
     useAppSelector((state) => state);
 
-  function displayStatusMessage(message: string, urls: any) {
+  function displayStatusMessage(message: string, urls: StringObject) {
     const { matches, parts } = getMatchesAndParts(message);
 
     if (!parts || !matches || !urls || Object.keys(urls).length === 0) {
@@ -54,7 +55,7 @@ const StatusMessages = () => {
 
   if (queryRunnerStatus) {
     const { messageType, statusText, status, duration, hint } = queryRunnerStatus;
-    let urls: any = {};
+    let urls: StringObject = {};
     let message = status.toString();
     const extractedUrls = extractUrl(status.toString());
     if (extractedUrls) {

@@ -9,7 +9,11 @@ export function replaceLinks(message: string): string {
   return message;
 }
 
-export function convertArrayToObject(array: any[]): object {
+export interface StringObject  {
+  [key: string]: string;
+}
+
+export function convertArrayToObject(array: string[]): StringObject {
   const initialValue = {};
   return array.reduce((obj, item, index) => {
     return {

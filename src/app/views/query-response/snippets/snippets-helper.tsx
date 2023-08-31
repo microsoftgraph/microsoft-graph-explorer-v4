@@ -12,8 +12,10 @@ import { componentNames, telemetry } from '../../../../telemetry';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { translateMessage } from '../../../utils/translate-messages';
 import { CopyButton } from '../../common/lazy-loader/component-registry';
-import { convertVhToPx, getResponseEditorHeight,
-  getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
+import {
+  convertVhToPx, getResponseEditorHeight,
+  getResponseHeight
+} from '../../common/dimensions/dimensions-adjustment';
 import { getSnippetStyles } from './Snippets.styles';
 
 interface ISnippetProps {
@@ -91,21 +93,21 @@ function Snippet(props: ISnippetProps) {
     return (language.trim() === 'powershell' || language.trim() === 'python') ? '#' : '//';
   }
 
-  const trackLinkClickedEvent = (link: string, e:any) => {
-    const isDocumentationLink : boolean = link.includes('doc')
+  const trackLinkClickedEvent = (link: string) => {
+    const isDocumentationLink: boolean = link.includes('doc')
     const componentName = getLanguageComponentName(isDocumentationLink, componentNames.CODE_SNIPPET_LANGUAGES);
-    telemetry.trackLinkClickEvent(e.currentTarget.href, componentName);
+    telemetry.trackLinkClickEvent(link, componentName);
   }
-  const getLanguageComponentName = (isDocumentationLink: boolean, snippetComponentNames: object) : string => {
+  const getLanguageComponentName = (isDocumentationLink: boolean, snippetComponentNames: object): string => {
     const snippetComponentEntries = Object.entries(snippetComponentNames);
     const snippetLanguageEntry = snippetComponentEntries.find(
       ([key]) => language.toLocaleLowerCase() === key.toLocaleLowerCase()
     );
     const componentName = isDocumentationLink ? snippetLanguageEntry?.[1].doc : snippetLanguageEntry?.[1].sdk;
-    return componentName || '' ;
+    return componentName || '';
   }
 
-  const addExtraSnippetInformation = () : JSX.Element => {
+  const addExtraSnippetInformation = (): JSX.Element => {
     const currentTheme: ITheme = getTheme();
     const snippetLinkStyles = getSnippetStyles(currentTheme);
     const snippetCommentStyles = getSnippetStyles(currentTheme).snippetComments;
@@ -115,7 +117,8 @@ function Snippet(props: ISnippetProps) {
         {setCommentSymbol()} {translateMessage('Leverage libraries')} {language} {translateMessage('Client library')}
 
         <Link href={sdkDownloadLink} underline styles={snippetLinkStyles}
-          onClick={(e) => trackLinkClickedEvent(sdkDownloadLink, e)} target={'_blank'} rel='noreferrer noopener'>
+          onClick={() =>
+            trackLinkClickedEvent(sdkDownloadLink)} target={'_blank'} rel='noreferrer noopener'>
           {sdkDownloadLink}
         </Link>
         <br />
@@ -123,7 +126,7 @@ function Snippet(props: ISnippetProps) {
         {setCommentSymbol()} {translateMessage('SDKs documentation')}
 
         <Link href={sdkDocLink} underline styles={snippetLinkStyles}
-          onClick={(e) => trackLinkClickedEvent(sdkDocLink, e)} target={'_blank'} rel='noreferrer noopener'>
+          onClick={() => trackLinkClickedEvent(sdkDocLink)} target={'_blank'} rel='noreferrer noopener'>
           {sdkDocLink}
         </Link>
       </div>
@@ -131,20 +134,20 @@ function Snippet(props: ISnippetProps) {
   }
 
   const displayError = (): JSX.Element | null => {
-    if((!loadingState && snippet) || (!loadingState && !snippetError)){
+    if ((!loadingState && snippet) || (!loadingState && !snippetError)) {
       return null;
     }
-    if(
+    if (
       (snippetError?.status && snippetError.status === 404) ||
       (snippetError?.status && snippetError.status === 400)
-    ){
-      return(
+    ) {
+      return (
         <Label style={{ padding: 10 }}>
           <FormattedMessage id='Snippet not available' />
         </Label>
       )
     }
-    else{
+    else {
       return (
         <>
           {!loadingState &&
