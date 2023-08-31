@@ -1,6 +1,8 @@
 import {
   Announced, DetailsList, DetailsListLayoutMode, getTheme, GroupHeader, IColumn,
-  IGroup, Label, SearchBox, SelectionMode, TooltipHost
+  IDetailsGroupDividerProps,
+  IDetailsHeaderProps,
+  IGroup, ITooltipHostProps, Label, SearchBox, SelectionMode, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -20,6 +22,10 @@ import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
 import { setConsentedStatus } from './util';
 
+interface PermissionListItem extends IPermission {
+  groupName: string;
+}
+
 const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const theme = getTheme();
   const dispatch: AppDispatch = useDispatch();
@@ -30,12 +36,12 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const tokenPresent = !!authToken.token;
   const loading = scopes.pending.isFullPermissions;
 
-  const [permissions, setPermissions] = useState<any[]>([]);
+  const [permissions, setPermissions] = useState<IPermission[]>([]);
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState(false);
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const permissionsList: any[] = [];
+  const permissionsList: PermissionListItem[] = [];
 
   const getPermissions = (): void => {
     dispatch(fetchScopes());
@@ -60,16 +66,19 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
   }
 
-  const renderDetailsHeader = (properties: any, defaultRender?: any): JSX.Element => {
-    return defaultRender({
-      ...properties,
-      onRenderColumnHeaderTooltip: (tooltipHostProps: any) => {
-        return (
-          <TooltipHost {...tooltipHostProps} styles={tooltipStyles} />
-        );
-      },
-      styles: detailsHeaderStyles
-    });
+  const renderDetailsHeader = (properties?: IDetailsHeaderProps, defaultRender?: Function): JSX.Element | null => {
+    if (defaultRender) {
+      return defaultRender({
+        ...properties,
+        onRenderColumnHeaderTooltip: (tooltipHostProps: ITooltipHostProps) => {
+          return (
+            <TooltipHost {...tooltipHostProps} styles={tooltipStyles} />
+          );
+        },
+        styles: detailsHeaderStyles
+      });
+    }
+    return null
   }
 
   useEffect(() => {
@@ -94,14 +103,14 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
   permissions.forEach((perm: IPermission) => {
-    const permission: any = { ...perm };
+    const permission = { ...perm } as PermissionListItem;
     const permissionValue = permission.value;
     const groupName = permissionValue.split('.')[0];
     permission.groupName = groupName;
     permissionsList.push(permission);
   });
 
-  const searchValueChanged = (event: any, value?: string): void => {
+  const searchValueChanged = (value?: string): void => {
     setSearchValue(value!);
     shouldGenerateGroups.current = true;
     setSearchStarted((search) => !search);
@@ -119,7 +128,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   };
 
 
-  const onRenderGroupHeader = (props: any): JSX.Element | null => {
+  const onRenderGroupHeader = (props?: IDetailsGroupDividerProps): JSX.Element | null => {
     if (props) {
       return (
         <GroupHeader  {...props} onRenderGroupHeaderCheckbox={hideCheckbox} styles={groupHeaderStyles}
@@ -146,7 +155,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
 
   const clearSearchBox = () => {
     setSearchValue('');
-    searchValueChanged({}, '');
+    searchValueChanged('');
   }
 
   return (
@@ -161,8 +170,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
           <hr />
           <SearchBox
             placeholder={translateMessage('Search permissions')}
-            onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
-              searchValueChanged(event, newValue)}
+            onChange={(e?: React.ChangeEvent<HTMLInputElement>, value?: string) => searchValueChanged(value)}
             styles={searchBoxStyles}
             onClear={() => clearSearchBox()}
             value={searchValue}
@@ -174,8 +182,8 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
             items={permissions}
             columns={getColumns('panel', tokenPresent)}
             groups={groups}
-            onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
-              return <PermissionItem column={column} index={index} item={item} />
+            onRenderItemColumn={(item?: IPermission, index?: number, column?: IColumn) => {
+              return <PermissionItem column={column} index={index!} item={item!} />
             }}
             selectionMode={SelectionMode.multiple}
             layoutMode={DetailsListLayoutMode.justified}
@@ -188,7 +196,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
             ariaLabelForSelectAllCheckbox={translateMessage('Toggle selection for all items') ||
               'Toggle selection for all items'}
             checkButtonAriaLabel={translateMessage('Row checkbox') || 'Row checkbox'}
-            onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)}
+            onRenderDetailsHeader={renderDetailsHeader}
             onRenderCheckbox={() => hideCheckbox()}
           />
         </>}
@@ -205,9 +213,9 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
           <FormattedMessage id='permissions not found' />
         </Label> :
         !loading && permissions && permissions.length === 0 && scopes.error && scopes.error.error &&
-          <Label>
-            <FormattedMessage id='Fetching permissions failing' />
-          </Label>
+        <Label>
+          <FormattedMessage id='Fetching permissions failing' />
+        </Label>
       }
     </div>
   );

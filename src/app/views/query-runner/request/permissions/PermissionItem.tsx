@@ -1,6 +1,6 @@
 import {
   DefaultButton, FontSizes, IColumn, IIconProps, Label,
-  PrimaryButton, TooltipHost, getId, getTheme
+  PrimaryButton, TooltipHost, getId, getTheme, mergeStyles
 } from '@fluentui/react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
@@ -17,7 +17,9 @@ import { PermissionConsentType } from './ConsentType';
 import { permissionStyles } from './Permission.styles';
 
 interface PermissionItemProps {
-  item: any; index: any; column: IColumn | undefined;
+  item: IPermission;
+  index: number;
+  column?: IColumn;
 }
 
 const buttonIcon: IIconProps = {
@@ -37,7 +39,8 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   const { item, column } = props;
   const consented = !!item.consented;
 
-  const { adminLabelStyles, consentButtonStyles } = permissionStyles(theme);
+  const consentButtonStyles = mergeStyles(permissionStyles(theme));
+  const adminLabelStyles = mergeStyles(permissionStyles(theme));
 
   const handleConsent = async (permission: IPermission): Promise<void> => {
     const consentScopes = [permission.value];
@@ -45,7 +48,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   };
 
   const getAllPrincipalPermissions = (tenantWidePermissionsGrant: IPermissionGrant[]): string[] => {
-    const allPrincipalPermissions = tenantWidePermissionsGrant.find((permission: any) =>
+    const allPrincipalPermissions = tenantWidePermissionsGrant.find((permission: IPermissionGrant) =>
       permission.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
     return allPrincipalPermissions ? allPrincipalPermissions.scope.split(' ') : [];
   }
@@ -84,7 +87,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
     if (consented) {
       if (userHasRequiredPermissions()) {
         return <PrimaryButton onClick={() => handleRevoke(item)}
-          styles={consentButtonStyles}
+          className={consentButtonStyles}
         >
           <FormattedMessage id='Revoke' />
         </PrimaryButton>
@@ -98,24 +101,24 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
           iconProps={buttonIcon}
           allowDisabledFocus
           disabled={true}
-          styles={consentButtonStyles}>
+          className={consentButtonStyles}>
           {translateMessage('Revoke')}
         </DefaultButton>
       </TooltipHost>
     }
     return <PrimaryButton onClick={() => handleConsent(item)}
-      styles={consentButtonStyles}
+      className={consentButtonStyles}
     >
       <FormattedMessage id='Consent' />
     </PrimaryButton>;
   }
 
   if (column) {
-    const content = item[column.fieldName as keyof any] as string;
+    const content = item[column.fieldName as keyof IPermission] as string;
     switch (column.key) {
 
       case 'isAdmin':
-        return <div style={adminLabelStyles}>
+        return <div className={adminLabelStyles}>
           <Label>{item.isAdmin ? <FormattedMessage id='Yes' /> : <FormattedMessage id='No' />}</Label>
         </div>;
 

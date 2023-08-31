@@ -1,5 +1,7 @@
 import {
   DetailsList, DetailsListLayoutMode, getTheme, IColumn,
+  IDetailsHeaderProps,
+  ITooltipHostProps,
   Label, Link, SelectionMode, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
@@ -12,11 +14,11 @@ import { fetchAllPrincipalGrants, fetchScopes } from '../../../../services/actio
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
+import { getColumns } from './columns';
 import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
-import { getColumns } from './columns';
 import { setConsentedStatus } from './util';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
 export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
   const dispatch: AppDispatch = useDispatch();
@@ -31,7 +33,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const [permissionsError, setPermissionsError] = useState(error);
 
   useEffect(() => {
-    if(error?.error && error?.error?.url.contains('permissions')){
+    if (error?.error && error?.error?.url.contains('permissions')) {
       setPermissionsError(error?.error);
     }
   }, [error])
@@ -44,7 +46,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const classes = classNames(classProps);
   const theme = getTheme();
   const { tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
-  const tabHeight =  convertVhToPx(dimensions.request.height, 110);
+  const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
@@ -88,16 +90,18 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
     }
   }, []);
 
-  const renderDetailsHeader = (props: any, defaultRender?: any): JSX.Element => {
-    return defaultRender({
-      ...props,
-      onRenderColumnHeaderTooltip: (tooltipHostProps: any) => {
-        return (
-          <TooltipHost {...tooltipHostProps} styles={tooltipStyles} />
-        );
-      },
-      styles: detailsHeaderStyles
-    });
+  const renderDetailsHeader = (properties?: IDetailsHeaderProps, defaultRender?: Function): JSX.Element | null => {
+    if (defaultRender) {
+      return defaultRender({
+        ...properties,
+        onRenderColumnHeaderTooltip: (tooltipHostProps: ITooltipHostProps) => {
+          return (
+            <TooltipHost {...tooltipHostProps} styles={tooltipStyles} />
+          );
+        },
+        styles: detailsHeaderStyles
+      });
+    } return null;
   }
 
   if (loading.isSpecificPermissions) {
@@ -126,7 +130,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
       </Label>)
   }
 
-  const displayErrorFetchingPermissionsMessage = () : JSX.Element => {
+  const displayErrorFetchingPermissionsMessage = (): JSX.Element => {
     return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='Fetching permissions failing' />
     </Label>);
@@ -169,12 +173,12 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
           } : { root: { height: tabHeight, overflowY: 'auto' } }}
           items={permissions}
           columns={getColumns('tab', tokenPresent)}
-          onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
-            return <PermissionItem column={column} index={index} item={item} />
+          onRenderItemColumn={(item?: IPermission, index?: number, column?: IColumn) => {
+            return <PermissionItem column={column} index={index!} item={item!} />
           }}
           selectionMode={SelectionMode.none}
           layoutMode={DetailsListLayoutMode.justified}
-          onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
+          onRenderDetailsHeader={renderDetailsHeader} />
       </div>
     </div>
   );
