@@ -93,8 +93,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     return !!element && getTextWidth(input) > element.scrollWidth;
   }
 
-  const selectSuggestion = (e: React.ChangeEvent<HTMLInputElement>) => {
-    appendSuggestionToUrl(e.currentTarget.innerText);
+  const selectSuggestion = (suggestion: string) => {
+    appendSuggestionToUrl(suggestion);
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -294,7 +294,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
         <SuggestionsList
           filteredSuggestions={suggestions}
           activeSuggestion={activeSuggestion}
-          onClick={(e: React.ChangeEvent<HTMLInputElement>) => selectSuggestion(e)} />}
+          onSuggestionSelected={selectSuggestion} />}
     </div>
   );
 }
