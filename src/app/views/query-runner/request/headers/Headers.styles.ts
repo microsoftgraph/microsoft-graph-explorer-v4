@@ -1,6 +1,11 @@
-import { FontSizes } from '@fluentui/react';
+import { FontSizes, IStyle } from '@fluentui/react';
 
 export const headerStyles = () => {
+  const rowContainer: IStyle = {
+    fontSize: FontSizes.medium,
+    position: 'relative'
+  };
+
   return {
     container: {
       textAlign: 'center',
@@ -11,10 +16,7 @@ export const headerStyles = () => {
     itemContent: {
       marginTop: '2.5%'
     },
-    rowContainer: {
-      fontSize: FontSizes.medium,
-      position: 'relative'
-    },
+    rowContainer,
     detailsRow: {
       display: 'flex',
       justifyContent: 'center',

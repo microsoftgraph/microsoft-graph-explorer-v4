@@ -1,13 +1,8 @@
-import {
-  FontSizes,
-  Pivot,
-  PivotItem
-} from '@fluentui/react';
+import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
 import { Resizable } from 're-resizable';
-import { CSSProperties, useEffect, useState } from 'react';
-import { injectIntl } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { Direction } from 're-resizable/lib/resizer';
+import { CSSProperties, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { telemetry } from '../../../../telemetry';

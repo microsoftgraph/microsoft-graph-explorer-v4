@@ -1,8 +1,16 @@
-import { DetailsList, DetailsRow, IColumn, IconButton, SelectionMode } from '@fluentui/react';
+import {
+  DetailsList, DetailsRow, IColumn, IDetailsRowProps,
+  IconButton, SelectionMode, mergeStyles
+} from '@fluentui/react';
+
+import { Header } from '../../../../../types/query-runner';
 import { IHeadersListControl } from '../../../../../types/request';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { headerStyles } from './Headers.styles';
 
+interface HeaderListItem extends Header {
+  button: string;
+}
 
 const HeadersList = ({
   handleOnHeaderDelete,
@@ -10,11 +18,11 @@ const HeadersList = ({
   handleOnHeaderEdit
 }: IHeadersListControl) => {
 
-  const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
-    const itemContent: any = headerStyles().itemContent;
+  const renderItemColumn = (item: HeaderListItem, index_?: number, column?: IColumn) => {
+    const itemContent = mergeStyles(headerStyles().itemContent);
     if (column) {
-      const fieldContent = item[column.fieldName as keyof any] as string;
-      if(column.key === 'button') {
+      const fieldContent = item[column.fieldName as keyof HeaderListItem] as string;
+      if (column.key === 'button') {
         return <div>
           <IconButton
             iconProps={{ iconName: 'Delete' }}
@@ -22,7 +30,7 @@ const HeadersList = ({
             ariaLabel={translateMessage('Remove request header')}
             onClick={() => handleOnHeaderDelete(item)}
           />
-          <span style={{fontSize: 'large', position: 'relative', bottom: '3px'}}>|</span>
+          <span style={{ fontSize: 'large', position: 'relative', bottom: '3px' }}>|</span>
           <IconButton
             iconProps={{ iconName: 'Edit' }}
             title={translateMessage('Edit request header')}
@@ -31,22 +39,24 @@ const HeadersList = ({
           />
         </div>;
       }
-      else{
-        return <div style={itemContent}>{fieldContent}</div>;
+      else {
+        return <div className={itemContent}>{fieldContent}</div>;
       }
     }
   };
 
-  const renderRow = (props: any): any => {
-    const { detailsRow, rowContainer }: any = headerStyles();
+  const renderRow = (props?: IDetailsRowProps): JSX.Element | null => {
+    const detailsRow = mergeStyles(headerStyles().detailsRow);
+    const rowContainer = mergeStyles(headerStyles().rowContainer);
 
     if (props) {
       return (
-        <div style={rowContainer}>
-          <DetailsRow {...props} style={detailsRow} />
+        <div className={rowContainer}>
+          <DetailsRow {...props} className={detailsRow} />
         </div>
       );
     }
+    return null
   };
 
   const columns = [
@@ -75,7 +85,7 @@ const HeadersList = ({
       onRenderItemColumn={renderItemColumn}
       onRenderRow={renderRow}
       selectionMode={SelectionMode.none}
-      styles={{root: {height: '100%'}}}
+      styles={{ root: { height: '100%' } }}
     />
   );
 };

@@ -2,11 +2,15 @@ import { IDimensions } from './dimensions';
 import { Mode } from './enums';
 import { Header, IQuery } from './query-runner';
 
+export interface IHeader {
+  name: string;
+  value: string;
+}
+
 export interface IHeadersListControl {
-  handleOnHeaderDelete: Function;
+  handleOnHeaderDelete: (headerItem: IHeader) => void;
   headers?: Header[];
-  messages: any;
-  handleOnHeaderEdit: Function;
+  handleOnHeaderEdit: (headerItem: IHeader) => void;
 }
 
 export interface IRequestHeadersProps {
