@@ -1,7 +1,26 @@
-import { FontSizes, FontWeights, ITheme } from '@fluentui/react';
+import { FontSizes, FontWeights, IStyle, ITheme } from '@fluentui/react';
 
 export const sidebarStyles = (theme: ITheme) => {
   const height = '85dvh'
+  const groupHeader: IStyle = {
+    fontSize: FontSizes.medium,
+    position: 'relative'
+  };
+
+  const queryList: IStyle = {
+    marginBottom: theme.spacing.s1,
+    cursor: 'pointer',
+    height,
+    overflow: 'hidden',
+    fontSize: FontSizes.medium,
+    background: 'inherit',
+    selectors: {
+      ':hover': {
+        overflow: 'scroll'
+      }
+    }
+  };
+
   return {
     searchBox: {
       marginTop: theme.spacing.s1
@@ -13,19 +32,7 @@ export const sidebarStyles = (theme: ITheme) => {
       justifyContent: 'center',
       alignItems: 'center'
     },
-    queryList: {
-      marginBottom: theme.spacing.s1,
-      cursor: 'pointer',
-      height,
-      overflow: 'hidden',
-      fontSize: FontSizes.medium,
-      background: 'inherit',
-      selectors: {
-        ':hover': {
-          overflow: 'scroll'
-        }
-      }
-    },
+    queryList,
     pullLeft: {
       float: 'left'
     },
@@ -35,10 +42,7 @@ export const sidebarStyles = (theme: ITheme) => {
 
     /* Group Headers */
 
-    groupHeader: {
-      fontSize: FontSizes.medium,
-      position: 'relative'
-    },
+    groupHeader,
     groupHeaderRow: {
       lineHeight: '50px',
       fontSize: FontSizes.medium,

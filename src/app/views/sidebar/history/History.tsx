@@ -2,11 +2,13 @@ import {
   Announced,
   ContextualMenuItemType, DefaultButton, DetailsList, DetailsRow, Dialog,
   DialogFooter, DialogType, getId, getTheme, IColumn, IconButton,
+  IDetailsGroupDividerProps,
+  IDetailsRowProps,
   IGroup,
-  Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
+  Label, mergeStyles, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
@@ -28,7 +30,6 @@ import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
-import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarEntry, exportQuery, generateHar } from './har-utils';
@@ -45,25 +46,28 @@ const columns = [
   { key: 'url', name: '', fieldName: 'url', minWidth: 100, maxWidth: 200 }
 ];
 
-const formatDate = (date: any) => {
+const formatDate = (date: Date): string => {
   const year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  month = (month < 10 ? '0' : '') + month;
-  let day = date.getDate();
-  day = (day < 10 ? '0' : '') + day;
-  return `${year}-${month}-${day}`;
+
+  const month = date.getMonth() + 1;
+  const monthVal = (month < 10 ? '0' : '') + month;
+
+  const day = date.getDate();
+  const dayVal = (day < 10 ? '0' : '') + day;
+
+  return `${year}-${monthVal}-${dayVal}`;
 };
 
-const sortItems = (content: History[]) => {
+const sortItems = (content: IHistoryItem[]) => {
   content.sort(dynamicSort('createdAt', SortOrder.DESC));
-  content.forEach((value: any, index: number) => {
+  content.forEach((value: IHistoryItem, index: number) => {
     value.index = index;
   });
   return content;
 }
 
 const getItems = (content: IHistoryItem[]) => {
-  const list: History[] = [];
+  const list: IHistoryItem[] = [];
   const olderText = translateMessage('older');
   const todayText = translateMessage('today');
   const yesterdayText = translateMessage('yesterday');
@@ -74,7 +78,7 @@ const getItems = (content: IHistoryItem[]) => {
   yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
   const yesterday = formatDate(yesterdaysDate);
 
-  content.forEach((element: any) => {
+  content.forEach((element: IHistoryItem) => {
     if (element.createdAt.includes(today)) {
       date = todayText;
     } else if (element.createdAt.includes(yesterday)) {
@@ -86,7 +90,7 @@ const getItems = (content: IHistoryItem[]) => {
   return sortItems(list);
 }
 
-const History = (props: any) => {
+const History = () => {
   const dispatch: AppDispatch = useDispatch();
   const { history } = useAppSelector((state) => state);
   const [historyItems, setHistoryItems] = useState<IHistoryItem[]>(history);
@@ -94,6 +98,7 @@ const History = (props: any) => {
   const [category, setCategory] = useState('');
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState(false);
+  const theme = getTheme();
 
   const shouldGenerateGroups = useRef(true);
 
@@ -108,7 +113,20 @@ const History = (props: any) => {
     }
   }, [historyItems, searchStarted])
 
-  const classes = classNames(props);
+  const groupHeaderClass = mergeStyles(sidebarStyles(theme).groupHeader);
+  const queryRowClass = mergeStyles(sidebarStyles(theme).queryRow);
+  const badgeClass = mergeStyles(sidebarStyles(theme).badge);
+  const docLinkClass = mergeStyles(sidebarStyles(theme).docLink);
+  const queryContentClass = mergeStyles(sidebarStyles(theme).queryContent);
+  const groupHeaderRowClass = mergeStyles(sidebarStyles(theme).groupHeaderRow);
+  const groupHeaderRowIconClass = mergeStyles(sidebarStyles(theme).groupHeaderRowIcon);
+  const pullLeftClass = mergeStyles(sidebarStyles(theme).pullLeft);
+  const pullRightClass = mergeStyles(sidebarStyles(theme).pullRight);
+  const headerCountClass = mergeStyles(sidebarStyles(theme).headerCount);
+  const groupTitleClass = mergeStyles(sidebarStyles(theme).groupTitle);
+  const searchBoxClass = mergeStyles(sidebarStyles(theme).searchBox);
+  const spinnerClass = mergeStyles(sidebarStyles(theme).spinner);
+  const queryListClass = mergeStyles(sidebarStyles(theme).queryList);
 
   useEffect(() => {
     setHistoryItems(history);
@@ -118,13 +136,13 @@ const History = (props: any) => {
     return NoResultsFound('We did not find any history items');
   }
 
-  const searchValueChanged = (_event: any, value?: string): void => {
+  const searchValueChanged = (value?: string): void => {
     shouldGenerateGroups.current = true;
     setSearchStarted(searchStatus => !searchStatus);
     let content = [...history];
     if (value) {
       const keyword = value.toLowerCase();
-      content = history.filter((sample: any) => {
+      content = history.filter((sample: IHistoryItem) => {
         const name = sample.url.toLowerCase();
         return name.toLowerCase().includes(keyword);
       });
@@ -132,19 +150,23 @@ const History = (props: any) => {
     setHistoryItems(content);
   }
 
-  const renderRow = (row: any): any => {
+  const renderRow = (row?: IDetailsRowProps): JSX.Element | null => {
+    if (!row) {
+      return null;
+    }
     return (
-      <div className={classes.groupHeader}>
+      <div className={groupHeaderClass}
+        onClick={() => onViewQueryListItem(row.item)}
+      >
         <DetailsRow
           {...row}
-          className={classes.queryRow}
-          onClick={() => onViewQueryListItem(row.item)}
+          className={queryRowClass}
         />
       </div>
     );
   };
 
-  const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+  const renderItemColumn = (item: IHistoryItem, index: number | undefined, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
     const currentTheme = getTheme();
 
@@ -155,7 +177,7 @@ const History = (props: any) => {
     const exportQueryText = translateMessage('Export');
 
     if (column) {
-      const queryContent = item[column.fieldName as keyof any] as string;
+      const queryContent = item[column.fieldName as keyof IHistoryItem] as string;
       let color = currentTheme.palette.green;
       if (item.status > 300) {
         color = currentTheme.palette.red;
@@ -164,7 +186,7 @@ const History = (props: any) => {
       switch (column.key) {
         case 'status':
           return (
-            <span style={{ color }} className={classes.badge}>
+            <span style={{ color }} className={badgeClass}>
               {item.status}
             </span>
           );
@@ -217,7 +239,7 @@ const History = (props: any) => {
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}>
               <IconButton
-                className={classes.docLink}
+                className={docLinkClass}
                 ariaLabel={translateMessage('Actions menu')}
                 menuIconProps={{ iconName: 'More' }}
                 menuProps={{
@@ -241,7 +263,7 @@ const History = (props: any) => {
               >
                 <span
                   aria-label={`${shortQueryContent}. ${translateMessage('Navigation help')}`}
-                  className={classes.queryContent}
+                  className={queryContentClass}
                 >
                   {shortQueryContent}
                 </span>
@@ -252,18 +274,18 @@ const History = (props: any) => {
     }
   };
 
-  const onToggleCollapse = (properties: any) => {
+  const onToggleCollapse = (properties: IDetailsGroupDividerProps) => {
     return () => {
-      properties.onToggleCollapse(properties.group);
+      properties.onToggleCollapse!(properties?.group!);
     };
   }
 
-  const renderGroupHeader = (properties: any): any => {
+  const onRenderGroupHeader = (properties?: IDetailsGroupDividerProps): JSX.Element | null => {
     const expandText = translateMessage('Expand');
     const collapseText = translateMessage('Collapse');
-    const groupName: string = properties.group!.name;
-    const groupCount: string = properties.group!.count;
-    const collapseButtonLabel: string = properties.group!.isCollapsed ? `${expandText} ${groupName}`
+    const groupName: string = properties?.group!.name!;
+    const groupCount: number = properties?.group!.count!;
+    const collapseButtonLabel: string = properties?.group!.isCollapsed ? `${expandText} ${groupName}`
       : `${collapseText} ${groupName}`;
 
     return (
@@ -278,8 +300,8 @@ const History = (props: any) => {
       >
         <div className={'col-md-8'}>
           <div
-            className={classes.groupHeaderRow}
-            onClick={onToggleCollapse(properties)}
+            className={groupHeaderRowClass}
+            onClick={onToggleCollapse(properties!)}
           >
             <TooltipHost
               content={collapseButtonLabel}
@@ -287,33 +309,33 @@ const History = (props: any) => {
               calloutProps={{ gapSpace: 0 }}
               styles={{ root: { display: 'inline-block' } }}>
               <IconButton
-                className={`${classes.pullLeft} ${classes.groupHeaderRowIcon}`}
+                className={`${pullLeftClass} ${groupHeaderRowIconClass}`}
                 iconProps={{
-                  iconName: properties.group!.isCollapsed
+                  iconName: properties?.group!.isCollapsed
                     ? 'ChevronRightSmall'
                     : 'ChevronDownSmall'
                 }}
                 ariaLabel={collapseButtonLabel}
-                onClick={() => onToggleCollapse(properties)}
+                onClick={() => onToggleCollapse(properties!)}
                 styles={{ icon: { marginTop: '15px' } }}
               />
             </TooltipHost>
-            <div className={classes.groupTitle}>
+            <div className={groupTitleClass}>
               <span>{groupName}</span>
-              <span className={classes.headerCount}>
+              <span className={headerCountClass}>
                 ({groupCount})
               </span>
             </div>
           </div>
         </div>
         <div className={'col-md-4'} style={{ display: 'inline-block' }}>
-          <div className={`${classes.pullRight}`}>
+          <div className={`${pullRightClass}`}>
             <TooltipHost
               content={`${translateMessage('Export')} ${groupName} queries`}
               id={getId()}
               calloutProps={{ gapSpace: 0 }}>
               <IconButton
-                className={`${classes.groupHeaderRowIcon}`}
+                className={`${groupHeaderRowIconClass}`}
                 iconProps={{ iconName: 'Download' }}
                 ariaLabel={`${translateMessage('Export')} ${groupName} queries`}
                 onClick={() => exportHistoryByCategory(groupName)}
@@ -324,7 +346,7 @@ const History = (props: any) => {
               id={getId()}
               calloutProps={{ gapSpace: 0 }} >
               <IconButton
-                className={`${classes.groupHeaderRowIcon}`}
+                className={`${groupHeaderRowIconClass}`}
                 iconProps={{ iconName: 'Delete' }}
                 ariaLabel={`${translateMessage('Delete')} ${groupName} queries`}
                 onClick={() => showDialog(groupName)}
@@ -347,7 +369,7 @@ const History = (props: any) => {
     setHideDialog(true);
   };
 
-  const deleteHistoryCategory = (): any => {
+  const deleteHistoryCategory = (): void => {
     const itemsToDelete = historyItems.filter((query: IHistoryItem) => query.category === category);
     dispatch(bulkRemoveHistoryItems(itemsToDelete));
     closeDialog();
@@ -477,8 +499,8 @@ const History = (props: any) => {
       <div>
         <SearchBox
           placeholder={translateMessage('Search history items')}
-          className={classes.searchBox}
-          onChange={searchValueChanged}
+          className={searchBoxClass}
+          onChange={(e_, value) => searchValueChanged(value)}
           styles={searchBoxStyles}
         />
         <hr />
@@ -490,14 +512,14 @@ const History = (props: any) => {
           <FormattedMessage id='Your history includes queries made in the last 30 days' />
           .
         </MessageBar>
-        {items.length === 0 && <Label className={classes.spinner}>
+        {items.length === 0 && <Label className={spinnerClass}>
           <FormattedMessage id='We did not find any history items' />
         </Label>}
         <Announced
           message={`${items.length} search results available.`}
         />
         {items.length > 0 && <DetailsList
-          className={classes.queryList}
+          className={queryListClass}
           onRenderItemColumn={renderItemColumn}
           items={items}
           columns={columns}
@@ -505,7 +527,7 @@ const History = (props: any) => {
           groups={groups}
           groupProps={{
             showEmptyGroups: true,
-            onRenderHeader: renderGroupHeader
+            onRenderHeader: onRenderGroupHeader
           }}
           onRenderRow={renderRow}
           onRenderDetailsHeader={renderDetailsHeader}
@@ -543,5 +565,4 @@ const History = (props: any) => {
 const trackedComponent = telemetry.trackReactComponent(History, componentNames.HISTORY_TAB);
 // @ts-ignore
 const styledHistory = styled(trackedComponent, sidebarStyles);
-const IntlHistory = injectIntl(styledHistory);
-export default IntlHistory;
+export default styledHistory;
