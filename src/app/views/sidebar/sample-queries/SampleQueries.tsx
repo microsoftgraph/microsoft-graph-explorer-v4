@@ -72,7 +72,7 @@ const SampleQueries = (): JSX.Element => {
     }
   }, [sampleQueries, searchStarted]);
 
-  const searchValueChanged = (event_: ChangeEvent<HTMLInputElement> | undefined, newValue?: string) => {
+  const searchValueChanged = (newValue?: string): void => {
     shouldGenerateGroups.current = true;
     setSearchStarted(searchStatus => !searchStatus);
     const { queries } = samples;
@@ -343,7 +343,7 @@ const SampleQueries = (): JSX.Element => {
       <SearchBox
         className={searchBoxClass}
         placeholder={translateMessage('Search sample queries')}
-        onChange={searchValueChanged}
+        onChange={(e_, value) => searchValueChanged(value)}
         styles={searchBoxStyles}
         aria-label={'Search'}
       />

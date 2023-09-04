@@ -78,7 +78,7 @@ const ResourceExplorer = () => {
     }, 300)
   ).current;
 
-  const searchValueChanged = (event_: ChangeEvent<HTMLInputElement> | undefined, newValue?: string) => {
+  const searchValueChanged = (newValue?: string): void => {
     debouncedSearch(newValue);
   }
 
@@ -136,7 +136,7 @@ const ResourceExplorer = () => {
     <section style={{ marginTop: '8px' }}>
       <SearchBox
         placeholder={translateMessage('Search resources')}
-        onChange={searchValueChanged}
+        onChange={(e_, value) => searchValueChanged(value)}
         styles={searchBoxStyles}
       />
       <hr />
