@@ -1,11 +1,11 @@
 import {
-  INavLink, INavLinkGroup, Label, Nav, SearchBox, Spinner, SpinnerSize,
+  getTheme,
+  INavLink, INavLinkGroup, Label, mergeStyles, Nav, SearchBox, Spinner, SpinnerSize,
   Stack,
-  styled,
   Toggle
 } from '@fluentui/react';
-import debouce from 'lodash.debounce';
-import { useEffect, useMemo, useState } from 'react';
+import debounce from 'lodash.debounce';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -19,9 +19,9 @@ import { GRAPH_URL } from '../../../services/graph-constants';
 import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
-import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
+import { UploadPostmanCollection } from './collection/UploadCollection';
 import CommandOptions from './command-options/CommandOptions';
 import {
   createResourcesList, getResourcePaths,
@@ -29,17 +29,19 @@ import {
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
-import { UploadPostmanCollection } from './collection/UploadCollection';
 
-const UnstyledResourceExplorer = (props: any) => {
+const ResourceExplorer = () => {
   const { resources: { data, pending }, collections } = useAppSelector(
     (state) => state
   );
 
   const dispatch: AppDispatch = useDispatch();
-  const classes = classNames(props);
+  const theme = getTheme();
+  const spinnerClass = mergeStyles(sidebarStyles(theme).spinner);
+  const queryListClass = mergeStyles(sidebarStyles(theme).queryList);
+
   const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
-  const versions: any[] = [
+  const versions: { key: string, text: string }[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
   ];
@@ -65,20 +67,20 @@ const UnstyledResourceExplorer = (props: any) => {
     dispatch(removeResourcePaths(getResourcePaths(item, version)));
   }
 
-  const changeVersion = (_event: React.MouseEvent<HTMLElement>, checked?: boolean | undefined): void => {
+  const changeVersion = (_event: React.MouseEvent<HTMLElement>, checked?: boolean): void => {
     const selectedVersion = checked ? versions[1].key : versions[0].key;
     setVersion(selectedVersion);
   }
 
-  const changeSearchValue = (event: any, value?: string) => {
-    const trimmedSearchText = value ? value.trim() : '';
-    setSearchText(trimmedSearchText);
+  const debouncedSearch = useRef(
+    debounce(async (newValue?: string) => {
+      setSearchText(newValue ? newValue.trim() : '');
+    }, 300)
+  ).current;
+
+  const changeSearchValue = (event_: ChangeEvent<HTMLInputElement> | undefined, newValue?: string) => {
+    debouncedSearch(newValue);
   }
-
-  const debouncedSearch = useMemo(() => {
-    return debouce(changeSearchValue, 300);
-  }, []);
-
 
   const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
     ev!.preventDefault();
@@ -86,7 +88,7 @@ const UnstyledResourceExplorer = (props: any) => {
     setQuery(item!);
   }
 
-  const resourceOptionSelected = (activity: string, context: any) => {
+  const resourceOptionSelected = (activity: ResourceOptions, context: IResourceLink) => {
     if (activity === ResourceOptions.ADD_TO_COLLECTION) {
       addToCollection(context);
     }
@@ -121,7 +123,7 @@ const UnstyledResourceExplorer = (props: any) => {
   if (pending) {
     return (
       <Spinner
-        className={classes.spinner}
+        className={spinnerClass}
         size={SpinnerSize.large}
         label={`${translateMessage('loading resources')} ...`}
         ariaLive='assertive'
@@ -134,7 +136,7 @@ const UnstyledResourceExplorer = (props: any) => {
     <section style={{ marginTop: '8px' }}>
       <SearchBox
         placeholder={translateMessage('Search resources')}
-        onChange={debouncedSearch}
+        onChange={changeSearchValue}
         styles={searchBoxStyles}
       />
       <hr />
@@ -171,13 +173,11 @@ const UnstyledResourceExplorer = (props: any) => {
               return <ResourceLink
                 link={link!}
                 version={version}
-                resourceOptionSelected={(activity: string, context: unknown) =>
-                  resourceOptionSelected(activity, context)}
-                classes={classes}
+                resourceOptionSelected={resourceOptionSelected}
               />
             }}
             onLinkClick={clickLink}
-            className={classes.queryList} />
+            className={queryListClass} />
           )
       }
     </section >
@@ -185,5 +185,4 @@ const UnstyledResourceExplorer = (props: any) => {
 }
 
 // @ts-ignore
-const ResourceExplorer = styled(UnstyledResourceExplorer, sidebarStyles);
 export default ResourceExplorer;

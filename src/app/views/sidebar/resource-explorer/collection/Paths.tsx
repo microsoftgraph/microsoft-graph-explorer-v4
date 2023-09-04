@@ -24,9 +24,9 @@ export default class Paths extends Component<IPathProps> {
       }
     });
   }
-  private renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+  private renderItemColumn = (item: ResourcePath, index?: number, column?: IColumn) => {
     if (column) {
-      const itemContent = item[column.fieldName as keyof any] as string;
+      const itemContent = item[column.fieldName as keyof ResourcePath] as string;
       return (
         <TooltipHost
           tooltipProps={{
@@ -51,7 +51,6 @@ export default class Paths extends Component<IPathProps> {
       );
     }
   }
-
 
   public render(): JSX.Element {
     const { resources, columns } = this.props;

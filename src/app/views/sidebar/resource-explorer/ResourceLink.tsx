@@ -1,6 +1,6 @@
 import {
   getId, getTheme, IconButton, INavLink,
-  ITooltipHostStyles, mergeStyleSets, TooltipHost
+  ITooltipHostStyles, mergeStyles, mergeStyleSets, TooltipHost
 } from '@fluentui/react';
 import { CSSProperties, useEffect } from 'react';
 
@@ -11,18 +11,20 @@ import { validateExternalLink } from '../../../utils/external-link-validation';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { translateMessage } from '../../../utils/translate-messages';
 import { existsInCollection, setExisting } from './resourcelink.utils';
+import { sidebarStyles } from '../Sidebar.styles';
 
 interface IResourceLinkProps {
   link: INavLink;
-  resourceOptionSelected: Function;
-  classes: any;
+  resourceOptionSelected: (activity: ResourceOptions, context: IResourceLink) => void;
   version: string;
 }
 
 const ResourceLink = (props: IResourceLinkProps) => {
-  const { classes, version } = props;
+  const { version } = props;
   const { collections } = useAppSelector(state => state);
   const link = props.link as IResourceLink;
+
+  const badgeClass = mergeStyles(sidebarStyles(getTheme()).badge);
 
   const paths = collections?.find(k => k.isDefault)?.paths || [];
   const resourceLink = { ...link };
@@ -85,7 +87,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   const trackDocumentLinkClickedEvent = async (): Promise<void> => {
     const documentationLink = resourceLink.docLink;
-    const properties: { [key: string]: any } = {
+    const properties: { [key: string]: string } = {
       ComponentName: componentNames.RESOURCE_DOCUMENTATION_LINK,
       QueryUrl: resourceLink.url,
       Link: documentationLink
@@ -100,13 +102,13 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   setExisting(resourceLink, existsInCollection(link, paths, version));
 
-  const handleAddToCollectionClick = (event: any) => {
+  const handleAddToCollectionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
     props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, link);
   }
 
-  const handleRemoveFromCollectionClick = (event: any) => {
+  const handleRemoveFromCollectionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
     props.resourceOptionSelected(ResourceOptions.REMOVE_FROM_COLLECTION, link);
@@ -114,7 +116,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   return <span className={linkStyle.link} tabIndex={0}>
     {resourceLink.method &&
-      <span className={classes.badge} style={methodButtonStyles}>
+      <span className={badgeClass} style={methodButtonStyles}>
         {resourceLink.method}
       </span>
     }

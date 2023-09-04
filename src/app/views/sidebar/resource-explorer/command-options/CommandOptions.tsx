@@ -66,7 +66,7 @@ const CommandOptions = (props: ICommandOptions) => {
     dispatch(removeResourcePaths(paths));
   }
 
-  const CustomButton: React.FunctionComponent<IButtonProps> = (props_: any) => {
+  const CustomButton: React.FunctionComponent<IButtonProps> = (props_) => {
     return <CommandBarButton {...props_} styles={itemStyles} />;
   };
 

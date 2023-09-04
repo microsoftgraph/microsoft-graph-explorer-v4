@@ -166,7 +166,7 @@ const History = () => {
     );
   };
 
-  const renderItemColumn = (item: IHistoryItem, index: number | undefined, column: IColumn | undefined) => {
+  const renderItemColumn = (item: IHistoryItem, index?: number, column?: IColumn) => {
     const hostId: string = getId('tooltipHost');
     const currentTheme = getTheme();
 

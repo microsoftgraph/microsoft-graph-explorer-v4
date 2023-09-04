@@ -71,7 +71,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
   }
 
-  const onChange = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+  const onChange = (event_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
     setQueryUrl(newValue!);
     initialiseAutoComplete(newValue!)
   };

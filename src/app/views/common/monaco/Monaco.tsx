@@ -8,7 +8,7 @@ import './monaco.scss';
 import { formatJsonStringForAllBrowsers } from './util/format-json';
 
 interface IMonaco {
-  body: object | string | undefined;
+  body?: object | string;
   onChange?: OnChange;
   verb?: string;
   language?: string;

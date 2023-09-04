@@ -1,13 +1,16 @@
+import {
+  ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
+  Label, MessageBarType, PrimaryButton,
+  getId
+} from '@fluentui/react';
 import { CSSProperties, useState } from 'react';
-import { generateResourcePathsFromPostmanCollection } from './postman.util';
-import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
-  Label, MessageBarType, PrimaryButton, getId } from '@fluentui/react';
 import { useDispatch } from 'react-redux';
-import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
-import { translateMessage } from '../../../../utils/translate-messages';
-import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
-import { ResourcePath } from '../../../../../types/resources';
 import { useAppSelector } from '../../../../../store';
+import { ResourcePath } from '../../../../../types/resources';
+import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
+import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
+import { translateMessage } from '../../../../utils/translate-messages';
+import { generateResourcePathsFromPostmanCollection } from './postman.util';
 
 export const UploadPostmanCollection = () => {
   const dispatch = useDispatch();
@@ -27,6 +30,7 @@ export const UploadPostmanCollection = () => {
     fileInput?.click();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFileSelect = (event: any) => {
     const file = event.target.files[0];
     if (file) {

@@ -8,7 +8,7 @@ interface IConsentType {
   allPrincipalPermissions: string[],
   singlePrincipalPermissions: string[],
   itemNotInGrants?: Function,
-  tenantGrantFetchPending: boolean | undefined,
+  tenantGrantFetchPending?: boolean,
   dispatch: Function
 }
 
