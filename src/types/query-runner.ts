@@ -82,26 +82,6 @@ export interface ISampleQuery {
   headers?: Header[];
 }
 
-export interface ISampleQueriesProps {
-  theme?: ITheme;
-  styles?: object;
-  tokenPresent: boolean;
-  profile: object;
-  samples: {
-    pending: boolean;
-    queries: ISampleQuery[];
-    error: {
-      message: string;
-    };
-  };
-  actions?: {
-    runQuery: Function;
-    setSampleQuery: Function;
-    fetchSamples: Function;
-    setQueryResponseStatus: Function;
-  };
-}
-
 export const httpMethods: IDropdownOption[] = [
   { key: 'GET', text: 'GET' },
   { key: 'POST', text: 'POST' },

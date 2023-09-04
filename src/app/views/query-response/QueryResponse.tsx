@@ -53,8 +53,8 @@ const QueryResponse = () => {
     toggleModal(pivotItem);
   };
 
-  const toggleModal = (event: any) => {
-    const { key } = event;
+  const toggleModal = (pivotItem: PivotItem) => {
+    const key = pivotItem.props.itemKey;
     if (key && key.includes('expand')) {
       toggleExpandResponse();
     }
@@ -78,7 +78,7 @@ const QueryResponse = () => {
     const tabKey = item.props.itemKey;
     if (tabKey) {
       telemetry.trackTabClickEvent(tabKey, query);
-      if(snippets.snippetTab){
+      if (snippets.snippetTab) {
         telemetry.trackTabClickEvent(snippets.snippetTab, query)
       }
     }

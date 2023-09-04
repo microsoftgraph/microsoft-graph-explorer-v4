@@ -3,9 +3,9 @@ import { createRef, useState } from 'react';
 import { translateMessage } from '../../../utils/translate-messages';
 
 interface ICopyButtonProps {
-  style?: any;
+  style?: object;
   handleOnClick: Function;
-  className?: any;
+  className?: string;
   isIconButton: boolean;
 }
 

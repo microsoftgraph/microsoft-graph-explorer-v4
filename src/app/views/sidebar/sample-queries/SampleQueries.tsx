@@ -1,17 +1,17 @@
 import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
-  getTheme,
-  GroupHeader, IColumn, Icon, IDetailsRowStyles, IGroup, Link, MessageBar, MessageBarType, SearchBox,
-  SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
+  getTheme, GroupHeader, IColumn, Icon, IDetailsGroupDividerProps,
+  IDetailsRowProps, IDetailsRowStyles, IGroup, Link, mergeStyles, MessageBar, MessageBarType, SearchBox,
+  SelectionMode, Spinner, SpinnerSize, TooltipHost
 } from '@fluentui/react';
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
-import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
+import { IQuery, ISampleQuery } from '../../../../types/query-runner';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
 import { fetchSamples } from '../../../services/actions/samples-action-creators';
@@ -21,7 +21,6 @@ import { getStyleFor } from '../../../utils/http-methods.utils';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { translateMessage } from '../../../utils/translate-messages';
-import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import {
@@ -29,7 +28,7 @@ import {
   trackSampleQueryClickEvent
 } from './sample-query-utils';
 
-const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
+const SampleQueries = (): JSX.Element => {
 
   const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
   const { authToken, profile, samples } =
@@ -43,11 +42,16 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
   const { error, pending } = samples;
 
-  const classProps = {
-    styles: sampleProps!.styles,
-    theme: sampleProps!.theme
-  };
-  const classes = classNames(classProps);
+  const theme = getTheme();
+  const groupHeaderClass = mergeStyles(sidebarStyles(theme).groupHeader);
+  const queryRowClass = mergeStyles(sidebarStyles(theme).queryRow);
+  const badgeClass = mergeStyles(sidebarStyles(theme).badge);
+  const docLinkClass = mergeStyles(sidebarStyles(theme).docLink);
+  const queryContentClass = mergeStyles(sidebarStyles(theme).queryContent);
+  const searchBoxClass = mergeStyles(sidebarStyles(theme).searchBox);
+  const spinnerClass = mergeStyles(sidebarStyles(theme).spinner);
+  const queryListClass = mergeStyles(sidebarStyles(theme).queryList);
+  const rowDisabledClass = mergeStyles(sidebarStyles(theme).rowDisabled);
 
   const shouldGenerateGroups = useRef(true);
 
@@ -68,11 +72,11 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     }
   }, [sampleQueries, searchStarted]);
 
-  const searchValueChanged = (_event: any, value?: string): void => {
+  const searchValueChanged = (event_: ChangeEvent<HTMLInputElement> | undefined, newValue?: string) => {
     shouldGenerateGroups.current = true;
     setSearchStarted(searchStatus => !searchStatus);
     const { queries } = samples;
-    const filteredQueries = value ? performSearch(queries, value) : queries;
+    const filteredQueries = newValue ? performSearch(queries, newValue) : queries;
     setSampleQueries(filteredQueries);
   };
 
@@ -144,7 +148,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
               onClick={() => trackDocumentLinkClickedEvent(item)}
             >
               <Icon
-                className={classes.docLink}
+                className={docLinkClass}
                 aria-label={translateMessage('Read documentation')}
                 iconName='TextDocument'
                 style={{
@@ -219,7 +223,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             styles={{ root: { display: 'inline-block' } }}
           >
             <span
-              className={classes.badge}
+              className={badgeClass}
               style={{
                 background: getStyleFor(item.method),
                 textAlign: 'center',
@@ -253,7 +257,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             id={getId()}
             calloutProps={{ gapSpace: 0 }}
           >
-            <span aria-label={queryContent} className={classes.queryContent}>
+            <span aria-label={queryContent} className={queryContentClass}>
               {queryContent}
             </span>
           </TooltipHost>
@@ -262,46 +266,47 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     }
   ];
 
-  const renderRow = (props: any): any => {
+  const renderRow = (row?: IDetailsRowProps): JSX.Element | null => {
     let selectionDisabled = false;
     const customStyles: Partial<IDetailsRowStyles> = {};
-    if (selectedQuery?.id === props.item.id) {
-      customStyles.root = { backgroundColor: currentTheme.palette.neutralLight };
-    }
 
-    if (props) {
-      const query: ISampleQuery = props.item!;
+    if (row) {
+      if (selectedQuery?.id === row.item.id) {
+        customStyles.root = { backgroundColor: currentTheme.palette.neutralLight };
+      }
+
+      const query: ISampleQuery = row.item!;
       if (!shouldRunQuery({ method: query.method, authenticated: tokenPresent, url: query.requestUrl })) {
         selectionDisabled = true;
       }
       return (
-        <div className={classes.groupHeader}>
+        <div className={groupHeaderClass} onClick={() => {
+          if (!selectionDisabled) {
+            querySelected(query);
+          }
+          setSelectedQuery(row.item)
+        }}>
           <DetailsRow
-            {...props}
+            {...row}
             styles={customStyles}
-            onClick={() => {
-              if (!selectionDisabled) {
-                querySelected(query);
-              }
-              setSelectedQuery(props.item)
-            }}
             className={
-              classes.queryRow +
+              queryRowClass +
               ' ' +
-              (selectionDisabled ? classes.rowDisabled : '')
+              (selectionDisabled ? rowDisabledClass : '')
             }
             data-selection-disabled={selectionDisabled}
-            getRowAriaLabel={() => props.item.method.toLowerCase() + props.item.humanName}
+            getRowAriaLabel={() => row.item.method.toLowerCase() + row.item.humanName}
           />
         </div>
       );
     }
+    return null;
   };
 
-  const renderGroupHeader = (props: any): any => {
+  const onRenderGroupHeader = (properties?: IDetailsGroupDividerProps): JSX.Element | null => {
     return (
       <GroupHeader
-        {...props}
+        {...properties}
         styles={{
           check: { display: 'none' },
           title: {
@@ -324,7 +329,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   if (pending && groups.length === 0) {
     return (
       <Spinner
-        className={classes.spinner}
+        className={spinnerClass}
         size={SpinnerSize.large}
         label={`${translateMessage('loading samples')} ...`}
         ariaLive='assertive'
@@ -336,7 +341,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   return (
     <div>
       <SearchBox
-        className={classes.searchBox}
+        className={searchBoxClass}
         placeholder={translateMessage('Search sample queries')}
         onChange={searchValueChanged}
         styles={searchBoxStyles}
@@ -375,7 +380,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
       {sampleQueries.length === 0 ? NoResultsFound('No samples found') :
         <div role="navigation">
           <DetailsList
-            className={classes.queryList}
+            className={queryListClass}
             cellStyleProps={{
               cellRightPadding: 0,
               cellExtraRightPadding: 0,
@@ -387,7 +392,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             groups={groups}
             groupProps={{
               showEmptyGroups: true,
-              onRenderHeader: renderGroupHeader
+              onRenderHeader: onRenderGroupHeader
             }}
             onRenderRow={renderRow}
             onRenderDetailsHeader={renderDetailsHeader}
@@ -399,6 +404,4 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   );
 }
 
-// @ts-ignore
-const SampleQueries = styled(UnstyledSampleQueries, sidebarStyles);
 export default SampleQueries;
