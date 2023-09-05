@@ -62,7 +62,7 @@ describe('Request History Action Creators', () => {
     const historyItem: IHistoryItem = {
       index: 0,
       statusText: 'Something worked!',
-      responseHeaders: [],
+      responseHeaders: {},
       result: {},
       url: 'https://graph.microsoft.com/v1.0/me',
       method: 'GET',
@@ -138,7 +138,7 @@ describe('Request History Action Creators', () => {
       {
         index: 0,
         statusText: 'OK',
-        responseHeaders: [],
+        responseHeaders: {},
         result: {},
         url: 'https://graph.microsoft.com/v1.0/me',
         method: 'GET',
@@ -150,7 +150,7 @@ describe('Request History Action Creators', () => {
       {
         index: 1,
         statusText: 'OK',
-        responseHeaders: [],
+        responseHeaders: {},
         result: {},
         url: 'https://graph.microsoft.com/v1.0/me/events',
         method: 'GET',

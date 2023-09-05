@@ -11,6 +11,8 @@ import {
   anonymousRequest,
   authenticatedRequest,
   generateResponseDownloadUrl,
+  getContentType,
+  getHeaderKeyPairs,
   isFileResponse,
   isImageResponse,
   parseResponse,
@@ -23,45 +25,49 @@ import { authenticationWrapper } from '../../../modules/authentication';
 import { BrowserAuthError } from '@azure/msal-browser';
 import { ClaimsChallenge } from '../../../modules/authentication/ClaimsChallenge';
 import { translateMessage } from '../../utils/translate-messages';
+import { IHeader } from '../../../types/request';
 
 const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
 export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = !!getState()?.authToken?.token;
-    const respHeaders: any = {};
     const createdAt = new Date().toISOString();
 
     if (tokenPresent) {
       return authenticatedRequest(dispatch, query)
-        .then(async (response: Response) => {
-          await processResponse(response, respHeaders, dispatch, createdAt);
+        .then(async (response) => {
+          await processResponse(response!, dispatch, createdAt);
         })
-        .catch(async (error: any) => {
+        .catch(async (error: unknown) => {
           return handleError(dispatch, error);
         });
     }
 
     return anonymousRequest(dispatch, query, getState)
       .then(async (response: Response) => {
-        await processResponse(response, respHeaders, dispatch, createdAt);
+        await processResponse(response, dispatch, createdAt);
       })
-      .catch(async (error: any) => {
+      .catch(async (error: unknown) => {
         return handleError(dispatch, error);
       });
   };
 
-  async function processResponse(
-    response: Response,
-    respHeaders: any,
-    dispatch: Function,
-    createdAt: any
-  ) {
-    let result = await parseResponse(response, respHeaders);
+  async function processResponse(response: Response, dispatch: Function, createdAt: string) {
+    let result: unknown = await parseResponse(response);
     const duration = new Date().getTime() - new Date(createdAt).getTime();
+
+    const responseHeaders: IHeader[] = [];
+    response.headers.forEach((value, key) => {
+      responseHeaders.push({
+        name: key,
+        value
+      });
+    });
+
+
     createHistory(
       response,
-      respHeaders,
       query,
       createdAt,
       dispatch,
@@ -90,22 +96,19 @@ export function runQuery(query: IQuery) {
       status.ok = true;
       status.messageType = MessageBarType.success;
 
-      if (isFileResponse(respHeaders)) {
-        const contentDownloadUrl = await generateResponseDownloadUrl(
-          response,
-          respHeaders
-        );
-        if (contentDownloadUrl) {
+      if (isFileResponse(response.headers)) {
+        const contentDownloadUrl = await generateResponseDownloadUrl(response);
+        if (contentDownloadUrl && contentDownloadUrl !== undefined) {
           result = {
-            contentDownloadUrl
+            contentDownloadUrl: contentDownloadUrl!
           };
         }
       }
     }
 
-    if(response && response.status === 401 && (CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES)) {
+    if (response && response.status === 401 && (CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES)) {
       const successful = await runReAuthenticatedRequest(response);
-      if(successful){
+      if (successful) {
         dispatch(runQuery(query));
         return;
       }
@@ -116,12 +119,12 @@ export function runQuery(query: IQuery) {
     return dispatch(
       queryResponse({
         body: result,
-        headers: respHeaders
+        headers: getHeaderKeyPairs(responseHeaders)
       })
     );
   }
 
-  async function runReAuthenticatedRequest(response: Response): Promise<boolean>{
+  async function runReAuthenticatedRequest(response: Response): Promise<boolean> {
     if (response.headers.get('www-authenticate')) {
       const account = authenticationWrapper.getAccount();
       if (!account) { return false; }
@@ -135,7 +138,7 @@ export function runQuery(query: IQuery) {
     return false;
   }
 
-  function handleError(dispatch: Function, error: any) {
+  function handleError(dispatch: Function, error: unknown) {
     let body = error;
     const status: IStatus = {
       messageType: MessageBarType.error,
@@ -158,10 +161,10 @@ export function runQuery(query: IQuery) {
     }
 
     if (error && error instanceof BrowserAuthError) {
-      if (error.errorCode === 'user_cancelled'){
+      if (error.errorCode === 'user_cancelled') {
         status.hint = `${translateMessage('user_cancelled')}`;
       }
-      else{
+      else {
         status.statusText = `${error.name}: ${error.message}`;
       }
     }
@@ -179,26 +182,40 @@ export function runQuery(query: IQuery) {
 
 async function createHistory(
   response: Response,
-  respHeaders: any,
   query: IQuery,
-  createdAt: any,
+  createdAt: string,
   dispatch: Function,
-  result: any,
+  result: string | object | unknown,
   duration: number
 ) {
   const status = response.status;
   const statusText = response.statusText === '' ? setStatusMessage(status) : response.statusText;
-  const responseHeaders = { ...respHeaders };
-  const contentType = respHeaders['content-type'];
+  const responseHeaders: IHeader[] = [];
+  response.headers.forEach((value, key) => {
+    responseHeaders.push({
+      name: key,
+      value
+    });
+  });
 
-  if (isImageResponse(contentType)) {
+  const contentType = getContentType(response.headers);
+
+  if (isImageResponse(contentType!)) {
     result = {
       message: 'Run the query to view the image'
     };
-    responseHeaders['content-type'] = ContentType.Json;
+    const index = responseHeaders.findIndex(k => k.name.toLowerCase() === 'content-type');
+    if (index > -1) {
+      responseHeaders[index].value = ContentType.Json;
+    } else {
+      responseHeaders.push({
+        name: 'content-type',
+        value: ContentType.Json
+      });
+    }
   }
 
-  if (isFileResponse(respHeaders)) {
+  if (isFileResponse(response.headers)) {
     result = {
       message: 'Run the query to generate file download URL'
     };
@@ -210,7 +227,7 @@ async function createHistory(
     method: query.selectedVerb,
     headers: query.sampleHeaders,
     body: query.sampleBody,
-    responseHeaders,
+    responseHeaders: getHeaderKeyPairs(responseHeaders),
     createdAt,
     status,
     statusText,

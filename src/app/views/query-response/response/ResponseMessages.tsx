@@ -23,6 +23,7 @@ export function ResponseMessages(
   graphExplorerMode: Mode,
   dispatch: Function) {
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function getOdataLinkFromResponseBody(responseBody: any): ODataLink | null {
     const odataLinks = ['nextLink', 'deltaLink'];
     let data = null;
@@ -38,6 +39,7 @@ export function ResponseMessages(
     }
     return data;
   }
+
   const [displayMessage, setDisplayMessage] = useState(true);
   const tokenPresent = !!authToken.token;
   const { body } = graphResponse;

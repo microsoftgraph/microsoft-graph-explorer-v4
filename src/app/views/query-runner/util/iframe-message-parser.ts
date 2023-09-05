@@ -61,12 +61,12 @@ function extractBody(payload: string): string {
  *
  * @param payload
  */
-function extractHeaders(payload: string): object[] {
+function extractHeaders(payload: string): { [key: string]: string }[] {
   const SPACE = /\s/;
   const NEWLINE = /\n/;
 
-  const headers: any = [];
-  let header: any = {};
+  const headers: { [key: string]: string }[] = [];
+  let header: { [key: string]: string } = {};
   let newlineCount = 0;
   let positionOfSecondNewLine = 0;
   let word = '';
@@ -110,9 +110,8 @@ function extractHeaders(payload: string): object[] {
  * @param payload
  * Has the form \n payload \n
  */
-function extractUrl(payload: string): object[] {
+function extractUrl(payload: string): { verb: string, url: string } {
   const domains = ['https://graph.microsoft.com/v1.0', 'https://graph.microsoft.com/beta'];
-  const result: object[] = [];
 
   // The payload has the form \n sampleUrl \n. After splitting it on new lines the sampleUrl will be at index 1
   // of the resulting array
@@ -137,12 +136,10 @@ function extractUrl(payload: string): object[] {
     url = domains[0] + url;
   }
 
-  result.push({ verb, url });
-
-  return result;
+  return { verb, url };
 }
 
-export function parse(httpRequestMessage: string) {
+export function parse(httpRequestMessage: string): { verb?: string, headers: object[], url: string, body?: string } {
   /**
    * The parser expects the http request message to start and end with a new line character, however,
    * the request message it receives does not have them. Hence, we prefix and suffix the httpRequestMessage
@@ -154,11 +151,5 @@ export function parse(httpRequestMessage: string) {
   const headers = extractHeaders(payload);
   const body = extractBody(payload);
 
-  const tokens = [...url, { body }];
-
-  const result = tokens.reduce((obj: object, item: object) => {
-    return { ...obj, ...item };
-  }, {});
-
-  return { ...result, headers };
+  return { ...url, body, headers };
 }

@@ -17,12 +17,11 @@ export function createHarEntry(query: IHistoryItem): Entry {
     });
   }
   const responseHeaders: HarHeader[] = [];
-  if (query.responseHeaders && query.responseHeaders.length > 0) {
-    query.responseHeaders.forEach((header) => {
-      const { name, value } = header;
+  if (query.responseHeaders && Object.keys(query.responseHeaders).length > 0) {
+    Object.keys(query.responseHeaders).forEach((key) => {
       const head: HarHeader = {
-        name,
-        value
+        name: key,
+        value: query.responseHeaders[key]
       };
       responseHeaders.push(head);
     });

@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Announced, getTheme, ITheme, styled } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import { Component } from 'react';
-import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -39,10 +39,9 @@ import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
+import { Direction } from 're-resizable/lib/resizer';
 export interface IAppProps {
   theme?: ITheme;
-  styles?: object;
-  intl: any;
   profile: object;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
@@ -144,7 +143,7 @@ class App extends Component<IAppProps, IAppState> {
   private getQueryStringParams(): ISharedQueryParams {
     const urlParams = new URLSearchParams(window.location.search);
 
-    const request = urlParams.get('request');
+    const request = urlParams.get('request') || null;
     const method = this.validateHttpMethod(urlParams.get('method') || '');
     const version = urlParams.get('version');
     const graphUrl = urlParams.get('GraphUrl') || GRAPH_URL;
@@ -154,7 +153,7 @@ class App extends Component<IAppProps, IAppState> {
     return { request, method, version, graphUrl, requestBody, headers };
   }
 
-  private generateQueryObjectFrom(queryParams: any) {
+  private generateQueryObjectFrom(queryParams: ISharedQueryParams) {
     const { request, method, version, graphUrl, requestBody, headers } =
       queryParams;
 
@@ -219,7 +218,7 @@ class App extends Component<IAppProps, IAppState> {
 
   private handleInitMsg = (msg: IInitMessage) => {
     const { actions, profile } = this.props;
-    const { verb, headers, url, body }: any = parse(msg.code);
+    const { verb, headers, url, body } = parse(msg.code);
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
@@ -228,7 +227,7 @@ class App extends Component<IAppProps, IAppState> {
     }
 
     // Sets selected verb in App Component
-    this.handleSelectVerb(verb);
+    this.handleSelectVerb(verb!);
 
     /**
      * We are delaying this by 1 second here so that we give Monaco's formatter time to initialize.
@@ -237,7 +236,7 @@ class App extends Component<IAppProps, IAppState> {
     setTimeout(() => {
       if (actions) {
         const { queryVersion } = parseSampleUrl(url);
-        const requestHeaders = headers.map((header: any) => {
+        const requestHeaders = headers.map((header) => {
           return {
             name: Object.keys(header)[0],
             value: Object.values(header)[0]
@@ -246,7 +245,7 @@ class App extends Component<IAppProps, IAppState> {
 
         const query: IQuery = {
           sampleUrl: url,
-          selectedVerb: verb,
+          selectedVerb: verb!,
           sampleBody: body,
           selectedVersion: queryVersion,
           sampleHeaders: requestHeaders
@@ -275,6 +274,7 @@ class App extends Component<IAppProps, IAppState> {
       });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public displayToggleButton = (mediaQueryList: any) => {
     const mobileScreen = mediaQueryList.matches;
     let showSidebar = true;
@@ -328,7 +328,10 @@ class App extends Component<IAppProps, IAppState> {
     return width;
   }
 
-  private shouldDisplayContent(parameters: any) {
+  private shouldDisplayContent(parameters: {
+    graphExplorerMode: Mode, mobileScreen?: boolean,
+    showSidebar?: boolean
+  }): boolean {
     const { graphExplorerMode, mobileScreen, showSidebar } = parameters;
     return !(graphExplorerMode === Mode.Complete && mobileScreen && showSidebar);
   }
@@ -345,7 +348,7 @@ class App extends Component<IAppProps, IAppState> {
     if (collection?.length === 0) {
       return;
     }
-    const element: any = collection[0];
+    const element = collection[0] as HTMLElement;
     element.style.removeProperty('flex-basis');
   }
 
@@ -356,13 +359,20 @@ class App extends Component<IAppProps, IAppState> {
     https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1602#:~:text=Zoom
     Removing the property altogether helps maintain the layout of the page.
     */
-    const collection = document.getElementsByClassName('resizable-sidebar');
+    const collection: HTMLCollectionOf<Element> = document.getElementsByClassName('resizable-sidebar');
     if (collection?.length === 0) {
       return;
     }
-    const element: any = collection[0];
+    const element = collection[0] as HTMLElement;
     element.style.removeProperty('height');
   }
+
+  private handleResize = (event_: MouseEvent | TouchEvent, direction_: Direction,
+    elementRef: HTMLElement): void => {
+    if (elementRef?.style?.width) {
+      this.resizeSideBar(elementRef.style.width);
+    }
+  };
 
   public render() {
     const classes = classNames(this.props);
@@ -419,11 +429,7 @@ class App extends Component<IAppProps, IAppState> {
             }}>
               {graphExplorerMode === Mode.Complete && (
                 <Resizable
-                  onResize={(e: any, direction: any, ref: any) => {
-                    if (ref?.style?.width) {
-                      this.resizeSideBar(ref.style.width);
-                    }
-                  }}
+                  onResize={this.handleResize}
                   className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth} resizable-sidebar`}
                   minWidth={'71'}
                   maxWidth={maxWidth}
@@ -526,8 +532,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-const StyledApp = styled(App, appStyles as any);
-const IntlApp = injectIntl(StyledApp);
 
 //@ts-ignore
-export default connect(mapStateToProps, mapDispatchToProps)(IntlApp);
+const StyledApp = styled(App, appStyles as IStyles);
+
+//@ts-ignore
+export default connect(mapStateToProps, mapDispatchToProps)(StyledApp);

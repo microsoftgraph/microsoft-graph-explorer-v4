@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getTheme, MessageBarType } from '@fluentui/react';
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import { AuthenticationType } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';

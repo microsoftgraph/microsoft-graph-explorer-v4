@@ -19,7 +19,7 @@ const Response = () => {
 
   const contentDownloadUrl = body?.contentDownloadUrl;
   const throwsCorsError = body?.throwsCorsError;
-  const contentType = getContentType(headers);
+  const contentType = getContentType(headers!);
   return (
     <div style={{ display: 'block' }}>
       {ResponseMessages(graphResponse, sampleQuery, authToken, graphExplorerMode, dispatch)}

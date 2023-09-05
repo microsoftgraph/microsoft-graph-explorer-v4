@@ -12,7 +12,7 @@ import { authenticationWrapper } from '../../../modules/authentication';
 import { AppAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
-import { IRequestOptions } from '../../../types/request';
+import { IHeader, IRequestOptions } from '../../../types/request';
 import { IStatus } from '../../../types/status';
 import { ClientError } from '../../utils/error-utils/ClientError';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
@@ -22,14 +22,14 @@ import { DEFAULT_USER_SCOPES } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
-export function queryResponse(response: object): AppAction {
+function queryResponse(response: object): AppAction {
   return {
     type: QUERY_GRAPH_SUCCESS,
     response
   };
 }
 
-export async function anonymousRequest(
+async function anonymousRequest(
   dispatch: Function,
   query: IQuery,
   getState: Function
@@ -44,10 +44,10 @@ export async function anonymousRequest(
     .then((response) => { return response; });
 }
 
-export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRunnerStatus: IStatus) {
+function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRunnerStatus: IStatus) {
   const escapedUrl = encodeURIComponent(query.sampleUrl);
   const graphUrl = `${proxyUrl}?url=${escapedUrl}`;
-  const sampleHeaders: any = {};
+  const sampleHeaders: { [key: string]: string } = {};
 
   if (query.sampleHeaders && query.sampleHeaders.length > 0) {
     query.sampleHeaders.forEach((header) => {
@@ -77,7 +77,7 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRun
   return { graphUrl, options };
 }
 
-export function authenticatedRequest(
+function authenticatedRequest(
   dispatch: Function,
   query: IQuery,
   scopes: string[] = DEFAULT_USER_SCOPES.split(' ')
@@ -90,7 +90,7 @@ function createAuthenticatedRequest(
   scopes: string[],
   query: IQuery
 ): GraphRequest {
-  const sampleHeaders: any = {};
+  const sampleHeaders: { [key: string]: string } = {};
   sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
   sampleHeaders.prefer = 'ms-graph-dev-mode';
 
@@ -117,8 +117,8 @@ function createAuthenticatedRequest(
     .responseType(ResponseType.RAW);
 }
 
-export function makeGraphRequest(scopes: string[]) {
-  return async (query: IQuery) => {
+function makeGraphRequest(scopes: string[]) {
+  return async (query: IQuery): Promise<Response> => {
     let response;
 
     const graphRequest = createAuthenticatedRequest(scopes, query);
@@ -140,13 +140,13 @@ export function makeGraphRequest(scopes: string[]) {
         response = await graphRequest.delete();
         break;
       default:
-        return;
+        response = undefined;
     }
     return Promise.resolve(response);
   };
 }
 
-export function isImageResponse(contentType: string | undefined) {
+function isImageResponse(contentType: string | undefined) {
   if (!contentType) {
     return false;
   }
@@ -155,17 +155,13 @@ export function isImageResponse(contentType: string | undefined) {
   );
 }
 
-export function isBetaURLResponse(json: any) {
-  return !!json?.account?.[0]?.source?.type?.[0];
-}
-
-export function getContentType(headers: any) {
-  let contentType = null;
-
+function getContentType(headers: Headers | {[key: string]: string}): string | undefined {
   if (headers) {
-    let contentTypes = headers['content-type'];
+    let contentTypes: string | null = null;
     if (headers instanceof Headers) {
       contentTypes = headers.get('content-type');
+    } else {
+      contentTypes = headers['content-type'];
     }
     if (contentTypes) {
       /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
@@ -173,18 +169,18 @@ export function getContentType(headers: any) {
        */
       const splitContentTypes = contentTypes.split(';');
       if (splitContentTypes.length > 0) {
-        contentType = splitContentTypes[0].toLowerCase();
+        return splitContentTypes[0].toLowerCase();
       }
     }
   }
-  return contentType;
+  return undefined
 }
 
-export function isFileResponse(headers: any) {
-  const contentDisposition = headers['content-disposition'];
+function isFileResponse(headers: Headers) {
+  const contentDisposition = headers.get('content-disposition');
   if (contentDisposition) {
     const directives = contentDisposition.split(';');
-    if (directives.contains('attachment')) {
+    if (directives.includes('attachment')) {
       return true;
     }
   }
@@ -204,16 +200,13 @@ export function isFileResponse(headers: any) {
   return false;
 }
 
-export async function generateResponseDownloadUrl(
-  response: Response,
-  respHeaders: any
-) {
+async function generateResponseDownloadUrl(response: Response) {
   try {
-    const fileContents = await parseResponse(response, respHeaders);
-    const contentType = getContentType(respHeaders);
+    const fileContents = await parseResponse(response);
+    const contentType = getContentType(response.headers);
     if (fileContents) {
       const buffer = await response.arrayBuffer();
-      const blob = new Blob([buffer], { type: contentType });
+      const blob = new Blob([buffer], { type: contentType! });
       return URL.createObjectURL(blob);
     }
   } catch (error) {
@@ -221,15 +214,8 @@ export async function generateResponseDownloadUrl(
   }
 }
 
-export function parseResponse(
-  response: any,
-  respHeaders: any = {}
-): Promise<any> {
+function parseResponse(response: Response): Promise<Response | string> {
   if (response && response.headers) {
-    response.headers.forEach((val: any, key: any) => {
-      respHeaders[key] = val;
-    });
-
     const contentType = getContentType(response.headers);
     switch (contentType) {
       case ContentType.Json:
@@ -238,12 +224,11 @@ export function parseResponse(
       case ContentType.HTML:
       case ContentType.TextPlain:
         return response.text();
-
       default:
-        return response;
+        return Promise.resolve(response);
     }
   }
-  return response;
+  return Promise.resolve(response);
 }
 
 /**
@@ -258,7 +243,7 @@ export function parseResponse(
  * @param query
  * @returns true if query calls the OneDrive or reporting API, otherwise false
  */
-export function queryResultsInCorsError(sampleUrl: string): boolean {
+function queryResultsInCorsError(sampleUrl: string): boolean {
   sampleUrl = sampleUrl.toLowerCase();
   if (
     (['/drive/', '/drives/', '/driveItem/'].some((x) =>
@@ -268,4 +253,30 @@ export function queryResultsInCorsError(sampleUrl: string): boolean {
     return true;
   }
   return false;
+}
+
+function getHeaderKeyPairs(sampleHeaders: IHeader[]): { [key: string]: string; } {
+  let headers: { [key: string]: string; } = {};
+  sampleHeaders.forEach(header => {
+    headers = {
+      ...headers,
+      [header.name]: header.value
+    };
+  });
+  return headers;
+}
+
+export {
+  queryResultsInCorsError,
+  parseResponse,
+  generateResponseDownloadUrl,
+  isFileResponse,
+  queryResponse,
+  anonymousRequest,
+  createAnonymousRequest,
+  authenticatedRequest,
+  makeGraphRequest,
+  isImageResponse,
+  getContentType,
+  getHeaderKeyPairs
 }

@@ -5,7 +5,7 @@ import {
   Toggle
 } from '@fluentui/react';
 import debounce from 'lodash.debounce';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 

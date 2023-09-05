@@ -3,9 +3,13 @@ import { isImageResponse } from '../../../services/actions/query-action-creator-
 import { Image, Monaco } from '../../common';
 import { formatXml } from '../../common/monaco/util/format-xml';
 
-const ResponseDisplay = (properties: any) => {
-  const { contentType, body, height } = properties;
+interface ResponseDisplayProps {
+  contentType?: string;
+  body: string | object | undefined,
+  height: string;
+}
 
+const ResponseDisplay = ({ contentType, body, height }: ResponseDisplayProps): JSX.Element => {
   switch (contentType) {
     case ContentType.XML:
       return <Monaco body={formatXml(body)} language={ContentType.HTML} readOnly={true} height={height} />;

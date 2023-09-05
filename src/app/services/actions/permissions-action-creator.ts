@@ -10,8 +10,10 @@ import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
 import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
-import { ACCOUNT_TYPE, DEFAULT_USER_SCOPES, PERMS_SCOPE,
-  REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../graph-constants';
+import {
+  ACCOUNT_TYPE, DEFAULT_USER_SCOPES, PERMS_SCOPE,
+  REVOKING_PERMISSIONS_REQUIRED_SCOPES
+} from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
   FETCH_FULL_SCOPES_PENDING,
@@ -31,6 +33,7 @@ import { RevokePermissionsUtil, REVOKE_STATUS } from './permissions-action-creat
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesError';
 import { IOAuthGrantPayload, IPermissionGrant } from '../../../types/permissions';
+import { BrowserAuthError } from '@azure/msal-browser';
 
 export function fetchFullScopesSuccess(response: object): AppAction {
   return {
@@ -67,7 +70,7 @@ export function fetchScopesError(response: object): AppAction {
   };
 }
 
-export function getAllPrincipalGrantsPending(response: boolean){
+export function getAllPrincipalGrantsPending(response: boolean) {
   return {
     type: GET_ALL_PRINCIPAL_GRANTS_PENDING,
     response
@@ -81,7 +84,7 @@ export function getAllPrincipalGrantsSuccess(response: object): AppAction {
   };
 }
 
-export function getAllPrincipalGrantsError(response: object): AppAction {
+export function getAllPrincipalGrantsError(response: unknown): AppAction {
   return {
     type: GET_ALL_PRINCIPAL_GRANTS_ERROR,
     response
@@ -201,8 +204,8 @@ export function consentToScopes(scopes: string[]) {
           }))
         dispatch(fetchAllPrincipalGrants());
       }
-    } catch (error: any) {
-      const { errorCode } = error;
+    } catch (error: unknown) {
+      const { errorCode } = error as BrowserAuthError;
       dispatch(
         setQueryResponseStatus({
           statusText: translateMessage('Scope consent failed'),
@@ -218,7 +221,7 @@ export function consentToScopes(scopes: string[]) {
 
 const validateConsentedScopes = (scopeToBeConsented: string[], consentedScopes: string[],
   consentedResponse: string[]) => {
-  if(!consentedScopes || !consentedResponse || !scopeToBeConsented) {
+  if (!consentedScopes || !consentedResponse || !scopeToBeConsented) {
     return consentedResponse;
   }
   const expectedScopes = [...consentedScopes, ...scopeToBeConsented];
@@ -264,7 +267,8 @@ export function revokeScopes(permissionToRevoke: string) {
       const retryDelay = 100;
       const permissionsUpdateObject: IPermissionUpdate = {
         permissionBeingRevokedIsAllPrincipal, userIsTenantAdmin, revokePermissionUtil, grantsPayload,
-        profile, permissionToRevoke, newScopesArray, retryCount, dispatch, retryDelay }
+        profile, permissionToRevoke, newScopesArray, retryCount, dispatch, retryDelay
+      }
 
       const updatedScopes = await updatePermissions(permissionsUpdateObject)
 
@@ -274,16 +278,16 @@ export function revokeScopes(permissionToRevoke: string) {
         dispatch(revokeScopesSuccess());
         trackRevokeConsentEvent(REVOKE_STATUS.success, permissionToRevoke);
       }
-      else{
+      else {
         throw new RevokeScopesError({
           errorText: 'Scopes not updated', statusText: 'An error occurred when unconsenting',
           status: '500', messageType: 1
         })
       }
     }
-    catch (errorMessage: any) {
+    catch (errorMessage: unknown) {
       if (errorMessage instanceof RevokeScopesError || errorMessage instanceof Function) {
-        const { errorText, statusText, status, messageType } = errorMessage
+        const { errorText, statusText, status, messageType } = errorMessage as RevokeScopesError
         dispatchScopesStatus(dispatch, statusText, status, messageType);
         const permissionObject = {
           permissionToRevoke,
@@ -293,9 +297,9 @@ export function revokeScopes(permissionToRevoke: string) {
         trackRevokeConsentEvent(REVOKE_STATUS.failure, permissionObject);
       }
       else {
-        const { code, message } = errorMessage;
+        const { message } = errorMessage as Error;
         trackRevokeConsentEvent(REVOKE_STATUS.failure, 'Failed to revoke consent');
-        dispatchScopesStatus(dispatch, message ? message : 'Failed to revoke consent', code ? code : 'Failed', 1);
+        dispatchScopesStatus(dispatch, message ? message : 'Failed to revoke consent', 'Failed', 1);
       }
     }
   }
@@ -321,14 +325,14 @@ Promise<string[] | null> {
   if (isRevokeSuccessful) {
     return newScopesString.split(' ');
   }
-  else if((retryCount < maxRetryCount) && !isRevokeSuccessful) {
+  else if ((retryCount < maxRetryCount) && !isRevokeSuccessful) {
     await new Promise(resolve => setTimeout(resolve, retryDelay * 2));
     dispatchScopesStatus(dispatch, 'We are retrying the revoking operation', 'Retrying', 5);
 
     permissionsUpdateObject.retryCount += 1;
     return updatePermissions(permissionsUpdateObject);
   }
-  else{
+  else {
     return null;
   }
 
@@ -346,7 +350,7 @@ const dispatchScopesStatus = (dispatch: Function, statusText: string, status: st
   )
 }
 
-const trackRevokeConsentEvent = (status: string, permissionObject: any) => {
+const trackRevokeConsentEvent = (status: string, permissionObject: string | object) => {
   telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
     componentName: componentNames.REVOKE_PERMISSION_CONSENT_BUTTON,
     permissionObject,
@@ -361,7 +365,7 @@ export function fetchAllPrincipalGrants() {
       const { profile, consentedScopes, scopes } = getState();
       const tenantWideGrant: IOAuthGrantPayload = scopes.data.tenantWidePermissionsGrant;
       const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
-      if (revokePermissionUtil && revokePermissionUtil.getGrantsPayload() !== null){
+      if (revokePermissionUtil && revokePermissionUtil.getGrantsPayload() !== null) {
         const servicePrincipalAppId = revokePermissionUtil.getServicePrincipalAppId();
         dispatch(getAllPrincipalGrantsPending(true));
         const requestCounter = 0;
@@ -369,11 +373,11 @@ export function fetchAllPrincipalGrants() {
         await checkScopesConsentType(servicePrincipalAppId, tenantWideGrant, revokePermissionUtil,
           consentedScopes, profile, requestCounter, dispatch);
       }
-      else{
+      else {
         dispatch(getAllPrincipalGrantsPending(false));
         dispatchScopesStatus(dispatch, 'Permissions', 'You require the following permissions to read', 0)
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       dispatch(getAllPrincipalGrantsPending(false));
       dispatch(getAllPrincipalGrantsError(error));
     }
@@ -393,11 +397,11 @@ const allScopesHaveConsentType = (consentedScopes: string[], tenantWideGrant: IO
 }
 
 export const getAllPrincipalGrant = (tenantWideGrant: IPermissionGrant[]): string[] => {
-  if(tenantWideGrant){
+  if (tenantWideGrant) {
     const allGrants = tenantWideGrant;
-    if(allGrants){
-      const principalGrant =  allGrants.find(grant => grant.consentType === 'AllPrincipals');
-      if(principalGrant){
+    if (allGrants) {
+      const principalGrant = allGrants.find(grant => grant.consentType === 'AllPrincipals');
+      if (principalGrant) {
         return principalGrant.scope.split(' ');
       }
     }
@@ -406,10 +410,10 @@ export const getAllPrincipalGrant = (tenantWideGrant: IPermissionGrant[]): strin
 }
 
 export const getSinglePrincipalGrant = (tenantWideGrant: IPermissionGrant[], principalId: string): string[] => {
-  if(tenantWideGrant && principalId){
+  if (tenantWideGrant && principalId) {
     const allGrants = tenantWideGrant;
     const singlePrincipalGrant = allGrants.find(grant => grant.principalId === principalId);
-    if(singlePrincipalGrant){
+    if (singlePrincipalGrant) {
       return singlePrincipalGrant.scope.split(' ');
     }
   }

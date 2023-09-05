@@ -50,7 +50,7 @@ export function removeHistoryItem(historyItem: IHistoryItem) {
 
 export function bulkRemoveHistoryItems(historyItems: IHistoryItem[]) {
 
-  const listOfKeys: any = [];
+  const listOfKeys: string[] = [];
   historyItems.forEach(historyItem => {
     listOfKeys.push(historyItem.createdAt);
   });

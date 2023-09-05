@@ -470,7 +470,7 @@ const History = () => {
     dispatch(setSampleQuery(sampleQuery));
     dispatch(viewHistoryItem({
       ...query,
-      headers: query.responseHeaders
+      responseHeaders: query.responseHeaders
     }));
     dispatch(setQueryResponseStatus({
       duration,
