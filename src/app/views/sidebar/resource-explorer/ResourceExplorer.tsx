@@ -258,7 +258,7 @@ const UnstyledResourceExplorer = (props: any) => {
           <DefaultButton onClick={toggleIsDialogHidden} text={translateMessage('Cancel')} />
         </DialogFooter>
       </Dialog>
-    </section >
+    </section>
   );
 }
 

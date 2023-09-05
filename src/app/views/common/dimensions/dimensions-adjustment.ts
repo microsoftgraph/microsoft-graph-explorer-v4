@@ -17,3 +17,13 @@ export function getResponseHeight(height: any, responseAreaExpanded: any) {
   }
   return responseHeight;
 }
+
+export function getResponseEditorHeight(adjustment: number){
+  const queryResponseElement = document.getElementsByClassName('query-response')[0];
+  let responseHeight = '';
+  if(queryResponseElement){
+    const queryResponseElementHeight = queryResponseElement?.clientHeight;
+    responseHeight = `${queryResponseElementHeight-adjustment}px`
+  }
+  return responseHeight;
+}

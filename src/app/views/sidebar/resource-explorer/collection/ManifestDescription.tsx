@@ -2,7 +2,7 @@ import {
   ChoiceGroup,
   FontSizes, FontWeights, IChoiceGroupOption, Link,
   PrimaryButton,
-  VerticalDivider, getTheme, mergeStyleSets
+  VerticalDivider, getTheme, mergeStyleSets, Spinner
 } from '@fluentui/react';
 import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -23,6 +23,7 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
   const [manifest, setManifest] = useState<APIManifest>();
   const [isGeneratingManifest, setIsGeneratingManifest] = useState<boolean>(false);
   const [selectedScope, setSelectedScope] = useState<string>('');
+  const [dots, setDots] = useState<string>('.');
 
   const manifestStyle = mergeStyleSets(
     {
@@ -98,6 +99,20 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
     }
   }, [selectedScope, isFetching]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if(dots === '...'){
+        setDots('.');
+        return;
+      }
+      setDots(dots + '.');
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    }
+  }, [dots]);
+
   const downloadManifest = () => {
     if (!manifest) { return; }
     const now = new Date();
@@ -127,10 +142,20 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
     });
   }
 
+  const showFetchingPermissionsText = () => {
+    const idString = `Fetching permissions for your items ${dots}`
+    return (
+      <FormattedMessage id={idString}/>
+    )
+  }
+
   return (
     <div className={manifestStyle.root}>
       <FormattedMessage id='API manifest description' />
-      <br />
+      <br/>
+      {isFetching && <br/>}
+      {isFetching && showFetchingPermissionsText()}
+      {isFetching && <br/>}
       <br/>
       <VerticalDivider />
 

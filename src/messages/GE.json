@@ -473,6 +473,7 @@
   "Query documentation": "Query documentation",
   "This token is not a jwt token and cannot be decoded by jwt.ms": "This token is not a jwt token and cannot be decoded by jwt.ms",
   "The URL must contain graph.microsoft.com": "The URL must contain graph.microsoft.com",
+  "Something went wrong": "Something went wrong while downloading this tab. Please try again",
   "Query documentation not found": "Query documentation not found",
   "Fetching code snippet failing": "Retry again",
   "Fetching permissions failing": "Retry again",

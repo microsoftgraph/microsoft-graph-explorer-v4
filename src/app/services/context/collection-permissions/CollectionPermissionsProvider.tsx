@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
 
 import { CollectionPermission, Method, ResourcePath } from '../../../../types/resources';
+import { DEVX_API_URL } from '../../graph-constants';
 import { CollectionPermissionsContext } from './CollectionPermissionsContext';
 
-const DEVX_API_URL = 'https://graphexplorerapi-staging.azurewebsites.net/api/permissions';
+const DEVX_API_PERMISSIONS_URL = `${DEVX_API_URL}/api/permissions`;
 
 function getRequestsFromPaths(paths: ResourcePath[]) {
   const requests: any[] = [];
@@ -18,7 +19,7 @@ function getRequestsFromPaths(paths: ResourcePath[]) {
 }
 
 async function getCollectionPermissions(paths: ResourcePath[]) {
-  const response = await fetch(DEVX_API_URL, {
+  const response = await fetch(DEVX_API_PERMISSIONS_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

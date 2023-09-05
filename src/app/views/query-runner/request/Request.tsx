@@ -1,4 +1,8 @@
-import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
+import {
+  FontSizes,
+  Pivot,
+  PivotItem
+} from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import { CSSProperties, useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
@@ -10,11 +14,9 @@ import { Mode } from '../../../../types/enums';
 import { setDimensions } from '../../../services/actions/dimensions-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
-import { Auth } from './auth';
 import { RequestBody } from './body';
-import { RequestHeaders } from './headers';
-import { Permissions } from './permissions';
 import './request.scss';
+import { Permissions, Auth, RequestHeaders } from '../../common/lazy-loader/component-registry';
 
 const Request = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
@@ -106,7 +108,7 @@ const Request = (props: any) => {
           <div style={containerStyle} id={'access-token-tab'}>
             <Auth />
           </div>
-        </PivotItem>,
+        </PivotItem>
       );
     }
 
