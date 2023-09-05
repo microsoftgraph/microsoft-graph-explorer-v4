@@ -40,7 +40,7 @@ interface Response {
   statusText: string;
   httpVersion: string;
   headers: HarHeader[];
-  cookies: any[];
+  cookies: unknown[];
   content: Content;
   redirectURL: string;
   headersSize: number;
@@ -69,7 +69,7 @@ interface Request {
 interface Cookie {
   name: string;
   value: string;
-  expires?: any;
+  expires?: unknown;
   httpOnly: boolean;
   secure: boolean;
 }

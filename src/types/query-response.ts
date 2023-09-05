@@ -20,5 +20,5 @@ export interface IQueryResponseProps {
 
 export interface IGraphResponse {
   body: any | undefined;
-  headers: any | undefined;
+  headers?: { [key: string]: string };
 }
