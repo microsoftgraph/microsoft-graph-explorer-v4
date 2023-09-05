@@ -19,7 +19,7 @@ import { translateMessage } from '../../../../utils/translate-messages';
 
 
 const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
-  const { getPermissions, permissions, isFetching } = useCollectionPermissions();
+  const { permissions, isFetching } = useCollectionPermissions();
   const [manifest, setManifest] = useState<APIManifest>();
   const [isGeneratingManifest, setIsGeneratingManifest] = useState<boolean>(false);
   const [selectedScope, setSelectedScope] = useState<string>('');
@@ -87,10 +87,6 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
     (state) => state
   );
   const items = collections ? collections.find(k => k.isDefault)!.paths : [];
-
-  useEffect(() => {
-    getPermissions(items);
-  }, []);
 
   useEffect(() => {
     if(!isFetching && selectedScope !== ''){

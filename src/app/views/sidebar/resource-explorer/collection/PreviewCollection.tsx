@@ -13,6 +13,7 @@ import { IResourceLink } from '../../../../../types/resources';
 import { removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { usePopups } from '../../../../services/hooks';
+import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
 import Paths from './Paths';
@@ -25,7 +26,8 @@ export interface IPathsReview {
 const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   const dispatch: AppDispatch = useDispatch();
   const { show: showManifestDescription } = usePopups('manifest-description', 'panel')
-  const { show: viewPermissions } = usePopups('collection-permissions', 'panel')
+  const { show: viewPermissions } = usePopups('collection-permissions', 'panel');
+  const { getPermissions } = useCollectionPermissions();
   const { collections } = useAppSelector(
     (state) => state
   );
@@ -84,6 +86,11 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     }
   }, [items]);
 
+  useEffect(() => {
+    console.log('Fetching permissions')
+    getPermissions(items);
+  }, [items.length])
+
   return (
     <>
       <Label>
@@ -95,14 +102,6 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
         primaryGroupAriaLabel='Selection actions'
         farItemsGroupAriaLabel='More selection actions'
       />
-      {items && items.length > 0 && <div style={{ height: '81vh' }}>
-        <Paths
-          resources={items}
-          columns={columns}
-          selectItems={selectItems}
-        />
-      </div>
-      }
       <DialogFooter
         styles={{
           actionsRight: { bottom: 0, justifyContent: 'start' }
@@ -124,6 +123,14 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
           <FormattedMessage id='View permissions' />
         </PrimaryButton>
       </DialogFooter>
+      {items && items.length > 0 && <div style={{ height: '81vh' }}>
+        <Paths
+          resources={items}
+          columns={columns}
+          selectItems={selectItems}
+        />
+      </div>
+      }
     </>
   )
 }
