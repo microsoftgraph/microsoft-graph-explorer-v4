@@ -61,11 +61,8 @@ function getValidationError(queryUrl: string): string | null {
   try {
     const validator = new ValidatedUrl();
     const validation = validator.validate(queryUrl);
-    if (!validation.success) {
-      return queryUrl.substring(validation.matched, validation.maxMatched);
-    } else {
-      return null;
-    }
+    return (!validation.success) ?
+      queryUrl.substring(validation.matched, validation.maxMatched) : null;
   } catch (error) {
     return null;
   }
