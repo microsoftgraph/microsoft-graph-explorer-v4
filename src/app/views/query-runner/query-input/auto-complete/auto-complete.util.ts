@@ -51,7 +51,7 @@ function getErrorMessage(queryUrl: string) {
   if (error) {
     return `${translateMessage('Possible error found in URL near')}: ${error}`;
   }
-  if (queryUrl.indexOf('graph.microsoft.com') === -1){
+  if (queryUrl.indexOf('graph.microsoft.com') === -1) {
     return translateMessage('The URL must contain graph.microsoft.com');
   }
   return '';
@@ -63,8 +63,9 @@ function getValidationError(queryUrl: string): string | null {
     const validation = validator.validate(queryUrl);
     if (!validation.success) {
       return queryUrl.substring(validation.matched, validation.maxMatched);
+    } else {
+      return null;
     }
-    throw new Error('Validation unsuccessful');
   } catch (error) {
     return null;
   }
