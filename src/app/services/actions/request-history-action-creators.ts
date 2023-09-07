@@ -29,7 +29,7 @@ export function viewHistoryItem(historyItem: IHistoryItem): AppAction {
     type: VIEW_HISTORY_ITEM_SUCCESS,
     response: {
       body: historyItem.result,
-      headers: historyItem.headers
+      headers: historyItem.responseHeaders
     }
   };
 }
