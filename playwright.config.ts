@@ -1,9 +1,9 @@
 require('dotenv').config();
-import { PlaywrightTestConfig, devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 
 const baseURL = process.env.PLAYWRIGHT_TESTS_BASE_URL!;
 
-const config: PlaywrightTestConfig = {
+export default defineConfig({
   globalSetup: require.resolve('./src/tests/ui/global-setup'),
   expect: {
     toMatchSnapshot: {
@@ -41,5 +41,4 @@ const config: PlaywrightTestConfig = {
         viewport: { width: 1365, height: 768 }}
     }
   ]
-};
-export default config;
+});
