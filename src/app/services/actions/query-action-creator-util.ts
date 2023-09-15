@@ -277,6 +277,5 @@ export async function makeAppOnlyCall(dispatch: Function, query: IQuery, accessT
     }
   };
   dispatch(queryRunningStatus(true));
-  console.log('Making app only call ', query, accessToken);
   return await fetch(query.sampleUrl, options)
 }

@@ -31,7 +31,6 @@ export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = !!getState()?.authToken?.token;
     const isAppOnlyCall = !!getState()?.appOnlyCalls?.isAppOnly;
-    console.log('isAppOnlyCall', isAppOnlyCall);
     const respHeaders: any = {};
     const createdAt = new Date().toISOString();
 

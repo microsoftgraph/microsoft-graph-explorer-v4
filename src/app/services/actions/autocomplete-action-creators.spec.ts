@@ -108,7 +108,10 @@ store.getState = () => ({
   ...mockState,
   proxyUrl: '',
   collections: [],
-  appOnlyCalls: false
+  appOnlyCalls: {
+    isAppOnly: false,
+    accessToken: ''
+  }
 })
 
 describe('fetchAutoCompleteOptions', () => {
