@@ -16,10 +16,11 @@ import { translateMessage } from '../../utils/translate-messages';
 import { QueryInput } from './query-input';
 import './query-runner.scss';
 import Request from './request/Request';
+import { makeAppOnlyCall } from '../../services/actions/query-action-creator-util';
 
 const QueryRunner = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
-  const { sampleQuery } = useAppSelector((state) => state);
+  const { sampleQuery, appOnlyCalls } = useAppSelector((state) => state);
 
   const [sampleBody, setSampleBody] = useState('');
 

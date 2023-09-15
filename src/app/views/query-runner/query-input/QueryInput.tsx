@@ -33,7 +33,7 @@ const QueryInput = (props: IQueryInputProps) => {
   });
 
   const { sampleQuery, authToken,
-    isLoadingData: submitting, sidebarProperties } = useAppSelector((state) => state);
+    isLoadingData: submitting, sidebarProperties, appOnlyCalls } = useAppSelector((state) => state);
   const authenticated = !!authToken.token;
   const { mobileScreen } = sidebarProperties;
 
@@ -111,7 +111,7 @@ const QueryInput = (props: IQueryInputProps) => {
           <SubmitButton
             className='run-query-button'
             text={translateMessage('Run Query')}
-            disabled={showError || !sampleQuery.sampleUrl}
+            disabled={(showError || !sampleQuery.sampleUrl) && !appOnlyCalls?.isAppOnly}
             role='button'
             handleOnClick={() => runQuery()}
             submitting={submitting}

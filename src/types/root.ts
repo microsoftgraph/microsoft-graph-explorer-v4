@@ -1,3 +1,4 @@
+import { AppOnlyToken } from '../app/services/actions/app-only-switch-action-creator';
 import { IAdaptiveCardResponse } from './adaptivecard';
 import { IAuthenticateResult } from './authentication';
 import { IAutocompleteResponse } from './auto-complete';
@@ -43,6 +44,7 @@ export interface ApplicationState {
   resources: IResources;
   policies: IPolicies;
   collections?: Collection[];
+  appOnlyCalls?: AppOnlyToken;
 }
 
 export interface IApiFetch {

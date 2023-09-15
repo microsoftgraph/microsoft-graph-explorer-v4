@@ -13,6 +13,7 @@ import {
   generateResponseDownloadUrl,
   isFileResponse,
   isImageResponse,
+  makeAppOnlyCall,
   parseResponse,
   queryResponse,
   queryResultsInCorsError
@@ -29,6 +30,8 @@ let CURRENT_RETRIES = 0;
 export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
     const tokenPresent = !!getState()?.authToken?.token;
+    const isAppOnlyCall = !!getState()?.appOnlyCalls?.isAppOnly;
+    console.log('isAppOnlyCall', isAppOnlyCall);
     const respHeaders: any = {};
     const createdAt = new Date().toISOString();
 
@@ -40,6 +43,17 @@ export function runQuery(query: IQuery) {
         .catch(async (error: any) => {
           return handleError(dispatch, error);
         });
+    }
+    else if(isAppOnlyCall){
+      return makeAppOnlyCall(dispatch, query, getState()?.appOnlyCalls?.accessToken)
+        .then(async (response: Response) => {
+          await processResponse(response, respHeaders, dispatch, createdAt);
+        }
+        )
+        .catch(async (error: any) => {
+          return handleError(dispatch, error);
+        }
+        );
     }
 
     return anonymousRequest(dispatch, query, getState)

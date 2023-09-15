@@ -269,3 +269,14 @@ export function queryResultsInCorsError(sampleUrl: string): boolean {
   }
   return false;
 }
+
+export async function makeAppOnlyCall(dispatch: Function, query: IQuery, accessToken: string) {
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    }
+  };
+  dispatch(queryRunningStatus(true));
+  console.log('Making app only call ', query, accessToken);
+  return await fetch(query.sampleUrl, options)
+}

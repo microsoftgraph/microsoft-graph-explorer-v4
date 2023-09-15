@@ -35,3 +35,13 @@ export function trackedGenericCopy(
   genericCopy(text);
   telemetry.trackCopyButtonClickEvent(componentName, sampleQuery, properties);
 }
+
+export async function copyFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    return Promise.resolve(text);
+  } catch (error) {
+    return Promise.reject('Error reading from clipboard');
+  }
+}
+

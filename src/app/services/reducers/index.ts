@@ -23,6 +23,7 @@ import { snippets } from './snippet-reducer';
 import { termsOfUse } from './terms-of-use-reducer';
 import { theme } from './theme-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
+import { appOnlyCalls } from './app-only-switch-reducer';
 
 export default combineReducers({
   adaptiveCard,
@@ -48,5 +49,6 @@ export default combineReducers({
   sidebarProperties,
   snippets,
   termsOfUse,
-  theme
+  theme,
+  appOnlyCalls
 });

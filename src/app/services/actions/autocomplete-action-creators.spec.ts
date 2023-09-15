@@ -107,7 +107,8 @@ const mockState: ApplicationState = {
 store.getState = () => ({
   ...mockState,
   proxyUrl: '',
-  collections: []
+  collections: [],
+  appOnlyCalls: false
 })
 
 describe('fetchAutoCompleteOptions', () => {

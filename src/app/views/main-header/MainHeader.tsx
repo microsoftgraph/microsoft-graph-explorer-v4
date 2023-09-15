@@ -1,6 +1,6 @@
 import {
   FontIcon, getId, getTheme, IconButton, IStackTokens, Label,
-  registerIcons, Stack, TooltipHost
+  registerIcons, Stack, Toggle, TooltipHost
 } from '@fluentui/react';
 import { FormattedMessage } from 'react-intl';
 
@@ -12,6 +12,10 @@ import { mainHeaderStyles } from './MainHeader.styles';
 import TenantIcon from './tenantIcon';
 import { Mode } from '../../../types/enums';
 import { useAppSelector } from '../../../store';
+import { translateMessage } from '../../utils/translate-messages';
+import { AppOnlyToken, switchToAppOnlyCalls } from '../../services/actions/app-only-switch-action-creator';
+import { useDispatch } from 'react-redux';
+import { copyFromClipboard } from '../common/copy';
 
 interface MainHeaderProps {
   toggleSidebar: Function;
@@ -32,6 +36,7 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
   const { profile, graphExplorerMode, sidebarProperties } = useAppSelector(
     (state) => state
   );
+  const dispatch = useDispatch();
 
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -41,6 +46,20 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
   const { rootStyles: itemAlignmentStackStyles, rightItemsStyles, graphExplorerLabelStyles,
     feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles,
     tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles(currentTheme, mobileScreen);
+
+  const switchToAppOnly = async (_event: React.MouseEvent<HTMLElement>, checked?: boolean | undefined) => {
+    // write logic to open vs code extension to retrieve token
+
+    const accessToken = await copyFromClipboard();
+    console.log('HEre is the token ', accessToken);
+
+    const appOnlyToken: AppOnlyToken = {
+      isAppOnly: checked ? checked : false,
+      accessToken
+
+    }
+    dispatch(switchToAppOnlyCalls(appOnlyToken));
+  }
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -85,6 +104,13 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
         <Stack horizontal styles={rightItemsStyles}
           tokens={{ childrenGap: mobileScreen ? 0 : 10 }}
         >
+          <Toggle label='App only'
+            onChange={switchToAppOnly}
+            onText={translateMessage('On')}
+            offText={translateMessage('Off')}
+            inlineLabel
+            styles={{ text: { position: 'relative', top: '4px' } }}
+          />
           {!mobileScreen && <FontIcon aria-label='tenant icon' iconName='tenantIcon' style={tenantIconStyles} />}
           {!profile && !mobileScreen &&
             <div style={tenantContainerStyle}>
