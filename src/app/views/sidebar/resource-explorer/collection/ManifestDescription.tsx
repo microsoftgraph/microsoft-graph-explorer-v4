@@ -2,7 +2,7 @@ import {
   ChoiceGroup,
   FontSizes, FontWeights, IChoiceGroupOption, Link,
   PrimaryButton,
-  VerticalDivider, getTheme, mergeStyleSets, Spinner
+  VerticalDivider, getTheme, mergeStyleSets
 } from '@fluentui/react';
 import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -16,6 +16,7 @@ import { useCollectionPermissions } from '../../../../services/hooks/useCollecti
 import { downloadToLocal, trackDownload } from '../../../common/download';
 import { generateAPIManifest } from './api-manifest.util';
 import { translateMessage } from '../../../../utils/translate-messages';
+import { genericCopy } from '../../../common/copy';
 
 
 const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
@@ -124,10 +125,21 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
 
   const openManifestInVisualStudio = () => {
     const base64UrlEncodedManifest = btoa(JSON.stringify(manifest));
-    // eslint-disable-next-line max-len
-    const manifestContentUrl = `vscode://ms-graph.kiota/OpenManifest?manifestContent=${base64UrlEncodedManifest}&apiIdentifier=graph`;
-    window.open(manifestContentUrl, '_blank');
-    trackVSCodeButtonClick();
+    try{
+      genericCopy(base64UrlEncodedManifest);
+
+      // New version of URL to be provided
+      // eslint-disable-next-line max-len
+      const manifestContentUrl = `vscode://ms-graph.kiota/OpenManifest?manifestContent=${base64UrlEncodedManifest}&apiIdentifier=graph`;
+      window.open(manifestContentUrl, '_blank');
+      trackVSCodeButtonClick();
+    }
+    catch{
+      telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+        ComponentName: componentNames.OPEN_MANIFEST_IN_VISUAL_STUDIO_CODE_BUTTON,
+        Error: 'Failed to copy manifest to clipboard'
+      });
+    }
   }
 
   const onSelectionChange = useCallback((ev: FormEvent<HTMLElement | HTMLInputElement> | undefined,

@@ -34,9 +34,9 @@ const LazyPreviewCollection = lazy(() =>
 const LazyFullPermissions = lazy(() =>
   import(/* webpackChunkName: "full permissions" */ '../../../query-runner/request/permissions/Permissions.Full'));
 const LazyCollectionPermissions = lazy(() =>
-  import(/* webpackChunkName: collection permissions */ '../../../sidebar/resource-explorer/collection/CollectionPermissions'));
+  import(/* webpackChunkName: "collection permissions" */ '../../../sidebar/resource-explorer/collection/CollectionPermissions'));
 const LazyManifestDescription = lazy(() =>
-  import(/* webpackChunkName: manifest description */ '../../../sidebar/resource-explorer/collection/ManifestDescription'));
+  import(/* webpackChunkName: "manifest description" */ '../../../sidebar/resource-explorer/collection/ManifestDescription'));
 
 export const Permissions = (props?: IPermissionProps) => {
   return (
