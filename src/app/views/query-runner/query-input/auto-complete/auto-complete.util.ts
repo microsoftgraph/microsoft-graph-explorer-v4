@@ -1,4 +1,4 @@
-import { ValidatedUrl } from '../../../../../modules/validation/abnf';
+import { getValidationError } from '../../../../../modules/validation/url-validator';
 import { hasPlaceHolders } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 
@@ -57,17 +57,6 @@ function getErrorMessage(queryUrl: string) {
   return '';
 }
 
-function getValidationError(queryUrl: string): string | null {
-  try {
-    const validator = new ValidatedUrl();
-    const validation = validator.validate(queryUrl);
-    return (!validation.success) ?
-      queryUrl.substring(validation.matched, validation.maxMatched) : null;
-  } catch (error) {
-    return null;
-  }
-}
-
 function getSearchText(input: string, index: number) {
   const stringPosition = index + 1;
   const previous = input.substring(0, stringPosition);
@@ -76,9 +65,9 @@ function getSearchText(input: string, index: number) {
 }
 
 export {
+  cleanUpSelectedSuggestion,
   getErrorMessage,
   getFilteredSuggestions,
-  cleanUpSelectedSuggestion,
   getLastCharacterOf,
   getSearchText
-}
+};
