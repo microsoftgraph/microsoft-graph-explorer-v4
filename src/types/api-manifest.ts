@@ -14,6 +14,8 @@ interface ApiDependencies {
 
 interface ApiDependency {
   apiDescriptionUrl: string;
+  apiDeploymentBaseUrl: string;
+  apiDescriptionVersion: string;
   auth: Auth;
   baseUrl?: string;
   requests: ManifestRequest[];

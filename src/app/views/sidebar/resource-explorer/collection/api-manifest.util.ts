@@ -13,6 +13,8 @@ export function generateAPIManifest(paths: ResourcePath[], permissions: Collecti
       graph:
       {
         apiDescriptionUrl: paths[0].version === 'beta' ? GRAPH_BETA_DESCRIPTION_URL : GRAPH_V1_DESCRIPTION_URL,
+        apiDeploymentBaseUrl: GRAPH_URL,
+        apiDescriptionVersion: paths[0].version!,
         auth: {
           clientIdentifier: '',
           access: getAccessFromPermissions(permissions, scopeType)
@@ -26,10 +28,10 @@ export function generateAPIManifest(paths: ResourcePath[], permissions: Collecti
 function getRequestsFromPaths(paths: ResourcePath[]): ManifestRequest[] {
   const requests: ManifestRequest[] = [];
   paths.forEach(path => {
-    const { version, method, url } = path;
+    const { method, url } = path;
     requests.push({
       method: method!.toString().toUpperCase(),
-      uriTemplate: `${GRAPH_URL}/${version}${url}`
+      uriTemplate: `${url}`
     });
   });
   return requests;
