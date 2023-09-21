@@ -17,7 +17,7 @@ import { useCollectionPermissions } from '../../../../services/hooks/useCollecti
 import { downloadToLocal, trackDownload } from '../../../common/download';
 import { generateAPIManifest } from './api-manifest.util';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { genericCopy } from '../../../common/copy';
+import { trackedGenericCopy } from '../../../common/copy';
 
 
 const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
@@ -130,10 +130,7 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
     const base64UrlEncodedManifest = btoa(JSON.stringify(manifest));
     try{
       setManifestCopied(true);
-      genericCopy(base64UrlEncodedManifest);
-      telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-        ComponentName: componentNames.COPY_API_MANIFEST_BUTTON
-      });
+      trackedGenericCopy(base64UrlEncodedManifest, componentNames.COPY_API_MANIFEST_BUTTON);
     }
     catch{
       telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
