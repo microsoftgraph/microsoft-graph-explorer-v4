@@ -13,7 +13,7 @@ interface ApiDependencies {
 }
 
 interface ApiDependency {
-  apiDescripionUrl: string;
+  apiDescriptionUrl: string;
   auth: Auth;
   baseUrl?: string;
   requests: ManifestRequest[];

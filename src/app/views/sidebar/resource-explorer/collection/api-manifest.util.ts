@@ -7,12 +7,12 @@ export function generateAPIManifest(paths: ResourcePath[], permissions: Collecti
   return {
     publisher: {
       name: 'Microsoft Graph',
-      contactEmail: ''
+      contactEmail: 'graphsdkpub@microsoft.com'
     },
     apiDependencies: {
       graph:
       {
-        apiDescripionUrl: paths[0].version === 'beta' ? GRAPH_BETA_DESCRIPTION_URL : GRAPH_V1_DESCRIPTION_URL,
+        apiDescriptionUrl: paths[0].version === 'beta' ? GRAPH_BETA_DESCRIPTION_URL : GRAPH_V1_DESCRIPTION_URL,
         auth: {
           clientIdentifier: '',
           access: getAccessFromPermissions(permissions, scopeType)

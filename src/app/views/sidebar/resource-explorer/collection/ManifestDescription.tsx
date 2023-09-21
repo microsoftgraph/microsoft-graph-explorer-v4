@@ -2,6 +2,7 @@ import {
   ChoiceGroup,
   FontSizes, FontWeights, IChoiceGroupOption, Link,
   PrimaryButton,
+  Spinner,
   VerticalDivider, getTheme, mergeStyleSets
 } from '@fluentui/react';
 import React, { FormEvent, useCallback, useEffect, useState } from 'react';
@@ -24,7 +25,7 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
   const [manifest, setManifest] = useState<APIManifest>();
   const [isGeneratingManifest, setIsGeneratingManifest] = useState<boolean>(false);
   const [selectedScope, setSelectedScope] = useState<string>('');
-  const [dots, setDots] = useState<string>('.');
+  const [manifestCopied, setManifestCopied] = useState<boolean>(false);
 
   const manifestStyle = mergeStyleSets(
     {
@@ -100,20 +101,6 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
     }
   }, [selectedScope, isFetching]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if(dots === '...'){
-        setDots('.');
-        return;
-      }
-      setDots(dots + '.');
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    }
-  }, [dots]);
-
   const downloadManifest = () => {
     if (!manifest) { return; }
     const now = new Date();
@@ -124,29 +111,37 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
   }
 
   const openManifestInVisualStudio = () => {
-    const base64UrlEncodedManifest = btoa(JSON.stringify(manifest));
-    try{
-      genericCopy(base64UrlEncodedManifest);
-
-      // New version of URL to be provided
-      // eslint-disable-next-line max-len
-      const manifestContentUrl = `vscode://ms-graph.kiota/OpenManifest?manifestContent=${base64UrlEncodedManifest}&apiIdentifier=graph`;
-      window.open(manifestContentUrl, '_blank');
-      trackVSCodeButtonClick();
-    }
-    catch{
-      telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-        ComponentName: componentNames.OPEN_MANIFEST_IN_VISUAL_STUDIO_CODE_BUTTON,
-        Error: 'Failed to copy manifest to clipboard'
-      });
-    }
+    // eslint-disable-next-line max-len
+    const manifestContentUrl = 'vscode://ms-graph.kiota/OpenManifest?apiIdentifier=graph&fromclipboard=true';
+    window.open(manifestContentUrl, '_blank');
+    trackVSCodeButtonClick();
+    setManifestCopied(false);
   }
 
   const onSelectionChange = useCallback((ev: FormEvent<HTMLElement | HTMLInputElement> | undefined,
     option: IChoiceGroupOption | undefined) => {
     setSelectedScope(option!.key);
     setIsGeneratingManifest(true);
+    setManifestCopied(false);
   }, []);
+
+  const copyManifestToClipboard = () => {
+    if (!manifest) { return; }
+    const base64UrlEncodedManifest = btoa(JSON.stringify(manifest));
+    try{
+      setManifestCopied(true);
+      genericCopy(base64UrlEncodedManifest);
+      telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+        ComponentName: componentNames.COPY_API_MANIFEST_BUTTON
+      });
+    }
+    catch{
+      telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+        ComponentName: componentNames.COPY_API_MANIFEST_BUTTON,
+        Error: 'Failed to copy manifest to clipboard'
+      });
+    }
+  }
 
   const trackVSCodeButtonClick = () => {
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
@@ -154,20 +149,10 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
     });
   }
 
-  const showFetchingPermissionsText = () => {
-    const idString = `Fetching permissions for your items ${dots}`
-    return (
-      <FormattedMessage id={idString}/>
-    )
-  }
-
   return (
     <div className={manifestStyle.root}>
       <FormattedMessage id='API manifest description' />
       <br/>
-      {isFetching && <br/>}
-      {isFetching && showFetchingPermissionsText()}
-      {isFetching && <br/>}
       <br/>
       <VerticalDivider />
 
@@ -192,9 +177,16 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
       <br/>
       <br/>
 
-      <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching}
+      <PrimaryButton
+        onClick={copyManifestToClipboard}
+        disabled={selectedScope === '' || isGeneratingManifest || isFetching || manifestCopied}
+      >
+        <FormattedMessage id='Copy to the clipboard'/>
+      </PrimaryButton>
+      &nbsp; &nbsp; &nbsp;
+      <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching || !manifestCopied}
         onClick={openManifestInVisualStudio}>
-        {isGeneratingManifest && <FormattedMessage id='Hold on, we are creating the manifest' />}
+        {isGeneratingManifest &&<> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
         {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
       </PrimaryButton>
 
@@ -225,7 +217,7 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
       <br/>
       <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching}
         onClick={downloadManifest}>
-        {isGeneratingManifest && <FormattedMessage id='Hold on, we are creating the manifest' />}
+        {isGeneratingManifest &&<> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
         {!isGeneratingManifest && <FormattedMessage id='Download API Manifest' />}
       </PrimaryButton>
       <br/>
