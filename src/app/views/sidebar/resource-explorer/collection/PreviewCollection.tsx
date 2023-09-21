@@ -87,7 +87,6 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   }, [items]);
 
   useEffect(() => {
-    console.log('Fetching permissions')
     getPermissions(items);
   }, [items.length])
 
