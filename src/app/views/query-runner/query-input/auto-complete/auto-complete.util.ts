@@ -51,19 +51,21 @@ function getErrorMessage(queryUrl: string) {
   if (error) {
     return `${translateMessage('Possible error found in URL near')}: ${error}`;
   }
-  if (queryUrl.indexOf('graph.microsoft.com') === -1){
+  if (queryUrl.indexOf('graph.microsoft.com') === -1) {
     return translateMessage('The URL must contain graph.microsoft.com');
   }
   return '';
 }
 
 function getValidationError(queryUrl: string): string | null {
-  const validator = new ValidatedUrl();
-  const validation = validator.validate(queryUrl);
-  if (!validation.success) {
-    return queryUrl.substring(validation.matched, validation.maxMatched);
+  try {
+    const validator = new ValidatedUrl();
+    const validation = validator.validate(queryUrl);
+    return (!validation.success) ?
+      queryUrl.substring(validation.matched, validation.maxMatched) : null;
+  } catch (error) {
+    return null;
   }
-  return null;
 }
 
 function getSearchText(input: string, index: number) {
