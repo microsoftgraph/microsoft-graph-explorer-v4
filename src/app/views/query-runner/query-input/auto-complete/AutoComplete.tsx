@@ -1,4 +1,4 @@
-import { getTheme, KeyCodes, TextField, Text, ITextFieldProps } from '@fluentui/react';
+import { getTheme, ITextFieldProps, KeyCodes, mergeStyles, Text, TextField } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -23,6 +23,7 @@ import { usePrevious } from './use-previous';
 const AutoComplete = (props: IAutoCompleteProps) => {
 
   const dispatch: AppDispatch = useDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const focusRef = useRef<any>(null);
 
   let element: HTMLDivElement | null | undefined = null;
@@ -55,7 +56,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     focusRef?.current?.focus();
   }
 
-  const updateUrlContent = (e: any) => {
+  const updateUrlContent = (e: React.FocusEvent<HTMLInputElement>) => {
     const targetValue = e.target.value;
     setQueryUrl(targetValue);
     props.contentChanged(targetValue);
@@ -70,10 +71,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
   }
 
-  const onChange = (e: any) => {
-    const currentValue = e.target.value;
-    setQueryUrl(currentValue);
-    initialiseAutoComplete(currentValue)
+  const onChange = (event_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+    setQueryUrl(newValue!);
+    initialiseAutoComplete(newValue!)
   };
 
   const isOverflowing = (input: string) => {
@@ -93,11 +93,11 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     return !!element && getTextWidth(input) > element.scrollWidth;
   }
 
-  const selectSuggestion = (e: any) => {
-    appendSuggestionToUrl(e.currentTarget.innerText);
+  const selectSuggestion = (suggestion: string) => {
+    appendSuggestionToUrl(suggestion);
   };
 
-  const onKeyDown = (event: any) => {
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     switch (event.keyCode) {
       case KeyCodes.enter:
         event.preventDefault();
@@ -244,7 +244,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     return <SuffixRenderer />;
   }
 
-  const closeSuggestionDialog = (event: any) => {
+  const closeSuggestionDialog = (event: React.FocusEvent<HTMLInputElement>) => {
     const { currentTarget, relatedTarget } = event;
     if (!currentTarget.contains(relatedTarget as Node) && shouldShowSuggestions) {
       setShouldShowSuggestions(false);
@@ -252,9 +252,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   }
 
   const currentTheme = getTheme();
-  const {
-    input: autoInput
-  }: any = queryInputStyles(currentTheme).autoComplete;
+  const autoInput = mergeStyles(queryInputStyles(currentTheme).autoComplete);
 
   const handleRenderDescription = (properties?: ITextFieldProps): JSX.Element | null => {
     if (!shouldShowSuggestions && !autoCompletePending && properties?.description) {
@@ -266,7 +264,6 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
     return null;
   };
-
 
   return (
     <div onBlur={closeSuggestionDialog}>
@@ -294,7 +291,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
         <SuggestionsList
           filteredSuggestions={suggestions}
           activeSuggestion={activeSuggestion}
-          onClick={(e: any) => selectSuggestion(e)} />}
+          onSuggestionSelected={selectSuggestion} />}
     </div>
   );
 }
