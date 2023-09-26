@@ -81,7 +81,7 @@ configuration:
     # Require branches to be up to date before merging. Requires requiredStatusChecks. boolean
     requiresStrictStatusChecks: true
     # Indicates whether there are restrictions on who can push. boolean. Should be set with whoCanPush.
-    restrictsPushes: true
+    restrictsPushes: false
     # Restrict who can dismiss pull request reviews. boolean
     restrictsReviewDismissals: false
 
