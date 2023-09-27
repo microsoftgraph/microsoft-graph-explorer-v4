@@ -1,4 +1,4 @@
-import { getValidationError } from '../../../../../modules/validation/url-validator';
+import { ValidationService } from '../../../../../modules/validation/validation-service';
 import { hasPlaceHolders } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 
@@ -47,7 +47,8 @@ function getErrorMessage(queryUrl: string) {
     return translateMessage('Parts between {} need to be replaced with real values');
   }
 
-  const error = getValidationError(queryUrl);
+  const validationService = new ValidationService(queryUrl);
+  const error = validationService.getValidationError();
   if (error) {
     return `${translateMessage('Possible error found in URL near')}: ${error}`;
   }
@@ -71,3 +72,4 @@ export {
   getLastCharacterOf,
   getSearchText
 };
+
