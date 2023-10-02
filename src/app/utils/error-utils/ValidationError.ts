@@ -1,7 +1,13 @@
+type ErrorType = 'warning' | 'error';
+
 class ValidationError extends Error {
-  constructor(message: string) {
+  type: ErrorType;
+
+  constructor(message: string, type: ErrorType, name: string = 'ValidationError') {
     super(message);
-    this.name = 'ValidationError';
+    this.name = name;
+    this.type = type;
+    this.message = message;
   }
 }
 

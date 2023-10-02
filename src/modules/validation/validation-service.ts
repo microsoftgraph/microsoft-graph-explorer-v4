@@ -19,20 +19,28 @@ class ValidationService {
   static validate(queryUrl: string): boolean {
 
     if (!queryUrl) {
-      throw new ValidationError(`${translateMessage('Missing url')}`);
+      throw new ValidationError(
+        `${translateMessage('Missing url')}`,
+        'error');
     }
 
     if (queryUrl.indexOf('graph.microsoft.com') === -1) {
-      throw new ValidationError(`${translateMessage('The URL must contain graph.microsoft.com')}`);
+      throw new ValidationError(
+        `${translateMessage('The URL must contain graph.microsoft.com')}`,
+        'error');
     }
 
     if (hasPlaceHolders(queryUrl)) {
-      throw new ValidationError(`${translateMessage('Parts between {} need to be replaced with real values')}`);
+      throw new ValidationError(
+        `${translateMessage('Parts between {} need to be replaced with real values')}`
+        , 'warning');
     }
 
     const abnfError = ValidationService.getAbnfValidationError(queryUrl);
     if (abnfError) {
-      throw new ValidationError(`${translateMessage('Possible error found in URL near')}: ${abnfError}`);
+      throw new ValidationError(
+        `${translateMessage('Possible error found in URL near')}: ${abnfError}`,
+        'warning');
     }
     return true;
   }

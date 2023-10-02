@@ -12,22 +12,18 @@ export const ValidationProvider = ({ children }: ValidationProviderProps) => {
   const [query, setQuery] = useState('');
   const [validationError, setValidationError] = useState('');
 
-  const validate = (queryToValidate: string): boolean => {
+  const validate = (queryToValidate: string) => {
     setQuery(queryToValidate);
     try {
       ValidationService.validate(queryToValidate);
       setIsValid(true);
       setValidationError('');
-      return true;
     } catch (error: unknown) {
       const theError = error as ValidationError;
       setValidationError(theError.message);
-      setIsValid(false);
+      setIsValid(theError.type === 'warning');
     }
-    return false;
   };
-
-  console.log('ValidationProvider', { isValid, query, validationError });
 
   return (
     <ValidationContext.Provider
