@@ -1,5 +1,5 @@
 import { ValidationService } from '../../../../../modules/validation/validation-service';
-import { hasPlaceHolders } from '../../../../utils/sample-url-generation';
+import { ValidationError } from '../../../../utils/error-utils/ValidationError';
 import { translateMessage } from '../../../../utils/translate-messages';
 
 function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
@@ -39,23 +39,13 @@ function getFilteredSuggestions(compareString: string, suggestions: string[]) {
 }
 
 function getErrorMessage(queryUrl: string) {
-  if (!queryUrl) {
-    return translateMessage('Missing url');
+  try {
+    ValidationService.validate(queryUrl);
+    return '';
+  } catch (error: unknown) {
+    const theError = error as ValidationError;
+    return theError.message || translateMessage('Invalid URL');
   }
-
-  if (hasPlaceHolders(queryUrl)) {
-    return translateMessage('Parts between {} need to be replaced with real values');
-  }
-
-  const validationService = new ValidationService(queryUrl);
-  const error = validationService.getValidationError();
-  if (error) {
-    return `${translateMessage('Possible error found in URL near')}: ${error}`;
-  }
-  if (queryUrl.indexOf('graph.microsoft.com') === -1) {
-    return translateMessage('The URL must contain graph.microsoft.com');
-  }
-  return '';
 }
 
 function getSearchText(input: string, index: number) {

@@ -1,31 +1,41 @@
+import { ValidationError } from '../../app/utils/error-utils/ValidationError';
+import { hasPlaceHolders } from '../../app/utils/sample-url-generation';
+import { translateMessage } from '../../app/utils/translate-messages';
 import { ValidatedUrl } from './abnf';
 
-interface IValidationService {
-  getValidationError(): string | null;
-}
+class ValidationService {
 
-class ValidationService implements IValidationService {
-  queryUrl: string;
-
-  constructor(queryUrl: string) {
-    this.queryUrl = queryUrl;
-  }
-
-  private getAbnfValidationError(): string | null {
+  private static getAbnfValidationError(queryUrl: string): string | null {
     try {
       const validator = new ValidatedUrl();
-      const validation = validator.validate(this.queryUrl);
+      const validation = validator.validate(queryUrl);
       return (!validation.success) ?
-        this.queryUrl.substring(validation.matched, validation.maxMatched) : null;
+        queryUrl.substring(validation.matched, validation.maxMatched) : null;
     } catch (error) {
       return null;
     }
   }
 
-  public getValidationError(): string | null {
-    const abnfError = this.getAbnfValidationError();
-    return abnfError;
+  static validate(queryUrl: string): boolean {
+
+    if (!queryUrl) {
+      throw new ValidationError(`${translateMessage('Missing url')}`);
+    }
+
+    if (queryUrl.indexOf('graph.microsoft.com') === -1) {
+      throw new ValidationError(`${translateMessage('The URL must contain graph.microsoft.com')}`);
+    }
+
+    if (hasPlaceHolders(queryUrl)) {
+      throw new ValidationError(`${translateMessage('Parts between {} need to be replaced with real values')}`);
+    }
+
+    const abnfError = ValidationService.getAbnfValidationError(queryUrl);
+    if (abnfError) {
+      throw new ValidationError(`${translateMessage('Possible error found in URL near')}: ${abnfError}`);
+    }
+    return true;
   }
 }
 
-export { ValidationService }
+export { ValidationService };
