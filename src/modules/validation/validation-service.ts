@@ -1,22 +1,27 @@
 import { ValidationError } from '../../app/utils/error-utils/ValidationError';
-import { hasPlaceHolders } from '../../app/utils/sample-url-generation';
+import { sanitizeQueryUrl } from '../../app/utils/query-url-sanitization';
+import { getMatchingResourceForUrl, getResourcesSupportedByVersion } from '../../app/utils/resources/resources-filter';
+import { hasPlaceHolders, parseSampleUrl } from '../../app/utils/sample-url-generation';
 import { translateMessage } from '../../app/utils/translate-messages';
-import { ValidatedUrl } from './abnf';
+import { IResource } from '../../types/resources';
 
 class ValidationService {
 
-  private static getAbnfValidationError(queryUrl: string): string | null {
-    try {
-      const validator = new ValidatedUrl();
-      const validation = validator.validate(queryUrl);
-      return (!validation.success) ?
-        queryUrl.substring(validation.matched, validation.maxMatched) : null;
-    } catch (error) {
+  private static getResourceValidationError(queryUrl: string, resources: IResource[]): string | null {
+    if (resources.length === 0) {
       return null;
     }
+    const sanitisedQuery = sanitizeQueryUrl(queryUrl);
+    const { queryVersion, requestUrl } = parseSampleUrl(sanitisedQuery);
+    const supportedResources = getResourcesSupportedByVersion(resources, queryVersion);
+    const matchingResource = getMatchingResourceForUrl(requestUrl, supportedResources)!;
+    if (!matchingResource) {
+      return 'No resource found matching this query';
+    }
+    return null;
   }
 
-  static validate(queryUrl: string): boolean {
+  static validate(queryUrl: string, resources: IResource[]): boolean {
 
     if (!queryUrl) {
       throw new ValidationError(
@@ -36,12 +41,13 @@ class ValidationService {
         , 'warning');
     }
 
-    const abnfError = ValidationService.getAbnfValidationError(queryUrl);
-    if (abnfError) {
+    const resourcesError = ValidationService.getResourceValidationError(queryUrl, resources);
+    if (resourcesError) {
       throw new ValidationError(
-        `${translateMessage('Possible error found in URL near')}: ${abnfError}`,
-        'warning');
+        `${translateMessage(resourcesError)}`,
+        'error');
     }
+
     return true;
   }
 }
