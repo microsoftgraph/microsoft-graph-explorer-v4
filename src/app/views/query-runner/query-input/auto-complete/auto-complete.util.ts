@@ -38,16 +38,6 @@ function getFilteredSuggestions(compareString: string, suggestions: string[]) {
   return Array.from(new Set(filteredSuggestions));
 }
 
-function getErrorMessage(queryUrl: string) {
-  try {
-    ValidationService.validate(queryUrl);
-    return '';
-  } catch (error: unknown) {
-    const theError = error as ValidationError;
-    return theError.message || translateMessage('Invalid URL');
-  }
-}
-
 function getSearchText(input: string, index: number) {
   const stringPosition = index + 1;
   const previous = input.substring(0, stringPosition);
@@ -57,7 +47,6 @@ function getSearchText(input: string, index: number) {
 
 export {
   cleanUpSelectedSuggestion,
-  getErrorMessage,
   getFilteredSuggestions,
   getLastCharacterOf,
   getSearchText

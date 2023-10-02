@@ -1,5 +1,5 @@
 import { getTheme, ITextFieldProps, KeyCodes, mergeStyles, Text, TextField } from '@fluentui/react';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
@@ -7,13 +7,14 @@ import { AppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IAutoCompleteProps } from '../../../../../types/auto-complete';
 import { fetchAutoCompleteOptions } from '../../../../services/actions/autocomplete-action-creators';
+import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
 import { GRAPH_API_VERSIONS, GRAPH_URL } from '../../../../services/graph-constants';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
 import {
-  cleanUpSelectedSuggestion, getErrorMessage, getFilteredSuggestions,
+  cleanUpSelectedSuggestion, getFilteredSuggestions,
   getSearchText
 } from './auto-complete.util';
 import SuffixRenderer from './suffix/SuffixRenderer';
@@ -23,6 +24,7 @@ import { usePrevious } from './use-previous';
 const AutoComplete = (props: IAutoCompleteProps) => {
 
   const dispatch: AppDispatch = useDispatch();
+  const validation = useContext(ValidationContext);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const focusRef = useRef<any>(null);
 
@@ -265,6 +267,11 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     return null;
   };
 
+  function getErrorMessage() {
+    validation.validate(queryUrl);
+    return validation.error;
+  }
+
   return (
     <div onBlur={closeSuggestionDialog}>
       <div ref={(el) => { element = el }}>
@@ -284,7 +291,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
           onRenderDescription={handleRenderDescription}
-          description={getErrorMessage(queryUrl)}
+          description={getErrorMessage()}
         />
       </div>
       {shouldShowSuggestions && queryUrl && suggestions.length > 0 &&
