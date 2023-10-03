@@ -1,6 +1,5 @@
 import { Label } from '@fluentui/react';
 import React, { ReactNode, useState, useEffect } from 'react';
-
 import { translateMessage } from '../../../utils/translate-messages';
 
 interface Props {
@@ -27,7 +26,7 @@ function ErrorBoundary(props: Props) {
   };
 
   if (state.hasError) {
-    return <Label>{translateMessage('Something went wrong')}</Label>;
+    return <Label>{translateMessage('Something went wrong. Reload the tab')}</Label>;
   } else {
     return (
       <React.Fragment>

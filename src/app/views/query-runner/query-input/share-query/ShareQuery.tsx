@@ -7,9 +7,8 @@ import { PopupsComponent } from '../../../../services/context/popups-context';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { copy } from '../../../common/copy';
-import { CopyButton } from '../../../common/copy/CopyButton';
 import { createShareLink } from '../../../common/share';
-
+import { CopyButton } from '../../../common/lazy-loader/component-registry';
 
 const ShareQuery: React.FC<PopupsComponent<null>> = (props) => {
 
