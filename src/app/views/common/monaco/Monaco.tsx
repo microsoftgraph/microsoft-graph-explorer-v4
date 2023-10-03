@@ -41,7 +41,7 @@ export function Monaco(props: IMonaco) {
   }, [monaco]);
 
   return (
-    <FocusZone disabled={props.extraInfoElement ? false : true}>
+    <FocusZone disabled= {props.extraInfoElement ? false : true}>
       <div className='monaco-editor'>
         {props.extraInfoElement}
         <ThemeContext.Consumer>

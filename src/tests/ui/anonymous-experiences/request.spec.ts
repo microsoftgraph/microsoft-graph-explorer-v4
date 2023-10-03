@@ -210,6 +210,14 @@ test.describe('Run query', () => {
     expect(queryContent).toBe('https://graph.microsoft.com/v1.0/groups?$filter=NOT groupTypes/any(c:c eq \'Unified\')&$count=true');
   });
 
+  test('Add segment and confirm that the URL is on the input field', async () => {
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/tenantRelationships/microsoft.graph.findTenantInformationByTenantId(tenantId=\'{tenantId}\')');
+    const queryContent = await page.locator('[aria-label="Query sample input"]').inputValue();
+    expect(queryContent).toBe('https://graph.microsoft.com/v1.0/tenantRelationships/microsoft.graph.findTenantInformationByTenantId(tenantId=\'{tenantId}\')');
+  })
+
   test('user can run query', async () => {
     const profileSample = page.locator('[aria-label="my profile"]');
     await profileSample.click();
@@ -244,7 +252,11 @@ test.describe('Run query', () => {
   })
 
   test('User can add request bodies that persist when switching between tabs', async () => {
-    await page.locator('[aria-label="my profile"]').click();
+    await page.getByLabel('HTTP request method option').getByText('GET').click();
+    await page.getByRole('option', { name: 'POST' }).click();
+    const queryInputField = page.locator('[aria-label="Query sample input"]');
+    await queryInputField.click();
+    await queryInputField.fill('https://graph.microsoft.com/v1.0/applications');
     await page.getByRole('tab', { name: 'Request body' }).click();
     await page.getByRole('tab', { name: 'Request body' }).press('Tab');
     await page.getByRole('textbox', { name: 'Editor content;Press Alt+F1 for Accessibility Options.' }).fill('{\n\n    "$schema": {}}\n}');

@@ -15,7 +15,6 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
-
 const getInitials = (name: string) => {
   let initials = '';
   if (name && name !== '') {
