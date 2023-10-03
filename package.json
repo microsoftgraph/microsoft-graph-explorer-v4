@@ -101,7 +101,7 @@
                 "@types/isomorphic-fetch": "0.0.36",
                 "@types/jest": "27.4.1",
                 "@types/lodash.debounce": "4.0.7",
-                "@types/react": "18.2.14",
+                "@types/react": "18.2.24",
                 "@types/react-dom": "18.2.8",
                 "@types/react-intl": "3.0.0",
                 "@types/react-redux": "7.1.20",
