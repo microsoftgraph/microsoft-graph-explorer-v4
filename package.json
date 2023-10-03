@@ -93,7 +93,7 @@
                 "not op_mini all"
         ],
         "devDependencies": {
-                "@axe-core/playwright": "4.7.0",
+                "@axe-core/playwright": "4.7.3",
                 "@playwright/test": "1.36.2",
                 "@types/chromedriver": "81.0.1",
                 "@types/enzyme": "3.10.13",
