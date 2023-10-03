@@ -256,7 +256,13 @@ describe('Permissions action creators', () => {
       uniqueId: 'string',
       tenantId: 'string',
       scopes: ['profile.Read User.Read'],
-      account: null,
+      account: {
+        homeAccountId: 'string',
+        environment: 'string',
+        tenantId: 'string',
+        username: 'string',
+        localAccountId: 'string'
+      },
       idToken: 'string',
       idTokenClaims: {},
       fromCache: true,
