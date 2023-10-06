@@ -1,7 +1,3 @@
-import { ValidationService } from '../../../../../modules/validation/validation-service';
-import { ValidationError } from '../../../../utils/error-utils/ValidationError';
-import { translateMessage } from '../../../../utils/translate-messages';
-
 function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
   let finalSelectedSuggestion = `${userInput + selected}`;
   if (compare) {

@@ -57,7 +57,7 @@ const SuffixRenderer = () => {
     const properties: { [key: string]: string } = {
       ComponentName: componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK,
       QueryUrl: parsed.requestUrl,
-      Link: documentationLink || ''
+      Link: documentationLink ?? ''
     };
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, properties);
 

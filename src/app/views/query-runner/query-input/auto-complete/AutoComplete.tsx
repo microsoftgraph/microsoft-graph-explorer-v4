@@ -103,51 +103,28 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     switch (event.keyCode) {
       case KeyCodes.enter:
         event.preventDefault();
-        if (shouldShowSuggestions) {
-          const selected = suggestions[activeSuggestion];
-          appendSuggestionToUrl(selected);
-        } else {
-          props.contentChanged(queryUrl);
-          props.runQuery(queryUrl);
-        }
+        handleEnterKeyPressed();
         break;
 
       case KeyCodes.tab:
         if (shouldShowSuggestions) {
           event.preventDefault();
-          const selected = suggestions[activeSuggestion];
-          appendSuggestionToUrl(selected);
-          setShouldShowSuggestions(false);
+          handleTabKeyPressed();
         }
         break;
 
       case KeyCodes.up:
         event.preventDefault();
-        if (shouldShowSuggestions) {
-          let active = activeSuggestion - 1;
-          if (activeSuggestion === 0) {
-            active = suggestions.length - 1;
-          }
-          setActiveSuggestion(active);
-        }
+        handleUpKeyPressed();
         break;
 
       case KeyCodes.down:
         event.preventDefault();
-        if (shouldShowSuggestions) {
-          let active = activeSuggestion + 1;
-          if (activeSuggestion === suggestions.length - 1) {
-            active = 0;
-          }
-          setActiveSuggestion(active);
-        }
+        handleDownKeyPressed();
         break;
 
       case KeyCodes.escape:
-        if (shouldShowSuggestions) {
-          props.contentChanged(queryUrl)
-          setShouldShowSuggestions(false);
-        }
+        handleEscapeKeyPressed();
         break;
 
       case KeyCodes.backspace:
@@ -160,6 +137,48 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
   };
 
+  function handleEscapeKeyPressed() {
+    if (shouldShowSuggestions) {
+      props.contentChanged(queryUrl);
+      setShouldShowSuggestions(false);
+    }
+  }
+
+  function handleDownKeyPressed() {
+    if (shouldShowSuggestions) {
+      let active = activeSuggestion + 1;
+      if (activeSuggestion === suggestions.length - 1) {
+        active = 0;
+      }
+      setActiveSuggestion(active);
+    }
+  }
+
+  function handleUpKeyPressed() {
+    if (shouldShowSuggestions) {
+      let active = activeSuggestion - 1;
+      if (activeSuggestion === 0) {
+        active = suggestions.length - 1;
+      }
+      setActiveSuggestion(active);
+    }
+  }
+
+  function handleTabKeyPressed() {
+    const selected = suggestions[activeSuggestion];
+    appendSuggestionToUrl(selected);
+    setShouldShowSuggestions(false);
+  }
+
+  function handleEnterKeyPressed() {
+    if (shouldShowSuggestions) {
+      const selected = suggestions[activeSuggestion];
+      appendSuggestionToUrl(selected);
+    } else {
+      props.contentChanged(queryUrl);
+      props.runQuery(queryUrl);
+    }
+  }
 
   const requestForAutocompleteOptions = (url: string, context: SignContext) => {
     const signature = sanitizeQueryUrl(url);
