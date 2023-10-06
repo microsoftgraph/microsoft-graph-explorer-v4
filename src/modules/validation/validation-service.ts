@@ -4,6 +4,7 @@ import { getMatchingResourceForUrl } from '../../app/utils/resources/resources-f
 import { hasPlaceHolders, parseSampleUrl } from '../../app/utils/sample-url-generation';
 import { translateMessage } from '../../app/utils/translate-messages';
 import { IResource } from '../../types/resources';
+import { ValidatedUrl } from './abnf';
 
 class ValidationService {
 
@@ -18,6 +19,17 @@ class ValidationService {
       return 'No resource found matching this query';
     }
     return null;
+  }
+
+  private static getAbnfValidationError(queryUrl: string): string | null {
+    try {
+      const validator = new ValidatedUrl();
+      const validation = validator.validate(queryUrl);
+      return (!validation.success) ?
+        queryUrl.substring(validation.matched, validation.maxMatched) : null;
+    } catch (error) {
+      return null;
+    }
   }
 
   static validate(queryUrl: string, resources: IResource[]): boolean {
@@ -47,8 +59,16 @@ class ValidationService {
         'error');
     }
 
+    const abnfError = ValidationService.getAbnfValidationError(queryUrl);
+    if (abnfError) {
+      throw new ValidationError(
+        `${translateMessage('Possible error found in URL near')}: ${abnfError}`,
+        'warning');
+    }
+
     return true;
   }
 }
 
 export { ValidationService };
+
