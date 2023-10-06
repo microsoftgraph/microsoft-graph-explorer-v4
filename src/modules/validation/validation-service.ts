@@ -1,6 +1,6 @@
 import { ValidationError } from '../../app/utils/error-utils/ValidationError';
 import { sanitizeQueryUrl } from '../../app/utils/query-url-sanitization';
-import { getMatchingResourceForUrl, getResourcesSupportedByVersion } from '../../app/utils/resources/resources-filter';
+import { getMatchingResourceForUrl } from '../../app/utils/resources/resources-filter';
 import { hasPlaceHolders, parseSampleUrl } from '../../app/utils/sample-url-generation';
 import { translateMessage } from '../../app/utils/translate-messages';
 import { IResource } from '../../types/resources';
@@ -11,10 +11,9 @@ class ValidationService {
     if (resources.length === 0) {
       return null;
     }
-    const sanitisedQuery = sanitizeQueryUrl(queryUrl);
-    const { queryVersion, requestUrl } = parseSampleUrl(sanitisedQuery);
-    const supportedResources = getResourcesSupportedByVersion(resources, queryVersion);
-    const matchingResource = getMatchingResourceForUrl(requestUrl, supportedResources)!;
+    const sanitizedUrl = sanitizeQueryUrl(queryUrl);
+    const { requestUrl } = parseSampleUrl(sanitizedUrl);
+    const matchingResource = getMatchingResourceForUrl(requestUrl, resources)!;
     if (!matchingResource) {
       return 'No resource found matching this query';
     }
