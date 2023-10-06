@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { ValidationService } from '../../../../modules/validation/validation-service';
 import { useAppSelector } from '../../../../store';
@@ -53,11 +53,14 @@ export const ValidationProvider = ({ children }: ValidationProviderProps) => {
     }
   };
 
+  const contextValue = useMemo(() => {
+    return { isValid, validate, query, error: validationError };
+  }, [isValid, validate, query, validationError]);
+
   return (
-    <ValidationContext.Provider
-      value={{ isValid, validate, query, error: validationError }}
-    >
+    <ValidationContext.Provider value={contextValue}>
       {children}
     </ValidationContext.Provider>
   );
+
 };
