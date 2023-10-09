@@ -1,7 +1,7 @@
 import { ITheme } from '@fluentui/react';
 
 export const queryInputStyles = (theme: ITheme) => {
-  const controlWidth = '96.5%';
+  const controlWidth = '94%';
   return {
     autoComplete: {
       input: {
