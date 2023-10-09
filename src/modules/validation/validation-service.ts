@@ -1,3 +1,4 @@
+import { GRAPH_URL } from '../../app/services/graph-constants';
 import { ValidationError } from '../../app/utils/error-utils/ValidationError';
 import { sanitizeQueryUrl } from '../../app/utils/query-url-sanitization';
 import { getMatchingResourceForUrl } from '../../app/utils/resources/resources-filter';
@@ -40,7 +41,7 @@ class ValidationService {
         'error');
     }
 
-    if (queryUrl.indexOf('graph.microsoft.com') === -1) {
+    if (queryUrl.indexOf(GRAPH_URL) === -1) {
       throw new ValidationError(
         `${translateMessage('The URL must contain graph.microsoft.com')}`,
         'error');
