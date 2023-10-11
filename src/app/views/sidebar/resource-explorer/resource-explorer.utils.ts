@@ -19,7 +19,7 @@ export function createResourcesList(
 ): INavLinkGroup[] {
   function getLinkType({ segment, links }: any): ResourceLinkType {
     const isGraphFunction = segment.startsWith('microsoft.graph');
-    const hasChildren = links && links.length > 0;
+    const hasChildren = links && links.length > 1;
     if (hasChildren) {
       return ResourceLinkType.NODE;
     }
@@ -34,11 +34,8 @@ export function createResourcesList(
     const { segment, children, labels } = parent;
     const links: IResourceLink[] = [];
     const childPaths = Array.from(new Set([...paths, segment]));
-    if (methods.length > 1) {
-      if (
-        !searchText ||
-        (searchText && childPaths.some((path) => path.contains(searchText)))
-      ) {
+    if (methods.length >= 1) {
+      if (!searchText || (searchText && childPaths.some((path) => path.contains(searchText)))) {
         methods.forEach((method) => {
           links.push(
             createNavLink(
@@ -94,14 +91,14 @@ export function createResourcesList(
       availableMethods
     ).sort(sortResourceLinks); // show graph functions at the top
 
-    // if segment has one method only and no children, do not make segment a node
-    if (availableMethods.length === 1 && versionedChildren.length === 0) {
+    // if segment has one method only and at most 1 child, do not make segment a node
+    if (availableMethods.length === 1 && versionedChildren.length <= 1 ) {
       paths = [...paths, segment];
       method = availableMethods[0];
     }
     const type = getLinkType({ ...info, links: versionedChildren });
     const enclosedCounter =
-      versionedChildren && versionedChildren.length > 0
+      versionedChildren && versionedChildren.length > 1
         ? ` (${versionedChildren.length})`
         : '';
 
@@ -126,7 +123,7 @@ export function createResourcesList(
       paths: pathItems,
       method: method?.toUpperCase(),
       type,
-      links: versionedChildren,
+      links: versionedChildren.length > 1 ? versionedChildren : [],
       docLink: docLink ? docLink : getLink(labels, version, method)
 
     };
