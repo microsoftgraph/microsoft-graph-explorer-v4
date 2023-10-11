@@ -8,9 +8,10 @@ import {
 } from '../redux-constants';
 
 export function history(state: any[] = [], action: AppAction): any {
+  let historyItems: any[];
   switch (action.type) {
     case ADD_HISTORY_ITEM_SUCCESS:
-      let historyItems = [...state, action.response];
+      historyItems = [...state, action.response];
       historyItems = historyItems.reduce((current, compare) => {
         return current.findIndex((historyItem: IHistoryItem) => {
           return historyItem.createdAt === compare.createdAt;
