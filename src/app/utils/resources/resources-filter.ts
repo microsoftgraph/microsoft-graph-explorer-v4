@@ -22,10 +22,11 @@ function getResourcesSupportedByVersion(
 }
 
 function versionExists(resource: IResource, version: string): boolean {
-  return resource &&
-    resource.labels &&
-    resource.labels.length > 0 &&
-    resource.labels.some((k) => k.name === version);
+  if (resource && resource.labels) {
+    return (resource.labels.length === 0) || (resource.labels.length > 0 &&
+      resource.labels.some((k) => k.name === version));
+  }
+  return false;
 }
 
 function searchResources(haystack: IResource[], needle: string): IResource[] {
