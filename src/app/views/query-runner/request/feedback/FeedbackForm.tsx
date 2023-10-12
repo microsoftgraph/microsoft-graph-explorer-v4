@@ -21,7 +21,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
   const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
   const currentTheme = getTheme();
   const { NODE_ENV } = process.env;
-  const { profile, policies } = useAppSelector((state) => state);
+  const { profile } = useAppSelector((state) => state);
 
   function surveyActivated(launcher: any, surveyItem: any) {
     return surveyItem;
@@ -94,15 +94,15 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
       },
       userEmail: ' ',  // Replaced by the user email
       userEmailConsentDefault: false, // Should the email checkbox be checked
-      emailPolicyValue: policies?.data?.email,
-      screenshotPolicyValue: policies?.data?.screenshot,
+      emailPolicyValue: 0, // NotConfigured = 0, Enabled = 1, Disabled = 2
+      screenshotPolicyValue: 0,
       customResourcesSetExternally: 2 // None = 0, Css = 1, Strings = 2, CssAndStrings = 3
     };
 
     floodgateObject.floodgate.initOptions = {
       autoDismiss: 2,
       campaignDefinitions: CampaignDefinitions,
-      showEmailAddress: (policies?.data?.email !== 2),
+      showEmailAddress: true,
       surveyEnabled: (profile?.profileType !== ACCOUNT_TYPE.AAD),
       onDismiss: (campaignId: string, submitted: boolean) => {
         const SecondsBeforePopup = getSecondsBeforePopup(floodgateObject.floodgate.getEngine()

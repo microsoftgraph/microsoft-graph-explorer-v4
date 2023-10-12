@@ -93,9 +93,4 @@ describe('AuthenticationWrapper should', () => {
     const token = await authenticationWrapper.getToken();
     expect(token.account!.homeAccountId).toBe('homeAccountId');
   });
-
-  it('Throws an error when getOcpsToken fails', async () => {
-    const getOcpsToken = await authenticationWrapper.getOcpsToken();
-    expect(getOcpsToken).toBeUndefined();
-  });
 })
