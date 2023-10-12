@@ -152,28 +152,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return response;
   }
 
-  public async getOcpsToken() {
-    const resourceId = 'https://clients.config.office.net/';
-    const ocpsAccessTokenRequest = {
-      scopes: [resourceId + '/.default'],
-      account: this.getAccount()
-    }
-    try {
-      const ocpsToken: string = (await msalApplication.acquireTokenSilent(ocpsAccessTokenRequest)).accessToken;
-      return ocpsToken;
-    } catch (error) {
-      if (error instanceof InteractionRequiredAuthError) {
-        msalApplication.acquireTokenPopup(ocpsAccessTokenRequest).then((ocpsAccessToken) => {
-          const ocpsToken = ocpsAccessToken.accessToken;
-          return ocpsToken;
-        })
-      }
-      else {
-        throw error;
-      }
-    }
-  }
-
   private async getAuthResult(scopes: string[] = [], sessionId?: string): Promise<AuthenticationResult> {
     try {
       const silentRequest: SilentRequest = {
