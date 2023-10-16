@@ -38,7 +38,7 @@ function GetSnippets() {
       sdkDownloadLink: 'https://aka.ms/msgraphpythonsdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     },
-    'Cli' : {
+    'CLI' : {
       sdkDownloadLink: 'https://aka.ms/msgraphclisdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     }
