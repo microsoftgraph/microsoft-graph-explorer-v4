@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { ITheme, Label, Link, PivotItem, getTheme } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -30,9 +31,11 @@ interface ISupportedLanguages {
 
 export function renderSnippets(supportedLanguages: ISupportedLanguages) {
   const sortedSupportedLanguages: ISupportedLanguages = {};
-  Object.keys(supportedLanguages).sort().forEach(key => {
+  sortedSupportedLanguages.CSharp = supportedLanguages.CSharp;
+  Object.keys(supportedLanguages).filter((language) => language !== 'CSharp').sort().forEach(key => {
     sortedSupportedLanguages[key] = supportedLanguages[key];
   });
+
 
   return Object.keys(sortedSupportedLanguages).
     map((language: string) => (
@@ -61,6 +64,7 @@ function Snippet(props: ISnippetProps) {
    * Ie the monaco component expects a lowercase string for the language prop and the graphexplorerapi expects
    * a lowercase string for the param value.
    */
+  const unformattedLanguage = language;
   language = language.toLowerCase();
 
   const { dimensions: { response }, snippets,
@@ -112,7 +116,7 @@ function Snippet(props: ISnippetProps) {
     return (
       <div style={snippetCommentStyles}>
 
-        {setCommentSymbol()} {translateMessage('Leverage libraries')} {language} {translateMessage('Client library')}
+        {setCommentSymbol()} {translateMessage('Leverage libraries')} {unformattedLanguage} {translateMessage('Client library')}
 
         <Link href={sdkDownloadLink} underline styles={snippetLinkStyles}
           onClick={(e) => trackLinkClickedEvent(sdkDownloadLink, e)} target={'_blank'} rel='noreferrer noopener'>
