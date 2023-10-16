@@ -17,11 +17,12 @@ export const configuration: Configuration = {
   },
   cache: {
     cacheLocation: 'localStorage',
-    storeAuthStateInCookie: true
+    storeAuthStateInCookie: true,
+    claimsBasedCachingEnabled: true
   }
 };
 
 
 const msalApplication = new PublicClientApplication(configuration);
-await msalApplication.initialize();
+msalApplication.initialize();
 export{ msalApplication };
