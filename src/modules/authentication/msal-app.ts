@@ -19,21 +19,10 @@ export const configuration: Configuration = {
     cacheLocation: 'localStorage',
     storeAuthStateInCookie: true,
     claimsBasedCachingEnabled: true
-  },
-  system: {
-    loggerOptions: {
-      logLevel: LogLevel.Verbose,
-      loggerCallback: (level, message, containsPii) => {
-        if (containsPii) {
-          return;
-        }
-      },
-      piiLoggingEnabled: false
-    }
   }
 };
 
 
 const msalApplication = new PublicClientApplication(configuration);
-await msalApplication.initialize();
+msalApplication.initialize();
 export{ msalApplication };
