@@ -251,7 +251,13 @@ describe('Permissions action creators', () => {
       uniqueId: 'string',
       tenantId: 'string',
       scopes: ['profile.Read User.Read'],
-      account: null,
+      account: {
+        homeAccountId: 'string',
+        environment: 'string',
+        tenantId: 'string',
+        username: 'string',
+        localAccountId: 'string'
+      },
       idToken: 'string',
       idTokenClaims: {},
       fromCache: true,
@@ -365,8 +371,8 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Failed',
-            status: 'An error occurred when unconsenting. Please try again',
+            statusText: 'Default scope',
+            status: 'Graph Explorer requires this permission for its normal working behavior',
             ok: false,
             messageType: 1
           }
@@ -432,8 +438,8 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Failed',
-            status: 'An error occurred when unconsenting. Please try again',
+            statusText: 'Unable to dissent',
+            status: 'Unable to dissentYou require the following permissions to revoke',
             ok: false,
             messageType: 1
           }
@@ -503,8 +509,9 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Failed',
-            status: 'An error occurred when unconsenting. Please try again',
+            statusText: 'Revoking admin granted scopes',
+            // eslint-disable-next-line max-len
+            status: 'You are unconsenting to an admin pre-consented permission. Ask your tenant admin to revoke consent to this permission on Azure AD',
             ok: false,
             messageType: 1
           }
