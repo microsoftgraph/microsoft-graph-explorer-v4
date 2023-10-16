@@ -57,6 +57,7 @@ export function renderSnippets(supportedLanguages: ISupportedLanguages) {
 function Snippet(props: ISnippetProps) {
   let { language } = props;
   const { sdkDownloadLink, sdkDocLink } = props.snippetInfo[language];
+  const unformattedLanguage = language;
 
   /**
    * Converting language lowercase so that we won't have to call toLowerCase() in multiple places.
@@ -64,7 +65,7 @@ function Snippet(props: ISnippetProps) {
    * Ie the monaco component expects a lowercase string for the language prop and the graphexplorerapi expects
    * a lowercase string for the param value.
    */
-  const unformattedLanguage = language;
+
   language = language.toLowerCase();
 
   const { dimensions: { response }, snippets,
