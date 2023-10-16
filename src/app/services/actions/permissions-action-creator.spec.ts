@@ -184,7 +184,7 @@ describe('Permissions action creators', () => {
       authority: 'string',
       uniqueId: 'string',
       tenantId: 'string',
-      scopes,
+      scopes: ['profile.Read User.Read'],
       account: {
         homeAccountId: 'string',
         environment: 'string',
@@ -287,6 +287,16 @@ describe('Permissions action creators', () => {
             ok: false,
             messageType: 0
           }
+        },
+        { type: 'REVOKE_SCOPES_ERROR', response: null },
+        {
+          type: 'QUERY_GRAPH_STATUS',
+          response: {
+            statusText: 'Default scope',
+            status: 'Graph Explorer requires this permission for its normal working behavior',
+            ok: false,
+            messageType: 1
+          }
         }
       ]
 
@@ -342,6 +352,16 @@ describe('Permissions action creators', () => {
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
             messageType: 0
+          }
+        },
+        { type: 'REVOKE_SCOPES_ERROR', response: null },
+        {
+          type: 'QUERY_GRAPH_STATUS',
+          response: {
+            statusText: 'Unable to dissent',
+            status: 'Unable to dissentYou require the following permissions to revoke',
+            ok: false,
+            messageType: 1
           }
         }
       ]
@@ -401,6 +421,17 @@ describe('Permissions action creators', () => {
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
             messageType: 0
+          }
+        },
+        { type: 'REVOKE_SCOPES_ERROR', response: null },
+        {
+          type: 'QUERY_GRAPH_STATUS',
+          response: {
+            statusText: 'Revoking admin granted scopes',
+            // eslint-disable-next-line max-len
+            status: 'You are unconsenting to an admin pre-consented permission. Ask your tenant admin to revoke consent to this permission on Azure AD',
+            ok: false,
+            messageType: 1
           }
         }
       ]
