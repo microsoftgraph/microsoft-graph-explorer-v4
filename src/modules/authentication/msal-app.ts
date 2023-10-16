@@ -23,5 +23,5 @@ export const configuration: Configuration = {
 
 
 const msalApplication = new PublicClientApplication(configuration);
-msalApplication.initialize();
+await msalApplication.initialize();
 export{ msalApplication };
