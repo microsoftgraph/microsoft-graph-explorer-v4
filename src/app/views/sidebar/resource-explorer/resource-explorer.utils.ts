@@ -26,6 +26,64 @@ export function createResourcesList(
     return isGraphFunction ? ResourceLinkType.FUNCTION : ResourceLinkType.PATH;
   }
 
+  function sortResourceLinks(a: IResourceLink, b: IResourceLink): number {
+    if (a.links.length === 0 && b.links.length > 0) {
+      return -1;
+    }
+    if (b.links.length === 0 && a.links.length > 0) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function createNavLink(
+    info: IResource,
+    parent: string,
+    paths: string[] = [],
+    method?: Method,
+    docLink?: string
+  ): IResourceLink {
+    const { segment, labels } = info;
+    const level = paths.length;
+    const availableMethods: Method[] = getAvailableMethods(labels, version);
+    const versionedChildren = getVersionedChildLinks(
+      info,
+      paths,
+      availableMethods
+    ).sort(sortResourceLinks); // show graph functions at the top
+
+    const type = getLinkType({ ...info, links: versionedChildren });
+    const enclosedCounter =
+      versionedChildren && versionedChildren.length > 0
+        ? ` (${versionedChildren.length})`
+        : '';
+
+    // if segment name does not contain search text, then found text is in child, so expand this link
+    const isExpanded =
+      searchText &&
+        ![...paths, segment].some((path) => path.contains(searchText))
+        ? true
+        : false;
+
+    const pathItems = Array.from(new Set([...paths, segment]));
+    const key = generateKey(method, pathItems, version);
+
+    return {
+      key,
+      url: key,
+      name: `${segment}${enclosedCounter}`,
+      labels,
+      isExpanded,
+      parent,
+      level,
+      paths: pathItems,
+      method: method?.toUpperCase(),
+      type,
+      links: versionedChildren,
+      docLink: docLink ? docLink : getLink(labels, version, method)
+    };
+  }
+
   function getVersionedChildLinks(
     parent: IResource,
     paths: string[],
@@ -34,7 +92,7 @@ export function createResourcesList(
     const { segment, children, labels } = parent;
     const links: IResourceLink[] = [];
     const childPaths = Array.from(new Set([...paths, segment]));
-    if (methods.length > 1) {
+    if (methods.length > 0) {
       if (
         !searchText ||
         (searchText && childPaths.some((path) => path.contains(searchText)))
@@ -66,70 +124,6 @@ export function createResourcesList(
         });
 
     return links;
-  }
-
-  function sortResourceLinks(a: IResourceLink, b: IResourceLink): number {
-    if (a.links.length === 0 && b.links.length > 0) {
-      return -1;
-    }
-    if (b.links.length === 0 && a.links.length > 0) {
-      return 1;
-    }
-    return 0;
-  }
-
-  function createNavLink(
-    info: IResource,
-    parent: string,
-    paths: string[] = [],
-    method?: Method,
-    docLink?: string
-  ): IResourceLink {
-    const { segment, labels } = info;
-    const level = paths.length;
-    const availableMethods: Method[] = getAvailableMethods(labels, version);
-    const versionedChildren = getVersionedChildLinks(
-      info,
-      paths,
-      availableMethods
-    ).sort(sortResourceLinks); // show graph functions at the top
-
-    // if segment has one method only and no children, do not make segment a node
-    if (availableMethods.length === 1 && versionedChildren.length === 0) {
-      paths = [...paths, segment];
-      method = availableMethods[0];
-    }
-    const type = getLinkType({ ...info, links: versionedChildren });
-    const enclosedCounter =
-      versionedChildren && versionedChildren.length > 0
-        ? ` (${versionedChildren.length})`
-        : '';
-
-    // if segment name does not contain search text, then found text is in child, so expand this link
-    const isExpanded =
-      searchText &&
-        ![...paths, segment].some((path) => path.contains(searchText))
-        ? true
-        : false;
-
-    const pathItems = Array.from(new Set([...paths, segment]));
-    const key = generateKey(method, pathItems, version);
-
-    return {
-      key,
-      url: key,
-      name: `${segment}${enclosedCounter}`,
-      labels,
-      isExpanded,
-      parent,
-      level,
-      paths: pathItems,
-      method: method?.toUpperCase(),
-      type,
-      links: versionedChildren,
-      docLink: docLink ? docLink : getLink(labels, version, method)
-
-    };
   }
 
   const navLink = createNavLink(
