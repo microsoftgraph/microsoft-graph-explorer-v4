@@ -123,7 +123,7 @@ export function createResourcesList(
       paths: pathItems,
       method: method?.toUpperCase(),
       type,
-      links: versionedChildren.length > 1 ? versionedChildren : [],
+      links: versionedChildren,
       docLink: docLink ? docLink : getLink(labels, version, method)
 
     };
