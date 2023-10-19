@@ -41,7 +41,8 @@ class ValidationService {
         'error');
     }
 
-    if (queryUrl.indexOf(GRAPH_URL) === -1) {
+    const { hostname, protocol } = new URL(queryUrl);
+    if (`${protocol}//${hostname}` !== GRAPH_URL) {
       throw new ValidationError(
         `${translateMessage('The URL must contain graph.microsoft.com')}`,
         'error');
