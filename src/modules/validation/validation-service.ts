@@ -42,7 +42,7 @@ class ValidationService {
     }
 
     const { hostname, protocol } = new URL(queryUrl);
-    if (`${protocol}//${hostname}` !== GRAPH_URL) {
+    if (`${protocol}//${hostname}` !== GRAPH_URL || !hostname.includes('graph.microsoft.com')) {
       throw new ValidationError(
         `${translateMessage('The URL must contain graph.microsoft.com')}`,
         'error');
@@ -58,7 +58,7 @@ class ValidationService {
     if (resourcesError) {
       throw new ValidationError(
         `${translateMessage(resourcesError)}`,
-        'error');
+        'warning');
     }
 
     const abnfError = ValidationService.getAbnfValidationError(queryUrl);
