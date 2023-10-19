@@ -487,5 +487,7 @@
   "Invalid file format": "Looks like you tried to upload an invalid file format. Please upload a valid Postman collection file",
   "Upload collection": "Upload collection",
   "Would you like to merge with the current collection?": "Would you like to merge with the current collection?",
-  "Invalid URL": "Invalid URL"
+  "Invalid URL": "Invalid URL",
+  "Missing version": "The URL must include a valid version to run the query",
+  "No resource found matching this query": "No resource was found matching this query"
 }

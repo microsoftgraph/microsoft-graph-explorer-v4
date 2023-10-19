@@ -42,9 +42,17 @@ class ValidationService {
     }
 
     const { hostname, protocol } = new URL(queryUrl);
-    if (`${protocol}//${hostname}` !== GRAPH_URL || !hostname.includes('graph.microsoft.com')) {
+    const { hostname: graphHostname } = new URL(GRAPH_URL);
+    if (`${protocol}//${hostname}` !== GRAPH_URL || !hostname.includes(graphHostname)) {
       throw new ValidationError(
         `${translateMessage('The URL must contain graph.microsoft.com')}`,
+        'error');
+    }
+
+    const { queryVersion } = parseSampleUrl(queryUrl);
+    if (!queryVersion) {
+      throw new ValidationError(
+        `${translateMessage('Missing version')}`,
         'error');
     }
 
