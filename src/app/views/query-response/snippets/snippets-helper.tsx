@@ -31,8 +31,16 @@ interface ISupportedLanguages {
 
 export function renderSnippets(supportedLanguages: ISupportedLanguages) {
   const sortedSupportedLanguages: ISupportedLanguages = {};
-  sortedSupportedLanguages.CSharp = supportedLanguages.CSharp;
-  Object.keys(supportedLanguages).filter((language) => language !== 'CSharp').sort().forEach(key => {
+  const sortedKeys = Object.keys(supportedLanguages).sort();
+
+  const cSharpIndex = sortedKeys.indexOf('CSharp');
+  if (cSharpIndex > -1) {
+    sortedKeys.splice(cSharpIndex, 1);
+  }
+
+  sortedKeys.unshift('CSharp');
+
+  sortedKeys.forEach(key => {
     sortedSupportedLanguages[key] = supportedLanguages[key];
   });
 
