@@ -359,7 +359,7 @@ describe('Permissions action creators', () => {
           type: 'QUERY_GRAPH_STATUS',
           response: {
             statusText: 'Unable to dissent',
-            status: 'Unable to dissentYou require the following permissions to revoke',
+            status: 'Unable to dissent. You require the following permissions to revoke',
             ok: false,
             messageType: 1
           }
