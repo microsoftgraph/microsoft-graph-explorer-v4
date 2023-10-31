@@ -1,8 +1,7 @@
-import { GRAPH_URL } from '../../app/services/graph-constants';
 import { ValidationError } from '../../app/utils/error-utils/ValidationError';
 import { sanitizeQueryUrl } from '../../app/utils/query-url-sanitization';
 import { getMatchingResourceForUrl } from '../../app/utils/resources/resources-filter';
-import { hasPlaceHolders, parseSampleUrl } from '../../app/utils/sample-url-generation';
+import { hasPlaceHolders, isValidHostname, parseSampleUrl } from '../../app/utils/sample-url-generation';
 import { translateMessage } from '../../app/utils/translate-messages';
 import { IResource } from '../../types/resources';
 import { ValidatedUrl } from './abnf';
@@ -41,9 +40,8 @@ class ValidationService {
         'error');
     }
 
-    const { hostname, protocol } = new URL(queryUrl);
-    const { hostname: graphHostname } = new URL(GRAPH_URL);
-    if (`${protocol}//${hostname}` !== GRAPH_URL || !hostname.includes(graphHostname)) {
+    const { hostname } = new URL(queryUrl);
+    if (!isValidHostname(hostname)) {
       throw new ValidationError(
         `${translateMessage('The URL must contain graph.microsoft.com')}`,
         'error');
