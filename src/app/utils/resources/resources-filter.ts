@@ -22,10 +22,23 @@ function getResourcesSupportedByVersion(
 }
 
 function versionExists(resource: IResource, version: string): boolean {
-  return resource &&
-    resource.labels &&
-    resource.labels.length > 0 &&
-    resource.labels.some((k) => k.name === version);
+  if (!resource) {
+    return false;
+  }
+
+  const hasLabels = resource.labels && resource.labels.length > 0;
+  const hasChildren = resource.children && resource.children?.length > 0;
+
+  if (!hasLabels && !hasChildren) {
+    return false;
+  }
+
+  if (!hasLabels && hasChildren) {
+    const childLabels = resource.children.map((child) => child.labels);
+    return childLabels.some((child) => child.some((label) => label.name === version));
+  }
+
+  return resource.labels.some((k) => k.name === version);
 }
 
 function searchResources(haystack: IResource[], needle: string): IResource[] {
