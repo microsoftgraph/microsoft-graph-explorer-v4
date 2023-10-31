@@ -99,11 +99,6 @@ const mockState: ApplicationState = {
       children: []
     },
     error: null
-  },
-  policies: {
-    pending: false,
-    data: {},
-    error: null
   }
 }
 

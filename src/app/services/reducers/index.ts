@@ -7,7 +7,6 @@ import { collections } from './collections-reducer';
 import { devxApi } from './devxApi-reducers';
 import { dimensions } from './dimensions-reducers';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
-import { policies } from './ocps-reducers';
 import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
 import { proxyUrl } from './proxy-url-reducer';
@@ -38,7 +37,6 @@ export default combineReducers({
   isLoadingData,
   profile,
   proxyUrl,
-  policies,
   queryRunnerStatus,
   resources,
   responseAreaExpanded,
