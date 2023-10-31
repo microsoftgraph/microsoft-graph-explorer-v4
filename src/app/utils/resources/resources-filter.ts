@@ -27,15 +27,15 @@ function versionExists(resource: IResource, version: string): boolean {
   }
 
   const hasLabels = resource.labels && resource.labels.length > 0;
-  const hasChildren = resource.children && resource.children?.length > 0;
+  const hasChildren = resource.children && resource.children.length > 0;
 
   if (!hasLabels && !hasChildren) {
     return false;
   }
 
   if (!hasLabels && hasChildren) {
-    const childLabels = resource.children.map((child) => child.labels);
-    return childLabels.some((child) => child.some((label) => label.name === version));
+    const childLabels = resource.children?.map((child) => child.labels);
+    return childLabels?.some((child) => child?.some((label) => label.name === version)) || false;
   }
 
   return resource.labels.some((k) => k.name === version);

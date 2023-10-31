@@ -26,7 +26,7 @@ const SuffixRenderer = () => {
 
     const resourceDocumentationUrl = new DocumentationService({
       sampleQuery,
-      source: resources.data.children
+      source: resources.data.children!
     }).getDocumentationLink();
 
     const sampleDocumentationUrl = new DocumentationService({
