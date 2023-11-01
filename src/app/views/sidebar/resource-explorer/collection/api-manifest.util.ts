@@ -1,38 +1,41 @@
 import { APIManifest, Access, ApiDependencies, ManifestRequest } from '../../../../../types/api-manifest';
 import { CollectionPermission, ResourcePath } from '../../../../../types/resources';
 import { GRAPH_BETA_DESCRIPTION_URL, GRAPH_URL, GRAPH_V1_DESCRIPTION_URL } from '../../../../services/graph-constants';
+import { getVersionsFromPaths } from './collection.util';
 
-export function generateAPIManifest(paths: ResourcePath[], permissions: CollectionPermission[],
-  scopeType: string): APIManifest {
+interface ManifestProps {
+  paths: ResourcePath[];
+  permissions?: {
+    [key: string]: CollectionPermission[];
+  };
+  scopeType: string;
+}
+
+export function generateAPIManifest({ paths, permissions, scopeType }: ManifestProps): APIManifest {
   return {
     publisher: {
       name: 'Microsoft Graph',
       contactEmail: 'graphsdkpub@microsoft.com'
     },
-    apiDependencies: getDependenciesFromPaths(paths, permissions, scopeType)
+    apiDependencies: getDependenciesFromPaths({ paths, permissions, scopeType })
   };
 }
 
-function getDependenciesFromPaths(paths: ResourcePath[], permissions: CollectionPermission[],
-  scopeType: string): ApiDependencies {
+function getDependenciesFromPaths({ paths, permissions, scopeType }: ManifestProps): ApiDependencies {
 
   const dependencies: ApiDependencies = {};
-  const versions: string[] = [];
-  paths.forEach(path => {
-    if (!versions.includes(path.version!)) {
-      versions.push(path.version!);
-    }
-  });
+  const versions: string[] = getVersionsFromPaths(paths);
 
   versions.forEach(version => {
-    const dependencyName = `graph-${version}`
+    const dependencyName = `graph-${version}`;
+    const accessPermissions = permissions ? permissions[version] : [];
     dependencies[dependencyName] = {
       apiDescriptionUrl: version === 'beta' ? GRAPH_BETA_DESCRIPTION_URL : GRAPH_V1_DESCRIPTION_URL,
       apiDeploymentBaseUrl: GRAPH_URL,
       apiDescriptionVersion: version,
       auth: {
         clientIdentifier: '',
-        access: getAccessFromPermissions(permissions, scopeType)
+        access: getAccessFromPermissions(accessPermissions, scopeType)
       },
       requests: getRequestsFromPaths(paths, version)
     }

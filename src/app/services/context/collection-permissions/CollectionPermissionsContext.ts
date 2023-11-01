@@ -1,10 +1,10 @@
 import { createContext } from 'react';
 
-import { ResourcePath } from '../../../../types/resources';
+import { CollectionPermission, ResourcePath } from '../../../../types/resources';
 
 interface CollectionPermissionsContext {
   getPermissions: (paths: ResourcePath[]) => Promise<void>;
-  permissions: any[];
+  permissions?: { [key: string]: CollectionPermission[] };
   isFetching?: boolean;
 }
 

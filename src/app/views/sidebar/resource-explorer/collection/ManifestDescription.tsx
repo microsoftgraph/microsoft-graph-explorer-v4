@@ -89,12 +89,12 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
   const { collections } = useAppSelector(
     (state) => state
   );
-  const items = collections ? collections.find(k => k.isDefault)!.paths : [];
+  const paths = collections ? collections.find(k => k.isDefault)!.paths : [];
 
   useEffect(() => {
-    if(!isFetching && selectedScope !== ''){
-      const generatedManifest = generateAPIManifest(items, permissions, selectedScope);
-      if(Object.keys(generatedManifest).length > 0){
+    if (!isFetching && selectedScope !== '') {
+      const generatedManifest = generateAPIManifest({ paths, permissions, scopeType: selectedScope });
+      if (Object.keys(generatedManifest).length > 0) {
         setIsGeneratingManifest(false);
         setManifest(generatedManifest);
       }
@@ -128,11 +128,11 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
   const copyManifestToClipboard = () => {
     if (!manifest) { return; }
     const base64UrlEncodedManifest = btoa(JSON.stringify(manifest));
-    try{
+    try {
       setManifestCopied(true);
       trackedGenericCopy(base64UrlEncodedManifest, componentNames.COPY_API_MANIFEST_BUTTON);
     }
-    catch{
+    catch {
       telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
         ComponentName: componentNames.COPY_API_MANIFEST_BUTTON,
         Error: 'Failed to copy manifest to clipboard'
@@ -149,41 +149,41 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
   return (
     <div className={manifestStyle.root}>
       <FormattedMessage id='API manifest description' />
-      <br/>
-      <br/>
+      <br />
+      <br />
       <VerticalDivider />
 
       <FormattedMessage id='Permissions choice' />
       <ChoiceGroup options={options}
         onChange={onSelectionChange} label=''
-        styles={{flexContainer: manifestStyle.permissionsButtons}}
+        styles={{ flexContainer: manifestStyle.permissionsButtons }}
       />
 
       <VerticalDivider />
 
-      <FormattedMessage id='To generate client'/>
-      <br/>
-      <FormattedMessage id='Use VS Code'/>
+      <FormattedMessage id='To generate client' />
+      <br />
+      <FormattedMessage id='Use VS Code' />
       <Link href='https://learn.microsoft.com/en-us/openapi/kiota/overview'
         target='_blank'
       >
         &nbsp;Kiota
       </Link>
       &nbsp;
-      <FormattedMessage id='VS Code extension'/>
-      <br/>
-      <br/>
+      <FormattedMessage id='VS Code extension' />
+      <br />
+      <br />
 
       <PrimaryButton
         onClick={copyManifestToClipboard}
         disabled={selectedScope === '' || isGeneratingManifest || isFetching || manifestCopied}
       >
-        <FormattedMessage id='Copy to the clipboard'/>
+        <FormattedMessage id='Copy to the clipboard' />
       </PrimaryButton>
       &nbsp; &nbsp; &nbsp;
       <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching || !manifestCopied}
         onClick={openManifestInVisualStudio}>
-        {isGeneratingManifest &&<> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
+        {isGeneratingManifest && <> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
         {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
       </PrimaryButton>
 
@@ -197,7 +197,7 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
       >
         &nbsp;Kiota CLI
       </Link>
-      <br/>
+      <br />
       <div className={manifestStyle.steps}>
         Steps:
         <ul>
@@ -211,13 +211,13 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
         </ul>
       </div>
       <VerticalDivider />
-      <br/>
+      <br />
       <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching}
         onClick={downloadManifest}>
-        {isGeneratingManifest &&<> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
+        {isGeneratingManifest && <> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
         {!isGeneratingManifest && <FormattedMessage id='Download API Manifest' />}
       </PrimaryButton>
-      <br/>
+      <br />
       To learn more about the API Manifest,
       visit the <Link href={API_MANIFEST_SPEC_PAGE} target='_blank' >API Manifest specification</Link> page.
     </div>

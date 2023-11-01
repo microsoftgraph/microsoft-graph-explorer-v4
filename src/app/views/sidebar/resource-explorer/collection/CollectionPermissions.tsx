@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { useAppSelector } from '../../../../../store';
 import { componentNames } from '../../../../../telemetry';
+import { CollectionPermission } from '../../../../../types/resources';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -41,7 +42,7 @@ const CollectionPermissions: React.FC<PopupsComponent<null>> = (props) => {
     }
   }, [paths]);
 
-  if (!isFetching && permissions.length === 0) {
+  if (!isFetching && !permissions) {
     return (
       <Label style={{
         display: 'flex',
@@ -63,14 +64,21 @@ const CollectionPermissions: React.FC<PopupsComponent<null>> = (props) => {
     )
   }
 
+  const permissionsArray: CollectionPermission[] = [];
+  if (permissions) {
+    Object.keys(permissions).forEach(key => {
+      permissionsArray.push(...permissions[key]);
+    });
+  }
+
   return (
     <>
       <DetailsList
-        items={permissions}
+        items={permissionsArray}
         columns={columns}
         selectionMode={SelectionMode.none}
       />
-      {permissions.length > 0 &&
+      {permissions &&
         <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
           <PrimaryButton onClick={downloadPermissions}>
             <FormattedMessage id='Download permissions' />
