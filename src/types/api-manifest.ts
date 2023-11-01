@@ -8,8 +8,8 @@ interface Publisher {
   contactEmail: string;
 }
 
-interface ApiDependencies {
-  graph: ApiDependency;
+export interface ApiDependencies {
+  [key: string]: ApiDependency
 }
 
 interface ApiDependency {

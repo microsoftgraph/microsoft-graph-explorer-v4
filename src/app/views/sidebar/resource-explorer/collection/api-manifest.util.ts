@@ -1,4 +1,4 @@
-import { APIManifest, Access, ManifestRequest } from '../../../../../types/api-manifest';
+import { APIManifest, Access, ApiDependencies, ManifestRequest } from '../../../../../types/api-manifest';
 import { CollectionPermission, ResourcePath } from '../../../../../types/resources';
 import { GRAPH_BETA_DESCRIPTION_URL, GRAPH_URL, GRAPH_V1_DESCRIPTION_URL } from '../../../../services/graph-constants';
 
@@ -9,36 +9,54 @@ export function generateAPIManifest(paths: ResourcePath[], permissions: Collecti
       name: 'Microsoft Graph',
       contactEmail: 'graphsdkpub@microsoft.com'
     },
-    apiDependencies: {
-      graph:
-      {
-        apiDescriptionUrl: paths[0].version === 'beta' ? GRAPH_BETA_DESCRIPTION_URL : GRAPH_V1_DESCRIPTION_URL,
-        apiDeploymentBaseUrl: GRAPH_URL,
-        apiDescriptionVersion: paths[0].version!,
-        auth: {
-          clientIdentifier: '',
-          access: getAccessFromPermissions(permissions, scopeType)
-        },
-        requests: getRequestsFromPaths(paths)
-      }
-    }
+    apiDependencies: getDependenciesFromPaths(paths, permissions, scopeType)
   };
 }
 
-function getRequestsFromPaths(paths: ResourcePath[]): ManifestRequest[] {
+function getDependenciesFromPaths(paths: ResourcePath[], permissions: CollectionPermission[],
+  scopeType: string): ApiDependencies {
+
+  const dependencies: ApiDependencies = {};
+  const versions: string[] = [];
+  paths.forEach(path => {
+    if (!versions.includes(path.version!)) {
+      versions.push(path.version!);
+    }
+  });
+
+  versions.forEach(version => {
+    const dependencyName = `graph-${version}`
+    dependencies[dependencyName] = {
+      apiDescriptionUrl: version === 'beta' ? GRAPH_BETA_DESCRIPTION_URL : GRAPH_V1_DESCRIPTION_URL,
+      apiDeploymentBaseUrl: GRAPH_URL,
+      apiDescriptionVersion: version,
+      auth: {
+        clientIdentifier: '',
+        access: getAccessFromPermissions(permissions, scopeType)
+      },
+      requests: getRequestsFromPaths(paths, version)
+    }
+  });
+
+  return dependencies;
+}
+
+function getRequestsFromPaths(paths: ResourcePath[], version: string): ManifestRequest[] {
   const requests: ManifestRequest[] = [];
   paths.forEach(path => {
     const { method, url } = path;
-    requests.push({
-      method: method!.toString().toUpperCase(),
-      uriTemplate: `${url}`
-    });
+    if (path.version === version) {
+      requests.push({
+        method: method!.toString().toUpperCase(),
+        uriTemplate: `${url}`
+      });
+    }
   });
   return requests;
 }
 
 function getAccessFromPermissions(permissions: CollectionPermission[], scopeType: string): Access[] {
-  if(scopeType === 'Application_DelegatedWork'){
+  if (scopeType === 'Application_DelegatedWork') {
     return [createAccessPermissions(permissions, 'Application'), createAccessPermissions(permissions, 'DelegatedWork')];
   }
   return [createAccessPermissions(permissions, scopeType)];
