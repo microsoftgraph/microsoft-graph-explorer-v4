@@ -96,7 +96,7 @@
                 "@types/chromedriver": "81.0.1",
                 "@types/isomorphic-fetch": "0.0.36",
                 "@types/jest": "29.5.3",
-                "@types/lodash.debounce": "4.0.7",
+                "@types/lodash.debounce": "4.0.8",
                 "@types/react": "18.2.24",
                 "@types/react-dom": "18.2.8",
                 "@types/react-intl": "3.0.0",
