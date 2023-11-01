@@ -71,7 +71,7 @@ function createAccessPermissions(permissions: CollectionPermission[], scopeType:
     return {
       type,
       claims: {
-        scp: {
+        roles: {
           essential: true,
           values: getScopedList(permissions, scopeType)
         }
@@ -81,7 +81,7 @@ function createAccessPermissions(permissions: CollectionPermission[], scopeType:
   return {
     type,
     claims: {
-      roles: {
+      scp: {
         essential: true,
         values: getScopedList(permissions, scopeType)
       }
