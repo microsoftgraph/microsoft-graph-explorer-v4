@@ -183,7 +183,7 @@ const UnstyledResourceExplorer = (props: any) => {
       <hr />
       <Stack horizontal tokens={{ childrenGap: 13, padding: 10 }}>
         <Label styles={{root: {position: 'relative', top: '2px'}}} >
-          {translateMessage('Switch to the beta APIs')}
+          {translateMessage('Switch to beta')}
         </Label>
         <Toggle
           onChange={changeVersion}
