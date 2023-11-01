@@ -67,6 +67,17 @@ function getAccessFromPermissions(permissions: CollectionPermission[], scopeType
 
 function createAccessPermissions(permissions: CollectionPermission[], scopeType: string): Access {
   const type = 'openid';
+  if (scopeType === 'Application') {
+    return {
+      type,
+      claims: {
+        scp: {
+          essential: true,
+          values: getScopedList(permissions, scopeType)
+        }
+      }
+    }
+  }
   return {
     type,
     claims: {
