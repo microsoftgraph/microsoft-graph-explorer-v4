@@ -20,7 +20,7 @@ import { authenticationWrapper } from '../../../modules/authentication';
 import thunk from 'redux-thunk';
 import { ACCOUNT_TYPE } from '../graph-constants';
 import { RevokePermissionsUtil } from './permissions-action-creator.util';
-import { AccountInfo } from '@azure/msal-browser';
+import { translateMessage } from '../../utils/translate-messages';
 const middleware = [thunk];
 let mockStore = configureMockStore(middleware);
 
@@ -275,8 +275,8 @@ describe('Permissions action creators', () => {
       {
         type: 'QUERY_GRAPH_STATUS',
         response: {
-          statusText: 'Success',
-          status: 'Scope consent successful',
+          statusText: translateMessage('Success'),
+          status: translateMessage('Scope consent successful'),
           ok: true,
           messageType: 4
         }
@@ -362,8 +362,8 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Revoking ',
-            status: 'Please wait while we revoke this permission',
+            statusText: translateMessage('Revoking'),
+            status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
             messageType: 0
           }
@@ -372,8 +372,8 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Default scope',
-            status: 'Graph Explorer requires this permission for its normal working behavior',
+            statusText: translateMessage('Default scope'),
+            status: translateMessage('Cannot delete default scope'),
             ok: false,
             messageType: 1
           }
@@ -429,8 +429,8 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Revoking ',
-            status: 'Please wait while we revoke this permission',
+            statusText: translateMessage('Revoking '),
+            status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
             messageType: 0
           }
@@ -439,8 +439,8 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Unable to dissent',
-            status: 'Unable to dissent. You require the following permissions to revoke',
+            statusText: translateMessage('Unable to dissent'),
+            status: translateMessage('Unable to dissent. You require the following permissions to revoke'),
             ok: false,
             messageType: 1
           }
@@ -500,8 +500,8 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Revoking ',
-            status: 'Please wait while we revoke this permission',
+            statusText: translateMessage('Revoking'),
+            status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
             messageType: 0
           }
@@ -510,9 +510,9 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Revoking admin granted scopes',
+            statusText: translateMessage('Revoking admin granted scopes'),
             // eslint-disable-next-line max-len
-            status: 'You are unconsenting to an admin pre-consented permission. Ask your tenant admin to revoke consent to this permission on Azure AD',
+            status: translateMessage('You are unconsenting to an admin pre-consented permission'),
             ok: false,
             messageType: 1
           }
