@@ -39,6 +39,7 @@ import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
+import { ValidationProvider } from '../services/context/validation-context/ValidationProvider';
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -465,18 +466,19 @@ class App extends Component<IAppProps, IAppState> {
                     display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                   }}
                 >
-                  <div style={{ marginBottom: 2 }} >
-                    <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                  </div>
-
-                  <div style={{
-                    display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
-                  }}>
-                    <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                      <StatusMessages />
+                  <ValidationProvider>
+                    <div style={{ marginBottom: 2 }} >
+                      <QueryRunner onSelectVerb={this.handleSelectVerb} />
                     </div>
-                    <QueryResponse verb={this.state.selectedVerb} />
-                  </div>
+                    <div style={{
+                      display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+                    }}>
+                      <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
+                        <StatusMessages />
+                      </div>
+                      <QueryResponse verb={this.state.selectedVerb} />
+                    </div>
+                  </ValidationProvider>
                 </Resizable>
               )}
             </div>
