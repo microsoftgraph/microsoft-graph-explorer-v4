@@ -1,5 +1,5 @@
 import {
-  DefaultButton, FontSizes, IColumn, IIconProps, Label,
+  DefaultButton, FontSizes, IColumn, IIconProps, IconButton, Label,
   PrimaryButton, TooltipHost, getId, getTheme
 } from '@fluentui/react';
 import { FormattedMessage } from 'react-intl';
@@ -27,6 +27,10 @@ const buttonIcon: IIconProps = {
     top: '1px',
     left: '6px'
   }
+};
+
+const infoIcon: IIconProps = {
+  iconName: 'Info'
 };
 
 const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
@@ -113,6 +117,29 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   if (column) {
     const content = item[column.fieldName as keyof any] as string;
     switch (column.key) {
+
+      case 'value':
+        if(props.index === 0) {
+          return <div>
+            {content}
+            <TooltipHost
+              content={translateMessage('Least privileged permission')}
+              id={'leastPrivilegedPermissionsTooltipHost'}
+              calloutProps={{ gapSpace: 0 }}
+            >
+              <IconButton
+                iconProps={infoIcon}
+                styles={{
+                  root: {
+                    position: 'relative',
+                    top: '4px'
+                  }
+                }}
+              />
+            </TooltipHost>
+          </div>
+        }
+        return <div>{content}</div>
 
       case 'isAdmin':
         return <div style={adminLabelStyles}>

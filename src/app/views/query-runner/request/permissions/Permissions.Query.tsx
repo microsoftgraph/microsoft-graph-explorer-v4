@@ -17,7 +17,9 @@ import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment'
 import { getColumns } from './columns';
 import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
-import { setConsentedStatus } from './util';
+import { getColumns } from './columns';
+import { setConsentedStatus, sortPermissionsWithPrivilege } from './util';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
 export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
   const dispatch: AppDispatch = useDispatch();
@@ -28,7 +30,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
 
   const tokenPresent = !!authToken.token;
   const { pending: loading, error } = scopes;
-  const permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
+  let permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
   const [isScreenSizeReduced, setIsScreenSizeReduced] = useState(false);
   const [permissionsError, setPermissionsError] = useState(error);
 
@@ -153,6 +155,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
       ? displayNoPermissionsFoundMessage() :
       displayErrorFetchingPermissionsMessage();
   }
+  permissions = sortPermissionsWithPrivilege(permissions);
 
   return (
     <div >
