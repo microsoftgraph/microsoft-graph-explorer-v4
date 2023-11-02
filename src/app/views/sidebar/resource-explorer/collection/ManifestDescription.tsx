@@ -112,11 +112,6 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
   }
 
   const openManifestInVisualStudio = () => {
-    // slows the process enough to get the manifest in the clipboard
-    setTimeout(() => {
-      copyManifestToClipboard();
-    }, 400);
-
     const manifestContentUrl
       = 'vscode://ms-graph.kiota/OpenManifest?apiIdentifier=graph&fromclipboard=true';
     window.open(manifestContentUrl, '_blank');
@@ -206,7 +201,14 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
       <VerticalDivider />
       <br />
       <Stack horizontal className={manifestStyle.actionButtons}>
-        <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching}
+        <PrimaryButton
+          onClick={copyManifestToClipboard}
+          disabled={selectedScope === '' || isGeneratingManifest || isFetching || manifestCopied}
+        >
+          <FormattedMessage id='Copy to the clipboard' />
+        </PrimaryButton>
+
+        <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching || !manifestCopied}
           onClick={openManifestInVisualStudio}>
           {isGeneratingManifest && <> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
           {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
