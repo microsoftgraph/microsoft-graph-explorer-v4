@@ -20,6 +20,7 @@ import { authenticationWrapper } from '../../../modules/authentication';
 import thunk from 'redux-thunk';
 import { ACCOUNT_TYPE } from '../graph-constants';
 import { RevokePermissionsUtil } from './permissions-action-creator.util';
+import { AccountInfo } from '@azure/msal-browser';
 const middleware = [thunk];
 let mockStore = configureMockStore(middleware);
 
