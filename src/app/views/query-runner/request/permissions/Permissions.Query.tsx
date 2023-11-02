@@ -17,9 +17,7 @@ import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment'
 import { getColumns } from './columns';
 import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
-import { getColumns } from './columns';
 import { setConsentedStatus, sortPermissionsWithPrivilege } from './util';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
 export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
   const dispatch: AppDispatch = useDispatch();
