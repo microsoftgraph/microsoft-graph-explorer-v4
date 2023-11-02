@@ -7,6 +7,7 @@ export interface IPermission {
   isAdmin: boolean;
   consented: boolean;
   consentType?: 'Principal' | 'AllPrinripal';
+  isLeastPrivilege?: boolean;
 }
 
 export interface IPermissionProps {

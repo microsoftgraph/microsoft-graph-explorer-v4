@@ -1,13 +1,19 @@
-import { FontSizes, Pivot, PivotItem } from '@fluentui/react';
+import { FontSizes, Label, Pivot, PivotItem } from '@fluentui/react';
 import { useDispatch } from 'react-redux';
+import { useContext } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { setSnippetTabSuccess } from '../../../services/actions/snippet-action-creator';
-import { renderSnippets } from './snippets-helper';
+import { ValidationContext } from '../../../services/context/validation-context/ValidationContext';
 import { translateMessage } from '../../../utils/translate-messages';
+import { renderSnippets } from './snippets-helper';
+
 function GetSnippets() {
   const dispatch: AppDispatch = useDispatch();
+  const validation = useContext(ValidationContext);
+
   const { snippets, sampleQuery } = useAppSelector((state) => state);
   const supportedLanguages = {
     'CSharp': {
@@ -38,7 +44,7 @@ function GetSnippets() {
       sdkDownloadLink: 'https://aka.ms/msgraphpythonsdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     },
-    'Cli' : {
+    'CLI' : {
       sdkDownloadLink: 'https://aka.ms/msgraphclisdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     }
@@ -52,7 +58,7 @@ function GetSnippets() {
     dispatch(setSnippetTabSuccess(pivotItem.props.itemKey!));
   }
 
-  return <Pivot
+  return validation.isValid ? <Pivot
     className={'unstyled-pivot'}
     selectedKey={snippets.snippetTab}
     onLinkClick={handlePivotItemClick}
@@ -61,8 +67,11 @@ function GetSnippets() {
     overflowAriaLabel={translateMessage('More items')}
   >
     {renderSnippets(supportedLanguages)}
-  </Pivot>;
-}
+  </Pivot> : <Label style={{ marginLeft: '12px' }}>
+    <FormattedMessage id={'Invalid URL'} />!
+  </Label>
+};
+
 const Snippets = telemetry.trackReactComponent(
   GetSnippets,
   componentNames.CODE_SNIPPETS_TAB
