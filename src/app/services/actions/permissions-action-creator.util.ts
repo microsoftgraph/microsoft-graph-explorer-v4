@@ -65,7 +65,7 @@ export class RevokePermissionsUtil {
     if (!this.userHasRequiredPermissions(requiredPermissions, consentedScopes, grantsPayload!)) {
       throw new RevokeScopesError({
         errorText: 'Revoking admin granted scopes',
-        statusText: 'Unable to dissentYou require the following permissions to revoke',
+        statusText: 'Unable to dissent. You require the following permissions to revoke',
         status: 'Unable to dissent',
         messageType: 1
       })
