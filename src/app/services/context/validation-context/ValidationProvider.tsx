@@ -15,27 +15,27 @@ interface ValidationProviderProps {
 
 export const ValidationProvider = ({ children }: ValidationProviderProps) => {
   const { resources } = useAppSelector((state) => state);
-  const base = getResourcesSupportedByVersion(resources.data.children, GRAPH_API_VERSIONS[0]);
+  const base = getResourcesSupportedByVersion(resources.data.children!, GRAPH_API_VERSIONS[0]);
 
   const [isValid, setIsValid] = useState<boolean>(false);
   const [query, setQuery] = useState<string>('');
   const [validationError, setValidationError] = useState<string>('');
 
   const [versionedResources, setVersionedResources] =
-  useState<IResource[]>(resources.data.children.length > 0 ? base : []);
+    useState<IResource[]>(resources.data.children!.length > 0 ? base : []);
   const [version, setVersion] = useState<string>(GRAPH_API_VERSIONS[0]);
 
   const { queryVersion } = parseSampleUrl(query);
 
   useEffect(() => {
-    if (resources.data.children.length > 0) {
-      setVersionedResources(getResourcesSupportedByVersion(resources.data.children, GRAPH_API_VERSIONS[0]));
+    if (resources.data.children!.length > 0) {
+      setVersionedResources(getResourcesSupportedByVersion(resources.data.children!, GRAPH_API_VERSIONS[0]));
     }
   }, [resources])
 
   useEffect(() => {
-    if (version !== queryVersion && GRAPH_API_VERSIONS.includes(queryVersion) && resources.data.children.length > 0) {
-      setVersionedResources(getResourcesSupportedByVersion(resources.data.children, queryVersion));
+    if (version !== queryVersion && GRAPH_API_VERSIONS.includes(queryVersion) && resources.data.children!.length > 0) {
+      setVersionedResources(getResourcesSupportedByVersion(resources.data.children!, queryVersion));
       setVersion(queryVersion);
     }
   }, [query]);
