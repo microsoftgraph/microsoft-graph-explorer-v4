@@ -3,6 +3,7 @@ import {
   FontSizes, FontWeights, IChoiceGroupOption, Link,
   PrimaryButton,
   Spinner,
+  Stack,
   VerticalDivider, getTheme, mergeStyleSets
 } from '@fluentui/react';
 import React, { FormEvent, useCallback, useEffect, useState } from 'react';
@@ -14,10 +15,10 @@ import { APIManifest } from '../../../../../types/api-manifest';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { API_MANIFEST_SPEC_PAGE, PERMS_SCOPE } from '../../../../services/graph-constants';
 import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
-import { downloadToLocal, trackDownload } from '../../../common/download';
-import { generateAPIManifest } from './api-manifest.util';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { trackedGenericCopy } from '../../../common/copy';
+import { downloadToLocal, trackDownload } from '../../../common/download';
+import { generateAPIManifest } from './api-manifest.util';
 
 
 const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
@@ -111,8 +112,13 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
   }
 
   const openManifestInVisualStudio = () => {
-    // eslint-disable-next-line max-len
-    const manifestContentUrl = 'vscode://ms-graph.kiota/OpenManifest?apiIdentifier=graph&fromclipboard=true';
+    // slows the process enough to get the manifest in the clipboard
+    setTimeout(() => {
+      copyManifestToClipboard();
+    }, 400);
+
+    const manifestContentUrl
+      = 'vscode://ms-graph.kiota/OpenManifest?apiIdentifier=graph&fromclipboard=true';
     window.open(manifestContentUrl, '_blank');
     trackVSCodeButtonClick();
     setManifestCopied(false);
@@ -174,19 +180,6 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
       <br />
       <br />
 
-      <PrimaryButton
-        onClick={copyManifestToClipboard}
-        disabled={selectedScope === '' || isGeneratingManifest || isFetching || manifestCopied}
-      >
-        <FormattedMessage id='Copy to the clipboard' />
-      </PrimaryButton>
-      &nbsp; &nbsp; &nbsp;
-      <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching || !manifestCopied}
-        onClick={openManifestInVisualStudio}>
-        {isGeneratingManifest && <> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
-        {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
-      </PrimaryButton>
-
       <VerticalDivider />
       <br />
       <br />
@@ -212,11 +205,19 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
       </div>
       <VerticalDivider />
       <br />
-      <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching}
-        onClick={downloadManifest}>
-        {isGeneratingManifest && <> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
-        {!isGeneratingManifest && <FormattedMessage id='Download API Manifest' />}
-      </PrimaryButton>
+      <Stack horizontal className={manifestStyle.actionButtons}>
+        <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching}
+          onClick={openManifestInVisualStudio}>
+          {isGeneratingManifest && <> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
+          {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
+        </PrimaryButton>
+
+        <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching}
+          onClick={downloadManifest}>
+          {isGeneratingManifest && <> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
+          {!isGeneratingManifest && <FormattedMessage id='Download API Manifest' />}
+        </PrimaryButton>
+      </Stack>
       <br />
       To learn more about the API Manifest,
       visit the <Link href={API_MANIFEST_SPEC_PAGE} target='_blank' >API Manifest specification</Link> page.
