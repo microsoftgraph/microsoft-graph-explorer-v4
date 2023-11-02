@@ -1,5 +1,5 @@
-import { getTheme, KeyCodes, TextField, Text, ITextFieldProps } from '@fluentui/react';
-import { useEffect, useRef, useState } from 'react';
+import { getTheme, ITextFieldProps, KeyCodes, mergeStyles, Text, TextField } from '@fluentui/react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
@@ -7,13 +7,14 @@ import { AppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IAutoCompleteProps } from '../../../../../types/auto-complete';
 import { fetchAutoCompleteOptions } from '../../../../services/actions/autocomplete-action-creators';
+import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
 import { GRAPH_API_VERSIONS, GRAPH_URL } from '../../../../services/graph-constants';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { queryInputStyles } from '../QueryInput.styles';
 import {
-  cleanUpSelectedSuggestion, getErrorMessage, getFilteredSuggestions,
+  cleanUpSelectedSuggestion, getFilteredSuggestions,
   getSearchText
 } from './auto-complete.util';
 import SuffixRenderer from './suffix/SuffixRenderer';
@@ -23,6 +24,8 @@ import { usePrevious } from './use-previous';
 const AutoComplete = (props: IAutoCompleteProps) => {
 
   const dispatch: AppDispatch = useDispatch();
+  const validation = useContext(ValidationContext);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const focusRef = useRef<any>(null);
 
   let element: HTMLDivElement | null | undefined = null;
@@ -55,7 +58,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     focusRef?.current?.focus();
   }
 
-  const updateUrlContent = (e: any) => {
+  const updateUrlContent = (e: React.FocusEvent<HTMLInputElement>) => {
     const targetValue = e.target.value;
     setQueryUrl(targetValue);
     props.contentChanged(targetValue);
@@ -70,10 +73,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
   }
 
-  const onChange = (e: any) => {
-    const currentValue = e.target.value;
-    setQueryUrl(currentValue);
-    initialiseAutoComplete(currentValue)
+  const onChange = (event_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+    setQueryUrl(newValue!);
+    initialiseAutoComplete(newValue!)
   };
 
   const isOverflowing = (input: string) => {
@@ -93,59 +95,36 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     return !!element && getTextWidth(input) > element.scrollWidth;
   }
 
-  const selectSuggestion = (e: any) => {
-    appendSuggestionToUrl(e.currentTarget.innerText);
+  const selectSuggestion = (suggestion: string) => {
+    appendSuggestionToUrl(suggestion);
   };
 
-  const onKeyDown = (event: any) => {
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     switch (event.keyCode) {
       case KeyCodes.enter:
         event.preventDefault();
-        if (shouldShowSuggestions) {
-          const selected = suggestions[activeSuggestion];
-          appendSuggestionToUrl(selected);
-        } else {
-          props.contentChanged(queryUrl);
-          props.runQuery(queryUrl);
-        }
+        handleEnterKeyPressed();
         break;
 
       case KeyCodes.tab:
         if (shouldShowSuggestions) {
           event.preventDefault();
-          const selected = suggestions[activeSuggestion];
-          appendSuggestionToUrl(selected);
-          setShouldShowSuggestions(false);
+          handleTabKeyPressed();
         }
         break;
 
       case KeyCodes.up:
         event.preventDefault();
-        if (shouldShowSuggestions) {
-          let active = activeSuggestion - 1;
-          if (activeSuggestion === 0) {
-            active = suggestions.length - 1;
-          }
-          setActiveSuggestion(active);
-        }
+        handleUpKeyPressed();
         break;
 
       case KeyCodes.down:
         event.preventDefault();
-        if (shouldShowSuggestions) {
-          let active = activeSuggestion + 1;
-          if (activeSuggestion === suggestions.length - 1) {
-            active = 0;
-          }
-          setActiveSuggestion(active);
-        }
+        handleDownKeyPressed();
         break;
 
       case KeyCodes.escape:
-        if (shouldShowSuggestions) {
-          props.contentChanged(queryUrl)
-          setShouldShowSuggestions(false);
-        }
+        handleEscapeKeyPressed();
         break;
 
       case KeyCodes.backspace:
@@ -158,6 +137,48 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
   };
 
+  function handleEscapeKeyPressed() {
+    if (shouldShowSuggestions) {
+      props.contentChanged(queryUrl);
+      setShouldShowSuggestions(false);
+    }
+  }
+
+  function handleDownKeyPressed() {
+    if (shouldShowSuggestions) {
+      let active = activeSuggestion + 1;
+      if (activeSuggestion === suggestions.length - 1) {
+        active = 0;
+      }
+      setActiveSuggestion(active);
+    }
+  }
+
+  function handleUpKeyPressed() {
+    if (shouldShowSuggestions) {
+      let active = activeSuggestion - 1;
+      if (activeSuggestion === 0) {
+        active = suggestions.length - 1;
+      }
+      setActiveSuggestion(active);
+    }
+  }
+
+  function handleTabKeyPressed() {
+    const selected = suggestions[activeSuggestion];
+    appendSuggestionToUrl(selected);
+    setShouldShowSuggestions(false);
+  }
+
+  function handleEnterKeyPressed() {
+    if (shouldShowSuggestions) {
+      const selected = suggestions[activeSuggestion];
+      appendSuggestionToUrl(selected);
+    } else {
+      props.contentChanged(queryUrl);
+      props.runQuery(queryUrl);
+    }
+  }
 
   const requestForAutocompleteOptions = (url: string, context: SignContext) => {
     const signature = sanitizeQueryUrl(url);
@@ -244,7 +265,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     return <SuffixRenderer />;
   }
 
-  const closeSuggestionDialog = (event: any) => {
+  const closeSuggestionDialog = (event: React.FocusEvent<HTMLInputElement>) => {
     const { currentTarget, relatedTarget } = event;
     if (!currentTarget.contains(relatedTarget as Node) && shouldShowSuggestions) {
       setShouldShowSuggestions(false);
@@ -252,9 +273,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   }
 
   const currentTheme = getTheme();
-  const {
-    input: autoInput
-  }: any = queryInputStyles(currentTheme).autoComplete;
+  const autoInput = mergeStyles(queryInputStyles(currentTheme).autoComplete);
 
   const handleRenderDescription = (properties?: ITextFieldProps): JSX.Element | null => {
     if (!shouldShowSuggestions && !autoCompletePending && properties?.description) {
@@ -267,6 +286,10 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     return null;
   };
 
+  function getErrorMessage() {
+    validation.validate(queryUrl);
+    return validation.error;
+  }
 
   return (
     <div onBlur={closeSuggestionDialog}>
@@ -287,14 +310,14 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
           onRenderDescription={handleRenderDescription}
-          description={getErrorMessage(queryUrl)}
+          description={getErrorMessage()}
         />
       </div>
       {shouldShowSuggestions && queryUrl && suggestions.length > 0 &&
         <SuggestionsList
           filteredSuggestions={suggestions}
           activeSuggestion={activeSuggestion}
-          onClick={(e: any) => selectSuggestion(e)} />}
+          onSuggestionSelected={selectSuggestion} />}
     </div>
   );
 }
