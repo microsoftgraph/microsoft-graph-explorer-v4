@@ -486,6 +486,8 @@
   "Remove from collection": "Remove from collection",
   "Invalid file format": "Looks like you tried to upload an invalid file format. Please upload a valid Postman collection file",
   "Upload collection": "Upload collection",
+  "Would you like to merge with the current collection?": "Would you like to merge with the current collection?",
+  "Least privileged permission": "This is the least privileged permission in the list",
   "You have an existing": "You have an existing collection. What would you like to do?",
   "Merge with existing": "Merge",
   "Replace existing": "Replace",
