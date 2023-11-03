@@ -89,3 +89,8 @@ export function hasPlaceHolders(url: string): boolean {
   return placeHolderChars.length > 1 && placeHolderChars.every((char) => url.includes(char));
 }
 
+export function isValidHostname(hostname: string): boolean {
+  const regex = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)?graph\.microsoft\.com$/;
+  return regex.test(hostname);
+}
+

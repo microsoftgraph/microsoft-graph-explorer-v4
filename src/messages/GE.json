@@ -486,8 +486,6 @@
   "Remove from collection": "Remove from collection",
   "Invalid file format": "Looks like you tried to upload an invalid file format. Please upload a valid Postman collection file",
   "Upload collection": "Upload collection",
-  "Would you like to merge with the current collection?": "Would you like to merge with the current collection?",
-  "Least privileged permission": "This is the least privileged permission in the list",
   "You have an existing": "You have an existing collection. What would you like to do?",
   "Merge with existing": "Merge",
   "Replace existing": "Replace",
@@ -510,5 +508,15 @@
   "Download API Manifest": "Download API Manifest",
   "Open in VS Code": "Open in VS Code",
   "Microsoft Graph OpenAPI explorer": "Microsoft Graph OpenAPI explorer",
-  "Hold on, we are creating the manifest": "Hold on, we are creating the manifest"
+  "Hold on, we are creating the manifest": "Hold on, we are creating the manifest",
+  "Invalid URL": "Invalid URL",
+  "Missing version": "The URL must include a valid version to run the query",
+  "No resource found matching this query": "No resource was found matching this query",
+  "Least privileged permission": "This is the least privileged permission in the list",
+  "Revoking": "Revoking ",
+  "Please wait while we revoke this permission": "Please wait while we revoke this permission",
+  "Unable to dissent": "Unable to dissent",
+  "Unable to dissent. You require the following permissions to revoke": "Unable to dissent. You require Directory.Read.All and DelegatedPermissionGrant.ReadWrite.All to be able to revoke consent to permissions",
+  "Revoking admin granted scopes": "Revoking admin granted scopes",
+  "Revoking default scopes": "Revoking default scopes"
 }

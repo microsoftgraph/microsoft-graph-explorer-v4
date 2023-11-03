@@ -25,7 +25,7 @@ export interface IAutoCompleteState {
 export interface ISuggestionsList {
   activeSuggestion: number;
   filteredSuggestions: string[];
-  onClick: Function;
+  onSuggestionSelected: (suggestion: string) => void;
 }
 
 export interface IAutocompleteResponse extends IApiResponse {

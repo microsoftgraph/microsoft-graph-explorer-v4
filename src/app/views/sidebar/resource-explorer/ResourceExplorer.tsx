@@ -53,7 +53,6 @@ const UnstyledResourceExplorer = (props: any) => {
   ];
 
   const resourcesToUse = data.children ? JSON.parse(JSON.stringify(data.children)) : [] as IResource[];
-
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');
   const [isDialogHidden, setIsDialogHidden] = useState(true);

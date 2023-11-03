@@ -26,7 +26,7 @@ const SuffixRenderer = () => {
 
     const resourceDocumentationUrl = new DocumentationService({
       sampleQuery,
-      source: resources.data.children
+      source: resources.data.children!
     }).getDocumentationLink();
 
     const sampleDocumentationUrl = new DocumentationService({
@@ -54,10 +54,10 @@ const SuffixRenderer = () => {
     const { requestUrl } = parseSampleUrl(sanitizeQueryUrl(sampleQuery.sampleUrl));
     const parsed = parseSampleUrl(sanitizeQueryUrl(`${GRAPH_URL}/v1.0/${requestUrl}`));
 
-    const properties: { [key: string]: any } = {
+    const properties: { [key: string]: string } = {
       ComponentName: componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK,
       QueryUrl: parsed.requestUrl,
-      Link: documentationLink
+      Link: documentationLink ?? ''
     };
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, properties);
 

@@ -1,7 +1,3 @@
-import { ValidatedUrl } from '../../../../../modules/validation/abnf';
-import { hasPlaceHolders } from '../../../../utils/sample-url-generation';
-import { translateMessage } from '../../../../utils/translate-messages';
-
 function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
   let finalSelectedSuggestion = `${userInput + selected}`;
   if (compare) {
@@ -38,36 +34,6 @@ function getFilteredSuggestions(compareString: string, suggestions: string[]) {
   return Array.from(new Set(filteredSuggestions));
 }
 
-function getErrorMessage(queryUrl: string) {
-  if (!queryUrl) {
-    return translateMessage('Missing url');
-  }
-
-  if (hasPlaceHolders(queryUrl)) {
-    return translateMessage('Parts between {} need to be replaced with real values');
-  }
-
-  const error = getValidationError(queryUrl);
-  if (error) {
-    return `${translateMessage('Possible error found in URL near')}: ${error}`;
-  }
-  if (queryUrl.indexOf('graph.microsoft.com') === -1) {
-    return translateMessage('The URL must contain graph.microsoft.com');
-  }
-  return '';
-}
-
-function getValidationError(queryUrl: string): string | null {
-  try {
-    const validator = new ValidatedUrl();
-    const validation = validator.validate(queryUrl);
-    return (!validation.success) ?
-      queryUrl.substring(validation.matched, validation.maxMatched) : null;
-  } catch (error) {
-    return null;
-  }
-}
-
 function getSearchText(input: string, index: number) {
   const stringPosition = index + 1;
   const previous = input.substring(0, stringPosition);
@@ -76,9 +42,9 @@ function getSearchText(input: string, index: number) {
 }
 
 export {
-  getErrorMessage,
-  getFilteredSuggestions,
   cleanUpSelectedSuggestion,
+  getFilteredSuggestions,
   getLastCharacterOf,
   getSearchText
-}
+};
+
