@@ -2,7 +2,7 @@ import { AppAction } from '../../../types/action';
 import { Collection, ResourcePath } from '../../../types/resources';
 import {
   COLLECTION_CREATE_SUCCESS,
-  RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
+  RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, RESOURCEPATHS_UPDATE_SUCCESS
 } from '../redux-constants';
 import { getUniquePaths } from './collections-reducer.util';
 
@@ -24,7 +24,16 @@ export function collections(state: Collection[] = initialState, action: AppActio
         context[index].paths = paths;
         return context;
       }
-      return state
+      return state;
+
+    case RESOURCEPATHS_UPDATE_SUCCESS:
+      const collectionIndex = state.findIndex(k => k.isDefault);
+      if (collectionIndex > -1) {
+        const context = [...state];
+        context[collectionIndex].paths = action.response;
+        return context;
+      }
+      return state;
 
     case RESOURCEPATHS_DELETE_SUCCESS:
       const indexOfDefaultCollection = state.findIndex(k => k.isDefault);

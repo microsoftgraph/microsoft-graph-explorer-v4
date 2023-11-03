@@ -36,6 +36,7 @@ export interface ResourcePath {
   method?: string;
   key?: string;
   url: string;
+  scope?: string;
 }
 
 export enum ResourceLinkType {
