@@ -113,12 +113,18 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     itemResources[itemResources.findIndex((item) =>
       item.key === resource.key)].scope = scope;
     dispatch(updateResourcePaths(itemResources));
+    setSelectedItems([]);
+
   }
 
   const bulkSelectScope = (scope: string): void => {
     const itemResources = [...items]
-    itemResources.forEach((item) => item.scope = scope);
+    selectedItems.map((resource) => {
+      itemResources[itemResources.findIndex((item) =>
+        item.key === resource.key)].scope = scope;
+    })
     dispatch(updateResourcePaths(itemResources));
+    setSelectedItems([]);
   }
 
   return (

@@ -1,17 +1,20 @@
 import { useMemo, useState } from 'react';
 
 import { CollectionPermission, Method, ResourcePath } from '../../../../types/resources';
-import { getVersionsFromPaths } from '../../../views/sidebar/resource-explorer/collection/collection.util';
+import {
+  getScopesFromPaths, getVersionsFromPaths, scopeOptions
+} from '../../../views/sidebar/resource-explorer/collection/collection.util';
 import { DEVX_API_URL } from '../../graph-constants';
 import { CollectionPermissionsContext } from './CollectionPermissionsContext';
 
 const DEVX_API_PERMISSIONS_URL = `${DEVX_API_URL}/api/permissions`;
 
-function getRequestsFromPaths(paths: ResourcePath[], version: string) {
+function getRequestsFromPaths(paths: ResourcePath[], version: string, scope: string) {
   const requests: any[] = [];
   paths.forEach(path => {
     const { method, url } = path;
-    if (version === path.version) {
+    path.scope = path.scope || scopeOptions[0].key;
+    if (version === path.version && scope === path.scope) {
       requests.push({
         method: method as Method,
         requestUrl: url
@@ -23,17 +26,26 @@ function getRequestsFromPaths(paths: ResourcePath[], version: string) {
 
 async function getCollectionPermissions(paths: ResourcePath[]): Promise<{ [key: string]: CollectionPermission[] }> {
   const versions = getVersionsFromPaths(paths);
+  const scopes = getScopesFromPaths(paths);
   const collectionPermissions: { [key: string]: CollectionPermission[] } = {};
   for (const version of versions) {
-    const response = await fetch(DEVX_API_PERMISSIONS_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(getRequestsFromPaths(paths, version))
-    });
-    const perms = await response.json();
-    collectionPermissions[version] = (perms.results) ? perms.results : [];
+    for (const scope of scopes) {
+      const requestPaths = getRequestsFromPaths(paths, version, scope);
+      if (requestPaths.length === 0) {
+        continue;
+      }
+      const url = `${DEVX_API_PERMISSIONS_URL}?version=${version}&scopeType=${scope}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestPaths)
+      });
+      const perms = await response.json();
+      const key = `${version}-${scope}`;
+      collectionPermissions[key] = (perms.results) ? perms.results : [];
+    }
   }
   return collectionPermissions;
 }
@@ -62,7 +74,7 @@ const CollectionPermissionsProvider = ({ children }: any) => {
 
   return (
     <CollectionPermissionsContext.Provider
-      value={{ getPermissions, ...valueObject}}>{children}</CollectionPermissionsContext.Provider>
+      value={{ getPermissions, ...valueObject }}>{children}</CollectionPermissionsContext.Provider>
   );
 }
 

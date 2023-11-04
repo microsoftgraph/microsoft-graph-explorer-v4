@@ -11,14 +11,14 @@ const scopeOptions: ScopeOption[] = Object.entries(PERMS_SCOPE).map(([_key, valu
   text: value as PERMS_SCOPE
 }));
 
-function getVersionsFromPaths(paths: ResourcePath[]) {
-  const versions: string[] = [];
-  paths.forEach(path => {
-    if (!versions.includes(path.version!)) {
-      versions.push(path.version!);
-    }
-  });
-  return versions;
+function getScopesFromPaths(paths: ResourcePath[]): string[] {
+  const scopes = paths.map(path => path.scope || scopeOptions[0].key);
+  return [...new Set(scopes)];
 }
 
-export { getVersionsFromPaths, scopeOptions, ScopeOption };
+function getVersionsFromPaths(paths: ResourcePath[]): string[] {
+  const versions = paths.map(path => path.version!);
+  return [...new Set(versions)];
+}
+
+export { getVersionsFromPaths, scopeOptions, ScopeOption, getScopesFromPaths };

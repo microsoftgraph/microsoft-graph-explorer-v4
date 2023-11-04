@@ -1,5 +1,5 @@
-import { DefaultButton, DetailsList, DialogFooter, Label, PrimaryButton, SelectionMode } from '@fluentui/react';
-import React, { useEffect } from 'react';
+import { DefaultButton, DetailsList, DialogFooter, IGroup, Label, PrimaryButton, SelectionMode } from '@fluentui/react';
+import { FC, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { useAppSelector } from '../../../../../store';
@@ -7,10 +7,11 @@ import { componentNames } from '../../../../../telemetry';
 import { CollectionPermission } from '../../../../../types/resources';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
+import { generateGroupsFromList } from '../../../../utils/generate-groups';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal, trackDownload } from '../../../common/download';
 
-const CollectionPermissions: React.FC<PopupsComponent<null>> = (props) => {
+const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
   const { getPermissions, permissions, isFetching } = useCollectionPermissions();
 
   const { collections } = useAppSelector(
@@ -23,10 +24,6 @@ const CollectionPermissions: React.FC<PopupsComponent<null>> = (props) => {
       key: 'value', name: translateMessage('Value'), fieldName: 'value',
       minWidth: 300,
       ariaLabel: translateMessage('Value')
-    },
-    {
-      key: 'scopeType', name: translateMessage('Scope Type'), fieldName: 'scopeType', minWidth: 200,
-      ariaLabel: translateMessage('Scope Type')
     }
   ];
 
@@ -65,17 +62,23 @@ const CollectionPermissions: React.FC<PopupsComponent<null>> = (props) => {
   }
 
   const permissionsArray: CollectionPermission[] = [];
+  let groups: IGroup[] | undefined = [];
   if (permissions) {
     Object.keys(permissions).forEach(key => {
       permissionsArray.push(...permissions[key]);
     });
+    groups = generateGroupsFromList(permissionsArray, 'scopeType')
   }
+
+  console.log({ groups, permissions, permissionsArray })
+
 
   return (
     <>
       <DetailsList
         items={permissionsArray}
         columns={columns}
+        groups={groups}
         selectionMode={SelectionMode.none}
       />
       {permissions &&
