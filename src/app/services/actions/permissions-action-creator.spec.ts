@@ -20,6 +20,7 @@ import { authenticationWrapper } from '../../../modules/authentication';
 import thunk from 'redux-thunk';
 import { ACCOUNT_TYPE } from '../graph-constants';
 import { RevokePermissionsUtil } from './permissions-action-creator.util';
+import { AccountInfo } from '@azure/msal-browser';
 const middleware = [thunk];
 let mockStore = configureMockStore(middleware);
 
@@ -256,7 +257,7 @@ describe('Permissions action creators', () => {
       uniqueId: 'string',
       tenantId: 'string',
       scopes: ['profile.Read User.Read'],
-      account: null,
+      account: {} as AccountInfo,
       idToken: 'string',
       idTokenClaims: {},
       fromCache: true,

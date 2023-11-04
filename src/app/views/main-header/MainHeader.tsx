@@ -16,6 +16,7 @@ import { translateMessage } from '../../utils/translate-messages';
 import { AppOnlyToken, switchToAppOnlyCalls } from '../../services/actions/app-only-switch-action-creator';
 import { useDispatch } from 'react-redux';
 import { copyFromClipboard } from '../common/copy';
+import { signOut } from '../../services/actions/auth-action-creators';
 
 interface MainHeaderProps {
   toggleSidebar: Function;
@@ -33,7 +34,7 @@ registerIcons({
   }
 });
 export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: MainHeaderProps) => {
-  const { profile, graphExplorerMode, sidebarProperties } = useAppSelector(
+  const { profile, graphExplorerMode, sidebarProperties, authToken } = useAppSelector(
     (state) => state
   );
   const dispatch = useDispatch();
@@ -56,7 +57,14 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
     const appOnlyToken: AppOnlyToken = {
       isAppOnly: checked ? checked : false,
       accessToken
-
+    }
+    if(!checked){
+      dispatch(switchToAppOnlyCalls(appOnlyToken));
+      console.log('Something ', checked);
+      return;
+    }
+    if(authToken.token){
+      dispatch(signOut());
     }
     dispatch(switchToAppOnlyCalls(appOnlyToken));
   }

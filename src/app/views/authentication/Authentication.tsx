@@ -17,7 +17,7 @@ import { authenticationStyles } from './Authentication.styles';
 const Authentication = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
   const [loginInProgress, setLoginInProgress] = useState(false);
-  const { authToken } = useAppSelector((state) => state);
+  const { authToken, appOnlyCalls } = useAppSelector((state) => state);
   const tokenPresent = !!authToken.token;
   const logoutInProgress = !!authToken.pending;
 
@@ -108,7 +108,8 @@ const Authentication = (props: any) => {
           {showSignInButtonOrProfile(
             tokenPresent,
             signIn,
-            signInWithOther
+            signInWithOther,
+            appOnlyCalls!
           )}
         </>
       )}
