@@ -67,6 +67,8 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
       dispatch(signOut());
     }
     dispatch(switchToAppOnlyCalls(appOnlyToken));
+    const vsCodeUri = 'vscode://mod-admin-evans.graphapponlytoken/getToken';
+    window.open(vsCodeUri, '_blank');
   }
 
   return (
