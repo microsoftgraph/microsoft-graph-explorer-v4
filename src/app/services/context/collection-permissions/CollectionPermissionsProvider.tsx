@@ -28,6 +28,8 @@ async function getCollectionPermissions(paths: ResourcePath[]): Promise<{ [key: 
   const versions = getVersionsFromPaths(paths);
   const scopes = getScopesFromPaths(paths);
   const collectionPermissions: { [key: string]: CollectionPermission[] } = {};
+  const fetchPromises: Promise<Response>[] = [];
+
   for (const version of versions) {
     for (const scope of scopes) {
       const requestPaths = getRequestsFromPaths(paths, version, scope);
@@ -35,18 +37,24 @@ async function getCollectionPermissions(paths: ResourcePath[]): Promise<{ [key: 
         continue;
       }
       const url = `${DEVX_API_PERMISSIONS_URL}?version=${version}&scopeType=${scope}`;
-      const response = await fetch(url, {
+      fetchPromises.push(fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(requestPaths)
-      });
-      const perms = await response.json();
-      const key = `${version}-${scope}`;
-      collectionPermissions[key] = (perms.results) ? perms.results : [];
+      }));
     }
   }
+
+  const responses = await Promise.all(fetchPromises);
+
+  for (let i = 0; i < responses.length; i++) {
+    const perms = await responses[i].json();
+    const key = `${versions[Math.floor(i / scopes.length)]}-${scopes[i % scopes.length]}`;
+    collectionPermissions[key] = (perms.results) ? perms.results : [];
+  }
+
   return collectionPermissions;
 }
 
