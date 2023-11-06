@@ -98,8 +98,12 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
   }
 
   const openManifestInVisualStudio = () => {
+    if (!manifest) { return; }
+    const identifierKeys = Object.keys(manifest.apiDependencies);
+    const apiIdentifier = identifierKeys.length === 1 ? Object.keys(manifest.apiDependencies)[0] : null;
     const manifestContentUrl
-      = 'vscode://ms-graph.kiota/OpenManifest?fromclipboard=true';
+      // eslint-disable-next-line max-len
+      = `vscode://ms-graph.kiota/OpenManifest?fromclipboard=true${apiIdentifier ? `&apiIdentifier=${apiIdentifier}` : ''}`;
     window.open(manifestContentUrl, '_blank');
     trackVSCodeButtonClick();
     setManifestCopied(false);
