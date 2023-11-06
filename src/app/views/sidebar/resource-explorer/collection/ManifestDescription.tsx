@@ -20,7 +20,7 @@ import { downloadToLocal, trackDownload } from '../../../common/download';
 import { generateAPIManifest } from './api-manifest.util';
 
 const ManifestDescription: FC<PopupsComponent<null>> = () => {
-  const { permissions, isFetching } = useCollectionPermissions();
+  const { permissions, isFetching, getPermissions } = useCollectionPermissions();
   const [manifest, setManifest] = useState<APIManifest>();
   const [isGeneratingManifest, setIsGeneratingManifest] = useState<boolean>(false);
   const [manifestCopied, setManifestCopied] = useState<boolean>(false);
@@ -72,14 +72,21 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
   const paths = collections ? collections.find(k => k.isDefault)!.paths : [];
 
   useEffect(() => {
-    if (!manifest && !isGeneratingManifest && permissions && paths.length > 0) {
+    if (paths.length > 0) {
+      getPermissions(paths);
+    }
+  }, [paths]);
+
+  useEffect(() => {
+    if (permissions && paths.length > 0) {
+      setIsGeneratingManifest(true);
       const generatedManifest = generateAPIManifest({ paths, permissions });
       if (Object.keys(generatedManifest).length > 0) {
         setIsGeneratingManifest(false);
-        setManifest(generatedManifest);
       }
+      setManifest(generatedManifest);
     }
-  }, [manifest]);
+  }, [permissions]);
 
   const downloadManifest = () => {
     if (!manifest) { return; }
@@ -137,10 +144,8 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
       &nbsp;
       <FormattedMessage id='VS Code extension' />
       <br />
-      <br />
 
       <VerticalDivider />
-      <br />
       <br />
       <FormattedMessage id='Use Kiota CLI' />
       <Link
@@ -164,23 +169,25 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
       </div>
       <VerticalDivider />
       <br />
+      {isFetching && <>
+        <Stack horizontal className={manifestStyle.actionButtons}> Fetching permissions<Spinner /></Stack>
+        <br />
+      </>}
       <Stack horizontal className={manifestStyle.actionButtons}>
         <PrimaryButton
           onClick={copyManifestToClipboard}
-          disabled={ isGeneratingManifest || isFetching || manifestCopied}
+          disabled={isGeneratingManifest || isFetching || manifestCopied}
         >
           <FormattedMessage id='Copy to the clipboard' />
         </PrimaryButton>
 
-        <PrimaryButton disabled={ isGeneratingManifest || isFetching || !manifestCopied}
+        <PrimaryButton disabled={isGeneratingManifest || isFetching || !manifestCopied}
           onClick={openManifestInVisualStudio}>
-          {isGeneratingManifest && <> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
           {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
         </PrimaryButton>
 
-        <PrimaryButton disabled={ isGeneratingManifest || isFetching}
+        <PrimaryButton disabled={isGeneratingManifest || isFetching}
           onClick={downloadManifest}>
-          {isGeneratingManifest && <> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
           {!isGeneratingManifest && <FormattedMessage id='Download API Manifest' />}
         </PrimaryButton>
       </Stack>

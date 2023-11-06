@@ -28,7 +28,6 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   const dispatch: AppDispatch = useDispatch();
   const { show: showManifestDescription } = usePopups('manifest-description', 'panel')
   const { show: viewPermissions } = usePopups('collection-permissions', 'panel');
-  const { getPermissions } = useCollectionPermissions();
   const { collections } = useAppSelector(
     (state) => state
   );
@@ -104,17 +103,12 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     }
   }, [items]);
 
-  useEffect(() => {
-    getPermissions(items);
-  }, [items.length])
-
   const setSelectedScope = (resource: ResourcePath, scope: string): void => {
     const itemResources = [...items]
     itemResources[itemResources.findIndex((item) =>
       item.key === resource.key)].scope = scope;
     dispatch(updateResourcePaths(itemResources));
     setSelectedItems([]);
-
   }
 
   const bulkSelectScope = (scope: string): void => {

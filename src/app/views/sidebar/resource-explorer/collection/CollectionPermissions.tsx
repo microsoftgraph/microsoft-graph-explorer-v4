@@ -70,9 +70,6 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
     groups = generateGroupsFromList(permissionsArray, 'scopeType')
   }
 
-  console.log({ groups, permissions, permissionsArray })
-
-
   return (
     <>
       <DetailsList
