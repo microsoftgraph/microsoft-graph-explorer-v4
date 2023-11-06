@@ -99,7 +99,7 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
 
   const openManifestInVisualStudio = () => {
     const manifestContentUrl
-      = 'vscode://ms-graph.kiota/OpenManifest?apiIdentifier=graph&fromclipboard=true';
+      = 'vscode://ms-graph.kiota/OpenManifest?fromclipboard=true';
     window.open(manifestContentUrl, '_blank');
     trackVSCodeButtonClick();
     setManifestCopied(false);
