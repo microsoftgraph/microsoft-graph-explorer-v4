@@ -47,7 +47,7 @@ export default class Paths extends Component<IPathProps> {
     if (column) {
       if (column.key === 'scope') {
         return <Dropdown
-          selectedKey={item.scope || scopeOptions[0].key}
+          selectedKey={item.scope ?? scopeOptions[0].key}
           options={scopeOptions}
           onChange={handleOnScopeChange}
           disabled={selectedItems.length > 1}
