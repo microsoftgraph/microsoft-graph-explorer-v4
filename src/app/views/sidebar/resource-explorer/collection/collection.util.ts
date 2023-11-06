@@ -12,7 +12,7 @@ const scopeOptions: ScopeOption[] = Object.entries(PERMS_SCOPE).map(([_key, valu
 }));
 
 function getScopesFromPaths(paths: ResourcePath[]): string[] {
-  const scopes = paths.map(path => path.scope || scopeOptions[0].key);
+  const scopes = paths.map(path => path.scope ?? scopeOptions[0].key);
   return [...new Set(scopes)];
 }
 

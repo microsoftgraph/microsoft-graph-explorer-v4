@@ -35,50 +35,47 @@ export default class Paths extends Component<IPathProps> {
     }
   }
 
-  private renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+  private renderItemColumn = (item: ResourcePath, index: number | undefined, column: IColumn | undefined) => {
 
     const selectedItems = this._selection.getSelection();
 
-    const handleOnScopeChange = (_event: any, option?: IDropdownOption<ScopeOption>) => {
-      this.props.setSelectedScope(item, option!.key as string)
+    const handleOnScopeChange = (_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption<ScopeOption>) => {
+      this.props.setSelectedScope(item, option?.key as string)
       this.props.selectItems([]);
     };
 
     if (column) {
-      const itemContent = item[column.fieldName as keyof any] as string;
-      switch (column.key) {
-        case 'scope':
-          return <Dropdown
-            selectedKey={item.scope || scopeOptions[0].key}
-            options={scopeOptions}
-            onChange={handleOnScopeChange}
-            disabled={selectedItems.length > 1}
-            styles={{ dropdown: { width: 300 } }}
-          />;
-        default:
-          return (
-            <TooltipHost
-              tooltipProps={{
-                content: item.url
-              }}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
-              styles={{ root: { display: 'inline-block' } }}
-            >
-              <span
-                style={{
-                  fontWeight: 'bold',
-                  display: 'inline-block',
-                  minWidth: '55px',
-                  textTransform: 'uppercase'
-                }}
-              >
-                {item.method}
-              </span>
-              {`/${item.version}${itemContent}`}
-            </TooltipHost>
-          );
+      if (column.key === 'scope') {
+        return <Dropdown
+          selectedKey={item.scope || scopeOptions[0].key}
+          options={scopeOptions}
+          onChange={handleOnScopeChange}
+          disabled={selectedItems.length > 1}
+          styles={{ dropdown: { width: 300 } }}
+        />;
       }
+      return (
+        <TooltipHost
+          tooltipProps={{
+            content: item.url
+          }}
+          id={getId()}
+          calloutProps={{ gapSpace: 0 }}
+          styles={{ root: { display: 'inline-block' } }}
+        >
+          <span
+            style={{
+              fontWeight: 'bold',
+              display: 'inline-block',
+              minWidth: '55px',
+              textTransform: 'uppercase'
+            }}
+          >
+            {item.method}
+          </span>
+          {`/${item.version}${item.url}`}
+        </TooltipHost>
+      );
     }
   }
 

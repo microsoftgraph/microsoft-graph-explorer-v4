@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 
 import { CollectionPermission, Method, ResourcePath } from '../../../../types/resources';
 import {
@@ -9,8 +9,13 @@ import { CollectionPermissionsContext } from './CollectionPermissionsContext';
 
 const DEVX_API_PERMISSIONS_URL = `${DEVX_API_URL}/api/permissions`;
 
+interface CollectionRequest {
+  method: Method;
+  requestUrl: string;
+}
+
 function getRequestsFromPaths(paths: ResourcePath[], version: string, scope: string) {
-  const requests: any[] = [];
+  const requests: CollectionRequest[] = [];
   paths.forEach(path => {
     const { method, url } = path;
     path.scope = path.scope || scopeOptions[0].key;
@@ -58,7 +63,7 @@ async function getCollectionPermissions(paths: ResourcePath[]): Promise<{ [key: 
   return collectionPermissions;
 }
 
-const CollectionPermissionsProvider = ({ children }: any) => {
+const CollectionPermissionsProvider = ({ children }: { children: ReactNode }) => {
   const [permissions, setPermissions] = useState<{ [key: string]: CollectionPermission[] } | undefined>(undefined);
   const [isFetching, setIsFetching] = useState(false);
   const [code, setCode] = useState('');

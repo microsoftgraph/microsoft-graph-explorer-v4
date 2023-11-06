@@ -13,7 +13,6 @@ import { IResourceLink, ResourcePath } from '../../../../../types/resources';
 import { removeResourcePaths, updateResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { usePopups } from '../../../../services/hooks';
-import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
 import Paths from './Paths';
