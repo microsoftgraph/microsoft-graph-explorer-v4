@@ -4,6 +4,7 @@ import {
   IColumn, Selection
 } from '@fluentui/react/lib/DetailsList';
 import { Component } from 'react';
+
 import { ResourcePath } from '../../../../../types/resources';
 import { ScopeOption, scopeOptions } from './collection.util';
 
@@ -28,9 +29,17 @@ export default class Paths extends Component<IPathProps> {
     });
   }
 
+  public componentDidUpdate(prevProps: IPathProps): void {
+    if (prevProps.resources !== this.props.resources) {
+      this._selection.setAllSelected(false);
+    }
+  }
+
   private renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
 
-    const handleOnScopeChange = (event: any, option?: IDropdownOption<ScopeOption>) => {
+    const selectedItems = this._selection.getSelection();
+
+    const handleOnScopeChange = (_event: any, option?: IDropdownOption<ScopeOption>) => {
       this.props.setSelectedScope(item, option!.key as string)
       this.props.selectItems([]);
     };
@@ -43,6 +52,7 @@ export default class Paths extends Component<IPathProps> {
             selectedKey={item.scope || scopeOptions[0].key}
             options={scopeOptions}
             onChange={handleOnScopeChange}
+            disabled={selectedItems.length > 1}
             styles={{ dropdown: { width: 300 } }}
           />;
         default:
