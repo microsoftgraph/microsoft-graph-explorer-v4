@@ -2,7 +2,7 @@ import { AppAction } from '../../../types/action';
 import { Collection, ResourcePath } from '../../../types/resources';
 import {
   COLLECTION_CREATE_SUCCESS,
-  RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
+  RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, RESOURCEPATHS_UPDATE_SUCCESS
 } from '../redux-constants';
 import { getUniquePaths } from './collections-reducer.util';
 
@@ -11,12 +11,13 @@ const initialState: Collection[] = [];
 export function collections(state: Collection[] = initialState, action: AppAction): Collection[] {
   switch (action.type) {
 
-    case COLLECTION_CREATE_SUCCESS:
+    case COLLECTION_CREATE_SUCCESS: {
       const items = [...state];
       items.push(action.response);
       return items;
+    }
 
-    case RESOURCEPATHS_ADD_SUCCESS:
+    case RESOURCEPATHS_ADD_SUCCESS: {
       const index = state.findIndex(k => k.isDefault);
       if (index > -1) {
         const paths: ResourcePath[] = getUniquePaths(state[index].paths, action.response);
@@ -24,9 +25,20 @@ export function collections(state: Collection[] = initialState, action: AppActio
         context[index].paths = paths;
         return context;
       }
-      return state
+      return state;
+    }
 
-    case RESOURCEPATHS_DELETE_SUCCESS:
+    case RESOURCEPATHS_UPDATE_SUCCESS: {
+      const collectionIndex = state.findIndex(k => k.isDefault);
+      if (collectionIndex > -1) {
+        const context = [...state];
+        context[collectionIndex].paths = action.response;
+        return context;
+      }
+      return state;
+    }
+
+    case RESOURCEPATHS_DELETE_SUCCESS: {
       const indexOfDefaultCollection = state.findIndex(k => k.isDefault);
       if (indexOfDefaultCollection > -1) {
         const list: ResourcePath[] = [...state[indexOfDefaultCollection].paths];
@@ -38,7 +50,7 @@ export function collections(state: Collection[] = initialState, action: AppActio
         newState[indexOfDefaultCollection].paths = list;
         return newState;
       }
-      return state
+    }
 
     default:
       return state;

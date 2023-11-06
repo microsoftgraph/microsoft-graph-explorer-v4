@@ -1,31 +1,28 @@
 import {
-  ChoiceGroup,
-  FontSizes, FontWeights, IChoiceGroupOption, Link,
+  FontSizes, FontWeights,
+  Link,
   PrimaryButton,
   Spinner,
   Stack,
   VerticalDivider, getTheme, mergeStyleSets
 } from '@fluentui/react';
-import React, { FormEvent, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { APIManifest } from '../../../../../types/api-manifest';
 import { PopupsComponent } from '../../../../services/context/popups-context';
-import { API_MANIFEST_SPEC_PAGE, PERMS_SCOPE } from '../../../../services/graph-constants';
+import { API_MANIFEST_SPEC_PAGE } from '../../../../services/graph-constants';
 import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
-import { translateMessage } from '../../../../utils/translate-messages';
 import { trackedGenericCopy } from '../../../common/copy';
 import { downloadToLocal, trackDownload } from '../../../common/download';
 import { generateAPIManifest } from './api-manifest.util';
 
-
-const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
-  const { permissions, isFetching } = useCollectionPermissions();
+const ManifestDescription: FC<PopupsComponent<null>> = () => {
+  const { permissions, isFetching, getPermissions } = useCollectionPermissions();
   const [manifest, setManifest] = useState<APIManifest>();
   const [isGeneratingManifest, setIsGeneratingManifest] = useState<boolean>(false);
-  const [selectedScope, setSelectedScope] = useState<string>('');
   const [manifestCopied, setManifestCopied] = useState<boolean>(false);
 
   const manifestStyle = mergeStyleSets(
@@ -69,38 +66,27 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
     }
   );
 
-  const options: IChoiceGroupOption[] = [
-    {
-      key: `${PERMS_SCOPE.WORK}`,
-      text: translateMessage('Delegated work'),
-      disabled: isGeneratingManifest
-    },
-    {
-      key: `${PERMS_SCOPE.APPLICATION}`,
-      text: translateMessage('Application permissions'),
-      disabled: isGeneratingManifest
-    },
-    {
-      key: `${PERMS_SCOPE.APPLICATION}_${PERMS_SCOPE.WORK}`,
-      text: translateMessage('Delegated & application permissions'),
-      disabled: isGeneratingManifest
-    }
-  ];
-
   const { collections } = useAppSelector(
     (state) => state
   );
   const paths = collections ? collections.find(k => k.isDefault)!.paths : [];
 
   useEffect(() => {
-    if (!isFetching && selectedScope !== '') {
-      const generatedManifest = generateAPIManifest({ paths, permissions, scopeType: selectedScope });
+    if (paths.length > 0) {
+      getPermissions(paths);
+    }
+  }, [paths]);
+
+  useEffect(() => {
+    if (permissions && paths.length > 0) {
+      setIsGeneratingManifest(true);
+      const generatedManifest = generateAPIManifest({ paths, permissions });
       if (Object.keys(generatedManifest).length > 0) {
         setIsGeneratingManifest(false);
-        setManifest(generatedManifest);
       }
+      setManifest(generatedManifest);
     }
-  }, [selectedScope, isFetching]);
+  }, [permissions]);
 
   const downloadManifest = () => {
     if (!manifest) { return; }
@@ -118,13 +104,6 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
     trackVSCodeButtonClick();
     setManifestCopied(false);
   }
-
-  const onSelectionChange = useCallback((ev: FormEvent<HTMLElement | HTMLInputElement> | undefined,
-    option: IChoiceGroupOption | undefined) => {
-    setSelectedScope(option!.key);
-    setIsGeneratingManifest(true);
-    setManifestCopied(false);
-  }, []);
 
   const copyManifestToClipboard = () => {
     if (!manifest) { return; }
@@ -154,14 +133,6 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
       <br />
       <VerticalDivider />
 
-      <FormattedMessage id='Permissions choice' />
-      <ChoiceGroup options={options}
-        onChange={onSelectionChange} label=''
-        styles={{ flexContainer: manifestStyle.permissionsButtons }}
-      />
-
-      <VerticalDivider />
-
       <FormattedMessage id='To generate client' />
       <br />
       <FormattedMessage id='Use VS Code' />
@@ -173,10 +144,8 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
       &nbsp;
       <FormattedMessage id='VS Code extension' />
       <br />
-      <br />
 
       <VerticalDivider />
-      <br />
       <br />
       <FormattedMessage id='Use Kiota CLI' />
       <Link
@@ -200,23 +169,25 @@ const ManifestDescription: React.FC<PopupsComponent<null>> = () => {
       </div>
       <VerticalDivider />
       <br />
+      {isFetching && <>
+        <Stack horizontal className={manifestStyle.actionButtons}> Fetching permissions<Spinner /></Stack>
+        <br />
+      </>}
       <Stack horizontal className={manifestStyle.actionButtons}>
         <PrimaryButton
           onClick={copyManifestToClipboard}
-          disabled={selectedScope === '' || isGeneratingManifest || isFetching || manifestCopied}
+          disabled={isGeneratingManifest || isFetching || manifestCopied}
         >
           <FormattedMessage id='Copy to the clipboard' />
         </PrimaryButton>
 
-        <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching || !manifestCopied}
+        <PrimaryButton disabled={isGeneratingManifest || isFetching || !manifestCopied}
           onClick={openManifestInVisualStudio}>
-          {isGeneratingManifest && <> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
           {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
         </PrimaryButton>
 
-        <PrimaryButton disabled={selectedScope === '' || isGeneratingManifest || isFetching}
+        <PrimaryButton disabled={isGeneratingManifest || isFetching}
           onClick={downloadManifest}>
-          {isGeneratingManifest && <> Fetching permissions&nbsp;&nbsp; <Spinner /></>}
           {!isGeneratingManifest && <FormattedMessage id='Download API Manifest' />}
         </PrimaryButton>
       </Stack>

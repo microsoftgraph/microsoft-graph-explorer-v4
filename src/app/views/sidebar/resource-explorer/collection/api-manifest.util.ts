@@ -1,34 +1,35 @@
 import { APIManifest, Access, ApiDependencies, ManifestRequest } from '../../../../../types/api-manifest';
 import { CollectionPermission, ResourcePath } from '../../../../../types/resources';
 import { GRAPH_BETA_DESCRIPTION_URL, GRAPH_URL, GRAPH_V1_DESCRIPTION_URL } from '../../../../services/graph-constants';
-import { getVersionsFromPaths } from './collection.util';
+import { scopeOptions } from './collection.util';
 
 interface ManifestProps {
   paths: ResourcePath[];
   permissions?: {
     [key: string]: CollectionPermission[];
   };
-  scopeType: string;
 }
 
-export function generateAPIManifest({ paths, permissions, scopeType }: ManifestProps): APIManifest {
+export function generateAPIManifest({ paths, permissions }: ManifestProps): APIManifest {
   return {
     publisher: {
       name: 'Microsoft Graph',
       contactEmail: 'graphsdkpub@microsoft.com'
     },
-    apiDependencies: getDependenciesFromPaths({ paths, permissions, scopeType })
+    apiDependencies: getDependenciesFromPaths({ paths, permissions })
   };
 }
 
-function getDependenciesFromPaths({ paths, permissions, scopeType }: ManifestProps): ApiDependencies {
+function getDependenciesFromPaths({ paths, permissions }: ManifestProps): ApiDependencies {
 
   const dependencies: ApiDependencies = {};
-  const versions: string[] = getVersionsFromPaths(paths);
+  const variants = Object.keys(permissions!);
 
-  versions.forEach(version => {
-    const dependencyName = `graph-${version}`;
-    const accessPermissions = permissions ? permissions[version] : [];
+  variants.forEach(variant => {
+    const dependencyName = `graph-${variant}`;
+    const accessPermissions = permissions ? permissions[variant] : [];
+    const version = variant.split('-')[0];
+    const scopeType = variant.split('-')[1];
     dependencies[dependencyName] = {
       apiDescriptionUrl: version === 'beta' ? GRAPH_BETA_DESCRIPTION_URL : GRAPH_V1_DESCRIPTION_URL,
       apiDeploymentBaseUrl: GRAPH_URL,
@@ -37,18 +38,19 @@ function getDependenciesFromPaths({ paths, permissions, scopeType }: ManifestPro
         clientIdentifier: '',
         access: getAccessFromPermissions(accessPermissions, scopeType)
       },
-      requests: getRequestsFromPaths(paths, version)
+      requests: getRequestsFromPaths(paths, version, scopeType)
     }
   });
 
   return dependencies;
 }
 
-function getRequestsFromPaths(paths: ResourcePath[], version: string): ManifestRequest[] {
+function getRequestsFromPaths(paths: ResourcePath[], version: string, scopeType: string): ManifestRequest[] {
   const requests: ManifestRequest[] = [];
   paths.forEach(path => {
     const { method, url } = path;
-    if (path.version === version) {
+    path.scope = path.scope ? path.scope : scopeOptions[0].key;
+    if (path.version === version && path.scope === scopeType) {
       requests.push({
         method: method!.toString().toUpperCase(),
         uriTemplate: `${url}`
@@ -59,9 +61,6 @@ function getRequestsFromPaths(paths: ResourcePath[], version: string): ManifestR
 }
 
 function getAccessFromPermissions(permissions: CollectionPermission[], scopeType: string): Access[] {
-  if (scopeType === 'Application_DelegatedWork') {
-    return [createAccessPermissions(permissions, 'Application'), createAccessPermissions(permissions, 'DelegatedWork')];
-  }
   return [createAccessPermissions(permissions, scopeType)];
 }
 
