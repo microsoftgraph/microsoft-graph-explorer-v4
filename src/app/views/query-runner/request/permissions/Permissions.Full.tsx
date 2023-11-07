@@ -34,7 +34,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState(false);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [sortOrder, setSortOrder] = useState<SortOrder | null>(null)
+  const [sortOrder, setSortOrder] = useState<{ order: SortOrder, value: string } | null>(null)
 
   const permissionsList: any[] = [];
 
@@ -152,7 +152,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
 
   const handleColumnClicked = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     let items = [...permissions];
-    let order = sortOrder;
+    let order = sortOrder?.order;
     switch (order) {
       case SortOrder.DESC:
         order = SortOrder.ASC;
@@ -166,10 +166,18 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     }
     items = items.sort(dynamicSort(column.fieldName!, order));
     setPermissions(items);
-    setSortOrder(order);
+    setSortOrder({ order, value: column.fieldName!});
   }
 
-  const columns = getColumns({ source: 'panel', tokenPresent, onColumnClicked: handleColumnClicked });
+  let columns = getColumns({ source: 'panel', tokenPresent, onColumnClicked: handleColumnClicked });
+  if (sortOrder) {
+    columns = columns.map((column: IColumn) => {
+      if (column.isSorted && column.fieldName === sortOrder.value) {
+        column.isSortedDescending = sortOrder.order === SortOrder.DESC;
+      }
+      return column;
+    })
+  }
 
   return (
     <div data-is-scrollable={true} style={panelStyles}>
