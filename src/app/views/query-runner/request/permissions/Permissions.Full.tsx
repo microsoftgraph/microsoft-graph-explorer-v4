@@ -1,8 +1,8 @@
 import {
   Announced, DetailsList, DetailsListLayoutMode, getTheme, GroupHeader, IColumn,
-  IGroup, Label, SearchBox, SelectionMode, TooltipHost
+  Label, SearchBox, SelectionMode, TooltipHost
 } from '@fluentui/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
@@ -31,12 +31,8 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const loading = scopes.pending.isFullPermissions;
 
   const [permissions, setPermissions] = useState<any[]>([]);
-  const [groups, setGroups] = useState<IGroup[]>([]);
-  const [searchStarted, setSearchStarted] = useState(false);
   const [searchValue, setSearchValue] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<{ order: SortOrder, value: string } | null>(null)
-
-  const permissionsList: any[] = [];
 
   const getPermissions = (): void => {
     dispatch(fetchScopes());
@@ -79,33 +75,10 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     }
   }, [scopes.data]);
 
-  const shouldGenerateGroups = useRef(true)
-
-  useEffect(() => {
-    if (shouldGenerateGroups.current) {
-      setGroups(generateGroupsFromList(permissionsList, 'groupName'));
-      if (groups && groups.length > 0) {
-        shouldGenerateGroups.current = false;
-      }
-      if (permissionsList.length === 0) { return }
-    }
-  }, [permissions, searchStarted])
-
-
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
-
-  permissions.forEach((perm: IPermission) => {
-    const permission: any = { ...perm };
-    const permissionValue = permission.value;
-    const groupName = permissionValue.split('.')[0];
-    permission.groupName = groupName;
-    permissionsList.push(permission);
-  });
 
   const searchValueChanged = (event: any, value?: string): void => {
     setSearchValue(value!);
-    shouldGenerateGroups.current = true;
-    setSearchStarted((search) => !search);
     let filteredPermissions = scopes.data.fullPermissions;
     if (value) {
       const keyword = value.toLowerCase();
@@ -166,7 +139,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     }
     items = items.sort(dynamicSort(column.fieldName!, order));
     setPermissions(items);
-    setSortOrder({ order, value: column.fieldName!});
+    setSortOrder({ order, value: column.fieldName! });
   }
 
   let columns = getColumns({ source: 'panel', tokenPresent, onColumnClicked: handleColumnClicked });
@@ -178,6 +151,17 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
       return column;
     })
   }
+
+  const permissionsList: any[] = [];
+  permissions.map((perm: IPermission) => {
+    const permission: any = { ...perm };
+    const permissionValue = permission.value;
+    const groupName = permissionValue.split('.')[0];
+    permission.groupName = (permission.consented && sortOrder?.value === 'consented')
+      ? `${translateMessage('Consented')} - ${groupName}` : groupName;
+    permissionsList.push(permission);
+  });
+  const groups = generateGroupsFromList(permissionsList, 'groupName');
 
   return (
     <div data-is-scrollable={true} style={panelStyles}>
