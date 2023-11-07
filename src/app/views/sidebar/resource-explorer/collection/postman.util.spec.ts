@@ -23,7 +23,7 @@ describe('Postman collection should', () => {
 
 function setupCollection() {
   const version = 'v1.0';
-  const filtered = createResourcesList(resource.children, version)[0];
+  const filtered = createResourcesList(resource.children!, version)[0];
   const item: any = filtered.links[0];
   const paths = getResourcePaths(item, version);
   const collection = generatePostmanCollection(paths);

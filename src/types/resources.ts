@@ -5,7 +5,7 @@ export type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 export interface IResource {
   segment: string;
   labels: IResourceLabel[];
-  children: IResource[];
+  children?: IResource[];
 }
 
 export interface IResourceLabel {
