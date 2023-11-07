@@ -34,6 +34,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState(false);
   const [searchValue, setSearchValue] = useState<string>('');
+  const [sortOrder, setSortOrder] = useState<SortOrder | null>(null)
 
   const permissionsList: any[] = [];
 
@@ -149,6 +150,27 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     searchValueChanged({}, '');
   }
 
+  const handleColumnClicked = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
+    let items = [...permissions];
+    let order = sortOrder;
+    switch (order) {
+      case SortOrder.DESC:
+        order = SortOrder.ASC;
+        break;
+      case SortOrder.ASC:
+        order = SortOrder.DESC;
+        break;
+      default:
+        order = SortOrder.DESC;
+        break;
+    }
+    items = items.sort(dynamicSort(column.fieldName!, order));
+    setPermissions(items);
+    setSortOrder(order);
+  }
+
+  const columns = getColumns({ source: 'panel', tokenPresent, onColumnClicked: handleColumnClicked });
+
   return (
     <div data-is-scrollable={true} style={panelStyles}>
       {loading ? <Label>
@@ -172,7 +194,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
           <DetailsList
             onShouldVirtualize={() => false}
             items={permissions}
-            columns={getColumns('panel', tokenPresent)}
+            columns={columns}
             groups={groups}
             onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
               return <PermissionItem column={column} index={index} item={item} />
@@ -205,9 +227,9 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
           <FormattedMessage id='permissions not found' />
         </Label> :
         !loading && permissions && permissions.length === 0 && scopes.error && scopes.error.error &&
-          <Label>
-            <FormattedMessage id='Fetching permissions failing' />
-          </Label>
+        <Label>
+          <FormattedMessage id='Fetching permissions failing' />
+        </Label>
       }
     </div>
   );
