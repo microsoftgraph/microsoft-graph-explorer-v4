@@ -1,15 +1,19 @@
 import {
-  DirectionalHint, FontSizes, getTheme, IconButton,
-  Pivot, PivotItem, Stack, TooltipDelay, TooltipHost
+  DirectionalHint,
+  FontSizes,
+  getTheme,
+  IconButton,
+  Pivot,
+  PivotItem,
+  Stack,
+  TooltipDelay,
+  TooltipHost
 } from '@fluentui/react';
-
 import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';
-import { History } from './history';
-import { ResourceExplorer } from './resource-explorer';
 import SampleQueries from './sample-queries/SampleQueries';
 import { sidebarStyles } from './Sidebar.styles';
-
+import { ResourceExplorer, History } from '../common/lazy-loader/component-registry';
 interface ISidebar {
   currentTab: string;
   setSidebarTabSelection: Function;
@@ -17,6 +21,7 @@ interface ISidebar {
   toggleSidebar: Function;
   mobileScreen: boolean;
 }
+
 export const Sidebar = (props: ISidebar) => {
   const theme = getTheme();
   const styles = sidebarStyles(theme).sidebarButtons;

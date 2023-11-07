@@ -84,6 +84,17 @@ configuration:
             https://aka.ms/askgraph
     eventResponderTasks:
     - if:
+      - payloadType: Issues
+      - and:
+          - isOpen
+          - not:
+              and:
+                - isAssignedToSomeone
+                - isLabeled
+      then:
+        - addLabel:
+            label: 'ToTriage'
+    - if:
       - payloadType: Issue_Comment
       - isAction:
           action: Created

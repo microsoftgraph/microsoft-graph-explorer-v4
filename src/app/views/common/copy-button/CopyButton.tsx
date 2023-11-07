@@ -9,7 +9,7 @@ interface ICopyButtonProps {
   isIconButton: boolean;
 }
 
-export function CopyButton(props:ICopyButtonProps) {
+export default function CopyButton(props:ICopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
   const copyIcon: IIconProps = {

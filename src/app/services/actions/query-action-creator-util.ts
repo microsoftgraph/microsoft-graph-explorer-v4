@@ -18,7 +18,7 @@ import { ClientError } from '../../utils/error-utils/ClientError';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { translateMessage } from '../../utils/translate-messages';
 import { authProvider, GraphClient } from '../graph-client';
-import { DEFAULT_USER_SCOPES } from '../graph-constants';
+import { DEFAULT_USER_SCOPES, GRAPH_URL } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
@@ -55,7 +55,7 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRun
     });
   }
 
-  const authToken = '{token:https://graph.microsoft.com/}';
+  const authToken = `{token:${GRAPH_URL}/}`;
   let headers = {
     Authorization: `Bearer ${authToken}`,
     'Content-Type': 'application/json',
