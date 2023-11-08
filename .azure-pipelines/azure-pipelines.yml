@@ -64,7 +64,7 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-      template: .azure-pipelines/english-file-transfer.yml
+      template: english-file-transfer.yml
 
   - job: One
     displayName: "Build and test validation"
