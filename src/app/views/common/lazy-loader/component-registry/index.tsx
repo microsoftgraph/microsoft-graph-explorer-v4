@@ -1,156 +1,108 @@
-/* eslint-disable max-len */
-import { lazy } from 'react';
 import { IPermissionProps } from '../../../../../types/permissions';
-import { SuspenseLoader } from '../suspense-loader/SuspenseLoader';
 
-const LazySpecificPermissions = lazy(() =>
-  import(/* webpackChunkName: "permissions" */ '../../../query-runner/request/permissions'));
-const LazyStatusMessages = lazy( () =>
-  import(/* webpackChunkName: "statusMessages" */ '../../../app-sections/StatusMessages'));
-const LazyResponseHeaders = lazy(() =>
-  import(/* webpackChunkName: "responseHeaders" */ '../../../query-response/headers/ResponseHeaders'));
-const LazyAdaptiveCard = lazy(() =>
-  import(/* webpackChunkName: "adaptiveCards" */ '../../../query-response/adaptive-cards/AdaptiveCard'));
-const LazyGraphToolkit = lazy(() =>
-  import(/* webpackChunkName: "graphToolkit" */ '../../../query-response/graph-toolkit/GraphToolkit'));
-const LazySnippets = lazy(() =>
-  import(/* webpackChunkName: "code snippets" */ '../../../query-response/snippets/Snippets'));
-const LazyCopyButton = lazy(() =>
-  import(/* webpackChunkName: "copy button" */ '../../copy-button/CopyButton'));
-const LazyAuth = lazy(() =>
-  import(/* webpackChunkName: "authTab" */ '../../../query-runner/request/auth/Auth'));
-const LazyRequestHeaders = lazy(() =>
-  import(/* webpackChunkName: "requestHeaders" */ '../../../query-runner/request/headers/RequestHeaders'));
-const LazyHistory = lazy(() =>
-  import(/* webpackChunkName: "history" */ '../../../sidebar/history/History'));
-const LazyResourceExplorer = lazy(() =>
-  import(/* webpackChunkName: "resourceExplorer" */ '../../../sidebar/resource-explorer/ResourceExplorer'));
-const LazyShareQuery = lazy(() =>
-  import(/* webpackChunkName: "share query" */ '../../../query-runner/query-input/share-query/ShareQuery'));
-const LazyThemeChoser = lazy(() =>
-  import(/* webpackChunkName: "theme chooser" */ '../../../main-header/settings/ThemeChooser'));
-const LazyPreviewCollection = lazy(() =>
-  import(/* webpackChunkName: "preview collection" */ '../../../sidebar/resource-explorer/collection/PreviewCollection'));
-const LazyFullPermissions = lazy(() =>
-  import(/* webpackChunkName: "full permissions" */ '../../../query-runner/request/permissions/Permissions.Full'));
+import LazySpecificPermissions from  '../../../query-runner/request/permissions';
+import LazyStatusMessages from  '../../../app-sections/StatusMessages';
+import LazyResponseHeaders from  '../../../query-response/headers/ResponseHeaders';
+import LazyAdaptiveCard from  '../../../query-response/adaptive-cards/AdaptiveCard';
+import LazyGraphToolkit from  '../../../query-response/graph-toolkit/GraphToolkit';
+import LazySnippets from  '../../../query-response/snippets/Snippets';
+import LazyCopyButton from  '../../copy-button/CopyButton';
+import LazyAuth from  '../../../query-runner/request/auth/Auth';
+import LazyRequestHeaders from  '../../../query-runner/request/headers/RequestHeaders';
+import LazyHistory from  '../../../sidebar/history/History';
+import LazyResourceExplorer from  '../../../sidebar/resource-explorer/ResourceExplorer';
+import LazyShareQuery from  '../../../query-runner/query-input/share-query/ShareQuery';
+import LazyThemeChoser from  '../../../main-header/settings/ThemeChooser';
+import LazyPreviewCollection from  '../../../sidebar/resource-explorer/collection/PreviewCollection';
+import LazyFullPermissions from  '../../../query-runner/request/permissions/Permissions.Full';
 
 export const Permissions = (props?: IPermissionProps) => {
   return (
-    <SuspenseLoader>
-      <LazySpecificPermissions {...props} />
-    </SuspenseLoader>
+    <LazySpecificPermissions {...props} />
   )
 }
 
 export const StatusMessages = () => {
   return (
-    <SuspenseLoader>
-      <LazyStatusMessages />
-    </SuspenseLoader>
+    <LazyStatusMessages />
   )
 }
 
 export const AdaptiveCards = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazyAdaptiveCard {...props} />
-    </SuspenseLoader>
+    <LazyAdaptiveCard {...props} />
   )
 }
 
 export const GraphToolkit = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazyGraphToolkit {...props} />
-    </SuspenseLoader>
+    <LazyGraphToolkit {...props} />
   )
 }
 
 export const ResponseHeaders = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazyResponseHeaders {...props} />
-    </SuspenseLoader>
+    <LazyResponseHeaders {...props} />
   )
 }
 
 export const Snippets = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazySnippets {...props} />
-    </SuspenseLoader>
+    <LazySnippets {...props} />
   )
 }
 
 export const CopyButton = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazyCopyButton {...props} />
-    </SuspenseLoader>
+    <LazyCopyButton {...props} />
   )
 }
 
 export const Auth = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazyAuth {...props} />
-    </SuspenseLoader>
+    <LazyAuth {...props} />
   )
 }
 
 export const RequestHeaders = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazyRequestHeaders {...props} />
-    </SuspenseLoader>
+    <LazyRequestHeaders {...props} />
   )
 }
 
 export const History = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazyHistory {...props} />
-    </SuspenseLoader>
+    <LazyHistory {...props} />
   )
 }
 
 export const ResourceExplorer = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazyResourceExplorer {...props} />
-    </SuspenseLoader>
+    <LazyResourceExplorer {...props} />
   )
 }
 
 export const ShareQuery = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazyShareQuery {...props} />
-    </SuspenseLoader>
+    <LazyShareQuery {...props} />
   )
 }
 
 export const ThemeChoser = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazyThemeChoser {...props} />
-    </SuspenseLoader>
+    <LazyThemeChoser {...props} />
   )
 }
 
 export const PreviewCollection = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazyPreviewCollection {...props} />
-    </SuspenseLoader>
+    <LazyPreviewCollection {...props} />
   )
 }
 
 export const FullPermissions = (props?: any) => {
   return (
-    <SuspenseLoader>
-      <LazyFullPermissions {...props} />
-    </SuspenseLoader>
+    <LazyFullPermissions {...props} />
   )
 }
 
