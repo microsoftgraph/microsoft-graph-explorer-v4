@@ -1,0 +1,27 @@
+trigger:
+  branches:
+    include:
+    - dev
+  paths:
+    include:
+    - src/messages/GE.json
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- checkout: self
+
+- script: echo "##vso[task.setvariable variable=today]$(date +%Y%m%d%H%M)"
+  displayName: 'Set current date as env variable'
+
+- pwsh: |
+    git config --global user.email "GraphTooling@service.microsoft.com"
+    git config --global user.name "Microsoft Graph DevX Tooling"
+    git clone https://github.com/microsoftgraph/microsoft-graph-devx-content.git
+    cp src/messages/GE.json microsoft-graph-devx-content/messages/
+    cd microsoft-graph-devx-content
+    git add .
+    git commit -m "$(today) English file transfer"
+    git push https://$(API_TOKEN_GITHUB)@github.com/microsoftgraph/microsoft-graph-devx-content.git
+  displayName: 'Push English file'
