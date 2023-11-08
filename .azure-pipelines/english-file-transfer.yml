@@ -11,10 +11,14 @@ steps:
     cp src/messages/GE.json microsoft-graph-devx-content/messages/
     cd microsoft-graph-devx-content
     git add .
-    if git diff-index --quiet HEAD --; then
+    $changes = git diff-index --quiet HEAD --; if ($LASTEXITCODE -ne 0) { $changes = $false } else { $changes = $true }
+    if ($changes -eq $false)
+    {
       echo "No changes to commit"
+    }
     else
+    {
       git commit -m "$(today) English file transfer"
       git push
-    fi
+    }
   displayName: 'Push English file'
