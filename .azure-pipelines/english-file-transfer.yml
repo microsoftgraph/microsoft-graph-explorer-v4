@@ -1,14 +1,3 @@
-trigger:
-  branches:
-    include:
-    - dev
-  paths:
-    include:
-    - src/messages/GE.json
-
-pool:
-  vmImage: 'ubuntu-latest'
-
 steps:
 - checkout: self
 
@@ -22,6 +11,10 @@ steps:
     cp src/messages/GE.json microsoft-graph-devx-content/messages/
     cd microsoft-graph-devx-content
     git add .
-    git commit -m "$(today) English file transfer"
-    git push
+    if git diff-index --quiet HEAD --; then
+      echo "No changes to commit"
+    else
+      git commit -m "$(today) English file transfer"
+      git push
+    fi
   displayName: 'Push English file'
