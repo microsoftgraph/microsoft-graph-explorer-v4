@@ -61,8 +61,6 @@ trigger:
 jobs:
   - job: EnglishFileTransfer
     condition: eq(variables['isDev'], 'true')
-    pool:
-      vmImage: 'ubuntu-latest'
     steps:
       template: english-file-transfer.yml
 
