@@ -23,5 +23,5 @@ steps:
     cd microsoft-graph-devx-content
     git add .
     git commit -m "$(today) English file transfer"
-    git push https://$(API_TOKEN_GITHUB)@github.com/microsoftgraph/microsoft-graph-devx-content.git
+    git push
   displayName: 'Push English file'
