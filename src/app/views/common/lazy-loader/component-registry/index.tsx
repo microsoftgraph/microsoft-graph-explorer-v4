@@ -11,10 +11,6 @@ import LazyAuth from  '../../../query-runner/request/auth/Auth';
 import LazyRequestHeaders from  '../../../query-runner/request/headers/RequestHeaders';
 import LazyHistory from  '../../../sidebar/history/History';
 import LazyResourceExplorer from  '../../../sidebar/resource-explorer/ResourceExplorer';
-import LazyShareQuery from  '../../../query-runner/query-input/share-query/ShareQuery';
-import LazyThemeChoser from  '../../../main-header/settings/ThemeChooser';
-import LazyPreviewCollection from  '../../../sidebar/resource-explorer/collection/PreviewCollection';
-import LazyFullPermissions from  '../../../query-runner/request/permissions/Permissions.Full';
 
 export const Permissions = (props?: IPermissionProps) => {
   return (
@@ -79,30 +75,6 @@ export const History = (props?: any) => {
 export const ResourceExplorer = (props?: any) => {
   return (
     <LazyResourceExplorer {...props} />
-  )
-}
-
-export const ShareQuery = (props?: any) => {
-  return (
-    <LazyShareQuery {...props} />
-  )
-}
-
-export const ThemeChoser = (props?: any) => {
-  return (
-    <LazyThemeChoser {...props} />
-  )
-}
-
-export const PreviewCollection = (props?: any) => {
-  return (
-    <LazyPreviewCollection {...props} />
-  )
-}
-
-export const FullPermissions = (props?: any) => {
-  return (
-    <LazyFullPermissions {...props} />
   )
 }
 
