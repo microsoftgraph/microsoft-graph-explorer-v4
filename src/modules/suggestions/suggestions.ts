@@ -46,7 +46,7 @@ class Suggestions implements ISuggestions {
       return this.createOpenApiResponse(versionedResources, url);
     } else {
       const matching = getMatchingResourceForUrl(url, versionedResources);
-      if (matching && matching.children.length > 0) {
+      if (matching && matching.children && matching.children.length > 0) {
         return this.createOpenApiResponse(matching.children, url)
       }
     }

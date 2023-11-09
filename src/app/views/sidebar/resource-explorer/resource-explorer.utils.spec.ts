@@ -15,12 +15,12 @@ describe('Resource payload should', () => {
   });
 
   it('return children with version v1.0', async () => {
-    const resources = getResourcesSupportedByVersion(resource.children, 'v1.0');
+    const resources = getResourcesSupportedByVersion(resource.children!, 'v1.0');
     expect(resources.length).toBeGreaterThan(0);
   });
 
   it('return links with version v1.0', async () => {
-    const filtered = createResourcesList(resource.children, 'v1.0')[0];
+    const filtered = createResourcesList(resource.children!, 'v1.0')[0];
     expect(filtered.links.length).toBeGreaterThan(0);
   });
 
@@ -31,7 +31,7 @@ describe('Resource payload should', () => {
     const currentTree = getCurrentTree({
       paths,
       level,
-      resourceItems: resource.children,
+      resourceItems: resource.children!,
       version
     });
     expect(currentTree).not.toBeNull();
@@ -39,7 +39,7 @@ describe('Resource payload should', () => {
 
   it('return available methods', async () => {
     const version = 'v1.0';
-    const filtered = createResourcesList(resource.children, version)[0];
+    const filtered = createResourcesList(resource.children!, version)[0];
     const resourceLink = filtered.links[0];
     const availableMethods = getAvailableMethods(resourceLink.labels, version);
     expect(availableMethods).not.toBeNull();
@@ -58,7 +58,7 @@ describe('Resource payload should', () => {
     const currentTree = getCurrentTree({
       paths,
       level,
-      resourceItems: resource.children,
+      resourceItems: resource.children!,
       version
     });
     const link = currentTree.links[0];
@@ -68,7 +68,7 @@ describe('Resource payload should', () => {
 
   it('return a flattened list of links', async () => {
     const version = 'v1.0';
-    const filtered = createResourcesList(resource.children, version)[0];
+    const filtered = createResourcesList(resource.children!, version)[0];
     const item: any = filtered.links[0];
     const paths = getResourcePaths(item, version);
     expect(paths.length).toBeGreaterThan(0);
@@ -84,7 +84,7 @@ describe('Resource payload should', () => {
 });
 
 describe('Resource filter should', () => {
-  const resources = getResourcesSupportedByVersion(resource.children, 'v1.0');
+  const resources = getResourcesSupportedByVersion(resource.children!, 'v1.0');
 
   const messageId = 'AAMkAGFkNWI1Njg3LWZmNTUtNDZjOS04ZTM2LTc5ZTc5ZjFlNTM4ZgB1SyTR4EQuQIAbWVtP3x1LBwD4_HsJDyJ8QAAA=';
 
@@ -109,7 +109,7 @@ describe('Resource filter should', () => {
       const setWithId = getMatchingResourceForUrl(requestUrl, resources)!;
       const setWithPlaceholder = getMatchingResourceForUrl(baseUrl, resources)!;
 
-      expect(setWithId.children.length).toBe(setWithPlaceholder.children.length);
+      expect(setWithId.children?.length).toBe(setWithPlaceholder.children?.length);
     });
 
   });
