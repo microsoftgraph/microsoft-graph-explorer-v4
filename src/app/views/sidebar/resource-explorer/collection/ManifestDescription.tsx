@@ -111,10 +111,9 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
 
   const copyManifestToClipboard = () => {
     if (!manifest) { return; }
-    const base64UrlEncodedManifest = btoa(JSON.stringify(manifest));
     try {
       setManifestCopied(true);
-      trackedGenericCopy(base64UrlEncodedManifest, componentNames.COPY_API_MANIFEST_BUTTON);
+      trackedGenericCopy(JSON.stringify(manifest), componentNames.COPY_API_MANIFEST_BUTTON);
     }
     catch {
       telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
