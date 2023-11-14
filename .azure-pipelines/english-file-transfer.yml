@@ -1,4 +1,8 @@
 steps:
+- checkout: self
+  persistCredentials: true
+  displayName: 'Checkout current repo'
+
 - checkout: microsoft-graph-devx-content
   persistCredentials: true
   displayName: 'Checkout content repo'
@@ -9,8 +13,8 @@ steps:
     Write-Host "The value of today is $today"
     git config --global user.email "GraphTooling@service.microsoft.com"
     git config --global user.name "Microsoft Graph DevX Tooling"
-    cp src/messages/GE.json microsoft-graph-devx-content/messages/
-    cd microsoft-graph-devx-content
+    cp $(Build.SourcesDirectory)/src/messages/GE.json $(Build.SourcesDirectory)/microsoft-graph-devx-content/messages/
+    cd $(Build.SourcesDirectory)/microsoft-graph-devx-content
     git add .
     git commit -m "$today English file transfer"
     git push
