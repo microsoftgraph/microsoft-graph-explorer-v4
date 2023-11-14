@@ -1,7 +1,7 @@
 steps:
 - checkout: self
 
-- checkout: https://github.com/microsoftgraph/microsoft-graph-devx-content@dev
+- checkout: github://microsoftgraph/microsoft-graph-devx-content@dev
   persistCredentials: true
 
 - pwsh: |
