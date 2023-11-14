@@ -10,7 +10,7 @@ steps:
 
 - pwsh: |
     cd $(Build.SourcesDirectory)/microsoft-graph-devx-content
-    git checkout dev
+    git checkout dev || git checkout -b dev
   displayName: 'Switch to dev branch'
 
 - pwsh: |
