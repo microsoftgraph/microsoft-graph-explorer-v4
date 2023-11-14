@@ -9,10 +9,11 @@ steps:
   fetchDepth: 1
 
 - pwsh: |
+    $today = Get-Date -Format "yyyyMMddHHmm"
+    Write-Host "The value of today is $today"
     cd $(Build.SourcesDirectory)/microsoft-graph-devx-content
-    git fetch origin dev
-    git switch dev
-  displayName: 'Switch to dev branch'
+    git checkout -b translation/$today
+  displayName: 'Switch to translation branch'
 
 - pwsh: |
     cp $(Build.SourcesDirectory)/microsoft-graph-explorer-v4/src/messages/GE.json $(Build.SourcesDirectory)/microsoft-graph-devx-content/messages/
@@ -22,10 +23,8 @@ steps:
     git config --global user.email "GraphTooling@service.microsoft.com"
     git config --global user.name "Microsoft Graph DevX Tooling"
     git config --global push.default current
-    $today = Get-Date -Format "yyyyMMddHHmm"
-    Write-Host "The value of today is $today"
     cd $(Build.SourcesDirectory)/microsoft-graph-devx-content
     git add .
-    git commit -m "$today English file transfer"
+    git commit -m "English file transfer"
     git push
   displayName: 'Push English file'
