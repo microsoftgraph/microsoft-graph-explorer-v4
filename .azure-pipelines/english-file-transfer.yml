@@ -1,15 +1,17 @@
 steps:
 - checkout: self
 
+- checkout: git://microsoftgraph/microsoft-graph-devx-content@dev
+  persistCredentials: true
+
 - pwsh: |
     $today = Get-Date -Format "yyyyMMddHHmm"
     Write-Host "The value of today is $today"
     git config --global user.email "GraphTooling@service.microsoft.com"
     git config --global user.name "Microsoft Graph DevX Tooling"
-    git clone https://github.com/microsoftgraph/microsoft-graph-devx-content.git
-    cp src/messages/GE.json microsoft-graph-devx-content/messages/ | Write-Host
-    cd microsoft-graph-devx-content | Write-Host
-    git add . | Write-Host
-    git commit -m "$today English file transfer" | Write-Host
-    git push | Write-Host
+    cp src/messages/GE.json microsoft-graph-devx-content/messages/
+    cd microsoft-graph-devx-content
+    git add .
+    git commit -m "$today English file transfer"
+    git push
   displayName: 'Push English file'
