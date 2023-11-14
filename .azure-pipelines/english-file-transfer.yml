@@ -7,7 +7,11 @@ steps:
   persistCredentials: true
   displayName: 'Checkout content repo'
   fetchDepth: 1
-  ref: dev
+
+- pwsh: |
+    cd $(Build.SourcesDirectory)/microsoft-graph-devx-content
+    git checkout dev
+  displayName: 'Switch to dev branch'
 
 - pwsh: |
     cp $(Build.SourcesDirectory)/microsoft-graph-explorer-v4/src/messages/GE.json $(Build.SourcesDirectory)/microsoft-graph-devx-content/messages/
