@@ -3,6 +3,8 @@ steps:
 
 - checkout: github://microsoftgraph/microsoft-graph-devx-content@dev
   persistCredentials: true
+  displayName: 'Checkout GitHub Repo'
+  name: microsoftgraph
 
 - pwsh: |
     $today = Get-Date -Format "yyyyMMddHHmm"
